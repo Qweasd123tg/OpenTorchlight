@@ -5,7 +5,7 @@ The basic audit needs only Python and GNU binutils.  If ``dnfile`` is available,
 the script also recovers the managed P/Invoke boundary from Editor.exe.  A
 temporary install is enough:
 
-    python3 -m pip install --target /tmp/torched-pydeps dnfile
+    python3 -m pip install --target /tmp/torched-pydeps dnfile dncil
     PYTHONPATH=/tmp/torched-pydeps python3 tools/audit_torched.py ...
 """
 
@@ -201,6 +201,7 @@ def managed_inventory(editor: Path, exports: list[str]) -> dict[str, Any]:
         for method in definition.MethodList
     }
     import_rows = []
+    core_import_by_method_id: dict[int, str] = {}
     dll_counts: collections.Counter[str] = collections.Counter()
     for mapping in table("ImplMap"):
         dll = str(mapping.ImportScope.row.Name).lower()
@@ -222,6 +223,7 @@ def managed_inventory(editor: Path, exports: list[str]) -> dict[str, Any]:
             for index, parameter_type in enumerate(parameter_types, 1)
         ]
         native_name = str(mapping.ImportName)
+        core_import_by_method_id[id(method)] = native_name
         prototype = ", ".join(f"{p['type']} {p['name']}" for p in parameters)
         import_rows.append(
             {
@@ -242,7 +244,7 @@ def managed_inventory(editor: Path, exports: list[str]) -> dict[str, Any]:
     }
     unique_imports = set(import_names)
     export_set = set(exports)
-    return {
+    result = {
         "available": True,
         "type_references": len(table("TypeRef")),
         "type_definitions": len(table("TypeDef")),
@@ -256,6 +258,70 @@ def managed_inventory(editor: Path, exports: list[str]) -> dict[str, Any]:
         "exports_without_managed_import": sorted(export_set - unique_imports),
         "core_imports": import_rows,
     }
+
+    try:
+        from dncil.cil.body import CilMethodBody  # type: ignore[import-not-found]
+        from dncil.cil.body.reader import (  # type: ignore[import-not-found]
+            CilMethodBodyReaderBytes,
+        )
+        from dncil.clr.token import Token  # type: ignore[import-not-found]
+    except ImportError:
+        result["il_call_map"] = {
+            "available": False,
+            "reason": "Install the optional dncil package to inspect method bodies.",
+        }
+        return result
+
+    method_rows = list(table("MethodDef"))
+    method_by_token = {
+        0x06000000 | row_id: method for row_id, method in enumerate(method_rows, 1)
+    }
+    pinvoke_by_token = {
+        token: core_import_by_method_id[id(method)]
+        for token, method in method_by_token.items()
+        if id(method) in core_import_by_method_id
+    }
+    call_sites = []
+    body_errors = []
+    bodies_scanned = 0
+    for method in method_rows:
+        if not method.Rva:
+            continue
+        managed_name = f"{owners.get(id(method), '')}.{method.Name}".lstrip(".")
+        try:
+            body = CilMethodBody(CilMethodBodyReaderBytes(image.get_data(method.Rva)))
+        except Exception as error:  # malformed IL should stay visible in the audit
+            body_errors.append({"method": managed_name, "error": str(error)})
+            continue
+        bodies_scanned += 1
+        for instruction in body.instructions:
+            if instruction.mnemonic not in ("call", "callvirt"):
+                continue
+            operand = instruction.operand
+            if not isinstance(operand, Token) or operand.value not in pinvoke_by_token:
+                continue
+            call_sites.append(
+                {
+                    "native_name": pinvoke_by_token[operand.value],
+                    "caller": managed_name,
+                    "il_offset": instruction.offset,
+                }
+            )
+
+    called_imports = {site["native_name"] for site in call_sites}
+    result["il_call_map"] = {
+        "available": True,
+        "method_bodies_scanned": bodies_scanned,
+        "method_body_errors": body_errors,
+        "direct_core_call_count": len(call_sites),
+        "core_imports_with_direct_callers": len(called_imports),
+        "core_imports_without_direct_callers": sorted(unique_imports - called_imports),
+        "call_sites": sorted(
+            call_sites,
+            key=lambda site: (site["native_name"], site["caller"], site["il_offset"]),
+        ),
+    }
+    return result
 
 
 def linux_overlap(original: Path, classes: list[str], engine_classes: list[str]) -> dict[str, Any]:

@@ -111,10 +111,35 @@ uint32 EditorLoadScene(uint32 sceneID, string fileAndPath, bool bClearFirst)
 ```
 
 Полный список прототипов находится в поле
-`managed_metadata.core_imports` JSON-отчёта. Следующий полезный уровень анализа
-— разобрать IL методов редактора вокруг этих вызовов. Так можно получить порядок
-операций, значения флагов и соответствие элементов UI функциям движка без
-угадывания по скриншотам.
+`managed_metadata.core_imports` JSON-отчёта.
+
+Дополнительно разобраны 4 758 методов с IL-телами, ошибок декодирования нет.
+Найдено 423 прямых вызова `Core.dll` из 185 уникальных импортов. Карта связывает
+родные операции с конкретными методами оболочки:
+
+- `EditorCreateObject` вызывается из `EditorNode.CreateEditorObjects`;
+- `EditorCreateLogicObject` — из `LogicEditorWindow.AddLogicObject`;
+- `EditorCreateLogicLink` — из `LogicLink.InitiateLink`;
+- `EditorInvokeOutputFunction` — из `LogicEditorWindow.onClickInvokeObject`;
+- `EditorTimelineAddProperty` — из конструктора `TimelinePanel`;
+- `EditorTimelineAddPointToProperty` — из конструктора `TimelinePoint`;
+- `EditorLoadScene` и `EditorSaveScene` — из `SceneManager`.
+
+Например, IL показывает, что `AddLogicObject` передаёт в родную функцию ID
+редактируемой `Logic Group` и ID выбранного объекта, получает ID нового узла и
+только потом создаёт его управляемое представление. `InitiateLink` сначала
+отбрасывает пустые узлы и связь объекта с самим собой, затем передаёт ID группы,
+обоих узлов и входной/выходной функции в `EditorCreateLogicLink`.
+
+Все места вызовов сохранены в `managed_metadata.il_call_map.call_sites`.
+Точечный листинг с разрешёнными именами методов, полей и строк выводит
+[`tools/dump_torched_il.py`](../tools/dump_torched_il.py):
+
+```sh
+PYTHONPATH=/tmp/torched-pydeps python3 tools/dump_torched_il.py \
+  --editor /tmp/torched-sdk/Editor.exe \
+  --method 'AddLogicObject|InitiateLink'
+```
 
 ## Повторение аудита
 
@@ -122,7 +147,7 @@ SDK сначала нужно извлечь во внешний временн�
 запускает и не меняет в SDK:
 
 ```sh
-python3 -m pip install --target /tmp/torched-pydeps dnfile
+python3 -m pip install --target /tmp/torched-pydeps dnfile dncil
 PYTHONPATH=/tmp/torched-pydeps python3 tools/audit_torched.py \
   --sdk-dir /tmp/torched-sdk \
   --installer /путь/TorchEDInstaller-1.0.exe \
@@ -130,8 +155,9 @@ PYTHONPATH=/tmp/torched-pydeps python3 tools/audit_torched.py \
   --output research/torched-sdk.json
 ```
 
-Без `dnfile` скрипт всё равно считает файлы, хеши, экспорты и RTTI. Пакет нужен
-только для чтения .NET-метаданных и восстановления P/Invoke-прототипов.
+Без `dnfile` скрипт всё равно считает файлы, хеши, экспорты и RTTI. `dnfile`
+нужен для чтения .NET-метаданных и восстановления P/Invoke-прототипов, а
+`dncil` — для построения карты прямых вызовов из IL.
 
 ## Как это меняет план восстановления
 
@@ -140,7 +166,8 @@ PYTHONPATH=/tmp/torched-pydeps python3 tools/audit_torched.py \
 восстановления самой игры:
 
 1. сопоставить 302 общих класса с символами Linux-бинарника;
-2. разобрать IL оболочки для логического графа, timeline и тестового запуска;
+2. по уже построенной карте IL разобрать логику графа, timeline и тестового
+   запуска;
 3. по найденным вызовам и данным восстановить runtime `Logic Group`, триггеров,
    spawner и событий;
 4. после этого перейти к выбору цели, бою, предметам, навыкам, квестам и

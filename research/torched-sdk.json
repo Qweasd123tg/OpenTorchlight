@@ -3786,7 +3786,2142 @@
         ],
         "prototype": "void EditorCreateMod(string modDirectory)"
       }
-    ]
+    ],
+    "il_call_map": {
+      "available": true,
+      "method_bodies_scanned": 4758,
+      "method_body_errors": [],
+      "direct_core_call_count": 423,
+      "core_imports_with_direct_callers": 185,
+      "core_imports_without_direct_callers": [
+        "EditorFlyToObject",
+        "EditorGetDungeons",
+        "EditorGetEdtiorLevelDepth",
+        "EditorGetIconSheets",
+        "EditorGetLogicFuncId",
+        "EditorGetMuted",
+        "EditorGetRedoCount",
+        "EditorGetWorkingPlaneHeight",
+        "EditorTimelineUpdate"
+      ],
+      "call_sites": [
+        {
+          "native_name": "EditorAmbientColor",
+          "caller": "Editor.LightColorForm..ctor",
+          "il_offset": 129
+        },
+        {
+          "native_name": "EditorAmbientColor",
+          "caller": "Editor.LightColorForm.updateColor",
+          "il_offset": 132
+        },
+        {
+          "native_name": "EditorAmbientColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 69
+        },
+        {
+          "native_name": "EditorAmbientColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 223
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal10MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal1MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal30MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal45MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal5MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyNormalNoise",
+          "caller": "Editor.SceneManager.normal90MenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyRotationNoise",
+          "caller": "Editor.SceneManager.rotationNoiseMenuItem_Click",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale01_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale01u_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale1_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale1u_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale2_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scale2u_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scalePoint1_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorApplyScaleNoise",
+          "caller": "Editor.SceneManager.scalePoint1u_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorAutomapTiles",
+          "caller": "Editor.TileSetsAndRoomPieceEditor.GetAutompTiles",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorConvertLayoutToNewTileset",
+          "caller": "Editor.LayoutConverter.buttonConvert_Click",
+          "il_offset": 232
+        },
+        {
+          "native_name": "EditorCreateLogicLink",
+          "caller": "Editor.LogicLink.InitiateLink",
+          "il_offset": 123
+        },
+        {
+          "native_name": "EditorCreateLogicObject",
+          "caller": "Editor.LogicEditorWindow.AddLogicObject",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorCreateMod",
+          "caller": "Editor.ModEditorForm.btnNew_Click",
+          "il_offset": 190
+        },
+        {
+          "native_name": "EditorCreateObject",
+          "caller": "Editor.EditorNode.CreateEditorObjects",
+          "il_offset": 65
+        },
+        {
+          "native_name": "EditorDeleteAllObjectsInScene",
+          "caller": "Editor.SceneManager.Clear",
+          "il_offset": 58
+        },
+        {
+          "native_name": "EditorDeleteAllObjectsInScene",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 115
+        },
+        {
+          "native_name": "EditorDeleteAllUndos",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 99
+        },
+        {
+          "native_name": "EditorDeleteLogicLink",
+          "caller": "Editor.LogicLink.LinkBeingRemove",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorDeleteLogicObject",
+          "caller": "Editor.LogicEditorWindow.RemoveLogicObject",
+          "il_offset": 34
+        },
+        {
+          "native_name": "EditorDeleteObject",
+          "caller": "Editor.SceneManager.DeleteNodeWithNoUpdate",
+          "il_offset": 68
+        },
+        {
+          "native_name": "EditorDiretionalColor",
+          "caller": "Editor.LightColorForm..ctor",
+          "il_offset": 155
+        },
+        {
+          "native_name": "EditorDiretionalColor",
+          "caller": "Editor.LightColorForm.updateColor",
+          "il_offset": 169
+        },
+        {
+          "native_name": "EditorDiretionalColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 83
+        },
+        {
+          "native_name": "EditorDiretionalColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 236
+        },
+        {
+          "native_name": "EditorDiretionalIntensity",
+          "caller": "Editor.LightColorForm..ctor",
+          "il_offset": 163
+        },
+        {
+          "native_name": "EditorDiretionalIntensity",
+          "caller": "Editor.LightColorForm.updateColor",
+          "il_offset": 177
+        },
+        {
+          "native_name": "EditorEndUndo",
+          "caller": "Editor.SceneManager.DeleteSelectedNodes",
+          "il_offset": 97
+        },
+        {
+          "native_name": "EditorFileExists",
+          "caller": "Editor.FileRefCheckerForm.CheckBlock",
+          "il_offset": 350
+        },
+        {
+          "native_name": "EditorFileExists",
+          "caller": "Editor.FileRefCheckerForm.CheckBlock",
+          "il_offset": 482
+        },
+        {
+          "native_name": "EditorFileExists",
+          "caller": "Editor.FileRefCheckerForm.CheckBlock",
+          "il_offset": 610
+        },
+        {
+          "native_name": "EditorFileExists",
+          "caller": "Editor.FileRefCheckerForm.CheckBlock",
+          "il_offset": 621
+        },
+        {
+          "native_name": "EditorFileExists",
+          "caller": "Editor.FileRefCheckerForm.buttonStart_Click",
+          "il_offset": 72
+        },
+        {
+          "native_name": "EditorFireEvent",
+          "caller": "Editor.MainForm.FireEditorEvent",
+          "il_offset": 39
+        },
+        {
+          "native_name": "EditorFlushKeymanager",
+          "caller": "Editor.RenderWindow.contextMenuStrip_Opening",
+          "il_offset": 58
+        },
+        {
+          "native_name": "EditorFlushKeymanager",
+          "caller": "Editor.RenderWindow.startHereToolStripMenuItem_Click",
+          "il_offset": 116
+        },
+        {
+          "native_name": "EditorGetAIFlags",
+          "caller": "Editor.UnitAIStatControl.GetFlags",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetActiveAnimationTimePosition",
+          "caller": "Editor.AnimationEditor.UpdateTimer_Tick",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorGetAffixes",
+          "caller": "Editor.CSkillAffixesObject.GetAffixes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAffixes",
+          "caller": "Editor.CSkillAffixesRemoveObject.GetAffixes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAlignments",
+          "caller": "Editor.MonsterEditor.GetAlignments",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAlignments",
+          "caller": "Editor.SkillTargetAlignment_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAlignments",
+          "caller": "Editor.UnitAIStatControl.GetAlignments",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAnimationKeyTypes",
+          "caller": "TriggerName_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetAnimationNameByPath",
+          "caller": "Editor.AnimationEditor.AddAnimation",
+          "il_offset": 66
+        },
+        {
+          "native_name": "EditorGetAnimationNameByPath",
+          "caller": "Editor.AnimationPanel.set_AnimationName",
+          "il_offset": 37
+        },
+        {
+          "native_name": "EditorGetCinematics",
+          "caller": "Editor.DungeonStrataPanel.GetCinematics",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetCinematics",
+          "caller": "Editor.PlayerEditor.GetCinematics",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetCountOfLogicLinksInLogicObject",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicObjectsLinks",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorGetCountOfLogicObjectsInLogicGroup",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicWindow",
+          "il_offset": 41
+        },
+        {
+          "native_name": "EditorGetDamageTypes",
+          "caller": "Editor.DamageType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetDamageTypes",
+          "caller": "Editor.EffectEditorClasses.EffectsPanel.GetDamageTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetDamageTypes",
+          "caller": "Editor.MonsterEditor.GetDamageTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetDamageTypes",
+          "caller": "Editor.PlayerEditor.GetDamageTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetDebugOutput",
+          "caller": "Editor.LogicDebugWindow.timer_Tick",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorGetDescriptorHash",
+          "caller": "Editor.MainForm.MainForm_Load",
+          "il_offset": 1837
+        },
+        {
+          "native_name": "EditorGetFlagState",
+          "caller": "Editor.CEditorFlag.GetFlagValue",
+          "il_offset": 7
+        },
+        {
+          "native_name": "EditorGetFlagState",
+          "caller": "Editor.CEditorFlag.Toggle",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorGetGraphNames",
+          "caller": "CameraShakeFile_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetGraphNames",
+          "caller": "Editor.MonsterEditor.GetGraphs",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetGraphNames",
+          "caller": "Editor.PlayerEditor.GetGraphs",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetListOfItems",
+          "caller": "Editor.SceneManager.ToggleRoomPieceType",
+          "il_offset": 170
+        },
+        {
+          "native_name": "EditorGetLogicLinkInputFunctionID",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicObjectsLinks",
+          "il_offset": 127
+        },
+        {
+          "native_name": "EditorGetLogicLinkOutputFunctionID",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicObjectsLinks",
+          "il_offset": 102
+        },
+        {
+          "native_name": "EditorGetLogicObjectIDLinkingTo",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicObjectsLinks",
+          "il_offset": 60
+        },
+        {
+          "native_name": "EditorGetLogicObjectPosition",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicWindow",
+          "il_offset": 112
+        },
+        {
+          "native_name": "EditorGetMissiles",
+          "caller": "Editor.ItemEditor.GetMissiles",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetModelAnimationLengthSeconds",
+          "caller": "Editor.AnimationEditor.AddAnimation",
+          "il_offset": 79
+        },
+        {
+          "native_name": "EditorGetObjectDescriptorID",
+          "caller": "Editor.SceneManager.addTreeNodesToTree",
+          "il_offset": 100
+        },
+        {
+          "native_name": "EditorGetObjectIDRefedInLogicObject",
+          "caller": "Editor.LogicEditorWindow.RefreshLogicWindow",
+          "il_offset": 63
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.LayoutChecker.buttonAutoRemove_Click",
+          "il_offset": 134
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.LayoutChecker.buttonStartCheck_Click",
+          "il_offset": 109
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.LayoutChecker.listBoxGroups_SelectedIndexChanged",
+          "il_offset": 140
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.MainForm.GetPropertyEditorHolderForm",
+          "il_offset": 27
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.MainForm.GetPropertyEditorHolderForm",
+          "il_offset": 43
+        },
+        {
+          "native_name": "EditorGetObjectName",
+          "caller": "Editor.SceneManager.getNewEditorNode",
+          "il_offset": 153
+        },
+        {
+          "native_name": "EditorGetObjectParent",
+          "caller": "Editor.MainForm.GetPropertyEditorHolderForm",
+          "il_offset": 34
+        },
+        {
+          "native_name": "EditorGetObjectParent",
+          "caller": "Editor.MainForm.GetPropertyEditorHolderForm",
+          "il_offset": 61
+        },
+        {
+          "native_name": "EditorGetObjectParent",
+          "caller": "Editor.SceneManager.addTreeNodesToTree",
+          "il_offset": 177
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.CObjectProperty.GetValue",
+          "il_offset": 8
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.SceneManager.GetGroupRandomizationValue",
+          "il_offset": 42
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.SceneManager.HideNode",
+          "il_offset": 124
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.SceneManager.HideNodeAndChildren",
+          "il_offset": 143
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.SceneManager.ShowAndRollChildren",
+          "il_offset": 195
+        },
+        {
+          "native_name": "EditorGetObjectProperty",
+          "caller": "Editor.SceneManager.ShowNode",
+          "il_offset": 124
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.ColorShiftEditor..ctor",
+          "il_offset": 226
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.ColorShiftEditor.Sync",
+          "il_offset": 60
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.DynamicProptertyEditor..ctor",
+          "il_offset": 386
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.DynamicProptertyEditor.Sync",
+          "il_offset": 60
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.LineEditor..ctor",
+          "il_offset": 124
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.LineEditor.Sync",
+          "il_offset": 53
+        },
+        {
+          "native_name": "EditorGetObjectPropertyArray",
+          "caller": "Editor.iEditorObject.retrieveDataFromDLL",
+          "il_offset": 50
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.AnimationEditor.AnimationEditor_Activated",
+          "il_offset": 24
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.AnimationEditor.Init",
+          "il_offset": 244
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 403
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 419
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 592
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 608
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 781
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.MainForm.GetDuplicates",
+          "il_offset": 797
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.GetGroupChoiceType",
+          "il_offset": 46
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.NodeIsRandomized",
+          "il_offset": 42
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.SelectAllLayoutLinksWithSameFile",
+          "il_offset": 68
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.SelectAllRoomPiecesByGuid",
+          "il_offset": 98
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.SelectAllRoomPiecesWithCurrentPieceGuid",
+          "il_offset": 68
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.SelectLayoutLinksByFile",
+          "il_offset": 98
+        },
+        {
+          "native_name": "EditorGetObjectPropertyString",
+          "caller": "Editor.SceneManager.ToggleRoomPieceType",
+          "il_offset": 235
+        },
+        {
+          "native_name": "EditorGetObjectSceneID",
+          "caller": "Editor.ColorShiftEditor.PlayScene",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetObjectSceneID",
+          "caller": "Editor.DynamicProptertyEditor.PlayScene",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetObjectSceneID",
+          "caller": "Editor.SceneManager.addTreeNodesToTree",
+          "il_offset": 24
+        },
+        {
+          "native_name": "EditorGetObjectSelectedByIndex",
+          "caller": "Editor.MainForm.UpdateSelectionGroupFromViewer",
+          "il_offset": 52
+        },
+        {
+          "native_name": "EditorGetObjectSelectedByIndex",
+          "caller": "Editor.MainForm.UpdateSelectionGroupFromViewer",
+          "il_offset": 72
+        },
+        {
+          "native_name": "EditorGetObjectSelectedByIndex",
+          "caller": "Editor.SceneManager.UpdateSelectionCount",
+          "il_offset": 21
+        },
+        {
+          "native_name": "EditorGetObjectSnap",
+          "caller": "Editor.SceneManager.UpdateSnapSizes",
+          "il_offset": 87
+        },
+        {
+          "native_name": "EditorGetObjectSnap",
+          "caller": "Editor.SceneManager.UpdateSnapSizes",
+          "il_offset": 181
+        },
+        {
+          "native_name": "EditorGetObjectSnap",
+          "caller": "Editor.SceneManager.UpdateSnapSizes",
+          "il_offset": 275
+        },
+        {
+          "native_name": "EditorGetObjectUnderMouse",
+          "caller": "Editor.RenderWindow.contextMenuStrip_Opening",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorGetObjectsCreatedThisRender",
+          "caller": "Editor.MainForm.HandleUpdateMessage",
+          "il_offset": 49
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.CEditorOptions.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.CQuestObject.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.CQuestRequirementsObject.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.DungeonStrataPanel.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.MonsterEditor.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetQuests",
+          "caller": "Editor.PlayerEditor.GetQuests",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSets",
+          "caller": "Editor.ItemEditor.GetSets",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkeletonBoneList",
+          "caller": "BoneName_Converter.GetStandardValues",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetSkeletonBoneList",
+          "caller": "Editor.AnimationEditor.toolStripButtonShowBoneList_Click",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetSkeletonBoneList",
+          "caller": "Editor.AnimationTrigger..ctor",
+          "il_offset": 152
+        },
+        {
+          "native_name": "EditorGetSkillActivationTypes",
+          "caller": "Editor.SkillActivationType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkillEffectAndAffixTargetTypes",
+          "caller": "Editor.SkillEffectAndAffixTargetType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkillEventTypes",
+          "caller": "Editor.SkillEventType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkillTargetTypes",
+          "caller": "Editor.SkillTargetType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkillTypes",
+          "caller": "Editor.SkillType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkills",
+          "caller": "Editor.CSkillExecuteSkillObject.GetSkillNames",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkills",
+          "caller": "Editor.UnitAIStatControl.GetSkills",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSkills",
+          "caller": "Editor.Units.UnitSkillPanel.GetSkillNames",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "Editor.CinematicsEditor.GetSoundCategories",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundCategories",
+          "caller": "SoundCategory_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundNames",
+          "caller": "Editor.ItemEditor.GetSounds",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundNames",
+          "caller": "Editor.MonsterEditor.GetSounds",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundNames",
+          "caller": "Editor.PlayerEditor.GetSounds",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundNames",
+          "caller": "Editor.PropEditor.GetSounds",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSoundNames",
+          "caller": "Sound_Converter.GetStandardValues",
+          "il_offset": 57
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "DialogSound_Converter.GetStandardValues",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "DialogSound_Converter.GetStandardValues",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "DialogSound_Converter.GetStandardValues",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "DialogSound_Converter.GetStandardValues",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "DialogSound_Converter.GetStandardValues",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "Editor.CinematicsEditor.GetSoundsByCategory",
+          "il_offset": 37
+        },
+        {
+          "native_name": "EditorGetSoundNamesByCategory",
+          "caller": "Sound_Converter.GetStandardValues",
+          "il_offset": 66
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.CEditorOptions.GetSpawnClasses",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.DungeonEditor.GetSpawnClasses",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.DungeonStrataPanel.GetSpawnClasses",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.MonsterEditor.GetSpawnClasses",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.PlayerEditor.GetSpawnClasses",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.RecipeEditor.GetSpawnClasses",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.SpawnClass_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.SpawnClasses.SpawnClassObjectControl.GetSpawnClasses",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.Units.EquipmentPanel.GetSpawnClasses",
+          "il_offset": 26
+        },
+        {
+          "native_name": "EditorGetSpawnClasses",
+          "caller": "Editor.Units.TreasurePanel.GetSpawnClasses",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 141
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 177
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 223
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 235
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.TimelineWindow.Play",
+          "il_offset": 204
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.TimelineWindow.timerBar_Scroll",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.TimelineWindow.timer_Tick",
+          "il_offset": 32
+        },
+        {
+          "native_name": "EditorGetTime",
+          "caller": "Editor.TimelineWindow.timer_Tick",
+          "il_offset": 132
+        },
+        {
+          "native_name": "EditorGetUndoRedoCounts",
+          "caller": "Editor.MainForm.Redo",
+          "il_offset": 26
+        },
+        {
+          "native_name": "EditorGetUndoRedoCounts",
+          "caller": "Editor.MainForm.TimerRenderWindowUpdate_Tick",
+          "il_offset": 214
+        },
+        {
+          "native_name": "EditorGetUndoRedoCounts",
+          "caller": "Editor.MainForm.Undo",
+          "il_offset": 26
+        },
+        {
+          "native_name": "EditorGetUnitThemes",
+          "caller": "Editor.SkillTheme_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitThemes",
+          "caller": "TriggerUnitTheme_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.IngredientPanel.GetUnitTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.SkillUnitType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.SpawnClasses.SpawnClassObjectControl.GetUnitTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.UnitAIStatControl.GetUnittypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.UnitEditor.GetUnitTypes",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitTypes",
+          "caller": "Editor.UnitType_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnits",
+          "caller": "Editor.CSkillEventObject.GetUnits",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnits",
+          "caller": "Editor.SpawnClassEditor.GetUnits",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnits",
+          "caller": "Editor.Unit_Converter.GetStandardValues",
+          "il_offset": 12
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.CEditorOptions.GetPetTypes",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.IngredientPanel.GetItems",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.Item_Converter.GetStandardValues",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.MainForm.GetCharacterClasses",
+          "il_offset": 23
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.Monster_Converter.GetStandardValues",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.RecipeEditor.GetItems",
+          "il_offset": 17
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.SpawnClasses.SpawnClassObjectControl.GetUnitsByType",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "Editor.Units.EquipmentPanel.GetUnitsByType",
+          "il_offset": 27
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "FilteredUnit_Converter.GetStandardValues",
+          "il_offset": 30
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "FilteredUnit_Converter.GetStandardValues",
+          "il_offset": 30
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "FilteredUnit_Converter.GetStandardValues",
+          "il_offset": 30
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "FilteredUnit_Converter.GetStandardValues",
+          "il_offset": 30
+        },
+        {
+          "native_name": "EditorGetUnitsByUnittype",
+          "caller": "FilteredUnit_Converter.GetStandardValues",
+          "il_offset": 30
+        },
+        {
+          "native_name": "EditorInvokeOutputFunction",
+          "caller": "Editor.LogicEditorWindow.onClickInvokeObject",
+          "il_offset": 85
+        },
+        {
+          "native_name": "EditorLoadScene",
+          "caller": "Editor.SceneManager.loadLayout",
+          "il_offset": 171
+        },
+        {
+          "native_name": "EditorLogMessage",
+          "caller": "Editor.Log.CLog.Log",
+          "il_offset": 24
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.CSoundBank..ctor",
+          "il_offset": 99
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.CSoundBank..ctor",
+          "il_offset": 110
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.SoundBankEditor.buttonAddBank_Click",
+          "il_offset": 131
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.TileSetsAndRoomPieceEditor.btnNewTilePiece_Click",
+          "il_offset": 215
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.TileSetsAndRoomPieceEditor.parseTilePiece",
+          "il_offset": 361
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.UnitEditor.MakeNewUnit",
+          "il_offset": 572
+        },
+        {
+          "native_name": "EditorMakeGuid",
+          "caller": "Editor.VisualObjectEditor.VisualObjectControl..ctor",
+          "il_offset": 84
+        },
+        {
+          "native_name": "EditorMaterialAmbientColor",
+          "caller": "Editor.LightColorForm..ctor",
+          "il_offset": 115
+        },
+        {
+          "native_name": "EditorMaterialAmbientColor",
+          "caller": "Editor.LightColorForm.updateColor",
+          "il_offset": 107
+        },
+        {
+          "native_name": "EditorMaterialAmbientColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 55
+        },
+        {
+          "native_name": "EditorMaterialAmbientColor",
+          "caller": "Editor.MainForm.pickLightColor",
+          "il_offset": 210
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.ColorShiftEditor..ctor",
+          "il_offset": 156
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.ColorShiftEditor.Apply",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.ColorShiftEditor.Sync",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.DynamicProptertyEditor..ctor",
+          "il_offset": 302
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.DynamicProptertyEditor.Apply",
+          "il_offset": 125
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.DynamicProptertyEditor.Sync",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.LineEditor..ctor",
+          "il_offset": 61
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.LineEditor.Apply",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.LineEditor.Sync",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.MainForm.StampPiece",
+          "il_offset": 163
+        },
+        {
+          "native_name": "EditorObjectExists",
+          "caller": "Editor.SceneManager.SetRoomPieceGuid",
+          "il_offset": 18
+        },
+        {
+          "native_name": "EditorParticleMovementConfig",
+          "caller": "Editor.ParticleMovementWindow..ctor",
+          "il_offset": 59
+        },
+        {
+          "native_name": "EditorParticleMovementConfig",
+          "caller": "Editor.ParticleMovementWindow.txBoxSize_TextChanged",
+          "il_offset": 43
+        },
+        {
+          "native_name": "EditorParticleMovementConfig",
+          "caller": "Editor.ParticleMovementWindow.txtBoxDuration_TextChanged",
+          "il_offset": 43
+        },
+        {
+          "native_name": "EditorPlayMusic",
+          "caller": "Editor.DungeonEditor.buttonPlayRulesMusic_Click",
+          "il_offset": 46
+        },
+        {
+          "native_name": "EditorPlaySound",
+          "caller": "Editor.SoundBankEditor.buttonPlayBank_Click",
+          "il_offset": 121
+        },
+        {
+          "native_name": "EditorPlaySound",
+          "caller": "Editor.SoundBankEditor.buttonPlaySound_Click",
+          "il_offset": 102
+        },
+        {
+          "native_name": "EditorPlaySound",
+          "caller": "Editor.SoundBankEditor.buttonPlaySound_Click",
+          "il_offset": 128
+        },
+        {
+          "native_name": "EditorPollObjectIDByIndex",
+          "caller": "Editor.SceneManager.refreshLayout",
+          "il_offset": 290
+        },
+        {
+          "native_name": "EditorPollObjects",
+          "caller": "Editor.SceneManager.refreshLayout",
+          "il_offset": 183
+        },
+        {
+          "native_name": "EditorRedo",
+          "caller": "Editor.MainForm.Redo",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorReloadAllAssets",
+          "caller": "Editor.MainForm.allToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorReloadAllAssets",
+          "caller": "Editor.MainForm.toolStripButtonReloadAll_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorReloadItem",
+          "caller": "Editor.MainForm.ReloadItemFile",
+          "il_offset": 110
+        },
+        {
+          "native_name": "EditorReloadModelAnimations",
+          "caller": "Editor.AnimationEditor.Save",
+          "il_offset": 191
+        },
+        {
+          "native_name": "EditorReloadMonster",
+          "caller": "Editor.MainForm.ReloadMonsterFile",
+          "il_offset": 110
+        },
+        {
+          "native_name": "EditorReloadMonsters",
+          "caller": "Editor.AnimationEditor.Save",
+          "il_offset": 178
+        },
+        {
+          "native_name": "EditorReloadPlayer",
+          "caller": "Editor.MainForm.ReloadPlayerFile",
+          "il_offset": 110
+        },
+        {
+          "native_name": "EditorReloadProp",
+          "caller": "Editor.MainForm.ReloadPropFile",
+          "il_offset": 110
+        },
+        {
+          "native_name": "EditorReloadSkill",
+          "caller": "Editor.MainForm.ReloadSkillFile",
+          "il_offset": 28
+        },
+        {
+          "native_name": "EditorReloadSkill",
+          "caller": "Editor.SkillEditor.MakeNewSkill",
+          "il_offset": 510
+        },
+        {
+          "native_name": "EditorReloadSoundData",
+          "caller": "Editor.MainForm.soundsToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorReloadSoundData",
+          "caller": "Editor.SoundBankEditor.toolStripButtonSave_Click",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorResetCamera",
+          "caller": "Editor.SceneManager.CreateMeshZoo",
+          "il_offset": 272
+        },
+        {
+          "native_name": "EditorResetCamera",
+          "caller": "Editor.UnitEditor.toolStripView_Click",
+          "il_offset": 596
+        },
+        {
+          "native_name": "EditorResetOrientation",
+          "caller": "Editor.SceneManager.resetOrientationMenuitem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorResetScale",
+          "caller": "Editor.SceneManager.resetScaleMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorResnapSelectedObjects",
+          "caller": "Editor.MainForm.StampPiece",
+          "il_offset": 307
+        },
+        {
+          "native_name": "EditorResnapSelectedObjects",
+          "caller": "Editor.RenderWindow.RenderWindow_KeyUp",
+          "il_offset": 199
+        },
+        {
+          "native_name": "EditorSaveScene",
+          "caller": "Editor.SceneManager.Save",
+          "il_offset": 232
+        },
+        {
+          "native_name": "EditorSetActiveAnimationPaused",
+          "caller": "Editor.AnimationEditor.AnimationEditor_FormClosing",
+          "il_offset": 91
+        },
+        {
+          "native_name": "EditorSetActiveAnimationPaused",
+          "caller": "Editor.AnimationEditor.Init",
+          "il_offset": 226
+        },
+        {
+          "native_name": "EditorSetActiveAnimationTimePosition",
+          "caller": "Editor.AnimationEditor.timelineBar_ValueChanged",
+          "il_offset": 79
+        },
+        {
+          "native_name": "EditorSetBackgroundColor",
+          "caller": "Editor.CEditorOptions.set_BackGroundColor",
+          "il_offset": 61
+        },
+        {
+          "native_name": "EditorSetBackgroundColor",
+          "caller": "Editor.MainForm.SetIngameMode",
+          "il_offset": 523
+        },
+        {
+          "native_name": "EditorSetChunkTemplateBasisSize",
+          "caller": "Editor.ChunkPalette.ClearChunk",
+          "il_offset": 6
+        },
+        {
+          "native_name": "EditorSetChunkTemplateBasisSize",
+          "caller": "Editor.ChunkPalette.DisplayChunk",
+          "il_offset": 89
+        },
+        {
+          "native_name": "EditorSetChunkTemplateExit",
+          "caller": "Editor.ChunkPalette.DisplayChunk",
+          "il_offset": 198
+        },
+        {
+          "native_name": "EditorSetChunkTemplateExits",
+          "caller": "Editor.ChunkPalette.ClearChunk",
+          "il_offset": 32
+        },
+        {
+          "native_name": "EditorSetChunkTemplateExits",
+          "caller": "Editor.ChunkPalette.DisplayChunk",
+          "il_offset": 236
+        },
+        {
+          "native_name": "EditorSetChunkTemplateHeight",
+          "caller": "Editor.ChunkPalette.Apply",
+          "il_offset": 45
+        },
+        {
+          "native_name": "EditorSetChunkTemplateHeight",
+          "caller": "Editor.ChunkPalette.ClearChunk",
+          "il_offset": 26
+        },
+        {
+          "native_name": "EditorSetChunkTemplateHeight",
+          "caller": "Editor.ChunkPalette.DisplayChunk",
+          "il_offset": 141
+        },
+        {
+          "native_name": "EditorSetChunkTemplateWidth",
+          "caller": "Editor.ChunkPalette.Apply",
+          "il_offset": 35
+        },
+        {
+          "native_name": "EditorSetChunkTemplateWidth",
+          "caller": "Editor.ChunkPalette.ClearChunk",
+          "il_offset": 16
+        },
+        {
+          "native_name": "EditorSetChunkTemplateWidth",
+          "caller": "Editor.ChunkPalette.DisplayChunk",
+          "il_offset": 115
+        },
+        {
+          "native_name": "EditorSetCommandAutoRun",
+          "caller": "Editor.CEditorOptions.set_ConsoleAutorun",
+          "il_offset": 75
+        },
+        {
+          "native_name": "EditorSetEditorActiveQuests",
+          "caller": "Editor.CEditorOptions.set_ActiveQuests",
+          "il_offset": 33
+        },
+        {
+          "native_name": "EditorSetEditorAiFreeze",
+          "caller": "Editor.CEditorOptions.set_AiFreeze",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorCharacterClass",
+          "caller": "Editor.CEditorOptions.set_CharacterClass",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorCharacterLevel",
+          "caller": "Editor.CEditorOptions.set_CharacterLevel",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorCompletedQuests",
+          "caller": "Editor.CEditorOptions.set_CompletedQuests",
+          "il_offset": 33
+        },
+        {
+          "native_name": "EditorSetEditorLevelCreatePet",
+          "caller": "Editor.CEditorOptions.set_SpawnPet",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorLevelDepth",
+          "caller": "Editor.CEditorOptions.set_DungeonDepth",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorLevelPopulate",
+          "caller": "Editor.CEditorOptions.set_DungeonPopulate",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorLevelPopulateChampions",
+          "caller": "Editor.CEditorOptions.set_DungeonPopulateChampions",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorMonsterSpawnclass",
+          "caller": "Editor.CEditorOptions.set_MonsterSpawnClass",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorPetType",
+          "caller": "Editor.CEditorOptions.set_PetType",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorPlayerFile",
+          "caller": "Editor.CEditorOptions.set_PlayerFile",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetEditorRunGodded",
+          "caller": "Editor.CEditorOptions.set_Godded",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetFlagState",
+          "caller": "Editor.CEditorFlag.SetFlagValue",
+          "il_offset": 8
+        },
+        {
+          "native_name": "EditorSetFlagState",
+          "caller": "Editor.CEditorFlag.Toggle",
+          "il_offset": 21
+        },
+        {
+          "native_name": "EditorSetIngameRes",
+          "caller": "Editor.MainForm.SetIngameMode",
+          "il_offset": 244
+        },
+        {
+          "native_name": "EditorSetLogicObjectPosition",
+          "caller": "Editor.LogicObject.set_X",
+          "il_offset": 47
+        },
+        {
+          "native_name": "EditorSetLogicObjectPosition",
+          "caller": "Editor.LogicObject.set_Y",
+          "il_offset": 47
+        },
+        {
+          "native_name": "EditorSetModPriority",
+          "caller": "Editor.ModEditorForm.btnDelete_Click",
+          "il_offset": 212
+        },
+        {
+          "native_name": "EditorSetMonsterAutoSpawn",
+          "caller": "Editor.CEditorOptions.set_MonsterAutospawn",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetMouseWheelDelta",
+          "caller": "Editor.MainForm.TimerRenderWindowUpdate_Tick",
+          "il_offset": 80
+        },
+        {
+          "native_name": "EditorSetMuted",
+          "caller": "Editor.CEditorOptions.set_Muted",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetMuted",
+          "caller": "Editor.MainForm.SetIngameMode",
+          "il_offset": 539
+        },
+        {
+          "native_name": "EditorSetObjectName",
+          "caller": "Editor.EditorNode.SetName",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorSetObjectName",
+          "caller": "Editor.SceneManager.scene_node_name_changed",
+          "il_offset": 43
+        },
+        {
+          "native_name": "EditorSetObjectParent",
+          "caller": "Editor.DragAndDropController.RecalculateTree",
+          "il_offset": 91
+        },
+        {
+          "native_name": "EditorSetObjectParent",
+          "caller": "Editor.DragAndDropController.RecalculateTree",
+          "il_offset": 123
+        },
+        {
+          "native_name": "EditorSetObjectParent",
+          "caller": "Editor.EditorNode.AddSelectedNode",
+          "il_offset": 29
+        },
+        {
+          "native_name": "EditorSetObjectParent",
+          "caller": "Editor.SceneManager.groupItem_Click",
+          "il_offset": 261
+        },
+        {
+          "native_name": "EditorSetObjectParent",
+          "caller": "Editor.SceneManager.groupItem_Click",
+          "il_offset": 290
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.AnimationEditor.Save",
+          "il_offset": 247
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.AnimationEditor.UpdateAnimation",
+          "il_offset": 51
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.AnimationEditor.UpdateLoops",
+          "il_offset": 41
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.AnimationEditor.UpdateSpeed",
+          "il_offset": 64
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.CObjectProperty.SetValue",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.MainForm.StampPiece",
+          "il_offset": 295
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.Palette.ApplyRoomPiece",
+          "il_offset": 231
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.CreateMeshZoo",
+          "il_offset": 204
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.HideNode",
+          "il_offset": 149
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.HideNodeAndChildren",
+          "il_offset": 168
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.RevertToPreRollState",
+          "il_offset": 96
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.SetRoomPieceGuid",
+          "il_offset": 71
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.ShowAndRollChildren",
+          "il_offset": 220
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.ShowNode",
+          "il_offset": 149
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.SceneManager.ToggleRoomPieceType",
+          "il_offset": 393
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.UnitEditor.toolStripView_Click",
+          "il_offset": 329
+        },
+        {
+          "native_name": "EditorSetObjectProperty",
+          "caller": "Editor.UnitEditor.toolStripView_Click",
+          "il_offset": 454
+        },
+        {
+          "native_name": "EditorSetObjectPropertyArray",
+          "caller": "Editor.ColorShiftEditor.Apply",
+          "il_offset": 141
+        },
+        {
+          "native_name": "EditorSetObjectPropertyArray",
+          "caller": "Editor.DynamicProptertyEditor.Apply",
+          "il_offset": 168
+        },
+        {
+          "native_name": "EditorSetObjectPropertyArray",
+          "caller": "Editor.LineEditor.Apply",
+          "il_offset": 141
+        },
+        {
+          "native_name": "EditorSetObjectPropertyArray",
+          "caller": "Editor.iEditorObject.setDataInDLL",
+          "il_offset": 57
+        },
+        {
+          "native_name": "EditorSetObjectSelected",
+          "caller": "Editor.SceneManager.UpdateSceneManager",
+          "il_offset": 224
+        },
+        {
+          "native_name": "EditorSetObjectSelected",
+          "caller": "Editor.SceneManager.UpdateSceneManager",
+          "il_offset": 345
+        },
+        {
+          "native_name": "EditorSetOrientSnapSize",
+          "caller": "Editor.MainForm.toolStripOrientationSnapComboBox_SelectedIndexChanged",
+          "il_offset": 48
+        },
+        {
+          "native_name": "EditorSetOrientSnapSize",
+          "caller": "Editor.MainForm.toolStripOrientationSnapComboBox_SelectedIndexChanged",
+          "il_offset": 60
+        },
+        {
+          "native_name": "EditorSetPOVVelocityMult",
+          "caller": "Editor.MainForm.toolStripComboBoxCameraSpeed_SelectedIndexChanged",
+          "il_offset": 44
+        },
+        {
+          "native_name": "EditorSetPOVVelocityMult",
+          "caller": "Editor.MainForm.toolStripComboBoxCameraSpeed_SelectedIndexChanged",
+          "il_offset": 56
+        },
+        {
+          "native_name": "EditorSetPosHSnapSize",
+          "caller": "Editor.MainForm.toolStripSnapComboBox_SelectedIndexChanged",
+          "il_offset": 40
+        },
+        {
+          "native_name": "EditorSetPosHSnapSize",
+          "caller": "Editor.MainForm.toolStripSnapComboBox_SelectedIndexChanged",
+          "il_offset": 52
+        },
+        {
+          "native_name": "EditorSetPosVSnapSize",
+          "caller": "Editor.MainForm.toolStripPositionSnapVComboBox_SelectedIndexChanged",
+          "il_offset": 40
+        },
+        {
+          "native_name": "EditorSetPosVSnapSize",
+          "caller": "Editor.MainForm.toolStripPositionSnapVComboBox_SelectedIndexChanged",
+          "il_offset": 52
+        },
+        {
+          "native_name": "EditorSetSceneVisible",
+          "caller": "Editor.SceneManager.toolStripButtonSetInvisible_Click",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorSetSceneVisible",
+          "caller": "Editor.SceneManager.toolStripButtonSetSceneVisible_Click",
+          "il_offset": 13
+        },
+        {
+          "native_name": "EditorSetSnapToGroundBias",
+          "caller": "Editor.CEditorOptions.set_SnapToGroundBias",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorSetTempStartPos",
+          "caller": "Editor.RenderWindow.startHereToolStripMenuItem_Click",
+          "il_offset": 105
+        },
+        {
+          "native_name": "EditorSetUseTempStartPos",
+          "caller": "Editor.RenderWindow.startHereToolStripMenuItem_Click",
+          "il_offset": 111
+        },
+        {
+          "native_name": "EditorSetWorkingPlaneHeight",
+          "caller": "Editor.MainForm.SetWorkingPlane",
+          "il_offset": 2
+        },
+        {
+          "native_name": "EditorSetWorkingPlaneHeightToSelectedPivot",
+          "caller": "Editor.MainForm.SetWorkingPlaneFromSelectedObject",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorSnapObjectsToGround",
+          "caller": "Editor.SceneManager.snapGroundAndNormalMenuItem_Click",
+          "il_offset": 2
+        },
+        {
+          "native_name": "EditorSnapObjectsToGround",
+          "caller": "Editor.SceneManager.snapGroundMenuItem_Click",
+          "il_offset": 2
+        },
+        {
+          "native_name": "EditorStartUndo",
+          "caller": "Editor.SceneManager.DeleteSelectedNodes",
+          "il_offset": 37
+        },
+        {
+          "native_name": "EditorStopMusic",
+          "caller": "Editor.DungeonEditor.buttonStopRulesMusic_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorTestCameraShake",
+          "caller": "Editor.CameraShakeEditor.toolStripButtonTest_Click",
+          "il_offset": 169
+        },
+        {
+          "native_name": "EditorTimelineAddPointToProperty",
+          "caller": "Editor.TimelinePoint..ctor",
+          "il_offset": 159
+        },
+        {
+          "native_name": "EditorTimelineAddProperty",
+          "caller": "Editor.TimelinePanel..ctor",
+          "il_offset": 212
+        },
+        {
+          "native_name": "EditorTimelineGetObjectIDInTimelineByIndex",
+          "caller": "Editor.TimelineWindow.RefreshTimelineOnCreate",
+          "il_offset": 82
+        },
+        {
+          "native_name": "EditorTimelineGetObjectIDInTimelineByIndex",
+          "caller": "Editor.TimelineWindow.RefreshTimelineOnCreate",
+          "il_offset": 234
+        },
+        {
+          "native_name": "EditorTimelineGetPointIDInTimelinePropertyByIndex",
+          "caller": "Editor.TimelinePanel.RefreshPanelPointsOnCreate",
+          "il_offset": 59
+        },
+        {
+          "native_name": "EditorTimelineGetPointIDInTimelinePropertyByIndex",
+          "caller": "Editor.TimelinePanel.RefreshPanelPointsOnCreate",
+          "il_offset": 142
+        },
+        {
+          "native_name": "EditorTimelineGetPropertyIDForObjectInTimelineByIndex",
+          "caller": "Editor.TimelineWindow.AddTimelinePropsToEditorNode",
+          "il_offset": 45
+        },
+        {
+          "native_name": "EditorTimelineGetPropertyIDForObjectInTimelineByIndex",
+          "caller": "Editor.TimelineWindow.AddTimelinePropsToEditorNode",
+          "il_offset": 154
+        },
+        {
+          "native_name": "EditorTimelineGetPropertyInterpType",
+          "caller": "Editor.TimelinePanel.get_InterpolationType",
+          "il_offset": 70
+        },
+        {
+          "native_name": "EditorTimelineGetTimePercentAtPoint",
+          "caller": "Editor.TimelinePoint.get_Time",
+          "il_offset": 78
+        },
+        {
+          "native_name": "EditorTimelineGetValueAtPoint",
+          "caller": "Editor.TimelinePoint.GetPropertyValueOnPoint",
+          "il_offset": 79
+        },
+        {
+          "native_name": "EditorTimelineGetValueAtPointArray",
+          "caller": "Editor.iEditorObject.retrieveDataFromDLL",
+          "il_offset": 84
+        },
+        {
+          "native_name": "EditorTimelineRemovePointFromProperty",
+          "caller": "Editor.TimelinePoint.DeleteTimelinePoint",
+          "il_offset": 102
+        },
+        {
+          "native_name": "EditorTimelineRemoveProperty",
+          "caller": "Editor.TimelinePanel.DeleteTimelinePanel",
+          "il_offset": 81
+        },
+        {
+          "native_name": "EditorTimelineSetPercentDone",
+          "caller": "Editor.TimelineWindow.timerBar_ValueChanged",
+          "il_offset": 98
+        },
+        {
+          "native_name": "EditorTimelineSetPercentDone",
+          "caller": "Editor.TimelineWindow.timerBar_ValueChanged",
+          "il_offset": 126
+        },
+        {
+          "native_name": "EditorTimelineSetPropertyInterpType",
+          "caller": "Editor.TimelinePanel.set_InterpolationType",
+          "il_offset": 102
+        },
+        {
+          "native_name": "EditorTimelineSetPropertyPointTimePercent",
+          "caller": "Editor.TimelinePoint.set_Time",
+          "il_offset": 147
+        },
+        {
+          "native_name": "EditorTimelineSetPropertyPointValue",
+          "caller": "Editor.TimelinePoint.SetPropertyValueOnPoint",
+          "il_offset": 93
+        },
+        {
+          "native_name": "EditorTimelineSetPropertyPointValueArray",
+          "caller": "Editor.iEditorObject.setDataInDLL",
+          "il_offset": 101
+        },
+        {
+          "native_name": "EditorToggleDisplayCollision",
+          "caller": "Editor.MainForm.showCollisionMeshesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "EditorUndo",
+          "caller": "Editor.MainForm.Undo",
+          "il_offset": 9
+        },
+        {
+          "native_name": "EditorUpdate",
+          "caller": "Editor.MainForm.TimerRenderWindowUpdate_Tick",
+          "il_offset": 162
+        },
+        {
+          "native_name": "EditorUpdate",
+          "caller": "Editor.SceneManager.CreateMeshZoo",
+          "il_offset": 340
+        },
+        {
+          "native_name": "EditorUpdate",
+          "caller": "Editor.UnitEditor.toolStripView_Click",
+          "il_offset": 602
+        },
+        {
+          "native_name": "EditorWindowHasFocus",
+          "caller": "Editor.MainForm.SetFocusOnRenderWindow",
+          "il_offset": 33
+        },
+        {
+          "native_name": "EditorWindowHasFocus",
+          "caller": "Editor.RenderWindow.RenderWindow_MouseEnter",
+          "il_offset": 10
+        },
+        {
+          "native_name": "EditorWindowHasFocus",
+          "caller": "Editor.RenderWindow.SetRenderWindowAllowedToProcess",
+          "il_offset": 25
+        },
+        {
+          "native_name": "GetEnabledModNames",
+          "caller": "Editor.MainForm.enableDisableInGameModsToolStripMenuItem1_Click",
+          "il_offset": 43
+        },
+        {
+          "native_name": "GetModNames",
+          "caller": "Editor.MainForm.enableDisableInGameModsToolStripMenuItem1_Click",
+          "il_offset": 37
+        },
+        {
+          "native_name": "InitEditor",
+          "caller": "Editor.MainForm.MainForm_Load",
+          "il_offset": 407
+        },
+        {
+          "native_name": "IsA",
+          "caller": "Editor.CUnitTypeHierarchy.IsA",
+          "il_offset": 3
+        },
+        {
+          "native_name": "IsA",
+          "caller": "Editor.ItemEditor.EnableGroupsByUnittype",
+          "il_offset": 54
+        },
+        {
+          "native_name": "IsA",
+          "caller": "Editor.ItemEditor.EnableGroupsByUnittype",
+          "il_offset": 79
+        },
+        {
+          "native_name": "IsA",
+          "caller": "Editor.ItemEditor.EnableGroupsByUnittype",
+          "il_offset": 104
+        },
+        {
+          "native_name": "IsA",
+          "caller": "Editor.UnitEditor.IsA",
+          "il_offset": 45
+        },
+        {
+          "native_name": "SetModEnabled",
+          "caller": "Editor.MainForm.enableDisableInGameModsToolStripMenuItem1_Click",
+          "il_offset": 272
+        },
+        {
+          "native_name": "SetModEnabled",
+          "caller": "Editor.MainForm.enableDisableInGameModsToolStripMenuItem1_Click",
+          "il_offset": 282
+        },
+        {
+          "native_name": "ShutdownEditor",
+          "caller": "Editor.MainForm.MainForm_FormClosing",
+          "il_offset": 965
+        },
+        {
+          "native_name": "reloadCinematics",
+          "caller": "Editor.CinematicsEditor.Save",
+          "il_offset": 79
+        },
+        {
+          "native_name": "reloadCinematics",
+          "caller": "Editor.MainForm.cinematicsToolStripMenuItem1_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadEditorLayoutLinks",
+          "caller": "Editor.MainForm.editorObjectsToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadEditorParticles",
+          "caller": "Editor.MainForm.particlesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadItemSets",
+          "caller": "Editor.ItemSetEditor.toolStripButtonSave_Click",
+          "il_offset": 7
+        },
+        {
+          "native_name": "reloadItemSets",
+          "caller": "Editor.MainForm.itemSetsToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadMissiles",
+          "caller": "Editor.MainForm.missilesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.CameraShakeEditor.Save",
+          "il_offset": 72
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.CameraShakeEditor.toolStripButtonTest_Click",
+          "il_offset": 139
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.CinematicsEditor.Save",
+          "il_offset": 74
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.FormationsEditor.Save",
+          "il_offset": 139
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.MainForm.ReloadItemFile",
+          "il_offset": 104
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.MainForm.ReloadMonsterFile",
+          "il_offset": 104
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.MainForm.ReloadPlayerFile",
+          "il_offset": 104
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.MainForm.ReloadPropFile",
+          "il_offset": 104
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.QuestEditor.Save",
+          "il_offset": 196
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.RecipeEditor.Save",
+          "il_offset": 86
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.SkillEditor.MakeNewSkill",
+          "il_offset": 503
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.SkillEditor.Save",
+          "il_offset": 199
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.SpawnClassEditor.Save",
+          "il_offset": 151
+        },
+        {
+          "native_name": "reloadModFileFilter",
+          "caller": "Editor.TileSetsAndRoomPieceEditor.Save",
+          "il_offset": 196
+        },
+        {
+          "native_name": "reloadQuests",
+          "caller": "Editor.QuestEditor.Save",
+          "il_offset": 201
+        },
+        {
+          "native_name": "reloadRecipes",
+          "caller": "Editor.MainForm.recipiesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadRecipes",
+          "caller": "Editor.RecipeEditor.Save",
+          "il_offset": 91
+        },
+        {
+          "native_name": "reloadSpawnClasses",
+          "caller": "Editor.FormationsEditor.Save",
+          "il_offset": 144
+        },
+        {
+          "native_name": "reloadSpawnClasses",
+          "caller": "Editor.MainForm.spawnClassesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadSpawnClasses",
+          "caller": "Editor.SpawnClassEditor.Save",
+          "il_offset": 156
+        },
+        {
+          "native_name": "reloadTextures",
+          "caller": "Editor.MainForm.texturesToolStripMenuItem_Click",
+          "il_offset": 1
+        },
+        {
+          "native_name": "reloadUnitThemes",
+          "caller": "Editor.UnitThemeEditor.Save",
+          "il_offset": 170
+        },
+        {
+          "native_name": "rollRoomPiece",
+          "caller": "Editor.SceneManager.RollPieceVariations",
+          "il_offset": 49
+        }
+      ]
+    }
   },
   "installer": {
     "name": "TorchEDInstaller-1.0.exe",
