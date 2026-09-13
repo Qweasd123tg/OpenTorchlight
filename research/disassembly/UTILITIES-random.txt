@@ -1,0 +1,155 @@
+
+/home/qweasd123tg/Документы/Torchlight/game/Torchlight.bin.x86_64:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000c92a70 <UTILITIES::randomBetween(float, float)>:
+  c92a70:	ucomiss xmm1,xmm0
+  c92a73:	jp     c92a7b <UTILITIES::randomBetween(float, float)+0xb>
+  c92a75:	je     c92b05 <UTILITIES::randomBetween(float, float)+0x95>
+  c92a7b:	mov    rdx,QWORD PTR [rip+0x85a06e]        # 14ecaf0 <g_Rand>
+  c92a82:	subss  xmm1,xmm0
+  c92a86:	mov    rax,rdx
+  c92a89:	shr    rdx,0x20
+  c92a8d:	and    eax,0xffffffff
+  c92a90:	unpcklps xmm1,xmm1
+  c92a93:	imul   rax,rax,0x29777b41
+  c92a9a:	cvtps2pd xmm1,xmm1
+  c92a9d:	lea    rdx,[rax+rdx*1]
+  c92aa1:	mov    rax,rdx
+  c92aa4:	mov    rcx,rdx
+  c92aa7:	shl    rdx,0x20
+  c92aab:	and    eax,0xffffffff
+  c92aae:	shr    rcx,0x20
+  c92ab2:	imul   rax,rax,0x29777b41
+  c92ab9:	add    rax,rcx
+  c92abc:	mov    QWORD PTR [rip+0x85a02d],rax        # 14ecaf0 <g_Rand>
+  c92ac3:	mov    eax,eax
+  c92ac5:	add    rax,rdx
+  c92ac8:	movabs rdx,0xfffffffffffff
+  c92ad2:	and    rax,rdx
+  c92ad5:	movabs rdx,0x3ff0000000000000
+  c92adf:	or     rax,rdx
+  c92ae2:	mov    QWORD PTR [rsp-0x8],rax
+  c92ae7:	movsd  xmm2,QWORD PTR [rsp-0x8]
+  c92aed:	subsd  xmm2,QWORD PTR [rip+0x33567b]        # fc8170 <typeinfo name for CTimelineProperty::CTimelinePoint+0x30>
+  c92af5:	mulsd  xmm1,xmm2
+  c92af9:	unpcklpd xmm1,xmm1
+  c92afd:	cvtpd2ps xmm1,xmm1
+  c92b01:	addss  xmm0,xmm1
+  c92b05:	repz ret
+  c92b07:	nop    WORD PTR [rax+rax*1+0x0]
+
+0000000000c92b10 <UTILITIES::randomIntegerBetween(int, int)>:
+  c92b10:	cmp    esi,edi
+  c92b12:	jle    c92b4a <UTILITIES::randomIntegerBetween(int, int)+0x3a>
+  c92b14:	mov    rax,QWORD PTR [rip+0x859fd5]        # 14ecaf0 <g_Rand>
+  c92b1b:	xor    edx,edx
+  c92b1d:	mov    rcx,rax
+  c92b20:	shr    rax,0x20
+  c92b24:	and    ecx,0xffffffff
+  c92b27:	imul   rcx,rcx,0x29777b41
+  c92b2e:	lea    rax,[rcx+rax*1]
+  c92b32:	mov    ecx,esi
+  c92b34:	sub    ecx,edi
+  c92b36:	add    ecx,0x1
+  c92b39:	mov    QWORD PTR [rip+0x859fb0],rax        # 14ecaf0 <g_Rand>
+  c92b40:	div    ecx
+  c92b42:	lea    edi,[rdx+rdi*1]
+  c92b45:	cmp    edi,esi
+  c92b47:	cmovg  edi,esi
+  c92b4a:	mov    eax,edi
+  c92b4c:	ret
+  c92b4d:	nop    DWORD PTR [rax]
+
+0000000000c92b50 <UTILITIES::randomBetweenVolatile(float, float)>:
+  c92b50:	ucomiss xmm1,xmm0
+  c92b53:	jp     c92b5b <UTILITIES::randomBetweenVolatile(float, float)+0xb>
+  c92b55:	je     c92be5 <UTILITIES::randomBetweenVolatile(float, float)+0x95>
+  c92b5b:	mov    rdx,QWORD PTR [rip+0x859f96]        # 14ecaf8 <g_RandVolatile>
+  c92b62:	subss  xmm1,xmm0
+  c92b66:	mov    rax,rdx
+  c92b69:	shr    rdx,0x20
+  c92b6d:	and    eax,0xffffffff
+  c92b70:	unpcklps xmm1,xmm1
+  c92b73:	imul   rax,rax,0x29777b41
+  c92b7a:	cvtps2pd xmm1,xmm1
+  c92b7d:	lea    rdx,[rax+rdx*1]
+  c92b81:	mov    rax,rdx
+  c92b84:	mov    rcx,rdx
+  c92b87:	shl    rdx,0x20
+  c92b8b:	and    eax,0xffffffff
+  c92b8e:	shr    rcx,0x20
+  c92b92:	imul   rax,rax,0x29777b41
+  c92b99:	add    rax,rcx
+  c92b9c:	mov    QWORD PTR [rip+0x859f55],rax        # 14ecaf8 <g_RandVolatile>
+  c92ba3:	mov    eax,eax
+  c92ba5:	add    rax,rdx
+  c92ba8:	movabs rdx,0xfffffffffffff
+  c92bb2:	and    rax,rdx
+  c92bb5:	movabs rdx,0x3ff0000000000000
+  c92bbf:	or     rax,rdx
+  c92bc2:	mov    QWORD PTR [rsp-0x8],rax
+  c92bc7:	movsd  xmm2,QWORD PTR [rsp-0x8]
+  c92bcd:	subsd  xmm2,QWORD PTR [rip+0x33559b]        # fc8170 <typeinfo name for CTimelineProperty::CTimelinePoint+0x30>
+  c92bd5:	mulsd  xmm1,xmm2
+  c92bd9:	unpcklpd xmm1,xmm1
+  c92bdd:	cvtpd2ps xmm1,xmm1
+  c92be1:	addss  xmm0,xmm1
+  c92be5:	repz ret
+  c92be7:	nop    WORD PTR [rax+rax*1+0x0]
+
+0000000000c92bf0 <UTILITIES::randomIntegerBetweenVolatile(int, int)>:
+  c92bf0:	cmp    esi,edi
+  c92bf2:	jle    c92c2a <UTILITIES::randomIntegerBetweenVolatile(int, int)+0x3a>
+  c92bf4:	mov    rax,QWORD PTR [rip+0x859efd]        # 14ecaf8 <g_RandVolatile>
+  c92bfb:	xor    edx,edx
+  c92bfd:	mov    rcx,rax
+  c92c00:	shr    rax,0x20
+  c92c04:	and    ecx,0xffffffff
+  c92c07:	imul   rcx,rcx,0x29777b41
+  c92c0e:	lea    rax,[rcx+rax*1]
+  c92c12:	mov    ecx,esi
+  c92c14:	sub    ecx,edi
+  c92c16:	add    ecx,0x1
+  c92c19:	mov    QWORD PTR [rip+0x859ed8],rax        # 14ecaf8 <g_RandVolatile>
+  c92c20:	div    ecx
+  c92c22:	lea    edi,[rdx+rdi*1]
+  c92c25:	cmp    edi,esi
+  c92c27:	cmovg  edi,esi
+  c92c2a:	mov    eax,edi
+  c92c2c:	ret
+  c92c2d:	nop    DWORD PTR [rax]
+
+0000000000c92c30 <UTILITIES::setSeedVolatile(int)>:
+  c92c30:	sub    rsp,0x8
+  c92c34:	test   edi,edi
+  c92c36:	mov    eax,edi
+  c92c38:	je     c92c50 <UTILITIES::setSeedVolatile(int)+0x20>
+  c92c3a:	mov    QWORD PTR [rip+0x859eb7],rax        # 14ecaf8 <g_RandVolatile>
+  c92c41:	add    rsp,0x8
+  c92c45:	ret
+  c92c46:	cs nop WORD PTR [rax+rax*1+0x0]
+  c92c50:	call   f61d60 <GetTickCount()>
+  c92c55:	mov    eax,eax
+  c92c57:	mov    QWORD PTR [rip+0x859e9a],rax        # 14ecaf8 <g_RandVolatile>
+  c92c5e:	add    rsp,0x8
+  c92c62:	ret
+  c92c63:	data16 data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c92c70 <UTILITIES::setSeed(int)>:
+  c92c70:	sub    rsp,0x8
+  c92c74:	test   edi,edi
+  c92c76:	mov    eax,edi
+  c92c78:	je     c92c90 <UTILITIES::setSeed(int)+0x20>
+  c92c7a:	mov    QWORD PTR [rip+0x859e6f],rax        # 14ecaf0 <g_Rand>
+  c92c81:	add    rsp,0x8
+  c92c85:	ret
+  c92c86:	cs nop WORD PTR [rax+rax*1+0x0]
+  c92c90:	call   f61d60 <GetTickCount()>
+  c92c95:	mov    eax,eax
+  c92c97:	mov    QWORD PTR [rip+0x859e52],rax        # 14ecaf0 <g_Rand>
+  c92c9e:	add    rsp,0x8
+  c92ca2:	ret
+  c92ca3:	data16 data16 data16 cs nop WORD PTR [rax+rax*1+0x0]

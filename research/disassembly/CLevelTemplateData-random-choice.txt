@@ -1,0 +1,148 @@
+
+/home/qweasd123tg/Документы/Torchlight/game/Torchlight.bin.x86_64:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000971360 <CLevelTemplateData::getRandomChunk(unsigned int)>:
+  971360:	push   rbx
+  971361:	cmp    esi,DWORD PTR [rdi+0xfc]
+  971367:	mov    rbx,rdi
+  97136a:	jb     971390 <CLevelTemplateData::getRandomChunk(unsigned int)+0x30>
+  97136c:	mov    rsi,QWORD PTR [rdi+0xf0]
+  971373:	mov    rdi,QWORD PTR [rsi]
+  971376:	call   c8aa10 <CRandomizer::getRandom()>
+  97137b:	cmp    eax,DWORD PTR [rbx+0x34]
+  97137e:	jae    9713aa <CLevelTemplateData::getRandomChunk(unsigned int)+0x4a>
+  971380:	mov    eax,eax
+  971382:	shl    rax,0x3
+  971386:	add    rax,QWORD PTR [rbx+0x28]
+  97138a:	pop    rbx
+  97138b:	mov    rax,QWORD PTR [rax]
+  97138e:	ret
+  97138f:	nop
+  971390:	mov    esi,esi
+  971392:	shl    rsi,0x3
+  971396:	add    rsi,QWORD PTR [rdi+0xf0]
+  97139d:	mov    rdi,QWORD PTR [rsi]
+  9713a0:	call   c8aa10 <CRandomizer::getRandom()>
+  9713a5:	cmp    eax,DWORD PTR [rbx+0x34]
+  9713a8:	jb     971380 <CLevelTemplateData::getRandomChunk(unsigned int)+0x20>
+  9713aa:	mov    rax,QWORD PTR [rbx+0x28]
+  9713ae:	pop    rbx
+  9713af:	mov    rax,QWORD PTR [rax]
+  9713b2:	ret
+  9713b3:	nop
+  9713b4:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+00000000009713c0 <CLevelTemplateData::getRandomLayout()>:
+  9713c0:	push   rbx
+  9713c1:	mov    rbx,rdi
+  9713c4:	mov    rdi,QWORD PTR [rdi+0xe8]
+  9713cb:	test   rdi,rdi
+  9713ce:	je     9713f0 <CLevelTemplateData::getRandomLayout()+0x30>
+  9713d0:	mov    eax,DWORD PTR [rdi+0x30]
+  9713d3:	test   eax,eax
+  9713d5:	je     9713f0 <CLevelTemplateData::getRandomLayout()+0x30>
+  9713d7:	call   c8aa10 <CRandomizer::getRandom()>
+  9713dc:	cmp    eax,DWORD PTR [rbx+0xc4]
+  9713e2:	jb     9713f8 <CLevelTemplateData::getRandomLayout()+0x38>
+  9713e4:	mov    rax,QWORD PTR [rbx+0xb8]
+  9713eb:	mov    rax,QWORD PTR [rax]
+  9713ee:	pop    rbx
+  9713ef:	ret
+  9713f0:	xor    eax,eax
+  9713f2:	pop    rbx
+  9713f3:	ret
+  9713f4:	nop    DWORD PTR [rax+0x0]
+  9713f8:	mov    eax,eax
+  9713fa:	shl    rax,0x3
+  9713fe:	add    rax,QWORD PTR [rbx+0xb8]
+  971405:	mov    rax,QWORD PTR [rax]
+  971408:	jmp    9713ee <CLevelTemplateData::getRandomLayout()+0x2e>
+  97140a:	nop    WORD PTR [rax+rax*1+0x0]
+
+0000000000971410 <CLevelTemplateData::resetOdds()>:
+  971410:	push   r15
+  971412:	push   r14
+  971414:	push   r13
+  971416:	push   r12
+  971418:	push   rbp
+  971419:	push   rbx
+  97141a:	mov    rbx,rdi
+  97141d:	sub    rsp,0x8
+  971421:	mov    edx,DWORD PTR [rdi+0xf8]
+  971427:	test   edx,edx
+  971429:	je     971501 <CLevelTemplateData::resetOdds()+0xf1>
+  97142f:	xor    r13d,r13d
+  971432:	nop    WORD PTR [rax+rax*1+0x0]
+  971438:	mov    ecx,DWORD PTR [rbx+0xfc]
+  97143e:	cmp    ecx,r13d
+  971441:	ja     971510 <CLevelTemplateData::resetOdds()+0x100>
+  971447:	mov    rax,QWORD PTR [rbx+0xf0]
+  97144e:	mov    rax,QWORD PTR [rax]
+  971451:	mov    r15d,DWORD PTR [rax+0x30]
+  971455:	test   r15d,r15d
+  971458:	jle    9714f0 <CLevelTemplateData::resetOdds()+0xe0>
+  97145e:	mov    r14d,r13d
+  971461:	xor    r12d,r12d
+  971464:	xor    ebp,ebp
+  971466:	shl    r14,0x3
+  97146a:	jmp    9714bc <CLevelTemplateData::resetOdds()+0xac>
+  97146c:	nop    DWORD PTR [rax+0x0]
+  971470:	mov    rdx,QWORD PTR [rbx+0xf0]
+  971477:	mov    rax,rdx
+  97147a:	mov    rdx,QWORD PTR [rdx]
+  97147d:	cmp    DWORD PTR [rdx+0x1c],ebp
+  971480:	ja     9714d4 <CLevelTemplateData::resetOdds()+0xc4>
+  971482:	mov    rdx,QWORD PTR [rdx+0x10]
+  971486:	mov    esi,DWORD PTR [rdx]
+  971488:	cmp    esi,DWORD PTR [rbx+0x34]
+  97148b:	jb     9714e3 <CLevelTemplateData::resetOdds()+0xd3>
+  97148d:	mov    rdx,QWORD PTR [rbx+0x28]
+  971491:	mov    rdx,QWORD PTR [rdx]
+  971494:	lea    rdi,[rax+r14*1]
+  971498:	cmp    ecx,r13d
+  97149b:	cmova  rax,rdi
+  97149f:	add    ebp,0x1
+  9714a2:	add    r12,0x4
+  9714a6:	mov    edx,DWORD PTR [rdx+0x14]
+  9714a9:	mov    rdi,QWORD PTR [rax]
+  9714ac:	call   c8a240 <CRandomizer::setChoiceOdds(int, int)>
+  9714b1:	cmp    r15d,ebp
+  9714b4:	jle    9714f0 <CLevelTemplateData::resetOdds()+0xe0>
+  9714b6:	mov    ecx,DWORD PTR [rbx+0xfc]
+  9714bc:	cmp    ecx,r13d
+  9714bf:	jbe    971470 <CLevelTemplateData::resetOdds()+0x60>
+  9714c1:	mov    rax,QWORD PTR [rbx+0xf0]
+  9714c8:	lea    rdx,[rax+r14*1]
+  9714cc:	mov    rdx,QWORD PTR [rdx]
+  9714cf:	cmp    DWORD PTR [rdx+0x1c],ebp
+  9714d2:	jbe    971482 <CLevelTemplateData::resetOdds()+0x72>
+  9714d4:	mov    rdx,QWORD PTR [rdx+0x10]
+  9714d8:	lea    rdx,[r12+rdx*1]
+  9714dc:	mov    esi,DWORD PTR [rdx]
+  9714de:	cmp    esi,DWORD PTR [rbx+0x34]
+  9714e1:	jae    97148d <CLevelTemplateData::resetOdds()+0x7d>
+  9714e3:	mov    edx,esi
+  9714e5:	shl    rdx,0x3
+  9714e9:	add    rdx,QWORD PTR [rbx+0x28]
+  9714ed:	jmp    971491 <CLevelTemplateData::resetOdds()+0x81>
+  9714ef:	nop
+  9714f0:	add    r13d,0x1
+  9714f4:	cmp    r13d,DWORD PTR [rbx+0xf8]
+  9714fb:	jb     971438 <CLevelTemplateData::resetOdds()+0x28>
+  971501:	add    rsp,0x8
+  971505:	pop    rbx
+  971506:	pop    rbp
+  971507:	pop    r12
+  971509:	pop    r13
+  97150b:	pop    r14
+  97150d:	pop    r15
+  97150f:	ret
+  971510:	mov    eax,r13d
+  971513:	shl    rax,0x3
+  971517:	add    rax,QWORD PTR [rbx+0xf0]
+  97151e:	jmp    97144e <CLevelTemplateData::resetOdds()+0x3e>
+  971523:	nop
+  971524:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]

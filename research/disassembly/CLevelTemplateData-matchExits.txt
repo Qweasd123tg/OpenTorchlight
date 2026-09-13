@@ -1,0 +1,284 @@
+
+/home/qweasd123tg/Документы/Torchlight/game/Torchlight.bin.x86_64:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000972e90 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>:
+  972e90:	push   r15
+  972e92:	mov    r15,rdi
+  972e95:	push   r14
+  972e97:	mov    r14,rsi
+  972e9a:	push   r13
+  972e9c:	push   r12
+  972e9e:	push   rbp
+  972e9f:	push   rbx
+  972ea0:	sub    rsp,0x68
+  972ea4:	mov    QWORD PTR [rsp+0x30],rdx
+  972ea9:	mov    eax,DWORD PTR [rsi+0x10]
+  972eac:	cmp    eax,DWORD PTR [rdi+0x1c]
+  972eaf:	jb     97335b <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x4cb>
+  972eb5:	mov    rax,QWORD PTR [rdi+0x10]
+  972eb9:	mov    rax,QWORD PTR [rax]
+  972ebc:	mov    QWORD PTR [rsp+0x40],rax
+  972ec1:	cmp    DWORD PTR [rax+0x50],0x0
+  972ec5:	jle    97327c <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x3ec>
+  972ecb:	mov    rbx,QWORD PTR [rsp+0x30]
+  972ed0:	lea    rax,[r14+0x30]
+  972ed4:	mov    QWORD PTR [rsp+0x48],0x0
+  972edd:	mov    DWORD PTR [rsp+0x14],0x0
+  972ee5:	mov    QWORD PTR [rsp+0x38],rax
+  972eea:	mov    rdx,QWORD PTR [rbx]
+  972eed:	mov    rcx,QWORD PTR [rbx+0x8]
+  972ef1:	mov    rax,QWORD PTR [rsp+0x40]
+  972ef6:	mov    ebx,DWORD PTR [rsp+0x14]
+  972efa:	cmp    DWORD PTR [rax+0x54],ebx
+  972efd:	ja     9732cb <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x43b>
+  972f03:	mov    rax,QWORD PTR [rax+0x48]
+  972f07:	movss  xmm0,DWORD PTR [rax]
+  972f0b:	movss  xmm2,DWORD PTR [r14+0x20]
+  972f11:	addss  xmm0,xmm2
+  972f15:	movss  xmm5,DWORD PTR [r15+0x90]
+  972f1e:	movss  DWORD PTR [rsp+0x8],xmm0
+  972f24:	movss  xmm0,DWORD PTR [r15+0x88]
+  972f2d:	movss  xmm3,DWORD PTR [rax+0x4]
+  972f32:	addss  xmm3,DWORD PTR [r14+0x24]
+  972f38:	movss  DWORD PTR [rsp+0x10],xmm3
+  972f3e:	movss  xmm3,DWORD PTR [r14+0x28]
+  972f44:	movss  xmm6,DWORD PTR [rax+0x8]
+  972f49:	addss  xmm6,xmm3
+  972f4d:	mov    rax,QWORD PTR [rsp+0x40]
+  972f52:	movss  DWORD PTR [rsp+0xc],xmm6
+  972f58:	cvtsi2ss xmm1,DWORD PTR [rax+0x18]
+  972f5d:	mulss  xmm1,xmm0
+  972f61:	mulss  xmm1,xmm5
+  972f65:	mulss  xmm1,DWORD PTR [rip+0x6318a3]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  972f6d:	addss  xmm1,xmm3
+  972f71:	movss  xmm3,DWORD PTR [rsp+0x8]
+  972f77:	subss  xmm3,xmm2
+  972f7b:	subss  xmm6,xmm1
+  972f7f:	movaps xmm2,xmm3
+  972f82:	movaps xmm1,xmm6
+  972f85:	xorps  xmm6,xmm6
+  972f88:	ucomiss xmm1,xmm6
+  972f8b:	jbe    973290 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x400>
+  972f91:	movss  xmm3,DWORD PTR [rip+0x6357f7]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  972f99:	andps  xmm3,xmm2
+  972f9c:	ucomiss xmm1,xmm3
+  972f9f:	jbe    973290 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x400>
+  972fa5:	movss  xmm1,DWORD PTR [rip+0x65b4eb]        # fce498 <vtable for iInventoryListener+0x58>
+  972fad:	mulss  xmm1,xmm0
+  972fb1:	addss  xmm1,DWORD PTR [rsp+0xc]
+  972fb7:	movss  DWORD PTR [rsp+0xc],xmm1
+  972fbd:	mov    rax,rcx
+  972fc0:	sub    rax,rdx
+  972fc3:	sar    rax,0x3
+  972fc7:	test   eax,eax
+  972fc9:	jle    97325f <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x3cf>
+  972fcf:	mov    QWORD PTR [rsp+0x18],0x0
+  972fd8:	mov    DWORD PTR [rsp+0x24],0x0
+  972fe0:	mov    rax,QWORD PTR [rsp+0x18]
+  972fe5:	mov    rbx,QWORD PTR [rdx+rax*1]
+  972fe9:	mov    eax,DWORD PTR [rbx+0x10]
+  972fec:	cmp    eax,DWORD PTR [r15+0x1c]
+  972ff0:	jb     973250 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x3c0>
+  972ff6:	mov    rax,QWORD PTR [r15+0x10]
+  972ffa:	movss  xmm4,DWORD PTR [r15+0x8c]
+  973003:	mov    r12,QWORD PTR [rax]
+  973006:	mulss  xmm4,xmm0
+  97300a:	movss  xmm6,DWORD PTR [rip+0x6356e2]        # fa86f4 <vtable for Ogre::SharedPtr<Ogre::Texture>+0x54>
+  973012:	movss  xmm1,DWORD PTR [rbx+0x20]
+  973017:	movss  xmm7,DWORD PTR [rsp+0x8]
+  97301d:	mov    eax,DWORD PTR [r12+0x14]
+  973022:	movss  xmm3,DWORD PTR [rbx+0x28]
+  973027:	subss  xmm4,DWORD PTR [rip+0x6317dd]        # fa480c <vtable for Ogre::FrameListener+0x4c>
+  97302f:	movss  xmm2,DWORD PTR [rbx+0x24]
+  973034:	mulss  xmm6,xmm4
+  973038:	addss  xmm6,xmm1
+  97303c:	ucomiss xmm7,xmm6
+  97303f:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  973045:	cvtsi2ss xmm8,eax
+  97304a:	movss  xmm6,DWORD PTR [rip+0x6317be]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  973052:	mulss  xmm6,xmm4
+  973056:	movaps xmm7,xmm8
+  97305a:	subss  xmm7,DWORD PTR [rip+0x63179a]        # fa47fc <vtable for Ogre::FrameListener+0x3c>
+  973062:	mulss  xmm7,xmm4
+  973066:	addss  xmm6,xmm7
+  97306a:	addss  xmm6,xmm1
+  97306e:	ucomiss xmm6,DWORD PTR [rsp+0x8]
+  973073:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  973079:	movss  xmm4,DWORD PTR [rip+0x65593b]        # fc89bc <typeinfo name for CEffectDisplayValues+0x1c>
+  973081:	addss  xmm4,xmm2
+  973085:	movss  xmm6,DWORD PTR [rsp+0x10]
+  97308b:	ucomiss xmm6,xmm4
+  97308e:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  973094:	movss  xmm4,DWORD PTR [rip+0x635680]        # fa871c <vtable for Ogre::SharedPtr<Ogre::Texture>+0x7c>
+  97309c:	addss  xmm4,xmm2
+  9730a0:	ucomiss xmm4,xmm6
+  9730a3:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  9730a9:	xorps  xmm4,xmm4
+  9730ac:	movss  xmm7,DWORD PTR [rsp+0xc]
+  9730b2:	addss  xmm4,xmm3
+  9730b6:	ucomiss xmm7,xmm4
+  9730b9:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  9730bf:	mulss  xmm5,xmm8
+  9730c4:	mulss  xmm5,xmm0
+  9730c8:	subss  xmm5,DWORD PTR [rip+0x63173c]        # fa480c <vtable for Ogre::FrameListener+0x4c>
+  9730d0:	addss  xmm5,xmm3
+  9730d4:	ucomiss xmm5,xmm7
+  9730d7:	jb     9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  9730dd:	mov    eax,DWORD PTR [r12+0x50]
+  9730e2:	test   eax,eax
+  9730e4:	jle    9731ec <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x35c>
+  9730ea:	lea    rax,[rbx+0x30]
+  9730ee:	xor    r13d,r13d
+  9730f1:	xor    ebp,ebp
+  9730f3:	mov    QWORD PTR [rsp+0x28],rax
+  9730f8:	jmp    9731c2 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x332>
+  9730fd:	nop    DWORD PTR [rax]
+  973100:	mov    rax,QWORD PTR [r12+0x48]
+  973105:	addss  xmm2,DWORD PTR [rax+0x4]
+  97310a:	addss  xmm1,DWORD PTR [rax]
+  97310e:	addss  xmm3,DWORD PTR [rax+0x8]
+  973113:	addss  xmm0,xmm0
+  973117:	subss  xmm2,DWORD PTR [rsp+0x10]
+  97311d:	subss  xmm1,DWORD PTR [rsp+0x8]
+  973123:	subss  xmm3,DWORD PTR [rsp+0xc]
+  973129:	mulss  xmm2,xmm2
+  97312d:	mulss  xmm1,xmm1
+  973131:	mulss  xmm3,xmm3
+  973135:	addss  xmm1,xmm2
+  973139:	addss  xmm1,xmm3
+  97313d:	sqrtss xmm1,xmm1
+  973141:	ucomiss xmm0,xmm1
+  973144:	jbe    97319c <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x30c>
+  973146:	mov    DWORD PTR [rsp+0x5c],ebp
+  97314a:	mov    rsi,QWORD PTR [rbx+0x38]
+  97314e:	cmp    rsi,QWORD PTR [rbx+0x40]
+  973152:	je     973238 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x3a8>
+  973158:	xor    eax,eax
+  97315a:	test   rsi,rsi
+  97315d:	je     973165 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x2d5>
+  97315f:	mov    DWORD PTR [rsi],ebp
+  973161:	mov    rax,QWORD PTR [rbx+0x38]
+  973165:	add    rax,0x4
+  973169:	mov    QWORD PTR [rbx+0x38],rax
+  97316d:	mov    rsi,QWORD PTR [r14+0x38]
+  973171:	cmp    rsi,QWORD PTR [r14+0x40]
+  973175:	mov    eax,DWORD PTR [rsp+0x14]
+  973179:	mov    DWORD PTR [rsp+0x5c],eax
+  97317d:	je     973220 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x390>
+  973183:	xor    eax,eax
+  973185:	test   rsi,rsi
+  973188:	je     973194 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x304>
+  97318a:	mov    eax,DWORD PTR [rsp+0x14]
+  97318e:	mov    DWORD PTR [rsi],eax
+  973190:	mov    rax,QWORD PTR [r14+0x38]
+  973194:	add    rax,0x4
+  973198:	mov    QWORD PTR [r14+0x38],rax
+  97319c:	add    ebp,0x1
+  97319f:	add    r13,0xc
+  9731a3:	cmp    DWORD PTR [r12+0x50],ebp
+  9731a8:	jle    9731e0 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x350>
+  9731aa:	movss  xmm1,DWORD PTR [rbx+0x20]
+  9731af:	movss  xmm2,DWORD PTR [rbx+0x24]
+  9731b4:	movss  xmm3,DWORD PTR [rbx+0x28]
+  9731b9:	movss  xmm0,DWORD PTR [r15+0x88]
+  9731c2:	cmp    DWORD PTR [r12+0x54],ebp
+  9731c7:	jbe    973100 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x270>
+  9731cd:	mov    rax,r13
+  9731d0:	add    rax,QWORD PTR [r12+0x48]
+  9731d5:	jmp    973105 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x275>
+  9731da:	nop    WORD PTR [rax+rax*1+0x0]
+  9731e0:	mov    rbx,QWORD PTR [rsp+0x30]
+  9731e5:	mov    rdx,QWORD PTR [rbx]
+  9731e8:	mov    rcx,QWORD PTR [rbx+0x8]
+  9731ec:	mov    rax,rcx
+  9731ef:	add    DWORD PTR [rsp+0x24],0x1
+  9731f4:	add    QWORD PTR [rsp+0x18],0x8
+  9731fa:	sub    rax,rdx
+  9731fd:	sar    rax,0x3
+  973201:	cmp    DWORD PTR [rsp+0x24],eax
+  973205:	jge    97325f <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x3cf>
+  973207:	movss  xmm0,DWORD PTR [r15+0x88]
+  973210:	movss  xmm5,DWORD PTR [r15+0x90]
+  973219:	jmp    972fe0 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x150>
+  97321e:	xchg   ax,ax
+  973220:	mov    rdi,QWORD PTR [rsp+0x38]
+  973225:	lea    rdx,[rsp+0x5c]
+  97322a:	call   85b790 <std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&)>
+  97322f:	jmp    97319c <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x30c>
+  973234:	nop    DWORD PTR [rax+0x0]
+  973238:	mov    rdi,QWORD PTR [rsp+0x28]
+  97323d:	lea    rdx,[rsp+0x5c]
+  973242:	call   85b790 <std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&)>
+  973247:	jmp    97316d <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x2dd>
+  97324c:	nop    DWORD PTR [rax+0x0]
+  973250:	mov    eax,eax
+  973252:	shl    rax,0x3
+  973256:	add    rax,QWORD PTR [r15+0x10]
+  97325a:	jmp    972ffa <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x16a>
+  97325f:	mov    rax,QWORD PTR [rsp+0x40]
+  973264:	add    DWORD PTR [rsp+0x14],0x1
+  973269:	add    QWORD PTR [rsp+0x48],0xc
+  97326f:	mov    ebx,DWORD PTR [rsp+0x14]
+  973273:	cmp    DWORD PTR [rax+0x50],ebx
+  973276:	jg     972ef1 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x61>
+  97327c:	add    rsp,0x68
+  973280:	pop    rbx
+  973281:	pop    rbp
+  973282:	pop    r12
+  973284:	pop    r13
+  973286:	pop    r14
+  973288:	pop    r15
+  97328a:	ret
+  97328b:	nop    DWORD PTR [rax+rax*1+0x0]
+  973290:	xorps  xmm3,xmm3
+  973293:	ucomiss xmm3,xmm1
+  973296:	jbe    9732de <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x44e>
+  973298:	movss  xmm3,DWORD PTR [rip+0x6354f0]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9732a0:	movaps xmm4,xmm1
+  9732a3:	andps  xmm4,xmm3
+  9732a6:	andps  xmm3,xmm2
+  9732a9:	ucomiss xmm4,xmm3
+  9732ac:	jbe    9732de <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x44e>
+  9732ae:	movss  xmm1,DWORD PTR [rip+0x664b4a]        # fd7e00 <typeinfo name for CChunk+0x8>
+  9732b6:	mulss  xmm1,xmm0
+  9732ba:	addss  xmm1,DWORD PTR [rsp+0xc]
+  9732c0:	movss  DWORD PTR [rsp+0xc],xmm1
+  9732c6:	jmp    972fbd <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x12d>
+  9732cb:	mov    rbx,QWORD PTR [rsp+0x40]
+  9732d0:	mov    rax,QWORD PTR [rsp+0x48]
+  9732d5:	add    rax,QWORD PTR [rbx+0x48]
+  9732d9:	jmp    972f07 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x77>
+  9732de:	xorps  xmm6,xmm6
+  9732e1:	ucomiss xmm2,xmm6
+  9732e4:	ja     973326 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x496>
+  9732e6:	xorps  xmm7,xmm7
+  9732e9:	ucomiss xmm7,xmm2
+  9732ec:	jbe    972fbd <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x12d>
+  9732f2:	andps  xmm2,XMMWORD PTR [rip+0x635497]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9732f9:	andps  xmm1,XMMWORD PTR [rip+0x635490]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  973300:	ucomiss xmm2,xmm1
+  973303:	jbe    972fbd <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x12d>
+  973309:	movss  xmm1,DWORD PTR [rip+0x664aef]        # fd7e00 <typeinfo name for CChunk+0x8>
+  973311:	mulss  xmm1,xmm0
+  973315:	addss  xmm1,DWORD PTR [rsp+0x8]
+  97331b:	movss  DWORD PTR [rsp+0x8],xmm1
+  973321:	jmp    972fbd <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x12d>
+  973326:	movss  xmm3,DWORD PTR [rip+0x635462]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  97332e:	andps  xmm3,xmm1
+  973331:	ucomiss xmm2,xmm3
+  973334:	jbe    9732e6 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x456>
+  973336:	movss  xmm1,DWORD PTR [rip+0x65b15a]        # fce498 <vtable for iInventoryListener+0x58>
+  97333e:	mulss  xmm1,xmm0
+  973342:	addss  xmm1,DWORD PTR [rsp+0x8]
+  973348:	movss  DWORD PTR [rsp+0x8],xmm1
+  97334e:	jmp    972fbd <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x12d>
+  973353:	mov    rdi,rax
+  973356:	call   554498 <_Unwind_Resume@plt>
+  97335b:	mov    eax,eax
+  97335d:	shl    rax,0x3
+  973361:	add    rax,QWORD PTR [rdi+0x10]
+  973365:	jmp    972eb9 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)+0x29>
+  97336a:	nop    WORD PTR [rax+rax*1+0x0]

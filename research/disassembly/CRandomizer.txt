@@ -1,0 +1,705 @@
+
+/home/qweasd123tg/Документы/Torchlight/game/Torchlight.bin.x86_64:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000c8a210 <CRandomizer::getOdds(int)>:
+  c8a210:	cmp    esi,DWORD PTR [rdi+0x34]
+  c8a213:	jae    c8a230 <CRandomizer::getOdds(int)+0x20>
+  c8a215:	mov    esi,esi
+  c8a217:	shl    rsi,0x2
+  c8a21b:	add    rsi,QWORD PTR [rdi+0x28]
+  c8a21f:	movss  xmm0,DWORD PTR [rsi]
+  c8a223:	cvttss2si eax,xmm0
+  c8a227:	ret
+  c8a228:	nop    DWORD PTR [rax+rax*1+0x0]
+  c8a230:	mov    rsi,QWORD PTR [rdi+0x28]
+  c8a234:	movss  xmm0,DWORD PTR [rsi]
+  c8a238:	cvttss2si eax,xmm0
+  c8a23c:	ret
+  c8a23d:	nop
+  c8a23e:	xchg   ax,ax
+
+0000000000c8a240 <CRandomizer::setChoiceOdds(int, int)>:
+  c8a240:	mov    r9d,DWORD PTR [rdi+0x18]
+  c8a244:	test   r9d,r9d
+  c8a247:	je     c8a298 <CRandomizer::setChoiceOdds(int, int)+0x58>
+  c8a249:	mov    r10d,DWORD PTR [rdi+0x1c]
+  c8a24d:	xor    ecx,ecx
+  c8a24f:	xor    eax,eax
+  c8a251:	jmp    c8a26d <CRandomizer::setChoiceOdds(int, int)+0x2d>
+  c8a253:	nop    DWORD PTR [rax+rax*1+0x0]
+  c8a258:	mov    r8,QWORD PTR [rdi+0x10]
+  c8a25c:	cmp    DWORD PTR [r8],esi
+  c8a25f:	je     c8a27e <CRandomizer::setChoiceOdds(int, int)+0x3e>
+  c8a261:	add    eax,0x1
+  c8a264:	add    rcx,0x4
+  c8a268:	cmp    eax,r9d
+  c8a26b:	jae    c8a298 <CRandomizer::setChoiceOdds(int, int)+0x58>
+  c8a26d:	cmp    r10d,eax
+  c8a270:	jbe    c8a258 <CRandomizer::setChoiceOdds(int, int)+0x18>
+  c8a272:	mov    r8,rcx
+  c8a275:	add    r8,QWORD PTR [rdi+0x10]
+  c8a279:	cmp    DWORD PTR [r8],esi
+  c8a27c:	jne    c8a261 <CRandomizer::setChoiceOdds(int, int)+0x21>
+  c8a27e:	cmp    DWORD PTR [rdi+0x34],eax
+  c8a281:	ja     c8a2a0 <CRandomizer::setChoiceOdds(int, int)+0x60>
+  c8a283:	cvtsi2ss xmm0,edx
+  c8a287:	mov    rax,QWORD PTR [rdi+0x28]
+  c8a28b:	movss  DWORD PTR [rax],xmm0
+  c8a28f:	mov    BYTE PTR [rdi+0x60],0x1
+  c8a293:	ret
+  c8a294:	nop    DWORD PTR [rax+0x0]
+  c8a298:	repz ret
+  c8a29a:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a2a0:	cvtsi2ss xmm0,edx
+  c8a2a4:	mov    eax,eax
+  c8a2a6:	shl    rax,0x2
+  c8a2aa:	add    rax,QWORD PTR [rdi+0x28]
+  c8a2ae:	movss  DWORD PTR [rax],xmm0
+  c8a2b2:	mov    BYTE PTR [rdi+0x60],0x1
+  c8a2b6:	ret
+  c8a2b7:	nop
+  c8a2b8:	nop    DWORD PTR [rax+rax*1+0x0]
+
+0000000000c8a2c0 <CRandomizer::removeChoice(unsigned int)>:
+  c8a2c0:	mov    r8d,DWORD PTR [rdi+0x18]
+  c8a2c4:	test   r8d,r8d
+  c8a2c7:	je     c8a360 <CRandomizer::removeChoice(unsigned int)+0xa0>
+  c8a2cd:	mov    r9d,DWORD PTR [rdi+0x1c]
+  c8a2d1:	xor    edx,edx
+  c8a2d3:	xor    eax,eax
+  c8a2d5:	jmp    c8a2f4 <CRandomizer::removeChoice(unsigned int)+0x34>
+  c8a2d7:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a2e0:	mov    rcx,QWORD PTR [rdi+0x10]
+  c8a2e4:	cmp    DWORD PTR [rcx],esi
+  c8a2e6:	je     c8a304 <CRandomizer::removeChoice(unsigned int)+0x44>
+  c8a2e8:	add    eax,0x1
+  c8a2eb:	add    rdx,0x4
+  c8a2ef:	cmp    eax,r8d
+  c8a2f2:	jae    c8a360 <CRandomizer::removeChoice(unsigned int)+0xa0>
+  c8a2f4:	cmp    r9d,eax
+  c8a2f7:	jbe    c8a2e0 <CRandomizer::removeChoice(unsigned int)+0x20>
+  c8a2f9:	mov    rcx,rdx
+  c8a2fc:	add    rcx,QWORD PTR [rdi+0x10]
+  c8a300:	cmp    DWORD PTR [rcx],esi
+  c8a302:	jne    c8a2e8 <CRandomizer::removeChoice(unsigned int)+0x28>
+  c8a304:	mov    edx,DWORD PTR [rdi+0x30]
+  c8a307:	cmp    edx,eax
+  c8a309:	jbe    c8a323 <CRandomizer::removeChoice(unsigned int)+0x63>
+  c8a30b:	mov    rcx,QWORD PTR [rdi+0x28]
+  c8a30f:	sub    edx,0x1
+  c8a312:	mov    esi,eax
+  c8a314:	mov    DWORD PTR [rdi+0x30],edx
+  c8a317:	mov    edx,edx
+  c8a319:	mov    edx,DWORD PTR [rcx+rdx*4]
+  c8a31c:	mov    DWORD PTR [rcx+rsi*4],edx
+  c8a31f:	mov    r8d,DWORD PTR [rdi+0x18]
+  c8a323:	cmp    eax,r8d
+  c8a326:	jae    c8a340 <CRandomizer::removeChoice(unsigned int)+0x80>
+  c8a328:	mov    rdx,QWORD PTR [rdi+0x10]
+  c8a32c:	sub    r8d,0x1
+  c8a330:	mov    ecx,eax
+  c8a332:	mov    DWORD PTR [rdi+0x18],r8d
+  c8a336:	mov    r8d,r8d
+  c8a339:	mov    esi,DWORD PTR [rdx+r8*4]
+  c8a33d:	mov    DWORD PTR [rdx+rcx*4],esi
+  c8a340:	mov    edx,DWORD PTR [rdi+0x48]
+  c8a343:	cmp    edx,eax
+  c8a345:	jbe    c8a35b <CRandomizer::removeChoice(unsigned int)+0x9b>
+  c8a347:	mov    rcx,QWORD PTR [rdi+0x40]
+  c8a34b:	sub    edx,0x1
+  c8a34e:	mov    eax,eax
+  c8a350:	mov    DWORD PTR [rdi+0x48],edx
+  c8a353:	mov    edx,edx
+  c8a355:	mov    edx,DWORD PTR [rcx+rdx*4]
+  c8a358:	mov    DWORD PTR [rcx+rax*4],edx
+  c8a35b:	mov    BYTE PTR [rdi+0x60],0x1
+  c8a35f:	ret
+  c8a360:	repz ret
+  c8a362:	data16 data16 data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c8a370 <global constructors keyed to CRandomizer::CRandomizer(ERANDOMIZER_TYPE)>:
+  c8a370:	sub    rsp,0x8
+  c8a374:	mov    edx,0xf9f788
+  c8a379:	mov    esi,0x14e68c8
+  c8a37e:	mov    edi,0x556288
+  c8a383:	mov    QWORD PTR [rip+0x85c53a],0x1423a38        # 14e68c8 <EMPTY_STRING>
+  c8a38e:	call   5551e8 <__cxa_atexit@plt>
+  c8a393:	mov    edx,0xf9f788
+  c8a398:	mov    esi,0x14e68d0
+  c8a39d:	mov    edi,0x5548d8
+  c8a3a2:	mov    QWORD PTR [rip+0x85c523],0x1424558        # 14e68d0 <EMPTY_WSTRING>
+  c8a3ad:	call   5551e8 <__cxa_atexit@plt>
+  c8a3b2:	mov    edi,0x14e68d8
+  c8a3b7:	call   555988 <std::ios_base::Init::Init()@plt>
+  c8a3bc:	mov    edx,0xf9f788
+  c8a3c1:	mov    esi,0x14e68d8
+  c8a3c6:	mov    edi,0x5544e8
+  c8a3cb:	add    rsp,0x8
+  c8a3cf:	jmp    5551e8 <__cxa_atexit@plt>
+  c8a3d4:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c8a3e0 <CRandomizer::setRandomSeed(unsigned int)>:
+  c8a3e0:	mov    edi,esi
+  c8a3e2:	jmp    c92c70 <UTILITIES::setSeed(int)>
+  c8a3e7:	nop
+  c8a3e8:	nop    DWORD PTR [rax+rax*1+0x0]
+
+0000000000c8a3f0 <CRandomizer::clear()>:
+  c8a3f0:	push   rbx
+  c8a3f1:	mov    rbx,rdi
+  c8a3f4:	mov    DWORD PTR [rdi+0x30],0x0
+  c8a3fb:	mov    DWORD PTR [rdi+0x34],0x0
+  c8a402:	mov    rdi,QWORD PTR [rdi+0x28]
+  c8a406:	test   rdi,rdi
+  c8a409:	je     c8a410 <CRandomizer::clear()+0x20>
+  c8a40b:	call   553638 <operator delete[](void*)@plt>
+  c8a410:	mov    rdi,QWORD PTR [rbx+0x40]
+  c8a414:	mov    QWORD PTR [rbx+0x28],0x0
+  c8a41c:	mov    DWORD PTR [rbx+0x48],0x0
+  c8a423:	mov    DWORD PTR [rbx+0x4c],0x0
+  c8a42a:	test   rdi,rdi
+  c8a42d:	je     c8a434 <CRandomizer::clear()+0x44>
+  c8a42f:	call   553638 <operator delete[](void*)@plt>
+  c8a434:	mov    rdi,QWORD PTR [rbx+0x10]
+  c8a438:	mov    QWORD PTR [rbx+0x40],0x0
+  c8a440:	mov    DWORD PTR [rbx+0x18],0x0
+  c8a447:	mov    DWORD PTR [rbx+0x1c],0x0
+  c8a44e:	test   rdi,rdi
+  c8a451:	je     c8a458 <CRandomizer::clear()+0x68>
+  c8a453:	call   553638 <operator delete[](void*)@plt>
+  c8a458:	mov    QWORD PTR [rbx+0x10],0x0
+  c8a460:	mov    BYTE PTR [rbx+0x60],0x1
+  c8a464:	pop    rbx
+  c8a465:	ret
+  c8a466:	cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c8a470 <CRandomizer::addChoice(int, int)>:
+  c8a470:	push   r15
+  c8a472:	push   r14
+  c8a474:	mov    r14d,edx
+  c8a477:	push   r13
+  c8a479:	push   r12
+  c8a47b:	lea    r12,[rdi+0x28]
+  c8a47f:	push   rbp
+  c8a480:	mov    ebp,esi
+  c8a482:	push   rbx
+  c8a483:	mov    rbx,rdi
+  c8a486:	sub    rsp,0x18
+  c8a48a:	mov    r13d,DWORD PTR [rdi+0x30]
+  c8a48e:	mov    r15d,DWORD PTR [rdi+0x34]
+  c8a492:	cmp    r13d,r15d
+  c8a495:	jb     c8a5b0 <CRandomizer::addChoice(int, int)+0x140>
+  c8a49b:	cmp    QWORD PTR [rdi+0x28],0x0
+  c8a4a0:	je     c8a5e0 <CRandomizer::addChoice(int, int)+0x170>
+  c8a4a6:	add    r15d,DWORD PTR [rdi+0x38]
+  c8a4aa:	mov    edi,r15d
+  c8a4ad:	shl    rdi,0x2
+  c8a4b1:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a4b6:	mov    r9d,DWORD PTR [rbx+0x34]
+  c8a4ba:	test   r9d,r9d
+  c8a4bd:	je     c8a4de <CRandomizer::addChoice(int, int)+0x6e>
+  c8a4bf:	xor    edx,edx
+  c8a4c1:	nop    DWORD PTR [rax+0x0]
+  c8a4c8:	mov    rsi,QWORD PTR [r12]
+  c8a4cc:	mov    ecx,edx
+  c8a4ce:	add    edx,0x1
+  c8a4d1:	mov    esi,DWORD PTR [rsi+rcx*4]
+  c8a4d4:	mov    DWORD PTR [rax+rcx*4],esi
+  c8a4d7:	cmp    edx,DWORD PTR [r12+0xc]
+  c8a4dc:	jb     c8a4c8 <CRandomizer::addChoice(int, int)+0x58>
+  c8a4de:	mov    rdi,QWORD PTR [rbx+0x28]
+  c8a4e2:	test   rdi,rdi
+  c8a4e5:	je     c8a4f6 <CRandomizer::addChoice(int, int)+0x86>
+  c8a4e7:	mov    QWORD PTR [rsp+0x8],rax
+  c8a4ec:	call   553638 <operator delete[](void*)@plt>
+  c8a4f1:	mov    rax,QWORD PTR [rsp+0x8]
+  c8a4f6:	mov    edx,DWORD PTR [rbx+0x30]
+  c8a4f9:	mov    QWORD PTR [rbx+0x28],rax
+  c8a4fd:	mov    DWORD PTR [rbx+0x34],r15d
+  c8a501:	cvtsi2ss xmm0,r14d
+  c8a506:	mov    edx,edx
+  c8a508:	movss  DWORD PTR [rax+rdx*4],xmm0
+  c8a50d:	mov    eax,DWORD PTR [rbx+0x18]
+  c8a510:	mov    r12d,DWORD PTR [rbx+0x1c]
+  c8a514:	add    DWORD PTR [rbx+0x30],0x1
+  c8a518:	cmp    eax,r12d
+  c8a51b:	jb     c8a5a0 <CRandomizer::addChoice(int, int)+0x130>
+  c8a521:	cmp    QWORD PTR [rbx+0x10],0x0
+  c8a526:	je     c8a5c0 <CRandomizer::addChoice(int, int)+0x150>
+  c8a52c:	add    r12d,DWORD PTR [rbx+0x20]
+  c8a530:	mov    edi,r12d
+  c8a533:	shl    rdi,0x2
+  c8a537:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a53c:	mov    r8d,DWORD PTR [rbx+0x1c]
+  c8a540:	mov    r14,rax
+  c8a543:	test   r8d,r8d
+  c8a546:	je     c8a565 <CRandomizer::addChoice(int, int)+0xf5>
+  c8a548:	xor    eax,eax
+  c8a54a:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a550:	mov    rcx,QWORD PTR [rbx+0x10]
+  c8a554:	mov    edx,eax
+  c8a556:	add    eax,0x1
+  c8a559:	mov    ecx,DWORD PTR [rcx+rdx*4]
+  c8a55c:	mov    DWORD PTR [r14+rdx*4],ecx
+  c8a560:	cmp    eax,DWORD PTR [rbx+0x1c]
+  c8a563:	jb     c8a550 <CRandomizer::addChoice(int, int)+0xe0>
+  c8a565:	mov    rdi,QWORD PTR [rbx+0x10]
+  c8a569:	test   rdi,rdi
+  c8a56c:	je     c8a573 <CRandomizer::addChoice(int, int)+0x103>
+  c8a56e:	call   553638 <operator delete[](void*)@plt>
+  c8a573:	mov    eax,DWORD PTR [rbx+0x18]
+  c8a576:	mov    QWORD PTR [rbx+0x10],r14
+  c8a57a:	mov    DWORD PTR [rbx+0x1c],r12d
+  c8a57e:	mov    eax,eax
+  c8a580:	mov    DWORD PTR [r14+rax*4],ebp
+  c8a584:	mov    BYTE PTR [rbx+0x60],0x1
+  c8a588:	mov    eax,r13d
+  c8a58b:	add    DWORD PTR [rbx+0x18],0x1
+  c8a58f:	add    rsp,0x18
+  c8a593:	pop    rbx
+  c8a594:	pop    rbp
+  c8a595:	pop    r12
+  c8a597:	pop    r13
+  c8a599:	pop    r14
+  c8a59b:	pop    r15
+  c8a59d:	ret
+  c8a59e:	xchg   ax,ax
+  c8a5a0:	mov    r14,QWORD PTR [rbx+0x10]
+  c8a5a4:	jmp    c8a57e <CRandomizer::addChoice(int, int)+0x10e>
+  c8a5a6:	cs nop WORD PTR [rax+rax*1+0x0]
+  c8a5b0:	mov    rax,QWORD PTR [rdi+0x28]
+  c8a5b4:	mov    edx,r13d
+  c8a5b7:	jmp    c8a501 <CRandomizer::addChoice(int, int)+0x91>
+  c8a5bc:	nop    DWORD PTR [rax+0x0]
+  c8a5c0:	mov    eax,DWORD PTR [rbx+0x20]
+  c8a5c3:	mov    edi,eax
+  c8a5c5:	mov    DWORD PTR [rbx+0x1c],eax
+  c8a5c8:	shl    rdi,0x2
+  c8a5cc:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a5d1:	mov    r14,rax
+  c8a5d4:	mov    QWORD PTR [rbx+0x10],rax
+  c8a5d8:	mov    eax,DWORD PTR [rbx+0x18]
+  c8a5db:	jmp    c8a57e <CRandomizer::addChoice(int, int)+0x10e>
+  c8a5dd:	nop    DWORD PTR [rax]
+  c8a5e0:	mov    eax,DWORD PTR [rdi+0x38]
+  c8a5e3:	mov    DWORD PTR [rdi+0x34],eax
+  c8a5e6:	mov    edi,eax
+  c8a5e8:	shl    rdi,0x2
+  c8a5ec:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a5f1:	mov    edx,DWORD PTR [rbx+0x30]
+  c8a5f4:	mov    QWORD PTR [rbx+0x28],rax
+  c8a5f8:	jmp    c8a501 <CRandomizer::addChoice(int, int)+0x91>
+  c8a5fd:	nop
+  c8a5fe:	xchg   ax,ax
+
+0000000000c8a600 <CRandomizer::CRandomizer(ERANDOMIZER_TYPE)>:
+  c8a600:	mov    QWORD PTR [rsp-0x10],rbx
+  c8a605:	mov    QWORD PTR [rsp-0x8],rbp
+  c8a60a:	mov    rbx,rdi
+  c8a60d:	sub    rsp,0x18
+  c8a611:	mov    ebp,esi
+  c8a613:	call   d796c0 <CRunicCore::CRunicCore()>
+  c8a618:	mov    DWORD PTR [rbx+0x58],ebp
+  c8a61b:	mov    QWORD PTR [rbx],0xfc8a30
+  c8a622:	mov    QWORD PTR [rbx+0x10],0x0
+  c8a62a:	mov    DWORD PTR [rbx+0x18],0x0
+  c8a631:	mov    DWORD PTR [rbx+0x1c],0x0
+  c8a638:	mov    DWORD PTR [rbx+0x20],0x64
+  c8a63f:	mov    QWORD PTR [rbx+0x28],0x0
+  c8a647:	mov    DWORD PTR [rbx+0x30],0x0
+  c8a64e:	mov    DWORD PTR [rbx+0x34],0x0
+  c8a655:	mov    DWORD PTR [rbx+0x38],0x64
+  c8a65c:	mov    QWORD PTR [rbx+0x40],0x0
+  c8a664:	mov    DWORD PTR [rbx+0x48],0x0
+  c8a66b:	mov    DWORD PTR [rbx+0x4c],0x0
+  c8a672:	mov    DWORD PTR [rbx+0x50],0x64
+  c8a679:	mov    DWORD PTR [rbx+0x5c],0x3f800000
+  c8a680:	mov    BYTE PTR [rbx+0x60],0x1
+  c8a684:	mov    rbp,QWORD PTR [rsp+0x10]
+  c8a689:	mov    rbx,QWORD PTR [rsp+0x8]
+  c8a68e:	add    rsp,0x18
+  c8a692:	ret
+  c8a693:	nop
+  c8a694:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c8a6a0 <CRandomizer::computeOdds()>:
+  c8a6a0:	push   r14
+  c8a6a2:	xorps  xmm0,xmm0
+  c8a6a5:	push   r13
+  c8a6a7:	push   r12
+  c8a6a9:	push   rbp
+  c8a6aa:	push   rbx
+  c8a6ab:	mov    rbx,rdi
+  c8a6ae:	sub    rsp,0x20
+  c8a6b2:	mov    esi,DWORD PTR [rdi+0x30]
+  c8a6b5:	test   esi,esi
+  c8a6b7:	je     c8a6f5 <CRandomizer::computeOdds()+0x55>
+  c8a6b9:	mov    edi,DWORD PTR [rdi+0x34]
+  c8a6bc:	xor    edx,edx
+  c8a6be:	xor    eax,eax
+  c8a6c0:	xorps  xmm0,xmm0
+  c8a6c3:	jmp    c8a6db <CRandomizer::computeOdds()+0x3b>
+  c8a6c5:	nop    DWORD PTR [rax]
+  c8a6c8:	mov    rcx,QWORD PTR [rbx+0x28]
+  c8a6cc:	add    eax,0x1
+  c8a6cf:	add    rdx,0x4
+  c8a6d3:	cmp    eax,esi
+  c8a6d5:	addss  xmm0,DWORD PTR [rcx]
+  c8a6d9:	jae    c8a6f5 <CRandomizer::computeOdds()+0x55>
+  c8a6db:	cmp    eax,edi
+  c8a6dd:	jae    c8a6c8 <CRandomizer::computeOdds()+0x28>
+  c8a6df:	mov    rcx,rdx
+  c8a6e2:	add    rcx,QWORD PTR [rbx+0x28]
+  c8a6e6:	add    eax,0x1
+  c8a6e9:	add    rdx,0x4
+  c8a6ed:	cmp    eax,esi
+  c8a6ef:	addss  xmm0,DWORD PTR [rcx]
+  c8a6f3:	jb     c8a6db <CRandomizer::computeOdds()+0x3b>
+  c8a6f5:	mov    rdi,QWORD PTR [rbx+0x40]
+  c8a6f9:	mov    DWORD PTR [rbx+0x48],0x0
+  c8a700:	mov    DWORD PTR [rbx+0x4c],0x0
+  c8a707:	test   rdi,rdi
+  c8a70a:	je     c8a71b <CRandomizer::computeOdds()+0x7b>
+  c8a70c:	movss  DWORD PTR [rsp],xmm0
+  c8a711:	call   553638 <operator delete[](void*)@plt>
+  c8a716:	movss  xmm0,DWORD PTR [rsp]
+  c8a71b:	mov    r11d,DWORD PTR [rbx+0x30]
+  c8a71f:	mov    QWORD PTR [rbx+0x40],0x0
+  c8a727:	test   r11d,r11d
+  c8a72a:	je     c8a840 <CRandomizer::computeOdds()+0x1a0>
+  c8a730:	xor    ecx,ecx
+  c8a732:	xor    r12d,r12d
+  c8a735:	cmp    DWORD PTR [rbx+0x34],r12d
+  c8a739:	mov    eax,DWORD PTR [rbx+0x48]
+  c8a73c:	lea    rbp,[rbx+0x40]
+  c8a740:	ja     c8a819 <CRandomizer::computeOdds()+0x179>
+  c8a746:	cs nop WORD PTR [rax+rax*1+0x0]
+  c8a750:	mov    r13d,DWORD PTR [rbx+0x4c]
+  c8a754:	mov    rdx,QWORD PTR [rbx+0x28]
+  c8a758:	cmp    r13d,eax
+  c8a75b:	movss  xmm1,DWORD PTR [rdx]
+  c8a75f:	ja     c8a835 <CRandomizer::computeOdds()+0x195>
+  c8a765:	test   rcx,rcx
+  c8a768:	je     c8a858 <CRandomizer::computeOdds()+0x1b8>
+  c8a76e:	add    r13d,DWORD PTR [rbx+0x50]
+  c8a772:	movss  DWORD PTR [rsp],xmm0
+  c8a777:	movss  DWORD PTR [rsp+0x10],xmm1
+  c8a77d:	mov    edi,r13d
+  c8a780:	shl    rdi,0x2
+  c8a784:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a789:	mov    r10d,DWORD PTR [rbx+0x4c]
+  c8a78d:	mov    r14,rax
+  c8a790:	movss  xmm0,DWORD PTR [rsp]
+  c8a795:	movss  xmm1,DWORD PTR [rsp+0x10]
+  c8a79b:	test   r10d,r10d
+  c8a79e:	je     c8a7bd <CRandomizer::computeOdds()+0x11d>
+  c8a7a0:	xor    eax,eax
+  c8a7a2:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a7a8:	mov    rcx,QWORD PTR [rbp+0x0]
+  c8a7ac:	mov    edx,eax
+  c8a7ae:	add    eax,0x1
+  c8a7b1:	mov    ecx,DWORD PTR [rcx+rdx*4]
+  c8a7b4:	mov    DWORD PTR [r14+rdx*4],ecx
+  c8a7b8:	cmp    eax,DWORD PTR [rbp+0xc]
+  c8a7bb:	jb     c8a7a8 <CRandomizer::computeOdds()+0x108>
+  c8a7bd:	mov    rdi,QWORD PTR [rbx+0x40]
+  c8a7c1:	test   rdi,rdi
+  c8a7c4:	je     c8a7e1 <CRandomizer::computeOdds()+0x141>
+  c8a7c6:	movss  DWORD PTR [rsp],xmm0
+  c8a7cb:	movss  DWORD PTR [rsp+0x10],xmm1
+  c8a7d1:	call   553638 <operator delete[](void*)@plt>
+  c8a7d6:	movss  xmm1,DWORD PTR [rsp+0x10]
+  c8a7dc:	movss  xmm0,DWORD PTR [rsp]
+  c8a7e1:	mov    eax,DWORD PTR [rbx+0x48]
+  c8a7e4:	mov    QWORD PTR [rbx+0x40],r14
+  c8a7e8:	mov    DWORD PTR [rbx+0x4c],r13d
+  c8a7ec:	divss  xmm1,xmm0
+  c8a7f0:	mov    eax,eax
+  c8a7f2:	add    r12d,0x1
+  c8a7f6:	movss  DWORD PTR [r14+rax*4],xmm1
+  c8a7fc:	mov    eax,DWORD PTR [rbx+0x48]
+  c8a7ff:	add    eax,0x1
+  c8a802:	cmp    r12d,DWORD PTR [rbx+0x30]
+  c8a806:	mov    DWORD PTR [rbx+0x48],eax
+  c8a809:	jae    c8a840 <CRandomizer::computeOdds()+0x1a0>
+  c8a80b:	cmp    DWORD PTR [rbx+0x34],r12d
+  c8a80f:	mov    rcx,QWORD PTR [rbx+0x40]
+  c8a813:	jbe    c8a750 <CRandomizer::computeOdds()+0xb0>
+  c8a819:	mov    edx,r12d
+  c8a81c:	mov    r13d,DWORD PTR [rbx+0x4c]
+  c8a820:	shl    rdx,0x2
+  c8a824:	add    rdx,QWORD PTR [rbx+0x28]
+  c8a828:	cmp    r13d,eax
+  c8a82b:	movss  xmm1,DWORD PTR [rdx]
+  c8a82f:	jbe    c8a765 <CRandomizer::computeOdds()+0xc5>
+  c8a835:	mov    r14,QWORD PTR [rbx+0x40]
+  c8a839:	jmp    c8a7ec <CRandomizer::computeOdds()+0x14c>
+  c8a83b:	nop    DWORD PTR [rax+rax*1+0x0]
+  c8a840:	mov    BYTE PTR [rbx+0x60],0x0
+  c8a844:	add    rsp,0x20
+  c8a848:	pop    rbx
+  c8a849:	pop    rbp
+  c8a84a:	pop    r12
+  c8a84c:	pop    r13
+  c8a84e:	pop    r14
+  c8a850:	ret
+  c8a851:	nop    DWORD PTR [rax+0x0]
+  c8a858:	mov    eax,DWORD PTR [rbx+0x50]
+  c8a85b:	movss  DWORD PTR [rsp],xmm0
+  c8a860:	movss  DWORD PTR [rsp+0x10],xmm1
+  c8a866:	mov    edi,eax
+  c8a868:	mov    DWORD PTR [rbx+0x4c],eax
+  c8a86b:	shl    rdi,0x2
+  c8a86f:	call   553ae8 <operator new[](unsigned long)@plt>
+  c8a874:	movss  xmm0,DWORD PTR [rsp]
+  c8a879:	mov    r14,rax
+  c8a87c:	mov    QWORD PTR [rbx+0x40],rax
+  c8a880:	movss  xmm1,DWORD PTR [rsp+0x10]
+  c8a886:	mov    eax,DWORD PTR [rbx+0x48]
+  c8a889:	jmp    c8a7ec <CRandomizer::computeOdds()+0x14c>
+  c8a88e:	xchg   ax,ax
+
+0000000000c8a890 <CRandomizer::setRandomizerToNormal(float)>:
+  c8a890:	ucomiss xmm0,DWORD PTR [rip+0x319f61]        # fa47f8 <vtable for Ogre::FrameListener+0x38>
+  c8a897:	jbe    c8a8d3 <CRandomizer::setRandomizerToNormal(float)+0x43>
+  c8a899:	mov    eax,DWORD PTR [rdi+0x30]
+  c8a89c:	test   eax,eax
+  c8a89e:	je     c8a8d3 <CRandomizer::setRandomizerToNormal(float)+0x43>
+  c8a8a0:	xor    eax,eax
+  c8a8a2:	jmp    c8a8b8 <CRandomizer::setRandomizerToNormal(float)+0x28>
+  c8a8a4:	nop    DWORD PTR [rax+0x0]
+  c8a8a8:	mov    rdx,QWORD PTR [rdi+0x28]
+  c8a8ac:	add    eax,0x1
+  c8a8af:	movss  DWORD PTR [rdx],xmm0
+  c8a8b3:	cmp    eax,DWORD PTR [rdi+0x30]
+  c8a8b6:	jae    c8a8d3 <CRandomizer::setRandomizerToNormal(float)+0x43>
+  c8a8b8:	cmp    DWORD PTR [rdi+0x34],eax
+  c8a8bb:	jbe    c8a8a8 <CRandomizer::setRandomizerToNormal(float)+0x18>
+  c8a8bd:	mov    edx,eax
+  c8a8bf:	add    eax,0x1
+  c8a8c2:	shl    rdx,0x2
+  c8a8c6:	add    rdx,QWORD PTR [rdi+0x28]
+  c8a8ca:	movss  DWORD PTR [rdx],xmm0
+  c8a8ce:	cmp    eax,DWORD PTR [rdi+0x30]
+  c8a8d1:	jb     c8a8b8 <CRandomizer::setRandomizerToNormal(float)+0x28>
+  c8a8d3:	mov    DWORD PTR [rdi+0x58],0x0
+  c8a8da:	mov    BYTE PTR [rdi+0x60],0x1
+  c8a8de:	jmp    c8a6a0 <CRandomizer::computeOdds()>
+  c8a8e3:	nop
+  c8a8e4:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]
+
+0000000000c8a8f0 <CRandomizer::getRandom(int&)>:
+  c8a8f0:	push   rbp
+  c8a8f1:	mov    rbp,rsi
+  c8a8f4:	push   rbx
+  c8a8f5:	mov    rbx,rdi
+  c8a8f8:	sub    rsp,0x8
+  c8a8fc:	cmp    BYTE PTR [rdi+0x60],0x0
+  c8a900:	jne    c8a9c0 <CRandomizer::getRandom(int&)+0xd0>
+  c8a906:	xorps  xmm0,xmm0
+  c8a909:	movss  xmm1,DWORD PTR [rip+0x319eeb]        # fa47fc <vtable for Ogre::FrameListener+0x3c>
+  c8a911:	call   c92a70 <UTILITIES::randomBetween(float, float)>
+  c8a916:	mov    esi,DWORD PTR [rbx+0x48]
+  c8a919:	test   esi,esi
+  c8a91b:	je     c8a980 <CRandomizer::getRandom(int&)+0x90>
+  c8a91d:	mov    edi,DWORD PTR [rbx+0x4c]
+  c8a920:	xor    edx,edx
+  c8a922:	xor    eax,eax
+  c8a924:	xorps  xmm1,xmm1
+  c8a927:	jmp    c8a948 <CRandomizer::getRandom(int&)+0x58>
+  c8a929:	nop    DWORD PTR [rax+0x0]
+  c8a930:	mov    rcx,QWORD PTR [rbx+0x40]
+  c8a934:	addss  xmm1,DWORD PTR [rcx]
+  c8a938:	ucomiss xmm1,xmm0
+  c8a93b:	ja     c8a95c <CRandomizer::getRandom(int&)+0x6c>
+  c8a93d:	add    eax,0x1
+  c8a940:	add    rdx,0x4
+  c8a944:	cmp    eax,esi
+  c8a946:	jae    c8a980 <CRandomizer::getRandom(int&)+0x90>
+  c8a948:	cmp    eax,edi
+  c8a94a:	jae    c8a930 <CRandomizer::getRandom(int&)+0x40>
+  c8a94c:	mov    rcx,rdx
+  c8a94f:	add    rcx,QWORD PTR [rbx+0x40]
+  c8a953:	addss  xmm1,DWORD PTR [rcx]
+  c8a957:	ucomiss xmm1,xmm0
+  c8a95a:	jbe    c8a93d <CRandomizer::getRandom(int&)+0x4d>
+  c8a95c:	cmp    DWORD PTR [rbx+0x58],0x1
+  c8a960:	je     c8a9e0 <CRandomizer::getRandom(int&)+0xf0>
+  c8a962:	mov    DWORD PTR [rbp+0x0],eax
+  c8a965:	cmp    DWORD PTR [rbx+0x1c],eax
+  c8a968:	ja     c8a9d0 <CRandomizer::getRandom(int&)+0xe0>
+  c8a96a:	mov    rax,QWORD PTR [rbx+0x10]
+  c8a96e:	mov    eax,DWORD PTR [rax]
+  c8a970:	add    rsp,0x8
+  c8a974:	pop    rbx
+  c8a975:	pop    rbp
+  c8a976:	ret
+  c8a977:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a980:	cmp    DWORD PTR [rbx+0x58],0x1
+  c8a984:	je     c8a9a0 <CRandomizer::getRandom(int&)+0xb0>
+  c8a986:	mov    DWORD PTR [rbp+0x0],0xffffffff
+  c8a98d:	add    rsp,0x8
+  c8a991:	xor    eax,eax
+  c8a993:	pop    rbx
+  c8a994:	pop    rbp
+  c8a995:	ret
+  c8a996:	cs nop WORD PTR [rax+rax*1+0x0]
+  c8a9a0:	mov    rax,QWORD PTR [rbx+0x28]
+  c8a9a4:	movss  xmm0,DWORD PTR [rax]
+  c8a9a8:	mulss  xmm0,DWORD PTR [rbx+0x5c]
+  c8a9ad:	movss  DWORD PTR [rax],xmm0
+  c8a9b1:	mov    BYTE PTR [rbx+0x60],0x1
+  c8a9b5:	jmp    c8a986 <CRandomizer::getRandom(int&)+0x96>
+  c8a9b7:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a9c0:	call   c8a6a0 <CRandomizer::computeOdds()>
+  c8a9c5:	jmp    c8a906 <CRandomizer::getRandom(int&)+0x16>
+  c8a9ca:	nop    WORD PTR [rax+rax*1+0x0]
+  c8a9d0:	mov    eax,eax
+  c8a9d2:	shl    rax,0x2
+  c8a9d6:	add    rax,QWORD PTR [rbx+0x10]
+  c8a9da:	mov    eax,DWORD PTR [rax]
+  c8a9dc:	jmp    c8a970 <CRandomizer::getRandom(int&)+0x80>
+  c8a9de:	xchg   ax,ax
+  c8a9e0:	cmp    DWORD PTR [rbx+0x34],eax
+  c8a9e3:	jbe    c8aa08 <CRandomizer::getRandom(int&)+0x118>
+  c8a9e5:	mov    edx,eax
+  c8a9e7:	shl    rdx,0x2
+  c8a9eb:	add    rdx,QWORD PTR [rbx+0x28]
+  c8a9ef:	movss  xmm0,DWORD PTR [rdx]
+  c8a9f3:	mulss  xmm0,DWORD PTR [rbx+0x5c]
+  c8a9f8:	movss  DWORD PTR [rdx],xmm0
+  c8a9fc:	mov    BYTE PTR [rbx+0x60],0x1
+  c8aa00:	jmp    c8a962 <CRandomizer::getRandom(int&)+0x72>
+  c8aa05:	nop    DWORD PTR [rax]
+  c8aa08:	mov    rdx,QWORD PTR [rbx+0x28]
+  c8aa0c:	jmp    c8a9ef <CRandomizer::getRandom(int&)+0xff>
+  c8aa0e:	xchg   ax,ax
+
+0000000000c8aa10 <CRandomizer::getRandom()>:
+  c8aa10:	push   rbx
+  c8aa11:	cmp    BYTE PTR [rdi+0x60],0x0
+  c8aa15:	mov    rbx,rdi
+  c8aa18:	jne    c8aab8 <CRandomizer::getRandom()+0xa8>
+  c8aa1e:	xorps  xmm0,xmm0
+  c8aa21:	movss  xmm1,DWORD PTR [rip+0x319dd3]        # fa47fc <vtable for Ogre::FrameListener+0x3c>
+  c8aa29:	call   c92a70 <UTILITIES::randomBetween(float, float)>
+  c8aa2e:	mov    esi,DWORD PTR [rbx+0x48]
+  c8aa31:	test   esi,esi
+  c8aa33:	je     c8aa90 <CRandomizer::getRandom()+0x80>
+  c8aa35:	mov    edi,DWORD PTR [rbx+0x4c]
+  c8aa38:	xor    edx,edx
+  c8aa3a:	xor    eax,eax
+  c8aa3c:	xorps  xmm1,xmm1
+  c8aa3f:	jmp    c8aa60 <CRandomizer::getRandom()+0x50>
+  c8aa41:	nop    DWORD PTR [rax+0x0]
+  c8aa48:	mov    rcx,QWORD PTR [rbx+0x40]
+  c8aa4c:	addss  xmm1,DWORD PTR [rcx]
+  c8aa50:	ucomiss xmm1,xmm0
+  c8aa53:	ja     c8aa74 <CRandomizer::getRandom()+0x64>
+  c8aa55:	add    eax,0x1
+  c8aa58:	add    rdx,0x4
+  c8aa5c:	cmp    eax,esi
+  c8aa5e:	jae    c8aa90 <CRandomizer::getRandom()+0x80>
+  c8aa60:	cmp    eax,edi
+  c8aa62:	jae    c8aa48 <CRandomizer::getRandom()+0x38>
+  c8aa64:	mov    rcx,rdx
+  c8aa67:	add    rcx,QWORD PTR [rbx+0x40]
+  c8aa6b:	addss  xmm1,DWORD PTR [rcx]
+  c8aa6f:	ucomiss xmm1,xmm0
+  c8aa72:	jbe    c8aa55 <CRandomizer::getRandom()+0x45>
+  c8aa74:	cmp    DWORD PTR [rbx+0x58],0x1
+  c8aa78:	je     c8aae0 <CRandomizer::getRandom()+0xd0>
+  c8aa7a:	cmp    DWORD PTR [rbx+0x1c],eax
+  c8aa7d:	ja     c8aac8 <CRandomizer::getRandom()+0xb8>
+  c8aa7f:	mov    rax,QWORD PTR [rbx+0x10]
+  c8aa83:	mov    eax,DWORD PTR [rax]
+  c8aa85:	pop    rbx
+  c8aa86:	ret
+  c8aa87:	nop    WORD PTR [rax+rax*1+0x0]
+  c8aa90:	xor    eax,eax
+  c8aa92:	cmp    DWORD PTR [rbx+0x58],0x1
+  c8aa96:	jne    c8aa85 <CRandomizer::getRandom()+0x75>
+  c8aa98:	mov    rax,QWORD PTR [rbx+0x28]
+  c8aa9c:	movss  xmm0,DWORD PTR [rax]
+  c8aaa0:	mulss  xmm0,DWORD PTR [rbx+0x5c]
+  c8aaa5:	movss  DWORD PTR [rax],xmm0
+  c8aaa9:	mov    BYTE PTR [rbx+0x60],0x1
+  c8aaad:	xor    eax,eax
+  c8aaaf:	pop    rbx
+  c8aab0:	ret
+  c8aab1:	nop    DWORD PTR [rax+0x0]
+  c8aab8:	call   c8a6a0 <CRandomizer::computeOdds()>
+  c8aabd:	jmp    c8aa1e <CRandomizer::getRandom()+0xe>
+  c8aac2:	nop    WORD PTR [rax+rax*1+0x0]
+  c8aac8:	mov    eax,eax
+  c8aaca:	shl    rax,0x2
+  c8aace:	add    rax,QWORD PTR [rbx+0x10]
+  c8aad2:	mov    eax,DWORD PTR [rax]
+  c8aad4:	jmp    c8aa85 <CRandomizer::getRandom()+0x75>
+  c8aad6:	cs nop WORD PTR [rax+rax*1+0x0]
+  c8aae0:	cmp    DWORD PTR [rbx+0x34],eax
+  c8aae3:	jbe    c8ab08 <CRandomizer::getRandom()+0xf8>
+  c8aae5:	mov    edx,eax
+  c8aae7:	shl    rdx,0x2
+  c8aaeb:	add    rdx,QWORD PTR [rbx+0x28]
+  c8aaef:	movss  xmm0,DWORD PTR [rdx]
+  c8aaf3:	mulss  xmm0,DWORD PTR [rbx+0x5c]
+  c8aaf8:	movss  DWORD PTR [rdx],xmm0
+  c8aafc:	mov    BYTE PTR [rbx+0x60],0x1
+  c8ab00:	jmp    c8aa7a <CRandomizer::getRandom()+0x6a>
+  c8ab05:	nop    DWORD PTR [rax]
+  c8ab08:	mov    rdx,QWORD PTR [rbx+0x28]
+  c8ab0c:	jmp    c8aaef <CRandomizer::getRandom()+0xdf>
+  c8ab0e:	xchg   ax,ax
+
+0000000000c8ab10 <CRandomizer::hasValidChoices()>:
+  c8ab10:	push   rbx
+  c8ab11:	cmp    BYTE PTR [rdi+0x60],0x0
+  c8ab15:	mov    rbx,rdi
+  c8ab18:	jne    c8ab70 <CRandomizer::hasValidChoices()+0x60>
+  c8ab1a:	mov    esi,DWORD PTR [rbx+0x48]
+  c8ab1d:	test   esi,esi
+  c8ab1f:	je     c8ab68 <CRandomizer::hasValidChoices()+0x58>
+  c8ab21:	mov    edi,DWORD PTR [rbx+0x4c]
+  c8ab24:	xor    edx,edx
+  c8ab26:	xor    eax,eax
+  c8ab28:	xorps  xmm1,xmm1
+  c8ab2b:	jmp    c8ab48 <CRandomizer::hasValidChoices()+0x38>
+  c8ab2d:	nop    DWORD PTR [rax]
+  c8ab30:	mov    rcx,QWORD PTR [rbx+0x40]
+  c8ab34:	movss  xmm0,DWORD PTR [rcx]
+  c8ab38:	ucomiss xmm0,xmm1
+  c8ab3b:	ja     c8ab5c <CRandomizer::hasValidChoices()+0x4c>
+  c8ab3d:	add    eax,0x1
+  c8ab40:	add    rdx,0x4
+  c8ab44:	cmp    eax,esi
+  c8ab46:	jae    c8ab68 <CRandomizer::hasValidChoices()+0x58>
+  c8ab48:	cmp    edi,eax
+  c8ab4a:	jbe    c8ab30 <CRandomizer::hasValidChoices()+0x20>
+  c8ab4c:	mov    rcx,rdx
+  c8ab4f:	add    rcx,QWORD PTR [rbx+0x40]
+  c8ab53:	movss  xmm0,DWORD PTR [rcx]
+  c8ab57:	ucomiss xmm0,xmm1
+  c8ab5a:	jbe    c8ab3d <CRandomizer::hasValidChoices()+0x2d>
+  c8ab5c:	mov    eax,0x1
+  c8ab61:	pop    rbx
+  c8ab62:	ret
+  c8ab63:	nop    DWORD PTR [rax+rax*1+0x0]
+  c8ab68:	xor    eax,eax
+  c8ab6a:	pop    rbx
+  c8ab6b:	ret
+  c8ab6c:	nop    DWORD PTR [rax+0x0]
+  c8ab70:	call   c8a6a0 <CRandomizer::computeOdds()>
+  c8ab75:	jmp    c8ab1a <CRandomizer::hasValidChoices()+0xa>
+  c8ab77:	nop
+  c8ab78:	nop
+  c8ab79:	nop
+  c8ab7a:	nop
+  c8ab7b:	nop
+  c8ab7c:	nop
+  c8ab7d:	nop
+  c8ab7e:	nop
+  c8ab7f:	nop

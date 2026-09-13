@@ -1,0 +1,25 @@
+# Local game installer and proprietary runtime data are inputs, not source.
+/Torchlight.sh
+/original/
+
+# CMake and editor outputs.
+/build/
+/CMakeFiles/
+/build-*/
+/out/
+/compile_commands.json
+/CMakeUserPresets.json
+/.cache/
+/.clangd/
+/.idea/
+/.vscode/
+
+# Python helpers.
+__pycache__/
+*.py[cod]
+
+# Crash and profiler output.
+core
+core.*
+*.profraw
+*.profdata

@@ -1,0 +1,1493 @@
+
+/home/qweasd123tg/Документы/Torchlight/game/Torchlight.bin.x86_64:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000973370 <CLevelTemplateData::createRandomLayout(int)>:
+  973370:	push   r15
+  973372:	push   r14
+  973374:	push   r13
+  973376:	push   r12
+  973378:	push   rbp
+  973379:	push   rbx
+  97337a:	mov    rbx,rdi
+  97337d:	sub    rsp,0x128
+  973384:	mov    DWORD PTR [rsp+0x3c],esi
+  973388:	cmp    DWORD PTR [rdi+0x1a0],0x0
+  97338f:	je     97466d <CLevelTemplateData::createRandomLayout(int)+0x12fd>
+  973395:	cmp    DWORD PTR [rsp+0x3c],0x0
+  97339a:	je     9733a5 <CLevelTemplateData::createRandomLayout(int)+0x35>
+  97339c:	mov    edi,DWORD PTR [rsp+0x3c]
+  9733a0:	call   c92c70 <UTILITIES::setSeed(int)>
+  9733a5:	lea    rax,[rbx+0x170]
+  9733ac:	lea    rdx,[rbx+0x108]
+  9733b3:	mov    BYTE PTR [rbx+0x762],0x1
+  9733ba:	mov    QWORD PTR [rsp+0xf0],0x0
+  9733c6:	mov    QWORD PTR [rsp+0xf8],0x0
+  9733d2:	mov    QWORD PTR [rsp+0xa8],rax
+  9733da:	mov    QWORD PTR [rsp+0xa0],rdx
+  9733e2:	lea    rax,[rbx+0x240]
+  9733e9:	lea    rdx,[rbx+0x1d8]
+  9733f0:	mov    QWORD PTR [rsp+0x100],0x0
+  9733fc:	mov    QWORD PTR [rsp+0xd0],0x0
+  973408:	mov    QWORD PTR [rsp+0x98],rax
+  973410:	lea    rax,[rbx+0x2a8]
+  973417:	mov    QWORD PTR [rsp+0xd8],0x0
+  973423:	mov    QWORD PTR [rsp+0x90],rdx
+  97342b:	lea    rdx,[rbx+0x310]
+  973432:	mov    QWORD PTR [rsp+0xe0],0x0
+  97343e:	mov    QWORD PTR [rsp+0x88],rax
+  973446:	lea    rax,[rbx+0x3e0]
+  97344d:	mov    DWORD PTR [rsp+0x50],0x0
+  973455:	mov    QWORD PTR [rsp+0x80],rdx
+  97345d:	lea    rdx,[rbx+0x378]
+  973464:	mov    QWORD PTR [rsp+0x78],rax
+  973469:	lea    rax,[rbx+0x448]
+  973470:	mov    QWORD PTR [rsp+0x70],rdx
+  973475:	lea    rdx,[rbx+0x4b0]
+  97347c:	mov    QWORD PTR [rsp+0x68],rax
+  973481:	mov    QWORD PTR [rsp+0x60],rdx
+  973486:	mov    rdi,QWORD PTR [rsp+0xa8]
+  97348e:	call   c8aa10 <CRandomizer::getRandom()>
+  973493:	xor    ecx,ecx
+  973495:	xor    edx,edx
+  973497:	xor    esi,esi
+  973499:	mov    edi,0x48
+  97349e:	mov    r12d,eax
+  9734a1:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  9734a6:	mov    rdi,rax
+  9734a9:	mov    rbp,rax
+  9734ac:	call   d796c0 <CRunicCore::CRunicCore()>
+  9734b1:	lea    rdi,[rbp+0x18]
+  9734b5:	mov    QWORD PTR [rbp+0x0],0xfd7cb0
+  9734bd:	mov    DWORD PTR [rbp+0x10],r12d
+  9734c1:	mov    esi,0x1495cc8
+  9734c6:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  9734cb:	mov    DWORD PTR [rbp+0x28],0x0
+  9734d2:	mov    DWORD PTR [rbp+0x24],0x0
+  9734d9:	mov    DWORD PTR [rbp+0x20],0x0
+  9734e0:	mov    QWORD PTR [rbp+0x30],0x0
+  9734e8:	mov    QWORD PTR [rbp+0x38],0x0
+  9734f0:	mov    QWORD PTR [rbp+0x40],0x0
+  9734f8:	mov    rsi,QWORD PTR [rsp+0xf8]
+  973500:	cmp    rsi,QWORD PTR [rsp+0x100]
+  973508:	mov    QWORD PTR [rsp+0x110],rbp
+  973510:	je     974a4c <CLevelTemplateData::createRandomLayout(int)+0x16dc>
+  973516:	xor    eax,eax
+  973518:	test   rsi,rsi
+  97351b:	je     973528 <CLevelTemplateData::createRandomLayout(int)+0x1b8>
+  97351d:	mov    QWORD PTR [rsi],rbp
+  973520:	mov    rax,QWORD PTR [rsp+0xf8]
+  973528:	add    rax,0x8
+  97352c:	mov    QWORD PTR [rsp+0xf8],rax
+  973534:	lea    r13,[rsp+0x11c]
+  97353c:	lea    r12,[rsp+0xb0]
+  973544:	mov    QWORD PTR [rsp+0xb0],0x0
+  973550:	mov    QWORD PTR [rsp+0xb8],0x0
+  97355c:	mov    QWORD PTR [rsp+0xc0],0x0
+  973568:	xor    ebp,ebp
+  97356a:	cmp    ebp,DWORD PTR [rbx+0x30]
+  97356d:	jae    9735bf <CLevelTemplateData::createRandomLayout(int)+0x24f>
+  97356f:	mov    rsi,QWORD PTR [rsp+0xb8]
+  973577:	cmp    rsi,QWORD PTR [rsp+0xc0]
+  97357f:	mov    DWORD PTR [rsp+0x11c],0x0
+  97358a:	je     9735b2 <CLevelTemplateData::createRandomLayout(int)+0x242>
+  97358c:	xor    eax,eax
+  97358e:	test   rsi,rsi
+  973591:	je     9735a1 <CLevelTemplateData::createRandomLayout(int)+0x231>
+  973593:	mov    DWORD PTR [rsi],0x0
+  973599:	mov    rax,QWORD PTR [rsp+0xb8]
+  9735a1:	add    rax,0x4
+  9735a5:	mov    QWORD PTR [rsp+0xb8],rax
+  9735ad:	add    ebp,0x1
+  9735b0:	jmp    97356a <CLevelTemplateData::createRandomLayout(int)+0x1fa>
+  9735b2:	mov    rdx,r13
+  9735b5:	mov    rdi,r12
+  9735b8:	call   5aa7a0 <std::vector<unsigned int, std::allocator<unsigned int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<unsigned int*, std::vector<unsigned int, std::allocator<unsigned int> > >, unsigned int const&)>
+  9735bd:	jmp    9735ad <CLevelTemplateData::createRandomLayout(int)+0x23d>
+  9735bf:	mov    esi,DWORD PTR [rbx+0x78]
+  9735c2:	mov    edi,DWORD PTR [rbx+0x74]
+  9735c5:	call   c92b10 <UTILITIES::randomIntegerBetween(int, int)>
+  9735ca:	mov    DWORD PTR [rsp+0x5c],eax
+  9735ce:	mov    DWORD PTR [rsp+0x4c],0x0
+  9735d6:	mov    DWORD PTR [rsp+0x38],0x0
+  9735de:	cmp    DWORD PTR [rsp+0x4c],0x3e7
+  9735e6:	jg     974a6e <CLevelTemplateData::createRandomLayout(int)+0x16fe>
+  9735ec:	mov    edx,DWORD PTR [rsp+0x5c]
+  9735f0:	cmp    DWORD PTR [rsp+0x38],edx
+  9735f4:	jge    973b90 <CLevelTemplateData::createRandomLayout(int)+0x820>
+  9735fa:	mov    rdi,QWORD PTR [rsp+0xa0]
+  973602:	call   c8aa10 <CRandomizer::getRandom()>
+  973607:	mov    DWORD PTR [rsp+0x1c],eax
+  97360b:	cmp    eax,DWORD PTR [rbx+0x1c]
+  97360e:	jb     973afe <CLevelTemplateData::createRandomLayout(int)+0x78e>
+  973614:	mov    rax,QWORD PTR [rbx+0x10]
+  973618:	mov    rax,QWORD PTR [rax]
+  97361b:	cmp    DWORD PTR [rsp+0x38],0x0
+  973620:	mov    QWORD PTR [rsp+0x30],rax
+  973625:	mov    eax,DWORD PTR [rax+0x50]
+  973628:	mov    DWORD PTR [rsp+0x58],eax
+  97362c:	jne    973633 <CLevelTemplateData::createRandomLayout(int)+0x2c3>
+  97362e:	cmp    eax,0x1
+  973631:	je     9735de <CLevelTemplateData::createRandomLayout(int)+0x26e>
+  973633:	mov    edx,DWORD PTR [rsp+0x1c]
+  973637:	cmp    edx,DWORD PTR [rbx+0xfc]
+  97363d:	jb     973b26 <CLevelTemplateData::createRandomLayout(int)+0x7b6>
+  973643:	mov    rax,QWORD PTR [rbx+0xf0]
+  97364a:	mov    rax,QWORD PTR [rax]
+  97364d:	cmp    DWORD PTR [rax+0x30],0x0
+  973651:	je     9735de <CLevelTemplateData::createRandomLayout(int)+0x26e>
+  973653:	mov    r14,QWORD PTR [rsp+0xf8]
+  97365b:	sub    r14,QWORD PTR [rsp+0xf0]
+  973663:	mov    QWORD PTR [rsp+0x40],0x0
+  97366c:	mov    DWORD PTR [rsp+0x24],0x0
+  973674:	sar    r14,0x3
+  973678:	mov    r15d,r14d
+  97367b:	mov    eax,DWORD PTR [rsp+0x58]
+  97367f:	cmp    DWORD PTR [rsp+0x24],eax
+  973683:	jge    973abb <CLevelTemplateData::createRandomLayout(int)+0x74b>
+  973689:	mov    rax,QWORD PTR [rsp+0x30]
+  97368e:	mov    edx,DWORD PTR [rsp+0x24]
+  973692:	cmp    DWORD PTR [rax+0x54],edx
+  973695:	ja     973aeb <CLevelTemplateData::createRandomLayout(int)+0x77b>
+  97369b:	mov    rax,QWORD PTR [rax+0x48]
+  97369f:	mov    rdx,QWORD PTR [rsp+0x30]
+  9736a4:	movss  xmm1,DWORD PTR [rbx+0x88]
+  9736ac:	movss  xmm2,DWORD PTR [rax]
+  9736b0:	xor    edi,edi
+  9736b2:	movss  xmm3,DWORD PTR [rip+0x631156]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  9736ba:	cvtsi2ss xmm0,DWORD PTR [rdx+0x14]
+  9736bf:	subss  xmm0,DWORD PTR [rip+0x631135]        # fa47fc <vtable for Ogre::FrameListener+0x3c>
+  9736c7:	mulss  xmm3,xmm1
+  9736cb:	mulss  xmm0,xmm1
+  9736cf:	mulss  xmm0,DWORD PTR [rbx+0x8c]
+  9736d7:	subss  xmm2,xmm0
+  9736db:	divss  xmm2,xmm1
+  9736df:	movss  DWORD PTR [rsp+0x28],xmm2
+  9736e5:	cvtsi2ss xmm0,DWORD PTR [rdx+0x18]
+  9736ea:	mulss  xmm0,DWORD PTR [rip+0x635002]        # fa86f4 <vtable for Ogre::SharedPtr<Ogre::Texture>+0x54>
+  9736f2:	addss  xmm3,DWORD PTR [rax+0x8]
+  9736f7:	mov    rax,QWORD PTR [rsp+0xf8]
+  9736ff:	sub    rax,QWORD PTR [rsp+0xf0]
+  973707:	mulss  xmm0,xmm1
+  97370b:	sar    rax,0x3
+  97370f:	lea    esi,[rax-0x1]
+  973712:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  97371a:	addss  xmm0,xmm3
+  97371e:	divss  xmm0,xmm1
+  973722:	movss  DWORD PTR [rsp+0x8],xmm0
+  973728:	call   c92b10 <UTILITIES::randomIntegerBetween(int, int)>
+  97372d:	test   r15d,r15d
+  973730:	jle    9738b6 <CLevelTemplateData::createRandomLayout(int)+0x546>
+  973736:	movss  xmm4,DWORD PTR [rsp+0x8]
+  97373c:	mov    ebp,eax
+  97373e:	movss  xmm0,DWORD PTR [rsp+0x28]
+  973744:	xor    r13d,r13d
+  973747:	xorps  xmm4,XMMWORD PTR [rip+0x635032]        # fa8780 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xe0>
+  97374e:	xorps  xmm0,XMMWORD PTR [rip+0x63502b]        # fa8780 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xe0>
+  973755:	movss  DWORD PTR [rsp+0x10],xmm4
+  97375b:	movss  DWORD PTR [rsp+0x8],xmm0
+  973761:	mov    edx,ebp
+  973763:	mov    rax,QWORD PTR [rsp+0xf0]
+  97376b:	sub    edx,r14d
+  97376e:	cmp    r15d,ebp
+  973771:	cmovg  edx,ebp
+  973774:	movsxd rdx,edx
+  973777:	mov    r12,QWORD PTR [rax+rdx*8]
+  97377b:	mov    eax,DWORD PTR [r12+0x10]
+  973780:	cmp    eax,DWORD PTR [rbx+0x1c]
+  973783:	jb     9738dc <CLevelTemplateData::createRandomLayout(int)+0x56c>
+  973789:	mov    rax,QWORD PTR [rbx+0x10]
+  97378d:	mov    r10,QWORD PTR [rax]
+  973790:	mov    r11d,DWORD PTR [r10+0x50]
+  973794:	test   r11d,r11d
+  973797:	jle    9738a6 <CLevelTemplateData::createRandomLayout(int)+0x536>
+  97379d:	mov    r8,QWORD PTR [r12+0x30]
+  9737a2:	mov    rdi,QWORD PTR [r12+0x38]
+  9737a7:	xor    r9d,r9d
+  9737aa:	xor    esi,esi
+  9737ac:	sub    rdi,r8
+  9737af:	shr    rdi,0x2
+  9737b3:	nop    DWORD PTR [rax+rax*1+0x0]
+  9737b8:	test   edi,edi
+  9737ba:	je     9737e7 <CLevelTemplateData::createRandomLayout(int)+0x477>
+  9737bc:	xor    eax,eax
+  9737be:	cmp    esi,DWORD PTR [r8]
+  9737c1:	mov    edx,0x4
+  9737c6:	jne    9737e0 <CLevelTemplateData::createRandomLayout(int)+0x470>
+  9737c8:	jmp    973896 <CLevelTemplateData::createRandomLayout(int)+0x526>
+  9737cd:	nop    DWORD PTR [rax]
+  9737d0:	mov    ecx,DWORD PTR [r8+rdx*1]
+  9737d4:	add    rdx,0x4
+  9737d8:	cmp    esi,ecx
+  9737da:	je     973896 <CLevelTemplateData::createRandomLayout(int)+0x526>
+  9737e0:	add    eax,0x1
+  9737e3:	cmp    eax,edi
+  9737e5:	jb     9737d0 <CLevelTemplateData::createRandomLayout(int)+0x460>
+  9737e7:	cmp    DWORD PTR [r10+0x54],esi
+  9737eb:	ja     9738d0 <CLevelTemplateData::createRandomLayout(int)+0x560>
+  9737f1:	mov    rax,QWORD PTR [r10+0x48]
+  9737f5:	cvtsi2ss xmm0,DWORD PTR [r10+0x14]
+  9737fb:	subss  xmm0,DWORD PTR [rip+0x630ff9]        # fa47fc <vtable for Ogre::FrameListener+0x3c>
+  973803:	movss  xmm2,DWORD PTR [rbx+0x88]
+  97380b:	movss  xmm3,DWORD PTR [rbx+0x8c]
+  973813:	movss  xmm1,DWORD PTR [rax]
+  973817:	movss  xmm5,DWORD PTR [rax+0x8]
+  97381c:	mov    eax,DWORD PTR [r10+0x18]
+  973820:	movss  xmm4,DWORD PTR [rbx+0x90]
+  973828:	mulss  xmm0,xmm2
+  97382c:	mulss  xmm0,xmm3
+  973830:	subss  xmm1,xmm0
+  973834:	xorps  xmm0,xmm0
+  973837:	divss  xmm1,xmm2
+  97383b:	ucomiss xmm1,xmm0
+  97383e:	jp     973842 <CLevelTemplateData::createRandomLayout(int)+0x4d2>
+  973840:	je     973851 <CLevelTemplateData::createRandomLayout(int)+0x4e1>
+  973842:	movss  xmm0,DWORD PTR [rsp+0x8]
+  973848:	ucomiss xmm0,xmm1
+  97384b:	je     9738eb <CLevelTemplateData::createRandomLayout(int)+0x57b>
+  973851:	cvtsi2ss xmm1,eax
+  973855:	movss  xmm0,DWORD PTR [rip+0x630fb3]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  97385d:	mulss  xmm0,xmm2
+  973861:	addss  xmm0,xmm5
+  973865:	mulss  xmm1,DWORD PTR [rip+0x634e87]        # fa86f4 <vtable for Ogre::SharedPtr<Ogre::Texture>+0x54>
+  97386d:	mulss  xmm1,xmm2
+  973871:	mulss  xmm1,xmm4
+  973875:	addss  xmm0,xmm1
+  973879:	xorps  xmm1,xmm1
+  97387c:	divss  xmm0,xmm2
+  973880:	ucomiss xmm0,xmm1
+  973883:	jp     973887 <CLevelTemplateData::createRandomLayout(int)+0x517>
+  973885:	je     973896 <CLevelTemplateData::createRandomLayout(int)+0x526>
+  973887:	movss  xmm3,DWORD PTR [rsp+0x10]
+  97388d:	ucomiss xmm3,xmm0
+  973890:	je     973a00 <CLevelTemplateData::createRandomLayout(int)+0x690>
+  973896:	add    esi,0x1
+  973899:	add    r9,0xc
+  97389d:	cmp    esi,r11d
+  9738a0:	jl     9737b8 <CLevelTemplateData::createRandomLayout(int)+0x448>
+  9738a6:	add    r13d,0x1
+  9738aa:	add    ebp,0x1
+  9738ad:	cmp    r15d,r13d
+  9738b0:	jg     973761 <CLevelTemplateData::createRandomLayout(int)+0x3f1>
+  9738b6:	add    DWORD PTR [rsp+0x24],0x1
+  9738bb:	add    QWORD PTR [rsp+0x40],0xc
+  9738c1:	jmp    97367b <CLevelTemplateData::createRandomLayout(int)+0x30b>
+  9738c6:	cs nop WORD PTR [rax+rax*1+0x0]
+  9738d0:	mov    rax,r9
+  9738d3:	add    rax,QWORD PTR [r10+0x48]
+  9738d7:	jmp    9737f5 <CLevelTemplateData::createRandomLayout(int)+0x485>
+  9738dc:	mov    eax,eax
+  9738de:	shl    rax,0x3
+  9738e2:	add    rax,QWORD PTR [rbx+0x10]
+  9738e6:	jmp    97378d <CLevelTemplateData::createRandomLayout(int)+0x41d>
+  9738eb:	jp     973851 <CLevelTemplateData::createRandomLayout(int)+0x4e1>
+  9738f1:	movss  xmm4,DWORD PTR [r12+0x24]
+  9738f8:	movss  xmm0,DWORD PTR [r12+0x20]
+  9738ff:	movss  DWORD PTR [rsp+0x54],xmm4
+  973905:	movss  xmm4,DWORD PTR [r12+0x28]
+  97390c:	movss  DWORD PTR [rsp+0x20],xmm4
+  973912:	xorps  xmm4,xmm4
+  973915:	ucomiss xmm1,xmm4
+  973918:	jbe    973ac5 <CLevelTemplateData::createRandomLayout(int)+0x755>
+  97391e:	mulss  xmm2,xmm3
+  973922:	addss  xmm0,xmm2
+  973926:	movss  DWORD PTR [rsp+0x28],xmm0
+  97392c:	xor    ecx,ecx
+  97392e:	xor    edx,edx
+  973930:	xor    esi,esi
+  973932:	mov    edi,0x48
+  973937:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  97393c:	mov    rdi,rax
+  97393f:	mov    r12,rax
+  973942:	call   d796c0 <CRunicCore::CRunicCore()>
+  973947:	mov    QWORD PTR [r12],0xfd7cb0
+  97394f:	mov    eax,DWORD PTR [rsp+0x1c]
+  973953:	lea    rdi,[r12+0x18]
+  973958:	mov    esi,0x1495cc8
+  97395d:	mov    DWORD PTR [r12+0x10],eax
+  973962:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  973967:	movss  xmm0,DWORD PTR [rsp+0x20]
+  97396d:	lea    rdx,[rsp+0xf0]
+  973975:	movss  DWORD PTR [r12+0x28],xmm0
+  97397c:	mov    rsi,r12
+  97397f:	mov    rdi,rbx
+  973982:	movss  xmm1,DWORD PTR [rsp+0x54]
+  973988:	movss  DWORD PTR [r12+0x24],xmm1
+  97398f:	movss  xmm2,DWORD PTR [rsp+0x28]
+  973995:	movss  DWORD PTR [r12+0x20],xmm2
+  97399c:	mov    QWORD PTR [r12+0x30],0x0
+  9739a5:	mov    QWORD PTR [r12+0x38],0x0
+  9739ae:	mov    QWORD PTR [r12+0x40],0x0
+  9739b7:	mov    QWORD PTR [rsp+0x108],r12
+  9739bf:	call   972980 <CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  9739c4:	test   al,al
+  9739c6:	je     973a46 <CLevelTemplateData::createRandomLayout(int)+0x6d6>
+  9739c8:	mov    rdi,QWORD PTR [rsp+0x108]
+  9739d0:	test   rdi,rdi
+  9739d3:	je     9738a6 <CLevelTemplateData::createRandomLayout(int)+0x536>
+  9739d9:	mov    rax,QWORD PTR [rdi]
+  9739dc:	call   QWORD PTR [rax+0x8]
+  9739df:	add    r13d,0x1
+  9739e3:	add    ebp,0x1
+  9739e6:	mov    QWORD PTR [rsp+0x108],0x0
+  9739f2:	cmp    r15d,r13d
+  9739f5:	jg     973761 <CLevelTemplateData::createRandomLayout(int)+0x3f1>
+  9739fb:	jmp    9738b6 <CLevelTemplateData::createRandomLayout(int)+0x546>
+  973a00:	jp     973896 <CLevelTemplateData::createRandomLayout(int)+0x526>
+  973a06:	movss  xmm1,DWORD PTR [r12+0x20]
+  973a0d:	movss  DWORD PTR [rsp+0x28],xmm1
+  973a13:	movss  xmm3,DWORD PTR [r12+0x24]
+  973a1a:	movss  DWORD PTR [rsp+0x54],xmm3
+  973a20:	xorps  xmm3,xmm3
+  973a23:	movss  xmm1,DWORD PTR [r12+0x28]
+  973a2a:	ucomiss xmm0,xmm3
+  973a2d:	jbe    973ad8 <CLevelTemplateData::createRandomLayout(int)+0x768>
+  973a33:	mulss  xmm4,xmm2
+  973a37:	addss  xmm1,xmm4
+  973a3b:	movss  DWORD PTR [rsp+0x20],xmm1
+  973a41:	jmp    97392c <CLevelTemplateData::createRandomLayout(int)+0x5bc>
+  973a46:	mov    rsi,QWORD PTR [rsp+0x108]
+  973a4e:	lea    rdx,[rsp+0xf0]
+  973a56:	mov    rdi,rbx
+  973a59:	call   9725d0 <CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  973a5e:	test   al,al
+  973a60:	je     9739c8 <CLevelTemplateData::createRandomLayout(int)+0x658>
+  973a66:	mov    rsi,QWORD PTR [rsp+0x108]
+  973a6e:	lea    rdx,[rsp+0xf0]
+  973a76:	mov    rdi,rbx
+  973a79:	call   972e90 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  973a7e:	mov    rsi,QWORD PTR [rsp+0xf8]
+  973a86:	cmp    rsi,QWORD PTR [rsp+0x100]
+  973a8e:	je     973b0f <CLevelTemplateData::createRandomLayout(int)+0x79f>
+  973a90:	xor    eax,eax
+  973a92:	test   rsi,rsi
+  973a95:	je     973aaa <CLevelTemplateData::createRandomLayout(int)+0x73a>
+  973a97:	mov    rax,QWORD PTR [rsp+0x108]
+  973a9f:	mov    QWORD PTR [rsi],rax
+  973aa2:	mov    rax,QWORD PTR [rsp+0xf8]
+  973aaa:	add    rax,0x8
+  973aae:	mov    QWORD PTR [rsp+0xf8],rax
+  973ab6:	add    DWORD PTR [rsp+0x38],0x1
+  973abb:	add    DWORD PTR [rsp+0x4c],0x1
+  973ac0:	jmp    9735de <CLevelTemplateData::createRandomLayout(int)+0x26e>
+  973ac5:	mulss  xmm2,xmm3
+  973ac9:	subss  xmm0,xmm2
+  973acd:	movss  DWORD PTR [rsp+0x28],xmm0
+  973ad3:	jmp    97392c <CLevelTemplateData::createRandomLayout(int)+0x5bc>
+  973ad8:	mulss  xmm2,xmm4
+  973adc:	subss  xmm1,xmm2
+  973ae0:	movss  DWORD PTR [rsp+0x20],xmm1
+  973ae6:	jmp    97392c <CLevelTemplateData::createRandomLayout(int)+0x5bc>
+  973aeb:	mov    rdx,QWORD PTR [rsp+0x30]
+  973af0:	mov    rax,QWORD PTR [rsp+0x40]
+  973af5:	add    rax,QWORD PTR [rdx+0x48]
+  973af9:	jmp    97369f <CLevelTemplateData::createRandomLayout(int)+0x32f>
+  973afe:	mov    eax,DWORD PTR [rsp+0x1c]
+  973b02:	shl    rax,0x3
+  973b06:	add    rax,QWORD PTR [rbx+0x10]
+  973b0a:	jmp    973618 <CLevelTemplateData::createRandomLayout(int)+0x2a8>
+  973b0f:	lea    rdx,[rsp+0x108]
+  973b17:	lea    rdi,[rsp+0xf0]
+  973b1f:	call   97cdf0 <std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CChunkInstance**, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> > >, CChunkInstance* const&)>
+  973b24:	jmp    973ab6 <CLevelTemplateData::createRandomLayout(int)+0x746>
+  973b26:	mov    eax,DWORD PTR [rsp+0x1c]
+  973b2a:	shl    rax,0x3
+  973b2e:	add    rax,QWORD PTR [rbx+0xf0]
+  973b35:	jmp    97364a <CLevelTemplateData::createRandomLayout(int)+0x2da>
+  973b3a:	mov    rbx,rax
+  973b3d:	mov    rdi,r12
+  973b40:	call   555268 <Ogre::NedAllocImpl::deallocBytes(void*)@plt>
+  973b45:	mov    rdi,QWORD PTR [rsp+0xb0]
+  973b4d:	test   rdi,rdi
+  973b50:	je     973b57 <CLevelTemplateData::createRandomLayout(int)+0x7e7>
+  973b52:	call   553f18 <operator delete(void*)@plt>
+  973b57:	mov    rdi,QWORD PTR [rsp+0xd0]
+  973b5f:	test   rdi,rdi
+  973b62:	je     973b69 <CLevelTemplateData::createRandomLayout(int)+0x7f9>
+  973b64:	call   553f18 <operator delete(void*)@plt>
+  973b69:	mov    rdi,QWORD PTR [rsp+0xf0]
+  973b71:	test   rdi,rdi
+  973b74:	je     973b7b <CLevelTemplateData::createRandomLayout(int)+0x80b>
+  973b76:	call   553f18 <operator delete(void*)@plt>
+  973b7b:	mov    rdi,rbx
+  973b7e:	call   554498 <_Unwind_Resume@plt>
+  973b83:	mov    rdi,r12
+  973b86:	mov    rbx,rax
+  973b89:	call   d79920 <CRunicCore::~CRunicCore()>
+  973b8e:	jmp    973b3d <CLevelTemplateData::createRandomLayout(int)+0x7cd>
+  973b90:	cmp    BYTE PTR [rbx+0x59],0x0
+  973b94:	je     973f80 <CLevelTemplateData::createRandomLayout(int)+0xc10>
+  973b9a:	lea    r14,[rsp+0xf0]
+  973ba2:	mov    QWORD PTR [rsp+0x10],0x0
+  973bab:	mov    DWORD PTR [rsp+0x28],0x0
+  973bb3:	mov    rdx,QWORD PTR [rsp+0xf8]
+  973bbb:	mov    rax,QWORD PTR [rsp+0xf0]
+  973bc3:	mov    rcx,rdx
+  973bc6:	sub    rcx,rax
+  973bc9:	sar    rcx,0x3
+  973bcd:	cmp    DWORD PTR [rsp+0x28],ecx
+  973bd1:	jge    97473c <CLevelTemplateData::createRandomLayout(int)+0x13cc>
+  973bd7:	mov    rdx,QWORD PTR [rsp+0x10]
+  973bdc:	mov    rbp,QWORD PTR [rax+rdx*1]
+  973be0:	mov    eax,DWORD PTR [rbp+0x10]
+  973be3:	cmp    eax,DWORD PTR [rbx+0x1c]
+  973be6:	jb     973f53 <CLevelTemplateData::createRandomLayout(int)+0xbe3>
+  973bec:	mov    rax,QWORD PTR [rbx+0x10]
+  973bf0:	mov    r13,QWORD PTR [rax]
+  973bf3:	xor    r15d,r15d
+  973bf6:	mov    eax,DWORD PTR [r13+0x50]
+  973bfa:	mov    QWORD PTR [rsp+0x30],0x0
+  973c03:	cmp    r15d,eax
+  973c06:	jge    973cd3 <CLevelTemplateData::createRandomLayout(int)+0x963>
+  973c0c:	mov    rsi,QWORD PTR [rbp+0x30]
+  973c10:	mov    rdi,QWORD PTR [rbp+0x38]
+  973c14:	sub    rdi,rsi
+  973c17:	shr    rdi,0x2
+  973c1b:	test   edi,edi
+  973c1d:	je     973c49 <CLevelTemplateData::createRandomLayout(int)+0x8d9>
+  973c1f:	cmp    r15d,DWORD PTR [rsi]
+  973c22:	je     973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  973c28:	mov    ecx,0x4
+  973c2d:	xor    edx,edx
+  973c2f:	jmp    973c42 <CLevelTemplateData::createRandomLayout(int)+0x8d2>
+  973c31:	mov    r8d,DWORD PTR [rsi+rcx*1]
+  973c35:	add    rcx,0x4
+  973c39:	cmp    r15d,r8d
+  973c3c:	je     973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  973c42:	add    edx,0x1
+  973c45:	cmp    edx,edi
+  973c47:	jb     973c31 <CLevelTemplateData::createRandomLayout(int)+0x8c1>
+  973c49:	cmp    DWORD PTR [r13+0x54],r15d
+  973c4d:	ja     973f62 <CLevelTemplateData::createRandomLayout(int)+0xbf2>
+  973c53:	mov    rdx,QWORD PTR [r13+0x48]
+  973c57:	cvtsi2ss xmm0,DWORD PTR [r13+0x18]
+  973c5d:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  973c65:	movss  xmm3,DWORD PTR [rbp+0x28]
+  973c6a:	movss  xmm1,DWORD PTR [rdx+0x8]
+  973c6f:	addss  xmm1,xmm3
+  973c73:	movss  xmm2,DWORD PTR [rbp+0x20]
+  973c78:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  973c80:	mulss  xmm0,DWORD PTR [rip+0x630b88]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  973c88:	addss  xmm0,xmm3
+  973c8c:	subss  xmm1,xmm0
+  973c90:	movss  xmm0,DWORD PTR [rdx]
+  973c94:	addss  xmm0,xmm2
+  973c98:	subss  xmm0,xmm2
+  973c9c:	xorps  xmm2,xmm2
+  973c9f:	ucomiss xmm1,xmm2
+  973ca2:	jbe    973e01 <CLevelTemplateData::createRandomLayout(int)+0xa91>
+  973ca8:	movaps xmm2,xmm0
+  973cab:	andps  xmm2,XMMWORD PTR [rip+0x634ade]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  973cb2:	ucomiss xmm1,xmm2
+  973cb5:	jbe    973e01 <CLevelTemplateData::createRandomLayout(int)+0xa91>
+  973cbb:	cmp    DWORD PTR [rbx+0x270],0x0
+  973cc2:	jne    973ce3 <CLevelTemplateData::createRandomLayout(int)+0x973>
+  973cc4:	add    r15d,0x1
+  973cc8:	add    QWORD PTR [rsp+0x30],0xc
+  973cce:	jmp    973c03 <CLevelTemplateData::createRandomLayout(int)+0x893>
+  973cd3:	add    DWORD PTR [rsp+0x28],0x1
+  973cd8:	add    QWORD PTR [rsp+0x10],0x8
+  973cde:	jmp    973bb3 <CLevelTemplateData::createRandomLayout(int)+0x843>
+  973ce3:	mov    rdi,QWORD PTR [rsp+0x98]
+  973ceb:	call   c8aa10 <CRandomizer::getRandom()>
+  973cf0:	mov    DWORD PTR [rsp+0x20],eax
+  973cf4:	cmp    eax,DWORD PTR [rbx+0x1c]
+  973cf7:	jb     974704 <CLevelTemplateData::createRandomLayout(int)+0x1394>
+  973cfd:	mov    rax,QWORD PTR [rbx+0x10]
+  973d01:	movss  xmm3,DWORD PTR [rbp+0x24]
+  973d06:	xor    ecx,ecx
+  973d08:	movss  DWORD PTR [rsp+0x1c],xmm3
+  973d0e:	xor    edx,edx
+  973d10:	xor    esi,esi
+  973d12:	mov    edi,0x48
+  973d17:	movss  xmm4,DWORD PTR [rbp+0x20]
+  973d1c:	movss  DWORD PTR [rsp+0x24],xmm4
+  973d22:	mov    rax,QWORD PTR [rax]
+  973d25:	cvtsi2ss xmm0,DWORD PTR [rax+0x18]
+  973d2a:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  973d32:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  973d3a:	addss  xmm0,DWORD PTR [rbp+0x28]
+  973d3f:	movss  DWORD PTR [rsp+0x8],xmm0
+  973d45:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  973d4a:	mov    rdi,rax
+  973d4d:	mov    r12,rax
+  973d50:	call   d796c0 <CRunicCore::CRunicCore()>
+  973d55:	mov    QWORD PTR [r12],0xfd7cb0
+  973d5d:	mov    eax,DWORD PTR [rsp+0x20]
+  973d61:	lea    rdi,[r12+0x18]
+  973d66:	mov    esi,0x1495cc8
+  973d6b:	mov    DWORD PTR [r12+0x10],eax
+  973d70:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  973d75:	movss  xmm0,DWORD PTR [rsp+0x1c]
+  973d7b:	movss  DWORD PTR [r12+0x24],xmm0
+  973d82:	movss  xmm1,DWORD PTR [rsp+0x24]
+  973d88:	movss  DWORD PTR [r12+0x20],xmm1
+  973d8f:	mov    rdx,r14
+  973d92:	mov    rsi,r12
+  973d95:	mov    rdi,rbx
+  973d98:	movss  xmm2,DWORD PTR [rsp+0x8]
+  973d9e:	movss  DWORD PTR [r12+0x28],xmm2
+  973da5:	mov    QWORD PTR [r12+0x30],0x0
+  973dae:	mov    QWORD PTR [r12+0x38],0x0
+  973db7:	mov    QWORD PTR [r12+0x40],0x0
+  973dc0:	mov    QWORD PTR [rsp+0x108],r12
+  973dc8:	call   972980 <CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  973dcd:	test   al,al
+  973dcf:	je     97468b <CLevelTemplateData::createRandomLayout(int)+0x131b>
+  973dd5:	mov    rdi,QWORD PTR [rsp+0x108]
+  973ddd:	test   rdi,rdi
+  973de0:	je     973f4a <CLevelTemplateData::createRandomLayout(int)+0xbda>
+  973de6:	mov    rax,QWORD PTR [rdi]
+  973de9:	call   QWORD PTR [rax+0x8]
+  973dec:	mov    QWORD PTR [rsp+0x108],0x0
+  973df8:	mov    eax,DWORD PTR [r13+0x50]
+  973dfc:	jmp    973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  973e01:	xorps  xmm2,xmm2
+  973e04:	ucomiss xmm2,xmm1
+  973e07:	ja     97492b <CLevelTemplateData::createRandomLayout(int)+0x15bb>
+  973e0d:	xorps  xmm3,xmm3
+  973e10:	ucomiss xmm0,xmm3
+  973e13:	jbe    974836 <CLevelTemplateData::createRandomLayout(int)+0x14c6>
+  973e19:	movaps xmm2,xmm1
+  973e1c:	andps  xmm2,XMMWORD PTR [rip+0x63496d]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  973e23:	ucomiss xmm0,xmm2
+  973e26:	jbe    974836 <CLevelTemplateData::createRandomLayout(int)+0x14c6>
+  973e2c:	cmp    DWORD PTR [rbx+0x2d8],0x0
+  973e33:	je     973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  973e39:	mov    rdi,QWORD PTR [rsp+0x88]
+  973e41:	call   c8aa10 <CRandomizer::getRandom()>
+  973e46:	mov    DWORD PTR [rsp+0x20],eax
+  973e4a:	cmp    eax,DWORD PTR [rbx+0x1c]
+  973e4d:	jb     974825 <CLevelTemplateData::createRandomLayout(int)+0x14b5>
+  973e53:	mov    rax,QWORD PTR [rbx+0x10]
+  973e57:	movss  xmm3,DWORD PTR [rbp+0x28]
+  973e5c:	xor    ecx,ecx
+  973e5e:	movss  DWORD PTR [rsp+0x1c],xmm3
+  973e64:	xor    edx,edx
+  973e66:	xor    esi,esi
+  973e68:	mov    edi,0x48
+  973e6d:	movss  xmm4,DWORD PTR [rbp+0x24]
+  973e72:	movss  DWORD PTR [rsp+0x24],xmm4
+  973e78:	mov    rax,QWORD PTR [rax]
+  973e7b:	cvtsi2ss xmm0,DWORD PTR [rax+0x14]
+  973e80:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  973e88:	mulss  xmm0,DWORD PTR [rbx+0x8c]
+  973e90:	addss  xmm0,DWORD PTR [rbp+0x20]
+  973e95:	movss  DWORD PTR [rsp+0x8],xmm0
+  973e9b:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  973ea0:	mov    rdi,rax
+  973ea3:	mov    r12,rax
+  973ea6:	call   d796c0 <CRunicCore::CRunicCore()>
+  973eab:	mov    QWORD PTR [r12],0xfd7cb0
+  973eb3:	mov    eax,DWORD PTR [rsp+0x20]
+  973eb7:	lea    rdi,[r12+0x18]
+  973ebc:	mov    esi,0x1495cc8
+  973ec1:	mov    DWORD PTR [r12+0x10],eax
+  973ec6:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  973ecb:	movss  xmm0,DWORD PTR [rsp+0x1c]
+  973ed1:	movss  DWORD PTR [r12+0x28],xmm0
+  973ed8:	movss  xmm1,DWORD PTR [rsp+0x24]
+  973ede:	movss  DWORD PTR [r12+0x24],xmm1
+  973ee5:	mov    rdx,r14
+  973ee8:	mov    rsi,r12
+  973eeb:	mov    rdi,rbx
+  973eee:	movss  xmm2,DWORD PTR [rsp+0x8]
+  973ef4:	movss  DWORD PTR [r12+0x20],xmm2
+  973efb:	mov    QWORD PTR [r12+0x30],0x0
+  973f04:	mov    QWORD PTR [r12+0x38],0x0
+  973f0d:	mov    QWORD PTR [r12+0x40],0x0
+  973f16:	mov    QWORD PTR [rsp+0x108],r12
+  973f1e:	call   972980 <CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  973f23:	test   al,al
+  973f25:	je     9747f3 <CLevelTemplateData::createRandomLayout(int)+0x1483>
+  973f2b:	mov    rdi,QWORD PTR [rsp+0x108]
+  973f33:	test   rdi,rdi
+  973f36:	je     973f4a <CLevelTemplateData::createRandomLayout(int)+0xbda>
+  973f38:	mov    rax,QWORD PTR [rdi]
+  973f3b:	call   QWORD PTR [rax+0x8]
+  973f3e:	mov    QWORD PTR [rsp+0x108],0x0
+  973f4a:	mov    eax,DWORD PTR [r13+0x50]
+  973f4e:	jmp    973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  973f53:	mov    eax,eax
+  973f55:	shl    rax,0x3
+  973f59:	add    rax,QWORD PTR [rbx+0x10]
+  973f5d:	jmp    973bf0 <CLevelTemplateData::createRandomLayout(int)+0x880>
+  973f62:	mov    rdx,QWORD PTR [rsp+0x30]
+  973f67:	add    rdx,QWORD PTR [r13+0x48]
+  973f6b:	jmp    973c57 <CLevelTemplateData::createRandomLayout(int)+0x8e7>
+  973f70:	lea    rdx,[rsp+0x108]
+  973f78:	mov    rdi,r14
+  973f7b:	call   97cdf0 <std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CChunkInstance**, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> > >, CChunkInstance* const&)>
+  973f80:	mov    rax,QWORD PTR [rsp+0xf8]
+  973f88:	lea    r14,[rsp+0xf0]
+  973f90:	mov    QWORD PTR [rsp+0x30],0x0
+  973f99:	mov    DWORD PTR [rsp+0x20],0x0
+  973fa1:	xor    r15d,r15d
+  973fa4:	mov    rdx,QWORD PTR [rsp+0xf0]
+  973fac:	mov    rbp,rax
+  973faf:	sub    rbp,rdx
+  973fb2:	shr    rbp,0x3
+  973fb6:	cmp    DWORD PTR [rsp+0x20],ebp
+  973fba:	jge    9745d9 <CLevelTemplateData::createRandomLayout(int)+0x1269>
+  973fc0:	mov    rax,QWORD PTR [rsp+0x30]
+  973fc5:	mov    rbp,QWORD PTR [rdx+rax*1]
+  973fc9:	mov    eax,DWORD PTR [rbp+0x10]
+  973fcc:	cmp    eax,DWORD PTR [rbx+0x1c]
+  973fcf:	jb     9745ca <CLevelTemplateData::createRandomLayout(int)+0x125a>
+  973fd5:	mov    rax,QWORD PTR [rbx+0x10]
+  973fd9:	mov    r13,QWORD PTR [rax]
+  973fdc:	mov    eax,DWORD PTR [r13+0x50]
+  973fe0:	mov    QWORD PTR [rsp+0x28],0x0
+  973fe9:	mov    DWORD PTR [rsp+0x10],0x0
+  973ff1:	cmp    DWORD PTR [rsp+0x10],eax
+  973ff5:	jge    9741d4 <CLevelTemplateData::createRandomLayout(int)+0xe64>
+  973ffb:	mov    rsi,QWORD PTR [rbp+0x30]
+  973fff:	mov    rdi,QWORD PTR [rbp+0x38]
+  974003:	sub    rdi,rsi
+  974006:	shr    rdi,0x2
+  97400a:	test   edi,edi
+  97400c:	je     97403d <CLevelTemplateData::createRandomLayout(int)+0xccd>
+  97400e:	mov    edx,DWORD PTR [rsp+0x10]
+  974012:	cmp    edx,DWORD PTR [rsi]
+  974014:	je     974256 <CLevelTemplateData::createRandomLayout(int)+0xee6>
+  97401a:	mov    ecx,0x4
+  97401f:	xor    edx,edx
+  974021:	jmp    974036 <CLevelTemplateData::createRandomLayout(int)+0xcc6>
+  974023:	mov    r8d,DWORD PTR [rsi+rcx*1]
+  974027:	add    rcx,0x4
+  97402b:	cmp    DWORD PTR [rsp+0x10],r8d
+  974030:	je     974256 <CLevelTemplateData::createRandomLayout(int)+0xee6>
+  974036:	add    edx,0x1
+  974039:	cmp    edx,edi
+  97403b:	jb     974023 <CLevelTemplateData::createRandomLayout(int)+0xcb3>
+  97403d:	mov    edx,DWORD PTR [rsp+0x10]
+  974041:	cmp    DWORD PTR [r13+0x54],edx
+  974045:	ja     97439e <CLevelTemplateData::createRandomLayout(int)+0x102e>
+  97404b:	mov    rdx,QWORD PTR [r13+0x48]
+  97404f:	cvtsi2ss xmm0,DWORD PTR [r13+0x18]
+  974055:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  97405d:	movss  xmm3,DWORD PTR [rbp+0x28]
+  974062:	movss  xmm1,DWORD PTR [rdx+0x8]
+  974067:	addss  xmm1,xmm3
+  97406b:	movss  xmm2,DWORD PTR [rbp+0x20]
+  974070:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  974078:	mulss  xmm0,DWORD PTR [rip+0x630790]        # fa4810 <vtable for Ogre::FrameListener+0x50>
+  974080:	addss  xmm0,xmm3
+  974084:	subss  xmm1,xmm0
+  974088:	movss  xmm0,DWORD PTR [rdx]
+  97408c:	addss  xmm0,xmm2
+  974090:	subss  xmm0,xmm2
+  974094:	xorps  xmm2,xmm2
+  974097:	ucomiss xmm1,xmm2
+  97409a:	jbe    97428c <CLevelTemplateData::createRandomLayout(int)+0xf1c>
+  9740a0:	movaps xmm2,xmm0
+  9740a3:	andps  xmm2,XMMWORD PTR [rip+0x6346e6]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9740aa:	ucomiss xmm1,xmm2
+  9740ad:	jbe    97428c <CLevelTemplateData::createRandomLayout(int)+0xf1c>
+  9740b3:	cmp    DWORD PTR [rbx+0x410],0x0
+  9740ba:	je     974281 <CLevelTemplateData::createRandomLayout(int)+0xf11>
+  9740c0:	mov    rdi,QWORD PTR [rsp+0x78]
+  9740c5:	call   c8aa10 <CRandomizer::getRandom()>
+  9740ca:	mov    DWORD PTR [rsp+0x1c],eax
+  9740ce:	cmp    eax,DWORD PTR [rbx+0x1c]
+  9740d1:	jb     974270 <CLevelTemplateData::createRandomLayout(int)+0xf00>
+  9740d7:	mov    rax,QWORD PTR [rbx+0x10]
+  9740db:	movss  xmm3,DWORD PTR [rbp+0x24]
+  9740e0:	xor    ecx,ecx
+  9740e2:	movss  DWORD PTR [rsp+0x24],xmm3
+  9740e8:	xor    edx,edx
+  9740ea:	xor    esi,esi
+  9740ec:	mov    edi,0x48
+  9740f1:	movss  xmm4,DWORD PTR [rbp+0x20]
+  9740f6:	movss  DWORD PTR [rsp+0x38],xmm4
+  9740fc:	mov    rax,QWORD PTR [rax]
+  9740ff:	cvtsi2ss xmm0,DWORD PTR [rax+0x18]
+  974104:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  97410c:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  974114:	addss  xmm0,DWORD PTR [rbp+0x28]
+  974119:	movss  DWORD PTR [rsp+0x8],xmm0
+  97411f:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  974124:	mov    rdi,rax
+  974127:	mov    r12,rax
+  97412a:	call   d796c0 <CRunicCore::CRunicCore()>
+  97412f:	mov    QWORD PTR [r12],0xfd7cb0
+  974137:	mov    eax,DWORD PTR [rsp+0x1c]
+  97413b:	lea    rdi,[r12+0x18]
+  974140:	mov    esi,0x1495cc8
+  974145:	mov    DWORD PTR [r12+0x10],eax
+  97414a:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  97414f:	movss  xmm0,DWORD PTR [rsp+0x24]
+  974155:	movss  DWORD PTR [r12+0x24],xmm0
+  97415c:	movss  xmm1,DWORD PTR [rsp+0x38]
+  974162:	movss  DWORD PTR [r12+0x20],xmm1
+  974169:	movss  xmm2,DWORD PTR [rsp+0x8]
+  97416f:	movss  DWORD PTR [r12+0x28],xmm2
+  974176:	mov    QWORD PTR [r12+0x30],0x0
+  97417f:	mov    QWORD PTR [r12+0x38],0x0
+  974188:	mov    rdx,r14
+  97418b:	mov    QWORD PTR [r12+0x40],0x0
+  974194:	mov    rsi,r12
+  974197:	mov    rdi,rbx
+  97419a:	mov    QWORD PTR [rsp+0x108],r12
+  9741a2:	call   972980 <CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  9741a7:	test   al,al
+  9741a9:	je     9741ec <CLevelTemplateData::createRandomLayout(int)+0xe7c>
+  9741ab:	mov    rdi,QWORD PTR [rsp+0x108]
+  9741b3:	test   rdi,rdi
+  9741b6:	je     974281 <CLevelTemplateData::createRandomLayout(int)+0xf11>
+  9741bc:	mov    rax,QWORD PTR [rdi]
+  9741bf:	call   QWORD PTR [rax+0x8]
+  9741c2:	mov    QWORD PTR [rsp+0x108],0x0
+  9741ce:	mov    r15d,0x1
+  9741d4:	add    DWORD PTR [rsp+0x20],0x1
+  9741d9:	mov    rax,QWORD PTR [rsp+0xf8]
+  9741e1:	add    QWORD PTR [rsp+0x30],0x8
+  9741e7:	jmp    973fa4 <CLevelTemplateData::createRandomLayout(int)+0xc34>
+  9741ec:	mov    rsi,QWORD PTR [rsp+0x108]
+  9741f4:	mov    rdx,r14
+  9741f7:	mov    rdi,rbx
+  9741fa:	call   9725d0 <CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  9741ff:	test   al,al
+  974201:	je     9741ab <CLevelTemplateData::createRandomLayout(int)+0xe3b>
+  974203:	mov    rsi,QWORD PTR [rsp+0x108]
+  97420b:	mov    rdx,r14
+  97420e:	mov    rdi,rbx
+  974211:	call   972e90 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  974216:	mov    rsi,QWORD PTR [rsp+0xf8]
+  97421e:	cmp    rsi,QWORD PTR [rsp+0x100]
+  974226:	je     97462f <CLevelTemplateData::createRandomLayout(int)+0x12bf>
+  97422c:	xor    eax,eax
+  97422e:	test   rsi,rsi
+  974231:	je     974246 <CLevelTemplateData::createRandomLayout(int)+0xed6>
+  974233:	mov    rax,QWORD PTR [rsp+0x108]
+  97423b:	mov    QWORD PTR [rsi],rax
+  97423e:	mov    rax,QWORD PTR [rsp+0xf8]
+  974246:	add    rax,0x8
+  97424a:	mov    QWORD PTR [rsp+0xf8],rax
+  974252:	mov    eax,DWORD PTR [r13+0x50]
+  974256:	add    DWORD PTR [rsp+0x10],0x1
+  97425b:	add    QWORD PTR [rsp+0x28],0xc
+  974261:	jmp    973ff1 <CLevelTemplateData::createRandomLayout(int)+0xc81>
+  974266:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  97426b:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  974270:	mov    eax,DWORD PTR [rsp+0x1c]
+  974274:	shl    rax,0x3
+  974278:	add    rax,QWORD PTR [rbx+0x10]
+  97427c:	jmp    9740db <CLevelTemplateData::createRandomLayout(int)+0xd6b>
+  974281:	mov    r15d,0x1
+  974287:	jmp    9741d4 <CLevelTemplateData::createRandomLayout(int)+0xe64>
+  97428c:	xorps  xmm2,xmm2
+  97428f:	ucomiss xmm2,xmm1
+  974292:	ja     97448c <CLevelTemplateData::createRandomLayout(int)+0x111c>
+  974298:	xorps  xmm3,xmm3
+  97429b:	ucomiss xmm0,xmm3
+  97429e:	ja     9743c5 <CLevelTemplateData::createRandomLayout(int)+0x1055>
+  9742a4:	xorps  xmm4,xmm4
+  9742a7:	ucomiss xmm4,xmm0
+  9742aa:	jbe    974256 <CLevelTemplateData::createRandomLayout(int)+0xee6>
+  9742ac:	andps  xmm0,XMMWORD PTR [rip+0x6344dd]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9742b3:	andps  xmm1,XMMWORD PTR [rip+0x6344d6]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9742ba:	ucomiss xmm0,xmm1
+  9742bd:	jbe    974256 <CLevelTemplateData::createRandomLayout(int)+0xee6>
+  9742bf:	cmp    DWORD PTR [rbx+0x4e0],0x0
+  9742c6:	je     974281 <CLevelTemplateData::createRandomLayout(int)+0xf11>
+  9742c8:	mov    rdi,QWORD PTR [rsp+0x60]
+  9742cd:	call   c8aa10 <CRandomizer::getRandom()>
+  9742d2:	mov    DWORD PTR [rsp+0x38],eax
+  9742d6:	mov    rax,QWORD PTR [rsp+0x110]
+  9742de:	mov    eax,DWORD PTR [rax+0x10]
+  9742e1:	cmp    eax,DWORD PTR [rbx+0x1c]
+  9742e4:	jb     9743b6 <CLevelTemplateData::createRandomLayout(int)+0x1046>
+  9742ea:	mov    rax,QWORD PTR [rbx+0x10]
+  9742ee:	movss  xmm3,DWORD PTR [rbp+0x28]
+  9742f3:	xor    ecx,ecx
+  9742f5:	movss  DWORD PTR [rsp+0x1c],xmm3
+  9742fb:	xor    edx,edx
+  9742fd:	xor    esi,esi
+  9742ff:	mov    edi,0x48
+  974304:	movss  xmm4,DWORD PTR [rbp+0x24]
+  974309:	movss  DWORD PTR [rsp+0x24],xmm4
+  97430f:	movss  xmm0,DWORD PTR [rbp+0x20]
+  974314:	movss  DWORD PTR [rsp+0x8],xmm0
+  97431a:	mov    rax,QWORD PTR [rax]
+  97431d:	movss  xmm1,DWORD PTR [rsp+0x8]
+  974323:	cvtsi2ss xmm0,DWORD PTR [rax+0x14]
+  974328:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  974330:	mulss  xmm0,DWORD PTR [rbx+0x8c]
+  974338:	subss  xmm1,xmm0
+  97433c:	movss  DWORD PTR [rsp+0x8],xmm1
+  974342:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  974347:	mov    rdi,rax
+  97434a:	mov    r12,rax
+  97434d:	call   d796c0 <CRunicCore::CRunicCore()>
+  974352:	mov    QWORD PTR [r12],0xfd7cb0
+  97435a:	mov    eax,DWORD PTR [rsp+0x38]
+  97435e:	lea    rdi,[r12+0x18]
+  974363:	mov    esi,0x1495cc8
+  974368:	mov    DWORD PTR [r12+0x10],eax
+  97436d:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  974372:	movss  xmm0,DWORD PTR [rsp+0x1c]
+  974378:	movss  DWORD PTR [r12+0x28],xmm0
+  97437f:	movss  xmm1,DWORD PTR [rsp+0x24]
+  974385:	movss  DWORD PTR [r12+0x24],xmm1
+  97438c:	movss  xmm2,DWORD PTR [rsp+0x8]
+  974392:	movss  DWORD PTR [r12+0x20],xmm2
+  974399:	jmp    974176 <CLevelTemplateData::createRandomLayout(int)+0xe06>
+  97439e:	mov    rdx,QWORD PTR [rsp+0x28]
+  9743a3:	add    rdx,QWORD PTR [r13+0x48]
+  9743a7:	jmp    97404f <CLevelTemplateData::createRandomLayout(int)+0xcdf>
+  9743ac:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  9743b1:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  9743b6:	mov    eax,eax
+  9743b8:	shl    rax,0x3
+  9743bc:	add    rax,QWORD PTR [rbx+0x10]
+  9743c0:	jmp    9742ee <CLevelTemplateData::createRandomLayout(int)+0xf7e>
+  9743c5:	movaps xmm2,xmm1
+  9743c8:	andps  xmm2,XMMWORD PTR [rip+0x6343c1]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9743cf:	ucomiss xmm0,xmm2
+  9743d2:	jbe    9742a4 <CLevelTemplateData::createRandomLayout(int)+0xf34>
+  9743d8:	cmp    DWORD PTR [rbx+0x478],0x0
+  9743df:	je     974281 <CLevelTemplateData::createRandomLayout(int)+0xf11>
+  9743e5:	mov    rdi,QWORD PTR [rsp+0x68]
+  9743ea:	call   c8aa10 <CRandomizer::getRandom()>
+  9743ef:	mov    DWORD PTR [rsp+0x1c],eax
+  9743f3:	cmp    eax,DWORD PTR [rbx+0x1c]
+  9743f6:	jb     9745b9 <CLevelTemplateData::createRandomLayout(int)+0x1249>
+  9743fc:	mov    rax,QWORD PTR [rbx+0x10]
+  974400:	movss  xmm3,DWORD PTR [rbp+0x28]
+  974405:	xor    ecx,ecx
+  974407:	movss  DWORD PTR [rsp+0x24],xmm3
+  97440d:	xor    edx,edx
+  97440f:	xor    esi,esi
+  974411:	mov    edi,0x48
+  974416:	movss  xmm4,DWORD PTR [rbp+0x24]
+  97441b:	movss  DWORD PTR [rsp+0x38],xmm4
+  974421:	mov    rax,QWORD PTR [rax]
+  974424:	cvtsi2ss xmm0,DWORD PTR [rax+0x14]
+  974429:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  974431:	mulss  xmm0,DWORD PTR [rbx+0x8c]
+  974439:	addss  xmm0,DWORD PTR [rbp+0x20]
+  97443e:	movss  DWORD PTR [rsp+0x8],xmm0
+  974444:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  974449:	mov    rdi,rax
+  97444c:	mov    r12,rax
+  97444f:	call   d796c0 <CRunicCore::CRunicCore()>
+  974454:	mov    QWORD PTR [r12],0xfd7cb0
+  97445c:	mov    eax,DWORD PTR [rsp+0x1c]
+  974460:	lea    rdi,[r12+0x18]
+  974465:	mov    esi,0x1495cc8
+  97446a:	mov    DWORD PTR [r12+0x10],eax
+  97446f:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  974474:	movss  xmm0,DWORD PTR [rsp+0x24]
+  97447a:	movss  DWORD PTR [r12+0x28],xmm0
+  974481:	movss  xmm1,DWORD PTR [rsp+0x38]
+  974487:	jmp    974385 <CLevelTemplateData::createRandomLayout(int)+0x1015>
+  97448c:	movaps xmm3,xmm1
+  97448f:	movaps xmm2,xmm0
+  974492:	andps  xmm3,XMMWORD PTR [rip+0x6342f7]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  974499:	andps  xmm2,XMMWORD PTR [rip+0x6342f0]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  9744a0:	ucomiss xmm3,xmm2
+  9744a3:	jbe    974298 <CLevelTemplateData::createRandomLayout(int)+0xf28>
+  9744a9:	cmp    DWORD PTR [rbx+0x3a8],0x0
+  9744b0:	je     974281 <CLevelTemplateData::createRandomLayout(int)+0xf11>
+  9744b6:	mov    rdi,QWORD PTR [rsp+0x70]
+  9744bb:	call   c8aa10 <CRandomizer::getRandom()>
+  9744c0:	mov    DWORD PTR [rsp+0x38],eax
+  9744c4:	mov    rax,QWORD PTR [rsp+0x110]
+  9744cc:	mov    eax,DWORD PTR [rax+0x10]
+  9744cf:	cmp    eax,DWORD PTR [rbx+0x1c]
+  9744d2:	jb     9745a5 <CLevelTemplateData::createRandomLayout(int)+0x1235>
+  9744d8:	mov    rax,QWORD PTR [rbx+0x10]
+  9744dc:	movss  xmm3,DWORD PTR [rbp+0x24]
+  9744e1:	xor    ecx,ecx
+  9744e3:	movss  DWORD PTR [rsp+0x1c],xmm3
+  9744e9:	xor    edx,edx
+  9744eb:	xor    esi,esi
+  9744ed:	mov    edi,0x48
+  9744f2:	movss  xmm4,DWORD PTR [rbp+0x20]
+  9744f7:	movss  DWORD PTR [rsp+0x24],xmm4
+  9744fd:	movss  xmm0,DWORD PTR [rbp+0x28]
+  974502:	movss  DWORD PTR [rsp+0x8],xmm0
+  974508:	mov    rax,QWORD PTR [rax]
+  97450b:	movss  xmm1,DWORD PTR [rsp+0x8]
+  974511:	cvtsi2ss xmm0,DWORD PTR [rax+0x18]
+  974516:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  97451e:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  974526:	subss  xmm1,xmm0
+  97452a:	movss  DWORD PTR [rsp+0x8],xmm1
+  974530:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  974535:	mov    rdi,rax
+  974538:	mov    r12,rax
+  97453b:	call   d796c0 <CRunicCore::CRunicCore()>
+  974540:	mov    QWORD PTR [r12],0xfd7cb0
+  974548:	mov    eax,DWORD PTR [rsp+0x38]
+  97454c:	lea    rdi,[r12+0x18]
+  974551:	mov    esi,0x1495cc8
+  974556:	mov    DWORD PTR [r12+0x10],eax
+  97455b:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  974560:	movss  xmm0,DWORD PTR [rsp+0x1c]
+  974566:	movss  DWORD PTR [r12+0x24],xmm0
+  97456d:	movss  xmm1,DWORD PTR [rsp+0x24]
+  974573:	movss  DWORD PTR [r12+0x20],xmm1
+  97457a:	movss  xmm2,DWORD PTR [rsp+0x8]
+  974580:	movss  DWORD PTR [r12+0x28],xmm2
+  974587:	jmp    974176 <CLevelTemplateData::createRandomLayout(int)+0xe06>
+  97458c:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  974591:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  974596:	cs nop WORD PTR [rax+rax*1+0x0]
+  9745a0:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  9745a5:	mov    eax,eax
+  9745a7:	shl    rax,0x3
+  9745ab:	add    rax,QWORD PTR [rbx+0x10]
+  9745af:	jmp    9744dc <CLevelTemplateData::createRandomLayout(int)+0x116c>
+  9745b4:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  9745b9:	mov    eax,DWORD PTR [rsp+0x1c]
+  9745bd:	shl    rax,0x3
+  9745c1:	add    rax,QWORD PTR [rbx+0x10]
+  9745c5:	jmp    974400 <CLevelTemplateData::createRandomLayout(int)+0x1090>
+  9745ca:	mov    eax,eax
+  9745cc:	shl    rax,0x3
+  9745d0:	add    rax,QWORD PTR [rbx+0x10]
+  9745d4:	jmp    973fd9 <CLevelTemplateData::createRandomLayout(int)+0xc69>
+  9745d9:	mov    r10d,DWORD PTR [rbx+0x48]
+  9745dd:	xor    esi,esi
+  9745df:	xor    ecx,ecx
+  9745e1:	cmp    ecx,r10d
+  9745e4:	jae    974b06 <CLevelTemplateData::createRandomLayout(int)+0x1796>
+  9745ea:	xor    r8d,r8d
+  9745ed:	xor    edi,edi
+  9745ef:	cmp    edi,ebp
+  9745f1:	jge    974b00 <CLevelTemplateData::createRandomLayout(int)+0x1790>
+  9745f7:	mov    r9,QWORD PTR [rdx+r8*1]
+  9745fb:	mov    r9d,DWORD PTR [r9+0x10]
+  9745ff:	cmp    r9d,DWORD PTR [rbx+0x1c]
+  974603:	jb     974af0 <CLevelTemplateData::createRandomLayout(int)+0x1780>
+  974609:	mov    r9,QWORD PTR [rbx+0x10]
+  97460d:	cmp    ecx,DWORD PTR [rbx+0x4c]
+  974610:	mov    r11,QWORD PTR [r9]
+  974613:	jb     974ae4 <CLevelTemplateData::createRandomLayout(int)+0x1774>
+  974619:	mov    r9,QWORD PTR [rbx+0x40]
+  97461d:	add    r8,0x8
+  974621:	cmp    r11,QWORD PTR [r9]
+  974624:	je     974ad8 <CLevelTemplateData::createRandomLayout(int)+0x1768>
+  97462a:	add    edi,0x1
+  97462d:	jmp    9745ef <CLevelTemplateData::createRandomLayout(int)+0x127f>
+  97462f:	lea    rdx,[rsp+0x108]
+  974637:	mov    rdi,r14
+  97463a:	call   97cdf0 <std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CChunkInstance**, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> > >, CChunkInstance* const&)>
+  97463f:	mov    eax,DWORD PTR [r13+0x50]
+  974643:	jmp    974256 <CLevelTemplateData::createRandomLayout(int)+0xee6>
+  974648:	mov    rdi,rbp
+  97464b:	mov    rbx,rax
+  97464e:	call   d79920 <CRunicCore::~CRunicCore()>
+  974653:	mov    rdi,rbp
+  974656:	call   555268 <Ogre::NedAllocImpl::deallocBytes(void*)@plt>
+  97465b:	jmp    973b57 <CLevelTemplateData::createRandomLayout(int)+0x7e7>
+  974660:	mov    rbx,rax
+  974663:	jmp    974653 <CLevelTemplateData::createRandomLayout(int)+0x12e3>
+  974665:	mov    rbx,rax
+  974668:	jmp    973b57 <CLevelTemplateData::createRandomLayout(int)+0x7e7>
+  97466d:	mov    DWORD PTR [rsp+0x3c],0x0
+  974675:	mov    eax,DWORD PTR [rsp+0x3c]
+  974679:	add    rsp,0x128
+  974680:	pop    rbx
+  974681:	pop    rbp
+  974682:	pop    r12
+  974684:	pop    r13
+  974686:	pop    r14
+  974688:	pop    r15
+  97468a:	ret
+  97468b:	mov    rsi,QWORD PTR [rsp+0x108]
+  974693:	mov    rdx,r14
+  974696:	mov    rdi,rbx
+  974699:	call   9725d0 <CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  97469e:	test   al,al
+  9746a0:	je     973dd5 <CLevelTemplateData::createRandomLayout(int)+0xa65>
+  9746a6:	mov    rsi,QWORD PTR [rsp+0x108]
+  9746ae:	mov    rdx,r14
+  9746b1:	mov    rdi,rbx
+  9746b4:	call   972e90 <CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  9746b9:	mov    rsi,QWORD PTR [rsp+0xf8]
+  9746c1:	cmp    rsi,QWORD PTR [rsp+0x100]
+  9746c9:	je     973f70 <CLevelTemplateData::createRandomLayout(int)+0xc00>
+  9746cf:	xor    eax,eax
+  9746d1:	test   rsi,rsi
+  9746d4:	je     9746e9 <CLevelTemplateData::createRandomLayout(int)+0x1379>
+  9746d6:	mov    rax,QWORD PTR [rsp+0x108]
+  9746de:	mov    QWORD PTR [rsi],rax
+  9746e1:	mov    rax,QWORD PTR [rsp+0xf8]
+  9746e9:	add    rax,0x8
+  9746ed:	mov    QWORD PTR [rsp+0xf8],rax
+  9746f5:	jmp    973f88 <CLevelTemplateData::createRandomLayout(int)+0xc18>
+  9746fa:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  9746ff:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  974704:	mov    eax,DWORD PTR [rsp+0x20]
+  974708:	shl    rax,0x3
+  97470c:	add    rax,QWORD PTR [rbx+0x10]
+  974710:	jmp    973d01 <CLevelTemplateData::createRandomLayout(int)+0x991>
+  974715:	mov    r15d,0x1
+  97471b:	mov    rdi,rbx
+  97471e:	call   971410 <CLevelTemplateData::resetOdds()>
+  974723:	test   r15b,r15b
+  974726:	je     974c7c <CLevelTemplateData::createRandomLayout(int)+0x190c>
+  97472c:	mov    rdx,QWORD PTR [rsp+0xf8]
+  974734:	mov    rax,QWORD PTR [rsp+0xf0]
+  97473c:	xor    ebp,ebp
+  97473e:	xor    r12d,r12d
+  974741:	mov    rcx,rdx
+  974744:	sub    rcx,rax
+  974747:	sar    rcx,0x3
+  97474b:	cmp    r12d,ecx
+  97474e:	jge    974789 <CLevelTemplateData::createRandomLayout(int)+0x1419>
+  974750:	mov    rdi,QWORD PTR [rax+rbp*1]
+  974754:	test   rdi,rdi
+  974757:	je     97477f <CLevelTemplateData::createRandomLayout(int)+0x140f>
+  974759:	mov    rax,QWORD PTR [rdi]
+  97475c:	call   QWORD PTR [rax+0x8]
+  97475f:	mov    rax,QWORD PTR [rsp+0xf0]
+  974767:	mov    QWORD PTR [rax+rbp*1],0x0
+  97476f:	mov    rdx,QWORD PTR [rsp+0xf8]
+  974777:	mov    rax,QWORD PTR [rsp+0xf0]
+  97477f:	add    r12d,0x1
+  974783:	add    rbp,0x8
+  974787:	jmp    974741 <CLevelTemplateData::createRandomLayout(int)+0x13d1>
+  974789:	mov    rdi,QWORD PTR [rsp+0xd0]
+  974791:	mov    QWORD PTR [rsp+0xf8],rax
+  974799:	mov    QWORD PTR [rsp+0xd8],rdi
+  9747a1:	mov    rdi,QWORD PTR [rsp+0xb0]
+  9747a9:	test   rdi,rdi
+  9747ac:	je     9747b3 <CLevelTemplateData::createRandomLayout(int)+0x1443>
+  9747ae:	call   553f18 <operator delete(void*)@plt>
+  9747b3:	add    DWORD PTR [rsp+0x50],0x1
+  9747b8:	cmp    DWORD PTR [rsp+0x50],0x3e8
+  9747c0:	jne    973486 <CLevelTemplateData::createRandomLayout(int)+0x116>
+  9747c6:	mov    rdi,QWORD PTR [rsp+0xd0]
+  9747ce:	test   rdi,rdi
+  9747d1:	je     9747d8 <CLevelTemplateData::createRandomLayout(int)+0x1468>
+  9747d3:	call   553f18 <operator delete(void*)@plt>
+  9747d8:	mov    rdi,QWORD PTR [rsp+0xf0]
+  9747e0:	test   rdi,rdi
+  9747e3:	je     974675 <CLevelTemplateData::createRandomLayout(int)+0x1305>
+  9747e9:	call   553f18 <operator delete(void*)@plt>
+  9747ee:	jmp    974675 <CLevelTemplateData::createRandomLayout(int)+0x1305>
+  9747f3:	mov    rsi,QWORD PTR [rsp+0x108]
+  9747fb:	mov    rdx,r14
+  9747fe:	mov    rdi,rbx
+  974801:	call   9725d0 <CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)>
+  974806:	test   al,al
+  974808:	je     973f2b <CLevelTemplateData::createRandomLayout(int)+0xbbb>
+  97480e:	jmp    9746a6 <CLevelTemplateData::createRandomLayout(int)+0x1336>
+  974813:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  974818:	nop    DWORD PTR [rax+rax*1+0x0]
+  974820:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  974825:	mov    eax,DWORD PTR [rsp+0x20]
+  974829:	shl    rax,0x3
+  97482d:	add    rax,QWORD PTR [rbx+0x10]
+  974831:	jmp    973e57 <CLevelTemplateData::createRandomLayout(int)+0xae7>
+  974836:	xorps  xmm4,xmm4
+  974839:	ucomiss xmm4,xmm0
+  97483c:	jbe    973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  974842:	andps  xmm0,XMMWORD PTR [rip+0x633f47]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  974849:	andps  xmm1,XMMWORD PTR [rip+0x633f40]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  974850:	ucomiss xmm0,xmm1
+  974853:	jbe    973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  974859:	cmp    DWORD PTR [rbx+0x340],0x0
+  974860:	je     973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  974866:	mov    rdi,QWORD PTR [rsp+0x80]
+  97486e:	call   c8aa10 <CRandomizer::getRandom()>
+  974873:	mov    DWORD PTR [rsp+0x24],eax
+  974877:	mov    rax,QWORD PTR [rsp+0x110]
+  97487f:	mov    eax,DWORD PTR [rax+0x10]
+  974882:	cmp    eax,DWORD PTR [rbx+0x1c]
+  974885:	jb     974a3d <CLevelTemplateData::createRandomLayout(int)+0x16cd>
+  97488b:	mov    rax,QWORD PTR [rbx+0x10]
+  97488f:	movss  xmm3,DWORD PTR [rbp+0x28]
+  974894:	xor    ecx,ecx
+  974896:	movss  DWORD PTR [rsp+0x20],xmm3
+  97489c:	xor    edx,edx
+  97489e:	xor    esi,esi
+  9748a0:	mov    edi,0x48
+  9748a5:	movss  xmm4,DWORD PTR [rbp+0x24]
+  9748aa:	movss  DWORD PTR [rsp+0x1c],xmm4
+  9748b0:	movss  xmm0,DWORD PTR [rbp+0x20]
+  9748b5:	movss  DWORD PTR [rsp+0x8],xmm0
+  9748bb:	mov    rax,QWORD PTR [rax]
+  9748be:	movss  xmm1,DWORD PTR [rsp+0x8]
+  9748c4:	cvtsi2ss xmm0,DWORD PTR [rax+0x14]
+  9748c9:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  9748d1:	mulss  xmm0,DWORD PTR [rbx+0x8c]
+  9748d9:	subss  xmm1,xmm0
+  9748dd:	movss  DWORD PTR [rsp+0x8],xmm1
+  9748e3:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  9748e8:	mov    rdi,rax
+  9748eb:	mov    r12,rax
+  9748ee:	call   d796c0 <CRunicCore::CRunicCore()>
+  9748f3:	mov    QWORD PTR [r12],0xfd7cb0
+  9748fb:	mov    eax,DWORD PTR [rsp+0x24]
+  9748ff:	lea    rdi,[r12+0x18]
+  974904:	mov    esi,0x1495cc8
+  974909:	mov    DWORD PTR [r12+0x10],eax
+  97490e:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  974913:	movss  xmm0,DWORD PTR [rsp+0x20]
+  974919:	movss  DWORD PTR [r12+0x28],xmm0
+  974920:	movss  xmm1,DWORD PTR [rsp+0x1c]
+  974926:	jmp    973ede <CLevelTemplateData::createRandomLayout(int)+0xb6e>
+  97492b:	movaps xmm3,xmm1
+  97492e:	movaps xmm2,xmm0
+  974931:	andps  xmm3,XMMWORD PTR [rip+0x633e58]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  974938:	andps  xmm2,XMMWORD PTR [rip+0x633e51]        # fa8790 <vtable for Ogre::SharedPtr<Ogre::Texture>+0xf0>
+  97493f:	ucomiss xmm3,xmm2
+  974942:	jbe    973e0d <CLevelTemplateData::createRandomLayout(int)+0xa9d>
+  974948:	cmp    DWORD PTR [rbx+0x208],0x0
+  97494f:	je     973cc4 <CLevelTemplateData::createRandomLayout(int)+0x954>
+  974955:	mov    rdi,QWORD PTR [rsp+0x90]
+  97495d:	call   c8aa10 <CRandomizer::getRandom()>
+  974962:	mov    DWORD PTR [rsp+0x24],eax
+  974966:	mov    rax,QWORD PTR [rsp+0x110]
+  97496e:	mov    eax,DWORD PTR [rax+0x10]
+  974971:	cmp    eax,DWORD PTR [rbx+0x1c]
+  974974:	jb     974a29 <CLevelTemplateData::createRandomLayout(int)+0x16b9>
+  97497a:	mov    rax,QWORD PTR [rbx+0x10]
+  97497e:	movss  xmm3,DWORD PTR [rbp+0x24]
+  974983:	xor    ecx,ecx
+  974985:	movss  DWORD PTR [rsp+0x20],xmm3
+  97498b:	xor    edx,edx
+  97498d:	xor    esi,esi
+  97498f:	mov    edi,0x48
+  974994:	movss  xmm4,DWORD PTR [rbp+0x20]
+  974999:	movss  DWORD PTR [rsp+0x1c],xmm4
+  97499f:	movss  xmm0,DWORD PTR [rbp+0x28]
+  9749a4:	movss  DWORD PTR [rsp+0x8],xmm0
+  9749aa:	mov    rax,QWORD PTR [rax]
+  9749ad:	movss  xmm1,DWORD PTR [rsp+0x8]
+  9749b3:	cvtsi2ss xmm0,DWORD PTR [rax+0x18]
+  9749b8:	mulss  xmm0,DWORD PTR [rbx+0x88]
+  9749c0:	mulss  xmm0,DWORD PTR [rbx+0x90]
+  9749c8:	subss  xmm1,xmm0
+  9749cc:	movss  DWORD PTR [rsp+0x8],xmm1
+  9749d2:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  9749d7:	mov    rdi,rax
+  9749da:	mov    r12,rax
+  9749dd:	call   d796c0 <CRunicCore::CRunicCore()>
+  9749e2:	mov    QWORD PTR [r12],0xfd7cb0
+  9749ea:	mov    eax,DWORD PTR [rsp+0x24]
+  9749ee:	lea    rdi,[r12+0x18]
+  9749f3:	mov    esi,0x1495cc8
+  9749f8:	mov    DWORD PTR [r12+0x10],eax
+  9749fd:	call   553288 <std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::basic_string(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)@plt>
+  974a02:	movss  xmm0,DWORD PTR [rsp+0x20]
+  974a08:	movss  DWORD PTR [r12+0x24],xmm0
+  974a0f:	movss  xmm1,DWORD PTR [rsp+0x1c]
+  974a15:	jmp    973d88 <CLevelTemplateData::createRandomLayout(int)+0xa18>
+  974a1a:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  974a1f:	jmp    973b83 <CLevelTemplateData::createRandomLayout(int)+0x813>
+  974a24:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  974a29:	mov    eax,eax
+  974a2b:	shl    rax,0x3
+  974a2f:	add    rax,QWORD PTR [rbx+0x10]
+  974a33:	jmp    97497e <CLevelTemplateData::createRandomLayout(int)+0x160e>
+  974a38:	jmp    973b3a <CLevelTemplateData::createRandomLayout(int)+0x7ca>
+  974a3d:	mov    eax,eax
+  974a3f:	shl    rax,0x3
+  974a43:	add    rax,QWORD PTR [rbx+0x10]
+  974a47:	jmp    97488f <CLevelTemplateData::createRandomLayout(int)+0x151f>
+  974a4c:	lea    rdi,[rsp+0xf0]
+  974a54:	lea    rdx,[rsp+0x110]
+  974a5c:	call   97cdf0 <std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CChunkInstance**, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> > >, CChunkInstance* const&)>
+  974a61:	jmp    973534 <CLevelTemplateData::createRandomLayout(int)+0x1c4>
+  974a66:	mov    rbx,rax
+  974a69:	jmp    973b45 <CLevelTemplateData::createRandomLayout(int)+0x7d5>
+  974a6e:	mov    rdx,QWORD PTR [rsp+0xf8]
+  974a76:	mov    rax,QWORD PTR [rsp+0xf0]
+  974a7e:	xor    ebp,ebp
+  974a80:	xor    r12d,r12d
+  974a83:	mov    rcx,rdx
+  974a86:	sub    rcx,rax
+  974a89:	sar    rcx,0x3
+  974a8d:	cmp    r12d,ecx
+  974a90:	jge    974acb <CLevelTemplateData::createRandomLayout(int)+0x175b>
+  974a92:	mov    rdi,QWORD PTR [rax+rbp*1]
+  974a96:	test   rdi,rdi
+  974a99:	je     974ac1 <CLevelTemplateData::createRandomLayout(int)+0x1751>
+  974a9b:	mov    rax,QWORD PTR [rdi]
+  974a9e:	call   QWORD PTR [rax+0x8]
+  974aa1:	mov    rax,QWORD PTR [rsp+0xf0]
+  974aa9:	mov    QWORD PTR [rax+rbp*1],0x0
+  974ab1:	mov    rdx,QWORD PTR [rsp+0xf8]
+  974ab9:	mov    rax,QWORD PTR [rsp+0xf0]
+  974ac1:	add    r12d,0x1
+  974ac5:	add    rbp,0x8
+  974ac9:	jmp    974a83 <CLevelTemplateData::createRandomLayout(int)+0x1713>
+  974acb:	mov    QWORD PTR [rsp+0xf8],rax
+  974ad3:	jmp    9747a1 <CLevelTemplateData::createRandomLayout(int)+0x1431>
+  974ad8:	add    ecx,0x1
+  974adb:	add    rsi,0x8
+  974adf:	jmp    9745e1 <CLevelTemplateData::createRandomLayout(int)+0x1271>
+  974ae4:	mov    r9,rsi
+  974ae7:	add    r9,QWORD PTR [rbx+0x40]
+  974aeb:	jmp    97461d <CLevelTemplateData::createRandomLayout(int)+0x12ad>
+  974af0:	mov    r9d,r9d
+  974af3:	shl    r9,0x3
+  974af7:	add    r9,QWORD PTR [rbx+0x10]
+  974afb:	jmp    97460d <CLevelTemplateData::createRandomLayout(int)+0x129d>
+  974b00:	mov    r15d,0x1
+  974b06:	lea    r14,[rsp+0xd0]
+  974b0e:	xor    r12d,r12d
+  974b11:	xor    r13d,r13d
+  974b14:	sub    rax,rdx
+  974b17:	sar    rax,0x3
+  974b1b:	cmp    r13d,eax
+  974b1e:	jge    97471b <CLevelTemplateData::createRandomLayout(int)+0x13ab>
+  974b24:	mov    rbp,QWORD PTR [rdx+r12*1]
+  974b28:	mov    eax,DWORD PTR [rbp+0x10]
+  974b2b:	cmp    eax,DWORD PTR [rbx+0xfc]
+  974b31:	jb     974c54 <CLevelTemplateData::createRandomLayout(int)+0x18e4>
+  974b37:	mov    rax,QWORD PTR [rbx+0xf0]
+  974b3e:	mov    rdi,QWORD PTR [rax]
+  974b41:	call   c8ab10 <CRandomizer::hasValidChoices()>
+  974b46:	test   al,al
+  974b48:	je     974715 <CLevelTemplateData::createRandomLayout(int)+0x13a5>
+  974b4e:	mov    eax,DWORD PTR [rbp+0x10]
+  974b51:	cmp    eax,DWORD PTR [rbx+0xfc]
+  974b57:	jb     974c42 <CLevelTemplateData::createRandomLayout(int)+0x18d2>
+  974b5d:	mov    rax,QWORD PTR [rbx+0xf0]
+  974b64:	mov    rdi,QWORD PTR [rax]
+  974b67:	call   c8aa10 <CRandomizer::getRandom()>
+  974b6c:	movsxd rcx,eax
+  974b6f:	lea    rdx,[rcx*4+0x0]
+  974b77:	add    rdx,QWORD PTR [rsp+0xb0]
+  974b7f:	add    DWORD PTR [rdx],0x1
+  974b82:	cmp    eax,DWORD PTR [rbx+0x34]
+  974b85:	jb     974c33 <CLevelTemplateData::createRandomLayout(int)+0x18c3>
+  974b8b:	mov    rdx,QWORD PTR [rbx+0x28]
+  974b8f:	mov    rdx,QWORD PTR [rdx]
+  974b92:	mov    rsi,QWORD PTR [rsp+0xb0]
+  974b9a:	mov    QWORD PTR [rsp+0x108],rdx
+  974ba2:	mov    ecx,DWORD PTR [rsi+rcx*4]
+  974ba5:	cmp    ecx,DWORD PTR [rdx+0x18]
+  974ba8:	jb     974bcc <CLevelTemplateData::createRandomLayout(int)+0x185c>
+  974baa:	mov    edx,DWORD PTR [rbp+0x10]
+  974bad:	cmp    edx,DWORD PTR [rbx+0xfc]
+  974bb3:	jb     974c66 <CLevelTemplateData::createRandomLayout(int)+0x18f6>
+  974bb9:	mov    rcx,QWORD PTR [rbx+0xf0]
+  974bc0:	mov    rdi,QWORD PTR [rcx]
+  974bc3:	xor    edx,edx
+  974bc5:	mov    esi,eax
+  974bc7:	call   c8a240 <CRandomizer::setChoiceOdds(int, int)>
+  974bcc:	mov    rsi,QWORD PTR [rsp+0xd8]
+  974bd4:	cmp    rsi,QWORD PTR [rsp+0xe0]
+  974bdc:	je     974c21 <CLevelTemplateData::createRandomLayout(int)+0x18b1>
+  974bde:	xor    eax,eax
+  974be0:	test   rsi,rsi
+  974be3:	je     974bf8 <CLevelTemplateData::createRandomLayout(int)+0x1888>
+  974be5:	mov    rax,QWORD PTR [rsp+0x108]
+  974bed:	mov    QWORD PTR [rsi],rax
+  974bf0:	mov    rax,QWORD PTR [rsp+0xd8]
+  974bf8:	add    rax,0x8
+  974bfc:	mov    QWORD PTR [rsp+0xd8],rax
+  974c04:	add    r13d,0x1
+  974c08:	mov    rax,QWORD PTR [rsp+0xf8]
+  974c10:	mov    rdx,QWORD PTR [rsp+0xf0]
+  974c18:	add    r12,0x8
+  974c1c:	jmp    974b14 <CLevelTemplateData::createRandomLayout(int)+0x17a4>
+  974c21:	lea    rdx,[rsp+0x108]
+  974c29:	mov    rdi,r14
+  974c2c:	call   9682c0 <std::vector<CChunk*, std::allocator<CChunk*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CChunk**, std::vector<CChunk*, std::allocator<CChunk*> > >, CChunk* const&)>
+  974c31:	jmp    974c04 <CLevelTemplateData::createRandomLayout(int)+0x1894>
+  974c33:	mov    edx,eax
+  974c35:	shl    rdx,0x3
+  974c39:	add    rdx,QWORD PTR [rbx+0x28]
+  974c3d:	jmp    974b8f <CLevelTemplateData::createRandomLayout(int)+0x181f>
+  974c42:	mov    eax,eax
+  974c44:	shl    rax,0x3
+  974c48:	add    rax,QWORD PTR [rbx+0xf0]
+  974c4f:	jmp    974b64 <CLevelTemplateData::createRandomLayout(int)+0x17f4>
+  974c54:	mov    eax,eax
+  974c56:	shl    rax,0x3
+  974c5a:	add    rax,QWORD PTR [rbx+0xf0]
+  974c61:	jmp    974b3e <CLevelTemplateData::createRandomLayout(int)+0x17ce>
+  974c66:	mov    edx,edx
+  974c68:	lea    rcx,[rdx*8+0x0]
+  974c70:	add    rcx,QWORD PTR [rbx+0xf0]
+  974c77:	jmp    974bc0 <CLevelTemplateData::createRandomLayout(int)+0x1850>
+  974c7c:	mov    esi,DWORD PTR [rbx+0xc0]
+  974c82:	mov    rdi,QWORD PTR [rbx+0xe8]
+  974c89:	mov    edx,0x1
+  974c8e:	call   c8a470 <CRandomizer::addChoice(int, int)>
+  974c93:	xor    ecx,ecx
+  974c95:	xor    edx,edx
+  974c97:	xor    esi,esi
+  974c99:	mov    edi,0x48
+  974c9e:	call   553318 <Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)@plt>
+  974ca3:	mov    rdi,rax
+  974ca6:	mov    rbp,rax
+  974ca9:	call   d796c0 <CRunicCore::CRunicCore()>
+  974cae:	mov    QWORD PTR [rbp+0x0],0xfd7d10
+  974cb6:	mov    QWORD PTR [rbp+0x10],0x0
+  974cbe:	lea    r12,[rbx+0xb8]
+  974cc5:	mov    DWORD PTR [rbp+0x18],0x0
+  974ccc:	mov    DWORD PTR [rbp+0x1c],0x0
+  974cd3:	mov    DWORD PTR [rbp+0x20],0xa
+  974cda:	mov    QWORD PTR [rbp+0x28],0x0
+  974ce2:	mov    DWORD PTR [rbp+0x30],0x0
+  974ce9:	mov    DWORD PTR [rbp+0x34],0x0
+  974cf0:	mov    DWORD PTR [rbp+0x38],0xa
+  974cf7:	mov    eax,DWORD PTR [rsp+0x3c]
+  974cfb:	mov    DWORD PTR [rbp+0x40],eax
+  974cfe:	mov    eax,DWORD PTR [rbx+0xc0]
+  974d04:	mov    r13d,DWORD PTR [rbx+0xc4]
+  974d0b:	cmp    eax,r13d
+  974d0e:	jb     974e47 <CLevelTemplateData::createRandomLayout(int)+0x1ad7>
+  974d14:	cmp    QWORD PTR [rbx+0xb8],0x0
+  974d1c:	je     974e19 <CLevelTemplateData::createRandomLayout(int)+0x1aa9>
+  974d22:	add    r13d,DWORD PTR [rbx+0xc8]
+  974d29:	mov    edi,r13d
+  974d2c:	shl    rdi,0x3
+  974d30:	call   553ae8 <operator new[](unsigned long)@plt>
+  974d35:	mov    r14,rax
+  974d38:	xor    eax,eax
+  974d3a:	cmp    eax,DWORD PTR [r12+0xc]
+  974d3f:	jae    974d64 <CLevelTemplateData::createRandomLayout(int)+0x19f4>
+  974d41:	mov    rcx,QWORD PTR [r12]
+  974d45:	mov    edx,eax
+  974d47:	add    eax,0x1
+  974d4a:	mov    rcx,QWORD PTR [rcx+rdx*8]
+  974d4e:	mov    QWORD PTR [r14+rdx*8],rcx
+  974d52:	jmp    974d3a <CLevelTemplateData::createRandomLayout(int)+0x19ca>
+  974d54:	mov    rdi,rbp
+  974d57:	mov    rbx,rax
+  974d5a:	call   555268 <Ogre::NedAllocImpl::deallocBytes(void*)@plt>
+  974d5f:	jmp    973b45 <CLevelTemplateData::createRandomLayout(int)+0x7d5>
+  974d64:	mov    rdi,QWORD PTR [rbx+0xb8]
+  974d6b:	test   rdi,rdi
+  974d6e:	je     974d75 <CLevelTemplateData::createRandomLayout(int)+0x1a05>
+  974d70:	call   553638 <operator delete[](void*)@plt>
+  974d75:	mov    eax,DWORD PTR [rbx+0xc0]
+  974d7b:	mov    QWORD PTR [rbx+0xb8],r14
+  974d82:	mov    DWORD PTR [rbx+0xc4],r13d
+  974d89:	mov    eax,eax
+  974d8b:	lea    r12,[rbp+0x10]
+  974d8f:	xor    r13d,r13d
+  974d92:	mov    QWORD PTR [r14+rax*8],rbp
+  974d96:	add    DWORD PTR [rbx+0xc0],0x1
+  974d9d:	xor    ebx,ebx
+  974d9f:	mov    rdi,QWORD PTR [rsp+0xd0]
+  974da7:	mov    rax,QWORD PTR [rsp+0xd8]
+  974daf:	sub    rax,rdi
+  974db2:	sar    rax,0x3
+  974db6:	cmp    r13d,eax
+  974db9:	jge    974f3f <CLevelTemplateData::createRandomLayout(int)+0x1bcf>
+  974dbf:	mov    rdi,QWORD PTR [rdi+rbx*1]
+  974dc3:	mov    rax,QWORD PTR [rsp+0xf0]
+  974dcb:	mov    QWORD PTR [rsp+0x8],rdi
+  974dd0:	mov    edx,DWORD PTR [rbp+0x30]
+  974dd3:	mov    r14d,DWORD PTR [rbp+0x34]
+  974dd7:	mov    r15,QWORD PTR [rax+rbx*1]
+  974ddb:	cmp    edx,r14d
+  974dde:	jb     974f36 <CLevelTemplateData::createRandomLayout(int)+0x1bc6>
+  974de4:	cmp    QWORD PTR [rbp+0x28],0x0
+  974de9:	je     974ec4 <CLevelTemplateData::createRandomLayout(int)+0x1b54>
+  974def:	add    r14d,DWORD PTR [rbp+0x38]
+  974df3:	mov    edi,r14d
+  974df6:	shl    rdi,0x3
+  974dfa:	call   553ae8 <operator new[](unsigned long)@plt>
+  974dff:	xor    edx,edx
+  974e01:	cmp    edx,DWORD PTR [rbp+0x34]
+  974e04:	jae    974e53 <CLevelTemplateData::createRandomLayout(int)+0x1ae3>
+  974e06:	mov    rsi,QWORD PTR [rbp+0x28]
+  974e0a:	mov    ecx,edx
+  974e0c:	add    edx,0x1
+  974e0f:	mov    rsi,QWORD PTR [rsi+rcx*8]
+  974e13:	mov    QWORD PTR [rax+rcx*8],rsi
+  974e17:	jmp    974e01 <CLevelTemplateData::createRandomLayout(int)+0x1a91>
+  974e19:	mov    eax,DWORD PTR [rbx+0xc8]
+  974e1f:	lea    rdi,[rax*8+0x0]
+  974e27:	mov    DWORD PTR [rbx+0xc4],eax
+  974e2d:	call   553ae8 <operator new[](unsigned long)@plt>
+  974e32:	mov    r14,rax
+  974e35:	mov    QWORD PTR [rbx+0xb8],rax
+  974e3c:	mov    eax,DWORD PTR [rbx+0xc0]
+  974e42:	jmp    974d89 <CLevelTemplateData::createRandomLayout(int)+0x1a19>
+  974e47:	mov    r14,QWORD PTR [rbx+0xb8]
+  974e4e:	jmp    974d89 <CLevelTemplateData::createRandomLayout(int)+0x1a19>
+  974e53:	mov    rdi,QWORD PTR [rbp+0x28]
+  974e57:	test   rdi,rdi
+  974e5a:	je     974e69 <CLevelTemplateData::createRandomLayout(int)+0x1af9>
+  974e5c:	mov    QWORD PTR [rsp],rax
+  974e60:	call   553638 <operator delete[](void*)@plt>
+  974e65:	mov    rax,QWORD PTR [rsp]
+  974e69:	mov    edx,DWORD PTR [rbp+0x30]
+  974e6c:	mov    QWORD PTR [rbp+0x28],rax
+  974e70:	mov    DWORD PTR [rbp+0x34],r14d
+  974e74:	mov    edx,edx
+  974e76:	mov    QWORD PTR [rax+rdx*8],r15
+  974e7a:	mov    eax,DWORD PTR [rbp+0x18]
+  974e7d:	mov    r14d,DWORD PTR [rbp+0x1c]
+  974e81:	add    DWORD PTR [rbp+0x30],0x1
+  974e85:	cmp    eax,r14d
+  974e88:	jb     974f30 <CLevelTemplateData::createRandomLayout(int)+0x1bc0>
+  974e8e:	cmp    QWORD PTR [rbp+0x10],0x0
+  974e93:	je     974f13 <CLevelTemplateData::createRandomLayout(int)+0x1ba3>
+  974e95:	add    r14d,DWORD PTR [rbp+0x20]
+  974e99:	mov    edi,r14d
+  974e9c:	shl    rdi,0x3
+  974ea0:	call   553ae8 <operator new[](unsigned long)@plt>
+  974ea5:	mov    r15,rax
+  974ea8:	xor    eax,eax
+  974eaa:	cmp    eax,DWORD PTR [r12+0xc]
+  974eaf:	jae    974ede <CLevelTemplateData::createRandomLayout(int)+0x1b6e>
+  974eb1:	mov    rcx,QWORD PTR [r12]
+  974eb5:	mov    edx,eax
+  974eb7:	add    eax,0x1
+  974eba:	mov    rcx,QWORD PTR [rcx+rdx*8]
+  974ebe:	mov    QWORD PTR [r15+rdx*8],rcx
+  974ec2:	jmp    974eaa <CLevelTemplateData::createRandomLayout(int)+0x1b3a>
+  974ec4:	mov    eax,DWORD PTR [rbp+0x38]
+  974ec7:	mov    edi,eax
+  974ec9:	mov    DWORD PTR [rbp+0x34],eax
+  974ecc:	shl    rdi,0x3
+  974ed0:	call   553ae8 <operator new[](unsigned long)@plt>
+  974ed5:	mov    QWORD PTR [rbp+0x28],rax
+  974ed9:	mov    edx,DWORD PTR [rbp+0x30]
+  974edc:	jmp    974e74 <CLevelTemplateData::createRandomLayout(int)+0x1b04>
+  974ede:	mov    rdi,QWORD PTR [rbp+0x10]
+  974ee2:	test   rdi,rdi
+  974ee5:	je     974eec <CLevelTemplateData::createRandomLayout(int)+0x1b7c>
+  974ee7:	call   553638 <operator delete[](void*)@plt>
+  974eec:	mov    eax,DWORD PTR [rbp+0x18]
+  974eef:	mov    QWORD PTR [rbp+0x10],r15
+  974ef3:	mov    DWORD PTR [rbp+0x1c],r14d
+  974ef7:	mov    rdx,QWORD PTR [rsp+0x8]
+  974efc:	mov    eax,eax
+  974efe:	add    r13d,0x1
+  974f02:	add    rbx,0x8
+  974f06:	mov    QWORD PTR [r15+rax*8],rdx
+  974f0a:	add    DWORD PTR [rbp+0x18],0x1
+  974f0e:	jmp    974d9f <CLevelTemplateData::createRandomLayout(int)+0x1a2f>
+  974f13:	mov    eax,DWORD PTR [rbp+0x20]
+  974f16:	mov    edi,eax
+  974f18:	mov    DWORD PTR [rbp+0x1c],eax
+  974f1b:	shl    rdi,0x3
+  974f1f:	call   553ae8 <operator new[](unsigned long)@plt>
+  974f24:	mov    r15,rax
+  974f27:	mov    QWORD PTR [rbp+0x10],rax
+  974f2b:	mov    eax,DWORD PTR [rbp+0x18]
+  974f2e:	jmp    974ef7 <CLevelTemplateData::createRandomLayout(int)+0x1b87>
+  974f30:	mov    r15,QWORD PTR [rbp+0x10]
+  974f34:	jmp    974ef7 <CLevelTemplateData::createRandomLayout(int)+0x1b87>
+  974f36:	mov    rax,QWORD PTR [rbp+0x28]
+  974f3a:	jmp    974e74 <CLevelTemplateData::createRandomLayout(int)+0x1b04>
+  974f3f:	mov    rax,QWORD PTR [rsp+0xf0]
+  974f47:	mov    QWORD PTR [rsp+0xd8],rdi
+  974f4f:	mov    QWORD PTR [rsp+0xf8],rax
+  974f57:	mov    rax,QWORD PTR [rsp+0xb0]
+  974f5f:	test   rax,rax
+  974f62:	je     9747ce <CLevelTemplateData::createRandomLayout(int)+0x145e>
+  974f68:	mov    rdi,rax
+  974f6b:	call   553f18 <operator delete(void*)@plt>
+  974f70:	mov    rdi,QWORD PTR [rsp+0xd0]
+  974f78:	jmp    9747ce <CLevelTemplateData::createRandomLayout(int)+0x145e>
+  974f7d:	nop
+  974f7e:	xchg   ax,ax
