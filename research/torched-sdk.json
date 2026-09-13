@@ -1,0 +1,3812 @@
+{
+  "format_version": 1,
+  "sdk": {
+    "file_count": 21602,
+    "directory_count_excluding_root": 1384,
+    "total_bytes": 1363609262,
+    "extension_counts": {
+      "dat": 6003,
+      "mesh": 3322,
+      "dds": 2776,
+      "layout": 2023,
+      "skeleton": 1600,
+      "jpg": 1529,
+      "wav": 1370,
+      "material": 1193,
+      "png": 530,
+      "ogg": 513,
+      "bip": 204,
+      "animation": 181,
+      "xml": 110,
+      "log": 70,
+      "imageset": 36,
+      "dll": 28,
+      "obj": 26,
+      "pdf": 15,
+      "max": 14,
+      "font": 9,
+      "cur": 8,
+      "psd": 7,
+      "bmp": 4,
+      "dle": 3,
+      "exe": 3,
+      "ico": 3,
+      "ttf": 3,
+      "cfg": 2,
+      "looknfeel": 2,
+      "pth": 2,
+      "scheme": 2,
+      "<none>": 1,
+      "bu": 1,
+      "cg": 1,
+      "dlu": 1,
+      "hie": 1,
+      "hlsl": 1,
+      "ini": 1,
+      "lnk": 1,
+      "nsis": 1,
+      "program": 1,
+      "tga": 1
+    },
+    "source_file_counts": {
+      ".c": 0,
+      ".cc": 0,
+      ".cpp": 0,
+      ".cs": 0,
+      ".h": 0,
+      ".hpp": 0,
+      ".lib": 0,
+      ".pdb": 0
+    },
+    "documentation_pdfs": [
+      "DocsToolsAndTutorials/3dsmax Exporters/Installing Exporters.pdf",
+      "DocsToolsAndTutorials/Animations and Wardrobe/Texture Fundamentals.pdf",
+      "DocsToolsAndTutorials/Animations and Wardrobe/Texture_Fundamentals_source/Texture Fundamentals.pdf",
+      "DocsToolsAndTutorials/Animations and Wardrobe/The Basics of Exporting Animations for TorchEd.pdf",
+      "DocsToolsAndTutorials/Animations and Wardrobe/Using The TorchEd Animation Editor.pdf",
+      "DocsToolsAndTutorials/DungeonCreation/How to create a new Dungeon.pdf",
+      "DocsToolsAndTutorials/KeyboardShortcuts/Keyboard shortcuts.pdf",
+      "DocsToolsAndTutorials/LevelSets and Props/LevelSet Import Export Tutorial.pdf",
+      "DocsToolsAndTutorials/Particles/Your First Particle System.pdf",
+      "DocsToolsAndTutorials/Room Creation and Palette/CREATING A ROOM.pdf",
+      "DocsToolsAndTutorials/Room Creation and Palette/palette.pdf",
+      "DocsToolsAndTutorials/TorchED introductory guide.pdf",
+      "DocsToolsAndTutorials/TorchED setup.pdf",
+      "DocsToolsAndTutorials/randomQuestTutorial/How to make a random quest.pdf",
+      "DocsToolsAndTutorials/weapons/Weapon_into_Game.pdf"
+    ]
+  },
+  "editor": {
+    "name": "Editor.exe",
+    "size": 2654864,
+    "sha256": "8e5e29cef0973388641d08284e51b2e4a254ca7c3dca1e9fcdcbc2c71d8ac480",
+    "file_type": "PE32 executable for MS Windows 4.00 (GUI), Intel i386 Mono/.Net assembly, 3 sections",
+    "pdb_paths_in_debug_data": [
+      "c:\\builder\\Projects\\Editor\\Editor\\obj\\ReleaseDLLExternal\\Editor.pdb"
+    ]
+  },
+  "core": {
+    "name": "Core.dll",
+    "size": 10218640,
+    "sha256": "4d8b29844e3ae133300cec6ce631c577df58f122ddd7ececf7e77b64e00508e8",
+    "file_type": "PE32 executable for MS Windows 5.00 (DLL), Intel i386, 5 sections",
+    "export_count": 193,
+    "exports": [
+      "EditorAmbientColor",
+      "EditorApplyNormalNoise",
+      "EditorApplyRotationNoise",
+      "EditorApplyScaleNoise",
+      "EditorAutomapTiles",
+      "EditorConvertLayoutToNewTileset",
+      "EditorCreateLogicLink",
+      "EditorCreateLogicObject",
+      "EditorCreateMod",
+      "EditorCreateObject",
+      "EditorDeleteAllObjectsInScene",
+      "EditorDeleteAllUndos",
+      "EditorDeleteLogicLink",
+      "EditorDeleteLogicObject",
+      "EditorDeleteObject",
+      "EditorDiretionalColor",
+      "EditorDiretionalIntensity",
+      "EditorEndUndo",
+      "EditorFileExists",
+      "EditorFireEvent",
+      "EditorFlushKeymanager",
+      "EditorFlyToObject",
+      "EditorGetAIFlags",
+      "EditorGetActiveAnimationTimePosition",
+      "EditorGetAffixes",
+      "EditorGetAlignments",
+      "EditorGetAnimationKeyTypes",
+      "EditorGetAnimationNameByPath",
+      "EditorGetCinematics",
+      "EditorGetCountOfLogicLinksInLogicObject",
+      "EditorGetCountOfLogicObjectsInLogicGroup",
+      "EditorGetDamageTypes",
+      "EditorGetDebugOutput",
+      "EditorGetDescriptorHash",
+      "EditorGetDungeons",
+      "EditorGetEdtiorLevelDepth",
+      "EditorGetFlagState",
+      "EditorGetGraphNames",
+      "EditorGetIconSheets",
+      "EditorGetListOfItems",
+      "EditorGetLogicFuncId",
+      "EditorGetLogicLinkInputFunctionID",
+      "EditorGetLogicLinkOutputFunctionID",
+      "EditorGetLogicObjectIDLinkingTo",
+      "EditorGetLogicObjectPosition",
+      "EditorGetMissiles",
+      "EditorGetModelAnimationLengthSeconds",
+      "EditorGetMuted",
+      "EditorGetObjectDescriptorID",
+      "EditorGetObjectIDRefedInLogicObject",
+      "EditorGetObjectName",
+      "EditorGetObjectParent",
+      "EditorGetObjectProperty",
+      "EditorGetObjectPropertyArray",
+      "EditorGetObjectPropertyString",
+      "EditorGetObjectSceneID",
+      "EditorGetObjectSelectedByIndex",
+      "EditorGetObjectSnap",
+      "EditorGetObjectUnderMouse",
+      "EditorGetObjectsCreatedThisRender",
+      "EditorGetQuests",
+      "EditorGetSets",
+      "EditorGetSkeletonBoneList",
+      "EditorGetSkillActivationTypes",
+      "EditorGetSkillEffectAndAffixTargetTypes",
+      "EditorGetSkillEventTypes",
+      "EditorGetSkillTargetTypes",
+      "EditorGetSkillTypes",
+      "EditorGetSkills",
+      "EditorGetSoundCategories",
+      "EditorGetSoundNames",
+      "EditorGetSoundNamesByCategory",
+      "EditorGetSpawnClasses",
+      "EditorGetTime",
+      "EditorGetUndoRedoCounts",
+      "EditorGetUnitThemes",
+      "EditorGetUnitTypes",
+      "EditorGetUnits",
+      "EditorGetUnitsByUnittype",
+      "EditorGetWorkingPlaneHeight",
+      "EditorInvokeOutputFunction",
+      "EditorLoadScene",
+      "EditorLogMessage",
+      "EditorMakeGuid",
+      "EditorMaterialAmbientColor",
+      "EditorObjectExists",
+      "EditorParticleMovementConfig",
+      "EditorPlayMusic",
+      "EditorPlaySound",
+      "EditorPollObjectIDByIndex",
+      "EditorPollObjects",
+      "EditorRedo",
+      "EditorReloadAllAssets",
+      "EditorReloadItem",
+      "EditorReloadModelAnimations",
+      "EditorReloadMonster",
+      "EditorReloadMonsters",
+      "EditorReloadPlayer",
+      "EditorReloadProp",
+      "EditorReloadSkill",
+      "EditorReloadSoundData",
+      "EditorResetCamera",
+      "EditorResetOrientation",
+      "EditorResetScale",
+      "EditorResnapSelectedObjects",
+      "EditorSaveScene",
+      "EditorSetActiveAnimationPaused",
+      "EditorSetActiveAnimationTimePosition",
+      "EditorSetBackgroundColor",
+      "EditorSetChunkTemplateBasisSize",
+      "EditorSetChunkTemplateExit",
+      "EditorSetChunkTemplateExits",
+      "EditorSetChunkTemplateHeight",
+      "EditorSetChunkTemplateWidth",
+      "EditorSetCommandAutoRun",
+      "EditorSetEditorActiveQuests",
+      "EditorSetEditorAiFreeze",
+      "EditorSetEditorCharacterClass",
+      "EditorSetEditorCharacterLevel",
+      "EditorSetEditorCompletedQuests",
+      "EditorSetEditorLevelCreatePet",
+      "EditorSetEditorLevelDepth",
+      "EditorSetEditorLevelPopulate",
+      "EditorSetEditorLevelPopulateChampions",
+      "EditorSetEditorMonsterSpawnclass",
+      "EditorSetEditorPetType",
+      "EditorSetEditorPlayerFile",
+      "EditorSetEditorRunGodded",
+      "EditorSetFlagState",
+      "EditorSetIngameRes",
+      "EditorSetLogicObjectPosition",
+      "EditorSetModPriority",
+      "EditorSetMonsterAutoSpawn",
+      "EditorSetMouseWheelDelta",
+      "EditorSetMuted",
+      "EditorSetObjectName",
+      "EditorSetObjectParent",
+      "EditorSetObjectProperty",
+      "EditorSetObjectPropertyArray",
+      "EditorSetObjectSelected",
+      "EditorSetOrientSnapSize",
+      "EditorSetPOVVelocityMult",
+      "EditorSetPosHSnapSize",
+      "EditorSetPosVSnapSize",
+      "EditorSetSceneVisible",
+      "EditorSetSnapToGroundBias",
+      "EditorSetTempStartPos",
+      "EditorSetUseTempStartPos",
+      "EditorSetWorkingPlaneHeight",
+      "EditorSetWorkingPlaneHeightToSelectedPivot",
+      "EditorSnapObjectsToGround",
+      "EditorStartUndo",
+      "EditorStopMusic",
+      "EditorTestCameraShake",
+      "EditorTimelineAddPointToProperty",
+      "EditorTimelineAddProperty",
+      "EditorTimelineGetObjectIDInTimelineByIndex",
+      "EditorTimelineGetPointIDInTimelinePropertyByIndex",
+      "EditorTimelineGetPropertyIDForObjectInTimelineByIndex",
+      "EditorTimelineGetPropertyInterpType",
+      "EditorTimelineGetTimePercentAtPoint",
+      "EditorTimelineGetValueAtPoint",
+      "EditorTimelineGetValueAtPointArray",
+      "EditorTimelineRemovePointFromProperty",
+      "EditorTimelineRemoveProperty",
+      "EditorTimelineSetPercentDone",
+      "EditorTimelineSetPropertyInterpType",
+      "EditorTimelineSetPropertyPointTimePercent",
+      "EditorTimelineSetPropertyPointValue",
+      "EditorTimelineSetPropertyPointValueArray",
+      "EditorTimelineUpdate",
+      "EditorToggleDisplayCollision",
+      "EditorUndo",
+      "EditorUpdate",
+      "EditorWindowHasFocus",
+      "GetEnabledModNames",
+      "GetModNames",
+      "InitEditor",
+      "IsA",
+      "SetModEnabled",
+      "ShutdownEditor",
+      "reloadCinematics",
+      "reloadEditorLayoutLinks",
+      "reloadEditorParticles",
+      "reloadItemSets",
+      "reloadMissiles",
+      "reloadModFileFilter",
+      "reloadQuests",
+      "reloadRecipes",
+      "reloadSpawnClasses",
+      "reloadTextures",
+      "reloadUnitThemes",
+      "rollRoomPiece"
+    ],
+    "msvc_rtti_class_count": 319,
+    "msvc_rtti_classes": [
+      "CAIFlag",
+      "CAIFlagManager",
+      "CAIManager",
+      "CAISkill",
+      "CAISkillManager",
+      "CAIStatWatcher",
+      "CActiveAnimation",
+      "CAffectorDescriptor",
+      "CAffectorWrapper",
+      "CAffix",
+      "CAlignDescriptor",
+      "CAlignWrapper",
+      "CAllDescriptorsScene",
+      "CAnimationPlayer",
+      "CAnimationPlayerDescriptor",
+      "CAnimationSet",
+      "CAstarPathfinder",
+      "CAttackDescription",
+      "CAutomap",
+      "CBaseObjectDescriptor",
+      "CBaseUnit",
+      "CBinaryStyle",
+      "CBoxColliderDescriptor",
+      "CBoxColliderWrapper",
+      "CBreakable",
+      "CCameraControl",
+      "CCameraController",
+      "CCameraControllerDescriptor",
+      "CCameraShake",
+      "CCameraShakeDescriptor",
+      "CChannelInstance",
+      "CCharacter",
+      "CCharacterSaveState",
+      "CChunk",
+      "CChunkInstance",
+      "CChunkType",
+      "CCinematicDescriptor",
+      "CCinematicMenu",
+      "CCinematicObject",
+      "CCinematics",
+      "CCmdLineParser",
+      "CColliderDescriptor",
+      "CColliderWrapper",
+      "CCollisionList",
+      "CCollisionModel",
+      "CColorAffectorDescriptor",
+      "CColorWrapper",
+      "CCombineMenu",
+      "CConsole",
+      "CContinueGameMenu",
+      "CCounter",
+      "CCounterDescriptor",
+      "CCullingBounds",
+      "CDamageShape",
+      "CDamageShapeDescriptor",
+      "CDataGroup",
+      "CDataValue",
+      "CDescriptor",
+      "CDescriptorLoadConfiguration",
+      "CDescriptorManager",
+      "CDescriptorProp",
+      "CDescriptorPropertyInterpreter",
+      "CDescriptorSaveConfiguration",
+      "CDialogMenu",
+      "CDieMenu",
+      "CDifficultyMenu",
+      "CDropdownMenu",
+      "CDungeon",
+      "CDungeonManager",
+      "CDungeonObject",
+      "CDungeonObjectDescriptor",
+      "CDynamicLine",
+      "CDynamicPropertyFile",
+      "CDynamicRenderable",
+      "CEditor",
+      "CEditorBaseObject",
+      "CEditorButton",
+      "CEditorButtonDescriptor",
+      "CEditorImage",
+      "CEditorImageDescriptor",
+      "CEditorObjectManager",
+      "CEditorScene",
+      "CEffect",
+      "CEffectDisplayValues",
+      "CEffectGroupManager",
+      "CEffectManager",
+      "CEnchantMenu",
+      "CEquipment",
+      "CEquipmentRef",
+      "CEquipmentTooltip",
+      "CExecuteSkillProps",
+      "CFileSystem",
+      "CFishingMenu",
+      "CForceAffectorDescriptor",
+      "CForceWrapper",
+      "CFormationNode",
+      "CFormationNodeSaveAndLoad",
+      "CGame",
+      "CGameClient",
+      "CGameGlobals",
+      "CGameSpeed",
+      "CGameStateController",
+      "CGameStateControllerDescriptor",
+      "CGameUI",
+      "CGenericModel",
+      "CGenericModelDescriptor",
+      "CGeometryRotateDescriptor",
+      "CGeometryRotateWrapper",
+      "CGraph",
+      "CGraphManager",
+      "CGravityAffectorDescriptor",
+      "CGravityWrapper",
+      "CHierarchy",
+      "CInteractiveMenu",
+      "CInventory",
+      "CInventoryMenu",
+      "CItem",
+      "CItemDescriptor",
+      "CItemGold",
+      "CItemSaveState",
+      "CJetAffectorDescriptor",
+      "CJetWrapper",
+      "CJournalMenu",
+      "CKeyManager",
+      "CKeyframe",
+      "CLayout",
+      "CLayoutDescriptor",
+      "CLayoutScene",
+      "CLevel",
+      "CLevelLayout",
+      "CLevelState",
+      "CLevelTemplateData",
+      "CLight",
+      "CLightDescriptor",
+      "CLineAffectorDescriptor",
+      "CLineWrapper",
+      "CLinearForceAffectorDescriptor",
+      "CLinearForceWrapper",
+      "CLogicGroup",
+      "CLogicGroupDescriptor",
+      "CLogicLink",
+      "CLogicNodeState",
+      "CLogicObject",
+      "CLogicTimer",
+      "CLogicTimerDescriptor",
+      "CLogicTrigger",
+      "CLogicWrapper",
+      "CMainMenu",
+      "CMasterResourceManager",
+      "CMenuManager",
+      "CMerchantMenu",
+      "CMeshListener",
+      "CMissile",
+      "CMissileDescriptor",
+      "CMissilePreloader",
+      "CMod",
+      "CModFileFilter",
+      "CModalMenu",
+      "CModelViewerScene",
+      "CMoneyTaker",
+      "CMoneyTakerDescriptor",
+      "CMonster",
+      "CMonsterDescriptor",
+      "CMouseHandler",
+      "CMouseManager",
+      "CMusicObject",
+      "CMusicObjectDescriptor",
+      "CNewGameMenu",
+      "CObjectControl3D",
+      "COgreResourceFile",
+      "COptionsMenu",
+      "COutputIncrementor",
+      "COutputIncrementorDescriptor",
+      "CPOV",
+      "CPairStyle",
+      "CParticle",
+      "CParticleCache",
+      "CParticleEmitterWrapper",
+      "CParticleEmitterWrapperDescriptor",
+      "CParticlePreloader",
+      "CParticleScene",
+      "CParticleTechWrapper",
+      "CParticleTechWrapperDescriptor",
+      "CParticleWrapper",
+      "CPath",
+      "CPathController",
+      "CPathControllerDescriptor",
+      "CPathNode",
+      "CPathNodeDescriptor",
+      "CPetMenu",
+      "CPlaneColliderDescriptor",
+      "CPlaneColliderWrapper",
+      "CPlayer",
+      "CPositionableObject",
+      "CPositionableObjectDescriptor",
+      "CPropertyNode",
+      "CPropertyNodeDescriptor",
+      "CPuzzleRandomizer",
+      "CPuzzleRandomizerDescriptor",
+      "CQuest",
+      "CQuestController",
+      "CQuestControllerDescriptor",
+      "CQuestDialog",
+      "CQuestDialogItem",
+      "CQuestDialogMenu",
+      "CQuestManager",
+      "CQuestMenu",
+      "CQuestRequirements",
+      "CQuestRewards",
+      "CQuestUnitData",
+      "CRandomChoice",
+      "CRandomChoiceDescriptor",
+      "CRandomGroup",
+      "CRandomGroupDescriptor",
+      "CRandomizer",
+      "CRecipes",
+      "CResourceManager",
+      "CResourceSettings",
+      "CRoomPiece",
+      "CRoomPieceData",
+      "CRoomPieceDataInformation",
+      "CRoomPieceDescriptor",
+      "CRunicCore",
+      "CScaleAffectorDescriptor",
+      "CScaleWrapper",
+      "CSceneNodeObject",
+      "CScriptListener",
+      "CSets",
+      "CSettings",
+      "CSettingsMenu",
+      "CShape",
+      "CShapeDescriptor",
+      "CSharedStash",
+      "CSineForceAffectorDescriptor",
+      "CSineForceWrapper",
+      "CSkill",
+      "CSkillController",
+      "CSkillControllerDescriptor",
+      "CSkillEffectAndAffixes",
+      "CSkillEvent",
+      "CSkillFoldout",
+      "CSkillManager",
+      "CSkillMenu",
+      "CSkillParser",
+      "CSkillProperty",
+      "CSkillTooltip",
+      "CSkipCutscene",
+      "CSkipCutsceneDescriptor",
+      "CSoundBank",
+      "CSoundBankDataInformation",
+      "CSoundData",
+      "CSoundInstance",
+      "CSoundManager",
+      "CSoundObject",
+      "CSoundObjectDescriptor",
+      "CSpawnClass",
+      "CSpawnClassData",
+      "CSpawnClassParser",
+      "CSpawningData",
+      "CSphereColliderDescriptor",
+      "CSphereColliderWrapper",
+      "CSplash",
+      "CStashMenu",
+      "CStatsMenu",
+      "CStringTranslate",
+      "CSubMenu",
+      "CTeleport",
+      "CTeleportDescriptor",
+      "CTextEvent",
+      "CTextureAnimateDescriptor",
+      "CTextureAnimateWrapper",
+      "CTextureRotateDescriptor",
+      "CTextureRotateWrapper",
+      "CTimeline",
+      "CTimelineDescriptor",
+      "CTimelineProperty",
+      "CTimerStatics",
+      "CTipMenu",
+      "CTriggerBox",
+      "CTriggerBoxDescriptor",
+      "CTriggerDescriptor",
+      "CTriggerSphere",
+      "CTriggerSphereDescriptor",
+      "CTriggerUnit",
+      "CUndo",
+      "CUnitResourceList",
+      "CUnitSpawner",
+      "CUnitSpawnerDescriptor",
+      "CUnitTheme",
+      "CUnitThemeParticle",
+      "CUnitThemes",
+      "CUnitTriggerDescriptor",
+      "CVortexAffectorDescriptor",
+      "CVortexWrapper",
+      "CWardrobe",
+      "CWarper",
+      "CWarperDescriptor",
+      "CWaypointActivator",
+      "CWaypointActivatorDescriptor",
+      "CWaypointMenu",
+      "CWeaponTrail",
+      "CollisionModelRef",
+      "iCollision",
+      "iDamageShape",
+      "iDataFileSaveAndLoad",
+      "iEditorResourceManager",
+      "iHighlight",
+      "iInventoryListener",
+      "iLevelUpdate",
+      "iLevelUpdatedCharacter",
+      "iMenuListener",
+      "iMissile",
+      "iRandomWeight",
+      "iResource",
+      "iSelected",
+      "iSnap",
+      "iUnitObserver",
+      "iUnitSpawner",
+      "type_info"
+    ],
+    "engine_class_count": 302,
+    "engine_classes": [
+      "CAIFlag",
+      "CAIFlagManager",
+      "CAIManager",
+      "CAISkill",
+      "CAISkillManager",
+      "CAIStatWatcher",
+      "CActiveAnimation",
+      "CAffectorDescriptor",
+      "CAffectorWrapper",
+      "CAffix",
+      "CAlignDescriptor",
+      "CAlignWrapper",
+      "CAllDescriptorsScene",
+      "CAnimationPlayer",
+      "CAnimationPlayerDescriptor",
+      "CAnimationSet",
+      "CAstarPathfinder",
+      "CAttackDescription",
+      "CAutomap",
+      "CBaseObjectDescriptor",
+      "CBaseUnit",
+      "CBinaryStyle",
+      "CBoxColliderDescriptor",
+      "CBoxColliderWrapper",
+      "CBreakable",
+      "CCameraControl",
+      "CCameraController",
+      "CCameraControllerDescriptor",
+      "CCameraShake",
+      "CCameraShakeDescriptor",
+      "CChannelInstance",
+      "CCharacter",
+      "CCharacterSaveState",
+      "CChunk",
+      "CChunkInstance",
+      "CChunkType",
+      "CCinematicDescriptor",
+      "CCinematicMenu",
+      "CCinematicObject",
+      "CCinematics",
+      "CCmdLineParser",
+      "CColliderDescriptor",
+      "CColliderWrapper",
+      "CCollisionList",
+      "CCollisionModel",
+      "CColorAffectorDescriptor",
+      "CColorWrapper",
+      "CCombineMenu",
+      "CConsole",
+      "CContinueGameMenu",
+      "CCounter",
+      "CCounterDescriptor",
+      "CCullingBounds",
+      "CDamageShape",
+      "CDamageShapeDescriptor",
+      "CDataGroup",
+      "CDataValue",
+      "CDescriptor",
+      "CDescriptorLoadConfiguration",
+      "CDescriptorManager",
+      "CDescriptorProp",
+      "CDescriptorPropertyInterpreter",
+      "CDescriptorSaveConfiguration",
+      "CDialogMenu",
+      "CDieMenu",
+      "CDifficultyMenu",
+      "CDropdownMenu",
+      "CDungeon",
+      "CDungeonManager",
+      "CDungeonObject",
+      "CDungeonObjectDescriptor",
+      "CDynamicLine",
+      "CDynamicPropertyFile",
+      "CDynamicRenderable",
+      "CEditor",
+      "CEditorBaseObject",
+      "CEditorButton",
+      "CEditorButtonDescriptor",
+      "CEditorImage",
+      "CEditorImageDescriptor",
+      "CEditorObjectManager",
+      "CEditorScene",
+      "CEffect",
+      "CEffectDisplayValues",
+      "CEffectGroupManager",
+      "CEffectManager",
+      "CEnchantMenu",
+      "CEquipment",
+      "CEquipmentRef",
+      "CEquipmentTooltip",
+      "CExecuteSkillProps",
+      "CFileSystem",
+      "CFishingMenu",
+      "CForceAffectorDescriptor",
+      "CForceWrapper",
+      "CFormationNode",
+      "CFormationNodeSaveAndLoad",
+      "CGame",
+      "CGameClient",
+      "CGameGlobals",
+      "CGameSpeed",
+      "CGameStateController",
+      "CGameStateControllerDescriptor",
+      "CGameUI",
+      "CGenericModel",
+      "CGenericModelDescriptor",
+      "CGeometryRotateDescriptor",
+      "CGeometryRotateWrapper",
+      "CGraph",
+      "CGraphManager",
+      "CGravityAffectorDescriptor",
+      "CGravityWrapper",
+      "CHierarchy",
+      "CInteractiveMenu",
+      "CInventory",
+      "CInventoryMenu",
+      "CItem",
+      "CItemDescriptor",
+      "CItemGold",
+      "CItemSaveState",
+      "CJetAffectorDescriptor",
+      "CJetWrapper",
+      "CJournalMenu",
+      "CKeyManager",
+      "CKeyframe",
+      "CLayout",
+      "CLayoutDescriptor",
+      "CLayoutScene",
+      "CLevel",
+      "CLevelLayout",
+      "CLevelState",
+      "CLevelTemplateData",
+      "CLight",
+      "CLightDescriptor",
+      "CLineAffectorDescriptor",
+      "CLineWrapper",
+      "CLinearForceAffectorDescriptor",
+      "CLinearForceWrapper",
+      "CLogicGroup",
+      "CLogicGroupDescriptor",
+      "CLogicLink",
+      "CLogicNodeState",
+      "CLogicObject",
+      "CLogicTimer",
+      "CLogicTimerDescriptor",
+      "CLogicTrigger",
+      "CLogicWrapper",
+      "CMainMenu",
+      "CMasterResourceManager",
+      "CMenuManager",
+      "CMerchantMenu",
+      "CMeshListener",
+      "CMissile",
+      "CMissileDescriptor",
+      "CMissilePreloader",
+      "CMod",
+      "CModFileFilter",
+      "CModalMenu",
+      "CModelViewerScene",
+      "CMoneyTaker",
+      "CMoneyTakerDescriptor",
+      "CMonster",
+      "CMonsterDescriptor",
+      "CMouseHandler",
+      "CMouseManager",
+      "CMusicObject",
+      "CMusicObjectDescriptor",
+      "CNewGameMenu",
+      "CObjectControl3D",
+      "COgreResourceFile",
+      "COptionsMenu",
+      "COutputIncrementor",
+      "COutputIncrementorDescriptor",
+      "CPOV",
+      "CPairStyle",
+      "CParticle",
+      "CParticleCache",
+      "CParticleEmitterWrapper",
+      "CParticleEmitterWrapperDescriptor",
+      "CParticlePreloader",
+      "CParticleScene",
+      "CParticleTechWrapper",
+      "CParticleTechWrapperDescriptor",
+      "CParticleWrapper",
+      "CPath",
+      "CPathController",
+      "CPathControllerDescriptor",
+      "CPathNode",
+      "CPathNodeDescriptor",
+      "CPetMenu",
+      "CPlaneColliderDescriptor",
+      "CPlaneColliderWrapper",
+      "CPlayer",
+      "CPositionableObject",
+      "CPositionableObjectDescriptor",
+      "CPropertyNode",
+      "CPropertyNodeDescriptor",
+      "CPuzzleRandomizer",
+      "CPuzzleRandomizerDescriptor",
+      "CQuest",
+      "CQuestController",
+      "CQuestControllerDescriptor",
+      "CQuestDialog",
+      "CQuestDialogItem",
+      "CQuestDialogMenu",
+      "CQuestManager",
+      "CQuestMenu",
+      "CQuestRequirements",
+      "CQuestRewards",
+      "CQuestUnitData",
+      "CRandomChoice",
+      "CRandomChoiceDescriptor",
+      "CRandomGroup",
+      "CRandomGroupDescriptor",
+      "CRandomizer",
+      "CRecipes",
+      "CResourceManager",
+      "CResourceSettings",
+      "CRoomPiece",
+      "CRoomPieceData",
+      "CRoomPieceDataInformation",
+      "CRoomPieceDescriptor",
+      "CRunicCore",
+      "CScaleAffectorDescriptor",
+      "CScaleWrapper",
+      "CSceneNodeObject",
+      "CScriptListener",
+      "CSets",
+      "CSettings",
+      "CSettingsMenu",
+      "CShape",
+      "CShapeDescriptor",
+      "CSharedStash",
+      "CSineForceAffectorDescriptor",
+      "CSineForceWrapper",
+      "CSkill",
+      "CSkillController",
+      "CSkillControllerDescriptor",
+      "CSkillEffectAndAffixes",
+      "CSkillEvent",
+      "CSkillFoldout",
+      "CSkillManager",
+      "CSkillMenu",
+      "CSkillParser",
+      "CSkillProperty",
+      "CSkillTooltip",
+      "CSkipCutscene",
+      "CSkipCutsceneDescriptor",
+      "CSoundBank",
+      "CSoundBankDataInformation",
+      "CSoundData",
+      "CSoundInstance",
+      "CSoundManager",
+      "CSoundObject",
+      "CSoundObjectDescriptor",
+      "CSpawnClass",
+      "CSpawnClassData",
+      "CSpawnClassParser",
+      "CSpawningData",
+      "CSphereColliderDescriptor",
+      "CSphereColliderWrapper",
+      "CSplash",
+      "CStashMenu",
+      "CStatsMenu",
+      "CStringTranslate",
+      "CSubMenu",
+      "CTeleport",
+      "CTeleportDescriptor",
+      "CTextEvent",
+      "CTextureAnimateDescriptor",
+      "CTextureAnimateWrapper",
+      "CTextureRotateDescriptor",
+      "CTextureRotateWrapper",
+      "CTimeline",
+      "CTimelineDescriptor",
+      "CTimelineProperty",
+      "CTimerStatics",
+      "CTipMenu",
+      "CTriggerBox",
+      "CTriggerBoxDescriptor",
+      "CTriggerDescriptor",
+      "CTriggerSphere",
+      "CTriggerSphereDescriptor",
+      "CTriggerUnit",
+      "CUndo",
+      "CUnitResourceList",
+      "CUnitSpawner",
+      "CUnitSpawnerDescriptor",
+      "CUnitTheme",
+      "CUnitThemeParticle",
+      "CUnitThemes",
+      "CUnitTriggerDescriptor",
+      "CVortexAffectorDescriptor",
+      "CVortexWrapper",
+      "CWardrobe",
+      "CWarper",
+      "CWarperDescriptor",
+      "CWaypointActivator",
+      "CWaypointActivatorDescriptor",
+      "CWaypointMenu",
+      "CWeaponTrail",
+      "CollisionModelRef"
+    ]
+  },
+  "managed_metadata": {
+    "available": true,
+    "type_references": 411,
+    "type_definitions": 326,
+    "method_definitions": 5070,
+    "pinvoke_rows": 212,
+    "pinvoke_rows_by_library": {
+      "core.dll": 196,
+      "user32": 1,
+      "user32.dll": 15
+    },
+    "core_pinvoke_rows": 196,
+    "core_unique_imports": 194,
+    "duplicate_core_imports": {
+      "EditorGetObjectProperty": 2,
+      "EditorSetObjectProperty": 2
+    },
+    "imports_without_native_export": [
+      "EditorGetRedoCount"
+    ],
+    "exports_without_managed_import": [],
+    "core_imports": [
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "InitEditor",
+        "native_name": "InitEditor",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "hInst",
+            "type": "int32"
+          },
+          {
+            "name": "hWnd",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void InitEditor(int32 hInst, int32 hWnd)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorLogMessage",
+        "native_name": "EditorLogMessage",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "msg",
+            "type": "string"
+          },
+          {
+            "name": "level",
+            "type": "Editor.Log.LogEntryLevel"
+          }
+        ],
+        "prototype": "void EditorLogMessage(string msg, Editor.Log.LogEntryLevel level)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "IsA",
+        "native_name": "IsA",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "UnitType",
+            "type": "string"
+          },
+          {
+            "name": "BaseUnitType",
+            "type": "string"
+          }
+        ],
+        "prototype": "bool IsA(string UnitType, string BaseUnitType)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "ShutdownEditor",
+        "native_name": "ShutdownEditor",
+        "return_type": "int32",
+        "parameters": [],
+        "prototype": "int32 ShutdownEditor()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorUndo",
+        "native_name": "EditorUndo",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorUndo()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorStartUndo",
+        "native_name": "EditorStartUndo",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorStartUndo()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorEndUndo",
+        "native_name": "EditorEndUndo",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorEndUndo()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorRedo",
+        "native_name": "EditorRedo",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorRedo()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetUndoRedoCounts",
+        "native_name": "EditorGetUndoRedoCounts",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "Undos",
+            "type": "ref uint32"
+          },
+          {
+            "name": "Redos",
+            "type": "ref uint32"
+          }
+        ],
+        "prototype": "void EditorGetUndoRedoCounts(ref uint32 Undos, ref uint32 Redos)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDeleteAllUndos",
+        "native_name": "EditorDeleteAllUndos",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorDeleteAllUndos()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetRedoCount",
+        "native_name": "EditorGetRedoCount",
+        "return_type": "uint32",
+        "parameters": [],
+        "prototype": "uint32 EditorGetRedoCount()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetBackgroundColor",
+        "native_name": "EditorSetBackgroundColor",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "R",
+            "type": "float32"
+          },
+          {
+            "name": "G",
+            "type": "float32"
+          },
+          {
+            "name": "B",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetBackgroundColor(float32 R, float32 G, float32 B)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetMouseWheelDelta",
+        "native_name": "EditorSetMouseWheelDelta",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iDelta",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetMouseWheelDelta(int32 iDelta)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetWorkingPlaneHeight",
+        "native_name": "EditorSetWorkingPlaneHeight",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fHeight",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetWorkingPlaneHeight(float32 fHeight)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetSnapToGroundBias",
+        "native_name": "EditorSetSnapToGroundBias",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fBias",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetSnapToGroundBias(float32 fBias)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetTempStartPos",
+        "native_name": "EditorSetTempStartPos",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "x",
+            "type": "float32"
+          },
+          {
+            "name": "y",
+            "type": "float32"
+          },
+          {
+            "name": "z",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetTempStartPos(float32 x, float32 y, float32 z)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetUseTempStartPos",
+        "native_name": "EditorSetUseTempStartPos",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bValue",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetUseTempStartPos(bool bValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTestCameraShake",
+        "native_name": "EditorTestCameraShake",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "cameraShakeName",
+            "type": "string"
+          },
+          {
+            "name": "fDuration",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorTestCameraShake(string cameraShakeName, float32 fDuration)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorAmbientColor",
+        "native_name": "EditorAmbientColor",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "red",
+            "type": "ref int32"
+          },
+          {
+            "name": "green",
+            "type": "ref int32"
+          },
+          {
+            "name": "blue",
+            "type": "ref int32"
+          },
+          {
+            "name": "bSetColor",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorAmbientColor(ref int32 red, ref int32 green, ref int32 blue, bool bSetColor)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorMaterialAmbientColor",
+        "native_name": "EditorMaterialAmbientColor",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "red",
+            "type": "ref int32"
+          },
+          {
+            "name": "green",
+            "type": "ref int32"
+          },
+          {
+            "name": "blue",
+            "type": "ref int32"
+          },
+          {
+            "name": "bSetColor",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorMaterialAmbientColor(ref int32 red, ref int32 green, ref int32 blue, bool bSetColor)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDiretionalColor",
+        "native_name": "EditorDiretionalColor",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "red",
+            "type": "ref int32"
+          },
+          {
+            "name": "green",
+            "type": "ref int32"
+          },
+          {
+            "name": "blue",
+            "type": "ref int32"
+          },
+          {
+            "name": "bSetColor",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorDiretionalColor(ref int32 red, ref int32 green, ref int32 blue, bool bSetColor)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDiretionalIntensity",
+        "native_name": "EditorDiretionalIntensity",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fIntensity",
+            "type": "ref float32"
+          },
+          {
+            "name": "bSetColor",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorDiretionalIntensity(ref float32 fIntensity, bool bSetColor)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetWorkingPlaneHeightToSelectedPivot",
+        "native_name": "EditorSetWorkingPlaneHeightToSelectedPivot",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorSetWorkingPlaneHeightToSelectedPivot()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetWorkingPlaneHeight",
+        "native_name": "EditorGetWorkingPlaneHeight",
+        "return_type": "float32",
+        "parameters": [],
+        "prototype": "float32 EditorGetWorkingPlaneHeight()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetPosHSnapSize",
+        "native_name": "EditorSetPosHSnapSize",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetPosHSnapSize(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetPosVSnapSize",
+        "native_name": "EditorSetPosVSnapSize",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetPosVSnapSize(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetEdtiorLevelDepth",
+        "native_name": "EditorGetEdtiorLevelDepth",
+        "return_type": "int32",
+        "parameters": [],
+        "prototype": "int32 EditorGetEdtiorLevelDepth()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorRunGodded",
+        "native_name": "EditorSetEditorRunGodded",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bGodded",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetEditorRunGodded(bool bGodded)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorAiFreeze",
+        "native_name": "EditorSetEditorAiFreeze",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bGAiFreeze",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetEditorAiFreeze(bool bGAiFreeze)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetMonsterAutoSpawn",
+        "native_name": "EditorSetMonsterAutoSpawn",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "strName",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetMonsterAutoSpawn(string strName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetCommandAutoRun",
+        "native_name": "EditorSetCommandAutoRun",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "strCmd",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetCommandAutoRun(string strCmd)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorLevelPopulate",
+        "native_name": "EditorSetEditorLevelPopulate",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bPopulate",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetEditorLevelPopulate(bool bPopulate)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorMonsterSpawnclass",
+        "native_name": "EditorSetEditorMonsterSpawnclass",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "SpawnClassName",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorMonsterSpawnclass(string SpawnClassName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorPlayerFile",
+        "native_name": "EditorSetEditorPlayerFile",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "strFile",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorPlayerFile(string strFile)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorLevelPopulateChampions",
+        "native_name": "EditorSetEditorLevelPopulateChampions",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bPopulate",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetEditorLevelPopulateChampions(bool bPopulate)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorLevelCreatePet",
+        "native_name": "EditorSetEditorLevelCreatePet",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bCreatePet",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetEditorLevelCreatePet(bool bCreatePet)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorCharacterClass",
+        "native_name": "EditorSetEditorCharacterClass",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "className",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorCharacterClass(string className)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorActiveQuests",
+        "native_name": "EditorSetEditorActiveQuests",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "quests",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorActiveQuests(string quests)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorCompletedQuests",
+        "native_name": "EditorSetEditorCompletedQuests",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "quests",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorCompletedQuests(string quests)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorPetType",
+        "native_name": "EditorSetEditorPetType",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "petType",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetEditorPetType(string petType)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorLevelDepth",
+        "native_name": "EditorSetEditorLevelDepth",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iDepth",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetEditorLevelDepth(int32 iDepth)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetEditorCharacterLevel",
+        "native_name": "EditorSetEditorCharacterLevel",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iLevel",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetEditorCharacterLevel(int32 iLevel)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetChunkTemplateBasisSize",
+        "native_name": "EditorSetChunkTemplateBasisSize",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetChunkTemplateBasisSize(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetChunkTemplateWidth",
+        "native_name": "EditorSetChunkTemplateWidth",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetChunkTemplateWidth(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetChunkTemplateHeight",
+        "native_name": "EditorSetChunkTemplateHeight",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetChunkTemplateHeight(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetChunkTemplateExits",
+        "native_name": "EditorSetChunkTemplateExits",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "Exits",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetChunkTemplateExits(int32 Exits)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetChunkTemplateExit",
+        "native_name": "EditorSetChunkTemplateExit",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "Exit",
+            "type": "int32"
+          },
+          {
+            "name": "X",
+            "type": "float32"
+          },
+          {
+            "name": "Y",
+            "type": "float32"
+          },
+          {
+            "name": "Z",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetChunkTemplateExit(int32 Exit, float32 X, float32 Y, float32 Z)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetOrientSnapSize",
+        "native_name": "EditorSetOrientSnapSize",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fSize",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetOrientSnapSize(float32 fSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetFlagState",
+        "native_name": "EditorGetFlagState",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "iFlag",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "bool EditorGetFlagState(uint32 iFlag)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetFlagState",
+        "native_name": "EditorSetFlagState",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iFlag",
+            "type": "uint32"
+          },
+          {
+            "name": "bOn",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetFlagState(uint32 iFlag, bool bOn)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetTime",
+        "native_name": "EditorGetTime",
+        "return_type": "float32",
+        "parameters": [],
+        "prototype": "float32 EditorGetTime()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorUpdate",
+        "native_name": "EditorUpdate",
+        "return_type": "int32",
+        "parameters": [
+          {
+            "name": "iFlags",
+            "type": "int32"
+          }
+        ],
+        "prototype": "int32 EditorUpdate(int32 iFlags)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectUnderMouse",
+        "native_name": "EditorGetObjectUnderMouse",
+        "return_type": "int64",
+        "parameters": [],
+        "prototype": "int64 EditorGetObjectUnderMouse()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorFlushKeymanager",
+        "native_name": "EditorFlushKeymanager",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorFlushKeymanager()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectProperty",
+        "native_name": "EditorGetObjectProperty",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void* EditorGetObjectProperty(int64 nObjectID, int32 nPropertyID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectPropertyArray",
+        "native_name": "EditorGetObjectPropertyArray",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "nSize",
+            "type": "ref int32"
+          }
+        ],
+        "prototype": "void* EditorGetObjectPropertyArray(int64 nObjectID, int32 nPropertyID, ref int32 nSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectPropertyString",
+        "native_name": "EditorGetObjectPropertyString",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "string EditorGetObjectPropertyString(int64 iObjectID, uint32 iPropertyID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectProperty",
+        "native_name": "EditorSetObjectProperty",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "pNewValue",
+            "type": "void*"
+          }
+        ],
+        "prototype": "void EditorSetObjectProperty(int64 nObjectID, int32 nPropertyID, void* pNewValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectPropertyArray",
+        "native_name": "EditorSetObjectPropertyArray",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "sizeOfArray",
+            "type": "int32"
+          },
+          {
+            "name": "pPropertyValue",
+            "type": "Editor.UnionData[]"
+          }
+        ],
+        "prototype": "void EditorSetObjectPropertyArray(int64 iObjectID, int32 iPropertyID, int32 sizeOfArray, Editor.UnionData[] pPropertyValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorWindowHasFocus",
+        "native_name": "EditorWindowHasFocus",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bHasFocus",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorWindowHasFocus(bool bHasFocus)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetIconSheets",
+        "native_name": "EditorGetIconSheets",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetIconSheets()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetDescriptorHash",
+        "native_name": "EditorGetDescriptorHash",
+        "return_type": "int64",
+        "parameters": [],
+        "prototype": "int64 EditorGetDescriptorHash()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorCreateObject",
+        "native_name": "EditorCreateObject",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iDescriptorID",
+            "type": "uint32"
+          },
+          {
+            "name": "iObjectIDToClone",
+            "type": "int64"
+          },
+          {
+            "name": "bCloneChildren",
+            "type": "bool"
+          }
+        ],
+        "prototype": "int64 EditorCreateObject(uint32 iSceneID, uint32 iDescriptorID, int64 iObjectIDToClone, bool bCloneChildren)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDeleteObject",
+        "native_name": "EditorDeleteObject",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "bool EditorDeleteObject(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDeleteAllObjectsInScene",
+        "native_name": "EditorDeleteAllObjectsInScene",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "void EditorDeleteAllObjectsInScene(uint32 iSceneID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectName",
+        "native_name": "EditorSetObjectName",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "newName",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorSetObjectName(int64 iObjectID, string newName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectName",
+        "native_name": "EditorGetObjectName",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "string EditorGetObjectName(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorResnapSelectedObjects",
+        "native_name": "EditorResnapSelectedObjects",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bResnapOrientation",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorResnapSelectedObjects(bool bResnapOrientation)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorApplyScaleNoise",
+        "native_name": "EditorApplyScaleNoise",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fRange",
+            "type": "float32"
+          },
+          {
+            "name": "bUniform",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorApplyScaleNoise(float32 fRange, bool bUniform)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorApplyNormalNoise",
+        "native_name": "EditorApplyNormalNoise",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fRange",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorApplyNormalNoise(float32 fRange)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorApplyRotationNoise",
+        "native_name": "EditorApplyRotationNoise",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fRange",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorApplyRotationNoise(float32 fRange)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorResetScale",
+        "native_name": "EditorResetScale",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorResetScale()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorResetOrientation",
+        "native_name": "EditorResetOrientation",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorResetOrientation()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSnapObjectsToGround",
+        "native_name": "EditorSnapObjectsToGround",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bSnapNormals",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSnapObjectsToGround(bool bSnapNormals)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorToggleDisplayCollision",
+        "native_name": "EditorToggleDisplayCollision",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorToggleDisplayCollision()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorObjectExists",
+        "native_name": "EditorObjectExists",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "bool EditorObjectExists(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectProperty",
+        "native_name": "EditorSetObjectProperty",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "uint32"
+          },
+          {
+            "name": "pPropertyValue",
+            "type": "void*"
+          }
+        ],
+        "prototype": "void EditorSetObjectProperty(int64 iObjectID, uint32 iPropertyID, void* pPropertyValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectProperty",
+        "native_name": "EditorGetObjectProperty",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "void* EditorGetObjectProperty(int64 iObjectID, uint32 iPropertyID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetListOfItems",
+        "native_name": "EditorGetListOfItems",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "uint32"
+          },
+          {
+            "name": "seperator",
+            "type": "string"
+          }
+        ],
+        "prototype": "string EditorGetListOfItems(uint32 iSceneID, int64 iObjectID, uint32 iPropertyID, string seperator)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorFlyToObject",
+        "native_name": "EditorFlyToObject",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "void EditorFlyToObject(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectSelectedByIndex",
+        "native_name": "EditorGetObjectSelectedByIndex",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "iIndex",
+            "type": "int32"
+          }
+        ],
+        "prototype": "int64 EditorGetObjectSelectedByIndex(int32 iIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectSelected",
+        "native_name": "EditorSetObjectSelected",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "bClearFirst",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetObjectSelected(int64 iObjectID, bool bClearFirst)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetObjectParent",
+        "native_name": "EditorSetObjectParent",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iParentID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "void EditorSetObjectParent(int64 iObjectID, int64 iParentID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectParent",
+        "native_name": "EditorGetObjectParent",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "int64 EditorGetObjectParent(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorPollObjectIDByIndex",
+        "native_name": "EditorPollObjectIDByIndex",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "int64 EditorPollObjectIDByIndex(uint32 iSceneID, uint32 iIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorPollObjects",
+        "native_name": "EditorPollObjects",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iSize",
+            "type": "ref int32"
+          }
+        ],
+        "prototype": "void* EditorPollObjects(uint32 iSceneID, ref int32 iSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectDescriptorID",
+        "native_name": "EditorGetObjectDescriptorID",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "uint32 EditorGetObjectDescriptorID(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectSceneID",
+        "native_name": "EditorGetObjectSceneID",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "uint32 EditorGetObjectSceneID(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorFireEvent",
+        "native_name": "EditorFireEvent",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iEventID",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "void EditorFireEvent(uint32 iSceneID, int64 iObjectID, uint32 iEventID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetSceneVisible",
+        "native_name": "EditorSetSceneVisible",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "bVisible",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetSceneVisible(uint32 iSceneID, bool bVisible)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectSnap",
+        "native_name": "EditorGetObjectSnap",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iSize",
+            "type": "ref int32"
+          },
+          {
+            "name": "bIncludeHorizontal",
+            "type": "bool"
+          },
+          {
+            "name": "bIncludeVertical",
+            "type": "bool"
+          },
+          {
+            "name": "bIncludeRotation",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void* EditorGetObjectSnap(int64 iObjectID, ref int32 iSize, bool bIncludeHorizontal, bool bIncludeVertical, bool bIncludeRotation)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectsCreatedThisRender",
+        "native_name": "EditorGetObjectsCreatedThisRender",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iSize",
+            "type": "ref int32"
+          }
+        ],
+        "prototype": "void* EditorGetObjectsCreatedThisRender(ref int32 iSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadAllAssets",
+        "native_name": "EditorReloadAllAssets",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorReloadAllAssets()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadModFileFilter",
+        "native_name": "reloadModFileFilter",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadModFileFilter()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "GetEnabledModNames",
+        "native_name": "GetEnabledModNames",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string GetEnabledModNames()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "GetModNames",
+        "native_name": "GetModNames",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string GetModNames()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "SetModEnabled",
+        "native_name": "SetModEnabled",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "ModName",
+            "type": "string"
+          },
+          {
+            "name": "bEnabled",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void SetModEnabled(string ModName, bool bEnabled)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadCinematics",
+        "native_name": "reloadCinematics",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadCinematics()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadEditorLayoutLinks",
+        "native_name": "reloadEditorLayoutLinks",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadEditorLayoutLinks()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadMissiles",
+        "native_name": "reloadMissiles",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadMissiles()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadPlayer",
+        "native_name": "EditorReloadPlayer",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorReloadPlayer(string file)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadProp",
+        "native_name": "EditorReloadProp",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorReloadProp(string file)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadMonster",
+        "native_name": "EditorReloadMonster",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorReloadMonster(string file)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadMonsters",
+        "native_name": "EditorReloadMonsters",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorReloadMonsters()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadItem",
+        "native_name": "EditorReloadItem",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorReloadItem(string file)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadTextures",
+        "native_name": "reloadTextures",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadTextures()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadItemSets",
+        "native_name": "reloadItemSets",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadItemSets()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadUnitThemes",
+        "native_name": "reloadUnitThemes",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadUnitThemes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadEditorParticles",
+        "native_name": "reloadEditorParticles",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadEditorParticles()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadRecipes",
+        "native_name": "reloadRecipes",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadRecipes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadQuests",
+        "native_name": "reloadQuests",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadQuests()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "reloadSpawnClasses",
+        "native_name": "reloadSpawnClasses",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void reloadSpawnClasses()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "rollRoomPiece",
+        "native_name": "rollRoomPiece",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "void rollRoomPiece(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorMakeGuid",
+        "native_name": "EditorMakeGuid",
+        "return_type": "int64",
+        "parameters": [],
+        "prototype": "int64 EditorMakeGuid()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorFileExists",
+        "native_name": "EditorFileExists",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "prototype": "uint32 EditorFileExists(string file)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorConvertLayoutToNewTileset",
+        "native_name": "EditorConvertLayoutToNewTileset",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "tilesetName",
+            "type": "string"
+          },
+          {
+            "name": "layoutfile",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorConvertLayoutToNewTileset(string tilesetName, string layoutfile)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSaveScene",
+        "native_name": "EditorSaveScene",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "sceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "fileAndPath",
+            "type": "string"
+          },
+          {
+            "name": "bSelectedOnly",
+            "type": "bool"
+          }
+        ],
+        "prototype": "bool EditorSaveScene(uint32 sceneID, string fileAndPath, bool bSelectedOnly)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorLoadScene",
+        "native_name": "EditorLoadScene",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "sceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "fileAndPath",
+            "type": "string"
+          },
+          {
+            "name": "bClearFirst",
+            "type": "bool"
+          }
+        ],
+        "prototype": "uint32 EditorLoadScene(uint32 sceneID, string fileAndPath, bool bClearFirst)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineSetPercentDone",
+        "native_name": "EditorTimelineSetPercentDone",
+        "return_type": "float32",
+        "parameters": [
+          {
+            "name": "nTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "fPercent",
+            "type": "float32"
+          }
+        ],
+        "prototype": "float32 EditorTimelineSetPercentDone(int64 nTimelineObjectID, float32 fPercent)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineUpdate",
+        "native_name": "EditorTimelineUpdate",
+        "return_type": "float32",
+        "parameters": [
+          {
+            "name": "nTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "dt",
+            "type": "float32"
+          }
+        ],
+        "prototype": "float32 EditorTimelineUpdate(int64 nTimelineObjectID, float32 dt)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineAddProperty",
+        "native_name": "EditorTimelineAddProperty",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "nTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorTimelineAddProperty(int64 nTimelineObjectID, int64 nObjectID, int32 nPropertyID, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineRemoveProperty",
+        "native_name": "EditorTimelineRemoveProperty",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "bool EditorTimelineRemoveProperty(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineAddPointToProperty",
+        "native_name": "EditorTimelineAddPointToProperty",
+        "return_type": "int32",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "int32 EditorTimelineAddPointToProperty(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineSetPropertyInterpType",
+        "native_name": "EditorTimelineSetPropertyInterpType",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "nTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "nameType",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorTimelineSetPropertyInterpType(int64 nTimelineObjectID, int64 nObjectID, int32 nPropertyID, string nameType)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetPropertyInterpType",
+        "native_name": "EditorTimelineGetPropertyInterpType",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "nTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          }
+        ],
+        "prototype": "string EditorTimelineGetPropertyInterpType(int64 nTimelineObjectID, int64 nObjectID, int32 nPropertyID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineRemovePointFromProperty",
+        "native_name": "EditorTimelineRemovePointFromProperty",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "bool EditorTimelineRemovePointFromProperty(int64 iTimelineObjectID, int64 iObjectID, int32 nPropertyID, int32 iPointID, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineSetPropertyPointValue",
+        "native_name": "EditorTimelineSetPropertyPointValue",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          },
+          {
+            "name": "pValue",
+            "type": "void*"
+          }
+        ],
+        "prototype": "void EditorTimelineSetPropertyPointValue(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 iPointID, void* pValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineSetPropertyPointValueArray",
+        "native_name": "EditorTimelineSetPropertyPointValueArray",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          },
+          {
+            "name": "iSize",
+            "type": "int32"
+          },
+          {
+            "name": "pValue",
+            "type": "Editor.UnionData[]"
+          }
+        ],
+        "prototype": "void EditorTimelineSetPropertyPointValueArray(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 iPointID, int32 iSize, Editor.UnionData[] pValue)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineSetPropertyPointTimePercent",
+        "native_name": "EditorTimelineSetPropertyPointTimePercent",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          },
+          {
+            "name": "fTimePercent",
+            "type": "float32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorTimelineSetPropertyPointTimePercent(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 iPointID, float32 fTimePercent, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetTimePercentAtPoint",
+        "native_name": "EditorTimelineGetTimePercentAtPoint",
+        "return_type": "float32",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "nPointID",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "float32 EditorTimelineGetTimePercentAtPoint(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 nPointID, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetValueAtPoint",
+        "native_name": "EditorTimelineGetValueAtPoint",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void* EditorTimelineGetValueAtPoint(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 iPointID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetValueAtPointArray",
+        "native_name": "EditorTimelineGetValueAtPointArray",
+        "return_type": "void*",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointID",
+            "type": "int32"
+          },
+          {
+            "name": "iSize",
+            "type": "ref int32"
+          }
+        ],
+        "prototype": "void* EditorTimelineGetValueAtPointArray(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyID, int32 iPointID, ref int32 iSize)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetObjectIDInTimelineByIndex",
+        "native_name": "EditorTimelineGetObjectIDInTimelineByIndex",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iIndex",
+            "type": "int32"
+          }
+        ],
+        "prototype": "int64 EditorTimelineGetObjectIDInTimelineByIndex(int64 iTimelineObjectID, int32 iIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetPropertyIDForObjectInTimelineByIndex",
+        "native_name": "EditorTimelineGetPropertyIDForObjectInTimelineByIndex",
+        "return_type": "int32",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyIndex",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "ref bool"
+          }
+        ],
+        "prototype": "int32 EditorTimelineGetPropertyIDForObjectInTimelineByIndex(int64 iTimelineObjectID, int64 iObjectID, int32 iPropertyIndex, ref bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorTimelineGetPointIDInTimelinePropertyByIndex",
+        "native_name": "EditorTimelineGetPointIDInTimelinePropertyByIndex",
+        "return_type": "int32",
+        "parameters": [
+          {
+            "name": "iTimelineObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "iPropertyID",
+            "type": "int32"
+          },
+          {
+            "name": "iPointIndex",
+            "type": "int32"
+          },
+          {
+            "name": "bIsEventProperty",
+            "type": "bool"
+          }
+        ],
+        "prototype": "int32 EditorTimelineGetPointIDInTimelinePropertyByIndex(int64 iTimelineObjectID, int64 nObjectID, int32 iPropertyID, int32 iPointIndex, bool bIsEventProperty)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetLogicFuncId",
+        "native_name": "EditorGetLogicFuncId",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "iSceneID",
+            "type": "uint32"
+          },
+          {
+            "name": "iDescriptorID",
+            "type": "uint32"
+          },
+          {
+            "name": "LogicFuncRefName",
+            "type": "string"
+          },
+          {
+            "name": "bIsInputFunc",
+            "type": "bool"
+          }
+        ],
+        "prototype": "uint32 EditorGetLogicFuncId(uint32 iSceneID, uint32 iDescriptorID, string LogicFuncRefName, bool bIsInputFunc)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorCreateLogicObject",
+        "native_name": "EditorCreateLogicObject",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nObjectIDToRef",
+            "type": "int64"
+          }
+        ],
+        "prototype": "uint32 EditorCreateLogicObject(int64 nLogicGroupID, int64 nObjectIDToRef)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorCreateLogicLink",
+        "native_name": "EditorCreateLogicLink",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIDOutput",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicObjectIDInput",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicOutputIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicInputIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "uint32 EditorCreateLogicLink(int64 nLogicGroupID, uint32 nLogicObjectIDOutput, uint32 nLogicObjectIDInput, uint32 nLogicOutputIndex, uint32 nLogicInputIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDeleteLogicObject",
+        "native_name": "EditorDeleteLogicObject",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "int32"
+          }
+        ],
+        "prototype": "bool EditorDeleteLogicObject(int64 nLogicGroupID, int32 nLogicObjectIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorDeleteLogicLink",
+        "native_name": "EditorDeleteLogicLink",
+        "return_type": "bool",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicLinkIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "bool EditorDeleteLogicLink(int64 nLogicGroupID, uint32 nLogicObjectIndex, uint32 nLogicLinkIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetCountOfLogicLinksInLogicObject",
+        "native_name": "EditorGetCountOfLogicLinksInLogicObject",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "uint32 EditorGetCountOfLogicLinksInLogicObject(int64 nLogicGroupID, uint32 nLogicObjectIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetLogicLinkOutputFunctionID",
+        "native_name": "EditorGetLogicLinkOutputFunctionID",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicLinkIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "uint32 EditorGetLogicLinkOutputFunctionID(int64 nLogicGroupID, uint32 nLogicObjectIndex, uint32 nLogicLinkIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetLogicLinkInputFunctionID",
+        "native_name": "EditorGetLogicLinkInputFunctionID",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicLinkIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "uint32 EditorGetLogicLinkInputFunctionID(int64 nLogicGroupID, uint32 nLogicObjectIndex, uint32 nLogicLinkIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetLogicObjectIDLinkingTo",
+        "native_name": "EditorGetLogicObjectIDLinkingTo",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "nLogicLinkIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "uint32 EditorGetLogicObjectIDLinkingTo(int64 nLogicGroupID, uint32 nLogicObjectIndex, uint32 nLogicLinkIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetCountOfLogicObjectsInLogicGroup",
+        "native_name": "EditorGetCountOfLogicObjectsInLogicGroup",
+        "return_type": "uint32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "uint32 EditorGetCountOfLogicObjectsInLogicGroup(int64 nLogicGroupID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetObjectIDRefedInLogicObject",
+        "native_name": "EditorGetObjectIDRefedInLogicObject",
+        "return_type": "int64",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "int64 EditorGetObjectIDRefedInLogicObject(int64 nLogicGroupID, uint32 nLogicObjectIndex)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetLogicObjectPosition",
+        "native_name": "EditorSetLogicObjectPosition",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "x",
+            "type": "int32"
+          },
+          {
+            "name": "y",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetLogicObjectPosition(int64 nLogicGroupID, uint32 nLogicObjectIndex, int32 x, int32 y)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetLogicObjectPosition",
+        "native_name": "EditorGetLogicObjectPosition",
+        "return_type": "int32",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIndex",
+            "type": "uint32"
+          },
+          {
+            "name": "x",
+            "type": "ref int32"
+          },
+          {
+            "name": "y",
+            "type": "ref int32"
+          }
+        ],
+        "prototype": "int32 EditorGetLogicObjectPosition(int64 nLogicGroupID, uint32 nLogicObjectIndex, ref int32 x, ref int32 y)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorInvokeOutputFunction",
+        "native_name": "EditorInvokeOutputFunction",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "nLogicGroupID",
+            "type": "int64"
+          },
+          {
+            "name": "nLogicObjectIDOutput",
+            "type": "uint32"
+          },
+          {
+            "name": "nOutputFunctionID",
+            "type": "uint32"
+          }
+        ],
+        "prototype": "void EditorInvokeOutputFunction(int64 nLogicGroupID, uint32 nLogicObjectIDOutput, uint32 nOutputFunctionID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetDebugOutput",
+        "native_name": "EditorGetDebugOutput",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetDebugOutput()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetModelAnimationLengthSeconds",
+        "native_name": "EditorGetModelAnimationLengthSeconds",
+        "return_type": "float32",
+        "parameters": [
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "animationName",
+            "type": "string"
+          }
+        ],
+        "prototype": "float32 EditorGetModelAnimationLengthSeconds(int64 nObjectID, string animationName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadModelAnimations",
+        "native_name": "EditorReloadModelAnimations",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "void EditorReloadModelAnimations(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetAnimationKeyTypes",
+        "native_name": "EditorGetAnimationKeyTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetAnimationKeyTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetUnitThemes",
+        "native_name": "EditorGetUnitThemes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetUnitThemes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetDamageTypes",
+        "native_name": "EditorGetDamageTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetDamageTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetUnitsByUnittype",
+        "native_name": "EditorGetUnitsByUnittype",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "UnitType",
+            "type": "string"
+          }
+        ],
+        "prototype": "string EditorGetUnitsByUnittype(string UnitType)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetUnits",
+        "native_name": "EditorGetUnits",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetUnits()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSpawnClasses",
+        "native_name": "EditorGetSpawnClasses",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSpawnClasses()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetDungeons",
+        "native_name": "EditorGetDungeons",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetDungeons()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetCinematics",
+        "native_name": "EditorGetCinematics",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetCinematics()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorAutomapTiles",
+        "native_name": "EditorAutomapTiles",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorAutomapTiles()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetMissiles",
+        "native_name": "EditorGetMissiles",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetMissiles()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadSkill",
+        "native_name": "EditorReloadSkill",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "filename",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorReloadSkill(string filename)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkills",
+        "native_name": "EditorGetSkills",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkills()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkillEventTypes",
+        "native_name": "EditorGetSkillEventTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkillEventTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetAffixes",
+        "native_name": "EditorGetAffixes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetAffixes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkillTypes",
+        "native_name": "EditorGetSkillTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkillTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkillTargetTypes",
+        "native_name": "EditorGetSkillTargetTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkillTargetTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkillEffectAndAffixTargetTypes",
+        "native_name": "EditorGetSkillEffectAndAffixTargetTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkillEffectAndAffixTargetTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkillActivationTypes",
+        "native_name": "EditorGetSkillActivationTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSkillActivationTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetQuests",
+        "native_name": "EditorGetQuests",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetQuests()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSets",
+        "native_name": "EditorGetSets",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSets()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetUnitTypes",
+        "native_name": "EditorGetUnitTypes",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetUnitTypes()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetAlignments",
+        "native_name": "EditorGetAlignments",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetAlignments()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetAIFlags",
+        "native_name": "EditorGetAIFlags",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetAIFlags()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetGraphNames",
+        "native_name": "EditorGetGraphNames",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetGraphNames()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSkeletonBoneList",
+        "native_name": "EditorGetSkeletonBoneList",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "nObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "string EditorGetSkeletonBoneList(int64 nObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetAnimationNameByPath",
+        "native_name": "EditorGetAnimationNameByPath",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "animationPath",
+            "type": "string"
+          }
+        ],
+        "prototype": "string EditorGetAnimationNameByPath(int64 iObjectID, string animationPath)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetActiveAnimationPaused",
+        "native_name": "EditorSetActiveAnimationPaused",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "bPaused",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetActiveAnimationPaused(int64 iObjectID, bool bPaused)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetActiveAnimationTimePosition",
+        "native_name": "EditorSetActiveAnimationTimePosition",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          },
+          {
+            "name": "fTimePosition",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetActiveAnimationTimePosition(int64 iObjectID, float32 fTimePosition)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetActiveAnimationTimePosition",
+        "native_name": "EditorGetActiveAnimationTimePosition",
+        "return_type": "float32",
+        "parameters": [
+          {
+            "name": "iObjectID",
+            "type": "int64"
+          }
+        ],
+        "prototype": "float32 EditorGetActiveAnimationTimePosition(int64 iObjectID)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSoundCategories",
+        "native_name": "EditorGetSoundCategories",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSoundCategories()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorPlaySound",
+        "native_name": "EditorPlaySound",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fileName",
+            "type": "string"
+          },
+          {
+            "name": "vol",
+            "type": "float32"
+          },
+          {
+            "name": "volVar",
+            "type": "float32"
+          },
+          {
+            "name": "freqVar",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorPlaySound(string fileName, float32 vol, float32 volVar, float32 freqVar)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorPlayMusic",
+        "native_name": "EditorPlayMusic",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fileName",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorPlayMusic(string fileName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorStopMusic",
+        "native_name": "EditorStopMusic",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorStopMusic()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSoundNamesByCategory",
+        "native_name": "EditorGetSoundNamesByCategory",
+        "return_type": "string",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "type": "string"
+          }
+        ],
+        "prototype": "string EditorGetSoundNamesByCategory(string categoryName)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetSoundNames",
+        "native_name": "EditorGetSoundNames",
+        "return_type": "string",
+        "parameters": [],
+        "prototype": "string EditorGetSoundNames()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorReloadSoundData",
+        "native_name": "EditorReloadSoundData",
+        "return_type": "void",
+        "parameters": [],
+        "prototype": "void EditorReloadSoundData()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetMuted",
+        "native_name": "EditorSetMuted",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "bMuted",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorSetMuted(bool bMuted)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorGetMuted",
+        "native_name": "EditorGetMuted",
+        "return_type": "bool",
+        "parameters": [],
+        "prototype": "bool EditorGetMuted()"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorResetCamera",
+        "native_name": "EditorResetCamera",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "x",
+            "type": "float32"
+          },
+          {
+            "name": "y",
+            "type": "float32"
+          },
+          {
+            "name": "z",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorResetCamera(float32 x, float32 y, float32 z)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetPOVVelocityMult",
+        "native_name": "EditorSetPOVVelocityMult",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fMult",
+            "type": "float32"
+          }
+        ],
+        "prototype": "void EditorSetPOVVelocityMult(float32 fMult)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorParticleMovementConfig",
+        "native_name": "EditorParticleMovementConfig",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "fDuration",
+            "type": "ref float32"
+          },
+          {
+            "name": "fRadius",
+            "type": "ref float32"
+          },
+          {
+            "name": "bSetValues",
+            "type": "bool"
+          }
+        ],
+        "prototype": "void EditorParticleMovementConfig(ref float32 fDuration, ref float32 fRadius, bool bSetValues)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetIngameRes",
+        "native_name": "EditorSetIngameRes",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "width",
+            "type": "int32"
+          },
+          {
+            "name": "height",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetIngameRes(int32 width, int32 height)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorSetModPriority",
+        "native_name": "EditorSetModPriority",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "modDirectory",
+            "type": "string"
+          },
+          {
+            "name": "iPriority",
+            "type": "int32"
+          }
+        ],
+        "prototype": "void EditorSetModPriority(string modDirectory, int32 iPriority)"
+      },
+      {
+        "managed_owner": "Editor.EditorConnection",
+        "managed_name": "EditorCreateMod",
+        "native_name": "EditorCreateMod",
+        "return_type": "void",
+        "parameters": [
+          {
+            "name": "modDirectory",
+            "type": "string"
+          }
+        ],
+        "prototype": "void EditorCreateMod(string modDirectory)"
+      }
+    ]
+  },
+  "installer": {
+    "name": "TorchEDInstaller-1.0.exe",
+    "size": 402491888,
+    "sha256": "47d2f9cb00bb4754c293b473a76f7eeaeb3155274ad6aaa1ac9145ceaf86e216",
+    "file_type": "PE32 executable for MS Windows 4.00 (GUI), Intel i386, Nullsoft Installer self-extracting archive, 5 sections",
+    "md5": "01ac7edcc21538da202b222933a5e621"
+  },
+  "linux_original_comparison": {
+    "binary": {
+      "name": "Torchlight.bin.x86_64",
+      "size": 16572528,
+      "sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "file_type": "ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.18, BuildID[sha1]=9d135e05d983d5c6053dca2e4559cabbb3112a83, not stripped"
+    },
+    "torched_rtti_classes_found": 318,
+    "torched_rtti_classes_missing": [
+      "type_info"
+    ],
+    "torched_engine_classes_found": 302,
+    "torched_engine_classes_missing": []
+  }
+}
