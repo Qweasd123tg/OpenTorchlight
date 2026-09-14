@@ -203,6 +203,22 @@ int main(int argc, char** argv) {
         require(std::hypot(center_ground[0] - player_start[0],
                            center_ground[2] - player_start[2]) < 1.0F,
                 "camera center does not project back near the player");
+        const auto left_ground = mine_renderer.ground_position_at_pixel(
+            kWidth / 4, kHeight / 2, kWidth, kHeight, player_start[1]);
+        const auto right_ground = mine_renderer.ground_position_at_pixel(
+            kWidth * 3 / 4, kHeight / 2, kWidth, kHeight, player_start[1]);
+        require(left_ground[0] < player_start[0] && left_ground[2] < player_start[2] &&
+                    right_ground[0] > player_start[0] &&
+                    right_ground[2] > player_start[2],
+                "camera horizontal axis is not mirrored into layout space");
+        const auto bottom_ground = mine_renderer.ground_position_at_pixel(
+            kWidth / 2, kHeight / 4, kWidth, kHeight, player_start[1]);
+        const auto top_ground = mine_renderer.ground_position_at_pixel(
+            kWidth / 2, kHeight * 3 / 4, kWidth, kHeight, player_start[1]);
+        require(bottom_ground[0] > player_start[0] &&
+                    bottom_ground[2] < player_start[2] &&
+                    top_ground[0] < player_start[0] && top_ground[2] > player_start[2],
+                "camera vertical axis is upside down");
         const auto& mine_stats = mine_renderer.stats();
         require(mine_stats.instances == mine_geometry.instances.size(),
                 "generated mine renderer has the wrong instance count");

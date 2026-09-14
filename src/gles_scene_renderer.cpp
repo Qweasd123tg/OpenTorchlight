@@ -27,6 +27,7 @@ constexpr float kOriginalCameraFovRadians = 45.0F * kDegreesToRadians;
 constexpr float kOriginalCameraNearClip = 0.1F;
 constexpr float kOriginalCameraFarClip = 500.0F;
 constexpr std::array<float, 3> kOriginalCameraOffset{0.4F, 0.6F, -0.4F};
+constexpr float kLayoutCameraAzimuthCorrection = 35.0F * kDegreesToRadians;
 
 class GlesSceneError : public std::runtime_error {
 public:
@@ -432,14 +433,21 @@ public:
         float scale_y = 0.0F;
         if (camera_target_.has_value()) {
             last_camera_position_ = *camera_target_;
+            const float camera_cosine = std::cos(kLayoutCameraAzimuthCorrection);
+            const float camera_sine = std::sin(kLayoutCameraAzimuthCorrection);
+            const std::array<float, 3> camera_offset{
+                kOriginalCameraOffset[0] * camera_cosine +
+                    kOriginalCameraOffset[2] * camera_sine,
+                kOriginalCameraOffset[1],
+                -kOriginalCameraOffset[0] * camera_sine +
+                    kOriginalCameraOffset[2] * camera_cosine};
             for (std::size_t axis = 0; axis < 3; ++axis) {
-                last_camera_position_[axis] +=
-                    kOriginalCameraOffset[axis] * camera_distance_;
+                last_camera_position_[axis] += camera_offset[axis] * camera_distance_;
             }
             last_camera_forward_ = normalized(subtract(*camera_target_, last_camera_position_));
             last_camera_right_ = normalized(
-                cross(last_camera_forward_, std::array<float, 3>{0.0F, 1.0F, 0.0F}));
-            last_camera_up_ = normalized(cross(last_camera_right_, last_camera_forward_));
+                cross(std::array<float, 3>{0.0F, 1.0F, 0.0F}, last_camera_forward_));
+            last_camera_up_ = normalized(cross(last_camera_forward_, last_camera_right_));
             last_tangent_half_fov_ = std::tan(kOriginalCameraFovRadians * 0.5F);
             last_aspect_ = aspect;
             last_perspective_ready_ = true;
