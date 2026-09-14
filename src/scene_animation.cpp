@@ -114,6 +114,22 @@ std::vector<const PakArchive::Entry*> sibling_animation_entries(
     return result;
 }
 
+std::vector<std::string_view> animation_stems(SceneAnimationKind kind) {
+    switch (kind) {
+    case SceneAnimationKind::idle:
+        return {"idle"};
+    case SceneAnimationKind::run:
+        return {"run"};
+    case SceneAnimationKind::attack:
+        return {"attack"};
+    case SceneAnimationKind::hit:
+        return {"hit"};
+    case SceneAnimationKind::death:
+        return {"die", "death"};
+    }
+    return {};
+}
+
 } // namespace
 
 std::vector<SceneMeshAnimation> load_scene_idle_animations(
@@ -127,11 +143,7 @@ std::vector<SceneMeshAnimation> load_scene_animations(
     const PakArchive& archive, const FixedSceneGeometry& geometry,
     SceneAnimationKind kind,
     std::optional<std::size_t> excluded_mesh_index) {
-    const auto animation_stem = kind == SceneAnimationKind::idle
-                                    ? std::string_view{"idle"}
-                                    : kind == SceneAnimationKind::run
-                                          ? std::string_view{"run"}
-                                          : std::string_view{"attack"};
+    const auto stems = animation_stems(kind);
     std::vector<SceneMeshAnimation> result;
     for (std::size_t mesh_index = 0; mesh_index < geometry.meshes.size(); ++mesh_index) {
         if (excluded_mesh_index && mesh_index == *excluded_mesh_index) {
@@ -147,8 +159,16 @@ std::vector<SceneMeshAnimation> load_scene_animations(
         if (bind_entry == nullptr) {
             continue;
         }
-        auto animation_entries = sibling_animation_entries(
-            archive, resource.source_path, animation_stem);
+        std::vector<const PakArchive::Entry*> animation_entries;
+        std::string_view selected_stem;
+        for (const auto stem : stems) {
+            animation_entries = sibling_animation_entries(
+                archive, resource.source_path, stem);
+            if (!animation_entries.empty()) {
+                selected_stem = stem;
+                break;
+            }
+        }
         if (animation_entries.empty()) {
             continue;
         }
@@ -161,7 +181,7 @@ std::vector<SceneMeshAnimation> load_scene_animations(
                 candidate.animations.begin(), candidate.animations.end(),
                 [&](const auto& animation) {
                     return ascii_equal_case_insensitive(
-                               animation.name, animation_stem) &&
+                               animation.name, selected_stem) &&
                            animation.length > 0.0F;
                 });
             if (candidate_clip == candidate.animations.end()) {

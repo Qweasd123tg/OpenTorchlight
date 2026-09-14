@@ -701,6 +701,12 @@ int main(int argc, char** argv) {
             auto scene_attack_animations = torchlight::load_scene_animations(
                 archive, level.geometry, torchlight::SceneAnimationKind::attack,
                 player_mesh_index);
+            auto scene_hit_animations = torchlight::load_scene_animations(
+                archive, level.geometry, torchlight::SceneAnimationKind::hit,
+                player_mesh_index);
+            auto scene_death_animations = torchlight::load_scene_animations(
+                archive, level.geometry, torchlight::SceneAnimationKind::death,
+                player_mesh_index);
             torchlight::CombatController combat(
                 players.front(), level_seed(options.seed, level.address.depth));
             torchlight::PlayerCombatState player_combat(
@@ -743,7 +749,7 @@ int main(int argc, char** argv) {
             enum class PlayerAnimationState { idle, run, attack };
             PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
             bool player_attack_animation_active = false;
-            enum class EnemyAnimationState { idle, run, attack };
+            enum class EnemyAnimationState { idle, run, attack, hit, death, hidden };
             struct EnemyAnimationPlayback {
                 EnemyAnimationState state = EnemyAnimationState::idle;
                 float time = 0.0F;
@@ -801,6 +807,12 @@ int main(int argc, char** argv) {
                         player_mesh_index);
                     scene_attack_animations = torchlight::load_scene_animations(
                         archive, level.geometry, torchlight::SceneAnimationKind::attack,
+                        player_mesh_index);
+                    scene_hit_animations = torchlight::load_scene_animations(
+                        archive, level.geometry, torchlight::SceneAnimationKind::hit,
+                        player_mesh_index);
+                    scene_death_animations = torchlight::load_scene_animations(
+                        archive, level.geometry, torchlight::SceneAnimationKind::death,
                         player_mesh_index);
                     scene_animation_accumulator = 1.0F;
                     renderer->set_camera_target(
@@ -1015,6 +1027,11 @@ int main(int argc, char** argv) {
                         update.state == torchlight::CombatState::killed) {
                         player_attack_animation_active = true;
                         player_animation_time = 0.0F;
+                        auto& playback = enemy_animation_playback[update.target_id];
+                        playback.state = update.state == torchlight::CombatState::killed
+                                             ? EnemyAnimationState::death
+                                             : EnemyAnimationState::hit;
+                        playback.time = 0.0F;
                         ++combat_attack_count;
                         std::cout << "combat_hit=" << update.target_id
                                   << " damage=" << update.damage
@@ -1040,12 +1057,6 @@ int main(int argc, char** argv) {
                     }
                     if (update.state == torchlight::CombatState::killed) {
                         ++combat_kill_count;
-                        const auto instance = runtime_instance_indices.find(
-                            update.target_id);
-                        if (instance != runtime_instance_indices.end()) {
-                            level.geometry.instances[instance->second].visible = false;
-                            renderer->set_instance_visible(instance->second, false);
-                        }
                     }
                     const auto enemy_updates = enemies.update(
                         std::min(elapsed, 0.1F), player_motion.position(),
@@ -1061,7 +1072,10 @@ int main(int argc, char** argv) {
                         };
                         if (enemy_update.state == torchlight::EnemyAiState::chasing &&
                             enemy_update.position_changed) {
-                            change_enemy_animation(EnemyAnimationState::run);
+                            if (playback.state != EnemyAnimationState::hit &&
+                                playback.state != EnemyAnimationState::death) {
+                                change_enemy_animation(EnemyAnimationState::run);
+                            }
                             ++enemy_chase_count;
                             const auto instance = runtime_instance_indices.find(
                                 enemy_update.entity_id);
@@ -1076,8 +1090,10 @@ int main(int argc, char** argv) {
                         }
                         if (enemy_update.state == torchlight::EnemyAiState::attacked ||
                             enemy_update.state == torchlight::EnemyAiState::player_killed) {
-                            playback.state = EnemyAnimationState::attack;
-                            playback.time = 0.0F;
+                            if (playback.state != EnemyAnimationState::death) {
+                                playback.state = EnemyAnimationState::attack;
+                                playback.time = 0.0F;
+                            }
                             const auto instance = runtime_instance_indices.find(
                                 enemy_update.entity_id);
                             if (instance != runtime_instance_indices.end()) {
@@ -1089,10 +1105,14 @@ int main(int argc, char** argv) {
                                       << " damage=" << enemy_update.damage
                                       << " player_health=" << enemy_update.player_health
                                       << '\n';
-                        } else if (enemy_update.state == torchlight::EnemyAiState::idle) {
+                        } else if (enemy_update.state == torchlight::EnemyAiState::idle &&
+                                   playback.state != EnemyAnimationState::hit &&
+                                   playback.state != EnemyAnimationState::death) {
                             change_enemy_animation(EnemyAnimationState::idle);
                         } else if (enemy_update.state == torchlight::EnemyAiState::waiting &&
-                                   playback.state != EnemyAnimationState::attack) {
+                                   playback.state != EnemyAnimationState::attack &&
+                                   playback.state != EnemyAnimationState::hit &&
+                                   playback.state != EnemyAnimationState::death) {
                             change_enemy_animation(EnemyAnimationState::idle);
                         }
                         if (enemy_update.state ==
@@ -1112,7 +1132,9 @@ int main(int argc, char** argv) {
                 const float animation_elapsed = std::min(elapsed, 0.1F);
                 for (auto& [entity_id, playback] : enemy_animation_playback) {
                     playback.time += animation_elapsed;
-                    if (playback.state != EnemyAnimationState::attack) {
+                    if (playback.state != EnemyAnimationState::attack &&
+                        playback.state != EnemyAnimationState::hit &&
+                        playback.state != EnemyAnimationState::death) {
                         continue;
                     }
                     const auto instance = runtime_instance_indices.find(entity_id);
@@ -1121,9 +1143,23 @@ int main(int argc, char** argv) {
                     }
                     const auto mesh_index =
                         level.geometry.instances[instance->second].mesh_index;
-                    const auto* attack = animation_for_mesh(
-                        scene_attack_animations, mesh_index);
-                    if (attack != nullptr && playback.time >= attack->duration) {
+                    const torchlight::SceneMeshAnimation* one_shot = nullptr;
+                    if (playback.state == EnemyAnimationState::attack) {
+                        one_shot = animation_for_mesh(
+                            scene_attack_animations, mesh_index);
+                    } else if (playback.state == EnemyAnimationState::hit) {
+                        one_shot = animation_for_mesh(scene_hit_animations, mesh_index);
+                    } else {
+                        one_shot = animation_for_mesh(
+                            scene_death_animations, mesh_index);
+                    }
+                    if (one_shot == nullptr || playback.time >= one_shot->duration) {
+                        if (playback.state == EnemyAnimationState::death) {
+                            playback.state = EnemyAnimationState::hidden;
+                            level.geometry.instances[instance->second].visible = false;
+                            renderer->set_instance_visible(instance->second, false);
+                            continue;
+                        }
                         playback.state = EnemyAnimationState::idle;
                         playback.time = 0.0F;
                     }
@@ -1144,8 +1180,10 @@ int main(int argc, char** argv) {
                         const auto instance = runtime_instance_indices.find(entity_id);
                         const auto* entity = entity_world.find(entity_id);
                         if (instance == runtime_instance_indices.end() ||
-                            entity == nullptr || !entity->alive ||
-                            !entity->combat_targetable) {
+                            entity == nullptr ||
+                            playback.state == EnemyAnimationState::hidden ||
+                            (playback.state != EnemyAnimationState::death &&
+                             (!entity->alive || !entity->combat_targetable))) {
                             continue;
                         }
                         const auto mesh_index =
@@ -1157,6 +1195,12 @@ int main(int argc, char** argv) {
                         } else if (playback.state == EnemyAnimationState::attack) {
                             animation = animation_for_mesh(
                                 scene_attack_animations, mesh_index);
+                        } else if (playback.state == EnemyAnimationState::hit) {
+                            animation = animation_for_mesh(
+                                scene_hit_animations, mesh_index);
+                        } else if (playback.state == EnemyAnimationState::death) {
+                            animation = animation_for_mesh(
+                                scene_death_animations, mesh_index);
                         }
                         if (animation == nullptr) {
                             animation = animation_for_mesh(

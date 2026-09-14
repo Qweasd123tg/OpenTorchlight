@@ -16,6 +16,8 @@ enum class SceneAnimationKind {
     idle,
     run,
     attack,
+    hit,
+    death,
 };
 
 struct SceneMeshAnimation {
