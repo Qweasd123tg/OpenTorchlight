@@ -859,7 +859,9 @@ int main(int argc, char** argv) {
                 if (std::hypot(player_dx, player_dz) > 0.00001F) {
                     constexpr float kRadiansToDegrees = 57.295779513082320876F;
                     const float player_angle =
-                        std::atan2(player_dx, player_dz) * kRadiansToDegrees;
+                        std::remainder(
+                            std::atan2(player_dx, player_dz) * kRadiansToDegrees + 180.0F,
+                            360.0F);
                     level.geometry.instances[player_instance_index].transform.angle =
                         player_angle;
                     renderer->set_instance_angle(player_instance_index, player_angle);
