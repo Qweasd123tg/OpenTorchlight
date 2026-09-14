@@ -12,7 +12,6 @@
 namespace torchlight {
 namespace {
 
-constexpr float kDegreesToRadians = 0.01745329251994329577F;
 
 class CollisionSceneError : public std::runtime_error {
 public:
@@ -47,14 +46,10 @@ const OgreGeometry& geometry_for(const OgreMesh& mesh, const OgreSubmesh& submes
 std::array<float, 3> transformed(const std::array<float, 3>& point,
                                  const LayoutWorldTransform& transform,
                                  const std::array<float, 3>& chunk_offset) {
-    const float local_x = point[0] * transform.scale[0];
-    const float local_z = -point[2] * transform.scale[2];
-    const float radians = transform.angle * kDegreesToRadians;
-    const float cosine = std::cos(radians);
-    const float sine = std::sin(radians);
-    return {chunk_offset[0] + transform.position[0] + local_x * cosine + local_z * sine,
-            chunk_offset[1] + transform.position[1] + point[1] * transform.scale[1],
-            chunk_offset[2] + transform.position[2] - local_x * sine + local_z * cosine};
+    auto result = transform_point(transform.position, transform.orientation,
+                                  transform.scale, point);
+    for (std::size_t axis = 0; axis < 3; ++axis) result[axis] += chunk_offset[axis];
+    return result;
 }
 
 bool degenerate(const CollisionTriangle& triangle) {

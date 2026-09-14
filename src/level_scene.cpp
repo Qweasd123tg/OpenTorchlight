@@ -15,7 +15,6 @@
 namespace torchlight {
 namespace {
 
-constexpr float kDegreesToRadians = 0.01745329251994329577F;
 
 class LevelSceneError : public std::runtime_error {
 public:
@@ -302,6 +301,23 @@ void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& ob
             object.scale_y = uniform_scale;
             object.scale_z = float_value(*properties, u"SCALE Z", uniform_scale);
             object.angle = numeric_float_value(*properties, u"ANGLE", 0.0F);
+            // TorchED serializes the columns of the local orientation matrix.
+            // ANGLE alone is insufficient: room pieces can also pitch and roll.
+            constexpr const char16_t* axes[9]{
+                u"RIGHTX", u"UPX", u"FORWARDX", u"RIGHTY", u"UPY", u"FORWARDY",
+                u"RIGHTZ", u"UPZ", u"FORWARDZ"};
+            auto orientation = kIdentityRotation;
+            bool has_orientation = false;
+            for (std::size_t axis = 0; axis < orientation.size(); ++axis) {
+                if (const auto value = optional_float(*properties, axes[axis])) {
+                    if (!std::isfinite(*value)) {
+                        throw LevelSceneError("Layout orientation is not finite");
+                    }
+                    orientation[axis] = *value;
+                    has_orientation = true;
+                }
+            }
+            if (has_orientation) object.orientation = orientation;
             object.piece_guid = optional_decimal(*properties, u"GUID");
             object.resource_file = text_value(*properties, u"FILE");
             object.monster = text_value(*properties, u"MONSTER");
@@ -614,7 +630,7 @@ std::vector<LayoutWorldTransform> resolve_layout_world_transforms(const LayoutMa
         local.position = {object.position_x.value_or(0.0F), object.position_y.value_or(0.0F),
                           object.position_z.value_or(0.0F)};
         local.scale = {object.scale_x, object.scale_y, object.scale_z};
-        local.angle = object.angle;
+        local.orientation = object.orientation.value_or(yaw_rotation(object.angle));
         if (object.parent_id != -1) {
             const auto parent = by_id.find(object.parent_id);
             if (parent == by_id.end()) {
@@ -622,21 +638,13 @@ std::vector<LayoutWorldTransform> resolve_layout_world_transforms(const LayoutMa
             }
             resolve(parent->second);
             const auto& parent_transform = transforms[parent->second];
-            const float scaled_x = parent_transform.scale[0] * local.position[0];
-            const float scaled_z = parent_transform.scale[2] * local.position[2];
-            const float radians = parent_transform.angle * kDegreesToRadians;
-            const float cosine = std::cos(radians);
-            const float sine = std::sin(radians);
-            local.position[0] = parent_transform.position[0] +
-                                scaled_x * cosine + scaled_z * sine;
-            local.position[1] = parent_transform.position[1] +
-                                parent_transform.scale[1] * local.position[1];
-            local.position[2] = parent_transform.position[2] -
-                                scaled_x * sine + scaled_z * cosine;
+            local.position = transform_point(parent_transform.position,
+                parent_transform.orientation, parent_transform.scale, local.position);
             for (std::size_t axis = 0; axis < 3; ++axis) {
                 local.scale[axis] *= parent_transform.scale[axis];
             }
-            local.angle += parent_transform.angle;
+            local.orientation = compose_rotation(parent_transform.orientation,
+                                                  local.orientation);
         }
         transforms[index] = local;
         states[index] = 2;

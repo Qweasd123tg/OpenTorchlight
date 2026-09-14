@@ -10,7 +10,6 @@ namespace torchlight {
 namespace {
 
 constexpr std::size_t kMaximumEventsPerDispatch = 16384;
-constexpr float kDegreesToRadians = 0.01745329251994329577F;
 
 class LogicRuntimeError : public std::runtime_error {
 public:
@@ -425,19 +424,15 @@ void LogicRuntime::update_player_position(const std::array<float, 3>& position) 
                 const float radius = float_value(object, u"RADIUS", 1.0F) * scale;
                 inside = dx * dx + dy * dy + dz * dz <= radius * radius;
             } else {
-                const float radians = -transform.angle * kDegreesToRadians;
-                const float cosine = std::cos(radians);
-                const float sine = std::sin(radians);
-                const float local_x = dx * cosine + dz * sine;
-                const float local_z = -dx * sine + dz * cosine;
+                const auto local = inverse_rotate_vector(transform.orientation, {dx, dy, dz});
                 const float half_x = float_value(object, u"DIMENSIONSX", 1.0F) *
                                      std::abs(transform.scale[0]) * 0.5F;
                 const float half_y = float_value(object, u"DIMENSIONSY", 1.0F) *
                                      std::abs(transform.scale[1]) * 0.5F;
                 const float half_z = float_value(object, u"DIMENSIONSZ", 1.0F) *
                                      std::abs(transform.scale[2]) * 0.5F;
-                inside = std::abs(local_x) <= half_x && std::abs(dy) <= half_y &&
-                         std::abs(local_z) <= half_z;
+                inside = std::abs(local[0]) <= half_x && std::abs(local[1]) <= half_y &&
+                         std::abs(local[2]) <= half_z;
             }
         }
         if (inside && !object_state.trigger_active) {

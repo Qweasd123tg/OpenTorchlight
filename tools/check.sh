@@ -2,7 +2,7 @@
 set -euo pipefail
 
 project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-default_game_dir="/home/qweasd123tg/Документы/Torchlight/game"
+default_game_dir="/home/qweasd123tg/Games/Torchlight/game"
 game_dir="${1:-$default_game_dir}"
 original="$game_dir/Torchlight.bin.x86_64"
 

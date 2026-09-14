@@ -20,6 +20,7 @@ struct WeaponPrototype {
     std::u16string name;
     std::u16string display_name;
     std::u16string unit_type;
+    std::string mesh_path;
     std::int32_t level = 1;
     std::int32_t minimum_damage_percent = 0;
     std::int32_t maximum_damage_percent = 0;

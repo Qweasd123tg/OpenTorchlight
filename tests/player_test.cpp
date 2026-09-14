@@ -57,6 +57,16 @@ int main(int argc, char** argv) {
                     players[1].minimum_armor_bonus == 20 &&
                     players[2].minimum_armor_bonus == 20,
                 "playable passive armor effects changed");
+        require(players[0].wardrobe_texture_layers.size() == 4 &&
+                    players[0].wardrobe_texture_layers[0] ==
+                        "media/models/Alchemist/body.png" &&
+                    players[0].wardrobe_texture_layers[1] ==
+                        "media/wardrobe/alchemist/starting_chest.png" &&
+                    players[0].wardrobe_texture_layers[2] ==
+                        "media/wardrobe/alchemist/starting_gloves.png" &&
+                    players[0].wardrobe_texture_layers[3] ==
+                        "media/wardrobe/alchemist/starting_boots.png",
+                "Alchemist wardrobe base layers changed");
         require(players[0].starting_weapon &&
                     players[0].starting_weapon->name == u"Moldy Staff" &&
                     players[0].starting_weapon->guid == 5521717854978183646LL &&
@@ -65,6 +75,9 @@ int main(int argc, char** argv) {
                     players[0].starting_weapon->maximum_damage_percent == 120 &&
                     players[0].starting_weapon->rarity_damage_modifier == 80 &&
                     players[0].starting_weapon->speed_damage_modifier == 115 &&
+                    players[0].starting_weapon->mesh_path ==
+                        "media/models/weapons/staff01/staff01.MESH" &&
+                    std::fabs(players[0].weapon_scale - 0.8F) < 0.0001F &&
                     players[0].starting_weapon->base_weapon_damage == 21.0F &&
                     std::fabs(players[0].starting_weapon->range - 0.8F) < 0.0001F,
                 "Alchemist starting staff combat data changed");
@@ -79,8 +92,21 @@ int main(int argc, char** argv) {
         torchlight::append_player_geometry(archive, players[0], {0.0F, 0.0F, 50.0F}, geometry);
         require(geometry.meshes.size() == 1 && geometry.instances.size() == 1,
                 "player geometry was not appended once");
+        require(geometry.meshes.front().texture_layers ==
+                    players[0].wardrobe_texture_layers,
+                "player geometry lost its wardrobe layers");
         require(geometry.unique_vertex_count > 0 && geometry.unique_index_count > 0,
                 "player mesh has no geometry");
+        const auto weapon_instance = torchlight::append_player_weapon_geometry(
+            archive, players[0], {0.0F, 0.0F, 50.0F}, geometry);
+        require(weapon_instance && geometry.meshes.size() == 2 &&
+                    geometry.instances.size() == 2 &&
+                    geometry.meshes[geometry.instances[*weapon_instance].mesh_index]
+                            .source_path ==
+                        "media/models/weapons/staff01/staff01.MESH" &&
+                    std::fabs(geometry.instances[*weapon_instance].transform.scale[0] -
+                              0.8F) < 0.0001F,
+                "Alchemist starting staff geometry was not appended at weapon scale");
         const torchlight::LevelSceneLoader scene_loader(archive);
         const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
         const auto rules = scene_loader.load_rules(main.strata.front().ruleset);
@@ -90,7 +116,7 @@ int main(int argc, char** argv) {
         require(std::isfinite(start[0]) && std::isfinite(start[1]) &&
                     std::isfinite(start[2]),
                 "generated player start is not finite");
-        std::cout << "PASS: loaded 3 playable players and appended Alchemist mesh, vertices="
+        std::cout << "PASS: loaded 3 playable players and appended Alchemist and staff meshes, vertices="
                   << geometry.unique_vertex_count << " indices=" << geometry.unique_index_count
                   << " start=" << start[0] << ',' << start[1] << ',' << start[2] << '\n';
         return 0;

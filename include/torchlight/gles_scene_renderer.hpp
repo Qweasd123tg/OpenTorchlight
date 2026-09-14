@@ -38,6 +38,8 @@ public:
     void set_instance_position(std::size_t instance_index,
                                const std::array<float, 3>& position);
     void set_instance_angle(std::size_t instance_index, float angle_degrees);
+    void set_instance_transform(std::size_t instance_index,
+                                const LayoutWorldTransform& transform);
     void set_instance_visible(std::size_t instance_index, bool visible);
     void set_mesh_pose(const OgreMeshPose& pose);
     void set_instance_pose(std::size_t instance_index, const OgreMeshPose& pose);

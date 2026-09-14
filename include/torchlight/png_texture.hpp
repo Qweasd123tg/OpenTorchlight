@@ -19,4 +19,8 @@ struct PngImage {
 
 [[nodiscard]] PngImage decode_png(const std::vector<std::uint8_t>& bytes);
 
+// CWardrobe::update copies the opaque base and source-alpha composites each
+// following same-size layer, forcing the destination alpha to 255.
+[[nodiscard]] PngImage compose_png_layers(const std::vector<PngImage>& layers);
+
 } // namespace torchlight

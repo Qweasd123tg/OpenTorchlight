@@ -19,12 +19,20 @@ enum class DdsFormat {
     rgba32,
 };
 
+struct DdsMipLevel {
+    std::uint32_t width = 0;
+    std::uint32_t height = 0;
+    std::vector<std::uint8_t> rgba;
+};
+
 struct DdsImage {
     std::uint32_t width = 0;
     std::uint32_t height = 0;
     std::uint32_t mip_count = 1;
     DdsFormat format = DdsFormat::dxt1;
     std::vector<std::uint8_t> rgba;
+    // Authored DDS levels after the base image, in descending size order.
+    std::vector<DdsMipLevel> additional_mipmaps;
 };
 
 [[nodiscard]] DdsImage decode_dds(const std::vector<std::uint8_t>& bytes);

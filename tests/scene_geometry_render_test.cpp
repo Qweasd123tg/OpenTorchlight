@@ -214,6 +214,24 @@ int main(int argc, char** argv) {
                 "generated mine monster has no reusable hit animation");
         require(monster_death_animation != death_animations.end(),
                 "generated mine monster has no reusable death animation");
+        require(!monster_idle_animation->manifest_path.empty() &&
+                    monster_idle_animation->manifest_path ==
+                        monster_run_animation->manifest_path &&
+                    monster_idle_animation->manifest_path ==
+                        monster_attack_animation->manifest_path &&
+                    monster_idle_animation->manifest_path ==
+                        monster_hit_animation->manifest_path &&
+                    monster_idle_animation->manifest_path ==
+                        monster_death_animation->manifest_path,
+                "monster states were not resolved from one model manifest");
+        require(std::any_of(monster_attack_animation->event_keys.begin(),
+                            monster_attack_animation->event_keys.end(),
+                            [](const auto& key) { return key.name == "HIT"; }),
+                "manifest-selected monster attack has no original HIT event");
+        require(!monster_idle_animation->skeleton_path.empty() &&
+                    !monster_run_animation->skeleton_path.empty() &&
+                    !monster_attack_animation->skeleton_path.empty(),
+                "manifest-selected animation lost its source skeleton path");
         const auto monster_idle_pose = torchlight::sample_scene_mesh_animation(
             mine_geometry, *monster_idle_animation, 0.25F);
         require(!monster_idle_pose.geometries.empty(),
@@ -228,7 +246,7 @@ int main(int argc, char** argv) {
             torchlight::parse_ogre_skeleton(archive.read(*bind_entry));
         const auto run_skeleton =
             torchlight::parse_ogre_skeleton(archive.read(*run_entry));
-        mine_renderer.set_camera_target(player_start, 8.0F);
+        mine_renderer.set_camera_target(player_start, 20.0F);
         mine_renderer.set_instance_pose(*runtime_instance, monster_idle_pose);
         mine_renderer.set_instance_pose(
             *runtime_instance, torchlight::sample_scene_mesh_animation(
@@ -274,10 +292,10 @@ int main(int argc, char** argv) {
             kWidth / 4, kHeight / 2, kWidth, kHeight, player_start[1]);
         const auto right_ground = mine_renderer.ground_position_at_pixel(
             kWidth * 3 / 4, kHeight / 2, kWidth, kHeight, player_start[1]);
-        require(left_ground[0] < player_start[0] && left_ground[2] < player_start[2] &&
-                    right_ground[0] > player_start[0] &&
-                    right_ground[2] > player_start[2],
-                "camera horizontal axis is not mirrored into layout space");
+        require(left_ground[0] > player_start[0] && left_ground[2] > player_start[2] &&
+                    right_ground[0] < player_start[0] &&
+                    right_ground[2] < player_start[2],
+                "camera horizontal axis differs from original OGRE");
         const auto bottom_ground = mine_renderer.ground_position_at_pixel(
             kWidth / 2, kHeight / 4, kWidth, kHeight, player_start[1]);
         const auto top_ground = mine_renderer.ground_position_at_pixel(

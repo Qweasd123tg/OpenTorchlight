@@ -4,6 +4,7 @@
 
 #include <array>
 #include <cstddef>
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -11,17 +12,43 @@
 
 namespace torchlight {
 
+enum class OgreSceneBlend {
+    replace,
+    alpha,
+    add,
+    modulate,
+};
+
+enum class OgreAlphaCompare {
+    always,
+    greater,
+    greater_equal,
+};
+
+enum class OgreTextureColorOperation {
+    modulate,
+    add,
+};
+
 struct OgreMaterial {
     std::string name;
     std::string source_path;
     std::string base_material;
     std::vector<std::string> textures;
+    std::string primary_texture;
     std::array<float, 3> ambient{1.0F, 1.0F, 1.0F};
     std::array<float, 3> diffuse{1.0F, 1.0F, 1.0F};
     std::array<float, 3> emissive{0.0F, 0.0F, 0.0F};
     bool diffuse_vertex_color = false;
-    bool alpha_blend = false;
-    bool alpha_rejection = false;
+    OgreSceneBlend scene_blend = OgreSceneBlend::replace;
+    OgreAlphaCompare alpha_compare = OgreAlphaCompare::always;
+    std::uint8_t alpha_rejection_value = 0;
+    OgreTextureColorOperation texture_color_operation =
+        OgreTextureColorOperation::modulate;
+    bool depth_write = true;
+    bool lighting = true;
+    bool texture_clamp = false;
+    bool texture_filter_linear = true;
 };
 
 [[nodiscard]] std::vector<OgreMaterial> parse_ogre_material_script(

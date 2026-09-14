@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <charconv>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -169,6 +170,98 @@ std::array<float, 3> parse_rgb(const std::vector<std::string>& tokens,
     return result;
 }
 
+std::uint8_t parse_byte(std::string_view value, std::string_view directive) {
+    unsigned parsed = 0;
+    const auto result = std::from_chars(value.data(), value.data() + value.size(), parsed);
+    if (result.ec != std::errc{} || result.ptr != value.data() + value.size() ||
+        parsed > 255U) {
+        throw OgreMaterialError(std::string(directive) + " value is not a byte");
+    }
+    return static_cast<std::uint8_t>(parsed);
+}
+
+void parse_first_texture_unit(const std::vector<std::string>& tokens,
+                              std::size_t open, std::size_t close,
+                              OgreMaterial& material) {
+    for (auto index = open + 1U; index < close; ++index) {
+        const auto directive = lowercase(tokens[index]);
+        if (directive == "texture" && index + 1U < close) {
+            material.primary_texture = tokens[index + 1U];
+        } else if (directive == "tex_address_mode" && index + 1U < close) {
+            material.texture_clamp = lowercase(tokens[index + 1U]) == "clamp";
+        } else if (directive == "filtering" && index + 1U < close) {
+            material.texture_filter_linear = lowercase(tokens[index + 1U]) != "none";
+        } else if (directive == "colour_op" && index + 1U < close) {
+            material.texture_color_operation =
+                lowercase(tokens[index + 1U]) == "add"
+                    ? OgreTextureColorOperation::add
+                    : OgreTextureColorOperation::modulate;
+        }
+    }
+}
+
+void parse_first_pass(const std::vector<std::string>& tokens,
+                      std::size_t open, std::size_t close,
+                      OgreMaterial& material) {
+    bool parsed_texture_unit = false;
+    for (auto index = open + 1U; index < close; ++index) {
+        const auto directive = lowercase(tokens[index]);
+        if (directive == "texture_unit") {
+            auto child_open = index + 1U;
+            while (child_open < close && tokens[child_open] != "{") {
+                ++child_open;
+            }
+            if (child_open < close) {
+                const auto child_close = matching_brace(tokens, child_open);
+                if (!parsed_texture_unit) {
+                    parse_first_texture_unit(tokens, child_open, child_close, material);
+                    parsed_texture_unit = true;
+                }
+                index = child_close;
+            }
+        } else if (tokens[index] == "{") {
+            index = matching_brace(tokens, index);
+        } else if (directive == "ambient" && index + 3U < close) {
+            material.ambient = parse_rgb(tokens, index + 1U, close);
+            index += 3U;
+        } else if (directive == "diffuse" && index + 1U < close &&
+                   lowercase(tokens[index + 1U]) == "vertexcolour") {
+            material.diffuse_vertex_color = true;
+            ++index;
+        } else if (directive == "diffuse" && index + 3U < close) {
+            material.diffuse = parse_rgb(tokens, index + 1U, close);
+            index += 3U;
+        } else if (directive == "emissive" && index + 3U < close) {
+            material.emissive = parse_rgb(tokens, index + 1U, close);
+            index += 3U;
+        } else if (directive == "scene_blend" && index + 1U < close) {
+            const auto source = lowercase(tokens[index + 1U]);
+            if (source == "alpha_blend") {
+                material.scene_blend = OgreSceneBlend::alpha;
+            } else if (source == "add" ||
+                       (source == "one" && index + 2U < close &&
+                        lowercase(tokens[index + 2U]) == "one")) {
+                material.scene_blend = OgreSceneBlend::add;
+            } else if (source == "modulate") {
+                material.scene_blend = OgreSceneBlend::modulate;
+            }
+        } else if (directive == "alpha_rejection" && index + 2U < close) {
+            const auto comparison = lowercase(tokens[index + 1U]);
+            if (comparison == "greater") {
+                material.alpha_compare = OgreAlphaCompare::greater;
+            } else if (comparison == "greater_equal") {
+                material.alpha_compare = OgreAlphaCompare::greater_equal;
+            }
+            material.alpha_rejection_value =
+                parse_byte(tokens[index + 2U], "alpha_rejection");
+        } else if (directive == "depth_write" && index + 1U < close) {
+            material.depth_write = lowercase(tokens[index + 1U]) != "off";
+        } else if (directive == "lighting" && index + 1U < close) {
+            material.lighting = lowercase(tokens[index + 1U]) != "off";
+        }
+    }
+}
+
 } // namespace
 
 std::vector<OgreMaterial> parse_ogre_material_script(std::string_view script,
@@ -219,25 +312,21 @@ std::vector<OgreMaterial> parse_ogre_material_script(std::string_view script,
             const auto directive = lowercase(tokens[body]);
             if (directive == "texture" && body + 1 < close && tokens[body + 1] != "{") {
                 material.textures.push_back(tokens[++body]);
-            } else if (directive == "ambient" && body + 3 < close) {
-                material.ambient = parse_rgb(tokens, body + 1U, close);
-                body += 3U;
-            } else if (directive == "diffuse" && body + 1 < close &&
-                       lowercase(tokens[body + 1]) == "vertexcolour") {
-                material.diffuse_vertex_color = true;
-                ++body;
-            } else if (directive == "diffuse" && body + 3 < close) {
-                material.diffuse = parse_rgb(tokens, body + 1U, close);
-                body += 3U;
-            } else if (directive == "emissive" && body + 3 < close) {
-                material.emissive = parse_rgb(tokens, body + 1U, close);
-                body += 3U;
-            } else if (directive == "scene_blend" && body + 1 < close &&
-                       lowercase(tokens[body + 1]) == "alpha_blend") {
-                material.alpha_blend = true;
-            } else if (directive == "alpha_rejection") {
-                material.alpha_rejection = true;
             }
+        }
+        for (auto body = index + 1U; body < close; ++body) {
+            if (lowercase(tokens[body]) != "pass") {
+                continue;
+            }
+            auto pass_open = body + 1U;
+            while (pass_open < close && tokens[pass_open] != "{") {
+                ++pass_open;
+            }
+            if (pass_open < close) {
+                parse_first_pass(tokens, pass_open,
+                                 matching_brace(tokens, pass_open), material);
+            }
+            break;
         }
         material.source_path = source_path;
         result.push_back(std::move(material));

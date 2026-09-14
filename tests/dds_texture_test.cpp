@@ -55,6 +55,8 @@ int main(int argc, char** argv) {
             require(image.rgba.size() ==
                         static_cast<std::size_t>(image.width) * image.height * 4U,
                     "DDS RGBA output has the wrong size");
+            require(image.additional_mipmaps.size() + 1U == image.mip_count,
+                    "DDS authored mip chain has the wrong level count");
             ++file_count;
             ++format_counts[static_cast<std::size_t>(image.format)];
             decoded_pixels += static_cast<std::uint64_t>(image.width) * image.height;

@@ -7,6 +7,7 @@ find_package(PNG REQUIRED)
 add_library(torchlight_core STATIC
     src/actor_motion.cpp
     src/adm_document.cpp
+    src/animation_manifest.cpp
     src/collision_scene.cpp
     src/combat.cpp
     src/damage.cpp
@@ -35,6 +36,7 @@ add_library(torchlight_core STATIC
     src/resource_config.cpp
     src/scene_animation.cpp
     src/scene_geometry.cpp
+    src/scene_math.cpp
     src/skeletal_animation.cpp
     src/spawn_class.cpp
     src/stat_graph.cpp
@@ -54,6 +56,8 @@ add_executable(torchlight_level_rules_dump tools/level_rules_dump.cpp)
 target_link_libraries(torchlight_level_rules_dump PRIVATE torchlight_core)
 add_executable(torchlight_player_units_dump tools/player_units_dump.cpp)
 target_link_libraries(torchlight_player_units_dump PRIVATE torchlight_core)
+add_executable(torchlight_scene_camera_dump tools/scene_camera_dump.cpp)
+target_link_libraries(torchlight_scene_camera_dump PRIVATE torchlight_core)
 
 if(UNIX AND NOT ANDROID)
     find_package(PkgConfig)
@@ -64,7 +68,9 @@ if(UNIX AND NOT ANDROID)
         pkg_check_modules(WAYLAND_EGL IMPORTED_TARGET wayland-egl)
     endif()
     find_program(WAYLAND_SCANNER wayland-scanner)
-    set(XDG_SHELL_XML /usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml)
+    find_file(XDG_SHELL_XML xdg-shell.xml PATHS
+        /usr/share/wayland-protocols/stable/xdg-shell
+        /usr/share/qt6/wayland/protocols/xdg-shell)
     if(EGL_FOUND AND GLES2_FOUND AND WAYLAND_CLIENT_FOUND AND WAYLAND_EGL_FOUND AND
        WAYLAND_SCANNER AND EXISTS ${XDG_SHELL_XML})
         set(XDG_SHELL_HEADER ${CMAKE_CURRENT_BINARY_DIR}/generated/xdg-shell-client-protocol.h)
@@ -122,6 +128,14 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(randomizer_comparison PRIVATE torchlight_core)
     add_library(pathfinder_comparison SHARED tests/pathfinder_c_api.cpp)
     target_link_libraries(pathfinder_comparison PRIVATE torchlight_core)
+    add_library(camera_comparison SHARED tests/camera_c_api.cpp)
+    target_link_libraries(camera_comparison PRIVATE torchlight_core)
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+        add_library(ogre_camera_reference SHARED tests/ogre_camera_reference.cpp)
+        target_compile_features(ogre_camera_reference PRIVATE cxx_std_17)
+        target_compile_definitions(ogre_camera_reference PRIVATE _GLIBCXX_USE_CXX11_ABI=0)
+        target_link_libraries(ogre_camera_reference PRIVATE ${CMAKE_DL_LIBS})
+    endif()
     add_executable(pak_archive_test tests/pak_archive_test.cpp)
     target_link_libraries(pak_archive_test PRIVATE torchlight_core)
     add_executable(actor_motion_test tests/actor_motion_test.cpp)
@@ -148,6 +162,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(ogre_material_test PRIVATE torchlight_core)
     add_executable(ogre_skeleton_test tests/ogre_skeleton_test.cpp)
     target_link_libraries(ogre_skeleton_test PRIVATE torchlight_core)
+    add_executable(animation_manifest_test tests/animation_manifest_test.cpp)
+    target_link_libraries(animation_manifest_test PRIVATE torchlight_core)
     add_executable(skeletal_animation_test tests/skeletal_animation_test.cpp)
     target_link_libraries(skeletal_animation_test PRIVATE torchlight_core)
     add_executable(dds_texture_test tests/dds_texture_test.cpp)
@@ -174,6 +190,15 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(level_transition_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        if(TARGET ogre_camera_reference)
+            add_test(NAME original_camera_comparison
+                COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_camera.py
+                    --original ${TORCHLIGHT_ORIGINAL}
+                    --library $<TARGET_FILE:camera_comparison>
+                    --ogre-reference $<TARGET_FILE:ogre_camera_reference>
+                    --scene-dump $<TARGET_FILE:torchlight_scene_camera_dump>)
+            set_tests_properties(original_camera_comparison PROPERTIES TIMEOUT 60)
+        endif()
         add_test(NAME original_input_comparison
             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_input.py
                 --original ${TORCHLIGHT_ORIGINAL}
@@ -220,6 +245,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND ogre_material_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_ogre_skeletons
             COMMAND ogre_skeleton_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_animation_manifests
+            COMMAND animation_manifest_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_skeletal_animation
             COMMAND skeletal_animation_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_dds_textures

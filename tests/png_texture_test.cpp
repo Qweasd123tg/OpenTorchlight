@@ -53,6 +53,11 @@ int main(int argc, char** argv) {
             ++images;
         }
         require(images == 188, "unexpected original PNG count");
+        torchlight::PngImage base{1, 1, {10U, 20U, 30U, 0U}};
+        torchlight::PngImage half_alpha{1, 1, {110U, 220U, 30U, 128U}};
+        const auto composite = torchlight::compose_png_layers({base, half_alpha});
+        require(composite.rgba == std::vector<std::uint8_t>({60U, 120U, 30U, 255U}),
+                "wardrobe source-alpha composition differs from the original loop");
         std::cout << "PASS: decoded " << images << " PNG textures and " << pixels
                   << " pixels, checksum=" << checksum << '\n';
         return 0;

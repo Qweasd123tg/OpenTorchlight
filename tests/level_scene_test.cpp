@@ -70,6 +70,19 @@ int main(int argc, char** argv) {
                     town.rules.chunks.front().type == u"1X1SINGLE_ROOM",
                 "town has the wrong fixed chunk");
         require(town.layout.version == 3, "town layout has the wrong version");
+        // Authored orientation of the tilted mine cart; no ANGLE property exists.
+        // Its three vectors must become matrix columns, without Z reflection.
+        const auto tilted_cart = std::find_if(town.layout.objects.begin(), town.layout.objects.end(),
+            [](const auto& object) { return object.id == -3785977148171415074LL; });
+        require(tilted_cart != town.layout.objects.end() && tilted_cart->orientation.has_value(),
+                "town mine cart lost its authored orientation");
+        const torchlight::Matrix3 cart_rotation{
+            0.876124F, 0.462839F, -0.134862F,
+            0.0700376F, 0.154578F, 0.985495F,
+            0.476972F, -0.872861F, 0.103013F};
+        for (std::size_t axis = 0; axis < cart_rotation.size(); ++axis)
+            require(std::abs((*tilted_cart->orientation)[axis] - cart_rotation[axis]) < 0.000002F,
+                    "town orientation columns are transposed or mirrored");
         require(town.layout.declared_count == 784, "town layout has the wrong declared count");
         require(town.layout.objects.size() == 733, "town layout has the wrong object count");
         require(town.layout.logic_groups.size() == 22,

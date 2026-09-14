@@ -22,12 +22,8 @@
 namespace torchlight {
 namespace {
 
-constexpr float kDegreesToRadians = 0.01745329251994329577F;
-constexpr float kOriginalCameraFovRadians = 45.0F * kDegreesToRadians;
 constexpr float kOriginalCameraNearClip = 0.1F;
 constexpr float kOriginalCameraFarClip = 500.0F;
-constexpr std::array<float, 3> kOriginalCameraOffset{0.4F, 0.6F, -0.4F};
-constexpr float kLayoutCameraAzimuthCorrection = 35.0F * kDegreesToRadians;
 
 class GlesSceneError : public std::runtime_error {
 public:
@@ -64,7 +60,7 @@ GLuint create_program() {
         "attribute vec4 vertex_color;"
         "uniform vec3 translation;"
         "uniform vec3 object_scale;"
-        "uniform vec2 object_rotation;"
+        "uniform mat3 object_rotation;"
         "uniform vec4 projection;"
         "uniform vec2 depth_projection;"
         "uniform vec3 camera_position;"
@@ -77,23 +73,14 @@ GLuint create_program() {
         "varying vec4 vertex_diffuse;"
         "varying float vertex_light;"
         "void main() {"
-        "  vec3 local = vec3(position.x * object_scale.x,"
-        "                    position.y * object_scale.y,"
-        "                   -position.z * object_scale.z);"
-        "  vec3 world = vec3(local.x * object_rotation.x + local.z * object_rotation.y,"
-        "                    local.y,"
-        "                   -local.x * object_rotation.y + local.z * object_rotation.x) +"
-        "               translation;"
+        "  vec3 world = object_rotation * (position * object_scale) + translation;"
         "  float projected_x = world.x - 0.70 * world.z;"
         "  float projected_y = world.y + 0.35 * (world.x + 0.70 * world.z);"
         "  float depth = 0.25 * world.x + 0.50 * world.z - 0.10 * world.y;"
         "  vec3 local_normal = normalize(vec3(normal.x / max(abs(object_scale.x), 0.0001),"
         "                                           normal.y / max(abs(object_scale.y), 0.0001),"
-        "                                          -normal.z / max(abs(object_scale.z), 0.0001)));"
-        "  vec3 world_normal = normalize(vec3("
-        "      local_normal.x * object_rotation.x + local_normal.z * object_rotation.y,"
-        "      local_normal.y,"
-        "     -local_normal.x * object_rotation.y + local_normal.z * object_rotation.x));"
+        "                                           normal.z / max(abs(object_scale.z), 0.0001)));"
+        "  vec3 world_normal = normalize(object_rotation * local_normal);"
         "  vec3 light_direction = normalize(vec3(-0.35, 0.80, -0.45));"
         "  vertex_light = max(dot(world_normal, light_direction), 0.0);"
         "  if (perspective_camera > 0.5) {"
@@ -122,6 +109,10 @@ GLuint create_program() {
         "uniform vec3 material_ambient;"
         "uniform vec3 material_emissive;"
         "uniform float use_vertex_color;"
+        "uniform float use_lighting;"
+        "uniform float texture_add;"
+        "uniform float alpha_reject_reference;"
+        "uniform float alpha_reject_inclusive;"
         "varying vec2 vertex_texcoord;"
         "varying vec4 vertex_diffuse;"
         "varying float vertex_light;"
@@ -129,10 +120,16 @@ GLuint create_program() {
         "  vec4 texel = texture2D(diffuse_texture, vertex_texcoord);"
         "  vec3 diffuse_color = mix(draw_color, vertex_diffuse.rgb, use_vertex_color);"
         "  float alpha = texel.a * mix(1.0, vertex_diffuse.a, use_vertex_color);"
-        "  if (alpha < 0.10) discard;"
-        "  vec3 illumination = material_emissive + 0.55 * material_ambient +"
-        "                      (0.35 + 0.55 * vertex_light) * diffuse_color;"
-        "  gl_FragColor = vec4(texel.rgb * illumination, alpha);"
+        "  if (alpha_reject_reference >= 0.0 &&"
+        "      (alpha_reject_inclusive > 0.5"
+        "           ? alpha < alpha_reject_reference"
+        "           : alpha <= alpha_reject_reference)) discard;"
+        "  vec3 lit = material_emissive + 0.55 * material_ambient +"
+        "             (0.35 + 0.55 * vertex_light) * diffuse_color;"
+        "  vec3 current = mix(diffuse_color, lit, use_lighting);"
+        "  vec3 modulated = texel.rgb * current;"
+        "  vec3 added = min(texel.rgb + current, vec3(1.0));"
+        "  gl_FragColor = vec4(mix(modulated, added, texture_add), alpha);"
         "}";
     const auto vertex_shader = compile_shader(GL_VERTEX_SHADER, vertex_source);
     const auto fragment_shader = compile_shader(GL_FRAGMENT_SHADER, fragment_source);
@@ -210,24 +207,12 @@ ProjectedPoint project(const std::array<float, 3>& point) {
             0.25F * point[0] + 0.50F * point[2] - 0.10F * point[1]};
 }
 
-std::array<float, 3> subtract(const std::array<float, 3>& left,
-                              const std::array<float, 3>& right) {
-    return {left[0] - right[0], left[1] - right[1], left[2] - right[2]};
-}
-
-std::array<float, 3> cross(const std::array<float, 3>& left,
-                           const std::array<float, 3>& right) {
-    return {left[1] * right[2] - left[2] * right[1],
-            left[2] * right[0] - left[0] * right[2],
-            left[0] * right[1] - left[1] * right[0]};
-}
-
-std::array<float, 3> normalized(const std::array<float, 3>& value) {
-    const float length = std::hypot(value[0], value[1], value[2]);
-    if (!(length > 0.0F)) {
-        throw GlesSceneError("Cannot normalize a zero camera vector");
-    }
-    return {value[0] / length, value[1] / length, value[2] / length};
+void upload_rotation(GLint location, const Matrix3& rotation) {
+    // GLES requires column-major storage and transpose=GL_FALSE.
+    const Matrix3 columns{rotation[0], rotation[3], rotation[6],
+                          rotation[1], rotation[4], rotation[7],
+                          rotation[2], rotation[5], rotation[8]};
+    glUniformMatrix3fv(location, 1, GL_FALSE, columns.data());
 }
 
 bool is_dds_path(const std::string& path) {
@@ -274,7 +259,33 @@ public:
         shadow_texture_ = fallback_texture;
         owned_textures_.push_back(fallback_texture);
         for (std::size_t mesh_index = 0; mesh_index < geometry.meshes.size(); ++mesh_index) {
-            const auto& mesh = geometry.meshes[mesh_index].mesh;
+            const auto& mesh_resource = geometry.meshes[mesh_index];
+            const auto& mesh = mesh_resource.mesh;
+            GLuint mesh_texture_override = 0;
+            if (!mesh_resource.texture_layers.empty()) {
+                std::string texture_key = "layers";
+                std::vector<PngImage> layers;
+                layers.reserve(mesh_resource.texture_layers.size());
+                for (const auto& layer_path : mesh_resource.texture_layers) {
+                    texture_key += "|" + layer_path;
+                    const auto* layer_entry = archive.find_normalized(layer_path);
+                    if (layer_entry == nullptr || !is_png_path(layer_entry->name)) {
+                        throw GlesSceneError(
+                            "Scene texture layer is absent or is not PNG: " + layer_path);
+                    }
+                    layers.push_back(decode_png(archive.read(*layer_entry)));
+                }
+                const auto found_texture = textures.find(texture_key);
+                if (found_texture != textures.end()) {
+                    mesh_texture_override = found_texture->second;
+                } else {
+                    const auto image = compose_png_layers(layers);
+                    mesh_texture_override = upload_texture(
+                        image.width, image.height, image.rgba, false, true);
+                    textures.emplace(std::move(texture_key), mesh_texture_override);
+                    owned_textures_.push_back(mesh_texture_override);
+                }
+            }
             animated_meshes_[mesh_index] = mesh.skeletally_animated;
             if (mesh.skeletally_animated && mesh.bounds) {
                 const float width = mesh.bounds->maximum[0] - mesh.bounds->minimum[0];
@@ -378,34 +389,57 @@ public:
                 std::array<float, 3> ambient{};
                 std::array<float, 3> emissive{};
                 bool textured = false;
-                bool alpha_blend = false;
                 bool use_vertex_color = false;
+                OgreSceneBlend scene_blend = OgreSceneBlend::replace;
+                OgreAlphaCompare alpha_compare = OgreAlphaCompare::always;
+                std::uint8_t alpha_rejection_value = 0;
+                OgreTextureColorOperation texture_color_operation =
+                    OgreTextureColorOperation::modulate;
+                bool depth_write = true;
+                bool lighting = true;
+                bool texture_clamp = false;
+                bool texture_filter_linear = true;
                 if (const auto* material = materials.find(submesh.material);
                     material != nullptr) {
                     color = material->diffuse;
                     ambient = material->ambient;
                     emissive = material->emissive;
-                    alpha_blend = material->alpha_blend;
                     use_vertex_color = material->diffuse_vertex_color;
-                    if (!material->textures.empty()) {
+                    scene_blend = material->scene_blend;
+                    alpha_compare = material->alpha_compare;
+                    alpha_rejection_value = material->alpha_rejection_value;
+                    texture_color_operation = material->texture_color_operation;
+                    depth_write = material->depth_write;
+                    lighting = material->lighting;
+                    texture_clamp = material->texture_clamp;
+                    texture_filter_linear = material->texture_filter_linear;
+                    if (mesh_texture_override != 0) {
+                        texture = mesh_texture_override;
+                        textured = true;
+                    } else if (!material->primary_texture.empty()) {
                         if (const auto* entry = resolve_material_texture(
-                                archive, *material, material->textures.front())) {
+                                archive, *material, material->primary_texture)) {
                             if (is_dds_path(entry->name) || is_png_path(entry->name)) {
-                                const auto found_texture = textures.find(entry->name);
+                                const auto texture_key =
+                                    entry->name + (texture_clamp ? "|clamp" : "|wrap") +
+                                    (texture_filter_linear ? "|linear" : "|nearest");
+                                const auto found_texture = textures.find(texture_key);
                                 if (found_texture != textures.end()) {
                                     texture = found_texture->second;
                                 } else {
                                     const auto bytes = archive.read(*entry);
                                     if (is_dds_path(entry->name)) {
                                         const auto image = decode_dds(bytes);
-                                        texture = upload_texture(
-                                            image.width, image.height, image.rgba);
+                                        texture = upload_dds_texture(
+                                            image, texture_clamp,
+                                            texture_filter_linear);
                                     } else {
                                         const auto image = decode_png(bytes);
                                         texture = upload_texture(
-                                            image.width, image.height, image.rgba);
+                                            image.width, image.height, image.rgba,
+                                            texture_clamp, texture_filter_linear);
                                     }
-                                    textures.emplace(entry->name, texture);
+                                    textures.emplace(texture_key, texture);
                                     owned_textures_.push_back(texture);
                                 }
                                 textured = true;
@@ -413,12 +447,26 @@ public:
                         }
                     }
                 }
-                draws_by_mesh_[mesh_index].push_back(
-                    Draw{&source_geometry, buffers.position, buffers.texcoord,
-                         buffers.normal, buffers.color, index_buffer,
-                         checked_count(indices.size()),
-                         texture, color, ambient, emissive, alpha_blend,
-                         use_vertex_color});
+                Draw draw;
+                draw.source = &source_geometry;
+                draw.vertex_buffer = buffers.position;
+                draw.texcoord_buffer = buffers.texcoord;
+                draw.normal_buffer = buffers.normal;
+                draw.color_buffer = buffers.color;
+                draw.index_buffer = index_buffer;
+                draw.index_count = checked_count(indices.size());
+                draw.texture = texture;
+                draw.color = color;
+                draw.ambient = ambient;
+                draw.emissive = emissive;
+                draw.scene_blend = scene_blend;
+                draw.alpha_compare = alpha_compare;
+                draw.alpha_rejection_value = alpha_rejection_value;
+                draw.texture_color_operation = texture_color_operation;
+                draw.depth_write = depth_write;
+                draw.lighting = lighting;
+                draw.use_vertex_color = use_vertex_color;
+                draws_by_mesh_[mesh_index].push_back(std::move(draw));
                 stats_.textured_batches += static_cast<std::size_t>(textured);
                 stats_.fallback_batches += static_cast<std::size_t>(!textured);
                 ++stats_.draw_batches;
@@ -456,6 +504,12 @@ public:
         emissive_location_ = glGetUniformLocation(program_, "material_emissive");
         texture_location_ = glGetUniformLocation(program_, "diffuse_texture");
         vertex_color_location_ = glGetUniformLocation(program_, "use_vertex_color");
+        lighting_location_ = glGetUniformLocation(program_, "use_lighting");
+        texture_add_location_ = glGetUniformLocation(program_, "texture_add");
+        alpha_reject_reference_location_ =
+            glGetUniformLocation(program_, "alpha_reject_reference");
+        alpha_reject_inclusive_location_ =
+            glGetUniformLocation(program_, "alpha_reject_inclusive");
         if (translation_location_ < 0 || object_scale_location_ < 0 ||
             object_rotation_location_ < 0 || projection_location_ < 0 ||
             depth_projection_location_ < 0 || camera_position_location_ < 0 ||
@@ -463,7 +517,10 @@ public:
             camera_forward_location_ < 0 || camera_projection_location_ < 0 ||
             perspective_camera_location_ < 0 || color_location_ < 0 ||
             ambient_location_ < 0 || emissive_location_ < 0 ||
-            texture_location_ < 0 || vertex_color_location_ < 0) {
+            texture_location_ < 0 || vertex_color_location_ < 0 ||
+            lighting_location_ < 0 || texture_add_location_ < 0 ||
+            alpha_reject_reference_location_ < 0 ||
+            alpha_reject_inclusive_location_ < 0) {
             throw GlesSceneError("OpenGL ES scene shader has an inactive uniform");
         }
     }
@@ -493,24 +550,10 @@ public:
         float scale_x = 0.0F;
         float scale_y = 0.0F;
         if (camera_target_.has_value()) {
-            last_camera_position_ = *camera_target_;
-            const float camera_cosine = std::cos(kLayoutCameraAzimuthCorrection);
-            const float camera_sine = std::sin(kLayoutCameraAzimuthCorrection);
-            const std::array<float, 3> camera_offset{
-                kOriginalCameraOffset[0] * camera_cosine +
-                    kOriginalCameraOffset[2] * camera_sine,
-                kOriginalCameraOffset[1],
-                -kOriginalCameraOffset[0] * camera_sine +
-                    kOriginalCameraOffset[2] * camera_cosine};
-            for (std::size_t axis = 0; axis < 3; ++axis) {
-                last_camera_position_[axis] += camera_offset[axis] * camera_distance_;
-            }
-            last_camera_forward_ = normalized(subtract(*camera_target_, last_camera_position_));
-            last_camera_right_ = normalized(
-                cross(std::array<float, 3>{0.0F, 1.0F, 0.0F}, last_camera_forward_));
-            last_camera_up_ = normalized(cross(last_camera_forward_, last_camera_right_));
-            last_tangent_half_fov_ = std::tan(kOriginalCameraFovRadians * 0.5F);
-            last_aspect_ = aspect;
+            const auto pose = game_camera_pose(*camera_target_, camera_distance_);
+            last_camera_ = make_camera_projection(
+                pose.position, pose.target,
+                aspect, 45.0F, kOriginalCameraNearClip, kOriginalCameraFarClip);
             last_perspective_ready_ = true;
         } else {
             const float extent_x = std::max(0.001F, maximum_.x - minimum_.x);
@@ -543,11 +586,11 @@ public:
         glUniform4f(projection_location_, center_x, center_y, scale_x, scale_y);
         glUniform2f(depth_projection_location_, (minimum_.depth + maximum_.depth) * 0.5F,
                     depth_scale);
-        glUniform3fv(camera_position_location_, 1, last_camera_position_.data());
-        glUniform3fv(camera_right_location_, 1, last_camera_right_.data());
-        glUniform3fv(camera_up_location_, 1, last_camera_up_.data());
-        glUniform3fv(camera_forward_location_, 1, last_camera_forward_.data());
-        glUniform4f(camera_projection_location_, last_tangent_half_fov_, aspect,
+        glUniform3fv(camera_position_location_, 1, last_camera_.position.data());
+        glUniform3fv(camera_right_location_, 1, last_camera_.right.data());
+        glUniform3fv(camera_up_location_, 1, last_camera_.up.data());
+        glUniform3fv(camera_forward_location_, 1, last_camera_.forward.data());
+        glUniform4f(camera_projection_location_, last_camera_.tangent_half_fov, aspect,
                     kOriginalCameraNearClip, kOriginalCameraFarClip);
         glUniform1f(perspective_camera_location_, camera_target_.has_value() ? 1.0F : 0.0F);
         glEnableVertexAttribArray(0);
@@ -562,8 +605,7 @@ public:
             }
             glUniform3fv(translation_location_, 1, instance.transform.position.data());
             glUniform3fv(object_scale_location_, 1, instance.transform.scale.data());
-            const float radians = instance.transform.angle * kDegreesToRadians;
-            glUniform2f(object_rotation_location_, std::cos(radians), std::sin(radians));
+            upload_rotation(object_rotation_location_, instance.transform.orientation);
             for (const auto& draw : draws_by_mesh_.at(instance.mesh_index)) {
                 auto vertex_buffer = draw.vertex_buffer;
                 auto normal_buffer = draw.normal_buffer;
@@ -573,17 +615,38 @@ public:
                     vertex_buffer = pose_buffers->second.position;
                     normal_buffer = pose_buffers->second.normal;
                 }
-                if (draw.alpha_blend) {
-                    glEnable(GL_BLEND);
-                    glDepthMask(GL_FALSE);
-                } else {
+                if (draw.scene_blend == OgreSceneBlend::replace) {
                     glDisable(GL_BLEND);
-                    glDepthMask(GL_TRUE);
+                } else {
+                    glEnable(GL_BLEND);
+                    if (draw.scene_blend == OgreSceneBlend::alpha) {
+                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                    } else if (draw.scene_blend == OgreSceneBlend::add) {
+                        glBlendFunc(GL_ONE, GL_ONE);
+                    } else {
+                        glBlendFunc(GL_DST_COLOR, GL_ZERO);
+                    }
                 }
+                glDepthMask(draw.depth_write ? GL_TRUE : GL_FALSE);
                 glUniform3fv(color_location_, 1, draw.color.data());
                 glUniform3fv(ambient_location_, 1, draw.ambient.data());
                 glUniform3fv(emissive_location_, 1, draw.emissive.data());
                 glUniform1f(vertex_color_location_, draw.use_vertex_color ? 1.0F : 0.0F);
+                glUniform1f(lighting_location_, draw.lighting ? 1.0F : 0.0F);
+                glUniform1f(texture_add_location_,
+                            draw.texture_color_operation ==
+                                    OgreTextureColorOperation::add
+                                ? 1.0F
+                                : 0.0F);
+                const float alpha_reference =
+                    draw.alpha_compare == OgreAlphaCompare::always
+                        ? -1.0F
+                        : static_cast<float>(draw.alpha_rejection_value) / 255.0F;
+                glUniform1f(alpha_reject_reference_location_, alpha_reference);
+                glUniform1f(alpha_reject_inclusive_location_,
+                            draw.alpha_compare == OgreAlphaCompare::greater_equal
+                                ? 1.0F
+                                : 0.0F);
                 glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ARRAY_BUFFER, draw.texcoord_buffer);
@@ -632,7 +695,23 @@ public:
         if (!std::isfinite(angle_degrees)) {
             throw GlesSceneError("Scene instance angle is not finite");
         }
-        instances_[instance_index].transform.angle = angle_degrees;
+        instances_[instance_index].transform.orientation = yaw_rotation(angle_degrees);
+    }
+
+    void set_instance_transform(std::size_t instance_index,
+                                const LayoutWorldTransform& transform) {
+        if (instance_index >= instances_.size()) {
+            throw GlesSceneError("Scene instance index is out of range");
+        }
+        const auto finite = [](const auto& values) {
+            return std::all_of(values.begin(), values.end(),
+                               [](float value) { return std::isfinite(value); });
+        };
+        if (!finite(transform.position) || !finite(transform.orientation) ||
+            !finite(transform.scale)) {
+            throw GlesSceneError("Scene instance transform is not finite");
+        }
+        instances_[instance_index].transform = transform;
     }
 
     void set_instance_visible(std::size_t instance_index, bool visible) {
@@ -765,20 +844,7 @@ public:
                                 static_cast<float>(height) -
                             1.0F;
         if (last_perspective_ready_) {
-            std::array<float, 3> direction{};
-            for (std::size_t axis = 0; axis < 3; ++axis) {
-                direction[axis] = last_camera_forward_[axis] +
-                                  last_camera_right_[axis] * ndc_x *
-                                      last_tangent_half_fov_ * last_aspect_ +
-                                  last_camera_up_[axis] * ndc_y * last_tangent_half_fov_;
-            }
-            direction = normalized(direction);
-            if (std::abs(direction[1]) < 0.00001F) {
-                throw GlesSceneError("Camera ray is parallel to the ground plane");
-            }
-            const float distance = (ground_height - last_camera_position_[1]) / direction[1];
-            return {last_camera_position_[0] + direction[0] * distance, ground_height,
-                    last_camera_position_[2] + direction[2] * distance};
+            return last_camera_.ground_at_ndc(ndc_x, ndc_y, ground_height);
         }
         if (!(last_scale_x_ > 0.0F) || !(last_scale_y_ > 0.0F)) {
             throw GlesSceneError("Orthographic camera projection is not ready");
@@ -810,7 +876,13 @@ private:
         std::array<float, 3> color{};
         std::array<float, 3> ambient{};
         std::array<float, 3> emissive{};
-        bool alpha_blend = false;
+        OgreSceneBlend scene_blend = OgreSceneBlend::replace;
+        OgreAlphaCompare alpha_compare = OgreAlphaCompare::always;
+        std::uint8_t alpha_rejection_value = 0;
+        OgreTextureColorOperation texture_color_operation =
+            OgreTextureColorOperation::modulate;
+        bool depth_write = true;
+        bool lighting = true;
         bool use_vertex_color = false;
     };
 
@@ -853,6 +925,10 @@ private:
         glUniform3fv(ambient_location_, 1, black.data());
         glUniform3fv(emissive_location_, 1, black.data());
         glUniform1f(vertex_color_location_, 1.0F);
+        glUniform1f(lighting_location_, 0.0F);
+        glUniform1f(texture_add_location_, 0.0F);
+        glUniform1f(alpha_reject_reference_location_, -1.0F);
+        glUniform1f(alpha_reject_inclusive_location_, 0.0F);
         glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.position);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
         glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.texcoord);
@@ -877,7 +953,7 @@ private:
             const std::array<float, 3> scale{radius, 1.0F, radius * 0.72F};
             glUniform3fv(translation_location_, 1, position.data());
             glUniform3fv(object_scale_location_, 1, scale.data());
-            glUniform2f(object_rotation_location_, 1.0F, 0.0F);
+            upload_rotation(object_rotation_location_, kIdentityRotation);
             glDrawArrays(GL_TRIANGLE_FAN, 0, shadow_vertex_count_);
         }
         glDepthMask(GL_TRUE);
@@ -885,7 +961,8 @@ private:
     }
 
     static GLuint upload_texture(std::uint32_t width, std::uint32_t height,
-                                 const std::vector<std::uint8_t>& rgba) {
+                                 const std::vector<std::uint8_t>& rgba,
+                                 bool clamp = false, bool linear_filter = true) {
         if (width > static_cast<std::uint32_t>(std::numeric_limits<GLsizei>::max()) ||
             height > static_cast<std::uint32_t>(std::numeric_limits<GLsizei>::max())) {
             throw GlesSceneError("Texture dimensions exceed OpenGL ES limits");
@@ -894,20 +971,71 @@ private:
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        const auto mag_filter = linear_filter ? GL_LINEAR : GL_NEAREST;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
         // OGRE texture_unit defaults to wrap. Town roads, terrain and many
         // building atlases intentionally use UVs outside 0..1; clamping them
         // stretches one border texel across whole polygons.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        const auto address_mode = clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, address_mode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, address_mode);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(width),
                      static_cast<GLsizei>(height), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+        if (linear_filter && (width > 1U || height > 1U)) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+            // OGRE 1.6's default TFO_BILINEAR uses linear texel filtering and
+            // selects the nearest authored/generated mip level.
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                            GL_LINEAR_MIPMAP_NEAREST);
+        } else {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mag_filter);
+        }
         if (glGetError() != GL_NO_ERROR) {
             if (texture != 0) {
                 glDeleteTextures(1, &texture);
             }
             throw GlesSceneError("OpenGL ES texture upload failed");
+        }
+        return texture;
+    }
+
+    static GLuint upload_dds_texture(const DdsImage& image, bool clamp,
+                                     bool linear_filter) {
+        if (image.width > static_cast<std::uint32_t>(std::numeric_limits<GLsizei>::max()) ||
+            image.height > static_cast<std::uint32_t>(std::numeric_limits<GLsizei>::max())) {
+            throw GlesSceneError("Texture dimensions exceed OpenGL ES limits");
+        }
+        GLuint texture = 0;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        const auto mag_filter = linear_filter ? GL_LINEAR : GL_NEAREST;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+        const auto address_mode = clamp ? GL_CLAMP_TO_EDGE : GL_REPEAT;
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, address_mode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, address_mode);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                     static_cast<GLsizei>(image.width),
+                     static_cast<GLsizei>(image.height), 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, image.rgba.data());
+        for (std::size_t index = 0; index < image.additional_mipmaps.size(); ++index) {
+            const auto& level = image.additional_mipmaps[index];
+            glTexImage2D(GL_TEXTURE_2D, static_cast<GLint>(index + 1U), GL_RGBA,
+                         static_cast<GLsizei>(level.width),
+                         static_cast<GLsizei>(level.height), 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, level.rgba.data());
+        }
+        if (linear_filter && !image.additional_mipmaps.empty()) {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                            GL_LINEAR_MIPMAP_NEAREST);
+        } else {
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mag_filter);
+        }
+        if (glGetError() != GL_NO_ERROR) {
+            if (texture != 0) {
+                glDeleteTextures(1, &texture);
+            }
+            throw GlesSceneError("OpenGL ES DDS texture upload failed");
         }
         return texture;
     }
@@ -928,17 +1056,10 @@ private:
                     const float local = (corner & (1U << axis)) != 0
                                             ? mesh.bounds->maximum[axis]
                                             : mesh.bounds->minimum[axis];
-                    point[axis] = instance.transform.scale[axis] * local;
+                    point[axis] = local;
                 }
-                point[2] = -point[2];
-                const float radians = instance.transform.angle * kDegreesToRadians;
-                const float cosine = std::cos(radians);
-                const float sine = std::sin(radians);
-                const float rotated_x = point[0] * cosine + point[2] * sine;
-                const float rotated_z = -point[0] * sine + point[2] * cosine;
-                point[0] = instance.transform.position[0] + rotated_x;
-                point[1] += instance.transform.position[1];
-                point[2] = instance.transform.position[2] + rotated_z;
+                point = transform_point(instance.transform.position,
+                    instance.transform.orientation, instance.transform.scale, point);
                 const auto projected = project(point);
                 minimum_.x = std::min(minimum_.x, projected.x);
                 minimum_.y = std::min(minimum_.y, projected.y);
@@ -983,6 +1104,10 @@ private:
     GLint emissive_location_ = -1;
     GLint texture_location_ = -1;
     GLint vertex_color_location_ = -1;
+    GLint lighting_location_ = -1;
+    GLint texture_add_location_ = -1;
+    GLint alpha_reject_reference_location_ = -1;
+    GLint alpha_reject_inclusive_location_ = -1;
     ProjectedPoint minimum_;
     ProjectedPoint maximum_;
     std::optional<std::array<float, 3>> camera_target_;
@@ -993,12 +1118,7 @@ private:
     float last_center_y_ = 0.0F;
     float last_scale_x_ = 0.0F;
     float last_scale_y_ = 0.0F;
-    std::array<float, 3> last_camera_position_{};
-    std::array<float, 3> last_camera_right_{1.0F, 0.0F, 0.0F};
-    std::array<float, 3> last_camera_up_{0.0F, 1.0F, 0.0F};
-    std::array<float, 3> last_camera_forward_{0.0F, 0.0F, 1.0F};
-    float last_tangent_half_fov_ = std::tan(kOriginalCameraFovRadians * 0.5F);
-    float last_aspect_ = 1.0F;
+    CameraProjection last_camera_{};
     bool last_perspective_ready_ = false;
     GlesSceneRenderStats stats_;
 };
@@ -1022,6 +1142,11 @@ void GlesSceneRenderer::set_instance_position(std::size_t instance_index,
 void GlesSceneRenderer::set_instance_angle(std::size_t instance_index,
                                            float angle_degrees) {
     implementation_->set_instance_angle(instance_index, angle_degrees);
+}
+
+void GlesSceneRenderer::set_instance_transform(
+    std::size_t instance_index, const LayoutWorldTransform& transform) {
+    implementation_->set_instance_transform(instance_index, transform);
 }
 
 void GlesSceneRenderer::set_instance_visible(std::size_t instance_index, bool visible) {

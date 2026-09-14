@@ -98,10 +98,8 @@ Transform sample_track(const OgreSkeletonTrack& track, float time, float length)
         track.keyframes.begin(), track.keyframes.end(), time,
         [](float value, const OgreSkeletonKeyframe& keyframe) { return value < keyframe.time; });
     if (found == track.keyframes.begin()) {
-        left = &track.keyframes.back();
         right = &track.keyframes.front();
-        const float span = right->time + length - left->time;
-        amount = span > 0.000001F ? (time + length - left->time) / span : 0.0F;
+        left = right;
     } else if (found == track.keyframes.end()) {
         left = &track.keyframes.back();
         right = &track.keyframes.front();
@@ -247,36 +245,97 @@ OgreGeometryPose skin_geometry(const OgreGeometry& geometry,
     return result;
 }
 
-} // namespace
+struct AnimationLayer {
+    const OgreSkeleton* skeleton = nullptr;
+    std::string_view name;
+    float time = 0.0F;
+    float weight = 1.0F;
+};
 
-OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
-                                        const OgreSkeleton& bind_skeleton,
-                                        const OgreSkeleton& animation_skeleton,
-                                        std::string_view animation_name,
-                                        float time_seconds) {
-    if (!std::isfinite(time_seconds)) {
-        throw OgreSkeletonError("OGRE animation time is not finite");
+void apply_animation_layer(
+    const AnimationLayer& layer,
+    const std::unordered_map<std::string, std::size_t>& bind_by_name,
+    const std::vector<Transform>& bind_local,
+    std::vector<Transform>& pose_local) {
+    if (layer.skeleton == nullptr || !std::isfinite(layer.time) ||
+        !std::isfinite(layer.weight)) {
+        throw OgreSkeletonError("OGRE animation layer is invalid");
+    }
+    const float weight = std::clamp(layer.weight, 0.0F, 1.0F);
+    if (weight == 0.0F) {
+        return;
     }
     const auto animation = std::find_if(
-        animation_skeleton.animations.begin(), animation_skeleton.animations.end(),
-        [animation_name](const auto& candidate) { return candidate.name == animation_name; });
-    if (animation == animation_skeleton.animations.end() || !(animation->length > 0.0F)) {
+        layer.skeleton->animations.begin(), layer.skeleton->animations.end(),
+        [&layer](const auto& candidate) { return candidate.name == layer.name; });
+    if (animation == layer.skeleton->animations.end() || !(animation->length > 0.0F)) {
         throw OgreSkeletonError("Requested OGRE animation is absent or empty");
     }
-    float time = std::fmod(time_seconds, animation->length);
+    float time = std::fmod(layer.time, animation->length);
     if (time < 0.0F) {
         time += animation->length;
     }
+    std::unordered_map<std::uint16_t, const OgreSkeletonTrack*> tracks;
+    for (const auto& track : animation->tracks) {
+        if (!tracks.emplace(track.bone_handle, &track).second) {
+            throw OgreSkeletonError("OGRE animation has duplicate tracks for a bone");
+        }
+    }
+    for (const auto& animation_bone : layer.skeleton->bones) {
+        const auto bind_bone = bind_by_name.find(animation_bone.name);
+        if (bind_bone == bind_by_name.end()) {
+            continue;
+        }
+        const auto track = tracks.find(animation_bone.handle);
+        auto delta = track == tracks.end()
+                         ? Transform{}
+                         : sample_track(*track->second, time, animation->length);
 
+        // Torchlight imports each sibling animation skeleton through OGRE 1.6's
+        // Skeleton::_mergeSkeletonAnimations. The clip skeletons have different
+        // local bind poses, so OGRE adjusts every key (and creates a static track
+        // for bones without keys) before applying it to the model skeleton:
+        //   destKey = inverse(destBind) * sourceBind * sourceKey
+        const auto& destination_bone = bind_local[bind_bone->second];
+        for (std::size_t axis = 0; axis < 3; ++axis) {
+            if (std::abs(destination_bone.scale[axis]) < 0.000001F) {
+                throw OgreSkeletonError("OGRE destination bind-pose bone has zero scale");
+            }
+            delta.position[axis] +=
+                animation_bone.position[axis] - destination_bone.position[axis];
+            delta.scale[axis] *=
+                animation_bone.scale[axis] / destination_bone.scale[axis];
+        }
+        const auto inverse_destination_rotation = std::array<float, 4>{
+            destination_bone.rotation[0], -destination_bone.rotation[1],
+            -destination_bone.rotation[2], -destination_bone.rotation[3]};
+        delta.rotation = multiply_quaternion(
+            multiply_quaternion(inverse_destination_rotation,
+                                normalize_quaternion(animation_bone.orientation)),
+            delta.rotation);
+
+        auto& local = pose_local[bind_bone->second];
+        for (std::size_t axis = 0; axis < 3; ++axis) {
+            local.position[axis] += delta.position[axis] * weight;
+            // OGRE 1.6 applies track scale directly; the AnimationState weight
+            // affects translation and rotation, but not this scale value.
+            local.scale[axis] *= delta.scale[axis];
+        }
+        local.rotation = multiply_quaternion(
+            local.rotation,
+            interpolate_quaternion({1.0F, 0.0F, 0.0F, 0.0F},
+                                   delta.rotation, weight));
+    }
+}
+
+OgreMeshPose sample_layers(const OgreMesh& mesh,
+                           const OgreSkeleton& bind_skeleton,
+                           const std::vector<AnimationLayer>& layers) {
     std::unordered_map<std::uint16_t, std::size_t> bind_by_handle;
     std::unordered_map<std::string, std::size_t> bind_by_name;
     for (std::size_t index = 0; index < bind_skeleton.bones.size(); ++index) {
         bind_by_handle.emplace(bind_skeleton.bones[index].handle, index);
         bind_by_name.emplace(bind_skeleton.bones[index].name, index);
-    }
-    std::unordered_map<std::uint16_t, std::string> animation_names;
-    for (const auto& bone : animation_skeleton.bones) {
-        animation_names.emplace(bone.handle, bone.name);
     }
 
     std::vector<Transform> bind_local;
@@ -286,27 +345,20 @@ OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
             Transform{bone.position, normalize_quaternion(bone.orientation), bone.scale});
     }
     auto pose_local = bind_local;
-    for (const auto& track : animation->tracks) {
-        const auto animation_bone = animation_names.find(track.bone_handle);
-        if (animation_bone == animation_names.end()) {
-            throw OgreSkeletonError("OGRE animation track references an absent clip bone");
-        }
-        const auto bind_bone = bind_by_name.find(animation_bone->second);
-        if (bind_bone == bind_by_name.end()) {
-            continue;
-        }
-        const auto delta = sample_track(track, time, animation->length);
-        auto& local = pose_local[bind_bone->second];
-        for (std::size_t axis = 0; axis < 3; ++axis) {
-            local.position[axis] += delta.position[axis];
-            local.scale[axis] *= delta.scale[axis];
-        }
-        local.rotation = multiply_quaternion(local.rotation, delta.rotation);
+    for (const auto& layer : layers) {
+        apply_animation_layer(layer, bind_by_name, bind_local, pose_local);
     }
     const auto bind_global = global_transforms(bind_skeleton, bind_local);
     const auto pose_global = global_transforms(bind_skeleton, pose_local);
 
     OgreMeshPose result;
+    result.bones.reserve(bind_skeleton.bones.size());
+    for (std::size_t index = 0; index < bind_skeleton.bones.size(); ++index) {
+        result.bones.push_back(
+            {bind_skeleton.bones[index].name, bind_skeleton.bones[index].handle,
+             pose_global[index].position, pose_global[index].rotation,
+             pose_global[index].scale});
+    }
     if (mesh.shared_geometry) {
         result.geometries.push_back(skin_geometry(
             *mesh.shared_geometry, mesh.shared_bone_assignments, bind_by_handle,
@@ -322,6 +374,32 @@ OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
     return result;
 }
 
+} // namespace
+
+OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
+                                        const OgreSkeleton& bind_skeleton,
+                                        const OgreSkeleton& animation_skeleton,
+                                        std::string_view animation_name,
+                                        float time_seconds) {
+    return sample_layers(mesh, bind_skeleton,
+                         {{&animation_skeleton, animation_name, time_seconds, 1.0F}});
+}
+
+OgreMeshPose sample_ogre_mesh_animation_blend(
+    const OgreMesh& mesh, const OgreSkeleton& bind_skeleton,
+    const OgreSkeleton& first_animation_skeleton,
+    std::string_view first_animation_name, float first_time_seconds,
+    float first_weight, const OgreSkeleton& second_animation_skeleton,
+    std::string_view second_animation_name, float second_time_seconds,
+    float second_weight) {
+    return sample_layers(
+        mesh, bind_skeleton,
+        {{&first_animation_skeleton, first_animation_name, first_time_seconds,
+          first_weight},
+         {&second_animation_skeleton, second_animation_name, second_time_seconds,
+          second_weight}});
+}
+
 OgreMeshPose blend_ogre_mesh_poses(const OgreMeshPose& first,
                                    const OgreMeshPose& second,
                                    float second_weight) {
@@ -333,6 +411,27 @@ OgreMeshPose blend_ogre_mesh_poses(const OgreMeshPose& first,
         throw OgreSkeletonError("OGRE poses have different geometry counts");
     }
     OgreMeshPose result;
+    if (first.bones.size() == second.bones.size()) {
+        result.bones.reserve(first.bones.size());
+        for (std::size_t index = 0; index < first.bones.size(); ++index) {
+            if (first.bones[index].handle != second.bones[index].handle ||
+                first.bones[index].name != second.bones[index].name) {
+                result.bones.clear();
+                break;
+            }
+            OgreBonePose bone = first.bones[index];
+            bone.orientation = interpolate_quaternion(
+                first.bones[index].orientation, second.bones[index].orientation,
+                amount);
+            for (std::size_t axis = 0; axis < 3; ++axis) {
+                bone.position[axis] +=
+                    (second.bones[index].position[axis] - bone.position[axis]) * amount;
+                bone.scale[axis] +=
+                    (second.bones[index].scale[axis] - bone.scale[axis]) * amount;
+            }
+            result.bones.push_back(std::move(bone));
+        }
+    }
     result.geometries.reserve(first.geometries.size());
     for (std::size_t geometry_index = 0;
          geometry_index < first.geometries.size(); ++geometry_index) {

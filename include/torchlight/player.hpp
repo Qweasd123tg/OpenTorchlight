@@ -20,9 +20,11 @@ struct PlayerPrototype {
     std::u16string name;
     std::u16string display_name;
     std::string mesh_path;
+    std::vector<std::string> wardrobe_texture_layers;
     float walking_speed = 0.0F;
     float running_speed = 0.0F;
     float attack_speed = 0.0F;
+    float weapon_scale = 1.0F;
     float reach_bonus = 0.0F;
     float minimum_health = 1.0F;
     float maximum_health = 1.0F;
@@ -45,6 +47,10 @@ struct PlayerPrototype {
 void append_player_geometry(const PakArchive& archive, const PlayerPrototype& player,
                             const std::array<float, 3>& position,
                             FixedSceneGeometry& geometry);
+
+[[nodiscard]] std::optional<std::size_t> append_player_weapon_geometry(
+    const PakArchive& archive, const PlayerPrototype& player,
+    const std::array<float, 3>& position, FixedSceneGeometry& geometry);
 
 [[nodiscard]] std::array<float, 3> layout_player_start(const LayoutManifest& layout);
 

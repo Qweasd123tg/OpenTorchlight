@@ -41,6 +41,18 @@ float floating(const UnitDefinition& definition, const char16_t* name) {
     return std::get<float>(property.value);
 }
 
+float optional_floating(const UnitDefinition& definition, const char16_t* name,
+                        float fallback) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    if (property->type != AdmValueType::floating) {
+        throw PlayerError("Playable player optional float has the wrong type");
+    }
+    return std::get<float>(property->value);
+}
+
 std::int32_t integer(const UnitDefinition& definition, const char16_t* name) {
     const auto& property = required(definition, name);
     if (property.type != AdmValueType::integer) {
@@ -132,6 +144,27 @@ std::string ascii(std::u16string_view value) {
     return result;
 }
 
+std::optional<std::string> optional_resource_path(
+    const PakArchive& archive, const UnitDefinition& definition,
+    const char16_t* name) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return std::nullopt;
+    }
+    if (!is_text(property->type)) {
+        throw PlayerError("Playable player wardrobe property is not text");
+    }
+    const auto path = ascii(std::get<std::u16string>(property->value));
+    if (path.empty()) {
+        return std::nullopt;
+    }
+    const auto* entry = archive.find_normalized(path);
+    if (entry == nullptr) {
+        throw PlayerError("Playable player wardrobe texture is absent from pak.zip: " + path);
+    }
+    return entry->name;
+}
+
 void add_mesh_counts(const OgreMesh& mesh, FixedSceneGeometry& geometry) {
     if (mesh.shared_geometry) {
         geometry.unique_vertex_count += mesh.shared_geometry->vertex_count;
@@ -175,9 +208,18 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
             throw PlayerError("Playable player mesh is absent from pak.zip: " + player.mesh_path);
         }
         player.mesh_path = mesh->name;
+        // CWardrobe stores CHEST, GLOVES and BOOTS in slot order and composites
+        // their base images over WARDROBE_BASE in update(nullptr).
+        for (const auto* property :
+             {u"WARDROBE_BASE", u"CHEST_BASE", u"GLOVES_BASE", u"BOOTS_BASE"}) {
+            if (auto path = optional_resource_path(archive, *definition, property)) {
+                player.wardrobe_texture_layers.push_back(std::move(*path));
+            }
+        }
         player.walking_speed = floating(*definition, u"WALKINGSPEED");
         player.running_speed = floating(*definition, u"RUNNINGSPEED");
         player.attack_speed = floating(*definition, u"ATTACKSPEED");
+        player.weapon_scale = optional_floating(*definition, u"WEAPON_SCALE", 1.0F);
         player.reach_bonus = floating(*definition, u"REACH_BONUS");
         const auto health_graph_name = ascii(text(*definition, u"HEALTH_GRAPH"));
         const StatGraph health_graph(
@@ -219,6 +261,22 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
             if (!player.starting_weapon) {
                 throw PlayerError("Starting equipment is not a weapon");
             }
+            auto weapon_directory =
+                ascii(text(*weapon_definition, u"RESOURCEDIRECTORY"));
+            if (!weapon_directory.empty() && weapon_directory.back() != '/') {
+                weapon_directory.push_back('/');
+            }
+            auto weapon_file = ascii(text(*weapon_definition, u"MESHFILE"));
+            if (weapon_file.size() < 5U ||
+                weapon_file.substr(weapon_file.size() - 5U) != ".mesh") {
+                weapon_file += ".mesh";
+            }
+            const auto* weapon_mesh =
+                archive.find_normalized(weapon_directory + weapon_file);
+            if (weapon_mesh == nullptr) {
+                throw PlayerError("Starting weapon mesh is absent from pak.zip");
+            }
+            player.starting_weapon->mesh_path = weapon_mesh->name;
         }
         result.push_back(std::move(player));
     }
@@ -235,6 +293,7 @@ void append_player_geometry(const PakArchive& archive, const PlayerPrototype& pl
     SceneMeshResource resource;
     resource.guid = player.guid;
     resource.source_path = entry->name;
+    resource.texture_layers = player.wardrobe_texture_layers;
     resource.mesh = parse_ogre_mesh(archive.read(*entry));
     add_mesh_counts(resource.mesh, geometry);
     const auto mesh_index = geometry.meshes.size();
@@ -242,6 +301,31 @@ void append_player_geometry(const PakArchive& archive, const PlayerPrototype& pl
     LayoutWorldTransform transform;
     transform.position = position;
     geometry.instances.push_back(SceneMeshInstance{0, 0, mesh_index, transform});
+}
+
+std::optional<std::size_t> append_player_weapon_geometry(
+    const PakArchive& archive, const PlayerPrototype& player,
+    const std::array<float, 3>& position, FixedSceneGeometry& geometry) {
+    if (!player.starting_weapon || player.starting_weapon->mesh_path.empty()) {
+        return std::nullopt;
+    }
+    const auto* entry = archive.find_normalized(player.starting_weapon->mesh_path);
+    if (entry == nullptr) {
+        throw PlayerError("Starting weapon mesh disappeared from pak.zip");
+    }
+    SceneMeshResource resource;
+    resource.guid = player.starting_weapon->guid;
+    resource.source_path = entry->name;
+    resource.mesh = parse_ogre_mesh(archive.read(*entry));
+    add_mesh_counts(resource.mesh, geometry);
+    const auto mesh_index = geometry.meshes.size();
+    geometry.meshes.push_back(std::move(resource));
+    LayoutWorldTransform transform;
+    transform.position = position;
+    transform.scale = {player.weapon_scale, player.weapon_scale, player.weapon_scale};
+    const auto instance_index = geometry.instances.size();
+    geometry.instances.push_back(SceneMeshInstance{0, 0, mesh_index, transform});
+    return instance_index;
 }
 
 std::array<float, 3> layout_player_start(const LayoutManifest& layout) {

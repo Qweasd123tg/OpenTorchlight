@@ -236,7 +236,9 @@ DdsImage decode_dds(const std::vector<std::uint8_t>& bytes) {
     image.height = little_u32(bytes.data() + 12);
     image.width = little_u32(bytes.data() + 16);
     image.mip_count = std::max(1U, little_u32(bytes.data() + 28));
-    image.rgba.resize(checked_pixel_bytes(image.width, image.height));
+    if (image.mip_count > 1U) {
+        image.additional_mipmaps.reserve(image.mip_count - 1U);
+    }
 
     const auto pixel_flags = little_u32(bytes.data() + 80);
     const auto encoded_format = little_u32(bytes.data() + 84);
@@ -252,7 +254,31 @@ DdsImage decode_dds(const std::vector<std::uint8_t>& bytes) {
         } else {
             throw DdsError("DDS FourCC is unsupported: " + std::to_string(encoded_format));
         }
-        decode_dxt(image, source, source_size);
+        std::size_t offset = 0U;
+        auto width = image.width;
+        auto height = image.height;
+        const auto block_size = image.format == DdsFormat::dxt1 ? 8U : 16U;
+        for (std::uint32_t level = 0U; level < image.mip_count; ++level) {
+            const auto encoded_size = checked_source_bytes(width, height, block_size);
+            if (offset > source_size || encoded_size > source_size - offset) {
+                throw DdsError("DDS compressed mip chain is truncated");
+            }
+            DdsImage decoded;
+            decoded.width = width;
+            decoded.height = height;
+            decoded.format = image.format;
+            decoded.rgba.resize(checked_pixel_bytes(width, height));
+            decode_dxt(decoded, source + offset, encoded_size);
+            if (level == 0U) {
+                image.rgba = std::move(decoded.rgba);
+            } else {
+                image.additional_mipmaps.push_back(
+                    {width, height, std::move(decoded.rgba)});
+            }
+            offset += encoded_size;
+            width = std::max(1U, width / 2U);
+            height = std::max(1U, height / 2U);
+        }
         return image;
     }
 
@@ -264,8 +290,37 @@ DdsImage decode_dds(const std::vector<std::uint8_t>& bytes) {
     const auto alpha_mask = (pixel_flags & ddpf_alpha_pixels) != 0U
                                 ? little_u32(bytes.data() + 104)
                                 : 0U;
-    decode_rgb(image, source, source_size, bits, little_u32(bytes.data() + 92),
-               little_u32(bytes.data() + 96), little_u32(bytes.data() + 100), alpha_mask);
+    std::size_t offset = 0U;
+    auto width = image.width;
+    auto height = image.height;
+    for (std::uint32_t level = 0U; level < image.mip_count; ++level) {
+        DdsImage decoded;
+        decoded.width = width;
+        decoded.height = height;
+        decoded.format = image.format;
+        decoded.rgba.resize(checked_pixel_bytes(width, height));
+        const auto row_bytes = static_cast<std::size_t>(width) * (bits / 8U);
+        const auto stride = (row_bytes + 3U) & ~std::size_t{3U};
+        if (height > std::numeric_limits<std::size_t>::max() / stride) {
+            throw DdsError("DDS uncompressed mip size overflows");
+        }
+        const auto encoded_size = stride * height;
+        if (offset > source_size || encoded_size > source_size - offset) {
+            throw DdsError("DDS uncompressed mip chain is truncated");
+        }
+        decode_rgb(decoded, source + offset, encoded_size, bits,
+                   little_u32(bytes.data() + 92), little_u32(bytes.data() + 96),
+                   little_u32(bytes.data() + 100), alpha_mask);
+        if (level == 0U) {
+            image.rgba = std::move(decoded.rgba);
+        } else {
+            image.additional_mipmaps.push_back(
+                {width, height, std::move(decoded.rgba)});
+        }
+        offset += encoded_size;
+        width = std::max(1U, width / 2U);
+        height = std::max(1U, height / 2U);
+    }
     return image;
 }
 

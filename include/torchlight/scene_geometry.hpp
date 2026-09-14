@@ -18,6 +18,7 @@ namespace torchlight {
 struct SceneMeshResource {
     std::int64_t guid = 0;
     std::string source_path;
+    std::vector<std::string> texture_layers;
     OgreMesh mesh;
 };
 

@@ -4,6 +4,7 @@
 #include "torchlight/scene_geometry.hpp"
 
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 #include <string>
@@ -27,6 +28,39 @@ int main(int argc, char** argv) {
         const torchlight::PakArchive archive(argv[2]);
         const torchlight::OgreMaterialCatalog materials(archive);
         require(materials.source_file_count() == 1182, "unexpected material script count");
+
+        const auto parse_script = [&](std::string_view path) {
+            const auto bytes = archive.read_normalized(path);
+            return torchlight::parse_ogre_material_script(
+                std::string(bytes.begin(), bytes.end()), std::string(path));
+        };
+        const auto skeleton_materials =
+            parse_script("media/models/skeleton/skeleton_warrior.material");
+        const auto skeleton_skin = std::find_if(
+            skeleton_materials.begin(), skeleton_materials.end(), [](const auto& material) {
+                return material.name == "Material_#38/15_-_Defaultaaa";
+            });
+        require(skeleton_skin != skeleton_materials.end() &&
+                    skeleton_skin->scene_blend == torchlight::OgreSceneBlend::alpha &&
+                    skeleton_skin->alpha_compare == torchlight::OgreAlphaCompare::greater &&
+                    skeleton_skin->alpha_rejection_value == 5,
+                "skeleton alpha pass state was not parsed exactly");
+        const auto spectral_materials =
+            parse_script("media/models/shadowarcher/shadowarmor.material");
+        require(spectral_materials.size() == 1 &&
+                    spectral_materials.front().scene_blend ==
+                        torchlight::OgreSceneBlend::add &&
+                    !spectral_materials.front().depth_write &&
+                    !spectral_materials.front().texture_clamp &&
+                    spectral_materials.front().primary_texture ==
+                        spectral_materials.front().textures.front(),
+                "spectral first pass inherited state from another texture unit");
+        const auto gold_materials = parse_script("media/models/gold/gold.material");
+        require(gold_materials.size() == 1 && gold_materials.front().lighting &&
+                    gold_materials.front().textures.size() == 3 &&
+                    gold_materials.front().primary_texture ==
+                        gold_materials.front().textures.front(),
+                "gold first pass inherited state from a later pass");
 
         std::size_t texture_references = 0;
         std::size_t resolved_texture_references = 0;
@@ -72,10 +106,10 @@ int main(int argc, char** argv) {
                     continue;
                 }
                 ++town_materials_found;
-                if (material->textures.empty()) {
+                if (material->primary_texture.empty()) {
                     ++town_materials_without_textures;
                 } else if (torchlight::resolve_material_texture(
-                               archive, *material, material->textures.front()) != nullptr) {
+                               archive, *material, material->primary_texture) != nullptr) {
                     ++town_textures_resolved;
                 } else {
                     ++town_missing_textures;

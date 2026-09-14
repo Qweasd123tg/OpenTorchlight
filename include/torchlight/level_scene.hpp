@@ -2,6 +2,7 @@
 
 #include "torchlight/adm_document.hpp"
 #include "torchlight/pak_archive.hpp"
+#include "torchlight/scene_math.hpp"
 
 #include <array>
 #include <cstdint>
@@ -120,6 +121,7 @@ struct LayoutObject {
     float scale_y = 1.0F;
     float scale_z = 1.0F;
     float angle = 0.0F;
+    std::optional<Matrix3> orientation;
     std::optional<std::int64_t> piece_guid;
     std::u16string resource_file;
     std::u16string monster;
@@ -152,7 +154,7 @@ struct LayoutLogicGroup {
 struct LayoutWorldTransform {
     std::array<float, 3> position{};
     std::array<float, 3> scale{1.0F, 1.0F, 1.0F};
-    float angle = 0.0F;
+    Matrix3 orientation = kIdentityRotation;
 };
 
 struct LayoutManifest {
