@@ -54,7 +54,25 @@ int main(int argc, char** argv) {
                     !torchlight::armor_slot_for_unit_type(u"MAGIC SWORD"),
                 "equipment unit type mapped to the wrong armor slot");
 
-        std::cout << "PASS: rolled original Leather Vest armor=4 rarity5=9\n";
+        const auto* staff = resources.find_case_insensitive(
+            torchlight::MasterResourceKind::item, u"Moldy Staff");
+        require(staff != nullptr, "original Moldy Staff resource is missing");
+        const auto staff_definition = definitions.load(*staff);
+        const torchlight::StatGraph damage_graph(
+            archive, "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm");
+        const auto weapon = torchlight::load_weapon_prototype(
+            *staff, *staff_definition, damage_graph);
+        require(weapon.has_value(), "Moldy Staff was not recognized as a weapon");
+        torchlight::TorchlightRandom weapon_random(123);
+        const auto rolled_weapon = torchlight::roll_weapon_item(
+            *weapon, weapon_random);
+        require(weapon->level == 1 && weapon->range == 0.8F &&
+                    weapon->base_weapon_damage == 21.0F &&
+                    rolled_weapon.minimum_damage == 11 &&
+                    rolled_weapon.maximum_damage == 22,
+                "Moldy Staff weapon graph calculation changed");
+
+        std::cout << "PASS: rolled original Leather Vest armor=4 and Moldy Staff damage=11-22\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

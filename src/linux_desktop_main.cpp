@@ -669,6 +669,7 @@ int main(int argc, char** argv) {
             std::size_t interaction_count = 0;
             std::size_t pickup_count = 0;
             std::size_t equipped_armor_count = 0;
+            std::size_t equipped_weapon_count = 0;
             std::size_t combat_attack_count = 0;
             std::size_t combat_kill_count = 0;
             std::size_t enemy_chase_count = 0;
@@ -835,6 +836,7 @@ int main(int argc, char** argv) {
                             const auto item_id = item->id;
                             const auto item_name = item->name;
                             const auto armor_item = item->armor_item;
+                            const auto weapon_item = item->weapon_item;
                             player_motion.stop();
                             active_path.clear();
                             next_path_node = 0;
@@ -843,6 +845,10 @@ int main(int argc, char** argv) {
                                 if (armor_item) {
                                     player_combat.equip(*armor_item);
                                     ++equipped_armor_count;
+                                }
+                                if (weapon_item) {
+                                    combat.equip(*weapon_item);
+                                    ++equipped_weapon_count;
                                 }
                                 const auto instance = runtime_instance_indices.find(item_id);
                                 if (instance != runtime_instance_indices.end()) {
@@ -854,7 +860,12 @@ int main(int argc, char** argv) {
                                           << " armor="
                                           << (armor_item ? armor_item->armor : 0)
                                           << " player_armor="
-                                          << player_combat.armor_class() << '\n';
+                                          << player_combat.armor_class()
+                                          << " attack_damage="
+                                          << combat.minimum_damage() << '-'
+                                          << combat.maximum_damage()
+                                          << " attack_range="
+                                          << combat.attack_range() << '\n';
                             }
                             active_pickup.reset();
                             drain_logic();
@@ -978,6 +989,7 @@ int main(int argc, char** argv) {
                       << " interactions=" << interaction_count
                       << " pickups=" << pickup_count
                       << " equipped_armor=" << equipped_armor_count
+                      << " equipped_weapons=" << equipped_weapon_count
                       << " combat_attacks=" << combat_attack_count
                       << " combat_kills=" << combat_kill_count
                       << " player_health=" << player_combat.health() << '/'

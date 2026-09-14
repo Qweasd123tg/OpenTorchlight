@@ -91,6 +91,9 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
       player_armor_graph_(
           definitions.archive(),
           "media/graphs/stats/ARMOR_PLAYER_BYLEVEL_FORSET.DAT.adm"),
+      player_weapon_damage_graph_(
+          definitions.archive(),
+          "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm"),
       random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
@@ -178,6 +181,10 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         const auto definition = definitions_->load(resource);
         entity.armor_item = roll_armor_item(
             resource, *definition, player_armor_graph_, random_);
+        if (const auto weapon = load_weapon_prototype(
+                resource, *definition, player_weapon_damage_graph_)) {
+            entity.weapon_item = roll_weapon_item(*weapon, random_);
+        }
     } else if (resource.kind == MasterResourceKind::monster) {
         const auto definition = definitions_->load(resource);
         const auto minimum_health_percent =

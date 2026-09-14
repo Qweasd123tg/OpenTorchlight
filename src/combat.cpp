@@ -12,31 +12,23 @@ CombatController::CombatController(const PlayerPrototype& player,
                                            player.maximum_damage));
     maximum_damage_ = std::max(1, std::max(player.minimum_damage,
                                            player.maximum_damage));
-    attack_range_ = std::max(0.5F, player.reach_bonus + 1.0F);
+    reach_bonus_ = player.reach_bonus;
+    attack_range_ = std::max(0.5F, reach_bonus_ + 1.0F);
     if (player.starting_weapon) {
-        const auto& weapon = *player.starting_weapon;
-        // CEquipment::calculateCombatStats first rolls the data-file percentage,
-        // applies rarity and speed modifiers, truncates it, then setGraphDamage
-        // scales BASE_WEAPON_DAMAGE and rounds the result upward.
-        const auto raw_damage = random_.integer_between(
-            weapon.minimum_damage_percent, weapon.maximum_damage_percent);
-        const auto scaled_percent = static_cast<std::int32_t>(
-            static_cast<float>(raw_damage) *
-            (static_cast<float>(weapon.rarity_damage_modifier) / 100.0F) *
-            (static_cast<float>(weapon.speed_damage_modifier) / 100.0F));
-        const auto damage = static_cast<std::int32_t>(std::ceil(
-            weapon.base_weapon_damage * static_cast<float>(scaled_percent) / 100.0F));
-        maximum_damage_ = std::max(1, damage);
-        minimum_damage_ = static_cast<std::int32_t>(
-            std::ceil(static_cast<float>(maximum_damage_) * 0.5F));
-        // CCharacter::attackRange adds the weapon range, scaled REACH_BONUS and
-        // the original 0.2 world-unit contact allowance. Player scale is 1 here.
-        attack_range_ = std::max(
-            0.5F, weapon.range + player.reach_bonus + 0.2F);
+        equip(roll_weapon_item(*player.starting_weapon, random_));
     }
     attack_interval_ = player.attack_speed > 0.0F
                            ? std::max(0.1F, 100.0F / player.attack_speed)
                            : 1.0F;
+}
+
+void CombatController::equip(const WeaponItem& item) noexcept {
+    minimum_damage_ = std::max(1, item.minimum_damage);
+    maximum_damage_ = std::max(minimum_damage_, item.maximum_damage);
+    // CCharacter::attackRange adds the weapon range, scaled REACH_BONUS and
+    // the original 0.2 world-unit contact allowance. Player scale is 1 here.
+    attack_range_ = std::max(
+        0.5F, item.prototype.range + reach_bonus_ + 0.2F);
 }
 
 bool CombatController::select_target(RuntimeEntityWorld& world,

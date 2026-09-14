@@ -37,6 +37,18 @@ std::int32_t optional_integer(const UnitDefinition& definition,
     return std::get<std::int32_t>(property->value);
 }
 
+float optional_floating(const UnitDefinition& definition, const char16_t* name,
+                        float fallback) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    if (property->type != AdmValueType::floating) {
+        throw EquipmentError("Weapon combat property is not a float");
+    }
+    return std::get<float>(property->value);
+}
+
 } // namespace
 
 std::optional<ArmorSlot> armor_slot_for_unit_type(
@@ -121,6 +133,69 @@ std::optional<ArmorItem> roll_armor_item(
             item.damage_defense.elemental_armor[index] = value;
         }
     }
+    return item;
+}
+
+std::optional<WeaponPrototype> load_weapon_prototype(
+    const MasterResourceRecord& resource, const UnitDefinition& definition,
+    const StatGraph& damage_graph) {
+    const auto* minimum = definition.find_property(u"MINDAMAGE");
+    const auto* maximum = definition.find_property(u"MAXDAMAGE");
+    const auto* range = definition.find_property(u"RANGE");
+    if (minimum == nullptr || maximum == nullptr || range == nullptr) {
+        return std::nullopt;
+    }
+    WeaponPrototype weapon;
+    weapon.guid = resource.guid;
+    weapon.name = resource.name;
+    weapon.display_name = resource.display_name;
+    weapon.unit_type = resource.unit_type;
+    weapon.level = optional_integer(definition, u"LEVEL", 1);
+    weapon.minimum_damage_percent = optional_integer(definition, u"MINDAMAGE", 0);
+    weapon.maximum_damage_percent = optional_integer(definition, u"MAXDAMAGE", 0);
+    weapon.rarity_damage_modifier = optional_integer(
+        definition, u"RARITY_DMG_MOD", 100);
+    weapon.speed_damage_modifier = optional_integer(
+        definition, u"SPEED_DMG_MOD", 100);
+    weapon.speed = optional_integer(definition, u"SPEED", 100);
+    weapon.range = optional_floating(definition, u"RANGE", 0.0F);
+    weapon.strike_range = optional_floating(
+        definition, u"STRIKERANGE", weapon.range);
+    weapon.base_weapon_damage = damage_graph.value(
+        static_cast<float>(weapon.level));
+    if (weapon.level < 1 || weapon.minimum_damage_percent < 0 ||
+        weapon.maximum_damage_percent < weapon.minimum_damage_percent ||
+        weapon.rarity_damage_modifier < 0 || weapon.speed_damage_modifier < 0 ||
+        !std::isfinite(weapon.range) || weapon.range < 0.0F ||
+        !std::isfinite(weapon.strike_range) || weapon.strike_range < 0.0F ||
+        !std::isfinite(weapon.base_weapon_damage) ||
+        !(weapon.base_weapon_damage > 0.0F)) {
+        throw EquipmentError("Weapon combat properties are invalid");
+    }
+    return weapon;
+}
+
+WeaponItem roll_weapon_item(const WeaponPrototype& prototype,
+                            TorchlightRandom& random,
+                            std::int32_t rarity_rank) noexcept {
+    const auto rank = std::clamp(rarity_rank, 0, 5);
+    const auto raw_damage = rank > 0
+                                ? prototype.maximum_damage_percent
+                                : random.integer_between(
+                                      prototype.minimum_damage_percent,
+                                      prototype.maximum_damage_percent);
+    const auto scaled_percent = static_cast<std::int32_t>(
+        static_cast<float>(raw_damage) *
+        (static_cast<float>(prototype.rarity_damage_modifier) / 100.0F) *
+        (static_cast<float>(prototype.speed_damage_modifier) / 100.0F));
+    const auto maximum_damage = std::max(1, static_cast<std::int32_t>(std::ceil(
+        prototype.base_weapon_damage *
+        static_cast<float>(scaled_percent + rank * 10) / 100.0F)));
+    WeaponItem item;
+    item.prototype = prototype;
+    item.maximum_damage = maximum_damage;
+    item.minimum_damage = static_cast<std::int32_t>(std::ceil(
+        static_cast<float>(maximum_damage) * 0.5F));
     return item;
 }
 

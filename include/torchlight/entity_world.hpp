@@ -42,6 +42,7 @@ struct RuntimeEntity {
     float follow_radius = 0.0F;
     std::u16string equipped_attack_name;
     std::optional<ArmorItem> armor_item;
+    std::optional<WeaponItem> weapon_item;
     DamageDefense damage_defense;
     bool alive = true;
     bool combat_targetable = false;
@@ -116,6 +117,7 @@ private:
     StatGraph monster_damage_graph_;
     StatGraph monster_armor_graph_;
     StatGraph player_armor_graph_;
+    StatGraph player_weapon_damage_graph_;
     std::unordered_map<std::int64_t, std::array<float, 3>> spawner_positions_;
     TorchlightRandom random_;
     std::int32_t spawn_level_ = 1;

@@ -15,6 +15,28 @@
 
 namespace torchlight {
 
+struct WeaponPrototype {
+    std::int64_t guid = 0;
+    std::u16string name;
+    std::u16string display_name;
+    std::u16string unit_type;
+    std::int32_t level = 1;
+    std::int32_t minimum_damage_percent = 0;
+    std::int32_t maximum_damage_percent = 0;
+    std::int32_t rarity_damage_modifier = 100;
+    std::int32_t speed_damage_modifier = 100;
+    std::int32_t speed = 100;
+    float range = 0.0F;
+    float strike_range = 0.0F;
+    float base_weapon_damage = 0.0F;
+};
+
+struct WeaponItem {
+    WeaponPrototype prototype;
+    std::int32_t minimum_damage = 1;
+    std::int32_t maximum_damage = 1;
+};
+
 enum class ArmorSlot : std::size_t {
     chest,
     boots,
@@ -46,5 +68,13 @@ struct ArmorItem {
     const MasterResourceRecord& resource, const UnitDefinition& definition,
     const StatGraph& armor_graph, TorchlightRandom& random,
     std::int32_t rarity_rank = 0);
+
+[[nodiscard]] std::optional<WeaponPrototype> load_weapon_prototype(
+    const MasterResourceRecord& resource, const UnitDefinition& definition,
+    const StatGraph& damage_graph);
+
+[[nodiscard]] WeaponItem roll_weapon_item(
+    const WeaponPrototype& prototype, TorchlightRandom& random,
+    std::int32_t rarity_rank = 0) noexcept;
 
 } // namespace torchlight

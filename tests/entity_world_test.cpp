@@ -178,6 +178,19 @@ int main(int argc, char** argv) {
                         &armor_world.entities().front(),
                 "runtime armor item did not preserve its generated combat data");
 
+        torchlight::LogicRuntime weapon_logic(layout, 42);
+        torchlight::RuntimeEntityWorld weapon_world(
+            layout, resources, definitions, spawn_classes, unit_types, 42, 1);
+        const torchlight::SpawnRequest weapon_request{
+            spawner, u"Rusty Blade", u"Items", 1};
+        require(weapon_world.consume_spawn_requests(
+                    {weapon_request}, weapon_logic).entities_created == 1 &&
+                    weapon_world.entities().front().weapon_item &&
+                    weapon_world.entities().front().weapon_item->minimum_damage == 10 &&
+                    weapon_world.entities().front().weapon_item->maximum_damage == 19 &&
+                    weapon_world.entities().front().weapon_item->prototype.range == 0.6F,
+                "runtime weapon did not preserve its generated combat data");
+
         auto town = loader.load_fixed_scene(u"media/dungeons/TOWN.DAT");
         const auto expansion = torchlight::expand_layout_links(loader, town.layout);
         require(expansion.links_expanded == 27,

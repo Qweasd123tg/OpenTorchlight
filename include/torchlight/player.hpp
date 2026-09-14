@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/damage.hpp"
+#include "torchlight/equipment.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/scene_geometry.hpp"
@@ -13,22 +14,6 @@
 #include <vector>
 
 namespace torchlight {
-
-struct WeaponPrototype {
-    std::int64_t guid = 0;
-    std::u16string name;
-    std::u16string display_name;
-    std::u16string unit_type;
-    std::int32_t level = 1;
-    std::int32_t minimum_damage_percent = 0;
-    std::int32_t maximum_damage_percent = 0;
-    std::int32_t rarity_damage_modifier = 100;
-    std::int32_t speed_damage_modifier = 100;
-    std::int32_t speed = 100;
-    float range = 0.0F;
-    float strike_range = 0.0F;
-    float base_weapon_damage = 0.0F;
-};
 
 struct PlayerPrototype {
     std::int64_t guid = 0;

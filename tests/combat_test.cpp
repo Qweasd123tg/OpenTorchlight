@@ -139,6 +139,15 @@ int main(int argc, char** argv) {
         require(!combat.select_target(world, spawned.position, 1.0F),
                 "dead monster remained selectable");
 
+        torchlight::WeaponItem replacement;
+        replacement.minimum_damage = 7;
+        replacement.maximum_damage = 14;
+        replacement.prototype.range = 7.0F;
+        combat.equip(replacement);
+        require(combat.minimum_damage() == 7 && combat.maximum_damage() == 14 &&
+                    combat.attack_range() == 8.45F,
+                "picked-up weapon did not replace player combat properties");
+
         std::cout << "PASS: selected, approached, damaged and killed an original monster\n";
         return 0;
     } catch (const std::exception& error) {

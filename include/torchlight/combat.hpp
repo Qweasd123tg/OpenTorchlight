@@ -32,6 +32,7 @@ public:
                                      const std::array<float, 3>& position,
                                      float maximum_distance) noexcept;
     void clear_target() noexcept;
+    void equip(const WeaponItem& item) noexcept;
     [[nodiscard]] const RuntimeEntity* target(
         const RuntimeEntityWorld& world) const noexcept;
     [[nodiscard]] std::uint64_t target_id() const noexcept { return target_id_; }
@@ -56,6 +57,7 @@ private:
     std::int32_t maximum_damage_ = 1;
     float attack_range_ = 1.0F;
     float attack_interval_ = 1.0F;
+    float reach_bonus_ = 0.0F;
     float cooldown_ = 0.0F;
 };
 

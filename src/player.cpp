@@ -49,30 +49,6 @@ std::int32_t integer(const UnitDefinition& definition, const char16_t* name) {
     return std::get<std::int32_t>(property.value);
 }
 
-std::int32_t optional_integer(const UnitDefinition& definition,
-                              const char16_t* name, std::int32_t fallback) {
-    const auto* property = definition.find_property(name);
-    if (property == nullptr) {
-        return fallback;
-    }
-    if (property->type != AdmValueType::integer) {
-        throw PlayerError("Equipment integer property has the wrong type");
-    }
-    return std::get<std::int32_t>(property->value);
-}
-
-float optional_floating(const UnitDefinition& definition, const char16_t* name,
-                        float fallback) {
-    const auto* property = definition.find_property(name);
-    if (property == nullptr) {
-        return fallback;
-    }
-    if (property->type != AdmValueType::floating) {
-        throw PlayerError("Equipment float property has the wrong type");
-    }
-    return std::get<float>(property->value);
-}
-
 bool is_text(AdmValueType type) noexcept {
     return type == AdmValueType::string || type == AdmValueType::translation ||
            type == AdmValueType::note;
@@ -142,44 +118,6 @@ std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definit
         }
     }
     return std::nullopt;
-}
-
-WeaponPrototype load_weapon(const MasterResourceIndex& resources,
-                            UnitDefinitionLoader& definitions,
-                            const StatGraph& damage_graph,
-                            std::u16string_view name) {
-    const auto* record = resources.find_case_insensitive(
-        MasterResourceKind::item, name);
-    if (record == nullptr || record->do_not_create || record->create_as != u"EQUIPMENT") {
-        throw PlayerError("Starting weapon is absent from equipment resources");
-    }
-    const auto definition = definitions.load(*record);
-    WeaponPrototype weapon;
-    weapon.guid = record->guid;
-    weapon.name = record->name;
-    weapon.display_name = record->display_name;
-    weapon.unit_type = record->unit_type;
-    weapon.level = optional_integer(*definition, u"LEVEL", 1);
-    weapon.minimum_damage_percent = integer(*definition, u"MINDAMAGE");
-    weapon.maximum_damage_percent = integer(*definition, u"MAXDAMAGE");
-    weapon.rarity_damage_modifier = optional_integer(
-        *definition, u"RARITY_DMG_MOD", 100);
-    weapon.speed_damage_modifier = optional_integer(
-        *definition, u"SPEED_DMG_MOD", 100);
-    weapon.speed = optional_integer(*definition, u"SPEED", 100);
-    weapon.range = optional_floating(*definition, u"RANGE", 0.0F);
-    weapon.strike_range = optional_floating(*definition, u"STRIKERANGE", weapon.range);
-    weapon.base_weapon_damage = damage_graph.value(static_cast<float>(weapon.level));
-    if (weapon.minimum_damage_percent < 0 ||
-        weapon.maximum_damage_percent < weapon.minimum_damage_percent ||
-        weapon.rarity_damage_modifier < 0 || weapon.speed_damage_modifier < 0 ||
-        !std::isfinite(weapon.range) || weapon.range < 0.0F ||
-        !std::isfinite(weapon.strike_range) || weapon.strike_range < 0.0F ||
-        !std::isfinite(weapon.base_weapon_damage) ||
-        !(weapon.base_weapon_damage > 0.0F)) {
-        throw PlayerError("Starting weapon combat properties are invalid");
-    }
-    return weapon;
 }
 
 std::string ascii(std::u16string_view value) {
@@ -269,8 +207,18 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
             throw PlayerError("Playable player health is invalid");
         }
         if (const auto weapon_name = starting_weapon_name(*definition)) {
-            player.starting_weapon = load_weapon(
-                resources, definitions, damage_graph, *weapon_name);
+            const auto* record = resources.find_case_insensitive(
+                MasterResourceKind::item, *weapon_name);
+            if (record == nullptr || record->do_not_create ||
+                record->create_as != u"EQUIPMENT") {
+                throw PlayerError("Starting weapon is absent from equipment resources");
+            }
+            const auto weapon_definition = definitions.load(*record);
+            player.starting_weapon = load_weapon_prototype(
+                *record, *weapon_definition, damage_graph);
+            if (!player.starting_weapon) {
+                throw PlayerError("Starting equipment is not a weapon");
+            }
         }
         result.push_back(std::move(player));
     }
