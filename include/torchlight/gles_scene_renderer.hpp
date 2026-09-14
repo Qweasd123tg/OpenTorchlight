@@ -39,6 +39,7 @@ public:
     void set_instance_angle(std::size_t instance_index, float angle_degrees);
     void set_instance_visible(std::size_t instance_index, bool visible);
     void set_mesh_pose(const OgreMeshPose& pose);
+    void set_instance_pose(std::size_t instance_index, const OgreMeshPose& pose);
     void set_camera_target(const std::array<float, 3>& target,
                            float camera_distance = 28.5F);
     void clear_camera_target() noexcept;

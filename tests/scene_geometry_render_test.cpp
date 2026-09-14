@@ -168,6 +168,12 @@ int main(int argc, char** argv) {
                 "runtime monster was not appended to generated geometry");
         const auto idle_animations = torchlight::load_scene_idle_animations(
             archive, mine_geometry, player_mesh_index);
+        const auto run_animations = torchlight::load_scene_animations(
+            archive, mine_geometry, torchlight::SceneAnimationKind::run,
+            player_mesh_index);
+        const auto attack_animations = torchlight::load_scene_animations(
+            archive, mine_geometry, torchlight::SceneAnimationKind::attack,
+            player_mesh_index);
         const auto runtime_monster_mesh_index =
             mine_geometry.instances[*runtime_instance].mesh_index;
         const auto monster_idle_animation = std::find_if(
@@ -176,6 +182,18 @@ int main(int argc, char** argv) {
             });
         require(monster_idle_animation != idle_animations.end(),
                 "generated mine monster has no reusable idle animation");
+        const auto monster_run_animation = std::find_if(
+            run_animations.begin(), run_animations.end(), [&](const auto& animation) {
+                return animation.mesh_index == runtime_monster_mesh_index;
+            });
+        const auto monster_attack_animation = std::find_if(
+            attack_animations.begin(), attack_animations.end(), [&](const auto& animation) {
+                return animation.mesh_index == runtime_monster_mesh_index;
+            });
+        require(monster_run_animation != run_animations.end(),
+                "generated mine monster has no reusable run animation");
+        require(monster_attack_animation != attack_animations.end(),
+                "generated mine monster has no reusable attack animation");
         const auto monster_idle_pose = torchlight::sample_scene_mesh_animation(
             mine_geometry, *monster_idle_animation, 0.25F);
         require(!monster_idle_pose.geometries.empty(),
@@ -191,7 +209,13 @@ int main(int argc, char** argv) {
         const auto run_skeleton =
             torchlight::parse_ogre_skeleton(archive.read(*run_entry));
         mine_renderer.set_camera_target(player_start, 8.0F);
-        mine_renderer.set_mesh_pose(monster_idle_pose);
+        mine_renderer.set_instance_pose(*runtime_instance, monster_idle_pose);
+        mine_renderer.set_instance_pose(
+            *runtime_instance, torchlight::sample_scene_mesh_animation(
+                                   mine_geometry, *monster_run_animation, 0.25F));
+        mine_renderer.set_instance_pose(
+            *runtime_instance, torchlight::sample_scene_mesh_animation(
+                                   mine_geometry, *monster_attack_animation, 0.25F));
         mine_renderer.set_mesh_pose(torchlight::sample_ogre_mesh_animation(
             mine_geometry.meshes[player_mesh_index].mesh, bind_skeleton,
             run_skeleton, "Run", 0.0F));

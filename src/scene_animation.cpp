@@ -42,15 +42,32 @@ std::string ascii_lower(std::string_view value) {
     return result;
 }
 
-std::vector<const PakArchive::Entry*> sibling_idle_entries(
-    const PakArchive& archive, std::string_view mesh_path) {
+std::vector<const PakArchive::Entry*> sibling_animation_entries(
+    const PakArchive& archive, std::string_view mesh_path,
+    std::string_view animation_stem) {
     const auto slash = mesh_path.find_last_of("/\\");
     const auto directory = slash == std::string_view::npos
                                ? std::string{}
                                : ascii_lower(mesh_path.substr(0, slash + 1U));
     const auto mesh_name = ascii_lower(
         slash == std::string_view::npos ? mesh_path : mesh_path.substr(slash + 1U));
+    const auto normalized_stem = ascii_lower(animation_stem);
     const bool unarmed_mesh = mesh_name.find("unarmed") != std::string::npos;
+
+    std::vector<const PakArchive::Entry*> direct;
+    const auto append_direct = [&](std::string_view suffix) {
+        if (const auto* entry = archive.find_normalized(
+                directory + normalized_stem + std::string(suffix));
+            entry != nullptr) {
+            direct.push_back(entry);
+        }
+    };
+    append_direct(".skeleton");
+    append_direct(unarmed_mesh ? "_unarmed.skeleton" : "_armed.skeleton");
+    append_direct(unarmed_mesh ? "_armed.skeleton" : "_unarmed.skeleton");
+    if (!direct.empty()) {
+        return direct;
+    }
 
     struct Candidate {
         const PakArchive::Entry* entry = nullptr;
@@ -66,19 +83,21 @@ std::vector<const PakArchive::Entry*> sibling_idle_entries(
             continue;
         }
         const auto filename = normalized.substr(directory.size());
-        if (filename.rfind("idle", 0) != 0 ||
+        if (filename.rfind(normalized_stem, 0) != 0 ||
             filename.size() < 9U ||
             filename.compare(filename.size() - 9U, 9U, ".skeleton") != 0) {
             continue;
         }
         int priority = 3;
-        if (filename == "idle.skeleton") {
+        if (filename == normalized_stem + ".skeleton") {
             priority = 0;
-        } else if ((unarmed_mesh && filename == "idle_unarmed.skeleton") ||
-                   (!unarmed_mesh && filename == "idle_armed.skeleton")) {
+        } else if ((unarmed_mesh &&
+                    filename == normalized_stem + "_unarmed.skeleton") ||
+                   (!unarmed_mesh &&
+                    filename == normalized_stem + "_armed.skeleton")) {
             priority = 1;
-        } else if (filename == "idle_unarmed.skeleton" ||
-                   filename == "idle_armed.skeleton") {
+        } else if (filename == normalized_stem + "_unarmed.skeleton" ||
+                   filename == normalized_stem + "_armed.skeleton") {
             priority = 2;
         }
         candidates.push_back(Candidate{&entry, priority, normalized});
@@ -100,6 +119,19 @@ std::vector<const PakArchive::Entry*> sibling_idle_entries(
 std::vector<SceneMeshAnimation> load_scene_idle_animations(
     const PakArchive& archive, const FixedSceneGeometry& geometry,
     std::optional<std::size_t> excluded_mesh_index) {
+    return load_scene_animations(
+        archive, geometry, SceneAnimationKind::idle, excluded_mesh_index);
+}
+
+std::vector<SceneMeshAnimation> load_scene_animations(
+    const PakArchive& archive, const FixedSceneGeometry& geometry,
+    SceneAnimationKind kind,
+    std::optional<std::size_t> excluded_mesh_index) {
+    const auto animation_stem = kind == SceneAnimationKind::idle
+                                    ? std::string_view{"idle"}
+                                    : kind == SceneAnimationKind::run
+                                          ? std::string_view{"run"}
+                                          : std::string_view{"attack"};
     std::vector<SceneMeshAnimation> result;
     for (std::size_t mesh_index = 0; mesh_index < geometry.meshes.size(); ++mesh_index) {
         if (excluded_mesh_index && mesh_index == *excluded_mesh_index) {
@@ -115,19 +147,21 @@ std::vector<SceneMeshAnimation> load_scene_idle_animations(
         if (bind_entry == nullptr) {
             continue;
         }
-        auto idle_entries = sibling_idle_entries(archive, resource.source_path);
-        if (idle_entries.empty()) {
+        auto animation_entries = sibling_animation_entries(
+            archive, resource.source_path, animation_stem);
+        if (animation_entries.empty()) {
             continue;
         }
         OgreSkeleton animation_skeleton;
         std::string animation_name;
         float animation_duration = 0.0F;
-        for (const auto* idle_entry : idle_entries) {
-            auto candidate = parse_ogre_skeleton(archive.read(*idle_entry));
+        for (const auto* animation_entry : animation_entries) {
+            auto candidate = parse_ogre_skeleton(archive.read(*animation_entry));
             auto candidate_clip = std::find_if(
                 candidate.animations.begin(), candidate.animations.end(),
-                [](const auto& animation) {
-                    return ascii_equal_case_insensitive(animation.name, "Idle") &&
+                [&](const auto& animation) {
+                    return ascii_equal_case_insensitive(
+                               animation.name, animation_stem) &&
                            animation.length > 0.0F;
                 });
             if (candidate_clip == candidate.animations.end()) {
@@ -147,6 +181,7 @@ std::vector<SceneMeshAnimation> load_scene_idle_animations(
         }
         SceneMeshAnimation animation;
         animation.mesh_index = mesh_index;
+        animation.kind = kind;
         animation.bind_skeleton = parse_ogre_skeleton(archive.read(*bind_entry));
         animation.animation_name = std::move(animation_name);
         animation.duration = animation_duration;
