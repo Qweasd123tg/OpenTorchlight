@@ -217,7 +217,42 @@ AdmDocument load_data_file(const PakArchive& archive, std::u16string_view path,
     return document;
 }
 
-void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& objects) {
+LayoutLogicGroup parse_logic_group(const AdmGroup& group, std::int64_t object_id) {
+    LayoutLogicGroup result;
+    result.object_id = object_id;
+    for (const auto& child : group.groups) {
+        if (child.name != u"LOGICOBJECT") {
+            continue;
+        }
+        LayoutLogicNode node;
+        node.id = unsigned_value(child, u"ID", 0);
+        node.object_id = int64_value(child, u"OBJECTID", 0);
+        node.editor_x = float_value(child, u"X", 0.0F);
+        node.editor_y = float_value(child, u"Y", 0.0F);
+        for (const auto& link_group : child.groups) {
+            if (link_group.name != u"LOGICLINK") {
+                continue;
+            }
+            const auto target = int_value(link_group, u"LINKINGTO", -1);
+            if (target < 0) {
+                throw LevelSceneError("Layout logic link has an invalid target node ID");
+            }
+            LayoutLogicLink link;
+            link.target_node_id = static_cast<std::uint32_t>(target);
+            link.output_name = text_value(link_group, u"OUTPUTNAME");
+            link.input_name = text_value(link_group, u"INPUTNAME");
+            if (link.output_name.empty() || link.input_name.empty()) {
+                throw LevelSceneError("Layout logic link has an empty function name");
+            }
+            node.links.push_back(std::move(link));
+        }
+        result.nodes.push_back(std::move(node));
+    }
+    return result;
+}
+
+void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& objects,
+                            std::vector<LayoutLogicGroup>& logic_groups) {
     if (group.name == u"BASEOBJECT") {
         const auto* properties = child_group(group, u"PROPERTIES");
         if (properties != nullptr) {
@@ -238,11 +273,15 @@ void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& ob
             object.resource_file = text_value(*properties, u"FILE");
             object.monster = text_value(*properties, u"MONSTER");
             object.unit = text_value(*properties, u"UNIT");
+            object.properties = properties->properties;
+            if (const auto* logic = child_group(*properties, u"LOGICGROUP")) {
+                logic_groups.push_back(parse_logic_group(*logic, object.id));
+            }
             objects.push_back(std::move(object));
         }
     }
     for (const auto& child : group.groups) {
-        collect_layout_objects(child, objects);
+        collect_layout_objects(child, objects, logic_groups);
     }
 }
 
@@ -404,8 +443,18 @@ LayoutManifest LevelSceneLoader::load_layout(std::string_view compiled_path) con
     result.source_path = entry->name;
     result.version = int_value(document.root, u"VERSION", 0);
     result.declared_count = unsigned_value(document.root, u"COUNT", 0);
-    collect_layout_objects(document.root, result.objects);
+    collect_layout_objects(document.root, result.objects, result.logic_groups);
     return result;
+}
+
+const AdmProperty* LayoutObject::find_property(
+    const std::u16string& property_name) const noexcept {
+    for (const auto& candidate : properties) {
+        if (candidate.name == property_name) {
+            return &candidate;
+        }
+    }
+    return nullptr;
 }
 
 std::vector<std::string> LevelSceneLoader::layout_candidates(

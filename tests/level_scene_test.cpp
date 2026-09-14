@@ -72,6 +72,18 @@ int main(int argc, char** argv) {
         require(town.layout.version == 3, "town layout has the wrong version");
         require(town.layout.declared_count == 784, "town layout has the wrong declared count");
         require(town.layout.objects.size() == 733, "town layout has the wrong object count");
+        require(town.layout.logic_groups.size() == 22,
+                "town layout has the wrong logic-group count");
+        std::size_t town_logic_nodes = 0;
+        std::size_t town_logic_links = 0;
+        for (const auto& group : town.layout.logic_groups) {
+            town_logic_nodes += group.nodes.size();
+            for (const auto& node : group.nodes) {
+                town_logic_links += node.links.size();
+            }
+        }
+        require(town_logic_nodes == 169, "town layout has the wrong logic-node count");
+        require(town_logic_links == 221, "town layout has the wrong logic-link count");
 
         const auto room_pieces = std::count_if(town.layout.objects.begin(),
                                                town.layout.objects.end(), [](const auto& object) {

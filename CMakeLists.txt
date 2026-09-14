@@ -12,6 +12,7 @@ add_library(torchlight_core STATIC
     src/input_state.cpp
     src/key_manager.cpp
     src/level_scene.cpp
+    src/logic_runtime.cpp
     src/master_resource_index.cpp
     src/mouse_manager.cpp
     src/navigation_grid.cpp
@@ -123,6 +124,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(unit_definition_test PRIVATE torchlight_core)
     add_executable(level_scene_test tests/level_scene_test.cpp)
     target_link_libraries(level_scene_test PRIVATE torchlight_core)
+    add_executable(logic_runtime_test tests/logic_runtime_test.cpp)
+    target_link_libraries(logic_runtime_test PRIVATE torchlight_core)
     add_executable(random_level_test tests/random_level_test.cpp)
     target_link_libraries(random_level_test PRIVATE torchlight_core)
     add_executable(player_test tests/player_test.cpp)
@@ -173,6 +176,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND unit_definition_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_level_scene
             COMMAND level_scene_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_logic_runtime
+            COMMAND logic_runtime_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_random_levels
             COMMAND random_level_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_players

@@ -3,6 +3,7 @@
 #include "torchlight/collision_scene.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
+#include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/navigation_grid.hpp"
 #include "torchlight/ogre_material.hpp"
@@ -439,6 +440,7 @@ int main(int argc, char** argv) {
         std::optional<torchlight::ActorMotion> player_motion;
         std::optional<std::size_t> player_instance_index;
         std::optional<torchlight::NavigationGrid> navigation;
+        std::optional<torchlight::FixedLevelScene> fixed_scene;
         std::vector<std::array<float, 3>> active_path;
         std::size_t next_path_node = 0;
         float player_floor_offset = 0.0F;
@@ -474,7 +476,8 @@ int main(int argc, char** argv) {
             player_name.assign(players.front().name.begin(), players.front().name.end());
             scene_state = "generated-dungeon-preview";
         } else {
-            const auto town = scene_loader.load_fixed_scene(u"media/dungeons/TOWN.DAT");
+            fixed_scene.emplace(scene_loader.load_fixed_scene(u"media/dungeons/TOWN.DAT"));
+            const auto& town = *fixed_scene;
             layout_object_count = town.layout.objects.size();
             geometry = torchlight::build_room_piece_geometry(archive, levelsets, town);
             placed_monster_count = torchlight::append_layout_monster_geometry(
@@ -501,6 +504,28 @@ int main(int argc, char** argv) {
 
         DesktopWindow window(1280, 720);
         torchlight::GlesSceneRenderer renderer(geometry, archive, materials);
+        std::optional<torchlight::LogicRuntime> logic_runtime;
+        std::size_t logic_event_count = 0;
+        std::size_t logic_invocation_count = 0;
+        std::size_t spawn_request_count = 0;
+        std::size_t warp_request_count = 0;
+        auto drain_logic = [&] {
+            if (!logic_runtime) {
+                return;
+            }
+            logic_event_count += logic_runtime->take_events().size();
+            logic_invocation_count += logic_runtime->take_invocations().size();
+            spawn_request_count += logic_runtime->take_spawn_requests().size();
+            warp_request_count += logic_runtime->take_warp_requests().size();
+        };
+        if (fixed_scene) {
+            logic_runtime.emplace(fixed_scene->layout, options.seed);
+            logic_runtime->activate_level();
+            if (player_motion) {
+                logic_runtime->update_player_position(player_motion->position());
+            }
+            drain_logic();
+        }
         if (player_motion) {
             renderer.set_camera_target(player_motion->position(), 32.0F);
         }
@@ -541,6 +566,11 @@ int main(int argc, char** argv) {
                 }
                 renderer.set_instance_position(*player_instance_index, player_motion->position());
                 renderer.set_camera_target(player_motion->position(), 32.0F);
+                if (logic_runtime) {
+                    logic_runtime->update(std::min(elapsed, 0.1F));
+                    logic_runtime->update_player_position(player_motion->position());
+                    drain_logic();
+                }
             }
             window.draw_scene_frame(renderer);
             rendered_once = true;
@@ -563,6 +593,10 @@ int main(int argc, char** argv) {
                   << " textures=" << render_stats.texture_resources
                   << " textured_batches=" << render_stats.textured_batches
                   << " placed_triangles=" << render_stats.placed_triangles
+                  << " logic_events=" << logic_event_count
+                  << " logic_invocations=" << logic_invocation_count
+                  << " spawn_requests=" << spawn_request_count
+                  << " warp_requests=" << warp_request_count
                   << " frames=" << frames;
         if (player_motion) {
             std::cout << " player_position=" << player_motion->position()[0] << ','

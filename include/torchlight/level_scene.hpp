@@ -124,6 +124,29 @@ struct LayoutObject {
     std::u16string resource_file;
     std::u16string monster;
     std::u16string unit;
+    std::vector<AdmProperty> properties;
+
+    [[nodiscard]] const AdmProperty* find_property(
+        const std::u16string& property_name) const noexcept;
+};
+
+struct LayoutLogicLink {
+    std::uint32_t target_node_id = 0;
+    std::u16string output_name;
+    std::u16string input_name;
+};
+
+struct LayoutLogicNode {
+    std::uint32_t id = 0;
+    std::int64_t object_id = 0;
+    float editor_x = 0.0F;
+    float editor_y = 0.0F;
+    std::vector<LayoutLogicLink> links;
+};
+
+struct LayoutLogicGroup {
+    std::int64_t object_id = 0;
+    std::vector<LayoutLogicNode> nodes;
 };
 
 struct LayoutWorldTransform {
@@ -137,6 +160,7 @@ struct LayoutManifest {
     std::int32_t version = 0;
     std::uint32_t declared_count = 0;
     std::vector<LayoutObject> objects;
+    std::vector<LayoutLogicGroup> logic_groups;
 };
 
 struct FixedLevelScene {
