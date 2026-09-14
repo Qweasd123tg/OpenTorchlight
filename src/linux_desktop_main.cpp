@@ -50,7 +50,7 @@
 
 namespace {
 
-constexpr float kCameraVerticalSpan = 22.0F;
+constexpr float kCameraDistance = 28.5F;
 
 class DesktopError : public std::runtime_error {
 public:
@@ -762,7 +762,7 @@ int main(int argc, char** argv) {
                     renderer.emplace(level.geometry, archive, materials);
                     ++renderer_rebuild_count;
                     renderer->set_camera_target(
-                        player_motion.position(), kCameraVerticalSpan);
+                        player_motion.position(), kCameraDistance);
                 }
                 logic_event_count += logic_runtime.take_events().size();
                 logic_invocation_count += logic_runtime.take_invocations().size();
@@ -777,7 +777,7 @@ int main(int argc, char** argv) {
             logic_runtime.update_player_position(player_motion.position());
             drain_logic();
             renderer.emplace(level.geometry, archive, materials);
-            renderer->set_camera_target(player_motion.position(), kCameraVerticalSpan);
+            renderer->set_camera_target(player_motion.position(), kCameraDistance);
             bool rendered_once = false;
             auto previous_frame = std::chrono::steady_clock::now();
 
@@ -867,7 +867,7 @@ int main(int argc, char** argv) {
                     renderer->set_instance_angle(player_instance_index, player_angle);
                 }
                 renderer->set_camera_target(
-                    player_motion.position(), kCameraVerticalSpan);
+                    player_motion.position(), kCameraDistance);
 
                 if (active_interaction) {
                     const auto dx = active_interaction->position[0] - player_motion.position()[0];

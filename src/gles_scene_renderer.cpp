@@ -23,6 +23,10 @@ namespace torchlight {
 namespace {
 
 constexpr float kDegreesToRadians = 0.01745329251994329577F;
+constexpr float kOriginalCameraFovRadians = 45.0F * kDegreesToRadians;
+constexpr float kOriginalCameraNearClip = 0.1F;
+constexpr float kOriginalCameraFarClip = 500.0F;
+constexpr std::array<float, 3> kOriginalCameraOffset{0.4F, 0.6F, -0.4F};
 
 class GlesSceneError : public std::runtime_error {
 public:
@@ -61,6 +65,12 @@ GLuint create_program() {
         "uniform vec2 object_rotation;"
         "uniform vec4 projection;"
         "uniform vec2 depth_projection;"
+        "uniform vec3 camera_position;"
+        "uniform vec3 camera_right;"
+        "uniform vec3 camera_up;"
+        "uniform vec3 camera_forward;"
+        "uniform vec4 camera_projection;"
+        "uniform float perspective_camera;"
         "varying vec2 vertex_texcoord;"
         "varying float vertex_light;"
         "void main() {"
@@ -83,9 +93,22 @@ GLuint create_program() {
         "     -local_normal.x * object_rotation.y + local_normal.z * object_rotation.x));"
         "  vec3 light_direction = normalize(vec3(-0.35, 0.80, -0.45));"
         "  vertex_light = 0.62 + 0.38 * max(dot(world_normal, light_direction), 0.0);"
-        "  gl_Position = vec4((projected_x - projection.x) * projection.z,"
-        "                     (projected_y - projection.y) * projection.w,"
-        "                     (depth - depth_projection.x) * depth_projection.y, 1.0);"
+        "  if (perspective_camera > 0.5) {"
+        "    vec3 camera_relative = world - camera_position;"
+        "    float camera_depth = dot(camera_relative, camera_forward);"
+        "    float clip_depth = ((camera_projection.w + camera_projection.z) /"
+        "                        (camera_projection.w - camera_projection.z)) * camera_depth -"
+        "                       (2.0 * camera_projection.w * camera_projection.z) /"
+        "                        (camera_projection.w - camera_projection.z);"
+        "    gl_Position = vec4(dot(camera_relative, camera_right) /"
+        "                           (camera_projection.x * camera_projection.y),"
+        "                       dot(camera_relative, camera_up) / camera_projection.x,"
+        "                       clip_depth, camera_depth);"
+        "  } else {"
+        "    gl_Position = vec4((projected_x - projection.x) * projection.z,"
+        "                       (projected_y - projection.y) * projection.w,"
+        "                       (depth - depth_projection.x) * depth_projection.y, 1.0);"
+        "  }"
         "  vertex_texcoord = texcoord;"
         "}";
     constexpr const char* fragment_source =
@@ -172,6 +195,26 @@ ProjectedPoint project(const std::array<float, 3>& point) {
     return {point[0] - 0.70F * point[2],
             point[1] + 0.35F * (point[0] + 0.70F * point[2]),
             0.25F * point[0] + 0.50F * point[2] - 0.10F * point[1]};
+}
+
+std::array<float, 3> subtract(const std::array<float, 3>& left,
+                              const std::array<float, 3>& right) {
+    return {left[0] - right[0], left[1] - right[1], left[2] - right[2]};
+}
+
+std::array<float, 3> cross(const std::array<float, 3>& left,
+                           const std::array<float, 3>& right) {
+    return {left[1] * right[2] - left[2] * right[1],
+            left[2] * right[0] - left[0] * right[2],
+            left[0] * right[1] - left[1] * right[0]};
+}
+
+std::array<float, 3> normalized(const std::array<float, 3>& value) {
+    const float length = std::hypot(value[0], value[1], value[2]);
+    if (!(length > 0.0F)) {
+        throw GlesSceneError("Cannot normalize a zero camera vector");
+    }
+    return {value[0] / length, value[1] / length, value[2] / length};
 }
 
 bool is_dds_path(const std::string& path) {
@@ -344,11 +387,21 @@ public:
         object_rotation_location_ = glGetUniformLocation(program_, "object_rotation");
         projection_location_ = glGetUniformLocation(program_, "projection");
         depth_projection_location_ = glGetUniformLocation(program_, "depth_projection");
+        camera_position_location_ = glGetUniformLocation(program_, "camera_position");
+        camera_right_location_ = glGetUniformLocation(program_, "camera_right");
+        camera_up_location_ = glGetUniformLocation(program_, "camera_up");
+        camera_forward_location_ = glGetUniformLocation(program_, "camera_forward");
+        camera_projection_location_ = glGetUniformLocation(program_, "camera_projection");
+        perspective_camera_location_ = glGetUniformLocation(program_, "perspective_camera");
         color_location_ = glGetUniformLocation(program_, "draw_color");
         texture_location_ = glGetUniformLocation(program_, "diffuse_texture");
         if (translation_location_ < 0 || object_scale_location_ < 0 ||
             object_rotation_location_ < 0 || projection_location_ < 0 ||
-            depth_projection_location_ < 0 || color_location_ < 0 || texture_location_ < 0) {
+            depth_projection_location_ < 0 || camera_position_location_ < 0 ||
+            camera_right_location_ < 0 || camera_up_location_ < 0 ||
+            camera_forward_location_ < 0 || camera_projection_location_ < 0 ||
+            perspective_camera_location_ < 0 || color_location_ < 0 ||
+            texture_location_ < 0) {
             throw GlesSceneError("OpenGL ES scene shader has an inactive uniform");
         }
     }
@@ -378,16 +431,24 @@ public:
         float scale_x = 0.0F;
         float scale_y = 0.0F;
         if (camera_target_.has_value()) {
-            const auto projected_target = project(*camera_target_);
-            center_x = projected_target.x;
-            center_y = projected_target.y;
-            scale_y = 1.90F / camera_vertical_span_;
-            scale_x = scale_y / aspect;
+            last_camera_position_ = *camera_target_;
+            for (std::size_t axis = 0; axis < 3; ++axis) {
+                last_camera_position_[axis] +=
+                    kOriginalCameraOffset[axis] * camera_distance_;
+            }
+            last_camera_forward_ = normalized(subtract(*camera_target_, last_camera_position_));
+            last_camera_right_ = normalized(
+                cross(last_camera_forward_, std::array<float, 3>{0.0F, 1.0F, 0.0F}));
+            last_camera_up_ = normalized(cross(last_camera_right_, last_camera_forward_));
+            last_tangent_half_fov_ = std::tan(kOriginalCameraFovRadians * 0.5F);
+            last_aspect_ = aspect;
+            last_perspective_ready_ = true;
         } else {
             const float extent_x = std::max(0.001F, maximum_.x - minimum_.x);
             const float extent_y = std::max(0.001F, maximum_.y - minimum_.y);
             scale_x = std::min(1.90F / extent_x, 1.90F / (extent_y * aspect));
             scale_y = scale_x * aspect;
+            last_perspective_ready_ = false;
         }
         last_width_ = width;
         last_height_ = height;
@@ -413,6 +474,13 @@ public:
         glUniform4f(projection_location_, center_x, center_y, scale_x, scale_y);
         glUniform2f(depth_projection_location_, (minimum_.depth + maximum_.depth) * 0.5F,
                     depth_scale);
+        glUniform3fv(camera_position_location_, 1, last_camera_position_.data());
+        glUniform3fv(camera_right_location_, 1, last_camera_right_.data());
+        glUniform3fv(camera_up_location_, 1, last_camera_up_.data());
+        glUniform3fv(camera_forward_location_, 1, last_camera_forward_.data());
+        glUniform4f(camera_projection_location_, last_tangent_half_fov_, aspect,
+                    kOriginalCameraNearClip, kOriginalCameraFarClip);
+        glUniform1f(perspective_camera_location_, camera_target_.has_value() ? 1.0F : 0.0F);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -523,14 +591,14 @@ public:
         }
     }
 
-    void set_camera_target(const std::array<float, 3>& target, float vertical_view_span) {
+    void set_camera_target(const std::array<float, 3>& target, float camera_distance) {
         if (!std::all_of(target.begin(), target.end(),
                          [](float value) { return std::isfinite(value); }) ||
-            !std::isfinite(vertical_view_span) || vertical_view_span <= 0.0F) {
-            throw GlesSceneError("Camera target or view span is invalid");
+            !std::isfinite(camera_distance) || camera_distance <= 0.0F) {
+            throw GlesSceneError("Camera target or distance is invalid");
         }
         camera_target_ = target;
-        camera_vertical_span_ = vertical_view_span;
+        camera_distance_ = camera_distance;
     }
 
     void clear_camera_target() noexcept { camera_target_.reset(); }
@@ -539,7 +607,6 @@ public:
         int pixel_x, int pixel_y_from_bottom, int width, int height,
         float ground_height) const {
         if (width <= 0 || height <= 0 || width != last_width_ || height != last_height_ ||
-            !(last_scale_x_ > 0.0F) || !(last_scale_y_ > 0.0F) ||
             !std::isfinite(ground_height)) {
             throw GlesSceneError("Camera projection is not ready for screen conversion");
         }
@@ -549,6 +616,25 @@ public:
         const float ndc_y = 2.0F * (static_cast<float>(pixel_y_from_bottom) + 0.5F) /
                                 static_cast<float>(height) -
                             1.0F;
+        if (last_perspective_ready_) {
+            std::array<float, 3> direction{};
+            for (std::size_t axis = 0; axis < 3; ++axis) {
+                direction[axis] = last_camera_forward_[axis] +
+                                  last_camera_right_[axis] * ndc_x *
+                                      last_tangent_half_fov_ * last_aspect_ +
+                                  last_camera_up_[axis] * ndc_y * last_tangent_half_fov_;
+            }
+            direction = normalized(direction);
+            if (std::abs(direction[1]) < 0.00001F) {
+                throw GlesSceneError("Camera ray is parallel to the ground plane");
+            }
+            const float distance = (ground_height - last_camera_position_[1]) / direction[1];
+            return {last_camera_position_[0] + direction[0] * distance, ground_height,
+                    last_camera_position_[2] + direction[2] * distance};
+        }
+        if (!(last_scale_x_ > 0.0F) || !(last_scale_y_ > 0.0F)) {
+            throw GlesSceneError("Orthographic camera projection is not ready");
+        }
         const float projected_x = last_center_x_ + ndc_x / last_scale_x_;
         const float projected_y = last_center_y_ + ndc_y / last_scale_y_;
         const float diagonal = (projected_y - ground_height) / 0.35F;
@@ -655,18 +741,31 @@ private:
     GLint object_rotation_location_ = -1;
     GLint projection_location_ = -1;
     GLint depth_projection_location_ = -1;
+    GLint camera_position_location_ = -1;
+    GLint camera_right_location_ = -1;
+    GLint camera_up_location_ = -1;
+    GLint camera_forward_location_ = -1;
+    GLint camera_projection_location_ = -1;
+    GLint perspective_camera_location_ = -1;
     GLint color_location_ = -1;
     GLint texture_location_ = -1;
     ProjectedPoint minimum_;
     ProjectedPoint maximum_;
     std::optional<std::array<float, 3>> camera_target_;
-    float camera_vertical_span_ = 80.0F;
+    float camera_distance_ = 28.5F;
     int last_width_ = 0;
     int last_height_ = 0;
     float last_center_x_ = 0.0F;
     float last_center_y_ = 0.0F;
     float last_scale_x_ = 0.0F;
     float last_scale_y_ = 0.0F;
+    std::array<float, 3> last_camera_position_{};
+    std::array<float, 3> last_camera_right_{1.0F, 0.0F, 0.0F};
+    std::array<float, 3> last_camera_up_{0.0F, 1.0F, 0.0F};
+    std::array<float, 3> last_camera_forward_{0.0F, 0.0F, 1.0F};
+    float last_tangent_half_fov_ = std::tan(kOriginalCameraFovRadians * 0.5F);
+    float last_aspect_ = 1.0F;
+    bool last_perspective_ready_ = false;
     GlesSceneRenderStats stats_;
 };
 
@@ -700,8 +799,8 @@ void GlesSceneRenderer::set_mesh_pose(const OgreMeshPose& pose) {
 }
 
 void GlesSceneRenderer::set_camera_target(const std::array<float, 3>& target,
-                                          float vertical_view_span) {
-    implementation_->set_camera_target(target, vertical_view_span);
+                                          float camera_distance) {
+    implementation_->set_camera_target(target, camera_distance);
 }
 
 void GlesSceneRenderer::clear_camera_target() noexcept {

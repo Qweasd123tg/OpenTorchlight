@@ -40,7 +40,7 @@ public:
     void set_instance_visible(std::size_t instance_index, bool visible);
     void set_mesh_pose(const OgreMeshPose& pose);
     void set_camera_target(const std::array<float, 3>& target,
-                           float vertical_view_span = 80.0F);
+                           float camera_distance = 28.5F);
     void clear_camera_target() noexcept;
     [[nodiscard]] std::array<float, 3> ground_position_at_pixel(
         int pixel_x, int pixel_y_from_bottom, int width, int height,
