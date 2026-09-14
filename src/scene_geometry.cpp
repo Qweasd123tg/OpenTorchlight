@@ -175,7 +175,8 @@ std::size_t append_layout_monster_geometry(const PakArchive& archive,
                                            UnitDefinitionLoader& definitions,
                                            const LayoutManifest& layout,
                                            FixedSceneGeometry& geometry,
-                                           std::size_t layout_index) {
+                                           std::size_t layout_index,
+                                           const RuntimeEntityWorld* entities) {
     const auto transforms = resolve_layout_world_transforms(layout);
     std::unordered_map<std::string, std::size_t> meshes;
     meshes.reserve(geometry.meshes.size() + layout.objects.size());
@@ -210,9 +211,12 @@ std::size_t append_layout_monster_geometry(const PakArchive& archive,
             geometry.meshes.push_back(std::move(resource));
             found = meshes.emplace(entry->name, mesh_index).first;
         }
-        geometry.instances.push_back(
-            SceneMeshInstance{layout_index, object_index, found->second,
-                              transforms[object_index]});
+        const auto* entity = entities == nullptr
+                                 ? nullptr
+                                 : entities->find_layout_entity(object.id);
+        geometry.instances.push_back(SceneMeshInstance{
+            layout_index, object_index, found->second, transforms[object_index],
+            entity == nullptr ? 0 : entity->id});
         ++appended;
     }
     return appended;

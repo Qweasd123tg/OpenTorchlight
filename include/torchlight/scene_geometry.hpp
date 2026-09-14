@@ -49,7 +49,8 @@ struct FixedSceneGeometry {
 [[nodiscard]] std::size_t append_layout_monster_geometry(
     const PakArchive& archive, const MasterResourceIndex& resources,
     UnitDefinitionLoader& definitions, const LayoutManifest& layout,
-    FixedSceneGeometry& geometry, std::size_t layout_index = 0);
+    FixedSceneGeometry& geometry, std::size_t layout_index = 0,
+    const RuntimeEntityWorld* entities = nullptr);
 
 [[nodiscard]] std::optional<std::size_t> append_runtime_entity_geometry(
     const PakArchive& archive, const MasterResourceIndex& resources,

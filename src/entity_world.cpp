@@ -42,6 +42,18 @@ float optional_number(const UnitDefinition& definition, const char16_t* name,
     }
 }
 
+bool optional_layout_bool(const LayoutObject& object, const char16_t* name,
+                          bool fallback) {
+    const auto* property = object.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    if (property->type != AdmValueType::boolean) {
+        throw EntityWorldError("Placed-unit property is not boolean");
+    }
+    return std::get<bool>(property->value);
+}
+
 } // namespace
 
 RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
@@ -61,6 +73,29 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
             spawner_positions_.emplace(layout.objects[index].id,
                                        transforms[index].position);
         }
+    }
+    SpawnResolutionStats ignored_stats;
+    for (std::size_t index = 0; index < layout.objects.size(); ++index) {
+        const auto& object = layout.objects[index];
+        if (object.descriptor != u"Monster" || object.monster.empty()) {
+            continue;
+        }
+        const auto* resource = resources_->find(
+            MasterResourceKind::monster, object.monster);
+        if (resource == nullptr || resource->do_not_create) {
+            throw EntityWorldError("Placed unit is absent from master resources");
+        }
+        create_resource(0, transforms[index].position, *resource, ignored_stats);
+        auto& entity = entities_.back();
+        entity.layout_object_id = object.id;
+        const auto unit_type = normalized(resource->unit_type);
+        const bool enabled = optional_layout_bool(object, u"ENABLED", true);
+        entity.alive = enabled;
+        entity.combat_targetable =
+            enabled && unit_type == u"MONSTER" &&
+            optional_layout_bool(object, u"TARGETABLE", true) &&
+            !optional_layout_bool(object, u"INVINCIBLE", false);
+        ++placed_entity_count_;
     }
 }
 
@@ -118,6 +153,7 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
             1.0F, optional_number(*definition, u"MAXHP",
                                   optional_number(*definition, u"MINHP", 1.0F)));
         entity.health = entity.maximum_health;
+        entity.combat_targetable = true;
     }
     entities_.push_back(std::move(entity));
     ++stats.entities_created;
@@ -163,20 +199,22 @@ SpawnResolutionStats RuntimeEntityWorld::consume_spawn_requests(
 
 bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& logic) {
     auto* found = find(entity_id);
-    if (found == nullptr || !found->alive ||
+    if (found == nullptr || !found->alive || !found->combat_targetable ||
         found->kind != MasterResourceKind::monster) {
         return false;
     }
     found->health = 0.0F;
     found->alive = false;
-    logic.notify_monster_killed(found->spawner_id);
+    if (found->spawner_id != 0) {
+        logic.notify_monster_killed(found->spawner_id);
+    }
     return true;
 }
 
 DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float damage,
                                                LogicRuntime& logic) {
     auto* entity = find(entity_id);
-    if (entity == nullptr || !entity->alive ||
+    if (entity == nullptr || !entity->alive || !entity->combat_targetable ||
         entity->kind != MasterResourceKind::monster ||
         !std::isfinite(damage) || !(damage > 0.0F)) {
         return {};
@@ -185,7 +223,9 @@ DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float dam
     const bool killed = entity->health <= 0.0F;
     if (killed) {
         entity->alive = false;
-        logic.notify_monster_killed(entity->spawner_id);
+        if (entity->spawner_id != 0) {
+            logic.notify_monster_killed(entity->spawner_id);
+        }
     }
     return {true, killed, entity->health};
 }
@@ -217,6 +257,15 @@ const RuntimeEntity* RuntimeEntityWorld::find(std::uint64_t entity_id) const noe
     return found == entities_.end() ? nullptr : &*found;
 }
 
+const RuntimeEntity* RuntimeEntityWorld::find_layout_entity(
+    std::int64_t layout_object_id) const noexcept {
+    const auto found = std::find_if(entities_.begin(), entities_.end(),
+                                    [layout_object_id](const auto& entity) {
+                                        return entity.layout_object_id == layout_object_id;
+                                    });
+    return found == entities_.end() ? nullptr : &*found;
+}
+
 const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
     const std::array<float, 3>& position, float maximum_distance) const noexcept {
     if (!std::isfinite(maximum_distance) || maximum_distance < 0.0F) {
@@ -225,7 +274,8 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
     const RuntimeEntity* result = nullptr;
     float nearest_squared = maximum_distance * maximum_distance;
     for (const auto& entity : entities_) {
-        if (!entity.alive || entity.kind != MasterResourceKind::monster) {
+        if (!entity.alive || !entity.combat_targetable ||
+            entity.kind != MasterResourceKind::monster) {
             continue;
         }
         const auto delta_x = entity.position[0] - position[0];

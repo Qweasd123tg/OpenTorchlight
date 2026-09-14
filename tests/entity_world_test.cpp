@@ -164,7 +164,51 @@ int main(int argc, char** argv) {
         require(has_event(item_logic.take_events(), spawner, u"Item Picked Up"),
                 "UNITTYPE item pickup did not notify its source spawner");
 
-        std::cout << "PASS: resolved original spawns into runtime entities and routed death\n";
+        auto town = loader.load_fixed_scene(u"media/dungeons/TOWN.DAT");
+        const auto expansion = torchlight::expand_layout_links(loader, town.layout);
+        require(expansion.links_expanded == 27,
+                "town reusable layouts were not expanded");
+        torchlight::LogicRuntime town_logic(town.layout, 13);
+        torchlight::RuntimeEntityWorld town_world(
+            town.layout, resources, definitions, spawn_classes, unit_types, 13);
+        require(town_world.placed_entity_count() == 44 &&
+                    town_world.entities().size() == 44,
+                "placed town units were not imported into the runtime world");
+        const auto combat_targets = std::count_if(
+            town_world.entities().begin(), town_world.entities().end(),
+            [](const auto& entity) { return entity.combat_targetable; });
+        require(combat_targets == 4,
+                "town NPC and disabled decoration target filtering changed");
+        for (const auto& entity : town_world.entities()) {
+            require(entity.layout_object_id != 0 &&
+                        town_world.find_layout_entity(entity.layout_object_id) == &entity,
+                    "placed unit lost its source layout identity");
+        }
+        const auto target = std::find_if(
+            town_world.entities().begin(), town_world.entities().end(),
+            [](const auto& entity) { return entity.combat_targetable; });
+        require(target != town_world.entities().end() &&
+                    town_world.nearest_alive_monster(target->position, 0.1F) == &*target,
+                "placed hostile monster cannot be selected");
+        const auto placed_damage = town_world.apply_damage(
+            target->id, target->maximum_health, town_logic);
+        require(placed_damage.accepted && placed_damage.killed &&
+                    town_logic.take_events().empty(),
+                "placed monster death incorrectly required a source spawner");
+
+        const torchlight::LevelsetCatalog levelsets(archive);
+        auto town_geometry = torchlight::build_room_piece_geometry(
+            archive, levelsets, town);
+        const auto placed_models = torchlight::append_layout_monster_geometry(
+            archive, resources, definitions, town.layout, town_geometry, 0,
+            &town_world);
+        const auto linked_models = std::count_if(
+            town_geometry.instances.begin(), town_geometry.instances.end(),
+            [](const auto& instance) { return instance.runtime_entity_id != 0; });
+        require(placed_models == 44 && linked_models == 44,
+                "placed unit geometry was not linked to runtime entity IDs");
+
+        std::cout << "PASS: resolved original spawns and 44 placed town units into runtime entities\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

@@ -18,6 +18,7 @@ namespace torchlight {
 struct RuntimeEntity {
     std::uint64_t id = 0;
     std::int64_t spawner_id = 0;
+    std::int64_t layout_object_id = 0;
     std::int64_t resource_guid = 0;
     MasterResourceKind kind = MasterResourceKind::prop;
     std::u16string name;
@@ -25,6 +26,7 @@ struct RuntimeEntity {
     float health = 0.0F;
     float maximum_health = 0.0F;
     bool alive = true;
+    bool combat_targetable = false;
 };
 
 struct DamageResult {
@@ -59,11 +61,16 @@ public:
     bool pick_up(std::uint64_t entity_id, LogicRuntime& logic);
     [[nodiscard]] RuntimeEntity* find(std::uint64_t entity_id) noexcept;
     [[nodiscard]] const RuntimeEntity* find(std::uint64_t entity_id) const noexcept;
+    [[nodiscard]] const RuntimeEntity* find_layout_entity(
+        std::int64_t layout_object_id) const noexcept;
     [[nodiscard]] const RuntimeEntity* nearest_alive_monster(
         const std::array<float, 3>& position, float maximum_distance) const noexcept;
 
     [[nodiscard]] const std::vector<RuntimeEntity>& entities() const noexcept {
         return entities_;
+    }
+    [[nodiscard]] std::size_t placed_entity_count() const noexcept {
+        return placed_entity_count_;
     }
 
 private:
@@ -86,6 +93,7 @@ private:
     TorchlightRandom random_;
     std::int32_t spawn_level_ = 1;
     std::uint64_t next_entity_id_ = 1;
+    std::size_t placed_entity_count_ = 0;
     std::vector<RuntimeEntity> entities_;
 };
 

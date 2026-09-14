@@ -481,11 +481,8 @@ torchlight::LayoutManifest load_static_layout(
 
 LoadedDesktopLevel load_desktop_level(
     const torchlight::PakArchive& archive,
-    const torchlight::MasterResourceIndex& resources,
-    torchlight::UnitDefinitionLoader& definitions,
     const torchlight::LevelsetCatalog& levelsets,
     const torchlight::LevelSceneLoader& loader,
-    const torchlight::PlayerPrototype& player,
     torchlight::DungeonAddress requested_address,
     std::uint32_t base_seed) {
     LoadedDesktopLevel result;
@@ -529,10 +526,6 @@ LoadedDesktopLevel load_desktop_level(
                                  : "fixed-dungeon";
     }
 
-    result.placed_monster_count = torchlight::append_layout_monster_geometry(
-        archive, resources, definitions, result.layout, result.geometry);
-    torchlight::append_player_geometry(
-        archive, player, result.player_start, result.geometry);
     result.navigation = torchlight::NavigationGrid::build(collision);
     if (const auto start_cell = result.navigation.nearest_walkable(result.player_start)) {
         result.player_floor_offset =
@@ -624,7 +617,7 @@ int main(int argc, char** argv) {
 
         while (app_running) {
             auto level = load_desktop_level(
-                archive, index, loader, levelsets, scene_loader, players.front(),
+                archive, levelsets, scene_loader,
                 transitions.current(), options.seed);
             if (level.address.dungeon_name != transitions.current().dungeon_name ||
                 level.address.depth != transitions.current().depth) {
@@ -632,7 +625,6 @@ int main(int argc, char** argv) {
             }
             torchlight::ActorMotion player_motion(
                 level.player_start, players.front().running_speed);
-            const auto player_instance_index = level.geometry.instances.size() - 1U;
             auto interactions = collect_unit_triggers(level.layout);
             std::optional<LevelInteraction> active_interaction;
             std::vector<std::array<float, 3>> active_path;
@@ -644,6 +636,11 @@ int main(int argc, char** argv) {
                 level.layout, index, loader, spawn_classes, unit_types,
                 level_seed(options.seed, level.address.depth),
                 std::max(1, level.address.depth));
+            level.placed_monster_count = torchlight::append_layout_monster_geometry(
+                archive, index, loader, level.layout, level.geometry, 0, &entity_world);
+            torchlight::append_player_geometry(
+                archive, players.front(), level.player_start, level.geometry);
+            const auto player_instance_index = level.geometry.instances.size() - 1U;
             torchlight::CombatController combat(
                 players.front(), level_seed(options.seed, level.address.depth));
             std::optional<torchlight::GlesSceneRenderer> renderer;
@@ -657,7 +654,7 @@ int main(int argc, char** argv) {
             std::size_t resolved_unit_type_count = 0;
             std::size_t unresolved_unit_type_count = 0;
             std::size_t missing_spawn_resource_count = 0;
-            std::size_t processed_entity_count = 0;
+            std::size_t processed_entity_count = entity_world.placed_entity_count();
             std::size_t runtime_model_count = 0;
             std::size_t missing_runtime_model_count = 0;
             std::size_t renderer_rebuild_count = 0;
@@ -667,6 +664,14 @@ int main(int argc, char** argv) {
             std::size_t combat_attack_count = 0;
             std::size_t combat_kill_count = 0;
             std::uint64_t level_frames = 0;
+
+            for (std::size_t instance_index = 0;
+                 instance_index < level.geometry.instances.size(); ++instance_index) {
+                const auto entity_id = level.geometry.instances[instance_index].runtime_entity_id;
+                if (entity_id != 0) {
+                    runtime_instance_indices.emplace(entity_id, instance_index);
+                }
+            }
 
             auto drain_logic = [&] {
                 for (std::size_t pass = 0;; ++pass) {
