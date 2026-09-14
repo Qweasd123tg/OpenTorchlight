@@ -579,6 +579,8 @@ struct PlayerAnimationResources {
     torchlight::OgreSkeleton bind;
     torchlight::OgreSkeleton idle;
     torchlight::OgreSkeleton run;
+    torchlight::OgreSkeleton attack;
+    float attack_duration = 0.0F;
 };
 
 PlayerAnimationResources load_player_animations(
@@ -602,7 +604,16 @@ PlayerAnimationResources load_player_animations(
     if (mesh.skeleton_file.empty()) {
         throw DesktopError("player mesh has no OGRE skeleton link");
     }
-    return {load(mesh.skeleton_file), load("Idle.SKELETON"), load("Run.SKELETON")};
+    auto attack = load("Attack1.SKELETON");
+    const auto attack_clip = std::find_if(
+        attack.animations.begin(), attack.animations.end(),
+        [](const auto& animation) { return animation.name == "Attack1"; });
+    if (attack_clip == attack.animations.end() || !(attack_clip->length > 0.0F)) {
+        throw DesktopError("player Attack1 animation clip is absent or empty");
+    }
+    const float attack_duration = attack_clip->length;
+    return {load(mesh.skeleton_file), load("Idle.SKELETON"), load("Run.SKELETON"),
+            std::move(attack), attack_duration};
 }
 
 } // namespace
@@ -716,7 +727,9 @@ int main(int argc, char** argv) {
             std::uint64_t level_frames = 0;
             std::size_t player_animation_updates = 0;
             float player_animation_time = 0.0F;
-            bool previous_animation_was_running = false;
+            enum class PlayerAnimationState { idle, run, attack };
+            PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
+            bool player_attack_animation_active = false;
 
             for (std::size_t instance_index = 0;
                  instance_index < level.geometry.instances.size(); ++instance_index) {
@@ -931,6 +944,10 @@ int main(int argc, char** argv) {
                     }
                 }
                 if (!pending_warp) {
+                    std::optional<std::array<float, 3>> combat_target_position;
+                    if (const auto* target = combat.target(entity_world)) {
+                        combat_target_position = target->position;
+                    }
                     const auto update = combat.update(
                         std::min(elapsed, 0.1F), player_motion.position(),
                         entity_world, logic_runtime);
@@ -943,11 +960,30 @@ int main(int argc, char** argv) {
                     }
                     if (update.state == torchlight::CombatState::attacked ||
                         update.state == torchlight::CombatState::killed) {
+                        player_attack_animation_active = true;
+                        player_animation_time = 0.0F;
                         ++combat_attack_count;
                         std::cout << "combat_hit=" << update.target_id
                                   << " damage=" << update.damage
                                   << " remaining_health=" << update.remaining_health
                                   << '\n';
+                    }
+                    if (combat_target_position &&
+                        update.state != torchlight::CombatState::approaching &&
+                        update.state != torchlight::CombatState::idle) {
+                        const float target_dx =
+                            (*combat_target_position)[0] - player_motion.position()[0];
+                        const float target_dz =
+                            (*combat_target_position)[2] - player_motion.position()[2];
+                        if (std::hypot(target_dx, target_dz) > 0.00001F) {
+                            constexpr float kRadiansToDegrees = 57.295779513082320876F;
+                            const float player_angle = std::remainder(
+                                std::atan2(target_dx, target_dz) * kRadiansToDegrees + 180.0F,
+                                360.0F);
+                            level.geometry.instances[player_instance_index].transform.angle =
+                                player_angle;
+                            renderer->set_instance_angle(player_instance_index, player_angle);
+                        }
                     }
                     if (update.state == torchlight::CombatState::killed) {
                         ++combat_kill_count;
@@ -997,16 +1033,34 @@ int main(int argc, char** argv) {
                     logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
                 }
-                const bool player_is_running = player_motion.moving();
-                if (player_is_running != previous_animation_was_running) {
+                const float animation_elapsed = std::min(elapsed, 0.1F);
+                if (player_attack_animation_active &&
+                    player_animation_state == PlayerAnimationState::attack &&
+                    player_animation_time + animation_elapsed >=
+                        player_animations.attack_duration) {
+                    player_attack_animation_active = false;
+                }
+                const auto next_animation_state = player_attack_animation_active
+                                                      ? PlayerAnimationState::attack
+                                                      : player_motion.moving()
+                                                            ? PlayerAnimationState::run
+                                                            : PlayerAnimationState::idle;
+                if (next_animation_state != player_animation_state) {
                     player_animation_time = 0.0F;
-                    previous_animation_was_running = player_is_running;
+                    player_animation_state = next_animation_state;
                 } else {
-                    player_animation_time += std::min(elapsed, 0.1F);
+                    player_animation_time += animation_elapsed;
                 }
                 const auto& animation_skeleton =
-                    player_is_running ? player_animations.run : player_animations.idle;
-                const auto animation_name = player_is_running ? "Run" : "Idle";
+                    player_animation_state == PlayerAnimationState::attack
+                        ? player_animations.attack
+                        : player_animation_state == PlayerAnimationState::run
+                              ? player_animations.run
+                              : player_animations.idle;
+                const auto animation_name =
+                    player_animation_state == PlayerAnimationState::attack
+                        ? "Attack1"
+                        : player_animation_state == PlayerAnimationState::run ? "Run" : "Idle";
                 renderer->set_mesh_pose(torchlight::sample_ogre_mesh_animation(
                     level.geometry.meshes[player_mesh_index].mesh,
                     player_animations.bind, animation_skeleton, animation_name,
