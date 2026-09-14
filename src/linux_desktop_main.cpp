@@ -16,6 +16,7 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/random_level.hpp"
+#include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/skeletal_animation.hpp"
 #include "torchlight/spawn_class.hpp"
@@ -692,6 +693,8 @@ int main(int argc, char** argv) {
             const auto player_instance_index = level.geometry.instances.size() - 1U;
             const auto player_mesh_index =
                 level.geometry.instances[player_instance_index].mesh_index;
+            auto scene_idle_animations = torchlight::load_scene_idle_animations(
+                archive, level.geometry, player_mesh_index);
             torchlight::CombatController combat(
                 players.front(), level_seed(options.seed, level.address.depth));
             torchlight::PlayerCombatState player_combat(
@@ -726,7 +729,10 @@ int main(int argc, char** argv) {
             std::size_t player_death_count = 0;
             std::uint64_t level_frames = 0;
             std::size_t player_animation_updates = 0;
+            std::size_t scene_animation_updates = 0;
             float player_animation_time = 0.0F;
+            float scene_animation_time = 0.0F;
+            float scene_animation_accumulator = 0.0F;
             enum class PlayerAnimationState { idle, run, attack };
             PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
             bool player_attack_animation_active = false;
@@ -774,6 +780,9 @@ int main(int argc, char** argv) {
                 if (geometry_changed && renderer) {
                     renderer.emplace(level.geometry, archive, materials);
                     ++renderer_rebuild_count;
+                    scene_idle_animations = torchlight::load_scene_idle_animations(
+                        archive, level.geometry, player_mesh_index);
+                    scene_animation_accumulator = 1.0F;
                     renderer->set_camera_target(
                         player_motion.position(), kCameraDistance);
                 }
@@ -1034,6 +1043,18 @@ int main(int argc, char** argv) {
                     drain_logic();
                 }
                 const float animation_elapsed = std::min(elapsed, 0.1F);
+                scene_animation_time += animation_elapsed;
+                scene_animation_accumulator += animation_elapsed;
+                constexpr float kSceneAnimationInterval = 1.0F / 15.0F;
+                if (scene_animation_accumulator >= kSceneAnimationInterval) {
+                    scene_animation_accumulator = std::fmod(
+                        scene_animation_accumulator, kSceneAnimationInterval);
+                    for (const auto& animation : scene_idle_animations) {
+                        renderer->set_mesh_pose(torchlight::sample_scene_mesh_animation(
+                            level.geometry, animation, scene_animation_time));
+                    }
+                    scene_animation_updates += scene_idle_animations.size();
+                }
                 if (player_attack_animation_active &&
                     player_animation_state == PlayerAnimationState::attack &&
                     player_animation_time + animation_elapsed >=
@@ -1127,6 +1148,8 @@ int main(int argc, char** argv) {
                       << " enemy_attacks=" << enemy_attack_count
                       << " player_deaths=" << player_death_count
                       << " player_animation_updates=" << player_animation_updates
+                      << " idle_animation_meshes=" << scene_idle_animations.size()
+                      << " scene_animation_updates=" << scene_animation_updates
                       << " warp_requests=" << warp_request_count
                       << " frames=" << level_frames
                       << " total_frames=" << total_frames

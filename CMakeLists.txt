@@ -33,6 +33,7 @@ add_library(torchlight_core STATIC
     src/random_level.cpp
     src/randomizer.cpp
     src/resource_config.cpp
+    src/scene_animation.cpp
     src/scene_geometry.cpp
     src/skeletal_animation.cpp
     src/spawn_class.cpp

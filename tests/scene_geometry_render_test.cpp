@@ -8,6 +8,7 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/random_level.hpp"
+#include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/skeletal_animation.hpp"
 #include "torchlight/unit_definition.hpp"
@@ -15,6 +16,7 @@
 #include <EGL/egl.h>
 #include <GLES2/gl2.h>
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
@@ -164,6 +166,20 @@ int main(int argc, char** argv) {
         require(runtime_instance.has_value() &&
                     mine_geometry.instances[*runtime_instance].runtime_entity_id == 1,
                 "runtime monster was not appended to generated geometry");
+        const auto idle_animations = torchlight::load_scene_idle_animations(
+            archive, mine_geometry, player_mesh_index);
+        const auto runtime_monster_mesh_index =
+            mine_geometry.instances[*runtime_instance].mesh_index;
+        const auto monster_idle_animation = std::find_if(
+            idle_animations.begin(), idle_animations.end(), [&](const auto& animation) {
+                return animation.mesh_index == runtime_monster_mesh_index;
+            });
+        require(monster_idle_animation != idle_animations.end(),
+                "generated mine monster has no reusable idle animation");
+        const auto monster_idle_pose = torchlight::sample_scene_mesh_animation(
+            mine_geometry, *monster_idle_animation, 0.25F);
+        require(!monster_idle_pose.geometries.empty(),
+                "generated mine monster idle animation has no skinned geometry");
         torchlight::GlesSceneRenderer mine_renderer(mine_geometry, archive, materials);
         const auto* bind_entry =
             archive.find_normalized("media/models/alchemist/alchemist.skeleton");
@@ -175,6 +191,7 @@ int main(int argc, char** argv) {
         const auto run_skeleton =
             torchlight::parse_ogre_skeleton(archive.read(*run_entry));
         mine_renderer.set_camera_target(player_start, 8.0F);
+        mine_renderer.set_mesh_pose(monster_idle_pose);
         mine_renderer.set_mesh_pose(torchlight::sample_ogre_mesh_animation(
             mine_geometry.meshes[player_mesh_index].mesh, bind_skeleton,
             run_skeleton, "Run", 0.0F));
