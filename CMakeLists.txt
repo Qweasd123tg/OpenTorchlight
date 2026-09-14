@@ -29,7 +29,8 @@ add_library(torchlight_core STATIC
     src/resource_config.cpp
     src/scene_geometry.cpp
     src/spawn_class.cpp
-    src/unit_definition.cpp)
+    src/unit_definition.cpp
+    src/unit_type.cpp)
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG)
@@ -146,6 +147,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(spawn_class_test PRIVATE torchlight_core)
     add_executable(entity_world_test tests/entity_world_test.cpp)
     target_link_libraries(entity_world_test PRIVATE torchlight_core)
+    add_executable(unit_type_test tests/unit_type_test.cpp)
+    target_link_libraries(unit_type_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         add_test(NAME original_input_comparison
@@ -202,6 +205,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND spawn_class_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_entity_world
             COMMAND entity_world_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_unit_types
+            COMMAND unit_type_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
             COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         if(TARGET gles_render_smoke_test)

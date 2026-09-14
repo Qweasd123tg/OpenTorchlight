@@ -4,6 +4,7 @@
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/spawn_class.hpp"
+#include "torchlight/unit_type.hpp"
 
 #include <array>
 #include <cstddef>
@@ -26,7 +27,8 @@ struct RuntimeEntity {
 struct SpawnResolutionStats {
     std::size_t requests = 0;
     std::size_t entities_created = 0;
-    std::size_t deferred_unit_types = 0;
+    std::size_t resolved_unit_types = 0;
+    std::size_t unresolved_unit_types = 0;
     std::size_t missing_resources = 0;
 };
 
@@ -35,7 +37,9 @@ public:
     RuntimeEntityWorld(const LayoutManifest& layout,
                        const MasterResourceIndex& resources,
                        const SpawnClassCatalog& spawn_classes,
-                       std::uint32_t random_seed = 1);
+                       const UnitTypeResourceIndex& unit_types,
+                       std::uint32_t random_seed = 1,
+                       std::int32_t spawn_level = 1);
 
     SpawnResolutionStats consume_spawn_requests(
         const std::vector<SpawnRequest>& requests, LogicRuntime& logic);
@@ -60,8 +64,10 @@ private:
 
     const MasterResourceIndex* resources_ = nullptr;
     const SpawnClassCatalog* spawn_classes_ = nullptr;
+    const UnitTypeResourceIndex* unit_types_ = nullptr;
     std::unordered_map<std::int64_t, std::array<float, 3>> spawner_positions_;
     TorchlightRandom random_;
+    std::int32_t spawn_level_ = 1;
     std::uint64_t next_entity_id_ = 1;
     std::vector<RuntimeEntity> entities_;
 };

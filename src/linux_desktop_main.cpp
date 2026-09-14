@@ -432,6 +432,9 @@ int main(int argc, char** argv) {
         for (const auto& record : index.records()) {
             static_cast<void>(loader.load(record));
         }
+        const torchlight::UnitTypeHierarchy unit_type_hierarchy(archive);
+        const torchlight::UnitTypeResourceIndex unit_types(
+            archive, unit_type_hierarchy, index, loader);
         const torchlight::LevelsetCatalog levelsets(archive);
         const torchlight::LevelSceneLoader scene_loader(archive);
         torchlight::FixedSceneGeometry geometry;
@@ -448,6 +451,7 @@ int main(int argc, char** argv) {
         std::vector<std::array<float, 3>> active_path;
         std::size_t next_path_node = 0;
         float player_floor_offset = 0.0F;
+        std::int32_t runtime_level = 1;
         if (options.main_stratum) {
             const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
             if (*options.main_stratum >= main.strata.size()) {
@@ -479,6 +483,7 @@ int main(int argc, char** argv) {
             }
             player_name.assign(players.front().name.begin(), players.front().name.end());
             scene_state = "generated-dungeon-preview";
+            runtime_level = static_cast<std::int32_t>(*options.main_stratum + 1U);
         } else {
             fixed_scene.emplace(scene_loader.load_fixed_scene(u"media/dungeons/TOWN.DAT"));
             const auto& town = *fixed_scene;
@@ -514,7 +519,8 @@ int main(int argc, char** argv) {
         std::size_t logic_invocation_count = 0;
         std::size_t spawn_request_count = 0;
         std::size_t spawned_entity_count = 0;
-        std::size_t deferred_unit_type_count = 0;
+        std::size_t resolved_unit_type_count = 0;
+        std::size_t unresolved_unit_type_count = 0;
         std::size_t missing_spawn_resource_count = 0;
         std::size_t processed_entity_count = 0;
         std::size_t runtime_model_count = 0;
@@ -537,7 +543,8 @@ int main(int argc, char** argv) {
                     entity_world->consume_spawn_requests(requests, *logic_runtime);
                 spawn_request_count += stats.requests;
                 spawned_entity_count += stats.entities_created;
-                deferred_unit_type_count += stats.deferred_unit_types;
+                resolved_unit_type_count += stats.resolved_unit_types;
+                unresolved_unit_type_count += stats.unresolved_unit_types;
                 missing_spawn_resource_count += stats.missing_resources;
             }
             bool geometry_changed = false;
@@ -564,11 +571,12 @@ int main(int argc, char** argv) {
         };
         if (fixed_scene) {
             logic_runtime.emplace(fixed_scene->layout, options.seed);
-            entity_world.emplace(fixed_scene->layout, index, spawn_classes, options.seed);
+            entity_world.emplace(fixed_scene->layout, index, spawn_classes, unit_types,
+                                 options.seed, runtime_level);
         } else if (generated_layout) {
             logic_runtime.emplace(generated_layout->layout, options.seed);
-            entity_world.emplace(generated_layout->layout, index, spawn_classes,
-                                 options.seed);
+            entity_world.emplace(generated_layout->layout, index, spawn_classes, unit_types,
+                                 options.seed, runtime_level);
         } else {
             throw DesktopError("no active layout was prepared");
         }
@@ -652,7 +660,8 @@ int main(int argc, char** argv) {
                   << " spawn_requests=" << spawn_request_count
                   << " runtime_entities=" << entity_world->entities().size()
                   << " spawned_entities=" << spawned_entity_count
-                  << " deferred_unit_types=" << deferred_unit_type_count
+                  << " resolved_unit_types=" << resolved_unit_type_count
+                  << " unresolved_unit_types=" << unresolved_unit_type_count
                   << " missing_spawn_resources=" << missing_spawn_resource_count
                   << " runtime_models=" << runtime_model_count
                   << " missing_runtime_models=" << missing_runtime_model_count

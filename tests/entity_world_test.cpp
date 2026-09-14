@@ -6,6 +6,8 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/spawn_class.hpp"
+#include "torchlight/unit_definition.hpp"
+#include "torchlight/unit_type.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -41,6 +43,10 @@ int main(int argc, char** argv) {
             archive.read("media/MASTERRESOURCEUNITS.DAT.ADM"));
         const torchlight::MasterResourceIndex resources(master);
         const torchlight::SpawnClassCatalog spawn_classes(archive);
+        torchlight::UnitDefinitionLoader definitions(archive);
+        const torchlight::UnitTypeHierarchy unit_type_hierarchy(archive);
+        const torchlight::UnitTypeResourceIndex unit_types(
+            archive, unit_type_hierarchy, resources, definitions);
         const torchlight::LevelSceneLoader loader(archive);
         const auto layout = loader.load_layout(
             "media/layouts/test/LOGICTEST.LAYOUT.adm");
@@ -48,13 +54,15 @@ int main(int argc, char** argv) {
         constexpr std::int64_t lever = 4789864698297979358LL;
         constexpr std::int64_t spawner = 4789864784197325278LL;
         torchlight::LogicRuntime logic(layout, 42);
-        torchlight::RuntimeEntityWorld world(layout, resources, spawn_classes, 42);
+        torchlight::RuntimeEntityWorld world(
+            layout, resources, spawn_classes, unit_types, 42);
         logic.trigger(lever);
         const auto requests = logic.take_spawn_requests();
         require(requests.size() == 1, "original lever did not request one spawn");
         const auto stats = world.consume_spawn_requests(requests, logic);
         require(stats.requests == 1 && stats.entities_created == 1 &&
-                    stats.deferred_unit_types == 0 && stats.missing_resources == 0,
+                    stats.resolved_unit_types == 0 &&
+                    stats.unresolved_unit_types == 0 && stats.missing_resources == 0,
                 "original spawn request did not create one resolved entity");
         require(world.entities().size() == 1 &&
                     world.entities()[0].name == u"Skeletal Warrior" &&
@@ -76,7 +84,6 @@ int main(int argc, char** argv) {
         }
         require(has_event(logic.take_events(), spawner, u"All Units Spawned"),
                 "entity creation did not complete the spawner");
-        torchlight::UnitDefinitionLoader definitions(archive);
         torchlight::FixedSceneGeometry runtime_geometry;
         const auto runtime_instance = torchlight::append_runtime_entity_geometry(
             archive, resources, definitions, world.entities()[0], runtime_geometry);
@@ -109,13 +116,15 @@ int main(int argc, char** argv) {
                 "all-monsters-dead did not continue the original timeline");
 
         torchlight::LogicRuntime class_logic(layout, 7);
-        torchlight::RuntimeEntityWorld class_world(layout, resources, spawn_classes, 7);
+        torchlight::RuntimeEntityWorld class_world(
+            layout, resources, spawn_classes, unit_types, 7);
         const torchlight::SpawnRequest class_request{
             spawner, u"SKELETONS", u"Spawn Class", 2};
         const auto class_stats =
             class_world.consume_spawn_requests({class_request, class_request}, class_logic);
         require(class_stats.entities_created == 4 &&
-                    class_stats.deferred_unit_types == 0 &&
+                    class_stats.resolved_unit_types == 0 &&
+                    class_stats.unresolved_unit_types == 0 &&
                     class_stats.missing_resources == 0,
                 "SKELETONS request did not create four concrete monsters");
         require(std::all_of(class_world.entities().begin(), class_world.entities().end(),
@@ -134,6 +143,26 @@ int main(int argc, char** argv) {
                 "last monster from repeated spawn request could not be killed");
         require(has_event(class_logic.take_events(), spawner, u"All Monsters Dead"),
                 "last monster did not complete repeated spawn requests");
+
+        torchlight::LogicRuntime item_logic(layout, 11);
+        torchlight::RuntimeEntityWorld item_world(
+            layout, resources, spawn_classes, unit_types, 11, 1);
+        const torchlight::SpawnRequest item_request{
+            spawner, u"FISH_SPAWN", u"Spawn Class", 1};
+        const auto item_stats =
+            item_world.consume_spawn_requests({item_request}, item_logic);
+        require(item_stats.entities_created == 1 &&
+                    item_stats.resolved_unit_types == 1 &&
+                    item_stats.unresolved_unit_types == 0 &&
+                    item_world.entities().size() == 1 &&
+                    item_world.entities()[0].kind ==
+                        torchlight::MasterResourceKind::item,
+                "FISH UNITTYPE did not create one concrete item");
+        static_cast<void>(item_logic.take_events());
+        require(item_world.pick_up(item_world.entities()[0].id, item_logic),
+                "UNITTYPE item could not be picked up");
+        require(has_event(item_logic.take_events(), spawner, u"Item Picked Up"),
+                "UNITTYPE item pickup did not notify its source spawner");
 
         std::cout << "PASS: resolved original spawns into runtime entities and routed death\n";
         return 0;

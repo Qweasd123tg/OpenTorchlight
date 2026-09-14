@@ -28,8 +28,12 @@ std::u16string normalized(std::u16string_view value) {
 RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
                                        const MasterResourceIndex& resources,
                                        const SpawnClassCatalog& spawn_classes,
-                                       std::uint32_t random_seed)
-    : resources_(&resources), spawn_classes_(&spawn_classes), random_(random_seed) {
+                                       const UnitTypeResourceIndex& unit_types,
+                                       std::uint32_t random_seed,
+                                       std::int32_t spawn_level)
+    : resources_(&resources), spawn_classes_(&spawn_classes),
+      unit_types_(&unit_types), random_(random_seed),
+      spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
     for (std::size_t index = 0; index < layout.objects.size(); ++index) {
         if (layout.objects[index].descriptor == u"Unit Spawner") {
@@ -59,7 +63,13 @@ void RuntimeEntityWorld::create_leaf(std::int64_t spawner_id,
                                      const SpawnLeaf& leaf,
                                      SpawnResolutionStats& stats) {
     if (leaf.kind == SpawnLeafKind::unit_type) {
-        ++stats.deferred_unit_types;
+        const auto* resource = unit_types_->roll(leaf.value, spawn_level_, random_);
+        if (resource == nullptr) {
+            ++stats.unresolved_unit_types;
+            return;
+        }
+        ++stats.resolved_unit_types;
+        create_resource(spawner_id, position, *resource, stats);
         return;
     }
     const auto* resource = resources_->find_any(leaf.value);
