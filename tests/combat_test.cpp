@@ -77,8 +77,10 @@ int main(int argc, char** argv) {
 
         torchlight::CombatController combat(players.front(), 31);
         require(combat.attack_range() == 2.25F &&
-                    std::fabs(combat.attack_interval() - 1.25F) < 0.0001F,
-                "player attack reach or interval is wrong");
+                    std::fabs(combat.attack_interval() - 1.25F) < 0.0001F &&
+                    combat.minimum_damage() == combat.maximum_damage() &&
+                    combat.minimum_damage() >= 22 && combat.maximum_damage() <= 24,
+                "starting staff damage, reach or interval is wrong");
         require(combat.select_target(world, spawned.position, 0.5F) &&
                     combat.target_id() == spawned.id,
                 "click selection did not choose the nearby monster");
@@ -89,13 +91,17 @@ int main(int argc, char** argv) {
                 "out-of-range target did not request an approach");
 
         auto result = combat.update(0.0F, spawned.position, world, logic);
+        const auto weapon_damage = combat.minimum_damage();
         require(result.state == torchlight::CombatState::attacked &&
-                    result.damage == 20 && result.remaining_health == 80.0F,
-                "first base attack applied the wrong damage");
+                    result.damage == weapon_damage &&
+                    result.remaining_health == 100.0F - weapon_damage,
+                "first equipped-weapon attack applied the wrong damage");
         require(combat.update(0.0F, spawned.position, world, logic).state ==
                     torchlight::CombatState::waiting,
                 "attack cooldown was ignored");
-        for (int attack = 0; attack < 4; ++attack) {
+        for (int attack = 0;
+             attack < 10 && result.state != torchlight::CombatState::killed;
+             ++attack) {
             result = combat.update(combat.attack_interval(), spawned.position,
                                    world, logic);
         }

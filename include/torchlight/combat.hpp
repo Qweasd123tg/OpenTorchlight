@@ -37,6 +37,12 @@ public:
     [[nodiscard]] std::uint64_t target_id() const noexcept { return target_id_; }
     [[nodiscard]] float attack_range() const noexcept { return attack_range_; }
     [[nodiscard]] float attack_interval() const noexcept { return attack_interval_; }
+    [[nodiscard]] std::int32_t minimum_damage() const noexcept {
+        return minimum_damage_;
+    }
+    [[nodiscard]] std::int32_t maximum_damage() const noexcept {
+        return maximum_damage_;
+    }
 
     [[nodiscard]] CombatUpdate update(float seconds,
                                       const std::array<float, 3>& player_position,

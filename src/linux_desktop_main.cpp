@@ -851,6 +851,13 @@ int main(int argc, char** argv) {
                       << " level_pieces=" << levelsets.pieces().size()
                       << " chunks=" << level.chunk_count
                       << " player=" << narrow_ascii(players.front().name)
+                      << " weapon="
+                      << (players.front().starting_weapon
+                              ? narrow_ascii(players.front().starting_weapon->name)
+                              : "none")
+                      << " attack_damage=" << combat.minimum_damage() << '-'
+                      << combat.maximum_damage()
+                      << " attack_range=" << combat.attack_range()
                       << " layout_objects=" << level.layout.objects.size()
                       << " expanded_layout_links=" << level.expanded_layout_link_count
                       << " placed_monsters=" << level.placed_monster_count

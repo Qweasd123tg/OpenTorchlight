@@ -43,6 +43,24 @@ int main(int argc, char** argv) {
         require(players[0].strength == 6 && players[0].dexterity == 7 &&
                     players[0].magic == 10 && players[0].defense == 5,
                 "Alchemist starting stats changed");
+        require(players[0].starting_weapon &&
+                    players[0].starting_weapon->name == u"Moldy Staff" &&
+                    players[0].starting_weapon->guid == 5521717854978183646LL &&
+                    players[0].starting_weapon->level == 1 &&
+                    players[0].starting_weapon->minimum_damage_percent == 110 &&
+                    players[0].starting_weapon->maximum_damage_percent == 120 &&
+                    players[0].starting_weapon->rarity_damage_modifier == 80 &&
+                    players[0].starting_weapon->speed_damage_modifier == 115 &&
+                    players[0].starting_weapon->base_weapon_damage == 21.0F &&
+                    std::fabs(players[0].starting_weapon->range - 0.8F) < 0.0001F,
+                "Alchemist starting staff combat data changed");
+        require(players[1].starting_weapon &&
+                    players[1].starting_weapon->name == u"Rusty Blade" &&
+                    players[2].starting_weapon &&
+                    players[2].starting_weapon->name == u"Loose Shortbow" &&
+                    players[2].starting_weapon->display_name == u"Practice Bow" &&
+                    players[2].starting_weapon->range == 7.0F,
+                "playable player starting equipment changed");
         torchlight::FixedSceneGeometry geometry;
         torchlight::append_player_geometry(archive, players[0], {0.0F, 0.0F, 50.0F}, geometry);
         require(geometry.meshes.size() == 1 && geometry.instances.size() == 1,

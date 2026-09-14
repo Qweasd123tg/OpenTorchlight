@@ -2,6 +2,8 @@
 
 #include "torchlight/ogre_mesh.hpp"
 
+#include <algorithm>
+#include <cmath>
 #include <stdexcept>
 #include <string_view>
 
@@ -46,6 +48,153 @@ std::int32_t integer(const UnitDefinition& definition, const char16_t* name) {
     return std::get<std::int32_t>(property.value);
 }
 
+std::int32_t optional_integer(const UnitDefinition& definition,
+                              const char16_t* name, std::int32_t fallback) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    if (property->type != AdmValueType::integer) {
+        throw PlayerError("Equipment integer property has the wrong type");
+    }
+    return std::get<std::int32_t>(property->value);
+}
+
+float optional_floating(const UnitDefinition& definition, const char16_t* name,
+                        float fallback) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    if (property->type != AdmValueType::floating) {
+        throw PlayerError("Equipment float property has the wrong type");
+    }
+    return std::get<float>(property->value);
+}
+
+struct GraphPoint {
+    float x = 0.0F;
+    float y = 0.0F;
+};
+
+float group_float(const AdmGroup& group, const char16_t* name) {
+    const auto* property = group.find_property(name);
+    if (property == nullptr || property->type != AdmValueType::floating) {
+        throw PlayerError("Weapon damage graph point is invalid");
+    }
+    return std::get<float>(property->value);
+}
+
+std::vector<GraphPoint> load_base_weapon_damage_graph(const PakArchive& archive) {
+    const auto document = parse_adm(archive.read_normalized(
+        "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm"));
+    if (document.root.name != u"LINE") {
+        throw PlayerError("BASE_WEAPON_DAMAGE graph root is not LINE");
+    }
+    std::vector<GraphPoint> result;
+    result.reserve(document.root.groups.size());
+    for (const auto& group : document.root.groups) {
+        if (group.name != u"POINT") {
+            throw PlayerError("BASE_WEAPON_DAMAGE graph child is not POINT");
+        }
+        result.push_back({group_float(group, u"X"), group_float(group, u"Y")});
+    }
+    if (result.empty() ||
+        !std::is_sorted(result.begin(), result.end(),
+                        [](const auto& left, const auto& right) {
+                            return left.x < right.x;
+                        })) {
+        throw PlayerError("BASE_WEAPON_DAMAGE graph is empty or unordered");
+    }
+    return result;
+}
+
+float graph_value(const std::vector<GraphPoint>& graph, float x) noexcept {
+    if (x <= graph.front().x) {
+        return graph.front().y;
+    }
+    for (std::size_t index = 1; index < graph.size(); ++index) {
+        if (x <= graph[index].x) {
+            const auto& left = graph[index - 1U];
+            const auto& right = graph[index];
+            const auto span = right.x - left.x;
+            return span <= 0.0F
+                       ? right.y
+                       : left.y + (right.y - left.y) * ((x - left.x) / span);
+        }
+    }
+    if (graph.size() == 1U) {
+        return graph.back().y;
+    }
+    const auto& left = graph[graph.size() - 2U];
+    const auto& right = graph.back();
+    const auto span = right.x - left.x;
+    return span <= 0.0F
+               ? right.y
+               : right.y + (right.y - left.y) * ((x - right.x) / span);
+}
+
+std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definition) {
+    for (auto group = definition.root.groups.rbegin();
+         group != definition.root.groups.rend(); ++group) {
+        if (group->name != u"EQUIPMENT") {
+            continue;
+        }
+        for (const auto slot : {u"RIGHTHAND", u"LEFTHAND"}) {
+            const auto* property = group->find_property(slot);
+            if (property == nullptr) {
+                continue;
+            }
+            if (property->type != AdmValueType::string &&
+                property->type != AdmValueType::translation &&
+                property->type != AdmValueType::note) {
+                throw PlayerError("Starting equipment slot is not text");
+            }
+            return std::get<std::u16string>(property->value);
+        }
+    }
+    return std::nullopt;
+}
+
+WeaponPrototype load_weapon(const MasterResourceIndex& resources,
+                            UnitDefinitionLoader& definitions,
+                            const std::vector<GraphPoint>& damage_graph,
+                            std::u16string_view name) {
+    const auto* record = resources.find_case_insensitive(
+        MasterResourceKind::item, name);
+    if (record == nullptr || record->do_not_create || record->create_as != u"EQUIPMENT") {
+        throw PlayerError("Starting weapon is absent from equipment resources");
+    }
+    const auto definition = definitions.load(*record);
+    WeaponPrototype weapon;
+    weapon.guid = record->guid;
+    weapon.name = record->name;
+    weapon.display_name = record->display_name;
+    weapon.unit_type = record->unit_type;
+    weapon.level = optional_integer(*definition, u"LEVEL", 1);
+    weapon.minimum_damage_percent = integer(*definition, u"MINDAMAGE");
+    weapon.maximum_damage_percent = integer(*definition, u"MAXDAMAGE");
+    weapon.rarity_damage_modifier = optional_integer(
+        *definition, u"RARITY_DMG_MOD", 100);
+    weapon.speed_damage_modifier = optional_integer(
+        *definition, u"SPEED_DMG_MOD", 100);
+    weapon.speed = optional_integer(*definition, u"SPEED", 100);
+    weapon.range = optional_floating(*definition, u"RANGE", 0.0F);
+    weapon.strike_range = optional_floating(*definition, u"STRIKERANGE", weapon.range);
+    weapon.base_weapon_damage = graph_value(
+        damage_graph, static_cast<float>(weapon.level));
+    if (weapon.minimum_damage_percent < 0 ||
+        weapon.maximum_damage_percent < weapon.minimum_damage_percent ||
+        weapon.rarity_damage_modifier < 0 || weapon.speed_damage_modifier < 0 ||
+        !std::isfinite(weapon.range) || weapon.range < 0.0F ||
+        !std::isfinite(weapon.strike_range) || weapon.strike_range < 0.0F ||
+        !std::isfinite(weapon.base_weapon_damage) ||
+        !(weapon.base_weapon_damage > 0.0F)) {
+        throw PlayerError("Starting weapon combat properties are invalid");
+    }
+    return weapon;
+}
+
 std::string ascii(std::u16string_view value) {
     std::string result;
     result.reserve(value.size());
@@ -76,6 +225,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                                                    const MasterResourceIndex& resources,
                                                    UnitDefinitionLoader& definitions) {
     std::vector<PlayerPrototype> result;
+    const auto damage_graph = load_base_weapon_damage_graph(archive);
     for (const auto& record : resources.records()) {
         if (record.kind != MasterResourceKind::player || record.do_not_create) {
             continue;
@@ -109,6 +259,10 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.dexterity = integer(*definition, u"DEXTERITY");
         player.magic = integer(*definition, u"MAGIC");
         player.defense = integer(*definition, u"DEFENSE");
+        if (const auto weapon_name = starting_weapon_name(*definition)) {
+            player.starting_weapon = load_weapon(
+                resources, definitions, damage_graph, *weapon_name);
+        }
         result.push_back(std::move(player));
     }
     return result;
