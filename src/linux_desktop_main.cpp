@@ -3,6 +3,7 @@
 #include "torchlight/collision_scene.hpp"
 #include "torchlight/combat.hpp"
 #include "torchlight/entity_world.hpp"
+#include "torchlight/enemy_ai.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/level_transition.hpp"
@@ -643,6 +644,10 @@ int main(int argc, char** argv) {
             const auto player_instance_index = level.geometry.instances.size() - 1U;
             torchlight::CombatController combat(
                 players.front(), level_seed(options.seed, level.address.depth));
+            torchlight::PlayerCombatState player_combat(
+                players.front(), level_seed(options.seed, level.address.depth));
+            torchlight::EnemyController enemies(
+                level_seed(options.seed, level.address.depth) ^ 0x9e3779b9U);
             std::optional<torchlight::GlesSceneRenderer> renderer;
             std::optional<torchlight::WarpRequest> pending_warp;
             std::unordered_map<std::uint64_t, std::size_t> runtime_instance_indices;
@@ -663,6 +668,9 @@ int main(int argc, char** argv) {
             std::size_t interaction_count = 0;
             std::size_t combat_attack_count = 0;
             std::size_t combat_kill_count = 0;
+            std::size_t enemy_chase_count = 0;
+            std::size_t enemy_attack_count = 0;
+            std::size_t player_death_count = 0;
             std::uint64_t level_frames = 0;
 
             for (std::size_t instance_index = 0;
@@ -736,7 +744,8 @@ int main(int argc, char** argv) {
                 const float elapsed =
                     std::chrono::duration<float>(current_frame - previous_frame).count();
                 previous_frame = current_frame;
-                if (const auto click = window.take_left_click(); click && rendered_once) {
+                if (const auto click = window.take_left_click();
+                    click && rendered_once && player_combat.alive()) {
                     auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
                         window.height(), player_motion.position()[1]);
@@ -828,6 +837,41 @@ int main(int argc, char** argv) {
                             renderer->set_instance_visible(instance->second, false);
                         }
                     }
+                    const auto enemy_updates = enemies.update(
+                        std::min(elapsed, 0.1F), player_motion.position(),
+                        player_combat, entity_world, &level.navigation);
+                    for (const auto& enemy_update : enemy_updates) {
+                        if (enemy_update.state == torchlight::EnemyAiState::chasing &&
+                            enemy_update.position_changed) {
+                            ++enemy_chase_count;
+                            const auto instance = runtime_instance_indices.find(
+                                enemy_update.entity_id);
+                            const auto* enemy = entity_world.find(enemy_update.entity_id);
+                            if (instance != runtime_instance_indices.end() && enemy != nullptr) {
+                                level.geometry.instances[instance->second].transform.position =
+                                    enemy->position;
+                                renderer->set_instance_position(
+                                    instance->second, enemy->position);
+                            }
+                        }
+                        if (enemy_update.state == torchlight::EnemyAiState::attacked ||
+                            enemy_update.state == torchlight::EnemyAiState::player_killed) {
+                            ++enemy_attack_count;
+                            std::cout << "enemy_hit=" << enemy_update.entity_id
+                                      << " damage=" << enemy_update.damage
+                                      << " player_health=" << enemy_update.player_health
+                                      << '\n';
+                        }
+                        if (enemy_update.state ==
+                            torchlight::EnemyAiState::player_killed) {
+                            ++player_death_count;
+                            player_motion.stop();
+                            active_path.clear();
+                            next_path_node = 0;
+                            combat.clear_target();
+                            std::cout << "player_killed=1\n";
+                        }
+                    }
                     logic_runtime.update(std::min(elapsed, 0.1F));
                     logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
@@ -882,6 +926,12 @@ int main(int argc, char** argv) {
                       << " interactions=" << interaction_count
                       << " combat_attacks=" << combat_attack_count
                       << " combat_kills=" << combat_kill_count
+                      << " player_health=" << player_combat.health() << '/'
+                      << player_combat.maximum_health()
+                      << " alerted_enemies=" << enemies.alerted_count()
+                      << " enemy_chases=" << enemy_chase_count
+                      << " enemy_attacks=" << enemy_attack_count
+                      << " player_deaths=" << player_death_count
                       << " warp_requests=" << warp_request_count
                       << " frames=" << level_frames
                       << " total_frames=" << total_frames

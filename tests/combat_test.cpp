@@ -78,7 +78,8 @@ int main(int argc, char** argv) {
                     std::fabs(spawned.walking_speed - 1.3F) < 0.0001F &&
                     std::fabs(spawned.running_speed - 1.8F) < 0.0001F &&
                     spawned.attack_speed == 100.0F && spawned.sight_radius == 7.0F &&
-                    spawned.reach_bonus == 0.75F,
+                    spawned.reach_bonus == 0.75F &&
+                    spawned.motion_radius == 4.5F && spawned.follow_radius == 18.0F,
                 "monster level-scaled combat properties are wrong");
         static_cast<void>(logic.take_events());
 

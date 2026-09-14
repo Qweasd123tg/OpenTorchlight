@@ -192,6 +192,9 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         entity.attack_speed = optional_number(*definition, u"ATTACKSPEED", 100.0F);
         entity.sight_radius = optional_number(*definition, u"SIGHT_RADIUS", 0.0F);
         entity.reach_bonus = optional_number(*definition, u"REACH_BONUS", 0.0F);
+        entity.motion_radius = optional_number(*definition, u"MOTION_RADIUS", 0.0F);
+        entity.follow_radius = optional_number(
+            *definition, u"FOLLOW_RADIUS", entity.sight_radius);
         if (!std::isfinite(entity.maximum_health)) {
             throw EntityWorldError("Runtime monster health is invalid");
         }
@@ -203,7 +206,9 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
             throw EntityWorldError("Runtime monster attack speed is invalid");
         }
         if (!std::isfinite(entity.sight_radius) || entity.sight_radius < 0.0F ||
-            !std::isfinite(entity.reach_bonus) || entity.reach_bonus < 0.0F) {
+            !std::isfinite(entity.reach_bonus) || entity.reach_bonus < 0.0F ||
+            !std::isfinite(entity.motion_radius) || entity.motion_radius < 0.0F ||
+            !std::isfinite(entity.follow_radius) || entity.follow_radius < 0.0F) {
             throw EntityWorldError("Runtime monster perception or reach is invalid");
         }
         entity.combat_targetable = true;

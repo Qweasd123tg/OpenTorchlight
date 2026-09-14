@@ -192,12 +192,28 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.running_speed = floating(*definition, u"RUNNINGSPEED");
         player.attack_speed = floating(*definition, u"ATTACKSPEED");
         player.reach_bonus = floating(*definition, u"REACH_BONUS");
+        const auto health_graph_name = ascii(text(*definition, u"HEALTH_GRAPH"));
+        const StatGraph health_graph(
+            archive, "media/graphs/stats/" + health_graph_name + ".DAT.adm");
+        const auto health_scale = health_graph.value(1.0F);
+        const auto minimum_health_percent = floating(*definition, u"MINHP");
+        const auto maximum_health_percent = floating(*definition, u"MAXHP");
+        player.minimum_health = health_scale *
+            std::min(minimum_health_percent, maximum_health_percent) / 100.0F;
+        player.maximum_health = health_scale *
+            std::max(minimum_health_percent, maximum_health_percent) / 100.0F;
         player.minimum_damage = integer(*definition, u"MINDAMAGE");
         player.maximum_damage = integer(*definition, u"MAXDAMAGE");
         player.strength = integer(*definition, u"STRENGTH");
         player.dexterity = integer(*definition, u"DEXTERITY");
         player.magic = integer(*definition, u"MAGIC");
         player.defense = integer(*definition, u"DEFENSE");
+        if (!std::isfinite(player.minimum_health) ||
+            !std::isfinite(player.maximum_health) ||
+            player.minimum_health <= 0.0F ||
+            player.maximum_health < player.minimum_health) {
+            throw PlayerError("Playable player health is invalid");
+        }
         if (const auto weapon_name = starting_weapon_name(*definition)) {
             player.starting_weapon = load_weapon(
                 resources, definitions, damage_graph, *weapon_name);

@@ -38,6 +38,8 @@ struct PlayerPrototype {
     float running_speed = 0.0F;
     float attack_speed = 0.0F;
     float reach_bonus = 0.0F;
+    float minimum_health = 1.0F;
+    float maximum_health = 1.0F;
     std::int32_t minimum_damage = 0;
     std::int32_t maximum_damage = 0;
     std::int32_t strength = 0;

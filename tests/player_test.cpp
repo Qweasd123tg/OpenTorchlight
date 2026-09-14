@@ -40,6 +40,11 @@ int main(int argc, char** argv) {
                 "Alchemist GUID changed");
         require(players[0].walking_speed == 2.5F && players[0].running_speed == 6.25F,
                 "Alchemist movement speeds changed");
+        require(players[0].minimum_health == 200.0F &&
+                    players[0].maximum_health == 200.0F &&
+                    players[1].maximum_health == 300.0F &&
+                    players[2].maximum_health == 200.0F,
+                "playable player health graphs changed");
         require(players[0].strength == 6 && players[0].dexterity == 7 &&
                     players[0].magic == 10 && players[0].defense == 5,
                 "Alchemist starting stats changed");

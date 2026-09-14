@@ -34,6 +34,8 @@ struct RuntimeEntity {
     float attack_speed = 0.0F;
     float sight_radius = 0.0F;
     float reach_bonus = 0.0F;
+    float motion_radius = 0.0F;
+    float follow_radius = 0.0F;
     bool alive = true;
     bool combat_targetable = false;
 };
@@ -78,6 +80,7 @@ public:
     [[nodiscard]] const std::vector<RuntimeEntity>& entities() const noexcept {
         return entities_;
     }
+    [[nodiscard]] std::vector<RuntimeEntity>& entities() noexcept { return entities_; }
     [[nodiscard]] std::size_t placed_entity_count() const noexcept {
         return placed_entity_count_;
     }
