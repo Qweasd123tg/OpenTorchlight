@@ -220,17 +220,17 @@ void verify_layout_link_expansion(const torchlight::LevelSceneLoader& loader,
     bool found_previous_floor = false;
     bool found_next_floor = false;
     for (const auto& object : expanded.layout.objects) {
-        if (object.descriptor != u"Warper") {
+        if (object.descriptor != u"Unit Trigger") {
             continue;
         }
-        runtime.invoke(object.id, u"Activate Warper");
+        runtime.trigger(object.id);
         for (const auto& request : runtime.take_warp_requests()) {
             found_previous_floor = found_previous_floor || request.level_delta == -1;
             found_next_floor = found_next_floor || request.level_delta == 1;
         }
     }
     require(found_previous_floor && found_next_floor,
-            "expanded entrance and exit did not preserve their floor directions");
+            "expanded entrance and exit triggers did not route their floor directions");
 }
 
 } // namespace

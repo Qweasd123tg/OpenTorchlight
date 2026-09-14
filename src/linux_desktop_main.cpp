@@ -5,6 +5,7 @@
 #include "torchlight/entity_world.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
+#include "torchlight/level_transition.hpp"
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/navigation_grid.hpp"
@@ -28,15 +29,18 @@
 #include <array>
 #include <charconv>
 #include <chrono>
+#include <cmath>
 #include <cstdint>
 #include <filesystem>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <system_error>
 #include <unordered_map>
+#include <utility>
 #include <unistd.h>
 #include <vector>
 
@@ -420,6 +424,158 @@ private:
     std::optional<std::array<int, 2>> left_click_;
 };
 
+struct LoadedDesktopLevel {
+    torchlight::DungeonAddress address;
+    torchlight::DungeonManifest dungeon;
+    torchlight::LevelRules rules;
+    torchlight::LayoutManifest layout;
+    torchlight::FixedSceneGeometry geometry;
+    torchlight::NavigationGrid navigation;
+    std::array<float, 3> player_start{};
+    std::string scene_state;
+    std::size_t chunk_count = 1;
+    std::size_t expanded_layout_link_count = 0;
+    std::size_t placed_monster_count = 0;
+    float player_floor_offset = 0.0F;
+};
+
+std::u16string dungeon_data_file(std::u16string_view dungeon_name) {
+    std::u16string result = u"media/dungeons/";
+    result.append(dungeon_name);
+    result.append(u".DAT");
+    return result;
+}
+
+std::uint32_t level_seed(std::uint32_t base_seed, std::int32_t depth) noexcept {
+    const auto offset = depth > 0 ? static_cast<std::uint32_t>(depth - 1) : 0U;
+    auto value = base_seed ^ (offset * 0x9e3779b9U);
+    return value == 0 ? 1U : value;
+}
+
+std::string narrow_ascii(std::u16string_view value) {
+    std::string result;
+    result.reserve(value.size());
+    for (const auto character : value) {
+        if (character > 0x7fU) {
+            throw DesktopError("dungeon name contains a non-ASCII character");
+        }
+        result.push_back(static_cast<char>(character));
+    }
+    return result;
+}
+
+torchlight::LayoutManifest load_static_layout(
+    const torchlight::LevelSceneLoader& loader,
+    const torchlight::LevelRules& rules) {
+    std::vector<std::string> candidates;
+    if (rules.chunks.size() == 1U) {
+        candidates = loader.layout_candidates(rules, rules.chunks.front().type);
+    } else if (rules.chunk_types.size() == 1U) {
+        candidates = loader.layout_candidates(rules, rules.chunk_types.front().name);
+    }
+    if (candidates.size() != 1U) {
+        throw DesktopError("static level does not resolve to exactly one layout");
+    }
+    return loader.load_layout(candidates.front());
+}
+
+LoadedDesktopLevel load_desktop_level(
+    const torchlight::PakArchive& archive,
+    const torchlight::MasterResourceIndex& resources,
+    torchlight::UnitDefinitionLoader& definitions,
+    const torchlight::LevelsetCatalog& levelsets,
+    const torchlight::LevelSceneLoader& loader,
+    const torchlight::PlayerPrototype& player,
+    torchlight::DungeonAddress requested_address,
+    std::uint32_t base_seed) {
+    LoadedDesktopLevel result;
+    result.dungeon = loader.load_dungeon(
+        dungeon_data_file(requested_address.dungeon_name));
+    const auto floor = torchlight::select_dungeon_floor(
+        result.dungeon, requested_address.depth);
+    result.address = {result.dungeon.name, floor.depth};
+    result.rules = loader.load_rules(result.dungeon.strata[floor.stratum_index].ruleset);
+    const auto seed = level_seed(base_seed, floor.depth);
+
+    torchlight::CollisionScene collision;
+    if (result.rules.randomized) {
+        const torchlight::RandomLevelGenerator generator(loader);
+        const auto generated = generator.generate(result.rules, seed);
+        result.chunk_count = generated.chunks.size();
+        auto composed = torchlight::compose_generated_level_layout(loader, generated);
+        result.layout = std::move(composed.layout);
+        const auto expansion = torchlight::expand_layout_links(loader, result.layout);
+        result.expanded_layout_link_count = expansion.links_expanded;
+        const torchlight::FixedLevelScene scene{
+            result.dungeon, result.rules, result.layout};
+        result.geometry = torchlight::build_room_piece_geometry(
+            archive, levelsets, scene);
+        result.player_start = torchlight::generated_player_start(loader, generated);
+        collision = torchlight::build_generated_level_collision(
+            archive, levelsets, loader, generated);
+        result.scene_state = "generated-dungeon";
+    } else {
+        result.layout = load_static_layout(loader, result.rules);
+        const auto expansion = torchlight::expand_layout_links(loader, result.layout);
+        result.expanded_layout_link_count = expansion.links_expanded;
+        const torchlight::FixedLevelScene scene{
+            result.dungeon, result.rules, result.layout};
+        result.geometry = torchlight::build_room_piece_geometry(
+            archive, levelsets, scene);
+        result.player_start = torchlight::layout_player_start(result.layout);
+        collision = torchlight::build_fixed_level_collision(archive, levelsets, scene);
+        result.scene_state = result.dungeon.strata[floor.stratum_index].is_town
+                                 ? "town-playable"
+                                 : "fixed-dungeon";
+    }
+
+    result.placed_monster_count = torchlight::append_layout_monster_geometry(
+        archive, resources, definitions, result.layout, result.geometry);
+    torchlight::append_player_geometry(
+        archive, player, result.player_start, result.geometry);
+    result.navigation = torchlight::NavigationGrid::build(collision);
+    if (const auto start_cell = result.navigation.nearest_walkable(result.player_start)) {
+        result.player_floor_offset =
+            result.player_start[1] -
+            result.navigation.cell((*start_cell)[0], (*start_cell)[1]).height;
+    }
+    return result;
+}
+
+struct LevelInteraction {
+    std::int64_t object_id = 0;
+    std::array<float, 3> position{};
+};
+
+std::vector<LevelInteraction> collect_unit_triggers(
+    const torchlight::LayoutManifest& layout) {
+    const auto transforms = torchlight::resolve_layout_world_transforms(layout);
+    std::vector<LevelInteraction> result;
+    for (std::size_t index = 0; index < layout.objects.size(); ++index) {
+        if (layout.objects[index].descriptor == u"Unit Trigger") {
+            result.push_back({layout.objects[index].id, transforms[index].position});
+        }
+    }
+    return result;
+}
+
+const LevelInteraction* nearest_interaction(
+    const std::vector<LevelInteraction>& interactions,
+    const std::array<float, 3>& position, float maximum_distance) noexcept {
+    const LevelInteraction* result = nullptr;
+    auto nearest_squared = maximum_distance * maximum_distance;
+    for (const auto& interaction : interactions) {
+        const auto dx = interaction.position[0] - position[0];
+        const auto dz = interaction.position[2] - position[2];
+        const auto distance_squared = dx * dx + dz * dz;
+        if (distance_squared <= nearest_squared) {
+            result = &interaction;
+            nearest_squared = distance_squared;
+        }
+    }
+    return result;
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
@@ -439,209 +595,166 @@ int main(int argc, char** argv) {
             archive, unit_type_hierarchy, index, loader);
         const torchlight::LevelsetCatalog levelsets(archive);
         const torchlight::LevelSceneLoader scene_loader(archive);
-        torchlight::FixedSceneGeometry geometry;
-        std::string scene_state;
-        std::size_t chunk_count = 1;
-        std::size_t layout_object_count = 0;
-        std::size_t expanded_layout_link_count = 0;
-        std::size_t placed_monster_count = 0;
-        std::string player_name = "none";
-        std::optional<torchlight::PlayerPrototype> player_prototype;
-        std::optional<torchlight::ActorMotion> player_motion;
-        std::optional<std::size_t> player_instance_index;
-        std::optional<torchlight::NavigationGrid> navigation;
-        std::optional<torchlight::FixedLevelScene> fixed_scene;
-        std::optional<torchlight::GeneratedLevelLayout> generated_layout;
-        std::vector<std::array<float, 3>> active_path;
-        std::size_t next_path_node = 0;
-        float player_floor_offset = 0.0F;
-        std::int32_t runtime_level = 1;
+        const auto players = torchlight::load_playable_players(archive, index, loader);
+        if (players.empty()) {
+            throw DesktopError("no playable player definitions were resolved");
+        }
+
+        torchlight::DungeonAddress initial_address{u"Town", 0};
         if (options.main_stratum) {
             const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
             if (*options.main_stratum >= main.strata.size()) {
                 throw DesktopError("main stratum index is out of range");
             }
-            const auto rules = scene_loader.load_rules(main.strata[*options.main_stratum].ruleset);
-            const torchlight::RandomLevelGenerator generator(scene_loader);
-            const auto generated = generator.generate(rules, options.seed);
-            chunk_count = generated.chunks.size();
-            generated_layout.emplace(
-                torchlight::compose_generated_level_layout(scene_loader, generated));
-            const auto expansion = torchlight::expand_layout_links(
-                scene_loader, generated_layout->layout);
-            expanded_layout_link_count = expansion.links_expanded;
-            layout_object_count = generated_layout->layout.objects.size();
-            const torchlight::FixedLevelScene expanded_scene{
-                main, rules, generated_layout->layout};
-            geometry = torchlight::build_room_piece_geometry(
-                archive, levelsets, expanded_scene);
-            const auto players = torchlight::load_playable_players(archive, index, loader);
-            if (players.empty()) {
-                throw DesktopError("no playable player definitions were resolved");
+            std::int64_t depth = 1;
+            for (std::size_t stratum = 0; stratum < *options.main_stratum; ++stratum) {
+                depth += main.strata[stratum].floors;
             }
-            const auto player_start = torchlight::generated_player_start(scene_loader, generated);
-            torchlight::append_player_geometry(archive, players.front(), player_start, geometry);
-            player_instance_index = geometry.instances.size() - 1U;
-            player_motion.emplace(player_start, players.front().running_speed);
-            const auto collision = torchlight::build_generated_level_collision(
-                archive, levelsets, scene_loader, generated);
-            navigation = torchlight::NavigationGrid::build(collision);
-            if (const auto start_cell = navigation->nearest_walkable(player_start)) {
-                player_floor_offset =
-                    player_start[1] - navigation->cell((*start_cell)[0], (*start_cell)[1]).height;
+            if (depth > std::numeric_limits<std::int32_t>::max()) {
+                throw DesktopError("main stratum depth exceeds the 32-bit range");
             }
-            player_name.assign(players.front().name.begin(), players.front().name.end());
-            player_prototype = players.front();
-            scene_state = "generated-dungeon-preview";
-            runtime_level = static_cast<std::int32_t>(*options.main_stratum + 1U);
-        } else {
-            fixed_scene.emplace(scene_loader.load_fixed_scene(u"media/dungeons/TOWN.DAT"));
-            const auto expansion = torchlight::expand_layout_links(
-                scene_loader, fixed_scene->layout);
-            expanded_layout_link_count = expansion.links_expanded;
-            const auto& town = *fixed_scene;
-            layout_object_count = town.layout.objects.size();
-            geometry = torchlight::build_room_piece_geometry(archive, levelsets, town);
-            placed_monster_count = torchlight::append_layout_monster_geometry(
-                archive, index, loader, town.layout, geometry);
-            const auto players = torchlight::load_playable_players(archive, index, loader);
-            if (players.empty()) {
-                throw DesktopError("no playable player definitions were resolved");
-            }
-            const auto player_start = torchlight::layout_player_start(town.layout);
-            torchlight::append_player_geometry(archive, players.front(), player_start, geometry);
-            player_instance_index = geometry.instances.size() - 1U;
-            player_motion.emplace(player_start, players.front().running_speed);
-            const auto collision =
-                torchlight::build_fixed_level_collision(archive, levelsets, town);
-            navigation = torchlight::NavigationGrid::build(collision);
-            if (const auto start_cell = navigation->nearest_walkable(player_start)) {
-                player_floor_offset =
-                    player_start[1] - navigation->cell((*start_cell)[0], (*start_cell)[1]).height;
-            }
-            player_name.assign(players.front().name.begin(), players.front().name.end());
-            player_prototype = players.front();
-            scene_state = "town-playable-preview";
+            initial_address = {main.name, static_cast<std::int32_t>(depth)};
         }
         const torchlight::OgreMaterialCatalog materials(archive);
-
         DesktopWindow window(1280, 720);
-        std::optional<torchlight::GlesSceneRenderer> renderer;
-        std::optional<torchlight::LogicRuntime> logic_runtime;
-        std::optional<torchlight::RuntimeEntityWorld> entity_world;
-        std::optional<torchlight::CombatController> combat;
-        std::size_t logic_event_count = 0;
-        std::size_t logic_invocation_count = 0;
-        std::size_t spawn_request_count = 0;
-        std::size_t spawned_entity_count = 0;
-        std::size_t resolved_unit_type_count = 0;
-        std::size_t unresolved_unit_type_count = 0;
-        std::size_t missing_spawn_resource_count = 0;
-        std::size_t processed_entity_count = 0;
-        std::size_t runtime_model_count = 0;
-        std::size_t missing_runtime_model_count = 0;
-        std::size_t renderer_rebuild_count = 0;
-        std::size_t warp_request_count = 0;
-        std::size_t selected_target_count = 0;
-        std::size_t combat_attack_count = 0;
-        std::size_t combat_kill_count = 0;
-        std::unordered_map<std::uint64_t, std::size_t> runtime_instance_indices;
-        auto drain_logic = [&] {
-            if (!logic_runtime || !entity_world) {
-                return;
+        torchlight::LevelTransitionState transitions(initial_address);
+        std::uint64_t total_frames = 0;
+        std::size_t completed_transitions = 0;
+        bool app_running = true;
+
+        while (app_running) {
+            auto level = load_desktop_level(
+                archive, index, loader, levelsets, scene_loader, players.front(),
+                transitions.current(), options.seed);
+            if (level.address.dungeon_name != transitions.current().dungeon_name ||
+                level.address.depth != transitions.current().depth) {
+                transitions.commit(level.address);
             }
-            for (std::size_t pass = 0;; ++pass) {
-                const auto requests = logic_runtime->take_spawn_requests();
-                if (requests.empty()) {
+            torchlight::ActorMotion player_motion(
+                level.player_start, players.front().running_speed);
+            const auto player_instance_index = level.geometry.instances.size() - 1U;
+            auto interactions = collect_unit_triggers(level.layout);
+            std::optional<LevelInteraction> active_interaction;
+            std::vector<std::array<float, 3>> active_path;
+            std::size_t next_path_node = 0;
+
+            torchlight::LogicRuntime logic_runtime(
+                level.layout, level_seed(options.seed, level.address.depth));
+            torchlight::RuntimeEntityWorld entity_world(
+                level.layout, index, loader, spawn_classes, unit_types,
+                level_seed(options.seed, level.address.depth),
+                std::max(1, level.address.depth));
+            torchlight::CombatController combat(
+                players.front(), level_seed(options.seed, level.address.depth));
+            std::optional<torchlight::GlesSceneRenderer> renderer;
+            std::optional<torchlight::WarpRequest> pending_warp;
+            std::unordered_map<std::uint64_t, std::size_t> runtime_instance_indices;
+
+            std::size_t logic_event_count = 0;
+            std::size_t logic_invocation_count = 0;
+            std::size_t spawn_request_count = 0;
+            std::size_t spawned_entity_count = 0;
+            std::size_t resolved_unit_type_count = 0;
+            std::size_t unresolved_unit_type_count = 0;
+            std::size_t missing_spawn_resource_count = 0;
+            std::size_t processed_entity_count = 0;
+            std::size_t runtime_model_count = 0;
+            std::size_t missing_runtime_model_count = 0;
+            std::size_t renderer_rebuild_count = 0;
+            std::size_t warp_request_count = 0;
+            std::size_t selected_target_count = 0;
+            std::size_t interaction_count = 0;
+            std::size_t combat_attack_count = 0;
+            std::size_t combat_kill_count = 0;
+            std::uint64_t level_frames = 0;
+
+            auto drain_logic = [&] {
+                for (std::size_t pass = 0;; ++pass) {
+                    const auto requests = logic_runtime.take_spawn_requests();
+                    if (requests.empty()) {
+                        break;
+                    }
+                    if (pass >= 64U) {
+                        throw DesktopError("level logic produced an unbounded spawn chain");
+                    }
+                    const auto stats =
+                        entity_world.consume_spawn_requests(requests, logic_runtime);
+                    spawn_request_count += stats.requests;
+                    spawned_entity_count += stats.entities_created;
+                    resolved_unit_type_count += stats.resolved_unit_types;
+                    unresolved_unit_type_count += stats.unresolved_unit_types;
+                    missing_spawn_resource_count += stats.missing_resources;
+                }
+                bool geometry_changed = false;
+                while (processed_entity_count < entity_world.entities().size()) {
+                    const auto instance = torchlight::append_runtime_entity_geometry(
+                        archive, index, loader,
+                        entity_world.entities()[processed_entity_count], level.geometry);
+                    runtime_model_count += static_cast<std::size_t>(instance.has_value());
+                    missing_runtime_model_count +=
+                        static_cast<std::size_t>(!instance.has_value());
+                    if (instance) {
+                        runtime_instance_indices.emplace(
+                            entity_world.entities()[processed_entity_count].id, *instance);
+                    }
+                    geometry_changed = geometry_changed || instance.has_value();
+                    ++processed_entity_count;
+                }
+                if (geometry_changed && renderer) {
+                    renderer.emplace(level.geometry, archive, materials);
+                    ++renderer_rebuild_count;
+                    renderer->set_camera_target(player_motion.position(), 32.0F);
+                }
+                logic_event_count += logic_runtime.take_events().size();
+                logic_invocation_count += logic_runtime.take_invocations().size();
+                auto warps = logic_runtime.take_warp_requests();
+                warp_request_count += warps.size();
+                if (!warps.empty() && !pending_warp) {
+                    pending_warp = std::move(warps.front());
+                }
+            };
+
+            logic_runtime.activate_level();
+            logic_runtime.update_player_position(player_motion.position());
+            drain_logic();
+            renderer.emplace(level.geometry, archive, materials);
+            renderer->set_camera_target(player_motion.position(), 32.0F);
+            bool rendered_once = false;
+            auto previous_frame = std::chrono::steady_clock::now();
+
+            while (!pending_warp) {
+                if (!window.process_events()) {
+                    app_running = false;
                     break;
                 }
-                if (pass >= 64U) {
-                    throw DesktopError("level logic produced an unbounded spawn chain");
-                }
-                const auto stats =
-                    entity_world->consume_spawn_requests(requests, *logic_runtime);
-                spawn_request_count += stats.requests;
-                spawned_entity_count += stats.entities_created;
-                resolved_unit_type_count += stats.resolved_unit_types;
-                unresolved_unit_type_count += stats.unresolved_unit_types;
-                missing_spawn_resource_count += stats.missing_resources;
-            }
-            bool geometry_changed = false;
-            while (processed_entity_count < entity_world->entities().size()) {
-                const auto instance = torchlight::append_runtime_entity_geometry(
-                    archive, index, loader,
-                    entity_world->entities()[processed_entity_count], geometry);
-                runtime_model_count += static_cast<std::size_t>(instance.has_value());
-                missing_runtime_model_count +=
-                    static_cast<std::size_t>(!instance.has_value());
-                if (instance) {
-                    runtime_instance_indices.emplace(
-                        entity_world->entities()[processed_entity_count].id, *instance);
-                }
-                geometry_changed = geometry_changed || instance.has_value();
-                ++processed_entity_count;
-            }
-            if (geometry_changed && renderer) {
-                renderer.emplace(geometry, archive, materials);
-                ++renderer_rebuild_count;
-                if (player_motion) {
-                    renderer->set_camera_target(player_motion->position(), 32.0F);
-                }
-            }
-            logic_event_count += logic_runtime->take_events().size();
-            logic_invocation_count += logic_runtime->take_invocations().size();
-            warp_request_count += logic_runtime->take_warp_requests().size();
-        };
-        if (fixed_scene) {
-            logic_runtime.emplace(fixed_scene->layout, options.seed);
-            entity_world.emplace(fixed_scene->layout, index, loader,
-                                 spawn_classes, unit_types,
-                                 options.seed, runtime_level);
-        } else if (generated_layout) {
-            logic_runtime.emplace(generated_layout->layout, options.seed);
-            entity_world.emplace(generated_layout->layout, index, loader,
-                                 spawn_classes, unit_types,
-                                 options.seed, runtime_level);
-        } else {
-            throw DesktopError("no active layout was prepared");
-        }
-        if (!player_prototype) {
-            throw DesktopError("no player combat prototype was prepared");
-        }
-        combat.emplace(*player_prototype, options.seed);
-        logic_runtime->activate_level();
-        if (player_motion) {
-            logic_runtime->update_player_position(player_motion->position());
-        }
-        drain_logic();
-        renderer.emplace(geometry, archive, materials);
-        if (player_motion) {
-            renderer->set_camera_target(player_motion->position(), 32.0F);
-        }
-        std::uint64_t frames = 0;
-        bool rendered_once = false;
-        auto previous_frame = std::chrono::steady_clock::now();
-        while (window.process_events()) {
-            const auto current_frame = std::chrono::steady_clock::now();
-            const float elapsed = std::chrono::duration<float>(current_frame - previous_frame).count();
-            previous_frame = current_frame;
-            if (player_motion && player_instance_index) {
+                const auto current_frame = std::chrono::steady_clock::now();
+                const float elapsed =
+                    std::chrono::duration<float>(current_frame - previous_frame).count();
+                previous_frame = current_frame;
                 if (const auto click = window.take_left_click(); click && rendered_once) {
                     auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
-                        window.height(), player_motion->position()[1]);
-                    if (combat && entity_world &&
-                        combat->select_target(*entity_world, destination, 2.0F)) {
-                        const auto* selected = combat->target(*entity_world);
+                        window.height(), player_motion.position()[1]);
+                    if (combat.select_target(entity_world, destination, 2.0F)) {
+                        const auto* selected = combat.target(entity_world);
                         destination = selected->position;
+                        active_interaction.reset();
                         ++selected_target_count;
                         std::cout << "selected_target=" << selected->id
                                   << " health=" << selected->health << '/'
                                   << selected->maximum_health << '\n';
-                    } else if (combat) {
-                        combat->clear_target();
+                    } else if (const auto* interaction = nearest_interaction(
+                                   interactions, destination, 3.0F)) {
+                        combat.clear_target();
+                        active_interaction = *interaction;
+                        destination = interaction->position;
+                        std::cout << "selected_interaction=" << interaction->object_id << '\n';
+                    } else {
+                        combat.clear_target();
+                        active_interaction.reset();
                     }
-                    active_path = navigation->find_path(player_motion->position(), destination);
+                    active_path = level.navigation.find_path(
+                        player_motion.position(), destination);
                     std::cout << "click_destination=" << destination[0] << ',' << destination[1]
                               << ',' << destination[2]
                               << " path_nodes=" << active_path.size() << '\n';
@@ -649,104 +762,140 @@ int main(int argc, char** argv) {
                     next_path_node = active_path.size() > 1U ? 1U : active_path.size();
                     if (next_path_node < active_path.size()) {
                         auto waypoint = active_path[next_path_node];
-                        waypoint[1] += player_floor_offset;
-                        player_motion->set_destination(waypoint);
+                        waypoint[1] += level.player_floor_offset;
+                        player_motion.set_destination(waypoint);
                     } else {
-                        player_motion->stop();
+                        player_motion.stop();
                     }
                 }
-                player_motion->advance(std::min(elapsed, 0.1F));
-                while (!player_motion->moving() && next_path_node < active_path.size()) {
+                player_motion.advance(std::min(elapsed, 0.1F));
+                while (!player_motion.moving() && next_path_node < active_path.size()) {
                     ++next_path_node;
                     if (next_path_node < active_path.size()) {
                         auto waypoint = active_path[next_path_node];
-                        waypoint[1] += player_floor_offset;
-                        player_motion->set_destination(waypoint);
+                        waypoint[1] += level.player_floor_offset;
+                        player_motion.set_destination(waypoint);
                     }
                 }
-                geometry.instances[*player_instance_index].transform.position =
-                    player_motion->position();
-                renderer->set_instance_position(*player_instance_index, player_motion->position());
-                renderer->set_camera_target(player_motion->position(), 32.0F);
-                if (logic_runtime) {
-                    if (combat && entity_world) {
-                        const auto update = combat->update(
-                            std::min(elapsed, 0.1F), player_motion->position(),
-                            *entity_world, *logic_runtime);
-                        if (update.state == torchlight::CombatState::waiting ||
-                            update.state == torchlight::CombatState::attacked ||
-                            update.state == torchlight::CombatState::killed) {
-                            player_motion->stop();
-                            active_path.clear();
-                            next_path_node = 0;
-                        }
-                        if (update.state == torchlight::CombatState::attacked ||
-                            update.state == torchlight::CombatState::killed) {
-                            ++combat_attack_count;
-                            std::cout << "combat_hit=" << update.target_id
-                                      << " damage=" << update.damage
-                                      << " remaining_health=" << update.remaining_health
-                                      << '\n';
-                        }
-                        if (update.state == torchlight::CombatState::killed) {
-                            ++combat_kill_count;
-                            const auto instance = runtime_instance_indices.find(
-                                update.target_id);
-                            if (instance != runtime_instance_indices.end()) {
-                                geometry.instances[instance->second].visible = false;
-                                renderer->set_instance_visible(instance->second, false);
-                            }
+                level.geometry.instances[player_instance_index].transform.position =
+                    player_motion.position();
+                renderer->set_instance_position(player_instance_index, player_motion.position());
+                renderer->set_camera_target(player_motion.position(), 32.0F);
+
+                if (active_interaction) {
+                    const auto dx = active_interaction->position[0] - player_motion.position()[0];
+                    const auto dz = active_interaction->position[2] - player_motion.position()[2];
+                    if (std::hypot(dx, dz) <= 2.25F) {
+                        player_motion.stop();
+                        active_path.clear();
+                        next_path_node = 0;
+                        logic_runtime.trigger(active_interaction->object_id);
+                        ++interaction_count;
+                        active_interaction.reset();
+                        drain_logic();
+                    }
+                }
+                if (!pending_warp) {
+                    const auto update = combat.update(
+                        std::min(elapsed, 0.1F), player_motion.position(),
+                        entity_world, logic_runtime);
+                    if (update.state == torchlight::CombatState::waiting ||
+                        update.state == torchlight::CombatState::attacked ||
+                        update.state == torchlight::CombatState::killed) {
+                        player_motion.stop();
+                        active_path.clear();
+                        next_path_node = 0;
+                    }
+                    if (update.state == torchlight::CombatState::attacked ||
+                        update.state == torchlight::CombatState::killed) {
+                        ++combat_attack_count;
+                        std::cout << "combat_hit=" << update.target_id
+                                  << " damage=" << update.damage
+                                  << " remaining_health=" << update.remaining_health
+                                  << '\n';
+                    }
+                    if (update.state == torchlight::CombatState::killed) {
+                        ++combat_kill_count;
+                        const auto instance = runtime_instance_indices.find(
+                            update.target_id);
+                        if (instance != runtime_instance_indices.end()) {
+                            level.geometry.instances[instance->second].visible = false;
+                            renderer->set_instance_visible(instance->second, false);
                         }
                     }
-                    logic_runtime->update(std::min(elapsed, 0.1F));
-                    logic_runtime->update_player_position(player_motion->position());
+                    logic_runtime.update(std::min(elapsed, 0.1F));
+                    logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
                 }
+                window.draw_scene_frame(*renderer);
+                rendered_once = true;
+                ++level_frames;
+                ++total_frames;
+                if (options.frame_limit != 0 && total_frames >= options.frame_limit) {
+                    app_running = false;
+                    break;
+                }
             }
-            window.draw_scene_frame(*renderer);
-            rendered_once = true;
-            ++frames;
-            if (options.frame_limit != 0 && frames >= options.frame_limit) {
+
+            const auto& render_stats = renderer->stats();
+            std::cout << "desktop_state=" << level.scene_state
+                      << " dungeon=" << narrow_ascii(level.address.dungeon_name)
+                      << " depth=" << level.address.depth
+                      << " resources=" << index.records().size()
+                      << " cached_unit_files=" << loader.cached_definition_count()
+                      << " level_pieces=" << levelsets.pieces().size()
+                      << " chunks=" << level.chunk_count
+                      << " player=" << narrow_ascii(players.front().name)
+                      << " layout_objects=" << level.layout.objects.size()
+                      << " expanded_layout_links=" << level.expanded_layout_link_count
+                      << " placed_monsters=" << level.placed_monster_count
+                      << " meshes=" << render_stats.mesh_resources
+                      << " instances=" << render_stats.instances
+                      << " draw_batches=" << render_stats.draw_batches
+                      << " textures=" << render_stats.texture_resources
+                      << " textured_batches=" << render_stats.textured_batches
+                      << " placed_triangles=" << render_stats.placed_triangles
+                      << " logic_events=" << logic_event_count
+                      << " logic_invocations=" << logic_invocation_count
+                      << " spawn_requests=" << spawn_request_count
+                      << " runtime_entities=" << entity_world.entities().size()
+                      << " spawned_entities=" << spawned_entity_count
+                      << " resolved_unit_types=" << resolved_unit_type_count
+                      << " unresolved_unit_types=" << unresolved_unit_type_count
+                      << " missing_spawn_resources=" << missing_spawn_resource_count
+                      << " runtime_models=" << runtime_model_count
+                      << " missing_runtime_models=" << missing_runtime_model_count
+                      << " renderer_rebuilds=" << renderer_rebuild_count
+                      << " selected_targets=" << selected_target_count
+                      << " interactions=" << interaction_count
+                      << " combat_attacks=" << combat_attack_count
+                      << " combat_kills=" << combat_kill_count
+                      << " warp_requests=" << warp_request_count
+                      << " frames=" << level_frames
+                      << " total_frames=" << total_frames
+                      << " player_position=" << player_motion.position()[0] << ','
+                      << player_motion.position()[1] << ',' << player_motion.position()[2]
+                      << " navigation_cells=" << level.navigation.walkable_cell_count()
+                      << '\n';
+
+            if (!app_running || !pending_warp) {
                 break;
             }
+            auto destination = transitions.resolve(*pending_warp);
+            const auto target_dungeon = scene_loader.load_dungeon(
+                dungeon_data_file(destination.dungeon_name));
+            const auto target_floor = torchlight::select_dungeon_floor(
+                target_dungeon, destination.depth);
+            destination = {target_dungeon.name, target_floor.depth};
+            transitions.commit(destination);
+            ++completed_transitions;
+            std::cout << "level_transition=" << completed_transitions
+                      << " dungeon=" << narrow_ascii(destination.dungeon_name)
+                      << " depth=" << destination.depth
+                      << " warp_name=" << narrow_ascii(pending_warp->warp_name)
+                      << '\n';
+            std::cout.flush();
         }
-        const auto& render_stats = renderer->stats();
-        std::cout << "desktop_state=" << scene_state << " resources=" << index.records().size()
-                  << " cached_unit_files=" << loader.cached_definition_count()
-                  << " level_pieces=" << levelsets.pieces().size()
-                  << " chunks=" << chunk_count
-                  << " player=" << player_name
-                  << " layout_objects=" << layout_object_count
-                  << " expanded_layout_links=" << expanded_layout_link_count
-                  << " placed_monsters=" << placed_monster_count
-                  << " meshes=" << render_stats.mesh_resources
-                  << " instances=" << render_stats.instances
-                  << " draw_batches=" << render_stats.draw_batches
-                  << " textures=" << render_stats.texture_resources
-                  << " textured_batches=" << render_stats.textured_batches
-                  << " placed_triangles=" << render_stats.placed_triangles
-                  << " logic_events=" << logic_event_count
-                  << " logic_invocations=" << logic_invocation_count
-                  << " spawn_requests=" << spawn_request_count
-                  << " runtime_entities=" << entity_world->entities().size()
-                  << " spawned_entities=" << spawned_entity_count
-                  << " resolved_unit_types=" << resolved_unit_type_count
-                  << " unresolved_unit_types=" << unresolved_unit_type_count
-                  << " missing_spawn_resources=" << missing_spawn_resource_count
-                  << " runtime_models=" << runtime_model_count
-                  << " missing_runtime_models=" << missing_runtime_model_count
-                  << " renderer_rebuilds=" << renderer_rebuild_count
-                  << " selected_targets=" << selected_target_count
-                  << " combat_attacks=" << combat_attack_count
-                  << " combat_kills=" << combat_kill_count
-                  << " warp_requests=" << warp_request_count
-                  << " frames=" << frames;
-        if (player_motion) {
-            std::cout << " player_position=" << player_motion->position()[0] << ','
-                      << player_motion->position()[1] << ',' << player_motion->position()[2];
-            std::cout << " navigation_cells=" << navigation->walkable_cell_count();
-        }
-        std::cout << '\n';
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "desktop failed: " << error.what() << '\n';

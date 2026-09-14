@@ -51,7 +51,10 @@ void append_layout_geometry(const PakArchive& archive, const LevelsetCatalog& le
             continue;
         }
         if (!object.piece_guid.has_value()) {
-            throw SceneGeometryError("Room piece has no GUID");
+            // Some reusable prop layouts contain an empty editor placeholder
+            // named Room Piece0. It has no renderable resource in the original
+            // data and must not invalidate the enclosing level.
+            continue;
         }
         auto found = mesh_by_guid.find(*object.piece_guid);
         if (found == mesh_by_guid.end()) {

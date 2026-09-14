@@ -148,6 +148,21 @@ std::array<float, 3> layout_player_start(const LayoutManifest& layout) {
     if (!marker) {
         const auto transforms = resolve_layout_world_transforms(layout);
         for (std::size_t index = 0; index < layout.objects.size(); ++index) {
+            const auto& object = layout.objects[index];
+            const auto* type = object.find_property(u"TYPE");
+            if (object.descriptor == u"Property Node" && type != nullptr &&
+                (type->type == AdmValueType::string ||
+                 type->type == AdmValueType::translation ||
+                 type->type == AdmValueType::note) &&
+                std::get<std::u16string>(type->value) == u"Entrance") {
+                marker = transforms[index];
+                break;
+            }
+        }
+    }
+    if (!marker) {
+        const auto transforms = resolve_layout_world_transforms(layout);
+        for (std::size_t index = 0; index < layout.objects.size(); ++index) {
             if (layout.objects[index].descriptor == u"Pathing" &&
                 layout.objects[index].name == u"PlayerWalksHalfway") {
                 marker = transforms[index];
