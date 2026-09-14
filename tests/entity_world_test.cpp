@@ -4,6 +4,7 @@
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/pak_archive.hpp"
+#include "torchlight/scene_geometry.hpp"
 #include "torchlight/spawn_class.hpp"
 
 #include <algorithm>
@@ -75,6 +76,22 @@ int main(int argc, char** argv) {
         }
         require(has_event(logic.take_events(), spawner, u"All Units Spawned"),
                 "entity creation did not complete the spawner");
+        torchlight::UnitDefinitionLoader definitions(archive);
+        torchlight::FixedSceneGeometry runtime_geometry;
+        const auto runtime_instance = torchlight::append_runtime_entity_geometry(
+            archive, resources, definitions, world.entities()[0], runtime_geometry);
+        require(runtime_instance == 0 && runtime_geometry.instances.size() == 1 &&
+                    runtime_geometry.instances[0].runtime_entity_id == world.entities()[0].id &&
+                    runtime_geometry.meshes.size() == 1,
+                "spawned monster did not resolve to visible runtime geometry");
+        auto second_entity = world.entities()[0];
+        second_entity.id = 2;
+        second_entity.position[0] += 2.0F;
+        const auto second_instance = torchlight::append_runtime_entity_geometry(
+            archive, resources, definitions, second_entity, runtime_geometry);
+        require(second_instance == 1 && runtime_geometry.instances.size() == 2 &&
+                    runtime_geometry.meshes.size() == 1,
+                "repeated runtime monster did not reuse its original mesh");
         require(world.kill(world.entities()[0].id, logic),
                 "live monster could not be killed");
         require(!world.kill(world.entities()[0].id, logic),

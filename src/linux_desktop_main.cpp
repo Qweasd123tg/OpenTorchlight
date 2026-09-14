@@ -507,7 +507,7 @@ int main(int argc, char** argv) {
         const torchlight::OgreMaterialCatalog materials(archive);
 
         DesktopWindow window(1280, 720);
-        torchlight::GlesSceneRenderer renderer(geometry, archive, materials);
+        std::optional<torchlight::GlesSceneRenderer> renderer;
         std::optional<torchlight::LogicRuntime> logic_runtime;
         std::optional<torchlight::RuntimeEntityWorld> entity_world;
         std::size_t logic_event_count = 0;
@@ -516,6 +516,10 @@ int main(int argc, char** argv) {
         std::size_t spawned_entity_count = 0;
         std::size_t deferred_unit_type_count = 0;
         std::size_t missing_spawn_resource_count = 0;
+        std::size_t processed_entity_count = 0;
+        std::size_t runtime_model_count = 0;
+        std::size_t missing_runtime_model_count = 0;
+        std::size_t renderer_rebuild_count = 0;
         std::size_t warp_request_count = 0;
         auto drain_logic = [&] {
             if (!logic_runtime || !entity_world) {
@@ -536,6 +540,24 @@ int main(int argc, char** argv) {
                 deferred_unit_type_count += stats.deferred_unit_types;
                 missing_spawn_resource_count += stats.missing_resources;
             }
+            bool geometry_changed = false;
+            while (processed_entity_count < entity_world->entities().size()) {
+                const auto instance = torchlight::append_runtime_entity_geometry(
+                    archive, index, loader,
+                    entity_world->entities()[processed_entity_count], geometry);
+                runtime_model_count += static_cast<std::size_t>(instance.has_value());
+                missing_runtime_model_count +=
+                    static_cast<std::size_t>(!instance.has_value());
+                geometry_changed = geometry_changed || instance.has_value();
+                ++processed_entity_count;
+            }
+            if (geometry_changed && renderer) {
+                renderer.emplace(geometry, archive, materials);
+                ++renderer_rebuild_count;
+                if (player_motion) {
+                    renderer->set_camera_target(player_motion->position(), 32.0F);
+                }
+            }
             logic_event_count += logic_runtime->take_events().size();
             logic_invocation_count += logic_runtime->take_invocations().size();
             warp_request_count += logic_runtime->take_warp_requests().size();
@@ -555,8 +577,9 @@ int main(int argc, char** argv) {
             logic_runtime->update_player_position(player_motion->position());
         }
         drain_logic();
+        renderer.emplace(geometry, archive, materials);
         if (player_motion) {
-            renderer.set_camera_target(player_motion->position(), 32.0F);
+            renderer->set_camera_target(player_motion->position(), 32.0F);
         }
         std::uint64_t frames = 0;
         bool rendered_once = false;
@@ -567,7 +590,7 @@ int main(int argc, char** argv) {
             previous_frame = current_frame;
             if (player_motion && player_instance_index) {
                 if (const auto click = window.take_left_click(); click && rendered_once) {
-                    const auto destination = renderer.ground_position_at_pixel(
+                    const auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
                         window.height(), player_motion->position()[1]);
                     active_path = navigation->find_path(player_motion->position(), destination);
@@ -593,22 +616,24 @@ int main(int argc, char** argv) {
                         player_motion->set_destination(waypoint);
                     }
                 }
-                renderer.set_instance_position(*player_instance_index, player_motion->position());
-                renderer.set_camera_target(player_motion->position(), 32.0F);
+                geometry.instances[*player_instance_index].transform.position =
+                    player_motion->position();
+                renderer->set_instance_position(*player_instance_index, player_motion->position());
+                renderer->set_camera_target(player_motion->position(), 32.0F);
                 if (logic_runtime) {
                     logic_runtime->update(std::min(elapsed, 0.1F));
                     logic_runtime->update_player_position(player_motion->position());
                     drain_logic();
                 }
             }
-            window.draw_scene_frame(renderer);
+            window.draw_scene_frame(*renderer);
             rendered_once = true;
             ++frames;
             if (options.frame_limit != 0 && frames >= options.frame_limit) {
                 break;
             }
         }
-        const auto& render_stats = renderer.stats();
+        const auto& render_stats = renderer->stats();
         std::cout << "desktop_state=" << scene_state << " resources=" << index.records().size()
                   << " cached_unit_files=" << loader.cached_definition_count()
                   << " level_pieces=" << levelsets.pieces().size()
@@ -629,6 +654,9 @@ int main(int argc, char** argv) {
                   << " spawned_entities=" << spawned_entity_count
                   << " deferred_unit_types=" << deferred_unit_type_count
                   << " missing_spawn_resources=" << missing_spawn_resource_count
+                  << " runtime_models=" << runtime_model_count
+                  << " missing_runtime_models=" << missing_runtime_model_count
+                  << " renderer_rebuilds=" << renderer_rebuild_count
                   << " warp_requests=" << warp_request_count
                   << " frames=" << frames;
         if (player_motion) {

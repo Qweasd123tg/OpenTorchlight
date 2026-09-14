@@ -1,4 +1,5 @@
 #include "torchlight/adm_document.hpp"
+#include "torchlight/entity_world.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/master_resource_index.hpp"
@@ -145,6 +146,21 @@ int main(int argc, char** argv) {
         require(!players.empty(), "no playable player prototype was loaded");
         const auto player_start = torchlight::generated_player_start(loader, generated);
         torchlight::append_player_geometry(archive, players.front(), player_start, mine_geometry);
+        const auto* skeleton = resources.find_case_insensitive(
+            torchlight::MasterResourceKind::monster, u"Skeletal Warrior");
+        require(skeleton != nullptr, "Skeletal Warrior master resource is absent");
+        torchlight::RuntimeEntity runtime_monster;
+        runtime_monster.id = 1;
+        runtime_monster.resource_guid = skeleton->guid;
+        runtime_monster.kind = skeleton->kind;
+        runtime_monster.name = skeleton->name;
+        runtime_monster.position = player_start;
+        runtime_monster.position[0] += 3.0F;
+        const auto runtime_instance = torchlight::append_runtime_entity_geometry(
+            archive, resources, definitions, runtime_monster, mine_geometry);
+        require(runtime_instance.has_value() &&
+                    mine_geometry.instances[*runtime_instance].runtime_entity_id == 1,
+                "runtime monster was not appended to generated geometry");
         torchlight::GlesSceneRenderer mine_renderer(mine_geometry, archive, materials);
         mine_renderer.set_camera_target(player_start);
         mine_renderer.draw(kWidth, kHeight);

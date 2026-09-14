@@ -1,6 +1,8 @@
 #include "torchlight/scene_geometry.hpp"
 
 #include <algorithm>
+#include <limits>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -107,6 +109,32 @@ std::string monster_mesh_path(const UnitDefinition& definition) {
     return result;
 }
 
+std::optional<std::string> runtime_unit_mesh_path(const UnitDefinition& definition) {
+    const auto* directory_property = definition.find_property(u"RESOURCEDIRECTORY");
+    const auto* mesh_property = definition.find_property(u"MESHFILE");
+    if (directory_property == nullptr || mesh_property == nullptr ||
+        (directory_property->type != AdmValueType::string &&
+         directory_property->type != AdmValueType::translation &&
+         directory_property->type != AdmValueType::note) ||
+        (mesh_property->type != AdmValueType::string &&
+         mesh_property->type != AdmValueType::translation &&
+         mesh_property->type != AdmValueType::note)) {
+        return std::nullopt;
+    }
+    auto directory = ascii_path(std::get<std::u16string>(directory_property->value));
+    std::replace(directory.begin(), directory.end(), '\\', '/');
+    if (!directory.empty() && directory.back() != '/') {
+        directory.push_back('/');
+    }
+    auto mesh = ascii_path(std::get<std::u16string>(mesh_property->value));
+    std::replace(mesh.begin(), mesh.end(), '\\', '/');
+    std::string result = directory + mesh;
+    if (result.size() < 5U || result.substr(result.size() - 5U) != ".mesh") {
+        result += ".mesh";
+    }
+    return result;
+}
+
 } // namespace
 
 FixedSceneGeometry build_room_piece_geometry(const PakArchive& archive,
@@ -185,6 +213,48 @@ std::size_t append_layout_monster_geometry(const PakArchive& archive,
         ++appended;
     }
     return appended;
+}
+
+std::optional<std::size_t> append_runtime_entity_geometry(
+    const PakArchive& archive, const MasterResourceIndex& resources,
+    UnitDefinitionLoader& definitions, const RuntimeEntity& entity,
+    FixedSceneGeometry& geometry) {
+    const auto* record = resources.find(entity.resource_guid);
+    if (record == nullptr || record->do_not_create) {
+        return std::nullopt;
+    }
+    const auto definition = definitions.load(*record);
+    const auto requested_path = runtime_unit_mesh_path(*definition);
+    if (!requested_path) {
+        return std::nullopt;
+    }
+    const auto* entry = archive.find_normalized(*requested_path);
+    if (entry == nullptr) {
+        return std::nullopt;
+    }
+
+    auto mesh = std::find_if(geometry.meshes.begin(), geometry.meshes.end(),
+                             [&](const auto& resource) {
+                                 return resource.source_path == entry->name;
+                             });
+    std::size_t mesh_index = 0;
+    if (mesh == geometry.meshes.end()) {
+        SceneMeshResource resource;
+        resource.guid = record->guid;
+        resource.source_path = entry->name;
+        resource.mesh = parse_ogre_mesh(archive.read(*entry));
+        add_mesh_counts(resource.mesh, geometry);
+        mesh_index = geometry.meshes.size();
+        geometry.meshes.push_back(std::move(resource));
+    } else {
+        mesh_index = static_cast<std::size_t>(mesh - geometry.meshes.begin());
+    }
+
+    LayoutWorldTransform transform;
+    transform.position = entity.position;
+    geometry.instances.push_back(SceneMeshInstance{
+        std::numeric_limits<std::size_t>::max(), 0, mesh_index, transform, entity.id});
+    return geometry.instances.size() - 1U;
 }
 
 } // namespace torchlight
