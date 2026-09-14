@@ -119,6 +119,8 @@ int main(int argc, char** argv) {
         require(stats.texture_resources == 101, "renderer has the wrong texture count");
         require(stats.textured_batches == 525, "renderer has untextured town batches");
         require(stats.fallback_batches == 0, "renderer used a fallback town texture");
+        require(stats.shadow_instances == 0,
+                "room-piece-only town render unexpectedly created character shadows");
 
         std::array<std::uint8_t, kWidth * kHeight * 4> pixels{};
         glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
@@ -290,6 +292,8 @@ int main(int argc, char** argv) {
         require(mine_stats.textured_batches > 0, "generated mine has no textured batches");
         require(mine_stats.fallback_batches == 0,
                 "generated mine or player used a fallback texture");
+        require(mine_stats.shadow_instances >= 2,
+                "generated mine did not create player and monster contact shadows");
         pixels.fill(0U);
         glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
         require(glGetError() == GL_NO_ERROR, "generated mine framebuffer readback failed");
@@ -305,6 +309,7 @@ int main(int argc, char** argv) {
                   << " instances=" << mine_stats.instances
                   << " placed_triangles=" << mine_stats.placed_triangles
                   << " textures=" << mine_stats.texture_resources
+                  << " shadows=" << mine_stats.shadow_instances
                   << " colored_pixels=" << mine_colored_pixels
                   << " animation_changed_pixels=" << animation_changed_pixels << '\n';
         return 0;

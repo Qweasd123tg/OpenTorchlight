@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace torchlight {
 namespace {
@@ -317,6 +318,57 @@ OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
                 *submesh.geometry, submesh.bone_assignments, bind_by_handle,
                 bind_global, pose_global));
         }
+    }
+    return result;
+}
+
+OgreMeshPose blend_ogre_mesh_poses(const OgreMeshPose& first,
+                                   const OgreMeshPose& second,
+                                   float second_weight) {
+    if (!std::isfinite(second_weight)) {
+        throw OgreSkeletonError("OGRE pose blend weight is not finite");
+    }
+    const float amount = std::clamp(second_weight, 0.0F, 1.0F);
+    if (first.geometries.size() != second.geometries.size()) {
+        throw OgreSkeletonError("OGRE poses have different geometry counts");
+    }
+    OgreMeshPose result;
+    result.geometries.reserve(first.geometries.size());
+    for (std::size_t geometry_index = 0;
+         geometry_index < first.geometries.size(); ++geometry_index) {
+        const auto& left = first.geometries[geometry_index];
+        const auto& right = second.geometries[geometry_index];
+        if (left.source == nullptr || left.source != right.source ||
+            left.positions.size() != right.positions.size() ||
+            left.normals.size() != right.normals.size()) {
+            throw OgreSkeletonError("OGRE poses do not describe the same mesh");
+        }
+        OgreGeometryPose blended;
+        blended.source = left.source;
+        blended.positions.resize(left.positions.size());
+        blended.normals.resize(left.normals.size());
+        for (std::size_t vertex = 0; vertex < left.positions.size(); ++vertex) {
+            for (std::size_t axis = 0; axis < 3; ++axis) {
+                blended.positions[vertex][axis] =
+                    left.positions[vertex][axis] +
+                    (right.positions[vertex][axis] - left.positions[vertex][axis]) * amount;
+            }
+        }
+        for (std::size_t vertex = 0; vertex < left.normals.size(); ++vertex) {
+            for (std::size_t axis = 0; axis < 3; ++axis) {
+                blended.normals[vertex][axis] =
+                    left.normals[vertex][axis] +
+                    (right.normals[vertex][axis] - left.normals[vertex][axis]) * amount;
+            }
+            const auto& normal = blended.normals[vertex];
+            const float length = std::hypot(normal[0], std::hypot(normal[1], normal[2]));
+            if (length > 0.000001F) {
+                for (auto& component : blended.normals[vertex]) {
+                    component /= length;
+                }
+            }
+        }
+        result.geometries.push_back(std::move(blended));
     }
     return result;
 }

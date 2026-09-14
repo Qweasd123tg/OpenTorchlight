@@ -4,6 +4,7 @@
 #include "torchlight/scene_geometry.hpp"
 
 #include <iostream>
+#include <cmath>
 #include <stdexcept>
 #include <string>
 
@@ -40,6 +41,14 @@ int main(int argc, char** argv) {
         require(bank != nullptr, "town bank material was not indexed");
         require(bank->textures.size() == 1 && bank->textures.front() == "town_bank_01.png",
                 "town bank material has the wrong texture");
+        require(bank->diffuse_vertex_color &&
+                    std::abs(bank->ambient[0] - 0.588F) < 0.0001F,
+                "town bank material has the wrong vertex-color lighting");
+        const auto* alchemist = materials.find("Starter_Set/boots");
+        require(alchemist != nullptr &&
+                    std::abs(alchemist->diffuse[0] - 0.745098F) < 0.0001F &&
+                    std::abs(alchemist->emissive[0] - 0.5F) < 0.0001F,
+                "Alchemist material colors were not parsed");
         const auto* bank_texture =
             torchlight::resolve_material_texture(archive, *bank, bank->textures.front());
         require(bank_texture != nullptr, "town bank texture did not resolve");

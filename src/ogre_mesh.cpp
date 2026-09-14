@@ -23,9 +23,12 @@ constexpr std::uint16_t kMeshBoneAssignment = 0x7000;
 constexpr std::uint16_t kBounds = 0x9000;
 constexpr std::uint16_t kPositionSemantic = 1;
 constexpr std::uint16_t kNormalSemantic = 4;
+constexpr std::uint16_t kDiffuseSemantic = 5;
 constexpr std::uint16_t kTextureCoordinateSemantic = 7;
 constexpr std::uint16_t kFloat2Type = 1;
 constexpr std::uint16_t kFloat3Type = 2;
+constexpr std::uint16_t kColorArgbType = 10;
+constexpr std::uint16_t kColorAbgrType = 11;
 
 struct Chunk {
     std::uint16_t id = 0;
@@ -210,6 +213,23 @@ float read_buffer_float(const std::vector<std::uint8_t>& data, std::size_t offse
     return result;
 }
 
+std::array<float, 4> read_buffer_color(const std::vector<std::uint8_t>& data,
+                                       std::size_t offset, std::uint16_t type) {
+    if (offset > data.size() || 4U > data.size() - offset) {
+        throw OgreMeshError("OGRE color exceeds its vertex buffer");
+    }
+    constexpr float kByteToUnit = 1.0F / 255.0F;
+    if (type == kColorAbgrType) {
+        return {data[offset] * kByteToUnit, data[offset + 1U] * kByteToUnit,
+                data[offset + 2U] * kByteToUnit, data[offset + 3U] * kByteToUnit};
+    }
+    if (type == kColorArgbType) {
+        return {data[offset + 2U] * kByteToUnit, data[offset + 1U] * kByteToUnit,
+                data[offset] * kByteToUnit, data[offset + 3U] * kByteToUnit};
+    }
+    throw OgreMeshError("OGRE diffuse color has an unsupported packed type");
+}
+
 void finish_geometry(OgreGeometry& geometry) {
     for (const auto& element : geometry.elements) {
         const auto* buffer = find_buffer(geometry, element.source);
@@ -268,6 +288,28 @@ void finish_geometry(OgreGeometry& geometry) {
                 read_buffer_float(normal_buffer->data, offset),
                 read_buffer_float(normal_buffer->data, offset + 4U),
                 read_buffer_float(normal_buffer->data, offset + 8U)});
+        }
+    }
+
+    const auto diffuse = std::find_if(geometry.elements.begin(), geometry.elements.end(),
+                                      [](const auto& element) {
+                                          return element.semantic == kDiffuseSemantic &&
+                                                 element.index == 0;
+                                      });
+    if (diffuse != geometry.elements.end()) {
+        if (diffuse->type != kColorArgbType && diffuse->type != kColorAbgrType) {
+            throw OgreMeshError("OGRE primary diffuse color has an unsupported type");
+        }
+        const auto* color_buffer = find_buffer(geometry, diffuse->source);
+        if (color_buffer == nullptr) {
+            throw OgreMeshError("OGRE diffuse-color buffer is absent");
+        }
+        geometry.colors.reserve(geometry.vertex_count);
+        for (std::uint32_t index = 0; index < geometry.vertex_count; ++index) {
+            const auto offset = static_cast<std::size_t>(index) * color_buffer->stride +
+                                diffuse->offset;
+            geometry.colors.push_back(
+                read_buffer_color(color_buffer->data, offset, diffuse->type));
         }
     }
 

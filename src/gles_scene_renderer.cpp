@@ -61,6 +61,7 @@ GLuint create_program() {
         "attribute vec3 position;"
         "attribute vec3 normal;"
         "attribute vec2 texcoord;"
+        "attribute vec4 vertex_color;"
         "uniform vec3 translation;"
         "uniform vec3 object_scale;"
         "uniform vec2 object_rotation;"
@@ -73,6 +74,7 @@ GLuint create_program() {
         "uniform vec4 camera_projection;"
         "uniform float perspective_camera;"
         "varying vec2 vertex_texcoord;"
+        "varying vec4 vertex_diffuse;"
         "varying float vertex_light;"
         "void main() {"
         "  vec3 local = vec3(position.x * object_scale.x,"
@@ -93,7 +95,7 @@ GLuint create_program() {
         "      local_normal.y,"
         "     -local_normal.x * object_rotation.y + local_normal.z * object_rotation.x));"
         "  vec3 light_direction = normalize(vec3(-0.35, 0.80, -0.45));"
-        "  vertex_light = 0.62 + 0.38 * max(dot(world_normal, light_direction), 0.0);"
+        "  vertex_light = max(dot(world_normal, light_direction), 0.0);"
         "  if (perspective_camera > 0.5) {"
         "    vec3 camera_relative = world - camera_position;"
         "    float camera_depth = dot(camera_relative, camera_forward);"
@@ -111,17 +113,26 @@ GLuint create_program() {
         "                       (depth - depth_projection.x) * depth_projection.y, 1.0);"
         "  }"
         "  vertex_texcoord = texcoord;"
+        "  vertex_diffuse = vertex_color;"
         "}";
     constexpr const char* fragment_source =
         "precision mediump float;"
         "uniform sampler2D diffuse_texture;"
         "uniform vec3 draw_color;"
+        "uniform vec3 material_ambient;"
+        "uniform vec3 material_emissive;"
+        "uniform float use_vertex_color;"
         "varying vec2 vertex_texcoord;"
+        "varying vec4 vertex_diffuse;"
         "varying float vertex_light;"
         "void main() {"
-        "  vec4 color = texture2D(diffuse_texture, vertex_texcoord) * vec4(draw_color, 1.0);"
-        "  if (color.a < 0.10) discard;"
-        "  gl_FragColor = vec4(color.rgb * vertex_light, color.a);"
+        "  vec4 texel = texture2D(diffuse_texture, vertex_texcoord);"
+        "  vec3 diffuse_color = mix(draw_color, vertex_diffuse.rgb, use_vertex_color);"
+        "  float alpha = texel.a * mix(1.0, vertex_diffuse.a, use_vertex_color);"
+        "  if (alpha < 0.10) discard;"
+        "  vec3 illumination = material_emissive + 0.55 * material_ambient +"
+        "                      (0.35 + 0.55 * vertex_light) * diffuse_color;"
+        "  gl_FragColor = vec4(texel.rgb * illumination, alpha);"
         "}";
     const auto vertex_shader = compile_shader(GL_VERTEX_SHADER, vertex_source);
     const auto fragment_shader = compile_shader(GL_FRAGMENT_SHADER, fragment_source);
@@ -136,6 +147,7 @@ GLuint create_program() {
     glBindAttribLocation(program, 0, "position");
     glBindAttribLocation(program, 1, "texcoord");
     glBindAttribLocation(program, 2, "normal");
+    glBindAttribLocation(program, 3, "vertex_color");
     glLinkProgram(program);
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
@@ -255,11 +267,21 @@ public:
         stats_.mesh_resources = geometry.meshes.size();
         stats_.instances = geometry.instances.size();
         draws_by_mesh_.resize(geometry.meshes.size());
+        animated_meshes_.resize(geometry.meshes.size(), false);
+        shadow_radius_by_mesh_.resize(geometry.meshes.size(), 0.0F);
         std::unordered_map<std::string, GLuint> textures;
         const auto fallback_texture = upload_texture(1, 1, {255U, 255U, 255U, 255U});
+        shadow_texture_ = fallback_texture;
         owned_textures_.push_back(fallback_texture);
         for (std::size_t mesh_index = 0; mesh_index < geometry.meshes.size(); ++mesh_index) {
             const auto& mesh = geometry.meshes[mesh_index].mesh;
+            animated_meshes_[mesh_index] = mesh.skeletally_animated;
+            if (mesh.skeletally_animated && mesh.bounds) {
+                const float width = mesh.bounds->maximum[0] - mesh.bounds->minimum[0];
+                const float depth = mesh.bounds->maximum[2] - mesh.bounds->minimum[2];
+                shadow_radius_by_mesh_[mesh_index] =
+                    std::clamp(std::max(width, depth) * 0.38F, 0.35F, 3.5F);
+            }
             for (const auto& submesh : mesh.submeshes) {
                 if (submesh.operation_type != 4 || submesh.indices.empty()) {
                     ++stats_.skipped_batches;
@@ -310,10 +332,28 @@ public:
                     glBufferData(GL_ARRAY_BUFFER,
                                  static_cast<GLsizeiptr>(normals.size() * sizeof(float)),
                                  normals.data(), GL_STATIC_DRAW);
+                    std::vector<float> colors;
+                    colors.reserve(source_geometry.positions.size() * 4U);
+                    if (source_geometry.colors.size() == source_geometry.positions.size()) {
+                        for (const auto& color : source_geometry.colors) {
+                            colors.insert(colors.end(), color.begin(), color.end());
+                        }
+                    } else {
+                        for (std::size_t index = 0;
+                             index < source_geometry.positions.size(); ++index) {
+                            colors.insert(colors.end(), {1.0F, 1.0F, 1.0F, 1.0F});
+                        }
+                    }
+                    glGenBuffers(1, &buffers.color);
+                    glBindBuffer(GL_ARRAY_BUFFER, buffers.color);
+                    glBufferData(GL_ARRAY_BUFFER,
+                                 static_cast<GLsizeiptr>(colors.size() * sizeof(float)),
+                                 colors.data(), GL_STATIC_DRAW);
                     vertex_buffers_.emplace(&source_geometry, buffers);
                     owned_vertex_buffers_.push_back(buffers.position);
                     owned_vertex_buffers_.push_back(buffers.texcoord);
                     owned_vertex_buffers_.push_back(buffers.normal);
+                    owned_vertex_buffers_.push_back(buffers.color);
                 } else {
                     buffers = found_vertex_buffer->second;
                 }
@@ -335,44 +375,57 @@ public:
                 owned_index_buffers_.push_back(index_buffer);
                 GLuint texture = fallback_texture;
                 auto color = material_color(submesh.material);
+                std::array<float, 3> ambient{};
+                std::array<float, 3> emissive{};
                 bool textured = false;
                 bool alpha_blend = false;
+                bool use_vertex_color = false;
                 if (const auto* material = materials.find(submesh.material);
-                    material != nullptr && !material->textures.empty()) {
+                    material != nullptr) {
+                    color = material->diffuse;
+                    ambient = material->ambient;
+                    emissive = material->emissive;
                     alpha_blend = material->alpha_blend;
-                    if (const auto* entry = resolve_material_texture(
-                            archive, *material, material->textures.front())) {
-                        if (is_dds_path(entry->name) || is_png_path(entry->name)) {
-                            const auto found_texture = textures.find(entry->name);
-                            if (found_texture != textures.end()) {
-                                texture = found_texture->second;
-                            } else {
-                                const auto bytes = archive.read(*entry);
-                                if (is_dds_path(entry->name)) {
-                                    const auto image = decode_dds(bytes);
-                                    texture = upload_texture(image.width, image.height, image.rgba);
+                    use_vertex_color = material->diffuse_vertex_color;
+                    if (!material->textures.empty()) {
+                        if (const auto* entry = resolve_material_texture(
+                                archive, *material, material->textures.front())) {
+                            if (is_dds_path(entry->name) || is_png_path(entry->name)) {
+                                const auto found_texture = textures.find(entry->name);
+                                if (found_texture != textures.end()) {
+                                    texture = found_texture->second;
                                 } else {
-                                    const auto image = decode_png(bytes);
-                                    texture = upload_texture(image.width, image.height, image.rgba);
+                                    const auto bytes = archive.read(*entry);
+                                    if (is_dds_path(entry->name)) {
+                                        const auto image = decode_dds(bytes);
+                                        texture = upload_texture(
+                                            image.width, image.height, image.rgba);
+                                    } else {
+                                        const auto image = decode_png(bytes);
+                                        texture = upload_texture(
+                                            image.width, image.height, image.rgba);
+                                    }
+                                    textures.emplace(entry->name, texture);
+                                    owned_textures_.push_back(texture);
                                 }
-                                textures.emplace(entry->name, texture);
-                                owned_textures_.push_back(texture);
+                                textured = true;
                             }
-                            color = {1.0F, 1.0F, 1.0F};
-                            textured = true;
                         }
                     }
                 }
                 draws_by_mesh_[mesh_index].push_back(
                     Draw{&source_geometry, buffers.position, buffers.texcoord,
-                         buffers.normal, index_buffer, checked_count(indices.size()),
-                         texture, color, alpha_blend});
+                         buffers.normal, buffers.color, index_buffer,
+                         checked_count(indices.size()),
+                         texture, color, ambient, emissive, alpha_blend,
+                         use_vertex_color});
                 stats_.textured_batches += static_cast<std::size_t>(textured);
                 stats_.fallback_batches += static_cast<std::size_t>(!textured);
                 ++stats_.draw_batches;
             }
         }
         stats_.texture_resources = textures.size();
+        initialize_shadow_buffers();
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         if (glGetError() != GL_NO_ERROR) {
@@ -380,6 +433,8 @@ public:
         }
         calculate_bounds(geometry);
         for (const auto& instance : instances_) {
+            stats_.shadow_instances += static_cast<std::size_t>(
+                instance.visible && animated_meshes_.at(instance.mesh_index));
             for (const auto& draw : draws_by_mesh_.at(instance.mesh_index)) {
                 stats_.placed_triangles += static_cast<std::uint64_t>(draw.index_count) / 3U;
             }
@@ -397,14 +452,18 @@ public:
         camera_projection_location_ = glGetUniformLocation(program_, "camera_projection");
         perspective_camera_location_ = glGetUniformLocation(program_, "perspective_camera");
         color_location_ = glGetUniformLocation(program_, "draw_color");
+        ambient_location_ = glGetUniformLocation(program_, "material_ambient");
+        emissive_location_ = glGetUniformLocation(program_, "material_emissive");
         texture_location_ = glGetUniformLocation(program_, "diffuse_texture");
+        vertex_color_location_ = glGetUniformLocation(program_, "use_vertex_color");
         if (translation_location_ < 0 || object_scale_location_ < 0 ||
             object_rotation_location_ < 0 || projection_location_ < 0 ||
             depth_projection_location_ < 0 || camera_position_location_ < 0 ||
             camera_right_location_ < 0 || camera_up_location_ < 0 ||
             camera_forward_location_ < 0 || camera_projection_location_ < 0 ||
             perspective_camera_location_ < 0 || color_location_ < 0 ||
-            texture_location_ < 0) {
+            ambient_location_ < 0 || emissive_location_ < 0 ||
+            texture_location_ < 0 || vertex_color_location_ < 0) {
             throw GlesSceneError("OpenGL ES scene shader has an inactive uniform");
         }
     }
@@ -494,6 +553,7 @@ public:
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
         for (std::size_t instance_index = 0;
              instance_index < instances_.size(); ++instance_index) {
             const auto& instance = instances_[instance_index];
@@ -521,20 +581,27 @@ public:
                     glDepthMask(GL_TRUE);
                 }
                 glUniform3fv(color_location_, 1, draw.color.data());
+                glUniform3fv(ambient_location_, 1, draw.ambient.data());
+                glUniform3fv(emissive_location_, 1, draw.emissive.data());
+                glUniform1f(vertex_color_location_, draw.use_vertex_color ? 1.0F : 0.0F);
                 glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ARRAY_BUFFER, draw.texcoord_buffer);
                 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
                 glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+                glBindBuffer(GL_ARRAY_BUFFER, draw.color_buffer);
+                glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, draw.index_buffer);
                 glBindTexture(GL_TEXTURE_2D, draw.texture);
                 glDrawElements(GL_TRIANGLES, draw.index_count, GL_UNSIGNED_SHORT, nullptr);
             }
         }
+        draw_character_shadows();
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
         glDepthMask(GL_TRUE);
         glDisable(GL_BLEND);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -728,6 +795,7 @@ private:
         GLuint position = 0;
         GLuint texcoord = 0;
         GLuint normal = 0;
+        GLuint color = 0;
     };
 
     struct Draw {
@@ -735,12 +803,86 @@ private:
         GLuint vertex_buffer = 0;
         GLuint texcoord_buffer = 0;
         GLuint normal_buffer = 0;
+        GLuint color_buffer = 0;
         GLuint index_buffer = 0;
         GLsizei index_count = 0;
         GLuint texture = 0;
         std::array<float, 3> color{};
+        std::array<float, 3> ambient{};
+        std::array<float, 3> emissive{};
         bool alpha_blend = false;
+        bool use_vertex_color = false;
     };
+
+    void initialize_shadow_buffers() {
+        constexpr std::size_t kSegments = 20U;
+        constexpr float kPi = 3.14159265358979323846F;
+        std::vector<float> positions{0.0F, 0.0F, 0.0F};
+        std::vector<float> texcoords{0.5F, 0.5F};
+        std::vector<float> normals{0.0F, 1.0F, 0.0F};
+        std::vector<float> colors{0.0F, 0.0F, 0.0F, 0.34F};
+        for (std::size_t segment = 0; segment <= kSegments; ++segment) {
+            const float angle = 2.0F * kPi * static_cast<float>(segment) /
+                                static_cast<float>(kSegments);
+            positions.insert(positions.end(), {std::cos(angle), 0.0F, std::sin(angle)});
+            texcoords.insert(texcoords.end(), {0.0F, 0.0F});
+            normals.insert(normals.end(), {0.0F, 1.0F, 0.0F});
+            colors.insert(colors.end(), {0.0F, 0.0F, 0.0F, 0.0F});
+        }
+        shadow_vertex_count_ = checked_count(kSegments + 2U);
+        const auto upload = [&](GLuint& buffer, const std::vector<float>& values) {
+            glGenBuffers(1, &buffer);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER,
+                         static_cast<GLsizeiptr>(values.size() * sizeof(float)),
+                         values.data(), GL_STATIC_DRAW);
+            owned_vertex_buffers_.push_back(buffer);
+        };
+        upload(shadow_buffers_.position, positions);
+        upload(shadow_buffers_.texcoord, texcoords);
+        upload(shadow_buffers_.normal, normals);
+        upload(shadow_buffers_.color, colors);
+    }
+
+    void draw_character_shadows() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDepthMask(GL_FALSE);
+        const std::array<float, 3> black{};
+        glUniform3fv(color_location_, 1, black.data());
+        glUniform3fv(ambient_location_, 1, black.data());
+        glUniform3fv(emissive_location_, 1, black.data());
+        glUniform1f(vertex_color_location_, 1.0F);
+        glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.position);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.texcoord);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.normal);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, shadow_buffers_.color);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glBindTexture(GL_TEXTURE_2D, shadow_texture_);
+        for (std::size_t instance_index = 0;
+             instance_index < instances_.size(); ++instance_index) {
+            const auto& instance = instances_[instance_index];
+            if (!instance.visible ||
+                !animated_meshes_.at(instance.mesh_index)) {
+                continue;
+            }
+            auto position = instance.transform.position;
+            position[1] += 0.025F;
+            const float radius = shadow_radius_by_mesh_.at(instance.mesh_index) *
+                                 std::max(std::abs(instance.transform.scale[0]),
+                                          std::abs(instance.transform.scale[2]));
+            const std::array<float, 3> scale{radius, 1.0F, radius * 0.72F};
+            glUniform3fv(translation_location_, 1, position.data());
+            glUniform3fv(object_scale_location_, 1, scale.data());
+            glUniform2f(object_rotation_location_, 1.0F, 0.0F);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, shadow_vertex_count_);
+        }
+        glDepthMask(GL_TRUE);
+        glDisable(GL_BLEND);
+    }
 
     static GLuint upload_texture(std::uint32_t width, std::uint32_t height,
                                  const std::vector<std::uint8_t>& rgba) {
@@ -816,6 +958,11 @@ private:
     std::unordered_map<const OgreGeometry*, GeometryBuffers> vertex_buffers_;
     std::vector<std::unordered_map<const OgreGeometry*, GeometryBuffers>>
         instance_pose_buffers_;
+    std::vector<bool> animated_meshes_;
+    std::vector<float> shadow_radius_by_mesh_;
+    GeometryBuffers shadow_buffers_;
+    GLsizei shadow_vertex_count_ = 0;
+    GLuint shadow_texture_ = 0;
     std::vector<GLuint> owned_vertex_buffers_;
     std::vector<GLuint> owned_index_buffers_;
     std::vector<GLuint> owned_textures_;
@@ -832,7 +979,10 @@ private:
     GLint camera_projection_location_ = -1;
     GLint perspective_camera_location_ = -1;
     GLint color_location_ = -1;
+    GLint ambient_location_ = -1;
+    GLint emissive_location_ = -1;
     GLint texture_location_ = -1;
+    GLint vertex_color_location_ = -1;
     ProjectedPoint minimum_;
     ProjectedPoint maximum_;
     std::optional<std::array<float, 3>> camera_target_;

@@ -24,4 +24,7 @@ struct OgreMeshPose {
     const OgreSkeleton& animation_skeleton, std::string_view animation_name,
     float time_seconds);
 
+[[nodiscard]] OgreMeshPose blend_ogre_mesh_poses(
+    const OgreMeshPose& first, const OgreMeshPose& second, float second_weight);
+
 } // namespace torchlight

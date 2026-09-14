@@ -744,11 +744,15 @@ int main(int argc, char** argv) {
             std::size_t scene_animation_updates = 0;
             std::size_t enemy_animation_updates = 0;
             float player_animation_time = 0.0F;
+            float player_transition_time = 0.0F;
             float scene_animation_time = 0.0F;
             float scene_animation_accumulator = 0.0F;
             enum class PlayerAnimationState { idle, run, attack };
             PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
             bool player_attack_animation_active = false;
+            bool player_transition_active = false;
+            torchlight::OgreMeshPose last_player_pose;
+            torchlight::OgreMeshPose player_transition_from_pose;
             enum class EnemyAnimationState { idle, run, attack, hit, death, hidden };
             struct EnemyAnimationPlayback {
                 EnemyAnimationState state = EnemyAnimationState::idle;
@@ -1227,6 +1231,11 @@ int main(int argc, char** argv) {
                                                             ? PlayerAnimationState::run
                                                             : PlayerAnimationState::idle;
                 if (next_animation_state != player_animation_state) {
+                    if (!last_player_pose.geometries.empty()) {
+                        player_transition_from_pose = last_player_pose;
+                        player_transition_time = 0.0F;
+                        player_transition_active = true;
+                    }
                     player_animation_time = 0.0F;
                     player_animation_state = next_animation_state;
                 } else {
@@ -1242,10 +1251,25 @@ int main(int argc, char** argv) {
                     player_animation_state == PlayerAnimationState::attack
                         ? "Attack1"
                         : player_animation_state == PlayerAnimationState::run ? "Run" : "Idle";
-                renderer->set_mesh_pose(torchlight::sample_ogre_mesh_animation(
+                auto player_pose = torchlight::sample_ogre_mesh_animation(
                     level.geometry.meshes[player_mesh_index].mesh,
                     player_animations.bind, animation_skeleton, animation_name,
-                    player_animation_time));
+                    player_animation_time);
+                if (player_transition_active) {
+                    constexpr float kPlayerTransitionDuration = 0.14F;
+                    player_transition_time += animation_elapsed;
+                    const float linear_amount = std::min(
+                        1.0F, player_transition_time / kPlayerTransitionDuration);
+                    const float smooth_amount =
+                        linear_amount * linear_amount * (3.0F - 2.0F * linear_amount);
+                    player_pose = torchlight::blend_ogre_mesh_poses(
+                        player_transition_from_pose, player_pose, smooth_amount);
+                    if (linear_amount >= 1.0F) {
+                        player_transition_active = false;
+                    }
+                }
+                renderer->set_mesh_pose(player_pose);
+                last_player_pose = std::move(player_pose);
                 ++player_animation_updates;
                 window.draw_scene_frame(*renderer);
                 rendered_once = true;
@@ -1281,6 +1305,7 @@ int main(int argc, char** argv) {
                       << " draw_batches=" << render_stats.draw_batches
                       << " textures=" << render_stats.texture_resources
                       << " textured_batches=" << render_stats.textured_batches
+                      << " shadow_instances=" << render_stats.shadow_instances
                       << " placed_triangles=" << render_stats.placed_triangles
                       << " logic_events=" << logic_event_count
                       << " logic_invocations=" << logic_invocation_count

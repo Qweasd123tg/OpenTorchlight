@@ -21,6 +21,7 @@ struct GlesSceneRenderStats {
     std::size_t texture_resources = 0;
     std::size_t textured_batches = 0;
     std::size_t fallback_batches = 0;
+    std::size_t shadow_instances = 0;
     std::uint64_t placed_triangles = 0;
 };
 

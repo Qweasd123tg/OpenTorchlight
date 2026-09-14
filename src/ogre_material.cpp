@@ -153,6 +153,22 @@ std::string collapse_path(std::string_view path) {
     return result;
 }
 
+std::array<float, 3> parse_rgb(const std::vector<std::string>& tokens,
+                               std::size_t first, std::size_t end) {
+    if (first > end || 3U > end - first) {
+        throw OgreMaterialError("OGRE material color has fewer than three channels");
+    }
+    std::array<float, 3> result{};
+    for (std::size_t channel = 0; channel < result.size(); ++channel) {
+        std::size_t parsed = 0;
+        result[channel] = std::stof(tokens[first + channel], &parsed);
+        if (parsed != tokens[first + channel].size()) {
+            throw OgreMaterialError("OGRE material color channel is not numeric");
+        }
+    }
+    return result;
+}
+
 } // namespace
 
 std::vector<OgreMaterial> parse_ogre_material_script(std::string_view script,
@@ -203,6 +219,19 @@ std::vector<OgreMaterial> parse_ogre_material_script(std::string_view script,
             const auto directive = lowercase(tokens[body]);
             if (directive == "texture" && body + 1 < close && tokens[body + 1] != "{") {
                 material.textures.push_back(tokens[++body]);
+            } else if (directive == "ambient" && body + 3 < close) {
+                material.ambient = parse_rgb(tokens, body + 1U, close);
+                body += 3U;
+            } else if (directive == "diffuse" && body + 1 < close &&
+                       lowercase(tokens[body + 1]) == "vertexcolour") {
+                material.diffuse_vertex_color = true;
+                ++body;
+            } else if (directive == "diffuse" && body + 3 < close) {
+                material.diffuse = parse_rgb(tokens, body + 1U, close);
+                body += 3U;
+            } else if (directive == "emissive" && body + 3 < close) {
+                material.emissive = parse_rgb(tokens, body + 1U, close);
+                body += 3U;
             } else if (directive == "scene_blend" && body + 1 < close &&
                        lowercase(tokens[body + 1]) == "alpha_blend") {
                 material.alpha_blend = true;

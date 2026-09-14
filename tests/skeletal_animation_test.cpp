@@ -65,6 +65,18 @@ int main(int argc, char** argv) {
         }
         require(vertices == 1524, "Alchemist pose has the wrong vertex count");
         require(changed > 1000, "Alchemist run animation moves too few vertices");
+        const auto blended = torchlight::blend_ogre_mesh_poses(first, second, 0.5F);
+        require(blended.geometries.size() == first.geometries.size(),
+                "Alchemist blended pose has the wrong geometry count");
+        const auto& blended_position = blended.geometries.front().positions.front();
+        const auto& first_position = first.geometries.front().positions.front();
+        const auto& second_position = second.geometries.front().positions.front();
+        for (std::size_t axis = 0; axis < 3; ++axis) {
+            require(std::abs(blended_position[axis] -
+                             (first_position[axis] + second_position[axis]) * 0.5F) <
+                        0.00001F,
+                    "Alchemist blended pose is not halfway between its sources");
+        }
         const auto attack_first = torchlight::sample_ogre_mesh_animation(
             mesh, bind, attack, "Attack1", 0.0F);
         const auto attack_second = torchlight::sample_ogre_mesh_animation(

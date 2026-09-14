@@ -2,6 +2,7 @@
 
 #include "torchlight/pak_archive.hpp"
 
+#include <array>
 #include <cstddef>
 #include <string>
 #include <string_view>
@@ -15,6 +16,10 @@ struct OgreMaterial {
     std::string source_path;
     std::string base_material;
     std::vector<std::string> textures;
+    std::array<float, 3> ambient{1.0F, 1.0F, 1.0F};
+    std::array<float, 3> diffuse{1.0F, 1.0F, 1.0F};
+    std::array<float, 3> emissive{0.0F, 0.0F, 0.0F};
+    bool diffuse_vertex_color = false;
     bool alpha_blend = false;
     bool alpha_rejection = false;
 };

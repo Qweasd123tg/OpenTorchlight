@@ -44,6 +44,8 @@ int main(int argc, char** argv) {
         std::size_t geometries = 0;
         std::size_t textured_geometries = 0;
         std::size_t normal_geometries = 0;
+        std::size_t colored_geometries = 0;
+        std::uint64_t colored_vertices = 0;
         std::size_t bone_assignments = 0;
         for (const auto& entry : archive.entries()) {
             if (!ends_with_mesh(entry.name)) {
@@ -69,6 +71,9 @@ int main(int argc, char** argv) {
                     static_cast<std::size_t>(!mesh.shared_geometry->texcoords.empty());
                 normal_geometries +=
                     static_cast<std::size_t>(!mesh.shared_geometry->normals.empty());
+                colored_geometries +=
+                    static_cast<std::size_t>(!mesh.shared_geometry->colors.empty());
+                colored_vertices += mesh.shared_geometry->colors.size();
             }
             for (const auto& submesh : mesh.submeshes) {
                 indices += submesh.indices.size();
@@ -80,6 +85,9 @@ int main(int argc, char** argv) {
                         static_cast<std::size_t>(!submesh.geometry->texcoords.empty());
                     normal_geometries +=
                         static_cast<std::size_t>(!submesh.geometry->normals.empty());
+                    colored_geometries +=
+                        static_cast<std::size_t>(!submesh.geometry->colors.empty());
+                    colored_vertices += submesh.geometry->colors.size();
                 }
             }
         }
@@ -94,6 +102,8 @@ int main(int argc, char** argv) {
                 "OGRE geometry has no primary texture coordinates");
         require(normal_geometries == geometries,
                 "OGRE geometry has no primary vertex normals");
+        require(colored_geometries == 360 && colored_vertices == 591528,
+                "unexpected original vertex-color coverage");
         require(bone_assignments == 477008, "unexpected vertex bone-assignment count");
         std::cout << "PASS: parsed 3312 OGRE v1.40 meshes, 1939624 vertices, "
                      "2461269 indices, 5105 submeshes and "
