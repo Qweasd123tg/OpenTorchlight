@@ -19,6 +19,10 @@ struct PlayerPrototype {
     std::string mesh_path;
     float walking_speed = 0.0F;
     float running_speed = 0.0F;
+    float attack_speed = 0.0F;
+    float reach_bonus = 0.0F;
+    std::int32_t minimum_damage = 0;
+    std::int32_t maximum_damage = 0;
     std::int32_t strength = 0;
     std::int32_t dexterity = 0;
     std::int32_t magic = 0;

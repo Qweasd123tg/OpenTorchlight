@@ -27,6 +27,7 @@ struct SceneMeshInstance {
     std::size_t mesh_index = 0;
     LayoutWorldTransform transform;
     std::uint64_t runtime_entity_id = 0;
+    bool visible = true;
 };
 
 struct FixedSceneGeometry {

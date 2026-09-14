@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
         constexpr std::int64_t spawner = 4789864784197325278LL;
         torchlight::LogicRuntime logic(layout, 42);
         torchlight::RuntimeEntityWorld world(
-            layout, resources, spawn_classes, unit_types, 42);
+            layout, resources, definitions, spawn_classes, unit_types, 42);
         logic.trigger(lever);
         const auto requests = logic.take_spawn_requests();
         require(requests.size() == 1, "original lever did not request one spawn");
@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 
         torchlight::LogicRuntime class_logic(layout, 7);
         torchlight::RuntimeEntityWorld class_world(
-            layout, resources, spawn_classes, unit_types, 7);
+            layout, resources, definitions, spawn_classes, unit_types, 7);
         const torchlight::SpawnRequest class_request{
             spawner, u"SKELETONS", u"Spawn Class", 2};
         const auto class_stats =
@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
 
         torchlight::LogicRuntime item_logic(layout, 11);
         torchlight::RuntimeEntityWorld item_world(
-            layout, resources, spawn_classes, unit_types, 11, 1);
+            layout, resources, definitions, spawn_classes, unit_types, 11, 1);
         const torchlight::SpawnRequest item_request{
             spawner, u"FISH_SPAWN", u"Spawn Class", 1};
         const auto item_stats =

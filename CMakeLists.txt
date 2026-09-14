@@ -8,6 +8,7 @@ add_library(torchlight_core STATIC
     src/actor_motion.cpp
     src/adm_document.cpp
     src/collision_scene.cpp
+    src/combat.cpp
     src/dds_texture.cpp
     src/entity_world.cpp
     src/input_state.cpp
@@ -149,6 +150,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(entity_world_test PRIVATE torchlight_core)
     add_executable(unit_type_test tests/unit_type_test.cpp)
     target_link_libraries(unit_type_test PRIVATE torchlight_core)
+    add_executable(combat_test tests/combat_test.cpp)
+    target_link_libraries(combat_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         add_test(NAME original_input_comparison
@@ -207,6 +210,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND entity_world_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_unit_types
             COMMAND unit_type_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_combat
+            COMMAND combat_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
             COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         if(TARGET gles_render_smoke_test)

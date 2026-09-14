@@ -9,6 +9,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -21,7 +22,15 @@ struct RuntimeEntity {
     MasterResourceKind kind = MasterResourceKind::prop;
     std::u16string name;
     std::array<float, 3> position{};
+    float health = 0.0F;
+    float maximum_health = 0.0F;
     bool alive = true;
+};
+
+struct DamageResult {
+    bool accepted = false;
+    bool killed = false;
+    float remaining_health = 0.0F;
 };
 
 struct SpawnResolutionStats {
@@ -36,6 +45,7 @@ class RuntimeEntityWorld {
 public:
     RuntimeEntityWorld(const LayoutManifest& layout,
                        const MasterResourceIndex& resources,
+                       UnitDefinitionLoader& definitions,
                        const SpawnClassCatalog& spawn_classes,
                        const UnitTypeResourceIndex& unit_types,
                        std::uint32_t random_seed = 1,
@@ -44,7 +54,13 @@ public:
     SpawnResolutionStats consume_spawn_requests(
         const std::vector<SpawnRequest>& requests, LogicRuntime& logic);
     bool kill(std::uint64_t entity_id, LogicRuntime& logic);
+    [[nodiscard]] DamageResult apply_damage(std::uint64_t entity_id, float damage,
+                                            LogicRuntime& logic);
     bool pick_up(std::uint64_t entity_id, LogicRuntime& logic);
+    [[nodiscard]] RuntimeEntity* find(std::uint64_t entity_id) noexcept;
+    [[nodiscard]] const RuntimeEntity* find(std::uint64_t entity_id) const noexcept;
+    [[nodiscard]] const RuntimeEntity* nearest_alive_monster(
+        const std::array<float, 3>& position, float maximum_distance) const noexcept;
 
     [[nodiscard]] const std::vector<RuntimeEntity>& entities() const noexcept {
         return entities_;
@@ -63,6 +79,7 @@ private:
         std::int64_t spawner_id) const noexcept;
 
     const MasterResourceIndex* resources_ = nullptr;
+    UnitDefinitionLoader* definitions_ = nullptr;
     const SpawnClassCatalog* spawn_classes_ = nullptr;
     const UnitTypeResourceIndex* unit_types_ = nullptr;
     std::unordered_map<std::int64_t, std::array<float, 3>> spawner_positions_;

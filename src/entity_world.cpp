@@ -1,6 +1,7 @@
 #include "torchlight/entity_world.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 #include <string>
 
@@ -23,15 +24,35 @@ std::u16string normalized(std::u16string_view value) {
     return result;
 }
 
+float optional_number(const UnitDefinition& definition, const char16_t* name,
+                      float fallback) {
+    const auto* property = definition.find_property(name);
+    if (property == nullptr) {
+        return fallback;
+    }
+    switch (property->type) {
+    case AdmValueType::integer:
+        return static_cast<float>(std::get<std::int32_t>(property->value));
+    case AdmValueType::floating:
+        return std::get<float>(property->value);
+    case AdmValueType::double_precision:
+        return static_cast<float>(std::get<double>(property->value));
+    default:
+        throw EntityWorldError("Runtime combat property is not numeric");
+    }
+}
+
 } // namespace
 
 RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
                                        const MasterResourceIndex& resources,
+                                       UnitDefinitionLoader& definitions,
                                        const SpawnClassCatalog& spawn_classes,
                                        const UnitTypeResourceIndex& unit_types,
                                        std::uint32_t random_seed,
                                        std::int32_t spawn_level)
-    : resources_(&resources), spawn_classes_(&spawn_classes),
+    : resources_(&resources), definitions_(&definitions),
+      spawn_classes_(&spawn_classes),
       unit_types_(&unit_types), random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
@@ -91,6 +112,13 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
     entity.kind = resource.kind;
     entity.name = resource.name;
     entity.position = position;
+    if (resource.kind == MasterResourceKind::monster) {
+        const auto definition = definitions_->load(resource);
+        entity.maximum_health = std::max(
+            1.0F, optional_number(*definition, u"MAXHP",
+                                  optional_number(*definition, u"MINHP", 1.0F)));
+        entity.health = entity.maximum_health;
+    }
     entities_.push_back(std::move(entity));
     ++stats.entities_created;
 }
@@ -134,31 +162,81 @@ SpawnResolutionStats RuntimeEntityWorld::consume_spawn_requests(
 }
 
 bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& logic) {
-    const auto found = std::find_if(entities_.begin(), entities_.end(),
-                                    [entity_id](const auto& entity) {
-                                        return entity.id == entity_id;
-                                    });
-    if (found == entities_.end() || !found->alive ||
+    auto* found = find(entity_id);
+    if (found == nullptr || !found->alive ||
         found->kind != MasterResourceKind::monster) {
         return false;
     }
+    found->health = 0.0F;
     found->alive = false;
     logic.notify_monster_killed(found->spawner_id);
     return true;
 }
 
+DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float damage,
+                                               LogicRuntime& logic) {
+    auto* entity = find(entity_id);
+    if (entity == nullptr || !entity->alive ||
+        entity->kind != MasterResourceKind::monster ||
+        !std::isfinite(damage) || !(damage > 0.0F)) {
+        return {};
+    }
+    entity->health = std::max(0.0F, entity->health - damage);
+    const bool killed = entity->health <= 0.0F;
+    if (killed) {
+        entity->alive = false;
+        logic.notify_monster_killed(entity->spawner_id);
+    }
+    return {true, killed, entity->health};
+}
+
 bool RuntimeEntityWorld::pick_up(std::uint64_t entity_id, LogicRuntime& logic) {
-    const auto found = std::find_if(entities_.begin(), entities_.end(),
-                                    [entity_id](const auto& entity) {
-                                        return entity.id == entity_id;
-                                    });
-    if (found == entities_.end() || !found->alive ||
+    auto* found = find(entity_id);
+    if (found == nullptr || !found->alive ||
         found->kind != MasterResourceKind::item) {
         return false;
     }
     found->alive = false;
     logic.notify_item_picked_up(found->spawner_id);
     return true;
+}
+
+RuntimeEntity* RuntimeEntityWorld::find(std::uint64_t entity_id) noexcept {
+    const auto found = std::find_if(entities_.begin(), entities_.end(),
+                                    [entity_id](const auto& entity) {
+                                        return entity.id == entity_id;
+                                    });
+    return found == entities_.end() ? nullptr : &*found;
+}
+
+const RuntimeEntity* RuntimeEntityWorld::find(std::uint64_t entity_id) const noexcept {
+    const auto found = std::find_if(entities_.begin(), entities_.end(),
+                                    [entity_id](const auto& entity) {
+                                        return entity.id == entity_id;
+                                    });
+    return found == entities_.end() ? nullptr : &*found;
+}
+
+const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
+    const std::array<float, 3>& position, float maximum_distance) const noexcept {
+    if (!std::isfinite(maximum_distance) || maximum_distance < 0.0F) {
+        return nullptr;
+    }
+    const RuntimeEntity* result = nullptr;
+    float nearest_squared = maximum_distance * maximum_distance;
+    for (const auto& entity : entities_) {
+        if (!entity.alive || entity.kind != MasterResourceKind::monster) {
+            continue;
+        }
+        const auto delta_x = entity.position[0] - position[0];
+        const auto delta_z = entity.position[2] - position[2];
+        const auto distance_squared = delta_x * delta_x + delta_z * delta_z;
+        if (distance_squared <= nearest_squared) {
+            nearest_squared = distance_squared;
+            result = &entity;
+        }
+    }
+    return result;
 }
 
 } // namespace torchlight

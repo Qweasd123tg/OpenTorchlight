@@ -1,6 +1,7 @@
 #include "torchlight/actor_motion.hpp"
 #include "torchlight/adm_document.hpp"
 #include "torchlight/collision_scene.hpp"
+#include "torchlight/combat.hpp"
 #include "torchlight/entity_world.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
@@ -35,6 +36,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <unordered_map>
 #include <unistd.h>
 #include <vector>
 
@@ -443,6 +445,7 @@ int main(int argc, char** argv) {
         std::size_t layout_object_count = 0;
         std::size_t placed_monster_count = 0;
         std::string player_name = "none";
+        std::optional<torchlight::PlayerPrototype> player_prototype;
         std::optional<torchlight::ActorMotion> player_motion;
         std::optional<std::size_t> player_instance_index;
         std::optional<torchlight::NavigationGrid> navigation;
@@ -482,6 +485,7 @@ int main(int argc, char** argv) {
                     player_start[1] - navigation->cell((*start_cell)[0], (*start_cell)[1]).height;
             }
             player_name.assign(players.front().name.begin(), players.front().name.end());
+            player_prototype = players.front();
             scene_state = "generated-dungeon-preview";
             runtime_level = static_cast<std::int32_t>(*options.main_stratum + 1U);
         } else {
@@ -507,6 +511,7 @@ int main(int argc, char** argv) {
                     player_start[1] - navigation->cell((*start_cell)[0], (*start_cell)[1]).height;
             }
             player_name.assign(players.front().name.begin(), players.front().name.end());
+            player_prototype = players.front();
             scene_state = "town-playable-preview";
         }
         const torchlight::OgreMaterialCatalog materials(archive);
@@ -515,6 +520,7 @@ int main(int argc, char** argv) {
         std::optional<torchlight::GlesSceneRenderer> renderer;
         std::optional<torchlight::LogicRuntime> logic_runtime;
         std::optional<torchlight::RuntimeEntityWorld> entity_world;
+        std::optional<torchlight::CombatController> combat;
         std::size_t logic_event_count = 0;
         std::size_t logic_invocation_count = 0;
         std::size_t spawn_request_count = 0;
@@ -527,6 +533,10 @@ int main(int argc, char** argv) {
         std::size_t missing_runtime_model_count = 0;
         std::size_t renderer_rebuild_count = 0;
         std::size_t warp_request_count = 0;
+        std::size_t selected_target_count = 0;
+        std::size_t combat_attack_count = 0;
+        std::size_t combat_kill_count = 0;
+        std::unordered_map<std::uint64_t, std::size_t> runtime_instance_indices;
         auto drain_logic = [&] {
             if (!logic_runtime || !entity_world) {
                 return;
@@ -555,6 +565,10 @@ int main(int argc, char** argv) {
                 runtime_model_count += static_cast<std::size_t>(instance.has_value());
                 missing_runtime_model_count +=
                     static_cast<std::size_t>(!instance.has_value());
+                if (instance) {
+                    runtime_instance_indices.emplace(
+                        entity_world->entities()[processed_entity_count].id, *instance);
+                }
                 geometry_changed = geometry_changed || instance.has_value();
                 ++processed_entity_count;
             }
@@ -571,15 +585,21 @@ int main(int argc, char** argv) {
         };
         if (fixed_scene) {
             logic_runtime.emplace(fixed_scene->layout, options.seed);
-            entity_world.emplace(fixed_scene->layout, index, spawn_classes, unit_types,
+            entity_world.emplace(fixed_scene->layout, index, loader,
+                                 spawn_classes, unit_types,
                                  options.seed, runtime_level);
         } else if (generated_layout) {
             logic_runtime.emplace(generated_layout->layout, options.seed);
-            entity_world.emplace(generated_layout->layout, index, spawn_classes, unit_types,
+            entity_world.emplace(generated_layout->layout, index, loader,
+                                 spawn_classes, unit_types,
                                  options.seed, runtime_level);
         } else {
             throw DesktopError("no active layout was prepared");
         }
+        if (!player_prototype) {
+            throw DesktopError("no player combat prototype was prepared");
+        }
+        combat.emplace(*player_prototype, options.seed);
         logic_runtime->activate_level();
         if (player_motion) {
             logic_runtime->update_player_position(player_motion->position());
@@ -598,9 +618,20 @@ int main(int argc, char** argv) {
             previous_frame = current_frame;
             if (player_motion && player_instance_index) {
                 if (const auto click = window.take_left_click(); click && rendered_once) {
-                    const auto destination = renderer->ground_position_at_pixel(
+                    auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
                         window.height(), player_motion->position()[1]);
+                    if (combat && entity_world &&
+                        combat->select_target(*entity_world, destination, 2.0F)) {
+                        const auto* selected = combat->target(*entity_world);
+                        destination = selected->position;
+                        ++selected_target_count;
+                        std::cout << "selected_target=" << selected->id
+                                  << " health=" << selected->health << '/'
+                                  << selected->maximum_health << '\n';
+                    } else if (combat) {
+                        combat->clear_target();
+                    }
                     active_path = navigation->find_path(player_motion->position(), destination);
                     std::cout << "click_destination=" << destination[0] << ',' << destination[1]
                               << ',' << destination[2]
@@ -629,6 +660,35 @@ int main(int argc, char** argv) {
                 renderer->set_instance_position(*player_instance_index, player_motion->position());
                 renderer->set_camera_target(player_motion->position(), 32.0F);
                 if (logic_runtime) {
+                    if (combat && entity_world) {
+                        const auto update = combat->update(
+                            std::min(elapsed, 0.1F), player_motion->position(),
+                            *entity_world, *logic_runtime);
+                        if (update.state == torchlight::CombatState::waiting ||
+                            update.state == torchlight::CombatState::attacked ||
+                            update.state == torchlight::CombatState::killed) {
+                            player_motion->stop();
+                            active_path.clear();
+                            next_path_node = 0;
+                        }
+                        if (update.state == torchlight::CombatState::attacked ||
+                            update.state == torchlight::CombatState::killed) {
+                            ++combat_attack_count;
+                            std::cout << "combat_hit=" << update.target_id
+                                      << " damage=" << update.damage
+                                      << " remaining_health=" << update.remaining_health
+                                      << '\n';
+                        }
+                        if (update.state == torchlight::CombatState::killed) {
+                            ++combat_kill_count;
+                            const auto instance = runtime_instance_indices.find(
+                                update.target_id);
+                            if (instance != runtime_instance_indices.end()) {
+                                geometry.instances[instance->second].visible = false;
+                                renderer->set_instance_visible(instance->second, false);
+                            }
+                        }
+                    }
                     logic_runtime->update(std::min(elapsed, 0.1F));
                     logic_runtime->update_player_position(player_motion->position());
                     drain_logic();
@@ -666,6 +726,9 @@ int main(int argc, char** argv) {
                   << " runtime_models=" << runtime_model_count
                   << " missing_runtime_models=" << missing_runtime_model_count
                   << " renderer_rebuilds=" << renderer_rebuild_count
+                  << " selected_targets=" << selected_target_count
+                  << " combat_attacks=" << combat_attack_count
+                  << " combat_kills=" << combat_kill_count
                   << " warp_requests=" << warp_request_count
                   << " frames=" << frames;
         if (player_motion) {

@@ -389,6 +389,9 @@ public:
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         for (const auto& instance : instances_) {
+            if (!instance.visible) {
+                continue;
+            }
             glUniform3fv(translation_location_, 1, instance.transform.position.data());
             glUniform3fv(object_scale_location_, 1, instance.transform.scale.data());
             const float radians = instance.transform.angle * kDegreesToRadians;
@@ -434,6 +437,13 @@ public:
             throw GlesSceneError("Scene instance position is not finite");
         }
         instances_[instance_index].transform.position = position;
+    }
+
+    void set_instance_visible(std::size_t instance_index, bool visible) {
+        if (instance_index >= instances_.size()) {
+            throw GlesSceneError("Scene instance index is out of range");
+        }
+        instances_[instance_index].visible = visible;
     }
 
     void set_camera_target(const std::array<float, 3>& target, float vertical_view_span) {
@@ -586,6 +596,10 @@ void GlesSceneRenderer::draw(int width, int height) {
 void GlesSceneRenderer::set_instance_position(std::size_t instance_index,
                                               const std::array<float, 3>& position) {
     implementation_->set_instance_position(instance_index, position);
+}
+
+void GlesSceneRenderer::set_instance_visible(std::size_t instance_index, bool visible) {
+    implementation_->set_instance_visible(instance_index, visible);
 }
 
 void GlesSceneRenderer::set_camera_target(const std::array<float, 3>& target,

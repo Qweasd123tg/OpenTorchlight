@@ -101,6 +101,10 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.mesh_path = mesh->name;
         player.walking_speed = floating(*definition, u"WALKINGSPEED");
         player.running_speed = floating(*definition, u"RUNNINGSPEED");
+        player.attack_speed = floating(*definition, u"ATTACKSPEED");
+        player.reach_bonus = floating(*definition, u"REACH_BONUS");
+        player.minimum_damage = integer(*definition, u"MINDAMAGE");
+        player.maximum_damage = integer(*definition, u"MAXDAMAGE");
         player.strength = integer(*definition, u"STRENGTH");
         player.dexterity = integer(*definition, u"DEXTERITY");
         player.magic = integer(*definition, u"MAGIC");
