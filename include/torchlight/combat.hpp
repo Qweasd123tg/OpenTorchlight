@@ -13,6 +13,7 @@ enum class CombatState {
     idle,
     approaching,
     waiting,
+    attacking,
     attacked,
     killed,
 };
@@ -22,6 +23,7 @@ struct CombatUpdate {
     std::uint64_t target_id = 0;
     std::int32_t damage = 0;
     float remaining_health = 0.0F;
+    std::uint64_t execution_id = 0;
 };
 
 class CombatController {
@@ -47,8 +49,12 @@ public:
 
     [[nodiscard]] CombatUpdate update(float seconds,
                                       const std::array<float, 3>& player_position,
-                                      RuntimeEntityWorld& world,
-                                      LogicRuntime& logic);
+                                      RuntimeEntityWorld& world);
+    [[nodiscard]] CombatUpdate perform_attack(
+        std::uint64_t execution_id,
+        const std::array<float, 3>& player_position,
+        RuntimeEntityWorld& world, LogicRuntime& logic);
+    void finish_attack(std::uint64_t execution_id) noexcept;
 
 private:
     TorchlightRandom random_;
@@ -59,6 +65,8 @@ private:
     float attack_interval_ = 1.0F;
     float reach_bonus_ = 0.0F;
     float cooldown_ = 0.0F;
+    std::uint64_t active_execution_id_ = 0;
+    std::uint64_t next_execution_id_ = 1;
 };
 
 } // namespace torchlight

@@ -1,5 +1,6 @@
 #include "torchlight/actor_motion.hpp"
 #include "torchlight/adm_document.hpp"
+#include "torchlight/animation_events.hpp"
 #include "torchlight/collision_scene.hpp"
 #include "torchlight/combat.hpp"
 #include "torchlight/entity_world.hpp"
@@ -782,6 +783,7 @@ int main(int argc, char** argv) {
                 PlayerAnimationState::idle;
             bool player_attack_animation_active = false;
             std::size_t player_attack_animation_index = 0U;
+            torchlight::AnimationEventPlayback player_attack_events;
             bool player_transition_active = false;
             float player_transition_from_time = 0.0F;
             enum class EnemyAnimationState { idle, run, attack, hit, death, hidden };
@@ -1070,34 +1072,29 @@ int main(int argc, char** argv) {
                     }
                     const auto update = combat.update(
                         std::min(elapsed, 0.1F), player_motion.position(),
-                        entity_world, logic_runtime);
+                        entity_world);
                     if (update.state == torchlight::CombatState::waiting ||
-                        update.state == torchlight::CombatState::attacked ||
-                        update.state == torchlight::CombatState::killed) {
+                        update.state == torchlight::CombatState::attacking) {
                         player_motion.stop();
                         active_path.clear();
                         next_path_node = 0;
                     }
-                    if (update.state == torchlight::CombatState::attacked ||
-                        update.state == torchlight::CombatState::killed) {
+                    if (update.state == torchlight::CombatState::attacking) {
                         player_attack_animation_active = true;
                         player_attack_animation_index =
                             torchlight::select_original_random_animation(
                                 player_animations.attacks.size(),
                                 player_animation_random);
+                        const auto& attack_clip =
+                            player_animations.attacks[player_attack_animation_index];
+                        player_attack_events.start(
+                            update.execution_id,
+                            attack_clip.skeleton_path + ":" +
+                                attack_clip.animation_name,
+                            attack_clip.duration, 1.0F, attack_clip.event_keys);
                         if (player_animation_state == PlayerAnimationState::attack) {
                             player_animation_time = 0.0F;
                         }
-                        auto& playback = enemy_animation_playback[update.target_id];
-                        playback.state = update.state == torchlight::CombatState::killed
-                                             ? EnemyAnimationState::death
-                                             : EnemyAnimationState::hit;
-                        playback.time = 0.0F;
-                        ++combat_attack_count;
-                        std::cout << "combat_hit=" << update.target_id
-                                  << " damage=" << update.damage
-                                  << " remaining_health=" << update.remaining_health
-                                  << '\n';
                     }
                     if (combat_target_position &&
                         update.state != torchlight::CombatState::approaching &&
@@ -1115,9 +1112,6 @@ int main(int argc, char** argv) {
                                 torchlight::yaw_rotation(player_angle);
                             renderer->set_instance_angle(player_instance_index, player_angle);
                         }
-                    }
-                    if (update.state == torchlight::CombatState::killed) {
-                        ++combat_kill_count;
                     }
                     const auto enemy_updates = enemies.update(
                         std::min(elapsed, 0.1F), player_motion.position(),
@@ -1264,13 +1258,6 @@ int main(int argc, char** argv) {
                         ++enemy_animation_updates;
                     }
                 }
-                if (player_attack_animation_active &&
-                    player_animation_state == PlayerAnimationState::attack &&
-                    player_animation_time + animation_elapsed >=
-                        player_animations.attacks[player_attack_animation_index]
-                            .duration) {
-                    player_attack_animation_active = false;
-                }
                 const auto next_animation_state = player_attack_animation_active
                                                       ? PlayerAnimationState::attack
                                                       : player_motion.moving()
@@ -1283,6 +1270,11 @@ int main(int argc, char** argv) {
                     player_transition_active = true;
                     player_animation_time = 0.0F;
                     player_animation_state = next_animation_state;
+                }
+                if (player_animation_state == PlayerAnimationState::attack &&
+                    player_attack_animation_active) {
+                    player_attack_events.advance(animation_elapsed);
+                    player_animation_time = player_attack_events.time_seconds();
                 } else {
                     player_animation_time += animation_elapsed;
                 }
@@ -1361,6 +1353,44 @@ int main(int argc, char** argv) {
                         weapon_transform;
                     renderer->set_instance_transform(
                         *player_weapon_instance_index, weapon_transform);
+                }
+                bool player_hit_processed = false;
+                if (player_animation_state == PlayerAnimationState::attack &&
+                    player_attack_animation_active) {
+                    for (const auto& event : player_attack_events.frame_events()) {
+                        if (event.key.name != "HIT") {
+                            continue;
+                        }
+                        const auto hit = combat.perform_attack(
+                            event.execution_id, player_motion.position(),
+                            entity_world, logic_runtime);
+                        if (hit.state != torchlight::CombatState::attacked &&
+                            hit.state != torchlight::CombatState::killed) {
+                            continue;
+                        }
+                        auto& playback = enemy_animation_playback[hit.target_id];
+                        playback.state = hit.state == torchlight::CombatState::killed
+                                             ? EnemyAnimationState::death
+                                             : EnemyAnimationState::hit;
+                        playback.time = 0.0F;
+                        ++combat_attack_count;
+                        combat_kill_count += static_cast<std::size_t>(
+                            hit.state == torchlight::CombatState::killed);
+                        player_hit_processed = true;
+                        std::cout << "combat_hit=" << hit.target_id
+                                  << " damage=" << hit.damage
+                                  << " remaining_health=" << hit.remaining_health
+                                  << " clip=" << event.source_clip
+                                  << " key=" << event.key_index << '\n';
+                    }
+                    if (player_attack_events.finished()) {
+                        combat.finish_attack(player_attack_events.execution_id());
+                        player_attack_animation_active = false;
+                    }
+                }
+                if (player_hit_processed) {
+                    drain_logic();
+                    renderer->set_mesh_pose(player_pose);
                 }
                 ++player_animation_updates;
                 window.draw_scene_frame(*renderer);

@@ -110,9 +110,22 @@ OGRE вычисляет кости из текущего набора `Animation
 
 `original-code`: `CGenericModel::updateAnimation` делит `FRAME` каждого ключа
 на константу 30,0 перед сравнением с предыдущим и текущим временем клипа.
-Следовательно, время события в секундах равно `FRAME / 30`. Вызов `HIT` пока
-не связан с боевым таймером; звук, частицы, bone offset и camera shake также
-только разобраны.
+Следовательно, время события в секундах равно `FRAME / 30`. Адресный ASM
+производителя событий сохранён в `disassembly/8aa4b0.asm`, а порядок
+`model update -> bone positions -> updateAttack` из
+`CCharacter::updateAnimation` — в `disassembly/848870.asm`.
+
+Обычная атака игрока теперь начинается без немедленного урона. Для выбранного
+клипа создаётся устойчивый ID исполнения; проигрыватель публикует все ключи,
+пересечённые текущим обновлением, в исходном порядке и с идентичностью клипа.
+Список не забирается одним потребителем. После расчёта позы и положения оружия
+каждый `HIT` вызывает отдельный `perform_attack`; до ключа HP цели не меняется.
+Завершение клипа закрывает то же исполнение. Синтетический тест проверяет два
+`HIT` в одном обновлении, повторное чтение списка без потери, отсутствие
+дублирования и масштабирование времени скоростью проигрывания.
+
+Вражеская обычная атака, звук, частицы, bone offset и camera shake пока не
+переведены на этот список событий.
 
 `original-code`: скорость выбранного клипа атаки вычисляется как
 `max(0.2, (effect(type 0x16) / 100 + 1) / attackDescription.speed)`; у
@@ -123,9 +136,9 @@ OGRE вычисляет кости из текущего набора `Animation
 ## Воспроизведение
 
 ```sh
-cmake --build build --target animation_manifest_test skeletal_animation_test scene_geometry_render_test
+cmake --build build --target animation_events_test animation_manifest_test skeletal_animation_test scene_geometry_render_test
 ctest --test-dir build --output-on-failure \
-  -R 'original_(animation_manifests|skeletal_animation|scene_geometry_render)'
+  -R 'animation_events|original_(animation_manifests|skeletal_animation|scene_geometry_render|combat)'
 ```
 
 Тест манифестов обязан разобрать все 182 оригинальных файла с точными общими

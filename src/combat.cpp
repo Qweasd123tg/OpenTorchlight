@@ -55,8 +55,7 @@ const RuntimeEntity* CombatController::target(
 
 CombatUpdate CombatController::update(float seconds,
                                       const std::array<float, 3>& player_position,
-                                      RuntimeEntityWorld& world,
-                                      LogicRuntime& logic) {
+                                      RuntimeEntityWorld& world) {
     if (std::isfinite(seconds) && seconds > 0.0F) {
         cooldown_ = std::max(0.0F, cooldown_ - seconds);
     }
@@ -66,6 +65,10 @@ CombatUpdate CombatController::update(float seconds,
         return {};
     }
     const auto selected_id = selected->id;
+    if (active_execution_id_ != 0) {
+        return {CombatState::waiting, selected_id, 0, selected->health,
+                active_execution_id_};
+    }
     const auto delta_x = selected->position[0] - player_position[0];
     const auto delta_z = selected->position[2] - player_position[2];
     if (std::hypot(delta_x, delta_z) > attack_range_) {
@@ -75,6 +78,34 @@ CombatUpdate CombatController::update(float seconds,
         return {CombatState::waiting, selected_id, 0, selected->health};
     }
 
+    active_execution_id_ = next_execution_id_++;
+    if (next_execution_id_ == 0) {
+        next_execution_id_ = 1;
+    }
+    cooldown_ = attack_interval_;
+    return {CombatState::attacking, selected_id, 0, selected->health,
+            active_execution_id_};
+}
+
+CombatUpdate CombatController::perform_attack(
+    std::uint64_t execution_id,
+    const std::array<float, 3>& player_position,
+    RuntimeEntityWorld& world, LogicRuntime& logic) {
+    if (execution_id == 0 || execution_id != active_execution_id_) {
+        return {};
+    }
+    const auto* selected = target(world);
+    if (selected == nullptr) {
+        return {};
+    }
+    const auto selected_id = selected->id;
+    const auto delta_x = selected->position[0] - player_position[0];
+    const auto delta_z = selected->position[2] - player_position[2];
+    if (std::hypot(delta_x, delta_z) > attack_range_) {
+        return {CombatState::approaching, selected_id, 0, selected->health,
+                execution_id};
+    }
+
     const auto rolled_damage = random_.integer_between(
         minimum_damage_, maximum_damage_);
     const auto mitigation = mitigate_damage(
@@ -82,16 +113,21 @@ CombatUpdate CombatController::update(float seconds,
         selected->damage_defense, random_);
     const auto result = world.apply_damage(
         selected_id, static_cast<float>(mitigation.applied), logic);
-    cooldown_ = attack_interval_;
     if (!result.accepted) {
-        clear_target();
         return {};
     }
     const auto state = result.killed ? CombatState::killed : CombatState::attacked;
     if (result.killed) {
         target_id_ = 0;
     }
-    return {state, selected_id, mitigation.applied, result.remaining_health};
+    return {state, selected_id, mitigation.applied, result.remaining_health,
+            execution_id};
+}
+
+void CombatController::finish_attack(std::uint64_t execution_id) noexcept {
+    if (execution_id == active_execution_id_) {
+        active_execution_id_ = 0;
+    }
 }
 
 } // namespace torchlight

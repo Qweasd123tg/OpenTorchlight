@@ -111,12 +111,19 @@ int main(int argc, char** argv) {
         require(reference_damage < 24 &&
                     mitigation_combat.select_target(world, spawned.position, 0.5F),
                 "ordinary mitigation fixture did not select a non-maximum roll");
-        const auto mitigation_result =
-            mitigation_combat.update(0.0F, spawned.position, world, logic);
+        const auto mitigation_start =
+            mitigation_combat.update(0.0F, spawned.position, world);
+        require(mitigation_start.state == torchlight::CombatState::attacking &&
+                    mitigation_start.execution_id != 0 &&
+                    spawned.health == spawned.maximum_health,
+                "ordinary player attack applied damage before an animation HIT");
+        const auto mitigation_result = mitigation_combat.perform_attack(
+            mitigation_start.execution_id, spawned.position, world, logic);
         require(mitigation_result.state == torchlight::CombatState::attacked &&
                     mitigation_result.damage ==
                         std::max(1, reference_damage - reference_armor),
                 "ordinary player attack scaled armor by the damage range maximum");
+        mitigation_combat.finish_attack(mitigation_start.execution_id);
         spawned.health = spawned.maximum_health;
         spawned.damage_defense = original_defense;
 
@@ -132,32 +139,49 @@ int main(int argc, char** argv) {
                 "click selection did not choose the nearby monster");
         auto far_position = spawned.position;
         far_position[0] += 5.0F;
-        require(combat.update(0.0F, far_position, world, logic).state ==
+        require(combat.update(0.0F, far_position, world).state ==
                     torchlight::CombatState::approaching,
                 "out-of-range target did not request an approach");
 
-        auto result = combat.update(0.0F, spawned.position, world, logic);
+        const auto first_attack = combat.update(
+            0.0F, spawned.position, world);
+        require(first_attack.state == torchlight::CombatState::attacking &&
+                    first_attack.execution_id != 0 &&
+                    spawned.health == spawned.maximum_health,
+                "attack start damaged the target before the HIT key");
+        auto result = combat.perform_attack(
+            first_attack.execution_id, spawned.position, world, logic);
         require(result.state == torchlight::CombatState::attacked &&
                     result.damage == 1 &&
                     result.remaining_health == spawned.maximum_health - 1.0F,
                 "level-ten monster armor did not absorb the starting attack");
-        require(combat.update(0.0F, spawned.position, world, logic).state ==
+        require(combat.perform_attack(
+                    first_attack.execution_id + 1, spawned.position, world, logic)
+                    .state == torchlight::CombatState::idle,
+                "foreign animation execution triggered an attack");
+        combat.finish_attack(first_attack.execution_id);
+        require(combat.update(0.0F, spawned.position, world).state ==
                     torchlight::CombatState::waiting,
                 "attack cooldown was ignored");
         require(combat.select_target(world, spawned.position, 0.5F) &&
-                    combat.update(0.0F, spawned.position, world, logic).state ==
+                    combat.update(0.0F, spawned.position, world).state ==
                         torchlight::CombatState::waiting,
                 "reselecting the same target reset the attack cooldown");
         combat.clear_target();
         require(combat.select_target(world, spawned.position, 0.5F) &&
-                    combat.update(0.0F, spawned.position, world, logic).state ==
+                    combat.update(0.0F, spawned.position, world).state ==
                         torchlight::CombatState::waiting,
                 "clearing and reselecting a target reset the attack cooldown");
         for (int attack = 0;
              attack < 128 && result.state != torchlight::CombatState::killed;
              ++attack) {
-            result = combat.update(combat.attack_interval(), spawned.position,
-                                   world, logic);
+            const auto attack_start = combat.update(
+                combat.attack_interval(), spawned.position, world);
+            require(attack_start.state == torchlight::CombatState::attacking,
+                    "expired cooldown did not begin an animation-bound attack");
+            result = combat.perform_attack(
+                attack_start.execution_id, spawned.position, world, logic);
+            combat.finish_attack(attack_start.execution_id);
         }
         require(result.state == torchlight::CombatState::killed &&
                     !world.entities().front().alive &&

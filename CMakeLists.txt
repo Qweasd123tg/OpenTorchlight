@@ -7,6 +7,7 @@ find_package(PNG REQUIRED)
 add_library(torchlight_core STATIC
     src/actor_motion.cpp
     src/adm_document.cpp
+    src/animation_events.cpp
     src/animation_manifest.cpp
     src/collision_scene.cpp
     src/combat.cpp
@@ -164,6 +165,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(ogre_skeleton_test PRIVATE torchlight_core)
     add_executable(animation_manifest_test tests/animation_manifest_test.cpp)
     target_link_libraries(animation_manifest_test PRIVATE torchlight_core)
+    add_executable(animation_events_test tests/animation_events_test.cpp)
+    target_link_libraries(animation_events_test PRIVATE torchlight_core)
     add_executable(skeletal_animation_test tests/skeletal_animation_test.cpp)
     target_link_libraries(skeletal_animation_test PRIVATE torchlight_core)
     add_executable(dds_texture_test tests/dds_texture_test.cpp)
@@ -188,6 +191,9 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(equipment_test PRIVATE torchlight_core)
     add_executable(level_transition_test tests/level_transition_test.cpp)
     target_link_libraries(level_transition_test PRIVATE torchlight_core)
+    add_test(NAME actor_motion COMMAND actor_motion_test)
+    add_test(NAME animation_events COMMAND animation_events_test)
+    add_test(NAME damage_calculation COMMAND damage_test)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         if(TARGET ogre_camera_reference)
@@ -222,7 +228,6 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         get_filename_component(TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
         add_test(NAME original_pak_archive
             COMMAND pak_archive_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
-        add_test(NAME actor_motion COMMAND actor_motion_test)
         add_test(NAME original_collision_meshes
             COMMAND collision_mesh_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_adm_document
@@ -267,7 +272,6 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND unit_type_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_combat
             COMMAND combat_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
-        add_test(NAME damage_calculation COMMAND damage_test)
         add_test(NAME original_level_transitions
             COMMAND level_transition_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
