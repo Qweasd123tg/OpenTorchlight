@@ -443,6 +443,7 @@ int main(int argc, char** argv) {
         std::string scene_state;
         std::size_t chunk_count = 1;
         std::size_t layout_object_count = 0;
+        std::size_t expanded_layout_link_count = 0;
         std::size_t placed_monster_count = 0;
         std::string player_name = "none";
         std::optional<torchlight::PlayerPrototype> player_prototype;
@@ -466,9 +467,14 @@ int main(int argc, char** argv) {
             chunk_count = generated.chunks.size();
             generated_layout.emplace(
                 torchlight::compose_generated_level_layout(scene_loader, generated));
+            const auto expansion = torchlight::expand_layout_links(
+                scene_loader, generated_layout->layout);
+            expanded_layout_link_count = expansion.links_expanded;
             layout_object_count = generated_layout->layout.objects.size();
-            geometry = torchlight::build_generated_level_geometry(
-                archive, levelsets, scene_loader, rules, generated);
+            const torchlight::FixedLevelScene expanded_scene{
+                main, rules, generated_layout->layout};
+            geometry = torchlight::build_room_piece_geometry(
+                archive, levelsets, expanded_scene);
             const auto players = torchlight::load_playable_players(archive, index, loader);
             if (players.empty()) {
                 throw DesktopError("no playable player definitions were resolved");
@@ -490,6 +496,9 @@ int main(int argc, char** argv) {
             runtime_level = static_cast<std::int32_t>(*options.main_stratum + 1U);
         } else {
             fixed_scene.emplace(scene_loader.load_fixed_scene(u"media/dungeons/TOWN.DAT"));
+            const auto expansion = torchlight::expand_layout_links(
+                scene_loader, fixed_scene->layout);
+            expanded_layout_link_count = expansion.links_expanded;
             const auto& town = *fixed_scene;
             layout_object_count = town.layout.objects.size();
             geometry = torchlight::build_room_piece_geometry(archive, levelsets, town);
@@ -708,6 +717,7 @@ int main(int argc, char** argv) {
                   << " chunks=" << chunk_count
                   << " player=" << player_name
                   << " layout_objects=" << layout_object_count
+                  << " expanded_layout_links=" << expanded_layout_link_count
                   << " placed_monsters=" << placed_monster_count
                   << " meshes=" << render_stats.mesh_resources
                   << " instances=" << render_stats.instances

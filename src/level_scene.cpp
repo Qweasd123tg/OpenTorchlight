@@ -5,7 +5,9 @@
 #include <algorithm>
 #include <charconv>
 #include <cmath>
+#include <deque>
 #include <functional>
+#include <limits>
 #include <stdexcept>
 #include <string_view>
 #include <system_error>
@@ -249,6 +251,37 @@ LayoutLogicGroup parse_logic_group(const AdmGroup& group, std::int64_t object_id
         result.nodes.push_back(std::move(node));
     }
     return result;
+}
+
+std::int64_t remapped_id(
+    const std::unordered_map<std::int64_t, std::int64_t>& ids,
+    std::int64_t original) {
+    const auto found = ids.find(original);
+    if (found == ids.end()) {
+        throw LevelSceneError("Linked layout references an absent object");
+    }
+    return found->second;
+}
+
+void replace_int64_property(LayoutObject& object, const char16_t* name,
+                            std::int64_t value) {
+    for (auto& property_value : object.properties) {
+        if (property_value.name == name) {
+            if (property_value.type != AdmValueType::integer64) {
+                throw LevelSceneError("Linked layout identity property is not 64-bit");
+            }
+            property_value.value = value;
+            return;
+        }
+    }
+}
+
+std::u16string layout_link_file(const LayoutObject& object) {
+    const auto* value = object.find_property(u"LAYOUT FILE");
+    if (value == nullptr || !is_text(*value)) {
+        throw LevelSceneError("Layout Link has no valid LAYOUT FILE");
+    }
+    return std::get<std::u16string>(value->value);
 }
 
 void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& objects,
@@ -623,6 +656,99 @@ std::optional<LayoutWorldTransform> find_layout_world_transform(
         }
     }
     return std::nullopt;
+}
+
+LayoutLinkExpansionStats expand_layout_links(const LevelSceneLoader& loader,
+                                              LayoutManifest& layout,
+                                              std::size_t maximum_depth) {
+    struct PendingLink {
+        std::size_t object_index = 0;
+        std::size_t depth = 0;
+    };
+
+    std::unordered_map<std::int64_t, bool> existing_ids;
+    existing_ids.reserve(layout.objects.size());
+    std::int64_t next_id = 1;
+    std::deque<PendingLink> pending;
+    for (std::size_t index = 0; index < layout.objects.size(); ++index) {
+        const auto& object = layout.objects[index];
+        if (!existing_ids.emplace(object.id, true).second) {
+            throw LevelSceneError("Layout link expansion found a duplicate object ID");
+        }
+        if (object.id >= next_id) {
+            if (object.id == std::numeric_limits<std::int64_t>::max()) {
+                throw LevelSceneError("Layout object ID space is exhausted");
+            }
+            next_id = object.id + 1;
+        }
+        if (object.descriptor == u"Layout Link") {
+            pending.push_back({index, 0});
+        }
+    }
+
+    LayoutLinkExpansionStats stats;
+    while (!pending.empty()) {
+        const auto link = pending.front();
+        pending.pop_front();
+        if (link.depth >= maximum_depth) {
+            throw LevelSceneError("Layout Link nesting exceeds the expansion limit");
+        }
+        const auto parent_id = layout.objects[link.object_index].id;
+        const auto source_file = layout_link_file(layout.objects[link.object_index]);
+        auto source = loader.load_layout(compiled_adm_path(source_file));
+
+        std::unordered_map<std::int64_t, std::int64_t> ids;
+        ids.reserve(source.objects.size());
+        for (const auto& object : source.objects) {
+            if (next_id == std::numeric_limits<std::int64_t>::max()) {
+                throw LevelSceneError("Expanded layout has too many objects");
+            }
+            if (!ids.emplace(object.id, next_id++).second) {
+                throw LevelSceneError("Linked layout has a duplicate object ID");
+            }
+        }
+
+        const auto first_added = layout.objects.size();
+        layout.objects.reserve(layout.objects.size() + source.objects.size());
+        for (auto object : source.objects) {
+            const auto original_id = object.id;
+            object.id = remapped_id(ids, original_id);
+            replace_int64_property(object, u"ID", object.id);
+            if (object.parent_id == -1) {
+                object.parent_id = parent_id;
+            } else {
+                object.parent_id = remapped_id(ids, object.parent_id);
+                replace_int64_property(object, u"PARENTID", object.parent_id);
+            }
+            layout.objects.push_back(std::move(object));
+        }
+
+        layout.logic_groups.reserve(layout.logic_groups.size() +
+                                    source.logic_groups.size());
+        for (auto group : source.logic_groups) {
+            group.object_id = remapped_id(ids, group.object_id);
+            for (auto& node : group.nodes) {
+                node.object_id = remapped_id(ids, node.object_id);
+            }
+            layout.logic_groups.push_back(std::move(group));
+        }
+        for (std::size_t index = first_added; index < layout.objects.size(); ++index) {
+            if (layout.objects[index].descriptor == u"Layout Link") {
+                pending.push_back({index, link.depth + 1U});
+            }
+        }
+
+        const auto expanded_count = static_cast<std::uint64_t>(layout.declared_count) +
+                                    source.declared_count;
+        if (expanded_count > std::numeric_limits<std::uint32_t>::max()) {
+            throw LevelSceneError("Expanded layout declared count is too large");
+        }
+        layout.declared_count = static_cast<std::uint32_t>(expanded_count);
+        ++stats.links_expanded;
+        stats.objects_added += source.objects.size();
+        stats.logic_groups_added += source.logic_groups.size();
+    }
+    return stats;
 }
 
 } // namespace torchlight

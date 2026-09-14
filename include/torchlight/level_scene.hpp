@@ -163,6 +163,12 @@ struct LayoutManifest {
     std::vector<LayoutLogicGroup> logic_groups;
 };
 
+struct LayoutLinkExpansionStats {
+    std::size_t links_expanded = 0;
+    std::size_t objects_added = 0;
+    std::size_t logic_groups_added = 0;
+};
+
 struct FixedLevelScene {
     DungeonManifest dungeon;
     LevelRules rules;
@@ -192,5 +198,12 @@ private:
 
 [[nodiscard]] std::optional<LayoutWorldTransform> find_layout_world_transform(
     const LayoutManifest& layout, std::u16string_view descriptor);
+
+// Replaces Layout Link placeholders with remapped copies of their referenced
+// layouts. Linked roots inherit the placeholder transform, and nested links
+// are expanded recursively.
+[[nodiscard]] LayoutLinkExpansionStats expand_layout_links(
+    const LevelSceneLoader& loader, LayoutManifest& layout,
+    std::size_t maximum_depth = 16);
 
 } // namespace torchlight

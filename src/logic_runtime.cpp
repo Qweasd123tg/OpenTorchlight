@@ -324,7 +324,7 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         }
         warp_requests_.push_back(
             {target_object_id, text_value(object, u"DUNGEON NAME"),
-             text_value(object, u"WARP NAME"), integer_value(object, u"LEVEL DELTA", 0),
+             text_value(object, u"WARP NAME"), integer_value(object, u"LEVEL DELTA", 1),
              optional_integer(object, u"LEVEL ABSOLUTE"),
              bool_value(object, u"WAYPOINT", false)});
     }

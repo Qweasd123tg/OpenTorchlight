@@ -3,6 +3,7 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/random_level.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <map>
@@ -198,6 +199,40 @@ void verify_repeated_chunk_layout(const torchlight::LevelSceneLoader& loader,
     runtime.activate_level();
 }
 
+void verify_layout_link_expansion(const torchlight::LevelSceneLoader& loader,
+                                  const torchlight::GeneratedLevel& level) {
+    auto expanded = torchlight::compose_generated_level_layout(loader, level);
+    const auto object_count_before_links = expanded.layout.objects.size();
+    const auto expansion = torchlight::expand_layout_links(loader, expanded.layout);
+    require(expansion.links_expanded > 0 && expansion.objects_added > 0 &&
+                expanded.layout.objects.size() > object_count_before_links,
+            "generated layout links were not expanded");
+    const auto warpers = std::count_if(
+        expanded.layout.objects.begin(), expanded.layout.objects.end(),
+        [](const auto& object) { return object.descriptor == u"Warper"; });
+    require(warpers >= 2, "generated entrance and exit warpers were not imported");
+    const auto transforms = torchlight::resolve_layout_world_transforms(expanded.layout);
+    require(transforms.size() == expanded.layout.objects.size(),
+            "expanded layout transforms are incomplete");
+    torchlight::LogicRuntime runtime(expanded.layout, level.seed);
+    runtime.activate_level();
+    static_cast<void>(runtime.take_warp_requests());
+    bool found_previous_floor = false;
+    bool found_next_floor = false;
+    for (const auto& object : expanded.layout.objects) {
+        if (object.descriptor != u"Warper") {
+            continue;
+        }
+        runtime.invoke(object.id, u"Activate Warper");
+        for (const auto& request : runtime.take_warp_requests()) {
+            found_previous_floor = found_previous_floor || request.level_delta == -1;
+            found_next_floor = found_next_floor || request.level_delta == 1;
+        }
+    }
+    require(found_previous_floor && found_next_floor,
+            "expanded entrance and exit did not preserve their floor directions");
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
@@ -215,6 +250,7 @@ int main(int argc, char** argv) {
         std::size_t generated_chunks = 0;
         std::size_t composed_levels = 0;
         bool repeated_chunk_checked = false;
+        bool layout_links_checked = false;
         std::unordered_set<std::string> checked_layouts;
         for (const auto& stratum : dungeon.strata) {
             const auto rules = loader.load_rules(stratum.ruleset);
@@ -239,6 +275,10 @@ int main(int argc, char** argv) {
                         verify_repeated_chunk_layout(loader, level.chunks.front(), seed);
                         repeated_chunk_checked = true;
                     }
+                    if (!layout_links_checked) {
+                        verify_layout_link_expansion(loader, level);
+                        layout_links_checked = true;
+                    }
                 }
                 ++generated_levels;
                 generated_chunks += level.chunks.size();
@@ -247,6 +287,7 @@ int main(int argc, char** argv) {
         require(tested_rules.size() == 12, "unexpected unique randomized ruleset count");
         require(composed_levels == tested_rules.size(),
                 "not all randomized rulesets produced a runtime layout");
+        require(layout_links_checked, "no generated layout links were checked");
         std::cout << "PASS: generated " << generated_levels << " deterministic levels with "
                   << generated_chunks << " placed chunks across " << tested_rules.size()
                   << " campaign rulesets; composed " << composed_levels
