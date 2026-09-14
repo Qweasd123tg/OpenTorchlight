@@ -75,13 +75,15 @@ public class ExportClassDecompilations extends GhidraScript {
                             decompiler.decompileFunction(function, 120, monitor);
                         if (result.decompileCompleted()) {
                             String code = result.getDecompiledFunction().getC()
-                                .replaceAll("[\\t ]+\\r?\\n", "\\n").stripTrailing();
+                                .replaceAll("[\\t ]+\\r?\\n", "\n").stripTrailing();
                             writer.write(code);
                             writer.write("\n");
                         } else {
                             failureCount++;
                             writer.write("/* DECOMPILATION FAILED: ");
-                            writer.write(result.getErrorMessage().replace("*/", "* /"));
+                            String error = result.getErrorMessage()
+                                .replace("*/", "* /").replaceAll("\\s+", " ").trim();
+                            writer.write(error);
                             writer.write(" */\n");
                         }
                     }

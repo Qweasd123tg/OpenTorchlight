@@ -1,15 +1,16 @@
 # Core game runtime exports
 
-This directory contains Ghidra pseudocode for 1,552 functions from 36 central
+This directory contains Ghidra pseudocode for 2,630 functions from 70 central
 Torchlight runtime classes. The selection covers characters, player state,
 equipment, models, animation, combat, skills, effects, missiles, AI, paths,
-levels, spawning, triggers, and the main game loop. It excludes third-party
+levels, spawning, triggers, quests, merchants, inventory UI, sound, layouts,
+resources, save-state helpers, and the main game loop. It excludes third-party
 libraries, editor UI, and bulk resource descriptors.
 
 The source executable is
 `Torchlight.bin.x86_64`, SHA-256
 `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
-Seventeen functions record an explicit decompilation failure inside their
+Twenty-two functions record an explicit decompilation failure inside their
 class file; their symbols and addresses remain available in
 `../original-symbols.txt` for targeted assembly export.
 

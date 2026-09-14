@@ -10,7 +10,9 @@
 соседних функций и точные инструкции — в `research/disassembly/`. Более
 широкий псевдокод центральных классов находится в
 `research/decompiled-core/`, а полный индекс имён и адресов ELF — в
-`research/original-symbols.txt`. Текущая реализация находится в `src/` и
+`research/original-symbols.txt`. Полный граф из разрешённых прямых вызовов
+лежит в `research/original-callgraph.tsv`, строки ELF с файловыми смещениями —
+в `research/original-strings.txt`. Текущая реализация находится в `src/` и
 `include/torchlight/`, проверки — в `tests/`.
 
 При поиске ошибки:

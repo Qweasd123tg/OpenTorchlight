@@ -72,7 +72,7 @@ public class ExportTargetDecompilations extends GhidraScript {
                 String header = "/* address=" + function.getEntryPoint() +
                     "\n   symbol=" + function.getName(true) + " */\n\n";
                 String code = result.getDecompiledFunction().getC()
-                    .replaceAll("[\\t ]+\\r?\\n", "\\n").stripTrailing();
+                    .replaceAll("[\\t ]+\\r?\\n", "\n").stripTrailing();
                 Files.writeString(codePath, header + code + "\n", StandardCharsets.UTF_8);
                 println(fields[1] + " <- " + function.getName(true));
             }
