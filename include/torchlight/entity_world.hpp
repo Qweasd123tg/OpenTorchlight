@@ -4,6 +4,7 @@
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/spawn_class.hpp"
+#include "torchlight/stat_graph.hpp"
 #include "torchlight/unit_type.hpp"
 
 #include <array>
@@ -23,8 +24,16 @@ struct RuntimeEntity {
     MasterResourceKind kind = MasterResourceKind::prop;
     std::u16string name;
     std::array<float, 3> position{};
+    std::int32_t level = 1;
     float health = 0.0F;
     float maximum_health = 0.0F;
+    std::int32_t minimum_damage = 0;
+    std::int32_t maximum_damage = 0;
+    float walking_speed = 0.0F;
+    float running_speed = 0.0F;
+    float attack_speed = 0.0F;
+    float sight_radius = 0.0F;
+    float reach_bonus = 0.0F;
     bool alive = true;
     bool combat_targetable = false;
 };
@@ -89,6 +98,8 @@ private:
     UnitDefinitionLoader* definitions_ = nullptr;
     const SpawnClassCatalog* spawn_classes_ = nullptr;
     const UnitTypeResourceIndex* unit_types_ = nullptr;
+    StatGraph monster_health_graph_;
+    StatGraph monster_damage_graph_;
     std::unordered_map<std::int64_t, std::array<float, 3>> spawner_positions_;
     TorchlightRandom random_;
     std::int32_t spawn_level_ = 1;

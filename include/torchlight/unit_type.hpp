@@ -3,6 +3,7 @@
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/randomizer.hpp"
+#include "torchlight/stat_graph.hpp"
 #include "torchlight/unit_definition.hpp"
 
 #include <cstddef>
@@ -64,21 +65,12 @@ public:
     }
 
 private:
-    struct GraphPoint {
-        float x = 0.0F;
-        float y = 0.0F;
-    };
-
-    [[nodiscard]] static std::vector<GraphPoint> load_graph(
-        const PakArchive& archive, std::string_view path);
-    [[nodiscard]] static float graph_value(
-        const std::vector<GraphPoint>& graph, float x) noexcept;
     [[nodiscard]] bool accepts_level(const UnitTypeCandidate& candidate,
                                      std::int32_t level) const noexcept;
 
     const UnitTypeHierarchy* hierarchy_ = nullptr;
-    std::vector<GraphPoint> item_range_minimum_;
-    std::vector<GraphPoint> item_range_maximum_;
+    StatGraph item_range_minimum_;
+    StatGraph item_range_maximum_;
     std::vector<UnitTypeCandidate> candidates_;
 };
 

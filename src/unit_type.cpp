@@ -64,14 +64,6 @@ std::u16string optional_text(const UnitDefinition& definition,
     return std::get<std::u16string>(property->value);
 }
 
-float required_float(const AdmGroup& group, const char16_t* name) {
-    const auto* property = group.find_property(name);
-    if (property == nullptr || property->type != AdmValueType::floating) {
-        throw UnitTypeError("Graph point is missing a floating coordinate");
-    }
-    return std::get<float>(property->value);
-}
-
 const AdmGroup* find_child(const AdmGroup& parent, std::u16string_view name) {
     const auto found = std::find_if(parent.groups.begin(), parent.groups.end(),
                                     [name](const auto& group) {
@@ -155,66 +147,15 @@ bool UnitTypeHierarchy::is_a(std::u16string_view candidate,
                      requested_type->id) != candidate_type->ancestors.end();
 }
 
-std::vector<UnitTypeResourceIndex::GraphPoint> UnitTypeResourceIndex::load_graph(
-    const PakArchive& archive, std::string_view path) {
-    const auto document = parse_adm(archive.read_normalized(path));
-    if (document.root.name != u"LINE") {
-        throw UnitTypeError("Item spawn range graph root is not LINE");
-    }
-    std::vector<GraphPoint> result;
-    result.reserve(document.root.groups.size());
-    for (const auto& group : document.root.groups) {
-        if (group.name != u"POINT") {
-            throw UnitTypeError("Item spawn range graph child is not POINT");
-        }
-        result.push_back({required_float(group, u"X"), required_float(group, u"Y")});
-    }
-    if (result.empty() ||
-        !std::is_sorted(result.begin(), result.end(), [](const auto& left, const auto& right) {
-            return left.x < right.x;
-        })) {
-        throw UnitTypeError("Item spawn range graph points are absent or unordered");
-    }
-    return result;
-}
-
-float UnitTypeResourceIndex::graph_value(const std::vector<GraphPoint>& graph,
-                                         float x) noexcept {
-    if (x <= graph.front().x) {
-        return graph.front().y;
-    }
-    for (std::size_t index = 1; index < graph.size(); ++index) {
-        if (x <= graph[index].x) {
-            const auto& left = graph[index - 1U];
-            const auto& right = graph[index];
-            const auto span = right.x - left.x;
-            if (span <= 0.0F) {
-                return right.y;
-            }
-            const auto amount = (x - left.x) / span;
-            return left.y + (right.y - left.y) * amount;
-        }
-    }
-    if (graph.size() == 1U) {
-        return graph.back().y;
-    }
-    const auto& left = graph[graph.size() - 2U];
-    const auto& right = graph.back();
-    const auto span = right.x - left.x;
-    return span <= 0.0F
-               ? right.y
-               : right.y + (right.y - left.y) * ((x - right.x) / span);
-}
-
 UnitTypeResourceIndex::UnitTypeResourceIndex(
     const PakArchive& archive, const UnitTypeHierarchy& hierarchy,
     const MasterResourceIndex& resources,
     UnitDefinitionLoader& definitions)
     : hierarchy_(&hierarchy),
-      item_range_minimum_(load_graph(
-          archive, "media/graphs/stats/ITEM_SPAWN_RANGE_MINIMUM.DAT.adm")),
-      item_range_maximum_(load_graph(
-          archive, "media/graphs/stats/ITEM_SPAWN_RANGE_MAXIMUM.DAT.adm")) {
+      item_range_minimum_(
+          archive, "media/graphs/stats/ITEM_SPAWN_RANGE_MINIMUM.DAT.adm"),
+      item_range_maximum_(
+          archive, "media/graphs/stats/ITEM_SPAWN_RANGE_MAXIMUM.DAT.adm") {
     candidates_.reserve(resources.records().size());
     for (const auto& resource : resources.records()) {
         if (resource.do_not_create) {
@@ -247,9 +188,9 @@ bool UnitTypeResourceIndex::accepts_level(const UnitTypeCandidate& candidate,
                                           std::int32_t level) const noexcept {
     if (candidate.equipment && candidate.maximum_level == 0) {
         const auto minimum = static_cast<std::int32_t>(std::floor(
-            graph_value(item_range_minimum_, static_cast<float>(candidate.item_level))));
+            item_range_minimum_.value(static_cast<float>(candidate.item_level))));
         const auto maximum = static_cast<std::int32_t>(std::ceil(
-            graph_value(item_range_maximum_, static_cast<float>(candidate.item_level))));
+            item_range_maximum_.value(static_cast<float>(candidate.item_level))));
         return level >= minimum && level <= maximum;
     }
     return level >= candidate.minimum_level && level <= candidate.maximum_level;

@@ -1,6 +1,7 @@
 #include "torchlight/player.hpp"
 
 #include "torchlight/ogre_mesh.hpp"
+#include "torchlight/stat_graph.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -72,68 +73,6 @@ float optional_floating(const UnitDefinition& definition, const char16_t* name,
     return std::get<float>(property->value);
 }
 
-struct GraphPoint {
-    float x = 0.0F;
-    float y = 0.0F;
-};
-
-float group_float(const AdmGroup& group, const char16_t* name) {
-    const auto* property = group.find_property(name);
-    if (property == nullptr || property->type != AdmValueType::floating) {
-        throw PlayerError("Weapon damage graph point is invalid");
-    }
-    return std::get<float>(property->value);
-}
-
-std::vector<GraphPoint> load_base_weapon_damage_graph(const PakArchive& archive) {
-    const auto document = parse_adm(archive.read_normalized(
-        "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm"));
-    if (document.root.name != u"LINE") {
-        throw PlayerError("BASE_WEAPON_DAMAGE graph root is not LINE");
-    }
-    std::vector<GraphPoint> result;
-    result.reserve(document.root.groups.size());
-    for (const auto& group : document.root.groups) {
-        if (group.name != u"POINT") {
-            throw PlayerError("BASE_WEAPON_DAMAGE graph child is not POINT");
-        }
-        result.push_back({group_float(group, u"X"), group_float(group, u"Y")});
-    }
-    if (result.empty() ||
-        !std::is_sorted(result.begin(), result.end(),
-                        [](const auto& left, const auto& right) {
-                            return left.x < right.x;
-                        })) {
-        throw PlayerError("BASE_WEAPON_DAMAGE graph is empty or unordered");
-    }
-    return result;
-}
-
-float graph_value(const std::vector<GraphPoint>& graph, float x) noexcept {
-    if (x <= graph.front().x) {
-        return graph.front().y;
-    }
-    for (std::size_t index = 1; index < graph.size(); ++index) {
-        if (x <= graph[index].x) {
-            const auto& left = graph[index - 1U];
-            const auto& right = graph[index];
-            const auto span = right.x - left.x;
-            return span <= 0.0F
-                       ? right.y
-                       : left.y + (right.y - left.y) * ((x - left.x) / span);
-        }
-    }
-    if (graph.size() == 1U) {
-        return graph.back().y;
-    }
-    const auto& left = graph[graph.size() - 2U];
-    const auto& right = graph.back();
-    const auto span = right.x - left.x;
-    return span <= 0.0F
-               ? right.y
-               : right.y + (right.y - left.y) * ((x - right.x) / span);
-}
-
 std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definition) {
     for (auto group = definition.root.groups.rbegin();
          group != definition.root.groups.rend(); ++group) {
@@ -158,7 +97,7 @@ std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definit
 
 WeaponPrototype load_weapon(const MasterResourceIndex& resources,
                             UnitDefinitionLoader& definitions,
-                            const std::vector<GraphPoint>& damage_graph,
+                            const StatGraph& damage_graph,
                             std::u16string_view name) {
     const auto* record = resources.find_case_insensitive(
         MasterResourceKind::item, name);
@@ -181,8 +120,7 @@ WeaponPrototype load_weapon(const MasterResourceIndex& resources,
     weapon.speed = optional_integer(*definition, u"SPEED", 100);
     weapon.range = optional_floating(*definition, u"RANGE", 0.0F);
     weapon.strike_range = optional_floating(*definition, u"STRIKERANGE", weapon.range);
-    weapon.base_weapon_damage = graph_value(
-        damage_graph, static_cast<float>(weapon.level));
+    weapon.base_weapon_damage = damage_graph.value(static_cast<float>(weapon.level));
     if (weapon.minimum_damage_percent < 0 ||
         weapon.maximum_damage_percent < weapon.minimum_damage_percent ||
         weapon.rarity_damage_modifier < 0 || weapon.speed_damage_modifier < 0 ||
@@ -225,7 +163,8 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                                                    const MasterResourceIndex& resources,
                                                    UnitDefinitionLoader& definitions) {
     std::vector<PlayerPrototype> result;
-    const auto damage_graph = load_base_weapon_damage_graph(archive);
+    const StatGraph damage_graph(
+        archive, "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm");
     for (const auto& record : resources.records()) {
         if (record.kind != MasterResourceKind::player || record.do_not_create) {
             continue;

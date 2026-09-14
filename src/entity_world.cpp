@@ -65,7 +65,13 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
                                        std::int32_t spawn_level)
     : resources_(&resources), definitions_(&definitions),
       spawn_classes_(&spawn_classes),
-      unit_types_(&unit_types), random_(random_seed),
+      unit_types_(&unit_types),
+      monster_health_graph_(
+          definitions.archive(),
+          "media/graphs/stats/HEALTH_MONSTER_BYLEVEL.DAT.adm"),
+      monster_damage_graph_(definitions.archive(),
+                            "media/graphs/stats/DAMAGE_MONSTER.DAT.adm"),
+      random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
     for (std::size_t index = 0; index < layout.objects.size(); ++index) {
@@ -147,12 +153,59 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
     entity.kind = resource.kind;
     entity.name = resource.name;
     entity.position = position;
+    entity.level = spawn_level_;
     if (resource.kind == MasterResourceKind::monster) {
         const auto definition = definitions_->load(resource);
-        entity.maximum_health = std::max(
-            1.0F, optional_number(*definition, u"MAXHP",
-                                  optional_number(*definition, u"MINHP", 1.0F)));
+        const auto minimum_health_percent =
+            optional_number(*definition, u"MINHP", 1.0F);
+        const auto maximum_health_percent =
+            optional_number(*definition, u"MAXHP", minimum_health_percent);
+        const auto health_scale = monster_health_graph_.value(
+            static_cast<float>(spawn_level_));
+        const auto health_low = health_scale *
+            std::min(minimum_health_percent, maximum_health_percent) / 100.0F;
+        const auto health_high = health_scale *
+            std::max(minimum_health_percent, maximum_health_percent) / 100.0F;
+        const auto rolled_health = health_high > health_low
+            ? random_.between(health_low, health_high)
+            : health_low;
+        entity.maximum_health = std::max(1.0F, std::trunc(rolled_health));
         entity.health = entity.maximum_health;
+        const auto minimum_damage_percent =
+            optional_number(*definition, u"MINDAMAGE", 0.0F);
+        const auto maximum_damage_percent =
+            optional_number(*definition, u"MAXDAMAGE", minimum_damage_percent);
+        const auto damage_scale = monster_damage_graph_.value(
+            static_cast<float>(spawn_level_));
+        entity.minimum_damage = std::max(
+            0, static_cast<std::int32_t>(std::ceil(
+                   damage_scale * std::min(minimum_damage_percent,
+                                           maximum_damage_percent) / 100.0F)));
+        entity.maximum_damage = std::max(
+            entity.minimum_damage,
+            static_cast<std::int32_t>(std::ceil(
+                damage_scale * std::max(minimum_damage_percent,
+                                        maximum_damage_percent) / 100.0F)));
+        entity.walking_speed = optional_number(*definition, u"WALKINGSPEED", 1.0F);
+        entity.running_speed = optional_number(
+            *definition, u"RUNNINGSPEED", entity.walking_speed);
+        entity.attack_speed = optional_number(*definition, u"ATTACKSPEED", 100.0F);
+        entity.sight_radius = optional_number(*definition, u"SIGHT_RADIUS", 0.0F);
+        entity.reach_bonus = optional_number(*definition, u"REACH_BONUS", 0.0F);
+        if (!std::isfinite(entity.maximum_health)) {
+            throw EntityWorldError("Runtime monster health is invalid");
+        }
+        if (!std::isfinite(entity.walking_speed) || entity.walking_speed < 0.0F ||
+            !std::isfinite(entity.running_speed) || entity.running_speed < 0.0F) {
+            throw EntityWorldError("Runtime monster movement speed is invalid");
+        }
+        if (!std::isfinite(entity.attack_speed) || entity.attack_speed < 0.0F) {
+            throw EntityWorldError("Runtime monster attack speed is invalid");
+        }
+        if (!std::isfinite(entity.sight_radius) || entity.sight_radius < 0.0F ||
+            !std::isfinite(entity.reach_bonus) || entity.reach_bonus < 0.0F) {
+            throw EntityWorldError("Runtime monster perception or reach is invalid");
+        }
         entity.combat_targetable = true;
     }
     entities_.push_back(std::move(entity));

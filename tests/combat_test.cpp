@@ -64,15 +64,22 @@ int main(int argc, char** argv) {
         constexpr std::int64_t spawner = 4789864784197325278LL;
         torchlight::LogicRuntime logic(layout, 31);
         torchlight::RuntimeEntityWorld world(
-            layout, resources, definitions, spawn_classes, unit_types, 31);
+            layout, resources, definitions, spawn_classes, unit_types, 31, 10);
         const torchlight::SpawnRequest request{
             spawner, u"Skeletal Warrior", u"Monsters", 1};
         const auto stats = world.consume_spawn_requests({request}, logic);
         require(stats.entities_created == 1 && world.entities().size() == 1,
                 "combat fixture monster was not spawned");
         const auto& spawned = world.entities().front();
-        require(spawned.maximum_health == 100.0F && spawned.health == 100.0F,
-                "monster base health was not loaded from its UNIT definition");
+        require(spawned.level == 10 && spawned.maximum_health >= 83.0F &&
+                    spawned.maximum_health <= 118.0F &&
+                    spawned.health == spawned.maximum_health &&
+                    spawned.minimum_damage == 72 && spawned.maximum_damage == 107 &&
+                    std::fabs(spawned.walking_speed - 1.3F) < 0.0001F &&
+                    std::fabs(spawned.running_speed - 1.8F) < 0.0001F &&
+                    spawned.attack_speed == 100.0F && spawned.sight_radius == 7.0F &&
+                    spawned.reach_bonus == 0.75F,
+                "monster level-scaled combat properties are wrong");
         static_cast<void>(logic.take_events());
 
         torchlight::CombatController combat(players.front(), 31);
@@ -94,7 +101,7 @@ int main(int argc, char** argv) {
         const auto weapon_damage = combat.minimum_damage();
         require(result.state == torchlight::CombatState::attacked &&
                     result.damage == weapon_damage &&
-                    result.remaining_health == 100.0F - weapon_damage,
+                    result.remaining_health == spawned.maximum_health - weapon_damage,
                 "first equipped-weapon attack applied the wrong damage");
         require(combat.update(0.0F, spawned.position, world, logic).state ==
                     torchlight::CombatState::waiting,

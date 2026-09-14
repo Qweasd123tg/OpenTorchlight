@@ -31,6 +31,7 @@ add_library(torchlight_core STATIC
     src/resource_config.cpp
     src/scene_geometry.cpp
     src/spawn_class.cpp
+    src/stat_graph.cpp
     src/unit_definition.cpp
     src/unit_type.cpp)
 target_include_directories(torchlight_core PUBLIC include)

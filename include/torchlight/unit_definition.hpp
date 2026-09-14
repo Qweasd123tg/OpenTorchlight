@@ -30,6 +30,7 @@ public:
     [[nodiscard]] std::shared_ptr<const UnitDefinition> load(const MasterResourceRecord& record);
     [[nodiscard]] std::shared_ptr<const UnitDefinition> load(std::u16string_view data_file);
     [[nodiscard]] std::size_t cached_definition_count() const noexcept { return cache_.size(); }
+    [[nodiscard]] const PakArchive& archive() const noexcept { return archive_; }
 
 private:
     [[nodiscard]] std::shared_ptr<const UnitDefinition>
