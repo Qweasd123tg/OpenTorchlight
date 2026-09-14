@@ -36,13 +36,11 @@ bool CombatController::select_target(RuntimeEntityWorld& world,
                                      float maximum_distance) noexcept {
     const auto* selected = world.nearest_alive_monster(position, maximum_distance);
     target_id_ = selected == nullptr ? 0 : selected->id;
-    cooldown_ = 0.0F;
     return selected != nullptr;
 }
 
 void CombatController::clear_target() noexcept {
     target_id_ = 0;
-    cooldown_ = 0.0F;
 }
 
 const RuntimeEntity* CombatController::target(
@@ -79,7 +77,7 @@ CombatUpdate CombatController::update(float seconds,
     const auto rolled_damage = random_.integer_between(
         minimum_damage_, maximum_damage_);
     const auto mitigation = mitigate_damage(
-        rolled_damage, maximum_damage_, DamageType::physical, 1.0F,
+        rolled_damage, rolled_damage, DamageType::physical, 1.0F,
         selected->damage_defense, random_);
     const auto result = world.apply_damage(
         selected_id, static_cast<float>(mitigation.applied), logic);

@@ -108,6 +108,31 @@ int main(int argc, char** argv) {
         require(!player.alive() && player.health() == 0.0F,
                 "repeated monster attacks did not kill the player");
 
+        auto& mitigation_enemy = world.entities().front();
+        mitigation_enemy.minimum_damage = 12;
+        mitigation_enemy.maximum_damage = 24;
+        mitigation_enemy.attack_speed = 100.0F;
+        mitigation_enemy.attack_range = 2.0F;
+        mitigation_enemy.sight_radius = 7.0F;
+        torchlight::PlayerPrototype mitigation_prototype;
+        mitigation_prototype.minimum_health = 100.0F;
+        mitigation_prototype.maximum_health = 100.0F;
+        mitigation_prototype.damage_defense.natural_armor = 10;
+        torchlight::PlayerCombatState mitigation_player(mitigation_prototype, 1);
+        torchlight::EnemyController mitigation_controller(1);
+        torchlight::TorchlightRandom mitigation_reference(1);
+        const auto reference_damage = mitigation_reference.integer_between(12, 24);
+        const auto reference_armor = mitigation_reference.integer_between(5, 10);
+        require(reference_damage < 24, "enemy mitigation seed rolled maximum damage");
+        const auto mitigation_updates = mitigation_controller.update(
+            0.0F, mitigation_enemy.position, mitigation_player, world);
+        require(mitigation_updates.size() == 1 &&
+                    mitigation_updates.front().state ==
+                        torchlight::EnemyAiState::attacked &&
+                    mitigation_updates.front().damage ==
+                        std::max(1, reference_damage - reference_armor),
+                "ordinary enemy attack scaled armor by the damage range maximum");
+
         std::cout << "PASS: monster detected, chased and attacked a level-one player\n";
         return 0;
     } catch (const std::exception& error) {

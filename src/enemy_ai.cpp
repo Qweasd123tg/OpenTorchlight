@@ -139,7 +139,7 @@ std::vector<EnemyAiUpdate> EnemyController::update(
             const auto rolled_damage = random_.integer_between(
                 entity.minimum_damage, entity.maximum_damage);
             const auto damage = player.apply_damage(
-                rolled_damage, entity.maximum_damage, DamageType::physical,
+                rolled_damage, rolled_damage, DamageType::physical,
                 random_);
             state.cooldown = std::max(0.1F, 100.0F / entity.attack_speed);
             updates.push_back({player.alive() ? EnemyAiState::attacked

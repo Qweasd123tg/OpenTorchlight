@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
         const auto stats = world.consume_spawn_requests({request}, logic);
         require(stats.entities_created == 1 && world.entities().size() == 1,
                 "combat fixture monster was not spawned");
-        const auto& spawned = world.entities().front();
+        auto& spawned = world.entities().front();
         require(spawned.level == 10 && spawned.maximum_health >= 83.0F &&
                     spawned.maximum_health <= 118.0F &&
                     spawned.health == spawned.maximum_health &&
@@ -97,6 +97,29 @@ int main(int argc, char** argv) {
                 "monster level-scaled combat properties are wrong");
         static_cast<void>(logic.take_events());
 
+        const auto original_defense = spawned.damage_defense;
+        spawned.damage_defense = {};
+        spawned.damage_defense.natural_armor = 10;
+        torchlight::PlayerPrototype mitigation_fixture;
+        mitigation_fixture.minimum_damage = 12;
+        mitigation_fixture.maximum_damage = 24;
+        mitigation_fixture.attack_speed = 80.0F;
+        torchlight::CombatController mitigation_combat(mitigation_fixture, 1);
+        torchlight::TorchlightRandom mitigation_reference(1);
+        const auto reference_damage = mitigation_reference.integer_between(12, 24);
+        const auto reference_armor = mitigation_reference.integer_between(5, 10);
+        require(reference_damage < 24 &&
+                    mitigation_combat.select_target(world, spawned.position, 0.5F),
+                "ordinary mitigation fixture did not select a non-maximum roll");
+        const auto mitigation_result =
+            mitigation_combat.update(0.0F, spawned.position, world, logic);
+        require(mitigation_result.state == torchlight::CombatState::attacked &&
+                    mitigation_result.damage ==
+                        std::max(1, reference_damage - reference_armor),
+                "ordinary player attack scaled armor by the damage range maximum");
+        spawned.health = spawned.maximum_health;
+        spawned.damage_defense = original_defense;
+
         torchlight::CombatController combat(players.front(), 31);
         require(combat.attack_range() == 2.25F &&
                     std::fabs(combat.attack_interval() - 1.25F) < 0.0001F &&
@@ -121,6 +144,15 @@ int main(int argc, char** argv) {
         require(combat.update(0.0F, spawned.position, world, logic).state ==
                     torchlight::CombatState::waiting,
                 "attack cooldown was ignored");
+        require(combat.select_target(world, spawned.position, 0.5F) &&
+                    combat.update(0.0F, spawned.position, world, logic).state ==
+                        torchlight::CombatState::waiting,
+                "reselecting the same target reset the attack cooldown");
+        combat.clear_target();
+        require(combat.select_target(world, spawned.position, 0.5F) &&
+                    combat.update(0.0F, spawned.position, world, logic).state ==
+                        torchlight::CombatState::waiting,
+                "clearing and reselecting a target reset the attack cooldown");
         for (int attack = 0;
              attack < 128 && result.state != torchlight::CombatState::killed;
              ++attack) {
