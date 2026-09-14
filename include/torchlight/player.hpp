@@ -47,6 +47,8 @@ struct PlayerPrototype {
     std::int32_t dexterity = 0;
     std::int32_t magic = 0;
     std::int32_t defense = 0;
+    std::int32_t minimum_armor_bonus = 0;
+    std::int32_t maximum_armor_bonus = 0;
     DamageDefense damage_defense;
     std::optional<WeaponPrototype> starting_weapon;
 };

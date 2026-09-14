@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/entity_world.hpp"
+#include "torchlight/equipment.hpp"
 #include "torchlight/navigation_grid.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/randomizer.hpp"
@@ -26,11 +27,21 @@ public:
     [[nodiscard]] std::int32_t armor_class() const noexcept {
         return damage_defense_.effective(DamageType::physical);
     }
+    void equip(const ArmorItem& item) noexcept;
+    [[nodiscard]] const std::optional<ArmorItem>& equipped(
+        ArmorSlot slot) const noexcept {
+        return equipped_armor_[static_cast<std::size_t>(slot)];
+    }
 
 private:
+    void refresh_damage_defense() noexcept;
+
     float health_ = 1.0F;
     float maximum_health_ = 1.0F;
+    DamageDefense base_damage_defense_;
     DamageDefense damage_defense_;
+    std::array<std::optional<ArmorItem>,
+               static_cast<std::size_t>(ArmorSlot::count)> equipped_armor_{};
 };
 
 enum class EnemyAiState {

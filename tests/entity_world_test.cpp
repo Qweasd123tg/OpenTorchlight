@@ -164,6 +164,20 @@ int main(int argc, char** argv) {
         require(has_event(item_logic.take_events(), spawner, u"Item Picked Up"),
                 "UNITTYPE item pickup did not notify its source spawner");
 
+        torchlight::LogicRuntime armor_logic(layout, 42);
+        torchlight::RuntimeEntityWorld armor_world(
+            layout, resources, definitions, spawn_classes, unit_types, 42, 1);
+        const torchlight::SpawnRequest armor_request{
+            spawner, u"a Leather Vest", u"Items", 1};
+        require(armor_world.consume_spawn_requests(
+                    {armor_request}, armor_logic).entities_created == 1 &&
+                    armor_world.entities().front().armor_item &&
+                    armor_world.entities().front().armor_item->armor == 4 &&
+                    armor_world.nearest_alive_item(
+                        armor_world.entities().front().position, 0.1F) ==
+                        &armor_world.entities().front(),
+                "runtime armor item did not preserve its generated combat data");
+
         auto town = loader.load_fixed_scene(u"media/dungeons/TOWN.DAT");
         const auto expansion = torchlight::expand_layout_links(loader, town.layout);
         require(expansion.links_expanded == 27,

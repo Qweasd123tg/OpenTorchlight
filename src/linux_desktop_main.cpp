@@ -628,6 +628,7 @@ int main(int argc, char** argv) {
                 level.player_start, players.front().running_speed);
             auto interactions = collect_unit_triggers(level.layout);
             std::optional<LevelInteraction> active_interaction;
+            std::optional<std::uint64_t> active_pickup;
             std::vector<std::array<float, 3>> active_path;
             std::size_t next_path_node = 0;
 
@@ -666,6 +667,8 @@ int main(int argc, char** argv) {
             std::size_t warp_request_count = 0;
             std::size_t selected_target_count = 0;
             std::size_t interaction_count = 0;
+            std::size_t pickup_count = 0;
+            std::size_t equipped_armor_count = 0;
             std::size_t combat_attack_count = 0;
             std::size_t combat_kill_count = 0;
             std::size_t enemy_chase_count = 0;
@@ -753,19 +756,30 @@ int main(int argc, char** argv) {
                         const auto* selected = combat.target(entity_world);
                         destination = selected->position;
                         active_interaction.reset();
+                        active_pickup.reset();
                         ++selected_target_count;
                         std::cout << "selected_target=" << selected->id
                                   << " health=" << selected->health << '/'
                                   << selected->maximum_health << '\n';
+                    } else if (const auto* item = entity_world.nearest_alive_item(
+                                   destination, 2.0F)) {
+                        combat.clear_target();
+                        active_interaction.reset();
+                        active_pickup = item->id;
+                        destination = item->position;
+                        std::cout << "selected_item=" << item->id
+                                  << " name=" << narrow_ascii(item->name) << '\n';
                     } else if (const auto* interaction = nearest_interaction(
                                    interactions, destination, 3.0F)) {
                         combat.clear_target();
+                        active_pickup.reset();
                         active_interaction = *interaction;
                         destination = interaction->position;
                         std::cout << "selected_interaction=" << interaction->object_id << '\n';
                     } else {
                         combat.clear_target();
                         active_interaction.reset();
+                        active_pickup.reset();
                     }
                     active_path = level.navigation.find_path(
                         player_motion.position(), destination);
@@ -807,6 +821,44 @@ int main(int argc, char** argv) {
                         ++interaction_count;
                         active_interaction.reset();
                         drain_logic();
+                    }
+                }
+                if (active_pickup) {
+                    const auto* item = entity_world.find(*active_pickup);
+                    if (item == nullptr || !item->alive ||
+                        item->kind != torchlight::MasterResourceKind::item) {
+                        active_pickup.reset();
+                    } else {
+                        const auto dx = item->position[0] - player_motion.position()[0];
+                        const auto dz = item->position[2] - player_motion.position()[2];
+                        if (std::hypot(dx, dz) <= 2.25F) {
+                            const auto item_id = item->id;
+                            const auto item_name = item->name;
+                            const auto armor_item = item->armor_item;
+                            player_motion.stop();
+                            active_path.clear();
+                            next_path_node = 0;
+                            if (entity_world.pick_up(item_id, logic_runtime)) {
+                                ++pickup_count;
+                                if (armor_item) {
+                                    player_combat.equip(*armor_item);
+                                    ++equipped_armor_count;
+                                }
+                                const auto instance = runtime_instance_indices.find(item_id);
+                                if (instance != runtime_instance_indices.end()) {
+                                    level.geometry.instances[instance->second].visible = false;
+                                    renderer->set_instance_visible(instance->second, false);
+                                }
+                                std::cout << "picked_up=" << item_id
+                                          << " name=" << narrow_ascii(item_name)
+                                          << " armor="
+                                          << (armor_item ? armor_item->armor : 0)
+                                          << " player_armor="
+                                          << player_combat.armor_class() << '\n';
+                            }
+                            active_pickup.reset();
+                            drain_logic();
+                        }
                     }
                 }
                 if (!pending_warp) {
@@ -924,10 +976,13 @@ int main(int argc, char** argv) {
                       << " renderer_rebuilds=" << renderer_rebuild_count
                       << " selected_targets=" << selected_target_count
                       << " interactions=" << interaction_count
+                      << " pickups=" << pickup_count
+                      << " equipped_armor=" << equipped_armor_count
                       << " combat_attacks=" << combat_attack_count
                       << " combat_kills=" << combat_kill_count
                       << " player_health=" << player_combat.health() << '/'
                       << player_combat.maximum_health()
+                      << " player_armor=" << player_combat.armor_class()
                       << " alerted_enemies=" << enemies.alerted_count()
                       << " enemy_chases=" << enemy_chase_count
                       << " enemy_attacks=" << enemy_attack_count

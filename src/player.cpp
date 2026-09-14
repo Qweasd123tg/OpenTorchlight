@@ -73,6 +73,55 @@ float optional_floating(const UnitDefinition& definition, const char16_t* name,
     return std::get<float>(property->value);
 }
 
+bool is_text(AdmValueType type) noexcept {
+    return type == AdmValueType::string || type == AdmValueType::translation ||
+           type == AdmValueType::note;
+}
+
+std::int32_t numeric_integer(const AdmProperty& property) {
+    switch (property.type) {
+    case AdmValueType::integer:
+        return std::get<std::int32_t>(property.value);
+    case AdmValueType::floating:
+        return static_cast<std::int32_t>(std::get<float>(property.value));
+    case AdmValueType::double_precision:
+        return static_cast<std::int32_t>(std::get<double>(property.value));
+    default:
+        throw PlayerError("Passive player effect value is not numeric");
+    }
+}
+
+std::array<std::int32_t, 2> passive_armor_bonus(
+    const UnitDefinition& definition) {
+    std::array<std::int32_t, 2> result{};
+    for (const auto& group : definition.root.groups) {
+        if (group.name != u"EFFECT") {
+            continue;
+        }
+        const auto* activation = group.find_property(u"ACTIVATION");
+        const auto* duration = group.find_property(u"DURATION");
+        const auto* type = group.find_property(u"TYPE");
+        if (activation == nullptr || duration == nullptr || type == nullptr ||
+            !is_text(activation->type) || !is_text(duration->type) ||
+            !is_text(type->type) ||
+            std::get<std::u16string>(activation->value) != u"PASSIVE" ||
+            std::get<std::u16string>(duration->value) != u"ALWAYS" ||
+            std::get<std::u16string>(type->value) != u"ARMOR BONUS") {
+            continue;
+        }
+        const auto* minimum = group.find_property(u"MIN");
+        const auto* maximum = group.find_property(u"MAX");
+        if (minimum == nullptr && maximum == nullptr) {
+            continue;
+        }
+        const auto low = numeric_integer(minimum != nullptr ? *minimum : *maximum);
+        const auto high = numeric_integer(maximum != nullptr ? *maximum : *minimum);
+        result[0] += std::min(low, high);
+        result[1] += std::max(low, high);
+    }
+    return result;
+}
+
 std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definition) {
     for (auto group = definition.root.groups.rbegin();
          group != definition.root.groups.rend(); ++group) {
@@ -210,6 +259,9 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.defense = integer(*definition, u"DEFENSE");
         player.damage_defense.natural_armor = integer(*definition, u"ARMOR");
         player.damage_defense.defense_attribute = player.defense;
+        const auto armor_bonus = passive_armor_bonus(*definition);
+        player.minimum_armor_bonus = armor_bonus[0];
+        player.maximum_armor_bonus = armor_bonus[1];
         if (!std::isfinite(player.minimum_health) ||
             !std::isfinite(player.maximum_health) ||
             player.minimum_health <= 0.0F ||

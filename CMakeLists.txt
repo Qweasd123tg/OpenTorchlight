@@ -11,6 +11,7 @@ add_library(torchlight_core STATIC
     src/combat.cpp
     src/damage.cpp
     src/dds_texture.cpp
+    src/equipment.cpp
     src/entity_world.cpp
     src/enemy_ai.cpp
     src/input_state.cpp
@@ -160,6 +161,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(combat_test PRIVATE torchlight_core)
     add_executable(damage_test tests/damage_test.cpp)
     target_link_libraries(damage_test PRIVATE torchlight_core)
+    add_executable(equipment_test tests/equipment_test.cpp)
+    target_link_libraries(equipment_test PRIVATE torchlight_core)
     add_executable(level_transition_test tests/level_transition_test.cpp)
     target_link_libraries(level_transition_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
@@ -218,6 +221,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND spawn_class_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_entity_world
             COMMAND entity_world_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_equipment
+            COMMAND equipment_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_enemy_ai
             COMMAND enemy_ai_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_unit_types

@@ -15,7 +15,31 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
     const auto rolled = high > low ? random.between(low, high) : low;
     maximum_health_ = std::max(1.0F, std::trunc(rolled));
     health_ = maximum_health_;
-    damage_defense_ = prototype.damage_defense;
+    base_damage_defense_ = prototype.damage_defense;
+    base_damage_defense_.natural_armor += random.integer_between(
+        std::min(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus),
+        std::max(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus));
+    refresh_damage_defense();
+}
+
+void PlayerCombatState::equip(const ArmorItem& item) noexcept {
+    equipped_armor_[static_cast<std::size_t>(item.slot)] = item;
+    refresh_damage_defense();
+}
+
+void PlayerCombatState::refresh_damage_defense() noexcept {
+    damage_defense_ = base_damage_defense_;
+    for (const auto& item : equipped_armor_) {
+        if (!item) {
+            continue;
+        }
+        damage_defense_.natural_armor += item->damage_defense.natural_armor;
+        for (std::size_t index = 0;
+             index < damage_defense_.elemental_armor.size(); ++index) {
+            damage_defense_.elemental_armor[index] +=
+                item->damage_defense.elemental_armor[index];
+        }
+    }
 }
 
 std::int32_t PlayerCombatState::apply_damage(

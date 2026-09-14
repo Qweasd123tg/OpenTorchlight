@@ -61,6 +61,8 @@ int main(int argc, char** argv) {
         auto player_position = start;
         player_position[0] += 5.0F;
         torchlight::PlayerCombatState player(players.front(), 71);
+        require(player.armor_class() == 21,
+                "Alchemist passive armor bonus was not applied");
         torchlight::EnemyController enemies(71);
 
         const auto chase = enemies.update(
@@ -78,9 +80,20 @@ int main(int argc, char** argv) {
             0.0F, player_position, player, world);
         require(attack.size() == 1 &&
                     attack.front().state == torchlight::EnemyAiState::attacked &&
-                    attack.front().damage >= 72 && attack.front().damage <= 107 &&
+                    attack.front().damage >= 51 && attack.front().damage <= 106 &&
                     attack.front().player_health == player.health() && player.alive(),
                 "monster did not apply its level-scaled damage");
+
+        torchlight::ArmorItem chest;
+        chest.slot = torchlight::ArmorSlot::chest;
+        chest.damage_defense.natural_armor = 10;
+        player.equip(chest);
+        require(player.armor_class() == 32,
+                "equipped armor was not added to passive armor");
+        chest.damage_defense.natural_armor = 20;
+        player.equip(chest);
+        require(player.armor_class() == 42,
+                "new armor did not replace the same equipment slot");
         const auto waiting = enemies.update(
             0.0F, player_position, player, world);
         require(waiting.size() == 1 &&

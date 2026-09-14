@@ -88,6 +88,9 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
       monster_armor_graph_(
           definitions.archive(),
           "media/graphs/stats/ARMOR_MONSTER_BYLEVEL.DAT.adm"),
+      player_armor_graph_(
+          definitions.archive(),
+          "media/graphs/stats/ARMOR_PLAYER_BYLEVEL_FORSET.DAT.adm"),
       random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
@@ -171,7 +174,11 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
     entity.name = resource.name;
     entity.position = position;
     entity.level = spawn_level_;
-    if (resource.kind == MasterResourceKind::monster) {
+    if (resource.kind == MasterResourceKind::item) {
+        const auto definition = definitions_->load(resource);
+        entity.armor_item = roll_armor_item(
+            resource, *definition, player_armor_graph_, random_);
+    } else if (resource.kind == MasterResourceKind::monster) {
         const auto definition = definitions_->load(resource);
         const auto minimum_health_percent =
             optional_number(*definition, u"MINHP", 1.0F);
@@ -445,6 +452,27 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
         }
     }
     return result;
+}
+
+const RuntimeEntity* RuntimeEntityWorld::nearest_alive_item(
+    const std::array<float, 3>& position, float maximum_distance) const noexcept {
+    if (!std::isfinite(maximum_distance) || maximum_distance < 0.0F) {
+        return nullptr;
+    }
+    const RuntimeEntity* nearest = nullptr;
+    auto nearest_distance = maximum_distance;
+    for (const auto& entity : entities_) {
+        if (!entity.alive || entity.kind != MasterResourceKind::item) {
+            continue;
+        }
+        const auto distance = std::hypot(entity.position[0] - position[0],
+                                         entity.position[2] - position[2]);
+        if (distance <= nearest_distance) {
+            nearest = &entity;
+            nearest_distance = distance;
+        }
+    }
+    return nearest;
 }
 
 } // namespace torchlight

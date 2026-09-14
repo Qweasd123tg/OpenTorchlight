@@ -52,6 +52,11 @@ int main(int argc, char** argv) {
                     players[0].damage_defense.effective(
                         torchlight::DamageType::physical) == 0,
                 "unequipped Alchemist unexpectedly has armor");
+        require(players[0].minimum_armor_bonus == 20 &&
+                    players[0].maximum_armor_bonus == 20 &&
+                    players[1].minimum_armor_bonus == 20 &&
+                    players[2].minimum_armor_bonus == 20,
+                "playable passive armor effects changed");
         require(players[0].starting_weapon &&
                     players[0].starting_weapon->name == u"Moldy Staff" &&
                     players[0].starting_weapon->guid == 5521717854978183646LL &&
