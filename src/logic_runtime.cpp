@@ -131,7 +131,11 @@ LogicRuntime::LogicRuntime(const LayoutManifest& layout, std::uint32_t random_se
             for (const auto& link : node.links) {
                 const auto target = nodes.find(link.target_node_id);
                 if (target == nodes.end()) {
-                    throw LogicRuntimeError("Logic link references an absent target node");
+                    // Shipped layouts can retain editor links to deleted nodes.
+                    // The original game loads those rooms, so keep the graph usable
+                    // and expose the count for diagnostics.
+                    ++dangling_link_count_;
+                    continue;
                 }
                 routes_[node.object_id].push_back(
                     {link.output_name, target->second->object_id, link.input_name});

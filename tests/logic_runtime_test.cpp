@@ -204,6 +204,12 @@ void test_original_logic_layout(const std::string& pak_path) {
                 return invocation.source_object_id == spawner && invocation.input_name == u"Play";
             }),
             "original all-monsters-dead link did not reach its timeline");
+
+    const auto shipped_with_dangling_links = loader.load_layout(
+        "media/layouts/SunkenTemple/1X1SINGLE_ROOM_HUB/1X1_HUB_LM_A.LAYOUT.adm");
+    const torchlight::LogicRuntime tolerant_runtime(shipped_with_dangling_links, 42);
+    require(tolerant_runtime.dangling_link_count() == 2,
+            "shipped dangling editor links were not isolated");
 }
 
 } // namespace

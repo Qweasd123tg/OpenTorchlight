@@ -62,6 +62,9 @@ public:
     explicit LogicRuntime(const LayoutManifest& layout, std::uint32_t random_seed = 1);
 
     [[nodiscard]] const LogicObjectState* state(std::int64_t object_id) const noexcept;
+    [[nodiscard]] std::size_t dangling_link_count() const noexcept {
+        return dangling_link_count_;
+    }
 
     void activate_level();
     void emit(std::int64_t object_id, std::u16string_view output_name);
@@ -104,6 +107,7 @@ private:
     std::unordered_map<std::int64_t, std::size_t> object_indices_;
     std::unordered_map<std::int64_t, LogicObjectState> states_;
     std::unordered_map<std::int64_t, std::vector<Route>> routes_;
+    std::size_t dangling_link_count_ = 0;
     std::vector<PendingEvent> pending_events_;
     std::size_t next_pending_event_ = 0;
     bool processing_events_ = false;

@@ -5,7 +5,9 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <stdexcept>
+#include <unordered_map>
 #include <utility>
 
 namespace torchlight {
@@ -295,6 +297,43 @@ void undo_placement(GeneratedLevel& level, std::vector<std::size_t>& appearances
     --appearances[removed_type];
 }
 
+void replace_int64_property(LayoutObject& object, const char16_t* name,
+                            std::int64_t value) {
+    for (auto& property : object.properties) {
+        if (property.name != name) {
+            continue;
+        }
+        if (property.type != AdmValueType::integer64) {
+            throw RandomLevelError("Generated layout identity property has the wrong type");
+        }
+        property.value = value;
+        return;
+    }
+}
+
+void replace_position_property(LayoutObject& object, const char16_t* name, float value) {
+    for (auto& property : object.properties) {
+        if (property.name != name) {
+            continue;
+        }
+        if (property.type != AdmValueType::floating) {
+            throw RandomLevelError("Generated layout position property has the wrong type");
+        }
+        property.value = value;
+        return;
+    }
+}
+
+std::int64_t mapped_object_id(
+    const std::unordered_map<std::int64_t, std::int64_t>& object_ids,
+    std::int64_t original_id) {
+    const auto found = object_ids.find(original_id);
+    if (found == object_ids.end()) {
+        throw RandomLevelError("Generated layout graph references an absent object");
+    }
+    return found->second;
+}
+
 } // namespace
 
 bool generated_chunks_intersect(const LevelRules& rules, const ChunkType& left_type,
@@ -316,6 +355,71 @@ std::array<float, 3> generated_exit_position(const LevelRules& rules,
     const auto& local = rules.chunk_types[placed.type].exits[exit];
     return {placed.position[0] + local.x, placed.position[1] + local.y,
             placed.position[2] + local.z};
+}
+
+GeneratedLevelLayout compose_generated_level_layout(const LevelSceneLoader& loader,
+                                                     const GeneratedLevel& level) {
+    GeneratedLevelLayout result;
+    result.layout.source_path = "generated-level:" + std::to_string(level.seed);
+    std::int64_t next_object_id = 1;
+    std::uint64_t declared_count = 0;
+
+    for (std::size_t chunk_index = 0; chunk_index < level.chunks.size(); ++chunk_index) {
+        const auto& chunk = level.chunks[chunk_index];
+        if (chunk.layout_path.empty()) {
+            throw RandomLevelError("Generated chunk has no layout path");
+        }
+        auto source = loader.load_layout(chunk.layout_path);
+        result.layout.version = std::max(result.layout.version, source.version);
+        declared_count += source.declared_count;
+        if (declared_count > std::numeric_limits<std::uint32_t>::max()) {
+            throw RandomLevelError("Generated layout declared count exceeds 32-bit range");
+        }
+
+        std::unordered_map<std::int64_t, std::int64_t> object_ids;
+        object_ids.reserve(source.objects.size());
+        for (const auto& object : source.objects) {
+            if (next_object_id == std::numeric_limits<std::int64_t>::max()) {
+                throw RandomLevelError("Generated layout has too many objects");
+            }
+            if (!object_ids.emplace(object.id, next_object_id++).second) {
+                throw RandomLevelError("Generated chunk layout has a duplicate object ID");
+            }
+        }
+
+        result.layout.objects.reserve(result.layout.objects.size() + source.objects.size());
+        result.object_origins.reserve(result.object_origins.size() + source.objects.size());
+        for (auto object : source.objects) {
+            const auto original_id = object.id;
+            object.id = mapped_object_id(object_ids, original_id);
+            replace_int64_property(object, u"ID", object.id);
+            if (object.parent_id == -1) {
+                object.position_x = object.position_x.value_or(0.0F) + chunk.position[0];
+                object.position_y = object.position_y.value_or(0.0F) + chunk.position[1];
+                object.position_z = object.position_z.value_or(0.0F) + chunk.position[2];
+                replace_position_property(object, u"POSITIONX", *object.position_x);
+                replace_position_property(object, u"POSITIONY", *object.position_y);
+                replace_position_property(object, u"POSITIONZ", *object.position_z);
+            } else {
+                object.parent_id = mapped_object_id(object_ids, object.parent_id);
+                replace_int64_property(object, u"PARENTID", object.parent_id);
+            }
+            result.layout.objects.push_back(std::move(object));
+            result.object_origins.push_back({chunk_index, original_id});
+        }
+
+        result.layout.logic_groups.reserve(result.layout.logic_groups.size() +
+                                           source.logic_groups.size());
+        for (auto group : source.logic_groups) {
+            group.object_id = mapped_object_id(object_ids, group.object_id);
+            for (auto& node : group.nodes) {
+                node.object_id = mapped_object_id(object_ids, node.object_id);
+            }
+            result.layout.logic_groups.push_back(std::move(group));
+        }
+    }
+    result.layout.declared_count = static_cast<std::uint32_t>(declared_count);
+    return result;
 }
 
 GeneratedLevel RandomLevelGenerator::generate(const LevelRules& rules, std::uint32_t seed) const {

@@ -1,4 +1,5 @@
 #include "torchlight/level_scene.hpp"
+#include "torchlight/logic_runtime.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/random_level.hpp"
 
@@ -134,6 +135,69 @@ void verify(const torchlight::LevelSceneLoader& loader, const torchlight::LevelR
     }
 }
 
+void verify_composed_layout(const torchlight::LevelSceneLoader& loader,
+                            const torchlight::GeneratedLevel& level) {
+    const auto composed = torchlight::compose_generated_level_layout(loader, level);
+    require(composed.layout.objects.size() == composed.object_origins.size(),
+            "composed layout lost object origins");
+    std::size_t expected_objects = 0;
+    std::size_t expected_groups = 0;
+    std::uint64_t expected_declared = 0;
+    for (const auto& chunk : level.chunks) {
+        const auto source = loader.load_layout(chunk.layout_path);
+        try {
+            torchlight::LogicRuntime source_runtime(source, level.seed);
+            source_runtime.activate_level();
+        } catch (const std::exception& error) {
+            throw std::runtime_error(chunk.layout_path + ": " + error.what());
+        }
+        expected_objects += source.objects.size();
+        expected_groups += source.logic_groups.size();
+        expected_declared += source.declared_count;
+    }
+    require(composed.layout.objects.size() == expected_objects,
+            "composed layout has the wrong object count");
+    require(composed.layout.logic_groups.size() == expected_groups,
+            "composed layout has the wrong graph count");
+    require(composed.layout.declared_count == expected_declared,
+            "composed layout has the wrong declared count");
+
+    std::unordered_set<std::int64_t> runtime_ids;
+    for (std::size_t index = 0; index < composed.layout.objects.size(); ++index) {
+        require(runtime_ids.insert(composed.layout.objects[index].id).second,
+                "composed layout has a duplicate runtime object ID");
+        require(composed.object_origins[index].chunk < level.chunks.size(),
+                "composed layout has an invalid object origin");
+    }
+    torchlight::LogicRuntime runtime(composed.layout, level.seed);
+    runtime.activate_level();
+}
+
+void verify_repeated_chunk_layout(const torchlight::LevelSceneLoader& loader,
+                                  const torchlight::GeneratedChunk& source_chunk,
+                                  std::uint32_t seed) {
+    torchlight::GeneratedLevel repeated;
+    repeated.seed = seed;
+    repeated.chunks.push_back(source_chunk);
+    repeated.chunks.push_back(source_chunk);
+    repeated.chunks[1].position[0] += 1000.0F;
+    repeated.chunks[1].position[2] -= 500.0F;
+    const auto source = loader.load_layout(source_chunk.layout_path);
+    const auto composed = torchlight::compose_generated_level_layout(loader, repeated);
+    require(composed.layout.objects.size() == source.objects.size() * 2U,
+            "repeated chunk composition lost objects");
+    require(!source.objects.empty(), "repeated chunk source is empty");
+    const auto transforms = torchlight::resolve_layout_world_transforms(composed.layout);
+    const auto second = source.objects.size();
+    require(std::fabs(transforms[second].position[0] - transforms[0].position[0] - 1000.0F) <
+                    0.001F &&
+                std::fabs(transforms[second].position[2] - transforms[0].position[2] + 500.0F) <
+                    0.001F,
+            "repeated chunk composition applied the wrong world offset");
+    torchlight::LogicRuntime runtime(composed.layout, seed);
+    runtime.activate_level();
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
@@ -149,6 +213,8 @@ int main(int argc, char** argv) {
         std::set<std::string> tested_rules;
         std::size_t generated_levels = 0;
         std::size_t generated_chunks = 0;
+        std::size_t composed_levels = 0;
+        bool repeated_chunk_checked = false;
         std::unordered_set<std::string> checked_layouts;
         for (const auto& stratum : dungeon.strata) {
             const auto rules = loader.load_rules(stratum.ruleset);
@@ -166,14 +232,25 @@ int main(int argc, char** argv) {
                 verify(loader, rules, level, checked_layouts);
                 require(same_level(level, generator.generate(rules, seed)),
                         "same seed did not reproduce the generated level");
+                if (seed == 1) {
+                    verify_composed_layout(loader, level);
+                    ++composed_levels;
+                    if (!repeated_chunk_checked) {
+                        verify_repeated_chunk_layout(loader, level.chunks.front(), seed);
+                        repeated_chunk_checked = true;
+                    }
+                }
                 ++generated_levels;
                 generated_chunks += level.chunks.size();
             }
         }
         require(tested_rules.size() == 12, "unexpected unique randomized ruleset count");
+        require(composed_levels == tested_rules.size(),
+                "not all randomized rulesets produced a runtime layout");
         std::cout << "PASS: generated " << generated_levels << " deterministic levels with "
                   << generated_chunks << " placed chunks across " << tested_rules.size()
-                  << " campaign rulesets\n";
+                  << " campaign rulesets; composed " << composed_levels
+                  << " runtime layouts\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

@@ -441,6 +441,7 @@ int main(int argc, char** argv) {
         std::optional<std::size_t> player_instance_index;
         std::optional<torchlight::NavigationGrid> navigation;
         std::optional<torchlight::FixedLevelScene> fixed_scene;
+        std::optional<torchlight::GeneratedLevelLayout> generated_layout;
         std::vector<std::array<float, 3>> active_path;
         std::size_t next_path_node = 0;
         float player_floor_offset = 0.0F;
@@ -453,9 +454,9 @@ int main(int argc, char** argv) {
             const torchlight::RandomLevelGenerator generator(scene_loader);
             const auto generated = generator.generate(rules, options.seed);
             chunk_count = generated.chunks.size();
-            for (const auto& chunk : generated.chunks) {
-                layout_object_count += scene_loader.load_layout(chunk.layout_path).objects.size();
-            }
+            generated_layout.emplace(
+                torchlight::compose_generated_level_layout(scene_loader, generated));
+            layout_object_count = generated_layout->layout.objects.size();
             geometry = torchlight::build_generated_level_geometry(
                 archive, levelsets, scene_loader, rules, generated);
             const auto players = torchlight::load_playable_players(archive, index, loader);
@@ -520,12 +521,16 @@ int main(int argc, char** argv) {
         };
         if (fixed_scene) {
             logic_runtime.emplace(fixed_scene->layout, options.seed);
-            logic_runtime->activate_level();
-            if (player_motion) {
-                logic_runtime->update_player_position(player_motion->position());
-            }
-            drain_logic();
+        } else if (generated_layout) {
+            logic_runtime.emplace(generated_layout->layout, options.seed);
+        } else {
+            throw DesktopError("no active layout was prepared");
         }
+        logic_runtime->activate_level();
+        if (player_motion) {
+            logic_runtime->update_player_position(player_motion->position());
+        }
+        drain_logic();
         if (player_motion) {
             renderer.set_camera_target(player_motion->position(), 32.0F);
         }

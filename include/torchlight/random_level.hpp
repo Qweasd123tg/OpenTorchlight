@@ -30,6 +30,18 @@ struct GeneratedLevel {
     std::vector<GeneratedChunk> chunks;
 };
 
+struct GeneratedLayoutObjectOrigin {
+    std::size_t chunk = 0;
+    std::int64_t original_object_id = 0;
+};
+
+struct GeneratedLevelLayout {
+    LayoutManifest layout;
+    // Aligned with layout.objects. Runtime IDs are unique across repeated
+    // chunks while this table preserves the original resource identity.
+    std::vector<GeneratedLayoutObjectOrigin> object_origins;
+};
+
 class RandomLevelGenerator {
 public:
     explicit RandomLevelGenerator(const LevelSceneLoader& loader) : loader_(loader) {}
@@ -49,5 +61,8 @@ private:
     const LevelRules& rules, const ChunkType& left_type,
     const std::array<float, 3>& left_position, const ChunkType& right_type,
     const std::array<float, 3>& right_position) noexcept;
+
+[[nodiscard]] GeneratedLevelLayout compose_generated_level_layout(
+    const LevelSceneLoader& loader, const GeneratedLevel& level);
 
 } // namespace torchlight
