@@ -14,6 +14,7 @@ add_library(torchlight_core STATIC
     src/input_state.cpp
     src/key_manager.cpp
     src/level_scene.cpp
+    src/level_transition.cpp
     src/logic_runtime.cpp
     src/master_resource_index.cpp
     src/mouse_manager.cpp
@@ -152,6 +153,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(unit_type_test PRIVATE torchlight_core)
     add_executable(combat_test tests/combat_test.cpp)
     target_link_libraries(combat_test PRIVATE torchlight_core)
+    add_executable(level_transition_test tests/level_transition_test.cpp)
+    target_link_libraries(level_transition_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         add_test(NAME original_input_comparison
@@ -212,6 +215,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND unit_type_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_combat
             COMMAND combat_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_level_transitions
+            COMMAND level_transition_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
             COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         if(TARGET gles_render_smoke_test)
