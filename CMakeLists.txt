@@ -34,6 +34,7 @@ add_library(torchlight_core STATIC
     src/randomizer.cpp
     src/resource_config.cpp
     src/scene_geometry.cpp
+    src/skeletal_animation.cpp
     src/spawn_class.cpp
     src/stat_graph.cpp
     src/unit_definition.cpp
@@ -146,6 +147,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(ogre_material_test PRIVATE torchlight_core)
     add_executable(ogre_skeleton_test tests/ogre_skeleton_test.cpp)
     target_link_libraries(ogre_skeleton_test PRIVATE torchlight_core)
+    add_executable(skeletal_animation_test tests/skeletal_animation_test.cpp)
+    target_link_libraries(skeletal_animation_test PRIVATE torchlight_core)
     add_executable(dds_texture_test tests/dds_texture_test.cpp)
     target_link_libraries(dds_texture_test PRIVATE torchlight_core)
     add_executable(png_texture_test tests/png_texture_test.cpp)
@@ -216,6 +219,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND ogre_material_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_ogre_skeletons
             COMMAND ogre_skeleton_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_skeletal_animation
+            COMMAND skeletal_animation_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_dds_textures
             COMMAND dds_texture_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_png_textures

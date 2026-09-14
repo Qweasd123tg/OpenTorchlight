@@ -115,8 +115,11 @@ std::array<float, 3> read_vector3(Reader& reader, std::size_t end,
 
 std::array<float, 4> read_quaternion(Reader& reader, std::size_t end,
                                      const char* description) {
-    return {reader.read_float(end, description), reader.read_float(end, description),
-            reader.read_float(end, description), reader.read_float(end, description)};
+    const float x = reader.read_float(end, description);
+    const float y = reader.read_float(end, description);
+    const float z = reader.read_float(end, description);
+    const float w = reader.read_float(end, description);
+    return {w, x, y, z};
 }
 
 OgreSkeletonTrack parse_track(Reader& reader, const Chunk& chunk) {

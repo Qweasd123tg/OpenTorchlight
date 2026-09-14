@@ -4,10 +4,12 @@
 #include "torchlight/level_scene.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/ogre_material.hpp"
+#include "torchlight/ogre_skeleton.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_geometry.hpp"
+#include "torchlight/skeletal_animation.hpp"
 #include "torchlight/unit_definition.hpp"
 
 #include <EGL/egl.h>
@@ -145,6 +147,7 @@ int main(int argc, char** argv) {
             torchlight::load_playable_players(archive, resources, definitions);
         require(!players.empty(), "no playable player prototype was loaded");
         const auto player_start = torchlight::generated_player_start(loader, generated);
+        const auto player_mesh_index = mine_geometry.meshes.size();
         torchlight::append_player_geometry(archive, players.front(), player_start, mine_geometry);
         const auto* skeleton = resources.find_case_insensitive(
             torchlight::MasterResourceKind::monster, u"Skeletal Warrior");
@@ -162,8 +165,39 @@ int main(int argc, char** argv) {
                     mine_geometry.instances[*runtime_instance].runtime_entity_id == 1,
                 "runtime monster was not appended to generated geometry");
         torchlight::GlesSceneRenderer mine_renderer(mine_geometry, archive, materials);
-        mine_renderer.set_camera_target(player_start);
+        const auto* bind_entry =
+            archive.find_normalized("media/models/alchemist/alchemist.skeleton");
+        const auto* run_entry =
+            archive.find_normalized("media/models/alchemist/run.skeleton");
+        require(bind_entry && run_entry, "Alchemist animation resources are absent");
+        const auto bind_skeleton =
+            torchlight::parse_ogre_skeleton(archive.read(*bind_entry));
+        const auto run_skeleton =
+            torchlight::parse_ogre_skeleton(archive.read(*run_entry));
+        mine_renderer.set_camera_target(player_start, 8.0F);
+        mine_renderer.set_mesh_pose(torchlight::sample_ogre_mesh_animation(
+            mine_geometry.meshes[player_mesh_index].mesh, bind_skeleton,
+            run_skeleton, "Run", 0.0F));
         mine_renderer.draw(kWidth, kHeight);
+        std::array<std::uint8_t, kWidth * kHeight * 4> first_pose_pixels{};
+        glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE,
+                     first_pose_pixels.data());
+        mine_renderer.set_mesh_pose(torchlight::sample_ogre_mesh_animation(
+            mine_geometry.meshes[player_mesh_index].mesh, bind_skeleton,
+            run_skeleton, "Run", 0.4F));
+        mine_renderer.draw(kWidth, kHeight);
+        std::array<std::uint8_t, kWidth * kHeight * 4> second_pose_pixels{};
+        glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE,
+                     second_pose_pixels.data());
+        std::size_t animation_changed_pixels = 0;
+        for (std::size_t offset = 0; offset < first_pose_pixels.size(); offset += 4U) {
+            animation_changed_pixels += static_cast<std::size_t>(
+                first_pose_pixels[offset] != second_pose_pixels[offset] ||
+                first_pose_pixels[offset + 1] != second_pose_pixels[offset + 1] ||
+                first_pose_pixels[offset + 2] != second_pose_pixels[offset + 2]);
+        }
+        require(animation_changed_pixels > 20,
+                "skeletal animation did not change the rendered framebuffer");
         const auto center_ground = mine_renderer.ground_position_at_pixel(
             kWidth / 2, kHeight / 2, kWidth, kHeight, player_start[1]);
         require(std::hypot(center_ground[0] - player_start[0],
@@ -190,7 +224,8 @@ int main(int argc, char** argv) {
                   << " instances=" << mine_stats.instances
                   << " placed_triangles=" << mine_stats.placed_triangles
                   << " textures=" << mine_stats.texture_resources
-                  << " colored_pixels=" << mine_colored_pixels << '\n';
+                  << " colored_pixels=" << mine_colored_pixels
+                  << " animation_changed_pixels=" << animation_changed_pixels << '\n';
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

@@ -11,10 +11,13 @@
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/navigation_grid.hpp"
 #include "torchlight/ogre_material.hpp"
+#include "torchlight/ogre_mesh.hpp"
+#include "torchlight/ogre_skeleton.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_geometry.hpp"
+#include "torchlight/skeletal_animation.hpp"
 #include "torchlight/spawn_class.hpp"
 #include "torchlight/unit_definition.hpp"
 
@@ -572,6 +575,36 @@ const LevelInteraction* nearest_interaction(
     return result;
 }
 
+struct PlayerAnimationResources {
+    torchlight::OgreSkeleton bind;
+    torchlight::OgreSkeleton idle;
+    torchlight::OgreSkeleton run;
+};
+
+PlayerAnimationResources load_player_animations(
+    const torchlight::PakArchive& archive, const torchlight::PlayerPrototype& player) {
+    const auto* mesh_entry = archive.find_normalized(player.mesh_path);
+    if (mesh_entry == nullptr) {
+        throw DesktopError("player animation mesh is absent from pak.zip");
+    }
+    const auto mesh = torchlight::parse_ogre_mesh(archive.read(*mesh_entry));
+    const auto slash = mesh_entry->name.find_last_of("/\\");
+    const auto directory = slash == std::string::npos
+                               ? std::string{}
+                               : mesh_entry->name.substr(0, slash + 1U);
+    const auto load = [&](const std::string& name) {
+        const auto* entry = archive.find_normalized(directory + name);
+        if (entry == nullptr) {
+            throw DesktopError("player animation resource is absent from pak.zip: " + name);
+        }
+        return torchlight::parse_ogre_skeleton(archive.read(*entry));
+    };
+    if (mesh.skeleton_file.empty()) {
+        throw DesktopError("player mesh has no OGRE skeleton link");
+    }
+    return {load(mesh.skeleton_file), load("Idle.SKELETON"), load("Run.SKELETON")};
+}
+
 } // namespace
 
 int main(int argc, char** argv) {
@@ -595,6 +628,7 @@ int main(int argc, char** argv) {
         if (players.empty()) {
             throw DesktopError("no playable player definitions were resolved");
         }
+        const auto player_animations = load_player_animations(archive, players.front());
 
         torchlight::DungeonAddress initial_address{u"Town", 0};
         if (options.main_stratum) {
@@ -645,6 +679,8 @@ int main(int argc, char** argv) {
             torchlight::append_player_geometry(
                 archive, players.front(), level.player_start, level.geometry);
             const auto player_instance_index = level.geometry.instances.size() - 1U;
+            const auto player_mesh_index =
+                level.geometry.instances[player_instance_index].mesh_index;
             torchlight::CombatController combat(
                 players.front(), level_seed(options.seed, level.address.depth));
             torchlight::PlayerCombatState player_combat(
@@ -678,6 +714,9 @@ int main(int argc, char** argv) {
             std::size_t enemy_attack_count = 0;
             std::size_t player_death_count = 0;
             std::uint64_t level_frames = 0;
+            std::size_t player_animation_updates = 0;
+            float player_animation_time = 0.0F;
+            bool previous_animation_was_running = false;
 
             for (std::size_t instance_index = 0;
                  instance_index < level.geometry.instances.size(); ++instance_index) {
@@ -800,6 +839,7 @@ int main(int argc, char** argv) {
                         player_motion.stop();
                     }
                 }
+                const auto previous_player_position = player_motion.position();
                 player_motion.advance(std::min(elapsed, 0.1F));
                 while (!player_motion.moving() && next_path_node < active_path.size()) {
                     ++next_path_node;
@@ -812,6 +852,18 @@ int main(int argc, char** argv) {
                 level.geometry.instances[player_instance_index].transform.position =
                     player_motion.position();
                 renderer->set_instance_position(player_instance_index, player_motion.position());
+                const float player_dx =
+                    player_motion.position()[0] - previous_player_position[0];
+                const float player_dz =
+                    player_motion.position()[2] - previous_player_position[2];
+                if (std::hypot(player_dx, player_dz) > 0.00001F) {
+                    constexpr float kRadiansToDegrees = 57.295779513082320876F;
+                    const float player_angle =
+                        std::atan2(player_dx, player_dz) * kRadiansToDegrees;
+                    level.geometry.instances[player_instance_index].transform.angle =
+                        player_angle;
+                    renderer->set_instance_angle(player_instance_index, player_angle);
+                }
                 renderer->set_camera_target(
                     player_motion.position(), kCameraVerticalSpan);
 
@@ -943,6 +995,21 @@ int main(int argc, char** argv) {
                     logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
                 }
+                const bool player_is_running = player_motion.moving();
+                if (player_is_running != previous_animation_was_running) {
+                    player_animation_time = 0.0F;
+                    previous_animation_was_running = player_is_running;
+                } else {
+                    player_animation_time += std::min(elapsed, 0.1F);
+                }
+                const auto& animation_skeleton =
+                    player_is_running ? player_animations.run : player_animations.idle;
+                const auto animation_name = player_is_running ? "Run" : "Idle";
+                renderer->set_mesh_pose(torchlight::sample_ogre_mesh_animation(
+                    level.geometry.meshes[player_mesh_index].mesh,
+                    player_animations.bind, animation_skeleton, animation_name,
+                    player_animation_time));
+                ++player_animation_updates;
                 window.draw_scene_frame(*renderer);
                 rendered_once = true;
                 ++level_frames;
@@ -1003,6 +1070,7 @@ int main(int argc, char** argv) {
                       << " enemy_chases=" << enemy_chase_count
                       << " enemy_attacks=" << enemy_attack_count
                       << " player_deaths=" << player_death_count
+                      << " player_animation_updates=" << player_animation_updates
                       << " warp_requests=" << warp_request_count
                       << " frames=" << level_frames
                       << " total_frames=" << total_frames

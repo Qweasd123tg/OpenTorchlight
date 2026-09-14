@@ -4,6 +4,7 @@
 #include "torchlight/ogre_material.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/png_texture.hpp"
+#include "torchlight/skeletal_animation.hpp"
 
 #include <GLES2/gl2.h>
 
@@ -209,12 +210,6 @@ public:
         stats_.mesh_resources = geometry.meshes.size();
         stats_.instances = geometry.instances.size();
         draws_by_mesh_.resize(geometry.meshes.size());
-        struct GeometryBuffers {
-            GLuint position = 0;
-            GLuint texcoord = 0;
-            GLuint normal = 0;
-        };
-        std::unordered_map<const OgreGeometry*, GeometryBuffers> vertex_buffers;
         std::unordered_map<std::string, GLuint> textures;
         const auto fallback_texture = upload_texture(1, 1, {255U, 255U, 255U, 255U});
         owned_textures_.push_back(fallback_texture);
@@ -226,9 +221,9 @@ public:
                     continue;
                 }
                 const auto& source_geometry = geometry_for(mesh, submesh);
-                auto found_vertex_buffer = vertex_buffers.find(&source_geometry);
+                auto found_vertex_buffer = vertex_buffers_.find(&source_geometry);
                 GeometryBuffers buffers;
-                if (found_vertex_buffer == vertex_buffers.end()) {
+                if (found_vertex_buffer == vertex_buffers_.end()) {
                     std::vector<float> positions;
                     positions.reserve(source_geometry.positions.size() * 3U);
                     for (const auto& position : source_geometry.positions) {
@@ -270,7 +265,7 @@ public:
                     glBufferData(GL_ARRAY_BUFFER,
                                  static_cast<GLsizeiptr>(normals.size() * sizeof(float)),
                                  normals.data(), GL_STATIC_DRAW);
-                    vertex_buffers.emplace(&source_geometry, buffers);
+                    vertex_buffers_.emplace(&source_geometry, buffers);
                     owned_vertex_buffers_.push_back(buffers.position);
                     owned_vertex_buffers_.push_back(buffers.texcoord);
                     owned_vertex_buffers_.push_back(buffers.normal);
@@ -475,11 +470,57 @@ public:
         instances_[instance_index].transform.position = position;
     }
 
+    void set_instance_angle(std::size_t instance_index, float angle_degrees) {
+        if (instance_index >= instances_.size()) {
+            throw GlesSceneError("Scene instance index is out of range");
+        }
+        if (!std::isfinite(angle_degrees)) {
+            throw GlesSceneError("Scene instance angle is not finite");
+        }
+        instances_[instance_index].transform.angle = angle_degrees;
+    }
+
     void set_instance_visible(std::size_t instance_index, bool visible) {
         if (instance_index >= instances_.size()) {
             throw GlesSceneError("Scene instance index is out of range");
         }
         instances_[instance_index].visible = visible;
+    }
+
+    void set_mesh_pose(const OgreMeshPose& pose) {
+        for (const auto& geometry : pose.geometries) {
+            if (geometry.source == nullptr ||
+                geometry.positions.size() != geometry.source->positions.size() ||
+                geometry.normals.size() != geometry.source->normals.size()) {
+                throw GlesSceneError("Skeletal pose geometry does not match its source mesh");
+            }
+            const auto buffers = vertex_buffers_.find(geometry.source);
+            if (buffers == vertex_buffers_.end()) {
+                throw GlesSceneError("Skeletal pose source mesh is absent from the renderer");
+            }
+            std::vector<float> positions;
+            positions.reserve(geometry.positions.size() * 3U);
+            for (const auto& position : geometry.positions) {
+                positions.insert(positions.end(), position.begin(), position.end());
+            }
+            std::vector<float> normals;
+            normals.reserve(geometry.normals.size() * 3U);
+            for (const auto& normal : geometry.normals) {
+                normals.insert(normals.end(), normal.begin(), normal.end());
+            }
+            glBindBuffer(GL_ARRAY_BUFFER, buffers->second.position);
+            glBufferSubData(GL_ARRAY_BUFFER, 0,
+                            static_cast<GLsizeiptr>(positions.size() * sizeof(float)),
+                            positions.data());
+            glBindBuffer(GL_ARRAY_BUFFER, buffers->second.normal);
+            glBufferSubData(GL_ARRAY_BUFFER, 0,
+                            static_cast<GLsizeiptr>(normals.size() * sizeof(float)),
+                            normals.data());
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        if (glGetError() != GL_NO_ERROR) {
+            throw GlesSceneError("OpenGL ES skeletal pose upload failed");
+        }
     }
 
     void set_camera_target(const std::array<float, 3>& target, float vertical_view_span) {
@@ -516,6 +557,12 @@ public:
     }
 
 private:
+    struct GeometryBuffers {
+        GLuint position = 0;
+        GLuint texcoord = 0;
+        GLuint normal = 0;
+    };
+
     struct Draw {
         GLuint vertex_buffer = 0;
         GLuint texcoord_buffer = 0;
@@ -598,6 +645,7 @@ private:
 
     std::vector<SceneMeshInstance> instances_;
     std::vector<std::vector<Draw>> draws_by_mesh_;
+    std::unordered_map<const OgreGeometry*, GeometryBuffers> vertex_buffers_;
     std::vector<GLuint> owned_vertex_buffers_;
     std::vector<GLuint> owned_index_buffers_;
     std::vector<GLuint> owned_textures_;
@@ -638,8 +686,17 @@ void GlesSceneRenderer::set_instance_position(std::size_t instance_index,
     implementation_->set_instance_position(instance_index, position);
 }
 
+void GlesSceneRenderer::set_instance_angle(std::size_t instance_index,
+                                           float angle_degrees) {
+    implementation_->set_instance_angle(instance_index, angle_degrees);
+}
+
 void GlesSceneRenderer::set_instance_visible(std::size_t instance_index, bool visible) {
     implementation_->set_instance_visible(instance_index, visible);
+}
+
+void GlesSceneRenderer::set_mesh_pose(const OgreMeshPose& pose) {
+    implementation_->set_mesh_pose(pose);
 }
 
 void GlesSceneRenderer::set_camera_target(const std::array<float, 3>& target,

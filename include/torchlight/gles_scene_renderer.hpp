@@ -11,6 +11,7 @@ namespace torchlight {
 
 class OgreMaterialCatalog;
 class PakArchive;
+struct OgreMeshPose;
 
 struct GlesSceneRenderStats {
     std::size_t mesh_resources = 0;
@@ -35,7 +36,9 @@ public:
     void draw(int width, int height);
     void set_instance_position(std::size_t instance_index,
                                const std::array<float, 3>& position);
+    void set_instance_angle(std::size_t instance_index, float angle_degrees);
     void set_instance_visible(std::size_t instance_index, bool visible);
+    void set_mesh_pose(const OgreMeshPose& pose);
     void set_camera_target(const std::array<float, 3>& target,
                            float vertical_view_span = 80.0F);
     void clear_camera_target() noexcept;
