@@ -27,6 +27,7 @@ add_library(torchlight_core STATIC
     src/randomizer.cpp
     src/resource_config.cpp
     src/scene_geometry.cpp
+    src/spawn_class.cpp
     src/unit_definition.cpp)
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
@@ -140,6 +141,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(png_texture_test PRIVATE torchlight_core)
     add_executable(scene_geometry_test tests/scene_geometry_test.cpp)
     target_link_libraries(scene_geometry_test PRIVATE torchlight_core)
+    add_executable(spawn_class_test tests/spawn_class_test.cpp)
+    target_link_libraries(spawn_class_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         add_test(NAME original_input_comparison
@@ -192,6 +195,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND png_texture_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_scene_geometry
             COMMAND scene_geometry_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_spawn_classes
+            COMMAND spawn_class_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
             COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         if(TARGET gles_render_smoke_test)

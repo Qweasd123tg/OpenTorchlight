@@ -18,6 +18,24 @@ bool is_text_type(AdmValueType type) noexcept {
            type == AdmValueType::note;
 }
 
+bool same_ascii_case_insensitive(std::u16string_view left,
+                                 std::u16string_view right) noexcept {
+    if (left.size() != right.size()) {
+        return false;
+    }
+    for (std::size_t index = 0; index < left.size(); ++index) {
+        const auto fold = [](char16_t character) {
+            return character >= u'a' && character <= u'z'
+                       ? static_cast<char16_t>(character - u'a' + u'A')
+                       : character;
+        };
+        if (fold(left[index]) != fold(right[index])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 const AdmProperty& required_property(const AdmGroup& group, const char16_t* name) {
     const auto* property = group.find_property(name);
     if (property == nullptr) {
@@ -154,6 +172,16 @@ const MasterResourceRecord* MasterResourceIndex::find(MasterResourceKind kind,
                                                       std::u16string_view name) const noexcept {
     for (const auto& record : records_) {
         if (record.kind == kind && record.name == name) {
+            return &record;
+        }
+    }
+    return nullptr;
+}
+
+const MasterResourceRecord* MasterResourceIndex::find_any(
+    std::u16string_view name) const noexcept {
+    for (const auto& record : records_) {
+        if (same_ascii_case_insensitive(record.name, name)) {
             return &record;
         }
     }
