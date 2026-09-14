@@ -33,3 +33,5 @@
 0x008996e0 attack_description_constructor
 0x00815a20 character_walking_speed
 0x00815ad0 character_running_speed
+0x00a0aeb0 spawner_hide_and_disable_units
+0x00a147f0 spawner_destroy_units

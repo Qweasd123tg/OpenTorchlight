@@ -259,8 +259,10 @@ std::optional<std::size_t> append_runtime_entity_geometry(
 
     LayoutWorldTransform transform;
     transform.position = entity.position;
-    geometry.instances.push_back(SceneMeshInstance{
-        std::numeric_limits<std::size_t>::max(), 0, mesh_index, transform, entity.id});
+    auto instance = SceneMeshInstance{
+        std::numeric_limits<std::size_t>::max(), 0, mesh_index, transform, entity.id};
+    instance.visible = entity.alive && entity.visible;
+    geometry.instances.push_back(std::move(instance));
     return geometry.instances.size() - 1U;
 }
 

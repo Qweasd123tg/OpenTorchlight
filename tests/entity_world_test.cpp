@@ -115,6 +115,53 @@ int main(int argc, char** argv) {
                             }),
                 "all-monsters-dead did not continue the original timeline");
 
+        torchlight::LogicRuntime control_logic(layout, 42);
+        torchlight::RuntimeEntityWorld control_world(
+            layout, resources, definitions, spawn_classes, unit_types, 42);
+        const torchlight::SpawnRequest control_spawn{
+            spawner, u"Skeletal Warrior", u"Monsters", 1};
+        require(control_world.consume_spawn_requests(
+                    {control_spawn}, control_logic).entities_created == 1,
+                "spawner-control fixture did not create its monster");
+        static_cast<void>(control_logic.take_events());
+        control_logic.invoke(spawner, u"Hide And Disable Spawned Units");
+        auto control_requests = control_logic.take_spawn_requests();
+        const auto hide_stats = control_world.consume_spawn_requests(
+            control_requests, control_logic);
+        const auto& hidden_entity = control_world.entities().front();
+        require(hide_stats.control_requests == 1 &&
+                    hide_stats.entities_hidden == 1 && hidden_entity.alive &&
+                    !hidden_entity.enabled && !hidden_entity.visible &&
+                    control_logic.state(spawner)->active_spawned_units == 1,
+                "spawner hide did not disable and hide its live owned monster");
+        require(control_world.nearest_alive_monster(
+                    hidden_entity.position, 0.1F) == nullptr &&
+                    !control_world.apply_damage(
+                        hidden_entity.id, 1.0F, control_logic).accepted,
+                "hidden spawned monster remained interactive");
+        torchlight::FixedSceneGeometry hidden_geometry;
+        const auto hidden_instance = torchlight::append_runtime_entity_geometry(
+            archive, resources, definitions, hidden_entity, hidden_geometry);
+        require(hidden_instance &&
+                    !hidden_geometry.instances[*hidden_instance].visible,
+                "hidden spawned monster produced a visible render instance");
+        require(control_logic.take_events().empty(),
+                "spawner hide emitted ordinary monster-death outputs");
+
+        control_logic.invoke(spawner, u"Destroy Spawned Units");
+        control_requests = control_logic.take_spawn_requests();
+        const auto destroy_stats = control_world.consume_spawn_requests(
+            control_requests, control_logic);
+        const auto& destroyed_entity = control_world.entities().front();
+        require(destroy_stats.control_requests == 1 &&
+                    destroy_stats.entities_destroyed == 1 &&
+                    !destroyed_entity.alive && !destroyed_entity.enabled &&
+                    !destroyed_entity.visible &&
+                    control_logic.state(spawner)->active_spawned_units == 0,
+                "spawner destroy did not remove its owned monster");
+        require(control_logic.take_events().empty(),
+                "spawner destroy emitted ordinary monster-death outputs");
+
         torchlight::LogicRuntime class_logic(layout, 7);
         torchlight::RuntimeEntityWorld class_world(
             layout, resources, definitions, spawn_classes, unit_types, 7);

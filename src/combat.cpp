@@ -46,8 +46,9 @@ void CombatController::clear_target() noexcept {
 const RuntimeEntity* CombatController::target(
     const RuntimeEntityWorld& world) const noexcept {
     const auto* selected = world.find(target_id_);
-    return selected != nullptr && selected->alive && selected->combat_targetable &&
-                   selected->kind == MasterResourceKind::monster
+    return selected != nullptr && selected->alive && selected->enabled &&
+               selected->combat_targetable &&
+               selected->kind == MasterResourceKind::monster
                ? selected
                : nullptr;
 }

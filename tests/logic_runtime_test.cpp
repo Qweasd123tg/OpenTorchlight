@@ -178,6 +178,39 @@ void test_stateful_graph() {
             "box trigger did not detect the player");
 }
 
+void test_spawner_controls() {
+    const auto layout = synthetic_layout();
+
+    torchlight::LogicRuntime hide_runtime(layout, 42);
+    hide_runtime.mark_spawn_complete(3, 2);
+    static_cast<void>(hide_runtime.take_events());
+    hide_runtime.invoke(3, u"Hide And Disable Spawned Units");
+    const auto hidden = hide_runtime.take_spawn_requests();
+    require(hidden.size() == 1 &&
+                hidden.front().action == torchlight::SpawnAction::hide_and_disable,
+            "spawner hide input did not retain a world control request");
+    require(hide_runtime.state(3) != nullptr &&
+                !hide_runtime.state(3)->enabled &&
+                hide_runtime.state(3)->active_spawned_units == 2,
+            "spawner hide input destroyed its owned-unit count");
+    require(hide_runtime.take_events().empty(),
+            "spawner hide input fabricated a monster-death output");
+
+    torchlight::LogicRuntime destroy_runtime(layout, 42);
+    destroy_runtime.mark_spawn_complete(3, 2);
+    static_cast<void>(destroy_runtime.take_events());
+    destroy_runtime.invoke(3, u"Destroy Spawned Units");
+    const auto destroyed = destroy_runtime.take_spawn_requests();
+    require(destroyed.size() == 1 &&
+                destroyed.front().action == torchlight::SpawnAction::destroy,
+            "spawner destroy input did not retain a world control request");
+    require(destroy_runtime.state(3) != nullptr &&
+                destroy_runtime.state(3)->active_spawned_units == 2,
+            "spawner destroy input cleared ownership before the world handled it");
+    require(destroy_runtime.take_events().empty(),
+            "spawner destroy input fabricated a monster-death output");
+}
+
 void test_original_logic_layout(const std::string& pak_path) {
     const torchlight::PakArchive archive(pak_path);
     const torchlight::LevelSceneLoader loader(archive);
@@ -224,6 +257,7 @@ int main(int argc, char** argv) {
             return 2;
         }
         test_stateful_graph();
+        test_spawner_controls();
         test_original_logic_layout(argv[2]);
         std::cout << "PASS: parsed and executed Torchlight layout logic graphs\n";
         return 0;

@@ -747,7 +747,10 @@ int main(int argc, char** argv) {
             std::size_t logic_event_count = 0;
             std::size_t logic_invocation_count = 0;
             std::size_t spawn_request_count = 0;
+            std::size_t spawn_control_request_count = 0;
             std::size_t spawned_entity_count = 0;
+            std::size_t hidden_spawned_entity_count = 0;
+            std::size_t destroyed_spawned_entity_count = 0;
             std::size_t resolved_unit_type_count = 0;
             std::size_t unresolved_unit_type_count = 0;
             std::size_t missing_spawn_resource_count = 0;
@@ -798,6 +801,7 @@ int main(int argc, char** argv) {
             }
 
             auto drain_logic = [&] {
+                bool entity_visibility_changed = false;
                 for (std::size_t pass = 0;; ++pass) {
                     const auto requests = logic_runtime.take_spawn_requests();
                     if (requests.empty()) {
@@ -808,8 +812,14 @@ int main(int argc, char** argv) {
                     }
                     const auto stats =
                         entity_world.consume_spawn_requests(requests, logic_runtime);
-                    spawn_request_count += stats.requests;
+                    spawn_request_count += stats.spawn_requests;
+                    spawn_control_request_count += stats.control_requests;
                     spawned_entity_count += stats.entities_created;
+                    hidden_spawned_entity_count += stats.entities_hidden;
+                    destroyed_spawned_entity_count += stats.entities_destroyed;
+                    entity_visibility_changed = entity_visibility_changed ||
+                                                stats.entities_hidden != 0 ||
+                                                stats.entities_destroyed != 0;
                     resolved_unit_type_count += stats.resolved_unit_types;
                     unresolved_unit_type_count += stats.unresolved_unit_types;
                     missing_spawn_resource_count += stats.missing_resources;
@@ -848,6 +858,19 @@ int main(int argc, char** argv) {
                         player_mesh_index);
                     renderer->set_camera_target(
                         player_motion.position(), kCameraDistance);
+                }
+                if (entity_visibility_changed) {
+                    for (const auto& entity : entity_world.entities()) {
+                        const auto instance = runtime_instance_indices.find(entity.id);
+                        if (instance == runtime_instance_indices.end()) {
+                            continue;
+                        }
+                        const bool visible = entity.alive && entity.visible;
+                        level.geometry.instances[instance->second].visible = visible;
+                        if (renderer) {
+                            renderer->set_instance_visible(instance->second, visible);
+                        }
+                    }
                 }
                 logic_event_count += logic_runtime.take_events().size();
                 logic_invocation_count += logic_runtime.take_invocations().size();
@@ -1379,8 +1402,12 @@ int main(int argc, char** argv) {
                       << " logic_events=" << logic_event_count
                       << " logic_invocations=" << logic_invocation_count
                       << " spawn_requests=" << spawn_request_count
+                      << " spawn_control_requests=" << spawn_control_request_count
                       << " runtime_entities=" << entity_world.entities().size()
                       << " spawned_entities=" << spawned_entity_count
+                      << " hidden_spawned_entities=" << hidden_spawned_entity_count
+                      << " destroyed_spawned_entities="
+                      << destroyed_spawned_entity_count
                       << " resolved_unit_types=" << resolved_unit_type_count
                       << " unresolved_unit_types=" << unresolved_unit_type_count
                       << " missing_spawn_resources=" << missing_spawn_resource_count

@@ -45,6 +45,8 @@ struct RuntimeEntity {
     std::optional<WeaponItem> weapon_item;
     DamageDefense damage_defense;
     bool alive = true;
+    bool enabled = true;
+    bool visible = true;
     bool combat_targetable = false;
 };
 
@@ -56,7 +58,11 @@ struct DamageResult {
 
 struct SpawnResolutionStats {
     std::size_t requests = 0;
+    std::size_t spawn_requests = 0;
+    std::size_t control_requests = 0;
     std::size_t entities_created = 0;
+    std::size_t entities_hidden = 0;
+    std::size_t entities_destroyed = 0;
     std::size_t resolved_unit_types = 0;
     std::size_t unresolved_unit_types = 0;
     std::size_t missing_resources = 0;

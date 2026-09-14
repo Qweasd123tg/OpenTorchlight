@@ -120,6 +120,8 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
         const auto unit_type = normalized(resource->unit_type);
         const bool enabled = optional_layout_bool(object, u"ENABLED", true);
         entity.alive = enabled;
+        entity.enabled = enabled;
+        entity.visible = optional_layout_bool(object, u"VISIBLE", true);
         entity.combat_targetable =
             enabled && unit_type == u"MONSTER" &&
             optional_layout_bool(object, u"TARGETABLE", true) &&
@@ -349,6 +351,34 @@ SpawnResolutionStats RuntimeEntityWorld::consume_spawn_requests(
         if (position == spawner_positions_.end()) {
             throw EntityWorldError("Spawn request references an absent Unit Spawner");
         }
+        if (request.action != SpawnAction::spawn) {
+            ++stats.control_requests;
+            for (auto& entity : entities_) {
+                if (entity.spawner_id != request.spawner_id) {
+                    continue;
+                }
+                if (request.action == SpawnAction::hide_and_disable) {
+                    if (entity.enabled || entity.visible) {
+                        ++stats.entities_hidden;
+                    }
+                    entity.enabled = false;
+                    entity.visible = false;
+                    continue;
+                }
+                if (entity.alive || entity.enabled || entity.visible) {
+                    ++stats.entities_destroyed;
+                }
+                entity.health = 0.0F;
+                entity.alive = false;
+                entity.enabled = false;
+                entity.visible = false;
+                entity.combat_targetable = false;
+            }
+            logic.synchronize_spawned_units(
+                request.spawner_id, alive_monster_count(request.spawner_id));
+            continue;
+        }
+        ++stats.spawn_requests;
         for (std::uint32_t instance = 0; instance < request.count; ++instance) {
             if (normalized(request.group) == u"SPAWN CLASS") {
                 for (const auto& leaf : spawn_classes_->roll(request.resource, random_)) {
@@ -371,7 +401,8 @@ SpawnResolutionStats RuntimeEntityWorld::consume_spawn_requests(
 
 bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& logic) {
     auto* found = find(entity_id);
-    if (found == nullptr || !found->alive || !found->combat_targetable ||
+    if (found == nullptr || !found->alive || !found->enabled ||
+        !found->combat_targetable ||
         found->kind != MasterResourceKind::monster) {
         return false;
     }
@@ -386,7 +417,8 @@ bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& logic) {
 DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float damage,
                                                LogicRuntime& logic) {
     auto* entity = find(entity_id);
-    if (entity == nullptr || !entity->alive || !entity->combat_targetable ||
+    if (entity == nullptr || !entity->alive || !entity->enabled ||
+        !entity->combat_targetable ||
         entity->kind != MasterResourceKind::monster ||
         !std::isfinite(damage) || !(damage > 0.0F)) {
         return {};
@@ -404,7 +436,7 @@ DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float dam
 
 bool RuntimeEntityWorld::pick_up(std::uint64_t entity_id, LogicRuntime& logic) {
     auto* found = find(entity_id);
-    if (found == nullptr || !found->alive ||
+    if (found == nullptr || !found->alive || !found->enabled ||
         found->kind != MasterResourceKind::item) {
         return false;
     }
@@ -446,7 +478,7 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
     const RuntimeEntity* result = nullptr;
     float nearest_squared = maximum_distance * maximum_distance;
     for (const auto& entity : entities_) {
-        if (!entity.alive || !entity.combat_targetable ||
+        if (!entity.alive || !entity.enabled || !entity.combat_targetable ||
             entity.kind != MasterResourceKind::monster) {
             continue;
         }
@@ -469,7 +501,8 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_item(
     const RuntimeEntity* nearest = nullptr;
     auto nearest_distance = maximum_distance;
     for (const auto& entity : entities_) {
-        if (!entity.alive || entity.kind != MasterResourceKind::item) {
+        if (!entity.alive || !entity.enabled ||
+            entity.kind != MasterResourceKind::item) {
             continue;
         }
         const auto distance = std::hypot(entity.position[0] - position[0],

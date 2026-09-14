@@ -97,7 +97,7 @@ std::vector<EnemyAiUpdate> EnemyController::update(
                              : 0.0F;
     std::vector<EnemyAiUpdate> updates;
     for (auto& entity : world.entities()) {
-        if (!entity.alive || !entity.combat_targetable ||
+        if (!entity.alive || !entity.enabled || !entity.combat_targetable ||
             entity.kind != MasterResourceKind::monster) {
             states_.erase(entity.id);
             continue;

@@ -24,11 +24,18 @@ struct LogicInvocation {
     std::u16string input_name;
 };
 
+enum class SpawnAction {
+    spawn,
+    destroy,
+    hide_and_disable,
+};
+
 struct SpawnRequest {
     std::int64_t spawner_id = 0;
     std::u16string resource;
     std::u16string group;
     std::uint32_t count = 0;
+    SpawnAction action = SpawnAction::spawn;
 };
 
 struct WarpRequest {
@@ -76,6 +83,8 @@ public:
 
     void mark_spawn_complete(std::int64_t spawner_id,
                              std::uint32_t active_monster_count);
+    void synchronize_spawned_units(std::int64_t spawner_id,
+                                   std::uint32_t active_monster_count);
     void notify_monster_killed(std::int64_t spawner_id);
     void notify_item_picked_up(std::int64_t spawner_id);
 

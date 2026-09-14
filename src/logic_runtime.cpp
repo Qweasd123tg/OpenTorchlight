@@ -308,12 +308,14 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         return;
     }
     if (object.descriptor == u"Unit Spawner" && input_name == u"Destroy Spawned Units") {
-        object_state.active_spawned_units = 0;
+        spawn_requests_.push_back(
+            {target_object_id, {}, {}, 0, SpawnAction::destroy});
         return;
     }
     if (object.descriptor == u"Unit Spawner" &&
         input_name == u"Hide And Disable Spawned Units") {
-        object_state.active_spawned_units = 0;
+        spawn_requests_.push_back(
+            {target_object_id, {}, {}, 0, SpawnAction::hide_and_disable});
         object_state.enabled = false;
         return;
     }
@@ -451,6 +453,15 @@ void LogicRuntime::mark_spawn_complete(std::int64_t spawner_id,
     }
     states_.at(spawner_id).active_spawned_units = active_monster_count;
     emit(spawner_id, u"All Units Spawned");
+}
+
+void LogicRuntime::synchronize_spawned_units(
+    std::int64_t spawner_id, std::uint32_t active_monster_count) {
+    const auto& object = require_object(spawner_id);
+    if (object.descriptor != u"Unit Spawner") {
+        throw LogicRuntimeError("Spawn synchronization references a non-spawner object");
+    }
+    states_.at(spawner_id).active_spawned_units = active_monster_count;
 }
 
 void LogicRuntime::notify_monster_killed(std::int64_t spawner_id) {
