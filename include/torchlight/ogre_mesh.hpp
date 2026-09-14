@@ -28,6 +28,12 @@ struct OgreVertexBuffer {
     std::vector<std::uint8_t> data;
 };
 
+struct OgreBoneAssignment {
+    std::uint32_t vertex_index = 0;
+    std::uint16_t bone_index = 0;
+    float weight = 0.0F;
+};
+
 struct OgreGeometry {
     std::uint32_t vertex_count = 0;
     std::vector<OgreVertexElement> elements;
@@ -43,6 +49,7 @@ struct OgreSubmesh {
     bool indexes_32bit = false;
     std::uint16_t operation_type = 4;
     std::vector<std::uint32_t> indices;
+    std::vector<OgreBoneAssignment> bone_assignments;
     std::optional<OgreGeometry> geometry;
 };
 
@@ -57,6 +64,7 @@ struct OgreMesh {
     bool skeletally_animated = false;
     std::optional<OgreGeometry> shared_geometry;
     std::vector<OgreSubmesh> submeshes;
+    std::vector<OgreBoneAssignment> shared_bone_assignments;
     std::string skeleton_file;
     std::optional<OgreMeshBounds> bounds;
 };

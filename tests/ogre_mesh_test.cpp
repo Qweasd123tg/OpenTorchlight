@@ -44,6 +44,7 @@ int main(int argc, char** argv) {
         std::size_t geometries = 0;
         std::size_t textured_geometries = 0;
         std::size_t normal_geometries = 0;
+        std::size_t bone_assignments = 0;
         for (const auto& entry : archive.entries()) {
             if (!ends_with_mesh(entry.name)) {
                 continue;
@@ -60,6 +61,7 @@ int main(int argc, char** argv) {
             ++mesh_files;
             submeshes += mesh.submeshes.size();
             skeletal_meshes += static_cast<std::size_t>(mesh.skeletally_animated);
+            bone_assignments += mesh.shared_bone_assignments.size();
             if (mesh.shared_geometry.has_value()) {
                 vertices += mesh.shared_geometry->vertex_count;
                 ++geometries;
@@ -70,6 +72,7 @@ int main(int argc, char** argv) {
             }
             for (const auto& submesh : mesh.submeshes) {
                 indices += submesh.indices.size();
+                bone_assignments += submesh.bone_assignments.size();
                 if (submesh.geometry.has_value()) {
                     vertices += submesh.geometry->vertex_count;
                     ++geometries;
@@ -91,8 +94,10 @@ int main(int argc, char** argv) {
                 "OGRE geometry has no primary texture coordinates");
         require(normal_geometries == geometries,
                 "OGRE geometry has no primary vertex normals");
+        require(bone_assignments == 477008, "unexpected vertex bone-assignment count");
         std::cout << "PASS: parsed 3312 OGRE v1.40 meshes, 1939624 vertices, "
-                     "2461269 indices and 5105 submeshes\n";
+                     "2461269 indices, 5105 submeshes and "
+                  << bone_assignments << " bone assignments\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

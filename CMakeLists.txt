@@ -24,6 +24,7 @@ add_library(torchlight_core STATIC
     src/navigation_grid.cpp
     src/ogre_material.cpp
     src/ogre_mesh.cpp
+    src/ogre_skeleton.cpp
     src/pak_archive.cpp
     src/pathfinder_rules.cpp
     src/pointer_movement.cpp
@@ -143,6 +144,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(ogre_mesh_test PRIVATE torchlight_core)
     add_executable(ogre_material_test tests/ogre_material_test.cpp)
     target_link_libraries(ogre_material_test PRIVATE torchlight_core)
+    add_executable(ogre_skeleton_test tests/ogre_skeleton_test.cpp)
+    target_link_libraries(ogre_skeleton_test PRIVATE torchlight_core)
     add_executable(dds_texture_test tests/dds_texture_test.cpp)
     target_link_libraries(dds_texture_test PRIVATE torchlight_core)
     add_executable(png_texture_test tests/png_texture_test.cpp)
@@ -211,6 +214,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND ogre_mesh_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_ogre_materials
             COMMAND ogre_material_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_ogre_skeletons
+            COMMAND ogre_skeleton_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_dds_textures
             COMMAND dds_texture_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_png_textures

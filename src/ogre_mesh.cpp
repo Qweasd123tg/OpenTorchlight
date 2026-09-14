@@ -12,12 +12,14 @@ constexpr std::uint16_t kHeader = 0x1000;
 constexpr std::uint16_t kMesh = 0x3000;
 constexpr std::uint16_t kSubmesh = 0x4000;
 constexpr std::uint16_t kSubmeshOperation = 0x4010;
+constexpr std::uint16_t kSubmeshBoneAssignment = 0x4100;
 constexpr std::uint16_t kGeometry = 0x5000;
 constexpr std::uint16_t kVertexDeclaration = 0x5100;
 constexpr std::uint16_t kVertexElement = 0x5110;
 constexpr std::uint16_t kVertexBuffer = 0x5200;
 constexpr std::uint16_t kVertexBufferData = 0x5210;
 constexpr std::uint16_t kSkeletonLink = 0x6000;
+constexpr std::uint16_t kMeshBoneAssignment = 0x7000;
 constexpr std::uint16_t kBounds = 0x9000;
 constexpr std::uint16_t kPositionSemantic = 1;
 constexpr std::uint16_t kNormalSemantic = 4;
@@ -365,12 +367,22 @@ OgreSubmesh parse_submesh(Reader& reader, const Chunk& chunk) {
     }
     while (reader.can_read(6, chunk.end)) {
         const auto next_id = reader.peek_u16(chunk.end);
-        if (next_id != kSubmeshOperation && next_id != 0x4100 && next_id != 0x4200) {
+        if (next_id != kSubmeshOperation && next_id != kSubmeshBoneAssignment &&
+            next_id != 0x4200) {
             break;
         }
         const auto child = reader.read_chunk(chunk.end);
         if (child.id == kSubmeshOperation) {
             submesh.operation_type = reader.read_u16(child.end, "submesh operation");
+        } else if (child.id == kSubmeshBoneAssignment) {
+            OgreBoneAssignment assignment;
+            assignment.vertex_index =
+                reader.read_u32(child.end, "submesh bone-assignment vertex index");
+            assignment.bone_index =
+                reader.read_u16(child.end, "submesh bone-assignment bone index");
+            assignment.weight =
+                reader.read_float(child.end, "submesh bone-assignment weight");
+            submesh.bone_assignments.push_back(assignment);
         }
         reader.seek(child.end);
     }
@@ -397,6 +409,19 @@ void validate_mesh(const OgreMesh& mesh) {
                     throw OgreMeshError("OGRE submesh index exceeds its geometry");
                 }
             }
+            for (const auto& assignment : submesh.bone_assignments) {
+                if (assignment.vertex_index >= geometry->vertex_count) {
+                    throw OgreMeshError("OGRE submesh bone assignment exceeds its geometry");
+                }
+            }
+        }
+    }
+    if (!mesh.shared_bone_assignments.empty() && !mesh.shared_geometry) {
+        throw OgreMeshError("OGRE shared bone assignment has no shared geometry");
+    }
+    for (const auto& assignment : mesh.shared_bone_assignments) {
+        if (assignment.vertex_index >= mesh.shared_geometry->vertex_count) {
+            throw OgreMeshError("OGRE shared bone assignment exceeds its geometry");
         }
     }
 }
@@ -436,6 +461,16 @@ OgreMesh parse_ogre_mesh(const std::vector<std::uint8_t>& bytes) {
         case kSkeletonLink:
             mesh.skeleton_file = reader.read_line(child.end, "OGRE skeleton link");
             break;
+        case kMeshBoneAssignment: {
+            OgreBoneAssignment assignment;
+            assignment.vertex_index =
+                reader.read_u32(child.end, "shared bone-assignment vertex index");
+            assignment.bone_index =
+                reader.read_u16(child.end, "shared bone-assignment bone index");
+            assignment.weight = reader.read_float(child.end, "shared bone-assignment weight");
+            mesh.shared_bone_assignments.push_back(assignment);
+            break;
+        }
         case kBounds: {
             OgreMeshBounds bounds;
             for (auto& coordinate : bounds.minimum) {
