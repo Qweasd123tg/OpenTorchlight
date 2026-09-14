@@ -1,0 +1,4 @@
+address=00889110
+symbol=CEquipment::unitInit
+error=
+Low-level Error: Overriding symbol with different type size
