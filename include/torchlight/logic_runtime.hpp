@@ -74,7 +74,8 @@ public:
     void update(float elapsed_seconds);
     void update_player_position(const std::array<float, 3>& position);
 
-    void mark_spawn_complete(std::int64_t spawner_id);
+    void mark_spawn_complete(std::int64_t spawner_id,
+                             std::uint32_t active_monster_count);
     void notify_monster_killed(std::int64_t spawner_id);
     void notify_item_picked_up(std::int64_t spawner_id);
 

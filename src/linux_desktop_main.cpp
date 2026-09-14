@@ -1,6 +1,7 @@
 #include "torchlight/actor_motion.hpp"
 #include "torchlight/adm_document.hpp"
 #include "torchlight/collision_scene.hpp"
+#include "torchlight/entity_world.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/logic_runtime.hpp"
@@ -11,6 +12,7 @@
 #include "torchlight/player.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_geometry.hpp"
+#include "torchlight/spawn_class.hpp"
 #include "torchlight/unit_definition.hpp"
 
 #include <EGL/egl.h>
@@ -425,6 +427,7 @@ int main(int argc, char** argv) {
         const auto master_document = torchlight::parse_adm(
             archive.read("media/MASTERRESOURCEUNITS.DAT.ADM"));
         const torchlight::MasterResourceIndex index(master_document);
+        const torchlight::SpawnClassCatalog spawn_classes(archive);
         torchlight::UnitDefinitionLoader loader(archive);
         for (const auto& record : index.records()) {
             static_cast<void>(loader.load(record));
@@ -506,23 +509,44 @@ int main(int argc, char** argv) {
         DesktopWindow window(1280, 720);
         torchlight::GlesSceneRenderer renderer(geometry, archive, materials);
         std::optional<torchlight::LogicRuntime> logic_runtime;
+        std::optional<torchlight::RuntimeEntityWorld> entity_world;
         std::size_t logic_event_count = 0;
         std::size_t logic_invocation_count = 0;
         std::size_t spawn_request_count = 0;
+        std::size_t spawned_entity_count = 0;
+        std::size_t deferred_unit_type_count = 0;
+        std::size_t missing_spawn_resource_count = 0;
         std::size_t warp_request_count = 0;
         auto drain_logic = [&] {
-            if (!logic_runtime) {
+            if (!logic_runtime || !entity_world) {
                 return;
+            }
+            for (std::size_t pass = 0;; ++pass) {
+                const auto requests = logic_runtime->take_spawn_requests();
+                if (requests.empty()) {
+                    break;
+                }
+                if (pass >= 64U) {
+                    throw DesktopError("level logic produced an unbounded spawn chain");
+                }
+                const auto stats =
+                    entity_world->consume_spawn_requests(requests, *logic_runtime);
+                spawn_request_count += stats.requests;
+                spawned_entity_count += stats.entities_created;
+                deferred_unit_type_count += stats.deferred_unit_types;
+                missing_spawn_resource_count += stats.missing_resources;
             }
             logic_event_count += logic_runtime->take_events().size();
             logic_invocation_count += logic_runtime->take_invocations().size();
-            spawn_request_count += logic_runtime->take_spawn_requests().size();
             warp_request_count += logic_runtime->take_warp_requests().size();
         };
         if (fixed_scene) {
             logic_runtime.emplace(fixed_scene->layout, options.seed);
+            entity_world.emplace(fixed_scene->layout, index, spawn_classes, options.seed);
         } else if (generated_layout) {
             logic_runtime.emplace(generated_layout->layout, options.seed);
+            entity_world.emplace(generated_layout->layout, index, spawn_classes,
+                                 options.seed);
         } else {
             throw DesktopError("no active layout was prepared");
         }
@@ -601,6 +625,10 @@ int main(int argc, char** argv) {
                   << " logic_events=" << logic_event_count
                   << " logic_invocations=" << logic_invocation_count
                   << " spawn_requests=" << spawn_request_count
+                  << " runtime_entities=" << entity_world->entities().size()
+                  << " spawned_entities=" << spawned_entity_count
+                  << " deferred_unit_types=" << deferred_unit_type_count
+                  << " missing_spawn_resources=" << missing_spawn_resource_count
                   << " warp_requests=" << warp_request_count
                   << " frames=" << frames;
         if (player_motion) {

@@ -304,7 +304,6 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         }
         const auto count = static_cast<std::uint32_t>(
             std::max(0, integer_value(object, u"COUNT", 1)));
-        object_state.active_spawned_units += count;
         spawn_requests_.push_back({target_object_id, text_value(object, u"RESOURCE"),
                                    text_value(object, u"GROUP"), count});
         return;
@@ -449,11 +448,13 @@ void LogicRuntime::update_player_position(const std::array<float, 3>& position) 
     }
 }
 
-void LogicRuntime::mark_spawn_complete(std::int64_t spawner_id) {
+void LogicRuntime::mark_spawn_complete(std::int64_t spawner_id,
+                                       std::uint32_t active_monster_count) {
     const auto& object = require_object(spawner_id);
     if (object.descriptor != u"Unit Spawner") {
         throw LogicRuntimeError("Spawn completion references a non-spawner object");
     }
+    states_.at(spawner_id).active_spawned_units = active_monster_count;
     emit(spawner_id, u"All Units Spawned");
 }
 

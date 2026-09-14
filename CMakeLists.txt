@@ -9,6 +9,7 @@ add_library(torchlight_core STATIC
     src/adm_document.cpp
     src/collision_scene.cpp
     src/dds_texture.cpp
+    src/entity_world.cpp
     src/input_state.cpp
     src/key_manager.cpp
     src/level_scene.cpp
@@ -143,6 +144,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(scene_geometry_test PRIVATE torchlight_core)
     add_executable(spawn_class_test tests/spawn_class_test.cpp)
     target_link_libraries(spawn_class_test PRIVATE torchlight_core)
+    add_executable(entity_world_test tests/entity_world_test.cpp)
+    target_link_libraries(entity_world_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
         find_package(Python3 REQUIRED COMPONENTS Interpreter)
         add_test(NAME original_input_comparison
@@ -197,6 +200,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND scene_geometry_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_spawn_classes
             COMMAND spawn_class_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_entity_world
+            COMMAND entity_world_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
             COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         if(TARGET gles_render_smoke_test)

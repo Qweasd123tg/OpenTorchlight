@@ -143,6 +143,8 @@ void test_stateful_graph() {
             "trigger-counter-spawner chain produced the wrong spawn request");
     require(runtime.state(2) != nullptr && !runtime.state(2)->enabled,
             "activate-once counter remained enabled");
+    runtime.mark_spawn_complete(3, 2);
+    static_cast<void>(runtime.take_events());
 
     runtime.update_player_position({10.0F, 0.0F, 0.0F});
     const auto left = runtime.take_events();
@@ -198,6 +200,7 @@ void test_original_logic_layout(const std::string& pak_path) {
     require(requests.size() == 1 && requests[0].spawner_id == spawner &&
                 requests[0].resource == u"Skeletal Warrior" && requests[0].count == 1,
             "original lever-to-spawner graph was not executed");
+    runtime.mark_spawn_complete(spawner, 1);
     runtime.notify_monster_killed(spawner);
     const auto invocations = runtime.take_invocations();
     require(std::any_of(invocations.begin(), invocations.end(), [](const auto& invocation) {

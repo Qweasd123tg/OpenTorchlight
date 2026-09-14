@@ -47,6 +47,8 @@ public:
     [[nodiscard]] const MasterResourceRecord* find(std::int64_t guid) const noexcept;
     [[nodiscard]] const MasterResourceRecord* find(MasterResourceKind kind,
                                                    std::u16string_view name) const noexcept;
+    [[nodiscard]] const MasterResourceRecord* find_case_insensitive(
+        MasterResourceKind kind, std::u16string_view name) const noexcept;
     [[nodiscard]] const MasterResourceRecord* find_any(
         std::u16string_view name) const noexcept;
     [[nodiscard]] std::size_t count(MasterResourceKind kind) const noexcept;

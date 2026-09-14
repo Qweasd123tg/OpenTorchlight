@@ -188,6 +188,16 @@ const MasterResourceRecord* MasterResourceIndex::find_any(
     return nullptr;
 }
 
+const MasterResourceRecord* MasterResourceIndex::find_case_insensitive(
+    MasterResourceKind kind, std::u16string_view name) const noexcept {
+    for (const auto& record : records_) {
+        if (record.kind == kind && same_ascii_case_insensitive(record.name, name)) {
+            return &record;
+        }
+    }
+    return nullptr;
+}
+
 std::size_t MasterResourceIndex::count(MasterResourceKind kind) const noexcept {
     std::size_t result = 0;
     for (const auto& record : records_) {
