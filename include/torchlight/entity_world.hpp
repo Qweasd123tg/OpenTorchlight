@@ -34,8 +34,11 @@ struct RuntimeEntity {
     float attack_speed = 0.0F;
     float sight_radius = 0.0F;
     float reach_bonus = 0.0F;
+    float weapon_range = 0.0F;
+    float attack_range = 0.5F;
     float motion_radius = 0.0F;
     float follow_radius = 0.0F;
+    std::u16string equipped_attack_name;
     bool alive = true;
     bool combat_targetable = false;
 };
@@ -94,6 +97,8 @@ private:
                          const std::array<float, 3>& position,
                          const MasterResourceRecord& resource,
                          SpawnResolutionStats& stats);
+    void equip_monster_attack(RuntimeEntity& entity,
+                              const UnitDefinition& definition);
     [[nodiscard]] std::uint32_t alive_monster_count(
         std::int64_t spawner_id) const noexcept;
 

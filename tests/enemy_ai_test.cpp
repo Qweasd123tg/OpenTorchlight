@@ -73,6 +73,7 @@ int main(int argc, char** argv) {
                 "monster did not detect and chase the player at its running speed");
 
         player_position = world.entities().front().position;
+        player_position[0] += 1.54F;
         const auto attack = enemies.update(
             0.0F, player_position, player, world);
         require(attack.size() == 1 &&

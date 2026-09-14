@@ -97,10 +97,7 @@ std::vector<EnemyAiUpdate> EnemyController::update(
             continue;
         }
 
-        // The selected attack description will eventually add its own range.
-        // Until animations are decoded, REACH_BONUS plus the original contact
-        // allowance is the conservative melee stopping distance.
-        const auto attack_range = std::max(0.5F, entity.reach_bonus + 0.2F);
+        const auto attack_range = entity.attack_range;
         if (distance <= attack_range) {
             state.path.clear();
             if (state.cooldown > 0.0F || entity.attack_speed <= 0.0F ||

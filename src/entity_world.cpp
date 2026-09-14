@@ -54,6 +54,20 @@ bool optional_layout_bool(const LayoutObject& object, const char16_t* name,
     return std::get<bool>(property->value);
 }
 
+const std::u16string* optional_text(const AdmGroup& group,
+                                    const char16_t* name) {
+    const auto* property = group.find_property(name);
+    if (property == nullptr) {
+        return nullptr;
+    }
+    if (property->type != AdmValueType::string &&
+        property->type != AdmValueType::translation &&
+        property->type != AdmValueType::note) {
+        throw EntityWorldError("Runtime equipment slot is not text");
+    }
+    return &std::get<std::u16string>(property->value);
+}
+
 } // namespace
 
 RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
@@ -192,6 +206,9 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         entity.attack_speed = optional_number(*definition, u"ATTACKSPEED", 100.0F);
         entity.sight_radius = optional_number(*definition, u"SIGHT_RADIUS", 0.0F);
         entity.reach_bonus = optional_number(*definition, u"REACH_BONUS", 0.0F);
+        equip_monster_attack(entity, *definition);
+        entity.attack_range = std::max(
+            0.5F, entity.weapon_range + entity.reach_bonus + 0.2F);
         entity.motion_radius = optional_number(*definition, u"MOTION_RADIUS", 0.0F);
         entity.follow_radius = optional_number(
             *definition, u"FOLLOW_RADIUS", entity.sight_radius);
@@ -207,6 +224,8 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         }
         if (!std::isfinite(entity.sight_radius) || entity.sight_radius < 0.0F ||
             !std::isfinite(entity.reach_bonus) || entity.reach_bonus < 0.0F ||
+            !std::isfinite(entity.weapon_range) || entity.weapon_range < 0.0F ||
+            !std::isfinite(entity.attack_range) || entity.attack_range < 0.0F ||
             !std::isfinite(entity.motion_radius) || entity.motion_radius < 0.0F ||
             !std::isfinite(entity.follow_radius) || entity.follow_radius < 0.0F) {
             throw EntityWorldError("Runtime monster perception or reach is invalid");
@@ -215,6 +234,56 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
     }
     entities_.push_back(std::move(entity));
     ++stats.entities_created;
+}
+
+void RuntimeEntityWorld::equip_monster_attack(
+    RuntimeEntity& entity, const UnitDefinition& definition) {
+    const auto equip = [&](const MasterResourceRecord* record) {
+        if (record == nullptr || record->kind != MasterResourceKind::item ||
+            record->do_not_create || normalized(record->create_as) != u"EQUIPMENT") {
+            return false;
+        }
+        const auto weapon = definitions_->load(*record);
+        if (weapon->find_property(u"RANGE") == nullptr) {
+            return false;
+        }
+        entity.weapon_range = optional_number(*weapon, u"RANGE", 0.0F);
+        entity.equipped_attack_name = record->name;
+        return true;
+    };
+
+    for (auto group = definition.root.groups.rbegin();
+         group != definition.root.groups.rend(); ++group) {
+        if (group->name != u"EQUIPMENT") {
+            continue;
+        }
+        for (const auto* slot : {u"RIGHTHAND", u"LEFTHAND"}) {
+            const auto* name = optional_text(*group, slot);
+            if (name != nullptr && equip(resources_->find_case_insensitive(
+                                       MasterResourceKind::item, *name))) {
+                return;
+            }
+        }
+        for (const auto* slot : {u"SPAWNRIGHTHAND", u"SPAWNLEFTHAND"}) {
+            const auto* spawn_class = optional_text(*group, slot);
+            if (spawn_class == nullptr) {
+                continue;
+            }
+            for (const auto& leaf : spawn_classes_->roll(*spawn_class, random_)) {
+                const MasterResourceRecord* record = nullptr;
+                if (leaf.kind == SpawnLeafKind::unit) {
+                    record = resources_->find_case_insensitive(
+                        MasterResourceKind::item, leaf.value);
+                } else {
+                    record = unit_types_->roll(leaf.value, spawn_level_, random_);
+                }
+                if (equip(record)) {
+                    return;
+                }
+            }
+        }
+        return;
+    }
 }
 
 std::uint32_t RuntimeEntityWorld::alive_monster_count(
