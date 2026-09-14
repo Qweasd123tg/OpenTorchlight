@@ -43,6 +43,7 @@ int main(int argc, char** argv) {
         std::size_t meshes_without_bounds = 0;
         std::size_t geometries = 0;
         std::size_t textured_geometries = 0;
+        std::size_t normal_geometries = 0;
         for (const auto& entry : archive.entries()) {
             if (!ends_with_mesh(entry.name)) {
                 continue;
@@ -64,6 +65,8 @@ int main(int argc, char** argv) {
                 ++geometries;
                 textured_geometries +=
                     static_cast<std::size_t>(!mesh.shared_geometry->texcoords.empty());
+                normal_geometries +=
+                    static_cast<std::size_t>(!mesh.shared_geometry->normals.empty());
             }
             for (const auto& submesh : mesh.submeshes) {
                 indices += submesh.indices.size();
@@ -72,6 +75,8 @@ int main(int argc, char** argv) {
                     ++geometries;
                     textured_geometries +=
                         static_cast<std::size_t>(!submesh.geometry->texcoords.empty());
+                    normal_geometries +=
+                        static_cast<std::size_t>(!submesh.geometry->normals.empty());
                 }
             }
         }
@@ -84,6 +89,8 @@ int main(int argc, char** argv) {
         require(geometries == 3528, "unexpected OGRE geometry count");
         require(textured_geometries == geometries,
                 "OGRE geometry has no primary texture coordinates");
+        require(normal_geometries == geometries,
+                "OGRE geometry has no primary vertex normals");
         std::cout << "PASS: parsed 3312 OGRE v1.40 meshes, 1939624 vertices, "
                      "2461269 indices and 5105 submeshes\n";
         return 0;

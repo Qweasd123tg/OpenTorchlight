@@ -20,6 +20,7 @@ constexpr std::uint16_t kVertexBufferData = 0x5210;
 constexpr std::uint16_t kSkeletonLink = 0x6000;
 constexpr std::uint16_t kBounds = 0x9000;
 constexpr std::uint16_t kPositionSemantic = 1;
+constexpr std::uint16_t kNormalSemantic = 4;
 constexpr std::uint16_t kTextureCoordinateSemantic = 7;
 constexpr std::uint16_t kFloat2Type = 1;
 constexpr std::uint16_t kFloat3Type = 2;
@@ -242,6 +243,30 @@ void finish_geometry(OgreGeometry& geometry) {
         geometry.positions.push_back({read_buffer_float(buffer->data, offset),
                                       read_buffer_float(buffer->data, offset + 4U),
                                       read_buffer_float(buffer->data, offset + 8U)});
+    }
+
+    const auto normal = std::find_if(geometry.elements.begin(), geometry.elements.end(),
+                                     [](const auto& element) {
+                                         return element.semantic == kNormalSemantic &&
+                                                element.index == 0;
+                                     });
+    if (normal != geometry.elements.end()) {
+        if (normal->type != kFloat3Type) {
+            throw OgreMeshError("OGRE primary normal is not FLOAT3");
+        }
+        const auto* normal_buffer = find_buffer(geometry, normal->source);
+        if (normal_buffer == nullptr) {
+            throw OgreMeshError("OGRE normal buffer is absent");
+        }
+        geometry.normals.reserve(geometry.vertex_count);
+        for (std::uint32_t index = 0; index < geometry.vertex_count; ++index) {
+            const auto offset = static_cast<std::size_t>(index) * normal_buffer->stride +
+                                normal->offset;
+            geometry.normals.push_back({
+                read_buffer_float(normal_buffer->data, offset),
+                read_buffer_float(normal_buffer->data, offset + 4U),
+                read_buffer_float(normal_buffer->data, offset + 8U)});
+        }
     }
 
     const auto texcoord = std::find_if(geometry.elements.begin(), geometry.elements.end(),

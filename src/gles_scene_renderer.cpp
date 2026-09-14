@@ -53,6 +53,7 @@ GLuint compile_shader(GLenum type, const char* source) {
 GLuint create_program() {
     constexpr const char* vertex_source =
         "attribute vec3 position;"
+        "attribute vec3 normal;"
         "attribute vec2 texcoord;"
         "uniform vec3 translation;"
         "uniform vec3 object_scale;"
@@ -60,6 +61,7 @@ GLuint create_program() {
         "uniform vec4 projection;"
         "uniform vec2 depth_projection;"
         "varying vec2 vertex_texcoord;"
+        "varying float vertex_light;"
         "void main() {"
         "  vec3 local = vec3(position.x * object_scale.x,"
         "                    position.y * object_scale.y,"
@@ -71,6 +73,15 @@ GLuint create_program() {
         "  float projected_x = world.x - 0.70 * world.z;"
         "  float projected_y = world.y + 0.35 * (world.x + 0.70 * world.z);"
         "  float depth = 0.25 * world.x + 0.50 * world.z - 0.10 * world.y;"
+        "  vec3 local_normal = normalize(vec3(normal.x / max(abs(object_scale.x), 0.0001),"
+        "                                           normal.y / max(abs(object_scale.y), 0.0001),"
+        "                                          -normal.z / max(abs(object_scale.z), 0.0001)));"
+        "  vec3 world_normal = normalize(vec3("
+        "      local_normal.x * object_rotation.x + local_normal.z * object_rotation.y,"
+        "      local_normal.y,"
+        "     -local_normal.x * object_rotation.y + local_normal.z * object_rotation.x));"
+        "  vec3 light_direction = normalize(vec3(-0.35, 0.80, -0.45));"
+        "  vertex_light = 0.62 + 0.38 * max(dot(world_normal, light_direction), 0.0);"
         "  gl_Position = vec4((projected_x - projection.x) * projection.z,"
         "                     (projected_y - projection.y) * projection.w,"
         "                     (depth - depth_projection.x) * depth_projection.y, 1.0);"
@@ -81,10 +92,11 @@ GLuint create_program() {
         "uniform sampler2D diffuse_texture;"
         "uniform vec3 draw_color;"
         "varying vec2 vertex_texcoord;"
+        "varying float vertex_light;"
         "void main() {"
         "  vec4 color = texture2D(diffuse_texture, vertex_texcoord) * vec4(draw_color, 1.0);"
         "  if (color.a < 0.10) discard;"
-        "  gl_FragColor = color;"
+        "  gl_FragColor = vec4(color.rgb * vertex_light, color.a);"
         "}";
     const auto vertex_shader = compile_shader(GL_VERTEX_SHADER, vertex_source);
     const auto fragment_shader = compile_shader(GL_FRAGMENT_SHADER, fragment_source);
@@ -98,6 +110,7 @@ GLuint create_program() {
     glAttachShader(program, fragment_shader);
     glBindAttribLocation(program, 0, "position");
     glBindAttribLocation(program, 1, "texcoord");
+    glBindAttribLocation(program, 2, "normal");
     glLinkProgram(program);
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
@@ -199,6 +212,7 @@ public:
         struct GeometryBuffers {
             GLuint position = 0;
             GLuint texcoord = 0;
+            GLuint normal = 0;
         };
         std::unordered_map<const OgreGeometry*, GeometryBuffers> vertex_buffers;
         std::unordered_map<std::string, GLuint> textures;
@@ -239,9 +253,27 @@ public:
                     glBufferData(GL_ARRAY_BUFFER,
                                  static_cast<GLsizeiptr>(texcoords.size() * sizeof(float)),
                                  texcoords.data(), GL_STATIC_DRAW);
+                    std::vector<float> normals;
+                    normals.reserve(source_geometry.positions.size() * 3U);
+                    if (source_geometry.normals.size() == source_geometry.positions.size()) {
+                        for (const auto& normal : source_geometry.normals) {
+                            normals.insert(normals.end(), normal.begin(), normal.end());
+                        }
+                    } else {
+                        for (std::size_t index = 0;
+                             index < source_geometry.positions.size(); ++index) {
+                            normals.insert(normals.end(), {0.0F, 1.0F, 0.0F});
+                        }
+                    }
+                    glGenBuffers(1, &buffers.normal);
+                    glBindBuffer(GL_ARRAY_BUFFER, buffers.normal);
+                    glBufferData(GL_ARRAY_BUFFER,
+                                 static_cast<GLsizeiptr>(normals.size() * sizeof(float)),
+                                 normals.data(), GL_STATIC_DRAW);
                     vertex_buffers.emplace(&source_geometry, buffers);
                     owned_vertex_buffers_.push_back(buffers.position);
                     owned_vertex_buffers_.push_back(buffers.texcoord);
+                    owned_vertex_buffers_.push_back(buffers.normal);
                 } else {
                     buffers = found_vertex_buffer->second;
                 }
@@ -292,7 +324,7 @@ public:
                     }
                 }
                 draws_by_mesh_[mesh_index].push_back(
-                    Draw{buffers.position, buffers.texcoord, index_buffer,
+                    Draw{buffers.position, buffers.texcoord, buffers.normal, index_buffer,
                          checked_count(indices.size()), texture, color, alpha_blend});
                 stats_.textured_batches += static_cast<std::size_t>(textured);
                 stats_.fallback_batches += static_cast<std::size_t>(!textured);
@@ -388,6 +420,7 @@ public:
                     depth_scale);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         for (const auto& instance : instances_) {
             if (!instance.visible) {
                 continue;
@@ -409,6 +442,8 @@ public:
                 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ARRAY_BUFFER, draw.texcoord_buffer);
                 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+                glBindBuffer(GL_ARRAY_BUFFER, draw.normal_buffer);
+                glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, draw.index_buffer);
                 glBindTexture(GL_TEXTURE_2D, draw.texture);
                 glDrawElements(GL_TRIANGLES, draw.index_count, GL_UNSIGNED_SHORT, nullptr);
@@ -416,6 +451,7 @@ public:
         }
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
         glDepthMask(GL_TRUE);
         glDisable(GL_BLEND);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -483,6 +519,7 @@ private:
     struct Draw {
         GLuint vertex_buffer = 0;
         GLuint texcoord_buffer = 0;
+        GLuint normal_buffer = 0;
         GLuint index_buffer = 0;
         GLsizei index_count = 0;
         GLuint texture = 0;

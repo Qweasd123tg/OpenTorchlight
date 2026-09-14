@@ -33,6 +33,7 @@ struct OgreGeometry {
     std::vector<OgreVertexElement> elements;
     std::vector<OgreVertexBuffer> buffers;
     std::vector<std::array<float, 3>> positions;
+    std::vector<std::array<float, 3>> normals;
     std::vector<std::array<float, 2>> texcoords;
 };
 
