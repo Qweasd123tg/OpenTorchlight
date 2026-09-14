@@ -15,13 +15,19 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
     const auto rolled = high > low ? random.between(low, high) : low;
     maximum_health_ = std::max(1.0F, std::trunc(rolled));
     health_ = maximum_health_;
+    damage_defense_ = prototype.damage_defense;
 }
 
-float PlayerCombatState::apply_damage(std::int32_t damage) noexcept {
-    if (damage > 0 && alive()) {
-        health_ = std::max(0.0F, health_ - static_cast<float>(damage));
+std::int32_t PlayerCombatState::apply_damage(
+    std::int32_t damage, std::int32_t maximum_damage, DamageType type,
+    TorchlightRandom& random) noexcept {
+    if (!alive()) {
+        return 0;
     }
-    return health_;
+    const auto result = mitigate_damage(
+        damage, maximum_damage, type, 1.0F, damage_defense_, random);
+    health_ = std::max(0.0F, health_ - static_cast<float>(result.applied));
+    return result.applied;
 }
 
 float EnemyController::distance_xz(const std::array<float, 3>& left,
@@ -106,13 +112,15 @@ std::vector<EnemyAiUpdate> EnemyController::update(
                     {EnemyAiState::waiting, entity.id, false, 0, player.health()});
                 continue;
             }
-            const auto damage = random_.integer_between(
+            const auto rolled_damage = random_.integer_between(
                 entity.minimum_damage, entity.maximum_damage);
-            const auto remaining = player.apply_damage(damage);
+            const auto damage = player.apply_damage(
+                rolled_damage, entity.maximum_damage, DamageType::physical,
+                random_);
             state.cooldown = std::max(0.1F, 100.0F / entity.attack_speed);
             updates.push_back({player.alive() ? EnemyAiState::attacked
                                               : EnemyAiState::player_killed,
-                               entity.id, false, damage, remaining});
+                               entity.id, false, damage, player.health()});
             continue;
         }
 

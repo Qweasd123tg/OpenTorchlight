@@ -85,6 +85,9 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
           "media/graphs/stats/HEALTH_MONSTER_BYLEVEL.DAT.adm"),
       monster_damage_graph_(definitions.archive(),
                             "media/graphs/stats/DAMAGE_MONSTER.DAT.adm"),
+      monster_armor_graph_(
+          definitions.archive(),
+          "media/graphs/stats/ARMOR_MONSTER_BYLEVEL.DAT.adm"),
       random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     const auto transforms = resolve_layout_world_transforms(layout);
@@ -200,6 +203,34 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
             static_cast<std::int32_t>(std::ceil(
                 damage_scale * std::max(minimum_damage_percent,
                                         maximum_damage_percent) / 100.0F)));
+        const auto armor_percent = optional_number(*definition, u"ARMOR", 0.0F);
+        entity.damage_defense.natural_armor = std::max(
+            0, static_cast<std::int32_t>(std::ceil(
+                   monster_armor_graph_.value(static_cast<float>(spawn_level_)) *
+                   armor_percent / 100.0F)));
+        entity.damage_defense.defense_attribute = std::max(
+            0, static_cast<std::int32_t>(
+                   optional_number(*definition, u"DEFENSE", 0.0F)));
+        constexpr std::array<const char16_t*, 7> armor_properties{
+            u"ARMOR_PHYSICAL", u"ARMOR_MAGICAL", u"ARMOR_FIRE", u"ARMOR_ICE",
+            u"ARMOR_ELECTRIC", u"ARMOR_POISON", u"ARMOR_ALL"};
+        const auto scaled_natural_armor = entity.damage_defense.natural_armor;
+        for (std::size_t index = 0; index < armor_properties.size(); ++index) {
+            const auto percent = optional_number(
+                *definition, armor_properties[index], -1.0F);
+            if (percent == -1.0F) {
+                continue;
+            }
+            const auto armor = static_cast<std::int32_t>(std::ceil(
+                static_cast<float>(scaled_natural_armor) * percent / 100.0F));
+            if (index == static_cast<std::size_t>(DamageType::physical)) {
+                if (armor > 0) {
+                    entity.damage_defense.natural_armor = armor;
+                }
+            } else {
+                entity.damage_defense.elemental_armor[index] = armor;
+            }
+        }
         entity.walking_speed = optional_number(*definition, u"WALKINGSPEED", 1.0F);
         entity.running_speed = optional_number(
             *definition, u"RUNNINGSPEED", entity.walking_speed);

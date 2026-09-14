@@ -26,8 +26,9 @@ CombatController::CombatController(const PlayerPrototype& player,
             (static_cast<float>(weapon.speed_damage_modifier) / 100.0F));
         const auto damage = static_cast<std::int32_t>(std::ceil(
             weapon.base_weapon_damage * static_cast<float>(scaled_percent) / 100.0F));
-        minimum_damage_ = std::max(1, damage);
-        maximum_damage_ = minimum_damage_;
+        maximum_damage_ = std::max(1, damage);
+        minimum_damage_ = static_cast<std::int32_t>(
+            std::ceil(static_cast<float>(maximum_damage_) * 0.5F));
         // CCharacter::attackRange adds the weapon range, scaled REACH_BONUS and
         // the original 0.2 world-unit contact allowance. Player scale is 1 here.
         attack_range_ = std::max(
@@ -83,8 +84,13 @@ CombatUpdate CombatController::update(float seconds,
         return {CombatState::waiting, selected_id, 0, selected->health};
     }
 
-    const auto damage = random_.integer_between(minimum_damage_, maximum_damage_);
-    const auto result = world.apply_damage(selected_id, static_cast<float>(damage), logic);
+    const auto rolled_damage = random_.integer_between(
+        minimum_damage_, maximum_damage_);
+    const auto mitigation = mitigate_damage(
+        rolled_damage, maximum_damage_, DamageType::physical, 1.0F,
+        selected->damage_defense, random_);
+    const auto result = world.apply_damage(
+        selected_id, static_cast<float>(mitigation.applied), logic);
     cooldown_ = attack_interval_;
     if (!result.accepted) {
         clear_target();
@@ -94,7 +100,7 @@ CombatUpdate CombatController::update(float seconds,
     if (result.killed) {
         target_id_ = 0;
     }
-    return {state, selected_id, damage, result.remaining_health};
+    return {state, selected_id, mitigation.applied, result.remaining_health};
 }
 
 } // namespace torchlight

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "torchlight/damage.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
@@ -39,6 +40,7 @@ struct RuntimeEntity {
     float motion_radius = 0.0F;
     float follow_radius = 0.0F;
     std::u16string equipped_attack_name;
+    DamageDefense damage_defense;
     bool alive = true;
     bool combat_targetable = false;
 };
@@ -108,6 +110,7 @@ private:
     const UnitTypeResourceIndex* unit_types_ = nullptr;
     StatGraph monster_health_graph_;
     StatGraph monster_damage_graph_;
+    StatGraph monster_armor_graph_;
     std::unordered_map<std::int64_t, std::array<float, 3>> spawner_positions_;
     TorchlightRandom random_;
     std::int32_t spawn_level_ = 1;

@@ -208,6 +208,8 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.dexterity = integer(*definition, u"DEXTERITY");
         player.magic = integer(*definition, u"MAGIC");
         player.defense = integer(*definition, u"DEFENSE");
+        player.damage_defense.natural_armor = integer(*definition, u"ARMOR");
+        player.damage_defense.defense_attribute = player.defense;
         if (!std::isfinite(player.minimum_health) ||
             !std::isfinite(player.maximum_health) ||
             player.minimum_health <= 0.0F ||

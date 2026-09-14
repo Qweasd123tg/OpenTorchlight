@@ -20,11 +20,17 @@ public:
     [[nodiscard]] float health() const noexcept { return health_; }
     [[nodiscard]] float maximum_health() const noexcept { return maximum_health_; }
     [[nodiscard]] bool alive() const noexcept { return health_ > 0.0F; }
-    [[nodiscard]] float apply_damage(std::int32_t damage) noexcept;
+    [[nodiscard]] std::int32_t apply_damage(
+        std::int32_t damage, std::int32_t maximum_damage, DamageType type,
+        TorchlightRandom& random) noexcept;
+    [[nodiscard]] std::int32_t armor_class() const noexcept {
+        return damage_defense_.effective(DamageType::physical);
+    }
 
 private:
     float health_ = 1.0F;
     float maximum_health_ = 1.0F;
+    DamageDefense damage_defense_;
 };
 
 enum class EnemyAiState {

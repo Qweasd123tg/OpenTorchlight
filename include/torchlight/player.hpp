@@ -1,5 +1,6 @@
 #pragma once
 
+#include "torchlight/damage.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/scene_geometry.hpp"
@@ -46,6 +47,7 @@ struct PlayerPrototype {
     std::int32_t dexterity = 0;
     std::int32_t magic = 0;
     std::int32_t defense = 0;
+    DamageDefense damage_defense;
     std::optional<WeaponPrototype> starting_weapon;
 };
 

@@ -48,6 +48,10 @@ int main(int argc, char** argv) {
         require(players[0].strength == 6 && players[0].dexterity == 7 &&
                     players[0].magic == 10 && players[0].defense == 5,
                 "Alchemist starting stats changed");
+        require(players[0].damage_defense.natural_armor == 0 &&
+                    players[0].damage_defense.effective(
+                        torchlight::DamageType::physical) == 0,
+                "unequipped Alchemist unexpectedly has armor");
         require(players[0].starting_weapon &&
                     players[0].starting_weapon->name == u"Moldy Staff" &&
                     players[0].starting_weapon->guid == 5521717854978183646LL &&

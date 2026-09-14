@@ -9,6 +9,7 @@ add_library(torchlight_core STATIC
     src/adm_document.cpp
     src/collision_scene.cpp
     src/combat.cpp
+    src/damage.cpp
     src/dds_texture.cpp
     src/entity_world.cpp
     src/enemy_ai.cpp
@@ -157,6 +158,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(unit_type_test PRIVATE torchlight_core)
     add_executable(combat_test tests/combat_test.cpp)
     target_link_libraries(combat_test PRIVATE torchlight_core)
+    add_executable(damage_test tests/damage_test.cpp)
+    target_link_libraries(damage_test PRIVATE torchlight_core)
     add_executable(level_transition_test tests/level_transition_test.cpp)
     target_link_libraries(level_transition_test PRIVATE torchlight_core)
     if(TORCHLIGHT_ORIGINAL)
@@ -221,6 +224,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             COMMAND unit_type_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_combat
             COMMAND combat_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME damage_calculation COMMAND damage_test)
         add_test(NAME original_level_transitions
             COMMAND level_transition_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap

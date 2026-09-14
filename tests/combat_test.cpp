@@ -82,6 +82,17 @@ int main(int argc, char** argv) {
                     spawned.equipped_attack_name == u"Skeleton Sword" &&
                     std::fabs(spawned.weapon_range - 0.6F) < 0.0001F &&
                     std::fabs(spawned.attack_range - 1.55F) < 0.0001F &&
+                    spawned.damage_defense.natural_armor == 40 &&
+                    spawned.damage_defense.effective(
+                        torchlight::DamageType::physical) == 40 &&
+                    spawned.damage_defense.effective(
+                        torchlight::DamageType::fire) == 40 &&
+                    spawned.damage_defense.effective(
+                        torchlight::DamageType::ice) == 20 &&
+                    spawned.damage_defense.effective(
+                        torchlight::DamageType::electric) == 32 &&
+                    spawned.damage_defense.effective(
+                        torchlight::DamageType::poison) == 32 &&
                     spawned.motion_radius == 4.5F && spawned.follow_radius == 18.0F,
                 "monster level-scaled combat properties are wrong");
         static_cast<void>(logic.take_events());
@@ -89,8 +100,9 @@ int main(int argc, char** argv) {
         torchlight::CombatController combat(players.front(), 31);
         require(combat.attack_range() == 2.25F &&
                     std::fabs(combat.attack_interval() - 1.25F) < 0.0001F &&
-                    combat.minimum_damage() == combat.maximum_damage() &&
-                    combat.minimum_damage() >= 22 && combat.maximum_damage() <= 24,
+                    combat.maximum_damage() >= 22 && combat.maximum_damage() <= 24 &&
+                    combat.minimum_damage() == static_cast<std::int32_t>(
+                        std::ceil(static_cast<float>(combat.maximum_damage()) * 0.5F)),
                 "starting staff damage, reach or interval is wrong");
         require(combat.select_target(world, spawned.position, 0.5F) &&
                     combat.target_id() == spawned.id,
@@ -102,16 +114,15 @@ int main(int argc, char** argv) {
                 "out-of-range target did not request an approach");
 
         auto result = combat.update(0.0F, spawned.position, world, logic);
-        const auto weapon_damage = combat.minimum_damage();
         require(result.state == torchlight::CombatState::attacked &&
-                    result.damage == weapon_damage &&
-                    result.remaining_health == spawned.maximum_health - weapon_damage,
-                "first equipped-weapon attack applied the wrong damage");
+                    result.damage == 1 &&
+                    result.remaining_health == spawned.maximum_health - 1.0F,
+                "level-ten monster armor did not absorb the starting attack");
         require(combat.update(0.0F, spawned.position, world, logic).state ==
                     torchlight::CombatState::waiting,
                 "attack cooldown was ignored");
         for (int attack = 0;
-             attack < 10 && result.state != torchlight::CombatState::killed;
+             attack < 128 && result.state != torchlight::CombatState::killed;
              ++attack) {
             result = combat.update(combat.attack_interval(), spawned.position,
                                    world, logic);
