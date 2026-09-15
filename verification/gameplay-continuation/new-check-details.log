@@ -1,0 +1,3 @@
+PASS: 390 gameplay continuation assertions (authored resources, no original runtime)
+PASS: 62 deferred death/loot/callback assertions (authored resource graph)
+PASS: gold=2064, mana=2320, entry fee=2113; unchanged numeric spans, synthetic dependencies; targeted export bytes, NOT whole original game

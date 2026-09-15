@@ -1,0 +1,22 @@
+{
+  "input_archive": "OpenTorchlight-gpt-pro-large-4.zip",
+  "input_sha256": "8ccb7a4cb52031c0e56c2b426cda097990b0c97fc9c9255a151938670728b7c0",
+  "baseline_portable_tests": 15,
+  "portable_tests": 21,
+  "asan_ubsan_tests": 21,
+  "clean_applied_portable_tests": 21,
+  "gameplay_assertions": 390,
+  "death_finalization_assertions": 62,
+  "read_only_assertions": 21,
+  "native_gold_cases": 2064,
+  "native_mana_cases": 2320,
+  "native_fee_cases": 2113,
+  "source_files_including_manifest": 486,
+  "clean_git_apply_and_byte_comparison": true,
+  "full_desktop_tested": false,
+  "original_game_resources_tested": false,
+  "gcc_16_tested": false,
+  "compiler": "GCC 14.2.0",
+  "native_scope": "targeted unchanged instruction spans, synthetic dependencies; not whole original ELF",
+  "note": "Final verification files added after clean code build; code/assets/generators unchanged thereafter."
+}

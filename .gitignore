@@ -1,7 +1,7 @@
 # Local game installer and proprietary runtime data are inputs, not source.
 /Torchlight.sh
 /original/
-/OpenTorchlight-gpt-pro.zip
+/OpenTorchlight-*.zip
 
 # CMake and editor outputs.
 /build/

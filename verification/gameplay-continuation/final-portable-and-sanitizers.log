@@ -1,0 +1,125 @@
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (4.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /mnt/data/ot_large4_work/build-portable
+ninja: no work to do.
+Internal ctest changing into directory: /mnt/data/ot_large4_work/build-portable
+Test project /mnt/data/ot_large4_work/build-portable
+      Start  1: ordinary_attack_action
+ 1/21 Test  #1: ordinary_attack_action ............   Passed    0.00 sec
+      Start  2: actor_motion
+ 2/21 Test  #2: actor_motion ......................   Passed    0.00 sec
+      Start  3: animation_events
+ 3/21 Test  #3: animation_events ..................   Passed    0.00 sec
+      Start  4: damage_calculation
+ 4/21 Test  #4: damage_calculation ................   Passed    0.00 sec
+      Start  5: warp_arrival
+ 5/21 Test  #5: warp_arrival ......................   Passed    0.00 sec
+      Start  6: level_entry_fallback
+ 6/21 Test  #6: level_entry_fallback ..............   Passed    0.04 sec
+      Start  7: enemy_ai_cooldown
+ 7/21 Test  #7: enemy_ai_cooldown .................   Passed    0.07 sec
+      Start  8: ai_cooldown_export_comparison
+ 8/21 Test  #8: ai_cooldown_export_comparison .....   Passed    0.98 sec
+      Start  9: desktop_gameplay_syntax
+ 9/21 Test  #9: desktop_gameplay_syntax ...........   Passed    2.09 sec
+      Start 10: inventory_view
+10/21 Test #10: inventory_view ....................   Passed    0.00 sec
+      Start 11: inventory_instances
+11/21 Test #11: inventory_instances ...............   Passed    0.00 sec
+      Start 12: item_cycle
+12/21 Test #12: item_cycle ........................   Passed    0.03 sec
+      Start 13: attack_speed_export_comparison
+13/21 Test #13: attack_speed_export_comparison ....   Passed    0.83 sec
+      Start 14: ordinary_combat
+14/21 Test #14: ordinary_combat ...................   Passed    0.10 sec
+      Start 15: gameplay_continuation
+15/21 Test #15: gameplay_continuation .............   Passed    0.04 sec
+      Start 16: death_finalization
+16/21 Test #16: death_finalization ................   Passed    0.01 sec
+      Start 17: effect_catalog_source
+17/21 Test #17: effect_catalog_source .............   Passed    0.72 sec
+      Start 18: read_only_extractors
+18/21 Test #18: read_only_extractors ..............   Passed    6.11 sec
+      Start 19: combat_inputs_evidence
+19/21 Test #19: combat_inputs_evidence ............   Passed    0.74 sec
+      Start 20: player_vitals_export_comparison
+20/21 Test #20: player_vitals_export_comparison ...   Passed    0.86 sec
+      Start 21: item_cycle_resource_fixture
+21/21 Test #21: item_cycle_resource_fixture .......   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 21
+
+Total Test time (real) =  12.65 sec
+Portable tests passed; original-game checks and UI audit were not run.
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (4.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /mnt/data/ot_large4_asan
+ninja: no work to do.
+Internal ctest changing into directory: /mnt/data/ot_large4_asan
+Test project /mnt/data/ot_large4_asan
+      Start  1: ordinary_attack_action
+ 1/21 Test  #1: ordinary_attack_action ............   Passed    0.01 sec
+      Start  2: actor_motion
+ 2/21 Test  #2: actor_motion ......................   Passed    0.01 sec
+      Start  3: animation_events
+ 3/21 Test  #3: animation_events ..................   Passed    0.01 sec
+      Start  4: damage_calculation
+ 4/21 Test  #4: damage_calculation ................   Passed    0.01 sec
+      Start  5: warp_arrival
+ 5/21 Test  #5: warp_arrival ......................   Passed    0.01 sec
+      Start  6: level_entry_fallback
+ 6/21 Test  #6: level_entry_fallback ..............   Passed    0.15 sec
+      Start  7: enemy_ai_cooldown
+ 7/21 Test  #7: enemy_ai_cooldown .................   Passed    0.33 sec
+      Start  8: ai_cooldown_export_comparison
+ 8/21 Test  #8: ai_cooldown_export_comparison .....   Passed    1.10 sec
+      Start  9: desktop_gameplay_syntax
+ 9/21 Test  #9: desktop_gameplay_syntax ...........   Passed    2.12 sec
+      Start 10: inventory_view
+10/21 Test #10: inventory_view ....................   Passed    0.02 sec
+      Start 11: inventory_instances
+11/21 Test #11: inventory_instances ...............   Passed    0.01 sec
+      Start 12: item_cycle
+12/21 Test #12: item_cycle ........................   Passed    0.12 sec
+      Start 13: attack_speed_export_comparison
+13/21 Test #13: attack_speed_export_comparison ....   Passed    0.93 sec
+      Start 14: ordinary_combat
+14/21 Test #14: ordinary_combat ...................   Passed    0.34 sec
+      Start 15: gameplay_continuation
+15/21 Test #15: gameplay_continuation .............   Passed    0.15 sec
+      Start 16: death_finalization
+16/21 Test #16: death_finalization ................   Passed    0.05 sec
+      Start 17: effect_catalog_source
+17/21 Test #17: effect_catalog_source .............   Passed    0.87 sec
+      Start 18: read_only_extractors
+18/21 Test #18: read_only_extractors ..............   Passed    5.73 sec
+      Start 19: combat_inputs_evidence
+19/21 Test #19: combat_inputs_evidence ............   Passed    0.63 sec
+      Start 20: player_vitals_export_comparison
+20/21 Test #20: player_vitals_export_comparison ...   Passed    0.82 sec
+      Start 21: item_cycle_resource_fixture
+21/21 Test #21: item_cycle_resource_fixture .......   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 21
+
+Total Test time (real) =  13.46 sec

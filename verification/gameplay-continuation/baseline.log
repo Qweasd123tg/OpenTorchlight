@@ -1,0 +1,213 @@
+-- The C compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3.1")
+-- Found PNG: /usr/lib/x86_64-linux-gnu/libpng.so (found version "1.6.48")
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Found Python3: /opt/pyvenv/bin/python3 (found version "3.13.5") found components: Interpreter
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (4.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /mnt/data/ot_large4_work/build-portable
+[1/143] Building CXX object CMakeFiles/torchlight_core.dir/src/actor_motion.cpp.o
+[2/143] Building CXX object CMakeFiles/torchlight_core.dir/src/animation_events.cpp.o
+[3/143] Building CXX object CMakeFiles/torchlight_core.dir/src/adm_document.cpp.o
+[4/143] Building CXX object CMakeFiles/torchlight_core.dir/src/animation_manifest.cpp.o
+[5/143] Building CXX object CMakeFiles/torchlight_core.dir/src/collision_scene.cpp.o
+[6/143] Building CXX object CMakeFiles/torchlight_core.dir/src/attack_action.cpp.o
+[7/143] Building CXX object CMakeFiles/torchlight_core.dir/src/damage.cpp.o
+[8/143] Building CXX object CMakeFiles/torchlight_core.dir/src/combat.cpp.o
+[9/143] Building CXX object CMakeFiles/torchlight_core.dir/src/dds_texture.cpp.o
+[10/143] Building CXX object CMakeFiles/torchlight_core.dir/src/equipment.cpp.o
+[11/143] Building CXX object CMakeFiles/torchlight_core.dir/src/entity_world.cpp.o
+[12/143] Building CXX object CMakeFiles/torchlight_core.dir/src/input_state.cpp.o
+[13/143] Building CXX object CMakeFiles/torchlight_core.dir/src/enemy_ai.cpp.o
+[14/143] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory.cpp.o
+[15/143] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory_view.cpp.o
+[16/143] Building CXX object CMakeFiles/torchlight_core.dir/src/player_session.cpp.o
+[17/143] Building CXX object CMakeFiles/torchlight_core.dir/src/key_manager.cpp.o
+[18/143] Building CXX object CMakeFiles/torchlight_core.dir/src/treasure.cpp.o
+[19/143] Building CXX object CMakeFiles/torchlight_core.dir/src/level_transition.cpp.o
+[20/143] Building CXX object CMakeFiles/torchlight_core.dir/src/level_scene.cpp.o
+[21/143] Building CXX object CMakeFiles/torchlight_core.dir/src/logic_runtime.cpp.o
+[22/143] Building CXX object CMakeFiles/torchlight_core.dir/src/master_resource_index.cpp.o
+[23/143] Building CXX object CMakeFiles/torchlight_core.dir/src/mouse_manager.cpp.o
+[24/143] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_material.cpp.o
+[25/143] Building CXX object CMakeFiles/torchlight_core.dir/src/navigation_grid.cpp.o
+[26/143] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_skeleton.cpp.o
+[27/143] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_mesh.cpp.o
+[28/143] Building CXX object CMakeFiles/torchlight_core.dir/src/pathfinder_rules.cpp.o
+[29/143] Building CXX object CMakeFiles/torchlight_core.dir/src/pointer_movement.cpp.o
+[30/143] Building CXX object CMakeFiles/torchlight_core.dir/src/pak_archive.cpp.o
+[31/143] Building CXX object CMakeFiles/torchlight_core.dir/src/png_texture.cpp.o
+[32/143] Building CXX object CMakeFiles/torchlight_core.dir/src/player.cpp.o
+[33/143] Building CXX object CMakeFiles/torchlight_core.dir/src/randomizer.cpp.o
+[34/143] Building CXX object CMakeFiles/torchlight_core.dir/src/random_level.cpp.o
+[35/143] Building CXX object CMakeFiles/torchlight_core.dir/src/resource_config.cpp.o
+[36/143] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_animation.cpp.o
+[37/143] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_geometry.cpp.o
+[38/143] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_math.cpp.o
+[39/143] Building CXX object CMakeFiles/torchlight_core.dir/src/skeletal_animation.cpp.o
+[40/143] Building CXX object CMakeFiles/torchlight_core.dir/src/spawn_class.cpp.o
+[41/143] Building CXX object CMakeFiles/torchlight_core.dir/src/stat_graph.cpp.o
+[42/143] Building CXX object CMakeFiles/torchlight_core.dir/src/unit_definition.cpp.o
+[43/143] Building CXX object CMakeFiles/torchlight_core.dir/src/unit_type.cpp.o
+[44/143] Generating fixtures/ai-cooldown.pak.zip
+Synthetic AI cooldown fixture: 21 UNIT definitions
+[45/143] Generating fixtures/item-cycle.pak.zip
+Synthetic item fixture: 16 units, 5 tables; no game assets
+[46/143] Linking CXX static library libtorchlight_core.a
+[47/143] Generating fixtures/ordinary-combat.pak.zip
+Authored combat fixture: 20 units, 54 files; no original assets
+[48/143] Building CXX object CMakeFiles/torchlight_level_rules_dump.dir/tools/level_rules_dump.cpp.o
+[49/143] Building CXX object CMakeFiles/torchlight_bootstrap.dir/src/bootstrap_main.cpp.o
+[50/143] Building CXX object CMakeFiles/torchlight_player_units_dump.dir/tools/player_units_dump.cpp.o
+[51/143] Building CXX object CMakeFiles/torchlight_scene_camera_dump.dir/tools/scene_camera_dump.cpp.o
+[52/143] Building CXX object CMakeFiles/input_comparison.dir/tests/input_c_api.cpp.o
+[53/143] Building CXX object CMakeFiles/action_comparison.dir/tests/action_c_api.cpp.o
+[54/143] Building CXX object CMakeFiles/attack_action_test.dir/tests/attack_action_test.cpp.o
+[55/143] Building CXX object CMakeFiles/pathfinder_comparison.dir/tests/pathfinder_c_api.cpp.o
+[56/143] Building CXX object CMakeFiles/randomizer_comparison.dir/tests/randomizer_c_api.cpp.o
+[57/143] Building CXX object CMakeFiles/camera_comparison.dir/tests/camera_c_api.cpp.o
+[58/143] Building CXX object CMakeFiles/ogre_camera_reference.dir/tests/ogre_camera_reference.cpp.o
+[59/143] Building CXX object CMakeFiles/pak_archive_test.dir/tests/pak_archive_test.cpp.o
+[60/143] Building CXX object CMakeFiles/actor_motion_test.dir/tests/actor_motion_test.cpp.o
+[61/143] Building CXX object CMakeFiles/adm_document_test.dir/tests/adm_document_test.cpp.o
+[62/143] Building CXX object CMakeFiles/collision_mesh_test.dir/tests/collision_mesh_test.cpp.o
+[63/143] Building CXX object CMakeFiles/master_resource_index_test.dir/tests/master_resource_index_test.cpp.o
+[64/143] Building CXX object CMakeFiles/unit_definition_test.dir/tests/unit_definition_test.cpp.o
+[65/143] Building CXX object CMakeFiles/level_scene_test.dir/tests/level_scene_test.cpp.o
+[66/143] Building CXX object CMakeFiles/logic_runtime_test.dir/tests/logic_runtime_test.cpp.o
+[67/143] Building CXX object CMakeFiles/random_level_test.dir/tests/random_level_test.cpp.o
+[68/143] Building CXX object CMakeFiles/ogre_mesh_test.dir/tests/ogre_mesh_test.cpp.o
+[69/143] Building CXX object CMakeFiles/player_test.dir/tests/player_test.cpp.o
+[70/143] Building CXX object CMakeFiles/ogre_skeleton_test.dir/tests/ogre_skeleton_test.cpp.o
+[71/143] Building CXX object CMakeFiles/ogre_material_test.dir/tests/ogre_material_test.cpp.o
+[72/143] Building CXX object CMakeFiles/animation_manifest_test.dir/tests/animation_manifest_test.cpp.o
+[73/143] Building CXX object CMakeFiles/animation_events_test.dir/tests/animation_events_test.cpp.o
+[74/143] Building CXX object CMakeFiles/dds_texture_test.dir/tests/dds_texture_test.cpp.o
+[75/143] Building CXX object CMakeFiles/skeletal_animation_test.dir/tests/skeletal_animation_test.cpp.o
+[76/143] Building CXX object CMakeFiles/png_texture_test.dir/tests/png_texture_test.cpp.o
+[77/143] Building CXX object CMakeFiles/spawn_class_test.dir/tests/spawn_class_test.cpp.o
+[78/143] Building CXX object CMakeFiles/scene_geometry_test.dir/tests/scene_geometry_test.cpp.o
+[79/143] Building CXX object CMakeFiles/entity_world_test.dir/tests/entity_world_test.cpp.o
+[80/143] Building CXX object CMakeFiles/enemy_ai_test.dir/tests/enemy_ai_test.cpp.o
+[81/143] Building CXX object CMakeFiles/unit_type_test.dir/tests/unit_type_test.cpp.o
+[82/143] Building CXX object CMakeFiles/damage_test.dir/tests/damage_test.cpp.o
+[83/143] Building CXX object CMakeFiles/combat_test.dir/tests/combat_test.cpp.o
+[84/143] Building CXX object CMakeFiles/equipment_test.dir/tests/equipment_test.cpp.o
+[85/143] Building CXX object CMakeFiles/level_transition_test.dir/tests/level_transition_test.cpp.o
+[86/143] Building CXX object CMakeFiles/warp_arrival_test.dir/tests/warp_arrival_test.cpp.o
+[87/143] Building CXX object CMakeFiles/ai_cooldown_probe.dir/tests/ai_cooldown_probe.cpp.o
+[88/143] Building CXX object CMakeFiles/level_entry_test.dir/tests/level_entry_test.cpp.o
+[89/143] Building CXX object CMakeFiles/inventory_test.dir/tests/inventory_test.cpp.o
+[90/143] Building CXX object CMakeFiles/inventory_view_test.dir/tests/inventory_view_test.cpp.o
+[91/143] Building CXX object CMakeFiles/attack_speed_probe.dir/tests/attack_speed_probe.cpp.o
+[92/143] Building CXX object CMakeFiles/enemy_ai_cooldown_test.dir/tests/enemy_ai_cooldown_test.cpp.o
+[93/143] Building CXX object CMakeFiles/item_cycle_test.dir/tests/item_cycle_test.cpp.o
+[94/143] Building CXX object CMakeFiles/item_cycle_resource_test.dir/tests/item_cycle_resource_test.cpp.o
+[95/143] Linking CXX executable torchlight_bootstrap
+[96/143] Linking CXX executable torchlight_level_rules_dump
+[97/143] Linking CXX executable torchlight_player_units_dump
+[98/143] Linking CXX executable torchlight_scene_camera_dump
+[99/143] Linking CXX executable attack_action_test
+[100/143] Linking CXX shared library libinput_comparison.so
+[101/143] Linking CXX shared library libaction_comparison.so
+[102/143] Linking CXX shared library librandomizer_comparison.so
+[103/143] Linking CXX shared library libpathfinder_comparison.so
+[104/143] Linking CXX shared library libcamera_comparison.so
+[105/143] Linking CXX shared library libogre_camera_reference.so
+[106/143] Building CXX object CMakeFiles/ordinary_combat_test.dir/tests/ordinary_combat_test.cpp.o
+[107/143] Linking CXX executable pak_archive_test
+[108/143] Linking CXX executable actor_motion_test
+[109/143] Linking CXX executable adm_document_test
+[110/143] Linking CXX executable master_resource_index_test
+[111/143] Linking CXX executable collision_mesh_test
+[112/143] Linking CXX executable unit_definition_test
+[113/143] Linking CXX executable level_scene_test
+[114/143] Linking CXX executable logic_runtime_test
+[115/143] Linking CXX executable random_level_test
+[116/143] Linking CXX executable ogre_mesh_test
+[117/143] Linking CXX executable player_test
+[118/143] Linking CXX executable ogre_skeleton_test
+[119/143] Linking CXX executable animation_manifest_test
+[120/143] Linking CXX executable animation_events_test
+[121/143] Linking CXX executable ogre_material_test
+[122/143] Linking CXX executable dds_texture_test
+[123/143] Linking CXX executable skeletal_animation_test
+[124/143] Linking CXX executable png_texture_test
+[125/143] Linking CXX executable spawn_class_test
+[126/143] Linking CXX executable scene_geometry_test
+[127/143] Linking CXX executable entity_world_test
+[128/143] Linking CXX executable unit_type_test
+[129/143] Linking CXX executable enemy_ai_test
+[130/143] Linking CXX executable damage_test
+[131/143] Linking CXX executable combat_test
+[132/143] Linking CXX executable equipment_test
+[133/143] Linking CXX executable level_transition_test
+[134/143] Linking CXX executable warp_arrival_test
+[135/143] Linking CXX executable level_entry_test
+[136/143] Linking CXX executable enemy_ai_cooldown_test
+[137/143] Linking CXX executable ai_cooldown_probe
+[138/143] Linking CXX executable inventory_view_test
+[139/143] Linking CXX executable inventory_test
+[140/143] Linking CXX executable attack_speed_probe
+[141/143] Linking CXX executable item_cycle_test
+[142/143] Linking CXX executable ordinary_combat_test
+[143/143] Linking CXX executable item_cycle_resource_test
+Internal ctest changing into directory: /mnt/data/ot_large4_work/build-portable
+Test project /mnt/data/ot_large4_work/build-portable
+      Start  1: ordinary_attack_action
+ 1/15 Test  #1: ordinary_attack_action ...........   Passed    0.00 sec
+      Start  2: actor_motion
+ 2/15 Test  #2: actor_motion .....................   Passed    0.00 sec
+      Start  3: animation_events
+ 3/15 Test  #3: animation_events .................   Passed    0.00 sec
+      Start  4: damage_calculation
+ 4/15 Test  #4: damage_calculation ...............   Passed    0.00 sec
+      Start  5: warp_arrival
+ 5/15 Test  #5: warp_arrival .....................   Passed    0.00 sec
+      Start  6: level_entry_fallback
+ 6/15 Test  #6: level_entry_fallback .............   Passed    0.04 sec
+      Start  7: enemy_ai_cooldown
+ 7/15 Test  #7: enemy_ai_cooldown ................   Passed    0.08 sec
+      Start  8: ai_cooldown_export_comparison
+ 8/15 Test  #8: ai_cooldown_export_comparison ....   Passed    0.89 sec
+      Start  9: desktop_gameplay_syntax
+ 9/15 Test  #9: desktop_gameplay_syntax ..........   Passed    1.89 sec
+      Start 10: inventory_view
+10/15 Test #10: inventory_view ...................   Passed    0.00 sec
+      Start 11: inventory_instances
+11/15 Test #11: inventory_instances ..............   Passed    0.00 sec
+      Start 12: item_cycle
+12/15 Test #12: item_cycle .......................   Passed    0.03 sec
+      Start 13: attack_speed_export_comparison
+13/15 Test #13: attack_speed_export_comparison ...   Passed    0.69 sec
+      Start 14: ordinary_combat
+14/15 Test #14: ordinary_combat ..................   Passed    0.08 sec
+      Start 15: item_cycle_resource_fixture
+15/15 Test #15: item_cycle_resource_fixture ......   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Total Test time (real) =   3.73 sec
+Portable tests passed; original-game checks and UI audit were not run.
+RESULT=0
