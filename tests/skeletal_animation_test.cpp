@@ -166,6 +166,23 @@ int main(int argc, char** argv) {
         require(std::abs(before_first.geometries.front().positions.front()[0] - 10.0F) <
                     0.00001F,
                 "animation did not hold OGRE's first key before its timestamp");
+        const auto looping_end = torchlight::sample_ogre_mesh_animation(
+            delayed_mesh, delayed_bind, delayed_animation, "Delayed", 1.0F,
+            torchlight::AnimationPlaybackMode::loop);
+        const auto clamped_end = torchlight::sample_ogre_mesh_animation(
+            delayed_mesh, delayed_bind, delayed_animation, "Delayed", 1.0F,
+            torchlight::AnimationPlaybackMode::clamp);
+        const auto clamped_overshoot = torchlight::sample_ogre_mesh_animation(
+            delayed_mesh, delayed_bind, delayed_animation, "Delayed", 3.0F,
+            torchlight::AnimationPlaybackMode::clamp);
+        require(std::abs(looping_end.geometries.front().positions.front()[0] - 10.0F) <
+                    0.00001F,
+                "looping animation no longer wrapped at its duration");
+        require(std::abs(clamped_end.geometries.front().positions.front()[0] - 20.0F) <
+                    0.00001F &&
+                    std::abs(clamped_overshoot.geometries.front().positions.front()[0] -
+                             20.0F) < 0.00001F,
+                "non-loop animation did not hold its final key at or after duration");
 
         torchlight::OgreMesh merged_mesh;
         merged_mesh.skeletally_animated = true;

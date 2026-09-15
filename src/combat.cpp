@@ -1,133 +1,134 @@
 #include "torchlight/combat.hpp"
+#include "torchlight/scene_animation.hpp"
 
-#include <algorithm>
 #include <cmath>
+#include <stdexcept>
+#include <utility>
 
 namespace torchlight {
-
-CombatController::CombatController(const PlayerPrototype& player,
-                                   std::uint32_t random_seed)
-    : random_(random_seed) {
-    minimum_damage_ = std::max(1, std::min(player.minimum_damage,
-                                           player.maximum_damage));
-    maximum_damage_ = std::max(1, std::max(player.minimum_damage,
-                                           player.maximum_damage));
-    reach_bonus_ = player.reach_bonus;
-    attack_range_ = std::max(0.5F, reach_bonus_ + 1.0F);
-    if (player.starting_weapon) {
-        equip(roll_weapon_item(*player.starting_weapon, random_));
+CombatController::CombatController(const PlayerPrototype& player, std::uint32_t seed)
+    : random_(seed), mesh_path_(player.mesh_path), loadout_(player.attacks),
+      character_(player.attack_character) {
+    // Directly constructed prototypes are explicit synthetic/programmatic data.
+    // Resource loading always fills innate descriptions (including missing-field diagnostics).
+    if (loadout_.innate.empty()) {
+        AttackDescription innate;
+        innate.minimum_damage = player.minimum_damage; innate.maximum_damage = player.maximum_damage;
+        loadout_.innate.push_back(innate);
     }
-    attack_interval_ = player.attack_speed > 0.0F
-                           ? std::max(0.1F, 100.0F / player.attack_speed)
-                           : 1.0F;
+    character_.strength = player.strength; character_.dexterity = player.dexterity;
+    character_.reach_bonus = player.reach_bonus;
+    base_effects_ = character_.effects;
+    if (player.starting_weapon) equip(roll_weapon_item(*player.starting_weapon, random_));
+    else refresh_attack_values();
 }
-
-void CombatController::equip(const WeaponItem& item) noexcept {
-    minimum_damage_ = std::max(1, item.minimum_damage);
-    maximum_damage_ = std::max(minimum_damage_, item.maximum_damage);
-    // CCharacter::attackRange adds the weapon range, scaled REACH_BONUS and
-    // the original 0.2 world-unit contact allowance. Player scale is 1 here.
-    attack_range_ = std::max(
-        0.5F, item.prototype.range + reach_bonus_ + 0.2F);
+void CombatController::refresh_attack_values() {
+    const auto* selected = loadout_.right ? &*loadout_.right :
+        loadout_.left ? &*loadout_.left : loadout_.innate.empty() ? nullptr : &loadout_.innate.front();
+    if (!selected) { minimum_damage_ = maximum_damage_ = 0; attack_range_ = 0; return; }
+    const auto damage = ordinary_physical_damage(*selected, loadout_, character_);
+    minimum_damage_ = damage[0]; maximum_damage_ = damage[1];
+    attack_range_ = ordinary_attack_range(*selected, loadout_, character_);
+    attack_playback_speed_ = ordinary_attack_speed(selected->speed_denominator,
+                                                   total_attack_effects(loadout_, character_), character_.ai_flag_one);
 }
-
-bool CombatController::select_target(RuntimeEntityWorld& world,
-                                     const std::array<float, 3>& position,
+void CombatController::equip(const WeaponItem& item) {
+    if (action_.active()) throw std::logic_error("cannot replace equipment during an attack");
+    auto description = describe_weapon_attack(item, item.prototype.attack_hand);
+    // Validate before replacing current equipment.
+    static_cast<void>(ordinary_attack_speed(description.speed_denominator, description.effects));
+    std::optional<AttackDescription> replacement(std::move(description));
+    if (replacement->hand == AttackHand::left) {
+        loadout_.right.reset();
+        loadout_.left.swap(replacement);
+    } else {
+        loadout_.left.reset();
+        loadout_.right.swap(replacement);
+    }
+    refresh_attack_values();
+}
+void CombatController::unequip() {
+    if (action_.active()) throw std::logic_error("cannot remove equipment during an attack");
+    loadout_.right.reset(); loadout_.left.reset(); refresh_attack_values();
+}
+void CombatController::set_external_attack_effects(const AttackEffects& effects) {
+    character_.effects = base_effects_; character_.effects.append(effects); refresh_attack_values();
+}
+void CombatController::set_animation_resolver(AttackClipResolver resolver) { resolver_ = std::move(resolver); }
+void CombatController::reset_level_context() noexcept {
+    target_id_ = 0; action_.cancel(); resolver_ = {};
+    // Equipment, effects, RNG and next execution ID survive a level change.
+}
+void CombatController::interrupt_attack() noexcept { action_.cancel(); }
+bool CombatController::select_target(RuntimeEntityWorld& world, const std::array<float, 3>& position,
                                      float maximum_distance) noexcept {
     const auto* selected = world.nearest_alive_monster(position, maximum_distance);
-    target_id_ = selected == nullptr ? 0 : selected->id;
-    return selected != nullptr;
+    target_id_ = selected ? selected->id : 0; return selected != nullptr;
 }
-
-void CombatController::clear_target() noexcept {
-    target_id_ = 0;
-}
-
-const RuntimeEntity* CombatController::target(
-    const RuntimeEntityWorld& world) const noexcept {
+void CombatController::clear_target() noexcept { target_id_ = 0; }
+const RuntimeEntity* CombatController::target(const RuntimeEntityWorld& world) const noexcept {
     const auto* selected = world.find(target_id_);
-    return selected != nullptr && selected->alive && selected->enabled &&
-               selected->combat_targetable &&
-               selected->kind == MasterResourceKind::monster
-               ? selected
-               : nullptr;
+    return selected && selected->alive && selected->enabled && selected->combat_targetable &&
+        selected->kind == MasterResourceKind::monster ? selected : nullptr;
 }
-
-CombatUpdate CombatController::update(float seconds,
-                                      const std::array<float, 3>& player_position,
-                                      RuntimeEntityWorld& world) {
-    if (std::isfinite(seconds) && seconds > 0.0F) {
-        cooldown_ = std::max(0.0F, cooldown_ - seconds);
-    }
+CombatUpdate CombatController::update(float seconds, const std::array<float, 3>& position,
+                                     RuntimeEntityWorld& world) {
+    static_cast<void>(seconds); // Clock belongs to the animation phase, not a second action timer.
     const auto* selected = target(world);
-    if (selected == nullptr) {
-        clear_target();
-        return {};
+    if (!selected) { clear_target(); return {}; }
+    if (action_.active()) return {CombatState::waiting, selected->id, 0, selected->health, action_.id()};
+    const auto* description = select_ordinary_attack(loadout_, prefer_left_, random_);
+    if (!description) { last_attack_issue_ = "no ordinary attack description"; return {CombatState::unavailable, selected->id}; }
+    attack_range_ = ordinary_attack_range(*description, loadout_, character_);
+    if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
+                                 selected->attack_character.collision_radius, attack_range_, has_ranged_weapon(loadout_)))
+        return {CombatState::approaching, selected->id, 0, selected->health};
+    if (!description->unavailable_reason.empty() || description->animation_prefix.empty() ||
+        description->traits.ranged) {
+        last_attack_issue_ = description->traits.ranged ? "ranged attack needs missile/weapon-skill runtime" :
+            !description->unavailable_reason.empty() ? description->unavailable_reason : "weapon has no description in this hand";
+        return {CombatState::unavailable, selected->id};
     }
-    const auto selected_id = selected->id;
-    if (active_execution_id_ != 0) {
-        return {CombatState::waiting, selected_id, 0, selected->health,
-                active_execution_id_};
-    }
-    const auto delta_x = selected->position[0] - player_position[0];
-    const auto delta_z = selected->position[2] - player_position[2];
-    if (std::hypot(delta_x, delta_z) > attack_range_) {
-        return {CombatState::approaching, selected_id, 0, selected->health};
-    }
-    if (cooldown_ > 0.0F) {
-        return {CombatState::waiting, selected_id, 0, selected->health};
-    }
-
-    active_execution_id_ = next_execution_id_++;
-    if (next_execution_id_ == 0) {
-        next_execution_id_ = 1;
-    }
-    cooldown_ = attack_interval_;
-    return {CombatState::attacking, selected_id, 0, selected->health,
-            active_execution_id_};
+    AttackClips clips;
+    try { if (resolver_) clips = resolver_(mesh_path_, description->animation_prefix); }
+    catch (const std::runtime_error& e) { last_attack_issue_ = e.what(); return {CombatState::unavailable, selected->id}; }
+    if (clips.empty()) { last_attack_issue_ = "no loaded clip for " + description->animation_prefix; return {CombatState::unavailable, selected->id}; }
+    const auto effects = total_attack_effects(loadout_, character_);
+    const auto speed = ordinary_attack_speed(description->speed_denominator, effects, character_.ai_flag_one);
+    const auto clip = clips[select_original_random_animation(clips.size(), random_)];
+    if (!next_execution_id_) throw std::overflow_error("player attack execution IDs exhausted");
+    action_.start(next_execution_id_, selected->id, *description, clip, speed);
+    ++next_execution_id_;
+    attack_playback_speed_ = speed;
+    last_attack_issue_ = effects.unresolved.empty() ? "" :
+        "partial effects: " + std::to_string(effects.unresolved.size()) + " unresolved resource records";
+    return {CombatState::attacking, selected->id, 0, selected->health, action_.id()};
 }
-
-CombatUpdate CombatController::perform_attack(
-    std::uint64_t execution_id,
-    const std::array<float, 3>& player_position,
-    RuntimeEntityWorld& world, LogicRuntime& logic) {
-    if (execution_id == 0 || execution_id != active_execution_id_) {
-        return {};
-    }
-    const auto* selected = target(world);
-    if (selected == nullptr) {
-        return {};
-    }
-    const auto selected_id = selected->id;
-    const auto delta_x = selected->position[0] - player_position[0];
-    const auto delta_z = selected->position[2] - player_position[2];
-    if (std::hypot(delta_x, delta_z) > attack_range_) {
-        return {CombatState::approaching, selected_id, 0, selected->health,
-                execution_id};
-    }
-
-    const auto rolled_damage = random_.integer_between(
-        minimum_damage_, maximum_damage_);
-    const auto mitigation = mitigate_damage(
-        rolled_damage, rolled_damage, DamageType::physical, 1.0F,
-        selected->damage_defense, random_);
-    const auto result = world.apply_damage(
-        selected_id, static_cast<float>(mitigation.applied), logic);
-    if (!result.accepted) {
-        return {};
-    }
-    const auto state = result.killed ? CombatState::killed : CombatState::attacked;
-    if (result.killed) {
-        target_id_ = 0;
-    }
-    return {state, selected_id, mitigation.applied, result.remaining_health,
-            execution_id};
+void CombatController::advance_animation(float seconds) {
+    action_.advance(std::isfinite(seconds) && seconds > 0 ? seconds : 0);
 }
-
-void CombatController::finish_attack(std::uint64_t execution_id) noexcept {
-    if (execution_id == active_execution_id_) {
-        active_execution_id_ = 0;
-    }
+CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& event,
+    const std::array<float, 3>& position, RuntimeEntityWorld& world, LogicRuntime& logic) {
+    if (!action_.consume_hit(event)) return {};
+    prefer_left_ = !prefer_left_; // Original performAttack toggles per HIT, not per clip start.
+    const auto* selected = world.find(action_.target_id());
+    if (!selected || selected->id != target_id_ || !selected->alive || !selected->enabled ||
+        !selected->combat_targetable || selected->kind != MasterResourceKind::monster)
+        return {CombatState::missed, action_.target_id(), 0, 0, event.execution_id};
+    const auto reach = ordinary_strike_range(action_.description(), character_, total_attack_effects(loadout_, character_));
+    if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
+                                 selected->attack_character.collision_radius, reach, action_.description().traits.ranged))
+        return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
+    const auto damage = ordinary_physical_damage(action_.description(), loadout_, character_);
+    const auto rolled = random_.integer_between(damage[0], damage[1]);
+    const auto mitigation = mitigate_damage(rolled, rolled, DamageType::physical, 1,
+                                            selected->damage_defense, random_);
+    const auto id = selected->id;
+    const auto result = world.apply_damage(id, static_cast<float>(mitigation.applied), logic);
+    if (!result.accepted) return {CombatState::missed, id, 0, result.remaining_health, event.execution_id};
+    if (result.killed) target_id_ = 0;
+    return {result.killed ? CombatState::killed : CombatState::attacked, id,
+            mitigation.applied, result.remaining_health, event.execution_id};
 }
-
+void CombatController::finish_animation_frame() noexcept { action_.finish_frame(); }
 } // namespace torchlight

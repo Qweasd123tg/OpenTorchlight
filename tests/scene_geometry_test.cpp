@@ -6,10 +6,12 @@
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/unit_definition.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace {
 
@@ -17,6 +19,18 @@ void require(bool condition, const char* message) {
     if (!condition) {
         throw std::runtime_error(message);
     }
+}
+
+bool same_color(const std::array<float, 4>& left,
+                const std::array<float, 4>& right) {
+    return std::equal(left.begin(), left.end(), right.begin(),
+                      [](float a, float b) { return std::abs(a - b) < 1.0e-6F; });
+}
+
+bool has_scene_object(const torchlight::LayoutManifest& layout) {
+    return std::any_of(layout.objects.begin(), layout.objects.end(), [](const auto& object) {
+        return object.descriptor == u"Scene Object";
+    });
 }
 
 } // namespace
@@ -36,6 +50,7 @@ int main(int argc, char** argv) {
         require(geometry.instances.size() == 352, "unexpected town mesh instance count");
         require(geometry.unique_vertex_count == 421431, "unexpected town vertex count");
         require(geometry.unique_index_count == 421431, "unexpected town index count");
+        const auto town_uses_material_override = !has_scene_object(town.layout);
         for (const auto& instance : geometry.instances) {
             require(instance.object_index < town.layout.objects.size(),
                     "town instance has an invalid object index");
@@ -47,6 +62,14 @@ int main(int argc, char** argv) {
             for (const auto value : instance.transform.scale) {
                 require(std::isfinite(value) && value > 0.0F,
                         "town instance has an invalid scale");
+            }
+            require(instance.material_color_override.has_value() ==
+                        town_uses_material_override,
+                    "town room-piece material override has the wrong scope");
+            if (instance.material_color_override.has_value()) {
+                require(same_color(*instance.material_color_override,
+                                   town.rules.material_ambient),
+                        "town room-piece material override has the wrong color");
             }
         }
         const auto master = torchlight::parse_adm(
@@ -69,11 +92,25 @@ int main(int argc, char** argv) {
         require(generated.chunks.size() >= 3, "generated mine has too few chunks");
         require(!mine_geometry.meshes.empty(), "generated mine has no mesh resources");
         require(!mine_geometry.instances.empty(), "generated mine has no mesh instances");
+        std::vector<bool> mine_uses_material_override;
+        mine_uses_material_override.reserve(generated.chunks.size());
+        for (const auto& chunk : generated.chunks) {
+            mine_uses_material_override.push_back(
+                !has_scene_object(loader.load_layout(chunk.layout_path)));
+        }
         for (const auto& instance : mine_geometry.instances) {
             require(instance.layout_index < generated.chunks.size(),
                     "generated mine instance has an invalid layout index");
             require(instance.mesh_index < mine_geometry.meshes.size(),
                     "generated mine instance has an invalid mesh index");
+            require(instance.material_color_override.has_value() ==
+                        mine_uses_material_override[instance.layout_index],
+                    "generated room-piece material override has the wrong scope");
+            if (instance.material_color_override.has_value()) {
+                require(same_color(*instance.material_color_override,
+                                   mine_rules.material_ambient),
+                        "generated room-piece material override has the wrong color");
+            }
         }
         std::cout << "PASS: built 352 town pieces and 44 placed monsters from "
                   << geometry.meshes.size() << " cached OGRE meshes\n";

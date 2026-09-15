@@ -419,6 +419,14 @@ LevelRules LevelSceneLoader::load_rules(std::u16string_view data_file) const {
     result.tile_basis = float_value(document.root, u"TILEBASIS", 1.0F);
     result.chunk_width_basis = float_value(document.root, u"CHUNKWIDTHBASIS", 1.0F);
     result.chunk_height_basis = float_value(document.root, u"CHUNKHEIGHTBASIS", 1.0F);
+    result.material_ambient = {
+        static_cast<float>(int_value(document.root, u"MATERIAL AMBIENT RED", 0x5c)) /
+            255.0F,
+        static_cast<float>(int_value(document.root, u"MATERIAL AMBIENT GREEN", 0x5c)) /
+            255.0F,
+        static_cast<float>(int_value(document.root, u"MATERIAL AMBIENT BLUE", 0x5c)) /
+            255.0F,
+        1.0F};
     result.minimum_chunks = int_value(document.root, u"MINCHUNKS", 0);
     result.maximum_chunks = int_value(document.root, u"MAXCHUNKS", 0);
     if (const auto* layout = child_group(document.root, u"LAYOUT")) {

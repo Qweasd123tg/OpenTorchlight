@@ -42,9 +42,14 @@ void add_mesh_counts(const OgreMesh& mesh, FixedSceneGeometry& scene_geometry) {
 
 void append_layout_geometry(const PakArchive& archive, const LevelsetCatalog& levelsets,
                             const LayoutManifest& layout, std::size_t layout_index,
-                            const std::array<float, 3>& offset, FixedSceneGeometry& result,
+                            const std::array<float, 3>& offset,
+                            const std::array<float, 4>& material_ambient,
+                            FixedSceneGeometry& result,
                             std::unordered_map<std::int64_t, std::size_t>& mesh_by_guid) {
     const auto transforms = resolve_layout_world_transforms(layout);
+    const auto has_scene_object = std::any_of(
+        layout.objects.begin(), layout.objects.end(),
+        [](const auto& object) { return object.descriptor == u"Scene Object"; });
     for (std::size_t object_index = 0; object_index < layout.objects.size(); ++object_index) {
         const auto& object = layout.objects[object_index];
         if (object.descriptor != u"Room Piece") {
@@ -80,8 +85,12 @@ void append_layout_geometry(const PakArchive& archive, const LevelsetCatalog& le
         for (std::size_t axis = 0; axis < transform.position.size(); ++axis) {
             transform.position[axis] += offset[axis];
         }
-        result.instances.push_back(
-            SceneMeshInstance{layout_index, object_index, found->second, transform});
+        auto instance = SceneMeshInstance{layout_index, object_index, found->second, transform,
+                                          0, true, std::nullopt};
+        if (!has_scene_object) {
+            instance.material_color_override = material_ambient;
+        }
+        result.instances.push_back(std::move(instance));
     }
 }
 
@@ -146,8 +155,8 @@ FixedSceneGeometry build_room_piece_geometry(const PakArchive& archive,
     FixedSceneGeometry result;
     std::unordered_map<std::int64_t, std::size_t> mesh_by_guid;
     mesh_by_guid.reserve(scene.layout.objects.size());
-    append_layout_geometry(archive, levelsets, scene.layout, 0, {0.0F, 0.0F, 0.0F}, result,
-                           mesh_by_guid);
+    append_layout_geometry(archive, levelsets, scene.layout, 0, {0.0F, 0.0F, 0.0F},
+                           scene.rules.material_ambient, result, mesh_by_guid);
     return result;
 }
 
@@ -164,8 +173,8 @@ FixedSceneGeometry build_generated_level_geometry(const PakArchive& archive,
             throw SceneGeometryError("Generated chunk type is out of range");
         }
         const auto layout = loader.load_layout(placed.layout_path);
-        append_layout_geometry(archive, levelsets, layout, chunk, placed.position, result,
-                               mesh_by_guid);
+        append_layout_geometry(archive, levelsets, layout, chunk, placed.position,
+                               rules.material_ambient, result, mesh_by_guid);
     }
     return result;
 }
@@ -216,7 +225,7 @@ std::size_t append_layout_monster_geometry(const PakArchive& archive,
                                  : entities->find_layout_entity(object.id);
         geometry.instances.push_back(SceneMeshInstance{
             layout_index, object_index, found->second, transforms[object_index],
-            entity == nullptr ? 0 : entity->id});
+            entity == nullptr ? 0 : entity->id, true, std::nullopt});
         ++appended;
     }
     return appended;
@@ -260,7 +269,8 @@ std::optional<std::size_t> append_runtime_entity_geometry(
     LayoutWorldTransform transform;
     transform.position = entity.position;
     auto instance = SceneMeshInstance{
-        std::numeric_limits<std::size_t>::max(), 0, mesh_index, transform, entity.id};
+        std::numeric_limits<std::size_t>::max(), 0, mesh_index, transform, entity.id, true,
+        std::nullopt};
     instance.visible = entity.alive && entity.visible;
     geometry.instances.push_back(std::move(instance));
     return geometry.instances.size() - 1U;

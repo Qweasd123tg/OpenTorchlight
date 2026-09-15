@@ -102,6 +102,8 @@ struct LevelRules {
     float tile_basis = 1.0F;
     float chunk_width_basis = 1.0F;
     float chunk_height_basis = 1.0F;
+    std::array<float, 4> material_ambient{
+        92.0F / 255.0F, 92.0F / 255.0F, 92.0F / 255.0F, 1.0F};
     std::int32_t minimum_chunks = 0;
     std::int32_t maximum_chunks = 0;
     std::vector<ChunkPlacement> chunks;

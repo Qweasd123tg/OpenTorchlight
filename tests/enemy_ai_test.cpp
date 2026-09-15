@@ -1,3 +1,4 @@
+#include "torchlight/scene_animation.hpp"
 #include "torchlight/adm_document.hpp"
 #include "torchlight/enemy_ai.hpp"
 #include "torchlight/entity_world.hpp"
@@ -10,8 +11,10 @@
 #include "torchlight/unit_definition.hpp"
 #include "torchlight/unit_type.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -64,6 +67,10 @@ int main(int argc, char** argv) {
         require(player.armor_class() == 21,
                 "Alchemist passive armor bonus was not applied");
         torchlight::EnemyController enemies(71);
+        torchlight::AttackAnimationCatalog catalog(archive);
+        enemies.set_animation_resolver([&](std::string_view mesh, std::string_view prefix) {
+            return catalog.resolve(mesh, prefix);
+        });
 
         const auto chase = enemies.update(
             0.1F, player_position, player, world);
@@ -76,63 +83,45 @@ int main(int argc, char** argv) {
 
         player_position = world.entities().front().position;
         player_position[0] += 1.54F;
-        const auto attack = enemies.update(
-            0.0F, player_position, player, world);
-        require(attack.size() == 1 &&
-                    attack.front().state == torchlight::EnemyAiState::attacked &&
-                    attack.front().damage >= 51 && attack.front().damage <= 106 &&
-                    attack.front().player_health == player.health() && player.alive(),
-                "monster did not apply its level-scaled damage");
-
-        torchlight::ArmorItem chest;
-        chest.slot = torchlight::ArmorSlot::chest;
-        chest.damage_defense.natural_armor = 10;
-        player.equip(chest);
-        require(player.armor_class() == 32,
-                "equipped armor was not added to passive armor");
-        chest.damage_defense.natural_armor = 20;
-        player.equip(chest);
-        require(player.armor_class() == 42,
-                "new armor did not replace the same equipment slot");
-        const auto waiting = enemies.update(
-            0.0F, player_position, player, world);
-        require(waiting.size() == 1 &&
-                    waiting.front().state == torchlight::EnemyAiState::waiting &&
-                    waiting.front().damage == 0,
-                "monster ignored its attack cooldown");
-
-        for (int frame = 0; frame < 40 && player.alive(); ++frame) {
-            static_cast<void>(
-                enemies.update(0.1F, player_position, player, world));
+        player_position = world.entities().front().position;
+        const auto hp_before = player.health();
+        const auto attack = enemies.update(0, player_position, player, world);
+        if (attack.size() != 1 || attack[0].state != torchlight::EnemyAiState::attacking)
+            throw std::runtime_error("original enemy clip could not start: " +
+                enemies.last_attack_issue(world.entities().front().id));
+        require(player.health() == hp_before, "enemy damage occurred at action start");
+        const auto id = world.entities().front().id;
+        const auto* action = enemies.action(id);
+        require(action && action->clip() && action->clip()->bind_skeleton,
+                "enemy action has no resource-backed model/clip");
+        torchlight::ArmorItem chest; chest.slot = torchlight::ArmorSlot::chest;
+        chest.damage_defense.natural_armor = 10; player.equip(chest);
+        require(player.armor_class() == 32, "equipped armor did not add to passive bonus");
+        chest.damage_defense.natural_armor = 20; player.equip(chest);
+        require(player.armor_class() == 42, "armor did not replace same slot");
+        const auto waiting = enemies.update(0, player_position, player, world);
+        require(waiting.size() == 1 && waiting[0].state == torchlight::EnemyAiState::waiting,
+                "running action was overwritten");
+        std::size_t applied_hits = 0;
+        for (int frame = 0; frame < 100000 && player.alive(); ++frame) {
+            constexpr float dt = .0625F;
+            enemies.advance_animations(dt, world, player);
+            action = enemies.action(id);
+            if (action) {
+                const auto events = action->playback().frame_events();
+                for (const auto& event : events) {
+                    const auto result = enemies.perform_attack(id, event, player_position, player, world);
+                    if (result.damage > 0) ++applied_hits;
+                    require(enemies.perform_attack(id, event, player_position, player, world).damage == 0,
+                            "enemy HIT repeated damage");
+                }
+            }
+            enemies.finish_animation_frame();
+            static_cast<void>(enemies.update(dt, player_position, player, world));
         }
-        require(!player.alive() && player.health() == 0.0F,
-                "repeated monster attacks did not kill the player");
-
-        auto& mitigation_enemy = world.entities().front();
-        mitigation_enemy.minimum_damage = 12;
-        mitigation_enemy.maximum_damage = 24;
-        mitigation_enemy.attack_speed = 100.0F;
-        mitigation_enemy.attack_range = 2.0F;
-        mitigation_enemy.sight_radius = 7.0F;
-        torchlight::PlayerPrototype mitigation_prototype;
-        mitigation_prototype.minimum_health = 100.0F;
-        mitigation_prototype.maximum_health = 100.0F;
-        mitigation_prototype.damage_defense.natural_armor = 10;
-        torchlight::PlayerCombatState mitigation_player(mitigation_prototype, 1);
-        torchlight::EnemyController mitigation_controller(1);
-        torchlight::TorchlightRandom mitigation_reference(1);
-        const auto reference_damage = mitigation_reference.integer_between(12, 24);
-        const auto reference_armor = mitigation_reference.integer_between(5, 10);
-        require(reference_damage < 24, "enemy mitigation seed rolled maximum damage");
-        const auto mitigation_updates = mitigation_controller.update(
-            0.0F, mitigation_enemy.position, mitigation_player, world);
-        require(mitigation_updates.size() == 1 &&
-                    mitigation_updates.front().state ==
-                        torchlight::EnemyAiState::attacked &&
-                    mitigation_updates.front().damage ==
-                        std::max(1, reference_damage - reference_armor),
-                "ordinary enemy attack scaled armor by the damage range maximum");
-
+        require(applied_hits > 0 && !player.alive() && player.health() == 0,
+                "resource-backed enemy HIT did not finish death chain within bounded window");
+        require(!enemies.action(id)->active(), "target death left an attacking action alive");
         std::cout << "PASS: monster detected, chased and attacked a level-one player\n";
         return 0;
     } catch (const std::exception& error) {

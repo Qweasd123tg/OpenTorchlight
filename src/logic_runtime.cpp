@@ -173,48 +173,65 @@ void LogicRuntime::activate_level() {
 
 void LogicRuntime::emit(std::int64_t object_id, std::u16string_view output_name) {
     static_cast<void>(require_object(object_id));
-    pending_events_.push_back({object_id, std::u16string(output_name)});
-    if (!processing_events_) {
-        process_events();
-    }
+    queue_event(object_id, std::u16string(output_name));
+    process_events();
+}
+
+void LogicRuntime::queue_event(std::int64_t object_id, std::u16string output_name) {
+    pending_actions_.push_back(
+        [this, object_id, output_name = std::move(output_name)]() mutable {
+            if (++dispatched_events_ > kMaximumEventsPerDispatch) {
+                throw LogicRuntimeError("Logic graph exceeded the event dispatch limit");
+            }
+            events_.push_back({object_id, output_name});
+            const auto found = routes_.find(object_id);
+            if (found == routes_.end()) {
+                return;
+            }
+            // Actions are popped from the back. Reverse insertion preserves the
+            // original link order while nested outputs finish before siblings.
+            for (auto route = found->second.rbegin(); route != found->second.rend(); ++route) {
+                if (route->output_name == output_name) {
+                    queue_invocation(object_id, route->target_object_id, route->input_name);
+                }
+            }
+        });
+}
+
+void LogicRuntime::queue_invocation(std::int64_t source_object_id,
+                                    std::int64_t target_object_id,
+                                    std::u16string input_name) {
+    pending_actions_.push_back(
+        [this, source_object_id, target_object_id,
+         input_name = std::move(input_name)] {
+            invoke_from(source_object_id, target_object_id, input_name);
+        });
 }
 
 void LogicRuntime::process_events() {
+    if (processing_events_) {
+        return;
+    }
     processing_events_ = true;
-    std::size_t processed = 0;
+    dispatched_events_ = 0;
     try {
-        while (next_pending_event_ < pending_events_.size()) {
-            if (++processed > kMaximumEventsPerDispatch) {
-                throw LogicRuntimeError("Logic graph exceeded the event dispatch limit");
-            }
-            auto event = std::move(pending_events_[next_pending_event_++]);
-            events_.push_back({event.object_id, event.output_name});
-            const auto found = routes_.find(event.object_id);
-            if (found == routes_.end()) {
-                continue;
-            }
-            for (const auto& route : found->second) {
-                if (route.output_name == event.output_name) {
-                    invoke_from(event.object_id, route.target_object_id, route.input_name);
-                }
-            }
+        while (!pending_actions_.empty()) {
+            auto action = std::move(pending_actions_.back());
+            pending_actions_.pop_back();
+            action();
         }
-        pending_events_.clear();
-        next_pending_event_ = 0;
         processing_events_ = false;
     } catch (...) {
-        pending_events_.clear();
-        next_pending_event_ = 0;
+        pending_actions_.clear();
         processing_events_ = false;
         throw;
     }
 }
 
 void LogicRuntime::invoke(std::int64_t object_id, std::u16string_view input_name) {
-    invoke_from(0, object_id, input_name);
-    if (!processing_events_) {
-        process_events();
-    }
+    static_cast<void>(require_object(object_id));
+    queue_invocation(0, object_id, std::u16string(input_name));
+    process_events();
 }
 
 void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t target_object_id,
@@ -228,11 +245,15 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         object_state.enabled = true;
         if (object.descriptor == u"Timer") {
             object_state.timer_running = true;
-            if (object_state.timer_loops_remaining <= 0) {
-                object_state.timer_loops_remaining =
-                    std::max(1, integer_value(object, u"LOOP COUNT", 1));
-            }
             reset_timer(object, object_state);
+            // original-code: CLogicTimer::setEnabled @0x9880b0 reads the
+            // remaining count only after the synchronous Enabled broadcast.
+            pending_actions_.push_back([this, target_object_id] {
+                auto& state = states_.at(target_object_id);
+                if (state.timer_loops_remaining <= 0) {
+                    state.timer_loops_remaining = 1;
+                }
+            });
         }
         emit(target_object_id, u"Enabled");
         return;
@@ -240,6 +261,10 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
     if (input_name == u"Disable") {
         object_state.enabled = false;
         object_state.timer_running = false;
+        if (object.descriptor == u"Timer") {
+            // original-code: setEnabled(false) resets before Disabled.
+            reset_timer(object, object_state);
+        }
         emit(target_object_id, u"Disabled");
         return;
     }
@@ -287,13 +312,18 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         const bool subtract = input_name == u"Subtract" || input_name == u"Decrement";
         object_state.counter += subtract ? -1 : 1;
         if (object_state.counter == integer_value(object, u"EQUALS VALUE", 10)) {
-            emit(target_object_id, u"Activated");
             const auto behavior = text_value(object, u"LOGIC", u"Activate only once");
-            if (behavior == u"Activate and reset") {
-                object_state.counter = integer_value(object, u"STARTING VALUE", 0);
-            } else {
-                object_state.enabled = false;
-            }
+            pending_actions_.push_back([this, target_object_id,
+                                        reset = behavior == u"Activate and reset"] {
+                auto& state = states_.at(target_object_id);
+                if (reset) {
+                    const auto& counter = require_object(target_object_id);
+                    state.counter = integer_value(counter, u"STARTING VALUE", 0);
+                } else {
+                    state.enabled = false;
+                }
+            });
+            emit(target_object_id, u"Activated");
         }
         return;
     }
@@ -316,7 +346,6 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
         input_name == u"Hide And Disable Spawned Units") {
         spawn_requests_.push_back(
             {target_object_id, {}, {}, 0, SpawnAction::hide_and_disable});
-        object_state.enabled = false;
         return;
     }
     if (object.descriptor == u"Warper" && input_name == u"Activate Warper") {
@@ -351,11 +380,15 @@ void LogicRuntime::activate_trigger(const LayoutObject& object, LogicObjectState
     object_state.trigger_active = true;
     // CLogicTrigger::TriggerActivated invokes output 1 before output 0 on the
     // first activation. The descriptor names are Triggered First Time and Triggered.
-    if (!object_state.triggered_once) {
+    const bool first_time = !object_state.triggered_once;
+    if (first_time) {
         object_state.triggered_once = true;
-        emit(object.id, u"Triggered First Time");
     }
-    emit(object.id, u"Triggered");
+    queue_event(object.id, u"Triggered");
+    if (first_time) {
+        queue_event(object.id, u"Triggered First Time");
+    }
+    process_events();
 }
 
 void LogicRuntime::deactivate_trigger(std::int64_t object_id) {
@@ -365,11 +398,15 @@ void LogicRuntime::deactivate_trigger(std::int64_t object_id) {
         return;
     }
     object_state.trigger_active = false;
-    if (!object_state.deactivated_once) {
+    const bool first_time = !object_state.deactivated_once;
+    if (first_time) {
         object_state.deactivated_once = true;
-        emit(object_id, u"Deactivated First Time");
     }
-    emit(object_id, u"Deactivated");
+    queue_event(object_id, u"Deactivated");
+    if (first_time) {
+        queue_event(object_id, u"Deactivated First Time");
+    }
+    process_events();
 }
 
 void LogicRuntime::reset_timer(const LayoutObject& object, LogicObjectState& object_state) {
@@ -391,17 +428,14 @@ void LogicRuntime::update(float elapsed_seconds) {
             continue;
         }
         object_state.timer_remaining -= elapsed_seconds;
-        while (object_state.timer_remaining <= 0.0F && object_state.enabled &&
-               object_state.timer_running) {
+        if (object_state.timer_remaining <= 0.0F) {
             emit(object.id, u"Activated");
             const bool forever = bool_value(object, u"LOOPS FOREVER", false);
             if (!forever && --object_state.timer_loops_remaining <= 0) {
                 object_state.timer_running = false;
-                break;
+                continue;
             }
-            const auto overshoot = object_state.timer_remaining;
             reset_timer(object, object_state);
-            object_state.timer_remaining += overshoot;
         }
     }
 }
@@ -474,10 +508,11 @@ void LogicRuntime::notify_monster_killed(std::int64_t spawner_id) {
         return;
     }
     --object_state.active_spawned_units;
-    emit(spawner_id, u"Monster Killed");
     if (object_state.active_spawned_units == 0) {
-        emit(spawner_id, u"All Monsters Dead");
+        queue_event(spawner_id, u"All Monsters Dead");
     }
+    queue_event(spawner_id, u"Monster Killed");
+    process_events();
 }
 
 void LogicRuntime::notify_item_picked_up(std::int64_t spawner_id) {

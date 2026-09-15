@@ -1,12 +1,34 @@
 #include "torchlight/enemy_ai.hpp"
+#include "torchlight/scene_animation.hpp"
+#include <stdexcept>
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace torchlight {
 
+std::int32_t evaluated_maximum_mana(std::int32_t raw_base, float growth,
+    const AttackEffects& effects) {
+    const auto checked = [](float value) {
+        if (!std::isfinite(value) || static_cast<double>(value) < std::numeric_limits<std::int32_t>::min() ||
+            static_cast<double>(value) > std::numeric_limits<std::int32_t>::max())
+            throw std::invalid_argument("invalid evaluated mana contribution");
+        return static_cast<std::int32_t>(value);
+    };
+    // Preserve int -> float add -> trunc int and two SEPARATE ceil operations.
+    const auto base = std::max(1, checked(static_cast<float>(raw_base) + growth));
+    const auto percent = checked(std::ceil(static_cast<float>(base) * effects.get(0x13) / 100.0F));
+    const auto flat = checked(std::ceil(effects.get(4)));
+    const auto total = static_cast<std::int64_t>(base) + percent + flat;
+    if (total < 0 || total > std::numeric_limits<std::int32_t>::max())
+        throw std::invalid_argument("invalid evaluated maximum mana");
+    return static_cast<std::int32_t>(total);
+}
+
 PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
                                      std::uint32_t random_seed) {
+    collision_radius_ = prototype.attack_character.collision_radius;
     TorchlightRandom random(random_seed);
     const auto low = std::max(
         1.0F, std::min(prototype.minimum_health, prototype.maximum_health));
@@ -20,10 +42,41 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
         std::min(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus),
         std::max(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus));
     refresh_damage_defense();
+    base_mana_ = prototype.base_mana;
+    base_mana_effects_ = prototype.attack_character.effects;
+    set_equipment_mana_effects({});
+    mana_ = maximum_mana_;
+}
+
+bool PlayerCombatState::spend_mana(float amount) noexcept {
+    if (!alive() || !mana_ || !std::isfinite(amount) || amount < 0 || *mana_ < amount) return false;
+    *mana_ -= amount;
+    return true;
+}
+void PlayerCombatState::set_equipment_mana_effects(const AttackEffects& equipment) {
+    if (!base_mana_) return;
+    auto effects = base_mana_effects_;
+    effects.append(equipment);
+    // maxMana @0x813a10: integer base, ceil percentage, ceil flat contribution.
+    maximum_mana_ = static_cast<float>(evaluated_maximum_mana(*base_mana_, 0, effects));
+    if (mana_) *mana_ = std::min(*mana_, *maximum_mana_);
+}
+void PlayerCombatState::restore_after_death() noexcept {
+    health_ = maximum_health_;
+    mana_ = maximum_mana_;
 }
 
 void PlayerCombatState::equip(const ArmorItem& item) noexcept {
-    equipped_armor_[static_cast<std::size_t>(item.slot)] = item;
+    const auto index = static_cast<std::size_t>(item.slot);
+    if (index >= equipped_armor_.size()) return;
+    equipped_armor_[index] = item;
+    refresh_damage_defense();
+}
+
+void PlayerCombatState::unequip(ArmorSlot slot) noexcept {
+    const auto index = static_cast<std::size_t>(slot);
+    if (index >= equipped_armor_.size()) return;
+    equipped_armor_[index].reset();
     refresh_damage_defense();
 }
 
@@ -52,6 +105,21 @@ std::int32_t PlayerCombatState::apply_damage(
         damage, maximum_damage, type, 1.0F, damage_defense_, random);
     health_ = std::max(0.0F, health_ - static_cast<float>(result.applied));
     return result.applied;
+}
+
+void MonsterAiCooldown::update(float seconds) noexcept {
+    // CMonster::updateAI @0x8e3a5b: subtraction happens before think gating;
+    // negative elapsed remainder is retained until the next successful attack.
+    remaining -= seconds;
+}
+
+void MonsterAiCooldown::attack_started(
+    float unit_cooldown, std::optional<float> equipment_cooldown) noexcept {
+    // CMonster::attackAI @0x8e00e6..0x8e013d, only after attack() succeeds.
+    if (equipment_cooldown) {
+        remaining = std::max(0.0F, remaining) + *equipment_cooldown;
+    }
+    remaining = std::max(0.0F, remaining) + unit_cooldown;
 }
 
 float EnemyController::distance_xz(const std::array<float, 3>& left,
@@ -93,7 +161,7 @@ std::vector<EnemyAiUpdate> EnemyController::update(
     PlayerCombatState& player, RuntimeEntityWorld& world,
     const NavigationGrid* navigation) {
     const auto elapsed = std::isfinite(seconds) && seconds > 0.0F
-                             ? std::min(seconds, 0.1F)
+                             ? seconds
                              : 0.0F;
     std::vector<EnemyAiUpdate> updates;
     for (auto& entity : world.entities()) {
@@ -103,11 +171,13 @@ std::vector<EnemyAiUpdate> EnemyController::update(
             continue;
         }
         auto& state = states_[entity.id];
-        state.cooldown = std::max(0.0F, state.cooldown - elapsed);
+        state.ai_cooldown.update(elapsed);
+
         state.repath_after = std::max(0.0F, state.repath_after - elapsed);
         if (!player.alive()) {
             state.alerted = false;
             state.path.clear();
+            state.action.cancel();
             continue;
         }
 
@@ -127,24 +197,49 @@ std::vector<EnemyAiUpdate> EnemyController::update(
             continue;
         }
 
-        const auto attack_range = entity.attack_range;
-        if (distance <= attack_range) {
+        if (state.action.active()) {
+            updates.push_back({EnemyAiState::waiting, entity.id, false, 0, player.health()});
+            continue;
+        }
+        const auto* description = select_ordinary_attack(entity.attacks, state.prefer_left, random_);
+        if (!description) {
+            state.attack_issue = "no ordinary attack description";
+            updates.push_back({EnemyAiState::unavailable, entity.id, false, 0, player.health()});
+            continue;
+        }
+        const auto attack_range = ordinary_attack_range(*description, entity.attacks, entity.attack_character);
+        if (within_character_attack_reach(entity.position, player_position,
+                entity.attack_character.collision_radius, player.collision_radius(), attack_range, has_ranged_weapon(entity.attacks))) {
             state.path.clear();
-            if (state.cooldown > 0.0F || entity.attack_speed <= 0.0F ||
-                entity.maximum_damage <= 0) {
-                updates.push_back(
-                    {EnemyAiState::waiting, entity.id, false, 0, player.health()});
+            if (state.ai_cooldown.blocks_attack()) {
+                updates.push_back({EnemyAiState::waiting, entity.id, false, 0, player.health()});
                 continue;
             }
-            const auto rolled_damage = random_.integer_between(
-                entity.minimum_damage, entity.maximum_damage);
-            const auto damage = player.apply_damage(
-                rolled_damage, rolled_damage, DamageType::physical,
-                random_);
-            state.cooldown = std::max(0.1F, 100.0F / entity.attack_speed);
-            updates.push_back({player.alive() ? EnemyAiState::attacked
-                                              : EnemyAiState::player_killed,
-                               entity.id, false, damage, player.health()});
+            if (description->traits.ranged || !description->unavailable_reason.empty() ||
+                description->animation_prefix.empty()) {
+                state.attack_issue = description->traits.ranged ? "ranged attack needs missile/weapon-skill runtime" :
+                    !description->unavailable_reason.empty() ? description->unavailable_reason : "no weapon description in selected hand";
+                updates.push_back({EnemyAiState::unavailable, entity.id, false, 0, player.health()});
+                continue;
+            }
+            AttackClips clips;
+            try { if (resolver_) clips = resolver_(entity.mesh_path, description->animation_prefix); }
+            catch (const std::runtime_error& error) { state.attack_issue = error.what(); }
+            if (clips.empty()) {
+                if (state.attack_issue.empty()) state.attack_issue = "no loaded clip for " + description->animation_prefix;
+                updates.push_back({EnemyAiState::unavailable, entity.id, false, 0, player.health()});
+                continue;
+            }
+            const auto effects = total_attack_effects(entity.attacks, entity.attack_character);
+            const auto speed = ordinary_attack_speed(description->speed_denominator, effects, entity.attack_character.ai_flag_one);
+            const auto selected_clip = clips[select_original_random_animation(clips.size(), random_)];
+            if (!next_execution_id_) throw std::overflow_error("enemy attack execution IDs exhausted");
+            state.action.start(next_execution_id_, 1, *description, selected_clip, speed);
+            ++next_execution_id_;
+            state.ai_cooldown.attack_started(entity.ai_attack_cooldown, description->equipment_ai_cooldown);
+            state.attack_issue = effects.unresolved.empty() ? "" :
+                "partial effects: " + std::to_string(effects.unresolved.size()) + " unresolved resource records";
+            updates.push_back({EnemyAiState::attacking, entity.id, false, 0, player.health()});
             continue;
         }
 
@@ -163,6 +258,71 @@ std::vector<EnemyAiUpdate> EnemyController::update(
             {EnemyAiState::chasing, entity.id, moved, 0, player.health()});
     }
     return updates;
+}
+
+void EnemyController::advance_animations(float seconds, const RuntimeEntityWorld& world,
+                                         const PlayerCombatState& player) {
+    const auto elapsed = std::isfinite(seconds) && seconds > 0 ? seconds : 0;
+    for (auto& [id, state] : states_) {
+        const auto* entity = world.find(id);
+        if (!entity || !entity->alive || !entity->enabled || !entity->combat_targetable || !player.alive())
+            state.action.cancel();
+        else state.action.advance(elapsed);
+    }
+}
+EnemyAiUpdate EnemyController::perform_attack(std::uint64_t entity_id, const AnimationEventOccurrence& event,
+    const std::array<float, 3>& player_position, PlayerCombatState& player, RuntimeEntityWorld& world) {
+    const auto found = states_.find(entity_id);
+    if (found == states_.end()) return {};
+    auto& state = found->second;
+    const auto* entity = world.find(entity_id);
+    if (!entity || !entity->alive || !entity->enabled || !entity->combat_targetable || !player.alive()) {
+        state.action.cancel(); return {};
+    }
+    if (!state.action.consume_hit(event)) return {};
+    state.prefer_left = !state.prefer_left;
+    const auto reach = ordinary_strike_range(state.action.description(), entity->attack_character,
+        total_attack_effects(entity->attacks, entity->attack_character));
+    if (!within_character_attack_reach(entity->position, player_position,
+            entity->attack_character.collision_radius, player.collision_radius(), reach, state.action.description().traits.ranged))
+        return {EnemyAiState::missed, entity_id, false, 0, player.health()};
+    const auto damage = ordinary_physical_damage(state.action.description(), entity->attacks, entity->attack_character);
+    const auto rolled = random_.integer_between(damage[0], damage[1]);
+    const auto applied = player.apply_damage(rolled, rolled, DamageType::physical, random_);
+    return {player.alive() ? EnemyAiState::attacked : EnemyAiState::player_killed,
+        entity_id, false, applied, player.health()};
+}
+void EnemyController::finish_animation_frame() noexcept {
+    for (auto& entry : states_) entry.second.action.finish_frame();
+}
+void EnemyController::level_resetting() noexcept {
+    for (auto& entry : states_) {
+        auto& state = entry.second;
+        state.action.cancel();
+        state.alerted = false;
+        state.path.clear();
+        state.next_path_node = 0;
+        state.repath_after = 0;
+        state.attack_issue.clear();
+    }
+}
+
+void EnemyController::interrupt_attack(std::uint64_t id) noexcept {
+    const auto found = states_.find(id);
+    if (found != states_.end()) found->second.action.cancel();
+}
+const OrdinaryAttackAction* EnemyController::action(std::uint64_t id) const noexcept {
+    const auto found = states_.find(id);
+    return found == states_.end() ? nullptr : &found->second.action;
+}
+const std::string& EnemyController::last_attack_issue(std::uint64_t id) const noexcept {
+    static const std::string empty;
+    const auto found = states_.find(id);
+    return found == states_.end() ? empty : found->second.attack_issue;
+}
+float EnemyController::ai_cooldown_remaining(std::uint64_t id) const noexcept {
+    const auto found = states_.find(id);
+    return found == states_.end() ? 0 : found->second.ai_cooldown.remaining;
 }
 
 std::size_t EnemyController::alerted_count() const noexcept {

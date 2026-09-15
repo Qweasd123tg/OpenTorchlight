@@ -1,0 +1,45 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "mode": "read-only static data, no execution",
+  "constants": {
+    "speed_one": {
+      "address": "0xfa47fc",
+      "bytes_le": "0000803f",
+      "float32": 1.0
+    },
+    "percentage_divisor": {
+      "address": "0xfa483c",
+      "bytes_le": "0000c842",
+      "float32": 100.0
+    },
+    "minimum_attack_speed": {
+      "address": "0xfa86e8",
+      "bytes_le": "cdcc4c3e",
+      "float32": 0.20000000298023224
+    },
+    "innate_attack_range_default": {
+      "address": "0xfce4f8",
+      "bytes_le": "0000c03e",
+      "float32": 0.375
+    },
+    "innate_strike_range_default": {
+      "address": "0xfa4810",
+      "bytes_le": "0000003f",
+      "float32": 0.5
+    },
+    "melee_vertical_cutoff": {
+      "address": "0xfce4c4",
+      "bytes_le": "00002040",
+      "float32": 2.5
+    },
+    "ai_flag_one_speed_multiplier": {
+      "address": "0xfce498",
+      "bytes_le": "0000c03f",
+      "float32": 1.5
+    }
+  },
+  "effect_catalog_path": {
+    "address": "0xff82c8",
+    "utf32le_text": "media/EffectsList.dat"
+  }
+}

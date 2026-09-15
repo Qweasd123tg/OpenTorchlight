@@ -30,10 +30,16 @@ struct OgreMeshPose {
     std::vector<OgreBonePose> bones;
 };
 
+enum class AnimationPlaybackMode {
+    loop,
+    clamp,
+};
+
 [[nodiscard]] OgreMeshPose sample_ogre_mesh_animation(
     const OgreMesh& mesh, const OgreSkeleton& bind_skeleton,
     const OgreSkeleton& animation_skeleton, std::string_view animation_name,
-    float time_seconds);
+    float time_seconds,
+    AnimationPlaybackMode playback_mode = AnimationPlaybackMode::loop);
 
 // Applies two OGRE AnimationState layers to the bind skeleton before skinning.
 // Translation and rotation weights follow OGRE 1.6 NodeAnimationTrack::applyToNode.
@@ -43,7 +49,9 @@ struct OgreMeshPose {
     std::string_view first_animation_name, float first_time_seconds,
     float first_weight, const OgreSkeleton& second_animation_skeleton,
     std::string_view second_animation_name, float second_time_seconds,
-    float second_weight);
+    float second_weight,
+    AnimationPlaybackMode first_playback_mode = AnimationPlaybackMode::loop,
+    AnimationPlaybackMode second_playback_mode = AnimationPlaybackMode::loop);
 
 [[nodiscard]] OgreMeshPose blend_ogre_mesh_poses(
     const OgreMeshPose& first, const OgreMeshPose& second, float second_weight);

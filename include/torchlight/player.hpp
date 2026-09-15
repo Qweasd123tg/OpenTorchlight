@@ -28,6 +28,12 @@ struct PlayerPrototype {
     float reach_bonus = 0.0F;
     float minimum_health = 1.0F;
     float maximum_health = 1.0F;
+    // original-code: CPlayer::calculateMaxMana evaluates MANA_GRAPH at level 1.
+    // Absent graph => unknown capacity, not a fabricated default.
+    std::optional<std::int32_t> base_mana;
+    std::int32_t starting_gold = 0;
+    // Session creation policy. Hardcore character creation is not yet imported.
+    bool hardcore = false;
     std::int32_t minimum_damage = 0;
     std::int32_t maximum_damage = 0;
     std::int32_t strength = 0;
@@ -37,6 +43,8 @@ struct PlayerPrototype {
     std::int32_t minimum_armor_bonus = 0;
     std::int32_t maximum_armor_bonus = 0;
     DamageDefense damage_defense;
+    AttackLoadout attacks;
+    AttackCharacterValues attack_character;
     std::optional<WeaponPrototype> starting_weapon;
 };
 

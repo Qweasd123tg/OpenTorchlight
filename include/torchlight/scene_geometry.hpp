@@ -29,6 +29,7 @@ struct SceneMeshInstance {
     LayoutWorldTransform transform;
     std::uint64_t runtime_entity_id = 0;
     bool visible = true;
+    std::optional<std::array<float, 4>> material_color_override;
 };
 
 struct FixedSceneGeometry {

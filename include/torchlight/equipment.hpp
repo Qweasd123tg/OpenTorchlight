@@ -1,5 +1,6 @@
 #pragma once
 
+#include "torchlight/attack_action.hpp"
 #include "torchlight/damage.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/randomizer.hpp"
@@ -30,6 +31,10 @@ struct WeaponPrototype {
     float range = 0.0F;
     float strike_range = 0.0F;
     float base_weapon_damage = 0.0F;
+    WeaponAttackTraits attack_traits;
+    AttackHand attack_hand = AttackHand::right;
+    AttackEffects attack_effects;
+    float ai_attack_cooldown = 0.0F;
 };
 
 struct WeaponItem {
@@ -57,7 +62,13 @@ struct ArmorItem {
     std::int32_t level = 1;
     std::int32_t armor = 0;
     DamageDefense damage_defense;
+    AttackEffects attack_effects;
 };
+
+[[nodiscard]] AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand);
+
+// Resource-derived path only; does not load geometry or invent a replacement.
+[[nodiscard]] std::string unit_model_path(const UnitDefinition& definition);
 
 [[nodiscard]] std::optional<ArmorSlot> armor_slot_for_unit_type(
     std::u16string_view unit_type) noexcept;

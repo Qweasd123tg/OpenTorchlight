@@ -9,6 +9,7 @@ add_library(torchlight_core STATIC
     src/adm_document.cpp
     src/animation_events.cpp
     src/animation_manifest.cpp
+    src/attack_action.cpp
     src/collision_scene.cpp
     src/combat.cpp
     src/damage.cpp
@@ -17,6 +18,10 @@ add_library(torchlight_core STATIC
     src/entity_world.cpp
     src/enemy_ai.cpp
     src/input_state.cpp
+    src/inventory.cpp
+    src/inventory_view.cpp
+    src/player_session.cpp
+    src/treasure.cpp
     src/key_manager.cpp
     src/level_scene.cpp
     src/level_transition.cpp
@@ -121,6 +126,9 @@ endif()
 include(CTest)
 set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
 if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
+    add_executable(attack_action_test tests/attack_action_test.cpp)
+    target_link_libraries(attack_action_test PRIVATE torchlight_core)
+    add_test(NAME ordinary_attack_action COMMAND attack_action_test)
     add_library(input_comparison SHARED tests/input_c_api.cpp)
     target_link_libraries(input_comparison PRIVATE torchlight_core)
     add_library(action_comparison SHARED tests/action_c_api.cpp)
@@ -191,11 +199,132 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(equipment_test PRIVATE torchlight_core)
     add_executable(level_transition_test tests/level_transition_test.cpp)
     target_link_libraries(level_transition_test PRIVATE torchlight_core)
+    add_executable(warp_arrival_test tests/warp_arrival_test.cpp)
+    target_link_libraries(warp_arrival_test PRIVATE torchlight_core)
     add_test(NAME actor_motion COMMAND actor_motion_test)
     add_test(NAME animation_events COMMAND animation_events_test)
     add_test(NAME damage_calculation COMMAND damage_test)
+    add_test(NAME warp_arrival COMMAND warp_arrival_test)
+    add_executable(level_entry_test tests/level_entry_test.cpp)
+    target_link_libraries(level_entry_test PRIVATE torchlight_core)
+    add_test(NAME level_entry_fallback COMMAND level_entry_test)
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    set(AI_COOLDOWN_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ai-cooldown.pak.zip)
+    add_custom_command(
+        OUTPUT ${AI_COOLDOWN_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_ai_cooldown_fixture.py
+            ${AI_COOLDOWN_FIXTURE}
+        DEPENDS tests/make_ai_cooldown_fixture.py
+        VERBATIM)
+    add_custom_target(ai_cooldown_fixture DEPENDS ${AI_COOLDOWN_FIXTURE})
+    add_executable(enemy_ai_cooldown_test tests/enemy_ai_cooldown_test.cpp)
+    target_link_libraries(enemy_ai_cooldown_test PRIVATE torchlight_core)
+    add_dependencies(enemy_ai_cooldown_test ai_cooldown_fixture)
+    add_test(NAME enemy_ai_cooldown COMMAND enemy_ai_cooldown_test ${AI_COOLDOWN_FIXTURE})
+    set_tests_properties(enemy_ai_cooldown PROPERTIES TIMEOUT 30)
+    add_executable(ai_cooldown_probe tests/ai_cooldown_probe.cpp)
+    target_link_libraries(ai_cooldown_probe PRIVATE torchlight_core)
+    add_test(NAME ai_cooldown_export_comparison
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ai_cooldown.py
+            --disassembly-dir ${CMAKE_CURRENT_SOURCE_DIR}/research/disassembly
+            --probe $<TARGET_FILE:ai_cooldown_probe>)
+    set_tests_properties(ai_cooldown_export_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    if(UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        add_test(NAME desktop_gameplay_syntax
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/check_desktop_gameplay_syntax.py
+                --root ${CMAKE_CURRENT_SOURCE_DIR} --compiler ${CMAKE_CXX_COMPILER})
+        set_tests_properties(desktop_gameplay_syntax PROPERTIES TIMEOUT 60)
+    endif()
+    add_executable(inventory_view_test tests/inventory_view_test.cpp)
+    target_link_libraries(inventory_view_test PRIVATE torchlight_core)
+    add_test(NAME inventory_view COMMAND inventory_view_test)
+    add_executable(inventory_test tests/inventory_test.cpp)
+    target_link_libraries(inventory_test PRIVATE torchlight_core)
+    add_test(NAME inventory_instances COMMAND inventory_test)
+    set(ITEM_CYCLE_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/item-cycle.pak.zip)
+    add_custom_command(OUTPUT ${ITEM_CYCLE_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_item_cycle_fixture.py
+            ${ITEM_CYCLE_FIXTURE}
+        DEPENDS tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py
+        VERBATIM)
+    add_custom_target(item_cycle_fixture DEPENDS ${ITEM_CYCLE_FIXTURE})
+    add_executable(item_cycle_test tests/item_cycle_test.cpp)
+    target_link_libraries(item_cycle_test PRIVATE torchlight_core)
+    add_dependencies(item_cycle_test item_cycle_fixture)
+    add_test(NAME item_cycle COMMAND item_cycle_test ${ITEM_CYCLE_FIXTURE})
+    set_tests_properties(item_cycle PROPERTIES TIMEOUT 30)
+    add_executable(attack_speed_probe tests/attack_speed_probe.cpp)
+    target_link_libraries(attack_speed_probe PRIVATE torchlight_core)
+    add_test(NAME attack_speed_export_comparison
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_attack_speed.py
+            --probe $<TARGET_FILE:attack_speed_probe>)
+    set_tests_properties(attack_speed_export_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    set(ORDINARY_COMBAT_FIXTURE "${CMAKE_CURRENT_BINARY_DIR}/fixtures/ordinary-combat.pak.zip")
+    add_custom_command(OUTPUT ${ORDINARY_COMBAT_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_attack_fixture.py ${ORDINARY_COMBAT_FIXTURE}
+        DEPENDS tests/make_attack_fixture.py tests/make_ai_cooldown_fixture.py tests/make_item_cycle_fixture.py
+        VERBATIM)
+    add_custom_target(ordinary_combat_fixture DEPENDS ${ORDINARY_COMBAT_FIXTURE})
+    add_executable(ordinary_combat_test tests/ordinary_combat_test.cpp)
+    target_link_libraries(ordinary_combat_test PRIVATE torchlight_core)
+    add_dependencies(ordinary_combat_test ordinary_combat_fixture)
+    add_test(NAME ordinary_combat COMMAND ordinary_combat_test ${ORDINARY_COMBAT_FIXTURE})
+    set_tests_properties(ordinary_combat PROPERTIES TIMEOUT 60)
+    add_executable(gameplay_continuation_test tests/gameplay_continuation_test.cpp)
+    target_link_libraries(gameplay_continuation_test PRIVATE torchlight_core)
+    add_dependencies(gameplay_continuation_test ordinary_combat_fixture)
+    add_test(NAME gameplay_continuation COMMAND gameplay_continuation_test ${ORDINARY_COMBAT_FIXTURE})
+    set_tests_properties(gameplay_continuation PROPERTIES TIMEOUT 60)
+    add_executable(death_finalization_test tests/death_finalization_test.cpp)
+    target_link_libraries(death_finalization_test PRIVATE torchlight_core)
+    add_dependencies(death_finalization_test item_cycle_fixture)
+    add_test(NAME death_finalization COMMAND death_finalization_test ${ITEM_CYCLE_FIXTURE})
+    set_tests_properties(death_finalization PROPERTIES TIMEOUT 60)
+    add_executable(effect_catalog_probe tests/effect_catalog_probe.cpp)
+    target_link_libraries(effect_catalog_probe PRIVATE torchlight_core)
+    add_test(NAME effect_catalog_source
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/effect_catalog_source_test.py
+            --probe $<TARGET_FILE:effect_catalog_probe>)
+    set_tests_properties(effect_catalog_source PROPERTIES TIMEOUT 60)
+
+    add_test(NAME read_only_extractors
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/read_only_extractors_test.py)
+    set_tests_properties(read_only_extractors PROPERTIES TIMEOUT 30)
+    add_executable(player_vitals_probe tests/player_vitals_probe.cpp)
+    target_link_libraries(player_vitals_probe PRIVATE torchlight_core)
+    add_test(NAME combat_inputs_evidence
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_player_vitals.py
+            --probe $<TARGET_FILE:player_vitals_probe> --constants-only)
+    add_test(NAME player_vitals_export_comparison
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_player_vitals.py
+            --probe $<TARGET_FILE:player_vitals_probe>)
+    set_tests_properties(player_vitals_export_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+
+    add_executable(item_cycle_resource_test tests/item_cycle_resource_test.cpp)
+    target_link_libraries(item_cycle_resource_test PRIVATE torchlight_core)
+    add_dependencies(item_cycle_resource_test item_cycle_fixture)
+    add_test(NAME item_cycle_resource_fixture
+        COMMAND item_cycle_resource_test --pak ${ITEM_CYCLE_FIXTURE})
+    set_tests_properties(item_cycle_resource_fixture PROPERTIES TIMEOUT 60)
+
     if(TORCHLIGHT_ORIGINAL)
-        find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        add_test(NAME original_player_vitals_comparison
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_player_vitals.py
+                --probe $<TARGET_FILE:player_vitals_probe> --original "${TORCHLIGHT_ORIGINAL}")
+        set_tests_properties(original_player_vitals_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+        add_test(NAME original_attack_speed_comparison
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_attack_speed.py
+                --original "${TORCHLIGHT_ORIGINAL}" --probe $<TARGET_FILE:attack_speed_probe>)
+        set_tests_properties(original_attack_speed_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+        add_test(NAME original_ai_cooldown_comparison
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ai_cooldown.py
+                --original ${TORCHLIGHT_ORIGINAL}
+                --probe $<TARGET_FILE:ai_cooldown_probe>)
+        set_tests_properties(original_ai_cooldown_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+        add_test(NAME original_level_entry_dispatch
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/verify_original_entry_dispatch.py
+                --original ${TORCHLIGHT_ORIGINAL})
+        set_tests_properties(original_level_entry_dispatch PROPERTIES TIMEOUT 30)
         if(TARGET ogre_camera_reference)
             add_test(NAME original_camera_comparison
                 COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_camera.py
@@ -226,6 +355,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 --library $<TARGET_FILE:pathfinder_comparison>)
         set_tests_properties(original_pathfinder_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         get_filename_component(TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
+        add_test(NAME original_item_cycle
+            COMMAND item_cycle_resource_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_item_cycle PROPERTIES TIMEOUT 180)
+
         add_test(NAME original_pak_archive
             COMMAND pak_archive_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_collision_meshes

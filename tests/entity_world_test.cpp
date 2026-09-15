@@ -103,6 +103,7 @@ int main(int argc, char** argv) {
                 "live monster could not be killed");
         require(!world.kill(world.entities()[0].id, logic),
                 "dead monster was killed twice");
+        static_cast<void>(world.resolve_death_loot(logic));
         const auto death_events = logic.take_events();
         require(has_event(death_events, spawner, u"Monster Killed") &&
                     has_event(death_events, spawner, u"All Monsters Dead"),
@@ -180,14 +181,17 @@ int main(int argc, char** argv) {
                             }),
                 "SKELETONS request created a non-monster entity");
         static_cast<void>(class_logic.take_events());
+        const auto last_monster_id = class_world.entities().back().id;
         for (std::size_t index = 0; index + 1U < class_world.entities().size(); ++index) {
             require(class_world.kill(class_world.entities()[index].id, class_logic),
                     "monster from repeated spawn request could not be killed");
         }
+        static_cast<void>(class_world.resolve_death_loot(class_logic));
         require(!has_event(class_logic.take_events(), spawner, u"All Monsters Dead"),
                 "repeated spawn requests overwrote the active monster count");
-        require(class_world.kill(class_world.entities().back().id, class_logic),
+        require(class_world.kill(last_monster_id, class_logic),
                 "last monster from repeated spawn request could not be killed");
+        static_cast<void>(class_world.resolve_death_loot(class_logic));
         require(has_event(class_logic.take_events(), spawner, u"All Monsters Dead"),
                 "last monster did not complete repeated spawn requests");
 

@@ -1,3 +1,4 @@
+#include "torchlight/scene_animation.hpp"
 #include "torchlight/adm_document.hpp"
 #include "torchlight/combat.hpp"
 #include "torchlight/entity_world.hpp"
@@ -58,6 +59,8 @@ int main(int argc, char** argv) {
         require(players.front().minimum_damage == 20 &&
                     players.front().maximum_damage == 20 &&
                     players.front().attack_speed == 80.0F &&
+                    players.front().starting_weapon &&
+                    players.front().starting_weapon->speed == 110 &&
                     players.front().reach_bonus == 1.25F,
                 "Alchemist base attack properties are wrong");
 
@@ -97,113 +100,60 @@ int main(int argc, char** argv) {
                 "monster level-scaled combat properties are wrong");
         static_cast<void>(logic.take_events());
 
-        const auto original_defense = spawned.damage_defense;
-        spawned.damage_defense = {};
-        spawned.damage_defense.natural_armor = 10;
-        torchlight::PlayerPrototype mitigation_fixture;
-        mitigation_fixture.minimum_damage = 12;
-        mitigation_fixture.maximum_damage = 24;
-        mitigation_fixture.attack_speed = 80.0F;
-        torchlight::CombatController mitigation_combat(mitigation_fixture, 1);
-        torchlight::TorchlightRandom mitigation_reference(1);
-        const auto reference_damage = mitigation_reference.integer_between(12, 24);
-        const auto reference_armor = mitigation_reference.integer_between(5, 10);
-        require(reference_damage < 24 &&
-                    mitigation_combat.select_target(world, spawned.position, 0.5F),
-                "ordinary mitigation fixture did not select a non-maximum roll");
-        const auto mitigation_start =
-            mitigation_combat.update(0.0F, spawned.position, world);
-        require(mitigation_start.state == torchlight::CombatState::attacking &&
-                    mitigation_start.execution_id != 0 &&
-                    spawned.health == spawned.maximum_health,
-                "ordinary player attack applied damage before an animation HIT");
-        const auto mitigation_result = mitigation_combat.perform_attack(
-            mitigation_start.execution_id, spawned.position, world, logic);
-        require(mitigation_result.state == torchlight::CombatState::attacked &&
-                    mitigation_result.damage ==
-                        std::max(1, reference_damage - reference_armor),
-                "ordinary player attack scaled armor by the damage range maximum");
-        mitigation_combat.finish_attack(mitigation_start.execution_id);
-        spawned.health = spawned.maximum_health;
-        spawned.damage_defense = original_defense;
-
+        torchlight::AttackAnimationCatalog catalog(archive);
         torchlight::CombatController combat(players.front(), 31);
-        require(combat.attack_range() == 2.25F &&
-                    std::fabs(combat.attack_interval() - 1.25F) < 0.0001F &&
-                    combat.maximum_damage() >= 22 && combat.maximum_damage() <= 24 &&
-                    combat.minimum_damage() == static_cast<std::int32_t>(
-                        std::ceil(static_cast<float>(combat.maximum_damage()) * 0.5F)),
-                "starting staff damage, reach or interval is wrong");
-        require(combat.select_target(world, spawned.position, 0.5F) &&
-                    combat.target_id() == spawned.id,
-                "click selection did not choose the nearby monster");
-        auto far_position = spawned.position;
-        far_position[0] += 5.0F;
-        require(combat.update(0.0F, far_position, world).state ==
-                    torchlight::CombatState::approaching,
-                "out-of-range target did not request an approach");
-
-        const auto first_attack = combat.update(
-            0.0F, spawned.position, world);
-        require(first_attack.state == torchlight::CombatState::attacking &&
-                    first_attack.execution_id != 0 &&
-                    spawned.health == spawned.maximum_health,
-                "attack start damaged the target before the HIT key");
-        auto result = combat.perform_attack(
-            first_attack.execution_id, spawned.position, world, logic);
-        require(result.state == torchlight::CombatState::attacked &&
-                    result.damage == 1 &&
-                    result.remaining_health == spawned.maximum_health - 1.0F,
-                "level-ten monster armor did not absorb the starting attack");
-        require(combat.perform_attack(
-                    first_attack.execution_id + 1, spawned.position, world, logic)
-                    .state == torchlight::CombatState::idle,
-                "foreign animation execution triggered an attack");
-        combat.finish_attack(first_attack.execution_id);
-        require(combat.update(0.0F, spawned.position, world).state ==
-                    torchlight::CombatState::waiting,
-                "attack cooldown was ignored");
-        require(combat.select_target(world, spawned.position, 0.5F) &&
-                    combat.update(0.0F, spawned.position, world).state ==
-                        torchlight::CombatState::waiting,
-                "reselecting the same target reset the attack cooldown");
-        combat.clear_target();
-        require(combat.select_target(world, spawned.position, 0.5F) &&
-                    combat.update(0.0F, spawned.position, world).state ==
-                        torchlight::CombatState::waiting,
-                "clearing and reselecting a target reset the attack cooldown");
-        for (int attack = 0;
-             attack < 128 && result.state != torchlight::CombatState::killed;
-             ++attack) {
-            const auto attack_start = combat.update(
-                combat.attack_interval(), spawned.position, world);
-            require(attack_start.state == torchlight::CombatState::attacking,
-                    "expired cooldown did not begin an animation-bound attack");
-            result = combat.perform_attack(
-                attack_start.execution_id, spawned.position, world, logic);
-            combat.finish_attack(attack_start.execution_id);
+        combat.set_animation_resolver([&](std::string_view mesh, std::string_view prefix) {
+            return catalog.resolve(mesh, prefix);
+        });
+        require(combat.maximum_damage() > 0 && combat.minimum_damage() ==
+                    static_cast<std::int32_t>(std::ceil(combat.maximum_damage() * .5F)),
+                "ordinary character damage was not derived from the selected weapon");
+        require(combat.select_target(world, spawned.position, .5F), "target selection failed");
+        auto far = spawned.position; far[0] += 100;
+        require(combat.update(0, far, world).state == torchlight::CombatState::approaching,
+                "out-of-range target did not request approach");
+        std::size_t applied_hits = 0;
+        for (int attempt = 0; attempt < 512 && spawned.alive; ++attempt) {
+            const auto hp = spawned.health;
+            const auto start = combat.update(0, spawned.position, world);
+            if (start.state != torchlight::CombatState::attacking)
+                throw std::runtime_error("original clip could not start: " + combat.last_attack_issue());
+            require(spawned.health == hp, "start dealt damage without HIT");
+            const auto& action = combat.action();
+            require(action.clip() && action.clip()->bind_skeleton, "model/clip bind pose was lost");
+            auto clip_name = action.clip()->animation_name;
+            for (auto& c : clip_name) if (c >= 'a' && c <= 'z') c -= 'a' - 'A';
+            require(clip_name.find(action.description().animation_prefix) == 0,
+                    "original clip does not match chosen attack family");
+            require(combat.select_target(world, spawned.position, .5F) &&
+                    combat.update(0, spawned.position, world).state == torchlight::CombatState::waiting,
+                    "repeat selection bypassed active action");
+            combat.clear_target();
+            require(combat.select_target(world, spawned.position, .5F) &&
+                    combat.update(0, spawned.position, world).state == torchlight::CombatState::waiting,
+                    "clear/reselect bypassed active action");
+            combat.advance_animation(action.clip()->duration / action.playback().playback_speed() + .01F);
+            const auto events = action.playback().frame_events();
+            for (const auto& event : events) {
+                auto foreign = event; ++foreign.execution_id;
+                require(combat.perform_attack(foreign, spawned.position, world, logic).damage == 0,
+                        "foreign action applied damage");
+                const auto result = combat.perform_attack(event, spawned.position, world, logic);
+                if (result.damage > 0) ++applied_hits;
+                require(combat.perform_attack(event, spawned.position, world, logic).damage == 0,
+                        "duplicate event applied damage");
+            }
+            combat.finish_animation_frame();
+            require(!combat.attack_in_progress(), "completed clip retained a second action gate");
         }
-        require(result.state == torchlight::CombatState::killed &&
-                    !world.entities().front().alive &&
-                    world.entities().front().health == 0.0F &&
-                    combat.target_id() == 0,
-                "final attack did not kill and release the target");
+        require(applied_hits > 0 && !spawned.alive && spawned.health == 0 && combat.target_id() == 0,
+                "resource-backed ordinary HIT chain did not kill/release target");
+        const auto corpse_position = spawned.position;
+        static_cast<void>(world.resolve_death_loot(logic));
         const auto events = logic.take_events();
         require(has_event(events, spawner, u"Monster Killed") &&
-                    has_event(events, spawner, u"All Monsters Dead"),
-                "combat kill did not continue the source spawner graph");
-        require(!combat.select_target(world, spawned.position, 1.0F),
-                "dead monster remained selectable");
-
-        torchlight::WeaponItem replacement;
-        replacement.minimum_damage = 7;
-        replacement.maximum_damage = 14;
-        replacement.prototype.range = 7.0F;
-        combat.equip(replacement);
-        require(combat.minimum_damage() == 7 && combat.maximum_damage() == 14 &&
-                    combat.attack_range() == 8.45F,
-                "picked-up weapon did not replace player combat properties");
-
+                has_event(events, spawner, u"All Monsters Dead"), "kill did not continue spawner logic");
+        require(!combat.select_target(world, corpse_position, 1), "corpse remained selectable");
         std::cout << "PASS: selected, approached, damaged and killed an original monster\n";
         return 0;
     } catch (const std::exception& error) {

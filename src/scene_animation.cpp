@@ -67,7 +67,7 @@ struct ManifestResource {
 
 std::optional<ManifestResource> model_animation_manifest(
     const PakArchive& archive, std::string_view mesh_path,
-    std::string_view bind_skeleton_file) {
+    std::string_view bind_skeleton_file, bool strict = false) {
     const auto slash = mesh_path.find_last_of("/\\");
     const auto directory = slash == std::string_view::npos
                                ? std::string{}
@@ -111,7 +111,8 @@ std::optional<ManifestResource> model_animation_manifest(
         return left.priority != right.priority ? left.priority < right.priority
                                                : left.normalized_name < right.normalized_name;
     });
-    if ((candidates.front().priority == 2 && candidates.size() != 1U) ||
+    if ((strict && candidates.front().priority == 2) ||
+        (candidates.front().priority == 2 && candidates.size() != 1U) ||
         (candidates.size() > 1U &&
          candidates[1].priority == candidates.front().priority)) {
         return std::nullopt;
@@ -169,7 +170,7 @@ std::vector<const AnimationManifestClip*> matching_clips(
 
 std::optional<ModelAnimationClip> load_manifest_clip(
     const PakArchive& archive, std::string_view mesh_path,
-    std::string_view manifest_path, const AnimationManifestClip& clip) {
+    std::string_view manifest_path, const AnimationManifestClip& clip, bool strict = false) {
     const auto* entry = sibling_entry(archive, mesh_path, clip.file);
     if (entry == nullptr) {
         return std::nullopt;
@@ -182,7 +183,7 @@ std::optional<ModelAnimationClip> load_manifest_clip(
             return ascii_equal_case_insensitive(candidate.name, stem) &&
                    candidate.length > 0.0F;
         });
-    if (animation == skeleton.animations.end()) {
+    if (!strict && animation == skeleton.animations.end()) {
         animation = std::find_if(
             skeleton.animations.begin(), skeleton.animations.end(),
             [](const auto& candidate) { return candidate.length > 0.0F; });
@@ -224,7 +225,7 @@ std::vector<ModelAnimationClip> load_model_animations_by_prefix(
     const PakArchive& archive, std::string_view mesh_path,
     std::string_view bind_skeleton_file, std::string_view prefix) {
     auto manifest_resource =
-        model_animation_manifest(archive, mesh_path, bind_skeleton_file);
+        model_animation_manifest(archive, mesh_path, bind_skeleton_file, true);
     if (!manifest_resource) {
         return {};
     }
@@ -234,7 +235,7 @@ std::vector<ModelAnimationClip> load_model_animations_by_prefix(
             continue;
         }
         if (auto loaded = load_manifest_clip(
-                archive, mesh_path, manifest_resource->entry->name, clip)) {
+                archive, mesh_path, manifest_resource->entry->name, clip, true)) {
             result.push_back(std::move(*loaded));
         }
     }
@@ -306,7 +307,11 @@ OgreMeshPose sample_scene_mesh_animation(const FixedSceneGeometry& geometry,
                                          float time_seconds) {
     return sample_ogre_mesh_animation(
         geometry.meshes.at(animation.mesh_index).mesh, animation.bind_skeleton,
-        animation.animation_skeleton, animation.animation_name, time_seconds);
+        animation.animation_skeleton, animation.animation_name, time_seconds,
+        animation.kind == SceneAnimationKind::idle ||
+                animation.kind == SceneAnimationKind::run
+            ? AnimationPlaybackMode::loop
+            : AnimationPlaybackMode::clamp);
 }
 
 } // namespace torchlight

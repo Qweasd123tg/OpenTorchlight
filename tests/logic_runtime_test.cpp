@@ -190,11 +190,17 @@ void test_spawner_controls() {
                 hidden.front().action == torchlight::SpawnAction::hide_and_disable,
             "spawner hide input did not retain a world control request");
     require(hide_runtime.state(3) != nullptr &&
-                !hide_runtime.state(3)->enabled &&
+                hide_runtime.state(3)->enabled &&
                 hide_runtime.state(3)->active_spawned_units == 2,
-            "spawner hide input destroyed its owned-unit count");
+            "spawner hide input changed its owner state or unit count");
     require(hide_runtime.take_events().empty(),
             "spawner hide input fabricated a monster-death output");
+    hide_runtime.invoke(3, u"Spawn Units");
+    const auto respawned = hide_runtime.take_spawn_requests();
+    require(respawned.size() == 1 &&
+                respawned.front().action == torchlight::SpawnAction::spawn &&
+                respawned.front().count == 2,
+            "spawner owner could not spawn again after hiding its children");
 
     torchlight::LogicRuntime destroy_runtime(layout, 42);
     destroy_runtime.mark_spawn_complete(3, 2);
@@ -209,6 +215,144 @@ void test_spawner_controls() {
             "spawner destroy input cleared ownership before the world handled it");
     require(destroy_runtime.take_events().empty(),
             "spawner destroy input fabricated a monster-death output");
+}
+
+void test_original_timer_update_semantics() {
+    torchlight::LayoutManifest layout;
+    layout.objects.push_back(object(10, u"Timer",
+                                    {float_property(u"TIME", 0.25F),
+                                     bool_property(u"LOOPS FOREVER", true)}));
+    layout.objects.push_back(object(11, u"Timer",
+                                    {float_property(u"TIME", 0.0F),
+                                     bool_property(u"LOOPS FOREVER", true)}));
+    layout.objects.push_back(object(12, u"Timer",
+                                    {float_property(u"TIME", 0.5F),
+                                     int_property(u"LOOP COUNT", 3)}));
+
+    torchlight::LogicRuntime runtime(layout, 42);
+    runtime.update(1.0F);
+    const auto first_update = runtime.take_events();
+    require(first_update.size() == 3,
+            "a timer update emitted catch-up events or skipped another timer");
+    require(runtime.state(10)->timer_remaining == 0.25F,
+            "timer carried overshoot instead of resetting its full period");
+    require(runtime.state(11)->timer_remaining == 0.0F,
+            "zero-period timer did not return after one activation");
+
+    runtime.update(0.0F);
+    const auto zero_update = runtime.take_events();
+    require(zero_update.size() == 1 && zero_update.front().object_id == 11,
+            "zero-period timer emitted more than once per update");
+
+    runtime.update(0.5F);
+    static_cast<void>(runtime.take_events());
+    runtime.update(0.5F);
+    static_cast<void>(runtime.take_events());
+    require(runtime.state(12)->timer_loops_remaining == 0,
+            "finite timer did not exhaust its original repeat count");
+    runtime.invoke(12, u"Enable");
+    require(runtime.state(12)->timer_loops_remaining == 1,
+            "enabling an exhausted timer restored more than one repeat");
+    require(runtime.state(12)->timer_remaining == 0.5F,
+            "enabling a timer did not reset its period");
+    runtime.update(0.2F);
+    runtime.invoke(12, u"Disable");
+    require(runtime.state(12)->timer_remaining == 0.5F,
+            "disabling a timer did not reset its period before Disabled");
+
+    torchlight::LayoutManifest callback_layout;
+    callback_layout.objects.push_back(object(13, u"Timer",
+                                             {float_property(u"TIME", 0.1F),
+                                              int_property(u"LOOP COUNT", 3)}));
+    callback_layout.objects.push_back(object(14, u"Logic Group"));
+    callback_layout.objects.push_back(object(15, u"Timer",
+                                             {float_property(u"TIME", 0.1F),
+                                              int_property(u"LOOP COUNT", 3)}));
+    torchlight::LayoutLogicGroup callback_graph;
+    callback_graph.object_id = 14;
+    callback_graph.nodes.push_back(node(0, 13, {{0, u"Activated", u"Reset"}}));
+    callback_graph.nodes.push_back(node(1, 15, {{1, u"Enabled", u"Reset"}}));
+    callback_layout.logic_groups.push_back(std::move(callback_graph));
+
+    torchlight::LogicRuntime callback_runtime(callback_layout, 42);
+    callback_runtime.update(0.1F);
+    require(callback_runtime.state(13)->timer_loops_remaining == 2,
+            "timer update cached its repeat count across Activated callback");
+    callback_runtime.update(0.1F);
+    callback_runtime.update(0.1F);
+    require(callback_runtime.state(13)->timer_loops_remaining == 2,
+            "Activated callback no longer reset the timer before decrement");
+
+    callback_runtime.update(0.1F);
+    callback_runtime.update(0.1F);
+    callback_runtime.update(0.1F);
+    require(callback_runtime.state(15)->timer_loops_remaining == 0,
+            "callback test timer did not reach its exhausted state");
+    callback_runtime.invoke(15, u"Enable");
+    require(callback_runtime.state(15)->timer_loops_remaining == 3,
+            "Enable cached an exhausted count before its synchronous callback");
+}
+
+torchlight::LayoutManifest nested_dispatch_layout(bool reverse_root_links) {
+    torchlight::LayoutManifest layout;
+    layout.objects.push_back(object(20, u"Logic Group"));
+    layout.objects.push_back(object(21, u"Timer", {bool_property(u"ENABLED", false)}));
+    layout.objects.push_back(object(22, u"Timer", {bool_property(u"ENABLED", false)}));
+
+    torchlight::LayoutLogicGroup graph;
+    graph.object_id = 20;
+    std::vector<torchlight::LayoutLogicLink> root_links{
+        {1, u"Activated", u"Enable"}, {2, u"Activated", u"Enable"}};
+    if (reverse_root_links) {
+        std::reverse(root_links.begin(), root_links.end());
+    }
+    graph.nodes.push_back(node(0, 20, std::move(root_links)));
+    graph.nodes.push_back(node(1, 21, {{2, u"Enabled", u"Disable"}}));
+    graph.nodes.push_back(node(2, 22));
+    layout.logic_groups.push_back(std::move(graph));
+    return layout;
+}
+
+void test_nested_dispatch_order() {
+    const auto layout = nested_dispatch_layout(false);
+    torchlight::LogicRuntime runtime(layout, 42);
+    runtime.emit(20, u"Activated");
+    const auto invocations = runtime.take_invocations();
+    require(invocations.size() == 3 && invocations[0].target_object_id == 21 &&
+                invocations[0].input_name == u"Enable" &&
+                invocations[1].target_object_id == 22 &&
+                invocations[1].input_name == u"Disable" &&
+                invocations[2].target_object_id == 22 &&
+                invocations[2].input_name == u"Enable",
+            "nested logic output did not finish before the next sibling link");
+    require(runtime.state(22)->enabled,
+            "depth-first dispatch produced the wrong final target state");
+
+    const auto reversed_layout = nested_dispatch_layout(true);
+    torchlight::LogicRuntime reversed(reversed_layout, 42);
+    reversed.emit(20, u"Activated");
+    require(!reversed.state(22)->enabled,
+            "reversing sibling links did not preserve their original order");
+}
+
+void test_dispatch_cycle_limit() {
+    torchlight::LayoutManifest layout;
+    layout.objects.push_back(object(30, u"Logic Group"));
+    layout.objects.push_back(object(31, u"Logic Group"));
+    torchlight::LayoutLogicGroup graph;
+    graph.object_id = 30;
+    graph.nodes.push_back(node(0, 30, {{1, u"Start", u"Start"}}));
+    graph.nodes.push_back(node(1, 31, {{0, u"Start", u"Start"}}));
+    layout.logic_groups.push_back(std::move(graph));
+
+    torchlight::LogicRuntime runtime(layout, 42);
+    bool rejected = false;
+    try {
+        runtime.invoke(30, u"Start");
+    } catch (const std::runtime_error&) {
+        rejected = true;
+    }
+    require(rejected, "cyclic logic graph bypassed the root dispatch limit");
 }
 
 void test_original_logic_layout(const std::string& pak_path) {
@@ -258,6 +402,9 @@ int main(int argc, char** argv) {
         }
         test_stateful_graph();
         test_spawner_controls();
+        test_original_timer_update_semantics();
+        test_nested_dispatch_order();
+        test_dispatch_cycle_limit();
         test_original_logic_layout(argv[2]);
         std::cout << "PASS: parsed and executed Torchlight layout logic graphs\n";
         return 0;

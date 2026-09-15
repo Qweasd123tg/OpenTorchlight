@@ -5,6 +5,7 @@
 
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -100,11 +101,10 @@ private:
         std::u16string input_name;
     };
 
-    struct PendingEvent {
-        std::int64_t object_id = 0;
-        std::u16string output_name;
-    };
-
+    void queue_event(std::int64_t object_id, std::u16string output_name);
+    void queue_invocation(std::int64_t source_object_id,
+                          std::int64_t target_object_id,
+                          std::u16string input_name);
     void process_events();
     void invoke_from(std::int64_t source_object_id, std::int64_t target_object_id,
                      std::u16string_view input_name);
@@ -118,8 +118,8 @@ private:
     std::unordered_map<std::int64_t, LogicObjectState> states_;
     std::unordered_map<std::int64_t, std::vector<Route>> routes_;
     std::size_t dangling_link_count_ = 0;
-    std::vector<PendingEvent> pending_events_;
-    std::size_t next_pending_event_ = 0;
+    std::vector<std::function<void()>> pending_actions_;
+    std::size_t dispatched_events_ = 0;
     bool processing_events_ = false;
     TorchlightRandom random_;
     std::vector<LogicEvent> events_;

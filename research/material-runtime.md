@@ -45,6 +45,29 @@ unit; текстура позднего прохода больше не под�
 `GL_LINEAR_MIPMAP_NEAREST`. PNG-текстуры получают сгенерированную цепочку,
 как автоматические mipmaps OGRE.
 
+## Runtime override уровня
+
+Исследован Linux ELF с SHA-256
+`91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
+Точечные экспорты находятся в `research/disassembly/89aef0.asm`,
+`950a40.asm` и `977760-material-ambient.asm`; связанный псевдокод — в
+`research/decompiled-core/generic_model.c`, `level.c` и
+`level_template_data.c`.
+
+`original-code`: `CLevelTemplateData::load @0x009762f0` читает
+`MATERIAL AMBIENT RED/GREEN/BLUE`, по умолчанию 92, делит каждую компоненту
+на 255 и задаёт alpha 1. `CLevel::updateMaterialAmbient @0x00950a40` проходит
+по `CEditorScene`. Если в конкретной сцене отсутствует объект дескриптора
+`Scene Object`, функция применяет этот RGBA ко всем её `Room Piece` через
+`CGenericModel::setAmbient @0x0089aef0`. ASM последней функции подтверждает,
+что один указатель цвета передаётся и `Ogre::Material::setAmbient`, и
+`Ogre::Material::setDiffuse` каждого материала модели.
+
+Порт хранит финальный RGBA как override отдельного `SceneMeshInstance` и перед
+shader подаёт его одновременно в diffuse и material ambient. Общий каталог
+материалов не изменяется. Ресурсный тест проверяет область override отдельно
+для фиксированного города и каждого layout сгенерированного этажа.
+
 ## Оставшиеся границы
 
 `prototype`: рендерер всё ещё рисует один проход и одну texture unit. Полное
@@ -55,3 +78,8 @@ unit; текстура позднего прохода больше не под�
 OpenTorchlight. Их нужно заменить значениями и состояниями исходного кадра,
 снятыми из оригинального runtime. Сами material-файлы этих параметров сцены не
 задают.
+
+`original-code`, граница: восстановлена только ветка `Room Piece` из
+`CLevel::updateMaterialAmbient`. Другие вызовы `CGenericModel::setAmbient`,
+например добавление предметов с настройками override lighting, требуют
+отдельного переноса их условий и источников цвета.

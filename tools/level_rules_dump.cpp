@@ -26,6 +26,9 @@ int main(int argc, char** argv) {
                       << " random=" << rules.randomized << " chunks=" << rules.minimum_chunks
                       << ".." << rules.maximum_chunks << " tile=" << rules.tile_basis
                       << " basis=" << rules.chunk_width_basis << 'x' << rules.chunk_height_basis
+                      << " material_ambient=" << rules.material_ambient[0] << ','
+                      << rules.material_ambient[1] << ',' << rules.material_ambient[2] << ','
+                      << rules.material_ambient[3]
                       << " types=" << rules.chunk_types.size() << '\n';
             for (std::size_t index = 0; index < rules.chunk_types.size(); ++index) {
                 const auto& type = rules.chunk_types[index];

@@ -9,6 +9,7 @@
 
 #include <cstddef>
 #include <optional>
+#include <memory>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -36,6 +37,8 @@ struct SceneMeshAnimation {
 };
 
 struct ModelAnimationClip {
+    // Shared bind pose is resolved with the exact model, independent of an Idle clip.
+    std::shared_ptr<const OgreSkeleton> bind_skeleton;
     OgreSkeleton animation_skeleton;
     std::string animation_name;
     std::string manifest_path;

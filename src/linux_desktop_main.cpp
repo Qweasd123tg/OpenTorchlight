@@ -16,6 +16,8 @@
 #include "torchlight/ogre_skeleton.hpp"
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
+#include "torchlight/player_session.hpp"
+#include "torchlight/inventory_view.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
@@ -50,6 +52,7 @@
 #include <utility>
 #include <unistd.h>
 #include <vector>
+#include <type_traits>
 
 namespace {
 
@@ -285,7 +288,15 @@ public:
     [[nodiscard]] int width() const noexcept { return width_; }
     [[nodiscard]] int height() const noexcept { return height_; }
 
-    void draw_scene_frame(torchlight::GlesSceneRenderer& renderer) {
+    [[nodiscard]] std::vector<std::uint32_t> take_key_presses() {
+        auto keys = std::move(key_presses_);
+        key_presses_.clear();
+        return keys;
+    }
+
+    void draw_scene_frame(torchlight::GlesSceneRenderer& renderer,
+                          const std::vector<torchlight::InventoryViewLine>& lines,
+                          bool inventory_open) {
         renderer.draw(width_, height_);
         glEnable(GL_SCISSOR_TEST);
         const int top_height = std::max(54, height_ / 12);
@@ -293,6 +304,37 @@ public:
         const int status_size = std::max(12, std::min(width_, height_) / 45);
         fill_rectangle(status_size, height_ - top_height / 2 - status_size / 2, status_size,
                        status_size, 0.72F, 0.43F, 0.10F);
+        // prototype: diagnostic overlay geometry/colors, not original UI metrics.
+        const int scale = width_ >= 950 ? 2 : 1;
+        const int line_height = 11 * scale;
+        const int left = 24;
+        int top = height_ - 12;
+        if (inventory_open) {
+            fill_rectangle(12, 12, std::max(0, width_ - 24), std::max(0, height_ - 24),
+                           0.075F, 0.070F, 0.060F);
+            top = height_ - 26;
+        }
+        for (const auto& line : lines) {
+            if (top - line_height < 12) break;
+            if (line.selected)
+                fill_rectangle(left - 6, top - line_height + 3,
+                               std::max(0, width_ - 2 * left), line_height,
+                               0.28F, 0.20F, 0.08F);
+            const auto columns = static_cast<std::size_t>(std::max(0, width_ - 2 * left) / (6 * scale));
+            int x = left;
+            for (const char c : line.text.substr(0, columns)) {
+                const auto glyph = torchlight::inventory_glyph(c);
+                for (int row = 0; row < 7; ++row) {
+                    for (int column = 0; column < 5; ++column) {
+                        if (glyph[row] & (1U << (4 - column)))
+                            fill_rectangle(x + column * scale, top - (row + 1) * scale,
+                                           scale, scale, 0.93F, 0.88F, 0.72F);
+                    }
+                }
+                x += 6 * scale;
+            }
+            top -= line_height;
+        }
         glDisable(GL_SCISSOR_TEST);
         if (glGetError() != GL_NO_ERROR) {
             throw DesktopError("OpenGL ES failed while drawing the scene preview");
@@ -388,9 +430,8 @@ private:
     static void keyboard_leave(void*, wl_keyboard*, std::uint32_t, wl_surface*) {}
     static void keyboard_key(void* data, wl_keyboard*, std::uint32_t, std::uint32_t,
                              std::uint32_t key, std::uint32_t state) {
-        if (key == KEY_ESC && state == WL_KEYBOARD_KEY_STATE_PRESSED) {
-            static_cast<DesktopWindow*>(data)->running_ = false;
-        }
+        if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
+            static_cast<DesktopWindow*>(data)->key_presses_.push_back(key);
     }
     static void keyboard_modifiers(void*, wl_keyboard*, std::uint32_t, std::uint32_t,
                                    std::uint32_t, std::uint32_t, std::uint32_t) {}
@@ -431,6 +472,7 @@ private:
     bool configured_ = false;
     bool running_ = true;
     std::optional<std::array<int, 2>> left_click_;
+    std::vector<std::uint32_t> key_presses_;
 };
 
 struct LoadedDesktopLevel {
@@ -441,6 +483,10 @@ struct LoadedDesktopLevel {
     torchlight::FixedSceneGeometry geometry;
     torchlight::NavigationGrid navigation;
     std::array<float, 3> player_start{};
+    float player_start_angle = 0.0F;
+    std::array<float, 3> recovery_anchor{};
+    float recovery_angle = 0.0F;
+    bool recovery_anchor_resolved = false;
     std::string scene_state;
     std::size_t chunk_count = 1;
     std::size_t expanded_layout_link_count = 0;
@@ -493,7 +539,8 @@ LoadedDesktopLevel load_desktop_level(
     const torchlight::LevelsetCatalog& levelsets,
     const torchlight::LevelSceneLoader& loader,
     torchlight::DungeonAddress requested_address,
-    std::uint32_t base_seed) {
+    std::uint32_t base_seed,
+    const torchlight::LevelEntryRequest* entry) {
     LoadedDesktopLevel result;
     result.dungeon = loader.load_dungeon(
         dungeon_data_file(requested_address.dungeon_name));
@@ -502,6 +549,26 @@ LoadedDesktopLevel load_desktop_level(
     result.address = {result.dungeon.name, floor.depth};
     result.rules = loader.load_rules(result.dungeon.strata[floor.stratum_index].ruleset);
     const auto seed = level_seed(base_seed, floor.depth);
+    const auto resolve_transition_start = [&]() {
+        if (entry == nullptr) {
+            return false;
+        }
+        auto normalized_entry = *entry;
+        normalized_entry.destination = result.address;
+        if (const auto anchor = torchlight::find_same_dungeon_entry_anchor(result.layout, normalized_entry)) {
+            result.recovery_anchor = anchor->position;
+            result.recovery_angle = anchor->angle_degrees;
+            result.recovery_anchor_resolved = true;
+        }
+        const auto arrival = torchlight::find_same_dungeon_level_arrival(
+            result.layout, normalized_entry);
+        if (!arrival) {
+            return false;
+        }
+        result.player_start = arrival->position;
+        result.player_start_angle = arrival->angle_degrees;
+        return true;
+    };
 
     torchlight::CollisionScene collision;
     if (result.rules.randomized) {
@@ -516,7 +583,9 @@ LoadedDesktopLevel load_desktop_level(
             result.dungeon, result.rules, result.layout};
         result.geometry = torchlight::build_room_piece_geometry(
             archive, levelsets, scene);
-        result.player_start = torchlight::generated_player_start(loader, generated);
+        if (!resolve_transition_start()) {
+            result.player_start = torchlight::generated_player_start(loader, generated);
+        }
         collision = torchlight::build_generated_level_collision(
             archive, levelsets, loader, generated);
         result.scene_state = "generated-dungeon";
@@ -528,13 +597,21 @@ LoadedDesktopLevel load_desktop_level(
             result.dungeon, result.rules, result.layout};
         result.geometry = torchlight::build_room_piece_geometry(
             archive, levelsets, scene);
-        result.player_start = torchlight::layout_player_start(result.layout);
+        if (!resolve_transition_start()) {
+            result.player_start = torchlight::layout_player_start(result.layout);
+        }
         collision = torchlight::build_fixed_level_collision(archive, levelsets, scene);
         result.scene_state = result.dungeon.strata[floor.stratum_index].is_town
                                  ? "town-playable"
                                  : "fixed-dungeon";
     }
 
+    // Initial boot / special entry paths still use the existing prototype start.
+    // Ordinary in-dungeon transitions preserve the separate original level anchor.
+    if (!result.recovery_anchor_resolved) {
+        result.recovery_anchor = result.player_start;
+        result.recovery_angle = result.player_start_angle;
+    }
     result.navigation = torchlight::NavigationGrid::build(collision);
     if (const auto start_cell = result.navigation.nearest_walkable(result.player_start)) {
         result.player_floor_offset =
@@ -583,6 +660,7 @@ struct PlayerAnimationResources {
     torchlight::OgreSkeleton idle;
     torchlight::OgreSkeleton run;
     std::vector<torchlight::ModelAnimationClip> attacks;
+    std::optional<torchlight::ModelAnimationClip> death;
     std::string idle_name;
     std::string run_name;
 };
@@ -615,14 +693,10 @@ PlayerAnimationResources load_player_animations(
     auto run = torchlight::load_model_animation(
         archive, mesh_entry->name, mesh.skeleton_file,
         torchlight::SceneAnimationKind::run);
-    std::string attack_prefix = "ATTACK";
-    if (player.starting_weapon &&
-        (unit_types.is_a(player.starting_weapon->unit_type, u"STAFF") ||
-         unit_types.is_a(player.starting_weapon->unit_type, u"POLEARM"))) {
-        // CEquipment::calculateCombatStats assigns both STAFF (0x3d) and
-        // POLEARM (0x69) weapons the CAttackDescription prefix "POLEARM".
-        attack_prefix = "POLEARM";
-    }
+    const auto attack_prefix = player.starting_weapon ?
+        torchlight::weapon_attack_prefix(
+            torchlight::weapon_attack_traits(player.starting_weapon->unit_type, unit_types).family,
+            player.starting_weapon->attack_hand) : std::string("ATTACK");
     auto attacks = torchlight::load_model_animations_by_prefix(
         archive, mesh_entry->name, mesh.skeleton_file, attack_prefix);
     if (!idle || !run || attacks.empty()) {
@@ -634,6 +708,8 @@ PlayerAnimationResources load_player_animations(
     result.idle = std::move(idle->animation_skeleton);
     result.run = std::move(run->animation_skeleton);
     result.attacks = std::move(attacks);
+    result.death = torchlight::load_model_animation(archive, mesh_entry->name,
+        mesh.skeleton_file, torchlight::SceneAnimationKind::death);
     result.idle_name = std::move(idle->animation_name);
     result.run_name = std::move(run->animation_name);
     return result;
@@ -662,9 +738,6 @@ int main(int argc, char** argv) {
         if (players.empty()) {
             throw DesktopError("no playable player definitions were resolved");
         }
-        const auto player_animations = load_player_animations(
-            archive, players.front(), unit_type_hierarchy);
-
         torchlight::DungeonAddress initial_address{u"Town", 0};
         if (options.main_stratum) {
             const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
@@ -683,18 +756,38 @@ int main(int argc, char** argv) {
         const torchlight::OgreMaterialCatalog materials(archive);
         DesktopWindow window(1280, 720);
         torchlight::LevelTransitionState transitions(initial_address);
+        std::optional<torchlight::LevelEntryRequest> pending_entry;
         std::uint64_t total_frames = 0;
         std::size_t completed_transitions = 0;
         bool app_running = true;
+        // Owned state outlives the loaded floor. No world pointer crosses unload.
+        torchlight::PlayerSession session(
+            players.front(), level_seed(options.seed, initial_address.depth),
+            &unit_type_hierarchy);
+        torchlight::InventoryView inventory_view;
+        const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
+            auto prototype = players.front();
+            prototype.starting_weapon.reset();
+            if (const auto* item = inventory.equipped(torchlight::InventorySlot::weapon);
+                item && item->weapon) prototype.starting_weapon = item->weapon->prototype;
+            return prototype;
+        };
 
         while (app_running) {
+            session.enter_level();
+            inventory_view.open = false;
+            auto player_visual = visual_prototype(session.inventory());
+            auto player_animations = load_player_animations(
+                archive, player_visual, unit_type_hierarchy);
             auto level = load_desktop_level(
                 archive, levelsets, scene_loader,
-                transitions.current(), options.seed);
+                transitions.current(), options.seed,
+                pending_entry ? &*pending_entry : nullptr);
             if (level.address.dungeon_name != transitions.current().dungeon_name ||
                 level.address.depth != transitions.current().depth) {
                 transitions.commit(level.address);
             }
+            pending_entry.reset();
             torchlight::ActorMotion player_motion(
                 level.player_start, players.front().running_speed);
             auto interactions = collect_unit_triggers(level.layout);
@@ -714,18 +807,26 @@ int main(int argc, char** argv) {
             torchlight::append_player_geometry(
                 archive, players.front(), level.player_start, level.geometry);
             const auto player_instance_index = level.geometry.instances.size() - 1U;
+            level.geometry.instances[player_instance_index].transform.orientation =
+                torchlight::yaw_rotation(level.player_start_angle);
             const auto player_mesh_index =
                 level.geometry.instances[player_instance_index].mesh_index;
-            const auto player_weapon_instance_index =
+            auto player_weapon_instance_index =
                 torchlight::append_player_weapon_geometry(
-                    archive, players.front(), level.player_start, level.geometry);
+                    archive, player_visual, level.player_start, level.geometry);
+            std::unordered_map<std::string, std::size_t> weapon_instance_cache;
+            if (player_weapon_instance_index && player_visual.starting_weapon)
+                weapon_instance_cache.emplace(player_visual.starting_weapon->mesh_path,
+                                              *player_weapon_instance_index);
+            if (player_weapon_instance_index) {
+                level.geometry.instances[*player_weapon_instance_index]
+                    .transform.orientation =
+                    torchlight::yaw_rotation(level.player_start_angle);
+            }
             auto scene_idle_animations = torchlight::load_scene_idle_animations(
                 archive, level.geometry, player_mesh_index);
             auto scene_run_animations = torchlight::load_scene_animations(
                 archive, level.geometry, torchlight::SceneAnimationKind::run,
-                player_mesh_index);
-            auto scene_attack_animations = torchlight::load_scene_animations(
-                archive, level.geometry, torchlight::SceneAnimationKind::attack,
                 player_mesh_index);
             auto scene_hit_animations = torchlight::load_scene_animations(
                 archive, level.geometry, torchlight::SceneAnimationKind::hit,
@@ -733,14 +834,17 @@ int main(int argc, char** argv) {
             auto scene_death_animations = torchlight::load_scene_animations(
                 archive, level.geometry, torchlight::SceneAnimationKind::death,
                 player_mesh_index);
-            torchlight::CombatController combat(
-                players.front(), level_seed(options.seed, level.address.depth));
-            torchlight::PlayerCombatState player_combat(
-                players.front(), level_seed(options.seed, level.address.depth));
+            auto& combat = session.combat();
+            auto& player_combat = session.health();
             torchlight::EnemyController enemies(
                 level_seed(options.seed, level.address.depth) ^ 0x9e3779b9U);
-            torchlight::TorchlightRandom player_animation_random(
-                level_seed(options.seed, level.address.depth) ^ 0x41c64e6dU);
+            torchlight::AttackAnimationCatalog attack_catalog(archive);
+            const auto resolve_attack = [&](std::string_view mesh, std::string_view prefix) {
+                return attack_catalog.resolve(mesh, prefix);
+            };
+            combat.set_animation_resolver(resolve_attack);
+            enemies.set_animation_resolver(resolve_attack);
+            std::unordered_map<std::uint64_t, std::string> reported_attack_issues;
             std::optional<torchlight::GlesSceneRenderer> renderer;
             std::optional<torchlight::WarpRequest> pending_warp;
             std::unordered_map<std::uint64_t, std::size_t> runtime_instance_indices;
@@ -763,6 +867,9 @@ int main(int argc, char** argv) {
             std::size_t selected_target_count = 0;
             std::size_t interaction_count = 0;
             std::size_t pickup_count = 0;
+            std::size_t loot_death_count = 0;
+            std::size_t loot_entity_count = 0;
+            std::size_t missing_loot_class_count = 0;
             std::size_t equipped_armor_count = 0;
             std::size_t equipped_weapon_count = 0;
             std::size_t combat_attack_count = 0;
@@ -777,13 +884,16 @@ int main(int argc, char** argv) {
             float player_animation_time = 0.0F;
             float player_transition_time = 0.0F;
             float scene_animation_time = 0.0F;
-            enum class PlayerAnimationState { idle, run, attack };
+            enum class PlayerAnimationState { idle, run, attack, death };
             PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
             PlayerAnimationState player_transition_from_state =
                 PlayerAnimationState::idle;
             bool player_attack_animation_active = false;
-            std::size_t player_attack_animation_index = 0U;
-            torchlight::AnimationEventPlayback player_attack_events;
+            torchlight::AttackClip player_pose_attack_clip;
+            torchlight::AttackClip player_previous_pose_clip;
+            torchlight::AttackClip player_transition_attack_clip;
+            float player_previous_attack_speed = 1.0F;
+            float player_transition_attack_speed = 1.0F;
             bool player_transition_active = false;
             float player_transition_from_time = 0.0F;
             enum class EnemyAnimationState { idle, run, attack, hit, death, hidden };
@@ -802,7 +912,28 @@ int main(int argc, char** argv) {
                 }
             }
 
+            const auto rebuild_renderer = [&] {
+                renderer.emplace(level.geometry, archive, materials);
+                ++renderer_rebuild_count;
+                scene_idle_animations = torchlight::load_scene_idle_animations(
+                    archive, level.geometry, player_mesh_index);
+                scene_run_animations = torchlight::load_scene_animations(
+                    archive, level.geometry, torchlight::SceneAnimationKind::run, player_mesh_index);
+                scene_hit_animations = torchlight::load_scene_animations(
+                    archive, level.geometry, torchlight::SceneAnimationKind::hit, player_mesh_index);
+                scene_death_animations = torchlight::load_scene_animations(
+                    archive, level.geometry, torchlight::SceneAnimationKind::death, player_mesh_index);
+                renderer->set_camera_target(player_motion.position(), kCameraDistance);
+            };
             auto drain_logic = [&] {
+                // Flush only after callers release pointers into entities_.
+                const auto loot = entity_world.resolve_death_loot(logic_runtime);
+                loot_death_count += loot.deaths;
+                loot_entity_count += loot.spawns.entities_created;
+                missing_loot_class_count += loot.missing_classes;
+                resolved_unit_type_count += loot.spawns.resolved_unit_types;
+                unresolved_unit_type_count += loot.spawns.unresolved_unit_types;
+                missing_spawn_resource_count += loot.spawns.missing_resources;
                 bool entity_visibility_changed = false;
                 for (std::size_t pass = 0;; ++pass) {
                     const auto requests = logic_runtime.take_spawn_requests();
@@ -841,26 +972,7 @@ int main(int argc, char** argv) {
                     geometry_changed = geometry_changed || instance.has_value();
                     ++processed_entity_count;
                 }
-                if (geometry_changed && renderer) {
-                    renderer.emplace(level.geometry, archive, materials);
-                    ++renderer_rebuild_count;
-                    scene_idle_animations = torchlight::load_scene_idle_animations(
-                        archive, level.geometry, player_mesh_index);
-                    scene_run_animations = torchlight::load_scene_animations(
-                        archive, level.geometry, torchlight::SceneAnimationKind::run,
-                        player_mesh_index);
-                    scene_attack_animations = torchlight::load_scene_animations(
-                        archive, level.geometry, torchlight::SceneAnimationKind::attack,
-                        player_mesh_index);
-                    scene_hit_animations = torchlight::load_scene_animations(
-                        archive, level.geometry, torchlight::SceneAnimationKind::hit,
-                        player_mesh_index);
-                    scene_death_animations = torchlight::load_scene_animations(
-                        archive, level.geometry, torchlight::SceneAnimationKind::death,
-                        player_mesh_index);
-                    renderer->set_camera_target(
-                        player_motion.position(), kCameraDistance);
-                }
+                if (geometry_changed && renderer) rebuild_renderer();
                 if (entity_visibility_changed) {
                     for (const auto& entity : entity_world.entities()) {
                         const auto instance = runtime_instance_indices.find(entity.id);
@@ -913,6 +1025,85 @@ int main(int argc, char** argv) {
                     });
                 return found == animations.end() ? nullptr : &*found;
             };
+            const auto change_equipment = [&](bool remove) {
+                const auto id = inventory_view.selected_id(session.inventory());
+                if (!player_combat.alive() || combat.attack_in_progress()) {
+                    inventory_view.status = torchlight::inventory_change_message(
+                        !player_combat.alive() ? torchlight::InventoryChange::dead
+                                              : torchlight::InventoryChange::busy);
+                    return;
+                }
+                // Validate all derived stats on a private candidate BEFORE adding
+                // cached render instances; a rejected item changes neither side.
+                auto candidate_session = session;
+                torchlight::InventoryChange proposed;
+                try { proposed = remove ? candidate_session.unequip(id) : candidate_session.equip(id); }
+                catch (const std::exception& error) {
+                    inventory_view.status = std::string("EQUIPMENT REJECTED: ") + error.what();
+                    std::cerr << "inventory_stats_error=" << error.what() << '\n';
+                    return;
+                }
+                const auto& preview = candidate_session.inventory();
+                if (proposed != torchlight::InventoryChange::changed) {
+                    inventory_view.status = torchlight::inventory_change_message(proposed);
+                    return;
+                }
+                const auto* before_weapon = session.weapon();
+                const auto* after_weapon = preview.equipped(torchlight::InventorySlot::weapon);
+                const bool weapon_changed = (before_weapon ? before_weapon->id : 0) !=
+                                            (after_weapon ? after_weapon->id : 0);
+                auto candidate_visual = visual_prototype(preview);
+                std::optional<PlayerAnimationResources> candidate_animations;
+                auto candidate_instance = player_weapon_instance_index;
+                bool geometry_added = false;
+                if (weapon_changed) {
+                    try {
+                        candidate_animations = load_player_animations(
+                            archive, candidate_visual, unit_type_hierarchy);
+                        candidate_instance.reset();
+                        if (candidate_visual.starting_weapon) {
+                            const auto& path = candidate_visual.starting_weapon->mesh_path;
+                            const auto cached = weapon_instance_cache.find(path);
+                            if (cached != weapon_instance_cache.end()) candidate_instance = cached->second;
+                            else {
+                                if (path.empty()) throw DesktopError("equipped weapon has no mesh path");
+                                candidate_instance = torchlight::append_player_weapon_geometry(
+                                    archive, candidate_visual, player_motion.position(), level.geometry);
+                                if (!candidate_instance) throw DesktopError("equipped weapon model is missing");
+                                weapon_instance_cache.emplace(path, *candidate_instance);
+                                level.geometry.instances[*candidate_instance].visible = false;
+                                geometry_added = true;
+                            }
+                        }
+                    } catch (const std::exception& error) {
+                        inventory_view.status = "EQUIP REJECTED: MODEL/ANIMATION UNAVAILABLE. ITEM KEPT.";
+                        std::cerr << "inventory_visual_error=" << error.what() << '\n';
+                        return;
+                    }
+                }
+                static_assert(std::is_nothrow_move_assignable_v<torchlight::PlayerSession>);
+                session = std::move(candidate_session);
+                inventory_view.status = torchlight::inventory_change_message(proposed);
+                if (weapon_changed) {
+                    if (player_weapon_instance_index) {
+                        level.geometry.instances[*player_weapon_instance_index].visible = false;
+                        renderer->set_instance_visible(*player_weapon_instance_index, false);
+                    }
+                    player_weapon_instance_index = candidate_instance;
+                    player_visual = std::move(candidate_visual);
+                    player_animations = std::move(*candidate_animations);
+                    player_animation_state = PlayerAnimationState::idle;
+                    player_transition_active = false;
+                    player_animation_time = 0.0F;
+                    player_attack_animation_active = false;
+                    if (player_weapon_instance_index)
+                        level.geometry.instances[*player_weapon_instance_index].visible = true;
+                    if (geometry_added) rebuild_renderer();
+                    else if (player_weapon_instance_index)
+                        renderer->set_instance_visible(*player_weapon_instance_index, true);
+                    ++equipped_weapon_count;
+                } else ++equipped_armor_count;
+            };
             bool rendered_once = false;
             auto previous_frame = std::chrono::steady_clock::now();
 
@@ -925,8 +1116,52 @@ int main(int argc, char** argv) {
                 const float elapsed =
                     std::chrono::duration<float>(current_frame - previous_frame).count();
                 previous_frame = current_frame;
+                for (const auto key : window.take_key_presses()) {
+                    if (!player_combat.alive()) {
+                        if (key == KEY_ESC) { app_running = false; continue; }
+                        if (key != KEY_R) continue;
+                        const auto recovery = session.recover_at_entry(enemies, player_motion, level.recovery_anchor);
+                        if (recovery.status != torchlight::RecoveryStatus::recovered) continue;
+                        inventory_view.open = false;
+                        active_interaction.reset(); active_pickup.reset(); active_path.clear(); next_path_node = 0;
+                        player_attack_animation_active = false;
+                        player_animation_state = player_transition_from_state = PlayerAnimationState::idle;
+                        player_animation_time = player_transition_time = 0;
+                        player_transition_active = false;
+                        player_pose_attack_clip.reset(); player_previous_pose_clip.reset(); player_transition_attack_clip.reset();
+                        for (auto& pair : enemy_animation_playback) {
+                            const auto* entity = entity_world.find(pair.first);
+                            if (entity && entity->alive && entity->enabled) pair.second = {};
+                        }
+                        level.geometry.instances[player_instance_index].transform.orientation =
+                            torchlight::yaw_rotation(level.recovery_angle);
+                        renderer->set_instance_angle(player_instance_index, level.recovery_angle);
+                        if (const auto cell = level.navigation.nearest_walkable(player_motion.position()))
+                            level.player_floor_offset = player_motion.position()[1] -
+                                level.navigation.cell((*cell)[0], (*cell)[1]).height;
+                        inventory_view.status = "RECOVERED AT ENTRY. GOLD LOST " + std::to_string(recovery.gold_lost);
+                        std::cout << "player_recovered=1 gold_lost=" << recovery.gold_lost << " gold=" << session.gold()
+                                  << " original_entry_anchor=" << level.recovery_anchor_resolved << '\n';
+                        continue;
+                    }
+                    if (key == KEY_I) inventory_view.open = !inventory_view.open;
+                    else if (key == KEY_ESC) {
+                        if (inventory_view.open) inventory_view.open = false;
+                        else app_running = false;
+                    } else if (inventory_view.open) {
+                        if (key == KEY_UP) inventory_view.move(-1, session.inventory());
+                        else if (key == KEY_DOWN) inventory_view.move(1, session.inventory());
+                        else if (key == KEY_ENTER || key == KEY_KPENTER) change_equipment(false);
+                        else if (key == KEY_U) change_equipment(true);
+                    }
+                }
+                if (!app_running) break;
+                // prototype: pause while inspecting the bag; do not replay HITs
+                // or run zero-period logic timers while this overlay is open.
+                // prototype UI policy: pause simulation while dead; death pose still advances.
+                const float simulation_elapsed = inventory_view.open || !player_combat.alive() ? 0.0F : std::min(elapsed, 0.1F);
                 if (const auto click = window.take_left_click();
-                    click && rendered_once && player_combat.alive()) {
+                    click && rendered_once && !inventory_view.open && player_combat.alive()) {
                     auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
                         window.height(), player_motion.position()[1]);
@@ -940,7 +1175,7 @@ int main(int argc, char** argv) {
                                   << " health=" << selected->health << '/'
                                   << selected->maximum_health << '\n';
                     } else if (const auto* item = entity_world.nearest_alive_item(
-                                   destination, 2.0F)) {
+                                   destination, 2.0F, true)) {
                         combat.clear_target();
                         active_interaction.reset();
                         active_pickup = item->id;
@@ -975,8 +1210,8 @@ int main(int argc, char** argv) {
                     }
                 }
                 const auto previous_player_position = player_motion.position();
-                player_motion.advance(std::min(elapsed, 0.1F));
-                while (!player_motion.moving() && next_path_node < active_path.size()) {
+                player_motion.advance(simulation_elapsed);
+                while (player_combat.alive() && !inventory_view.open && !player_motion.moving() && next_path_node < active_path.size()) {
                     ++next_path_node;
                     if (next_path_node < active_path.size()) {
                         auto waypoint = active_path[next_path_node];
@@ -1004,7 +1239,7 @@ int main(int argc, char** argv) {
                 renderer->set_camera_target(
                     player_motion.position(), kCameraDistance);
 
-                if (active_interaction) {
+                if (player_combat.alive() && !inventory_view.open && active_interaction) {
                     const auto dx = active_interaction->position[0] - player_motion.position()[0];
                     const auto dz = active_interaction->position[2] - player_motion.position()[2];
                     if (std::hypot(dx, dz) <= 2.25F) {
@@ -1017,7 +1252,7 @@ int main(int argc, char** argv) {
                         drain_logic();
                     }
                 }
-                if (active_pickup) {
+                if (player_combat.alive() && !inventory_view.open && active_pickup) {
                     const auto* item = entity_world.find(*active_pickup);
                     if (item == nullptr || !item->alive ||
                         item->kind != torchlight::MasterResourceKind::item) {
@@ -1027,52 +1262,35 @@ int main(int argc, char** argv) {
                         const auto dz = item->position[2] - player_motion.position()[2];
                         if (std::hypot(dx, dz) <= 2.25F) {
                             const auto item_id = item->id;
-                            const auto item_name = item->name;
-                            const auto armor_item = item->armor_item;
-                            const auto weapon_item = item->weapon_item;
                             player_motion.stop();
                             active_path.clear();
                             next_path_node = 0;
-                            if (entity_world.pick_up(item_id, logic_runtime)) {
+                            const auto inventory_id = session.pick_up(entity_world, item_id, logic_runtime);
+                            if (inventory_id != 0) {
                                 ++pickup_count;
-                                if (armor_item) {
-                                    player_combat.equip(*armor_item);
-                                    ++equipped_armor_count;
-                                }
-                                if (weapon_item) {
-                                    combat.equip(*weapon_item);
-                                    ++equipped_weapon_count;
-                                }
+                                inventory_view.status = "PICKED UP ITEM #" + std::to_string(inventory_id) + ". PRESS I TO EQUIP.";
                                 const auto instance = runtime_instance_indices.find(item_id);
                                 if (instance != runtime_instance_indices.end()) {
                                     level.geometry.instances[instance->second].visible = false;
                                     renderer->set_instance_visible(instance->second, false);
                                 }
-                                std::cout << "picked_up=" << item_id
-                                          << " name=" << narrow_ascii(item_name)
-                                          << " armor="
-                                          << (armor_item ? armor_item->armor : 0)
-                                          << " player_armor="
-                                          << player_combat.armor_class()
-                                          << " attack_damage="
-                                          << combat.minimum_damage() << '-'
-                                          << combat.maximum_damage()
-                                          << " attack_range="
-                                          << combat.attack_range() << '\n';
-                            }
+                                std::cout << "picked_up=" << item_id << " inventory_id=" << inventory_id
+                                          << " bag_count=" << session.inventory().items().size() << '\n';
+                            } else inventory_view.status = "CANNOT PICK UP: NOT SUPPORTED EQUIPMENT OR PLAYER DEAD.";
                             active_pickup.reset();
                             drain_logic();
                         }
                     }
                 }
-                if (!pending_warp) {
+                if (!pending_warp && !inventory_view.open && player_combat.alive()) {
                     std::optional<std::array<float, 3>> combat_target_position;
                     if (const auto* target = combat.target(entity_world)) {
                         combat_target_position = target->position;
                     }
-                    const auto update = combat.update(
-                        std::min(elapsed, 0.1F), player_motion.position(),
-                        entity_world);
+                    const auto update = player_combat.alive() ? combat.update(
+                        simulation_elapsed, player_motion.position(), entity_world) : torchlight::CombatUpdate{};
+                    if (update.state == torchlight::CombatState::unavailable)
+                        inventory_view.status = "ATTACK UNAVAILABLE: " + combat.last_attack_issue();
                     if (update.state == torchlight::CombatState::waiting ||
                         update.state == torchlight::CombatState::attacking) {
                         player_motion.stop();
@@ -1081,20 +1299,11 @@ int main(int argc, char** argv) {
                     }
                     if (update.state == torchlight::CombatState::attacking) {
                         player_attack_animation_active = true;
-                        player_attack_animation_index =
-                            torchlight::select_original_random_animation(
-                                player_animations.attacks.size(),
-                                player_animation_random);
-                        const auto& attack_clip =
-                            player_animations.attacks[player_attack_animation_index];
-                        player_attack_events.start(
-                            update.execution_id,
-                            attack_clip.skeleton_path + ":" +
-                                attack_clip.animation_name,
-                            attack_clip.duration, 1.0F, attack_clip.event_keys);
-                        if (player_animation_state == PlayerAnimationState::attack) {
+                        player_pose_attack_clip = combat.action().clip();
+                        if (player_animation_state == PlayerAnimationState::attack)
                             player_animation_time = 0.0F;
-                        }
+                        if (!combat.last_attack_issue().empty())
+                            inventory_view.status = combat.last_attack_issue();
                     }
                     if (combat_target_position &&
                         update.state != torchlight::CombatState::approaching &&
@@ -1114,9 +1323,18 @@ int main(int argc, char** argv) {
                         }
                     }
                     const auto enemy_updates = enemies.update(
-                        std::min(elapsed, 0.1F), player_motion.position(),
+                        simulation_elapsed, player_motion.position(),
                         player_combat, entity_world, &level.navigation);
                     for (const auto& enemy_update : enemy_updates) {
+                        // Report unresolved resource inputs once per changed reason, not every frame.
+                        const auto& issue = enemies.last_attack_issue(enemy_update.entity_id);
+                        auto& reported = reported_attack_issues[enemy_update.entity_id];
+                        if (issue != reported) {
+                            if (!issue.empty())
+                                std::cerr << "enemy_attack_issue=" << enemy_update.entity_id
+                                          << " reason=" << issue << '\n';
+                            reported = issue;
+                        }
                         auto& playback =
                             enemy_animation_playback[enemy_update.entity_id];
                         const auto change_enemy_animation = [&](EnemyAnimationState state) {
@@ -1143,23 +1361,18 @@ int main(int argc, char** argv) {
                                     instance->second, enemy->position);
                             }
                         }
-                        if (enemy_update.state == torchlight::EnemyAiState::attacked ||
-                            enemy_update.state == torchlight::EnemyAiState::player_killed) {
+                        if (enemy_update.state == torchlight::EnemyAiState::attacking) {
                             if (playback.state != EnemyAnimationState::death) {
                                 playback.state = EnemyAnimationState::attack;
                                 playback.time = 0.0F;
                             }
-                            const auto instance = runtime_instance_indices.find(
-                                enemy_update.entity_id);
-                            if (instance != runtime_instance_indices.end()) {
-                                face_instance_toward(
-                                    instance->second, player_motion.position());
-                            }
-                            ++enemy_attack_count;
-                            std::cout << "enemy_hit=" << enemy_update.entity_id
-                                      << " damage=" << enemy_update.damage
-                                      << " player_health=" << enemy_update.player_health
-                                      << '\n';
+                            const auto instance = runtime_instance_indices.find(enemy_update.entity_id);
+                            if (instance != runtime_instance_indices.end())
+                                face_instance_toward(instance->second, player_motion.position());
+                            const auto* action = enemies.action(enemy_update.entity_id);
+                            std::cout << "enemy_attack_start=" << enemy_update.entity_id
+                                      << " clip=" << action->clip()->skeleton_path
+                                      << " speed=" << action->playback().playback_speed() << '\n';
                         } else if (enemy_update.state == torchlight::EnemyAiState::idle &&
                                    playback.state != EnemyAnimationState::hit &&
                                    playback.state != EnemyAnimationState::death) {
@@ -1170,22 +1383,28 @@ int main(int argc, char** argv) {
                                    playback.state != EnemyAnimationState::death) {
                             change_enemy_animation(EnemyAnimationState::idle);
                         }
-                        if (enemy_update.state ==
-                            torchlight::EnemyAiState::player_killed) {
-                            ++player_death_count;
-                            player_motion.stop();
-                            active_path.clear();
-                            next_path_node = 0;
-                            combat.clear_target();
-                            std::cout << "player_killed=1\n";
-                        }
+
                     }
-                    logic_runtime.update(std::min(elapsed, 0.1F));
+                    logic_runtime.update(simulation_elapsed);
                     logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
                 }
-                const float animation_elapsed = std::min(elapsed, 0.1F);
+                const float animation_elapsed = simulation_elapsed;
+                if (!player_combat.alive()) { combat.clear_target(); combat.interrupt_attack(); }
+                combat.advance_animation(animation_elapsed);
+                enemies.advance_animations(animation_elapsed, entity_world, player_combat);
+                player_attack_animation_active = combat.attack_in_progress();
                 for (auto& [entity_id, playback] : enemy_animation_playback) {
+                    const auto* action = enemies.action(entity_id);
+                    if (action && action->active()) {
+                        playback.state = EnemyAnimationState::attack;
+                        playback.time = action->playback().time_seconds();
+                        continue; // Losing sight does not replace the pose of a running action.
+                    }
+                    if (playback.state == EnemyAnimationState::attack) {
+                        playback.state = EnemyAnimationState::idle;
+                        playback.time = 0.0F;
+                    }
                     playback.time += animation_elapsed;
                     if (playback.state != EnemyAnimationState::attack &&
                         playback.state != EnemyAnimationState::hit &&
@@ -1199,10 +1418,7 @@ int main(int argc, char** argv) {
                     const auto mesh_index =
                         level.geometry.instances[instance->second].mesh_index;
                     const torchlight::SceneMeshAnimation* one_shot = nullptr;
-                    if (playback.state == EnemyAnimationState::attack) {
-                        one_shot = animation_for_mesh(
-                            scene_attack_animations, mesh_index);
-                    } else if (playback.state == EnemyAnimationState::hit) {
+                    if (playback.state == EnemyAnimationState::hit) {
                         one_shot = animation_for_mesh(scene_hit_animations, mesh_index);
                     } else {
                         one_shot = animation_for_mesh(
@@ -1241,7 +1457,16 @@ int main(int argc, char** argv) {
                     if (playback.state == EnemyAnimationState::run) {
                         animation = animation_for_mesh(scene_run_animations, mesh_index);
                     } else if (playback.state == EnemyAnimationState::attack) {
-                        animation = animation_for_mesh(scene_attack_animations, mesh_index);
+                        const auto* action = enemies.action(entity_id);
+                        if (action && action->clip() && action->clip()->bind_skeleton) {
+                            renderer->set_instance_pose(instance->second,
+                                torchlight::sample_ogre_mesh_animation(
+                                    level.geometry.meshes[mesh_index].mesh, *action->clip()->bind_skeleton,
+                                    action->clip()->animation_skeleton, action->clip()->animation_name,
+                                    action->playback().time_seconds(), torchlight::AnimationPlaybackMode::clamp));
+                            ++enemy_animation_updates;
+                            continue;
+                        }
                     } else if (playback.state == EnemyAnimationState::hit) {
                         animation = animation_for_mesh(scene_hit_animations, mesh_index);
                     } else if (playback.state == EnemyAnimationState::death) {
@@ -1258,7 +1483,9 @@ int main(int argc, char** argv) {
                         ++enemy_animation_updates;
                     }
                 }
-                const auto next_animation_state = player_attack_animation_active
+                const auto next_animation_state = !player_combat.alive()
+                                                      ? PlayerAnimationState::death
+                                                      : player_attack_animation_active
                                                       ? PlayerAnimationState::attack
                                                       : player_motion.moving()
                                                             ? PlayerAnimationState::run
@@ -1266,56 +1493,70 @@ int main(int argc, char** argv) {
                 if (next_animation_state != player_animation_state) {
                     player_transition_from_state = player_animation_state;
                     player_transition_from_time = player_animation_time;
+                    player_transition_attack_clip = player_previous_pose_clip;
+                    player_transition_attack_speed = player_previous_attack_speed;
                     player_transition_time = 0.0F;
-                    player_transition_active = true;
+                    player_transition_active = next_animation_state != PlayerAnimationState::death;
                     player_animation_time = 0.0F;
                     player_animation_state = next_animation_state;
                 }
-                if (player_animation_state == PlayerAnimationState::attack &&
+                if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
-                    player_attack_events.advance(animation_elapsed);
-                    player_animation_time = player_attack_events.time_seconds();
+                    player_animation_time = combat.action().playback().time_seconds();
                 } else {
-                    player_animation_time += animation_elapsed;
+                    player_animation_time += player_animation_state == PlayerAnimationState::death ?
+                        std::min(elapsed, 0.1F) : animation_elapsed;
                 }
-                const auto animation_skeleton = [&](PlayerAnimationState state)
+                const auto animation_skeleton = [&](PlayerAnimationState state, bool previous = false)
                     -> const torchlight::OgreSkeleton& {
                     if (state == PlayerAnimationState::attack) {
-                        return player_animations.attacks[player_attack_animation_index]
-                            .animation_skeleton;
+                        const auto& clip = previous ? player_transition_attack_clip : player_pose_attack_clip;
+                        if (clip) return clip->animation_skeleton;
                     }
+                    if (state == PlayerAnimationState::death && player_animations.death)
+                        return player_animations.death->animation_skeleton;
                     if (state == PlayerAnimationState::run) {
                         return player_animations.run;
                     }
                     return player_animations.idle;
                 };
-                const auto animation_name = [&](PlayerAnimationState state)
+                const auto animation_name = [&](PlayerAnimationState state, bool previous = false)
                     -> const std::string& {
                     if (state == PlayerAnimationState::attack) {
-                        return player_animations.attacks[player_attack_animation_index]
-                            .animation_name;
+                        const auto& clip = previous ? player_transition_attack_clip : player_pose_attack_clip;
+                        if (clip) return clip->animation_name;
                     }
+                    if (state == PlayerAnimationState::death && player_animations.death)
+                        return player_animations.death->animation_name;
                     if (state == PlayerAnimationState::run) {
                         return player_animations.run_name;
                     }
                     return player_animations.idle_name;
                 };
+                const auto animation_playback_mode = [](PlayerAnimationState state) {
+                    return state == PlayerAnimationState::attack || state == PlayerAnimationState::death
+                               ? torchlight::AnimationPlaybackMode::clamp
+                               : torchlight::AnimationPlaybackMode::loop;
+                };
                 torchlight::OgreMeshPose player_pose;
                 if (player_transition_active) {
                     constexpr float kPlayerTransitionDuration = 0.2F;
                     player_transition_time += animation_elapsed;
-                    player_transition_from_time += animation_elapsed;
+                    player_transition_from_time += animation_elapsed *
+                        (player_transition_from_state == PlayerAnimationState::attack ? player_transition_attack_speed : 1.0F);
                     const float linear_amount = std::min(
                         1.0F, player_transition_time / kPlayerTransitionDuration);
                     player_pose = torchlight::sample_ogre_mesh_animation_blend(
                         level.geometry.meshes[player_mesh_index].mesh,
                         player_animations.bind,
-                        animation_skeleton(player_transition_from_state),
-                        animation_name(player_transition_from_state),
+                        animation_skeleton(player_transition_from_state, true),
+                        animation_name(player_transition_from_state, true),
                         player_transition_from_time, 1.0F - linear_amount,
                         animation_skeleton(player_animation_state),
                         animation_name(player_animation_state), player_animation_time,
-                        linear_amount);
+                        linear_amount,
+                        animation_playback_mode(player_transition_from_state),
+                        animation_playback_mode(player_animation_state));
                     if (linear_amount >= 1.0F) {
                         player_transition_active = false;
                     }
@@ -1324,16 +1565,18 @@ int main(int argc, char** argv) {
                         level.geometry.meshes[player_mesh_index].mesh,
                         player_animations.bind,
                         animation_skeleton(player_animation_state),
-                        animation_name(player_animation_state), player_animation_time);
+                        animation_name(player_animation_state), player_animation_time,
+                        animation_playback_mode(player_animation_state));
                 }
                 renderer->set_mesh_pose(player_pose);
                 if (player_weapon_instance_index) {
-                    const auto tag = std::find_if(
-                        player_pose.bones.begin(), player_pose.bones.end(),
-                        [](const auto& bone) { return bone.name == "tag_righthand"; });
+                    const bool left_weapon = session.weapon() && session.weapon()->weapon &&
+                        session.weapon()->weapon->prototype.attack_hand == torchlight::AttackHand::left;
+                    const auto tag = std::find_if(player_pose.bones.begin(), player_pose.bones.end(),
+                        [&](const auto& bone) { return bone.name == (left_weapon ? "tag_lefthand" : "tag_righthand"); });
                     if (tag == player_pose.bones.end()) {
                         throw DesktopError(
-                            "player skeleton lacks the right-hand equipment tag");
+                            "player skeleton lacks the selected equipment hand tag");
                     }
                     const auto& body_transform =
                         level.geometry.instances[player_instance_index].transform;
@@ -1354,25 +1597,61 @@ int main(int argc, char** argv) {
                     renderer->set_instance_transform(
                         *player_weapon_instance_index, weapon_transform);
                 }
+                player_previous_pose_clip = player_pose_attack_clip;
+                player_previous_attack_speed = combat.action().playback().playback_speed();
+                // The global enemy-before-player order is retained explicitly;
+                // per-character order is advance -> pose -> HIT -> finish.
+                if (!inventory_view.open) {
+                    for (const auto& entity : entity_world.entities()) {
+                        const auto* action = enemies.action(entity.id);
+                        if (!action || !action->active()) continue;
+                        const auto events = action->playback().frame_events();
+                        for (const auto& event : events) {
+                            if (event.key.name != "HIT") continue;
+                            const auto hit = enemies.perform_attack(entity.id, event,
+                                player_motion.position(), player_combat, entity_world);
+                            if (hit.state != torchlight::EnemyAiState::attacked &&
+                                hit.state != torchlight::EnemyAiState::player_killed) continue;
+                            ++enemy_attack_count;
+                            std::cout << "enemy_hit=" << entity.id << " damage=" << hit.damage
+                                      << " player_health=" << hit.player_health << " clip=" << event.source_clip
+                                      << " key=" << event.key_index << '\n';
+                            if (hit.state == torchlight::EnemyAiState::player_killed) {
+                                ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
+                                combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
+                                active_interaction.reset(); active_pickup.reset(); inventory_view.open = false;
+                                std::cout << "player_killed=1\n";
+                                break;
+                            }
+                        }
+                    }
+                    enemies.finish_animation_frame();
+                }
                 bool player_hit_processed = false;
-                if (player_animation_state == PlayerAnimationState::attack &&
+                if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
-                    for (const auto& event : player_attack_events.frame_events()) {
+                    for (const auto& event : combat.action().playback().frame_events()) {
                         if (event.key.name != "HIT") {
                             continue;
                         }
                         const auto hit = combat.perform_attack(
-                            event.execution_id, player_motion.position(),
-                            entity_world, logic_runtime);
+                            event, player_motion.position(), entity_world, logic_runtime);
                         if (hit.state != torchlight::CombatState::attacked &&
                             hit.state != torchlight::CombatState::killed) {
                             continue;
                         }
                         auto& playback = enemy_animation_playback[hit.target_id];
-                        playback.state = hit.state == torchlight::CombatState::killed
-                                             ? EnemyAnimationState::death
-                                             : EnemyAnimationState::hit;
-                        playback.time = 0.0F;
+                        if (hit.state == torchlight::CombatState::killed) {
+                            enemies.interrupt_attack(hit.target_id);
+                            playback.state = EnemyAnimationState::death; playback.time = 0.0F;
+                        } else {
+                            const auto* active_attack = enemies.action(hit.target_id);
+                            // Do not invent unconditional stagger: ordinary damage
+                            // alone must not replace a still-running attack clip.
+                            if (!active_attack || !active_attack->active()) {
+                                playback.state = EnemyAnimationState::hit; playback.time = 0.0F;
+                            }
+                        }
                         ++combat_attack_count;
                         combat_kill_count += static_cast<std::size_t>(
                             hit.state == torchlight::CombatState::killed);
@@ -1383,17 +1662,31 @@ int main(int argc, char** argv) {
                                   << " clip=" << event.source_clip
                                   << " key=" << event.key_index << '\n';
                     }
-                    if (player_attack_events.finished()) {
-                        combat.finish_attack(player_attack_events.execution_id());
-                        player_attack_animation_active = false;
-                    }
+                    combat.finish_animation_frame();
+                    player_attack_animation_active = combat.attack_in_progress();
                 }
                 if (player_hit_processed) {
                     drain_logic();
                     renderer->set_mesh_pose(player_pose);
                 }
                 ++player_animation_updates;
-                window.draw_scene_frame(*renderer);
+                auto overlay = inventory_view.lines(session,
+                    static_cast<std::size_t>(std::max(1, window.height() / (window.width() >= 950 ? 22 : 11) - 10)));
+                if (!inventory_view.open) {
+                    overlay.resize(1);
+                    overlay.push_back({inventory_view.status.empty()
+                        ? "I INVENTORY | CLICK MONSTER TO ATTACK OR ITEM TO PICK UP"
+                        : inventory_view.status, false});
+                }
+                if (!player_combat.alive()) {
+                    overlay.resize(1);
+                    overlay.push_back({"PLAYER DIED - SIMULATION PAUSED", false});
+                    overlay.push_back({session.hardcore() ? "HARDCORE: RECOVERY DISABLED. ESC TO EXIT." :
+                        "R: RECOVER AT LEVEL ENTRY | ESC: EXIT", true});
+                    if (!session.hardcore()) overlay.push_back({"COST " + std::to_string(session.gold() / 10) +
+                        " GOLD. INVENTORY AND FLOOR ARE RETAINED.", false});
+                }
+                window.draw_scene_frame(*renderer, overlay, inventory_view.open || !player_combat.alive());
                 rendered_once = true;
                 ++level_frames;
                 ++total_frames;
@@ -1405,6 +1698,10 @@ int main(int argc, char** argv) {
 
             const auto& render_stats = renderer->stats();
             std::cout << "desktop_state=" << level.scene_state
+                      << " inventory_items=" << session.inventory().items().size()
+                      << " loot_deaths=" << loot_death_count
+                      << " loot_items=" << loot_entity_count
+                      << " missing_loot_classes=" << missing_loot_class_count
                       << " dungeon=" << narrow_ascii(level.address.dungeon_name)
                       << " depth=" << level.address.depth
                       << " resources=" << index.records().size()
@@ -1413,8 +1710,8 @@ int main(int argc, char** argv) {
                       << " chunks=" << level.chunk_count
                       << " player=" << narrow_ascii(players.front().name)
                       << " weapon="
-                      << (players.front().starting_weapon
-                              ? narrow_ascii(players.front().starting_weapon->name)
+                      << (session.weapon()
+                              ? narrow_ascii(session.weapon()->name)
                               : "none")
                       << " attack_damage=" << combat.minimum_damage() << '-'
                       << combat.maximum_damage()
@@ -1473,17 +1770,18 @@ int main(int argc, char** argv) {
             if (!app_running || !pending_warp) {
                 break;
             }
-            auto destination = transitions.resolve(*pending_warp);
+            auto entry = transitions.resolve_entry(*pending_warp);
             const auto target_dungeon = scene_loader.load_dungeon(
-                dungeon_data_file(destination.dungeon_name));
+                dungeon_data_file(entry.destination.dungeon_name));
             const auto target_floor = torchlight::select_dungeon_floor(
-                target_dungeon, destination.depth);
-            destination = {target_dungeon.name, target_floor.depth};
-            transitions.commit(destination);
+                target_dungeon, entry.destination.depth);
+            entry.destination = {target_dungeon.name, target_floor.depth};
+            transitions.commit(entry.destination);
+            pending_entry = entry;
             ++completed_transitions;
             std::cout << "level_transition=" << completed_transitions
-                      << " dungeon=" << narrow_ascii(destination.dungeon_name)
-                      << " depth=" << destination.depth
+                      << " dungeon=" << narrow_ascii(entry.destination.dungeon_name)
+                      << " depth=" << entry.destination.depth
                       << " warp_name=" << narrow_ascii(pending_warp->warp_name)
                       << '\n';
             std::cout.flush();

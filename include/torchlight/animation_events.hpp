@@ -22,6 +22,8 @@ struct AnimationEventOccurrence {
     std::size_t key_index = 0;
     AnimationEventKey key;
     float clip_time_seconds = 0.0F;
+    // Inferred ownership guard: disambiguates controllers/floors reusing numeric IDs.
+    std::uint64_t playback_generation = 0;
 };
 
 // Advances one non-looping animation and publishes every manifest key crossed
@@ -54,6 +56,7 @@ public:
 
 private:
     std::uint64_t execution_id_ = 0;
+    std::uint64_t playback_generation_ = 0;
     std::string source_clip_;
     std::vector<AnimationEventKey> keys_;
     std::vector<bool> emitted_;

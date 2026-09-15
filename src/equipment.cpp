@@ -51,6 +51,45 @@ float optional_floating(const UnitDefinition& definition, const char16_t* name,
 
 } // namespace
 
+std::string unit_model_path(const UnitDefinition& definition) {
+    const auto text = [&](const char16_t* name) {
+        const auto* property = definition.find_property(name);
+        if (!property) return std::string{};
+        if (property->type != AdmValueType::string &&
+            property->type != AdmValueType::translation &&
+            property->type != AdmValueType::note)
+            throw EquipmentError("Item model property must be text");
+        std::string result;
+        for (const auto ch : std::get<std::u16string>(property->value)) {
+            if (ch > 127) throw EquipmentError("Item model path is not ASCII");
+            result.push_back(ch == u'\\' ? '/' : static_cast<char>(ch));
+        }
+        return result;
+    };
+    auto directory = text(u"RESOURCEDIRECTORY");
+    auto mesh = text(u"MESHFILE");
+    if (mesh.empty()) return {};
+    if (!directory.empty() && directory.back() != '/') directory.push_back('/');
+    auto path = directory + mesh;
+    auto suffix = path.size() >= 5 ? path.substr(path.size() - 5) : std::string{};
+    for (auto& ch : suffix) if (ch >= 'A' && ch <= 'Z') ch += 'a' - 'A';
+    if (suffix != ".mesh") path += ".mesh";
+    return path;
+}
+
+AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand) {
+    AttackDescription result;
+    result.hand = hand; result.source_guid = item.prototype.guid;
+    result.traits = item.prototype.attack_traits;
+    result.animation_prefix = weapon_attack_prefix(result.traits.family, hand);
+    result.minimum_damage = item.minimum_damage; result.maximum_damage = item.maximum_damage;
+    result.range = item.prototype.range; result.strike_range = item.prototype.strike_range;
+    result.speed_denominator = static_cast<float>(item.prototype.speed) / 100.0F;
+    result.equipment_ai_cooldown = item.prototype.ai_attack_cooldown;
+    result.effects = item.prototype.attack_effects;
+    return result;
+}
+
 std::optional<ArmorSlot> armor_slot_for_unit_type(
     std::u16string_view unit_type) noexcept {
     const auto type = normalized(unit_type);
@@ -150,6 +189,7 @@ std::optional<WeaponPrototype> load_weapon_prototype(
     weapon.name = resource.name;
     weapon.display_name = resource.display_name;
     weapon.unit_type = resource.unit_type;
+    weapon.mesh_path = unit_model_path(definition);
     weapon.level = optional_integer(definition, u"LEVEL", 1);
     weapon.minimum_damage_percent = optional_integer(definition, u"MINDAMAGE", 0);
     weapon.maximum_damage_percent = optional_integer(definition, u"MAXDAMAGE", 0);
@@ -166,6 +206,7 @@ std::optional<WeaponPrototype> load_weapon_prototype(
     if (weapon.level < 1 || weapon.minimum_damage_percent < 0 ||
         weapon.maximum_damage_percent < weapon.minimum_damage_percent ||
         weapon.rarity_damage_modifier < 0 || weapon.speed_damage_modifier < 0 ||
+        weapon.speed <= 0 ||
         !std::isfinite(weapon.range) || weapon.range < 0.0F ||
         !std::isfinite(weapon.strike_range) || weapon.strike_range < 0.0F ||
         !std::isfinite(weapon.base_weapon_damage) ||

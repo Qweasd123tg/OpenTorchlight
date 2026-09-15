@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <string>
 
@@ -96,6 +97,7 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
           "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm"),
       random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
+    attack_effect_catalog_ = AttackEffectCatalog::discover(definitions.archive());
     const auto transforms = resolve_layout_world_transforms(layout);
     for (std::size_t index = 0; index < layout.objects.size(); ++index) {
         if (layout.objects[index].descriptor == u"Unit Spawner") {
@@ -177,18 +179,40 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
     entity.resource_guid = resource.guid;
     entity.kind = resource.kind;
     entity.name = resource.name;
+    entity.display_name = resource.display_name;
+    entity.unit_type = resource.unit_type;
     entity.position = position;
     entity.level = spawn_level_;
     if (resource.kind == MasterResourceKind::item) {
         const auto definition = definitions_->load(resource);
+        entity.mesh_path = unit_model_path(*definition);
+        if (const auto* entry = definitions_->archive().find_normalized(entity.mesh_path))
+            entity.mesh_path = entry->name;
+        // Match the loaded UNIT/BASEFILE value, not optional master-table metadata.
+        const auto* create_as = optional_text(definition->root, u"CREATEAS");
+        entity.inventory_eligible = create_as && normalized(*create_as) == u"EQUIPMENT";
+        entity.two_handed = unit_types_->is_a_id(resource.unit_type, 10);
+        const auto effects = load_constant_attack_effects(
+            *definition, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
         entity.armor_item = roll_armor_item(
             resource, *definition, player_armor_graph_, random_);
-        if (const auto weapon = load_weapon_prototype(
+        if (entity.armor_item) entity.armor_item->attack_effects = effects;
+        if (auto weapon = load_weapon_prototype(
                 resource, *definition, player_weapon_damage_graph_)) {
+            weapon->attack_traits = weapon_attack_traits(resource.unit_type, *unit_types_);
+            weapon->attack_hand = weapon->attack_traits.family == WeaponAttackFamily::bow ?
+                AttackHand::left : AttackHand::right;
+            weapon->attack_effects = effects;
+            weapon->ai_attack_cooldown = optional_number(*definition, u"AI_ATTACKCOOLDOWN", 0);
             entity.weapon_item = roll_weapon_item(*weapon, random_);
+            entity.weapon_item->prototype.mesh_path = entity.mesh_path;
         }
     } else if (resource.kind == MasterResourceKind::monster) {
         const auto definition = definitions_->load(resource);
+        entity.mesh_path = unit_model_path(*definition);
+        if (const auto* entry = definitions_->archive().find_normalized(entity.mesh_path))
+            entity.mesh_path = entry->name;
+        entity.treasure = load_treasure_profile(*definition);
         const auto minimum_health_percent =
             optional_number(*definition, u"MINHP", 1.0F);
         const auto maximum_health_percent =
@@ -251,8 +275,16 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         entity.running_speed = optional_number(
             *definition, u"RUNNINGSPEED", entity.walking_speed);
         entity.attack_speed = optional_number(*definition, u"ATTACKSPEED", 100.0F);
+        entity.ai_attack_cooldown = optional_number(
+            *definition, u"AI_ATTACKCOOLDOWN", 0.0F);
         entity.sight_radius = optional_number(*definition, u"SIGHT_RADIUS", 0.0F);
         entity.reach_bonus = optional_number(*definition, u"REACH_BONUS", 0.0F);
+        entity.attacks.innate.push_back(load_innate_attack(
+            *definition, entity.minimum_damage, entity.maximum_damage));
+        entity.attacks.no_unarmed_attacks = attack_unit_bool(*definition, u"NO_UNARMED_ATTACKS", false);
+        entity.attacks.use_weapon_damage = attack_unit_bool(*definition, u"USEWEAPONDAMAGE", true);
+        entity.attack_character = load_attack_character_values(
+            *definition, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
         equip_monster_attack(entity, *definition);
         entity.attack_range = std::max(
             0.5F, entity.weapon_range + entity.reach_bonus + 0.2F);
@@ -265,6 +297,12 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         if (!std::isfinite(entity.walking_speed) || entity.walking_speed < 0.0F ||
             !std::isfinite(entity.running_speed) || entity.running_speed < 0.0F) {
             throw EntityWorldError("Runtime monster movement speed is invalid");
+        }
+        // Keep finite negative cooldowns: the original clamps before adding
+        // the UNIT value, not after it. Non-finite resource values are invalid
+        // portable inputs, not a claimed recovery of original error handling.
+        if (!std::isfinite(entity.ai_attack_cooldown)) {
+            throw EntityWorldError("Runtime monster AI attack cooldown is invalid");
         }
         if (!std::isfinite(entity.attack_speed) || entity.attack_speed < 0.0F) {
             throw EntityWorldError("Runtime monster attack speed is invalid");
@@ -285,48 +323,61 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
 
 void RuntimeEntityWorld::equip_monster_attack(
     RuntimeEntity& entity, const UnitDefinition& definition) {
-    const auto equip = [&](const MasterResourceRecord* record) {
-        if (record == nullptr || record->kind != MasterResourceKind::item ||
-            record->do_not_create || normalized(record->create_as) != u"EQUIPMENT") {
-            return false;
+    const auto equip = [&](const MasterResourceRecord* record, AttackHand hand) {
+        if (!record || record->kind != MasterResourceKind::item || record->do_not_create) return false;
+        const auto unit = definitions_->load(*record);
+        const auto* create_as = optional_text(unit->root, u"CREATEAS");
+        if (!create_as || normalized(*create_as) != u"EQUIPMENT" || !unit->find_property(u"RANGE")) return false;
+        // Only weapon types may occupy this attack path; shields stay outside it.
+        if (!unit_types_->is_a_id(record->unit_type, 8)) return false;
+        const auto cooldown = optional_number(*unit, u"AI_ATTACKCOOLDOWN", 0);
+        if (!std::isfinite(cooldown)) throw EntityWorldError("Runtime weapon AI attack cooldown is invalid");
+        WeaponPrototype prototype;
+        if (auto loaded = load_weapon_prototype(*record, *unit, player_weapon_damage_graph_))
+            prototype = std::move(*loaded);
+        else {
+            // No fabricated damage: original zero-base metadata still selects a
+            // weapon animation when USEWEAPONDAMAGE=false uses innate damage.
+            prototype.guid = record->guid; prototype.unit_type = record->unit_type;
+            prototype.range = optional_number(*unit, u"RANGE", 0);
+            prototype.strike_range = optional_number(*unit, u"STRIKERANGE", prototype.range);
+            const auto raw_speed = optional_number(*unit, u"SPEED", 100);
+            if (!std::isfinite(raw_speed) || raw_speed <= 0 ||
+                static_cast<double>(raw_speed) > std::numeric_limits<std::int32_t>::max() ||
+                !std::isfinite(prototype.range) || prototype.range < 0 ||
+                !std::isfinite(prototype.strike_range) || prototype.strike_range < 0)
+                throw EntityWorldError("Runtime weapon attack metadata is invalid");
+            prototype.speed = static_cast<std::int32_t>(raw_speed);
         }
-        const auto weapon = definitions_->load(*record);
-        if (weapon->find_property(u"RANGE") == nullptr) {
-            return false;
+        prototype.attack_traits = weapon_attack_traits(record->unit_type, *unit_types_);
+        prototype.attack_effects = load_constant_attack_effects(
+            *unit, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
+        prototype.ai_attack_cooldown = cooldown;
+        auto item = roll_weapon_item(prototype, random_);
+        if (!unit->find_property(u"MINDAMAGE") || !unit->find_property(u"MAXDAMAGE"))
+            item.minimum_damage = item.maximum_damage = 0;
+        auto description = describe_weapon_attack(item, hand);
+        if (hand == AttackHand::right) entity.attacks.right = std::move(description);
+        else entity.attacks.left = std::move(description);
+        if (entity.equipped_attack_name.empty() || hand == AttackHand::right) {
+            entity.equipped_attack_name = record->name;
+            entity.equipped_ai_attack_cooldown = cooldown;
+            entity.weapon_range = prototype.range;
         }
-        entity.weapon_range = optional_number(*weapon, u"RANGE", 0.0F);
-        entity.equipped_attack_name = record->name;
         return true;
     };
-
-    for (auto group = definition.root.groups.rbegin();
-         group != definition.root.groups.rend(); ++group) {
-        if (group->name != u"EQUIPMENT") {
-            continue;
-        }
-        for (const auto* slot : {u"RIGHTHAND", u"LEFTHAND"}) {
-            const auto* name = optional_text(*group, slot);
-            if (name != nullptr && equip(resources_->find_case_insensitive(
-                                       MasterResourceKind::item, *name))) {
-                return;
-            }
-        }
-        for (const auto* slot : {u"SPAWNRIGHTHAND", u"SPAWNLEFTHAND"}) {
-            const auto* spawn_class = optional_text(*group, slot);
-            if (spawn_class == nullptr) {
-                continue;
-            }
-            for (const auto& leaf : spawn_classes_->roll(*spawn_class, random_)) {
+    for (auto group = definition.root.groups.rbegin(); group != definition.root.groups.rend(); ++group) {
+        if (group->name != u"EQUIPMENT") continue;
+        for (const auto hand : {AttackHand::right, AttackHand::left}) {
+            const auto* direct = optional_text(*group, hand == AttackHand::right ? u"RIGHTHAND" : u"LEFTHAND");
+            if (direct && equip(resources_->find_case_insensitive(MasterResourceKind::item, *direct), hand)) continue;
+            const auto* spawn = optional_text(*group, hand == AttackHand::right ? u"SPAWNRIGHTHAND" : u"SPAWNLEFTHAND");
+            if (!spawn) continue;
+            for (const auto& leaf : spawn_classes_->roll(*spawn, random_)) {
                 const MasterResourceRecord* record = nullptr;
-                if (leaf.kind == SpawnLeafKind::unit) {
-                    record = resources_->find_case_insensitive(
-                        MasterResourceKind::item, leaf.value);
-                } else {
-                    record = unit_types_->roll(leaf.value, spawn_level_, random_);
-                }
-                if (equip(record)) {
-                    return;
-                }
+                if (leaf.kind == SpawnLeafKind::unit_type) record = unit_types_->roll(leaf.value, spawn_level_, random_);
+                else record = resources_->find_any(leaf.value);
+                if (equip(record, hand)) break;
             }
         }
         return;
@@ -399,23 +450,75 @@ SpawnResolutionStats RuntimeEntityWorld::consume_spawn_requests(
     return stats;
 }
 
-bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& logic) {
+void RuntimeEntityWorld::record_death(RuntimeEntity& entity) {
+    // Snapshot even a no-loot death: it still owes its spawner a notification.
+    // Allocate before committing death; entity pointers remain valid until flush.
+    pending_deaths_.push_back({entity.id, entity.position, entity.treasure,
+                              entity.spawner_id, entity.drops_loot});
+    entity.health = 0.0F;
+    entity.alive = false;
+}
+
+LootResolutionStats RuntimeEntityWorld::resolve_death_loot(LogicRuntime& logic) {
+    LootResolutionStats stats;
+    while (!pending_deaths_.empty()) {
+        auto death = std::move(pending_deaths_.front());
+        pending_deaths_.pop_front();
+        // Consume once before generation. Malformed resource exceptions remain
+        // fatal to this drain; no partly spawned death may be rerolled on retry.
+        // Other deaths remain queued instead of being lost with a moved batch.
+        const auto generate = [&] {
+            ++stats.deaths;
+            auto name = death.treasure.spawn_class;
+            auto rolls = 1;
+            if (!name.empty() && spawn_classes_->find(name)) {
+                rolls = random_.integer_between(death.treasure.minimum_rolls,
+                                                 death.treasure.maximum_rolls);
+            } else {
+                // CCharacter::die null table -> CLevel::rollTreasure @0x95d0b0.
+                if (!name.empty()) ++stats.missing_classes;
+                name = u"BARREL_TREASURE";
+            }
+            if (!spawn_classes_->find(name)) { ++stats.missing_classes; return; }
+            std::size_t leaves_created = 0;
+            for (int roll = 0; roll < rolls; ++roll) {
+                const auto leaves = spawn_classes_->roll(name, random_);
+                leaves_created += leaves.size();
+                if (leaves_created > 4096U)
+                    throw EntityWorldError("Death loot exceeds the portable spawn safety budget");
+                ++stats.class_rolls;
+                for (const auto& leaf : leaves) {
+                    const auto before = entities_.size();
+                    // Drops are independent world items, NOT children of the dead
+                    // unit's spawner. Hide/Destroy on that spawner must not eat loot.
+                    create_leaf(0, death.position, leaf, stats.spawns);
+                    for (auto i = before; i < entities_.size(); ++i)
+                        entities_[i].loot_source_id = death.source_id;
+                }
+            }
+        };
+        if (death.drops_loot) generate();
+        // original-code CCharacter::die @0x838ed0: treasure precedes
+        // broadcastKilled. The portable phase is deferred for vector safety;
+        // it is not a claim of original synchronous/global character ordering.
+        if (death.spawner_id != 0) logic.notify_monster_killed(death.spawner_id);
+    }
+    return stats;
+}
+
+bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& /*logic*/) {
     auto* found = find(entity_id);
     if (found == nullptr || !found->alive || !found->enabled ||
         !found->combat_targetable ||
         found->kind != MasterResourceKind::monster) {
         return false;
     }
-    found->health = 0.0F;
-    found->alive = false;
-    if (found->spawner_id != 0) {
-        logic.notify_monster_killed(found->spawner_id);
-    }
+    record_death(*found);
     return true;
 }
 
 DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float damage,
-                                               LogicRuntime& logic) {
+                                               LogicRuntime& /*logic*/) {
     auto* entity = find(entity_id);
     if (entity == nullptr || !entity->alive || !entity->enabled ||
         !entity->combat_targetable ||
@@ -423,25 +526,24 @@ DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float dam
         !std::isfinite(damage) || !(damage > 0.0F)) {
         return {};
     }
-    entity->health = std::max(0.0F, entity->health - damage);
-    const bool killed = entity->health <= 0.0F;
+    const auto remaining_health = std::max(0.0F, entity->health - damage);
+    const bool killed = remaining_health <= 0.0F;
     if (killed) {
-        entity->alive = false;
-        if (entity->spawner_id != 0) {
-            logic.notify_monster_killed(entity->spawner_id);
-        }
-    }
+        record_death(*entity);
+    } else entity->health = remaining_health;
     return {true, killed, entity->health};
 }
 
 bool RuntimeEntityWorld::pick_up(std::uint64_t entity_id, LogicRuntime& logic) {
     auto* found = find(entity_id);
-    if (found == nullptr || !found->alive || !found->enabled ||
+    if (found == nullptr || !found->alive || !found->enabled || !found->visible ||
         found->kind != MasterResourceKind::item) {
         return false;
     }
     found->alive = false;
-    logic.notify_item_picked_up(found->spawner_id);
+    found->visible = false;
+    found->enabled = false;
+    if (found->spawner_id != 0) logic.notify_item_picked_up(found->spawner_id);
     return true;
 }
 
@@ -494,15 +596,15 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_monster(
 }
 
 const RuntimeEntity* RuntimeEntityWorld::nearest_alive_item(
-    const std::array<float, 3>& position, float maximum_distance) const noexcept {
+    const std::array<float, 3>& position, float maximum_distance, bool inventory_only) const noexcept {
     if (!std::isfinite(maximum_distance) || maximum_distance < 0.0F) {
         return nullptr;
     }
     const RuntimeEntity* nearest = nullptr;
     auto nearest_distance = maximum_distance;
     for (const auto& entity : entities_) {
-        if (!entity.alive || !entity.enabled ||
-            entity.kind != MasterResourceKind::item) {
+        if (!entity.alive || !entity.enabled || !entity.visible ||
+            entity.kind != MasterResourceKind::item || (inventory_only && !entity.inventory_eligible)) {
             continue;
         }
         const auto distance = std::hypot(entity.position[0] - position[0],

@@ -1,8 +1,15 @@
 # Выбор цели и первый боевой цикл
 
+> **Current combat-action patch:** ordinary player/enemy attacks now share
+> description/clip/HIT execution; the old enemy `100 / ATTACKSPEED` gate is gone.
+> Signed AI cooldown remains independent. See `ordinary-attack-action.md` and
+> `../COMBAT_ACTION_RESULT_RU.md` for current code, test results and limitations.
+> Earlier descriptions/test counts below are historical unless explicitly updated.
+
+
 ## Поток управления
 
-`CombatController` хранит ID выбранной цели, задержку следующего удара и свой
+`CombatController` хранит ID выбранной цели, время выбранного клипа атаки и свой
 экземпляр восстановленного `TorchlightRandom`. Клик сначала преобразуется
 GLES-камерой в мировую координату пола. Если в радиусе двух мировых единиц есть
 живой runtime-монстр, выбирается ближайший; иначе клик остаётся обычной командой
@@ -18,7 +25,8 @@ GLES-камерой в мировую координату пола. Если в
 ## Данные
 
 У созданных монстров читаются `MINHP`, `MAXHP`, `MINDAMAGE`, `MAXDAMAGE`,
-`WALKINGSPEED`, `RUNNINGSPEED`, `ATTACKSPEED`, `SIGHT_RADIUS` и `REACH_BONUS`
+`WALKINGSPEED`, `RUNNINGSPEED`, `ATTACKSPEED`, `AI_ATTACKCOOLDOWN`,
+`SIGHT_RADIUS` и `REACH_BONUS`
 из полного определения `UNIT` с учётом `BASEFILE`. Стартовый предмет берётся
 из дочерней группы `EQUIPMENT` определения игрока и разрешается через
 `MASTERRESOURCEUNITS`.
@@ -46,7 +54,21 @@ GLES-камерой в мировую координату пола. Если в
 максимальный урон. Каждый обычный удар в `CCharacter::rollAttack` отдельно
 бросает целое число от `ceil(maximumDamage * 0.5)` до `maximumDamage`.
 
-Текущий интервал равен `100 / ATTACKSPEED`. Дистанция повторяет подтверждённую
+`original-code`: блок `CEquipment::calculateCombatStats @0x881470` делит целое
+оружейное `SPEED` на 100 и сохраняет результат в `CAttackDescription+0x70`.
+`CCharacter::attack @0x82b8fa` вычисляет скорость проигрывания как
+`max(0.2, (effect(type 0x16) / 100 + 1) / attackDescription.speed)`, а по
+адресам `0x82ba08–0x82ba1e` записывает таймер атаки
+`clip_length / playback_speed`. Обычная атака порта пока не исполняет эффекты,
+поэтому использует доказанный частный случай с нулевым effect. Одни и те же
+длительность клипа и скорость передаются боевому таймеру, event player и
+non-loop sampler; отдельного интервала `100 / ATTACKSPEED` у игрока больше нет.
+Чтение свойства и запись attack description сохранены в точечных экспортах
+`research/disassembly/880bb0-weapon-speed-read.asm` и
+`research/disassembly/881450-attack-description-speed.asm`; вызывающий код
+атаки — в `research/disassembly/82b550.asm`.
+
+Дистанция повторяет подтверждённую
 для стартового комплекта ветку `CCharacter::attackRange` по адресу `0x812580`:
 `RANGE` оружия плюс `REACH_BONUS` при масштабе игрока 1 и контактная поправка
 `0.2`. Для `Moldy Staff` это `0.8 + 1.25 + 0.2 = 2.25`, для стартового лука —
@@ -110,8 +132,9 @@ GLES-камерой в мировую координату пола. Если в
 а 80–120% урона дают границы 72–107. Также проверены скорости 1.3/1.8,
 `ATTACKSPEED=100`, `SIGHT_RADIUS=7` и `REACH_BONUS=0.75`. Для Алхимика проверены
 входные данные стартового посоха, итоговый диапазон создания 22–24,
-`ATTACKSPEED=80` и дальность 2.25. Дальняя позиция требует подхода, повторный
-удар до истечения задержки не проходит, а фактическое число ударов до смерти
+`ATTACKSPEED=80`, оружейное `SPEED=110` и дальность 2.25. Дальняя позиция
+требует подхода, повторный удар до окончания выбранного клипа не проходит, а
+фактическое число ударов до смерти
 вычисляется из зафиксированного урона предмета. После этого проверяются
 `Monster Killed`, `All Monsters Dead` и невозможность повторно выбрать мёртвого
 монстра.
@@ -128,8 +151,15 @@ GLES-камерой в мировую координату пола. Если в
 созданном GLES renderer.
 
 В пределах ближней дистанции враг выбирает целый урон между рассчитанными
-`minimum_damage` и `maximum_damage`. Собственный интервал каждого врага равен
-`100 / ATTACKSPEED`. Здоровье игрока первого уровня загружается из названного в
+`minimum_damage` и `maximum_damage`. Теперь независимо проверяются два условия:
+восстановленный AI cooldown из UNIT/выбранного оружия и временный ограничитель
+действия `max(0.1, 100 / ATTACKSPEED)` (prototype). Оба времени идут параллельно.
+AI timer уменьшается и без текущей цели; после успешной атаки сохраняется
+исходный порядок clamp/вклад предмета/clamp/вклад UNIT. Подробные адреса,
+сквозная синтетическая проверка и побитовое сравнение двух машинных срезов:
+[monster-ai-cooldown.md](monster-ai-cooldown.md). Длительность вражеского клипа,
+его HIT и полный updateAI пока не восстановлены этим патчем.
+Здоровье игрока первого уровня загружается из названного в
 его UNIT графа: для Алхимика и Vanquisher это 200, для Destroyer — 300. После
 нулевого HP новые команды движения не принимаются.
 

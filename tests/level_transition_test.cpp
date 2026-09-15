@@ -1,7 +1,9 @@
 #include "torchlight/level_scene.hpp"
 #include "torchlight/level_transition.hpp"
 #include "torchlight/pak_archive.hpp"
+#include "torchlight/random_level.hpp"
 
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -87,6 +89,34 @@ int main(int argc, char** argv) {
             rejected = true;
         }
         require(rejected, "out-of-range main depth was accepted");
+
+        const auto build_main_layout = [&](std::int32_t depth, std::uint32_t seed) {
+            const auto selected = torchlight::select_dungeon_floor(main, depth);
+            const auto rules = loader.load_rules(main.strata[selected.stratum_index].ruleset);
+            const torchlight::RandomLevelGenerator generator(loader);
+            const auto generated = generator.generate(rules, seed);
+            auto composed = torchlight::compose_generated_level_layout(loader, generated);
+            static_cast<void>(torchlight::expand_layout_links(loader, composed.layout));
+            return composed.layout;
+        };
+        const auto floor_two_layout = build_main_layout(2, 0x9e377993U);
+        torchlight::WarpRequest down;
+        down.level_delta = 1;
+        const auto floor_two_arrival = torchlight::find_same_dungeon_warp_arrival(
+            floor_two_layout, {{main.name, 1}, {main.name, 2}, down});
+        require(floor_two_arrival.has_value() &&
+                    std::isfinite(floor_two_arrival->position[0]) &&
+                    std::isfinite(floor_two_arrival->position[2]),
+                "real second floor has no reverse Warper for floor one");
+
+        const auto floor_one_layout = build_main_layout(1, 42U);
+        torchlight::WarpRequest up;
+        up.level_delta = -1;
+        const auto floor_one_arrival = torchlight::find_same_dungeon_warp_arrival(
+            floor_one_layout, {{main.name, 2}, {main.name, 1}, up});
+        require(floor_one_arrival.has_value() &&
+                    std::isfinite(floor_one_arrival->angle_degrees),
+                "real first floor has no reverse Warper for floor two");
 
         std::cout << "PASS: resolved town, relative, absolute and LASTDUNGEON warps\n";
         return 0;

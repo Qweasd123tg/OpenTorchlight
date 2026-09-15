@@ -1,0 +1,47 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "mode": "read-only bounded data; no execution",
+  "status": "new evidence for review, NOT automatic runtime overrides",
+  "strings": {
+    "gold_percent_key_low_at_8ca993": {
+      "address": "0xfd1e98",
+      "utf32le_text": "MINVALUE"
+    },
+    "gold_percent_key_high_at_8ca9e4": {
+      "address": "0xfd1ec0",
+      "utf32le_text": "MAXVALUE"
+    },
+    "gold_graph_at_8cabC1": {
+      "address": "0xfd1f48",
+      "utf32le_text": "GOLDDROP_HARD"
+    },
+    "gold_graph_at_8cac81": {
+      "address": "0xfd1f80",
+      "utf32le_text": "GOLDDROP_VERYHARD"
+    },
+    "gold_graph_at_8cad04": {
+      "address": "0xfd1f20",
+      "utf32le_text": "GOLDDROP"
+    },
+    "gold_graph_at_8cad8c": {
+      "address": "0xfd1ee8",
+      "utf32le_text": "GOLDDROP_EASY"
+    },
+    "spawner_give_loot_property_at_65cf25": {
+      "address": "0xfc2078",
+      "utf32le_text": "PROPERTIES"
+    }
+  },
+  "constants": {
+    "ranged_pitch_operand": {
+      "address": "0xfa86d0",
+      "bytes_le": "0000a040",
+      "float32": 5.0
+    },
+    "weapon_muzzle_offset_operand": {
+      "address": "0xfc676c",
+      "bytes_le": "cdcc4c3f",
+      "float32": 0.800000011920929
+    }
+  }
+}

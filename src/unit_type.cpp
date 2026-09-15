@@ -147,6 +147,12 @@ bool UnitTypeHierarchy::is_a(std::u16string_view candidate,
                      requested_type->id) != candidate_type->ancestors.end();
 }
 
+bool UnitTypeHierarchy::is_a_id(std::u16string_view candidate,
+                                std::int32_t original_type_id) const noexcept {
+    const auto requested = by_id_.find(original_type_id);
+    return requested != by_id_.end() && is_a(candidate, types_[requested->second].name);
+}
+
 UnitTypeResourceIndex::UnitTypeResourceIndex(
     const PakArchive& archive, const UnitTypeHierarchy& hierarchy,
     const MasterResourceIndex& resources,

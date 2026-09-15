@@ -1,5 +1,12 @@
 # Анимации моделей
 
+> **Current combat-action patch:** ordinary player/enemy attacks now share
+> description/clip/HIT execution; the old enemy `100 / ATTACKSPEED` gate is gone.
+> Signed AI cooldown remains independent. See `ordinary-attack-action.md` and
+> `../COMBAT_ACTION_RESULT_RU.md` for current code, test results and limitations.
+> Earlier descriptions/test counts below are historical unless explicitly updated.
+
+
 ## Зафиксированные входы
 
 - `original-code`: `Torchlight.bin.x86_64`, SHA-256
@@ -97,6 +104,14 @@ OGRE статический track для костей без ключей. Ср�
 `CCharacter::updateAnimation` и `CCharacter::attack` передают для переходов
 игрока 0,2 секунды; runtime использует это значение для idle/run/attack.
 
+`original-code`: атака передаёт non-loop режим из `CCharacter::attack
+@0x0082b550` через обе перегрузки `blendAnimation`. В
+`CGenericModel::updateAnimation @0x008aa4b0` loop-флаг проверяется около
+`0x8ab01c`: циклический путь вычитает длительность, а non-loop путь около
+`0x8ab484` зажимает время к концу клипа. Sampler теперь принимает этот режим
+явно. `Idle` и `Run` продолжают вычислять остаток периода; `Attack`, `Hit` и
+`Death` удерживают последний ключ при точном конце и overshoot.
+
 `original-code`: `CEquipment::attachToGivenLocation` присоединяет модель
 оружия к equipment bone с единичным локальным смещением и поворотом, затем
 задаёт масштаб `WEAPON_SCALE`. Стартовый `staff01.MESH` теперь каждый кадр
@@ -129,9 +144,12 @@ OGRE вычисляет кости из текущего набора `Animation
 
 `original-code`: скорость выбранного клипа атаки вычисляется как
 `max(0.2, (effect(type 0x16) / 100 + 1) / attackDescription.speed)`; у
-`Moldy Staff` поле `SPEED=110` даёт знаменатель `1.1`. Связь базового
-`ATTACKSPEED=80` со значением effect `0x16` ещё не доказана, поэтому эта
-скорость пока не подменяется предположением.
+`Moldy Staff` поле `SPEED=110` даёт знаменатель `1.1`. Инструкции
+`CEquipment::calculateCombatStats @0x881470–0x881486` подтверждают перенос
+`SPEED / 100` в `CAttackDescription+0x70`. Порт пока не исполняет effect типа
+`0x16`, поэтому явно использует его нулевой частный случай. Базовый
+`ATTACKSPEED=80` не подставляется в эту формулу. Полученная скорость одновременно
+задаёт event player, pose sampler и таймер `clip_length / playback_speed`.
 
 ## Воспроизведение
 

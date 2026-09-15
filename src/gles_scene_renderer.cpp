@@ -628,8 +628,14 @@ public:
                     }
                 }
                 glDepthMask(draw.depth_write ? GL_TRUE : GL_FALSE);
-                glUniform3fv(color_location_, 1, draw.color.data());
-                glUniform3fv(ambient_location_, 1, draw.ambient.data());
+                const auto* draw_color = draw.color.data();
+                const auto* material_ambient = draw.ambient.data();
+                if (instance.material_color_override.has_value()) {
+                    draw_color = instance.material_color_override->data();
+                    material_ambient = instance.material_color_override->data();
+                }
+                glUniform3fv(color_location_, 1, draw_color);
+                glUniform3fv(ambient_location_, 1, material_ambient);
                 glUniform3fv(emissive_location_, 1, draw.emissive.data());
                 glUniform1f(vertex_color_location_, draw.use_vertex_color ? 1.0F : 0.0F);
                 glUniform1f(lighting_location_, draw.lighting ? 1.0F : 0.0F);

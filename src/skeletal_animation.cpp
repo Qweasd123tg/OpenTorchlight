@@ -87,7 +87,8 @@ Transform combine(const Transform& parent, const Transform& child) {
     return result;
 }
 
-Transform sample_track(const OgreSkeletonTrack& track, float time, float length) {
+Transform sample_track(const OgreSkeletonTrack& track, float time, float length,
+                       AnimationPlaybackMode playback_mode) {
     if (track.keyframes.empty()) {
         return {};
     }
@@ -102,9 +103,13 @@ Transform sample_track(const OgreSkeletonTrack& track, float time, float length)
         left = right;
     } else if (found == track.keyframes.end()) {
         left = &track.keyframes.back();
-        right = &track.keyframes.front();
-        const float span = right->time + length - left->time;
-        amount = span > 0.000001F ? (time - left->time) / span : 0.0F;
+        if (playback_mode == AnimationPlaybackMode::loop) {
+            right = &track.keyframes.front();
+            const float span = right->time + length - left->time;
+            amount = span > 0.000001F ? (time - left->time) / span : 0.0F;
+        } else {
+            right = left;
+        }
     } else {
         left = &*(found - 1);
         right = &*found;
@@ -250,6 +255,7 @@ struct AnimationLayer {
     std::string_view name;
     float time = 0.0F;
     float weight = 1.0F;
+    AnimationPlaybackMode playback_mode = AnimationPlaybackMode::loop;
 };
 
 void apply_animation_layer(
@@ -271,9 +277,14 @@ void apply_animation_layer(
     if (animation == layer.skeleton->animations.end() || !(animation->length > 0.0F)) {
         throw OgreSkeletonError("Requested OGRE animation is absent or empty");
     }
-    float time = std::fmod(layer.time, animation->length);
-    if (time < 0.0F) {
-        time += animation->length;
+    float time = layer.time;
+    if (layer.playback_mode == AnimationPlaybackMode::loop) {
+        time = std::fmod(time, animation->length);
+        if (time < 0.0F) {
+            time += animation->length;
+        }
+    } else {
+        time = std::clamp(time, 0.0F, animation->length);
     }
     std::unordered_map<std::uint16_t, const OgreSkeletonTrack*> tracks;
     for (const auto& track : animation->tracks) {
@@ -289,7 +300,8 @@ void apply_animation_layer(
         const auto track = tracks.find(animation_bone.handle);
         auto delta = track == tracks.end()
                          ? Transform{}
-                         : sample_track(*track->second, time, animation->length);
+                         : sample_track(*track->second, time, animation->length,
+                                        layer.playback_mode);
 
         // Torchlight imports each sibling animation skeleton through OGRE 1.6's
         // Skeleton::_mergeSkeletonAnimations. The clip skeletons have different
@@ -380,9 +392,11 @@ OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
                                         const OgreSkeleton& bind_skeleton,
                                         const OgreSkeleton& animation_skeleton,
                                         std::string_view animation_name,
-                                        float time_seconds) {
+                                        float time_seconds,
+                                        AnimationPlaybackMode playback_mode) {
     return sample_layers(mesh, bind_skeleton,
-                         {{&animation_skeleton, animation_name, time_seconds, 1.0F}});
+                         {{&animation_skeleton, animation_name, time_seconds, 1.0F,
+                           playback_mode}});
 }
 
 OgreMeshPose sample_ogre_mesh_animation_blend(
@@ -391,13 +405,14 @@ OgreMeshPose sample_ogre_mesh_animation_blend(
     std::string_view first_animation_name, float first_time_seconds,
     float first_weight, const OgreSkeleton& second_animation_skeleton,
     std::string_view second_animation_name, float second_time_seconds,
-    float second_weight) {
+    float second_weight, AnimationPlaybackMode first_playback_mode,
+    AnimationPlaybackMode second_playback_mode) {
     return sample_layers(
         mesh, bind_skeleton,
         {{&first_animation_skeleton, first_animation_name, first_time_seconds,
-          first_weight},
+          first_weight, first_playback_mode},
          {&second_animation_skeleton, second_animation_name, second_time_seconds,
-          second_weight}});
+          second_weight, second_playback_mode}});
 }
 
 OgreMeshPose blend_ogre_mesh_poses(const OgreMeshPose& first,

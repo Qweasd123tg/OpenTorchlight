@@ -1,5 +1,12 @@
 # Сущности времени выполнения
 
+> **Current combat-action patch:** ordinary player/enemy attacks now share
+> description/clip/HIT execution; the old enemy `100 / ATTACKSPEED` gate is gone.
+> Signed AI cooldown remains independent. See `ordinary-attack-action.md` and
+> `../COMBAT_ACTION_RESULT_RU.md` for current code, test results and limitations.
+> Earlier descriptions/test counts below are historical unless explicitly updated.
+
+
 `RuntimeEntityWorld` превращает запросы объектов `Unit Spawner` в сущности с
 устойчивым ID, исходным GUID мастер-ресурса, типом, именем, позицией и признаком
 жизни. У монстра также сохраняются текущие и максимальные HP из полного
@@ -29,7 +36,16 @@
 
 Это следует из `CUnitSpawner::hideAndDisableUnits(bool)` по адресу `0xa0aeb0`:
 оригинал проходит по массиву safe-pointer, вызывает для каждого персонажа
-виртуальное переключение enabled и отдельно `CCharacter::setVisible`. В
+виртуальное переключение enabled и отдельно `CCharacter::setVisible`.
+`CUnitSpawnerDescriptor::InputLogicEvent @0x652850` напрямую передаёт `true`
+этому методу (`0x6528b0–0x6528b9`) и не отключает сам объект спавнера. Поэтому
+после скрытия детей владелец остаётся доступен для нового `Spawn Units`. Это
+`original-code` для Linux ELF SHA-256
+`91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
+Инструкции входного обработчика сохранены в
+`research/disassembly/652850-spawner-input.asm`.
+
+В
 `CUnitSpawner::destroyUnits()` по адресу `0xa147f0` оригинал вызывает у каждого
 объекта виртуальное удаление, останавливает связанные layout и освобождает оба
 массива safe-pointer. Соответствующие машинные инструкции сохранены в
@@ -111,7 +127,10 @@ skinning. Отдельный bind-скелет каждого клипа сна�
 только после его длительности. При отсутствии подходящей анимации остаётся
 безопасный путь с немедленным скрытием.
 
-Момент нанесения урона пока совпадает с логическим таймером AI, а не с маркером
-внутри атакующего клипа. Синхронизация попадания остаётся следующим этапом.
+Момент нанесения урона врага пока совпадает с началом логической атаки, а не
+с маркером внутри клипа. Независимый AI cooldown из UNIT монстра и выбранного
+оружия восстановлен отдельно; он не заменяет время исполнения атаки.
+См. [monster-ai-cooldown.md](monster-ai-cooldown.md). Синхронизация попадания
+остаётся следующим этапом.
 Происхождение и точные границы анимационной части описаны в
 [animation-runtime.md](animation-runtime.md).

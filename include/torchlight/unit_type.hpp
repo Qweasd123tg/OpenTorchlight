@@ -29,6 +29,8 @@ public:
         std::u16string_view name) const noexcept;
     [[nodiscard]] bool is_a(std::u16string_view candidate,
                             std::u16string_view requested) const noexcept;
+    [[nodiscard]] bool is_a_id(std::u16string_view candidate,
+                               std::int32_t original_type_id) const noexcept;
     [[nodiscard]] const std::vector<UnitTypeDefinition>& types() const noexcept {
         return types_;
     }
@@ -60,6 +62,10 @@ public:
     [[nodiscard]] const MasterResourceRecord* roll(
         std::u16string_view type, std::int32_t level,
         TorchlightRandom& random) const;
+    [[nodiscard]] bool is_a_id(std::u16string_view candidate,
+                               std::int32_t original_type_id) const noexcept {
+        return hierarchy_->is_a_id(candidate, original_type_id);
+    }
     [[nodiscard]] std::size_t indexed_resource_count() const noexcept {
         return candidates_.size();
     }

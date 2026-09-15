@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <string_view>
 
@@ -110,7 +111,7 @@ std::array<std::int32_t, 2> passive_armor_bonus(
     return result;
 }
 
-std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definition) {
+std::optional<std::pair<std::u16string, AttackHand>> starting_weapon_name(const UnitDefinition& definition) {
     for (auto group = definition.root.groups.rbegin();
          group != definition.root.groups.rend(); ++group) {
         if (group->name != u"EQUIPMENT") {
@@ -126,7 +127,8 @@ std::optional<std::u16string> starting_weapon_name(const UnitDefinition& definit
                 property->type != AdmValueType::note) {
                 throw PlayerError("Starting equipment slot is not text");
             }
-            return std::get<std::u16string>(property->value);
+            return std::make_pair(std::get<std::u16string>(property->value),
+                                  std::u16string_view(slot) == u"LEFTHAND" ? AttackHand::left : AttackHand::right);
         }
     }
     return std::nullopt;
@@ -183,6 +185,8 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                                                    const MasterResourceIndex& resources,
                                                    UnitDefinitionLoader& definitions) {
     std::vector<PlayerPrototype> result;
+    const UnitTypeHierarchy attack_hierarchy(archive);
+    const auto attack_catalog = AttackEffectCatalog::discover(archive);
     const StatGraph damage_graph(
         archive, "media/graphs/stats/BASE_WEAPON_DAMAGE.DAT.adm");
     for (const auto& record : resources.records()) {
@@ -231,12 +235,28 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
             std::min(minimum_health_percent, maximum_health_percent) / 100.0F;
         player.maximum_health = health_scale *
             std::max(minimum_health_percent, maximum_health_percent) / 100.0F;
+        player.starting_gold = definition->find_property(u"GOLD") ?
+            std::max(0, integer(*definition, u"GOLD")) : 0;
+        const auto mana_name = definition->find_property(u"MANA_GRAPH") ?
+            ascii(text(*definition, u"MANA_GRAPH")) : std::string("MANA_PLAYER_DESTROYER");
+        const auto mana_path = "media/graphs/stats/" + mana_name + ".DAT.adm";
+        if (!mana_name.empty() && archive.find_normalized(mana_path)) {
+            const auto mana = std::ceil(StatGraph(archive, mana_path).value(1.0F));
+            if (!std::isfinite(mana) || static_cast<double>(mana) < std::numeric_limits<std::int32_t>::min() ||
+                static_cast<double>(mana) > std::numeric_limits<std::int32_t>::max())
+                throw PlayerError("Playable player mana exceeds int32");
+            player.base_mana = static_cast<std::int32_t>(mana);
+        }
         player.minimum_damage = integer(*definition, u"MINDAMAGE");
         player.maximum_damage = integer(*definition, u"MAXDAMAGE");
         player.strength = integer(*definition, u"STRENGTH");
         player.dexterity = integer(*definition, u"DEXTERITY");
         player.magic = integer(*definition, u"MAGIC");
         player.defense = integer(*definition, u"DEFENSE");
+        player.attacks.innate.push_back(load_innate_attack(*definition, player.minimum_damage, player.maximum_damage));
+        player.attacks.no_unarmed_attacks = attack_unit_bool(*definition, u"NO_UNARMED_ATTACKS", false);
+        player.attacks.use_weapon_damage = attack_unit_bool(*definition, u"USEWEAPONDAMAGE", true);
+        player.attack_character = load_attack_character_values(*definition, attack_catalog ? &*attack_catalog : nullptr);
         player.damage_defense.natural_armor = integer(*definition, u"ARMOR");
         player.damage_defense.defense_attribute = player.defense;
         const auto armor_bonus = passive_armor_bonus(*definition);
@@ -250,7 +270,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         }
         if (const auto weapon_name = starting_weapon_name(*definition)) {
             const auto* record = resources.find_case_insensitive(
-                MasterResourceKind::item, *weapon_name);
+                MasterResourceKind::item, weapon_name->first);
             if (record == nullptr || record->do_not_create ||
                 record->create_as != u"EQUIPMENT") {
                 throw PlayerError("Starting weapon is absent from equipment resources");
@@ -261,6 +281,11 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
             if (!player.starting_weapon) {
                 throw PlayerError("Starting equipment is not a weapon");
             }
+            player.starting_weapon->attack_traits = weapon_attack_traits(record->unit_type, attack_hierarchy);
+            player.starting_weapon->attack_hand = weapon_name->second;
+            player.starting_weapon->attack_effects = load_constant_attack_effects(
+                *weapon_definition, attack_catalog ? &*attack_catalog : nullptr);
+            player.starting_weapon->ai_attack_cooldown = optional_floating(*weapon_definition, u"AI_ATTACKCOOLDOWN", 0);
             auto weapon_directory =
                 ascii(text(*weapon_definition, u"RESOURCEDIRECTORY"));
             if (!weapon_directory.empty() && weapon_directory.back() != '/') {
@@ -300,7 +325,8 @@ void append_player_geometry(const PakArchive& archive, const PlayerPrototype& pl
     geometry.meshes.push_back(std::move(resource));
     LayoutWorldTransform transform;
     transform.position = position;
-    geometry.instances.push_back(SceneMeshInstance{0, 0, mesh_index, transform});
+    geometry.instances.push_back(
+        SceneMeshInstance{0, 0, mesh_index, transform, 0, true, std::nullopt});
 }
 
 std::optional<std::size_t> append_player_weapon_geometry(
@@ -324,7 +350,8 @@ std::optional<std::size_t> append_player_weapon_geometry(
     transform.position = position;
     transform.scale = {player.weapon_scale, player.weapon_scale, player.weapon_scale};
     const auto instance_index = geometry.instances.size();
-    geometry.instances.push_back(SceneMeshInstance{0, 0, mesh_index, transform});
+    geometry.instances.push_back(
+        SceneMeshInstance{0, 0, mesh_index, transform, 0, true, std::nullopt});
     return instance_index;
 }
 

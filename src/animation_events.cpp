@@ -2,8 +2,22 @@
 
 #include <algorithm>
 #include <cmath>
+#include <atomic>
+#include <limits>
 
 namespace torchlight {
+namespace {
+std::uint64_t new_playback_generation() {
+    static std::atomic<std::uint64_t> next{1};
+    auto value = next.load(std::memory_order_relaxed);
+    for (;;) {
+        if (value == std::numeric_limits<std::uint64_t>::max())
+            throw AnimationEventPlaybackError("Animation playback generations exhausted");
+        if (next.compare_exchange_weak(value, value + 1, std::memory_order_relaxed)) return value;
+    }
+}
+}
+
 
 void AnimationEventPlayback::start(
     std::uint64_t execution_id, std::string_view source_clip,
@@ -25,6 +39,7 @@ void AnimationEventPlayback::start(
         }
     }
 
+    playback_generation_ = new_playback_generation();
     execution_id_ = execution_id;
     source_clip_ = source_clip;
     keys_ = keys;
@@ -56,7 +71,7 @@ void AnimationEventPlayback::advance(float elapsed_seconds) {
             key_time <= time_seconds_) {
             emitted_[index] = true;
             frame_events_.push_back({execution_id_, source_clip_, index,
-                                     keys_[index], key_time});
+                                     keys_[index], key_time, playback_generation_});
         }
     }
     if (time_seconds_ >= duration_seconds_) {
