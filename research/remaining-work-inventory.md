@@ -4,6 +4,16 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
+## Изменение large-5
+
+Новый переносимый checkpoint и frontend реализованы и проверены на авторских
+ресурсах; оконный код подключён, но настоящий Wayland/Town/pak здесь не запускался.
+Это не закрывает весь New/Load оригинала. Текущий результат и пределы:
+`../FRONTEND_CAMPAIGN_RESULT_RU.md`, `frontend-save-evidence.md`.
+`coverage.tsv` — машинная карта по адресам; наличие декомпиляции автоматически
+не повышает статус. Исторические `verified` ниже относятся только к ранее
+описанным проверенным границам, а не ко всей подсистеме и не к fresh full-game run.
+
 ## Сводная карта
 
 | Область | Текущий статус | Что уже есть | Главный остаток |
@@ -11,11 +21,11 @@
 | Архивы/ADM/UNIT/BASEFILE | verified | полный разбор исходного pak и 3343 UNIT | редкие форматы и записи, которые появятся в новых системах |
 | Mesh/skeleton/animation | verified | загрузка, skinning, клипы и события | blend graph, attachments, death/special/skill состояния |
 | Material/texture/render | partial | основной GLES-проход, DDS/PNG, ambient override | все passes, blend/depth/cull, particles, decals, lights, post effects |
-| Камера/input/pathfinding | verified | основные формулы и A* | UI focus, drag, hotkeys, controller, специальные режимы камеры |
+| Камера/input/pathfinding | partial | ранее сравненные формулы/A*, frontend focus и save-position validation | тонкая стенка между центрами grid cells, drag/controller, специальные режимы, original collision fidelity |
 | Layout/random level/logic | partial | генерация, links, timer, spawn, warp | весь command set, re-entrancy, сохранение состояния, special layouts |
-| Boot/game states/menu | researched | классы и UI-индексы доступны | настоящий splash/main/new/load/pause/exit flow |
-| Town | partial | геометрия, сущности, collision, прогулка | городской state flow, NPC dispatcher, порталы, сервисы и сохранение |
-| Save/load | researched | save-state классы декомпилированы | формат, атомарная запись, персонаж, предметы, мир, этажи, слоты |
+| Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland/Town, original skins/fonts, splash/loading/settings, IME |
+| Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | настоящий интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, migration/backup/delete UX, настоящий pak |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
 | Ranged/projectile | researched | основные функции и точечные ASM | descriptor → spawn → flight/sweep → HIT/pierce/retire/render |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
@@ -54,13 +64,13 @@
 - selection/highlight/approach/interaction для NPC и интерактивных props;
 - вход в данж, обратный портал, stash, merchant, quest giver и сервисы;
 - HUD, target frame, loot labels, уведомления и окна персонажа/предметов;
-- save → завершение процесса → load с тем же доказанным состоянием.
+- save → завершение процесса → load реализовано для переносимого состояния; осталось подтвердить настоящий оконный Town, а не только авторскую трёхпроцессную сцену.
 
 ### Мир и уровни
 
 - полный набор layout commands/logic objects/timelines/triggers;
 - точный глобальный scheduler и безопасная re-entrancy;
-- persistent level state для покинутых этажей;
+- полный original persistent level state: собственный кеш runtime-сущностей/логики уже есть, quest/timeline/volatile reset ещё нет;
 - chests, doors, breakables, traps, shrines, portals и scripted encounters;
 - difficulty/rank/theme/rarity sources и все special entry modes;
 - кампания по всем этажам, боссы, переходы, финал и map content.

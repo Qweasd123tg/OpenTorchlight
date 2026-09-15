@@ -17,6 +17,7 @@ public:
     [[nodiscard]] float between(float low, float high) noexcept;
 
 private:
+    friend struct CheckpointAccess;
     [[nodiscard]] std::uint64_t advance() noexcept;
 
     std::uint64_t state_;

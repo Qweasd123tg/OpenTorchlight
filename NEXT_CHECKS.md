@@ -1,66 +1,113 @@
-# Следующий проход после gameplay-continuation (large-4)
+# Следующий проход после frontend/campaign (large-5)
 
-Актуальная реализация и границы: `GAMEPLAY_CONTINUATION_RESULT_RU.md` и
-`research/gameplay-continuation.md`. Исходное максимальное задание остаётся в
-`GPT_PRO_LARGE_TASK.md`; оно выполнено частично, не закрыто как «вся игра».
+Актуальный результат: `FRONTEND_CAMPAIGN_RESULT_RU.md`. Границы реализации:
+`research/frontend-save-evidence.md`, формат: `research/checkpoint-format.md`.
+Исходный большой scope остаётся в `GPT_PRO_LARGE_TASK.md`; это не «вся игра».
+Полный реестр: `research/remaining-work-inventory.md`. Машинная карта:
+`python3 tools/coverage_map.py --check --next 20`.
 
-## Проверенная база этого патча
+## 1. Подтвердить настоящий оконный цикл на машине интегратора
 
-Локальный интегратор собрал полный desktop GCC 16 и провёл 59/59 тестов с
-настоящими ELF и `pak.zip`. `original_player_vitals_comparison` дал 6497
-совпадений; original combat/AI/item cycle, GLES и рендеры также прошли.
-Оконный executable загрузил Main:1 и отрисовал три кадра. Ручной полный
-combat/death/R/loot/equip/warp сценарий ещё не выполнен.
+Свежие проверки здесь: 28/28 portable и 28/28 ASan/UBSan GCC14.2; три отдельных
+процесса авторской сцены; четыре реальных Mesa/EGL UI-кадра. Это НЕ полный
+Wayland-desktop, настоящий Town или новый прогон исторических 59/59.
 
-## Главная цель следующего large-5
+```bash
+bash tools/check.sh "/path/to/Torchlight/game"
+./build/torchlight_desktop "/path/to/Torchlight/game" --save-dir "$HOME/ot-large5-test"
+```
 
-Следующий проход должен дать видимый цикл: стартовое меню → New Game/Load →
-выбор героя → настоящий Town → свободная прогулка и базовые взаимодействия →
-save → выход → загрузка того же состояния. Использовать оригинальные UI/layout
-ресурсы и state controller; временные элементы явно помечать `prototype`.
+Проверить без `--frames` и `--main-stratum`: main menu → каждый из трёх классов,
+имя → Town; пройти вокруг реальных препятствий, выбрать NPC/Unit Trigger,
+подобрать/надеть предмет, получить урон, сохранить через Escape. Завершить
+процесс, Load/Continue, сравнить класс/имя/позицию/HP/mana/gold/экземпляры и слоты.
+Затем вход в Main, смерть → R, возврат в Town, сохранение и новый процесс.
+Ошибочный `.otc` должен оставаться видимым ошибочным слотом, а не New Game.
 
-Приоритет включает живой городской HUD, collision/navigation, NPC/порталы,
-stash/merchant/quest dispatcher и сквозной save/load. Ranged переносится на
-следующую позицию после работающего визуального городского цикла. Полный объём и
-обязательная карта непокрытых функций описаны в `GPT_PRO_LARGE_TASK.md`.
-Исчерпывающий рабочий перечень подсистем находится в
-`research/remaining-work-inventory.md`; весь этот список разрешён в одном проходе.
+`original_frontend_checkpoint` добавлен к CTest при `TORCHLIGHT_ORIGINAL`:
+он читает настоящий pak, три XML меню, всех игроков и Town, сохраняет и загружает
+в отдельном процессе. Код теста скомпилирован, но без pak здесь не выполнен.
+Он также не доказывает оригинальный .SVB формат или весь графический сценарий.
 
-## Сначала проверка настоящей интеграции
+Особенно проверить: исходные CEGUI background/imageset свойства, unified bounds,
+resize и mouse hit-test, pause → resume с восстановлением GL state, save-error
+в паузе, отказ несовместимого ресурса до изменения live state. Не считать
+прототипные bitmap labels/buttons восстановленным оригинальным skin/font.
+Физический US-ввод имени пока без IME и кириллицы. Normal — единственный режим.
 
-`bash tools/check.sh "$GAME_DIR"`, затем ручной combat/death/R/loot/equip/warp.
-Проверить разные точки reverse Warper и level entry, gold/10, HP/mana, сохранение
-мира и отсутствие stale HIT. Начальный boot/special entry может иметь prototype
-anchor; это видно в логе `original_entry_anchor=0`. Не интерпретировать три
-отрисованных кадра как доказательство этого сценария.
+## 2. Проверка тонких препятствий в существующей NavigationGrid
 
-## Выполненный независимый ресурсный шаг
+При подготовке авторской сцены найдена открытая граница: вертикальная тонкая
+стенка на границе клеток (x=10 при cell_size=1, radius=0.45) может оказаться между
+проверяемыми центрами и не пометить клетки заблокированными. Сквозная positive
+фикстура использует x=10.5, где стена действительно попадает в blocked cells.
+Это не исправление исходного растеризатора и не доказательство произвольных
+городских стен. Отдельно добавить сегмент/cell-edge collision или другой
+доказанный способ обработки после сравнения с оригинальным pathfinder.
+Не менять геометрию реального Town, чтобы скрыть проблему.
 
-`tools/dump_original_gameplay_inputs.py` выполнен на SHA-проверенном ELF;
-результат сохранён в `research/original-gameplay-inputs.json`.
+## 3. Расширить interaction по доказанным producer/requirements
 
-Получены только строки по VA 0xfd1e98, 0xfd1ec0, 0xfd1f48, 0xfd1f80, 0xfd1f20,
-0xfd1ee8, 0xfc2078 и f32-операнды 0xfa86d0/0xfc676c. Не угадывать названия
-gold-percent ключей, графов, layout no-loot или значения muzzle/ray operands.
-Следом — `CItemGold::unitInit/getItem` и программный drops_loot к реальному
-layout-свойству. Отдельно проверить rank/difficulty источники, прежде чем считать
-номинал денег или состав добычи совпадающими.
+Теперь есть общий generation-bound selection/approach/dispatch: Unit Trigger
+идёт через LogicRuntime, не произвольный прямой Warper; noncombat NPC даёт
+инспекцию/видимый unsupported-service, без фиктивной торговли или награды.
+Для продолжения минимально нужны:
 
-## Следующая после визуального цикла связка: ranged
+- `CCharacter::inInteractionRange @0x008244a0` ASM и три f32 по
+  `0x00fce4b8`, `0x00fce4bc`, `0x00fce4c0`. Ghidra показывает разные ветви и
+  вычитание collision radii; caller radius 2.25 в порте остаётся prototype.
+- `CInteract::interactWithUnit @0x00986ff0`, producer текущего interaction target,
+  выбор callback/service; не путать название класса с доказанным поведением.
+- `CTriggerUnit::interact @0x009095c0`, `trigger` и producer quest/key requirements.
+  Сохранять re-check на arrival, отсутствие повторного dispatch и переходов
+  устаревшей команды после смерти/смены уровня.
 
-`performAttack @0x847280` различает weapon skill/missile и ray fallback.
-Проследить producer equipment+0x400, CWeaponMissileDescriptor `0x602dc0`, hand tag,
-выбор resource/скорости/радиуса/числа пробитий. Затем flight → collision sweep →
-HIT/retire с кастером и повторным попаданием, привязка к анимации и desktop.
-Нельзя снять existing unavailable gate и выдать ranged за melee сквозь стены.
-Точечные exports уже лежат в `research/disassembly/`; полного дампа не нужно.
+Далее NPC merchant/quest/stash можно добавлять по одному сквозному сервису:
+resource → requirement → UI → операция → checkpoint. Нельзя назначить сервис
+только по имени NPC или открыть все Warper в обход logic/quest gates.
 
-## Остальные границы
+## 4. Расширить сохранение без заявления о совместимости с оригиналом
 
-AI flag1 — пока явно оценённый потребитель скорости, не менеджер флагов. Нужны
-производители/сроки/interrupt/alignment, исходный глобальный scheduler и faction
-semantics. Далее реальные skills/mana regen, XP/level, временные эффекты, все
-режимы смерти/pets/dropToGround, дисковое сохранение и кеш покинутых этажей.
-Текущая paused-death UI и безопасная deferred death-фаза обозначены prototype;
-совпадение глобальной re-entrancy не заявлено. При resource failure в loot drain
-нет rollback частично созданной смерти: это остаётся явной ошибкой, не повторным roll.
+Текущий `.otc` сохраняет только поддержанные runtime-данные. Отсутствуют quest,
+полные timeline/affix/skills/pet состояния, original volatile-floor reset,
+миграции будущих schema versions, backup/delete UX. До их runtime-реализации
+нельзя объявить эти разделы сохранёнными. Offscreen clocks в кеше заморожены —
+prototype. Сохранённое действие атаки не возобновляется; actions/HIT/paths
+отменяются при load, а AI cooldown/RNG сохраняются.
+
+При ошибке после rename, но до directory fsync файл уже мог быть заменён: ошибка
+прямо требует reload revision; нельзя повторно присвоить старую revision и
+переписать слот. Pre-rename crash оставляет старый слот целым, возможный
+`.checkpoint-*` orphan игнорируется. При принудительном закрытии compositor
+ошибка последней best-effort записи видна в stderr, не в уже закрытом окне.
+
+`CGameClient::saveCharacter @0x0058b5d0` / `loadCharacter @0x00581ce0`,
+`CPlayer::storeLevelSavedState @0x008f6080`, CLevelState/CLogicNodeState и
+`restoreLevelState` — ключевые границы для полного original persistence.
+
+## 5. Следующий независимый runtime: мировой gold / no-loot / ranged
+
+Числа/строки уже read-only извлечены в `research/original-gameplay-inputs.json`.
+Не повторять извлечение вместо переноса. Но `MINVALUE/MAXVALUE`, четыре GOLDDROP
+имени, одна строка `PROPERTIES`, pitch=5 и muzzle offset=.8 сами по себе не
+доказывают producer/rank/difficulty/virtual dispatch.
+
+Для `CItemGold::unitInit @0x008ca940` уже есть focused ASM. Проследить значение
+client+0x1a8+1 у аргумента графа, difficulty и путь фактического getItem/pickup
+до wallet. Для no-loot найти конкретный descriptor field/вход
+`setUnitsGiveLoot`, а не объявить `PROPERTIES` именем искомого bool.
+
+Ranged: `performAttack @0x00847280`, `fireMissiles @0x0087f120`, producer
+`equipment+0x400` и `CWeaponMissileDescriptor @0x00602dc0`. Нужны descriptor,
+hand/muzzle, resource/velocity, sweep/LOS, owner/ignore list, pierce/retire,
+HIT attribution, death/warp cleanup и desktop representation. Существующий
+unavailable gate не снимать ради мгновенного melee сквозь стены.
+
+## 6. Следующий объём полного реестра
+
+После этих границ: исходный scheduler/AI flags/factions; dynamic effects,
+conditions/graphs/stacking/remove; skills/mana regeneration; XP/fame/points;
+полная rarity/equipment/consumable модель; quests/merchant/stash/pet; audio/FX;
+только затем проверяемый Android lifecycle/touch/packaging. Пользоваться coverage
+frontier как воспроизводимой подсказкой, не принимать centrality за важность
+каждого library/thunk symbol и не повышать `closed` за один smoke.

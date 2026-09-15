@@ -39,6 +39,7 @@ public:
     [[nodiscard]] static std::optional<InventorySlot> slot_for(const InventoryItem& item) noexcept;
     [[nodiscard]] const std::vector<InventoryItem>& items() const noexcept { return items_; }
 private:
+    friend struct CheckpointAccess;
     InventoryId next_id_ = 1;
     std::vector<InventoryItem> items_;
     std::array<InventoryId, static_cast<std::size_t>(InventorySlot::count)> equipped_{};

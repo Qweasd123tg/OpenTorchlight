@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /mnt/data/ot-large5-work/build-sanitized
+Test project /mnt/data/ot-large5-work/build-sanitized
+    Start  9: desktop_gameplay_syntax
+1/2 Test  #9: desktop_gameplay_syntax ..........   Passed    5.55 sec
+    Start 17: coverage_map_current
+2/2 Test #17: coverage_map_current .............   Passed    2.84 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   8.39 sec

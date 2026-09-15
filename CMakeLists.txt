@@ -12,6 +12,12 @@ add_library(torchlight_core STATIC
     src/attack_action.cpp
     src/collision_scene.cpp
     src/combat.cpp
+    src/checkpoint.cpp
+    src/save_codec.cpp
+    src/save_store.cpp
+    src/ui_layout.cpp
+    src/frontend.cpp
+    src/interaction.cpp
     src/damage.cpp
     src/dds_texture.cpp
     src/equipment.cpp
@@ -94,7 +100,7 @@ if(UNIX AND NOT ANDROID)
         add_library(torchlight_xdg_shell STATIC ${XDG_SHELL_CODE} ${XDG_SHELL_HEADER})
         target_include_directories(torchlight_xdg_shell PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated)
         target_link_libraries(torchlight_xdg_shell PUBLIC PkgConfig::WAYLAND_CLIENT)
-        add_library(torchlight_gles2 STATIC src/gles_scene_renderer.cpp)
+        add_library(torchlight_gles2 STATIC src/gles_scene_renderer.cpp src/gles_ui_renderer.cpp)
         target_link_libraries(torchlight_gles2 PUBLIC torchlight_core PkgConfig::GLES2)
         target_compile_features(torchlight_gles2 PUBLIC cxx_std_17)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -270,6 +276,74 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_dependencies(ordinary_combat_test ordinary_combat_fixture)
     add_test(NAME ordinary_combat COMMAND ordinary_combat_test ${ORDINARY_COMBAT_FIXTURE})
     set_tests_properties(ordinary_combat PROPERTIES TIMEOUT 60)
+    set(FRONTEND_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/frontend.pak.zip)
+    add_custom_command(OUTPUT ${FRONTEND_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_frontend_fixture.py ${FRONTEND_FIXTURE}
+        DEPENDS tests/make_frontend_fixture.py tests/make_attack_fixture.py tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py
+        VERBATIM)
+    add_custom_target(frontend_fixture DEPENDS ${FRONTEND_FIXTURE})
+    add_executable(frontend_test tests/frontend_test.cpp)
+    target_link_libraries(frontend_test PRIVATE torchlight_core)
+    add_dependencies(frontend_test frontend_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(frontend_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME frontend COMMAND frontend_test ${FRONTEND_FIXTURE})
+    add_executable(frontend_resource_test tests/frontend_resource_test.cpp)
+    target_link_libraries(frontend_resource_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(frontend_resource_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_executable(frontend_cycle_test tests/frontend_cycle_test.cpp)
+    target_link_libraries(frontend_cycle_test PRIVATE torchlight_core)
+    add_dependencies(frontend_cycle_test frontend_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(frontend_cycle_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME frontend_campaign_cycle COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/frontend_cycle_process_test.py
+        --probe $<TARGET_FILE:frontend_cycle_test> --fixture ${FRONTEND_FIXTURE})
+    set_tests_properties(frontend_campaign_cycle PROPERTIES TIMEOUT 120)
+    add_test(NAME coverage_map_current COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/coverage_map.py --check --root ${CMAKE_CURRENT_SOURCE_DIR})
+    set_tests_properties(coverage_map_current PROPERTIES TIMEOUT 60)
+    # Optional real EGL/GLVND readback test, not a substitute for the desktop SDK.
+    find_library(UI_TEST_GL_DISPATCH NAMES GL libGL.so.1)
+    if(UNIX AND UI_TEST_GL_DISPATCH)
+        add_library(gles_ui_probe SHARED tests/gles_ui_probe.cpp src/gles_ui_renderer.cpp)
+        target_include_directories(gles_ui_probe PRIVATE tests/support/gles-api)
+        target_link_libraries(gles_ui_probe PRIVATE torchlight_core ${UI_TEST_GL_DISPATCH})
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(gles_ui_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        add_dependencies(gles_ui_probe frontend_fixture)
+        add_test(NAME gles_ui_headless COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_ui_headless_test.py
+            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${FRONTEND_FIXTURE})
+        set_tests_properties(gles_ui_headless PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+        set(TORCHLIGHT_PYTHON_ASAN_PRELOAD "" CACHE FILEPATH "ASan runtime for the optional Python-hosted EGL probe")
+        if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
+            # Python and Mesa own process-global allocations. Native core tests
+            # still use leak detection; this host checks address/UB errors only.
+            set_tests_properties(gles_ui_headless PROPERTIES ENVIRONMENT
+                "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+        endif()
+    endif()
+    add_executable(save_checkpoint_test tests/save_checkpoint_test.cpp)
+    target_link_libraries(save_checkpoint_test PRIVATE torchlight_core)
+    add_dependencies(save_checkpoint_test ordinary_combat_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(save_checkpoint_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME save_checkpoint COMMAND save_checkpoint_test ${ORDINARY_COMBAT_FIXTURE}
+        ${CMAKE_CURRENT_BINARY_DIR}/checkpoint-test-saves self)
+    add_test(NAME save_fresh_process COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/save_process_test.py
+        --probe $<TARGET_FILE:save_checkpoint_test> --fixture ${ORDINARY_COMBAT_FIXTURE})
+    add_test(NAME save_atomic_process COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/save_atomic_process_test.py
+        --probe $<TARGET_FILE:save_checkpoint_test> --fixture ${ORDINARY_COMBAT_FIXTURE})
+    set_tests_properties(save_checkpoint save_fresh_process save_atomic_process PROPERTIES TIMEOUT 90)
     add_executable(gameplay_continuation_test tests/gameplay_continuation_test.cpp)
     target_link_libraries(gameplay_continuation_test PRIVATE torchlight_core)
     add_dependencies(gameplay_continuation_test ordinary_combat_fixture)
@@ -355,6 +429,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 --library $<TARGET_FILE:pathfinder_comparison>)
         set_tests_properties(original_pathfinder_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         get_filename_component(TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
+        add_test(NAME original_frontend_checkpoint
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/save_process_test.py
+                --probe $<TARGET_FILE:frontend_resource_test> --fixture "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_frontend_checkpoint PROPERTIES TIMEOUT 240)
         add_test(NAME original_item_cycle
             COMMAND item_cycle_resource_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         set_tests_properties(original_item_cycle PROPERTIES TIMEOUT 180)

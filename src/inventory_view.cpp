@@ -65,7 +65,7 @@ std::vector<InventoryViewLine> InventoryView::lines(const PlayerSession& session
         result.push_back({detail.str(), false});
     }
     if (!status.empty()) result.push_back({status, false});
-    result.push_back({"REPLACED GEAR STAYS IN THE BAG. NO FILE SAVES YET.", false});
+    result.push_back({"REPLACED GEAR STAYS IN THE BAG. ESC CLOSES; ESC AGAIN OPENS SAVE MENU.", false});
     return result;
 }
 const char* inventory_change_message(InventoryChange change) noexcept {

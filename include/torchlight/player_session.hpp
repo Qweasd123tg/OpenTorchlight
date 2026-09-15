@@ -38,6 +38,7 @@ public:
         return inventory_.equipped(InventorySlot::weapon);
     }
 private:
+    friend struct CheckpointAccess;
     [[nodiscard]] InventoryChange change_equipment(InventoryId id, bool remove);
     void refresh_equipment();
     std::int32_t gold_ = 0;

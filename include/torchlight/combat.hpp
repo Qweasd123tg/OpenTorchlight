@@ -54,6 +54,7 @@ public:
     void finish_animation_frame() noexcept;
 
 private:
+    friend struct CheckpointAccess;
     void refresh_attack_values();
     TorchlightRandom random_;
     std::string mesh_path_;

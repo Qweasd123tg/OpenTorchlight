@@ -95,6 +95,7 @@ public:
     [[nodiscard]] std::vector<WarpRequest> take_warp_requests();
 
 private:
+    friend struct CheckpointAccess;
     struct Route {
         std::u16string output_name;
         std::int64_t target_object_id = 0;

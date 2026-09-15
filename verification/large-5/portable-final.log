@@ -1,0 +1,178 @@
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (5.9s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/ot-large5-work/build-portable
+[1/102] Building CXX object CMakeFiles/torchlight_core.dir/src/save_codec.cpp.o
+[2/102] Building CXX object CMakeFiles/torchlight_core.dir/src/save_store.cpp.o
+[3/102] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_layout.cpp.o
+[4/102] Building CXX object CMakeFiles/torchlight_core.dir/src/interaction.cpp.o
+[5/102] Building CXX object CMakeFiles/torchlight_core.dir/src/frontend.cpp.o
+[6/102] Building CXX object CMakeFiles/torchlight_bootstrap.dir/src/bootstrap_main.cpp.o
+[7/102] Building CXX object CMakeFiles/attack_action_test.dir/tests/attack_action_test.cpp.o
+[8/102] Building CXX object CMakeFiles/torchlight_core.dir/src/checkpoint.cpp.o
+[9/102] Linking CXX static library libtorchlight_core.a
+[10/102] Building CXX object CMakeFiles/randomizer_comparison.dir/tests/randomizer_c_api.cpp.o
+[11/102] Building CXX object CMakeFiles/torchlight_scene_camera_dump.dir/tools/scene_camera_dump.cpp.o
+[12/102] Building CXX object CMakeFiles/logic_runtime_test.dir/tests/logic_runtime_test.cpp.o
+[13/102] Building CXX object CMakeFiles/random_level_test.dir/tests/random_level_test.cpp.o
+[14/102] Building CXX object CMakeFiles/collision_mesh_test.dir/tests/collision_mesh_test.cpp.o
+[15/102] Building CXX object CMakeFiles/ogre_material_test.dir/tests/ogre_material_test.cpp.o
+[16/102] Building CXX object CMakeFiles/scene_geometry_test.dir/tests/scene_geometry_test.cpp.o
+[17/102] Building CXX object CMakeFiles/skeletal_animation_test.dir/tests/skeletal_animation_test.cpp.o
+[18/102] Building CXX object CMakeFiles/spawn_class_test.dir/tests/spawn_class_test.cpp.o
+[19/102] Building CXX object CMakeFiles/player_test.dir/tests/player_test.cpp.o
+[20/102] Building CXX object CMakeFiles/unit_type_test.dir/tests/unit_type_test.cpp.o
+[21/102] Building CXX object CMakeFiles/damage_test.dir/tests/damage_test.cpp.o
+[22/102] Building CXX object CMakeFiles/entity_world_test.dir/tests/entity_world_test.cpp.o
+[23/102] Building CXX object CMakeFiles/enemy_ai_test.dir/tests/enemy_ai_test.cpp.o
+[24/102] Building CXX object CMakeFiles/equipment_test.dir/tests/equipment_test.cpp.o
+[25/102] Building CXX object CMakeFiles/warp_arrival_test.dir/tests/warp_arrival_test.cpp.o
+[26/102] Building CXX object CMakeFiles/level_entry_test.dir/tests/level_entry_test.cpp.o
+[27/102] Building CXX object CMakeFiles/level_transition_test.dir/tests/level_transition_test.cpp.o
+[28/102] Building CXX object CMakeFiles/enemy_ai_cooldown_test.dir/tests/enemy_ai_cooldown_test.cpp.o
+[29/102] Building CXX object CMakeFiles/combat_test.dir/tests/combat_test.cpp.o
+[30/102] Building CXX object CMakeFiles/ai_cooldown_probe.dir/tests/ai_cooldown_probe.cpp.o
+[31/102] Building CXX object CMakeFiles/inventory_test.dir/tests/inventory_test.cpp.o
+[32/102] Building CXX object CMakeFiles/item_cycle_test.dir/tests/item_cycle_test.cpp.o
+[33/102] Building CXX object CMakeFiles/frontend_test.dir/tests/frontend_test.cpp.o
+[34/102] Building CXX object CMakeFiles/attack_speed_probe.dir/tests/attack_speed_probe.cpp.o
+[35/102] Building CXX object CMakeFiles/inventory_view_test.dir/tests/inventory_view_test.cpp.o
+[36/102] Building CXX object CMakeFiles/frontend_resource_test.dir/tests/frontend_resource_test.cpp.o
+[37/102] Building CXX object CMakeFiles/gles_ui_probe.dir/tests/gles_ui_probe.cpp.o
+[38/102] Building CXX object CMakeFiles/gles_ui_probe.dir/src/gles_ui_renderer.cpp.o
+[39/102] Building CXX object CMakeFiles/gameplay_continuation_test.dir/tests/gameplay_continuation_test.cpp.o
+[40/102] Building CXX object CMakeFiles/death_finalization_test.dir/tests/death_finalization_test.cpp.o
+[41/102] Building CXX object CMakeFiles/ordinary_combat_test.dir/tests/ordinary_combat_test.cpp.o
+[42/102] Building CXX object CMakeFiles/effect_catalog_probe.dir/tests/effect_catalog_probe.cpp.o
+[43/102] Building CXX object CMakeFiles/player_vitals_probe.dir/tests/player_vitals_probe.cpp.o
+[44/102] Linking CXX executable torchlight_bootstrap
+[45/102] Linking CXX executable torchlight_level_rules_dump
+[46/102] Building CXX object CMakeFiles/frontend_cycle_test.dir/tests/frontend_cycle_test.cpp.o
+[47/102] Linking CXX executable torchlight_player_units_dump
+[48/102] Building CXX object CMakeFiles/item_cycle_resource_test.dir/tests/item_cycle_resource_test.cpp.o
+[49/102] Linking CXX shared library libinput_comparison.so
+[50/102] Linking CXX executable attack_action_test
+[51/102] Linking CXX shared library libaction_comparison.so
+[52/102] Linking CXX shared library librandomizer_comparison.so
+[53/102] Linking CXX shared library libcamera_comparison.so
+[54/102] Linking CXX shared library libpathfinder_comparison.so
+[55/102] Linking CXX executable pak_archive_test
+[56/102] Linking CXX executable actor_motion_test
+[57/102] Linking CXX executable collision_mesh_test
+[58/102] Linking CXX executable adm_document_test
+[59/102] Linking CXX executable master_resource_index_test
+[60/102] Linking CXX executable unit_definition_test
+[61/102] Linking CXX executable level_scene_test
+[62/102] Linking CXX executable logic_runtime_test
+[63/102] Linking CXX executable random_level_test
+[64/102] Linking CXX executable ogre_mesh_test
+[65/102] Linking CXX executable torchlight_scene_camera_dump
+[66/102] Linking CXX executable player_test
+[67/102] Linking CXX executable ogre_material_test
+[68/102] Linking CXX executable ogre_skeleton_test
+[69/102] Linking CXX executable animation_manifest_test
+[70/102] Linking CXX executable animation_events_test
+[71/102] Linking CXX executable skeletal_animation_test
+[72/102] Linking CXX executable png_texture_test
+[73/102] Linking CXX executable spawn_class_test
+[74/102] Linking CXX executable scene_geometry_test
+[75/102] Linking CXX executable dds_texture_test
+[76/102] Linking CXX executable enemy_ai_test
+[77/102] Linking CXX executable unit_type_test
+[78/102] Linking CXX executable entity_world_test
+[79/102] Linking CXX executable damage_test
+[80/102] Linking CXX executable equipment_test
+[81/102] Linking CXX executable level_transition_test
+[82/102] Linking CXX executable warp_arrival_test
+[83/102] Linking CXX executable combat_test
+[84/102] Linking CXX executable level_entry_test
+[85/102] Linking CXX executable ai_cooldown_probe
+[86/102] Linking CXX executable inventory_test
+[87/102] Linking CXX executable inventory_view_test
+[88/102] Linking CXX executable item_cycle_test
+[89/102] Linking CXX executable attack_speed_probe
+[90/102] Linking CXX executable frontend_test
+[91/102] Linking CXX executable enemy_ai_cooldown_test
+[92/102] Linking CXX executable ordinary_combat_test
+[93/102] Linking CXX executable frontend_resource_test
+[94/102] Linking CXX shared library libgles_ui_probe.so
+[95/102] Linking CXX executable frontend_cycle_test
+[96/102] Linking CXX executable gameplay_continuation_test
+[97/102] Linking CXX executable player_vitals_probe
+[98/102] Linking CXX executable effect_catalog_probe
+[99/102] Linking CXX executable death_finalization_test
+[100/102] Linking CXX executable item_cycle_resource_test
+[101/102] Building CXX object CMakeFiles/save_checkpoint_test.dir/tests/save_checkpoint_test.cpp.o
+[102/102] Linking CXX executable save_checkpoint_test
+Internal ctest changing into directory: /mnt/data/ot-large5-work/build-portable
+Test project /mnt/data/ot-large5-work/build-portable
+      Start  1: ordinary_attack_action
+ 1/28 Test  #1: ordinary_attack_action ............   Passed    0.03 sec
+      Start  2: actor_motion
+ 2/28 Test  #2: actor_motion ......................   Passed    0.00 sec
+      Start  3: animation_events
+ 3/28 Test  #3: animation_events ..................   Passed    0.00 sec
+      Start  4: damage_calculation
+ 4/28 Test  #4: damage_calculation ................   Passed    0.00 sec
+      Start  5: warp_arrival
+ 5/28 Test  #5: warp_arrival ......................   Passed    0.00 sec
+      Start  6: level_entry_fallback
+ 6/28 Test  #6: level_entry_fallback ..............   Passed    0.09 sec
+      Start  7: enemy_ai_cooldown
+ 7/28 Test  #7: enemy_ai_cooldown .................   Passed    0.16 sec
+      Start  8: ai_cooldown_export_comparison
+ 8/28 Test  #8: ai_cooldown_export_comparison .....   Passed    2.62 sec
+      Start  9: desktop_gameplay_syntax
+ 9/28 Test  #9: desktop_gameplay_syntax ...........   Passed    5.71 sec
+      Start 10: inventory_view
+10/28 Test #10: inventory_view ....................   Passed    0.01 sec
+      Start 11: inventory_instances
+11/28 Test #11: inventory_instances ...............   Passed    0.01 sec
+      Start 12: item_cycle
+12/28 Test #12: item_cycle ........................   Passed    0.15 sec
+      Start 13: attack_speed_export_comparison
+13/28 Test #13: attack_speed_export_comparison ....   Passed    3.12 sec
+      Start 14: ordinary_combat
+14/28 Test #14: ordinary_combat ...................   Passed    0.22 sec
+      Start 15: frontend
+15/28 Test #15: frontend ..........................   Passed    0.01 sec
+      Start 16: frontend_campaign_cycle
+16/28 Test #16: frontend_campaign_cycle ...........   Passed    1.97 sec
+      Start 17: coverage_map_current
+17/28 Test #17: coverage_map_current ..............   Passed    6.94 sec
+      Start 18: gles_ui_headless
+18/28 Test #18: gles_ui_headless ..................   Passed    3.08 sec
+      Start 19: save_checkpoint
+19/28 Test #19: save_checkpoint ...................   Passed    0.23 sec
+      Start 20: save_fresh_process
+20/28 Test #20: save_fresh_process ................   Passed    2.06 sec
+      Start 21: save_atomic_process
+21/28 Test #21: save_atomic_process ...............   Passed    2.12 sec
+      Start 22: gameplay_continuation
+22/28 Test #22: gameplay_continuation .............   Passed    0.08 sec
+      Start 23: death_finalization
+23/28 Test #23: death_finalization ................   Passed    0.02 sec
+      Start 24: effect_catalog_source
+24/28 Test #24: effect_catalog_source .............   Passed    1.74 sec
+      Start 25: read_only_extractors
+25/28 Test #25: read_only_extractors ..............   Passed   20.62 sec
+      Start 26: combat_inputs_evidence
+26/28 Test #26: combat_inputs_evidence ............   Passed    2.05 sec
+      Start 27: player_vitals_export_comparison
+27/28 Test #27: player_vitals_export_comparison ...   Passed    6.24 sec
+      Start 28: item_cycle_resource_fixture
+28/28 Test #28: item_cycle_resource_fixture .......   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 28
+
+Total Test time (real) =  59.35 sec
+Portable tests passed; original-game checks and UI audit were not run.

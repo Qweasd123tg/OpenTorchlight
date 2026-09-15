@@ -48,6 +48,7 @@ public:
     }
 
 private:
+    friend struct CheckpointAccess;
     void refresh_damage_defense() noexcept;
 
     std::optional<std::int32_t> base_mana_;
@@ -121,6 +122,7 @@ public:
     [[nodiscard]] std::size_t alerted_count() const noexcept;
 
 private:
+    friend struct CheckpointAccess;
     struct State {
         bool alerted = false;
         MonsterAiCooldown ai_cooldown;

@@ -1,0 +1,83 @@
+Internal ctest changing into directory: /mnt/data/ot-large5-work/build-portable
+UpdateCTestConfiguration  from :/mnt/data/ot-large5-work/build-portable/DartConfiguration.tcl
+Parse Config file:/mnt/data/ot-large5-work/build-portable/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/mnt/data/ot-large5-work/build-portable/DartConfiguration.tcl
+Parse Config file:/mnt/data/ot-large5-work/build-portable/DartConfiguration.tcl
+Test project /mnt/data/ot-large5-work/build-portable
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 15
+    Start 15: frontend
+
+15: Test command: /mnt/data/ot-large5-work/build-portable/frontend_test "/mnt/data/ot-large5-work/build-portable/fixtures/frontend.pak.zip"
+15: Working Directory: /mnt/data/ot-large5-work/build-portable
+15: Test timeout computed to be: 1500
+15: frontend: 32 assertions; authored CEGUI/PNG fixture, no original skin equivalence
+1/6 Test #15: frontend .........................   Passed    0.01 sec
+test 16
+    Start 16: frontend_campaign_cycle
+
+16: Test command: /opt/pyvenv/bin/python3 "/mnt/data/ot-large5-work/tests/frontend_cycle_process_test.py" "--probe" "/mnt/data/ot-large5-work/build-portable/frontend_cycle_test" "--fixture" "/mnt/data/ot-large5-work/build-portable/fixtures/frontend.pak.zip"
+16: Working Directory: /mnt/data/ot-large5-work/build-portable
+16: Test timeout computed to be: 120
+16: frontend-cycle write: 222 assertions (authored resources; not original Town/GUI parity)
+16: frontend-cycle read: 222 assertions (authored resources; not original Town/GUI parity)
+16: frontend-cycle verify: 4 assertions (authored resources; not original Town/GUI parity)
+16: Three independent processes completed the authored-resource frontend/campaign cycle.
+2/6 Test #16: frontend_campaign_cycle ..........   Passed    0.90 sec
+test 18
+    Start 18: gles_ui_headless
+
+18: Test command: /opt/pyvenv/bin/python3 "/mnt/data/ot-large5-work/tests/gles_ui_headless_test.py" "--probe" "/mnt/data/ot-large5-work/build-portable/libgles_ui_probe.so" "--fixture" "/mnt/data/ot-large5-work/build-portable/fixtures/frontend.pak.zip"
+18: Working Directory: /mnt/data/ot-large5-work/build-portable
+18: Test timeout computed to be: 60
+18: Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+18: 4 real GLES UI frames passed: atlas crop/orientation, resize, create, pause. No original assets or Wayland used.
+3/6 Test #18: gles_ui_headless .................   Passed    1.04 sec
+test 19
+    Start 19: save_checkpoint
+
+19: Test command: /mnt/data/ot-large5-work/build-portable/save_checkpoint_test "/mnt/data/ot-large5-work/build-portable/fixtures/ordinary-combat.pak.zip" "/mnt/data/ot-large5-work/build-portable/checkpoint-test-saves" "self"
+19: Working Directory: /mnt/data/ot-large5-work/build-portable
+19: Test timeout computed to be: 90
+19: save_checkpoint self: 598 assertions passed (authored resources; not original save compatibility)
+4/6 Test #19: save_checkpoint ..................   Passed    0.11 sec
+test 20
+    Start 20: save_fresh_process
+
+20: Test command: /opt/pyvenv/bin/python3 "/mnt/data/ot-large5-work/tests/save_process_test.py" "--probe" "/mnt/data/ot-large5-work/build-portable/save_checkpoint_test" "--fixture" "/mnt/data/ot-large5-work/build-portable/fixtures/ordinary-combat.pak.zip"
+20: Working Directory: /mnt/data/ot-large5-work/build-portable
+20: Test timeout computed to be: 90
+20: save_checkpoint write: 588 assertions passed (authored resources; not original save compatibility)
+20: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+20: Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+5/6 Test #20: save_fresh_process ...............   Passed    0.92 sec
+test 21
+    Start 21: save_atomic_process
+
+21: Test command: /opt/pyvenv/bin/python3 "/mnt/data/ot-large5-work/tests/save_atomic_process_test.py" "--probe" "/mnt/data/ot-large5-work/build-portable/save_checkpoint_test" "--fixture" "/mnt/data/ot-large5-work/build-portable/fixtures/ordinary-combat.pak.zip"
+21: Working Directory: /mnt/data/ot-large5-work/build-portable
+21: Test timeout computed to be: 90
+21: save_checkpoint write: 588 assertions passed (authored resources; not original save compatibility)
+21: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+21: save_checkpoint race-b: 1 assertions passed (authored resources; not original save compatibility)
+21: expected competing writer conflict
+21: save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+21: Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+6/6 Test #21: save_atomic_process ..............   Passed    1.00 sec
+
+The following tests passed:
+	frontend
+	frontend_campaign_cycle
+	gles_ui_headless
+	save_checkpoint
+	save_fresh_process
+	save_atomic_process
+
+100% tests passed, 0 tests failed out of 6
+
+Total Test time (real) =   3.98 sec

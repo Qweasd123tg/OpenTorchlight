@@ -20,7 +20,7 @@ def main() -> int:
                     'xdg-shell-client-protocol.h'):
         source = source.replace(f'#include <{include}>\n', '')
     start = source.index('void require_egl(')
-    end = source.index('struct LoadedDesktopLevel {', start)
+    end = source.index('// Prototype text input:', start)
     window_declaration = '''
 class DesktopWindow {
 public:
@@ -30,6 +30,7 @@ public:
     std::vector<std::uint32_t> take_key_presses();
     int width() const noexcept;
     int height() const noexcept;
+    void draw_menu_frame(torchlight::GlesUiRenderer&, const torchlight::FrontendFrame&);
     void draw_scene_frame(torchlight::GlesSceneRenderer&,
                           const std::vector<torchlight::InventoryViewLine>&, bool);
 };

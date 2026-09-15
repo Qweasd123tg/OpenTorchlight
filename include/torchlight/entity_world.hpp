@@ -137,6 +137,7 @@ public:
     }
 
 private:
+    friend struct CheckpointAccess;
     [[nodiscard]] const MasterResourceRecord* resolve_direct(
         std::u16string_view group, std::u16string_view resource) const noexcept;
     void create_leaf(std::int64_t spawner_id, const std::array<float, 3>& position,

@@ -1,3 +1,9 @@
+#include "torchlight/interaction.hpp"
+#include "torchlight/frontend.hpp"
+#include "torchlight/gles_ui_renderer.hpp"
+#include "torchlight/checkpoint.hpp"
+#include "torchlight/save_store.hpp"
+#include <random>
 #include "torchlight/actor_motion.hpp"
 #include "torchlight/adm_document.hpp"
 #include "torchlight/animation_events.hpp"
@@ -68,13 +74,14 @@ struct Options {
     std::uint64_t frame_limit = 0;
     std::optional<std::size_t> main_stratum;
     std::uint32_t seed = 42;
+    std::optional<std::filesystem::path> save_directory;
 };
 
 Options parse_options(int argc, char** argv) {
     if (argc < 2) {
         throw DesktopError(
             "usage: torchlight_desktop /path/to/Torchlight/game "
-            "[--frames N] [--main-stratum N --seed N]");
+            "[--save-dir PATH] [--frames N] [--main-stratum N --seed N]");
     }
     Options options;
     options.game_directory = argv[1];
@@ -84,7 +91,10 @@ Options parse_options(int argc, char** argv) {
         }
         const std::string name = argv[argument];
         const std::string value = argv[argument + 1];
-        if (name == "--frames") {
+        if (name == "--save-dir") {
+            if (value.empty()) throw DesktopError("empty save directory");
+            options.save_directory = value;
+        } else if (name == "--frames") {
             const auto parsed = std::from_chars(value.data(), value.data() + value.size(),
                                                 options.frame_limit);
             if (value.empty() || parsed.ec != std::errc{} ||
@@ -342,6 +352,12 @@ public:
         require_egl(eglSwapBuffers(egl_display_, egl_surface_) == EGL_TRUE, "eglSwapBuffers");
     }
 
+    void draw_menu_frame(torchlight::GlesUiRenderer& renderer, const torchlight::FrontendFrame& frame) {
+        renderer.draw(frame, width_, height_);
+        if (glGetError() != GL_NO_ERROR) throw DesktopError("OpenGL ES failed while drawing the frontend");
+        require_egl(eglSwapBuffers(egl_display_, egl_surface_) == EGL_TRUE, "eglSwapBuffers");
+    }
+
 private:
     static void registry_global(void* data, wl_registry* registry, std::uint32_t name,
                                 const char* interface, std::uint32_t version) {
@@ -474,6 +490,28 @@ private:
     std::optional<std::array<int, 2>> left_click_;
     std::vector<std::uint32_t> key_presses_;
 };
+
+// Prototype text input: physical US A-Z / digits. Arbitrary UTF-8 save names are
+// retained by the codec; full compositor/IME input is a separate UI boundary.
+void frontend_key(torchlight::Frontend& frontend, std::uint32_t key) {
+    using K = torchlight::FrontendKey;
+    if (key == KEY_ESC) frontend.key(K::back);
+    else if (key == KEY_UP) frontend.key(K::previous);
+    else if (key == KEY_DOWN || key == KEY_TAB) frontend.key(K::next);
+    else if (key == KEY_ENTER || key == KEY_KPENTER) frontend.key(K::accept);
+    else if (key == KEY_BACKSPACE) frontend.key(K::backspace);
+    else {
+        static const std::pair<std::uint32_t,char> keys[] = {
+            {KEY_A,'a'},{KEY_B,'b'},{KEY_C,'c'},{KEY_D,'d'},{KEY_E,'e'},{KEY_F,'f'},
+            {KEY_G,'g'},{KEY_H,'h'},{KEY_I,'i'},{KEY_J,'j'},{KEY_K,'k'},{KEY_L,'l'},
+            {KEY_M,'m'},{KEY_N,'n'},{KEY_O,'o'},{KEY_P,'p'},{KEY_Q,'q'},{KEY_R,'r'},
+            {KEY_S,'s'},{KEY_T,'t'},{KEY_U,'u'},{KEY_V,'v'},{KEY_W,'w'},{KEY_X,'x'},
+            {KEY_Y,'y'},{KEY_Z,'z'},{KEY_0,'0'},{KEY_1,'1'},{KEY_2,'2'},{KEY_3,'3'},
+            {KEY_4,'4'},{KEY_5,'5'},{KEY_6,'6'},{KEY_7,'7'},{KEY_8,'8'},{KEY_9,'9'},
+            {KEY_SPACE,' '},{KEY_MINUS,'-'}};
+        for (const auto& pair : keys) if (pair.first == key) frontend.text(pair.second);
+    }
+}
 
 struct LoadedDesktopLevel {
     torchlight::DungeonAddress address;
@@ -621,40 +659,6 @@ LoadedDesktopLevel load_desktop_level(
     return result;
 }
 
-struct LevelInteraction {
-    std::int64_t object_id = 0;
-    std::array<float, 3> position{};
-};
-
-std::vector<LevelInteraction> collect_unit_triggers(
-    const torchlight::LayoutManifest& layout) {
-    const auto transforms = torchlight::resolve_layout_world_transforms(layout);
-    std::vector<LevelInteraction> result;
-    for (std::size_t index = 0; index < layout.objects.size(); ++index) {
-        if (layout.objects[index].descriptor == u"Unit Trigger") {
-            result.push_back({layout.objects[index].id, transforms[index].position});
-        }
-    }
-    return result;
-}
-
-const LevelInteraction* nearest_interaction(
-    const std::vector<LevelInteraction>& interactions,
-    const std::array<float, 3>& position, float maximum_distance) noexcept {
-    const LevelInteraction* result = nullptr;
-    auto nearest_squared = maximum_distance * maximum_distance;
-    for (const auto& interaction : interactions) {
-        const auto dx = interaction.position[0] - position[0];
-        const auto dz = interaction.position[2] - position[2];
-        const auto distance_squared = dx * dx + dz * dz;
-        if (distance_squared <= nearest_squared) {
-            result = &interaction;
-            nearest_squared = distance_squared;
-        }
-    }
-    return result;
-}
-
 struct PlayerAnimationResources {
     torchlight::OgreSkeleton bind;
     torchlight::OgreSkeleton idle;
@@ -755,25 +759,76 @@ int main(int argc, char** argv) {
         }
         const torchlight::OgreMaterialCatalog materials(archive);
         DesktopWindow window(1280, 720);
+        torchlight::UiResources ui_resources(archive);
+        torchlight::GlesUiRenderer ui_renderer(archive, ui_resources);
+        std::vector<torchlight::FrontendClass> frontend_classes;
+        for (const auto& p : players) frontend_classes.push_back({p.guid, narrow_ascii(p.name)});
+        torchlight::Frontend frontend(ui_resources, std::move(frontend_classes));
+        torchlight::SaveStore saves(options.save_directory ? *options.save_directory : torchlight::SaveStore::default_directory());
+        const auto resource_identity = torchlight::checkpoint_resource_identity(archive);
+        const auto refresh_saves = [&] {
+            try { frontend.set_saves(saves.list(resource_identity)); }
+            catch (const std::exception& e) { frontend.set_saves({}); frontend.error(e.what()); }
+        };
+        refresh_saves();
+        torchlight::PlayerPrototype selected_player = players.front();
         torchlight::LevelTransitionState transitions(initial_address);
         std::optional<torchlight::LevelEntryRequest> pending_entry;
         std::uint64_t total_frames = 0;
         std::size_t completed_transitions = 0;
         bool app_running = true;
-        // Owned state outlives the loaded floor. No world pointer crosses unload.
-        torchlight::PlayerSession session(
-            players.front(), level_seed(options.seed, initial_address.depth),
-            &unit_type_hierarchy);
+        const bool direct_preview = options.main_stratum.has_value() || options.frame_limit != 0;
+        bool gameplay_active = direct_preview;
+        bool resume_saved_position = false;
+        std::uint32_t campaign_seed = options.seed;
+        torchlight::CampaignCheckpoint campaign;
+        campaign.slot = "preview"; campaign.seed = campaign_seed; campaign.class_guid = selected_player.guid;
+        campaign.character_name = "Preview"; campaign.resource_identity = resource_identity; campaign.current = initial_address;
+        torchlight::PlayerSession session(selected_player, level_seed(campaign_seed, initial_address.depth), &unit_type_hierarchy);
         torchlight::InventoryView inventory_view;
+        if (direct_preview) frontend.entered_game();
         const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
-            auto prototype = players.front();
+            auto prototype = selected_player;
             prototype.starting_weapon.reset();
             if (const auto* item = inventory.equipped(torchlight::InventorySlot::weapon);
                 item && item->weapon) prototype.starting_weapon = item->weapon->prototype;
             return prototype;
         };
-
         while (app_running) {
+            if (!gameplay_active) {
+                if (!window.process_events()) break;
+                static_cast<void>(frontend.frame(window.width(), window.height()));
+                for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
+                if (frontend.page() == torchlight::FrontendPage::quit) break;
+                if (const auto request = frontend.take_request()) {
+                    try {
+                        torchlight::CampaignCheckpoint candidate;
+                        if (request->command == torchlight::FrontendCommand::load) candidate = saves.read(request->slot, resource_identity);
+                        else if (request->command == torchlight::FrontendCommand::create) {
+                            candidate.slot = saves.allocate_slot(); candidate.class_guid = request->class_guid;
+                            candidate.character_name = request->name; candidate.resource_identity = resource_identity;
+                            std::random_device entropy;
+                            do { candidate.seed = entropy(); } while (candidate.seed == 0);
+                        } else throw DesktopError("unexpected command outside gameplay");
+                        const auto chosen = std::find_if(players.begin(), players.end(), [&](const auto& p) { return p.guid == candidate.class_guid; });
+                        if (chosen == players.end()) throw DesktopError("saved class is unavailable in this resource set");
+                        auto candidate_session = request->command == torchlight::FrontendCommand::load
+                            ? torchlight::CheckpointAccess::restore_player(*chosen, candidate.player, candidate.seed, &unit_type_hierarchy)
+                            : torchlight::PlayerSession(*chosen, candidate.seed, &unit_type_hierarchy);
+                        auto candidate_transitions = request->command == torchlight::FrontendCommand::load
+                            ? torchlight::CheckpointAccess::restore_transitions(candidate)
+                            : torchlight::LevelTransitionState(candidate.current);
+                        selected_player = *chosen; session = std::move(candidate_session); campaign = std::move(candidate);
+                        campaign_seed = campaign.seed; transitions = std::move(candidate_transitions); pending_entry.reset();
+                        resume_saved_position = request->command == torchlight::FrontendCommand::load;
+                        gameplay_active = true; frontend.entered_game(); inventory_view.status.clear();
+                    } catch (const std::exception& e) { frontend.error(std::string("CANNOT OPEN GAME: ") + e.what()); }
+                }
+                if (!gameplay_active) window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                continue;
+            }
+            try {
             session.enter_level();
             inventory_view.open = false;
             auto player_visual = visual_prototype(session.inventory());
@@ -781,7 +836,7 @@ int main(int argc, char** argv) {
                 archive, player_visual, unit_type_hierarchy);
             auto level = load_desktop_level(
                 archive, levelsets, scene_loader,
-                transitions.current(), options.seed,
+                transitions.current(), campaign_seed,
                 pending_entry ? &*pending_entry : nullptr);
             if (level.address.dungeon_name != transitions.current().dungeon_name ||
                 level.address.depth != transitions.current().depth) {
@@ -789,23 +844,41 @@ int main(int argc, char** argv) {
             }
             pending_entry.reset();
             torchlight::ActorMotion player_motion(
-                level.player_start, players.front().running_speed);
-            auto interactions = collect_unit_triggers(level.layout);
-            std::optional<LevelInteraction> active_interaction;
+                level.player_start, selected_player.running_speed);
+            std::optional<torchlight::InteractionRequest> active_interaction;
             std::optional<std::uint64_t> active_pickup;
             std::vector<std::array<float, 3>> active_path;
             std::size_t next_path_node = 0;
 
             torchlight::LogicRuntime logic_runtime(
-                level.layout, level_seed(options.seed, level.address.depth));
+                level.layout, level_seed(campaign_seed, level.address.depth));
             torchlight::RuntimeEntityWorld entity_world(
                 level.layout, index, loader, spawn_classes, unit_types,
-                level_seed(options.seed, level.address.depth),
+                level_seed(campaign_seed, level.address.depth),
                 std::max(1, level.address.depth));
+            torchlight::EnemyController enemies(level_seed(campaign_seed, level.address.depth) ^ 0x9e3779b9U);
+            const auto* saved_floor = torchlight::find_floor(campaign, level.address);
+            if (saved_floor) {
+                torchlight::CheckpointAccess::restore_floor(*saved_floor, entity_world, logic_runtime, enemies);
+                if (resume_saved_position) {
+                    if (!torchlight::checkpoint_position_walkable(level.navigation, saved_floor->player_position, saved_floor->floor_offset))
+                        throw DesktopError("saved position is not walkable in the regenerated layout");
+                    level.player_start = saved_floor->player_position; level.player_start_angle = saved_floor->player_angle;
+                    level.recovery_anchor = saved_floor->recovery_anchor; level.recovery_angle = saved_floor->recovery_angle;
+                    level.recovery_anchor_resolved = saved_floor->original_recovery_anchor;
+                    level.player_floor_offset = saved_floor->floor_offset;
+                    player_motion = torchlight::ActorMotion(level.player_start, selected_player.running_speed);
+                }
+            } else if (resume_saved_position) throw DesktopError("save does not contain the current floor");
+            resume_saved_position = false;
+            torchlight::InteractionDispatcher interactions(level.layout, entity_world, logic_runtime);
             level.placed_monster_count = torchlight::append_layout_monster_geometry(
                 archive, index, loader, level.layout, level.geometry, 0, &entity_world);
+            for (auto& instance : level.geometry.instances) if (const auto* e = entity_world.find(instance.runtime_entity_id)) {
+                instance.transform.position = e->position; instance.visible = e->visible && e->alive;
+            }
             torchlight::append_player_geometry(
-                archive, players.front(), level.player_start, level.geometry);
+                archive, selected_player, level.player_start, level.geometry);
             const auto player_instance_index = level.geometry.instances.size() - 1U;
             level.geometry.instances[player_instance_index].transform.orientation =
                 torchlight::yaw_rotation(level.player_start_angle);
@@ -836,8 +909,6 @@ int main(int argc, char** argv) {
                 player_mesh_index);
             auto& combat = session.combat();
             auto& player_combat = session.health();
-            torchlight::EnemyController enemies(
-                level_seed(options.seed, level.address.depth) ^ 0x9e3779b9U);
             torchlight::AttackAnimationCatalog attack_catalog(archive);
             const auto resolve_attack = [&](std::string_view mesh, std::string_view prefix) {
                 return attack_catalog.resolve(mesh, prefix);
@@ -995,11 +1066,38 @@ int main(int argc, char** argv) {
                 }
             };
 
-            logic_runtime.activate_level();
-            logic_runtime.update_player_position(player_motion.position());
+            // Restored object flags/counters/timers must not be overwritten by activation.
+            if (!saved_floor) {
+                logic_runtime.activate_level();
+                logic_runtime.update_player_position(player_motion.position());
+            }
             drain_logic();
             renderer.emplace(level.geometry, archive, materials);
             renderer->set_camera_target(player_motion.position(), kCameraDistance);
+            bool return_to_menu = false;
+            const auto capture_floor = [&] {
+                torchlight::FloorCheckpoint state; state.address = level.address;
+                state.layout_identity = torchlight::checkpoint_layout_identity(level.layout);
+                state.player_position = player_motion.position(); state.recovery_anchor = level.recovery_anchor;
+                state.recovery_angle = level.recovery_angle; state.floor_offset = level.player_floor_offset;
+                state.original_recovery_anchor = level.recovery_anchor_resolved;
+                const auto& rotation = level.geometry.instances.at(player_instance_index).transform.orientation;
+                state.player_angle = std::atan2(rotation[2], rotation[8]) * 57.295779513082320876F;
+                state.world = torchlight::CheckpointAccess::capture(entity_world);
+                state.logic = torchlight::CheckpointAccess::capture(logic_runtime);
+                state.enemies = torchlight::CheckpointAccess::capture(enemies);
+                return state;
+            };
+            const auto checkpoint_now = [&] {
+                if (pending_warp) throw DesktopError("finish the pending transition before saving");
+                auto candidate = campaign;
+                candidate.current = transitions.current(); candidate.last_dungeon = transitions.last_dungeon();
+                candidate.player = torchlight::CheckpointAccess::capture(session);
+                torchlight::remember_floor(candidate, capture_floor());
+                candidate.revision = saves.write(candidate);
+                campaign = std::move(candidate);
+                std::cout << "checkpoint_saved=" << campaign.slot << " revision=" << campaign.revision << '\n';
+            };
             const auto face_instance_toward = [&](std::size_t instance_index,
                                                   const std::array<float, 3>& target) {
                 auto& transform = level.geometry.instances.at(instance_index).transform;
@@ -1105,6 +1203,7 @@ int main(int argc, char** argv) {
                 } else ++equipped_armor_count;
             };
             bool rendered_once = false;
+            bool saved_for_exit = false;
             auto previous_frame = std::chrono::steady_clock::now();
 
             while (!pending_warp) {
@@ -1112,18 +1211,33 @@ int main(int argc, char** argv) {
                     app_running = false;
                     break;
                 }
+                if (frontend.page() == torchlight::FrontendPage::pause) {
+                    static_cast<void>(frontend.frame(window.width(), window.height()));
+                    for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                    if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
+                    if (const auto request = frontend.take_request()) {
+                        try { checkpoint_now(); frontend.saved(request->command); saved_for_exit = request->command == torchlight::FrontendCommand::save_and_quit; }
+                        catch (const std::exception& e) { frontend.error(std::string("SAVE FAILED: ") + e.what()); }
+                    }
+                    if (frontend.page() == torchlight::FrontendPage::main) { return_to_menu = true; break; }
+                    if (frontend.page() == torchlight::FrontendPage::quit) { app_running = false; break; }
+                    if (frontend.page() == torchlight::FrontendPage::pause)
+                        window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                    previous_frame = std::chrono::steady_clock::now();
+                    continue;
+                }
                 const auto current_frame = std::chrono::steady_clock::now();
                 const float elapsed =
                     std::chrono::duration<float>(current_frame - previous_frame).count();
                 previous_frame = current_frame;
                 for (const auto key : window.take_key_presses()) {
                     if (!player_combat.alive()) {
-                        if (key == KEY_ESC) { app_running = false; continue; }
+                        if (key == KEY_ESC) { frontend.pause(); continue; }
                         if (key != KEY_R) continue;
                         const auto recovery = session.recover_at_entry(enemies, player_motion, level.recovery_anchor);
                         if (recovery.status != torchlight::RecoveryStatus::recovered) continue;
                         inventory_view.open = false;
-                        active_interaction.reset(); active_pickup.reset(); active_path.clear(); next_path_node = 0;
+                        active_interaction.reset(); interactions.cancel(); active_pickup.reset(); active_path.clear(); next_path_node = 0;
                         player_attack_animation_active = false;
                         player_animation_state = player_transition_from_state = PlayerAnimationState::idle;
                         player_animation_time = player_transition_time = 0;
@@ -1147,7 +1261,7 @@ int main(int argc, char** argv) {
                     if (key == KEY_I) inventory_view.open = !inventory_view.open;
                     else if (key == KEY_ESC) {
                         if (inventory_view.open) inventory_view.open = false;
-                        else app_running = false;
+                        else frontend.pause();
                     } else if (inventory_view.open) {
                         if (key == KEY_UP) inventory_view.move(-1, session.inventory());
                         else if (key == KEY_DOWN) inventory_view.move(1, session.inventory());
@@ -1156,6 +1270,7 @@ int main(int argc, char** argv) {
                     }
                 }
                 if (!app_running) break;
+                if (frontend.page() == torchlight::FrontendPage::pause) { static_cast<void>(window.take_left_click()); continue; }
                 // prototype: pause while inspecting the bag; do not replay HITs
                 // or run zero-period logic timers while this overlay is open.
                 // prototype UI policy: pause simulation while dead; death pose still advances.
@@ -1168,7 +1283,7 @@ int main(int argc, char** argv) {
                     if (combat.select_target(entity_world, destination, 2.0F)) {
                         const auto* selected = combat.target(entity_world);
                         destination = selected->position;
-                        active_interaction.reset();
+                        active_interaction.reset(); interactions.cancel();
                         active_pickup.reset();
                         ++selected_target_count;
                         std::cout << "selected_target=" << selected->id
@@ -1177,21 +1292,21 @@ int main(int argc, char** argv) {
                     } else if (const auto* item = entity_world.nearest_alive_item(
                                    destination, 2.0F, true)) {
                         combat.clear_target();
-                        active_interaction.reset();
+                        active_interaction.reset(); interactions.cancel();
                         active_pickup = item->id;
                         destination = item->position;
                         std::cout << "selected_item=" << item->id
                                   << " name=" << narrow_ascii(item->name) << '\n';
-                    } else if (const auto* interaction = nearest_interaction(
-                                   interactions, destination, 3.0F)) {
+                    } else if (const auto interaction = interactions.select(destination, 3.0F)) {
                         combat.clear_target();
                         active_pickup.reset();
                         active_interaction = *interaction;
                         destination = interaction->position;
+                        inventory_view.status = "SELECTED: " + narrow_ascii(interaction->label);
                         std::cout << "selected_interaction=" << interaction->object_id << '\n';
                     } else {
                         combat.clear_target();
-                        active_interaction.reset();
+                        active_interaction.reset(); interactions.cancel();
                         active_pickup.reset();
                     }
                     active_path = level.navigation.find_path(
@@ -1239,17 +1354,13 @@ int main(int argc, char** argv) {
                 renderer->set_camera_target(
                     player_motion.position(), kCameraDistance);
 
-                if (player_combat.alive() && !inventory_view.open && active_interaction) {
-                    const auto dx = active_interaction->position[0] - player_motion.position()[0];
-                    const auto dz = active_interaction->position[2] - player_motion.position()[2];
-                    if (std::hypot(dx, dz) <= 2.25F) {
-                        player_motion.stop();
-                        active_path.clear();
-                        next_path_node = 0;
-                        logic_runtime.trigger(active_interaction->object_id);
-                        ++interaction_count;
-                        active_interaction.reset();
-                        drain_logic();
+                if (!inventory_view.open && active_interaction) {
+                    const auto result = interactions.dispatch(*active_interaction, player_motion.position(), player_combat.alive(), 2.25F);
+                    if (result != torchlight::InteractionResult::approaching) {
+                        player_motion.stop(); active_path.clear(); next_path_node = 0;
+                        inventory_view.status = torchlight::interaction_result_message(result);
+                        if (result == torchlight::InteractionResult::triggered) ++interaction_count;
+                        active_interaction.reset(); drain_logic();
                     }
                 }
                 if (player_combat.alive() && !inventory_view.open && active_pickup) {
@@ -1590,7 +1701,7 @@ int main(int argc, char** argv) {
                     for (std::size_t axis = 0; axis < 3; ++axis) {
                         weapon_transform.scale[axis] =
                             body_transform.scale[axis] * tag->scale[axis] *
-                            players.front().weapon_scale;
+                            selected_player.weapon_scale;
                     }
                     level.geometry.instances[*player_weapon_instance_index].transform =
                         weapon_transform;
@@ -1619,7 +1730,7 @@ int main(int argc, char** argv) {
                             if (hit.state == torchlight::EnemyAiState::player_killed) {
                                 ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
-                                active_interaction.reset(); active_pickup.reset(); inventory_view.open = false;
+                                active_interaction.reset(); interactions.cancel(); active_pickup.reset(); inventory_view.open = false;
                                 std::cout << "player_killed=1\n";
                                 break;
                             }
@@ -1675,14 +1786,14 @@ int main(int argc, char** argv) {
                 if (!inventory_view.open) {
                     overlay.resize(1);
                     overlay.push_back({inventory_view.status.empty()
-                        ? "I INVENTORY | CLICK MONSTER TO ATTACK OR ITEM TO PICK UP"
+                        ? "I INVENTORY | ESC PAUSE / SAVE | CLICK TO MOVE / ATTACK / PICK UP"
                         : inventory_view.status, false});
                 }
                 if (!player_combat.alive()) {
                     overlay.resize(1);
                     overlay.push_back({"PLAYER DIED - SIMULATION PAUSED", false});
-                    overlay.push_back({session.hardcore() ? "HARDCORE: RECOVERY DISABLED. ESC TO EXIT." :
-                        "R: RECOVER AT LEVEL ENTRY | ESC: EXIT", true});
+                    overlay.push_back({session.hardcore() ? "HARDCORE: RECOVERY DISABLED. ESC FOR MENU." :
+                        "R: RECOVER AT LEVEL ENTRY | ESC: PAUSE / SAVE", true});
                     if (!session.hardcore()) overlay.push_back({"COST " + std::to_string(session.gold() / 10) +
                         " GOLD. INVENTORY AND FLOOR ARE RETAINED.", false});
                 }
@@ -1708,7 +1819,7 @@ int main(int argc, char** argv) {
                       << " cached_unit_files=" << loader.cached_definition_count()
                       << " level_pieces=" << levelsets.pieces().size()
                       << " chunks=" << level.chunk_count
-                      << " player=" << narrow_ascii(players.front().name)
+                      << " player=" << narrow_ascii(selected_player.name)
                       << " weapon="
                       << (session.weapon()
                               ? narrow_ascii(session.weapon()->name)
@@ -1767,9 +1878,20 @@ int main(int argc, char** argv) {
                       << " navigation_cells=" << level.navigation.walkable_cell_count()
                       << '\n';
 
-            if (!app_running || !pending_warp) {
+            if (return_to_menu) {
+                gameplay_active = false; refresh_saves(); continue;
+            }
+            if (!app_running) {
+                if (!direct_preview && !pending_warp && !saved_for_exit) {
+                    try { checkpoint_now(); }
+                    catch (const std::exception& e) { std::cerr << "exit_checkpoint_failed=" << e.what() << '\n'; }
+                }
                 break;
             }
+            if (!pending_warp) break;
+            // Cache departure only at a settled boundary; do not discard floor state.
+            torchlight::remember_floor(campaign, capture_floor());
+            campaign.player = torchlight::CheckpointAccess::capture(session);
             auto entry = transitions.resolve_entry(*pending_warp);
             const auto target_dungeon = scene_loader.load_dungeon(
                 dungeon_data_file(entry.destination.dungeon_name));
@@ -1785,6 +1907,12 @@ int main(int argc, char** argv) {
                       << " warp_name=" << narrow_ascii(pending_warp->warp_name)
                       << '\n';
             std::cout.flush();
+            } catch (const std::exception& e) {
+                if (direct_preview) throw;
+                gameplay_active = false; frontend.show_main(); refresh_saves();
+                frontend.error(std::string("LEVEL LOAD/RUNTIME FAILED: ") + e.what());
+                std::cerr << "frontend_game_error=" << e.what() << '\n';
+            }
         }
         return 0;
     } catch (const std::exception& error) {

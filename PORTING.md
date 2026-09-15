@@ -1,6 +1,21 @@
 # Torchlight: перенос на Android
 
-## Актуальный срез large-4
+## Актуальный срез large-5
+
+В portable core добавлены checkpoint/codec, POSIX atomic SaveStore, XML UI loader,
+frontend state flow и частичный interaction dispatcher. Desktop подключает
+New/Load/Town/pause/save/return и кеш этажей. `.otc` — отдельный формат порта;
+исходные save-файлы не импортируются и не заменяются. POSIX persistence ещё
+не адаптирована к lifecycle/хранилищу Android; не-POSIX запись явно отклоняется.
+
+Свежие GCC14 проверки: 28/28 portable и 28/28 ASan/UBSan; нативные тесты с LSan,
+изолированный Python/Mesa host без LSan. Реальный headless EGL отрисовал 4 кадра
+UI на авторских ресурсах. Полный Wayland-desktop и исходные ресурсы не запускались.
+Android/OnePlus/ARM64 этим проходом не проверены. GUI-прототип и формат сохранения
+не объявлены восстановленным CEGUI/`.SVB`. Точные пределы и команды:
+[FRONTEND_CAMPAIGN_RESULT_RU.md](FRONTEND_CAMPAIGN_RESULT_RU.md).
+
+## Исторический срез large-4
 
 Переносимый runtime теперь включает ограниченное восстановление после смерти
 на том же этаже, mana/кошелёк с исходной числовой арифметикой, точные combat inputs,

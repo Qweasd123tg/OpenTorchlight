@@ -1,0 +1,23 @@
+c++ (Debian 14.2.0-19) 14.2.0
+cmake version 3.31.6
+
+Desktop dependency metadata:
+Package wayland-client was not found in the pkg-config search path.
+Perhaps you should add the directory containing `wayland-client.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'wayland-client', required by 'virtual:world', not found
+Package wayland-egl was not found in the pkg-config search path.
+Perhaps you should add the directory containing `wayland-egl.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'wayland-egl', required by 'virtual:world', not found
+Package egl was not found in the pkg-config search path.
+Perhaps you should add the directory containing `egl.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'egl', required by 'virtual:world', not found
+Package glesv2 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `glesv2.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'glesv2', required by 'virtual:world', not found
+
+Full desktop target attempt:
+ninja: error: unknown target 'torchlight_desktop'

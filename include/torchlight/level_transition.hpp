@@ -65,6 +65,7 @@ public:
     void commit(DungeonAddress destination);
 
 private:
+    friend struct CheckpointAccess;
     DungeonAddress current_;
     std::optional<DungeonAddress> last_dungeon_;
 };
