@@ -562,6 +562,17 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 renderer->set_camera_target(player_motion.position(), kCameraDistance);
             };
             auto drain_logic = [&] {
+                // Credit before script callbacks can hide/destroy corpses, and
+                // without replacing any current attack/pose playback object.
+                const auto rewards = session.collect_kill_rewards(entity_world);
+                if (rewards.kills || rewards.unavailable) {
+                    std::cout << "reward_kills=" << rewards.kills << " xp_gained=" << rewards.experience
+                              << " levels_gained=" << rewards.levels << " reward_unavailable=" << rewards.unavailable
+                              << " player_level=" << session.progression().level << '\n';
+                    if (rewards.kills) inventory_view.status = "XP +" + std::to_string(rewards.experience) +
+                        (rewards.levels ? " | LEVEL UP! PRESS I TO SPEND STAT POINTS." : "");
+                    else inventory_view.status = "XP NOT AWARDED: PLAYER DEAD OR REQUIRED GRAPH UNAVAILABLE.";
+                }
                 // Flush only after callers release pointers into entities_.
                 const auto loot = entity_world.resolve_death_loot(logic_runtime);
                 loot_death_count += loot.deaths;
@@ -854,6 +865,12 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         else if (key == torchlight::physical_key::DOWN) inventory_view.move(1, session.inventory());
                         else if (key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) change_equipment(false);
                         else if (key == torchlight::physical_key::U) change_equipment(true);
+                        else if (key >= torchlight::physical_key::DIGIT_1 && key <= torchlight::physical_key::DIGIT_4) {
+                            const auto index = static_cast<std::size_t>(key - torchlight::physical_key::DIGIT_1);
+                            inventory_view.status = session.allocate_attribute(index)
+                                ? "ATTRIBUTE INCREASED. ONE STAT POINT SPENT."
+                                : "NO STAT POINTS, PROGRESSION UNAVAILABLE, OR ATTACK STILL ACTIVE.";
+                        }
                     }
                 }
                 if (!app_running) break;
@@ -963,16 +980,19 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             player_motion.stop();
                             active_path.clear();
                             next_path_node = 0;
-                            const auto inventory_id = session.pick_up(entity_world, item_id, logic_runtime);
-                            if (inventory_id != 0) {
+                            const auto gold = session.pick_up_gold(entity_world, item_id, logic_runtime);
+                            const auto inventory_id = gold ? 0 : session.pick_up(entity_world, item_id, logic_runtime);
+                            if (gold || inventory_id != 0) {
                                 ++pickup_count;
-                                inventory_view.status = "PICKED UP ITEM #" + std::to_string(inventory_id) + ". PRESS I TO EQUIP.";
+                                inventory_view.status = gold ? "PICKED UP GOLD " + std::to_string(*gold) :
+                                    "PICKED UP ITEM #" + std::to_string(inventory_id) + ". PRESS I TO EQUIP.";
                                 const auto instance = runtime_instance_indices.find(item_id);
                                 if (instance != runtime_instance_indices.end()) {
                                     level.geometry.instances[instance->second].visible = false;
                                     renderer->set_instance_visible(instance->second, false);
                                 }
                                 std::cout << "picked_up=" << item_id << " inventory_id=" << inventory_id
+                                          << " gold_amount=" << (gold ? *gold : 0) << " wallet=" << session.gold()
                                           << " bag_count=" << session.inventory().items().size() << '\n';
                             } else inventory_view.status = "CANNOT PICK UP: NOT SUPPORTED EQUIPMENT OR PLAYER DEAD.";
                             active_pickup.reset();
@@ -1371,13 +1391,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 auto overlay = inventory_view.lines(session,
                     static_cast<std::size_t>(std::max(1, window.height() / (window.width() >= 950 ? 22 : 11) - 10)));
                 if (!inventory_view.open) {
-                    overlay.resize(1);
+                    overlay.resize(2);
                     overlay.push_back({inventory_view.status.empty()
                         ? "I INVENTORY | ESC PAUSE / SAVE | CLICK TO MOVE / ATTACK / PICK UP"
                         : inventory_view.status, false});
                 }
                 if (!player_combat.alive()) {
-                    overlay.resize(1);
+                    overlay.resize(2);
                     overlay.push_back({"PLAYER DIED - SIMULATION PAUSED", false});
                     overlay.push_back({session.hardcore() ? "HARDCORE: RECOVERY DISABLED. ESC FOR MENU." :
                         "R: RECOVER AT LEVEL ENTRY | ESC: PAUSE / SAVE", true});

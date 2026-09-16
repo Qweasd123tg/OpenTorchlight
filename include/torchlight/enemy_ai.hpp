@@ -31,6 +31,8 @@ public:
     [[nodiscard]] std::optional<float> maximum_mana() const noexcept { return maximum_mana_; }
     [[nodiscard]] bool spend_mana(float amount) noexcept;
     void set_equipment_mana_effects(const AttackEffects& effects);
+    void set_progression_vitals(std::int32_t maximum_health, std::optional<std::int32_t> base_mana);
+    void set_defense_attribute(std::int32_t value) noexcept;
     // Restores vitals only: no stat reroll, equipment reset, or level rebuild.
     void restore_after_death() noexcept;
     [[nodiscard]] float collision_radius() const noexcept { return collision_radius_; }
@@ -55,6 +57,7 @@ private:
     std::optional<float> mana_;
     std::optional<float> maximum_mana_;
     AttackEffects base_mana_effects_;
+    AttackEffects equipment_mana_effects_;
     float collision_radius_ = 0.0F;
     float health_ = 1.0F;
     float maximum_health_ = 1.0F;

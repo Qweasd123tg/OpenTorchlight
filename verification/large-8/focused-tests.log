@@ -1,0 +1,92 @@
+Internal ctest changing into directory: /mnt/data/opentorchlight_work/build-verification
+UpdateCTestConfiguration  from :/mnt/data/opentorchlight_work/build-verification/DartConfiguration.tcl
+Parse Config file:/mnt/data/opentorchlight_work/build-verification/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/mnt/data/opentorchlight_work/build-verification/DartConfiguration.tcl
+Parse Config file:/mnt/data/opentorchlight_work/build-verification/DartConfiguration.tcl
+Test project /mnt/data/opentorchlight_work/build-verification
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 28
+    Start 28: reward_resource_graphs
+
+28: Test command: /mnt/data/opentorchlight_work/build-verification/reward_resource_probe "/mnt/data/opentorchlight_work/build-verification/fixtures/progression.pak.zip"
+28: Working Directory: /mnt/data/opentorchlight_work/build-verification
+28: Test timeout computed to be: 1500
+28: class_guid=5022 max_level=4 cap=1000 awarded_stats=12 awarded_skills=6
+28: class_guid=5023 max_level=4 cap=1000 awarded_stats=12 awarded_skills=6
+28: PASS: 2 class templates, 8 level-graph samples; resource compatibility only, XP producer inferred, NOT original parity
+1/7 Test #28: reward_resource_graphs ...........   Passed    0.00 sec
+test 29
+    Start 29: reward_unavailable
+
+29: Test command: /mnt/data/opentorchlight_work/build-verification/reward_cycle_test "--unavailable" "/mnt/data/opentorchlight_work/build-verification/fixtures/ordinary-combat.pak.zip"
+29: Working Directory: /mnt/data/opentorchlight_work/build-verification
+29: Test timeout computed to be: 1500
+29: reward cycle: 7 assertions passed; authored resources, NOT original gameplay parity
+2/7 Test #29: reward_unavailable ...............   Passed    0.01 sec
+test 30
+    Start 30: progression_numeric
+
+30: Test command: /mnt/data/opentorchlight_work/build-verification/reward_cycle_test "--numeric"
+30: Working Directory: /mnt/data/opentorchlight_work/build-verification
+30: Test timeout computed to be: 90
+30: reward cycle: 24 assertions passed; authored resources, NOT original gameplay parity
+3/7 Test #30: progression_numeric ..............   Passed    0.00 sec
+test 31
+    Start 31: reward_cycle
+
+31: Test command: /mnt/data/opentorchlight_work/build-verification/reward_cycle_test "/mnt/data/opentorchlight_work/build-verification/fixtures/progression.pak.zip"
+31: Working Directory: /mnt/data/opentorchlight_work/build-verification
+31: Test timeout computed to be: 90
+31: reward cycle: 79 assertions passed; authored resources, NOT original gameplay parity
+4/7 Test #31: reward_cycle .....................   Passed    0.02 sec
+test 32
+    Start 32: reward_fresh_process
+
+32: Test command: /opt/pyvenv/bin/python3 "/mnt/data/opentorchlight_work/tests/reward_save_process_test.py" "--probe" "/mnt/data/opentorchlight_work/build-verification/reward_cycle_test" "--fixture" "/mnt/data/opentorchlight_work/build-verification/fixtures/progression.pak.zip"
+32: Working Directory: /mnt/data/opentorchlight_work/build-verification
+32: Test timeout computed to be: 90
+32: reward cycle: 47 assertions passed; authored resources, NOT original gameplay parity
+32: reward cycle: 20 assertions passed; authored resources, NOT original gameplay parity
+32: reward cycle: 20 assertions passed; authored resources, NOT original gameplay parity
+32: PASS: separate-process reward/vitals/point/rolled-gold restoration; repeat reads do not duplicate rewards
+5/7 Test #32: reward_fresh_process .............   Passed    0.70 sec
+test 33
+    Start 33: legacy_reward_save_migration
+
+33: Test command: /opt/pyvenv/bin/python3 "/mnt/data/opentorchlight_work/tests/legacy_reward_save_test.py" "--probe" "/mnt/data/opentorchlight_work/build-verification/save_checkpoint_test" "--upgrade" "/mnt/data/opentorchlight_work/build-verification/checkpoint_upgrade_probe" "--fixture" "/mnt/data/opentorchlight_work/build-verification/fixtures/frontend.pak.zip"
+33: Working Directory: /mnt/data/opentorchlight_work/build-verification
+33: Test timeout computed to be: 90
+33: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+33: PASS: frozen unmodified-large-7 v1 fixture upgraded without retroactive rewards
+33: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+33: PASS: v1 and upgraded v2 load the same legacy inventory, floor, vitals and wallet in fresh processes
+6/7 Test #33: legacy_reward_save_migration .....   Passed    0.68 sec
+test 34
+    Start 34: world_gold_export_comparison
+
+34: Test command: /opt/pyvenv/bin/python3 "/mnt/data/opentorchlight_work/tests/compare_world_gold.py" "--probe" "/mnt/data/opentorchlight_work/build-verification/world_gold_probe"
+34: Working Directory: /mnt/data/opentorchlight_work/build-verification
+34: Test timeout computed to be: 90
+34: PASS: 10107 gold scalar cases; unchanged instructions; native ceilf dependency; targeted exports, NOT original asset/runtime validation
+7/7 Test #34: world_gold_export_comparison .....   Passed    0.70 sec
+
+The following tests passed:
+	reward_resource_graphs
+	reward_unavailable
+	progression_numeric
+	reward_cycle
+	reward_fresh_process
+	legacy_reward_save_migration
+	world_gold_export_comparison
+
+100% tests passed, 0 tests failed out of 7
+
+Label Time Summary:
+core    =   2.12 sec*proc (7 tests)
+
+Total Test time (real) =   2.12 sec

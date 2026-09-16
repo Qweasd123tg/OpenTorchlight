@@ -57,7 +57,7 @@ def effect(name, value, **extra):
     return group('EFFECT', props)
 
 
-def write_fixture(path: Path):
+def write_fixture(path: Path, *, with_rewards: bool = False):
     entries = {}
     units, records = [], []
     def add(name, category='MONSTERS', unit_type='MONSTER', props=(), children=(), directory='media/combat/'):
@@ -113,6 +113,20 @@ def write_fixture(path: Path):
     add('TEST_PLAYER','PLAYERS','PLAYER',playerbase,[effect('FIXTURE_HASTE',50)])
     add('TEST_LEFT_PLAYER','PLAYERS','PLAYER',playerbase,[equip(LEFTHAND='SWORD')])
     # First player has no starting equipment: test UNIT effects independently of inventory.
+    if with_rewards:
+        # Authored reward values, NOT measurements from Torchlight assets.
+        dummy = [(k,t,2 if k in ('MINHP','MAXHP') else v) for k,t,v in base]
+        add('REWARD_DUMMY', props=dummy+[('XP',1,125)], children=[
+            group('TREASURE',[('SPAWNCLASS',5,'GOLD_DROPS')])])
+        for name, low, high in [('GOLD',125,125),('ZERO_GOLD',0,0),('RANGE_GOLD',25,175)]:
+            add(name,'ITEMS','GOLD', [('MINVALUE',2,low),('MAXVALUE',2,high)])
+            n,g=units[-1]
+            units[-1]=(n,group(g[0],[(k,t,'GOLD' if k=='CREATEAS' else v) for k,t,v in g[1]],g[2]))
+        add('BAD_GOLD','ITEMS','GOLD',[('MINVALUE',2,-1),('MAXVALUE',2,10)])
+        n,g=units[-1]
+        units[-1]=(n,group(g[0],[(k,t,'GOLD' if k=='CREATEAS' else v) for k,t,v in g[1]],g[2]))
+        entries['media/spawnclasses/GOLD_DROPS.dat.adm']=adm(group('SPAWNCLASS',[('NAME',5,'GOLD_DROPS')],
+            [group('OBJECT',[('UNIT',5,'GOLD'),('WEIGHT',1,-1)])]))
     for name, definition in units: entries[f'media/units/{name}.dat.adm']=adm(definition)
     master=adm(group('UNITS',children=records))
     entries['media/master.adm']=master
@@ -128,6 +142,7 @@ def write_fixture(path: Path):
         for name,id,parents in [('MONSTER',1,()),('SWORD',2,(8,60)),('WEAPON',8,()),
             ('MELEE',60,()),('RANGED',35,(8,)),('PISTOL',90,(35,8)),('PLAYER',3,()),
             ('CHEST ARMOR',4,()),('NORMAL CHEST ARMOR',5,(4,))]]
+    if with_rewards: types.append(group('GOLD',[('ID',1,9)]))
     entries['media/UNITTYPES.HIE.adm']=adm(group('HIERACHY',children=[group('UNITTYPES',children=types)]))
     entries['media/spawnclasses/SWORDS.dat.adm']=adm(group('SPAWNCLASS',[('NAME',5,'SWORDS')],
         [group('OBJECT',[('UNIT',5,'SWORD')])]))
@@ -135,7 +150,20 @@ def write_fixture(path: Path):
             ('ARMOR_MONSTER_BYLEVEL',100),('ARMOR_PLAYER_BYLEVEL_FORSET',100),('BASE_WEAPON_DAMAGE',100),
             ('ITEM_SPAWN_RANGE_MINIMUM',1),('ITEM_SPAWN_RANGE_MAXIMUM',10)]:
         entries[f'media/graphs/stats/{name}.DAT.adm']=adm(group('LINE',children=[group('POINT',[('X',2,1),('Y',2,value)])]))
-    for directory in ['media/combat/','media/empty/','media/nohit/','media/mismatch/','media/unrelated/']:
+    if with_rewards:
+        reward_graphs = {
+            'EXPERIENCEGATE':[100.75,250.9,500.2,1000.9],
+            'STAT_POINTS_PER_LEVEL':[0,2.1,4,5],
+            'SKILL_POINTS_PER_LEVEL':[0,.2,2,3],
+            'HEALTH_PLAYER':[100,150.2,220.1,300],
+            'MANA_PLAYER_DESTROYER':[30.25,40.1,50.25,60.9],
+            'EXPERIENCE_MONSTER':[200.9,300.9,400.9,500.9],
+            'GOLDDROP':[19.2,39.2,59.2,79.2],
+        }
+        for name, values in reward_graphs.items():
+            entries[f'media/graphs/stats/{name}.DAT.adm']=adm(group('LINE',children=[
+                group('POINT',[('X',2,i+1),('Y',2,value)]) for i,value in enumerate(values)]))
+    for directory in ['media/combat/' ,'media/empty/','media/nohit/','media/mismatch/','media/unrelated/']:
         entries[directory+'Creature.mesh']=mesh()
         entries[directory+'Creature.skeleton']=skeleton()
     clips=[('ATTACK_A', [('HIT',6),('FOOTSTEP',9),('HIT',30)]),

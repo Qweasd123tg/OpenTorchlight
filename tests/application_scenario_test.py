@@ -65,7 +65,7 @@ def main() -> int:
         resumed=run('continue',ROOT/'tests/scenarios/town-continue.scenario',saved)
         before=state(first,'before_exit');after=state(resumed,'restored')
         for key in ('class_guid','name','seed','position','angle','recovery_anchor','hp','max_hp','mana','max_mana',
-                    'gold','inventory','slots','damage','armor'):
+                    'gold','progression','inventory','slots','damage','armor'):
             require(first_difference(before[key],after[key]) is None,'fresh process changed '+key)
         require(after['revision']==2,'actual save-and-exit did not write the second revision')
         require(after['walkable'],'loaded position not on navigation grid')

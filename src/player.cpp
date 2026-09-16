@@ -200,6 +200,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         }
         PlayerPrototype player;
         player.guid = record.guid;
+        player.progression_rules = load_progression_rules(archive, *definition);
         player.name = text(*definition, u"NAME");
         player.display_name = text(*definition, u"DISPLAYNAME");
         auto directory = ascii(text(*definition, u"RESOURCEDIRECTORY"));

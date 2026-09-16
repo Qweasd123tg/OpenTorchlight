@@ -98,6 +98,8 @@ RuntimeEntityWorld::RuntimeEntityWorld(const LayoutManifest& layout,
       random_(random_seed),
       spawn_level_(std::max<std::int32_t>(1, spawn_level)) {
     attack_effect_catalog_ = AttackEffectCatalog::discover(definitions.archive());
+    gold_graph_ = find_named_stat_graph(definitions.archive(), "GOLDDROP");
+    experience_graph_ = find_named_stat_graph(definitions.archive(), "EXPERIENCE_MONSTER");
     const auto transforms = resolve_layout_world_transforms(layout);
     for (std::size_t index = 0; index < layout.objects.size(); ++index) {
         if (layout.objects[index].descriptor == u"Unit Spawner") {
@@ -191,6 +193,18 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         // Match the loaded UNIT/BASEFILE value, not optional master-table metadata.
         const auto* create_as = optional_text(definition->root, u"CREATEAS");
         entity.inventory_eligible = create_as && normalized(*create_as) == u"EQUIPMENT";
+        if (create_as && normalized(*create_as) == u"GOLD" && gold_graph_) {
+            const auto low = optional_number(*definition, u"MINVALUE", 100);
+            const auto high = optional_number(*definition, u"MAXVALUE", 100);
+            if (!std::isfinite(low) || !std::isfinite(high) || low < 0 || high < low)
+                throw EntityWorldError("invalid gold MINVALUE/MAXVALUE");
+            // prototype context: portable rank = spawn_level - 1. Normal only.
+            // The original uses a separate volatile RNG; this portable world stream
+            // is reproducible, but NOT a claim of identical original random ordering.
+            const auto percent = random_.between(low, high);
+            entity.gold_amount = evaluated_world_gold(gold_graph_->value(
+                static_cast<float>(spawn_level_)), percent);
+        }
         entity.two_handed = unit_types_->is_a_id(resource.unit_type, 10);
         const auto effects = load_constant_attack_effects(
             *definition, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
@@ -213,6 +227,12 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         if (const auto* entry = definitions_->archive().find_normalized(entity.mesh_path))
             entity.mesh_path = entry->name;
         entity.treasure = load_treasure_profile(*definition);
+        if (experience_graph_) {
+            // inferred ordinary-monster producer; see progression-and-world-rewards.md.
+            entity.experience_reward = inferred_monster_experience(
+                experience_graph_->value(static_cast<float>(spawn_level_)),
+                optional_number(*definition, u"XP", 0));
+        }
         const auto minimum_health_percent =
             optional_number(*definition, u"MINHP", 1.0F);
         const auto maximum_health_percent =
@@ -518,7 +538,7 @@ bool RuntimeEntityWorld::kill(std::uint64_t entity_id, LogicRuntime& /*logic*/) 
 }
 
 DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float damage,
-                                               LogicRuntime& /*logic*/) {
+                                               LogicRuntime& /*logic*/, bool player_credit) {
     auto* entity = find(entity_id);
     if (entity == nullptr || !entity->alive || !entity->enabled ||
         !entity->combat_targetable ||
@@ -530,6 +550,7 @@ DamageResult RuntimeEntityWorld::apply_damage(std::uint64_t entity_id, float dam
     const bool killed = remaining_health <= 0.0F;
     if (killed) {
         record_death(*entity);
+        entity->player_kill = player_credit;
     } else entity->health = remaining_health;
     return {true, killed, entity->health};
 }
@@ -604,7 +625,7 @@ const RuntimeEntity* RuntimeEntityWorld::nearest_alive_item(
     auto nearest_distance = maximum_distance;
     for (const auto& entity : entities_) {
         if (!entity.alive || !entity.enabled || !entity.visible ||
-            entity.kind != MasterResourceKind::item || (inventory_only && !entity.inventory_eligible)) {
+            entity.kind != MasterResourceKind::item || (inventory_only && !entity.inventory_eligible && !entity.gold_amount)) {
             continue;
         }
         const auto distance = std::hypot(entity.position[0] - position[0],

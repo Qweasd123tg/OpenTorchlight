@@ -4,6 +4,7 @@
 #include <limits>
 #include <cmath>
 #include <type_traits>
+#include <stdexcept>
 
 namespace torchlight {
 namespace {
@@ -14,7 +15,9 @@ PlayerPrototype unarmed(PlayerPrototype prototype) {
 }
 PlayerSession::PlayerSession(const PlayerPrototype& prototype, std::uint32_t seed,
                              const UnitTypeHierarchy* hierarchy)
-    : gold_(std::max(0, prototype.starting_gold)), hardcore_(prototype.hardcore),
+    : progression_rules_(prototype.progression_rules),
+      base_attributes_{prototype.strength, prototype.dexterity, prototype.magic, prototype.defense},
+      gold_(std::max(0, prototype.starting_gold)), hardcore_(prototype.hardcore),
       combat_(unarmed(prototype), seed), health_(prototype, seed) {
     if (prototype.starting_weapon) {
         TorchlightRandom random(seed);
@@ -30,6 +33,80 @@ PlayerSession::PlayerSession(const PlayerPrototype& prototype, std::uint32_t see
         static_cast<void>(inventory_.equip(id));
         refresh_equipment();
     }
+}
+std::array<std::int32_t, 4> PlayerSession::attributes() const {
+    auto values = base_attributes_;
+    for (std::size_t i = 0; i < values.size(); ++i) {
+        const auto n = static_cast<std::int64_t>(values[i]) + progression_.allocated[i];
+        if (n < -1000000 || n > 1000000) throw std::invalid_argument("attribute outside supported range");
+        values[i] = static_cast<std::int32_t>(n);
+    }
+    return values;
+}
+void PlayerSession::refresh_attributes() {
+    const auto values = attributes();
+    combat_.set_attributes(values[0], values[1]);
+    health_.set_defense_attribute(values[3]);
+}
+bool PlayerSession::allocate_attribute(std::size_t index) {
+    if (!progression_rules_ || !health_.alive() || combat_.attack_in_progress() ||
+        index >= progression_.allocated.size() || progression_.stat_points == 0) return false;
+    PlayerSession staged(*this);
+    --staged.progression_.stat_points;
+    ++staged.progression_.allocated[index];
+    validate_progression(staged.progression_, *progression_rules_);
+    staged.refresh_attributes();
+    using std::swap;
+    swap(progression_, staged.progression_);
+    swap(combat_, staged.combat_);
+    swap(health_, staged.health_);
+    return true;
+}
+std::uint32_t PlayerSession::award_experience(std::int32_t amount) {
+    if (!health_.alive() || !progression_rules_) return 0;
+    auto next = progression_;
+    const auto bonus = total_attack_effects(combat_.attack_loadout(), combat_.attack_character()).get(0x44);
+    const auto levels = advance_progression(next, *progression_rules_, amount, bonus);
+    // Preserve the action object and sampled clip: a multi-HIT kill must not
+    // cancel/restart the current attack or invalidate its event cursor.
+    auto vitals = health_;
+    if (levels) {
+        const auto& rule = progression_rules_->at(next.level);
+        vitals.set_progression_vitals(rule.maximum_health, rule.base_mana);
+    }
+    using std::swap;
+    swap(health_, vitals);
+    progression_ = next;
+    return levels;
+}
+RewardCollection PlayerSession::collect_kill_rewards(RuntimeEntityWorld& world) {
+    RewardCollection result;
+    for (auto& entity : world.entities()) {
+        if (entity.kind != MasterResourceKind::monster || entity.alive ||
+            !entity.player_kill || entity.reward_claimed) continue;
+        if (!health_.alive() || !progression_rules_ || !entity.experience_reward) {
+            ++result.unavailable;
+        } else {
+            const auto before = progression_.experience;
+            result.levels += award_experience(*entity.experience_reward);
+            result.experience += static_cast<std::int64_t>(progression_.experience) - before;
+            ++result.kills;
+        }
+        entity.reward_claimed = true; // commit only after a successful award/explicit exclusion
+    }
+    return result;
+}
+std::optional<std::int32_t> PlayerSession::pick_up_gold(RuntimeEntityWorld& world,
+    std::uint64_t id, LogicRuntime& logic) {
+    const auto* entity = world.find(id);
+    if (!health_.alive() || !entity || !entity->gold_amount || entity->inventory_eligible ||
+        entity->kind != MasterResourceKind::item || !entity->alive || !entity->enabled || !entity->visible)
+        return std::nullopt;
+    const auto amount = *entity->gold_amount;
+    if (amount < 0) throw std::invalid_argument("negative world gold");
+    if (!world.pick_up(id, logic)) return std::nullopt;
+    give_gold(amount);
+    return amount;
 }
 void PlayerSession::give_gold(std::int32_t amount) noexcept {
     const auto total = static_cast<std::int64_t>(gold_) + amount;

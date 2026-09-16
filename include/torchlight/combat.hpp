@@ -52,6 +52,8 @@ public:
     [[nodiscard]] CombatUpdate perform_attack(const AnimationEventOccurrence& event,
         const std::array<float, 3>& position, RuntimeEntityWorld& world, LogicRuntime& logic);
     void finish_animation_frame() noexcept;
+    // Recompute existing physical consumers without replacing the current action.
+    void set_attributes(std::int32_t strength, std::int32_t dexterity);
 
 private:
     friend struct CheckpointAccess;

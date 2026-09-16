@@ -42,6 +42,7 @@ add_library(torchlight_core STATIC
     src/inventory.cpp
     src/inventory_view.cpp
     src/player_session.cpp
+    src/progression.cpp
     src/treasure.cpp
     src/key_manager.cpp
     src/level_scene.cpp
@@ -412,6 +413,53 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_player_vitals.py
             --probe $<TARGET_FILE:player_vitals_probe>)
     set_tests_properties(player_vitals_export_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+
+    set(PROGRESSION_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/progression.pak.zip)
+    add_custom_command(OUTPUT ${PROGRESSION_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_progression_fixture.py ${PROGRESSION_FIXTURE}
+        DEPENDS tests/make_progression_fixture.py tests/make_attack_fixture.py tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py
+        VERBATIM)
+    add_custom_target(progression_fixture DEPENDS ${PROGRESSION_FIXTURE})
+    add_executable(reward_cycle_test tests/reward_cycle_test.cpp)
+    target_link_libraries(reward_cycle_test PRIVATE torchlight_core)
+    add_dependencies(reward_cycle_test progression_fixture)
+    add_executable(reward_resource_probe tests/reward_resource_probe.cpp)
+    target_link_libraries(reward_resource_probe PRIVATE torchlight_core)
+    add_dependencies(reward_resource_probe progression_fixture)
+    add_test(NAME reward_resource_graphs COMMAND reward_resource_probe ${PROGRESSION_FIXTURE})
+    add_test(NAME reward_unavailable COMMAND reward_cycle_test --unavailable ${ORDINARY_COMBAT_FIXTURE})
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_progression_resource_graphs COMMAND reward_resource_probe ${TORCHLIGHT_GAME_DIR}/pak.zip)
+    endif()
+    add_executable(world_gold_probe tests/world_gold_probe.cpp)
+    target_link_libraries(world_gold_probe PRIVATE torchlight_core)
+    add_executable(checkpoint_upgrade_probe tests/checkpoint_upgrade_probe.cpp)
+    target_link_libraries(checkpoint_upgrade_probe PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        foreach(_reward_target reward_cycle_test reward_resource_probe world_gold_probe checkpoint_upgrade_probe)
+            target_compile_options(${_reward_target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endforeach()
+    endif()
+    add_test(NAME progression_numeric COMMAND reward_cycle_test --numeric)
+    add_test(NAME reward_cycle COMMAND reward_cycle_test ${PROGRESSION_FIXTURE})
+    add_test(NAME reward_fresh_process COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/reward_save_process_test.py
+        --probe $<TARGET_FILE:reward_cycle_test> --fixture ${PROGRESSION_FIXTURE})
+    add_test(NAME legacy_reward_save_migration COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/legacy_reward_save_test.py
+        --probe $<TARGET_FILE:save_checkpoint_test> --upgrade $<TARGET_FILE:checkpoint_upgrade_probe>
+        --fixture ${FRONTEND_FIXTURE})
+    add_test(NAME world_gold_export_comparison COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_world_gold.py --probe $<TARGET_FILE:world_gold_probe>)
+    set_tests_properties(progression_numeric reward_cycle reward_fresh_process legacy_reward_save_migration
+        world_gold_export_comparison PROPERTIES TIMEOUT 90)
+    set_tests_properties(world_gold_export_comparison PROPERTIES SKIP_RETURN_CODE 77)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_world_gold_comparison COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_world_gold.py --probe $<TARGET_FILE:world_gold_probe>
+            --original ${TORCHLIGHT_ORIGINAL})
+        set_tests_properties(original_world_gold_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
+    endif()
 
     add_executable(item_cycle_resource_test tests/item_cycle_resource_test.cpp)
     target_link_libraries(item_cycle_resource_test PRIVATE torchlight_core)

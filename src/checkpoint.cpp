@@ -96,6 +96,13 @@ void entity(const RuntimeEntity &e) {
     require(static_cast<unsigned>(e.kind) <= static_cast<unsigned>(MasterResourceKind::prop),
             "invalid entity kind");
     require(e.level > 0 && e.level <= 100000, "invalid entity level");
+    require(!e.gold_amount || (*e.gold_amount >= 0 && e.kind == MasterResourceKind::item &&
+        !e.inventory_eligible && !e.armor_item && !e.weapon_item), "invalid saved world gold");
+    require(!e.experience_reward || (*e.experience_reward >= 0 && e.kind == MasterResourceKind::monster),
+        "invalid saved monster experience");
+    require(!e.player_kill || (e.kind == MasterResourceKind::monster && !e.alive && e.health == 0),
+        "invalid saved player kill credit");
+    require(!e.reward_claimed || e.player_kill, "reward claimed without player kill");
     position(e.position);
     scalar(e.health, "invalid saved HP");
     scalar(e.maximum_health, "invalid saved max HP");
@@ -183,6 +190,7 @@ PlayerCheckpoint CheckpointAccess::capture(const PlayerSession &p) {
     s.base_defense = p.health_.base_damage_defense_;
     s.combat_random = p.combat_.random_.state_;
     s.prefer_left = p.combat_.prefer_left_;
+    if (p.progression_rules_) s.progression = p.progression_;
     validate(s);
     return s;
 }
@@ -217,6 +225,10 @@ EnemyCheckpoint CheckpointAccess::capture(const EnemyController &e) {
 }
 void CheckpointAccess::validate(const PlayerCheckpoint &s) {
     require(s.gold >= 0, "negative saved gold");
+    if (s.progression) {
+        try { validate_progression(*s.progression); }
+        catch (const std::invalid_argument& e) { throw CheckpointError(e.what()); }
+    }
     scalar(s.health, "invalid player HP");
     scalar(s.maximum_health, "invalid player max HP");
     require(s.maximum_health >= 1 && s.health >= 0 && s.health <= s.maximum_health,
@@ -267,6 +279,22 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
     p.gold_ = s.gold;
     p.health_.base_damage_defense_ = s.base_defense;
     p.health_.maximum_health_ = s.maximum_health;
+    if (s.progression) {
+        require(bool(p.progression_rules_), "saved progression requires class graphs");
+        try {
+            validate_progression(*s.progression, *p.progression_rules_);
+            p.progression_ = *s.progression;
+            require(p.attributes()[3] == s.base_defense.defense_attribute,
+                    "saved defense disagrees with allocated attributes");
+            p.refresh_attributes();
+            if (p.progression_.level > 1) {
+                const auto& rule = p.progression_rules_->at(p.progression_.level);
+                p.health_.set_progression_vitals(rule.maximum_health, rule.base_mana);
+                require(p.health_.maximum_health_ == s.maximum_health,
+                        "saved health maximum disagrees with level graph");
+            }
+        } catch (const std::invalid_argument& e) { throw CheckpointError(e.what()); }
+    }
     p.refresh_equipment(); // validates/recomputes current resource-dependent derived values
     require(p.health_.maximum_mana_ == s.maximum_mana,
             "saved mana maximum disagrees with class/equipment resources");

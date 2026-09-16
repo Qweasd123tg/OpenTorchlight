@@ -1,0 +1,246 @@
+{
+  "schema": 1,
+  "kind": "verification-run",
+  "groups": {
+    "core": {
+      "status": "PASSED",
+      "passed": 40,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "ordinary_attack_action",
+          "status": "PASSED",
+          "seconds": "0.00173054"
+        },
+        {
+          "name": "actor_motion",
+          "status": "PASSED",
+          "seconds": "0.00151774"
+        },
+        {
+          "name": "animation_events",
+          "status": "PASSED",
+          "seconds": "0.00204487"
+        },
+        {
+          "name": "damage_calculation",
+          "status": "PASSED",
+          "seconds": "0.00142832"
+        },
+        {
+          "name": "warp_arrival",
+          "status": "PASSED",
+          "seconds": "0.00202623"
+        },
+        {
+          "name": "level_entry_fallback",
+          "status": "PASSED",
+          "seconds": "0.0435337"
+        },
+        {
+          "name": "enemy_ai_cooldown",
+          "status": "PASSED",
+          "seconds": "0.0712951"
+        },
+        {
+          "name": "ai_cooldown_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.06666"
+        },
+        {
+          "name": "desktop_gameplay_syntax",
+          "status": "PASSED",
+          "seconds": "2.56054"
+        },
+        {
+          "name": "inventory_view",
+          "status": "PASSED",
+          "seconds": "0.00177646"
+        },
+        {
+          "name": "inventory_instances",
+          "status": "PASSED",
+          "seconds": "0.00225269"
+        },
+        {
+          "name": "item_cycle",
+          "status": "PASSED",
+          "seconds": "0.0373703"
+        },
+        {
+          "name": "attack_speed_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.08084"
+        },
+        {
+          "name": "ordinary_combat",
+          "status": "PASSED",
+          "seconds": "0.088145"
+        },
+        {
+          "name": "frontend",
+          "status": "PASSED",
+          "seconds": "0.00347394"
+        },
+        {
+          "name": "frontend_campaign_cycle",
+          "status": "PASSED",
+          "seconds": "0.886236"
+        },
+        {
+          "name": "coverage_map_current",
+          "status": "PASSED",
+          "seconds": "1.27486"
+        },
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "1.21809"
+        },
+        {
+          "name": "save_checkpoint",
+          "status": "PASSED",
+          "seconds": "0.107752"
+        },
+        {
+          "name": "save_fresh_process",
+          "status": "PASSED",
+          "seconds": "0.942562"
+        },
+        {
+          "name": "save_atomic_process",
+          "status": "PASSED",
+          "seconds": "1.0297"
+        },
+        {
+          "name": "gameplay_continuation",
+          "status": "PASSED",
+          "seconds": "0.0496332"
+        },
+        {
+          "name": "death_finalization",
+          "status": "PASSED",
+          "seconds": "0.00894055"
+        },
+        {
+          "name": "effect_catalog_source",
+          "status": "PASSED",
+          "seconds": "0.942761"
+        },
+        {
+          "name": "read_only_extractors",
+          "status": "PASSED",
+          "seconds": "7.36063"
+        },
+        {
+          "name": "combat_inputs_evidence",
+          "status": "PASSED",
+          "seconds": "0.788187"
+        },
+        {
+          "name": "player_vitals_export_comparison",
+          "status": "PASSED",
+          "seconds": "0.952659"
+        },
+        {
+          "name": "reward_resource_graphs",
+          "status": "PASSED",
+          "seconds": "0.00630234"
+        },
+        {
+          "name": "reward_unavailable",
+          "status": "PASSED",
+          "seconds": "0.00859945"
+        },
+        {
+          "name": "progression_numeric",
+          "status": "PASSED",
+          "seconds": "0.00231022"
+        },
+        {
+          "name": "reward_cycle",
+          "status": "PASSED",
+          "seconds": "0.0262167"
+        },
+        {
+          "name": "reward_fresh_process",
+          "status": "PASSED",
+          "seconds": "0.963202"
+        },
+        {
+          "name": "legacy_reward_save_migration",
+          "status": "PASSED",
+          "seconds": "0.94693"
+        },
+        {
+          "name": "world_gold_export_comparison",
+          "status": "PASSED",
+          "seconds": "0.77024"
+        },
+        {
+          "name": "item_cycle_resource_fixture",
+          "status": "PASSED",
+          "seconds": "0.00449494"
+        },
+        {
+          "name": "parent_dungeon",
+          "status": "PASSED",
+          "seconds": "0.00156449"
+        },
+        {
+          "name": "scenario_first_difference",
+          "status": "PASSED",
+          "seconds": "0.911863"
+        },
+        {
+          "name": "asset_catalog_negative",
+          "status": "PASSED",
+          "seconds": "0.929644"
+        },
+        {
+          "name": "random_observation",
+          "status": "PASSED",
+          "seconds": "0.00191146"
+        },
+        {
+          "name": "verification_driver",
+          "status": "PASSED",
+          "seconds": "4.15559"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 7.373
+    },
+    "assets": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "reference": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "render": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "desktop": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    }
+  },
+  "inputs": {},
+  "evidence": {
+    "core": "authored fixtures and bounded export comparisons",
+    "assets": "resource-derived; not ELF parity",
+    "reference": "pinned original comparisons",
+    "render": "actual GL; self snapshots are regression only",
+    "desktop": "full window adapter; not original-game parity"
+  },
+  "test_timeout_scale": 1
+}

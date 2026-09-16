@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/damage.hpp"
+#include "torchlight/progression.hpp"
 #include "torchlight/equipment.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/logic_runtime.hpp"
@@ -64,6 +65,9 @@ struct RuntimeEntity {
     bool enabled = true;
     bool visible = true;
     bool combat_targetable = false;
+    // Already evaluated amounts; never recompute on save restoration.
+    std::optional<std::int32_t> gold_amount, experience_reward;
+    bool player_kill = false, reward_claimed = false;
 };
 
 struct DamageResult {
@@ -116,7 +120,7 @@ public:
     }
     bool kill(std::uint64_t entity_id, LogicRuntime& logic);
     [[nodiscard]] DamageResult apply_damage(std::uint64_t entity_id, float damage,
-                                            LogicRuntime& logic);
+                                            LogicRuntime& logic, bool player_credit = false);
     bool pick_up(std::uint64_t entity_id, LogicRuntime& logic);
     [[nodiscard]] RuntimeEntity* find(std::uint64_t entity_id) noexcept;
     [[nodiscard]] const RuntimeEntity* find(std::uint64_t entity_id) const noexcept;
@@ -165,6 +169,7 @@ private:
     const SpawnClassCatalog* spawn_classes_ = nullptr;
     const UnitTypeResourceIndex* unit_types_ = nullptr;
     std::optional<AttackEffectCatalog> attack_effect_catalog_;
+    std::optional<StatGraph> gold_graph_, experience_graph_;
     StatGraph monster_health_graph_;
     StatGraph monster_damage_graph_;
     StatGraph monster_armor_graph_;

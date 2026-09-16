@@ -37,7 +37,23 @@ std::vector<InventoryViewLine> InventoryView::lines(const PlayerSession& session
         << '/' << *session.health().maximum_mana();
     else stats << "  MANA ?";
     result.push_back({stats.str(), false});
+    const auto& progress = session.progression();
+    std::ostringstream xp;
+    xp << "LEVEL " << progress.level << "  XP ";
+    if (const auto* rules = session.progression_rules()) {
+        xp << progress.experience << '/' << rules->gate(progress.level)
+           << "  STAT POINTS " << progress.stat_points << "  SKILL POINTS " << progress.skill_points;
+        if (progress.level == rules->maximum_level()) xp << "  MAX LEVEL";
+    } else xp << "? - PROGRESSION GRAPHS UNAVAILABLE";
+    result.push_back({xp.str(), false});
     result.push_back({"INVENTORY - PAUSED", false});
+    if (session.progression_rules()) {
+        const auto a = session.attributes();
+        result.push_back({"1 STR " + std::to_string(a[0]) + " | 2 DEX " + std::to_string(a[1]) +
+            " | 3 MAGIC " + std::to_string(a[2]) + " | 4 DEF " + std::to_string(a[3]) +
+            " - SPEND ONE STAT POINT", false});
+        result.push_back({"SKILL POINTS RETAINED; ACTIVE SKILLS / MAGIC COMBAT NOT IMPLEMENTED.", false});
+    }
     result.push_back({"UP/DOWN SELECT | ENTER EQUIP | U UNEQUIP | I/ESC CLOSE", false});
     if (inventory.items().empty()) result.push_back({"BAG IS EMPTY. PICK UP EQUIPMENT IN THE WORLD.", false});
     const auto selected = inventory.items().empty() ? 0 : std::min(selected_, inventory.items().size() - 1);

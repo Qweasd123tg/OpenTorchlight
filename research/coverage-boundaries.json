@@ -236,14 +236,23 @@
         "0x8ca940"
       ],
       "status": "researched",
-      "boundary": "MINVALUE/MAXVALUE/4 difficulty graphs and ceil order inspected; world gold and original pickup attribution not implemented.",
+      "boundary": "Gold float multiply/divide/ceil scalar compared against unchanged targeted-export instructions. Portable Normal world piles/pickup/save implemented. Original volatile RNG order, dungeon rank propagation and pickup attribution remain unverified; original function status retained.",
       "evidence": [
         "research/original-gameplay-inputs.json",
-        "research/disassembly/8ca940-gold-unit-init.asm"
+        "research/disassembly/8ca940-gold-unit-init.asm",
+        "research/progression-and-world-rewards.md"
       ],
-      "implementation": [],
-      "tests": [],
-      "comparison": ""
+      "implementation": [
+        "src/progression.cpp",
+        "src/entity_world.cpp",
+        "src/player_session.cpp"
+      ],
+      "tests": [
+        "tests/compare_world_gold.py",
+        "tests/reward_cycle_test.cpp",
+        "tests/reward_save_process_test.py"
+      ],
+      "comparison": "tests/compare_world_gold.py (export scalar only; --original optional, not run in large-8)"
     },
     {
       "addresses": [
@@ -506,9 +515,10 @@
       "id": "custom-disk-checkpoint-v1",
       "subsystem": "save",
       "status": "implemented",
-      "boundary": "Explicit little-endian bounded checksummed format, atomic replacement, revisions, fresh-process restore. NOT original SVB compatibility.",
+      "boundary": "Version-2 bounded little-endian port format with explicit v1 decode/migration, progression and stored world rewards; atomic replacement, revisions, fresh-process restore. NOT original SVB compatibility. Historical system ID retained.",
       "evidence": [
-        "research/frontend-save-evidence.md"
+        "research/frontend-save-evidence.md",
+        "research/checkpoint-format.md"
       ],
       "implementation": [
         "src/save_codec.cpp",
@@ -520,7 +530,9 @@
         "tests/save_process_test.py",
         "tests/save_atomic_process_test.py",
         "tests/frontend_cycle_test.cpp",
-        "tests/frontend_resource_test.cpp"
+        "tests/frontend_resource_test.cpp",
+        "tests/reward_save_process_test.py",
+        "tests/legacy_reward_save_test.py"
       ]
     },
     {
@@ -587,6 +599,28 @@
         "tests/asset_catalog_test.py",
         "tests/scenario_diff_test.py",
         "tests/random_observation_test.cpp"
+      ]
+    },
+    {
+      "id": "player-progression-and-world-rewards",
+      "subsystem": "combat",
+      "status": "partial",
+      "boundary": "Shared application credit path, graph-driven progression/points/vitals, attribute spending, gold pickup and checkpoint-v2 persistence. Authored regression, not full original gameplay parity. XP producer and level cascading inferred; gold rank/RNG context prototype; no active skills/fame/regen.",
+      "evidence": [
+        "research/progression-and-world-rewards.md"
+      ],
+      "implementation": [
+        "src/progression.cpp",
+        "src/player_session.cpp",
+        "src/entity_world.cpp",
+        "src/application.cpp",
+        "src/save_codec.cpp"
+      ],
+      "tests": [
+        "tests/reward_cycle_test.cpp",
+        "tests/reward_resource_probe.cpp",
+        "tests/reward_save_process_test.py",
+        "tests/legacy_reward_save_test.py"
       ]
     }
   ]

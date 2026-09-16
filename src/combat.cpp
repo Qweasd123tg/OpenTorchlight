@@ -124,11 +124,16 @@ CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& ev
     const auto mitigation = mitigate_damage(rolled, rolled, DamageType::physical, 1,
                                             selected->damage_defense, random_);
     const auto id = selected->id;
-    const auto result = world.apply_damage(id, static_cast<float>(mitigation.applied), logic);
+    const auto result = world.apply_damage(id, static_cast<float>(mitigation.applied), logic, true);
     if (!result.accepted) return {CombatState::missed, id, 0, result.remaining_health, event.execution_id};
     if (result.killed) target_id_ = 0;
     return {result.killed ? CombatState::killed : CombatState::attacked, id,
             mitigation.applied, result.remaining_health, event.execution_id};
+}
+void CombatController::set_attributes(std::int32_t strength, std::int32_t dexterity) {
+    character_.strength = strength;
+    character_.dexterity = dexterity;
+    refresh_attack_values();
 }
 void CombatController::finish_animation_frame() noexcept { action_.finish_frame(); }
 } // namespace torchlight

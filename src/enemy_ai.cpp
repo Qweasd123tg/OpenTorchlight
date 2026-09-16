@@ -54,12 +54,27 @@ bool PlayerCombatState::spend_mana(float amount) noexcept {
     return true;
 }
 void PlayerCombatState::set_equipment_mana_effects(const AttackEffects& equipment) {
+    equipment_mana_effects_ = equipment;
     if (!base_mana_) return;
     auto effects = base_mana_effects_;
     effects.append(equipment);
     // maxMana @0x813a10: integer base, ceil percentage, ceil flat contribution.
     maximum_mana_ = static_cast<float>(evaluated_maximum_mana(*base_mana_, 0, effects));
     if (mana_) *mana_ = std::min(*mana_, *maximum_mana_);
+}
+void PlayerCombatState::set_progression_vitals(std::int32_t maximum_health,
+                                              std::optional<std::int32_t> base_mana) {
+    if (maximum_health < 1 || (base_mana && *base_mana < 0))
+        throw std::invalid_argument("invalid progression vitals");
+    maximum_health_ = static_cast<float>(maximum_health);
+    base_mana_ = base_mana;
+    if (base_mana_) set_equipment_mana_effects(equipment_mana_effects_);
+    else { mana_.reset(); maximum_mana_.reset(); }
+    restore_after_death(); // CCharacter::levelUp refills vitals; no reroll.
+}
+void PlayerCombatState::set_defense_attribute(std::int32_t value) noexcept {
+    base_damage_defense_.defense_attribute = value;
+    refresh_damage_defense();
 }
 void PlayerCombatState::restore_after_death() noexcept {
     health_ = maximum_health_;

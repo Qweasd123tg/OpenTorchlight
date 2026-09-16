@@ -4,6 +4,15 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
+## Изменение large-8
+
+Подключены обычные награды за смертельный HIT игрока, graph-driven XP/level,
+очки/распределение атрибутов, рост HP/mana, gold pickup в кошелёк и checkpoint v2
+с миграцией v1. Это рабочий portable срез, не завершённая исходная прокачка:
+XP producer ещё inferred, gold rank/RNG context prototype. Настоящие pak/ELF
+в этом проходе отсутствуют; исторический large-6 acceptance не переносится
+автоматически на новый код. Детали — `../PROGRESSION_REWARDS_RESULT_RU.md`.
+
 ## Изменение large-6
 
 Настоящий pak теперь проверен и отрисован в общем application-loop без окна:
@@ -36,16 +45,16 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 | Layout/random level/logic | partial | генерация, links, timer, spawn, warp | весь command set, re-entrancy, сохранение состояния, special layouts |
 | Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland-ввод (Town headless уже проверен), original skins/fonts, splash/loading/settings, IME |
 | Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | оконный интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
-| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, migration/backup/delete UX; настоящий pak уже проверен |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1→v2 уже поддержан; настоящий pak уже проверен |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
 | Ranged/projectile | researched | основные функции и точечные ASM | descriptor → spawn → flight/sweep → HIT/pierce/retire/render |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
 | Player death/restart | verified | один entry-restart с gold/10 | остальные варианты, pet, dropToGround, временные эффекты |
-| HP/mana/gold | partial | base/max/spend и entry fee | regen, мировой gold, difficulty/rank graphs, UI/economика |
+| HP/mana/gold | partial | base/max/spend, entry fee, level growth, gold piles/pickup/wallet/save | regen, original volatile RNG/rank, остальные difficulty, цены/экономика |
 | Loot/inventory/equipment | partial | death → drop → pickup → equip → travel | rarity, affix, requirements, все слоты, stack, consumables, visuals |
 | Effects/affixes | partial | каталог и ограниченные constant passive | полный lifecycle, graphs, conditions, stacking, FX, serialization |
 | Skills | researched | центральные классы декомпилированы | data loader, controller, costs, cooldown, targeting, missiles/AOE |
-| XP/level/fame | unseen | отдельные поля/символы известны | начисление, growth, points, UI, penalties, serialization |
+| XP/level/fame | partial | portable XP/level/growth/stat+skill points, атрибуты, HUD и save | подтвердить XP producer/CPlayer levelUp, factions/spawner XP gates, fame, активные skills, полные penalties |
 | Quests/dialogs | researched | quest классы декомпилированы | loader, requirements, state machine, dialog, rewards, persistence |
 | NPC/merchant | researched | merchant/dialog classes доступны | interaction, buy/sell, prices, stock, окна и сохранение |
 | Stash/shared stash | researched | классы доступны | UI, перенос экземпляров, disk persistence |

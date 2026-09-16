@@ -341,6 +341,15 @@ private:
         out << ",\"max_hp\":"; json::number(out,player.maximum_health);
         out << ",\"mana\":"; if(player.mana) json::number(out,*player.mana); else out<<"null";
         out << ",\"max_mana\":"; if(player.maximum_mana) json::number(out,*player.maximum_mana); else out<<"null";
+        out << ",\"progression\":";
+        if (player.progression) {
+            const auto& p = *player.progression;
+            out << "{\"level\":" << p.level << ",\"experience\":" << p.experience
+                << ",\"stat_points\":" << p.stat_points << ",\"skill_points\":" << p.skill_points
+                << ",\"allocated\":[";
+            for (std::size_t i=0; i<p.allocated.size(); ++i) { if(i) out << ','; out << p.allocated[i]; }
+            out << "]}";
+        } else out << "null";
         out << ",\"damage\":["<<v.session->combat().minimum_damage()<<','<<v.session->combat().maximum_damage()
             <<"],\"armor\":"<<v.session->health().armor_class()<<",\"inventory\":[";
         bool comma=false;
@@ -363,7 +372,11 @@ private:
             comma = true;
             out<<"{\"id\":"<<entity.id<<",\"hp\":";json::number(out,entity.health);
             out<<",\"alive\":"<<(entity.alive?"true":"false")<<",\"enabled\":"<<(entity.enabled?"true":"false")
-               <<",\"visible\":"<<(entity.visible?"true":"false")<<",\"position\":";json::array(out,entity.position);out<<'}';
+               <<",\"visible\":"<<(entity.visible?"true":"false")<<",\"position\":";json::array(out,entity.position);
+            out << ",\"gold_amount\":"; if(entity.gold_amount) out << *entity.gold_amount; else out << "null";
+            out << ",\"experience_reward\":"; if(entity.experience_reward) out << *entity.experience_reward; else out << "null";
+            out << ",\"player_kill\":" << (entity.player_kill?"true":"false")
+                << ",\"reward_claimed\":" << (entity.reward_claimed?"true":"false") << '}';
         }
         out << "],\"logic\":[";comma=false;
         for(const auto& node:logic.entries){

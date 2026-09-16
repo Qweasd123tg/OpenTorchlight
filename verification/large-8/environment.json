@@ -1,0 +1,7 @@
+{
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5",
+  "compiler": "c++ (Debian 14.2.0-19) 14.2.0",
+  "cmake": "cmake version 3.31.6",
+  "scope": "authored fixtures and bounded cached exports only; external original pak and ELF absent"
+}

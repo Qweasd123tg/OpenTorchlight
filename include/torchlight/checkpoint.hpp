@@ -25,6 +25,7 @@ struct PlayerCheckpoint {
     DamageDefense base_defense;
     std::uint64_t combat_random = 0;
     bool prefer_left = false;
+    std::optional<ProgressionState> progression;
 };
 struct WorldCheckpoint {
     std::uint64_t next_id = 1, random_state = 0;

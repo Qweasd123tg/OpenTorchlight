@@ -9,13 +9,21 @@
 namespace torchlight {
 namespace {
 // Explicit little-endian fields. Never memcpy a C++ object, ABI enum or pointer.
+template <class A, class S> void versioned_fields(A&, S&) {}
+#define V2_FIELDS(T, ...) \
+    template <class A> void versioned_fields(A& a, T& s) { if (a.version >= 2) a(__VA_ARGS__); } \
+    template <class A> void versioned_fields(A& a, const T& s) { if (a.version >= 2) a(__VA_ARGS__); }
+V2_FIELDS(PlayerCheckpoint, s.progression)
+V2_FIELDS(RuntimeEntity, s.gold_amount, s.experience_reward, s.player_kill, s.reward_claimed)
+#undef V2_FIELDS
 #define FIELDS(T, ...)                                                                             \
     template <class A> void fields(A &a, T &s) {                                                   \
-        a(__VA_ARGS__);                                                                            \
+        a(__VA_ARGS__); versioned_fields(a, s);                                                                            \
     }                                                                                              \
     template <class A> void fields(A &a, const T &s) {                                             \
-        a(__VA_ARGS__);                                                                            \
+        a(__VA_ARGS__); versioned_fields(a, s);                                                                            \
     }
+FIELDS(ProgressionState, s.level, s.experience, s.stat_points, s.skill_points, s.allocated)
 FIELDS(DamageDefense, s.natural_armor, s.defense_attribute, s.elemental_armor)
 FIELDS(AttackEffectValue, s.type, s.damage_type, s.value)
 FIELDS(AttackEffects, s.values, s.unresolved)
@@ -77,6 +85,7 @@ class AllocationBudget {
 };
 class Writer {
   public:
+    const std::uint32_t version = kCheckpointFormatVersion;
     std::vector<std::uint8_t> bytes;
     AllocationBudget budget;
     template <class... T> void operator()(const T &...v) {
@@ -139,6 +148,7 @@ class Reader {
   public:
     explicit Reader(const std::vector<std::uint8_t> &b) : bytes(b) {
     }
+    std::uint32_t version = kCheckpointFormatVersion;
     const std::vector<std::uint8_t> &bytes;
     std::size_t pos = 0;
     // Aggregate element budget prevents many small nested containers from expanding
@@ -238,13 +248,14 @@ CampaignCheckpoint decode_checkpoint(const std::vector<std::uint8_t> &file) {
     header.pos = 8;
     std::uint32_t version, length, crc;
     header(version, length, crc);
-    if (version != kCheckpointFormatVersion)
+    if (version != 1 && version != kCheckpointFormatVersion)
         throw CheckpointError("unsupported checkpoint version");
     if (length != file.size() - 20)
         throw CheckpointError("checkpoint length mismatch");
     if (static_cast<std::uint32_t>(crc32(0, file.data() + 20, length)) != crc)
         throw CheckpointError("checkpoint checksum mismatch");
     Reader reader(file);
+    reader.version = version;
     reader.pos = 20;
     CampaignCheckpoint result;
     reader(result);

@@ -12,6 +12,10 @@ struct RecoveryResult {
     RecoveryStatus status = RecoveryStatus::alive;
     std::int32_t gold_lost = 0;
 };
+struct RewardCollection {
+    std::uint32_t kills = 0, levels = 0, unavailable = 0;
+    std::int64_t experience = 0;
+};
 class PlayerSession {
 public:
     PlayerSession(const PlayerPrototype& prototype, std::uint32_t seed,
@@ -26,6 +30,13 @@ public:
     [[nodiscard]] InventoryChange equip(InventoryId id);
     [[nodiscard]] InventoryChange unequip(InventoryId id);
     [[nodiscard]] std::int32_t gold() const noexcept { return gold_; }
+    [[nodiscard]] std::optional<std::int32_t> pick_up_gold(RuntimeEntityWorld&, std::uint64_t, LogicRuntime&);
+    [[nodiscard]] const ProgressionState& progression() const noexcept { return progression_; }
+    [[nodiscard]] const ProgressionRules* progression_rules() const noexcept { return progression_rules_.get(); }
+    [[nodiscard]] std::array<std::int32_t, 4> attributes() const;
+    [[nodiscard]] bool allocate_attribute(std::size_t index);
+    [[nodiscard]] std::uint32_t award_experience(std::int32_t amount);
+    [[nodiscard]] RewardCollection collect_kill_rewards(RuntimeEntityWorld&);
     [[nodiscard]] bool hardcore() const noexcept { return hardcore_; }
     // original-code giveGold: positive saturation, negative clamp, no wrapping.
     void give_gold(std::int32_t amount) noexcept;
@@ -41,6 +52,10 @@ private:
     friend struct CheckpointAccess;
     [[nodiscard]] InventoryChange change_equipment(InventoryId id, bool remove);
     void refresh_equipment();
+    void refresh_attributes();
+    std::shared_ptr<const ProgressionRules> progression_rules_;
+    ProgressionState progression_;
+    std::array<std::int32_t, 4> base_attributes_{};
     std::int32_t gold_ = 0;
     bool hardcore_ = false;
     PlayerInventory inventory_;

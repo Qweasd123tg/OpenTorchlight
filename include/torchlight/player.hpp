@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/damage.hpp"
+#include "torchlight/progression.hpp"
 #include "torchlight/equipment.hpp"
 #include "torchlight/master_resource_index.hpp"
 #include "torchlight/pak_archive.hpp"
@@ -16,6 +17,7 @@
 namespace torchlight {
 
 struct PlayerPrototype {
+    std::shared_ptr<const ProgressionRules> progression_rules;
     std::int64_t guid = 0;
     std::u16string name;
     std::u16string display_name;

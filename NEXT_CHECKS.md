@@ -1,4 +1,27 @@
-# Следующий проход после автоматического стенда (large-6)
+# Следующий проход после large-8: награды и прокачка
+
+Сначала прочитать `PROGRESSION_REWARDS_RESULT_RU.md` и
+`research/progression-and-world-rewards.md`. Использовать текущий архив целиком:
+формат `.otc` v2 должен сохранять обратное чтение v1.
+
+Первая проверка интегратора — новые графы трёх классов и награды на настоящем
+pak (`original_progression_resource_graphs`), затем прежние assets/render
+сценарии общего `run_application` и новый численный reference
+`original_world_gold_comparison`. В этом проходе настоящих pak/ELF нет.
+
+Далее — проверить ASM обычного XP producer внутри CCharacter при выборе
+EXPERIENCE_MONSTER (экспорт `character.c`, область около 0x83ecd6..0x83f928),
+отдельно `CPlayer::levelUp @0x8f9ad0`; не принимать повреждённую декомпиляцию
+за формулу. Уточнить spawner give-XP gates/owner attribution, реальный
+CLevel+0x1a8 и volatile RNG золота. Только после этого повышать original fidelity.
+
+Следующий независимый игровой блок — активные skills/effects/projectiles,
+расходники/regen или NPC services. Не превращать ranged в instant melee и не
+вшивать один класс/умение ради демонстрации. Skill points сейчас накоплены,
+но pipeline обучения/применения и fame остаются открытыми.
+
+## Исторический план после large-6
+
 
 Актуальная работа: `AUTOMATED_VERIFICATION_RESULT_RU.md`,
 `research/automatic-verification.md`. Ниже сохранены прежние границы large-5,

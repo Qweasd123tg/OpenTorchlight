@@ -1,0 +1,29 @@
+Internal ctest changing into directory: /mnt/data/opentorchlight_work/build-reward-sanitized
+Test project /mnt/data/opentorchlight_work/build-reward-sanitized
+      Start 18: save_checkpoint
+      Start 19: save_fresh_process
+      Start 20: save_atomic_process
+      Start 27: reward_resource_graphs
+ 1/10 Test #27: reward_resource_graphs ...........   Passed    0.04 sec
+      Start 28: reward_unavailable
+ 2/10 Test #28: reward_unavailable ...............   Passed    0.04 sec
+      Start 29: progression_numeric
+ 3/10 Test #29: progression_numeric ..............   Passed    0.02 sec
+      Start 30: reward_cycle
+ 4/10 Test #30: reward_cycle .....................   Passed    0.11 sec
+      Start 31: reward_fresh_process
+ 5/10 Test #18: save_checkpoint ..................   Passed    0.53 sec
+      Start 32: legacy_reward_save_migration
+ 6/10 Test #31: reward_fresh_process .............   Passed    1.03 sec
+      Start 33: world_gold_export_comparison
+ 7/10 Test #19: save_fresh_process ...............   Passed    1.27 sec
+ 8/10 Test #20: save_atomic_process ..............   Passed    1.42 sec
+ 9/10 Test #32: legacy_reward_save_migration .....   Passed    0.94 sec
+10/10 Test #33: world_gold_export_comparison .....   Passed    0.65 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Label Time Summary:
+core    =   6.05 sec*proc (10 tests)
+
+Total Test time (real) =   1.88 sec
