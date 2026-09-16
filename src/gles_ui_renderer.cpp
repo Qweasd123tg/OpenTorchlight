@@ -34,6 +34,17 @@ struct Texture {
     GLuint id = 0;
     int width = 0, height = 0;
 };
+struct FontTexture {
+    GLuint id = 0;
+    UiFont *font = nullptr;
+    int width = 0, height = 0;
+    float screen_width = 0, screen_height = 0;
+};
+std::string upper(std::string s) {
+    for (auto &c : s)
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    return s;
+}
 } // namespace
 struct GlesUiRenderer::Impl {
     const PakArchive *archive;
@@ -42,6 +53,9 @@ struct GlesUiRenderer::Impl {
     GLint screen = -1, color = -1, textured = -1, sampler = -1;
     std::map<std::string, Texture> textures;
     std::set<std::string> failed;
+    std::map<std::string, FontTexture> fonts;
+    std::set<std::string> failed_fonts;
+    int viewport_width = 0, viewport_height = 0;
     explicit Impl(const PakArchive &a, UiResources &r) : archive(&a), resources(&r) {
         const char *vs = "attribute vec2 position; attribute vec2 texcoord; uniform vec2 screen; "
                          "varying vec2 uv; void "
@@ -82,6 +96,8 @@ struct GlesUiRenderer::Impl {
     ~Impl() {
         for (auto &pair : textures)
             glDeleteTextures(1, &pair.second.id);
+        for (auto &pair : fonts)
+            glDeleteTextures(1, &pair.second.id);
         if (buffer)
             glDeleteBuffers(1, &buffer);
         if (program)
@@ -94,6 +110,37 @@ struct GlesUiRenderer::Impl {
                                {r.x, r.y + r.height, uv.x, uv.y + uv.height},
                                {r.x + r.width, r.y, uv.x + uv.width, uv.y},
                                {r.x + r.width, r.y + r.height, uv.x + uv.width, uv.y + uv.height}});
+    }
+    void begin_state(int width, int height) {
+        viewport_width = width;
+        viewport_height = height;
+        glViewport(0, 0, width, height);
+        glDisable(GL_SCISSOR_TEST);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glUseProgram(program);
+        glUniform2f(screen, static_cast<float>(width), static_cast<float>(height));
+        glUniform1i(sampler, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                              reinterpret_cast<const void *>(2 * sizeof(float)));
+    }
+    void begin(int width, int height) {
+        begin_state(width, height);
+        glClearColor(.045F, .055F, .065F, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+    void end() {
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glUseProgram(0);
+        glDisable(GL_BLEND);
     }
     void draw_batch(const std::vector<Vertex> &vertices, std::array<float, 4> tint,
                     GLuint texture = 0) {
@@ -151,6 +198,80 @@ struct GlesUiRenderer::Impl {
             return nullptr;
         }
     }
+    FontTexture *load_font(const std::string &name) {
+        if (name.empty())
+            return nullptr;
+        const auto key = upper(name);
+        if (auto it = fonts.find(key); it != fonts.end())
+            return &it->second;
+        if (failed_fonts.count(key))
+            return nullptr;
+        auto *font = resources->font(key);
+        if (font == nullptr || !font->valid()) {
+            failed_fonts.insert(key);
+            return nullptr;
+        }
+        FontTexture result;
+        result.font = font;
+        result.width = font->atlas_width();
+        result.height = font->atlas_height();
+        glGenTextures(1, &result.id);
+        return &fonts.emplace(key, result).first->second;
+    }
+    // Re-notifies and re-uploads the atlas only when the screen size changed.
+    FontTexture *prepare_font(const std::string &name, int width, int height) {
+        auto *texture = load_font(name);
+        if (texture == nullptr)
+            return nullptr;
+        if (texture->screen_width != static_cast<float>(width) ||
+            texture->screen_height != static_cast<float>(height)) {
+            texture->font->notify_screen_size(static_cast<float>(width),
+                                              static_cast<float>(height));
+            texture->screen_width = static_cast<float>(width);
+            texture->screen_height = static_cast<float>(height);
+            glBindTexture(GL_TEXTURE_2D, texture->id);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, texture->font->atlas_rgba().data());
+        }
+        return texture;
+    }
+    // Returns false when no glyph atlas is available and the prototype
+    // diagnostic glyphs must be used instead.
+    bool text_run(FontTexture *texture, std::string_view text, float x, float y, float max_x,
+                  std::vector<Vertex> &out) {
+        if (texture == nullptr)
+            return false;
+        const float baseline = y + texture->font->ascent();
+        for (const auto character : text) {
+            const auto *glyph = texture->font->glyph(static_cast<unsigned char>(character));
+            if (glyph == nullptr)
+                continue;
+            if (x + glyph->advance > max_x && !out.empty())
+                break;
+            if (glyph->width > 0 && glyph->height > 0)
+                quad(out,
+                     {x + glyph->bearing_x, baseline - glyph->bearing_y, glyph->width,
+                      glyph->height},
+                     {glyph->u0, glyph->v0, glyph->u1 - glyph->u0, glyph->v1 - glyph->v0});
+            x += glyph->advance;
+        }
+        return true;
+    }
+    bool draw_text(const std::string &font_name, std::string_view text, float x, float y,
+                   float max_x, std::array<float, 4> tint) {
+        auto *texture = load_font(font_name);
+        if (texture == nullptr)
+            return false;
+        std::vector<Vertex> vertices;
+        if (!text_run(texture, text, x, y, max_x, vertices))
+            return false;
+        draw_batch(vertices, tint, texture->id);
+        return true;
+    }
     static void text(std::vector<Vertex> &v, std::string_view s, float x, float y, int scale,
                      int width) {
         for (const auto c : s) {
@@ -165,68 +286,179 @@ struct GlesUiRenderer::Impl {
             x += 6 * scale;
         }
     }
+    void draw_image(const UiResolvedWidget &widget, UiRect source_rect) {
+        if (widget.image.empty())
+            return;
+        const auto image = resources->image(widget.image);
+        if (!image)
+            return;
+        auto *texture = load(image->texture_path);
+        if (!texture)
+            return;
+        UiRect region{image->x / texture->width, image->y / texture->height,
+                      image->width / texture->width, image->height / texture->height};
+        if (source_rect.width > 0 && source_rect.height > 0)
+            region = {region.x + region.width * source_rect.x, region.y + region.height * source_rect.y,
+                      region.width * source_rect.width, region.height * source_rect.height};
+        std::vector<Vertex> vertices;
+        quad(vertices, widget.rect, region);
+        draw_batch(vertices, {1, 1, 1, 1}, texture->id);
+    }
     // prototype: fallback palette, diagnostic glyphs and button chrome. The
-    // resource-derived rectangles and images are not a complete CEGUI skin.
+    // resource-derived rectangles, images and fonts are not a complete CEGUI skin.
     void draw(const FrontendFrame &frame, int width, int height) {
-        glViewport(0, 0, width, height);
-        glDisable(GL_SCISSOR_TEST);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_CULL_FACE);
-        glClearColor(.045F, .055F, .065F, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glUseProgram(program);
-        glUniform2f(screen, static_cast<float>(width), static_cast<float>(height));
-        glUniform1i(sampler, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                              reinterpret_cast<const void *>(2 * sizeof(float)));
-        for (const auto &w : frame.decorations) {
-            const auto image = resources->image(w.image);
-            if (!image)
-                continue;
-            auto *texture = load(image->texture_path);
-            if (!texture)
-                continue;
-            if (image->x + image->width > texture->width ||
-                image->y + image->height > texture->height)
-                continue;
-            std::vector<Vertex> v;
-            quad(v, w.rect,
-                 {image->x / texture->width, image->y / texture->height,
-                  image->width / texture->width, image->height / texture->height});
-            draw_batch(v, {1, 1, 1, 1}, texture->id);
+        begin(width, height);
+        for (const auto &w : frame.decorations)
+            draw_image(w, {});
+        if (!draw_text("FrizQuadrataBig", frame.title, 24, 16, static_cast<float>(width) - 24,
+                       {.92F, .90F, .82F, 1})) {
+            std::vector<Vertex> letters;
+            text(letters, frame.title, 24, 20, width >= 950 ? 2 : 1, width);
+            draw_batch(letters, {.92F, .90F, .82F, 1});
         }
-        const int scale = width >= 950 ? 2 : 1;
-        std::vector<Vertex> letters;
-        text(letters, frame.title, 24, 20, scale, width);
         for (const auto &button : frame.buttons) {
-            std::vector<Vertex> v;
-            quad(v, button.rect);
-            draw_batch(v, button.enabled
-                              ? (button.focused ? std::array<float, 4>{.32F, .30F, .21F, .95F}
-                                                : std::array<float, 4>{.12F, .15F, .17F, .95F})
-                              : std::array<float, 4>{.08F, .09F, .1F, .85F});
-            text(letters, (button.selected ? "[X] " : "") + button.text, button.rect.x + 8,
-                 button.rect.y + (button.rect.height - 7 * scale) * .5F, scale,
-                 static_cast<int>(
-                     std::min(static_cast<float>(width), button.rect.x + button.rect.width)));
+            const std::string image_name =
+                button.hover_image.empty() || !button.focused ? button.image : button.hover_image;
+            if (!image_name.empty()) {
+                UiResolvedWidget background;
+                background.rect = button.rect;
+                background.image = image_name;
+                draw_image(background, {});
+            } else {
+                std::vector<Vertex> v;
+                quad(v, button.rect);
+                draw_batch(v, button.enabled
+                                  ? (button.focused ? std::array<float, 4>{.32F, .30F, .21F, .95F}
+                                                    : std::array<float, 4>{.12F, .15F, .17F, .95F})
+                                  : std::array<float, 4>{.08F, .09F, .1F, .85F});
+            }
+            std::vector<Vertex> letters;
+            auto *texture = prepare_font(
+                button.font.empty() ? "FrizQuadrata" : button.font, width, height);
+            const float font_height =
+                texture != nullptr ? texture->font->line_height() : 7.0F;
+            const float text_y = button.rect.y + (button.rect.height - font_height) * .5F;
+            if (texture != nullptr &&
+                text_run(texture, button.text, button.rect.x + 8, text_y,
+                         button.rect.x + button.rect.width, letters)) {
+                draw_batch(letters, {.95F, .93F, .86F, 1}, texture->id);
+            } else {
+                text(letters, (button.selected ? "[X] " : "") + button.text, button.rect.x + 8,
+                     button.rect.y + (button.rect.height - 7) * .5F, 1,
+                     static_cast<int>(std::min(static_cast<float>(width),
+                                               button.rect.x + button.rect.width)));
+                draw_batch(letters, {.92F, .90F, .82F, 1});
+            }
         }
         float y = 48.0F;
+        auto *note_font = prepare_font("SerifSmall", width, height);
         for (const auto &line : frame.notes) {
-            text(letters, line.text, 24, y, scale, width);
-            y += 9 * scale;
+            std::vector<Vertex> letters;
+            if (note_font != nullptr &&
+                text_run(note_font, line.text, 24, y, static_cast<float>(width) - 24, letters))
+                draw_batch(letters, {.88F, .86F, .78F, 1}, note_font->id);
+            else {
+                text(letters, line.text, 24, y, width >= 950 ? 2 : 1, width);
+                draw_batch(letters, {.92F, .90F, .82F, 1});
+            }
+            y += note_font != nullptr ? std::max(9.0F, note_font->font->line_height() + 2.0F)
+                                      : 9.0F * (width >= 950 ? 2 : 1);
         }
-        draw_batch(letters, {.92F, .90F, .82F, 1});
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glUseProgram(0);
-        glDisable(GL_BLEND);
+        end();
+    }
+    // Composites over the current scene; never clears the framebuffer.
+    void draw_hud(const UiHudFrame &frame, int width, int height) {
+        begin_state(width, height);
+        for (const auto &w : frame.images)
+            draw_image(w, {});
+        for (const auto &bar : frame.bars) {
+            auto rect = bar.widget.rect;
+            if (bar.vertical) {
+                const float full = rect.height;
+                rect.height = full * bar.fraction;
+                if (bar.bottom_anchored)
+                    rect.y += full - rect.height;
+            } else
+                rect.width *= bar.fraction;
+            if (rect.width <= 0 || rect.height <= 0)
+                continue;
+            auto widget = bar.widget;
+            widget.rect = rect;
+            draw_image(widget, {});
+        }
+        for (const auto &w : frame.texts) {
+            const auto font_name = w.font.empty() ? "SerifSmall" : w.font;
+            auto *texture = prepare_font(font_name, width, height);
+            std::vector<Vertex> letters;
+            if (texture != nullptr &&
+                text_run(texture, w.text, w.rect.x, w.rect.y, w.rect.x + w.rect.width, letters))
+                draw_batch(letters, {.95F, .93F, .86F, 1}, texture->id);
+            else {
+                text(letters, w.text, w.rect.x, w.rect.y, width >= 950 ? 2 : 1, width);
+                draw_batch(letters, {.95F, .93F, .86F, 1});
+            }
+        }
+        end();
+    }
+    // The window frame geometry stays prototype; text uses the resource font.
+    void draw_overlay(const std::vector<InventoryViewLine> &lines, bool inventory_open, int width,
+                      int height) {
+        const auto fill_rectangle = [](int x, int y, int w, int h, float r, float g, float b) {
+            glScissor(x, y, w, h);
+            glClearColor(r, g, b, 1.0F);
+            glClear(GL_COLOR_BUFFER_BIT);
+        };
+        begin_state(width, height);
+        glEnable(GL_SCISSOR_TEST);
+        const int top_height = std::max(54, height / 12);
+        fill_rectangle(0, height - top_height, width, top_height, 0.18F, 0.105F, 0.035F);
+        const int status_size = std::max(12, std::min(width, height) / 45);
+        fill_rectangle(status_size, height - top_height / 2 - status_size / 2, status_size,
+                       status_size, 0.72F, 0.43F, 0.10F);
+        const int left = 24;
+        int top = height - 12;
+        if (inventory_open) {
+            fill_rectangle(12, 12, std::max(0, width - 24), std::max(0, height - 24), 0.075F,
+                           0.070F, 0.060F);
+            top = height - 26;
+        }
+        auto *texture = prepare_font("SerifSmall", width, height);
+        const float line_height =
+            texture != nullptr ? std::max(11.0F, texture->font->line_height() + 3.0F) : 11.0F;
+        for (const auto &line : lines) {
+            if (static_cast<float>(top) - line_height < 12)
+                break;
+            const int baseline_top = top - static_cast<int>(line_height) + 3;
+            if (line.selected)
+                fill_rectangle(left - 6, baseline_top, std::max(0, width - 2 * left),
+                               static_cast<int>(line_height), 0.28F, 0.20F, 0.08F);
+            std::vector<Vertex> letters;
+            if (texture != nullptr &&
+                text_run(texture, line.text, static_cast<float>(left),
+                         static_cast<float>(top - static_cast<int>(line_height) + 3),
+                         static_cast<float>(width - left), letters))
+                draw_batch(letters, {.93F, .88F, .72F, 1}, texture->id);
+            else {
+                const int scale = width >= 950 ? 2 : 1;
+                int x = left;
+                for (const char c : line.text.substr(
+                         0, static_cast<std::size_t>(std::max(0, width - 2 * left) / (6 * scale)))) {
+                    const auto glyph = inventory_glyph(c);
+                    for (int row = 0; row < 7; ++row)
+                        for (int column = 0; column < 5; ++column)
+                            if (glyph[row] & (1U << (4 - column)))
+                                fill_rectangle(x + column * scale,
+                                               top - (row + 1) * scale, scale, scale, 0.93F,
+                                               0.88F, 0.72F);
+                    x += 6 * scale;
+                }
+            }
+            top -= static_cast<int>(line_height);
+        }
+        glDisable(GL_SCISSOR_TEST);
+        end();
+        if (glGetError() != GL_NO_ERROR)
+            throw std::runtime_error("OpenGL ES failed while drawing the scene preview");
     }
 };
 GlesUiRenderer::GlesUiRenderer(const PakArchive &a, UiResources &r)
@@ -236,51 +468,61 @@ GlesUiRenderer::~GlesUiRenderer() = default;
 void GlesUiRenderer::draw(const FrontendFrame &f, int w, int h) {
     impl_->draw(f, w, h);
 }
-void draw_inventory_overlay(const std::vector<InventoryViewLine>& lines,
-                            bool inventory_open, int width, int height) {
+void GlesUiRenderer::draw_hud(const UiHudFrame &f, int w, int h) {
+    impl_->draw_hud(f, w, h);
+}
+void GlesUiRenderer::draw_overlay(const std::vector<InventoryViewLine> &lines, bool open, int w,
+                                  int h) {
+    impl_->draw_overlay(lines, open, w, h);
+}
+void draw_inventory_overlay(const std::vector<InventoryViewLine> &lines, bool inventory_open,
+                            int width, int height) {
     const auto fill_rectangle = [](int x, int y, int w, int h, float r, float g, float b) {
-        glScissor(x, y, w, h); glClearColor(r, g, b, 1.0F); glClear(GL_COLOR_BUFFER_BIT);
+        glScissor(x, y, w, h);
+        glClearColor(r, g, b, 1.0F);
+        glClear(GL_COLOR_BUFFER_BIT);
     };
-        glEnable(GL_SCISSOR_TEST);
-        const int top_height = std::max(54, height / 12);
-        fill_rectangle(0, height - top_height, width, top_height, 0.18F, 0.105F, 0.035F);
-        const int status_size = std::max(12, std::min(width, height) / 45);
-        fill_rectangle(status_size, height - top_height / 2 - status_size / 2, status_size,
-                       status_size, 0.72F, 0.43F, 0.10F);
-        // prototype: diagnostic overlay geometry/colors, not original UI metrics.
-        const int scale = width >= 950 ? 2 : 1;
-        const int line_height = 11 * scale;
-        const int left = 24;
-        int top = height - 12;
-        if (inventory_open) {
-            fill_rectangle(12, 12, std::max(0, width - 24), std::max(0, height - 24),
-                           0.075F, 0.070F, 0.060F);
-            top = height - 26;
-        }
-        for (const auto& line : lines) {
-            if (top - line_height < 12) break;
-            if (line.selected)
-                fill_rectangle(left - 6, top - line_height + 3,
-                               std::max(0, width - 2 * left), line_height,
-                               0.28F, 0.20F, 0.08F);
-            const auto columns = static_cast<std::size_t>(std::max(0, width - 2 * left) / (6 * scale));
-            int x = left;
-            for (const char c : line.text.substr(0, columns)) {
-                const auto glyph = torchlight::inventory_glyph(c);
-                for (int row = 0; row < 7; ++row) {
-                    for (int column = 0; column < 5; ++column) {
-                        if (glyph[row] & (1U << (4 - column)))
-                            fill_rectangle(x + column * scale, top - (row + 1) * scale,
-                                           scale, scale, 0.93F, 0.88F, 0.72F);
-                    }
+    glEnable(GL_SCISSOR_TEST);
+    const int top_height = std::max(54, height / 12);
+    fill_rectangle(0, height - top_height, width, top_height, 0.18F, 0.105F, 0.035F);
+    const int status_size = std::max(12, std::min(width, height) / 45);
+    fill_rectangle(status_size, height - top_height / 2 - status_size / 2, status_size,
+                   status_size, 0.72F, 0.43F, 0.10F);
+    // prototype: diagnostic overlay geometry/colors, not original UI metrics.
+    const int scale = width >= 950 ? 2 : 1;
+    const int line_height = 11 * scale;
+    const int left = 24;
+    int top = height - 12;
+    if (inventory_open) {
+        fill_rectangle(12, 12, std::max(0, width - 24), std::max(0, height - 24), 0.075F, 0.070F,
+                       0.060F);
+        top = height - 26;
+    }
+    for (const auto &line : lines) {
+        if (top - line_height < 12)
+            break;
+        if (line.selected)
+            fill_rectangle(left - 6, top - line_height + 3, std::max(0, width - 2 * left),
+                           line_height, 0.28F, 0.20F, 0.08F);
+        const auto columns =
+            static_cast<std::size_t>(std::max(0, width - 2 * left) / (6 * scale));
+        int x = left;
+        for (const char c : line.text.substr(0, columns)) {
+            const auto glyph = torchlight::inventory_glyph(c);
+            for (int row = 0; row < 7; ++row) {
+                for (int column = 0; column < 5; ++column) {
+                    if (glyph[row] & (1U << (4 - column)))
+                        fill_rectangle(x + column * scale, top - (row + 1) * scale, scale, scale,
+                                       0.93F, 0.88F, 0.72F);
                 }
-                x += 6 * scale;
             }
-            top -= line_height;
+            x += 6 * scale;
         }
-        glDisable(GL_SCISSOR_TEST);
-        if (glGetError() != GL_NO_ERROR) {
-            throw std::runtime_error("OpenGL ES failed while drawing the scene preview");
-        }
+        top -= line_height;
+    }
+    glDisable(GL_SCISSOR_TEST);
+    if (glGetError() != GL_NO_ERROR) {
+        throw std::runtime_error("OpenGL ES failed while drawing the scene preview");
+    }
 }
 } // namespace torchlight

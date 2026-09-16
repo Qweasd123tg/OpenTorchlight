@@ -5,7 +5,60 @@
 с Android 16 и получит сенсорное управление. Требования и исходные находки:
 [PORTING.md](PORTING.md).
 
-## Текущий проход: развитие персонажа и мировые награды (large-8)
+## Текущий проход: оригинальный UI — шрифты, HUD и кнопки меню
+
+Вместо прототипного 5x7-шрифта и диагностических прямоугольников UI берёт
+ресурсы оригинала:
+
+* **Шрифты**: `<Font>` CEGUI 0.6.2 (`media/UI/*.font`) + TTF через FreeType.
+  Масштаб повторяет pinned `libCEGUIBase.so.1`: per-axis `AutoScaled` из
+  `Font::notifyScreenResolution @0xd18e0`, `Size*64` и `FT_Set_Char_Size` из
+  `FreeTypeFont::updateFont @0xe07b0`. Проверка `original_ui_font_resource`:
+  **7 шрифтов, 665 ASCII-глифов** на настоящем pak.
+* **HUD**: `bottomhud.layout` рисуется целиком — панели, рамки, полосы
+  HP/mana/XP (доли из состояния игрока), подписи зоны и хоткеев. Поведение
+  полос снято чтением ASM `updateIngameUI @0xab8100`; точная формула якоря —
+  `inferred`.
+* **Меню**: подписи кнопок и их картинки (`ButtonStandardRed` и состояния)
+  читаются из оригинального `GuiLook.looknfeel`.
+
+**Границы:** это `resource-derived`/`library-derived` повторение, не побитовый
+кадр: полный Falagard (состояния, 9-slice, тени, клиппинг) не реализован,
+растр глифов зависит от версии FreeType, а у оригинала OGRE + CEGUI OpenGL.
+`desktop` по-прежнему NOT RUN. Детали: [ui-visuals](research/ui-visuals.md).
+
+## Предыдущий этап: интеграция large-8 и восстановление XP producer
+
+Патч large-7 → large-8 применён интегратором: дерево побайтово совпало с
+выданным ZIP, все записи `CHECKSUMS.sha256` валидны. На машине интегратора с
+настоящим read-only pak (`8650ad75…`) и закреплённым ELF (`91b41ae9…`) прогнаны
+все группы: **core 41/41, assets 30/30, reference 11/11, render 5/5**;
+`desktop` — NOT RUN без тестового композитора.
+
+Обычный XP producer восстановлен по машинному коду. `CCharacter::setLevel`
+@0x83ecdd..0x83ecfd и `CCharacter::makeChampion` @0x85191b..0x85192e вычисляют
+`trunc((g / 100) * g)`, где `g` — значение `EXPERIENCE_MONSTER` (champion —
+`EXPERIENCE_CHAMPIONMONSTER`) на уровне юнита; поле данных `XP` служит только
+ненулевым гейтом. Ghidra-вывод `(fVar23 / 100) * fVar23` верен, а не повреждён:
+второй множитель — то же значение графа, не `UNIT.XP`. Порт переведён с
+`inferred` на `original_monster_experience`; проверки
+`monster_experience_export_comparison` и
+`original_monster_experience_comparison` сравнили **20 031** скалярный случай с
+неизменёнными инструкциями закреплённого ELF и подтвердили делитель `100.0f`.
+
+**Граница:** это проверка скалярной формулы, а не всего `setLevel`, spawner или
+церемонии выдачи награды. `CPlayer::levelUp @0x8f9ad0`, spawner give-XP
+гейты/атрибуция, ранг `CLevel+0x1a8` и volatile RNG золота остаются открытыми;
+связь gold-rank с portable spawn-level и использование мирового RNG —
+по-прежнему `prototype`. Полная исходная прокачка, fame, skills, regen, ranged
+и кампания не объявляются готовыми.
+
+Подробности: [восстановление XP producer](XP_PRODUCER_RECOVERY_RU.md),
+[результат large-8](PROGRESSION_REWARDS_RESULT_RU.md),
+[доказательства и ограничения](research/progression-and-world-rewards.md),
+[формат сохранений](research/checkpoint-format.md).
+
+## Предыдущий этап: развитие персонажа и мировые награды (large-8, авторская среда)
 
 В общий `src/application.cpp` подключена цепочка: смертельный HIT игрока →
 XP → несколько уровней при достаточной награде → HP/mana и очки → золото из
@@ -17,13 +70,14 @@ XP → несколько уровней при достаточной нагр�
 исторических наград, отсутствовавшие в v1, не выдумываются и не перебрасываются.
 Бонусы XP ограничены уже поддержанными constant passive effects.
 
-**Граница:** численная формула золота сравнена с сохранёнными машинными
-инструкциями; XP producer остаётся `inferred`, связь gold-rank с portable
-spawn-level и использование мирового RNG — `prototype`. Полная исходная
-прокачка, fame, skills, regen, ranged и вся кампания не объявляются готовыми.
-В этой загрузке нет настоящего pak/ELF; новые изменения проверяются на
-авторских данных и экспортированных численных участках. Исторические прогоны
-настоящего pak ниже не являются проверкой нового прохода.
+**Граница (на момент прохода):** численная формула золота сравнена с
+сохранёнными машинными инструкциями; XP producer был `inferred` (восстановлен
+в проходе выше), связь gold-rank с portable spawn-level и использование мирового
+RNG — `prototype`. Полная исходная прокачка, fame, skills, regen, ranged и вся
+кампания не объявляются готовыми. В авторской среде не было настоящего pak/ELF;
+тогдашние изменения проверялись на авторских данных и экспортированных численных
+участках. Исторические прогоны настоящего pak ниже не являются проверкой
+того прохода.
 
 Подробности: [результат large-8](PROGRESSION_REWARDS_RESULT_RU.md),
 [доказательства и ограничения](research/progression-and-world-rewards.md),

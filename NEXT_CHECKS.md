@@ -1,19 +1,88 @@
-# Следующий проход после large-8: награды и прокачка
+# Следующий проход после UI-этапа (шрифты/HUD)
+
+**Текущее задание: `GPT_PRO_UI_TASK.md`** — добить интерфейс (главный экран,
+меню New/Load, пауза, инвентарь, бит-в-бит сверка шрифтов, Falagard,
+`updateIngameUI @0xab8100`). Ниже — полный контекст и остаток.
+
+Состояние входа: core 41/41, assets 31/31, reference 11/11, render 5/5 на
+настоящих pak+ELF. `CHECKSUMS.sha256` валиден. Читать целиком этот файл,
+`README.md`, `research/ui-visuals.md`, `research/progression-and-world-rewards.md`,
+`research/remaining-work-inventory.md`; карта остатка —
+`python3 tools/coverage_map.py --check --next 25`.
+
+Сделано в этом проходе: оригинальные `<Font>` CEGUI 0.6.2 через FreeType,
+HUD из `bottomhud.layout` с полосами HP/mana/XP, картинки кнопок из
+`GuiLook.looknfeel`, подписи из layout. Проверки:
+`original_ui_font_resource` (настоящий pak), HUD-кадры в `gles_ui_headless`.
+
+## Первый приоритет: визуал (продолжить)
+
+1. Сверить атлас глифов с оригинальным `CEGUI::FreeTypeFont` изолированным
+   вызовом (бит-в-бит по возможности) и закрепить DPI-выбор (сейчас `inferred`).
+2. Достроить Falagard-подмножество: состояния кнопок, Window frame составные
+   части (`WindowTopLeft` и т.д.), текстовые тени; затем `inventorymenu.layout`
+   (рамка, слоты, `itemicons`/`UIIcons`) и полный `updateSlots`.
+3. `CGameUI::updateIngameUI @0xab8100`: декомпилировать/выгрузить участок полос
+   (`0xab885b..0xab8974`) и заменить `inferred` формулы позиции/размера.
+4. `--desktop` harness (тестовый композитор) остаётся NOT RUN.
+
+## Полный список открытых моментов (выбирать по приоритету задания)
+
+**Fidelity наград/прокачки:** `CPlayer::levelUp @0x8f9ad0`; spawner give-XP
+гейты и атрибуция владельцу; fame `CCharacter::awardFame @0x83c9c0` и
+`fameGate`; volatile RNG золота; ранг `CLevel+0x1a8`; champion-путь
+(`makeChampion` уже снят, спавн чемпионов — нет).
+
+**Бой:** ranged/projectile по `performAttack @0x847280`, `fireMissiles
+@0x87f120`, `CWeaponMissileDescriptor @0x602dc0`, `equipment+0x400`, muzzle
+`0.8`, pitch `5.0`; полный `CEffect` lifecycle/conditions/stacking/remove;
+factions/AI flags/skill selection/retarget/группы; interrupt, секторы/AOE,
+stun/knockback/debuff; death-события игрока/питомца/монстров.
+
+**Умения:** loader/learn/rank/cast/cost/cooldown/animation/target/missile/AOE —
+все три класса через шаблоны данных (407 файлов `media/skills/`); mana/health
+regen; расходники/зелья и stack.
+
+**Предметы/экономика:** treasure rank/RNG/rarity и вложенные spawn semantics;
+affix/requirements/identification/sockets/stack; все слоты/dual-wield;
+inventory grids; merchant buy/sell/stock/prices, enchant, combine, stash.
+
+**NPC/квесты/питомец:** `CCharacter::inInteractionRange @0x8244a0` с f32
+`0xfce4b8/bc/c0`; `CInteract::interactWithUnit @0x986ff0`;
+`CTriggerUnit::interact @0x9095c0`; quest loader/state/requirements/dialog/
+rewards/persistence; pet spawn/follow/combat/inventory/send-town/save.
+
+**Мир/кампания:** полный layout commands/timelines/triggers и re-entrancy;
+chests/doors/breakables/traps/shrines/portals; `CDungeon::loadDungeon` и
+`performWarp @0x58d110` (parent-route, `CDungeon+0x80`); все 35 этажей, боссы,
+финал; difficulty/rank/theme/entry modes; volatile floors.
+
+**Save/presentation/platform:** оригинальный persistence (timeline/quest/pet/
+skills), backup/delete UX; audio banks/music; particles/FX/decals/lights;
+localization/settings/splash; Android lifecycle/touch/APK — только после ПК.
+
+Правило прежнее: не поднимать допуски и не отключать проверки; каждая новая
+цепочка — resource/ASM-доказательство и CTest, статусы
+`original-code/library-derived/resource-derived/inferred/prototype`.
+
+## Исторический план: награды и прокачка (после large-8)
 
 Сначала прочитать `PROGRESSION_REWARDS_RESULT_RU.md` и
 `research/progression-and-world-rewards.md`. Использовать текущий архив целиком:
 формат `.otc` v2 должен сохранять обратное чтение v1.
 
-Первая проверка интегратора — новые графы трёх классов и награды на настоящем
-pak (`original_progression_resource_graphs`), затем прежние assets/render
-сценарии общего `run_application` и новый численный reference
-`original_world_gold_comparison`. В этом проходе настоящих pak/ELF нет.
+Проверка интегратора на настоящем pak/ELF выполнена: core 40/40, assets 30/30,
+render 5/5, reference 10/10, включая `original_progression_resource_graphs` и
+`original_world_gold_comparison`.
 
-Далее — проверить ASM обычного XP producer внутри CCharacter при выборе
-EXPERIENCE_MONSTER (экспорт `character.c`, область около 0x83ecd6..0x83f928),
-отдельно `CPlayer::levelUp @0x8f9ad0`; не принимать повреждённую декомпиляцию
-за формулу. Уточнить spawner give-XP gates/owner attribution, реальный
-CLevel+0x1a8 и volatile RNG золота. Только после этого повышать original fidelity.
+Обычный XP producer проверен по машинному коду: `CCharacter::setLevel`
+@0x83ecdd..0x83ecfd и `CCharacter::makeChampion` @0x85191b..0x85192e вычисляют
+`trunc((g / 100) * g)`, поле данных `XP` — только ненулевой гейт. Порт переведён
+на `original_monster_experience`, добавлен differential-тест
+`monster_experience_export_comparison` / `original_monster_experience_comparison`
+(20 031 случай). Открыто: `CPlayer::levelUp @0x8f9ad0`, spawner give-XP
+gates/owner attribution, реальный CLevel+0x1a8 и volatile RNG золота. Только
+после этого повышать original fidelity по этим участкам.
 
 Следующий независимый игровой блок — активные skills/effects/projectiles,
 расходники/regen или NPC services. Не превращать ranged в instant melee и не

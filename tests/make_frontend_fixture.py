@@ -15,6 +15,7 @@ def doc(body):
 def png():
     def chunk(tag,data): return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
     return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',2,2,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b'\0'+b'\xff\x80\0\xff'*2+b'\0'+b'\0\x40\xff\xff'*2))+chunk(b'IEND',b'')
+
 def main():
     path=Path(sys.argv[1]);path.parent.mkdir(parents=True,exist_ok=True);write_fixture(path)
     background=window('Background',pos=(0,0),size=(1024,768),extra='<Property Name="Image" Value="set:Author image:Background"/>')

@@ -1,5 +1,6 @@
 #pragma once
 #include "torchlight/pak_archive.hpp"
+#include "torchlight/ui_font.hpp"
 #include <map>
 #include <optional>
 
@@ -37,12 +38,21 @@ struct UiImage {
     std::string texture_path;
     float x = 0, y = 0, width = 0, height = 0;
 };
+// Bounded GuiLook.looknfeel extraction for widget types this renderer draws.
+struct UiWidgetImages {
+    std::string normal, hover, pushed;
+};
 class UiResources {
   public:
     explicit UiResources(const PakArchive &archive) : archive_(&archive) {
     }
     [[nodiscard]] const UiLayout *layout(const std::string &path);
     [[nodiscard]] std::optional<UiImage> image(const std::string &reference);
+    // Case-insensitive lookup by the original CEGUI <Font Name=...>. The
+    // returned cache is mutated by rasterization; callers own the screen size.
+    [[nodiscard]] UiFont *font(const std::string &name);
+    // WidgetLook PropertyDefinition initialValue from media/UI/GuiLook.looknfeel.
+    [[nodiscard]] std::optional<UiWidgetImages> widget_images(const std::string &type);
     [[nodiscard]] const std::vector<std::string> &diagnostics() const noexcept {
         return diagnostics_;
     }
@@ -51,7 +61,9 @@ class UiResources {
     const PakArchive *archive_;
     std::map<std::string, UiLayout> layouts_;
     std::map<std::string, UiImage> images_;
+    std::map<std::string, UiFont> fonts_;
+    std::map<std::string, UiWidgetImages> widget_images_;
     std::vector<std::string> diagnostics_;
-    bool images_loaded_ = false;
+    bool images_loaded_ = false, fonts_loaded_ = false, looknfeel_loaded_ = false;
 };
 } // namespace torchlight

@@ -20,6 +20,8 @@ struct FrontendClass {
 };
 struct FrontendButton {
     std::string id, text;
+    // Original skin references resolved from the looknfeel when available.
+    std::string image, hover_image, font;
     UiRect rect;
     bool enabled = true, focused = false, selected = false;
 };

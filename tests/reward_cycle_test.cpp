@@ -33,7 +33,10 @@ std::uint64_t spawn_item(test_fixture::World& f, const char16_t* name) {
 void numeric() {
     require(evaluated_world_gold(19.2F,125) == 24, "gold operation order / ceil");
     require(evaluated_world_gold(0,100) == 0 && evaluated_world_gold(100,0) == 0, "zero gold");
-    require(inferred_monster_experience(200.9F,125) == 251, "inferred XP scaling / trunc");
+    require(original_monster_experience(200.9F) == 403, "original XP scaling / trunc");
+    require(original_monster_experience(100) == 100 && original_monster_experience(150) == 225 &&
+        original_monster_experience(0) == 0, "original XP square/100 curve");
+    require(experience_with_bonus(original_monster_experience(200.9F),0)==403, "XP bonus baseline");
     require(checked_reward_integer(100.75F,false)==100 && checked_reward_integer(100.75F,true)==101,
         "gate trunc and point ceil conflated");
     require(experience_with_bonus(1,.1F)==2 && experience_with_bonus(100,12.5F)==113, "ceil XP bonus");
@@ -43,6 +46,10 @@ void numeric() {
     }
     rejects([]{static_cast<void>(evaluated_world_gold(2147483648.F,100));},"gold int32 overflow accepted");
     rejects([]{static_cast<void>(experience_with_bonus(1,std::numeric_limits<float>::infinity()));},"invalid XP bonus accepted");
+    rejects([]{static_cast<void>(original_monster_experience(-1.F));},"negative XP graph accepted");
+    rejects([]{static_cast<void>(original_monster_experience(std::numeric_limits<float>::quiet_NaN()));},
+        "NaN XP graph accepted");
+    rejects([]{static_cast<void>(original_monster_experience(1e30F));},"XP int32 overflow accepted");
     ProgressionRules rules({{100,0,0,100,31},{250,3,1,151,41},{500,4,2,221,51},{1000,5,3,300,61}});
     require(rules.gate(0)==0 && rules.gate(999)==1000 && rules.maximum_level()==4, "gate clamp/count");
     rejects([&]{static_cast<void>(rules.gate(-1));},"negative graph level");
@@ -84,7 +91,7 @@ struct Cycle {
         require(armor && player.equip(armor)==InventoryChange::changed,"equip mana armor");
         require(player.health().maximum_mana()==36 && player.health().spend_mana(20),"initial gear mana");
         f.spawn(u"REWARD_DUMMY"); corpse=f.world.entities().back().id;
-        require(f.world.find(corpse)->experience_reward==251,"resource XP not evaluated at spawn");
+        require(f.world.find(corpse)->experience_reward==403,"resource XP not evaluated at spawn");
         require(player.combat().select_target(f.world,{},1),"reward target selection");
         require(player.combat().update(0,{},f.world).state==CombatState::attacking,"reward action not started");
         const auto execution=player.combat().action().id();
@@ -95,7 +102,7 @@ struct Cycle {
         require(hit.state==CombatState::killed && f.world.find(corpse)->player_kill,"lethal HIT did not attribute credit");
         require(player.progression().experience==0,"reward applied before safe phase");
         const auto reward=player.collect_kill_rewards(f.world);
-        require(reward.kills==1 && reward.levels==2 && reward.experience==251,"kill-to-progression chain");
+        require(reward.kills==1 && reward.levels==2 && reward.experience==403,"kill-to-progression chain");
         require(player.progression().level==3 && player.progression().stat_points==7 && player.progression().skill_points==3,
                 "new levels/points incorrect");
         require(player.health().health()==221 && player.health().maximum_health()==221,"level-up HP graph/refill");
@@ -103,7 +110,7 @@ struct Cycle {
         require(player.combat().action().active() && player.combat().action().id()==execution,
                 "level-up replaced active attack");
         require(player.combat().perform_attack(events.front(),{},f.world,f.logic).damage==0,"replayed HIT reissued damage");
-        require(player.collect_kill_rewards(f.world).kills==0 && player.progression().experience==251,"duplicate XP");
+        require(player.collect_kill_rewards(f.world).kills==0 && player.progression().experience==403,"duplicate XP");
         require(!player.allocate_attribute(0),"allocation rewrites active action");
         player.combat().advance_animation(2); player.combat().finish_animation_frame();
         require(!player.combat().attack_in_progress(),"attack never finished");
@@ -154,13 +161,13 @@ void restored(const char* path, const CampaignCheckpoint& c) {
     Cycle r(path);
     auto player=CheckpointAccess::restore_player(r.proto,c.player,1,&r.f.hierarchy);
     CheckpointAccess::restore_floor(c.floors.front(),r.f.world,r.f.logic,r.enemies);
-    require(player.progression().level==3 && player.progression().experience==251 && player.progression().stat_points==3,
+    require(player.progression().level==3 && player.progression().experience==403 && player.progression().stat_points==3,
             "saved progression lost");
     require(player.progression().allocated==std::array<std::int32_t,4>{1,1,1,1},"allocated points not persisted");
     require(player.health().maximum_health()==221 && player.health().maximum_mana()==59 && player.gold()==133,
             "loaded vitals/gear/wallet changed");
     const auto before=CheckpointAccess::capture(r.f.world);
-    require(player.collect_kill_rewards(r.f.world).kills==0 && player.progression().experience==251,"load repeated death XP");
+    require(player.collect_kill_rewards(r.f.world).kills==0 && player.progression().experience==403,"load repeated death XP");
     bool found=false;
     for(const auto& e:before.entities) {
         const auto* actual=r.f.world.find(e.id);

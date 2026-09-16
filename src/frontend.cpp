@@ -210,6 +210,7 @@ FrontendFrame Frontend::frame(int width, int height) {
             status_ = e.what();
         }
     std::map<std::string, UiRect> originals;
+    std::map<std::string, std::string> original_text, original_font, original_type;
     for (const auto &w : widgets) {
         if (!w.visible)
             continue;
@@ -247,8 +248,12 @@ FrontendFrame Frontend::frame(int width, int height) {
                     if (callback == "GUISELECT" + number(i + 1))
                         action = "slot-" + number(scroll_ + i);
         }
-        if (!action.empty() && w.enabled && w.rect.width > 0 && w.rect.height > 0)
+        if (!action.empty() && w.enabled && w.rect.width > 0 && w.rect.height > 0) {
             originals[action] = w.rect;
+            original_text[action] = w.text;
+            original_font[action] = w.font;
+            original_type[action] = w.type;
+        }
         if (w.callback.empty() && !w.image.empty())
             frame.decorations.push_back(w);
     }
@@ -261,7 +266,20 @@ FrontendFrame Frontend::frame(int width, int height) {
                     420 * scale, 40 * scale};
         if (const auto it = originals.find(id); it != originals.end())
             rect = it->second;
-        frame.buttons.push_back({std::move(id), std::move(label), rect, enabled, false, selected});
+        if (const auto it = original_text.find(id);
+            it != original_text.end() && !it->second.empty() && it->second != "1")
+            label = it->second;
+        FrontendButton button{std::move(id), std::move(label), {}, {}, {}, rect, enabled, false,
+                              selected};
+        if (const auto it = original_type.find(id); it != original_type.end()) {
+            if (const auto images = resources_->widget_images(it->second)) {
+                button.image = images->normal;
+                button.hover_image = images->hover;
+            }
+        }
+        if (const auto it = original_font.find(id); it != original_font.end())
+            button.font = it->second;
+        frame.buttons.push_back(std::move(button));
     };
     if (page_ == FrontendPage::main) {
         add("new", "NEW CHARACTER");

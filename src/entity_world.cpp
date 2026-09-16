@@ -227,11 +227,12 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
         if (const auto* entry = definitions_->archive().find_normalized(entity.mesh_path))
             entity.mesh_path = entry->name;
         entity.treasure = load_treasure_profile(*definition);
-        if (experience_graph_) {
-            // inferred ordinary-monster producer; see progression-and-world-rewards.md.
-            entity.experience_reward = inferred_monster_experience(
-                experience_graph_->value(static_cast<float>(spawn_level_)),
-                optional_number(*definition, u"XP", 0));
+        // CCharacter::unitInit @0x852c4d reads unit data XP only as a nonzero
+        // gate; CCharacter::setLevel @0x83ecea then overwrites the reward with
+        // trunc((EXPERIENCE_MONSTER(level)/100) * graph). Zero stays unknown.
+        if (experience_graph_ && optional_number(*definition, u"XP", 0) != 0) {
+            entity.experience_reward = original_monster_experience(
+                experience_graph_->value(static_cast<float>(spawn_level_)));
         }
         const auto minimum_health_percent =
             optional_number(*definition, u"MINHP", 1.0F);

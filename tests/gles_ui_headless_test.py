@@ -8,6 +8,7 @@ from pathlib import Path
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--probe',required=True);parser.add_argument('--fixture',required=True)
+    parser.add_argument('--hud-fixture',required=True)
     parser.add_argument('--output',type=Path)
     a=parser.parse_args();os.environ.setdefault('LIBGL_ALWAYS_SOFTWARE','1')
     try:e=C.CDLL('libEGL.so.1')
@@ -59,7 +60,29 @@ def main():
                 rgb=b''.join(bytes(row[i:i+3]) for row in rows for i in range(0,len(row),4))
                 a.output.write_bytes(f'P6\n{w} {h}\n255\n'.encode()+rgb)
         assert results[0]!=results[2] and results[2]!=results[3],'page transitions render identical images'
-        print('4 real GLES UI frames passed: atlas crop/orientation, resize, create, pause. No original assets or Wayland used.')
+        hud=C.CDLL(a.probe).render_hud_probe
+        hud.restype=integer
+        hud.argtypes=[C.c_char_p,integer,integer,C.c_float,C.c_float,C.c_float,
+                      C.POINTER(C.c_ubyte),C.c_char_p,C.c_uint]
+        w,h=1024,768
+        def hud_frame(health,mana,xp):
+            pixels=(C.c_ubyte*(w*h*4))()
+            if hud(os.fsencode(a.hud_fixture),w,h,health,mana,xp,pixels,error,len(error)):
+                raise RuntimeError(error.value.decode())
+            return bytes(pixels)
+        def sample(image,x,y):return tuple(image[((h-1-y)*w+x)*4:((h-1-y)*w+x)*4+4])
+        half=hud_frame(0.5,0.5,0.5)
+        assert sample(half,15,135)[0]>200 and sample(half,15,135)[2]<60,(sample(half,15,135),'health fill bottom')
+        assert sample(half,15,105)[0]<60,(sample(half,15,105),'health empty top')
+        assert sample(half,35,135)[2]>200 and sample(half,35,135)[0]<60,(sample(half,35,135),'mana fill bottom')
+        assert sample(half,15,152)[0]>200 and sample(half,15,152)[2]<60,(sample(half,15,152),'xp fill left')
+        assert sample(half,45,152)[0]<60,(sample(half,45,152),'xp empty right')
+        quarter=hud_frame(0.25,1.0,0.0)
+        assert sample(quarter,15,135)[0]>200 and sample(quarter,15,105)[0]<60,(sample(quarter,15,105),'health quarter anchor')
+        assert sample(quarter,35,105)[2]>200 and sample(quarter,35,135)[2]>200,(sample(quarter,35,135),'mana full')
+        assert sample(quarter,15,152)[0]<60,(sample(quarter,15,152),'zero xp')
+        print('4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, '
+              'create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.')
     finally:
         function('eglMakeCurrent',C.c_uint,ptr,ptr,ptr,ptr)(display,None,None,None)
         if context:function('eglDestroyContext',C.c_uint,ptr,ptr)(display,context)

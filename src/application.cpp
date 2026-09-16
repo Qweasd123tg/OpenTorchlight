@@ -324,6 +324,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const torchlight::OgreMaterialCatalog materials(archive);
         torchlight::UiResources ui_resources(archive);
         torchlight::GlesUiRenderer ui_renderer(archive, ui_resources);
+        torchlight::UiHud ui_hud(ui_resources);
         std::vector<torchlight::FrontendClass> frontend_classes;
         for (const auto& p : players) frontend_classes.push_back({p.guid, narrow_ascii(p.name)});
         torchlight::Frontend frontend(ui_resources, std::move(frontend_classes));
@@ -1404,7 +1405,25 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     if (!session.hardcore()) overlay.push_back({"COST " + std::to_string(session.gold() / 10) +
                         " GOLD. INVENTORY AND FLOOR ARE RETAINED.", false});
                 }
-                window.draw_scene_frame(*renderer, overlay, inventory_view.open || !player_combat.alive());
+                torchlight::UiHudValues hud_values;
+                const auto& vitals = session.health();
+                if (vitals.maximum_health() > 0)
+                    hud_values.health_fraction = vitals.health() / vitals.maximum_health();
+                if (vitals.maximum_mana() && *vitals.maximum_mana() > 0 && vitals.mana())
+                    hud_values.mana_fraction = *vitals.mana() / *vitals.maximum_mana();
+                hud_values.level_name = narrow_ascii(level.address.dungeon_name);
+                if (const auto* rules = session.progression_rules()) {
+                    const auto current_level = session.progression().level;
+                    const auto gate = rules->gate(current_level);
+                    if (current_level == rules->maximum_level())
+                        hud_values.experience_fraction = 1.0F;
+                    else if (gate > 0)
+                        hud_values.experience_fraction =
+                            static_cast<float>(session.progression().experience) / gate;
+                }
+                const auto hud = ui_hud.frame(window.width(), window.height(), hud_values);
+                window.draw_scene_frame(*renderer, ui_renderer, overlay,
+                                        inventory_view.open || !player_combat.alive(), hud);
                 observe("after_draw", &player_pose);
                 rendered_once = true;
                 ++level_frames;

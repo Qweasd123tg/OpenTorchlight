@@ -13,8 +13,10 @@ namespace torchlight {
 [[nodiscard]] std::int32_t checked_reward_integer(float value, bool round_up);
 // Exact float operation order from CItemGold::unitInit @0x8cad46.
 [[nodiscard]] std::int32_t evaluated_world_gold(float graph_value, float percent);
-// Inferred producer; NOT verified original XP scaling. See evidence document.
-[[nodiscard]] std::int32_t inferred_monster_experience(float graph_value, float percent);
+// Exact float operation order from CCharacter::setLevel @0x83ecea and
+// CCharacter::makeChampion @0x85191b: trunc((EXPERIENCE_MONSTER(level)/100) * g).
+// The unit data XP field is only a nonzero gate in the original.
+[[nodiscard]] std::int32_t original_monster_experience(float graph_value);
 [[nodiscard]] std::int32_t experience_with_bonus(std::int32_t amount, float percent);
 
 struct LevelProgressionRule {

@@ -105,11 +105,15 @@ public:
         renderer.draw(frame, width_, height_); readback(); ++menu_frames_;
         if (!menu_capture_.empty()) { write_pixels(menu_capture_); menu_capture_.clear(); }
     }
-    void draw_scene_frame(GlesSceneRenderer& renderer, const std::vector<InventoryViewLine>& lines, bool bag) override {
-        last_renderer_ = &renderer; last_overlay_ = lines; last_bag_ = bag;
+    void draw_scene_frame(GlesSceneRenderer& renderer, GlesUiRenderer& ui_renderer,
+                          const std::vector<InventoryViewLine>& lines, bool bag,
+                          const UiHudFrame& hud) override {
+        last_renderer_ = &renderer; last_ui_renderer_ = &ui_renderer;
+        last_overlay_ = lines; last_bag_ = bag; last_hud_ = hud;
         renderer.draw(width_, height_);
         // Exact same HUD implementation as the Wayland adapter.
-        draw_inventory_overlay(lines, bag, width_, height_);
+        ui_renderer.draw_hud(hud, width_, height_);
+        ui_renderer.draw_overlay(lines, bag, width_, height_);
         readback(); ++scene_frames_;
     }
     void notice(std::string_view kind, std::string_view text) override {
@@ -293,7 +297,11 @@ private:
         const bool weapon_visible = v.weapon_instance && last_renderer_->instance_visible(*v.weapon_instance);
         const auto redraw = [&] {
             last_renderer_->draw(width_,height_);
-            draw_inventory_overlay(last_overlay_,last_bag_,width_,height_);
+            if (last_ui_renderer_) {
+                last_ui_renderer_->draw_hud(last_hud_,width_,height_);
+                last_ui_renderer_->draw_overlay(last_overlay_,last_bag_,width_,height_);
+            } else
+                draw_inventory_overlay(last_overlay_,last_bag_,width_,height_);
             readback();
         };
         last_renderer_->set_instance_visible(v.player_instance,false);
@@ -413,7 +421,9 @@ private:
     std::vector<std::uint32_t> keys_;
     std::vector<unsigned char> pixels_;
     GlesSceneRenderer* last_renderer_ = nullptr;
+    GlesUiRenderer* last_ui_renderer_ = nullptr;
     std::vector<InventoryViewLine> last_overlay_;
+    UiHudFrame last_hud_;
     bool last_bag_ = false;
     std::ofstream events_,rng_;
     std::unordered_set<std::string> labels_;

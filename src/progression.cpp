@@ -61,10 +61,10 @@ std::int32_t evaluated_world_gold(float value, float percent) {
         throw std::invalid_argument("invalid gold inputs");
     return checked_reward_integer(value * (percent / 100.0F), true);
 }
-std::int32_t inferred_monster_experience(float value, float percent) {
-    if (!std::isfinite(value) || !std::isfinite(percent) || value < 0 || percent < 0)
-        throw std::invalid_argument("invalid monster experience inputs");
-    return checked_reward_integer(value * (percent / 100.0F), false);
+std::int32_t original_monster_experience(float graph_value) {
+    if (!std::isfinite(graph_value) || graph_value < 0)
+        throw std::invalid_argument("invalid monster experience graph value");
+    return checked_reward_integer((graph_value / 100.0F) * graph_value, false);
 }
 std::int32_t experience_with_bonus(std::int32_t amount, float percent) {
     if (!std::isfinite(percent)) throw std::invalid_argument("non-finite XP bonus");

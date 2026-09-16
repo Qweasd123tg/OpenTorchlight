@@ -309,10 +309,12 @@ public:
     }
 
     void draw_scene_frame(torchlight::GlesSceneRenderer& renderer,
+                          torchlight::GlesUiRenderer& ui_renderer,
                           const std::vector<torchlight::InventoryViewLine>& lines,
-                          bool inventory_open) {
+                          bool inventory_open, const torchlight::UiHudFrame& hud) {
         renderer.draw(width_, height_);
-        torchlight::draw_inventory_overlay(lines, inventory_open, width_, height_);
+        ui_renderer.draw_hud(hud, width_, height_);
+        ui_renderer.draw_overlay(lines, inventory_open, width_, height_);
         require_egl(eglSwapBuffers(egl_display_, egl_surface_) == EGL_TRUE, "eglSwapBuffers");
     }
 

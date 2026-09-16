@@ -391,4 +391,85 @@ std::optional<UiImage> UiResources::image(const std::string &reference) {
     const auto it = images_.find(key);
     return it == images_.end() ? std::nullopt : std::optional<UiImage>(it->second);
 }
+std::optional<UiWidgetImages> UiResources::widget_images(const std::string &type) {
+    if (type.empty())
+        return std::nullopt;
+    if (!looknfeel_loaded_) {
+        looknfeel_loaded_ = true;
+        const auto *entry = archive_->find_normalized("media/UI/GuiLook.looknfeel");
+        if (entry) {
+            try {
+                const auto text = decode(archive_->read(*entry));
+                std::size_t position = 0;
+                while (true) {
+                    const auto start = text.find("<WidgetLook name=\"", position);
+                    if (start == std::string::npos)
+                        break;
+                    const auto name_start = start + 19;
+                    const auto name_end = text.find('"', name_start);
+                    if (name_end == std::string::npos)
+                        break;
+                    const auto section_end = text.find("</WidgetLook>", name_end);
+                    if (section_end == std::string::npos)
+                        break;
+                    const std::string_view body(text.data() + static_cast<std::ptrdiff_t>(name_end),
+                                                section_end - name_end);
+                    UiWidgetImages images;
+                    const auto property = [&](const char *key) {
+                        const auto needle = std::string("name=\"") + key + "\"";
+                        const auto at = body.find(needle);
+                        if (at == std::string_view::npos)
+                            return std::string{};
+                        const auto value = body.find("initialValue=\"", at);
+                        if (value == std::string_view::npos || value > body.find("/>", at))
+                            return std::string{};
+                        const auto value_start = value + 14;
+                        const auto value_end = body.find('"', value_start);
+                        if (value_end == std::string_view::npos)
+                            return std::string{};
+                        return std::string(body.substr(value_start, value_end - value_start));
+                    };
+                    images.normal = property("NormalImage");
+                    images.hover = property("HoverImage");
+                    images.pushed = property("PushedImage");
+                    if (!images.normal.empty() || !images.hover.empty())
+                        widget_images_.insert_or_assign(
+                            upper(std::string(text.substr(name_start, name_end - name_start))),
+                            std::move(images));
+                    position = section_end + 1;
+                }
+            } catch (const std::exception &e) {
+                diagnostics_.push_back("GuiLook.looknfeel: " + std::string(e.what()));
+            }
+        }
+    }
+    const auto it = widget_images_.find(upper(type));
+    if (it == widget_images_.end())
+        return std::nullopt;
+    return it->second;
+}
+UiFont *UiResources::font(const std::string &name) {
+    if (name.empty())
+        return nullptr;
+    if (!fonts_loaded_) {
+        fonts_loaded_ = true;
+        for (const auto &entry : archive_->entries()) {
+            const auto upper_name = upper(entry.name);
+            if (upper_name.size() < 5 || upper_name.substr(upper_name.size() - 5) != ".FONT")
+                continue;
+            try {
+                auto definition =
+                    parse_ui_font_definition(archive_->read(entry), entry.name);
+                auto key = upper(definition.name);
+                fonts_.emplace(std::move(key), UiFont(*archive_, std::move(definition)));
+            } catch (const std::exception &e) {
+                diagnostics_.push_back(entry.name + ": " + e.what());
+            }
+        }
+    }
+    const auto it = fonts_.find(upper(name));
+    if (it == fonts_.end())
+        return nullptr;
+    return &it->second;
+}
 } // namespace torchlight

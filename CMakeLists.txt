@@ -3,6 +3,9 @@ project(torchlight_recovery LANGUAGES C CXX)
 
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+# CEGUI 0.6.2 uses FreeType for <Font> resources. Optional: without it the UI
+# keeps the explicitly marked prototype glyph font.
+find_package(Freetype QUIET)
 set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
 set(TORCHLIGHT_GAME_DIR "" CACHE PATH "Read-only directory containing pak.zip (independent of ELF)")
 if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
@@ -31,6 +34,8 @@ add_library(torchlight_core STATIC
     src/save_codec.cpp
     src/save_store.cpp
     src/ui_layout.cpp
+    src/ui_font.cpp
+    src/ui_hud.cpp
     src/frontend.cpp
     src/interaction.cpp
     src/damage.cpp
@@ -73,6 +78,13 @@ add_library(torchlight_core STATIC
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG)
+if(Freetype_FOUND)
+    target_link_libraries(torchlight_core PUBLIC Freetype::Freetype)
+    target_compile_definitions(torchlight_core PUBLIC TORCHLIGHT_HAVE_FREETYPE=1)
+    message(STATUS "UI fonts: FreeType ${FREETYPE_VERSION_STRING}")
+else()
+    message(STATUS "UI fonts: FreeType not found; prototype glyph fallback only")
+endif()
 set_target_properties(torchlight_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(torchlight_core PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -315,6 +327,12 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         DEPENDS tests/make_frontend_fixture.py tests/make_attack_fixture.py tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py
         VERBATIM)
     add_custom_target(frontend_fixture DEPENDS ${FRONTEND_FIXTURE})
+    set(HUD_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/hud.pak.zip)
+    add_custom_command(OUTPUT ${HUD_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_hud_fixture.py ${HUD_FIXTURE}
+        DEPENDS tests/make_hud_fixture.py
+        VERBATIM)
+    add_custom_target(hud_fixture DEPENDS ${HUD_FIXTURE})
     add_executable(frontend_test tests/frontend_test.cpp)
     target_link_libraries(frontend_test PRIVATE torchlight_core)
     add_dependencies(frontend_test frontend_fixture)
@@ -326,6 +344,17 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(frontend_resource_test PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(frontend_resource_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(Freetype_FOUND)
+        add_executable(ui_font_probe tests/ui_font_probe.cpp)
+        target_link_libraries(ui_font_probe PRIVATE torchlight_core)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(ui_font_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        if(TORCHLIGHT_GAME_DIR)
+            add_test(NAME original_ui_font_resource
+                COMMAND ui_font_probe "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        endif()
     endif()
     add_executable(frontend_cycle_test tests/frontend_cycle_test.cpp)
     target_link_libraries(frontend_cycle_test PRIVATE torchlight_core)
@@ -356,10 +385,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(application_scenario_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endif()
-        add_dependencies(gles_ui_probe frontend_fixture)
+        add_dependencies(gles_ui_probe frontend_fixture hud_fixture)
         add_test(NAME gles_ui_headless COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_ui_headless_test.py
-            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${FRONTEND_FIXTURE})
+            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${FRONTEND_FIXTURE}
+            --hud-fixture ${HUD_FIXTURE})
         set_tests_properties(gles_ui_headless PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         set(TORCHLIGHT_PYTHON_ASAN_PRELOAD "" CACHE FILEPATH "ASan runtime for the optional Python-hosted EGL probe")
         if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
@@ -435,8 +465,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(world_gold_probe PRIVATE torchlight_core)
     add_executable(checkpoint_upgrade_probe tests/checkpoint_upgrade_probe.cpp)
     target_link_libraries(checkpoint_upgrade_probe PRIVATE torchlight_core)
+    add_executable(monster_experience_probe tests/monster_experience_probe.cpp)
+    target_link_libraries(monster_experience_probe PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        foreach(_reward_target reward_cycle_test reward_resource_probe world_gold_probe checkpoint_upgrade_probe)
+        foreach(_reward_target reward_cycle_test reward_resource_probe world_gold_probe
+                monster_experience_probe checkpoint_upgrade_probe)
             target_compile_options(${_reward_target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endforeach()
     endif()
@@ -451,14 +484,21 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         --fixture ${FRONTEND_FIXTURE})
     add_test(NAME world_gold_export_comparison COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_world_gold.py --probe $<TARGET_FILE:world_gold_probe>)
+    add_test(NAME monster_experience_export_comparison COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_monster_experience.py --probe $<TARGET_FILE:monster_experience_probe>)
     set_tests_properties(progression_numeric reward_cycle reward_fresh_process legacy_reward_save_migration
-        world_gold_export_comparison PROPERTIES TIMEOUT 90)
-    set_tests_properties(world_gold_export_comparison PROPERTIES SKIP_RETURN_CODE 77)
+        world_gold_export_comparison monster_experience_export_comparison PROPERTIES TIMEOUT 90)
+    set_tests_properties(world_gold_export_comparison monster_experience_export_comparison
+        PROPERTIES SKIP_RETURN_CODE 77)
     if(TORCHLIGHT_ORIGINAL)
         add_test(NAME original_world_gold_comparison COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_world_gold.py --probe $<TARGET_FILE:world_gold_probe>
             --original ${TORCHLIGHT_ORIGINAL})
-        set_tests_properties(original_world_gold_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
+        add_test(NAME original_monster_experience_comparison COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_monster_experience.py --probe $<TARGET_FILE:monster_experience_probe>
+            --original ${TORCHLIGHT_ORIGINAL})
+        set_tests_properties(original_world_gold_comparison original_monster_experience_comparison
+            PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
     endif()
 
     add_executable(item_cycle_resource_test tests/item_cycle_resource_test.cpp)
@@ -655,6 +695,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             set_tests_properties(${_ot_test} PROPERTIES LABELS "render")
         elseif(_ot_test MATCHES "^original_")
             set_tests_properties(${_ot_test} PROPERTIES LABELS "assets" TIMEOUT 240)
+            if(_ot_test STREQUAL "original_random_levels")
+                # ~216s alone; parallel core+render load pushed it past 240s.
+                set_tests_properties(${_ot_test} PROPERTIES TIMEOUT 600)
+            endif()
         elseif(_ot_test STREQUAL "gles_ui_headless")
             # Retain the historical portable UI runtime probe while making it
             # discoverable in render as well. Its skip is NOT a pass in check.py.

@@ -2,6 +2,7 @@
 #include "torchlight/frontend.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/gles_ui_renderer.hpp"
+#include "torchlight/ui_hud.hpp"
 #include "torchlight/navigation_grid.hpp"
 #include "torchlight/player_session.hpp"
 #include <filesystem>
@@ -54,7 +55,9 @@ public:
     virtual double clock_seconds() = 0;
     virtual std::uint32_t new_campaign_seed() = 0;
     virtual void draw_menu_frame(GlesUiRenderer&, const FrontendFrame&) = 0;
-    virtual void draw_scene_frame(GlesSceneRenderer&, const std::vector<InventoryViewLine>&, bool) = 0;
+    virtual void draw_scene_frame(GlesSceneRenderer&, GlesUiRenderer&,
+                                  const std::vector<InventoryViewLine>&, bool,
+                                  const UiHudFrame&) = 0;
     virtual void observe_frontend(FrontendPage, const FrontendFrame&, const std::string&) {}
     virtual void observe_game(const ApplicationView&) {}
     virtual void notice(std::string_view, std::string_view) {}

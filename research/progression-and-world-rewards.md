@@ -2,9 +2,11 @@
 
 ## Inputs and evidence boundary
 
-Source ELF SHA-256: `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
-Only the supplied targeted exports are available in this pass. Neither the ELF
-nor the original `pak.zip` is present; authored fixtures are NOT original assets.
+Source ELF SHA-256: `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`,
+original `pak.zip` SHA-256 `8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8`.
+The large-8 authoring pass saw only targeted exports and authored fixtures.
+This pass also ran on a machine with both originals present read-only: focused
+disassembly and the scalar reference below were checked against them.
 
 * `original-code`: `CMasterResourceManager::experienceGate` @`0xa549d0` returns
   zero for level zero, clamps to graph control-point count, evaluates
@@ -19,12 +21,25 @@ nor the original `pak.zip` is present; authored fixtures are NOT original assets
   points for the NEW level. `CPlayer::levelUp` @`0x8f9ad0` failed decompilation:
   the portable repeated-level loop and single-player attribution are `inferred`,
   NOT a verified port of that override, parties, pets, or champion/fame rewards.
-* `inferred`: ordinary monster reward = trunc(EXPERIENCE_MONSTER(level) *
-  (UNIT.XP / 100)). `character.c` clearly selects the difficulty-dependent graph
-  and loads XP, but its scaling decompile is corrupted (reuses one temporary).
-  This producer MUST be checked against focused ASM before a parity promotion.
-  Missing graph => unknown reward, never an invented constant. Only Normal
-  difficulty is supported by the current application.
+* `original-code`: ordinary monster reward = `trunc((g / 100) * g)` where `g` is
+  `EXPERIENCE_MONSTER[_difficulty].getValue(unit level, 0)`.
+  `CCharacter::setLevel` @0x83ecdd..0x83ecfd emits `cvtsi2ssl level; call getValue;
+  movaps; divss [fa483c=100.0f]; mulss; cvttss2si; mov [this+0x454]`. The earlier
+  Ghidra output `(fVar23 / DAT_00fa483c) * fVar23` is faithful, not corrupted: the
+  second operand is the same graph value, not `UNIT.XP`.
+  `CCharacter::makeChampion` @0x85191b..0x85192e repeats the identical scalar for
+  `EXPERIENCE_CHAMPIONMONSTER[_difficulty]`.
+  The unit data `XP` field is only a nonzero gate: `CCharacter::unitInit`
+  @0x852c48 stores it in +0x454 and then invokes the virtual setLevel (slot
+  +0x318 @0x852b50); setLevel overwrites +0x454 only when it was nonzero.
+  `CCharacter::awardExperience` @0x822850 receives victim +0x454 and adds the
+  `ceil(amount * effect0x44% )` bonus. Missing graph => unknown reward, never an
+  invented constant. Only Normal difficulty is supported by the application.
+* `original-code` bounded: `tests/compare_monster_experience.py` executed the
+  unchanged span `0x83ecea..0x83ecfd` (digest `9aa637a7...`) and matched
+  `original_monster_experience` on 20 031 scalar cases; `--original` re-checks the
+  SHA-pinned ELF and the `100.0f` divisor. This is a scalar formula check, not a
+  whole `setLevel`, spawner or award-flow test.
 * `original-code`: `CItemGold::unitInit` @`0x8ca940` reads MINVALUE/MAXVALUE (defaults
   100), samples the volatile random source, and calculates
   ceil(GOLDDROP(rank+1) * (sample/100)). The unchanged numeric span

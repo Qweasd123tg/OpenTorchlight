@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
                 throw std::runtime_error("cannot traverse resource level gates");
             for(std::int32_t i=1;i<=rules.maximum_level();++i) {
                 static_cast<void>(torchlight::evaluated_world_gold(gold->value(static_cast<float>(i)),100));
-                static_cast<void>(torchlight::inferred_monster_experience(experience->value(static_cast<float>(i)),100));
+                static_cast<void>(torchlight::original_monster_experience(experience->value(static_cast<float>(i))));
                 ++levels;
             }
             std::cout<<"class_guid="<<player.guid<<" max_level="<<rules.maximum_level()
@@ -34,6 +34,6 @@ int main(int argc, char** argv) {
                      <<" awarded_skills="<<state.skill_points<<'\n';
         }
         std::cout<<"PASS: "<<players.size()<<" class templates, "<<levels
-                 <<" level-graph samples; resource compatibility only, XP producer inferred, NOT original parity\n";
+                 <<" level-graph samples; resource compatibility only, XP scalar formula original-code, NOT full original parity\n";
     } catch(const std::exception& e) {std::cerr<<"FAIL: "<<e.what()<<'\n';return 1;}
 }
