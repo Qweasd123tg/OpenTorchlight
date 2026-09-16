@@ -273,6 +273,17 @@ FrontendFrame Frontend::frame(int width, int height) {
         }
         if (!duplicate) frame.texts.push_back(std::move(w));
     }
+    // PORT: portable supplements are not original controls; anchor them below
+    // the resolved original rectangles so no recovered button is covered.
+    float supplemental_left = -1.0F, supplemental_bottom = 0.0F, supplemental_width = 0.0F;
+    const auto consider_anchor = [&](const UiResolvedWidget &w) {
+        if (!w.visible || w.rect.width <= 0 || w.rect.height <= 0) return;
+        supplemental_left = supplemental_left < 0 ? w.rect.x : std::min(supplemental_left, w.rect.x);
+        supplemental_bottom = std::max(supplemental_bottom, w.rect.y + w.rect.height);
+        supplemental_width = std::max(supplemental_width, w.rect.width);
+    };
+    for (const auto &entry : originals) consider_anchor(entry.second);
+    for (const auto &w : unsupported) consider_anchor(w);
     std::size_t fallback_row = 0;
     const auto make_button = [&](std::string id, std::string label,
                                   const UiResolvedWidget *source, bool enabled, bool selected) {
@@ -297,9 +308,16 @@ FrontendFrame Frontend::frame(int width, int height) {
         } else {
             // Explicit portable fallback/supplement; never original layout geometry.
             const float scale = std::min(width / 1024.0F, height / 768.0F);
-            const float x = frame.original_layout ? 16.0F : 302.0F;
-            b.rect = {x * scale, (180.0F + static_cast<float>(fallback_row++) * 48.0F) * scale,
-                      (frame.original_layout ? 246.0F : 420.0F) * scale, 40.0F * scale};
+            if (supplemental_left >= 0) {
+                b.rect = {supplemental_left,
+                          supplemental_bottom + 18.0F * scale +
+                              static_cast<float>(fallback_row++) * 48.0F * scale,
+                          supplemental_width, 40.0F * scale};
+            } else {
+                b.rect = {(frame.original_layout ? 16.0F : 302.0F) * scale,
+                          (180.0F + static_cast<float>(fallback_row++) * 48.0F) * scale,
+                          (frame.original_layout ? 246.0F : 420.0F) * scale, 40.0F * scale};
+            }
             b.widget.rect = b.widget.clip = b.rect;
             b.text = "PORT: " + b.text;
         }

@@ -1,5 +1,18 @@
 # Следующий проход после large-10
 
+## Интеграторский прогон large-10 (настоящие pak+ELF)
+
+**Итог: core 45/45, assets 32/32, render 6/6, reference 11/11; desktop NOT RUN.**
+
+Найден и исправлен порт-дефект, невидимый на авторских ресурсах: PORT-кнопки
+паузы ставились в x=16, y=180+row*48 и перекрывали оригинальную
+`Return To Game` (83,268 246x44) из `optionsmenu.layout`; `Frontend::click`
+выбирает сверху вниз, поэтому `original_menu_presentation` падал
+(«resource pause resume failed»). Теперь supplemental-кнопки якорятся ниже
+разрешённых оригинальных прямоугольников (`src/frontend.cpp`), оригинальная
+кнопка снова работает, а PORT-операции сохранены и помечены `PORT:`.
+`CHECKSUMS.sha256` пересчитан на исправленном дереве.
+
 Актуальный результат: `UI_MENU_COMPLETION_RESULT_RU.md`; исходные доказательства:
 `research/ui-menu-completion.md`; проверки: `verification/large-10/verification.json`.
 Ниже сохранён старый план large-9. Его `41/41 + assets/reference/render` — исторический
