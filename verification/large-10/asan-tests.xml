@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="10"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="10"
+	timestamp="2026-09-16T15:58:53"
+	>
+	<testcase name="frontend" classname="frontend" time="0.116626" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>frontend: 34 assertions; authored CEGUI/PNG fixture, no original skin equivalence
+</system-out>
+	</testcase>
+	<testcase name="frontend_menu_resources" classname="frontend_menu_resources" time="0.059133" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>29 authored menu checks passed; no original pak parity claim
+</system-out>
+	</testcase>
+	<testcase name="ui_text_layout" classname="ui_text_layout" time="0.0232188" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 text decoding / wrapping / clipping checks passed
+</system-out>
+	</testcase>
+	<testcase name="ui_font_atlas" classname="ui_font_atlas" time="0.0300176" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 real FreeType / authored atlas checks passed; not original CEGUI parity
+</system-out>
+	</testcase>
+	<testcase name="frontend_campaign_cycle" classname="frontend_campaign_cycle" time="1.54296" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>frontend-cycle write: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle read: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle verify: 4 assertions (authored resources; not original Town/GUI parity)
+Three independent processes completed the authored-resource frontend/campaign cycle.
+</system-out>
+	</testcase>
+	<testcase name="gles_ui_headless" classname="gles_ui_headless" time="2.00106" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="2.16897" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+8 real FreeType sequence frames passed; bright-pixel counts: [153, 419, 70, 115, 419, 419, 80, 459]
+PASS: 13 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="0.65036" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 603 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="save_fresh_process" classname="save_fresh_process" time="1.65524" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 593 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+</system-out>
+	</testcase>
+	<testcase name="save_atomic_process" classname="save_atomic_process" time="1.86112" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 593 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+save_checkpoint race-b: 1 assertions passed (authored resources; not original save compatibility)
+expected competing writer conflict
+save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+</system-out>
+	</testcase>
+</testsuite>

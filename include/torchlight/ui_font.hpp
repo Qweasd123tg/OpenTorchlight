@@ -43,6 +43,8 @@ class UiFont {
     [[nodiscard]] const std::vector<std::uint8_t> &atlas_rgba() const noexcept;
     [[nodiscard]] int atlas_width() const noexcept;
     [[nodiscard]] int atlas_height() const noexcept;
+    // Changes on atlas reset or insertion. Consumers upload AFTER rasterization.
+    [[nodiscard]] std::uint64_t atlas_revision() const noexcept;
 
   private:
     struct Impl;

@@ -1,0 +1,72 @@
+{
+  "kind": "test-only public ABI declarations; no implementations",
+  "binding": "/opt/pyvenv/lib/python3.13/site-packages/freetype/__init__.py",
+  "binding_runtime_version": [
+    2,
+    13,
+    2
+  ],
+  "linked_library": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6",
+  "runtime_version": [
+    2,
+    13,
+    3
+  ],
+  "structs": {
+    "FT_Vector": {
+      "binding_size": 16,
+      "offsets": {
+        "x": 0,
+        "y": 8
+      }
+    },
+    "FT_Bitmap": {
+      "binding_size": 40,
+      "offsets": {
+        "rows": 0,
+        "width": 4,
+        "pitch": 8,
+        "buffer": 16,
+        "num_grays": 24,
+        "pixel_mode": 26,
+        "palette_mode": 27,
+        "palette": 32
+      }
+    },
+    "FT_Size_Metrics": {
+      "binding_size": 56,
+      "offsets": {
+        "x_ppem": 0,
+        "y_ppem": 2,
+        "x_scale": 8,
+        "y_scale": 16,
+        "ascender": 24,
+        "descender": 32,
+        "height": 40,
+        "max_advance": 48
+      }
+    },
+    "FT_SizeRec_": {
+      "binding_size": 88,
+      "offsets": {
+        "metrics": 24
+      }
+    },
+    "FT_GlyphSlotRec_": {
+      "binding_size": 304,
+      "offsets": {
+        "advance": 128,
+        "bitmap": 152,
+        "bitmap_left": 192,
+        "bitmap_top": 196
+      }
+    },
+    "FT_FaceRec_": {
+      "binding_size": 248,
+      "offsets": {
+        "glyph": 152,
+        "size": 160
+      }
+    }
+  }
+}

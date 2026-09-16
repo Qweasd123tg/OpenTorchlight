@@ -1,0 +1,37 @@
+{
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "compiler": "c++ (Debian 14.2.0-19) 14.2.0",
+  "cmake": "cmake version 3.31.6",
+  "python": "3.13.5",
+  "graphics": {
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "api": "OpenGL ES 3.2",
+    "Mesa": "25.0.7-2",
+    "source": "freetype-tests.log; actual EGL context"
+  },
+  "freetype": {
+    "runtime_version": [
+      2,
+      13,
+      3
+    ],
+    "standard_SDK_headers_available": false,
+    "test_only_explicit_ABI_declarations": true,
+    "normal_build_does_not_use_helper": true
+  },
+  "libraries": {
+    "/usr/lib/x86_64-linux-gnu/libfreetype.so.6": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libfreetype.so.6.20.2",
+      "sha256": "c8f7edab3c587fe6723350e1305cd809c7f4cb72d3ecdeac20f27ef407e978de"
+    },
+    "/usr/lib/x86_64-linux-gnu/libGL.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libGL.so.1.7.0",
+      "sha256": "b01915dfedf03be4710d3184bc62a3364880fc950043742fd5e07659b409ef1e"
+    },
+    "/usr/lib/x86_64-linux-gnu/libEGL.so.1": {
+      "resolved_path": "/usr/lib/x86_64-linux-gnu/libEGL.so.1.1.0",
+      "sha256": "f4b60a4618fbf760f395f64dfd53320446ba1011151a80e411742b3232b194e6"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="5"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="3"
+	timestamp="2026-09-16T15:58:39"
+	>
+	<testcase name="frontend_menu_resources" classname="frontend_menu_resources" time="0.0140589" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>29 authored menu checks passed; no original pak parity claim
+</system-out>
+	</testcase>
+	<testcase name="ui_text_layout" classname="ui_text_layout" time="0.00366704" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 text decoding / wrapping / clipping checks passed
+</system-out>
+	</testcase>
+	<testcase name="ui_font_atlas" classname="ui_font_atlas" time="0.0163876" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 real FreeType / authored atlas checks passed; not original CEGUI parity
+</system-out>
+	</testcase>
+	<testcase name="gles_ui_headless" classname="gles_ui_headless" time="1.29324" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="1.76794" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+8 real FreeType sequence frames passed; bright-pixel counts: [153, 419, 70, 115, 419, 419, 80, 459]
+PASS: 13 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+</testsuite>

@@ -264,6 +264,25 @@ UiLayout UiLayout::parse(const std::vector<std::uint8_t> &bytes) {
         xml_error("layout without windows");
     return result;
 }
+std::string UiResolvedWidget::property(const std::string &key) const {
+    const auto i = properties.find(key);
+    return i == properties.end() ? std::string{} : i->second;
+}
+UiTextStyle UiResolvedWidget::text_style() const {
+    UiTextStyle style;
+    const auto h = upper(property("HorzFormatting"));
+    style.wrap = h.find("WORDWRAP") != std::string::npos;
+    if (h.find("CENTRE") != std::string::npos || h.find("CENTER") != std::string::npos)
+        style.horizontal = UiTextHorizontal::centre;
+    else if (h.find("RIGHT") != std::string::npos)
+        style.horizontal = UiTextHorizontal::right;
+    const auto v = upper(property("VertFormatting"));
+    if (v == "VERTCENTRED" || v == "CENTRE" || v == "CENTER" || v == "CENTREALIGNED")
+        style.vertical = UiTextVertical::centre;
+    else if (v == "BOTTOMALIGNED" || v == "BOTTOM")
+        style.vertical = UiTextVertical::bottom;
+    return style;
+}
 std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
     if (width <= 0 || height <= 0)
         throw std::invalid_argument("invalid UI viewport");
@@ -279,6 +298,8 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
         UiResolvedWidget v;
         v.name = node.name;
         v.type = node.type;
+        v.parent = node.parent;
+        v.properties = node.properties;
         v.rect = parent;
         v.text = node.property("Text");
         v.font = node.property("Font");
@@ -328,6 +349,16 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
         for (auto x : {v.rect.x, v.rect.y, v.rect.width, v.rect.height})
             if (!std::isfinite(x) || std::abs(x) > 1e7F)
                 xml_error("layout bounds out of range");
+        // Bounded subset: clip to viewport and each clipping ancestor. A child
+        // may opt out of parent clipping, but never of the framebuffer bounds.
+        const UiRect ancestor = node.parent < 0 || upper(node.property("ClippedByParent")) == "FALSE"
+                                    ? UiRect{0, 0, w, h}
+                                    : result[static_cast<std::size_t>(node.parent)].clip;
+        const float x = std::max(v.rect.x, ancestor.x), y = std::max(v.rect.y, ancestor.y);
+        v.clip = {x, y, std::max(0.0F, std::min(v.rect.x + v.rect.width,
+                       ancestor.x + ancestor.width) - x),
+                       std::max(0.0F, std::min(v.rect.y + v.rect.height,
+                       ancestor.y + ancestor.height) - y)};
         result.push_back(std::move(v));
     }
     for (auto &v : result) {
@@ -335,6 +366,8 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
         v.rect.y = oy + v.rect.y * zoom;
         v.rect.width *= zoom;
         v.rect.height *= zoom;
+        v.clip = {ox + v.clip.x * zoom, oy + v.clip.y * zoom,
+                  v.clip.width * zoom, v.clip.height * zoom};
     }
     return result;
 }
@@ -402,41 +435,28 @@ std::optional<UiWidgetImages> UiResources::widget_images(const std::string &type
                 const auto text = decode(archive_->read(*entry));
                 std::size_t position = 0;
                 while (true) {
-                    const auto start = text.find("<WidgetLook name=\"", position);
-                    if (start == std::string::npos)
-                        break;
-                    const auto name_start = start + 19;
-                    const auto name_end = text.find('"', name_start);
-                    if (name_end == std::string::npos)
-                        break;
-                    const auto section_end = text.find("</WidgetLook>", name_end);
+                    const auto start = text.find("<WidgetLook", position);
+                    if (start == std::string::npos) break;
+                    const auto section_end = text.find("</WidgetLook>", start);
                     if (section_end == std::string::npos)
-                        break;
-                    const std::string_view body(text.data() + static_cast<std::ptrdiff_t>(name_end),
-                                                section_end - name_end);
+                        throw std::runtime_error("unterminated WidgetLook");
+                    position = section_end + 13;
+                    const auto section = text.substr(start, position - start);
+                    const auto nodes = parse_xml({section.begin(), section.end()});
+                    if (nodes.empty() || nodes.front().tag != "WidgetLook") continue;
                     UiWidgetImages images;
-                    const auto property = [&](const char *key) {
-                        const auto needle = std::string("name=\"") + key + "\"";
-                        const auto at = body.find(needle);
-                        if (at == std::string_view::npos)
-                            return std::string{};
-                        const auto value = body.find("initialValue=\"", at);
-                        if (value == std::string_view::npos || value > body.find("/>", at))
-                            return std::string{};
-                        const auto value_start = value + 14;
-                        const auto value_end = body.find('"', value_start);
-                        if (value_end == std::string_view::npos)
-                            return std::string{};
-                        return std::string(body.substr(value_start, value_end - value_start));
-                    };
-                    images.normal = property("NormalImage");
-                    images.hover = property("HoverImage");
-                    images.pushed = property("PushedImage");
-                    if (!images.normal.empty() || !images.hover.empty())
-                        widget_images_.insert_or_assign(
-                            upper(std::string(text.substr(name_start, name_end - name_start))),
-                            std::move(images));
-                    position = section_end + 1;
+                    // Only direct defaults, never similarly named properties
+                    // of a Child/ImagerySection or a later WidgetLook.
+                    for (const auto &n : nodes) {
+                        if (n.parent != 0 || n.tag != "PropertyDefinition") continue;
+                        const auto key = attr(n, "name"), value = attr(n, "initialValue");
+                        if (key == "NormalImage") images.normal = value;
+                        else if (key == "HoverImage") images.hover = value;
+                        else if (key == "PushedImage") images.pushed = value;
+                        else if (key == "DisabledImage") images.disabled = value;
+                    }
+                    widget_images_.insert_or_assign(upper(attr(nodes.front(), "name")),
+                                                    std::move(images));
                 }
             } catch (const std::exception &e) {
                 diagnostics_.push_back("GuiLook.looknfeel: " + std::string(e.what()));

@@ -1,3 +1,40 @@
+# Следующий проход после large-10
+
+Актуальный результат: `UI_MENU_COMPLETION_RESULT_RU.md`; исходные доказательства:
+`research/ui-menu-completion.md`; проверки: `verification/large-10/verification.json`.
+Ниже сохранён старый план large-9. Его `41/41 + assets/reference/render` — исторический
+прогон интегратора, не повторная проверка текущего архива.
+
+В large-10 закрыта потеря статических надписей, добавлена привязка CharacterName /
+PlayerNName, ресурсная пауза, защищены скрытые/disabled кнопки и .otc save-failure.
+Исправлен пустой GPU-атлас, добавлены UTF-8, переносы, ограниченное форматирование
+и clipping. Core 44/44 без SDK, FT/GLES 5/5, выбранные ASan/UBSan 10/10.
+
+**Первым делом на машине с read-only исходной игрой** повторить полный стенд:
+
+```bash
+python3 tools/check.py --core --assets "$GAME_DIR" --render --jobs 4
+ctest --test-dir build-verification -R '^original_menu_presentation$' --output-on-failure
+python3 tools/check.py --reference "$GAME_DIR/Torchlight.bin.x86_64" --jobs 4
+```
+
+Новая проба сравнивает наличие Text/Font в кадре с оригинальными четырьмя layouts;
+она НЕ сверяет пиксели исходного CEGUI. Не перепутать авторский menu-widgets.pak.zip
+с настоящим pak.zip: успешный smoke на нём не является assets-проверкой.
+
+Дальше: реальные `WidgetLook`/`StateImagery`/Label-area, порядок слоёв, цвета,
+StaticTextOutline shadows и составная рамка; `inventorymenu.layout` и createIcon /
+updateSlots. Нормальный/фокусный/disabled скин частично подключён, но PushedImage
+только читается: настоящая pointer capture/release и весь Falagard ещё открыты.
+GUIEXITGAME оставлен disabled; не привязывать его к выходу в титульное меню без
+исходного dispatcher/trace. Settings и удаление .otc требуют отдельной реализации.
+
+Битовая сверка оригинального FreeTypeFont, закрепление DPI и точные HP/mana/XP
+формулы по ASM остаются приоритетами из старого задания. Не заменять отсутствующий
+оригинал картинкой текущего порта. Полный Wayland harness всё ещё NOT RUN.
+
+---
+
 # Следующий проход после UI-этапа (шрифты/HUD)
 
 **Текущее задание: `GPT_PRO_UI_TASK.md`** — добить интерфейс (главный экран,

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "kind": "verification-run",
+  "groups": {
+    "core": {
+      "requested": true,
+      "status": "FAILED",
+      "reason": "build failed: exit 1"
+    },
+    "assets": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "reference": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "render": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    },
+    "desktop": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    }
+  },
+  "inputs": {},
+  "evidence": {
+    "core": "authored fixtures and bounded export comparisons",
+    "assets": "resource-derived; not ELF parity",
+    "reference": "pinned original comparisons",
+    "render": "actual GL; self snapshots are regression only",
+    "desktop": "full window adapter; not original-game parity"
+  },
+  "test_timeout_scale": 1
+}

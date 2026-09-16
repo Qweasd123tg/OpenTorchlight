@@ -1,0 +1,9 @@
+[1/9] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_font.cpp.o
+[2/9] Linking CXX static library libtorchlight_core.a
+[3/9] Linking CXX executable frontend_test
+[4/9] Linking CXX executable frontend_menu_test
+[5/9] Linking CXX executable ui_font_atlas_test
+[6/9] Linking CXX executable ui_text_test
+[7/9] Linking CXX executable frontend_cycle_test
+[8/9] Linking CXX shared library libgles_ui_probe.so
+[9/9] Linking CXX executable save_checkpoint_test

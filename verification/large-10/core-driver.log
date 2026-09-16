@@ -1,0 +1,124 @@
++ cmake -S /mnt/data/work-large10 -B /mnt/data/work-large10/build-verification -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DTORCHLIGHT_ENABLE_DESKTOP=OFF -DTORCHLIGHT_ENABLE_RENDER=ON -DTORCHLIGHT_GAME_DIR= -DTORCHLIGHT_ORIGINAL=
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (5.8s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work-large10/build-verification
++ cmake --build /mnt/data/work-large10/build-verification --parallel 4
+ninja: no work to do.
++ ctest --test-dir /mnt/data/work-large10/build-verification -L ^core$ --output-on-failure --no-tests=error --output-junit /mnt/data/work-large10/build-verification/verification-logs/core.xml --parallel 4
+Internal ctest changing into directory: /mnt/data/work-large10/build-verification
+Test project /mnt/data/work-large10/build-verification
+      Start 28: read_only_extractors
+      Start 44: verification_driver
+      Start  9: desktop_gameplay_syntax
+      Start 38: monster_experience_export_comparison
+ 1/44 Test #38: monster_experience_export_comparison ...   Passed    1.66 sec
+      Start 42: asset_catalog_negative
+ 2/44 Test #42: asset_catalog_negative .................   Passed    1.40 sec
+      Start  8: ai_cooldown_export_comparison
+ 3/44 Test #44: verification_driver ....................   Passed    4.65 sec
+      Start 36: legacy_reward_save_migration
+ 4/44 Test  #9: desktop_gameplay_syntax ................   Passed    4.75 sec
+      Start 37: world_gold_export_comparison
+ 5/44 Test  #8: ai_cooldown_export_comparison ..........   Passed    2.04 sec
+      Start 19: coverage_map_current
+ 6/44 Test #36: legacy_reward_save_migration ...........   Passed    0.89 sec
+      Start 41: scenario_first_difference
+ 7/44 Test #37: world_gold_export_comparison ...........   Passed    1.19 sec
+      Start 24: save_atomic_process
+ 8/44 Test #41: scenario_first_difference ..............   Passed    0.93 sec
+      Start 29: combat_inputs_evidence
+ 9/44 Test #29: combat_inputs_evidence .................   Passed    0.77 sec
+      Start 27: effect_catalog_source
+10/44 Test #24: save_atomic_process ....................   Passed    1.33 sec
+      Start 21: gles_menu_text
+11/44 Test #19: coverage_map_current ...................   Passed    2.62 sec
+      Start 35: reward_fresh_process
+12/44 Test #27: effect_catalog_source ..................   Passed    0.84 sec
+      Start 13: attack_speed_export_comparison
+13/44 Test #21: gles_menu_text .........................   Passed    1.19 sec
+      Start 23: save_fresh_process
+14/44 Test #13: attack_speed_export_comparison .........   Passed    1.02 sec
+      Start 30: player_vitals_export_comparison
+15/44 Test #35: reward_fresh_process ...................   Passed    1.54 sec
+      Start 18: frontend_campaign_cycle
+16/44 Test #23: save_fresh_process .....................   Passed    1.25 sec
+      Start 20: gles_ui_headless
+17/44 Test #30: player_vitals_export_comparison ........   Passed    1.00 sec
+      Start 22: save_checkpoint
+18/44 Test #22: save_checkpoint ........................   Passed    0.09 sec
+      Start  7: enemy_ai_cooldown
+19/44 Test  #7: enemy_ai_cooldown ......................   Passed    0.16 sec
+      Start 14: ordinary_combat
+20/44 Test #14: ordinary_combat ........................   Passed    0.16 sec
+      Start 25: gameplay_continuation
+21/44 Test #25: gameplay_continuation ..................   Passed    0.08 sec
+      Start  6: level_entry_fallback
+22/44 Test #28: read_only_extractors ...................   Passed   10.62 sec
+      Start 34: reward_cycle
+23/44 Test  #6: level_entry_fallback ...................   Passed    0.06 sec
+      Start 12: item_cycle
+24/44 Test #34: reward_cycle ...........................   Passed    0.04 sec
+      Start 32: reward_unavailable
+25/44 Test #32: reward_unavailable .....................   Passed    0.02 sec
+      Start 26: death_finalization
+26/44 Test #26: death_finalization .....................   Passed    0.02 sec
+      Start  2: actor_motion
+27/44 Test  #2: actor_motion ...........................   Passed    0.00 sec
+      Start 33: progression_numeric
+28/44 Test #18: frontend_campaign_cycle ................   Passed    1.43 sec
+      Start 39: item_cycle_resource_fixture
+29/44 Test #12: item_cycle .............................   Passed    0.04 sec
+      Start 31: reward_resource_graphs
+30/44 Test #33: progression_numeric ....................   Passed    0.01 sec
+      Start 40: parent_dungeon
+31/44 Test #40: parent_dungeon .........................   Passed    0.01 sec
+      Start  3: animation_events
+32/44 Test #39: item_cycle_resource_fixture ............   Passed    0.01 sec
+      Start  4: damage_calculation
+33/44 Test #31: reward_resource_graphs .................   Passed    0.01 sec
+      Start  1: ordinary_attack_action
+34/44 Test  #3: animation_events .......................   Passed    0.00 sec
+      Start  5: warp_arrival
+35/44 Test  #4: damage_calculation .....................   Passed    0.00 sec
+      Start 11: inventory_instances
+36/44 Test  #1: ordinary_attack_action .................   Passed    0.01 sec
+      Start 16: frontend_menu_resources
+37/44 Test  #5: warp_arrival ...........................   Passed    0.01 sec
+      Start 10: inventory_view
+38/44 Test #11: inventory_instances ....................   Passed    0.01 sec
+      Start 15: frontend
+39/44 Test #16: frontend_menu_resources ................   Passed    0.01 sec
+40/44 Test #15: frontend ...............................   Passed    0.01 sec
+      Start 43: random_observation
+      Start 17: ui_text_layout
+41/44 Test #10: inventory_view .........................   Passed    0.01 sec
+42/44 Test #43: random_observation .....................   Passed    0.01 sec
+43/44 Test #17: ui_text_layout .........................   Passed    0.00 sec
+44/44 Test #20: gles_ui_headless .......................   Passed    1.33 sec
+
+100% tests passed, 0 tests failed out of 44
+
+Label Time Summary:
+core      =  43.23 sec*proc (44 tests)
+render    =   2.52 sec*proc (2 tests)
+
+Total Test time (real) =  11.05 sec
+
+GROUP       STATUS       PASS / FAIL / SKIP    REASON
+core        PASSED         44 /    0 /    0    
+assets      NOT RUN         0 /    0 /    0    Not requested
+reference   NOT RUN         0 /    0 /    0    Not requested
+render      NOT RUN         0 /    0 /    0    Not requested
+desktop     NOT RUN         0 /    0 /    0    Not requested
+Report: /mnt/data/large10-core-final.json

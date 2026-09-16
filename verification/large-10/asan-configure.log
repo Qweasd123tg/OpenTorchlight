@@ -1,0 +1,14 @@
+-- UI fonts: FreeType 2.13.3
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (6.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work-large10/build-asan

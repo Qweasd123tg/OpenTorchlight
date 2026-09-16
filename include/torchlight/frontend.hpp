@@ -24,6 +24,9 @@ struct FrontendButton {
     std::string image, hover_image, font;
     UiRect rect;
     bool enabled = true, focused = false, selected = false;
+    std::string pushed_image, disabled_image;
+    bool supplemental = true;
+    UiResolvedWidget widget;
 };
 struct FrontendFrame {
     std::string title;
@@ -31,6 +34,7 @@ struct FrontendFrame {
     std::vector<FrontendButton> buttons;
     std::vector<InventoryViewLine> notes;
     bool original_layout = false;
+    std::vector<UiResolvedWidget> texts;
 };
 class Frontend {
   public:

@@ -1,0 +1,5 @@
+media/UI/mainmenuframe.layout: texts=3 buttons=5
+media/UI/charactercreate.layout: texts=2 buttons=4
+media/UI/characterload.layout: texts=3 buttons=5
+media/UI/optionsmenu.layout: texts=1 buttons=6
+PASS: 6 external static labels retained; resource mapping only, no original-frame parity

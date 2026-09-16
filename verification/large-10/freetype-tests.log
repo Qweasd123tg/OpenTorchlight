@@ -1,0 +1,71 @@
+Internal ctest changing into directory: /mnt/data/work-large10/build-font
+UpdateCTestConfiguration  from :/mnt/data/work-large10/build-font/DartConfiguration.tcl
+Parse Config file:/mnt/data/work-large10/build-font/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/mnt/data/work-large10/build-font/DartConfiguration.tcl
+Parse Config file:/mnt/data/work-large10/build-font/DartConfiguration.tcl
+Test project /mnt/data/work-large10/build-font
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 16
+    Start 16: frontend_menu_resources
+
+16: Test command: /mnt/data/work-large10/build-font/frontend_menu_test "/mnt/data/work-large10/build-font/fixtures/menu-widgets.pak.zip"
+16: Working Directory: /mnt/data/work-large10/build-font
+16: Test timeout computed to be: 30
+16: 29 authored menu checks passed; no original pak parity claim
+1/5 Test #16: frontend_menu_resources ..........   Passed    0.01 sec
+test 17
+    Start 17: ui_text_layout
+
+17: Test command: /mnt/data/work-large10/build-font/ui_text_test
+17: Working Directory: /mnt/data/work-large10/build-font
+17: Test timeout computed to be: 30
+17: 13 text decoding / wrapping / clipping checks passed
+2/5 Test #17: ui_text_layout ...................   Passed    0.00 sec
+test 18
+    Start 18: ui_font_atlas
+
+18: Test command: /mnt/data/work-large10/build-font/ui_font_atlas_test "/mnt/data/work-large10/build-font/fixtures/ui-font.pak.zip"
+18: Working Directory: /mnt/data/work-large10/build-font
+18: Test timeout computed to be: 30
+18: 13 real FreeType / authored atlas checks passed; not original CEGUI parity
+3/5 Test #18: ui_font_atlas ....................   Passed    0.02 sec
+test 21
+    Start 21: gles_ui_headless
+
+21: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/gles_ui_headless_test.py" "--probe" "/mnt/data/work-large10/build-font/libgles_ui_probe.so" "--fixture" "/mnt/data/work-large10/build-font/fixtures/frontend.pak.zip" "--hud-fixture" "/mnt/data/work-large10/build-font/fixtures/hud.pak.zip"
+21: Working Directory: /mnt/data/work-large10/build-font
+21: Test timeout computed to be: 60
+21: Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+21: 4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+4/5 Test #21: gles_ui_headless .................   Passed    1.29 sec
+test 22
+    Start 22: gles_menu_text
+
+22: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/gles_menu_text_test.py" "--probe" "/mnt/data/work-large10/build-font/libgles_ui_probe.so" "--fixture" "/mnt/data/work-large10/build-font/fixtures/menu-widgets.pak.zip" "--font-fixture" "/mnt/data/work-large10/build-font/fixtures/ui-font.pak.zip"
+22: Working Directory: /mnt/data/work-large10/build-font
+22: Test timeout computed to be: 60
+22: Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+22: 5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+22: 8 real FreeType sequence frames passed; bright-pixel counts: [153, 419, 70, 115, 419, 419, 80, 459]
+22: PASS: 13 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+5/5 Test #22: gles_menu_text ...................   Passed    1.77 sec
+
+The following tests passed:
+	frontend_menu_resources
+	ui_text_layout
+	ui_font_atlas
+	gles_ui_headless
+	gles_menu_text
+
+100% tests passed, 0 tests failed out of 5
+
+Label Time Summary:
+core      =   3.10 sec*proc (5 tests)
+render    =   3.06 sec*proc (2 tests)
+
+Total Test time (real) =   3.10 sec

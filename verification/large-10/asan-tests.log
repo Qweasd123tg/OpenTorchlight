@@ -1,0 +1,134 @@
+Internal ctest changing into directory: /mnt/data/work-large10/build-asan
+UpdateCTestConfiguration  from :/mnt/data/work-large10/build-asan/DartConfiguration.tcl
+Parse Config file:/mnt/data/work-large10/build-asan/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/mnt/data/work-large10/build-asan/DartConfiguration.tcl
+Parse Config file:/mnt/data/work-large10/build-asan/DartConfiguration.tcl
+Test project /mnt/data/work-large10/build-asan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 15
+      Start 15: frontend
+
+15: Test command: /mnt/data/work-large10/build-asan/frontend_test "/mnt/data/work-large10/build-asan/fixtures/frontend.pak.zip"
+15: Working Directory: /mnt/data/work-large10/build-asan
+15: Test timeout computed to be: 1500
+15: frontend: 34 assertions; authored CEGUI/PNG fixture, no original skin equivalence
+ 1/10 Test #15: frontend .........................   Passed    0.12 sec
+test 16
+      Start 16: frontend_menu_resources
+
+16: Test command: /mnt/data/work-large10/build-asan/frontend_menu_test "/mnt/data/work-large10/build-asan/fixtures/menu-widgets.pak.zip"
+16: Working Directory: /mnt/data/work-large10/build-asan
+16: Test timeout computed to be: 30
+16: 29 authored menu checks passed; no original pak parity claim
+ 2/10 Test #16: frontend_menu_resources ..........   Passed    0.06 sec
+test 17
+      Start 17: ui_text_layout
+
+17: Test command: /mnt/data/work-large10/build-asan/ui_text_test
+17: Working Directory: /mnt/data/work-large10/build-asan
+17: Test timeout computed to be: 30
+17: 13 text decoding / wrapping / clipping checks passed
+ 3/10 Test #17: ui_text_layout ...................   Passed    0.02 sec
+test 18
+      Start 18: ui_font_atlas
+
+18: Test command: /mnt/data/work-large10/build-asan/ui_font_atlas_test "/mnt/data/work-large10/build-asan/fixtures/ui-font.pak.zip"
+18: Working Directory: /mnt/data/work-large10/build-asan
+18: Test timeout computed to be: 30
+18: 13 real FreeType / authored atlas checks passed; not original CEGUI parity
+ 4/10 Test #18: ui_font_atlas ....................   Passed    0.03 sec
+test 19
+      Start 19: frontend_campaign_cycle
+
+19: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/frontend_cycle_process_test.py" "--probe" "/mnt/data/work-large10/build-asan/frontend_cycle_test" "--fixture" "/mnt/data/work-large10/build-asan/fixtures/frontend.pak.zip"
+19: Working Directory: /mnt/data/work-large10/build-asan
+19: Test timeout computed to be: 120
+19: frontend-cycle write: 222 assertions (authored resources; not original Town/GUI parity)
+19: frontend-cycle read: 222 assertions (authored resources; not original Town/GUI parity)
+19: frontend-cycle verify: 4 assertions (authored resources; not original Town/GUI parity)
+19: Three independent processes completed the authored-resource frontend/campaign cycle.
+ 5/10 Test #19: frontend_campaign_cycle ..........   Passed    1.54 sec
+test 21
+      Start 21: gles_ui_headless
+
+21: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/gles_ui_headless_test.py" "--probe" "/mnt/data/work-large10/build-asan/libgles_ui_probe.so" "--fixture" "/mnt/data/work-large10/build-asan/fixtures/frontend.pak.zip" "--hud-fixture" "/mnt/data/work-large10/build-asan/fixtures/hud.pak.zip"
+21: Working Directory: /mnt/data/work-large10/build-asan
+21: Environment variables: 
+21:  LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/14/libasan.so
+21:  ASAN_OPTIONS=detect_leaks=0:halt_on_error=1
+21:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+21: Test timeout computed to be: 60
+21: Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+21: 4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+ 6/10 Test #21: gles_ui_headless .................   Passed    2.00 sec
+test 22
+      Start 22: gles_menu_text
+
+22: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/gles_menu_text_test.py" "--probe" "/mnt/data/work-large10/build-asan/libgles_ui_probe.so" "--fixture" "/mnt/data/work-large10/build-asan/fixtures/menu-widgets.pak.zip" "--font-fixture" "/mnt/data/work-large10/build-asan/fixtures/ui-font.pak.zip"
+22: Working Directory: /mnt/data/work-large10/build-asan
+22: Environment variables: 
+22:  LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/14/libasan.so
+22:  ASAN_OPTIONS=detect_leaks=0:halt_on_error=1
+22:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+22: Test timeout computed to be: 60
+22: Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+22: 5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+22: 8 real FreeType sequence frames passed; bright-pixel counts: [153, 419, 70, 115, 419, 419, 80, 459]
+22: PASS: 13 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+ 7/10 Test #22: gles_menu_text ...................   Passed    2.17 sec
+test 23
+      Start 23: save_checkpoint
+
+23: Test command: /mnt/data/work-large10/build-asan/save_checkpoint_test "/mnt/data/work-large10/build-asan/fixtures/ordinary-combat.pak.zip" "/mnt/data/work-large10/build-asan/checkpoint-test-saves" "self"
+23: Working Directory: /mnt/data/work-large10/build-asan
+23: Test timeout computed to be: 90
+23: save_checkpoint self: 603 assertions passed (authored resources; not original save compatibility)
+ 8/10 Test #23: save_checkpoint ..................   Passed    0.65 sec
+test 24
+      Start 24: save_fresh_process
+
+24: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/save_process_test.py" "--probe" "/mnt/data/work-large10/build-asan/save_checkpoint_test" "--fixture" "/mnt/data/work-large10/build-asan/fixtures/ordinary-combat.pak.zip"
+24: Working Directory: /mnt/data/work-large10/build-asan
+24: Test timeout computed to be: 90
+24: save_checkpoint write: 593 assertions passed (authored resources; not original save compatibility)
+24: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+24: Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+ 9/10 Test #24: save_fresh_process ...............   Passed    1.66 sec
+test 25
+      Start 25: save_atomic_process
+
+25: Test command: /opt/pyvenv/bin/python3 "/mnt/data/work-large10/tests/save_atomic_process_test.py" "--probe" "/mnt/data/work-large10/build-asan/save_checkpoint_test" "--fixture" "/mnt/data/work-large10/build-asan/fixtures/ordinary-combat.pak.zip"
+25: Working Directory: /mnt/data/work-large10/build-asan
+25: Test timeout computed to be: 90
+25: save_checkpoint write: 593 assertions passed (authored resources; not original save compatibility)
+25: save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+25: save_checkpoint race-b: 1 assertions passed (authored resources; not original save compatibility)
+25: expected competing writer conflict
+25: save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+25: Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+10/10 Test #25: save_atomic_process ..............   Passed    1.86 sec
+
+The following tests passed:
+	frontend
+	frontend_menu_resources
+	ui_text_layout
+	ui_font_atlas
+	frontend_campaign_cycle
+	gles_ui_headless
+	gles_menu_text
+	save_checkpoint
+	save_fresh_process
+	save_atomic_process
+
+100% tests passed, 0 tests failed out of 10
+
+Label Time Summary:
+core      =  10.11 sec*proc (10 tests)
+render    =   4.17 sec*proc (2 tests)
+
+Total Test time (real) =  10.12 sec

@@ -102,10 +102,13 @@ UiFontDefinition parse_ui_font_definition(const std::vector<std::uint8_t> &bytes
 namespace {
 #ifdef TORCHLIGHT_HAVE_FREETYPE
 FT_Library shared_library() {
-    static FT_Library library = nullptr;
-    if (library == nullptr && FT_Init_FreeType(&library) != 0)
-        library = nullptr;
-    return library;
+    struct Library {
+        FT_Library value = nullptr;
+        Library() { if (FT_Init_FreeType(&value) != 0) value = nullptr; }
+        ~Library() { if (value) FT_Done_FreeType(value); }
+    };
+    static Library library;
+    return library.value;
 }
 #endif
 constexpr int kAtlasSize = 512;
@@ -122,6 +125,7 @@ struct UiFont::Impl {
         std::vector<std::uint8_t>(static_cast<std::size_t>(kAtlasSize) * kAtlasSize * 4, 0);
     std::map<char32_t, UiGlyph> glyphs;
     int pack_x = kAtlasPadding, pack_y = kAtlasPadding, row_height = 0;
+    std::uint64_t revision = 1;
 #ifdef TORCHLIGHT_HAVE_FREETYPE
     FT_Face face = nullptr;
 #endif
@@ -136,11 +140,18 @@ struct UiFont::Impl {
         if (face == nullptr)
             return;
         const float points = definition.size * 64.0F;
-        const auto char_width = static_cast<FT_F26Dot6>(
-            std::trunc(points * (definition.auto_scaled ? horz_scale : 1.0F)));
-        const auto char_height = static_cast<FT_F26Dot6>(
-            std::trunc(points * (definition.auto_scaled ? vert_scale : 1.0F)));
-        // OGRE-hosted CEGUI reports a 96 dpi renderer; native FT units are 1/64 px.
+        const float sx = points * (definition.auto_scaled ? horz_scale : 1.0F);
+        const float sy = points * (definition.auto_scaled ? vert_scale : 1.0F);
+        // Port bound: reject dimensions exceeding the fixed atlas before float
+        // to integer conversion. Do not pass NaN/overflow to FreeType.
+        if (!std::isfinite(sx) || !std::isfinite(sy) || sx <= 0 || sy <= 0 ||
+            sx > kAtlasSize * 64.0F || sy > kAtlasSize * 64.0F) {
+            ready = false;
+            return;
+        }
+        const auto char_width = static_cast<FT_F26Dot6>(std::trunc(sx));
+        const auto char_height = static_cast<FT_F26Dot6>(std::trunc(sy));
+        // inferred DPI; original renderer path remains unverified. FT units: 1/64.
         if (FT_Set_Char_Size(face, char_width, char_height, 96, 96) != 0) {
             ready = false;
             return;
@@ -172,6 +183,9 @@ struct UiFont::Impl {
         glyph.width = static_cast<float>(bitmap.width);
         glyph.height = static_cast<float>(bitmap.rows);
         if (bitmap.width > 0 && bitmap.rows > 0) {
+            if (bitmap.width > kAtlasSize - 2 * kAtlasPadding ||
+                bitmap.rows > kAtlasSize - 2 * kAtlasPadding)
+                return nullptr;
             if (pack_x + static_cast<int>(bitmap.width) + kAtlasPadding > kAtlasSize) {
                 pack_x = kAtlasPadding;
                 pack_y += row_height + kAtlasPadding;
@@ -200,9 +214,11 @@ struct UiFont::Impl {
             glyph.v1 = static_cast<float>(pack_y + static_cast<int>(bitmap.rows)) / kAtlasSize;
             pack_x += static_cast<int>(bitmap.width) + kAtlasPadding;
             row_height = std::max(row_height, static_cast<int>(bitmap.rows));
+            ++revision;
         }
         return &glyphs.emplace(codepoint, glyph).first->second;
 #else
+        static_cast<void>(codepoint);
         return nullptr;
 #endif
     }
@@ -225,6 +241,8 @@ UiFont::UiFont(const PakArchive &archive, UiFontDefinition definition)
         return;
     }
     impl_->set_char_size();
+#else
+    static_cast<void>(archive);
 #endif
 }
 UiFont::~UiFont() = default;
@@ -238,11 +256,16 @@ bool UiFont::valid() const noexcept {
     return impl_->ready;
 }
 void UiFont::notify_screen_size(float width, float height) {
-    if (width <= 0 || height <= 0 || impl_->definition.native_horz <= 0 ||
-        impl_->definition.native_vert <= 0)
+    if (!std::isfinite(width) || !std::isfinite(height) || width <= 0 || height <= 0 ||
+        impl_->definition.native_horz <= 0 || impl_->definition.native_vert <= 0)
         return;
-    impl_->horz_scale = width / impl_->definition.native_horz;
-    impl_->vert_scale = height / impl_->definition.native_vert;
+    const float sx = width / impl_->definition.native_horz;
+    const float sy = height / impl_->definition.native_vert;
+    if (sx == impl_->horz_scale && sy == impl_->vert_scale)
+        return;
+    impl_->horz_scale = sx;
+    impl_->vert_scale = sy;
+    ++impl_->revision;
     impl_->glyphs.clear();
     impl_->pack_x = kAtlasPadding;
     impl_->pack_y = kAtlasPadding;
@@ -271,5 +294,8 @@ int UiFont::atlas_width() const noexcept {
 }
 int UiFont::atlas_height() const noexcept {
     return kAtlasSize;
+}
+std::uint64_t UiFont::atlas_revision() const noexcept {
+    return impl_->revision;
 }
 } // namespace torchlight

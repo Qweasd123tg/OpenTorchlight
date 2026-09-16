@@ -1,0 +1,9 @@
+Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+Traceback (most recent call last):
+  File "/mnt/data/work-large10/tests/gles_menu_text_test.py", line 97, in <module>
+    if __name__=='__main__':raise SystemExit(main())
+                                             ~~~~^^
+  File "/mnt/data/work-large10/tests/gles_menu_text_test.py", line 77, in main
+    assert n>0,('resource glyph atlas not uploaded',step,n)
+           ^^^
+AssertionError: ('resource glyph atlas not uploaded', 0, 0)

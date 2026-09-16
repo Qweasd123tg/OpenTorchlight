@@ -27,11 +27,13 @@ Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
             throw std::invalid_argument("invalid frontend class");
 }
 void Frontend::set_saves(std::vector<SaveSlotInfo> saves) {
+    buttons_.clear();
     saves_ = std::move(saves);
     save_index_ = std::min(save_index_, saves_.empty() ? 0 : saves_.size() - 1);
     scroll_ = 0;
 }
 void Frontend::show_main() {
+    buttons_.clear();
     page_ = FrontendPage::main;
     focus_ = 0;
     request_.reset();
@@ -39,12 +41,14 @@ void Frontend::show_main() {
 }
 void Frontend::pause() {
     if (page_ == FrontendPage::playing) {
+        buttons_.clear();
         page_ = FrontendPage::pause;
         focus_ = 0;
         status_.clear();
     }
 }
 void Frontend::entered_game() {
+    buttons_.clear();
     page_ = FrontendPage::playing;
     request_.reset();
     status_.clear();
@@ -101,7 +105,8 @@ void Frontend::click(float x, float y) {
     if (request_)
         return;
     for (std::size_t i = buttons_.size(); i > 0; --i)
-        if (buttons_[i - 1].enabled && buttons_[i - 1].rect.contains(x, y)) {
+        if (buttons_[i - 1].enabled && buttons_[i - 1].rect.contains(x, y) &&
+            buttons_[i - 1].widget.clip.contains(x, y)) {
             focus_ = i - 1;
             activate(buttons_[i - 1].id);
             return;
@@ -177,162 +182,180 @@ std::optional<FrontendRequest> Frontend::take_request() {
     return result;
 }
 FrontendFrame Frontend::frame(int width, int height) {
+    if (width <= 0 || height <= 0) throw std::invalid_argument("invalid UI viewport");
     FrontendFrame frame;
-    std::string path;
+    std::string path, fallback_title;
     switch (page_) {
     case FrontendPage::main:
-        frame.title = "OPENTORCHLIGHT";
-        path = "media/UI/mainmenuframe.layout";
-        break;
+        fallback_title = "OPENTORCHLIGHT"; path = "media/UI/mainmenuframe.layout"; break;
     case FrontendPage::create:
-        frame.title = "NEW CHARACTER";
-        path = "media/UI/charactercreate.layout";
-        break;
+        fallback_title = "NEW CHARACTER"; path = "media/UI/charactercreate.layout"; break;
     case FrontendPage::load:
-        frame.title = "LOAD CHARACTER";
-        path = "media/UI/characterload.layout";
-        break;
+        fallback_title = "LOAD CHARACTER"; path = "media/UI/characterload.layout"; break;
     case FrontendPage::pause:
-        frame.title = "PAUSED";
-        break;
-    default:
-        buttons_.clear();
-        return frame;
+        fallback_title = "PAUSED"; path = "media/UI/optionsmenu.layout"; break;
+    default: buttons_.clear(); return frame;
     }
     std::vector<UiResolvedWidget> widgets;
-    if (!path.empty())
-        try {
-            if (const auto *layout = resources_->layout(path)) {
-                widgets = layout->resolve(width, height);
-                frame.original_layout = true;
-            }
-        } catch (const std::exception &e) {
-            status_ = e.what();
+    try {
+        if (const auto *layout = resources_->layout(path)) {
+            widgets = layout->resolve(width, height);
+            frame.original_layout = true;
         }
-    std::map<std::string, UiRect> originals;
-    std::map<std::string, std::string> original_text, original_font, original_type;
-    for (const auto &w : widgets) {
-        if (!w.visible)
-            continue;
+    } catch (const std::exception &e) { status_ = e.what(); }
+    // A resource page gets only its own titles, never a synthetic logo/header.
+    if (!frame.original_layout) frame.title = fallback_title;
+    std::map<std::string, UiResolvedWidget> originals;
+    std::vector<UiResolvedWidget> unsupported;
+    std::vector<std::string> actions(widgets.size());
+    bool character_name_bound = false;
+    std::vector<bool> slot_name_bound(5, false);
+    for (std::size_t n = 0; n < widgets.size(); ++n) {
+        const auto &w = widgets[n];
+        // Retain hidden/disabled known actions in originals so a fallback cannot
+        // resurrect a control explicitly hidden/disabled by a resource.
         const auto callback = upper(w.callback), name = upper(leaf(w.name));
-        std::string action;
+        auto &action = actions[n];
         if (page_ == FrontendPage::main) {
-            if (callback == "GUINEWGAMEMENU")
-                action = "new";
-            else if (callback == "GUICONTINUEGAMEMENU")
-                action = "loads";
-            else if (callback == "GUICONTINUEGAME")
-                action = "continue";
-            else if (callback == "GUIEXITAPPLICATION")
-                action = "exit";
+            if (callback == "GUINEWGAMEMENU") action = "new";
+            else if (callback == "GUICONTINUEGAMEMENU") action = "loads";
+            else if (callback == "GUICONTINUEGAME") action = "continue";
+            else if (callback == "GUIEXITAPPLICATION") action = "exit";
         } else if (page_ == FrontendPage::create) {
-            if (callback == "GUIBACK")
-                action = "back";
-            else if (callback == "GUINEWGAME")
-                action = "create";
+            if (callback == "GUIBACK") action = "back";
+            else if (callback == "GUINEWGAME") action = "create";
             else if (callback == "GUISELECT1")
                 for (std::size_t i = 0; i < classes_.size(); ++i)
-                    if (name == upper(classes_[i].name))
-                        action = "class-" + number(i);
+                    if (name == upper(classes_[i].name)) action = "class-" + number(i);
         } else if (page_ == FrontendPage::load) {
-            if (callback == "GUIBACK")
-                action = "back";
-            else if (callback == "GUICONTINUEGAME")
-                action = "load";
-            else if (callback == "GUISCROLLUP")
-                action = "scroll-up";
-            else if (callback == "GUISCROLLDOWN")
-                action = "scroll-down";
-            else
-                for (std::size_t i = 0; i < 5; ++i)
-                    if (callback == "GUISELECT" + number(i + 1))
-                        action = "slot-" + number(scroll_ + i);
-        }
-        if (!action.empty() && w.enabled && w.rect.width > 0 && w.rect.height > 0) {
-            originals[action] = w.rect;
-            original_text[action] = w.text;
-            original_font[action] = w.font;
-            original_type[action] = w.type;
-        }
-        if (w.callback.empty() && !w.image.empty())
-            frame.decorations.push_back(w);
+            if (callback == "GUIBACK") action = "back";
+            else if (callback == "GUICONTINUEGAME") action = "load";
+            else if (callback == "GUISCROLLUP") action = "scroll-up";
+            else if (callback == "GUISCROLLDOWN") action = "scroll-down";
+            else for (std::size_t i = 0; i < 5; ++i)
+                if (callback == "GUISELECT" + number(i + 1)) action = "slot-" + number(scroll_ + i);
+        } else if (page_ == FrontendPage::pause && callback == "GUICLOSEMENU") action = "resume";
+        if (!action.empty()) originals[action] = w;
+        else if (!w.callback.empty() && w.visible) unsupported.push_back(w);
     }
-    std::size_t row = 0;
-    const auto add = [&](std::string id, std::string label, bool enabled = true,
-                         bool selected = false) {
-        // Standalone fallback / supplemental controls, never claimed as CEGUI skin parity.
-        const float scale = std::min(width / 1024.0F, height / 768.0F);
-        UiRect rect{width * .5F - 210 * scale, 140 * scale + static_cast<float>(row++) * 48 * scale,
-                    420 * scale, 40 * scale};
-        if (const auto it = originals.find(id); it != originals.end())
-            rect = it->second;
-        if (const auto it = original_text.find(id);
-            it != original_text.end() && !it->second.empty() && it->second != "1")
-            label = it->second;
-        FrontendButton button{std::move(id), std::move(label), {}, {}, {}, rect, enabled, false,
-                              selected};
-        if (const auto it = original_type.find(id); it != original_type.end()) {
-            if (const auto images = resources_->widget_images(it->second)) {
-                button.image = images->normal;
-                button.hover_image = images->hover;
+    for (std::size_t n = 0; n < widgets.size(); ++n) {
+        auto w = widgets[n];
+        if (!w.visible || !w.callback.empty()) continue;
+        if (!w.image.empty()) frame.decorations.push_back(w);
+        const auto name = upper(leaf(w.name)), type = upper(w.type);
+        const bool static_text = type.find("STATICTEXT") != std::string::npos ||
+                                 type.find("ITEMTEXT") != std::string::npos;
+        const bool name_entry = page_ == FrontendPage::create && name == "CHARACTERNAME";
+        if (!static_text && !name_entry) continue;
+        if (name_entry) { w.text = name_; character_name_bound = true; }
+        if (page_ == FrontendPage::load) {
+            for (std::size_t i = 0; i < 5; ++i) {
+                if (name == "PLAYER" + number(i + 1) + "NAME") {
+                    slot_name_bound[i] = true;
+                    const auto index = scroll_ + i;
+                    w.text = index < saves_.size() ?
+                        (saves_[index].name.empty() ? saves_[index].slot : saves_[index].name) : "";
+                } else if (name == "PLAYER" + number(i + 1) + "DESC") {
+                    // .otc metadata is not an original .SVB description.
+                    const auto index = scroll_ + i;
+                    w.text = index < saves_.size() ?
+                        (saves_[index].loadable() ? "PORT SAVE (.otc)" : "PORT SAVE: UNREADABLE") : "";
+                }
             }
         }
-        if (const auto it = original_font.find(id); it != original_font.end())
-            button.font = it->second;
-        frame.buttons.push_back(std::move(button));
+        if (w.text.empty() || w.text == "1") continue;
+        bool duplicate = false;
+        for (auto p = w.parent; p >= 0; p = widgets[static_cast<std::size_t>(p)].parent) {
+            const auto &ancestor = widgets[static_cast<std::size_t>(p)];
+            if (!actions[static_cast<std::size_t>(p)].empty() && ancestor.text == w.text) {
+                duplicate = true; break;
+            }
+        }
+        if (!duplicate) frame.texts.push_back(std::move(w));
+    }
+    std::size_t fallback_row = 0;
+    const auto make_button = [&](std::string id, std::string label,
+                                  const UiResolvedWidget *source, bool enabled, bool selected) {
+        FrontendButton b;
+        b.id = std::move(id); b.text = std::move(label); b.enabled = enabled; b.selected = selected;
+        b.supplemental = source == nullptr;
+        if (source) {
+            b.widget = *source; b.rect = source->rect; b.font = source->font;
+            b.enabled = b.enabled && source->enabled;
+            if (!source->text.empty() && source->text != "1" && b.id.rfind("slot-", 0) != 0)
+                b.text = source->text;
+            if (const auto images = resources_->widget_images(source->type)) {
+                b.image = images->normal; b.hover_image = images->hover;
+                b.pushed_image = images->pushed; b.disabled_image = images->disabled;
+            }
+            if (!source->image.empty()) b.image = source->image;
+            for (auto item : {std::pair<const char *, std::string *>{"HoverImage", &b.hover_image},
+                              {"PushedImage", &b.pushed_image}, {"DisabledImage", &b.disabled_image}}) {
+                const auto value = source->property(item.first);
+                if (!value.empty()) *item.second = value;
+            }
+        } else {
+            // Explicit portable fallback/supplement; never original layout geometry.
+            const float scale = std::min(width / 1024.0F, height / 768.0F);
+            const float x = frame.original_layout ? 16.0F : 302.0F;
+            b.rect = {x * scale, (180.0F + static_cast<float>(fallback_row++) * 48.0F) * scale,
+                      (frame.original_layout ? 246.0F : 420.0F) * scale, 40.0F * scale};
+            b.widget.rect = b.widget.clip = b.rect;
+            b.text = "PORT: " + b.text;
+        }
+        frame.buttons.push_back(std::move(b));
+    };
+    const auto add = [&](const std::string &id, std::string label, bool enabled = true,
+                         bool selected = false) {
+        const auto it = originals.find(id);
+        if (it != originals.end() && (!it->second.visible || it->second.rect.width <= 0 ||
+                                     it->second.rect.height <= 0 || it->second.clip.width <= 0 ||
+                                     it->second.clip.height <= 0)) return;
+        make_button(id, std::move(label), it == originals.end() ? nullptr : &it->second,
+                    enabled, selected);
     };
     if (page_ == FrontendPage::main) {
         add("new", "NEW CHARACTER");
         add("loads", "LOAD CHARACTER", !saves_.empty());
-        add("continue", "CONTINUE LAST",
-            std::any_of(saves_.begin(), saves_.end(), [](const auto &s) { return s.loadable(); }));
+        add("continue", "CONTINUE LAST", std::any_of(saves_.begin(), saves_.end(),
+                                               [](const auto &s) { return s.loadable(); }));
         add("exit", "EXIT");
-        frame.notes.push_back(
-            {"NORMAL ONLY | ORIGINAL LAYOUTS WHEN AVAILABLE | PORT SAVE FORMAT", false});
+        frame.notes.push_back({"PORT: NORMAL ONLY; SAVES USE .otc, NOT ORIGINAL .SVB", false});
     } else if (page_ == FrontendPage::create) {
         for (std::size_t i = 0; i < classes_.size(); ++i)
             add("class-" + number(i), upper(classes_[i].name), true, i == class_index_);
-        add("create", "CREATE - NORMAL");
-        add("back", "BACK");
-        frame.notes.push_back({"NAME: " + name_, true});
-        frame.notes.push_back(
-            {"TYPE A-Z / 0-9; BACKSPACE TO EDIT. PET AND DIFFICULTY OPTIONS NOT IMPLEMENTED.",
-             false});
+        add("create", "CREATE - NORMAL"); add("back", "BACK");
+        if (!character_name_bound) frame.notes.push_back({"PORT NAME: " + name_, true});
+        frame.notes.push_back({"PORT: TYPE A-Z / 0-9; BACKSPACE. PET / DIFFICULTY NOT IMPLEMENTED.", false});
     } else if (page_ == FrontendPage::load) {
-        for (std::size_t i = scroll_; i < std::min(saves_.size(), scroll_ + 5); ++i)
-            add("slot-" + number(i),
-                saves_[i].name.empty()
-                    ? saves_[i].slot
-                    : saves_[i].name + (saves_[i].loadable() ? "" : " [UNREADABLE]"),
-                true, i == save_index_);
+        for (std::size_t i = scroll_; i < std::min(saves_.size(), scroll_ + 5); ++i) {
+            const auto label = slot_name_bound[i - scroll_] ? std::string{} :
+                               saves_[i].name.empty() ? saves_[i].slot : saves_[i].name;
+            add("slot-" + number(i), label, true, i == save_index_);
+        }
         add("load", "LOAD SELECTED", save_index_ < saves_.size() && saves_[save_index_].loadable());
         add("scroll-up", "PREVIOUS", scroll_ > 0);
-        add("scroll-down", "NEXT", scroll_ + 5 < saves_.size());
-        add("back", "BACK");
-        if (saves_.empty())
-            frame.notes.push_back({"NO SAVED CHARACTERS", false});
-        else if (save_index_ < saves_.size())
-            frame.notes.push_back({"SAVE: " + saves_[save_index_].slot, false});
+        add("scroll-down", "NEXT", scroll_ + 5 < saves_.size()); add("back", "BACK");
+        if (saves_.empty()) frame.notes.push_back({"PORT: NO SAVED CHARACTERS", false});
+        else if (save_index_ < saves_.size()) frame.notes.push_back({"PORT SAVE: " + saves_[save_index_].slot, false});
     } else {
-        add("resume", "RESUME");
-        add("save", "SAVE");
-        add("save-menu", "SAVE AND MAIN MENU");
-        add("save-exit", "SAVE AND EXIT");
-        frame.notes.push_back(
-            {"PAUSED: NO SIMULATION ADVANCE. DISK WRITE MUST SUCCEED BEFORE LEAVING.", false});
+        add("resume", "RESUME"); add("save", "SAVE (.otc)");
+        add("save-menu", "SAVE AND MAIN MENU"); add("save-exit", "SAVE AND EXIT");
+        frame.notes.push_back({"PORT: PAUSED. .otc WRITE MUST SUCCEED BEFORE LEAVING.", false});
     }
-    if (focus_ >= frame.buttons.size())
-        focus_ = 0;
-    if (!frame.buttons.empty())
-        frame.buttons[focus_].focused = true;
-    if (!status_.empty())
-        frame.notes.push_back({status_, false});
-    if (frame.original_layout)
-        frame.notes.push_back(
-            {"PROTOTYPE CONTROLS / FONT; RESOURCE RECTANGLES AND SUPPORTED IMAGES", false});
-    if (!frame.original_layout)
-        frame.notes.push_back(
-            {"PROTOTYPE UI: ORIGINAL LAYOUT MISSING OR THIS PAGE IS PORT-SPECIFIC", false});
+    for (const auto &w : unsupported) {
+        make_button("unsupported:" + w.name, w.text == "1" ? "" : w.text, &w, false, false);
+    }
+    if (!unsupported.empty()) frame.notes.push_back({
+        "PORT: DISABLED RESOURCE CONTROLS ARE NOT IMPLEMENTED (SETTINGS / ORIGINAL EXIT / OTHER MENUS).", false});
+    if (focus_ >= frame.buttons.size()) focus_ = 0;
+    if (!frame.buttons.empty()) {
+        for (std::size_t n = 0; n < frame.buttons.size() && !frame.buttons[focus_].enabled; ++n)
+            focus_ = (focus_ + 1) % frame.buttons.size();
+        if (frame.buttons[focus_].enabled) frame.buttons[focus_].focused = true;
+    }
+    if (!status_.empty()) frame.notes.push_back({status_, false});
+    if (!frame.original_layout) frame.notes.push_back({"PORT FALLBACK: ORIGINAL LAYOUT UNAVAILABLE", false});
     buttons_ = frame.buttons;
     return frame;
 }

@@ -35,6 +35,7 @@ add_library(torchlight_core STATIC
     src/save_store.cpp
     src/ui_layout.cpp
     src/ui_font.cpp
+    src/ui_text.cpp
     src/ui_hud.cpp
     src/frontend.cpp
     src/interaction.cpp
@@ -340,6 +341,49 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(frontend_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME frontend COMMAND frontend_test ${FRONTEND_FIXTURE})
+    set(MENU_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/menu-widgets.pak.zip)
+    add_custom_command(OUTPUT ${MENU_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_menu_fixture.py ${MENU_FIXTURE}
+        DEPENDS tests/make_menu_fixture.py tests/make_frontend_fixture.py tests/make_ui_font_fixture.py
+        VERBATIM)
+    add_custom_target(menu_fixture DEPENDS ${MENU_FIXTURE})
+    add_executable(frontend_menu_test tests/frontend_menu_test.cpp)
+    target_link_libraries(frontend_menu_test PRIVATE torchlight_core)
+    add_dependencies(frontend_menu_test menu_fixture)
+    add_executable(ui_text_test tests/ui_text_test.cpp)
+    target_link_libraries(ui_text_test PRIVATE torchlight_core)
+    foreach(_ui_target frontend_menu_test ui_text_test)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(${_ui_target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+    endforeach()
+    add_test(NAME frontend_menu_resources COMMAND frontend_menu_test ${MENU_FIXTURE})
+    add_test(NAME ui_text_layout COMMAND ui_text_test)
+    set_tests_properties(frontend_menu_resources ui_text_layout PROPERTIES TIMEOUT 30)
+    set(UI_FONT_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ui-font.pak.zip)
+    add_custom_command(OUTPUT ${UI_FONT_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_ui_font_fixture.py ${UI_FONT_FIXTURE}
+        DEPENDS tests/make_ui_font_fixture.py VERBATIM)
+    add_custom_target(ui_font_fixture DEPENDS ${UI_FONT_FIXTURE})
+    if(Freetype_FOUND)
+        add_executable(ui_font_atlas_test tests/ui_font_atlas_test.cpp)
+        target_link_libraries(ui_font_atlas_test PRIVATE torchlight_core)
+        add_dependencies(ui_font_atlas_test ui_font_fixture)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(ui_font_atlas_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        add_test(NAME ui_font_atlas COMMAND ui_font_atlas_test ${UI_FONT_FIXTURE})
+        set_tests_properties(ui_font_atlas PROPERTIES TIMEOUT 30)
+    endif()
+    add_executable(menu_resource_probe tests/menu_resource_probe.cpp)
+    target_link_libraries(menu_resource_probe PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(menu_resource_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_menu_presentation
+            COMMAND menu_resource_probe "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
     add_executable(frontend_resource_test tests/frontend_resource_test.cpp)
     target_link_libraries(frontend_resource_test PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -385,17 +429,25 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(application_scenario_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endif()
-        add_dependencies(gles_ui_probe frontend_fixture hud_fixture)
+        add_dependencies(gles_ui_probe frontend_fixture hud_fixture menu_fixture ui_font_fixture)
         add_test(NAME gles_ui_headless COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_ui_headless_test.py
             --probe $<TARGET_FILE:gles_ui_probe> --fixture ${FRONTEND_FIXTURE}
             --hud-fixture ${HUD_FIXTURE})
+        set(_ui_font_args)
+        if(Freetype_FOUND)
+            list(APPEND _ui_font_args --font-fixture ${UI_FONT_FIXTURE})
+        endif()
+        add_test(NAME gles_menu_text COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_menu_text_test.py
+            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${MENU_FIXTURE} ${_ui_font_args})
+        set_tests_properties(gles_menu_text PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         set_tests_properties(gles_ui_headless PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         set(TORCHLIGHT_PYTHON_ASAN_PRELOAD "" CACHE FILEPATH "ASan runtime for the optional Python-hosted EGL probe")
         if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
             # Python and Mesa own process-global allocations. Native core tests
             # still use leak detection; this host checks address/UB errors only.
-            set_tests_properties(gles_ui_headless PROPERTIES ENVIRONMENT
+            set_tests_properties(gles_ui_headless gles_menu_text PROPERTIES ENVIRONMENT
                 "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
         endif()
     endif()
@@ -699,7 +751,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 # ~216s alone; parallel core+render load pushed it past 240s.
                 set_tests_properties(${_ot_test} PROPERTIES TIMEOUT 600)
             endif()
-        elseif(_ot_test STREQUAL "gles_ui_headless")
+        elseif(_ot_test STREQUAL "gles_ui_headless" OR _ot_test STREQUAL "gles_menu_text")
             # Retain the historical portable UI runtime probe while making it
             # discoverable in render as well. Its skip is NOT a pass in check.py.
             set_tests_properties(${_ot_test} PROPERTIES LABELS "core;render")

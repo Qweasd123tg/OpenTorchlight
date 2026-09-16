@@ -1,0 +1,627 @@
+{
+  "schema": 1,
+  "kind": "OpenTorchlight-large-10-verification",
+  "base_archive": {
+    "filename": "OpenTorchlight-gpt-pro-large-9.zip",
+    "sha256": "c68dce705cef7c0e4edd159111178d4bc01a44712d584cea8535d438ec88f31f",
+    "checksum_manifest_valid": true
+  },
+  "groups": {
+    "core_no_freetype": {
+      "status": "PASSED",
+      "passed": 44,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "ordinary_attack_action",
+          "status": "PASSED",
+          "seconds": "0.00554599"
+        },
+        {
+          "name": "actor_motion",
+          "status": "PASSED",
+          "seconds": "0.00382207"
+        },
+        {
+          "name": "animation_events",
+          "status": "PASSED",
+          "seconds": "0.00431204"
+        },
+        {
+          "name": "damage_calculation",
+          "status": "PASSED",
+          "seconds": "0.00407662"
+        },
+        {
+          "name": "warp_arrival",
+          "status": "PASSED",
+          "seconds": "0.00555363"
+        },
+        {
+          "name": "level_entry_fallback",
+          "status": "PASSED",
+          "seconds": "0.0605413"
+        },
+        {
+          "name": "enemy_ai_cooldown",
+          "status": "PASSED",
+          "seconds": "0.158859"
+        },
+        {
+          "name": "ai_cooldown_export_comparison",
+          "status": "PASSED",
+          "seconds": "2.04408"
+        },
+        {
+          "name": "desktop_gameplay_syntax",
+          "status": "PASSED",
+          "seconds": "4.74669"
+        },
+        {
+          "name": "inventory_view",
+          "status": "PASSED",
+          "seconds": "0.0147301"
+        },
+        {
+          "name": "inventory_instances",
+          "status": "PASSED",
+          "seconds": "0.00509781"
+        },
+        {
+          "name": "item_cycle",
+          "status": "PASSED",
+          "seconds": "0.0404669"
+        },
+        {
+          "name": "attack_speed_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.02109"
+        },
+        {
+          "name": "ordinary_combat",
+          "status": "PASSED",
+          "seconds": "0.160193"
+        },
+        {
+          "name": "frontend",
+          "status": "PASSED",
+          "seconds": "0.0103025"
+        },
+        {
+          "name": "frontend_menu_resources",
+          "status": "PASSED",
+          "seconds": "0.0125621"
+        },
+        {
+          "name": "ui_text_layout",
+          "status": "PASSED",
+          "seconds": "0.00496563"
+        },
+        {
+          "name": "frontend_campaign_cycle",
+          "status": "PASSED",
+          "seconds": "1.42885"
+        },
+        {
+          "name": "coverage_map_current",
+          "status": "PASSED",
+          "seconds": "2.62075"
+        },
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "1.3314"
+        },
+        {
+          "name": "gles_menu_text",
+          "status": "PASSED",
+          "seconds": "1.18908"
+        },
+        {
+          "name": "save_checkpoint",
+          "status": "PASSED",
+          "seconds": "0.0911625"
+        },
+        {
+          "name": "save_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.25368"
+        },
+        {
+          "name": "save_atomic_process",
+          "status": "PASSED",
+          "seconds": "1.33345"
+        },
+        {
+          "name": "gameplay_continuation",
+          "status": "PASSED",
+          "seconds": "0.0758404"
+        },
+        {
+          "name": "death_finalization",
+          "status": "PASSED",
+          "seconds": "0.0162408"
+        },
+        {
+          "name": "effect_catalog_source",
+          "status": "PASSED",
+          "seconds": "0.842126"
+        },
+        {
+          "name": "read_only_extractors",
+          "status": "PASSED",
+          "seconds": "10.6192"
+        },
+        {
+          "name": "combat_inputs_evidence",
+          "status": "PASSED",
+          "seconds": "0.768567"
+        },
+        {
+          "name": "player_vitals_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.00482"
+        },
+        {
+          "name": "reward_resource_graphs",
+          "status": "PASSED",
+          "seconds": "0.00956478"
+        },
+        {
+          "name": "reward_unavailable",
+          "status": "PASSED",
+          "seconds": "0.0151165"
+        },
+        {
+          "name": "progression_numeric",
+          "status": "PASSED",
+          "seconds": "0.00511918"
+        },
+        {
+          "name": "reward_cycle",
+          "status": "PASSED",
+          "seconds": "0.0429647"
+        },
+        {
+          "name": "reward_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.53845"
+        },
+        {
+          "name": "legacy_reward_save_migration",
+          "status": "PASSED",
+          "seconds": "0.88947"
+        },
+        {
+          "name": "world_gold_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.18788"
+        },
+        {
+          "name": "monster_experience_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.66163"
+        },
+        {
+          "name": "item_cycle_resource_fixture",
+          "status": "PASSED",
+          "seconds": "0.0108342"
+        },
+        {
+          "name": "parent_dungeon",
+          "status": "PASSED",
+          "seconds": "0.00501535"
+        },
+        {
+          "name": "scenario_first_difference",
+          "status": "PASSED",
+          "seconds": "0.934123"
+        },
+        {
+          "name": "asset_catalog_negative",
+          "status": "PASSED",
+          "seconds": "1.39945"
+        },
+        {
+          "name": "random_observation",
+          "status": "PASSED",
+          "seconds": "0.00674805"
+        },
+        {
+          "name": "verification_driver",
+          "status": "PASSED",
+          "seconds": "4.64729"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 11.061
+    },
+    "selected_real_freetype_gles": {
+      "status": "PASSED",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "frontend_menu_resources",
+          "status": "PASSED",
+          "seconds": "0.0140589"
+        },
+        {
+          "name": "ui_text_layout",
+          "status": "PASSED",
+          "seconds": "0.00366704"
+        },
+        {
+          "name": "ui_font_atlas",
+          "status": "PASSED",
+          "seconds": "0.0163876"
+        },
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "1.29324"
+        },
+        {
+          "name": "gles_menu_text",
+          "status": "PASSED",
+          "seconds": "1.76794"
+        }
+      ]
+    },
+    "selected_asan_ubsan": {
+      "status": "PASSED",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "frontend",
+          "status": "PASSED",
+          "seconds": "0.116626"
+        },
+        {
+          "name": "frontend_menu_resources",
+          "status": "PASSED",
+          "seconds": "0.059133"
+        },
+        {
+          "name": "ui_text_layout",
+          "status": "PASSED",
+          "seconds": "0.0232188"
+        },
+        {
+          "name": "ui_font_atlas",
+          "status": "PASSED",
+          "seconds": "0.0300176"
+        },
+        {
+          "name": "frontend_campaign_cycle",
+          "status": "PASSED",
+          "seconds": "1.54296"
+        },
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "2.00106"
+        },
+        {
+          "name": "gles_menu_text",
+          "status": "PASSED",
+          "seconds": "2.16897"
+        },
+        {
+          "name": "save_checkpoint",
+          "status": "PASSED",
+          "seconds": "0.65036"
+        },
+        {
+          "name": "save_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.65524"
+        },
+        {
+          "name": "save_atomic_process",
+          "status": "PASSED",
+          "seconds": "1.86112"
+        }
+      ]
+    },
+    "original_assets": {
+      "status": "NOT RUN",
+      "reason": "No original pak.zip supplied"
+    },
+    "original_reference": {
+      "status": "NOT RUN",
+      "reason": "No original ELF/pinned CEGUI supplied"
+    },
+    "full_render_group": {
+      "status": "NOT RUN",
+      "reason": "Full group not requested without original resources; two real GLES tests were run as core/selected tests"
+    },
+    "wayland_desktop": {
+      "status": "NOT RUN",
+      "reason": "No Wayland/EGL/GLES development SDK/window harness available"
+    }
+  },
+  "tests_overlap": true,
+  "font_readback": {
+    "total_frames_across_two_gles_tests": 19,
+    "previous_ui_hud_frames": 6,
+    "new_menu_frames": 5,
+    "persistent_font_sequence_frames": 8,
+    "bright_pixels": [
+      153,
+      419,
+      70,
+      115,
+      419,
+      419,
+      80,
+      459
+    ],
+    "resize_roundtrip_byte_identical": true,
+    "original_game_image_oracle": false
+  },
+  "negative_regressions": [
+    {
+      "name": "unmodified-large9-no-freetype-build",
+      "status": "EXPECTED FAILURE REPRODUCED",
+      "reason": "unused-parameter archive under -Werror",
+      "log": "input-large9-no-freetype-build.log"
+    },
+    {
+      "name": "original-large9-renderer-with-new-font-only-probe",
+      "status": "EXPECTED FAILURE REPRODUCED",
+      "first_glyph_bright_pixels": 0,
+      "exit_code": 1,
+      "old_renderer_sha256": "ec722403da36cfe17e4253b4bca3e460d11c93e4a81f11a4770716cc8753377f",
+      "log": "old-renderer-expected-failure.log"
+    }
+  ],
+  "menu_resource_probe": {
+    "authored_sanity": "PASSED",
+    "original_menu_presentation": "NOT RUN",
+    "reason": "Author-created layouts only; no original pak available"
+  },
+  "sanitizers": {
+    "native_leak_detection": true,
+    "python_mesa_host_leak_detection": false,
+    "address_and_undefined_behavior_checks": true,
+    "diagnostics_found": false,
+    "not_all_core_tests_sanitized": true
+  },
+  "fonts": {
+    "actual_system_runtime": [
+      2,
+      13,
+      3
+    ],
+    "test_only_ABI_headers": true,
+    "generated_author_glyphs_only": true,
+    "font_binaries_in_delivery": false,
+    "original_CEGUI_font_parity": "NOT RUN"
+  },
+  "limits": [
+    "No original pak/ELF/CEGUI/full-window validation in this pass",
+    "No complete Falagard, nine-slice, original text shadows or exact Label-area",
+    "PushedImage parsed but not driven by pointer press/release",
+    "Some text colors and supplemental positions/focus border remain prototype",
+    "DPI=96 and exact HUD formulas remain unresolved",
+    "UTF-8 rendering is not Unicode text input/IME",
+    "Inventory and original exit/settings flow not implemented by this pass",
+    "Port .otc save format unchanged; no .SVB support added"
+  ],
+  "changed_source_and_docs": [
+    {
+      "path": "CMakeLists.txt",
+      "status": "modified",
+      "sha256": "36c04735d1fec7eeac74b4e85b34d1daf502b20f4123cf11d04d9465be7c0849"
+    },
+    {
+      "path": "GPT_PRO_UI_TASK.md",
+      "status": "modified",
+      "sha256": "10058508e46656a1022e25f67c72e7e4b98bec156b099736d44bde8b1451530b"
+    },
+    {
+      "path": "NEXT_CHECKS.md",
+      "status": "modified",
+      "sha256": "16115e556b2a314d31fc187ca089f70070a3620076e3a98b4647f71f9aa41bde"
+    },
+    {
+      "path": "README.md",
+      "status": "modified",
+      "sha256": "05de2657fc420505907fcf81029fa25ee6595366d6026ca85c563e41df35507b"
+    },
+    {
+      "path": "UI_MENU_COMPLETION_RESULT_RU.md",
+      "status": "added",
+      "sha256": "ac5c786df63a96b46d47b304f19675b9f924b6fe3b109e07df9e29423127bd25"
+    },
+    {
+      "path": "include/torchlight/frontend.hpp",
+      "status": "modified",
+      "sha256": "53d7b563b6a960a7b9e1bb92e7458bbdc0336782b50e9af75aaa18801efdd1ac"
+    },
+    {
+      "path": "include/torchlight/ui_font.hpp",
+      "status": "modified",
+      "sha256": "c4a494dbcc0b8b55b0ebe3d8efba20773f55e30e427eceb6d38267f38fa366ec"
+    },
+    {
+      "path": "include/torchlight/ui_layout.hpp",
+      "status": "modified",
+      "sha256": "f937fd3a44ed1a3ffdab761fcdee0c7485b550891d1dd4be95fc8f55ece28398"
+    },
+    {
+      "path": "include/torchlight/ui_text.hpp",
+      "status": "added",
+      "sha256": "50de331a05717de106ab260a9d747062f7deb8104fb3b2700f8576c224a0a97a"
+    },
+    {
+      "path": "research/ui-menu-completion.md",
+      "status": "added",
+      "sha256": "9a35c94a2280e0f47376978654e1bc5e34e8cafd79c6b1bcc21fef82ae2e2c67"
+    },
+    {
+      "path": "research/ui-visuals.md",
+      "status": "modified",
+      "sha256": "4e7c4c1dc1b60b745ee236fa0bf88b3c27227ae0a2a50c9978da886d953eb793"
+    },
+    {
+      "path": "src/frontend.cpp",
+      "status": "modified",
+      "sha256": "61f98d8a4d524f69686054998230698af944c6a5510de8214016f1d4e7724e73"
+    },
+    {
+      "path": "src/gles_ui_renderer.cpp",
+      "status": "modified",
+      "sha256": "063e95f3cb358c0b5d03213721ad021bac68e7bc286d4938bad66753122e7081"
+    },
+    {
+      "path": "src/ui_font.cpp",
+      "status": "modified",
+      "sha256": "0754a301a2db4cc7ce79319ed5425a693e4bad51e0c83f872ee5f0e33b8ae0b8"
+    },
+    {
+      "path": "src/ui_layout.cpp",
+      "status": "modified",
+      "sha256": "9a4ed13c1b72b2455d2d032ce0c36890a34418b6782ad3463b1fde87b67e83d5"
+    },
+    {
+      "path": "src/ui_text.cpp",
+      "status": "added",
+      "sha256": "8db9589852de059b305f42bba9469f9841f793915f0466dfe4109783071d47c7"
+    },
+    {
+      "path": "tests/frontend_menu_test.cpp",
+      "status": "added",
+      "sha256": "eccbf92858843f07f28a0b27042339b77243307413f0b35fa4ea10dd865ecdd9"
+    },
+    {
+      "path": "tests/gles_menu_text_test.py",
+      "status": "added",
+      "sha256": "566b0d977a70e6235a0c8ffe19c81570f0afc1025b050e836574a9cdd4885022"
+    },
+    {
+      "path": "tests/gles_ui_probe.cpp",
+      "status": "modified",
+      "sha256": "7522376fb68d7eb4ba68222e7230b292f34360a5e29890248cd25a34888933e4"
+    },
+    {
+      "path": "tests/make_menu_fixture.py",
+      "status": "added",
+      "sha256": "bfac8c3115615ca2721ab897408604a6dae75f59bdb62c7ae42cdf837343d2ed"
+    },
+    {
+      "path": "tests/make_ui_font_fixture.py",
+      "status": "added",
+      "sha256": "fbd83bd98b6c72a09eae90a3c29866550a038913569f84b84e47e1144a714a38"
+    },
+    {
+      "path": "tests/menu_resource_probe.cpp",
+      "status": "added",
+      "sha256": "4b3965085f0fbb0c2731f82029ee8d05a82d3d8550c84d504775d9c6dfcb3ec9"
+    },
+    {
+      "path": "tests/ui_font_atlas_test.cpp",
+      "status": "added",
+      "sha256": "d30416fd6aeea6e09003e1769dfe714b2981644ba20c9a24ec8f99c87895d1bd"
+    },
+    {
+      "path": "tests/ui_text_test.cpp",
+      "status": "added",
+      "sha256": "e60615df1e3f6f0881311c161bba568c2b7418be0788e279468a5325a15983f0"
+    },
+    {
+      "path": "tools/testing/freetype_test_headers.py",
+      "status": "added",
+      "sha256": "415888377f72face45c89bf374004e2d2fe90c3decc3b5ebc8cb8c23e8f08725"
+    }
+  ],
+  "evidence_files": [
+    {
+      "path": "asan-build.log",
+      "sha256": "4bb496dd2309e16fdd967598f1d2d87abb05d8dfe9a8dd0e01017d36bd5b251c"
+    },
+    {
+      "path": "asan-configure.log",
+      "sha256": "86d82c99e6cb3144b699d7920dc0e8eabc173644a7f6fedda6039ffe47b6c078"
+    },
+    {
+      "path": "asan-tests.log",
+      "sha256": "a5aabd3af320ed2177b1177e8837f105f5a20e2d6b3d766a19c6b5117971a9c1"
+    },
+    {
+      "path": "asan-tests.xml",
+      "sha256": "f29cb13f2c36faca7eae79280492c16783b1dc780e0efad20f81b5f5bc87b96d"
+    },
+    {
+      "path": "core-build.log",
+      "sha256": "8c35b1682f73592d30612d7b0fabdb384fcfff35cb5a076cb48b85b1368aa794"
+    },
+    {
+      "path": "core-configure.log",
+      "sha256": "fe1cb8db007907d97d62b9ca7b8800addea8db25c49fcc68b8080a647a74e126"
+    },
+    {
+      "path": "core-driver.json",
+      "sha256": "a2c8be41bd8a988b4933d17c19198c9cd328c8d33b1017f19efd451ab01d0ef3"
+    },
+    {
+      "path": "core-driver.log",
+      "sha256": "fde11a96e1f8ee78801fa127edd26995386d0a0e850c3aa798f090cec3201e2d"
+    },
+    {
+      "path": "core-tests.xml",
+      "sha256": "02150b00f1efce8c05e8ccdd1578c96565f61ea4d3efafead6f73a8ccf5dc665"
+    },
+    {
+      "path": "environment.json",
+      "sha256": "9ab86b3f14136c8f17552ae69b835659a5d42b9bfdb68e26688dcd65a3ee892b"
+    },
+    {
+      "path": "freetype-build.log",
+      "sha256": "206c2d5f1f31cd1d5b75f1a8c710b6365aa0b2949cca39009e5a8b37f7a5c84c"
+    },
+    {
+      "path": "freetype-configure.log",
+      "sha256": "52d3efe78c7dfca23ec8e04d065b3b24498d2ab1004aae6106be17925901e732"
+    },
+    {
+      "path": "freetype-test-abi-manifest.json",
+      "sha256": "9a425eaec9044350b1964926fffb8c5564e26f5524fa3be6f429a7107fdcf04d"
+    },
+    {
+      "path": "freetype-tests.log",
+      "sha256": "1ca1a3703fc9079ae52cb7384a1ca4a32db30546a2337bb5869a11b1e6575975"
+    },
+    {
+      "path": "freetype-tests.xml",
+      "sha256": "5ffdcb5cbd9f0cd9cbb70325a3bb069435efe9610825ce47c8f8807048b626f3"
+    },
+    {
+      "path": "input-large9-checksums.log",
+      "sha256": "e97c3361605b06916d69471c8bce4d7cfa0d058ff4c9f53d93d0bff8c88e783e"
+    },
+    {
+      "path": "input-large9-no-freetype-build.json",
+      "sha256": "bbb00dae135985e1c07c9de4bfa5278f11f6c2a854725724745511e35c83f337"
+    },
+    {
+      "path": "input-large9-no-freetype-build.log",
+      "sha256": "cbd72780ddbec4a35a3d564d82e355ebf2795d96d1a174cc04aad5e03e74deb0"
+    },
+    {
+      "path": "menu-probe-authored-only.log",
+      "sha256": "1825a819ebe9b3457c7f35024c15bb772e6d1aad404937bdbf9b152d5bc81025"
+    },
+    {
+      "path": "old-renderer-expected-failure.log",
+      "sha256": "1712ac8e0855e06f57899aa9085c4d7d095f9e24d477af2fed4f0fc8358250b6"
+    }
+  ],
+  "packaging": "See external OpenTorchlight-large-10-verification.json for final ZIP/patch hashes and bytewise patch-application result; self-referential archive hashes excluded here."
+}

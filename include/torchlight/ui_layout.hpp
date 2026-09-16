@@ -2,6 +2,7 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/ui_font.hpp"
 #include <map>
+#include <array>
 #include <optional>
 
 namespace torchlight {
@@ -18,10 +19,22 @@ struct UiWidget {
     std::map<std::string, std::string> properties;
     [[nodiscard]] std::string property(const std::string &key) const;
 };
+enum class UiTextHorizontal { left, centre, right };
+enum class UiTextVertical { top, centre, bottom };
+struct UiTextStyle {
+    UiTextHorizontal horizontal = UiTextHorizontal::left;
+    UiTextVertical vertical = UiTextVertical::top;
+    bool wrap = false;
+};
 struct UiResolvedWidget {
     std::string name, type, text, callback, image, font;
     UiRect rect;
     bool visible = true, enabled = true;
+    std::int32_t parent = -1;
+    UiRect clip;
+    std::map<std::string, std::string> properties;
+    [[nodiscard]] std::string property(const std::string &key) const;
+    [[nodiscard]] UiTextStyle text_style() const;
 };
 class UiLayout {
   public:
@@ -40,7 +53,7 @@ struct UiImage {
 };
 // Bounded GuiLook.looknfeel extraction for widget types this renderer draws.
 struct UiWidgetImages {
-    std::string normal, hover, pushed;
+    std::string normal, hover, pushed, disabled;
 };
 class UiResources {
   public:
