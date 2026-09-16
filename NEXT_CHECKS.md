@@ -1,3 +1,63 @@
+# Следующий проход после автоматического стенда (large-6)
+
+Актуальная работа: `AUTOMATED_VERIFICATION_RESULT_RU.md`,
+`research/automatic-verification.md`. Ниже сохранены прежние границы large-5,
+но отсутствие настоящего pak/Town в их исторических формулировках больше
+не описывает нынешний ресурсный стенд.
+
+## 1. Закрыть именно оконный слой, не пересоздать тестовую игру
+
+`src/application.cpp` уже общий для окна и сценариев. EGL/pbuffer сценарий
+подтверждает настоящие menu/application/resources/render, но не Wayland
+callbacks/focus/configure/close/OS input. Нужен тестовый compositor в отдельном
+runtime-dir/socket и закреплённая доставка ввода. Не подключаться к рабочему
+столу пользователя. Зарегистрировать настоящий CTest с меткой desktop;
+тогда `--desktop` перестанет возвращать NOT RUN. Простого `--frames 3` мало.
+
+Повторить New/Continue/resize/pause/save/новый процесс; добавить повреждённый
+slot и отказ записи именно через окно. Сохранить общий loop, не дублировать
+его в harness. Отсутствующий SDK/Weston/протокол тестового ввода должен быть
+явным NOT RUN. Production Wayland adapter после извлечения пока не собран.
+
+## 2. Получить ограниченные эталоны оригинала
+
+Нужен SHA-закреплённый ELF. Имеющийся `compare_attack_speed.py --scenario-dir`
+исполняет только старые immutable числовые spans на новых реальных SPEED;
+нулевые haste/resistance — явные входы, а не полноценная трасса атаки.
+Следующие эталоны: один обычный HIT, переход и UI → world с устойчивыми ID и
+записью порядка вызовов. Не записывать текущий framebuffer порта как
+доказательство исходной графики. Render dump пока не apitrace и не depth/ID pass.
+
+## 3. Подтвердить parent-route и расширить сквозную игровую сцену
+
+Настоящий roundtrip Town → Main:1 → Town прошёл. `PARENT_DUNGEON` взят из
+MAIN.DAT.ADM; отрицательная first-floor ветвь видна в performWarp, но loader
+mapping `CDungeon+0x80` всё ещё inferred. Нужен focused `CDungeon::loadDungeon`
+и контрольные инструкции `performWarp @0x58d110`; source/границы в
+`research/parent-dungeon-boundary.md`. Special -99/waypoint/explicit destination
+не объявлены восстановленными этой правкой.
+
+Добавить реальную controlled melee → HIT → death/loot → pickup/equip → save
+сцену через тот же common host. Сейчас настоящие три класса/стартовые вещи и
+цикл инвентаря проверены; полноценный ranged и боевой renderer-сценарий не
+возникли автоматически. Нативные authored/pak-only combat тесты сохранены.
+
+## 4. Пользоваться машинными артефактами
+
+`tools/check.py --core --assets DIR --render` пишет пять групп независимо;
+`coverage_map.py --verification-report FILE` показывает их рядом с reviewed
+coverage, но ничего не повышает до verified/closed. Каталог missing references
+(в том числе старые authoring paths) нельзя назвать 152 сломанными файлами.
+Для каталога и новых сцен сохранять хеш pak/скрипта/библиотеки/Mesa и первую
+ошибку, не подбирать tolerances ради зелёного результата.
+
+Старая thin-wall проблема, исходный scheduler, interaction requirements,
+эффекты, ranged, мировой gold/NPC/quests/pet остаются отдельными задачами.
+
+---
+
+## Исторический NEXT_CHECKS после large-5 (контекст, не свежий статус)
+
 # Следующий проход после frontend/campaign (large-5)
 
 Актуальный результат: `FRONTEND_CAMPAIGN_RESULT_RU.md`. Границы реализации:

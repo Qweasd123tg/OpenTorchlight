@@ -9,6 +9,7 @@ from collections import defaultdict,deque
 from pathlib import Path
 
 STATUSES={'unseen','researched','partial','implemented','verified','closed'}
+VERIFICATION_GROUPS=('core','assets','reference','render','desktop')
 SYMBOL=re.compile(r'^([0-9a-fA-F]+) (?:([0-9a-fA-F]+) )?([TtWw]) (.+)$')
 ROOTS=('CGame::update(', 'CGameClient::updateIngame(', 'CGameClient::loadMenuLevel(',
        'CGameClient::saveCharacter(', 'CGameClient::loadCharacter(', 'CGameClient::performWarp(',
@@ -89,12 +90,28 @@ def generate(root):
       'inputs':{str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs},
       'rows':len(rows),'defined_function_addresses':len(functions),'annotated_function_addresses':len(boundaries),
       'status_counts':{s:sum(r['status']==s for r in rows) for s in sorted(STATUSES)},
+      'verification_groups':list(VERIFICATION_GROUPS),'verification_join':'tools/coverage_map.py --check --verification-report FILE; never changes reviewed statuses',
       'meaning':'Callgraph has only resolved direct edges. Status is a reviewed bounded claim, not percent game completion. No runtime verification is inferred from symbol/decompilation presence.',
       'priority_formula':'10*log2(1+unique_in+unique_out) + 12*subsystem_weight + 8*(5-root_distance) for distances <=4; otherwise omit distance term'}
     return output.getvalue(),json.dumps(metadata,ensure_ascii=False,indent=2,sort_keys=True)+'\n',rows
 
+def verification_summary(path):
+    """Join an explicit run without promoting any reviewed original boundary."""
+    report=json.loads(path.read_text())
+    if report.get('schema') != 1 or report.get('kind') != 'verification-run':
+        raise ValueError('not an OpenTorchlight verification-run report')
+    groups={}
+    for name in VERIFICATION_GROUPS:
+        group=report.get('groups',{}).get(name)
+        if not isinstance(group,dict) or group.get('status') not in {'PASSED','FAILED','NOT RUN'}:
+            raise ValueError('missing or invalid verification group: '+name)
+        groups[name]={key:group.get(key) for key in ('requested','status','passed','failed','skipped','reason')}
+    return {'schema':1,'kind':'coverage-verification-join','source_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
+            'groups':groups,'original_status_promotions':0,
+            'meaning':'Execution groups are separate evidence. PASSED resource/regression tests do not promote original fidelity.'}
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1]);p.add_argument('--check',action='store_true');p.add_argument('--next',type=int,default=0);p.add_argument('--include-researched',action='store_true')
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[1]);p.add_argument('--check',action='store_true');p.add_argument('--next',type=int,default=0);p.add_argument('--include-researched',action='store_true');p.add_argument('--verification-report',type=Path)
     a=p.parse_args();root=a.root.resolve();tsv,meta,rows=generate(root)
     for path,text in [(root/'research/coverage.tsv',tsv),(root/'research/coverage-summary.json',meta)]:
         if a.check:
@@ -106,5 +123,7 @@ def main():
         frontier=[r for r in rows if r['status'] in allowed and re.search(r'\bC[A-Z]\w*::',r['symbol']) and not r['symbol'].startswith(('non-virtual thunk','virtual thunk'))]
         for r in sorted(frontier,key=lambda r:(-r['priority'],r['address']))[:max(0,a.next)]:
             print(f"{r['priority']:8.3f} {r['status']:10} {r['address']} [{r['subsystem']}] {r['symbol']}")
+    if a.verification_report:
+        print(json.dumps(verification_summary(a.verification_report),ensure_ascii=False,sort_keys=True))
     return 0
 if __name__=='__main__':raise SystemExit(main())

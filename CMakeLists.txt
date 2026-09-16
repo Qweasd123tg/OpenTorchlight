@@ -3,6 +3,21 @@ project(torchlight_recovery LANGUAGES C CXX)
 
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
+set(TORCHLIGHT_GAME_DIR "" CACHE PATH "Read-only directory containing pak.zip (independent of ELF)")
+if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
+    get_filename_component(_TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
+    set(TORCHLIGHT_GAME_DIR "${_TORCHLIGHT_GAME_DIR}" CACHE PATH "Read-only directory containing pak.zip" FORCE)
+endif()
+option(TORCHLIGHT_ENABLE_RENDER "Build available offscreen rendering targets" ON)
+option(TORCHLIGHT_ENABLE_DESKTOP "Build the Wayland adapter when its SDK is available" ON)
+# Same test inputs/assertions; instrumentation may need a larger wall-clock budget.
+# Explicit cache value is reported by check.py, never inferred from a failed test.
+set(TORCHLIGHT_TEST_TIMEOUT_SCALE 1 CACHE STRING "Wall-clock multiplier (1-10), e.g. 4 for sanitizer builds")
+if(NOT TORCHLIGHT_TEST_TIMEOUT_SCALE MATCHES "^([1-9]|10)$")
+    message(FATAL_ERROR "TORCHLIGHT_TEST_TIMEOUT_SCALE must be an integer from 1 to 10")
+endif()
+
 
 add_library(torchlight_core STATIC
     src/actor_motion.cpp
@@ -62,6 +77,20 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(torchlight_core PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
 
+add_executable(torchlight_asset_catalog src/asset_catalog_main.cpp)
+target_link_libraries(torchlight_asset_catalog PRIVATE torchlight_core)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(torchlight_asset_catalog PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
+
+add_library(torchlight_application STATIC src/application.cpp)
+target_link_libraries(torchlight_application PUBLIC torchlight_core)
+target_compile_features(torchlight_application PUBLIC cxx_std_17)
+set_target_properties(torchlight_application PROPERTIES POSITION_INDEPENDENT_CODE ON)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(torchlight_application PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
+
 add_executable(torchlight_bootstrap src/bootstrap_main.cpp)
 target_link_libraries(torchlight_bootstrap PRIVATE torchlight_core)
 add_executable(torchlight_level_rules_dump tools/level_rules_dump.cpp)
@@ -83,8 +112,28 @@ if(UNIX AND NOT ANDROID)
     find_file(XDG_SHELL_XML xdg-shell.xml PATHS
         /usr/share/wayland-protocols/stable/xdg-shell
         /usr/share/qt6/wayland/protocols/xdg-shell)
-    if(EGL_FOUND AND GLES2_FOUND AND WAYLAND_CLIENT_FOUND AND WAYLAND_EGL_FOUND AND
-       WAYLAND_SCANNER AND EXISTS ${XDG_SHELL_XML})
+    if(TORCHLIGHT_ENABLE_RENDER AND EGL_FOUND AND GLES2_FOUND)
+        add_library(torchlight_gles2 STATIC src/gles_scene_renderer.cpp src/gles_ui_renderer.cpp)
+        target_link_libraries(torchlight_gles2 PUBLIC torchlight_core PkgConfig::GLES2)
+        target_compile_features(torchlight_gles2 PUBLIC cxx_std_17)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(torchlight_gles2 PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        add_executable(gles_render_smoke_test tests/gles_render_smoke_test.cpp)
+        target_link_libraries(gles_render_smoke_test PRIVATE PkgConfig::EGL PkgConfig::GLES2)
+        target_compile_features(gles_render_smoke_test PRIVATE cxx_std_17)
+        add_executable(ogre_mesh_render_test tests/ogre_mesh_render_test.cpp)
+        target_link_libraries(ogre_mesh_render_test PRIVATE
+            torchlight_core PkgConfig::EGL PkgConfig::GLES2)
+        target_compile_features(ogre_mesh_render_test PRIVATE cxx_std_17)
+        add_executable(scene_geometry_render_test tests/scene_geometry_render_test.cpp)
+        target_link_libraries(scene_geometry_render_test PRIVATE
+            torchlight_gles2 PkgConfig::EGL)
+        target_compile_features(scene_geometry_render_test PRIVATE cxx_std_17)
+    endif()
+    if(TORCHLIGHT_ENABLE_DESKTOP AND TARGET torchlight_gles2 AND
+       WAYLAND_CLIENT_FOUND AND WAYLAND_EGL_FOUND AND WAYLAND_SCANNER AND
+       XDG_SHELL_XML AND EXISTS "${XDG_SHELL_XML}")
         set(XDG_SHELL_HEADER ${CMAKE_CURRENT_BINARY_DIR}/generated/xdg-shell-client-protocol.h)
         set(XDG_SHELL_CODE ${CMAKE_CURRENT_BINARY_DIR}/generated/xdg-shell-protocol.c)
         add_custom_command(
@@ -100,37 +149,20 @@ if(UNIX AND NOT ANDROID)
         add_library(torchlight_xdg_shell STATIC ${XDG_SHELL_CODE} ${XDG_SHELL_HEADER})
         target_include_directories(torchlight_xdg_shell PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated)
         target_link_libraries(torchlight_xdg_shell PUBLIC PkgConfig::WAYLAND_CLIENT)
-        add_library(torchlight_gles2 STATIC src/gles_scene_renderer.cpp src/gles_ui_renderer.cpp)
-        target_link_libraries(torchlight_gles2 PUBLIC torchlight_core PkgConfig::GLES2)
-        target_compile_features(torchlight_gles2 PUBLIC cxx_std_17)
-        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-            target_compile_options(torchlight_gles2 PRIVATE -Wall -Wextra -Wpedantic -Werror)
-        endif()
         add_executable(torchlight_desktop src/linux_desktop_main.cpp)
         target_link_libraries(torchlight_desktop PRIVATE
-            torchlight_gles2 torchlight_xdg_shell PkgConfig::WAYLAND_EGL PkgConfig::EGL)
+            torchlight_application torchlight_gles2 torchlight_xdg_shell PkgConfig::WAYLAND_EGL PkgConfig::EGL)
         target_compile_features(torchlight_desktop PRIVATE cxx_std_17)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(torchlight_desktop PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endif()
-        add_executable(gles_render_smoke_test tests/gles_render_smoke_test.cpp)
-        target_link_libraries(gles_render_smoke_test PRIVATE PkgConfig::EGL PkgConfig::GLES2)
-        target_compile_features(gles_render_smoke_test PRIVATE cxx_std_17)
-        add_executable(ogre_mesh_render_test tests/ogre_mesh_render_test.cpp)
-        target_link_libraries(ogre_mesh_render_test PRIVATE
-            torchlight_core PkgConfig::EGL PkgConfig::GLES2)
-        target_compile_features(ogre_mesh_render_test PRIVATE cxx_std_17)
-        add_executable(scene_geometry_render_test tests/scene_geometry_render_test.cpp)
-        target_link_libraries(scene_geometry_render_test PRIVATE
-            torchlight_gles2 PkgConfig::EGL)
-        target_compile_features(scene_geometry_render_test PRIVATE cxx_std_17)
+
     else()
         message(STATUS "Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing")
     endif()
 endif()
 
 include(CTest)
-set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
 if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(attack_action_test tests/attack_action_test.cpp)
     target_link_libraries(attack_action_test PRIVATE torchlight_core)
@@ -309,12 +341,19 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     set_tests_properties(coverage_map_current PROPERTIES TIMEOUT 60)
     # Optional real EGL/GLVND readback test, not a substitute for the desktop SDK.
     find_library(UI_TEST_GL_DISPATCH NAMES GL libGL.so.1)
-    if(UNIX AND UI_TEST_GL_DISPATCH)
+    if(UNIX AND UI_TEST_GL_DISPATCH AND TORCHLIGHT_ENABLE_RENDER)
         add_library(gles_ui_probe SHARED tests/gles_ui_probe.cpp src/gles_ui_renderer.cpp)
         target_include_directories(gles_ui_probe PRIVATE tests/support/gles-api)
         target_link_libraries(gles_ui_probe PRIVATE torchlight_core ${UI_TEST_GL_DISPATCH})
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(gles_ui_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        add_library(application_scenario_probe SHARED
+            tests/application_scenario_probe.cpp src/gles_scene_renderer.cpp src/gles_ui_renderer.cpp)
+        target_include_directories(application_scenario_probe PRIVATE tests/support/gles-api)
+        target_link_libraries(application_scenario_probe PRIVATE torchlight_application ${UI_TEST_GL_DISPATCH})
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(application_scenario_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endif()
         add_dependencies(gles_ui_probe frontend_fixture)
         add_test(NAME gles_ui_headless COMMAND ${Python3_EXECUTABLE}
@@ -428,7 +467,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 --original ${TORCHLIGHT_ORIGINAL}
                 --library $<TARGET_FILE:pathfinder_comparison>)
         set_tests_properties(original_pathfinder_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
-        get_filename_component(TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
+
+    else()
+        message(STATUS "Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it")
+    endif()
+    if(TORCHLIGHT_GAME_DIR)
         add_test(NAME original_frontend_checkpoint
             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/save_process_test.py
                 --probe $<TARGET_FILE:frontend_resource_test> --fixture "${TORCHLIGHT_GAME_DIR}/pak.zip")
@@ -486,11 +529,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         add_test(NAME original_level_transitions
             COMMAND level_transition_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_data_bootstrap
-            COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
-        if(TARGET gles_render_smoke_test)
-            add_test(NAME gles_render_smoke COMMAND gles_render_smoke_test)
-            set_tests_properties(gles_render_smoke PROPERTIES
-                TIMEOUT 30 ENVIRONMENT "EGL_PLATFORM=surfaceless")
+            COMMAND torchlight_bootstrap --pak "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        if(EXISTS "${TORCHLIGHT_GAME_DIR}/resources.cfg")
+            add_test(NAME original_resource_configuration
+                COMMAND torchlight_bootstrap "${TORCHLIGHT_GAME_DIR}")
         endif()
         if(TARGET ogre_mesh_render_test)
             add_test(NAME original_ogre_mesh_render
@@ -504,7 +546,81 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             set_tests_properties(original_scene_geometry_render PROPERTIES
                 TIMEOUT 30 ENVIRONMENT "EGL_PLATFORM=surfaceless")
         endif()
-    else()
-        message(STATUS "Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it")
     endif()
+        if(TARGET gles_render_smoke_test)
+            add_test(NAME gles_render_smoke COMMAND gles_render_smoke_test)
+            set_tests_properties(gles_render_smoke PROPERTIES
+                TIMEOUT 30 ENVIRONMENT "EGL_PLATFORM=surfaceless")
+        endif()
+
+    add_executable(parent_dungeon_test tests/parent_dungeon_test.cpp)
+    target_link_libraries(parent_dungeon_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(parent_dungeon_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME parent_dungeon COMMAND parent_dungeon_test)
+    add_test(NAME scenario_first_difference
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/scenario_diff_test.py)
+    add_test(NAME asset_catalog_negative
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/asset_catalog_test.py
+            --probe $<TARGET_FILE:torchlight_asset_catalog> --pak ${FRONTEND_FIXTURE}
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/catalog-evidence --negative
+            --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+    set_tests_properties(asset_catalog_negative PROPERTIES TIMEOUT 90)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_asset_catalog
+            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/asset_catalog_test.py
+                --probe $<TARGET_FILE:torchlight_asset_catalog> --pak ${TORCHLIGHT_GAME_DIR}/pak.zip
+                --output-dir ${CMAKE_CURRENT_BINARY_DIR}/catalog-evidence
+                --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+        if(TARGET application_scenario_probe)
+            add_test(NAME application_scenario_render
+                COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_scenario_test.py
+                    --probe $<TARGET_FILE:application_scenario_probe>
+                    --game-dir ${TORCHLIGHT_GAME_DIR}
+                    --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence --roundtrip
+                    --speed-probe $<TARGET_FILE:attack_speed_probe>
+                    --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+            set_tests_properties(application_scenario_render PROPERTIES TIMEOUT 900)
+            if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
+                set_tests_properties(application_scenario_render PROPERTIES ENVIRONMENT
+                    "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+            endif()
+        endif()
+    endif()
+
+    add_executable(random_observation_test tests/random_observation_test.cpp)
+    target_link_libraries(random_observation_test PRIVATE torchlight_core)
+    add_test(NAME random_observation COMMAND random_observation_test)
+
+    add_test(NAME verification_driver
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/verification_driver_test.py)
+    set_tests_properties(verification_driver PROPERTIES TIMEOUT 40)
+
+    # Every registered test has an execution group. Labels describe dependency
+    # and evidence, not fidelity: original_* resource tests are NOT ELF parity.
+    get_property(_ot_tests DIRECTORY PROPERTY TESTS)
+    foreach(_ot_test IN LISTS _ot_tests)
+        if(_ot_test MATCHES "^original_.*_comparison$" OR _ot_test STREQUAL "original_level_entry_dispatch")
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "reference")
+        elseif(_ot_test MATCHES "_render$" OR _ot_test STREQUAL "gles_render_smoke")
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "render")
+        elseif(_ot_test MATCHES "^original_")
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "assets" TIMEOUT 240)
+        elseif(_ot_test STREQUAL "gles_ui_headless")
+            # Retain the historical portable UI runtime probe while making it
+            # discoverable in render as well. Its skip is NOT a pass in check.py.
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "core;render")
+        else()
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "core")
+        endif()
+        if(NOT TORCHLIGHT_TEST_TIMEOUT_SCALE STREQUAL "1")
+            get_test_property(${_ot_test} TIMEOUT _ot_timeout)
+            if(_ot_timeout AND NOT _ot_timeout STREQUAL "NOTFOUND")
+                math(EXPR _ot_scaled_timeout "${_ot_timeout} * ${TORCHLIGHT_TEST_TIMEOUT_SCALE}")
+                set_tests_properties(${_ot_test} PROPERTIES TIMEOUT ${_ot_scaled_timeout})
+            endif()
+        endif()
+    endforeach()
+
 endif()

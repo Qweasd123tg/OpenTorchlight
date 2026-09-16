@@ -53,6 +53,8 @@ struct DungeonManifest {
     std::u16string name;
     bool volatile_dungeon = false;
     std::vector<DungeonStratum> strata;
+    // Resource-derived route when leaving the first ordinary dungeon floor.
+    std::u16string parent_dungeon{};
 };
 
 struct ChunkPlacement {

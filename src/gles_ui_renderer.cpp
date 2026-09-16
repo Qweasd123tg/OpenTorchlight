@@ -236,4 +236,51 @@ GlesUiRenderer::~GlesUiRenderer() = default;
 void GlesUiRenderer::draw(const FrontendFrame &f, int w, int h) {
     impl_->draw(f, w, h);
 }
+void draw_inventory_overlay(const std::vector<InventoryViewLine>& lines,
+                            bool inventory_open, int width, int height) {
+    const auto fill_rectangle = [](int x, int y, int w, int h, float r, float g, float b) {
+        glScissor(x, y, w, h); glClearColor(r, g, b, 1.0F); glClear(GL_COLOR_BUFFER_BIT);
+    };
+        glEnable(GL_SCISSOR_TEST);
+        const int top_height = std::max(54, height / 12);
+        fill_rectangle(0, height - top_height, width, top_height, 0.18F, 0.105F, 0.035F);
+        const int status_size = std::max(12, std::min(width, height) / 45);
+        fill_rectangle(status_size, height - top_height / 2 - status_size / 2, status_size,
+                       status_size, 0.72F, 0.43F, 0.10F);
+        // prototype: diagnostic overlay geometry/colors, not original UI metrics.
+        const int scale = width >= 950 ? 2 : 1;
+        const int line_height = 11 * scale;
+        const int left = 24;
+        int top = height - 12;
+        if (inventory_open) {
+            fill_rectangle(12, 12, std::max(0, width - 24), std::max(0, height - 24),
+                           0.075F, 0.070F, 0.060F);
+            top = height - 26;
+        }
+        for (const auto& line : lines) {
+            if (top - line_height < 12) break;
+            if (line.selected)
+                fill_rectangle(left - 6, top - line_height + 3,
+                               std::max(0, width - 2 * left), line_height,
+                               0.28F, 0.20F, 0.08F);
+            const auto columns = static_cast<std::size_t>(std::max(0, width - 2 * left) / (6 * scale));
+            int x = left;
+            for (const char c : line.text.substr(0, columns)) {
+                const auto glyph = torchlight::inventory_glyph(c);
+                for (int row = 0; row < 7; ++row) {
+                    for (int column = 0; column < 5; ++column) {
+                        if (glyph[row] & (1U << (4 - column)))
+                            fill_rectangle(x + column * scale, top - (row + 1) * scale,
+                                           scale, scale, 0.93F, 0.88F, 0.72F);
+                    }
+                }
+                x += 6 * scale;
+            }
+            top -= line_height;
+        }
+        glDisable(GL_SCISSOR_TEST);
+        if (glGetError() != GL_NO_ERROR) {
+            throw std::runtime_error("OpenGL ES failed while drawing the scene preview");
+        }
+}
 } // namespace torchlight

@@ -141,6 +141,25 @@ LevelEntryRequest LevelTransitionState::resolve_entry(
     return {current_, resolve(request), request};
 }
 
+LevelEntryRequest LevelTransitionState::resolve_entry(
+    const WarpRequest& request, const DungeonManifest& source) const {
+    if (!same_name(source.name, current_.dungeon_name)) {
+        throw LevelTransitionError("Parent dungeon metadata does not match current floor");
+    }
+    // Original CGameClient::performWarp handles a negative delta at internal
+    // floor zero before loading the new floor. The port numbers non-town floors
+    // from one. PARENT_DUNGEON is present in the real MAIN.DAT.ADM (Town).
+    // The exact CDungeon+0x80 loader binding still needs its own ASM export;
+    // this is a narrow resource-derived behavior, not a claim about all portals.
+    if (!is_town(source) && current_.depth == 1 && request.dungeon_name.empty() &&
+        request.level_delta < 0 && request.level_delta != -99 && !request.waypoint &&
+        (!request.absolute_level || *request.absolute_level == 0) &&
+        !source.parent_dungeon.empty()) {
+        return {current_, {source.parent_dungeon, 0}, request};
+    }
+    return resolve_entry(request);
+}
+
 void LevelTransitionState::commit(DungeonAddress destination) {
     if (destination.dungeon_name.empty()) {
         throw LevelTransitionError("Destination dungeon name is empty");

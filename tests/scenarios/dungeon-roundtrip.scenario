@@ -1,0 +1,16 @@
+menu main
+button continue
+level Town 0
+frames 3
+capture before_dungeon
+trigger-nearest
+level Main 1
+frames 3
+capture dungeon_entry
+trigger-nearest
+level Town 0
+frames 3
+capture returned_town
+key ESC
+menu pause
+button save-exit

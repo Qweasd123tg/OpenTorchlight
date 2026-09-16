@@ -7,7 +7,7 @@ With --original, its pinned SHA and all referenced constants are checked first.
 Runs only on Linux x86-64, never writes installed game files; the slices and fixture constants share a relocated window.
 """
 from __future__ import annotations
-import argparse, ctypes, hashlib, itertools, mmap, platform, random, struct, subprocess
+import argparse, ctypes, hashlib, itertools, json, math, mmap, platform, random, struct, subprocess
 from pathlib import Path
 from compare_ai_cooldown import Executable, asm_bytes, bits, f32
 from verify_original_entry_dispatch import ELF_SHA256, virtual_bytes
@@ -17,7 +17,7 @@ SLICES=[(0x82b976,0x82b9c5),(0x82bcea,0x82bd46)]
 DIGESTS=['02299d125757691c84ba91e8606a95851c8b08e9bbe58ab80af11538fe34988f', '375647ab6819dd2d2e103a1570ff440bee72ba845b26afc0ab19330959f547c5']
 CONSTANTS={0xfa47fc:1.,0xfa483c:100.,0xfa86e8:.2}
 
-def compare(probe,code):
+def compare(probe,code,resource_cases=()):
     mapped=None;wrapper=None
     try:
         # Relocate the entire sparse text/constant window by ONE common bias.
@@ -43,6 +43,7 @@ def compare(probe,code):
         cases=list(itertools.product([.01,.2,.5,1.,1.1,2.,10.],[-1000.,-100.,-60.,-0.,0.,50.,100.,1000.],[-200.,0.,25.,50.,99.,100.,200.]))
         rng=random.Random(0x82b550)
         cases += [(f32(rng.uniform(.01,20)),f32(rng.uniform(-2000,2000)),f32(rng.uniform(-100,300))) for _ in range(12000)]
+        cases += list(resource_cases)
         expected=[];requests=[]
         for d,h,r in cases:
             denom.value=d
@@ -62,6 +63,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--probe',required=True,type=Path)
     p.add_argument('--original',type=Path)
+    p.add_argument('--scenario-dir',type=Path,
+                   help='add SPEED/100 cases from successful real-pak application captures; zero effects are an explicit numeric fixture')
     p.add_argument('--disassembly',type=Path,default=Path(__file__).resolve().parents[1]/'research/disassembly/82b550-attack-speed.asm')
     args=p.parse_args()
     if platform.system()!='Linux' or platform.machine() not in ('x86_64','AMD64'):
@@ -75,7 +78,24 @@ def main():
         code=[virtual_bytes(image,a,b-a) if image is not None else asm_bytes(args.disassembly,a,b) for a,b in SLICES]
         for raw,digest in zip(code,DIGESTS):
             if hashlib.sha256(raw).hexdigest()!=digest:raise ValueError('instruction digest mismatch')
-        count=compare(args.probe,code)
+        resource_cases=[]
+        if args.scenario_dir:
+            observations={}
+            for state_path in sorted(args.scenario_dir.glob('*/*.state.json')):
+                environment=state_path.parent/'environment.json'
+                if not environment.is_file():raise ValueError('scenario has no provenance environment')
+                metadata=json.loads(environment.read_text())
+                if metadata.get('status')!='PASSED' or not metadata.get('pak_sha256'):
+                    raise ValueError('failed/unidentified resource scenario')
+                for item in json.loads(state_path.read_text()).get('inventory',[]):
+                    if 'speed' not in item:continue
+                    speed=float(item['speed'])
+                    if not math.isfinite(speed) or speed<=0:raise ValueError('invalid captured weapon speed')
+                    observations[(item['guid'],speed)]=f32(f32(speed)/100.)
+            if not observations:raise ValueError('no captured weapon SPEED values')
+            resource_cases=[(d,0.,0.) for d in observations.values()]
+        count=compare(args.probe,code,resource_cases)
+        if resource_cases:print(f'Resource-backed extra inputs: {len(resource_cases)} concrete weapon GUID/SPEED pairs; effects deliberately set to zero; NOT full attack trace')
     except (OSError,ValueError,subprocess.SubprocessError) as e:p.exit(1,f'FAIL: {e}\n')
     print(f'PASS: {count} bit-exact speed cases; '+('SHA-checked ELF slices/constants' if image is not None else 'pinned export slices with explicit fixture constants, not ELF validation'))
     return 0

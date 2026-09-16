@@ -1,0 +1,65 @@
+#pragma once
+#include "torchlight/frontend.hpp"
+#include "torchlight/gles_scene_renderer.hpp"
+#include "torchlight/gles_ui_renderer.hpp"
+#include "torchlight/navigation_grid.hpp"
+#include "torchlight/player_session.hpp"
+#include <filesystem>
+#include <optional>
+
+namespace torchlight {
+// Port-native orchestration shared by the real window and deterministic scenarios.
+// No window API, wall clock or random_device is owned by this component.
+struct ApplicationOptions {
+    std::filesystem::path game_directory;
+    std::uint64_t frame_limit = 0; // Explicit legacy preview mode, NOT menu acceptance.
+    std::optional<std::size_t> main_stratum;
+    std::uint32_t seed = 42;
+    std::optional<std::filesystem::path> save_directory;
+};
+struct ApplicationView {
+    // Borrowed read-only values, valid ONLY during observe_game(). No pointer is
+    // an object identity and nothing here may be retained past the callback.
+    const char* phase = "before_input";
+    FrontendPage page = FrontendPage::main;
+    std::uint64_t frame = 0, level_frame = 0, revision = 0;
+    std::uint32_t seed = 0;
+    std::int64_t class_guid = 0;
+    std::string character_name, slot;
+    DungeonAddress address;
+    Vector3 player_position{}, recovery_anchor{};
+    float player_angle = 0, floor_offset = 0;
+    std::size_t player_instance = 0;
+    std::optional<std::size_t> weapon_instance;
+    bool inventory_open = false, moving = false;
+    const PlayerSession* session = nullptr;
+    const RuntimeEntityWorld* world = nullptr;
+    const LogicRuntime* logic = nullptr;
+    const EnemyController* enemies = nullptr;
+    const NavigationGrid* navigation = nullptr;
+    const LayoutManifest* layout = nullptr;
+    const FixedSceneGeometry* geometry = nullptr;
+    const GlesSceneRenderer* renderer = nullptr;
+    const OgreMeshPose* player_pose = nullptr;
+};
+class ApplicationHost {
+public:
+    virtual ~ApplicationHost() = default;
+    virtual bool process_events() = 0;
+    virtual std::optional<std::array<int, 2>> take_left_click() = 0;
+    // Backend-neutral physical US scan-code contract; see application_keys.hpp.
+    virtual std::vector<std::uint32_t> take_key_presses() = 0;
+    virtual int width() const noexcept = 0;
+    virtual int height() const noexcept = 0;
+    virtual double clock_seconds() = 0;
+    virtual std::uint32_t new_campaign_seed() = 0;
+    virtual void draw_menu_frame(GlesUiRenderer&, const FrontendFrame&) = 0;
+    virtual void draw_scene_frame(GlesSceneRenderer&, const std::vector<InventoryViewLine>&, bool) = 0;
+    virtual void observe_frontend(FrontendPage, const FrontendFrame&, const std::string&) {}
+    virtual void observe_game(const ApplicationView&) {}
+    virtual void notice(std::string_view, std::string_view) {}
+};
+// Preserves the existing application policy and update ordering; not a recovered
+// original scheduler. A scripted fixed clock is explicitly a prototype driver.
+int run_application(const ApplicationOptions& options, ApplicationHost& host);
+} // namespace torchlight

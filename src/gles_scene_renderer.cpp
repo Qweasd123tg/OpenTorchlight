@@ -1,3 +1,4 @@
+#include "torchlight/diagnostic_json.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 
 #include "torchlight/dds_texture.hpp"
@@ -389,6 +390,7 @@ public:
                 std::array<float, 3> ambient{};
                 std::array<float, 3> emissive{};
                 bool textured = false;
+                std::string texture_source = "fallback:white";
                 bool use_vertex_color = false;
                 OgreSceneBlend scene_blend = OgreSceneBlend::replace;
                 OgreAlphaCompare alpha_compare = OgreAlphaCompare::always;
@@ -415,11 +417,14 @@ public:
                     texture_filter_linear = material->texture_filter_linear;
                     if (mesh_texture_override != 0) {
                         texture = mesh_texture_override;
+                        texture_source = "layers";
+                        for (const auto& layer : mesh_resource.texture_layers) texture_source += "|" + layer;
                         textured = true;
                     } else if (!material->primary_texture.empty()) {
                         if (const auto* entry = resolve_material_texture(
                                 archive, *material, material->primary_texture)) {
                             if (is_dds_path(entry->name) || is_png_path(entry->name)) {
+                                texture_source = entry->name;
                                 const auto texture_key =
                                     entry->name + (texture_clamp ? "|clamp" : "|wrap") +
                                     (texture_filter_linear ? "|linear" : "|nearest");
@@ -448,6 +453,9 @@ public:
                     }
                 }
                 Draw draw;
+                draw.material_name = submesh.material;
+                draw.texture_source = std::move(texture_source);
+                draw.textured = textured;
                 draw.source = &source_geometry;
                 draw.vertex_buffer = buffers.position;
                 draw.texcoord_buffer = buffers.texcoord;
@@ -862,6 +870,70 @@ public:
                 (diagonal - projected_x) / 1.4F};
     }
 
+    std::array<float, 2> pixel_position_of_world(const Vector3& world) const {
+        if (!last_perspective_ready_ || last_width_ <= 0 || last_height_ <= 0)
+            throw GlesSceneError("Perspective camera has not rendered a frame");
+        const auto ndc = last_camera_.project_ndc(world);
+        return {(ndc[0] + 1) * 0.5F * last_width_ - 0.5F,
+                (1 - ndc[1]) * 0.5F * last_height_ - 0.5F};
+    }
+    bool instance_visible(std::size_t index) const { return instances_.at(index).visible; }
+
+    void write_diagnostics(std::ostream& out) const {
+        using namespace diagnostic;
+        out << "{\"schema\":1,\"evidence\":\"port-regression-not-original\","
+            << "\"viewport\":[" << last_width_ << ',' << last_height_ << "],\"camera\":{";
+        out << "\"view\":"; array(out, last_camera_.view);
+        out << ",\"projection\":"; array(out, last_camera_.projection);
+        out << ",\"position\":"; array(out, last_camera_.position);
+        out << "},\"pipeline\":{\"depth_test\":true,\"depth_func\":\"LEQUAL\","
+            << "\"cull\":false,\"shadow_pass\":\"prototype-contact-shadow-after-meshes\"},"
+            << "\"light\":{\"direction\":[-0.35,0.8,-0.45],\"status\":\"prototype-shader\"},\"instances\":[";
+        for (std::size_t i = 0; i < instances_.size(); ++i) {
+            if (i) out << ',';
+            const auto& item = instances_[i];
+            out << "{\"index\":" << i << ",\"mesh\":" << item.mesh_index
+                << ",\"visible\":" << (item.visible ? "true" : "false")
+                << ",\"entity\":" << item.runtime_entity_id << ",\"position\":";
+            array(out, item.transform.position);
+            out << ",\"rotation\":"; array(out, item.transform.orientation);
+            out << ",\"scale\":"; array(out, item.transform.scale);
+            out << ",\"passes\":[";
+            bool comma = false;
+            for (const auto& draw : draws_by_mesh_.at(item.mesh_index)) {
+                if (comma) out << ',';
+                comma = true;
+                out << "{\"material\":"; string(out, draw.material_name);
+                out << ",\"texture\":"; string(out, draw.texture_source);
+                out << ",\"fallback\":" << (!draw.textured ? "true" : "false")
+                    << ",\"index_count\":" << draw.index_count
+                    << ",\"blend\":" << static_cast<int>(draw.scene_blend)
+                    << ",\"depth_write\":" << (draw.depth_write ? "true" : "false")
+                    << ",\"lighting\":" << (draw.lighting ? "true" : "false")
+                    << ",\"vertex_color\":" << (draw.use_vertex_color ? "true" : "false")
+                    << ",\"texture_op\":" << static_cast<int>(draw.texture_color_operation)
+                    << ",\"alpha_compare\":" << static_cast<int>(draw.alpha_compare)
+                    << ",\"alpha_value\":" << static_cast<unsigned>(draw.alpha_rejection_value)
+                    << ",\"diffuse\":";
+                if (item.material_color_override) {
+                    const auto& rgba = *item.material_color_override;
+                    array(out, std::array<float, 3>{rgba[0], rgba[1], rgba[2]});
+                }
+                else array(out, draw.color);
+                out << ",\"ambient\":";
+                if (item.material_color_override) {
+                    const auto& rgba = *item.material_color_override;
+                    array(out, std::array<float, 3>{rgba[0], rgba[1], rgba[2]});
+                }
+                else array(out, draw.ambient);
+                out << ",\"emissive\":"; array(out, draw.emissive);
+                out << '}';
+            }
+            out << "]}";
+        }
+        out << "]}";
+    }
+
 private:
     struct GeometryBuffers {
         GLuint position = 0;
@@ -871,6 +943,8 @@ private:
     };
 
     struct Draw {
+        std::string material_name, texture_source;
+        bool textured = false;
         const OgreGeometry* source = nullptr;
         GLuint vertex_buffer = 0;
         GLuint texcoord_buffer = 0;
@@ -1159,6 +1233,10 @@ void GlesSceneRenderer::set_instance_visible(std::size_t instance_index, bool vi
     implementation_->set_instance_visible(instance_index, visible);
 }
 
+bool GlesSceneRenderer::instance_visible(std::size_t instance_index) const {
+    return implementation_->instance_visible(instance_index);
+}
+
 void GlesSceneRenderer::set_mesh_pose(const OgreMeshPose& pose) {
     implementation_->set_mesh_pose(pose);
 }
@@ -1186,6 +1264,13 @@ std::array<float, 3> GlesSceneRenderer::ground_position_at_pixel(
 
 const GlesSceneRenderStats& GlesSceneRenderer::stats() const noexcept {
     return implementation_->stats();
+}
+
+std::array<float, 2> GlesSceneRenderer::pixel_position_of_world(const Vector3& world) const {
+    return implementation_->pixel_position_of_world(world);
+}
+void GlesSceneRenderer::write_diagnostics(std::ostream& out) const {
+    implementation_->write_diagnostics(out);
 }
 
 } // namespace torchlight

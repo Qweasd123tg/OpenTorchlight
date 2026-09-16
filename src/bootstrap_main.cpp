@@ -37,13 +37,18 @@ std::string location_type(torchlight::ResourceLocationType type) {
 
 int main(int argc, char** argv) {
     try {
-        if (argc != 2) {
-            std::cerr << "usage: torchlight_bootstrap /path/to/Torchlight/game\n";
+        const bool pak_only = argc == 3 && std::string(argv[1]) == "--pak";
+        if (argc != 2 && !pak_only) {
+            std::cerr << "usage: torchlight_bootstrap /path/to/Torchlight/game | --pak /path/to/pak.zip\n";
             return 2;
         }
+        // Explicit asset-only entry point. Full installation mode remains strict
+        // about resources.cfg; absent external files are never invented.
         const std::filesystem::path game_directory = argv[1];
-        const auto locations = torchlight::parse_resource_config(game_directory / "resources.cfg");
-        std::filesystem::path pak_path;
+        const auto locations = pak_only ? std::vector<torchlight::ResourceLocation>{}
+            : torchlight::parse_resource_config(game_directory / "resources.cfg");
+        std::filesystem::path pak_path = pak_only ? std::filesystem::path(argv[2]) : std::filesystem::path{};
+        std::cout << "resource_configuration=" << (pak_only ? "NOT_RUN_explicit_pak_mode" : "checked") << '\n';
         std::cout << "resource_locations=" << locations.size() << '\n';
         for (const auto& location : locations) {
             const auto resolved = game_directory / location.path;

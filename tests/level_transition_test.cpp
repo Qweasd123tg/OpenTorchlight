@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
         const torchlight::LevelSceneLoader loader(archive);
         const auto town = loader.load_dungeon(u"media/dungeons/TOWN.DAT");
         const auto main = loader.load_dungeon(u"media/dungeons/MAIN.DAT");
+        require(main.parent_dungeon == u"Town", "MAIN PARENT_DUNGEON resource was not retained");
         require(torchlight::select_dungeon_floor(town, 99).depth == 0,
                 "town did not normalize to depth zero");
         require(torchlight::select_dungeon_floor(main, 0).stratum_index == 0 &&

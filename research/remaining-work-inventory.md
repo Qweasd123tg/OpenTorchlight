@@ -4,7 +4,18 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
-## Изменение large-5
+## Изменение large-6
+
+Настоящий pak теперь проверен и отрисован в общем application-loop без окна:
+Town/Main, три класса, разные стартовые вещи, движение/инвентарь/resize,
+межпроцессный save/Continue и обратный маршрут через parent. Отдельные группы
+и отчёты различают resource compatibility, собственный regression и original
+reference. Renderer выполняется в Mesa EGL; compositor/OS input harness и
+новые original-process traces остаются открытыми. Каталог перечисляет
+поддержанные и неподдержанные границы, а не процент готовности игры.
+Подробно: `automatic-verification.md`, `../AUTOMATED_VERIFICATION_RESULT_RU.md`.
+
+## Историческое изменение large-5
 
 Новый переносимый checkpoint и frontend реализованы и проверены на авторских
 ресурсах; оконный код подключён, но настоящий Wayland/Town/pak здесь не запускался.
@@ -23,9 +34,9 @@
 | Material/texture/render | partial | основной GLES-проход, DDS/PNG, ambient override | все passes, blend/depth/cull, particles, decals, lights, post effects |
 | Камера/input/pathfinding | partial | ранее сравненные формулы/A*, frontend focus и save-position validation | тонкая стенка между центрами grid cells, drag/controller, специальные режимы, original collision fidelity |
 | Layout/random level/logic | partial | генерация, links, timer, spawn, warp | весь command set, re-entrancy, сохранение состояния, special layouts |
-| Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland/Town, original skins/fonts, splash/loading/settings, IME |
-| Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | настоящий интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
-| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, migration/backup/delete UX, настоящий pak |
+| Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland-ввод (Town headless уже проверен), original skins/fonts, splash/loading/settings, IME |
+| Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | оконный интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, migration/backup/delete UX; настоящий pak уже проверен |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
 | Ranged/projectile | researched | основные функции и точечные ASM | descriptor → spawn → flight/sweep → HIT/pierce/retire/render |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
@@ -64,7 +75,7 @@
 - selection/highlight/approach/interaction для NPC и интерактивных props;
 - вход в данж, обратный портал, stash, merchant, quest giver и сервисы;
 - HUD, target frame, loot labels, уведомления и окна персонажа/предметов;
-- save → завершение процесса → load реализовано для переносимого состояния; осталось подтвердить настоящий оконный Town, а не только авторскую трёхпроцессную сцену.
+- save → завершение процесса → load реализовано для переносимого состояния; настоящий Town прошёл общим headless-loop; осталось подтвердить именно оконный слой.
 
 ### Мир и уровни
 

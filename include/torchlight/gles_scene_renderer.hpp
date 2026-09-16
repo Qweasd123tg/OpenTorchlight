@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <array>
 #include <memory>
+#include <iosfwd>
 
 namespace torchlight {
 
@@ -41,6 +42,7 @@ public:
     void set_instance_transform(std::size_t instance_index,
                                 const LayoutWorldTransform& transform);
     void set_instance_visible(std::size_t instance_index, bool visible);
+    [[nodiscard]] bool instance_visible(std::size_t instance_index) const;
     void set_mesh_pose(const OgreMeshPose& pose);
     void set_instance_pose(std::size_t instance_index, const OgreMeshPose& pose);
     void set_camera_target(const std::array<float, 3>& target,
@@ -50,6 +52,9 @@ public:
         int pixel_x, int pixel_y_from_bottom, int width, int height,
         float ground_height) const;
     [[nodiscard]] const GlesSceneRenderStats& stats() const noexcept;
+    // Last rendered camera. Screen coordinates returned with TOP-left origin.
+    [[nodiscard]] std::array<float, 2> pixel_position_of_world(const Vector3& world) const;
+    void write_diagnostics(std::ostream& out) const;
 
 private:
     class Implementation;

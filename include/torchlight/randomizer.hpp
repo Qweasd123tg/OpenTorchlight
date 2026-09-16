@@ -6,6 +6,26 @@
 
 namespace torchlight {
 
+// Port-native optional observation. No pointers appear in the trace; the sink
+// supplies an ordered sequence. No callback is invoked unless explicitly scoped.
+struct RandomObservation {
+    enum class Kind { seed, integer, real } kind = Kind::seed;
+    std::uint64_t before = 0, after = 0;
+    std::int32_t integer_low = 0, integer_high = 0, integer_result = 0;
+    float real_low = 0, real_high = 0, real_result = 0;
+};
+using RandomObserver = void (*)(const RandomObservation&, void*) noexcept;
+class RandomObservationScope {
+public:
+    RandomObservationScope(RandomObserver, void*) noexcept;
+    ~RandomObservationScope();
+    RandomObservationScope(const RandomObservationScope&) = delete;
+    RandomObservationScope& operator=(const RandomObservationScope&) = delete;
+private:
+    RandomObserver previous_;
+    void* previous_context_;
+};
+
 // The deterministic generator used by the original Linux build. Seed zero was
 // time-based there; recovered code requires an explicit non-zero seed instead.
 class TorchlightRandom {

@@ -386,6 +386,7 @@ DungeonManifest LevelSceneLoader::load_dungeon(std::u16string_view data_file) co
     DungeonManifest result;
     result.name = text_value(document.root, u"NAME");
     result.volatile_dungeon = bool_value(document.root, u"VOLATILE", false);
+    result.parent_dungeon = text_value(document.root, u"PARENT_DUNGEON");
     for (const auto& group : document.root.groups) {
         if (group.name.size() < 6 || group.name.substr(0, 6) != u"STRATA") {
             continue;

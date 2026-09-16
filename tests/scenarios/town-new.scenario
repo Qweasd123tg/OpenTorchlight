@@ -1,0 +1,38 @@
+# Actual input handlers, real resources, fixed host clock. No gameplay state injection.
+menu main
+menu-capture main
+button new
+menu create
+button class-1
+name automated
+button create
+level Town 0
+frames 3
+capture town_initial
+walk 3 0
+still
+frames 2
+capture town_walked
+key I
+inventory open
+unequip WEAPON
+frames 1
+capture unarmed
+equip WEAPON
+frames 1
+capture rearmed
+key I
+inventory closed
+resize 800 450
+frames 3
+capture town_resized
+key ESC
+menu pause
+button save
+revision 1
+button resume
+frames 2
+capture before_exit
+key ESC
+menu pause
+button save-exit

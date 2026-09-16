@@ -62,6 +62,10 @@ public:
     }
     [[nodiscard]] DungeonAddress resolve(const WarpRequest& request) const;
     [[nodiscard]] LevelEntryRequest resolve_entry(const WarpRequest& request) const;
+    // Resource-derived first-floor PARENT_DUNGEON boundary; special portal
+    // modes remain outside this overload's newly supported branch.
+    [[nodiscard]] LevelEntryRequest resolve_entry(const WarpRequest& request,
+                                                 const DungeonManifest& source) const;
     void commit(DungeonAddress destination);
 
 private:

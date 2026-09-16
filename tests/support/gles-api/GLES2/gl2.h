@@ -1,5 +1,5 @@
 #pragma once
-// Test-only GLES2 ABI declarations for the isolated EGL/Mesa UI probe. The
+// Test-only GLES2 ABI declarations for the isolated EGL/Mesa probes. The
 // shipped desktop ALWAYS requires the platform's genuine GLES development SDK.
 // No functions are emulated: these declarations link to GLVND's real dispatcher.
 #include <stddef.h>
@@ -84,6 +84,36 @@ GLenum glGetError(void);
 void glReadPixels(GLint,GLint,GLsizei,GLsizei,GLenum,GLenum,void*);
 void glFinish(void);
 const unsigned char* glGetString(GLenum);
+
+typedef ptrdiff_t GLintptr;
+#define GL_TRUE 1
+#define GL_INFO_LOG_LENGTH 0x8B84
+#define GL_DYNAMIC_DRAW 0x88E8
+#define GL_STATIC_DRAW 0x88E4
+#define GL_ELEMENT_ARRAY_BUFFER 0x8893
+#define GL_DST_COLOR 0x0306
+#define GL_LEQUAL 0x0203
+#define GL_LINEAR_MIPMAP_NEAREST 0x2701
+#define GL_NEAREST 0x2600
+#define GL_ONE 1
+#define GL_ZERO 0
+#define GL_REPEAT 0x2901
+#define GL_TRIANGLE_FAN 0x0006
+#define GL_UNPACK_ALIGNMENT 0x0CF5
+#define GL_UNSIGNED_SHORT 0x1403
+void glBufferSubData(GLenum,GLintptr,GLsizeiptr,const void*);
+void glClearDepthf(GLfloat);
+void glDepthFunc(GLenum);
+void glDepthMask(GLboolean);
+void glDrawElements(GLenum,GLsizei,GLenum,const void*);
+void glGenerateMipmap(GLenum);
+void glGetProgramInfoLog(GLuint,GLsizei,GLsizei*,char*);
+void glPixelStorei(GLenum,GLint);
+void glUniform1f(GLint,GLfloat);
+void glUniform3fv(GLint,GLsizei,const GLfloat*);
+void glUniform4f(GLint,GLfloat,GLfloat,GLfloat,GLfloat);
+void glUniformMatrix3fv(GLint,GLsizei,GLboolean,const GLfloat*);
+void glScissor(GLint,GLint,GLsizei,GLsizei);
 #ifdef __cplusplus
 }
 #endif

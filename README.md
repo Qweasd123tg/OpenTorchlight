@@ -5,7 +5,48 @@
 с Android 16 и получит сенсорное управление. Требования и исходные находки:
 [PORTING.md](PORTING.md).
 
-## Текущий этап: frontend и дисковая кампания (large-5)
+## Текущий этап: автоматическая проверка на настоящем pak (large-6)
+
+Оконный адаптер и автоматические сценарии используют один `run_application`.
+Отдельные процессы проходят настоящее меню, три класса с их стартовым оружием,
+Town, ходьбу/инвентарь/resize/save/Continue и Town → Main:1 → Town через реальные
+Unit Trigger. Кадры рисует настоящий Mesa/EGL, а не графические заглушки.
+Сравниваются состояния, camera/bone/world matrices, материалы/текстуры,
+последовательность RNG и пиксели. Собственные снимки явно **regression only**,
+не доказательство visual parity оригинала. Ручной просмотр не является
+условием прохождения этих сценариев.
+
+Добавлены независимые группы core/assets/reference/render/desktop; наличие pak
+больше не требует ELF. Запрошенная отсутствующая группа или пропущенный тест
+даёт **NOT RUN и ненулевой exit**, а не зелёный полный результат. Каталог
+зависимостей различает поддержанный парсер, unresolved dependency, неизвестный
+формат/семантику и независимо доказанную integrity ошибку.
+
+Сценарий обнаружил и локализовал потерянный `PARENT_DUNGEON=Town`: обратный
+переход с Main:1 теперь использует parent, а не снова загружает Main:1.
+Статус переноса **resource-derived/inferred**; исходная loader-привязка
+CDungeon+0x80 пока не подтверждена отдельным ASM.
+
+Актуальные выполненные проверки и ограничения:
+[AUTOMATED_VERIFICATION_RESULT_RU.md](AUTOMATED_VERIFICATION_RESULT_RU.md).
+Архитектура/команды: [automatic-verification](research/automatic-verification.md).
+Маршрут: [parent-dungeon-boundary](research/parent-dungeon-boundary.md).
+
+```bash
+# DIR содержит настоящий pak.zip; ELF для этой команды не нужен.
+bash tools/check.sh --core --assets DIR --render --jobs 2 \
+  --report build/verification.json
+python3 tools/coverage_map.py --check --verification-report build/verification.json
+```
+
+Полный Wayland desktop здесь не собран/запущен. Автоматический compositor/input
+harness ещё не реализован: `--desktop` честно возвращает NOT RUN, а общий
+сценарный host не выдается за тест ОС-ввода. Закреплённый ELF отсутствует;
+новые оригинальные process traces не получены. Программный рендерер не
+подтверждает производительность реальной видеокарты. Ресурсы, бинарники игры и
+файлы шрифтов в патч/исходный ZIP не включаются.
+
+## Предыдущий этап: frontend и дисковая кампания (large-5)
 
 Обычный запуск теперь открывает меню: New Game с выбором загруженного класса и
 именем → Town, Continue/Load со списком слотов, пауза и Save / Save & Menu /
@@ -28,7 +69,7 @@ RNG сохраняются. Исходные quest/timeline/volatile-floor пр�
 изменяются. Путь: `$XDG_DATA_HOME/opentorchlight/saves`, иначе
 `$HOME/.local/share/opentorchlight/saves`; можно задать `--save-dir PATH`.
 
-**Свежая проверка этого патча:** GCC 14.2.0, **28/28 portable**, **28/28 ASan/UBSan**.
+**Историческая проверка large-5:** GCC 14.2.0, **28/28 portable**, **28/28 ASan/UBSan**.
 Трёхпроцессный сценарий проверяет New/Load, выбранный класс, ходьбу с обходом
 препятствия, предметы, Town-shaped → Main-shaped → возврат, смерть/recovery и
 повторную загрузку. Это авторские ресурсы, не настоящий Town. Отдельно реально

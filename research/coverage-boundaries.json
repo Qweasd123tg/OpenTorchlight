@@ -58,6 +58,7 @@
         "research/frontend-save-evidence.md"
       ],
       "implementation": [
+        "src/application.cpp",
         "src/save_store.cpp",
         "src/checkpoint.cpp",
         "src/linux_desktop_main.cpp"
@@ -104,6 +105,7 @@
         "research/frontend-save-evidence.md"
       ],
       "implementation": [
+        "src/application.cpp",
         "src/checkpoint.cpp",
         "src/linux_desktop_main.cpp"
       ],
@@ -117,19 +119,23 @@
         "0x58d110"
       ],
       "status": "partial",
-      "boundary": "Ordinary transitions preserve port session and visited-floor cache. Special portals, pet and complete original warp choreography remain.",
+      "boundary": "Ordinary transitions preserve port session and visited-floor cache. Special portals, pet and complete original warp choreography remain. First-floor parent route is resource-derived/inferred; full original portal policy remains open.",
       "evidence": [
         "research/decompiled-core/game_client.c",
         "research/level-transitions.md",
-        "research/frontend-save-evidence.md"
+        "research/frontend-save-evidence.md",
+        "research/parent-dungeon-boundary.md"
       ],
       "implementation": [
+        "src/application.cpp",
         "src/level_transition.cpp",
         "src/linux_desktop_main.cpp"
       ],
       "tests": [
         "tests/warp_arrival_test.cpp",
-        "tests/level_entry_test.cpp"
+        "tests/level_entry_test.cpp",
+        "tests/parent_dungeon_test.cpp",
+        "tests/application_scenario_test.py"
       ],
       "comparison": ""
     },
@@ -521,11 +527,13 @@
       "id": "desktop-menu-orchestration",
       "subsystem": "frontend",
       "status": "partial",
-      "boundary": "New/load/class/name/pause wired to desktop, resource rectangles/image atlas subset. Prototype glyphs/normal-only/input policy; full Wayland run required.",
+      "boundary": "Shared application/UI/renderer exercised in separate processes with real Town/Main/assets and exact regression snapshots. Actual Wayland delivery/compositor harness and original skin/parity remain open.",
       "evidence": [
-        "research/frontend-save-evidence.md"
+        "research/frontend-save-evidence.md",
+        "research/automatic-verification.md"
       ],
       "implementation": [
+        "src/application.cpp",
         "src/frontend.cpp",
         "src/ui_layout.cpp",
         "src/gles_ui_renderer.cpp",
@@ -536,7 +544,8 @@
         "tests/gles_ui_headless_test.py",
         "tests/check_desktop_gameplay_syntax.py",
         "tests/frontend_cycle_test.cpp",
-        "tests/frontend_resource_test.cpp"
+        "tests/frontend_resource_test.cpp",
+        "tests/application_scenario_test.py"
       ]
     },
     {
@@ -551,7 +560,33 @@
         "src/interaction.cpp"
       ],
       "tests": [
-        "tests/frontend_cycle_test.cpp"
+        "tests/frontend_cycle_test.cpp",
+        "tests/application_scenario_test.py"
+      ]
+    },
+    {
+      "id": "automatic-verification-groups",
+      "subsystem": "verification",
+      "status": "partial",
+      "boundary": "Independent core/assets/reference/render/desktop results, strict NOT RUN, real-pak common-loop scenarios and exact regression diff. No new original process trace or full compositor input harness.",
+      "evidence": [
+        "research/automatic-verification.md",
+        "research/parent-dungeon-boundary.md"
+      ],
+      "implementation": [
+        "tools/check.py",
+        "tools/coverage_map.py",
+        "src/application.cpp",
+        "src/asset_catalog_main.cpp",
+        "tools/run_scenario.py",
+        "tools/compare_scenarios.py"
+      ],
+      "tests": [
+        "tests/verification_driver_test.py",
+        "tests/application_scenario_test.py",
+        "tests/asset_catalog_test.py",
+        "tests/scenario_diff_test.py",
+        "tests/random_observation_test.cpp"
       ]
     }
   ]

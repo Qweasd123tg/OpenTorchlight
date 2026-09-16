@@ -2,21 +2,29 @@
   "annotated_function_addresses": 64,
   "defined_function_addresses": 17023,
   "inputs": {
-    "research/coverage-boundaries.json": "5cc0a23799a4d8779bffc17cb7f1fe6b062b7ff1ae363eb4e9726d817105a98f",
+    "research/coverage-boundaries.json": "00a909f4c3074da725cc9b071f0fc66755d71cee17b6c520406a50a129ee7fa0",
     "research/original-callgraph.tsv": "f02c52bf533d727b4c24ee9fba3d9f95d26205d75fd0ea16bdc5f655bbb8a827",
     "research/original-symbols.txt": "0ce1b5687c1128ac52434b660c3ba0254ff7a2cd2aa0f5be3894cb1026b67d3d"
   },
   "meaning": "Callgraph has only resolved direct edges. Status is a reviewed bounded claim, not percent game completion. No runtime verification is inferred from symbol/decompilation presence.",
   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
   "priority_formula": "10*log2(1+unique_in+unique_out) + 12*subsystem_weight + 8*(5-root_distance) for distances <=4; otherwise omit distance term",
-  "rows": 17026,
+  "rows": 17027,
   "schema": 1,
   "status_counts": {
     "closed": 0,
     "implemented": 1,
-    "partial": 29,
+    "partial": 30,
     "researched": 13,
     "unseen": 16959,
     "verified": 24
-  }
+  },
+  "verification_groups": [
+    "core",
+    "assets",
+    "reference",
+    "render",
+    "desktop"
+  ],
+  "verification_join": "tools/coverage_map.py --check --verification-report FILE; never changes reviewed statuses"
 }

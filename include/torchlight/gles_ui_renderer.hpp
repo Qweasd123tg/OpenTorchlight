@@ -2,6 +2,9 @@
 #include "torchlight/frontend.hpp"
 #include <memory>
 namespace torchlight {
+// Existing diagnostic inventory/HUD overlay, shared by window and headless runs.
+void draw_inventory_overlay(const std::vector<InventoryViewLine>& lines,
+                            bool inventory_open, int width, int height);
 class GlesUiRenderer {
   public:
     GlesUiRenderer(const PakArchive &, UiResources &);

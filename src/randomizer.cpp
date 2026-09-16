@@ -4,11 +4,21 @@
 #include <stdexcept>
 
 namespace torchlight {
+namespace {
+thread_local RandomObserver observer = nullptr;
+thread_local void* observer_context = nullptr;
+void emit(const RandomObservation& value) noexcept { if (observer) observer(value, observer_context); }
+}
+RandomObservationScope::RandomObservationScope(RandomObserver callback, void* context) noexcept
+    : previous_(observer), previous_context_(observer_context) { observer = callback; observer_context = context; }
+RandomObservationScope::~RandomObservationScope() { observer = previous_; observer_context = previous_context_; }
+
 
 TorchlightRandom::TorchlightRandom(std::uint32_t seed) : state_(seed) {
     if (seed == 0) {
         throw std::invalid_argument("TorchlightRandom requires a non-zero seed");
     }
+    if (observer) { RandomObservation event; event.after = seed; emit(event); }
 }
 
 std::uint64_t TorchlightRandom::advance() noexcept {
@@ -19,20 +29,34 @@ std::uint64_t TorchlightRandom::advance() noexcept {
 }
 
 std::int32_t TorchlightRandom::integer_between(std::int32_t low, std::int32_t high) noexcept {
-    if (high <= low) {
-        return low;
-    }
+    const auto before = state_;
+    const auto finish = [&](std::int32_t result) noexcept {
+        if (observer) {
+            RandomObservation event; event.kind = RandomObservation::Kind::integer;
+            event.before = before; event.after = state_;
+            event.integer_low = low; event.integer_high = high; event.integer_result = result; emit(event);
+        }
+        return result;
+    };
+    if (high <= low) return finish(low);
     const auto value = advance();
     const auto span = static_cast<std::uint32_t>(high) - static_cast<std::uint32_t>(low) + 1U;
     const auto offset = static_cast<std::uint32_t>(value) % span;
     const auto result = static_cast<std::int64_t>(low) + static_cast<std::int64_t>(offset);
-    return result > high ? high : static_cast<std::int32_t>(result);
+    return finish(result > high ? high : static_cast<std::int32_t>(result));
 }
 
 float TorchlightRandom::between(float low, float high) noexcept {
-    if (high == low) {
-        return low;
-    }
+    const auto before = state_;
+    const auto finish = [&](float result) noexcept {
+        if (observer) {
+            RandomObservation event; event.kind = RandomObservation::Kind::real;
+            event.before = before; event.after = state_;
+            event.real_low = low; event.real_high = high; event.real_result = result; emit(event);
+        }
+        return result;
+    };
+    if (high == low) return finish(low);
     const auto first = advance();
     const auto second = advance();
     const std::uint64_t mantissa =
@@ -42,7 +66,7 @@ float TorchlightRandom::between(float low, float high) noexcept {
     double unit = 0.0;
     std::memcpy(&unit, &bits, sizeof(unit));
     unit -= 1.0;
-    return low + static_cast<float>(static_cast<double>(high - low) * unit);
+    return finish(low + static_cast<float>(static_cast<double>(high - low) * unit));
 }
 
 std::size_t weighted_index(const std::vector<float>& weights, TorchlightRandom& random) {
