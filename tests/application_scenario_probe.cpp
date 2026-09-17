@@ -105,6 +105,11 @@ public:
     std::optional<UiPointerClick> take_ui_click() override {
         auto result = ui_click_; ui_click_.reset(); return result;
     }
+    // original-code P2: HUD commands run on press; the press is its own
+    // channel so the scenario can stage down before up like the Wayland host.
+    std::optional<std::array<float, 2>> take_ui_press() override {
+        auto result = ui_press_; ui_press_.reset(); return result;
+    }
     UiPointerState ui_pointer_state() const noexcept override { return pointer_; }
     void draw_menu_frame(GlesUiRenderer& renderer, const FrontendFrame& frame) override {
         renderer.draw(frame, width_, height_); readback(); ++menu_frames_;
@@ -160,24 +165,29 @@ public:
         if (step.verb == "level") {
             if (ascii(view.address.dungeon_name) == step.args[0] && view.address.depth == std::stoi(step.args[1])) done();
         } else if (step.verb == "hud-button") {
-            if (view.page != FrontendPage::playing || view.inventory_open)
-                throw std::runtime_error("HUD input requires unobstructed gameplay");
-            const auto it = std::find_if(last_hud_.buttons.begin(), last_hud_.buttons.end(),
-                [&](const auto& button){ return button.name == step.args[0]; });
-            if (it == last_hud_.buttons.end() || !it->enabled)
-                throw std::runtime_error("requested HUD button absent or disabled: " + step.args[0]);
-            const auto& rect = it->has_clip ? it->clip : it->rect;
-            const std::array<float,2> point = {rect.x + rect.width/2, rect.y + rect.height/2};
-            if (hud_button_at(last_hud_, point[0], point[1]) != &*it)
-                throw std::runtime_error("requested HUD target is obstructed");
-            pointer_.position = point;
+            // original-code P2: the command runs on press, so the entry gate
+            // (unobstructed gameplay) applies to the first visit only; later
+            // visits observe the post-command state and only stage release.
             if (++step.visits == 1) {
+                if (view.page != FrontendPage::playing || view.inventory_open)
+                    throw std::runtime_error("HUD input requires unobstructed gameplay");
+                const auto it = std::find_if(last_hud_.buttons.begin(), last_hud_.buttons.end(),
+                    [&](const auto& button){ return button.name == step.args[0]; });
+                if (it == last_hud_.buttons.end() || !it->enabled)
+                    throw std::runtime_error("requested HUD button absent or disabled: " + step.args[0]);
+                const auto& rect = it->has_clip ? it->clip : it->rect;
+                const std::array<float,2> point = {rect.x + rect.width/2, rect.y + rect.height/2};
+                if (hud_button_at(last_hud_, point[0], point[1]) != &*it)
+                    throw std::runtime_error("requested HUD target is obstructed");
+                pointer_.position = point;
+                hud_point_ = point;
                 click_ = {static_cast<int>(point[0]), static_cast<int>(point[1])};
                 pointer_.left_press_origin = point;
+                ui_press_ = point;
                 notice("hud_press", step.args[0]);
             } else {
                 if (view.moving) throw std::runtime_error("HUD press leaked into world movement");
-                ui_click_ = UiPointerClick{*pointer_.left_press_origin, point};
+                ui_click_ = UiPointerClick{*pointer_.left_press_origin, hud_point_};
                 pointer_.left_press_origin.reset();
                 notice("hud_release", step.args[0]);
                 done();
@@ -538,6 +548,8 @@ private:
     std::optional<std::uint64_t> combat_target_;
     std::optional<std::array<int,2>> click_;
     std::optional<UiPointerClick> ui_click_;
+    std::optional<std::array<float,2>> ui_press_;
+    std::array<float,2> hud_point_{0.0F, 0.0F};
     UiPointerState pointer_;
     std::vector<std::uint32_t> keys_;
     std::vector<unsigned char> pixels_;

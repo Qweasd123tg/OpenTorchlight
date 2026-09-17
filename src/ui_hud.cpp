@@ -35,11 +35,9 @@ const UiResolvedWidget *hud_button_at(const UiHudFrame &frame, float x, float y)
             (!it->has_clip || it->clip.contains(x, y))) return &*it;
     return nullptr;
 }
-std::optional<std::string> hud_click_callback(const UiHudFrame &frame,
-                                             const UiPointerClick &click) {
-    const auto *pressed = hud_button_at(frame, click.press[0], click.press[1]);
-    const auto *released = hud_button_at(frame, click.release[0], click.release[1]);
-    if (!pressed || released != pressed || !pressed->enabled || pressed->callback.empty())
+std::optional<std::string> hud_press_callback(const UiHudFrame &frame, float x, float y) {
+    const auto *pressed = hud_button_at(frame, x, y);
+    if (!pressed || !pressed->enabled || pressed->callback.empty())
         return std::nullopt;
     return pressed->callback;
 }

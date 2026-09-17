@@ -464,6 +464,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                 if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
                 static_cast<void>(window.take_ui_click());
+                static_cast<void>(window.take_ui_press());
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
                     // original-code: CContinueGameMenu deleteCharacter @0xc3fd00
@@ -974,6 +975,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                     if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
                     static_cast<void>(window.take_ui_click());
+                    static_cast<void>(window.take_ui_press());
                     if (const auto request = frontend.take_request()) {
                         if (request->command == torchlight::FrontendCommand::apply_settings) {
                             try { apply_settings(*request); }
@@ -1006,21 +1008,44 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     throw DesktopError("application host clock must be finite and monotonic");
                 previous_frame = current_frame;
                 auto world_click = window.take_left_click();
-                const auto ui_click = window.take_ui_click();
+                static_cast<void>(window.take_ui_click());
+                const auto ui_press = window.take_ui_press();
                 auto key_presses = window.take_key_presses();
+                // Shared panel actions for real keys and HUD commands alike:
+                // the HUD callback names a command, never a synthetic key.
+                const auto toggle_inventory_panel = [&] {
+                    inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
+                    skill_panel = false; quest_panel = false; merchant_entity.reset();
+                };
+                const auto toggle_skills_panel = [&] {
+                    inventory_view.open = !skill_panel || !inventory_view.open;
+                    skill_panel = true; quest_panel = false; merchant_entity.reset();
+                };
+                const auto toggle_quests_panel = [&] {
+                    inventory_view.open = !quest_panel || !inventory_view.open;
+                    quest_panel = true; skill_panel = false; merchant_entity.reset();
+                };
+                const auto toggle_options_panel = [&] {
+                    if (inventory_view.open) { inventory_view.open = false; merchant_entity.reset(); }
+                    else frontend.pause();
+                };
                 if (!inventory_view.open) {
                     const auto input_hud = ui_hud.frame(window.width(), window.height(), {});
                     if (world_click && torchlight::hud_button_at(input_hud,
                             static_cast<float>((*world_click)[0]), static_cast<float>((*world_click)[1])))
                         world_click.reset(); // Even transparent/disabled HUD targets block the world.
-                    if (ui_click && player_combat.alive()) {
-                        if (const auto callback = torchlight::hud_click_callback(input_hud, *ui_click)) {
+                    // original-code: the HUD onClick fires on MouseButtonDown
+                    // (CGameUI::mapEventHandlers @0xa97e00, handle_onClick
+                    // @0xa83690), so the press dispatches immediately. The
+                    // release channel above is drained, never re-dispatched.
+                    if (ui_press && player_combat.alive()) {
+                        if (const auto callback = torchlight::hud_press_callback(input_hud, (*ui_press)[0], (*ui_press)[1])) {
                             // resource-derived callback names. Presentation remains PORT
                             // for inventory/skills/quests; journal != quests, stats != inventory.
-                            if (*callback == "guiToggleInventory") key_presses.push_back(torchlight::physical_key::I);
-                            else if (*callback == "guiToggleSkills") key_presses.push_back(torchlight::physical_key::K);
-                            else if (*callback == "guiToggleQuests") key_presses.push_back(torchlight::physical_key::J);
-                            else if (*callback == "guiToggleOptions") key_presses.push_back(torchlight::physical_key::ESC);
+                            if (*callback == "guiToggleInventory") toggle_inventory_panel();
+                            else if (*callback == "guiToggleSkills") toggle_skills_panel();
+                            else if (*callback == "guiToggleQuests") toggle_quests_panel();
+                            else if (*callback == "guiToggleOptions") toggle_options_panel();
                             else window.notice("hud_callback_unimplemented", *callback);
                         }
                     }
@@ -1055,14 +1080,11 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         continue;
                     }
                     if (key == torchlight::physical_key::I) {
-                        inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
-                        skill_panel = false; quest_panel = false; merchant_entity.reset();
+                        toggle_inventory_panel();
                     } else if (key == torchlight::physical_key::K) {
-                        inventory_view.open = !skill_panel || !inventory_view.open;
-                        skill_panel = true; quest_panel = false; merchant_entity.reset();
+                        toggle_skills_panel();
                     } else if (key == torchlight::physical_key::J) {
-                        inventory_view.open = !quest_panel || !inventory_view.open;
-                        quest_panel = true; skill_panel = false; merchant_entity.reset();
+                        toggle_quests_panel();
                     } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
                         const auto& skills = session.skills().skills;
                         if (selected_skill < skills.size()) {
@@ -1078,8 +1100,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                     else if (key == torchlight::physical_key::ESC) {
-                        if (inventory_view.open) { inventory_view.open = false; merchant_entity.reset(); }
-                        else frontend.pause();
+                        toggle_options_panel();
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open && merchant_entity) {

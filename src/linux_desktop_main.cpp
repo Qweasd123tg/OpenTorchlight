@@ -332,6 +332,11 @@ public:
     std::optional<torchlight::UiPointerClick> take_ui_click() override {
         auto click = ui_click_; ui_click_.reset(); return click;
     }
+    // original-code P2: the in-game HUD command runs on MouseButtonDown, so
+    // the press position is a standalone channel, not half of a click pair.
+    std::optional<std::array<float, 2>> take_ui_press() override {
+        auto press = ui_press_; ui_press_.reset(); return press;
+    }
     torchlight::UiPointerState ui_pointer_state() const noexcept override {
         torchlight::UiPointerState state;
         if (pointer_inside_) state.position = std::array<float, 2>{
@@ -453,7 +458,7 @@ private:
     static void pointer_leave(void* data, wl_pointer*, std::uint32_t, wl_surface*) {
         auto &self = *static_cast<DesktopWindow*>(data);
         self.pointer_inside_ = false;
-        self.ui_press_origin_.reset(); self.ui_click_.reset();
+        self.ui_press_origin_.reset(); self.ui_click_.reset(); self.ui_press_.reset();
     }
     static void pointer_motion(void* data, wl_pointer*, std::uint32_t, wl_fixed_t x,
                                wl_fixed_t y) {
@@ -469,6 +474,7 @@ private:
             self.left_click_ = {self.pointer_x_, self.pointer_y_};
             self.ui_press_origin_ = std::array<float, 2>{
                 static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_)};
+            self.ui_press_ = *self.ui_press_origin_;
         } else if (state == WL_POINTER_BUTTON_STATE_RELEASED) {
             if (self.pointer_inside_ && self.ui_press_origin_)
                 self.ui_click_ = torchlight::UiPointerClick{*self.ui_press_origin_,
@@ -531,6 +537,7 @@ private:
     int pointer_y_ = 0;
     bool pointer_inside_ = false;
     std::optional<std::array<float, 2>> ui_press_origin_;
+    std::optional<std::array<float, 2>> ui_press_;
     std::optional<torchlight::UiPointerClick> ui_click_;
     bool configured_ = false;
     bool running_ = true;
