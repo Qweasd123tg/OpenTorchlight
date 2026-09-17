@@ -14,12 +14,12 @@ int main(int argc, char** argv) {
         for(const auto& floor:saved.floors) for(const auto& entity:floor.world.entities)
             if(entity.gold_amount || entity.experience_reward || entity.player_kill || entity.reward_claimed)
                 throw std::runtime_error("v1 migration manufactured world rewards");
-        const auto v2=torchlight::encode_checkpoint(saved);
-        if(v2[8]!=2 || torchlight::encode_checkpoint(torchlight::decode_checkpoint(v2))!=v2)
-            throw std::runtime_error("v2 upgrade not canonical");
+        const auto current=torchlight::encode_checkpoint(saved);
+        if(current[8]!=torchlight::kCheckpointFormatVersion || torchlight::encode_checkpoint(torchlight::decode_checkpoint(current))!=current)
+            throw std::runtime_error("current-version upgrade not canonical");
         input.close();
         std::ofstream output(argv[1],std::ios::binary|std::ios::trunc);
-        output.write(reinterpret_cast<const char*>(v2.data()),static_cast<std::streamsize>(v2.size()));
+        output.write(reinterpret_cast<const char*>(current.data()),static_cast<std::streamsize>(current.size()));
         output.close();if(!output)throw std::runtime_error("cannot write upgraded fixture");
         std::cout<<"PASS: frozen unmodified-large-7 v1 fixture upgraded without retroactive rewards\n";
     } catch(const std::exception& e) {std::cerr<<e.what()<<'\n';return 1;}

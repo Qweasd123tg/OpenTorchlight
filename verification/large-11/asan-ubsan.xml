@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="11"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="3"
+	timestamp="2026-09-16T20:06:52"
+	>
+	<testcase name="item_cycle" classname="item_cycle" time="0.135807" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>synthetic_cycle=death-&gt;model-&gt;pickup-&gt;bag-&gt;equip-&gt;travel checks=339
+</system-out>
+	</testcase>
+	<testcase name="ordinary_combat" classname="ordinary_combat" time="0.3516" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 129 resource-backed ordinary combat assertions (authored fixture)
+</system-out>
+	</testcase>
+	<testcase name="frontend_campaign_cycle" classname="frontend_campaign_cycle" time="1.02321" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>frontend-cycle write: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle read: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle verify: 4 assertions (authored resources; not original Town/GUI parity)
+Three independent processes completed the authored-resource frontend/campaign cycle.
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="0.396384" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 603 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="gameplay_continuation" classname="gameplay_continuation" time="0.145797" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 390 gameplay continuation assertions (authored resources, no original runtime)
+</system-out>
+	</testcase>
+	<testcase name="death_finalization" classname="death_finalization" time="0.0522761" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 62 deferred death/loot/callback assertions (authored resource graph)
+</system-out>
+	</testcase>
+	<testcase name="reward_cycle" classname="reward_cycle" time="0.10306" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 79 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="vitals_numeric" classname="vitals_numeric" time="0.0620351" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 24018 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_resource_cycle" classname="vitals_resource_cycle" time="0.0660915" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 51 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_fresh_process" classname="vitals_fresh_process" time="0.704624" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 6 authored vitals checks; not original ELF execution
+PASS: 5 authored vitals checks; not original ELF execution
+PASS: v3 vitals survive fresh-process load without refilling or double-buffing
+</system-out>
+	</testcase>
+	<testcase name="vitals_v2_migration" classname="vitals_v2_migration" time="0.931433" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 10 authored vitals checks; not original ELF execution
+PASS: 10 authored vitals checks; not original ELF execution
+PASS: two level fixtures from the unchanged-fresh v2 writer -&gt; v3, no refill and no double bonus
+</system-out>
+	</testcase>
+</testsuite>

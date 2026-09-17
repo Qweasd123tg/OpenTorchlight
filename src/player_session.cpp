@@ -32,6 +32,7 @@ PlayerSession::PlayerSession(const PlayerPrototype& prototype, std::uint32_t see
         const auto id = inventory_.store(std::move(item));
         static_cast<void>(inventory_.equip(id));
         refresh_equipment();
+        health_.restore_after_death(); // New character starts full AFTER starting equipment.
     }
 }
 std::array<std::int32_t, 4> PlayerSession::attributes() const {
@@ -184,9 +185,9 @@ void PlayerSession::refresh_equipment() {
         else health_.unequip(static_cast<ArmorSlot>(i));
     }
     combat_.set_external_attack_effects(effects);
-    // Original equipped hand effects belong to the same effect manager for mana.
+    // Original equipped hand effects belong to the same effect manager for vitals.
     if (const auto* item = weapon(); item && item->weapon)
         effects.append(item->weapon->prototype.attack_effects);
-    health_.set_equipment_mana_effects(effects);
+    health_.set_equipment_vital_effects(effects);
 }
 } // namespace torchlight

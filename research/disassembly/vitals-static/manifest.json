@@ -1,0 +1,47 @@
+{
+  "evidence_kind": "user-provided objdump text; not original executable bytes",
+  "declared_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "full_disasm_sha256": "b51f229034f89d655533e55bd57bf0545092d5f94c3fb745621e2bb90b20f7c9",
+  "spans": {
+    "maximum-health": {
+      "start": "0x813e60",
+      "end_exclusive": "0x813f20",
+      "sha256": "f3e58c2871e9ecced1dcf795b215d953ad23625413b2d6a93470baea0549179b"
+    },
+    "maximum-mana": {
+      "start": "0x813a10",
+      "end_exclusive": "0x813a90",
+      "sha256": "95d604c64fac07b006f56c49a08cbd9cc46b69b2151c0cae3554d74cd04fa3c7"
+    },
+    "mana-recovery": {
+      "start": "0x815c90",
+      "end_exclusive": "0x815d40",
+      "sha256": "8f99ff8430f595c1bdc8146ea705effc77969cb95a57a233fea36a01ea1d5911"
+    },
+    "health-effect-rate": {
+      "start": "0x816d70",
+      "end_exclusive": "0x816de0",
+      "sha256": "00c2f3156377bfb0b3d9016820632dd9e76c92682f2b23982316fd1ca753e9cd"
+    },
+    "health-recovery-entry": {
+      "start": "0x83d930",
+      "end_exclusive": "0x83da2b",
+      "sha256": "9fdb99dade79bd72f1804975f9d4e6d31a6a7c01639672ca2f7e080919a86469"
+    },
+    "health-recovery-normal": {
+      "start": "0x83dc30",
+      "end_exclusive": "0x83dc70",
+      "sha256": "be8e84fb886686bf64dfe28ccdb211e14ef4b460a7f00ac0655af17dab5993f7"
+    },
+    "health-modification": {
+      "start": "0x838a50",
+      "end_exclusive": "0x838ed0",
+      "sha256": "b29cac806869cf29d302f5f014a4f026be51207a12238e6e11f0f4be45869e31"
+    },
+    "globals-recovery-loads": {
+      "start": "0xa4efdb",
+      "end_exclusive": "0xa4f0cb",
+      "sha256": "eaf57c68400427e9cb1956742f93a10e97fd15d6dc6d3c24dd2289d485726c3d"
+    }
+  }
+}

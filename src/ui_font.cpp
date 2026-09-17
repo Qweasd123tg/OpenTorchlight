@@ -151,7 +151,12 @@ struct UiFont::Impl {
         }
         const auto char_width = static_cast<FT_F26Dot6>(std::trunc(sx));
         const auto char_height = static_cast<FT_F26Dot6>(std::trunc(sy));
-        // inferred DPI; original renderer path remains unverified. FT units: 1/64.
+        // library-derived: both pinned CEGUI renderers return 96.
+        // OgreCEGUIRenderer::getHorz/VertScreenDPI (0x6d30/0x6d40) and
+        // OpenGLRenderer::getHorz/VertScreenDPI (0x281d0/0x281e0) do
+        // `mov $0x60,%eax`. Formula Size*64 + trunc((Size*64)*scale) is
+        // FreeTypeFont::updateFont @0xe07b0; scales are
+        // Font::notifyScreenResolution @0xd18e0. See research/ui-font-dpi.md.
         if (FT_Set_Char_Size(face, char_width, char_height, 96, 96) != 0) {
             ready = false;
             return;

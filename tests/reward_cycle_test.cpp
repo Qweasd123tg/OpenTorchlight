@@ -237,9 +237,9 @@ int main(int argc, char** argv) {
         else if(argc==2) {
             Cycle c(argv[1]);c.play();auto data=c.checkpoint();
             const auto bytes=encode_checkpoint(data);
-            require(bytes[8]==2,"checkpoint writer did not use v2");
+            require(bytes[8]==kCheckpointFormatVersion,"checkpoint writer did not use current version");
             const auto decoded=decode_checkpoint(bytes);
-            require(encode_checkpoint(decoded)==bytes,"v2 roundtrip not canonical");
+            require(encode_checkpoint(decoded)==bytes,"current-version roundtrip not canonical");
             restored(argv[1],decoded);exclusions(argv[1]);
         } else if(argc==4) {
             const std::string mode=argv[3];SaveStore store(argv[2]);

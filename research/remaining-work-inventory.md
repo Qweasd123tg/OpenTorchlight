@@ -4,6 +4,17 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
+## Изменение large-11 (донор fresh)
+
+Добавлены пассивная регенерация игрока из GLOBALS/эффектов, maxHP экипировки и
+разделение base/effective HP, сохранение v3 с настоящими v2 migration-fixtures.
+Core 49/49; выбранные ASan/UBSan 11/11; настоящий pak/ELF здесь не проверялся.
+Обычная XP-формула была подтверждена интегратором ранее, до fresh; прежнее
+утверждение «XP producer inferred» ниже является историей large-8.
+Нет полного timed-effect/potion pipeline, восстановления HP монстров/питомца,
+skills/ranged/population/quests/торговли/pet/кампании. Приоритеты и критерии
+завершения: `../FULL_GAME_ROADMAP_RU.md`.
+
 ## Изменение large-8
 
 Подключены обычные награды за смертельный HIT игрока, graph-driven XP/level,
@@ -45,16 +56,16 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 | Layout/random level/logic | partial | генерация, links, timer, spawn, warp | весь command set, re-entrancy, сохранение состояния, special layouts |
 | Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland-ввод (Town headless уже проверен), original skins/fonts, splash/loading/settings, IME |
 | Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | оконный интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
-| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1→v2 уже поддержан; настоящий pak уже проверен |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1/v2→v3 поддержан; настоящий pak проверялся до этого прохода |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
 | Ranged/projectile | researched | основные функции и точечные ASM | descriptor → spawn → flight/sweep → HIT/pierce/retire/render |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
 | Player death/restart | verified | один entry-restart с gold/10 | остальные варианты, pet, dropToGround, временные эффекты |
-| HP/mana/gold | partial | base/max/spend, entry fee, level growth, gold piles/pickup/wallet/save | regen, original volatile RNG/rank, остальные difficulty, цены/экономика |
+| HP/mana/gold | partial | base/effective HP, passive player regen, max/spend, entry fee, level growth, gold pickup/wallet/save | timed effects/potions, monster/pet regen, original volatile RNG/rank, остальные difficulty, экономика |
 | Loot/inventory/equipment | partial | death → drop → pickup → equip → travel | rarity, affix, requirements, все слоты, stack, consumables, visuals |
 | Effects/affixes | partial | каталог и ограниченные constant passive | полный lifecycle, graphs, conditions, stacking, FX, serialization |
 | Skills | researched | центральные классы декомпилированы | data loader, controller, costs, cooldown, targeting, missiles/AOE |
-| XP/level/fame | partial | portable XP/level/growth/stat+skill points, атрибуты, HUD и save | подтвердить XP producer/CPlayer levelUp, factions/spawner XP gates, fame, активные skills, полные penalties |
+| XP/level/fame | partial | portable XP/level/growth/stat+skill points, атрибуты, HUD и save | полный CPlayer levelUp (обычный XP scalar уже сравнен), factions/spawner XP gates, fame, активные skills, полные penalties |
 | Quests/dialogs | researched | quest классы декомпилированы | loader, requirements, state machine, dialog, rewards, persistence |
 | NPC/merchant | researched | merchant/dialog classes доступны | interaction, buy/sell, prices, stock, окна и сохранение |
 | Stash/shared stash | researched | классы доступны | UI, перенос экземпляров, disk persistence |
@@ -109,7 +120,7 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 - создание/clone/owner/lifetime/update/remove/serialize `CEffect`;
 - affix roll, graphs, requirements, activation/conditions и visual FX;
 - skill load/learn/rank/cast/cost/cooldown/event/target/missile/AOE;
-- mana/health regeneration, buffs, debuffs, potions и consumables;
+- полные buffs/debuffs/timed effects, potions/consumables; passive player HP/mana regen добавлен, monster/pet lifecycle ещё нет;
 - XP, level, fame, attributes, skill/stat points и death penalties;
 - поддержка шаблонов всех трёх классов без ручной прошивки каждого skill.
 

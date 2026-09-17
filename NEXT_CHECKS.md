@@ -1,3 +1,73 @@
+# Следующий проход после large-11 (донор: fresh)
+
+## Фактический результат
+
+В этой среде: baseline fresh core 44/44; обновлённый core 49/49, без пропусков;
+выбранные ASan/UBSan 11/11. Новые HP/regen-формулы статически исследованы по
+присланному полному текстовому дизассемблеру. Оригинальные pak и ELF отсутствуют;
+старые интеграторские результаты ниже не переносятся на новый код.
+
+Добавлены `vitals.hpp/cpp`, общий recovery-step, maxHP effects, checkpoint v3 с
+v1/v2-миграцией, настоящий старый v2 writer/fixtures и сборщик private inputs.
+Зелья, skills, population, quests, pet и вся кампания не объявлены закрытыми.
+Подробно: `PLAYER_VITALS_RESULT_RU.md`, `FULL_GAME_ROADMAP_RU.md`.
+
+## Нужные входы без ручного запуска игры
+
+Нужны `pak.zip` и `Torchlight.bin.x86_64` из исследуемой Linux-установки.
+По возможности приложить родные OGRE/CEGUI `.so` из той же установки.
+Сохранения, настройки, видео и ручное прохождение не нужны.
+
+```bash
+python3 tools/collect_game_inputs.py \
+  --game-dir "/путь/к/Torchlight" \
+  --output "/вне-игры-и-репозитория/game-inputs.zip"
+```
+
+Скрипт только читает выбранные исходники, создаёт manifest хешей и сообщает о
+неполном комплекте/другой сборке. Его временный файл и результат находятся в
+одном каталоге; требуется файловая система с hard-link для атомарной публикации
+без перезаписи. ZIP не включать в репозиторий. При неизвестном хеше исследовать
+новую сборку отдельно, не отключать проверки закреплённого ELF.
+
+## Первый прогон после получения входов
+
+```bash
+python3 tools/dump_original_gameplay_inputs.py \
+  --original "$GAME_DIR/Torchlight.bin.x86_64" \
+  --output /tmp/original-gameplay-inputs.json
+python3 tools/check.py --core --assets "$GAME_DIR" --render --jobs 4
+python3 tools/check.py --reference "$GAME_DIR/Torchlight.bin.x86_64" --jobs 4
+```
+
+Экстрактор только читает ELF. Следующая reference-команда исполняет ограниченные
+сравнительные стенды; это не ручной запуск всей игры. Настоящая сцена требует
+соответствующего EGL/GLES/FreeType окружения. NOT RUN не превращать в PASS.
+
+Проверить GLOBALS-ключи/типы для всех классов. Добавить новый bounded original
+comparison для maxHP/updateHP/updateMana, затем сценарий damage → recovery →
+pause → equip/unequip → level-up → save → новый процесс → load в **общем**
+application-loop на настоящем pak. Текущие новые витальные state-тесты не
+доказывают именно этот полный application-сценарий.
+
+## Дальше по игровым зависимостям
+
+1. Вычитать 0xfa86dc (timed recovery), 0xfce4e0 (population density), 0xfa86d8
+   (delta use site), а также ranged constants; значения не угадывать.
+2. `CEffect` lifetime/conditions/stacking + consumable acceptance/uses/stack,
+   чтение графов и настоящий potion use. Отдельно запрет расхода без применения.
+3. Skill loader/rank/cost/cooldown/target/action events и missile/sweep/retire.
+4. Обычное populate/formation/champion: не выдавать расположенные layout-юниты
+   и logic-spawners за полное население случайных этажей.
+5. NPC/merchant/quests/pet; затем boss gates и полный маршрут кампании.
+
+Каждый этап меняет реальный игровой loop, состояние сохранения и ресурсные
+проверки вместе. Отдельный mock-runner не заменяет рабочую функцию игры.
+
+---
+
+# Архивный план large-10 (история, не новые результаты)
+
 # Следующий проход после large-10
 
 ## Интеграторский прогон large-10 (настоящие pak+ELF)

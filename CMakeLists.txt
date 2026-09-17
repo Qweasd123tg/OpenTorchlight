@@ -44,6 +44,7 @@ add_library(torchlight_core STATIC
     src/equipment.cpp
     src/entity_world.cpp
     src/enemy_ai.cpp
+    src/vitals.cpp
     src/input_state.cpp
     src/inventory.cpp
     src/inventory_view.cpp
@@ -736,6 +737,32 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME verification_driver
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/verification_driver_test.py)
     set_tests_properties(verification_driver PROPERTIES TIMEOUT 40)
+
+    set(VITALS_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/vitals.pak.zip)
+    add_custom_command(OUTPUT ${VITALS_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_vitals_fixture.py ${VITALS_FIXTURE}
+        DEPENDS tests/make_vitals_fixture.py tests/make_attack_fixture.py tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py
+        VERBATIM)
+    add_custom_target(vitals_fixture DEPENDS ${VITALS_FIXTURE})
+    add_executable(vitals_test tests/vitals_test.cpp)
+    target_link_libraries(vitals_test PRIVATE torchlight_core)
+    add_dependencies(vitals_test vitals_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(vitals_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME vitals_numeric COMMAND vitals_test --numeric)
+    add_test(NAME vitals_resource_cycle COMMAND vitals_test ${VITALS_FIXTURE})
+    add_test(NAME vitals_fresh_process COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/vitals_process_test.py
+        --probe $<TARGET_FILE:vitals_test> --fixture ${VITALS_FIXTURE})
+    add_test(NAME vitals_v2_migration COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/vitals_legacy_test.py
+        --probe $<TARGET_FILE:vitals_test> --fixture ${VITALS_FIXTURE})
+    set_tests_properties(vitals_numeric vitals_resource_cycle vitals_fresh_process vitals_v2_migration PROPERTIES TIMEOUT 90)
+
+    add_test(NAME collect_game_inputs_safety COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/collect_game_inputs_test.py)
+    set_tests_properties(collect_game_inputs_safety PROPERTIES TIMEOUT 30)
 
     # Every registered test has an execution group. Labels describe dependency
     # and evidence, not fidelity: original_* resource tests are NOT ELF parity.

@@ -185,6 +185,7 @@ PlayerCheckpoint CheckpointAccess::capture(const PlayerSession &p) {
     s.hardcore = p.hardcore_;
     s.health = p.health_.health_;
     s.maximum_health = p.health_.maximum_health_;
+    s.base_health = p.health_.base_health_;
     s.mana = p.health_.mana_;
     s.maximum_mana = p.health_.maximum_mana_;
     s.base_defense = p.health_.base_damage_defense_;
@@ -229,6 +230,7 @@ void CheckpointAccess::validate(const PlayerCheckpoint &s) {
         try { validate_progression(*s.progression); }
         catch (const std::invalid_argument& e) { throw CheckpointError(e.what()); }
     }
+    if (s.base_health) require(*s.base_health >= 1, "invalid saved base HP");
     scalar(s.health, "invalid player HP");
     scalar(s.maximum_health, "invalid player max HP");
     require(s.maximum_health >= 1 && s.health >= 0 && s.health <= s.maximum_health,
@@ -278,7 +280,15 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
     p.inventory_.equipped_ = s.inventory.slots;
     p.gold_ = s.gold;
     p.health_.base_damage_defense_ = s.base_defense;
-    p.health_.maximum_health_ = s.maximum_health;
+    // V1/v2 stored only the then-unmodified maximum. It is the migration base,
+    // never the already-buffed maximum in a v3 save.
+    require(s.base_health || (std::trunc(s.maximum_health) == s.maximum_health &&
+                static_cast<double>(s.maximum_health) <= std::numeric_limits<std::int32_t>::max()),
+            "legacy saved base HP is not an integer");
+    // Do not evaluate a float-to-int fallback for a v3 value: rounding the
+    // valid INT32_MAX base to float can put the derived maximum above int32.
+    const auto saved_base = s.base_health ? *s.base_health : static_cast<std::int32_t>(s.maximum_health);
+    p.health_.base_health_ = saved_base;
     if (s.progression) {
         require(bool(p.progression_rules_), "saved progression requires class graphs");
         try {
@@ -290,15 +300,17 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
             if (p.progression_.level > 1) {
                 const auto& rule = p.progression_rules_->at(p.progression_.level);
                 p.health_.set_progression_vitals(rule.maximum_health, rule.base_mana);
-                require(p.health_.maximum_health_ == s.maximum_health,
-                        "saved health maximum disagrees with level graph");
+                require(rule.maximum_health == saved_base,
+                        "saved base health disagrees with level graph");
             }
         } catch (const std::invalid_argument& e) { throw CheckpointError(e.what()); }
     }
     p.refresh_equipment(); // validates/recomputes current resource-dependent derived values
+    require(!s.base_health || p.health_.maximum_health_ == s.maximum_health,
+            "saved health maximum disagrees with base/equipment resources");
     require(p.health_.maximum_mana_ == s.maximum_mana,
             "saved mana maximum disagrees with class/equipment resources");
-    p.health_.health_ = s.health;
+    p.health_.health_ = std::min(s.health, p.health_.maximum_health_);
     p.health_.mana_ = s.mana;
     p.combat_.random_.state_ = s.combat_random;
     p.combat_.prefer_left_ = s.prefer_left;

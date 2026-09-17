@@ -1,0 +1,31 @@
+Internal ctest changing into directory: /mnt/data/ot-work/build-asan
+Test project /mnt/data/ot-work/build-asan
+      Start 12: item_cycle
+ 1/11 Test #12: item_cycle .......................   Passed    0.14 sec
+      Start 14: ordinary_combat
+ 2/11 Test #14: ordinary_combat ..................   Passed    0.35 sec
+      Start 18: frontend_campaign_cycle
+ 3/11 Test #18: frontend_campaign_cycle ..........   Passed    1.02 sec
+      Start 20: save_checkpoint
+ 4/11 Test #20: save_checkpoint ..................   Passed    0.40 sec
+      Start 23: gameplay_continuation
+ 5/11 Test #23: gameplay_continuation ............   Passed    0.15 sec
+      Start 24: death_finalization
+ 6/11 Test #24: death_finalization ...............   Passed    0.05 sec
+      Start 32: reward_cycle
+ 7/11 Test #32: reward_cycle .....................   Passed    0.10 sec
+      Start 43: vitals_numeric
+ 8/11 Test #43: vitals_numeric ...................   Passed    0.06 sec
+      Start 44: vitals_resource_cycle
+ 9/11 Test #44: vitals_resource_cycle ............   Passed    0.07 sec
+      Start 45: vitals_fresh_process
+10/11 Test #45: vitals_fresh_process .............   Passed    0.70 sec
+      Start 46: vitals_v2_migration
+11/11 Test #46: vitals_v2_migration ..............   Passed    0.93 sec
+
+100% tests passed, 0 tests failed out of 11
+
+Label Time Summary:
+core    =   3.97 sec*proc (11 tests)
+
+Total Test time (real) =   3.98 sec

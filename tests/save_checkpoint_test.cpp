@@ -123,8 +123,11 @@ void check_restored(const char *pak, const CampaignCheckpoint &c) {
     auto again = c;
     again.player = CheckpointAccess::capture(session);
     again.floors[0] = floor_state(f, enemies);
-    require(encode_checkpoint(c) == encode_checkpoint(again),
-            "roundtrip changed canonical checkpoint");
+    auto canonical = c;
+    // A legacy DTO gains its previously implicit pre-effect HP at recapture.
+    if (!canonical.player.base_health) canonical.player.base_health = session.health().base_health();
+    require(encode_checkpoint(canonical) == encode_checkpoint(again),
+            "roundtrip changed canonical checkpoint beyond explicit legacy base-HP migration");
     auto transitions = CheckpointAccess::restore_transitions(c);
     WarpRequest back;
     back.dungeon_name = u"LASTDUNGEON";

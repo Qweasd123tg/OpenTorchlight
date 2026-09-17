@@ -1,0 +1,237 @@
+  838a50:	mov    QWORD PTR [rsp-0x18],rbx
+  838a55:	mov    QWORD PTR [rsp-0x10],rbp
+  838a5a:	mov    rbx,rdi
+  838a5d:	mov    QWORD PTR [rsp-0x8],r12
+  838a62:	sub    rsp,0x58
+  838a66:	movss  DWORD PTR [rsp+0x18],xmm0
+  838a6c:	cmp    BYTE PTR [rdi+0x52f],0x0
+  838a73:	jne    838a84 <_ZN10CCharacter8modifyHPEf+0x34>
+  838a75:	ucomiss xmm0,DWORD PTR [rip+0x76bd7c]        # fa47f8 <_ZTVN4Ogre13FrameListenerE+0x38>
+  838a7c:	jp     838a84 <_ZN10CCharacter8modifyHPEf+0x34>
+  838a7e:	jb     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838a84:	mov    esi,0xa7
+  838a89:	mov    rdi,rbx
+  838a8c:	xor    ebp,ebp
+  838a8e:	call   7f62a0 <_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE>
+  838a93:	test   al,al
+  838a95:	jne    838cb0 <_ZN10CCharacter8modifyHPEf+0x260>
+  838a9b:	movss  xmm0,DWORD PTR [rbx+0x414]
+  838aa3:	ucomiss xmm0,DWORD PTR [rip+0x76bd4e]        # fa47f8 <_ZTVN4Ogre13FrameListenerE+0x38>
+  838aaa:	movss  DWORD PTR [rsp+0x1c],xmm0
+  838ab0:	jbe    838c70 <_ZN10CCharacter8modifyHPEf+0x220>
+  838ab6:	movss  xmm0,DWORD PTR [rsp+0x1c]
+  838abc:	ucomiss xmm0,DWORD PTR [rip+0x76bd35]        # fa47f8 <_ZTVN4Ogre13FrameListenerE+0x38>
+  838ac3:	je     838d58 <_ZN10CCharacter8modifyHPEf+0x308>
+  838ac9:	mov    rax,QWORD PTR [rbx]
+  838acc:	mov    rdi,rbx
+  838acf:	call   QWORD PTR [rax+0x290]
+  838ad5:	test   al,al
+  838ad7:	jne    838d08 <_ZN10CCharacter8modifyHPEf+0x2b8>
+  838add:	mov    esi,0x1c
+  838ae2:	mov    rdi,rbx
+  838ae5:	call   7f62a0 <_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE>
+  838aea:	test   al,al
+  838aec:	je     838db0 <_ZN10CCharacter8modifyHPEf+0x360>
+  838af2:	movss  xmm0,DWORD PTR [rsp+0x18]
+  838af8:	mov    rdi,rbx
+  838afb:	addss  xmm0,DWORD PTR [rbx+0x414]
+  838b03:	movss  DWORD PTR [rbx+0x414],xmm0
+  838b0b:	movss  DWORD PTR [rsp],xmm0
+  838b10:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838b15:	cvtsi2ss xmm1,eax
+  838b19:	movss  xmm0,DWORD PTR [rsp]
+  838b1e:	ucomiss xmm0,xmm1
+  838b21:	ja     838d90 <_ZN10CCharacter8modifyHPEf+0x340>
+  838b27:	movss  xmm0,DWORD PTR [rbx+0x414]
+  838b2f:	cmp    BYTE PTR [rbx+0x52e],0x0
+  838b36:	je     838d28 <_ZN10CCharacter8modifyHPEf+0x2d8>
+  838b3c:	ucomiss xmm0,DWORD PTR [rip+0x76bcb9]        # fa47fc <_ZTVN4Ogre13FrameListenerE+0x3c>
+  838b43:	jae    838d28 <_ZN10CCharacter8modifyHPEf+0x2d8>
+  838b49:	jp     838d28 <_ZN10CCharacter8modifyHPEf+0x2d8>
+  838b4f:	cmp    QWORD PTR [rbx+0x1b8],0x0
+  838b57:	je     838b8c <_ZN10CCharacter8modifyHPEf+0x13c>
+  838b59:	lea    rbp,[rsp+0x20]
+  838b5e:	lea    rdx,[rsp+0x3e]
+  838b63:	mov    esi,0xfcd160
+  838b68:	mov    rdi,rbp
+  838b6b:	call   555e58 <_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_@plt>
+  838b70:	mov    rdi,QWORD PTR [rbx+0x1b8]
+  838b77:	mov    edx,0x1
+  838b7c:	mov    rsi,rbp
+  838b7f:	call   7f2c30 <_ZN14CEffectManager12removeEffectERKSbIwSt11char_traitsIwESaIwEEb>
+  838b84:	mov    rdi,rbp
+  838b87:	call   5548d8 <_ZNSbIwSt11char_traitsIwESaIwEED1Ev@plt>
+  838b8c:	mov    DWORD PTR [rbx+0x414],0x3f800000
+  838b96:	movss  xmm0,DWORD PTR [rip+0x76bc5e]        # fa47fc <_ZTVN4Ogre13FrameListenerE+0x3c>
+  838b9e:	movss  xmm1,DWORD PTR [rbx+0x420]
+  838ba6:	ucomiss xmm1,xmm0
+  838ba9:	jbe    838bb3 <_ZN10CCharacter8modifyHPEf+0x163>
+  838bab:	movss  DWORD PTR [rbx+0x420],xmm0
+  838bb3:	mov    esi,0x1c
+  838bb8:	mov    rdi,rbx
+  838bbb:	call   7f62a0 <_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE>
+  838bc0:	test   al,al
+  838bc2:	jne    838de0 <_ZN10CCharacter8modifyHPEf+0x390>
+  838bc8:	mov    rdi,QWORD PTR [rbx+0x640]
+  838bcf:	test   rdi,rdi
+  838bd2:	je     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838bd8:	call   85acb0 <_ZN9CBaseUnit8isPlayerEv>
+  838bdd:	test   al,al
+  838bdf:	je     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838be1:	cmp    BYTE PTR [rbx+0x52e],0x0
+  838be8:	je     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838bea:	movss  xmm0,DWORD PTR [rip+0x76bc0a]        # fa47fc <_ZTVN4Ogre13FrameListenerE+0x3c>
+  838bf2:	movss  xmm1,DWORD PTR [rsp+0x1c]
+  838bf8:	ucomiss xmm1,xmm0
+  838bfb:	jbe    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838bfd:	ucomiss xmm0,DWORD PTR [rbx+0x414]
+  838c04:	jb     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838c06:	mov    rdx,QWORD PTR [rbx+0x640]
+  838c0d:	xor    ecx,ecx
+  838c0f:	mov    rsi,QWORD PTR [rdx+0x648]
+  838c16:	mov    rax,QWORD PTR [rdx+0x650]
+  838c1d:	sub    rax,rsi
+  838c20:	sar    rax,0x3
+  838c24:	test   rax,rax
+  838c27:	je     838c2c <_ZN10CCharacter8modifyHPEf+0x1dc>
+  838c29:	mov    rcx,QWORD PTR [rsi]
+  838c2c:	cmp    rbx,rcx
+  838c2f:	jne    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838c31:	mov    rdi,QWORD PTR [rdx+0x298]
+  838c38:	test   rdi,rdi
+  838c3b:	je     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838c3d:	movss  xmm1,DWORD PTR [rip+0x76bbb7]        # fa47fc <_ZTVN4Ogre13FrameListenerE+0x3c>
+  838c45:	mov    esi,0x2d
+  838c4a:	movaps xmm0,xmm1
+  838c4d:	call   a688a0 <_ZN10CSoundBank17queueGlobalSampleEiff>
+  838c52:	nop    WORD PTR [rax+rax*1+0x0]
+  838c58:	mov    rbx,QWORD PTR [rsp+0x40]
+  838c5d:	mov    rbp,QWORD PTR [rsp+0x48]
+  838c62:	mov    r12,QWORD PTR [rsp+0x50]
+  838c67:	add    rsp,0x58
+  838c6b:	ret
+  838c6c:	nop    DWORD PTR [rax+0x0]
+  838c70:	jp     838ab6 <_ZN10CCharacter8modifyHPEf+0x66>
+  838c76:	movss  xmm1,DWORD PTR [rsp+0x18]
+  838c7c:	ucomiss xmm1,DWORD PTR [rip+0x76bb75]        # fa47f8 <_ZTVN4Ogre13FrameListenerE+0x38>
+  838c83:	jbe    838ab6 <_ZN10CCharacter8modifyHPEf+0x66>
+  838c89:	mov    rdi,rbx
+  838c8c:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838c91:	cvtsi2ss xmm0,eax
+  838c95:	ucomiss xmm0,DWORD PTR [rsp+0x18]
+  838c9a:	ja     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838c9c:	movss  xmm0,DWORD PTR [rbx+0x414]
+  838ca4:	jmp    838abc <_ZN10CCharacter8modifyHPEf+0x6c>
+  838ca9:	nop    DWORD PTR [rax+0x0]
+  838cb0:	lea    r12,[rsp+0x30]
+  838cb5:	lea    rdx,[rsp+0x3f]
+  838cba:	mov    esi,0xfa7dc8
+  838cbf:	mov    rdi,r12
+  838cc2:	call   555e58 <_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_@plt>
+  838cc7:	mov    rsi,r12
+  838cca:	mov    rdi,rbx
+  838ccd:	mov    ebp,0x1
+  838cd2:	call   7ff390 <_ZN9CBaseUnit12hasUnitThemeERKSbIwSt11char_traitsIwESaIwEE>
+  838cd7:	mov    rdi,QWORD PTR [rsp+0x30]
+  838cdc:	test   al,al
+  838cde:	setne  bpl
+  838ce2:	sub    rdi,0x18
+  838ce6:	cmp    rdi,0x1424540
+  838ced:	jne    838e64 <_ZN10CCharacter8modifyHPEf+0x414>
+  838cf3:	test   bpl,bpl
+  838cf6:	jne    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838cfc:	jmp    838a9b <_ZN10CCharacter8modifyHPEf+0x4b>
+  838d01:	nop    DWORD PTR [rax+0x0]
+  838d08:	mov    rdi,rbx
+  838d0b:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838d10:	cvtsi2ss xmm0,eax
+  838d14:	movss  DWORD PTR [rbx+0x414],xmm0
+  838d1c:	jmp    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838d21:	nop    DWORD PTR [rax+0x0]
+  838d28:	xorps  xmm1,xmm1
+  838d2b:	ucomiss xmm1,xmm0
+  838d2e:	jbe    838b9e <_ZN10CCharacter8modifyHPEf+0x14e>
+  838d34:	mov    DWORD PTR [rbx+0x414],0x0
+  838d3e:	mov    rdi,rbx
+  838d41:	call   810720 <_ZN10CCharacter28forceDisplayOfDamageAbsorbedEv>
+  838d46:	movss  xmm0,DWORD PTR [rbx+0x414]
+  838d4e:	jmp    838b9e <_ZN10CCharacter8modifyHPEf+0x14e>
+  838d53:	nop    DWORD PTR [rax+rax*1+0x0]
+  838d58:	jp     838ac9 <_ZN10CCharacter8modifyHPEf+0x79>
+  838d5e:	mov    rdi,rbx
+  838d61:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838d66:	cvtsi2ss xmm0,eax
+  838d6a:	movss  xmm1,DWORD PTR [rsp+0x18]
+  838d70:	ucomiss xmm1,xmm0
+  838d73:	jb     838ac9 <_ZN10CCharacter8modifyHPEf+0x79>
+  838d79:	mov    DWORD PTR [rbx+0x454],0x0
+  838d83:	jmp    838ac9 <_ZN10CCharacter8modifyHPEf+0x79>
+  838d88:	nop    DWORD PTR [rax+rax*1+0x0]
+  838d90:	mov    rdi,rbx
+  838d93:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838d98:	cvtsi2ss xmm0,eax
+  838d9c:	movss  DWORD PTR [rbx+0x414],xmm0
+  838da4:	jmp    838b2f <_ZN10CCharacter8modifyHPEf+0xdf>
+  838da9:	nop    DWORD PTR [rax+0x0]
+  838db0:	movss  xmm3,DWORD PTR [rsp+0x18]
+  838db6:	mov    rdi,rbx
+  838db9:	cvtsi2ss xmm0,DWORD PTR [rbx+0x418]
+  838dc1:	movss  xmm2,DWORD PTR [rbx+0x420]
+  838dc9:	movss  xmm1,DWORD PTR [rbx+0x414]
+  838dd1:	call   7f6850 <_ZN9CBaseUnit27broadcastHPThreshholdEventsEffff>
+  838dd6:	jmp    838af2 <_ZN10CCharacter8modifyHPEf+0xa2>
+  838ddb:	nop    DWORD PTR [rax+rax*1+0x0]
+  838de0:	movss  xmm0,DWORD PTR [rbx+0x414]
+  838de8:	mov    rdi,rbx
+  838deb:	movss  DWORD PTR [rsp+0x18],xmm0
+  838df1:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838df6:	cvtsi2ss xmm0,eax
+  838dfa:	movss  xmm1,DWORD PTR [rip+0x76f8e6]        # fa86e8 <_ZTVN4Ogre9SharedPtrINS_7TextureEEE+0x48>
+  838e02:	mulss  xmm0,xmm1
+  838e06:	ucomiss xmm0,DWORD PTR [rsp+0x18]
+  838e0b:	jb     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838e11:	mov    rdi,rbx
+  838e14:	movss  DWORD PTR [rsp],xmm1
+  838e19:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  838e1e:	cvtsi2ss xmm0,eax
+  838e22:	movss  xmm1,DWORD PTR [rsp]
+  838e27:	mulss  xmm0,xmm1
+  838e2b:	movss  xmm1,DWORD PTR [rsp+0x1c]
+  838e31:	ucomiss xmm1,xmm0
+  838e34:	jbe    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838e3a:	mov    rdi,QWORD PTR [rbx+0x298]
+  838e41:	test   rdi,rdi
+  838e44:	je     838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838e4a:	xorps  xmm0,xmm0
+  838e4d:	mov    esi,0x34
+  838e52:	movss  xmm1,DWORD PTR [rip+0x76b9b2]        # fa480c <_ZTVN4Ogre13FrameListenerE+0x4c>
+  838e5a:	call   a688a0 <_ZN10CSoundBank17queueGlobalSampleEiff>
+  838e5f:	jmp    838c58 <_ZN10CCharacter8modifyHPEf+0x208>
+  838e64:	mov    eax,0x5541c8
+  838e69:	test   rax,rax
+  838e6c:	je     838ea7 <_ZN10CCharacter8modifyHPEf+0x457>
+  838e6e:	or     eax,0xffffffff
+  838e71:	lock xadd DWORD PTR [rdi+0x10],eax
+  838e76:	test   eax,eax
+  838e78:	jg     838cf3 <_ZN10CCharacter8modifyHPEf+0x2a3>
+  838e7e:	lea    rsi,[rsp+0x3d]
+  838e83:	call   553548 <_ZNSbIwSt11char_traitsIwESaIwEE4_Rep10_M_destroyERKS1_@plt>
+  838e88:	jmp    838cf3 <_ZN10CCharacter8modifyHPEf+0x2a3>
+  838e8d:	test   bpl,bpl
+  838e90:	mov    rbx,rax
+  838e93:	je     838e9f <_ZN10CCharacter8modifyHPEf+0x44f>
+  838e95:	lea    rdi,[rsp+0x30]
+  838e9a:	call   5548d8 <_ZNSbIwSt11char_traitsIwESaIwEED1Ev@plt>
+  838e9f:	mov    rdi,rbx
+  838ea2:	call   554498 <_Unwind_Resume@plt>
+  838ea7:	mov    eax,DWORD PTR [rdi+0x10]
+  838eaa:	lea    edx,[rax-0x1]
+  838ead:	mov    DWORD PTR [rdi+0x10],edx
+  838eb0:	jmp    838e76 <_ZN10CCharacter8modifyHPEf+0x426>
+  838eb2:	mov    rdi,rbp
+  838eb5:	mov    rbx,rax
+  838eb8:	call   5548d8 <_ZNSbIwSt11char_traitsIwESaIwEED1Ev@plt>
+  838ebd:	jmp    838e9f <_ZN10CCharacter8modifyHPEf+0x44f>
+  838ebf:	mov    rbx,rax
+  838ec2:	jmp    838e9f <_ZN10CCharacter8modifyHPEf+0x44f>
+  838ec4:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]

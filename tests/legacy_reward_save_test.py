@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Frozen original large-7 writer output -> v2. NOT original Torchlight saves."""
+"""Frozen original large-7 writer output -> current checkpoint version. NOT original Torchlight saves."""
 import argparse
 import hashlib
 import subprocess
@@ -19,4 +19,4 @@ with tempfile.TemporaryDirectory(prefix='ot-legacy-rewards-') as directory:
     subprocess.run([str(a.probe.resolve()),str(a.fixture.resolve()),directory,'read'],check=True,timeout=30)
     subprocess.run([str(a.upgrade.resolve()),str(save)],check=True,timeout=30)
     subprocess.run([str(a.probe.resolve()),str(a.fixture.resolve()),directory,'read'],check=True,timeout=30)
-print('PASS: v1 and upgraded v2 load the same legacy inventory, floor, vitals and wallet in fresh processes')
+print('PASS: v1 and upgraded checkpoint load the same legacy inventory, floor, vitals and wallet in fresh processes')

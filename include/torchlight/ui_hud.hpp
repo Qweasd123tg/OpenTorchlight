@@ -5,9 +5,10 @@
 #include <vector>
 
 namespace torchlight {
-// Portable HUD policy over the original bottomhud.layout geometry. Dynamic bar
-// behavior is bounded and marked in research/ui-visuals.md; this is not the
-// full CGameUI::updateIngameUI.
+// Fraction policy is original-code: CGameUI::updateIngameUI @0xab8100 low-clamps
+// with max(fraction, 0.0) and leaves overfill to parent clipping; geometry
+// (UVector2 trunc/setPosition/setSize) remains port-bound. See
+// research/ui-hud-bars.md and research/ui-visuals.md.
 struct UiHudValues {
     float health_fraction = 1.0F, mana_fraction = 1.0F, experience_fraction = 0.0F;
     std::optional<float> target_health_fraction;

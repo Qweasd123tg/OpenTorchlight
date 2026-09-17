@@ -13,7 +13,12 @@ template <class A, class S> void versioned_fields(A&, S&) {}
 #define V2_FIELDS(T, ...) \
     template <class A> void versioned_fields(A& a, T& s) { if (a.version >= 2) a(__VA_ARGS__); } \
     template <class A> void versioned_fields(A& a, const T& s) { if (a.version >= 2) a(__VA_ARGS__); }
-V2_FIELDS(PlayerCheckpoint, s.progression)
+template <class A, class S> void player_versioned_fields(A& a, S& s) {
+    if (a.version >= 2) a(s.progression);
+    if (a.version >= 3) a(s.base_health);
+}
+template <class A> void versioned_fields(A& a, PlayerCheckpoint& s) { player_versioned_fields(a, s); }
+template <class A> void versioned_fields(A& a, const PlayerCheckpoint& s) { player_versioned_fields(a, s); }
 V2_FIELDS(RuntimeEntity, s.gold_amount, s.experience_reward, s.player_kill, s.reward_claimed)
 #undef V2_FIELDS
 #define FIELDS(T, ...)                                                                             \
@@ -248,7 +253,7 @@ CampaignCheckpoint decode_checkpoint(const std::vector<std::uint8_t> &file) {
     header.pos = 8;
     std::uint32_t version, length, crc;
     header(version, length, crc);
-    if (version != 1 && version != kCheckpointFormatVersion)
+    if (version < 1 || version > kCheckpointFormatVersion)
         throw CheckpointError("unsupported checkpoint version");
     if (length != file.size() - 20)
         throw CheckpointError("checkpoint length mismatch");

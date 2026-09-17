@@ -1,0 +1,20 @@
+{
+  "baseline_archive": "OpenTorchlight-gpt-pro-fresh.zip",
+  "baseline_sha256": "df2f0359861636e424c09bf9a267f9c3665197a2d5994661c7d773538aa86fb5",
+  "generator": "vitals-v2-writer.cpp compiled against unchanged fresh torchlight_core (kCheckpointFormatVersion == 2)",
+  "inputs": "authored tests/make_vitals_fixture.py; not original game assets",
+  "fixtures": {
+    "vitals-v2-level1.hex": {
+      "binary_sha256": "b484f336679b8b297136c2f449d7cca140e6bfffb5a5a9cb5399ba1d0fd76dbb",
+      "bytes": 671,
+      "old_max_health": 100,
+      "old_health": 74
+    },
+    "vitals-v2-level3.hex": {
+      "binary_sha256": "c0ca859c4c50fe27e5d8594dda3fd8d78342f0f3a7a7b140f1dfe70f3aca6b28",
+      "bytes": 671,
+      "old_max_health": 221,
+      "old_health": 195
+    }
+  }
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/damage.hpp"
+#include "torchlight/vitals.hpp"
 #include "torchlight/progression.hpp"
 #include "torchlight/equipment.hpp"
 #include "torchlight/master_resource_index.hpp"
@@ -33,6 +34,7 @@ struct PlayerPrototype {
     // original-code: CPlayer::calculateMaxMana evaluates MANA_GRAPH at level 1.
     // Absent graph => unknown capacity, not a fabricated default.
     std::optional<std::int32_t> base_mana;
+    VitalRecoveryRules recovery_rules;
     std::int32_t starting_gold = 0;
     // Session creation policy. Hardcore character creation is not yet imported.
     bool hardcore = false;

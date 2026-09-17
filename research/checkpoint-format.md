@@ -1,4 +1,4 @@
-# OpenTorchlight checkpoint schema 2 (port-native; v1 readable)
+# OpenTorchlight checkpoint schema 3 (port-native; v1/v2 readable)
 
 Status: **implemented port format**, not original binary save compatibility.
 The sources of truth for the exact field order are `src/save_codec.cpp` and the
@@ -7,7 +7,7 @@ DTOs in `include/torchlight/checkpoint.hpp`. Do not dump C++ structs/ABI bytes.
 ## File and compatibility
 
 Extension `.otc`, independent user save directory. The 20-byte header is:
-8-byte `OTCHKPT\0`, little-endian u32 version=2, u32 payload length, u32 CRC32.
+8-byte `OTCHKPT\0`, little-endian u32 version=3, u32 payload length, u32 CRC32.
 The payload uses explicit little-endian integers, IEEE f32 values, strict
 boolean bytes, length-prefixed strings/arrays and tagged optionals. UTF-16
 resource identifiers are preserved separately from the character-name byte
@@ -16,8 +16,9 @@ string. The physical US input frontend is more restricted than the codec.
 Maximum payload: 32 MiB. Shared encoder/decoder allocation accounting: 64 MiB
 and 500,000 cumulative container elements; additional per-field limits and
 128 visited floors. Save-store listing currently limits 128 slots. A file that
-exceeds limits is rejected, not truncated. The reader accepts versions 1 and 2; all others are errors. A v1 save is
-written as v2 on its next successful save. The original atomic revision protocol
+exceeds limits is rejected, not truncated. The reader accepts versions 1, 2 and 3; all others are errors. A v1/v2 save is
+written with a v3 header on its next successful save. Legacy base-HP migration
+occurs at player-session restore/recapture, not merely at DTO re-encoding. The original atomic revision protocol
 is unchanged. The allocation budget bounds charged DTO allocations,
 not every incidental allocation of the whole C++ process/graphics runtime.
 
@@ -33,7 +34,7 @@ filesystem owner or a signed save format.
 Campaign: slot/revision/resource identity/seed/class GUID/name/Normal difficulty,
 current dungeon/depth and last dungeon, player state, visited floor snapshots.
 Player: separate evaluated item instances, unique item IDs/next ID/slots;
-HP/max, optional mana/max, wallet/hardcore state, base defense, combat RNG and
+HP/max, optional pre-effect integer base HP, optional mana/max, wallet/hardcore state, base defense, combat RNG and
 hand preference; optional progression (level, total XP, free stat/skill points,
 allocated STR/DEX/MAGIC/DEF). Class graphs are loaded from resources, not saved
 as trusted arbitrary rules. Restore validates point balance against levels,
@@ -126,5 +127,39 @@ settled save capture. Active animation/HIT tokens are still not persisted.
 Stat points must balance the per-level grants and allocations; skill points
 currently equal earned grants because learning skills remains unsupported.
 Negative XP adjustments do not lower a saved level. These consistency checks
-are not anti-cheat authentication. World graph rank propagation and ordinary
-monster XP scaling remain explicitly prototype/inferred, respectively.
+are not anti-cheat authentication. World graph rank propagation remains prototype. The ordinary monster XP scalar
+was subsequently reconstructed and compared by the integrator; see
+`progression-and-world-rewards.md`. This does not close the full reward flow.
+
+## v3 integer base HP and compatibility (large-11, donor fresh)
+
+The v3 player record appends a tagged optional signed int32 `base_health` after
+its v2 progression field. No older field ordering changes. New session captures
+always provide it. Current maximum HP is derived from base plus supported
+class/equipment effects; loading checks that the saved maximum agrees.
+The recovered HP formula divides the percent before multiplication and applies
+separate ceilings to percent and flat contributions.
+
+V1/v2 have no base field. Their then-unmodified maximum is a legacy base and must
+be an in-range integer; progression above level one additionally validates that
+base against the class graph. Effects are applied exactly once. Current HP is
+preserved, except for clamping down to a smaller derived maximum. This is a
+behavioral migration: an old HP-bonus item begins affecting the maximum, but
+loading does not grant a free heal. The save remains bound to the same pak.
+
+Direct decode/encode of an old DTO writes a v3 header with an absent base field.
+That means pending legacy migration, not a fabricated original base. Restoring
+and recapturing a player resolves it. Absence is not accepted as permission to
+skip other resource, numeric, inventory or progression validation.
+
+Recovery rates are reloaded from the same resource archive and supported stored
+item effects; they are not independent trusted rate fields in the save. Inactive
+floors and a stopped process do not accumulate wall-clock regeneration.
+
+`vitals_v2_migration` uses two frozen files made by an unchanged fresh writer,
+at levels 1 and 3 with the new authored test armor equipped. Base/max 100 and
+221 become maxima 124 and 260; damaged HP stays 74 and 195 respectively.
+Mana, wallet and items are preserved. V3 recapture/reload is canonical and does
+not repeat the bonus. `vitals_fresh_process` checks a separate-process roundtrip.
+Old readers do not read v3; retain a separate backup of pre-upgrade `.otc` files
+before using the new writer. This is still not original `.SVB` compatibility.

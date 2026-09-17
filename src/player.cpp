@@ -185,6 +185,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                                                    const MasterResourceIndex& resources,
                                                    UnitDefinitionLoader& definitions) {
     std::vector<PlayerPrototype> result;
+    const auto recovery_rules = load_vital_recovery_rules(archive);
     const UnitTypeHierarchy attack_hierarchy(archive);
     const auto attack_catalog = AttackEffectCatalog::discover(archive);
     const StatGraph damage_graph(
@@ -221,6 +222,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                 player.wardrobe_texture_layers.push_back(std::move(*path));
             }
         }
+        player.recovery_rules = recovery_rules;
         player.walking_speed = floating(*definition, u"WALKINGSPEED");
         player.running_speed = floating(*definition, u"RUNNINGSPEED");
         player.attack_speed = floating(*definition, u"ATTACKSPEED");

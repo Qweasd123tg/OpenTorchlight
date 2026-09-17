@@ -1,0 +1,13 @@
+  83dc30:	mov    rdi,rbx
+  83dc33:	call   813e60 <_ZN10CCharacter5maxHPEv>
+  83dc38:	mov    ebp,eax
+  83dc3a:	call   a4e160 <_ZN12CGameGlobals12getSingletonEv>
+  83dc3f:	cvtsi2ss xmm0,ebp
+  83dc43:	mov    rdi,rbx
+  83dc46:	divss  xmm0,DWORD PTR [rip+0x766bee]        # fa483c <_ZTVN4Ogre13FrameListenerE+0x7c>
+  83dc4e:	mulss  xmm0,DWORD PTR [rax+0x58]
+  83dc53:	mulss  xmm0,DWORD PTR [rsp+0x18]
+  83dc59:	call   838a50 <_ZN10CCharacter8modifyHPEf>
+  83dc5e:	jmp    83d981 <_ZN10CCharacter8updateHPER6CLevelf+0x51>
+  83dc63:	nop
+  83dc64:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]

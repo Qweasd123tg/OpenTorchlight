@@ -1,0 +1,33 @@
+  813a10:	push   rbp
+  813a11:	mov    eax,0x1
+  813a16:	mov    edx,0x7
+  813a1b:	mov    esi,0x13
+  813a20:	mov    rbp,rdi
+  813a23:	push   rbx
+  813a24:	sub    rsp,0x18
+  813a28:	cvtsi2ss xmm0,DWORD PTR [rdi+0x43c]
+  813a30:	addss  xmm0,DWORD PTR [rdi+0x440]
+  813a38:	cvttss2si ebx,xmm0
+  813a3c:	test   ebx,ebx
+  813a3e:	cmovle ebx,eax
+  813a41:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  813a46:	movaps xmm1,xmm0
+  813a49:	cvtsi2ss xmm0,ebx
+  813a4d:	mulss  xmm0,xmm1
+  813a51:	divss  xmm0,DWORD PTR [rip+0x790de3]        # fa483c <_ZTVN4Ogre13FrameListenerE+0x7c>
+  813a59:	call   553678 <ceilf@plt>
+  813a5e:	mov    edx,0x7
+  813a63:	mov    rdi,rbp
+  813a66:	mov    esi,0x4
+  813a6b:	movss  DWORD PTR [rsp],xmm0
+  813a70:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  813a75:	call   553678 <ceilf@plt>
+  813a7a:	cvttss2si edx,DWORD PTR [rsp]
+  813a7f:	cvttss2si eax,xmm0
+  813a83:	add    rsp,0x18
+  813a87:	lea    eax,[rdx+rax*1]
+  813a8a:	add    eax,ebx
+  813a8c:	pop    rbx
+  813a8d:	pop    rbp
+  813a8e:	ret
+  813a8f:	nop

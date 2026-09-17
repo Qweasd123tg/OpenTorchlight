@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "kind": "OpenTorchlight-development-pass",
+  "release": "large-11",
+  "date": "2026-09-16",
+  "donor": "OpenTorchlight-gpt-pro-fresh.zip",
+  "inputs": {
+    "OpenTorchlight-gpt-pro-fresh.zip": {
+      "sha256": "df2f0359861636e424c09bf9a267f9c3665197a2d5994661c7d773538aa86fb5",
+      "bytes": 5088951
+    },
+    "OpenTorchlight-full-disasm.zip": {
+      "sha256": "19fa6c5558ea4a7f61d89b635790ba0c0376d89b1e5332b6a8eea4a4a4b7b3f6",
+      "bytes": 13990806
+    }
+  },
+  "baseline_core": {
+    "passed": 44,
+    "failed": 0,
+    "skipped": 0,
+    "report": "baseline-fresh.json"
+  },
+  "final_core": {
+    "passed": 49,
+    "failed": 0,
+    "skipped": 0,
+    "report": "core.json"
+  },
+  "asan_ubsan": {
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "address_sanitizer": "detect_leaks=1:halt_on_error=1",
+    "undefined_behavior_sanitizer": "halt_on_error=1:print_stacktrace=1",
+    "tests": [
+      {
+        "name": "item_cycle",
+        "status": "PASSED"
+      },
+      {
+        "name": "ordinary_combat",
+        "status": "PASSED"
+      },
+      {
+        "name": "frontend_campaign_cycle",
+        "status": "PASSED"
+      },
+      {
+        "name": "save_checkpoint",
+        "status": "PASSED"
+      },
+      {
+        "name": "gameplay_continuation",
+        "status": "PASSED"
+      },
+      {
+        "name": "death_finalization",
+        "status": "PASSED"
+      },
+      {
+        "name": "reward_cycle",
+        "status": "PASSED"
+      },
+      {
+        "name": "vitals_numeric",
+        "status": "PASSED"
+      },
+      {
+        "name": "vitals_resource_cycle",
+        "status": "PASSED"
+      },
+      {
+        "name": "vitals_fresh_process",
+        "status": "PASSED"
+      },
+      {
+        "name": "vitals_v2_migration",
+        "status": "PASSED"
+      }
+    ],
+    "report": "asan-ubsan.xml"
+  },
+  "collector": {
+    "unittest_cases": 7,
+    "original_game_executed": false,
+    "input_kind": "authored temporary fixtures only"
+  },
+  "compatibility": {
+    "checkpoint_write_version": 3,
+    "read_versions": [
+      1,
+      2,
+      3
+    ],
+    "frozen_v2_saves": 2,
+    "generator": "unchanged fresh core; version-2 static_assert; see tests/fixtures/vitals-v2-provenance.json",
+    "original_game_save_compatibility": false
+  },
+  "new_evidence": {
+    "kind": "static reconstruction plus authored numeric/state/process regression",
+    "source": "research/disassembly/vitals-static/manifest.json",
+    "provided_objdump_has_raw_instruction_bytes": false,
+    "original_elf_executed": false,
+    "new_original_function_differential_comparison": "NOT RUN"
+  },
+  "not_run": {
+    "real_asset_suite": "pak.zip absent",
+    "original_reference_suite": "original ELF absent",
+    "full_scene_render": "pak.zip absent; existing core Mesa UI tests passed",
+    "desktop": "not built/run; required SDK and real game inputs unavailable",
+    "new_real_pak_application_regeneration_scenario": "not implemented/run; player state/process tests plus shared-loop code integration only"
+  },
+  "not_complete": [
+    "timed effects and consumables",
+    "active skills and complete ranged/projectile combat",
+    "normal dungeon population, formations and champions",
+    "special/boss AI",
+    "quests and NPC services",
+    "full item economy",
+    "pet gameplay and persistence",
+    "end-to-end campaign",
+    "complete UI/audio/particles and platform release"
+  ],
+  "rules": [
+    "Test groups overlap; do not add counts.",
+    "Static text is not direct execution of original machine-code bytes.",
+    "Historical integrator asset/reference results do not certify this updated tree.",
+    "This is an updated source project, not a finished game distribution."
+  ]
+}

@@ -30,7 +30,14 @@ public:
     [[nodiscard]] std::optional<float> mana() const noexcept { return mana_; }
     [[nodiscard]] std::optional<float> maximum_mana() const noexcept { return maximum_mana_; }
     [[nodiscard]] bool spend_mana(float amount) noexcept;
-    void set_equipment_mana_effects(const AttackEffects& effects);
+    [[nodiscard]] std::int32_t base_health() const noexcept { return base_health_; }
+    [[nodiscard]] const VitalRecoveryRules& recovery_rules() const noexcept { return recovery_rules_; }
+    // Positive finite simulation time only; dead/paused state is never revived.
+    // False means invalid arithmetic; HP and mana are committed together.
+    [[nodiscard]] bool update_vitals(float seconds) noexcept;
+    void set_equipment_vital_effects(const AttackEffects& effects);
+    // Compatibility name retained for older callers; now also updates HP.
+    void set_equipment_mana_effects(const AttackEffects& effects) { set_equipment_vital_effects(effects); }
     void set_progression_vitals(std::int32_t maximum_health, std::optional<std::int32_t> base_mana);
     void set_defense_attribute(std::int32_t value) noexcept;
     // Restores vitals only: no stat reroll, equipment reset, or level rebuild.
@@ -56,8 +63,11 @@ private:
     std::optional<std::int32_t> base_mana_;
     std::optional<float> mana_;
     std::optional<float> maximum_mana_;
-    AttackEffects base_mana_effects_;
-    AttackEffects equipment_mana_effects_;
+    std::int32_t base_health_ = 1;
+    VitalRecoveryRules recovery_rules_;
+    AttackEffects base_vital_effects_;
+    AttackEffects equipment_vital_effects_;
+    float health_per_second_ = 0.0F, mana_per_second_ = 0.0F;
     float collision_radius_ = 0.0F;
     float health_ = 1.0F;
     float maximum_health_ = 1.0F;

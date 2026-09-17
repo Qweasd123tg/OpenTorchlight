@@ -16,10 +16,16 @@ std::string leaf_upper(const std::string &name) {
 bool hotkey_label(const std::string &name) {
     return name.find("HOTKEY") != std::string::npos;
 }
-float clamp_fraction(float value) {
+// original-code: CGameUI::updateIngameUI @0xab8100 low-clamps fraction with
+// max(fraction, 0.0) via cmpnltss/andps/andnps/orps (HP 0xab846b..0xab8476,
+// mana 0xab88c7..0xab88e5). No high-clamp to 1.0 is present in either path:
+// the only rodata floats touched are 0.0 ([rsp+0x98]), 0.5 ([rsp+0xa0]=fa4810)
+// for UDim rounding and -0.5 (fa86f4) for layout bias. Overfill (>1) is left
+// to CEGUI parent clipping. See research/ui-hud-bars.md.
+float clamp_fraction_low(float value) {
     if (!(value >= 0.0F))
         return 0.0F;
-    return std::min(value, 1.0F);
+    return value;
 }
 } // namespace
 UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values) const {
@@ -37,14 +43,14 @@ UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values) const 
         if (name.rfind("TARGET", 0) == 0 && !target_present)
             continue;
         if (name == "PLAYERHEALTHBARSUB")
-            result.bars.push_back({widget, clamp_fraction(values.health_fraction), true, true});
+            result.bars.push_back({widget, clamp_fraction_low(values.health_fraction), true, true});
         else if (name == "PLAYERMANABARSUB")
-            result.bars.push_back({widget, clamp_fraction(values.mana_fraction), true, true});
+            result.bars.push_back({widget, clamp_fraction_low(values.mana_fraction), true, true});
         else if (name == "EXPERIENCEBARSUB")
-            result.bars.push_back({widget, clamp_fraction(values.experience_fraction), false, false});
+            result.bars.push_back({widget, clamp_fraction_low(values.experience_fraction), false, false});
         else if (name == "TARGETHEALTHBARSUB" && target_present)
             result.bars.push_back(
-                {widget, clamp_fraction(*values.target_health_fraction), false, false});
+                {widget, clamp_fraction_low(*values.target_health_fraction), false, false});
         else if (!widget.image.empty())
             result.images.push_back(widget);
         else if (name == "LEVELNAME" && !values.level_name.empty()) {

@@ -26,6 +26,8 @@ struct PlayerCheckpoint {
     std::uint64_t combat_random = 0;
     bool prefer_left = false;
     std::optional<ProgressionState> progression;
+    // v3: absent only for migration from v1/v2, where max-HP effects were ignored.
+    std::optional<std::int32_t> base_health;
 };
 struct WorldCheckpoint {
     std::uint64_t next_id = 1, random_state = 0;

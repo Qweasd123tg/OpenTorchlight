@@ -880,6 +880,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // or run zero-period logic timers while this overlay is open.
                 // prototype UI policy: pause simulation while dead; death pose still advances.
                 const float simulation_elapsed = inventory_view.open || !player_combat.alive() ? 0.0F : std::min(elapsed, 0.1F);
+                // Shared desktop/scenario simulation phase, not wall-clock catch-up.
+                if (!player_combat.update_vitals(simulation_elapsed))
+                    throw std::runtime_error("Invalid player recovery arithmetic");
                 if (const auto click = window.take_left_click();
                     click && rendered_once && !inventory_view.open && player_combat.alive()) {
                     auto destination = renderer->ground_position_at_pixel(

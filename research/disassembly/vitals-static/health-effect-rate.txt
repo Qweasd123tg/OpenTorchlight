@@ -1,0 +1,27 @@
+  816d70:	push   rbx
+  816d71:	mov    edx,0x7
+  816d76:	mov    rbx,rdi
+  816d79:	mov    esi,0x34
+  816d7e:	sub    rsp,0x20
+  816d82:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  816d87:	mov    edx,0x7
+  816d8c:	mov    esi,0x7
+  816d91:	mov    rdi,rbx
+  816d94:	movss  DWORD PTR [rsp],xmm0
+  816d99:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  816d9e:	mov    edx,0x7
+  816da3:	mov    esi,0x7c
+  816da8:	mov    rdi,rbx
+  816dab:	movss  DWORD PTR [rsp+0x1c],xmm0
+  816db1:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  816db6:	movss  xmm1,DWORD PTR [rsp]
+  816dbb:	ucomiss xmm1,DWORD PTR [rip+0x78da36]        # fa47f8 <_ZTVN4Ogre13FrameListenerE+0x38>
+  816dc2:	jbe    816dcf <_ZN10CCharacter23getEffectValuesOfDamageEv+0x5f>
+  816dc4:	movss  xmm2,DWORD PTR [rip+0x7919b4]        # fa8780 <_ZTVN4Ogre9SharedPtrINS_7TextureEEE+0xe0>
+  816dcc:	xorps  xmm1,xmm2
+  816dcf:	addss  xmm0,DWORD PTR [rsp+0x1c]
+  816dd5:	add    rsp,0x20
+  816dd9:	pop    rbx
+  816dda:	addss  xmm0,xmm1
+  816dde:	ret
+  816ddf:	nop

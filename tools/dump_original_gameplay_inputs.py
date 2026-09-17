@@ -18,7 +18,12 @@ STRINGS={
     'gold_graph_at_8cad8c':0xfd1ee8,
     'spawner_give_loot_property_at_65cf25':0xfc2078,
 }
-FLOATS={'ranged_pitch_operand':0xfa86d0,'weapon_muzzle_offset_operand':0xfc676c}
+FLOATS={'ranged_pitch_operand':0xfa86d0,'weapon_muzzle_offset_operand':0xfc676c,
+        # Use-site names only; no guessed values or automatic runtime defaults.
+        'timed_recovery_effect_scale':0xfa86dc,
+        'population_density_divisor':0xfce4e0,
+        'update_ingame_delta_operand':0xfa86d8}
+
 
 def wide_string(image,address):
     data=bytearray()

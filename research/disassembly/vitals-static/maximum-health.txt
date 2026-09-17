@@ -1,0 +1,45 @@
+  813e60:	push   rbp
+  813e61:	mov    edx,0x7
+  813e66:	mov    rbp,rdi
+  813e69:	mov    esi,0x14
+  813e6e:	push   rbx
+  813e6f:	sub    rsp,0x28
+  813e73:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  813e78:	mov    rdi,QWORD PTR [rbp+0x640]
+  813e7f:	movaps xmm1,xmm0
+  813e82:	movss  xmm2,DWORD PTR [rip+0x7909b2]        # fa483c <_ZTVN4Ogre13FrameListenerE+0x7c>
+  813e8a:	divss  xmm1,xmm2
+  813e8e:	test   rdi,rdi
+  813e91:	je     813ec0 <_ZN10CCharacter5maxHPEv+0x60>
+  813e93:	mov    edx,0x7
+  813e98:	mov    esi,0x68
+  813e9d:	movss  DWORD PTR [rsp],xmm1
+  813ea2:	movss  DWORD PTR [rsp+0x10],xmm2
+  813ea8:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  813ead:	movss  xmm2,DWORD PTR [rsp+0x10]
+  813eb3:	divss  xmm0,xmm2
+  813eb7:	movss  xmm1,DWORD PTR [rsp]
+  813ebc:	addss  xmm1,xmm0
+  813ec0:	mov    ebx,DWORD PTR [rbp+0x41c]
+  813ec6:	add    ebx,DWORD PTR [rbp+0x418]
+  813ecc:	mov    eax,0x1
+  813ed1:	test   ebx,ebx
+  813ed3:	cmovle ebx,eax
+  813ed6:	cvtsi2ss xmm0,ebx
+  813eda:	mulss  xmm0,xmm1
+  813ede:	call   553678 <ceilf@plt>
+  813ee3:	mov    edx,0x7
+  813ee8:	mov    rdi,rbp
+  813eeb:	mov    esi,0x5
+  813ef0:	movss  DWORD PTR [rsp],xmm0
+  813ef5:	call   8137e0 <_ZN10CCharacter14getEffectValueE12EEFFECT_TYPE13EDAMAGE_TYPES>
+  813efa:	call   553678 <ceilf@plt>
+  813eff:	cvttss2si edx,DWORD PTR [rsp]
+  813f04:	cvttss2si eax,xmm0
+  813f08:	add    rsp,0x28
+  813f0c:	lea    eax,[rdx+rax*1]
+  813f0f:	add    eax,ebx
+  813f11:	pop    rbx
+  813f12:	pop    rbp
+  813f13:	ret
+  813f14:	data16 data16 cs nop WORD PTR [rax+rax*1+0x0]

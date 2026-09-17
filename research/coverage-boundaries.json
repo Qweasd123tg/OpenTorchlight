@@ -508,6 +508,32 @@
         "tests/compare_original_action.py"
       ],
       "comparison": "Historical pinned ELF moveToMouse differential with controlled dependencies; original not rerun this pass."
+    },
+    {
+      "addresses": [
+        "0x813e60",
+        "0x815c90",
+        "0x83d930",
+        "0x816d70",
+        "0x838a50"
+      ],
+      "status": "partial",
+      "boundary": "Static reconstruction of ordinary unowned maximum HP, two-source HP/mana recovery and signed passive damage rate, including scalar no-partial-revival gate. Finite constant player/class/equipment effects only. No original invocation, real-pak run, pet/owner/temporary effects, full modifyHP branches or original frame-phase parity.",
+      "evidence": [
+        "research/player-vitals-recovery.md",
+        "research/disassembly/vitals-static/manifest.json"
+      ],
+      "implementation": [
+        "src/vitals.cpp",
+        "src/enemy_ai.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/vitals_test.cpp",
+        "tests/vitals_process_test.py",
+        "tests/vitals_legacy_test.py"
+      ],
+      "comparison": "Authored numeric/order/state regression only; original machine-code bytes were absent."
     }
   ],
   "port_systems": [
@@ -515,7 +541,7 @@
       "id": "custom-disk-checkpoint-v1",
       "subsystem": "save",
       "status": "implemented",
-      "boundary": "Version-2 bounded little-endian port format with explicit v1 decode/migration, progression and stored world rewards; atomic replacement, revisions, fresh-process restore. NOT original SVB compatibility. Historical system ID retained.",
+      "boundary": "Version-3 bounded port format with v1/v2 decode and base-HP migration; progression, world rewards, atomic replacement, revisions and fresh-process restore. Explicit integer base HP avoids double application of equipment bonuses. NOT original SVB compatibility. Historical system ID retained.",
       "evidence": [
         "research/frontend-save-evidence.md",
         "research/checkpoint-format.md"
@@ -532,7 +558,9 @@
         "tests/frontend_cycle_test.cpp",
         "tests/frontend_resource_test.cpp",
         "tests/reward_save_process_test.py",
-        "tests/legacy_reward_save_test.py"
+        "tests/legacy_reward_save_test.py",
+        "tests/vitals_test.cpp",
+        "tests/vitals_legacy_test.py"
       ]
     },
     {
@@ -605,7 +633,7 @@
       "id": "player-progression-and-world-rewards",
       "subsystem": "combat",
       "status": "partial",
-      "boundary": "Shared application credit path, graph-driven progression/points/vitals, attribute spending, gold pickup and checkpoint-v2 persistence. Authored regression, not full original gameplay parity. XP producer and level cascading inferred; gold rank/RNG context prototype; no active skills/fame/regen.",
+      "boundary": "Shared application credit path, graph-driven progression/points/vitals, attribute spending, gold pickup and checkpoint-v3 persistence. Ordinary XP scalar was previously compared with bounded original exports; full award/level cascade still partial, gold rank/RNG context prototype. Passive player regeneration added separately; no active skills, fame or consumables.",
       "evidence": [
         "research/progression-and-world-rewards.md"
       ],
@@ -621,6 +649,28 @@
         "tests/reward_resource_probe.cpp",
         "tests/reward_save_process_test.py",
         "tests/legacy_reward_save_test.py"
+      ]
+    },
+    {
+      "id": "player-passive-vitals",
+      "subsystem": "combat",
+      "status": "partial",
+      "boundary": "Resource-loaded optional GLOBALS and constant class/equipment effects advance current player HP/mana in the shared loop. Level/equip/save preserve base/effective separation. Authored process tests only; no new real-pak application regen scenario, timed effects, potion activation, monster or pet regen.",
+      "evidence": [
+        "research/player-vitals-recovery.md"
+      ],
+      "implementation": [
+        "src/vitals.cpp",
+        "src/player.cpp",
+        "src/enemy_ai.cpp",
+        "src/player_session.cpp",
+        "src/application.cpp",
+        "src/checkpoint.cpp"
+      ],
+      "tests": [
+        "tests/vitals_test.cpp",
+        "tests/vitals_process_test.py",
+        "tests/vitals_legacy_test.py"
       ]
     }
   ]

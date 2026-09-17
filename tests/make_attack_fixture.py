@@ -57,7 +57,7 @@ def effect(name, value, **extra):
     return group('EFFECT', props)
 
 
-def write_fixture(path: Path, *, with_rewards: bool = False):
+def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool = False):
     entries = {}
     units, records = [], []
     def add(name, category='MONSTERS', unit_type='MONSTER', props=(), children=(), directory='media/combat/'):
@@ -127,12 +127,28 @@ def write_fixture(path: Path, *, with_rewards: bool = False):
         units[-1]=(n,group(g[0],[(k,t,'GOLD' if k=='CREATEAS' else v) for k,t,v in g[1]],g[2]))
         entries['media/spawnclasses/GOLD_DROPS.dat.adm']=adm(group('SPAWNCLASS',[('NAME',5,'GOLD_DROPS')],
             [group('OBJECT',[('UNIT',5,'GOLD'),('WEIGHT',1,-1)])]))
+    if with_vitals:
+        armor_props = [('ARMORMIN',1,1),('ARMORMAX',1,1),('ARMOR_PHYSICAL',1,100)]
+        add('VITAL_CHEST','ITEMS','NORMAL CHEST ARMOR',armor_props,
+            [effect('FIXTURE_HP_FLAT',10.2),effect('FIXTURE_HP_PERCENT',12.5),
+             effect('FIXTURE_HP_REGEN',3),effect('FIXTURE_MANA_REGEN',2)])
+        add('INVALID_HP_CHEST','ITEMS','NORMAL CHEST ARMOR',armor_props,
+            [effect('FIXTURE_HP_PERCENT',-125),effect('FIXTURE_MANA_REGEN',300)])
+        add('NEGATIVE_HP_CHEST','ITEMS','NORMAL CHEST ARMOR',armor_props,
+            [effect('FIXTURE_HP_PERCENT',-25)])
+        add('HARMFUL_CHEST','ITEMS','NORMAL CHEST ARMOR',armor_props,
+            [effect('FIXTURE_HP_REGEN',-3),effect('FIXTURE_DAMAGE_OVER_TIME',1.5)])
+        entries['media/globals.dat.adm']=adm(group('GLOBALS',[
+            ('HP_RECHARGE_RATE',2,2.5),('PET_HP_RECHARGE_RATE',2,7),('MANA_RECHARGE_RATE',2,10)]))
     for name, definition in units: entries[f'media/units/{name}.dat.adm']=adm(definition)
     master=adm(group('UNITS',children=records))
     entries['media/master.adm']=master
     entries['media/MASTERRESOURCEUNITS.DAT.ADM']=master
     names={4:'FIXTURE_MANA_FLAT',0x13:'FIXTURE_MANA_PERCENT',0x16:'FIXTURE_HASTE',0x8c:'FIXTURE_SLOW_RESIST',0x0f:'FIXTURE_MELEE_PERCENT',
            0x47:'FIXTURE_STR_PERCENT',0x45:'FIXTURE_STR_FLAT',0x19:'FIXTURE_DAMAGE_PERCENT'}
+    if with_vitals:
+        names.update({5:'FIXTURE_HP_FLAT',0x14:'FIXTURE_HP_PERCENT',7:'FIXTURE_HP_REGEN',
+            6:'FIXTURE_MANA_REGEN',0x34:'FIXTURE_DAMAGE_OVER_TIME'})
     entries['media/EffectsList.dat.adm']=adm(group('EFFECTS',children=[
         group('EFFECT',[('NAME',5,names.get(i,f'UNUSED_{i:03}'))]) for i in range(145)]))
     # Valid lookalike is deliberately wrong. Only the pinned EffectsList path is authoritative.

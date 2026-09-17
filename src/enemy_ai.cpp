@@ -30,12 +30,17 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
                                      std::uint32_t random_seed) {
     collision_radius_ = prototype.attack_character.collision_radius;
     TorchlightRandom random(random_seed);
+    if (!std::isfinite(prototype.minimum_health) || !std::isfinite(prototype.maximum_health))
+        throw std::invalid_argument("nonfinite player health range");
     const auto low = std::max(
         1.0F, std::min(prototype.minimum_health, prototype.maximum_health));
     const auto high = std::max(
         low, std::max(prototype.minimum_health, prototype.maximum_health));
     const auto rolled = high > low ? random.between(low, high) : low;
-    maximum_health_ = std::max(1.0F, std::trunc(rolled));
+    if (!std::isfinite(rolled) || static_cast<double>(std::trunc(rolled)) > std::numeric_limits<std::int32_t>::max())
+        throw std::invalid_argument("player health roll exceeds int32");
+    base_health_ = static_cast<std::int32_t>(std::max(1.0F, std::trunc(rolled)));
+    maximum_health_ = static_cast<float>(base_health_);
     health_ = maximum_health_;
     base_damage_defense_ = prototype.damage_defense;
     base_damage_defense_.natural_armor += random.integer_between(
@@ -43,9 +48,11 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
         std::max(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus));
     refresh_damage_defense();
     base_mana_ = prototype.base_mana;
-    base_mana_effects_ = prototype.attack_character.effects;
-    set_equipment_mana_effects({});
-    mana_ = maximum_mana_;
+    recovery_rules_ = prototype.recovery_rules;
+    validate_vital_recovery_rules(recovery_rules_);
+    base_vital_effects_ = prototype.attack_character.effects;
+    set_equipment_vital_effects({});
+    restore_after_death();
 }
 
 bool PlayerCombatState::spend_mana(float amount) noexcept {
@@ -53,24 +60,52 @@ bool PlayerCombatState::spend_mana(float amount) noexcept {
     *mana_ -= amount;
     return true;
 }
-void PlayerCombatState::set_equipment_mana_effects(const AttackEffects& equipment) {
-    equipment_mana_effects_ = equipment;
-    if (!base_mana_) return;
-    auto effects = base_mana_effects_;
+bool PlayerCombatState::update_vitals(float seconds) noexcept {
+    if (!std::isfinite(seconds) || seconds < 0) return false;
+    if (seconds == 0 || !alive()) return true;
+    const auto health = advance_health(health_, maximum_health_,
+        recovery_rules_.health_percent_per_second, health_per_second_, seconds);
+    std::optional<float> mana;
+    if (mana_ && maximum_mana_)
+        mana = advance_vital(*mana_, *maximum_mana_,
+            recovery_rules_.mana_percent_per_second, mana_per_second_, seconds);
+    if (!health || (mana_ && !mana)) return false;
+    health_ = *health;
+    if (mana_) mana_ = mana;
+    return true;
+}
+void PlayerCombatState::set_equipment_vital_effects(const AttackEffects& equipment) {
+    auto next_equipment = equipment;
+    auto effects = base_vital_effects_;
     effects.append(equipment);
-    // maxMana @0x813a10: integer base, ceil percentage, ceil flat contribution.
-    maximum_mana_ = static_cast<float>(evaluated_maximum_mana(*base_mana_, 0, effects));
-    if (mana_) *mana_ = std::min(*mana_, *maximum_mana_);
+    const auto health_max = static_cast<float>(evaluated_maximum_health(base_health_, 0, effects));
+    std::optional<float> mana_max;
+    if (base_mana_) mana_max = static_cast<float>(evaluated_maximum_mana(*base_mana_, 0, effects));
+    const auto health_rate = evaluated_health_rate(effects);
+    const auto mana_rate = evaluated_mana_rate(effects);
+    if (!std::isfinite(health_rate) || !std::isfinite(mana_rate))
+        throw std::invalid_argument("nonfinite combined passive recovery rate");
+    // All allocations/validation finish before committing any derived field.
+    using std::swap;
+    swap(equipment_vital_effects_, next_equipment);
+    maximum_health_ = health_max;
+    health_ = std::min(health_, maximum_health_);
+    maximum_mana_ = mana_max;
+    if (mana_) mana_ = mana_max ? std::optional<float>(std::min(*mana_, *mana_max)) : std::nullopt;
+    health_per_second_ = health_rate;
+    mana_per_second_ = mana_rate;
 }
 void PlayerCombatState::set_progression_vitals(std::int32_t maximum_health,
                                               std::optional<std::int32_t> base_mana) {
     if (maximum_health < 1 || (base_mana && *base_mana < 0))
         throw std::invalid_argument("invalid progression vitals");
-    maximum_health_ = static_cast<float>(maximum_health);
-    base_mana_ = base_mana;
-    if (base_mana_) set_equipment_mana_effects(equipment_mana_effects_);
-    else { mana_.reset(); maximum_mana_.reset(); }
-    restore_after_death(); // CCharacter::levelUp refills vitals; no reroll.
+    auto staged = *this;
+    staged.base_health_ = maximum_health;
+    staged.base_mana_ = base_mana;
+    staged.set_equipment_vital_effects(staged.equipment_vital_effects_);
+    staged.restore_after_death(); // CCharacter::levelUp refills vitals; no reroll.
+    using std::swap;
+    swap(*this, staged);
 }
 void PlayerCombatState::set_defense_attribute(std::int32_t value) noexcept {
     base_damage_defense_.defense_attribute = value;
