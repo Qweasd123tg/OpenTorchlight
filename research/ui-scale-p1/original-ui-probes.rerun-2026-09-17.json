@@ -1,0 +1,191 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "functions": {
+    "pause": {
+      "symbol": "CGameClient::getIsPaused()",
+      "address": "0x56e570",
+      "size": 141
+    },
+    "both": {
+      "symbol": "CGameUI::bothCoveredPartial()",
+      "address": "0xa82ae0",
+      "size": 277
+    },
+    "modal": {
+      "symbol": "CGameUI::modalDialogOpenPartial()",
+      "address": "0xa82a80",
+      "size": 86
+    },
+    "console": {
+      "symbol": "CGameUI::getConsoleIsOpen()",
+      "address": "0xa84140",
+      "size": 27
+    },
+    "inv_right": {
+      "symbol": "CInventoryMenu::isRight()",
+      "address": "0xb60ed0",
+      "size": 6
+    },
+    "inv_partial": {
+      "symbol": "CInventoryMenu::openPartial()",
+      "address": "0xb60f00",
+      "size": 5
+    },
+    "pet_right": {
+      "symbol": "CPetMenu::isRight()",
+      "address": "0xba5180",
+      "size": 3
+    },
+    "pet_partial": {
+      "symbol": "CPetMenu::openPartial()",
+      "address": "0xba51b0",
+      "size": 5
+    },
+    "handle_click": {
+      "symbol": "CGameUI::handle_onClick(CEGUI::EventArgs const&)",
+      "address": "0xa83690",
+      "size": 46
+    },
+    "scale": {
+      "symbol": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
+      "address": "0xa83ed0",
+      "size": 370
+    },
+    "sx": {
+      "symbol": "CGameUI::scaledX(float)",
+      "address": "0xa83ea0",
+      "size": 36
+    },
+    "sy": {
+      "symbol": "CGameUI::scaledY(float)",
+      "address": "0xa83e70",
+      "size": 36
+    }
+  },
+  "pause": {
+    "cases": 682,
+    "passed": 682,
+    "examples": [
+      {
+        "panels": [],
+        "original_paused": false
+      },
+      {
+        "panels": [
+          {
+            "side": "left",
+            "partial_open": true
+          }
+        ],
+        "original_paused": false
+      },
+      {
+        "panels": [
+          {
+            "side": "right",
+            "partial_open": true
+          }
+        ],
+        "original_paused": false
+      },
+      {
+        "panels": [
+          {
+            "side": "left",
+            "partial_open": true
+          },
+          {
+            "side": "right",
+            "partial_open": true
+          }
+        ],
+        "original_paused": true
+      },
+      {
+        "panels": [
+          {
+            "side": "right",
+            "partial_open": true
+          },
+          {
+            "side": "right",
+            "partial_open": true
+          }
+        ],
+        "original_paused": false
+      }
+    ],
+    "scope": "Original decision functions and original Inventory/Pet side/partial getters; controlled objects and vtables, console absent. No actual panel open/close lifecycle tested."
+  },
+  "click": {
+    "cases": 48,
+    "passed": 48,
+    "subscription_event": "CEGUI::Window::EventMouseButtonDown",
+    "event_symbol_address": "0x14247e0",
+    "subscription_argument_instruction": "0xa97f04",
+    "scope": "Original handler dispatches immediately for mouse button code 0 with a window. UI onClick virtual target is a recording callback. CEGUI event generation/capture and actual gameplay command are not executed."
+  },
+  "scaling": {
+    "tree_calls": 400,
+    "nodes_bit_exact": 1200,
+    "float_fields_bit_exact": 9600,
+    "child_first_order_checks": 400,
+    "constants": {
+      "0xfa4804": 768.0,
+      "0xfa4808": 0.0009765625
+    },
+    "examples": [
+      {
+        "viewport": [
+          1024,
+          768
+        ],
+        "y_ratio": 1.0,
+        "raw_width": 390.0,
+        "scaled_offset_width": 390.0
+      },
+      {
+        "viewport": [
+          1280,
+          720
+        ],
+        "y_ratio": 0.9375,
+        "raw_width": 390.0,
+        "scaled_offset_width": 365.625
+      },
+      {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "y_ratio": 1.40625,
+        "raw_width": 390.0,
+        "scaled_offset_width": 548.4375
+      },
+      {
+        "viewport": [
+          2560,
+          1440
+        ],
+        "y_ratio": 1.875,
+        "raw_width": 390.0,
+        "scaled_offset_width": 731.25
+      },
+      {
+        "viewport": [
+          1023,
+          767
+        ],
+        "y_ratio": 0.9986979365348816,
+        "raw_width": 390.0,
+        "scaled_offset_width": 389.4921875
+      }
+    ],
+    "repeat_mutation": {
+      "first_width": 548.4375,
+      "second_width": 771.240234375
+    },
+    "scope": "Three original functions unchanged; settings query and CEGUI accessors stubbed. No CEGUI final rectangles, rounding, autoscale, rendering, events, or resize lifecycle claimed."
+  },
+  "not_a_full_game_or_pixel_parity_test": true
+}

@@ -50,6 +50,14 @@ class UiLayout {
   public:
     [[nodiscard]] static UiLayout parse(const std::vector<std::uint8_t> &bytes);
     [[nodiscard]] std::vector<UiResolvedWidget> resolve(int width, int height) const;
+    // original-code: CGameUI::convertToScreenScale @0xa83ed0 scales the four
+    // UDim offset members by one ratio before CEGUI resolution, scales
+    // untouched. A ratio of 1 reproduces the legacy unscaled resolve exactly.
+    // The parsed document is never mutated, so repeated calls cannot
+    // accumulate scaling (the original instead recreates UI on resize via
+    // CGameClient::rescaleUI).
+    [[nodiscard]] std::vector<UiResolvedWidget> resolve(int width, int height,
+                                                        float screen_scale_ratio) const;
     [[nodiscard]] const std::vector<UiWidget> &widgets() const noexcept {
         return widgets_;
     }
