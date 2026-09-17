@@ -1,0 +1,274 @@
++ cmake -S /mnt/data/work12 -B /mnt/data/build12 -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DTORCHLIGHT_ENABLE_DESKTOP=OFF -DTORCHLIGHT_ENABLE_RENDER=ON -DTORCHLIGHT_GAME_DIR=/mnt/data/original12 -DTORCHLIGHT_ORIGINAL=/mnt/data/original12/Torchlight.bin.x86_64 -DTORCHLIGHT_REFERENCE_PYTHON=/mnt/data/reusable-python-pie
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Configuring done (3.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /mnt/data/build12
++ cmake --build /mnt/data/build12 --parallel 4
+[1/3] Building CXX object CMakeFiles/torchlight_application.dir/src/application.cpp.o
+[2/3] Linking CXX static library libtorchlight_application.a
+[3/3] Linking CXX shared library libapplication_scenario_probe.so
++ ctest --test-dir /mnt/data/build12 -L ^core$ --output-on-failure --no-tests=error --output-junit /mnt/data/build12/verification-logs/core.xml --parallel 4
+Internal ctest changing into directory: /mnt/data/build12
+Test project /mnt/data/build12
+      Start  29: read_only_extractors
+      Start  87: verification_driver
+      Start   9: desktop_gameplay_syntax
+      Start   8: ai_cooldown_export_comparison
+ 1/54 Test   #8: ai_cooldown_export_comparison ..........   Passed    1.44 sec
+      Start  20: coverage_map_current
+ 2/54 Test  #20: coverage_map_current ...................   Passed    2.05 sec
+      Start  40: monster_experience_export_comparison
+ 3/54 Test   #9: desktop_gameplay_syntax ................   Passed    3.60 sec
+      Start  25: save_atomic_process
+ 4/54 Test  #40: monster_experience_export_comparison ...   Passed    1.35 sec
+      Start  81: scenario_first_difference
+ 5/54 Test  #25: save_atomic_process ....................   Passed    1.59 sec
+      Start  21: gles_ui_headless
+ 6/54 Test  #81: scenario_first_difference ..............   Passed    0.95 sec
+      Start  28: effect_catalog_source
+ 7/54 Test  #87: verification_driver ....................   Passed    5.88 sec
+      Start  19: frontend_campaign_cycle
+ 8/54 Test  #21: gles_ui_headless .......................   Passed    1.13 sec
+      Start  90: vitals_fresh_process
+ 9/54 Test  #28: effect_catalog_source ..................   Passed    1.00 sec
+      Start  30: combat_inputs_evidence
+10/54 Test  #19: frontend_campaign_cycle ................   Passed    1.41 sec
+      Start  37: reward_fresh_process
+11/54 Test  #90: vitals_fresh_process ...................   Passed    1.05 sec
+      Start  13: attack_speed_export_comparison
+12/54 Test  #30: combat_inputs_evidence .................   Passed    1.13 sec
+      Start  38: legacy_reward_save_migration
+13/54 Test  #37: reward_fresh_process ...................   Passed    1.00 sec
+      Start  22: gles_menu_text
+14/54 Test  #13: attack_speed_export_comparison .........   Passed    1.26 sec
+      Start  82: asset_catalog_negative
+15/54 Test  #38: legacy_reward_save_migration ...........   Passed    1.20 sec
+      Start  31: player_vitals_export_comparison
+16/54 Test  #22: gles_menu_text .........................   Passed    1.30 sec
+      Start  24: save_fresh_process
+17/54 Test  #82: asset_catalog_negative .................   Passed    1.34 sec
+      Start  39: world_gold_export_comparison
+18/54 Test  #29: read_only_extractors ...................   Passed   10.22 sec
+      Start  92: collect_game_inputs_safety
+19/54 Test  #31: player_vitals_export_comparison ........   Passed    1.16 sec
+      Start  91: vitals_v2_migration
+20/54 Test  #24: save_fresh_process .....................   Passed    1.23 sec
+      Start  94: consumable_fresh_process
+21/54 Test  #39: world_gold_export_comparison ...........   Passed    0.93 sec
+      Start 101: gameplay_v3_migration
+22/54 Test  #92: collect_game_inputs_safety .............   Passed    0.79 sec
+      Start  14: ordinary_combat
+23/54 Test  #91: vitals_v2_migration ....................   Passed    0.73 sec
+      Start  23: save_checkpoint
+24/54 Test  #23: save_checkpoint ........................   Passed    0.16 sec
+      Start   7: enemy_ai_cooldown
+25/54 Test  #14: ordinary_combat ........................   Passed    0.20 sec
+      Start  26: gameplay_continuation
+26/54 Test  #26: gameplay_continuation ..................   Passed    0.04 sec
+      Start  96: population_cycle
+27/54 Test   #7: enemy_ai_cooldown ......................   Passed    0.10 sec
+      Start  12: item_cycle
+28/54 Test  #12: item_cycle .............................   Passed    0.03 sec
+      Start   6: level_entry_fallback
+29/54 Test  #96: population_cycle .......................   Passed    0.08 sec
+      Start  36: reward_cycle
+30/54 Test  #36: reward_cycle ...........................   Passed    0.03 sec
+      Start  98: ranged_cycle
+31/54 Test   #6: level_entry_fallback ...................   Passed    0.04 sec
+      Start  88: vitals_numeric
+32/54 Test  #98: ranged_cycle ...........................   Passed    0.02 sec
+      Start  27: death_finalization
+33/54 Test  #88: vitals_numeric .........................   Passed    0.02 sec
+      Start  93: consumable_cycle
+34/54 Test  #27: death_finalization .....................   Passed    0.01 sec
+      Start  89: vitals_resource_cycle
+35/54 Test  #89: vitals_resource_cycle ..................   Passed    0.01 sec
+      Start  33: reward_unavailable
+36/54 Test  #93: consumable_cycle .......................   Passed    0.02 sec
+      Start  16: frontend_menu_resources
+37/54 Test  #33: reward_unavailable .....................   Passed    0.01 sec
+      Start  32: reward_resource_graphs
+38/54 Test  #16: frontend_menu_resources ................   Passed    0.01 sec
+      Start  15: frontend
+39/54 Test  #32: reward_resource_graphs .................   Passed    0.01 sec
+      Start  43: item_cycle_resource_fixture
+40/54 Test  #15: frontend ...............................   Passed    0.00 sec
+      Start   5: warp_arrival
+41/54 Test  #43: item_cycle_resource_fixture ............   Passed    0.01 sec
+42/54 Test   #5: warp_arrival ...........................   Passed    0.00 sec
+      Start  10: inventory_view
+      Start   2: actor_motion
+43/54 Test  #10: inventory_view .........................   Passed    0.00 sec
+      Start   1: ordinary_attack_action
+44/54 Test   #2: actor_motion ...........................   Passed    0.00 sec
+      Start  80: parent_dungeon
+45/54 Test   #1: ordinary_attack_action .................   Passed    0.00 sec
+      Start  11: inventory_instances
+46/54 Test  #80: parent_dungeon .........................   Passed    0.00 sec
+      Start   3: animation_events
+47/54 Test  #11: inventory_instances ....................   Passed    0.00 sec
+      Start   4: damage_calculation
+48/54 Test   #3: animation_events .......................   Passed    0.00 sec
+      Start  35: progression_numeric
+49/54 Test   #4: damage_calculation .....................   Passed    0.00 sec
+      Start  17: ui_text_layout
+50/54 Test  #35: progression_numeric ....................   Passed    0.00 sec
+51/54 Test  #17: ui_text_layout .........................   Passed    0.00 sec
+      Start  86: random_observation
+52/54 Test  #86: random_observation .....................   Passed    0.00 sec
+53/54 Test  #94: consumable_fresh_process ...............   Passed    0.77 sec
+54/54 Test #101: gameplay_v3_migration ..................   Passed    0.78 sec
+
+100% tests passed, 0 tests failed out of 54
+
+Label Time Summary:
+core      =  46.09 sec*proc (54 tests)
+render    =   2.43 sec*proc (2 tests)
+
+Total Test time (real) =  11.68 sec
++ ctest --test-dir /mnt/data/build12 -L ^assets$ --output-on-failure --no-tests=error --output-junit /mnt/data/build12/verification-logs/assets.xml --parallel 4
+Internal ctest changing into directory: /mnt/data/build12
+Test project /mnt/data/build12
+      Start 83: original_asset_catalog
+      Start 62: original_random_levels
+      Start 69: original_dds_textures
+      Start 60: original_level_scene
+ 1/33 Test #60: original_level_scene ...................   Passed    2.72 sec
+      Start 53: original_frontend_checkpoint
+ 2/33 Test #53: original_frontend_checkpoint ...........   Passed    4.11 sec
+      Start 99: original_ranged
+ 3/33 Test #99: original_ranged ........................   Passed    1.21 sec
+      Start 75: original_enemy_ai
+ 4/33 Test #75: original_enemy_ai ......................   Passed    1.27 sec
+      Start 78: original_level_transitions
+ 5/33 Test #78: original_level_transitions .............   Passed    1.75 sec
+      Start 73: original_entity_world
+ 6/33 Test #73: original_entity_world ..................   Passed    1.79 sec
+      Start 95: original_consumables
+ 7/33 Test #95: original_consumables ...................   Passed    1.76 sec
+      Start 97: original_population
+ 8/33 Test #97: original_population ....................   Passed    1.67 sec
+      Start 71: original_scene_geometry
+ 9/33 Test #71: original_scene_geometry ................   Passed    0.89 sec
+      Start 76: original_unit_types
+10/33 Test #76: original_unit_types ....................   Passed    1.03 sec
+      Start 79: original_data_bootstrap
+11/33 Test #79: original_data_bootstrap ................   Passed    1.26 sec
+      Start 77: original_combat
+12/33 Test #77: original_combat ........................   Passed    1.33 sec
+      Start 54: original_item_cycle
+13/33 Test #54: original_item_cycle ....................   Passed    1.42 sec
+      Start 59: original_unit_definitions
+14/33 Test #59: original_unit_definitions ..............   Passed    1.42 sec
+      Start 70: original_png_textures
+15/33 Test #70: original_png_textures ..................   Passed    0.97 sec
+      Start 63: original_players
+16/33 Test #63: original_players .......................   Passed    0.75 sec
+      Start 64: original_ogre_meshes
+17/33 Test #64: original_ogre_meshes ...................   Passed    1.28 sec
+      Start 56: original_collision_meshes
+18/33 Test #56: original_collision_meshes ..............   Passed    1.40 sec
+      Start 72: original_spawn_classes
+19/33 Test #69: original_dds_textures ..................   Passed   29.23 sec
+      Start 66: original_ogre_skeletons
+20/33 Test #72: original_spawn_classes .................   Passed    1.36 sec
+      Start 34: original_progression_resource_graphs
+21/33 Test #66: original_ogre_skeletons ................   Passed    0.78 sec
+      Start 74: original_equipment
+22/33 Test #74: original_equipment .....................   Passed    0.40 sec
+      Start 57: original_adm_document
+23/33 Test #57: original_adm_document ..................   Passed    0.39 sec
+      Start 65: original_ogre_materials
+24/33 Test #34: original_progression_resource_graphs ...   Passed    1.44 sec
+      Start 58: original_master_resource_index
+25/33 Test #58: original_master_resource_index .........   Passed    0.95 sec
+      Start 61: original_logic_runtime
+26/33 Test #65: original_ogre_materials ................   Passed    1.04 sec
+      Start 68: original_skeletal_animation
+27/33 Test #68: original_skeletal_animation ............   Passed    0.23 sec
+      Start 67: original_animation_manifests
+28/33 Test #61: original_logic_runtime .................   Passed    0.47 sec
+      Start 55: original_pak_archive
+29/33 Test #67: original_animation_manifests ...........   Passed    0.20 sec
+      Start 18: original_menu_presentation
+30/33 Test #55: original_pak_archive ...................   Passed    0.15 sec
+31/33 Test #18: original_menu_presentation .............   Passed    0.13 sec
+32/33 Test #62: original_random_levels .................   Passed   39.45 sec
+33/33 Test #83: original_asset_catalog .................   Passed   45.57 sec
+
+100% tests passed, 0 tests failed out of 33
+
+Label Time Summary:
+assets    = 149.82 sec*proc (33 tests)
+
+Total Test time (real) =  45.57 sec
++ ctest --test-dir /mnt/data/build12 -L ^reference$ --output-on-failure --no-tests=error --output-junit /mnt/data/build12/verification-logs/reference.xml --parallel 4
+Internal ctest changing into directory: /mnt/data/build12
+Test project /mnt/data/build12
+      Start  46: original_ai_cooldown_comparison
+      Start  49: original_input_comparison
+      Start  47: original_level_entry_dispatch
+      Start  45: original_attack_speed_comparison
+ 1/12 Test  #46: original_ai_cooldown_comparison ..........   Passed    1.24 sec
+      Start  44: original_player_vitals_comparison
+ 2/12 Test  #47: original_level_entry_dispatch ............   Passed    1.52 sec
+      Start  42: original_monster_experience_comparison
+ 3/12 Test  #45: original_attack_speed_comparison .........   Passed    2.10 sec
+      Start  41: original_world_gold_comparison
+ 4/12 Test  #49: original_input_comparison ................   Passed    2.33 sec
+      Start  51: original_randomizer_comparison
+ 5/12 Test  #44: original_player_vitals_comparison ........   Passed    1.28 sec
+      Start  48: original_camera_comparison
+ 6/12 Test  #42: original_monster_experience_comparison ...   Passed    1.81 sec
+      Start  52: original_pathfinder_comparison
+ 7/12 Test  #41: original_world_gold_comparison ...........   Passed    1.25 sec
+      Start  50: original_action_comparison
+ 8/12 Test  #48: original_camera_comparison ...............   Passed    0.92 sec
+      Start 100: original_gameplay_numeric_comparison
+ 9/12 Test  #51: original_randomizer_comparison ...........   Passed    1.51 sec
+10/12 Test #100: original_gameplay_numeric_comparison .....   Passed    0.57 sec
+11/12 Test  #50: original_action_comparison ...............   Passed    0.90 sec
+12/12 Test  #52: original_pathfinder_comparison ...........   Passed    1.02 sec
+
+100% tests passed, 0 tests failed out of 12
+
+Label Time Summary:
+reference    =  16.46 sec*proc (12 tests)
+
+Total Test time (real) =   4.36 sec
++ ctest --test-dir /mnt/data/build12 -L ^render$ --output-on-failure --no-tests=error --output-junit /mnt/data/build12/verification-logs/render.xml --parallel 4
+Internal ctest changing into directory: /mnt/data/build12
+Test project /mnt/data/build12
+    Start 84: application_scenario_render
+    Start 21: gles_ui_headless
+    Start 22: gles_menu_text
+    Start 85: application_combat_render
+1/4 Test #21: gles_ui_headless .................   Passed    1.89 sec
+2/4 Test #22: gles_menu_text ...................   Passed    1.96 sec
+3/4 Test #85: application_combat_render ........   Passed   31.90 sec
+4/4 Test #84: application_scenario_render ......   Passed   81.19 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Label Time Summary:
+core      =   3.85 sec*proc (2 tests)
+render    = 116.94 sec*proc (4 tests)
+
+Total Test time (real) =  81.19 sec
+
+GROUP       STATUS       PASS / FAIL / SKIP    REASON
+core        PASSED         54 /    0 /    0
+assets      PASSED         33 /    0 /    0
+reference   PASSED         12 /    0 /    0
+render      PASSED          4 /    0 /    0
+desktop     NOT RUN         0 /    0 /    0    Not requested
+Report: /mnt/data/log12/final-full.json

@@ -56,7 +56,7 @@ void CombatController::set_external_attack_effects(const AttackEffects& effects)
 }
 void CombatController::set_animation_resolver(AttackClipResolver resolver) { resolver_ = std::move(resolver); }
 void CombatController::reset_level_context() noexcept {
-    target_id_ = 0; action_.cancel(); resolver_ = {};
+    target_id_ = 0; action_.cancel(); resolver_ = {}; line_of_sight_ = {};
     // Equipment, effects, RNG and next execution ID survive a level change.
 }
 void CombatController::interrupt_attack() noexcept { action_.cancel(); }
@@ -84,8 +84,9 @@ CombatUpdate CombatController::update(float seconds, const std::array<float, 3>&
                                  selected->attack_character.collision_radius, attack_range_, has_ranged_weapon(loadout_)))
         return {CombatState::approaching, selected->id, 0, selected->health};
     if (!description->unavailable_reason.empty() || description->animation_prefix.empty() ||
-        description->traits.ranged) {
-        last_attack_issue_ = description->traits.ranged ? "ranged attack needs missile/weapon-skill runtime" :
+        (description->traits.ranged && (description->delivery != WeaponDelivery::direct_physical || !line_of_sight_))) {
+        last_attack_issue_ = description->traits.ranged ?
+            (description->delivery != WeaponDelivery::direct_physical ? weapon_delivery_issue(description->delivery) : "ranged collision context is missing") :
             !description->unavailable_reason.empty() ? description->unavailable_reason : "weapon has no description in this hand";
         return {CombatState::unavailable, selected->id};
     }
@@ -118,6 +119,8 @@ CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& ev
     const auto reach = ordinary_strike_range(action_.description(), character_, total_attack_effects(loadout_, character_));
     if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
                                  selected->attack_character.collision_radius, reach, action_.description().traits.ranged))
+        return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
+    if (action_.description().traits.ranged && (!line_of_sight_ || !line_of_sight_(position, selected->position)))
         return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
     const auto damage = ordinary_physical_damage(action_.description(), loadout_, character_);
     const auto rolled = random_.integer_between(damage[0], damage[1]);

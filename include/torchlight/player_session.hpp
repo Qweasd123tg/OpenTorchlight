@@ -27,6 +27,13 @@ public:
     [[nodiscard]] const PlayerCombatState& health() const noexcept { return health_; }
     [[nodiscard]] InventoryId pick_up(RuntimeEntityWorld& world, std::uint64_t entity_id,
                                       LogicRuntime& logic);
+    [[nodiscard]] ConsumableUse use_consumable(InventoryId id);
+    [[nodiscard]] ConsumableUse use_recovery(bool health);
+    [[nodiscard]] bool update_vitals(float seconds);
+    [[nodiscard]] const std::vector<ActiveRecovery>& active_recovery() const noexcept { return active_recovery_; }
+    // Enrich v1-v3 owned potions after loading with this exact resource catalog.
+    // Does not grant items, reroll values, or replace v4 serialized descriptors.
+    void hydrate_consumables(UnitDefinitionLoader&, const MasterResourceIndex&);
     [[nodiscard]] InventoryChange equip(InventoryId id);
     [[nodiscard]] InventoryChange unequip(InventoryId id);
     [[nodiscard]] std::int32_t gold() const noexcept { return gold_; }
@@ -61,5 +68,6 @@ private:
     PlayerInventory inventory_;
     CombatController combat_;
     PlayerCombatState health_;
+    std::vector<ActiveRecovery> active_recovery_;
 };
 } // namespace torchlight

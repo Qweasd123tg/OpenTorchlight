@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="2"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="4"
+	timestamp="2026-09-16T21:57:42"
+	>
+	<testcase name="coverage_map_current" classname="coverage_map_current" time="0.994622" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Coverage: 17031 explicit rows; no automatic promotions from decompilation.
+</system-out>
+	</testcase>
+	<testcase name="verification_driver" classname="verification_driver" time="3.061" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>....
+----------------------------------------------------------------------
+Ran 4 tests in 2.412s
+
+OK
+</system-out>
+	</testcase>
+</testsuite>

@@ -29,6 +29,7 @@ public:
     void reset_level_context() noexcept;
     void interrupt_attack() noexcept;
     void set_animation_resolver(AttackClipResolver resolver);
+    void set_line_of_sight(AttackLineOfSight resolver) { line_of_sight_ = std::move(resolver); }
     // Replaces evaluated non-hand equipment/active contributions, not base
     // UNIT passives. Live damage sees new effects; a running clip keeps its speed.
     void set_external_attack_effects(const AttackEffects& effects);
@@ -61,6 +62,7 @@ private:
     TorchlightRandom random_;
     std::string mesh_path_;
     AttackClipResolver resolver_;
+    AttackLineOfSight line_of_sight_;
     AttackLoadout loadout_;
     AttackCharacterValues character_;
     AttackEffects base_effects_;

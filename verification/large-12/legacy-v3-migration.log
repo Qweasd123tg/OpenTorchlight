@@ -1,0 +1,29 @@
+[0/1] Re-running CMake...
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Configuring done (3.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /mnt/data/build12
+[1/4] Generating fixtures/legacy-v3.pak.zip
+Authored combat fixture: 36 units, 73 files; no original assets
+[2/4] Building CXX object CMakeFiles/legacy_v3_test.dir/tests/legacy_v3_test.cpp.o
+[3/4] Linking CXX executable legacy_v3_test
+Internal ctest changing into directory: /mnt/data/build12
+Test project /mnt/data/build12
+    Start 100: gameplay_v3_migration
+1/1 Test #100: gameplay_v3_migration ............   Passed    0.62 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+core    =   0.62 sec*proc (1 test)
+
+Total Test time (real) =   0.62 sec

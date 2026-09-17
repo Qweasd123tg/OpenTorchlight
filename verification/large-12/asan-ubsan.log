@@ -1,0 +1,39 @@
+Internal ctest changing into directory: /mnt/data/asan12
+Test project /mnt/data/asan12
+      Start 45: vitals_fresh_process
+      Start 52: gameplay_v3_migration
+ 1/15 Test #45: vitals_fresh_process .............   Passed    1.09 sec
+      Start 46: vitals_v2_migration
+ 2/15 Test #52: gameplay_v3_migration ............   Passed    1.27 sec
+      Start 49: consumable_fresh_process
+ 3/15 Test #46: vitals_v2_migration ..............   Passed    1.01 sec
+      Start  7: enemy_ai_cooldown
+ 4/15 Test #49: consumable_fresh_process .........   Passed    0.94 sec
+      Start 50: population_cycle
+ 5/15 Test  #7: enemy_ai_cooldown ................   Passed    0.32 sec
+      Start 51: ranged_cycle
+ 6/15 Test #50: population_cycle .................   Passed    0.21 sec
+      Start 48: consumable_cycle
+ 7/15 Test #48: consumable_cycle .................   Passed    0.08 sec
+      Start 43: vitals_numeric
+ 8/15 Test #51: ranged_cycle .....................   Passed    0.09 sec
+      Start 44: vitals_resource_cycle
+ 9/15 Test #43: vitals_numeric ...................   Passed    0.07 sec
+      Start 11: inventory_instances
+10/15 Test #44: vitals_resource_cycle ............   Passed    0.07 sec
+      Start 14: ordinary_combat
+11/15 Test #11: inventory_instances ..............   Passed    0.02 sec
+      Start 20: save_checkpoint
+12/15 Test #14: ordinary_combat ..................   Passed    0.40 sec
+      Start 21: save_fresh_process
+13/15 Test #20: save_checkpoint ..................   Passed    0.40 sec
+      Start 22: save_atomic_process
+14/15 Test #21: save_fresh_process ...............   Passed    1.19 sec
+15/15 Test #22: save_atomic_process ..............   Passed    1.55 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Label Time Summary:
+core    =   8.71 sec*proc (15 tests)
+
+Total Test time (real) =   4.55 sec

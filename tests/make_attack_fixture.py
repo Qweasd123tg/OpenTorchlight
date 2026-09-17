@@ -57,7 +57,7 @@ def effect(name, value, **extra):
     return group('EFFECT', props)
 
 
-def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool = False):
+def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool = False, with_consumables: bool = False, with_ranged: bool = False):
     entries = {}
     units, records = [], []
     def add(name, category='MONSTERS', unit_type='MONSTER', props=(), children=(), directory='media/combat/'):
@@ -140,6 +140,29 @@ def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool =
             [effect('FIXTURE_HP_REGEN',-3),effect('FIXTURE_DAMAGE_OVER_TIME',1.5)])
         entries['media/globals.dat.adm']=adm(group('GLOBALS',[
             ('HP_RECHARGE_RATE',2,2.5),('PET_HP_RECHARGE_RATE',2,7),('MANA_RECHARGE_RATE',2,10)]))
+    if with_consumables:
+        def recovery(name, kind, value, duration=2, **extra):
+            return group('EFFECT', [('NAME',5,name),('TYPE',5,kind),('ACTIVATION',5,'DYNAMIC'),
+                ('DURATION',5,str(duration)),('MIN',2,value),('MAX',2,value),('NOGRAPH',6,True)] +
+                [(k,6 if isinstance(v,bool) else 5,v) for k,v in extra.items()])
+        hp = recovery('HPBONUS','HEAL',1250)
+        mp = recovery('MANABONUS','MANA',625)
+        potion_props = [('USES',5,'1'),('MAXSTACKSIZE',1,3),('DONT_USE_ON_FULL',6,True)]
+        add('HP_POTION','ITEMS','POTION',potion_props,[hp])
+        add('MP_POTION','ITEMS','POTION',potion_props,[mp])
+        add('MIX_POTION','ITEMS','POTION',potion_props,[hp,mp])
+        add('BIG_POTION','ITEMS','POTION',potion_props,[recovery('HPBONUS','HEAL',2500)])
+        add('LEVEL_POTION','ITEMS','POTION',potion_props+[('LEVEL_REQUIRED',1,9)],[hp])
+        add('BAD_POTION','ITEMS','POTION',potion_props,[hp,recovery('OTHER','FIXTURE_HASTE',10)])
+        add('CONDITIONAL_POTION','ITEMS','POTION',potion_props,[recovery('HPBONUS','HEAL',1250,UNITTYPE='MONSTER')])
+    if with_ranged:
+        ranged_props=[('MINDAMAGE',1,20),('MAXDAMAGE',1,20),('SPEED',1,100),
+            ('RANGE',2,6),('STRIKERANGE',2,7),('DAMAGE_PHYSICAL',1,100)]
+        add('DIRECT_PISTOL','ITEMS','PISTOL',ranged_props)
+        add('RANGED_DIRECT',props=base,children=[equip(RIGHTHAND='DIRECT_PISTOL')])
+        add('MISSILE_PISTOL','ITEMS','PISTOL',ranged_props+[('MISSILE',5,'TEST_MISSILE')])
+        add('SKILL_PISTOL','ITEMS','PISTOL',ranged_props,[group('SKILLS',[('SKILL',5,'TEST_SKILL')])])
+        add('ELEMENTAL_PISTOL','ITEMS','PISTOL',[(k,t,50 if k=='DAMAGE_PHYSICAL' else v) for k,t,v in ranged_props]+[('DAMAGE_FIRE',1,50)])
     for name, definition in units: entries[f'media/units/{name}.dat.adm']=adm(definition)
     master=adm(group('UNITS',children=records))
     entries['media/master.adm']=master
@@ -149,6 +172,7 @@ def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool =
     if with_vitals:
         names.update({5:'FIXTURE_HP_FLAT',0x14:'FIXTURE_HP_PERCENT',7:'FIXTURE_HP_REGEN',
             6:'FIXTURE_MANA_REGEN',0x34:'FIXTURE_DAMAGE_OVER_TIME'})
+    if with_consumables: names.update({124:'HEAL',6:'MANA'})
     entries['media/EffectsList.dat.adm']=adm(group('EFFECTS',children=[
         group('EFFECT',[('NAME',5,names.get(i,f'UNUSED_{i:03}'))]) for i in range(145)]))
     # Valid lookalike is deliberately wrong. Only the pinned EffectsList path is authoritative.
@@ -158,6 +182,7 @@ def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool =
         for name,id,parents in [('MONSTER',1,()),('SWORD',2,(8,60)),('WEAPON',8,()),
             ('MELEE',60,()),('RANGED',35,(8,)),('PISTOL',90,(35,8)),('PLAYER',3,()),
             ('CHEST ARMOR',4,()),('NORMAL CHEST ARMOR',5,(4,))]]
+    if with_consumables: types.append(group('POTION',[('ID',1,33)]))
     if with_rewards: types.append(group('GOLD',[('ID',1,9)]))
     entries['media/UNITTYPES.HIE.adm']=adm(group('HIERACHY',children=[group('UNITTYPES',children=types)]))
     entries['media/spawnclasses/SWORDS.dat.adm']=adm(group('SPAWNCLASS',[('NAME',5,'SWORDS')],
@@ -185,6 +210,7 @@ def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool =
     clips=[('ATTACK_A', [('HIT',6),('FOOTSTEP',9),('HIT',30)]),
         ('RSLASH_A',[('HIT',6),('FOOTSTEP',9),('HIT',12),('HIT',30)]),
         ('LSLASH_A',[('HIT',15)]), ('LPISTOL_A',[('HIT',10)])]
+    if with_ranged: clips.append(('RPISTOL_A',[('HIT',6)]))
     entries['media/combat/Creature.animation']=manifest(clips)
     for index,(name,_) in enumerate(clips):
         entries[f'media/combat/{name}.skeleton']=skeleton(name,1,10*(index+1))

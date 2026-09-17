@@ -1,0 +1,9 @@
+menu main
+dt 0
+button continue
+level Main 1
+frames 1
+capture restored
+key ESC
+menu pause
+button save-exit

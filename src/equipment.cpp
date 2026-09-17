@@ -77,6 +77,48 @@ std::string unit_model_path(const UnitDefinition& definition) {
     return path;
 }
 
+WeaponDelivery load_weapon_delivery(const UnitDefinition& definition) {
+    // doWeaponSkill runs before fireMissiles. Conservative refusal is deliberate:
+    // partial skill support must not become an extra ordinary physical attack.
+    for (const auto& group : definition.root.groups)
+        if (normalized(group.name) == u"SKILLS" || normalized(group.name) == u"SKILL")
+            return WeaponDelivery::weapon_skill;
+    if (const auto* missile = definition.find_property(u"MISSILE")) {
+        if (missile->type != AdmValueType::string && missile->type != AdmValueType::translation &&
+            missile->type != AdmValueType::note) throw EquipmentError("MISSILE must be text");
+        if (!std::get<std::u16string>(missile->value).empty()) return WeaponDelivery::missile;
+    }
+    // Physical allocation is explicit for this supported path. Base resource
+    // templates without a damage allocation remain unverified, not guessed.
+    const auto* physical = definition.find_property(u"DAMAGE_PHYSICAL");
+    if (!physical) return WeaponDelivery::unverified;
+    const auto percent = [&](const char16_t* key) {
+        const auto* p = definition.find_property(key);
+        if (!p) return 0.0F;
+        float value;
+        if (p->type == AdmValueType::integer) value = static_cast<float>(std::get<std::int32_t>(p->value));
+        else if (p->type == AdmValueType::floating) value = std::get<float>(p->value);
+        else throw EquipmentError("Weapon damage allocation must be numeric");
+        if (!std::isfinite(value) || value < 0) throw EquipmentError("Invalid weapon damage allocation");
+        return value;
+    };
+    if (percent(u"DAMAGE_PHYSICAL") != 100) return WeaponDelivery::unsupported_damage;
+    for (const auto* key : {u"DAMAGE_FIRE", u"DAMAGE_ICE", u"DAMAGE_ELECTRIC", u"DAMAGE_ELECTRICAL",
+                           u"DAMAGE_POISON", u"DAMAGE_UNDEFINED"})
+        if (percent(key) != 0) return WeaponDelivery::unsupported_damage;
+    return WeaponDelivery::direct_physical;
+}
+const char* weapon_delivery_issue(WeaponDelivery delivery) noexcept {
+    switch (delivery) {
+        case WeaponDelivery::direct_physical: return "";
+        case WeaponDelivery::missile: return "weapon requires missile runtime";
+        case WeaponDelivery::weapon_skill: return "weapon requires skill runtime";
+        case WeaponDelivery::unsupported_damage: return "ranged elemental/mixed damage is unsupported";
+        case WeaponDelivery::unverified: return "ranged delivery metadata is unverified";
+    }
+    return "invalid weapon delivery";
+}
+
 AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand) {
     AttackDescription result;
     result.hand = hand; result.source_guid = item.prototype.guid;
@@ -87,6 +129,7 @@ AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand
     result.speed_denominator = static_cast<float>(item.prototype.speed) / 100.0F;
     result.equipment_ai_cooldown = item.prototype.ai_attack_cooldown;
     result.effects = item.prototype.attack_effects;
+    result.delivery = item.prototype.delivery;
     return result;
 }
 
@@ -185,6 +228,7 @@ std::optional<WeaponPrototype> load_weapon_prototype(
         return std::nullopt;
     }
     WeaponPrototype weapon;
+    weapon.delivery = load_weapon_delivery(definition);
     weapon.guid = resource.guid;
     weapon.name = resource.name;
     weapon.display_name = resource.display_name;

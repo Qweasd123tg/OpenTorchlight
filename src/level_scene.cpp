@@ -381,6 +381,28 @@ const LevelPiece* LevelsetCatalog::find(std::int64_t guid) const noexcept {
     return found == by_guid_.end() ? nullptr : &pieces_[found->second];
 }
 
+void apply_population_overrides(PopulationSettings& settings, const AdmGroup& group) {
+    auto s = settings;
+    s.monster_class = text_value(group, u"MONSTERSPAWNCLASS", s.monster_class);
+    s.randomized_class = bool_value(group, u"MONSTERSPAWNCLASSRANDOMIZED", s.randomized_class);
+    s.minimum_count = numeric_float_value(group, u"MONSTER_MIN", s.minimum_count);
+    s.maximum_count = numeric_float_value(group, u"MONSTER_MAX", s.maximum_count);
+    s.minimum_density = numeric_float_value(group, u"MONSTERS_PER_METER_MIN", s.minimum_density);
+    s.maximum_density = numeric_float_value(group, u"MONSTERS_PER_METER_MAX", s.maximum_density);
+    const auto level = [&](const char16_t* name, std::int32_t fallback) {
+        const auto v = numeric_float_value(group, name, static_cast<float>(fallback));
+        if (!std::isfinite(v) || v < -1 || v > 1000 || std::trunc(v) != v)
+            throw LevelSceneError("Invalid population level");
+        return static_cast<std::int32_t>(v);
+    };
+    s.minimum_level = level(u"MONSTER_LVL_MIN", s.minimum_level);
+    s.maximum_level = level(u"MONSTER_LVL_MAX", s.maximum_level);
+    for (const auto v : {s.minimum_count, s.maximum_count, s.minimum_density, s.maximum_density})
+        if (!std::isfinite(v) || v < 0 || v > 50000)
+            throw LevelSceneError("Invalid population count/density");
+    settings = std::move(s);
+}
+
 DungeonManifest LevelSceneLoader::load_dungeon(std::u16string_view data_file) const {
     const auto document = load_data_file(archive_, data_file, u"DUNGEON");
     DungeonManifest result;
@@ -398,6 +420,7 @@ DungeonManifest LevelSceneLoader::load_dungeon(std::u16string_view data_file) co
         stratum.allow_portals = bool_value(group, u"ALLOW_PORTALS", true);
         stratum.allow_pet_return = bool_value(group, u"ALLOW_PET_RETURN", true);
         stratum.is_town = bool_value(group, u"IS_TOWN", false);
+        stratum.population_overrides = group;
         if (stratum.ruleset.empty()) {
             throw LevelSceneError("Dungeon stratum has no RULESET");
         }
@@ -416,6 +439,7 @@ LevelRules LevelSceneLoader::load_rules(std::u16string_view data_file) const {
     result.display_name = text_value(document.root, u"LEVELNAME");
     result.randomized = bool_value(document.root, u"RANDOMIZED", false);
     result.populate = bool_value(document.root, u"POPULATE", true);
+    apply_population_overrides(result.population, document.root);
     result.requires_exit = bool_value(document.root, u"REQUIRESEXIT", false);
     result.tile_basis = float_value(document.root, u"TILEBASIS", 1.0F);
     result.chunk_width_basis = float_value(document.root, u"CHUNKWIDTHBASIS", 1.0F);

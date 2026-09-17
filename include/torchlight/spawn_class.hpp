@@ -22,7 +22,7 @@ struct SpawnClassEntry {
     std::u16string unit;
     std::u16string unit_type;
     std::u16string spawn_class;
-    std::int32_t weight = 1;
+    std::int32_t weight = -1;
     std::int32_t minimum_count = 1;
     std::int32_t maximum_count = 1;
     std::vector<AdmProperty> properties;

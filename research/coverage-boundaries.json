@@ -217,17 +217,19 @@
         "0x847280"
       ],
       "status": "partial",
-      "boundary": "Melee consumer exists; missile/ray/weapon-skill path not implemented. Do not turn ranged into immediate melee.",
+      "boundary": "Melee and positively classified ordinary physical direct ranged HIT paths; portable static LOS. Missiles, weapon skills and mixed damage remain unavailable.",
       "evidence": [
-        "research/ordinary-attack-action.md",
-        "research/decompiled-core/character.c",
-        "research/decompiled-core/equipment.c"
+        "research/ranged-direct-evidence.md",
+        "research/decompiled-core/character.c"
       ],
       "implementation": [
-        "src/attack_action.cpp"
+        "src/combat.cpp",
+        "src/enemy_ai.cpp",
+        "src/line_of_sight.cpp"
       ],
       "tests": [
-        "tests/ordinary_combat_test.cpp"
+        "tests/ranged_test.cpp",
+        "tests/application_combat_test.py"
       ],
       "comparison": ""
     },
@@ -534,6 +536,103 @@
         "tests/vitals_legacy_test.py"
       ],
       "comparison": "Authored numeric/order/state regression only; original machine-code bytes were absent."
+    },
+    {
+      "addresses": [
+        "0x7eb5f0"
+      ],
+      "status": "partial",
+      "boundary": "Finite recovery scale for effect types 6/7/123/124 matches bounded original instructions; full manager/cache/lifetime is NOT implemented.",
+      "evidence": [
+        "research/finite-recovery-evidence.md"
+      ],
+      "implementation": [
+        "src/consumable.cpp"
+      ],
+      "tests": [
+        "tests/compare_gameplay_numeric.py",
+        "tests/consumable_test.cpp"
+      ],
+      "comparison": "10,040 evaluated binary32 values; synthetic original manager, not full scheduler"
+    },
+    {
+      "addresses": [
+        "0x971530"
+      ],
+      "status": "verified",
+      "boundary": "Monster-count integer/density calculation with real original RNG, finite supported bounds; not whole population.",
+      "evidence": [
+        "research/population-evidence.md"
+      ],
+      "implementation": [
+        "src/population.cpp"
+      ],
+      "tests": [
+        "tests/compare_gameplay_numeric.py",
+        "tests/population_test.cpp"
+      ],
+      "comparison": "10,055 counts and post-call RNG states matched original bounded function"
+    },
+    {
+      "addresses": [
+        "0x86e710",
+        "0x86e910",
+        "0x813f20",
+        "0x7dc9f0"
+      ],
+      "status": "partial",
+      "boundary": "Supported positive constant DYNAMIC recovery potion descriptors, level/full/same-name acceptance and debit; other item effects fail closed.",
+      "evidence": [
+        "research/finite-recovery-evidence.md"
+      ],
+      "implementation": [
+        "src/consumable.cpp",
+        "src/player_session.cpp",
+        "src/inventory.cpp"
+      ],
+      "tests": [
+        "tests/consumable_test.cpp",
+        "tests/consumable_process_test.py"
+      ],
+      "comparison": ""
+    },
+    {
+      "addresses": [
+        "0xa76100",
+        "0xa751e0"
+      ],
+      "status": "partial",
+      "boundary": "Spawn entry defaults and WEIGHT=0 forced entry handling recovered from bounded ASM; full spawn consumer call ordering not verified.",
+      "evidence": [
+        "research/spawn-classes.md",
+        "research/disassembly/spawn-zero-weight.asm"
+      ],
+      "implementation": [
+        "src/spawn_class.cpp"
+      ],
+      "tests": [
+        "tests/population_test.cpp"
+      ],
+      "comparison": ""
+    },
+    {
+      "addresses": [
+        "0x974f80"
+      ],
+      "status": "partial",
+      "boundary": "Retain STRATA monster overrides and choose one nested randomized monster class; original formations/positions not implemented.",
+      "evidence": [
+        "research/population-evidence.md"
+      ],
+      "implementation": [
+        "src/level_scene.cpp",
+        "src/population.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/population_test.cpp"
+      ],
+      "comparison": ""
     }
   ],
   "port_systems": [
@@ -671,6 +770,42 @@
         "tests/vitals_test.cpp",
         "tests/vitals_process_test.py",
         "tests/vitals_legacy_test.py"
+      ]
+    },
+    {
+      "id": "finite-recovery-checkpoint-v4",
+      "subsystem": "save",
+      "status": "implemented",
+      "boundary": "Port-native finite recovery scheduler, stack ownership and OTC v4; reads v1-v3, frozen actual v3 writer tested. Not original SAVE format.",
+      "evidence": [
+        "research/finite-recovery-evidence.md",
+        "tests/fixtures/legacy-v3-provenance.json"
+      ],
+      "implementation": [
+        "src/save_codec.cpp",
+        "src/checkpoint.cpp",
+        "src/player_session.cpp"
+      ],
+      "tests": [
+        "tests/consumable_process_test.py",
+        "tests/legacy_v3_process_test.py"
+      ]
+    },
+    {
+      "id": "ordinary-population-placement",
+      "subsystem": "world",
+      "status": "partial",
+      "boundary": "Portable 0.4-grid reachable component/spacing, persisted no-repeat flag. Actual seed491 places 51 of 76 requested; no formations/champions/quest population.",
+      "evidence": [
+        "research/population-evidence.md"
+      ],
+      "implementation": [
+        "src/population.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/population_test.cpp",
+        "tests/application_combat_test.py"
       ]
     }
   ]

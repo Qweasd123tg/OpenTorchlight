@@ -84,6 +84,8 @@ struct LoadedDesktopLevel {
     torchlight::LayoutManifest layout;
     torchlight::FixedSceneGeometry geometry;
     torchlight::NavigationGrid navigation;
+    torchlight::CollisionScene collision;
+    std::optional<torchlight::NavigationGrid> population_navigation;
     std::array<float, 3> player_start{};
     float player_start_angle = 0.0F;
     std::array<float, 3> recovery_anchor{};
@@ -149,7 +151,10 @@ LoadedDesktopLevel load_desktop_level(
     const auto floor = torchlight::select_dungeon_floor(
         result.dungeon, requested_address.depth);
     result.address = {result.dungeon.name, floor.depth};
-    result.rules = loader.load_rules(result.dungeon.strata[floor.stratum_index].ruleset);
+    const auto& stratum = result.dungeon.strata[floor.stratum_index];
+    result.rules = loader.load_rules(stratum.ruleset);
+    torchlight::apply_population_overrides(result.rules.population, stratum.population_overrides);
+    if (stratum.is_town) result.rules.populate = false;
     const auto seed = level_seed(base_seed, floor.depth);
     const auto resolve_transition_start = [&]() {
         if (entry == nullptr) {
@@ -215,6 +220,9 @@ LoadedDesktopLevel load_desktop_level(
         result.recovery_angle = result.player_start_angle;
     }
     result.navigation = torchlight::NavigationGrid::build(collision);
+    if (result.rules.populate)
+        result.population_navigation = torchlight::NavigationGrid::build(collision, .4F);
+    result.collision = std::move(collision);
     if (const auto start_cell = result.navigation.nearest_walkable(result.player_start)) {
         result.player_floor_offset =
             result.player_start[1] -
@@ -396,6 +404,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             }
             try {
             session.enter_level();
+            session.hydrate_consumables(loader, index);
             inventory_view.open = false;
             auto player_visual = visual_prototype(session.inventory());
             auto player_animations = load_player_animations(
@@ -436,6 +445,24 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     player_motion = torchlight::ActorMotion(level.player_start, selected_player.running_speed);
                 }
             } else if (resume_saved_position) throw DesktopError("save does not contain the current floor");
+            else if (level.population_navigation) {
+                std::vector<std::array<float, 3>> exclusions;
+                const auto transforms = torchlight::resolve_layout_world_transforms(level.layout);
+                for (std::size_t i = 0; i < level.layout.objects.size(); ++i) {
+                    const auto& descriptor = level.layout.objects[i].descriptor;
+                    if (descriptor == u"Warp Point" || descriptor == u"Player Start" || descriptor == u"PlayerStart")
+                        exclusions.push_back(transforms[i].position);
+                }
+                const auto population = entity_world.populate(level.rules.population,
+                    *level.population_navigation, level.player_start, exclusions);
+                std::cout << "population_requested=" << population.requested
+                          << " population_created=" << population.created
+                          << " population_unsupported=" << population.unsupported_resources
+                          << " population_missing=" << population.missing_resources
+                          << " population_unplaced=" << population.unplaced
+                          << " population_pathable=" << population.pathable_nodes
+                          << " population_placement=portable-grid" << '\n';
+            }
             resume_saved_position = false;
             torchlight::InteractionDispatcher interactions(level.layout, entity_world, logic_runtime);
             level.placed_monster_count = torchlight::append_layout_monster_geometry(
@@ -446,6 +473,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             torchlight::append_player_geometry(
                 archive, selected_player, level.player_start, level.geometry);
             const auto player_instance_index = level.geometry.instances.size() - 1U;
+            // Keep facing as persisted state. Reconstructing it from sin/cos on
+            // each checkpoint drifts by an ULP per save/load even at dt=0.
+            float player_facing_angle = level.player_start_angle;
             level.geometry.instances[player_instance_index].transform.orientation =
                 torchlight::yaw_rotation(level.player_start_angle);
             const auto player_mesh_index =
@@ -481,6 +511,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             };
             combat.set_animation_resolver(resolve_attack);
             enemies.set_animation_resolver(resolve_attack);
+            const auto visible_attack = [&](std::array<float, 3> from, std::array<float, 3> to) {
+                // Portable body-centre approximation until original bone attachment
+                // points are available for every animated model. Never bypass walls.
+                from[1] += .8F; to[1] += .8F;
+                return torchlight::collision_segment_clear(level.collision, from, to);
+            };
+            combat.set_line_of_sight(visible_attack);
+            enemies.set_line_of_sight(visible_attack);
             std::unordered_map<std::uint64_t, std::string> reported_attack_issues;
             std::optional<torchlight::GlesSceneRenderer> renderer;
             std::optional<torchlight::WarpRequest> pending_warp;
@@ -658,8 +696,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 state.player_position = player_motion.position(); state.recovery_anchor = level.recovery_anchor;
                 state.recovery_angle = level.recovery_angle; state.floor_offset = level.player_floor_offset;
                 state.original_recovery_anchor = level.recovery_anchor_resolved;
-                const auto& rotation = level.geometry.instances.at(player_instance_index).transform.orientation;
-                state.player_angle = std::atan2(rotation[2], rotation[8]) * 57.295779513082320876F;
+                state.player_angle = player_facing_angle;
                 state.world = torchlight::CheckpointAccess::capture(entity_world);
                 state.logic = torchlight::CheckpointAccess::capture(logic_runtime);
                 state.enemies = torchlight::CheckpointAccess::capture(enemies);
@@ -791,8 +828,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 view.slot = campaign.slot; view.address = level.address;
                 view.player_position = player_motion.position(); view.moving = player_motion.moving();
                 view.recovery_anchor = level.recovery_anchor; view.floor_offset = level.player_floor_offset;
-                const auto& rotation = level.geometry.instances[player_instance_index].transform.orientation;
-                view.player_angle = std::atan2(rotation[2], rotation[8]) * 57.295779513082320876F;
+                view.player_angle = player_facing_angle;
                 view.player_instance = player_instance_index; view.weapon_instance = player_weapon_instance_index;
                 view.inventory_open = inventory_view.open; view.session = &session;
                 view.world = &entity_world; view.logic = &logic_runtime; view.enemies = &enemies;
@@ -849,6 +885,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         level.geometry.instances[player_instance_index].transform.orientation =
                             torchlight::yaw_rotation(level.recovery_angle);
                         renderer->set_instance_angle(player_instance_index, level.recovery_angle);
+                        player_facing_angle = level.recovery_angle;
                         if (const auto cell = level.navigation.nearest_walkable(player_motion.position()))
                             level.player_floor_offset = player_motion.position()[1] -
                                 level.navigation.cell((*cell)[0], (*cell)[1]).height;
@@ -861,10 +898,18 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     else if (key == torchlight::physical_key::ESC) {
                         if (inventory_view.open) inventory_view.open = false;
                         else frontend.pause();
+                    } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
+                        inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open) {
                         if (key == torchlight::physical_key::UP) inventory_view.move(-1, session.inventory());
                         else if (key == torchlight::physical_key::DOWN) inventory_view.move(1, session.inventory());
-                        else if (key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) change_equipment(false);
+                        else if (key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) {
+                            const auto id = inventory_view.selected_id(session.inventory());
+                            const auto* item = session.inventory().find(id);
+                            if (item && item->consumable)
+                                inventory_view.status = torchlight::consumable_use_message(session.use_consumable(id));
+                            else change_equipment(false);
+                        }
                         else if (key == torchlight::physical_key::U) change_equipment(true);
                         else if (key >= torchlight::physical_key::DIGIT_1 && key <= torchlight::physical_key::DIGIT_4) {
                             const auto index = static_cast<std::size_t>(key - torchlight::physical_key::DIGIT_1);
@@ -881,7 +926,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // prototype UI policy: pause simulation while dead; death pose still advances.
                 const float simulation_elapsed = inventory_view.open || !player_combat.alive() ? 0.0F : std::min(elapsed, 0.1F);
                 // Shared desktop/scenario simulation phase, not wall-clock catch-up.
-                if (!player_combat.update_vitals(simulation_elapsed))
+                if (!session.update_vitals(simulation_elapsed))
                     throw std::runtime_error("Invalid player recovery arithmetic");
                 if (const auto click = window.take_left_click();
                     click && rendered_once && !inventory_view.open && player_combat.alive()) {
@@ -958,6 +1003,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     level.geometry.instances[player_instance_index].transform.orientation =
                         torchlight::yaw_rotation(player_angle);
                     renderer->set_instance_angle(player_instance_index, player_angle);
+                    player_facing_angle = player_angle;
                 }
                 renderer->set_camera_target(
                     player_motion.position(), kCameraDistance);
@@ -1042,6 +1088,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             level.geometry.instances[player_instance_index].transform.orientation =
                                 torchlight::yaw_rotation(player_angle);
                             renderer->set_instance_angle(player_instance_index, player_angle);
+                            player_facing_angle = player_angle;
                         }
                     }
                     const auto enemy_updates = enemies.update(

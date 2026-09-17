@@ -29,7 +29,9 @@ add_library(torchlight_core STATIC
     src/animation_manifest.cpp
     src/attack_action.cpp
     src/collision_scene.cpp
+    src/line_of_sight.cpp
     src/combat.cpp
+    src/consumable.cpp
     src/checkpoint.cpp
     src/save_codec.cpp
     src/save_store.cpp
@@ -49,6 +51,7 @@ add_library(torchlight_core STATIC
     src/inventory.cpp
     src/inventory_view.cpp
     src/player_session.cpp
+    src/population.cpp
     src/progression.cpp
     src/treasure.cpp
     src/key_manager.cpp
@@ -262,6 +265,9 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(level_entry_test PRIVATE torchlight_core)
     add_test(NAME level_entry_fallback COMMAND level_entry_test)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    set(TORCHLIGHT_REFERENCE_PYTHON "${Python3_EXECUTABLE}" CACHE FILEPATH
+        "PIE Python interpreter for original fixed-address comparison (optional)")
+
     set(AI_COOLDOWN_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ai-cooldown.pak.zip)
     add_custom_command(
         OUTPUT ${AI_COOLDOWN_FIXTURE}
@@ -581,7 +587,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         set_tests_properties(original_level_entry_dispatch PROPERTIES TIMEOUT 30)
         if(TARGET ogre_camera_reference)
             add_test(NAME original_camera_comparison
-                COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_camera.py
+                COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_camera.py
                     --original ${TORCHLIGHT_ORIGINAL}
                     --library $<TARGET_FILE:camera_comparison>
                     --ogre-reference $<TARGET_FILE:ogre_camera_reference>
@@ -589,22 +595,22 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             set_tests_properties(original_camera_comparison PROPERTIES TIMEOUT 60)
         endif()
         add_test(NAME original_input_comparison
-            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_input.py
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_input.py
                 --original ${TORCHLIGHT_ORIGINAL}
                 --library $<TARGET_FILE:input_comparison>)
         set_tests_properties(original_input_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         add_test(NAME original_action_comparison
-            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_action.py
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_action.py
                 --original ${TORCHLIGHT_ORIGINAL}
                 --library $<TARGET_FILE:action_comparison>)
         set_tests_properties(original_action_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         add_test(NAME original_randomizer_comparison
-            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_random.py
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_random.py
                 --original ${TORCHLIGHT_ORIGINAL}
                 --library $<TARGET_FILE:randomizer_comparison>)
         set_tests_properties(original_randomizer_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
         add_test(NAME original_pathfinder_comparison
-            COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_pathfinder.py
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_original_pathfinder.py
                 --original ${TORCHLIGHT_ORIGINAL}
                 --library $<TARGET_FILE:pathfinder_comparison>)
         set_tests_properties(original_pathfinder_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
@@ -722,9 +728,16 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                     --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence --roundtrip
                     --speed-probe $<TARGET_FILE:attack_speed_probe>
                     --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+            add_test(NAME application_combat_render
+                COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_combat_test.py
+                    --probe $<TARGET_FILE:application_scenario_probe>
+                    --game-dir ${TORCHLIGHT_GAME_DIR}
+                    --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
+                    --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+            set_tests_properties(application_combat_render PROPERTIES TIMEOUT 600)
             set_tests_properties(application_scenario_render PROPERTIES TIMEOUT 900)
             if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
-                set_tests_properties(application_scenario_render PROPERTIES ENVIRONMENT
+                set_tests_properties(application_scenario_render application_combat_render PROPERTIES ENVIRONMENT
                     "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
             endif()
         endif()
@@ -763,6 +776,73 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME collect_game_inputs_safety COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/collect_game_inputs_test.py)
     set_tests_properties(collect_game_inputs_safety PROPERTIES TIMEOUT 30)
+
+    set(CONSUMABLE_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/consumables.pak.zip)
+    add_custom_command(OUTPUT ${CONSUMABLE_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_consumable_fixture.py ${CONSUMABLE_FIXTURE}
+        DEPENDS tests/make_consumable_fixture.py tests/make_attack_fixture.py tests/make_item_cycle_fixture.py tests/make_ai_cooldown_fixture.py)
+    add_custom_target(consumable_fixture DEPENDS ${CONSUMABLE_FIXTURE})
+    add_executable(consumable_test tests/consumable_test.cpp)
+    target_link_libraries(consumable_test PRIVATE torchlight_core)
+    add_dependencies(consumable_test consumable_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(consumable_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME consumable_cycle COMMAND consumable_test ${CONSUMABLE_FIXTURE})
+    add_test(NAME consumable_fresh_process COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/consumable_process_test.py $<TARGET_FILE:consumable_test> ${CONSUMABLE_FIXTURE})
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_consumables COMMAND consumable_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    set(POPULATION_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/population.pak.zip)
+    add_custom_command(OUTPUT ${POPULATION_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_population_fixture.py ${POPULATION_FIXTURE}
+        DEPENDS tests/make_population_fixture.py tests/make_attack_fixture.py tests/make_ai_cooldown_fixture.py tests/make_item_cycle_fixture.py VERBATIM)
+    add_custom_target(population_fixture DEPENDS ${POPULATION_FIXTURE})
+    add_executable(population_test tests/population_test.cpp)
+    target_link_libraries(population_test PRIVATE torchlight_core)
+    add_dependencies(population_test population_fixture)
+    add_test(NAME population_cycle COMMAND population_test ${POPULATION_FIXTURE})
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_population COMMAND population_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    set(RANGED_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ranged.pak.zip)
+    add_custom_command(OUTPUT ${RANGED_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_ranged_fixture.py ${RANGED_FIXTURE}
+        DEPENDS tests/make_ranged_fixture.py tests/make_attack_fixture.py tests/make_ai_cooldown_fixture.py tests/make_item_cycle_fixture.py VERBATIM)
+    add_custom_target(ranged_fixture DEPENDS ${RANGED_FIXTURE})
+    add_executable(ranged_test tests/ranged_test.cpp)
+    target_link_libraries(ranged_test PRIVATE torchlight_core)
+    add_dependencies(ranged_test ranged_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(ranged_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME ranged_cycle COMMAND ranged_test ${RANGED_FIXTURE})
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ranged COMMAND ranged_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    add_executable(gameplay_numeric_probe tests/gameplay_numeric_probe.cpp)
+    target_link_libraries(gameplay_numeric_probe PRIVATE torchlight_core)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_gameplay_numeric_comparison
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_gameplay_numeric.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:gameplay_numeric_probe>)
+        set_tests_properties(original_gameplay_numeric_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
+    endif()
+
+    set(LEGACY_V3_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/legacy-v3.pak.zip)
+    add_custom_command(OUTPUT ${LEGACY_V3_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_legacy_v3_fixture.py ${LEGACY_V3_FIXTURE}
+        DEPENDS tests/make_legacy_v3_fixture.py tests/make_attack_fixture.py tests/make_ai_cooldown_fixture.py tests/make_item_cycle_fixture.py VERBATIM)
+    add_custom_target(legacy_v3_fixture DEPENDS ${LEGACY_V3_FIXTURE})
+    add_executable(legacy_v3_test tests/legacy_v3_test.cpp)
+    target_link_libraries(legacy_v3_test PRIVATE torchlight_core)
+    add_dependencies(legacy_v3_test legacy_v3_fixture)
+    add_test(NAME gameplay_v3_migration COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/legacy_v3_process_test.py --probe $<TARGET_FILE:legacy_v3_test> --fixture ${LEGACY_V3_FIXTURE})
 
     # Every registered test has an execution group. Labels describe dependency
     # and evidence, not fidelity: original_* resource tests are NOT ELF parity.

@@ -19,6 +19,11 @@ struct ModelAnimationClip;
 // All original addresses and excluded branches are recorded in
 // research/ordinary-attack-action.md. These are values, not a binary ABI layout.
 enum class AttackHand { innate, right, left };
+// The original branches on weapon skills and MISSILE, not simply ranged ISA.
+// Unknown metadata must not silently turn a spell/projectile into a physical HIT.
+enum class WeaponDelivery { unverified, direct_physical, missile, weapon_skill, unsupported_damage };
+[[nodiscard]] WeaponDelivery load_weapon_delivery(const UnitDefinition& definition);
+[[nodiscard]] const char* weapon_delivery_issue(WeaponDelivery delivery) noexcept;
 enum class WeaponAttackFamily { slash, bow, crossbow, rifle, pistol, wand, polearm };
 struct WeaponAttackTraits {
     WeaponAttackFamily family = WeaponAttackFamily::slash;
@@ -79,6 +84,7 @@ struct AttackDescription {
     WeaponAttackTraits traits;
     AttackEffects effects;
     std::string unavailable_reason;
+    WeaponDelivery delivery = WeaponDelivery::unverified;
 };
 struct AttackLoadout {
     std::vector<AttackDescription> innate;
@@ -129,6 +135,10 @@ struct AttackCharacterValues {
     const std::array<float, 3>& target, float attacker_radius, float target_radius,
     float reach, bool ranged) noexcept;
 
+// Caller supplies collision context from the current floor. No callback means
+// ranged delivery is unavailable; returning false consumes HIT without damage.
+using AttackLineOfSight = std::function<bool(const std::array<float, 3>&,
+                                            const std::array<float, 3>&)>;
 using AttackClip = std::shared_ptr<const ModelAnimationClip>;
 using AttackClips = std::vector<AttackClip>;
 using AttackClipResolver = std::function<AttackClips(std::string_view mesh, std::string_view prefix)>;

@@ -1,5 +1,6 @@
 #pragma once
 #include "torchlight/equipment.hpp"
+#include "torchlight/consumable.hpp"
 #include <array>
 #include <cstdint>
 #include <optional>
@@ -22,15 +23,18 @@ struct InventoryItem {
     std::optional<ArmorItem> armor;
     // Hand-classification is filled from original UNITTYPES ID 10 by callers.
     bool two_handed = false;
+    std::optional<ConsumableItem> consumable;
 };
 enum class InventoryChange { changed, unchanged, not_found, unsupported, busy, dead };
 
 class PlayerInventory {
 public:
     // Owns the already rolled instance, never re-rolls from a resource GUID.
-    // Bag capacity, stacks and original pane numbering are not yet recovered.
+    // Bag pane numbering/capacity remain portable. Identical consumables stack
+    // up to resource MAXSTACKSIZE; evaluated effect data must also match.
     [[nodiscard]] InventoryId store(InventoryItem item);
     [[nodiscard]] bool erase(InventoryId id) noexcept;
+    [[nodiscard]] bool consume_one(InventoryId id) noexcept;
     [[nodiscard]] InventoryChange equip(InventoryId id) noexcept;
     [[nodiscard]] InventoryChange unequip(InventoryId id) noexcept;
     [[nodiscard]] const InventoryItem* find(InventoryId id) const noexcept;
@@ -40,6 +44,7 @@ public:
     [[nodiscard]] const std::vector<InventoryItem>& items() const noexcept { return items_; }
 private:
     friend struct CheckpointAccess;
+    friend class PlayerSession;
     InventoryId next_id_ = 1;
     std::vector<InventoryItem> items_;
     std::array<InventoryId, static_cast<std::size_t>(InventorySlot::count)> equipped_{};

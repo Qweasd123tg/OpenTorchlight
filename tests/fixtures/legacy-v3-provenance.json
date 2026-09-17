@@ -1,0 +1,17 @@
+{
+  "provenance": "Created by untouched large-11 HEAD core, not the large-12 writer; all data authored.",
+  "baseline_zip_sha256": "34616e503d50a35ae4ba23ec80bd2e8dc1eb7c38945217876937b0135fc87ed1",
+  "source_commit": "07c0c52fdcf54c0360e42bacac19814cb1cb60f4",
+  "fixture_sha256": "940501fe9110d0314bce965f2add7665581ddb85f726643727c86e7c188cecd6",
+  "binary_sha256": "d369a58a33a201b6d883f1b43ff070f6e65d9bfd24842506be544a8d751d5321",
+  "bytes": 3352,
+  "writer_source_sha256": "be0190d52d90e353db01449920a6b47cf0901be8c07881932db012b72742560d",
+  "expected": {
+    "health": 40,
+    "gold": 146,
+    "inventory_items": 4,
+    "entities": 6,
+    "potion_instances": 3,
+    "dead_entities": 5
+  }
+}

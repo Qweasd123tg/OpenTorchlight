@@ -4,6 +4,17 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
+## Изменение large-12 (донор large-11)
+
+Теперь есть настоящие pak/ELF. Подключены конечное HP/mana-восстановление от
+12 поддержанных зелий, стеки/расход, OTC v4, обычная STRATA-популяция и прямой
+физический ranged HIT со статической линией видимости. Проверены миграция
+настоящего старого v3 и общий сценарий новой игры/выстрела/XP/save/Continue.
+Численные recovery/population-функции сравнены исполнением оригинальных
+инструкций. Исходные материалы, точные результаты и ограничения:
+`../GAMEPLAY_LARGE_12_RESULT_RU.md`, `../verification/large-12/verification.json`.
+Это не полные effects, skills, missiles, исходное размещение или кампания.
+
 ## Изменение large-11 (донор fresh)
 
 Добавлены пассивная регенерация игрока из GLOBALS/эффектов, maxHP экипировки и
@@ -53,17 +64,17 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 | Mesh/skeleton/animation | verified | загрузка, skinning, клипы и события | blend graph, attachments, death/special/skill состояния |
 | Material/texture/render | partial | основной GLES-проход, DDS/PNG, ambient override | все passes, blend/depth/cull, particles, decals, lights, post effects |
 | Камера/input/pathfinding | partial | ранее сравненные формулы/A*, frontend focus и save-position validation | тонкая стенка между центрами grid cells, drag/controller, специальные режимы, original collision fidelity |
-| Layout/random level/logic | partial | генерация, links, timer, spawn, warp | весь command set, re-entrancy, сохранение состояния, special layouts |
+| Layout/random level/logic | partial | генерация, links, timer, spawn, warp, обычная STRATA-популяция | точное размещение/связность (не все выбранные монстры размещаются), весь command set, re-entrancy, сохранение состояния, special layouts |
 | Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland-ввод (Town headless уже проверен), original skins/fonts, splash/loading/settings, IME |
 | Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | оконный интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
-| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1/v2→v3 поддержан; настоящий pak проверялся до этого прохода |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1/v2/v3→v4 проверен, настоящий pak проверен в large-12 |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
-| Ranged/projectile | researched | основные функции и точечные ASM | descriptor → spawn → flight/sweep → HIT/pierce/retire/render |
+| Ranged/projectile | partial | direct physical HIT для обычных bows/pistols/rifles/crossbows, статическая LOS | настоящие missiles/skills, динамические препятствия, trail, полная физика |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
 | Player death/restart | verified | один entry-restart с gold/10 | остальные варианты, pet, dropToGround, временные эффекты |
-| HP/mana/gold | partial | base/effective HP, passive player regen, max/spend, entry fee, level growth, gold pickup/wallet/save | timed effects/potions, monster/pet regen, original volatile RNG/rank, остальные difficulty, экономика |
-| Loot/inventory/equipment | partial | death → drop → pickup → equip → travel | rarity, affix, requirements, все слоты, stack, consumables, visuals |
-| Effects/affixes | partial | каталог и ограниченные constant passive | полный lifecycle, graphs, conditions, stacking, FX, serialization |
+| HP/mana/gold | partial | base/effective HP, passive player regen, max/spend, entry fee, level growth, gold pickup/wallet/save | все остальные временные эффекты, monster/pet regen, original volatile RNG/rank, остальные difficulty, экономика |
+| Loot/inventory/equipment | partial | death → drop → pickup → equip → travel | rarity, affix, все требования/слоты, прочие consumables, visuals |
+| Effects/affixes | partial | passive + ограниченные finite DYNAMIC recovery, OTC таймеры | остальные lifecycle/graphs/conditions/stacking/FX |
 | Skills | researched | центральные классы декомпилированы | data loader, controller, costs, cooldown, targeting, missiles/AOE |
 | XP/level/fame | partial | portable XP/level/growth/stat+skill points, атрибуты, HUD и save | полный CPlayer levelUp (обычный XP scalar уже сравнен), factions/spawner XP gates, fame, активные skills, полные penalties |
 | Quests/dialogs | researched | quest классы декомпилированы | loader, requirements, state machine, dialog, rewards, persistence |

@@ -1,0 +1,19 @@
+{
+  "evidence": "resource-backed common application regression, not original/Wayland",
+  "output": "/mnt/data/freetype12/scenario-evidence/combat-l365gzkx",
+  "runs": [
+    {
+      "name": "kill",
+      "returncode": 0
+    },
+    {
+      "name": "continue",
+      "returncode": 0
+    }
+  ],
+  "assertions": 40,
+  "status": "PASSED",
+  "entities": 52,
+  "player_kills": 1,
+  "experience": 100
+}

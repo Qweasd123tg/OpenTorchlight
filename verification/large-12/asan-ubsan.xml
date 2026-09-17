@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="15"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="4"
+	timestamp="2026-09-16T21:54:17"
+	>
+	<testcase name="enemy_ai_cooldown" classname="enemy_ai_cooldown" time="0.322229" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Starts over [0,2]: AI=0 -&gt; 3; AI=2 -&gt; 2
+PASS: 751 AI cooldown assertions; synthetic resources only
+</system-out>
+	</testcase>
+	<testcase name="inventory_instances" classname="inventory_instances" time="0.0171241" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>inventory_checks=4033
+</system-out>
+	</testcase>
+	<testcase name="ordinary_combat" classname="ordinary_combat" time="0.397429" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 129 resource-backed ordinary combat assertions (authored fixture)
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="0.398965" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 586 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="save_fresh_process" classname="save_fresh_process" time="1.18894" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 576 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+</system-out>
+	</testcase>
+	<testcase name="save_atomic_process" classname="save_atomic_process" time="1.55222" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 576 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+save_checkpoint race-a: 1 assertions passed (authored resources; not original save compatibility)
+expected competing writer conflict
+save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+</system-out>
+	</testcase>
+	<testcase name="vitals_numeric" classname="vitals_numeric" time="0.0669059" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 24018 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_resource_cycle" classname="vitals_resource_cycle" time="0.0653301" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 51 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_fresh_process" classname="vitals_fresh_process" time="1.09282" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 6 authored vitals checks; not original ELF execution
+PASS: 5 authored vitals checks; not original ELF execution
+PASS: v3 vitals survive fresh-process load without refilling or double-buffing
+</system-out>
+	</testcase>
+	<testcase name="vitals_v2_migration" classname="vitals_v2_migration" time="1.0089" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 10 authored vitals checks; not original ELF execution
+PASS: 10 authored vitals checks; not original ELF execution
+PASS: two level fixtures from the unchanged-fresh v2 writer -&gt; current format, no refill and no double bonus
+</system-out>
+	</testcase>
+	<testcase name="consumable_cycle" classname="consumable_cycle" time="0.0849822" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=71 passed
+</system-out>
+	</testcase>
+	<testcase name="consumable_fresh_process" classname="consumable_fresh_process" time="0.941405" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>written_revision=1
+checks=7 passed
+checks=7 passed
+</system-out>
+	</testcase>
+	<testcase name="population_cycle" classname="population_cycle" time="0.214661" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>created=12 missing=0 unsupported=0
+checks=15905 passed
+</system-out>
+	</testcase>
+	<testcase name="ranged_cycle" classname="ranged_cycle" time="0.0909579" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ranged checks=2055 passed
+</system-out>
+	</testcase>
+	<testcase name="gameplay_v3_migration" classname="gameplay_v3_migration" time="1.26868" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS legacy v3 untouched writer migration; no refill, reroll, duplicate or respawn
+PASS legacy v3 v4 second process; no refill, reroll, duplicate or respawn
+PASS: frozen unchanged large-11 -&gt; v4, two independent reader processes
+</system-out>
+	</testcase>
+</testsuite>

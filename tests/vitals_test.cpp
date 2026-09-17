@@ -134,7 +134,7 @@ void state_tests(const char* file) {
     static_cast<void>(player.health().apply_damage(100,100,DamageType::physical,random));
     require(player.health().spend_mana(20),"level mana spend");
     auto saved=checkpoint(player);auto bytes=encode_checkpoint(saved);
-    require(bytes[8]==3 && saved.player.base_health==221,"pre-effect base HP not saved in v3");
+    require(bytes[8]==kCheckpointFormatVersion && saved.player.base_health==221,"pre-effect base HP not saved in v3");
     auto loaded=CheckpointAccess::restore_player(proto,decode_checkpoint(bytes).player,999,&f.hierarchy);
     require(encode_checkpoint(checkpoint(loaded))==bytes,"load doubled bonus/rerolled base/filled vitals");
     require(loaded.health().update_vitals(.25F) && player.health().update_vitals(.25F),"post-load recovery failed");
@@ -212,7 +212,7 @@ void legacy(const char* fixture,const char* save_file) {
     require(player.inventory().items().size()==1 && player.inventory().equipped(InventorySlot::chest),"v2 inventory/slot lost");
     auto current=old;current.player=CheckpointAccess::capture(player);
     const auto upgraded=encode_checkpoint(current);
-    require(upgraded[8]==3,"legacy recapture did not write v3");
+    require(upgraded[8]==kCheckpointFormatVersion,"legacy recapture did not write current version");
     auto again=CheckpointAccess::restore_player(proto,decode_checkpoint(upgraded).player,999,&f.hierarchy);
     current.player=CheckpointAccess::capture(again);
     require(encode_checkpoint(current)==upgraded,"second migration applied HP bonus twice");

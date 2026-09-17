@@ -34,7 +34,8 @@ public:
     [[nodiscard]] const VitalRecoveryRules& recovery_rules() const noexcept { return recovery_rules_; }
     // Positive finite simulation time only; dead/paused state is never revived.
     // False means invalid arithmetic; HP and mana are committed together.
-    [[nodiscard]] bool update_vitals(float seconds) noexcept;
+    [[nodiscard]] bool update_vitals(float seconds, float extra_health_rate = 0,
+                                      float extra_mana_rate = 0) noexcept;
     void set_equipment_vital_effects(const AttackEffects& effects);
     // Compatibility name retained for older callers; now also updates HP.
     void set_equipment_mana_effects(const AttackEffects& effects) { set_equipment_vital_effects(effects); }
@@ -121,6 +122,7 @@ public:
         const NavigationGrid* navigation = nullptr);
 
     void set_animation_resolver(AttackClipResolver resolver) { resolver_ = std::move(resolver); }
+    void set_line_of_sight(AttackLineOfSight resolver) { line_of_sight_ = std::move(resolver); }
     void advance_animations(float seconds, const RuntimeEntityWorld& world, const PlayerCombatState& player);
     [[nodiscard]] EnemyAiUpdate perform_attack(std::uint64_t entity_id, const AnimationEventOccurrence& event,
         const std::array<float, 3>& player_position, PlayerCombatState& player, RuntimeEntityWorld& world);
@@ -156,6 +158,7 @@ private:
                                       RuntimeEntity& entity, State& state) noexcept;
 
     AttackClipResolver resolver_;
+    AttackLineOfSight line_of_sight_;
     std::uint64_t next_execution_id_ = 1;
     TorchlightRandom random_;
     std::unordered_map<std::uint64_t, State> states_;

@@ -127,6 +127,7 @@ RecoveryResult PlayerSession::recover_at_entry(EnemyController& enemies, ActorMo
     combat_.interrupt_attack();
     enemies.level_resetting();
     health_.restore_after_death();
+    active_recovery_.clear();
     motion = ActorMotion(anchor, motion.speed());
     return {RecoveryStatus::recovered, loss};
 }
@@ -145,14 +146,106 @@ InventoryId PlayerSession::pick_up(RuntimeEntityWorld& world, std::uint64_t enti
     item.weapon = entity->weapon_item;
     item.armor = entity->armor_item;
     item.two_handed = entity->two_handed;
+    item.consumable = entity->consumable;
     // Allocate/store first. Failure to allocate leaves the world item untouched.
     // This is a single-threaded transfer; no persistent world pointer is kept.
-    const auto id = inventory_.store(std::move(item));
-    if (!world.pick_up(entity_id, logic)) {
-        static_cast<void>(inventory_.erase(id));
-        return 0;
-    }
+    auto staged = inventory_;
+    const auto id = staged.store(std::move(item));
+    if (!world.pick_up(entity_id, logic)) return 0;
+    using std::swap;
+    swap(inventory_, staged);
     return id;
+}
+void PlayerSession::hydrate_consumables(UnitDefinitionLoader& loader, const MasterResourceIndex& index) {
+    const auto catalog = AttackEffectCatalog::discover(loader.archive());
+    auto bag = inventory_;
+    for (auto& item : bag.items_) {
+        const auto* record = index.find(item.resource_guid);
+        if (item.weapon && item.weapon->prototype.delivery == WeaponDelivery::unverified && record)
+            item.weapon->prototype.delivery = load_weapon_delivery(*loader.load(*record));
+        if (item.consumable || item.weapon || item.armor) continue;
+        if (record && record->kind == MasterResourceKind::item)
+            item.consumable = load_consumable(loader.archive(), *loader.load(*record), catalog ? &*catalog : nullptr);
+    }
+    using std::swap;
+    // This entry-only hydration never rolls weapon damage or restores vitals.
+    // Keep current clip ownership intact if the caller invokes it during a fight.
+    auto next_combat = combat_;
+    if (!next_combat.attack_in_progress()) {
+        const auto* equipped = bag.equipped(InventorySlot::weapon);
+        if (equipped && equipped->weapon) next_combat.equip(*equipped->weapon);
+    }
+    swap(inventory_, bag);
+    swap(combat_, next_combat);
+}
+ConsumableUse PlayerSession::use_consumable(InventoryId id) {
+    if (!health_.alive()) return ConsumableUse::dead;
+    const auto* item = inventory_.find(id);
+    if (!item) return ConsumableUse::not_found;
+    if (!item->consumable || !item->consumable->unavailable_reason.empty()) return ConsumableUse::unsupported;
+    const auto& c = *item->consumable;
+    validate_consumable(c);
+    if (progression_.level < c.level_required) return ConsumableUse::level_required;
+    auto effects = active_recovery_;
+    std::size_t accepted = 0;
+    for (const auto& e : c.effects) {
+        const bool hp = is_health_recovery(e.type);
+        if (!hp && (!health_.mana() || !health_.maximum_mana())) continue;
+        const auto current = hp ? health_.health() : *health_.mana();
+        const auto maximum = hp ? health_.maximum_health() : *health_.maximum_mana();
+        // Original potion gate uses integer HP()/mana() and any effect NAME.
+        // Check the staged list too: duplicate effects in one item cannot bypass it.
+        if (c.dont_use_on_full && (std::trunc(current) >= maximum ||
+            std::any_of(effects.begin(), effects.end(), [&](const auto& a) { return a.effect.name == e.name; }))) continue;
+        if (effects.size() >= 256) return ConsumableUse::unsupported;
+        effects.push_back({e, e.duration, item->resource_guid});
+        ++accepted;
+    }
+    if (!accepted) return ConsumableUse::full_or_active;
+    auto bag = inventory_;
+    // All allocations and effect checks finish BEFORE either side commits.
+    if (!bag.consume_one(id)) return ConsumableUse::exhausted;
+    using std::swap;
+    swap(inventory_, bag);
+    active_recovery_.swap(effects);
+    return ConsumableUse::used;
+}
+ConsumableUse PlayerSession::use_recovery(bool hp) {
+    ConsumableUse result = health_.alive() ? ConsumableUse::not_found : ConsumableUse::dead;
+    for (const auto& item : inventory_.items()) {
+        if (!item.consumable || !item.consumable->unavailable_reason.empty()) continue;
+        if (!std::any_of(item.consumable->effects.begin(), item.consumable->effects.end(),
+            [hp](const auto& e) { return hp ? is_health_recovery(e.type) : is_mana_recovery(e.type); })) continue;
+        result = use_consumable(item.id);
+        if (result == ConsumableUse::used) return result; // bag may now have erased this item
+    }
+    return result;
+}
+bool PlayerSession::update_vitals(float seconds) {
+    if (!std::isfinite(seconds) || seconds < 0) return false;
+    if (!health_.alive()) { active_recovery_.clear(); return true; }
+    if (seconds == 0 || active_recovery_.empty()) return health_.update_vitals(seconds);
+    auto vitals = health_;
+    auto active = active_recovery_;
+    // Portable scheduler: split at expiry, so long frames cannot over-heal.
+    // Original scalar formulas are retained; full original frame ordering is not claimed.
+    float remaining = seconds;
+    while (remaining > 0 && !active.empty()) {
+        float step = remaining, hp = 0, mana = 0;
+        for (const auto& a : active) {
+            step = std::min(step, a.remaining);
+            (is_health_recovery(a.effect.type) ? hp : mana) += finite_recovery_rate(a.effect.value);
+        }
+        if (!(step > 0) || !vitals.update_vitals(step, hp, mana)) return false;
+        for (auto& a : active) a.remaining = std::max(0.0F, a.remaining - step);
+        active.erase(std::remove_if(active.begin(), active.end(), [](const auto& a) { return a.remaining == 0; }), active.end());
+        remaining = std::max(0.0F, remaining - step);
+    }
+    if (remaining > 0 && !vitals.update_vitals(remaining)) return false;
+    using std::swap;
+    swap(health_, vitals);
+    active_recovery_.swap(active);
+    return true;
 }
 InventoryChange PlayerSession::equip(InventoryId id) { return change_equipment(id, false); }
 InventoryChange PlayerSession::unequip(InventoryId id) { return change_equipment(id, true); }

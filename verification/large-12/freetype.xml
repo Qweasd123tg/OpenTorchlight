@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="6"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="25"
+	timestamp="2026-09-16T21:55:05"
+	>
+	<testcase name="ui_text_layout" classname="ui_text_layout" time="0.00249078" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 text decoding / wrapping / clipping checks passed
+</system-out>
+	</testcase>
+	<testcase name="ui_font_atlas" classname="ui_font_atlas" time="0.00964169" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 real FreeType / authored atlas checks passed; not original CEGUI parity
+</system-out>
+	</testcase>
+	<testcase name="original_ui_font_resource" classname="original_ui_font_resource" time="0.0629623" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>Serif size=11 native=1024x768 auto=1 aa=1 glyphs=95 line=17.00 ascent=14.00
+SerifBig size=16 native=1024x768 auto=1 aa=1 glyphs=95 line=24.00 ascent=20.00
+SerifHuge size=32 native=1024x768 auto=1 aa=1 glyphs=95 line=48.00 ascent=40.00
+SerifSmall size=8 native=1024x768 auto=1 aa=1 glyphs=95 line=12.00 ascent=10.00
+FrizQuadrata size=11 native=1024x768 auto=1 aa=1 glyphs=95 line=17.00 ascent=14.00
+FrizQuadrataSmall size=6 native=1024x768 auto=1 aa=1 glyphs=95 line=9.00 ascent=8.00
+FrizQuadrataBig size=15 native=1024x768 auto=1 aa=1 glyphs=95 line=23.00 ascent=19.00
+PASS: 7 original fonts, 665 rasterized ASCII glyphs at 1024x768; FreeType atlas semantics only, NOT original OGRE/CEGUI framebuffer parity
+</system-out>
+	</testcase>
+	<testcase name="gles_ui_headless" classname="gles_ui_headless" time="0.862929" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="0.877508" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+8 real FreeType sequence frames passed; bright-pixel counts: [153, 419, 70, 115, 419, 419, 80, 459]
+PASS: 13 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+	<testcase name="application_combat_render" classname="application_combat_render" time="24.271" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: 40 common-app combat assertions, two processes; evidence /mnt/data/freetype12/scenario-evidence/combat-l365gzkx
+</system-out>
+	</testcase>
+</testsuite>

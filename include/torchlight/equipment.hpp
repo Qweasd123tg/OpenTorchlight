@@ -35,6 +35,7 @@ struct WeaponPrototype {
     AttackHand attack_hand = AttackHand::right;
     AttackEffects attack_effects;
     float ai_attack_cooldown = 0.0F;
+    WeaponDelivery delivery = WeaponDelivery::unverified;
 };
 
 struct WeaponItem {

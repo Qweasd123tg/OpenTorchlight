@@ -28,12 +28,15 @@ struct PlayerCheckpoint {
     std::optional<ProgressionState> progression;
     // v3: absent only for migration from v1/v2, where max-HP effects were ignored.
     std::optional<std::int32_t> base_health;
+    std::vector<ActiveRecovery> active_recovery; // v4, evaluated values and remaining game time
 };
 struct WorldCheckpoint {
     std::uint64_t next_id = 1, random_state = 0;
     std::uint32_t placed_count = 0;
     std::int32_t spawn_level = 1;
     std::vector<RuntimeEntity> entities;
+    bool population_generated = true; // legacy floors are never silently repopulated
+
 };
 struct LogicCheckpointEntry {
     std::int64_t id = 0;

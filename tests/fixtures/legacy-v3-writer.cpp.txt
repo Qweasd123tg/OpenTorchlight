@@ -1,0 +1,30 @@
+#include "ai_cooldown_fixture.hpp"
+#include "torchlight/save_store.hpp"
+#include <fstream>
+#include <iostream>
+using namespace torchlight;
+int main(int argc,char**argv){try{
+ if(argc!=3)return 2;
+ test_fixture::World f(argv[1]);
+ auto players=load_playable_players(f.archive,f.resources,f.definitions);
+ auto p=players.front();for(auto& x:players)if(x.name==u"TEST_PLAYER")p=x;
+ PlayerSession session(p,73,&f.hierarchy);EnemyController enemies(81);
+ for(const auto* name:{u"HP_POTION",u"HP_POTION",u"HP_POTION",u"DIRECT_PISTOL"}){
+  if(f.world.consume_spawn_requests({{42,name,u"Items",1}},f.logic).entities_created!=1)throw std::runtime_error("spawn");
+  auto id=session.pick_up(f.world,f.world.entities().back().id,f.logic);if(!id)throw std::runtime_error("pickup");
+  if(std::u16string_view(name)==u"DIRECT_PISTOL"&&session.equip(id)!=InventoryChange::changed)throw std::runtime_error("equip");
+ }
+ f.spawn(u"RANGED_DIRECT");f.world.entities().back().position={7,0,4};
+ f.spawn(u"INNATE");auto dead=f.world.entities().back().id;
+ if(!f.world.kill(dead,f.logic))throw std::runtime_error("kill");
+ static_cast<void>(f.world.resolve_death_loot(f.logic));
+ session.give_gold(37);if(!session.health().spend_mana(10))throw std::runtime_error("mana");
+ TorchlightRandom random(42);static_cast<void>(session.health().apply_damage(60,60,DamageType::physical,random));
+ CampaignCheckpoint c;c.slot="legacy-v3";c.seed=73;c.class_guid=p.guid;c.resource_identity=checkpoint_resource_identity(f.archive);c.character_name="Legacy";
+ c.player=CheckpointAccess::capture(session);FloorCheckpoint floor;floor.address={u"Town",0};floor.layout_identity=checkpoint_layout_identity(f.manifest);
+ floor.world=CheckpointAccess::capture(f.world);floor.logic=CheckpointAccess::capture(f.logic);floor.enemies=CheckpointAccess::capture(enemies);c.floors.push_back(floor);
+ auto data=encode_checkpoint(c);if(data[8]!=3)throw std::runtime_error("writer is not v3");
+ std::ofstream out(argv[2],std::ios::binary);out.write(reinterpret_cast<const char*>(data.data()),data.size());if(!out)throw std::runtime_error("write");
+ std::cout<<"v3 bytes="<<data.size()<<" hp="<<session.health().health()<<" gold="<<session.gold()<<" items="<<session.inventory().items().size()<<" entities="<<f.world.entities().size()<<'\n';
+ return 0;
+}catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}}

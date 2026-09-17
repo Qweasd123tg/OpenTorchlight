@@ -20,4 +20,4 @@ with tempfile.TemporaryDirectory(prefix='ot-v2-vitals-') as directory:
         file=Path(directory)/(name+'.otc');file.write_bytes(raw)
         subprocess.run([str(a.probe.resolve()),'--legacy',str(a.fixture.resolve()),str(file)],
                        check=True,timeout=40)
-print('PASS: two level fixtures from the unchanged-fresh v2 writer -> v3, no refill and no double bonus')
+print('PASS: two level fixtures from the unchanged-fresh v2 writer -> current format, no refill and no double bonus')

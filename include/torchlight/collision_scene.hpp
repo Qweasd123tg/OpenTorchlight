@@ -30,4 +30,10 @@ struct CollisionScene {
     const PakArchive& archive, const LevelsetCatalog& levelsets,
     const FixedLevelScene& scene);
 
+// Portable two-sided segment/triangle visibility, not an OGRE/PhysX parity claim.
+// Inputs are world-space attachment/end points; invalid or incomplete geometry
+// is conservatively blocked. Floor contacts at the segment endpoints are ignored.
+[[nodiscard]] bool collision_segment_clear(const CollisionScene& scene,
+    const std::array<float, 3>& from, const std::array<float, 3>& to) noexcept;
+
 } // namespace torchlight

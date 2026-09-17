@@ -1,4 +1,6 @@
 #pragma once
+#include "torchlight/consumable.hpp"
+#include "torchlight/population.hpp"
 
 #include "torchlight/damage.hpp"
 #include "torchlight/progression.hpp"
@@ -58,6 +60,7 @@ struct RuntimeEntity {
     std::u16string equipped_attack_name;
     std::optional<ArmorItem> armor_item;
     std::optional<WeaponItem> weapon_item;
+    std::optional<ConsumableItem> consumable;
     DamageDefense damage_defense;
     AttackLoadout attacks;
     AttackCharacterValues attack_character;
@@ -104,6 +107,10 @@ public:
                        const UnitTypeResourceIndex& unit_types,
                        std::uint32_t random_seed = 1,
                        std::int32_t spawn_level = 1);
+
+    [[nodiscard]] PopulationReport populate(const PopulationSettings&, const NavigationGrid&,
+                                             const std::array<float, 3>& entry,
+                                             const std::vector<std::array<float, 3>>& exclusions = {});
 
     SpawnResolutionStats consume_spawn_requests(
         const std::vector<SpawnRequest>& requests, LogicRuntime& logic);
@@ -180,6 +187,7 @@ private:
     std::int32_t spawn_level_ = 1;
     std::uint64_t next_entity_id_ = 1;
     std::size_t placed_entity_count_ = 0;
+    bool population_generated_ = false;
     std::vector<RuntimeEntity> entities_;
 };
 

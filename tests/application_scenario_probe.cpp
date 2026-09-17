@@ -72,7 +72,7 @@ public:
             std::string arg; while (fields >> arg) step.args.push_back(std::move(arg));
             const std::vector<std::pair<std::string,std::size_t>> counts = {
                 {"menu",1},{"button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
-                {"walk",2},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
+                {"walk",2},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
                 {"resize",2},{"dt",1},{"revision",1},{"quit",0},{"menu-capture",1}};
             const auto spec = std::find_if(counts.begin(),counts.end(),[&](const auto& p){return p.first==step.verb;});
             if (spec == counts.end() || spec->second != step.args.size())
@@ -177,6 +177,34 @@ public:
             click_ = {static_cast<int>(std::lround(pixel[0])),static_cast<int>(std::lround(pixel[1]))};
             notice("walk_pointer",std::to_string((*click_)[0])+","+std::to_string((*click_)[1]));
             done();
+        } else if (step.verb == "kill-nearest") {
+            if (!view.session->health().alive()) throw std::runtime_error("player died in real-input combat scenario");
+            if (view.level_frame==0) return;
+            if (!combat_target_) {
+                const auto* target=view.world->nearest_alive_monster(view.player_position,100);
+                if (!target) throw std::runtime_error("populated floor has no ordinary target");
+                combat_target_=target->id;
+                notice("combat_target",std::to_string(*combat_target_));
+            }
+            const auto* target=view.world->find(*combat_target_);
+            if (!target) throw std::runtime_error("combat target disappeared");
+            if (!target->alive) {
+                if (!target->player_kill) throw std::runtime_error("target died without player HIT");
+                notice("combat_kill",std::to_string(*combat_target_));combat_target_.reset();done();return;
+            }
+            if (view.session->combat().target_id()==*combat_target_ || view.moving) return;
+            auto destination=target->position;
+            auto pixel=view.renderer->pixel_position_of_world(destination);
+            if (pixel[0]<0 || pixel[1]<0 || pixel[0]>=width_ || pixel[1]>=height_) {
+                const auto path=view.navigation->find_path(view.player_position,destination);
+                if(path.size()<2)throw std::runtime_error("ordinary target has no navigation route");
+                destination=path[std::min<std::size_t>(4,path.size()-1)];destination[1]+=view.floor_offset;
+                pixel=view.renderer->pixel_position_of_world(destination);
+            }
+            if(pixel[0]<0 || pixel[1]<0 || pixel[0]>=width_ || pixel[1]>=height_)
+                throw std::runtime_error("combat approach waypoint is not visible");
+            click_={static_cast<int>(std::lround(pixel[0])),static_cast<int>(std::lround(pixel[1]))};
+            notice("combat_pointer",std::to_string((*click_)[0])+","+std::to_string((*click_)[1]));
         } else if (step.verb == "trigger-nearest") {
             if (trigger_source_ && (trigger_source_->dungeon_name!=view.address.dungeon_name ||
                                     trigger_source_->depth!=view.address.depth)) {
@@ -368,9 +396,20 @@ private:
             if(item.weapon) out<<",\"damage\":["<<item.weapon->minimum_damage<<','<<item.weapon->maximum_damage
                 <<"],\"speed\":"<<item.weapon->prototype.speed;
             if(item.armor) out<<",\"armor\":"<<item.armor->armor;
+            if(item.weapon) out<<",\"delivery\":"<<static_cast<unsigned>(item.weapon->prototype.delivery);
+            if(item.consumable) out<<",\"stack\":"<<item.consumable->count<<",\"uses\":"<<item.consumable->uses;
             out<<'}';
         }
-        out << "],\"slots\":[";
+        out << "],\"active_recovery\":[";comma=false;
+        for(const auto& active:player.active_recovery){
+            if(comma)out<<',';
+            comma=true;
+            out<<"{\"name\":";json::string(out,ascii(active.effect.name));
+            out<<",\"type\":"<<active.effect.type<<",\"remaining\":";json::number(out,active.remaining);
+            out<<",\"value\":";json::number(out,active.effect.value);out<<'}';
+        }
+        out<<"],\"population_generated\":"<<(world.population_generated?"true":"false");
+        out << ",\"slots\":[";
         for(std::size_t i=0;i<player.inventory.slots.size();++i){if(i)out<<',';out<<player.inventory.slots[i];}
         out<<"],\"rng\":{\"combat\":"<<player.combat_random<<",\"world\":"<<world.random_state
            <<",\"logic\":"<<logic.random_state<<",\"ai\":"<<enemy.random_state<<"},\"entities\":[";
@@ -417,6 +456,7 @@ private:
     double time_seconds_=0.0, delta_seconds_=1.0/60.0;
     int width_=640,height_=360;
     std::optional<DungeonAddress> trigger_source_;
+    std::optional<std::uint64_t> combat_target_;
     std::optional<std::array<int,2>> click_;
     std::vector<std::uint32_t> keys_;
     std::vector<unsigned char> pixels_;

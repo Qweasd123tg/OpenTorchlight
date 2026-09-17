@@ -40,6 +40,17 @@ private:
     std::size_t source_file_count_ = 0;
 };
 
+// Constructor defaults recovered from CLevelTemplateData. Placement remains a
+// portable collision-grid policy, not a reproduction of original formations.
+struct PopulationSettings {
+    std::u16string monster_class = u"MONSTERSET";
+    bool randomized_class = false;
+    float minimum_count = 0, maximum_count = 0;
+    float minimum_density = .01F, maximum_density = .0125F;
+    std::int32_t minimum_level = -1, maximum_level = -1;
+};
+void apply_population_overrides(PopulationSettings&, const AdmGroup&);
+
 struct DungeonStratum {
     std::u16string name;
     std::u16string ruleset;
@@ -47,6 +58,7 @@ struct DungeonStratum {
     bool allow_portals = true;
     bool allow_pet_return = true;
     bool is_town = false;
+    AdmGroup population_overrides{};
 };
 
 struct DungeonManifest {
@@ -111,6 +123,7 @@ struct LevelRules {
     std::vector<ChunkPlacement> chunks;
     std::vector<ChunkResource> chunk_resources;
     std::vector<ChunkType> chunk_types;
+    PopulationSettings population{};
 };
 
 struct LayoutObject {

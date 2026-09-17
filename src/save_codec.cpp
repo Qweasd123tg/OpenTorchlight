@@ -16,10 +16,24 @@ template <class A, class S> void versioned_fields(A&, S&) {}
 template <class A, class S> void player_versioned_fields(A& a, S& s) {
     if (a.version >= 2) a(s.progression);
     if (a.version >= 3) a(s.base_health);
+    if (a.version >= 4) a(s.active_recovery);
 }
 template <class A> void versioned_fields(A& a, PlayerCheckpoint& s) { player_versioned_fields(a, s); }
 template <class A> void versioned_fields(A& a, const PlayerCheckpoint& s) { player_versioned_fields(a, s); }
-V2_FIELDS(RuntimeEntity, s.gold_amount, s.experience_reward, s.player_kill, s.reward_claimed)
+template <class A, class S> void entity_versioned_fields(A& a, S& s) {
+    if (a.version >= 2) a(s.gold_amount, s.experience_reward, s.player_kill, s.reward_claimed);
+    if (a.version >= 4) a(s.consumable);
+}
+template <class A> void versioned_fields(A& a, RuntimeEntity& s) { entity_versioned_fields(a, s); }
+template <class A> void versioned_fields(A& a, const RuntimeEntity& s) { entity_versioned_fields(a, s); }
+template <class A> void versioned_fields(A& a, InventoryItem& s) { if (a.version >= 4) a(s.consumable); }
+template <class A> void versioned_fields(A& a, const InventoryItem& s) { if (a.version >= 4) a(s.consumable); }
+template <class A> void versioned_fields(A& a, WorldCheckpoint& s) { if (a.version >= 4) a(s.population_generated); }
+template <class A> void versioned_fields(A& a, const WorldCheckpoint& s) { if (a.version >= 4) a(s.population_generated); }
+template <class A> void versioned_fields(A& a, WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); }
+template <class A> void versioned_fields(A& a, const WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); }
+template <class A> void versioned_fields(A& a, AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
+template <class A> void versioned_fields(A& a, const AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
 #undef V2_FIELDS
 #define FIELDS(T, ...)                                                                             \
     template <class A> void fields(A &a, T &s) {                                                   \
@@ -28,6 +42,9 @@ V2_FIELDS(RuntimeEntity, s.gold_amount, s.experience_reward, s.player_kill, s.re
     template <class A> void fields(A &a, const T &s) {                                             \
         a(__VA_ARGS__); versioned_fields(a, s);                                                                            \
     }
+FIELDS(RecoveryEffect, s.name, s.type, s.duration, s.value)
+FIELDS(ConsumableItem, s.count, s.maximum_stack, s.uses, s.level_required, s.dont_use_on_full, s.effects, s.unavailable_reason)
+FIELDS(ActiveRecovery, s.effect, s.remaining, s.source_guid)
 FIELDS(ProgressionState, s.level, s.experience, s.stat_points, s.skill_points, s.allocated)
 FIELDS(DamageDefense, s.natural_armor, s.defense_attribute, s.elemental_armor)
 FIELDS(AttackEffectValue, s.type, s.damage_type, s.value)

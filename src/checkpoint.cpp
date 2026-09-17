@@ -40,7 +40,11 @@ void traits(const WeaponAttackTraits &t) {
     require(static_cast<unsigned>(t.family) <= static_cast<unsigned>(WeaponAttackFamily::polearm),
             "invalid saved weapon family");
 }
+void delivery(WeaponDelivery value) {
+    require(static_cast<unsigned>(value) <= static_cast<unsigned>(WeaponDelivery::unsupported_damage), "invalid saved weapon delivery");
+}
 void attack(const AttackDescription &a) {
+    delivery(a.delivery);
     require(a.minimum_damage >= 0 && a.maximum_damage >= a.minimum_damage &&
                 a.maximum_damage <= 100000000,
             "invalid saved attack damage");
@@ -61,6 +65,7 @@ void weapon(const WeaponItem &w) {
                 w.maximum_damage <= 100000000,
             "invalid saved item damage");
     const auto &p = w.prototype;
+    delivery(p.delivery);
     require(p.speed > 0 && p.level >= 0 && p.level <= 100000, "invalid saved item speed/level");
     scalar(p.range, "invalid saved weapon range");
     scalar(p.strike_range, "invalid saved strike range");
@@ -79,6 +84,10 @@ void armor(const ArmorItem &a) {
     effects(a.attack_effects);
 }
 void item(const InventoryItem &i) {
+    if (i.consumable) {
+        try { validate_consumable(*i.consumable); } catch (const std::exception& e) { throw CheckpointError(e.what()); }
+        require(!i.weapon && !i.armor, "consumable equipment conflict");
+    }
     require(!(i.weapon && i.armor), "saved item cannot be both weapon and armor");
     require(i.mesh_path.size() <= 4096 && i.name.size() <= 4096 && i.display_name.size() <= 4096 &&
                 i.unit_type.size() <= 4096,
@@ -95,6 +104,11 @@ void item(const InventoryItem &i) {
 void entity(const RuntimeEntity &e) {
     require(static_cast<unsigned>(e.kind) <= static_cast<unsigned>(MasterResourceKind::prop),
             "invalid entity kind");
+    if (e.consumable) {
+        try { validate_consumable(*e.consumable); } catch (const std::exception& ex) { throw CheckpointError(ex.what()); }
+        require(e.kind == MasterResourceKind::item && e.inventory_eligible && !e.weapon_item && !e.armor_item && !e.gold_amount,
+            "invalid world consumable ownership");
+    }
     require(e.level > 0 && e.level <= 100000, "invalid entity level");
     require(!e.gold_amount || (*e.gold_amount >= 0 && e.kind == MasterResourceKind::item &&
         !e.inventory_eligible && !e.armor_item && !e.weapon_item), "invalid saved world gold");
@@ -186,6 +200,7 @@ PlayerCheckpoint CheckpointAccess::capture(const PlayerSession &p) {
     s.health = p.health_.health_;
     s.maximum_health = p.health_.maximum_health_;
     s.base_health = p.health_.base_health_;
+    s.active_recovery = p.active_recovery_;
     s.mana = p.health_.mana_;
     s.maximum_mana = p.health_.maximum_mana_;
     s.base_defense = p.health_.base_damage_defense_;
@@ -200,7 +215,7 @@ WorldCheckpoint CheckpointAccess::capture(const RuntimeEntityWorld &w) {
     require(w.placed_entity_count_ <= std::numeric_limits<std::uint32_t>::max(),
             "too many placed entities");
     return {w.next_entity_id_, w.random_.state_, static_cast<std::uint32_t>(w.placed_entity_count_),
-            w.spawn_level_, w.entities_};
+            w.spawn_level_, w.entities_, w.population_generated_};
 }
 LogicCheckpoint CheckpointAccess::capture(const LogicRuntime &l) {
     require(!l.processing_events_ && l.pending_actions_.empty() && l.spawn_requests_.empty() &&
@@ -225,6 +240,7 @@ EnemyCheckpoint CheckpointAccess::capture(const EnemyController &e) {
     return s;
 }
 void CheckpointAccess::validate(const PlayerCheckpoint &s) {
+    try { validate_active_recovery(s.active_recovery); } catch (const std::exception& e) { throw CheckpointError(e.what()); }
     require(s.gold >= 0, "negative saved gold");
     if (s.progression) {
         try { validate_progression(*s.progression); }
@@ -289,6 +305,7 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
     // valid INT32_MAX base to float can put the derived maximum above int32.
     const auto saved_base = s.base_health ? *s.base_health : static_cast<std::int32_t>(s.maximum_health);
     p.health_.base_health_ = saved_base;
+    p.active_recovery_ = s.active_recovery;
     if (s.progression) {
         require(bool(p.progression_rules_), "saved progression requires class graphs");
         try {
@@ -383,6 +400,23 @@ void CheckpointAccess::restore_floor(const FloorCheckpoint &s, RuntimeEntityWorl
     require(logic.states_.size() == s.logic.entries.size(),
             "saved logic object set differs from layout");
     auto staged_world = s.world.entities;
+    // v1-v3 retained potion items without use descriptors. Resolve ONLY missing
+    // descriptors from the exact current catalog; never re-roll a v4 value.
+    for (auto& e : staged_world) {
+        const auto resolve_delivery = [&](std::int64_t guid, WeaponDelivery& value) {
+            if (value != WeaponDelivery::unverified) return;
+            const auto* record = world.resources_->find(guid);
+            if (record && record->kind == MasterResourceKind::item)
+                value = load_weapon_delivery(*world.definitions_->load(*record));
+        };
+        if (e.weapon_item) resolve_delivery(e.weapon_item->prototype.guid, e.weapon_item->prototype.delivery);
+        if (e.attacks.right) resolve_delivery(e.attacks.right->source_guid, e.attacks.right->delivery);
+        if (e.attacks.left) resolve_delivery(e.attacks.left->source_guid, e.attacks.left->delivery);
+        if (e.kind != MasterResourceKind::item || e.consumable || e.weapon_item || e.armor_item || !e.inventory_eligible) continue;
+        const auto* record = world.resources_->find(e.resource_guid);
+        if (record) e.consumable = load_consumable(world.definitions_->archive(), *world.definitions_->load(*record),
+            world.attack_effect_catalog_ ? &*world.attack_effect_catalog_ : nullptr);
+    }
     auto staged_logic = logic.states_;
     for (const auto &l : s.logic.entries) {
         const auto it = staged_logic.find(l.id);
@@ -399,6 +433,7 @@ void CheckpointAccess::restore_floor(const FloorCheckpoint &s, RuntimeEntityWorl
     // All allocations/validation done. Existing active actions are discarded.
     world.entities_.swap(staged_world);
     world.next_entity_id_ = s.world.next_id;
+    world.population_generated_ = s.world.population_generated;
     world.random_.state_ = s.world.random_state;
     world.pending_deaths_.clear();
     logic.states_.swap(staged_logic);

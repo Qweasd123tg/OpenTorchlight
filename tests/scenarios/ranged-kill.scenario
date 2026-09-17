@@ -1,0 +1,22 @@
+# Physical input only. No injected entities, damage, item grants or direct session API.
+menu main
+button new
+menu create
+button class-2
+name archer
+button create
+level Town 0
+frames 3
+trigger-nearest
+level Main 1
+frames 3
+capture populated
+kill-nearest
+frames 3
+capture killed
+dt 0
+frames 1
+capture frozen
+key ESC
+menu pause
+button save-exit

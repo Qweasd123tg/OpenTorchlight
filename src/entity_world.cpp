@@ -205,6 +205,8 @@ void RuntimeEntityWorld::create_resource(std::int64_t spawner_id,
             entity.gold_amount = evaluated_world_gold(gold_graph_->value(
                 static_cast<float>(spawn_level_)), percent);
         }
+        entity.consumable = load_consumable(definitions_->archive(), *definition,
+            attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
         entity.two_handed = unit_types_->is_a_id(resource.unit_type, 10);
         const auto effects = load_constant_attack_effects(
             *definition, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);
@@ -370,6 +372,7 @@ void RuntimeEntityWorld::equip_monster_attack(
                 throw EntityWorldError("Runtime weapon attack metadata is invalid");
             prototype.speed = static_cast<std::int32_t>(raw_speed);
         }
+        prototype.delivery = load_weapon_delivery(*unit);
         prototype.attack_traits = weapon_attack_traits(record->unit_type, *unit_types_);
         prototype.attack_effects = load_constant_attack_effects(
             *unit, attack_effect_catalog_ ? &*attack_effect_catalog_ : nullptr);

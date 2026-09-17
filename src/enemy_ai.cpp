@@ -60,15 +60,16 @@ bool PlayerCombatState::spend_mana(float amount) noexcept {
     *mana_ -= amount;
     return true;
 }
-bool PlayerCombatState::update_vitals(float seconds) noexcept {
-    if (!std::isfinite(seconds) || seconds < 0) return false;
+bool PlayerCombatState::update_vitals(float seconds, float extra_health_rate, float extra_mana_rate) noexcept {
+    if (!std::isfinite(seconds) || seconds < 0 || !std::isfinite(extra_health_rate) ||
+        !std::isfinite(extra_mana_rate) || extra_health_rate < 0 || extra_mana_rate < 0) return false;
     if (seconds == 0 || !alive()) return true;
     const auto health = advance_health(health_, maximum_health_,
-        recovery_rules_.health_percent_per_second, health_per_second_, seconds);
+        recovery_rules_.health_percent_per_second, health_per_second_ + extra_health_rate, seconds);
     std::optional<float> mana;
     if (mana_ && maximum_mana_)
         mana = advance_vital(*mana_, *maximum_mana_,
-            recovery_rules_.mana_percent_per_second, mana_per_second_, seconds);
+            recovery_rules_.mana_percent_per_second, mana_per_second_ + extra_mana_rate, seconds);
     if (!health || (mana_ && !mana)) return false;
     health_ = *health;
     if (mana_) mana_ = mana;
@@ -265,9 +266,10 @@ std::vector<EnemyAiUpdate> EnemyController::update(
                 updates.push_back({EnemyAiState::waiting, entity.id, false, 0, player.health()});
                 continue;
             }
-            if (description->traits.ranged || !description->unavailable_reason.empty() ||
+            if ((description->traits.ranged && (description->delivery != WeaponDelivery::direct_physical || !line_of_sight_)) || !description->unavailable_reason.empty() ||
                 description->animation_prefix.empty()) {
-                state.attack_issue = description->traits.ranged ? "ranged attack needs missile/weapon-skill runtime" :
+                state.attack_issue = description->traits.ranged ?
+                    (description->delivery != WeaponDelivery::direct_physical ? weapon_delivery_issue(description->delivery) : "ranged collision context is missing") :
                     !description->unavailable_reason.empty() ? description->unavailable_reason : "no weapon description in selected hand";
                 updates.push_back({EnemyAiState::unavailable, entity.id, false, 0, player.health()});
                 continue;
@@ -335,6 +337,8 @@ EnemyAiUpdate EnemyController::perform_attack(std::uint64_t entity_id, const Ani
         total_attack_effects(entity->attacks, entity->attack_character));
     if (!within_character_attack_reach(entity->position, player_position,
             entity->attack_character.collision_radius, player.collision_radius(), reach, state.action.description().traits.ranged))
+        return {EnemyAiState::missed, entity_id, false, 0, player.health()};
+    if (state.action.description().traits.ranged && (!line_of_sight_ || !line_of_sight_(entity->position, player_position)))
         return {EnemyAiState::missed, entity_id, false, 0, player.health()};
     const auto damage = ordinary_physical_damage(state.action.description(), entity->attacks, entity->attack_character);
     const auto rolled = random_.integer_between(damage[0], damage[1]);

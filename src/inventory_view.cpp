@@ -54,7 +54,7 @@ std::vector<InventoryViewLine> InventoryView::lines(const PlayerSession& session
             " - SPEND ONE STAT POINT", false});
         result.push_back({"SKILL POINTS RETAINED; ACTIVE SKILLS / MAGIC COMBAT NOT IMPLEMENTED.", false});
     }
-    result.push_back({"UP/DOWN SELECT | ENTER EQUIP | U UNEQUIP | I/ESC CLOSE", false});
+    result.push_back({"UP/DOWN SELECT | ENTER EQUIP/USE | U UNEQUIP | I/ESC CLOSE", false});
     if (inventory.items().empty()) result.push_back({"BAG IS EMPTY. PICK UP EQUIPMENT IN THE WORLD.", false});
     const auto selected = inventory.items().empty() ? 0 : std::min(selected_, inventory.items().size() - 1);
     visible_items = std::max<std::size_t>(1, visible_items);
@@ -66,7 +66,8 @@ std::vector<InventoryViewLine> InventoryView::lines(const PlayerSession& session
         std::ostringstream row;
         row << (i == selected ? "> " : "  ") << '#' << item.id << ' '
             << (slot ? "[ON] " : "[BAG] ") << display_name(item).substr(0, 28) << "  "
-            << (supported_slot ? inventory_slot_name(*supported_slot) : "VIEW ONLY");
+            << (supported_slot ? inventory_slot_name(*supported_slot) : (item.consumable && item.consumable->unavailable_reason.empty() ? "POTION" : "VIEW ONLY"));
+        if (item.consumable) row << " x" << item.consumable->count;
         result.push_back({row.str(), i == selected});
     }
     if (const auto* item = inventory.find(selected_id(inventory))) {
@@ -77,9 +78,20 @@ std::vector<InventoryViewLine> InventoryView::lines(const PlayerSession& session
                    << "  SPEED " << w.prototype.speed << "  RANGE " << w.prototype.range;
             if (item->two_handed) detail << "  TWO HANDS";
         } else if (item->armor) detail << "STORED ARMOR " << item->armor->armor;
-        else detail << "ITEM RETAINED. ITS USE/EFFECTS ARE NOT IMPLEMENTED.";
+        else if (item->consumable && item->consumable->unavailable_reason.empty()) {
+            detail << "USES " << item->consumable->uses << "  STACK " << item->consumable->count << '/' << item->consumable->maximum_stack;
+            for (const auto& e : item->consumable->effects) detail << (is_health_recovery(e.type) ? " HP " : " MANA ")
+                << finite_recovery_rate(e.value) << "/s FOR " << e.duration << "s";
+        } else detail << "ITEM RETAINED. ITS USE/EFFECTS ARE NOT IMPLEMENTED.";
         result.push_back({detail.str(), false});
     }
+    for (const auto& a : session.active_recovery()) {
+        std::ostringstream active;
+        active << (is_health_recovery(a.effect.type) ? "HP" : "MANA") << " RECOVERY " << std::fixed << std::setprecision(1)
+               << a.remaining << "s LEFT (PAUSED)";
+        result.push_back({active.str(), false});
+    }
+    result.push_back({"IN GAME: Q HEALTH POTION | E MANA POTION (PORT CONTROLS)", false});
     if (!status.empty()) result.push_back({status, false});
     result.push_back({"REPLACED GEAR STAYS IN THE BAG. ESC CLOSES; ESC AGAIN OPENS SAVE MENU.", false});
     return result;

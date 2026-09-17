@@ -97,9 +97,11 @@ SpawnClassEntry parse_entry(const AdmGroup& group) {
     if (selector_count != 1U) {
         throw SpawnClassError("Spawn-class entry must have exactly one selector");
     }
-    result.weight = optional_integer(group, u"WEIGHT", 1);
+    // addSpawnClassData 0xa7623e: default -1; 0xa76342..4f: zero -> -1.
+    result.weight = optional_integer(group, u"WEIGHT", -1);
+    if (result.weight == 0) result.weight = -1;
     result.minimum_count = optional_integer(group, u"MINCOUNT", 1);
-    result.maximum_count = optional_integer(group, u"MAXCOUNT", result.minimum_count);
+    result.maximum_count = optional_integer(group, u"MAXCOUNT", 1);
     if (result.weight < -1 || result.minimum_count < 0 || result.maximum_count < 0) {
         throw SpawnClassError("Spawn-class entry has an invalid weight or count range: weight=" +
                               std::to_string(result.weight) + " min=" +
@@ -181,8 +183,10 @@ void SpawnClassCatalog::roll_class(const SpawnClassDefinition& definition,
     active_classes.push_back(normalized);
     try {
         const auto expand = [&](const SpawnClassEntry& selected) {
-            const auto count = random.integer_between(selected.minimum_count,
-                                                      selected.maximum_count);
+            // Both forced and weighted branches clamp repetitions to at least one
+            // (0xa752bf / 0xa7578d), even when authored count endpoints are zero.
+            const auto count = std::max(1, random.integer_between(selected.minimum_count,
+                                                      selected.maximum_count));
             for (std::int32_t index = 0; index < count; ++index) {
                 if (output.size() >= kMaximumSpawnLeaves) {
                     throw SpawnClassError("Spawn class expanded beyond the safety limit");

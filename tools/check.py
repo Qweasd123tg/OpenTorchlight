@@ -74,6 +74,8 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--portable", "--core", dest="core", action="store_true")
     p.add_argument("--assets", type=Path, metavar="DIR")
     p.add_argument("--reference", type=Path, metavar="ELF")
+    p.add_argument("--reference-python", type=Path, metavar="EXECUTABLE",
+                   help="optional PIE Python for original fixed-address comparison probes")
     p.add_argument("--render", action="store_true")
     p.add_argument("--desktop", action="store_true")
     p.add_argument("--all", action="store_true", help="require all five groups")
@@ -86,6 +88,9 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    if args.reference_python is not None and (not args.reference_python.is_file() or
+                                            not os.access(args.reference_python, os.X_OK)):
+        parser().error("--reference-python must be an executable file")
     if args.jobs < 1:
         parser().error("--jobs must be positive")
     root = Path(__file__).resolve().parents[1]
@@ -158,6 +163,8 @@ def main(argv: list[str] | None = None) -> int:
                          "-DTORCHLIGHT_ENABLE_RENDER=" + ("ON" if selected & {"core", "render", "desktop"} else "OFF"),
                          "-DTORCHLIGHT_GAME_DIR=" + (str(game) if game else ""),
                          "-DTORCHLIGHT_ORIGINAL=" + (str(original) if original and original.is_file() else "")]
+            if args.reference_python is not None:
+                configure.append("-DTORCHLIGHT_REFERENCE_PYTHON=" + str(args.reference_python.resolve()))
             phase = "configure"
             code = run(configure, phase)
             if not code:
@@ -166,6 +173,8 @@ def main(argv: list[str] | None = None) -> int:
                 budget = next((line.split("=",1)[1] for line in cache.splitlines()
                                if line.startswith("TORCHLIGHT_TEST_TIMEOUT_SCALE:STRING=")), "1")
                 report["test_timeout_scale"] = int(budget)
+                report["reference_python"] = next((line.split("=",1)[1] for line in cache.splitlines()
+                    if line.startswith("TORCHLIGHT_REFERENCE_PYTHON:FILEPATH=")), "")
                 discovery = subprocess.run(["ctest", "--test-dir", str(build), "--show-only=json-v1"],
                                            capture_output=True, text=True, check=False)
                 (log_dir / "discovery.json").write_text(discovery.stdout, encoding="utf-8")

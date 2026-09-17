@@ -1,68 +1,76 @@
-# Следующий проход после large-11 (донор: fresh)
+# Следующий проход после large-12
 
-## Фактический результат
+## Текущая база
 
-В этой среде: baseline fresh core 44/44; обновлённый core 49/49, без пропусков;
-выбранные ASan/UBSan 11/11. Новые HP/regen-формулы статически исследованы по
-присланному полному текстовому дизассемблеру. Оригинальные pak и ELF отсутствуют;
-старые интеграторские результаты ниже не переносятся на новый код.
+Донор large-11; новые pak/ELF предоставлены и проверены. Не запрашивать их
+повторно. Их адреса/хеши и границы восстановления зафиксированы в research.
+Новые механики: finite recovery potions, stack/debit, ordinary STRATA population,
+WEIGHT=0 fix, direct physical ranged HIT/LOS, OTC v4 и настоящая v3 migration.
+Описание: `GAMEPLAY_LARGE_12_RESULT_RU.md`.
 
-Добавлены `vitals.hpp/cpp`, общий recovery-step, maxHP effects, checkpoint v3 с
-v1/v2-миграцией, настоящий старый v2 writer/fixtures и сборщик private inputs.
-Зелья, skills, population, quests, pet и вся кампания не объявлены закрытыми.
-Подробно: `PLAYER_VITALS_RESULT_RU.md`, `FULL_GAME_ROADMAP_RU.md`.
+Основной прогон: core 54/54, assets 33/33, reference 12/12, render 4/4 без
+пропусков (101 уникальный тест); ASan/UBSan 15/15. Отдельно реальный FreeType
+2.13.3/Mesa: 6/6, включая новый сквозной бой/сохранение. Desktop NOT RUN.
+Не переносить эти результаты автоматически на следующий изменённый исходник.
 
-## Нужные входы без ручного запуска игры
+## Первый блок: умения и настоящие снаряды
 
-Нужны `pak.zip` и `Torchlight.bin.x86_64` из исследуемой Linux-установки.
-По возможности приложить родные OGRE/CEGUI `.so` из той же установки.
-Сохранения, настройки, видео и ручное прохождение не нужны.
+Продолжить `CSkill`, `CEquipment::fireMissiles @0x87f120`, missile lifecycle,
+стоимость/уровень/cooldown, выбор цели и события анимации. Не заменять всё
+одним physical HIT: жезлы с MISSILE и умения оружия сейчас правильно отключены
+в этом пути. Начать с одного настоящего навыка и одного projectile-дескриптора,
+довести до общего loop, затем расширять по фактическим вариантам ресурсов.
+
+Критерий: применение через реальный UI-ввод, одно списание ресурса, недоступность
+при cooldown/нехватке маны, правильный HIT/смерть/XP, отсутствие урона через
+стену, сохранение и продолжение в другом процессе. Прямые обычные физические
+выстрелы уже работают; не переписывать их как фиктивный missile.
+
+## Размещение и динамические препятствия
+
+Разобрать причину: seed 42 resource test 61/61, common-app seed 491 — 51 из 76,
+25 unplaced. Проверить восстановление fine grid и связных областей вокруг
+переходов/лестниц. Не уменьшать счётчик до числа размещённых только ради зелёного
+теста. Затем original formations/champions, special spawners, bosses.
+
+LOS сейчас проверяет статические треугольники с переносимым body-center ray.
+Динамические двери, исходный muzzle/Physics, угол/ретаргет и путь вокруг стены
+нужны отдельно. Отсутствие кривой полёта у обычного лука не ошибка само по себе:
+оригинальная обычная ветвь direct, визуальный ArrowTrail — другая задача.
+
+## После этого
+
+NPC/merchant/stash, предметная экономика и полный набор effects; питомец;
+задания/диалоги/состояния мира; boss gates и реальный маршрут до финала.
+UI/action bar, звук/FX, оконный стенд и платформа — отдельные критерии выпуска.
+План: `FULL_GAME_ROADMAP_RU.md`, реестр: `research/remaining-work-inventory.md`.
+
+## Воспроизводимый запуск проверок
+
+GAME_DIR должен содержать внешние pak.zip и Torchlight.bin.x86_64. Не запускать
+проверки в каталоге пользовательских сохранений и не коммитить оригиналы.
 
 ```bash
-python3 tools/collect_game_inputs.py \
-  --game-dir "/путь/к/Torchlight" \
-  --output "/вне-игры-и-репозитория/game-inputs.zip"
+python3 tools/check.py --core --assets "$GAME_DIR" \
+  --reference "$GAME_DIR/Torchlight.bin.x86_64" --render --jobs 4
 ```
 
-Скрипт только читает выбранные исходники, создаёт manifest хешей и сообщает о
-неполном комплекте/другой сборке. Его временный файл и результат находятся в
-одном каталоге; требуется файловая система с hard-link для атомарной публикации
-без перезаписи. ZIP не включать в репозиторий. При неизвестном хеше исследовать
-новую сборку отдельно, не отключать проверки закреплённого ELF.
-
-## Первый прогон после получения входов
+На хосте, где non-PIE Python занимает закреплённые адреса original probes,
+проверка обязана сообщить NOT RUN, а не затереть существующую память. Можно
+явно собрать отдельный PIE launcher из SDK установленного Python:
 
 ```bash
-python3 tools/dump_original_gameplay_inputs.py \
-  --original "$GAME_DIR/Torchlight.bin.x86_64" \
-  --output /tmp/original-gameplay-inputs.json
-python3 tools/check.py --core --assets "$GAME_DIR" --render --jobs 4
-python3 tools/check.py --reference "$GAME_DIR/Torchlight.bin.x86_64" --jobs 4
+python3 tools/testing/build_pie_python.py --output /tmp/torchlight-python-pie
+python3 tools/check.py --core --assets "$GAME_DIR" \
+  --reference "$GAME_DIR/Torchlight.bin.x86_64" \
+  --reference-python /tmp/torchlight-python-pie --render --jobs 4
 ```
 
-Экстрактор только читает ELF. Следующая reference-команда исполняет ограниченные
-сравнительные стенды; это не ручной запуск всей игры. Настоящая сцена требует
-соответствующего EGL/GLES/FreeType окружения. NOT RUN не превращать в PASS.
-
-Проверить GLOBALS-ключи/типы для всех классов. Добавить новый bounded original
-comparison для maxHP/updateHP/updateMana, затем сценарий damage → recovery →
-pause → equip/unequip → level-up → save → новый процесс → load в **общем**
-application-loop на настоящем pak. Текущие новые витальные state-тесты не
-доказывают именно этот полный application-сценарий.
-
-## Дальше по игровым зависимостям
-
-1. Вычитать 0xfa86dc (timed recovery), 0xfce4e0 (population density), 0xfa86d8
-   (delta use site), а также ranged constants; значения не угадывать.
-2. `CEffect` lifetime/conditions/stacking + consumable acceptance/uses/stack,
-   чтение графов и настоящий potion use. Отдельно запрет расхода без применения.
-3. Skill loader/rank/cost/cooldown/target/action events и missile/sweep/retire.
-4. Обычное populate/formation/champion: не выдавать расположенные layout-юниты
-   и logic-spawners за полное население случайных этажей.
-5. NPC/merchant/quests/pet; затем boss gates и полный маршрут кампании.
-
-Каждый этап меняет реальный игровой loop, состояние сохранения и ресурсные
-проверки вместе. Отдельный mock-runner не заменяет рабочую функцию игры.
+Launcher требует Linux, matching shared libpython/headers и C compiler; он
+не содержит оригинальный код игры и не перезаписывает существующий output.
+Для сборки продукта нужен нормальный FreeType/Wayland/GLES SDK. Тестовые
+ABI-декларации из tools/testing — явный обход отсутствующего SDK для стенда,
+не производственный комплект заголовков.
 
 ---
 
