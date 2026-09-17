@@ -1,0 +1,58 @@
+[
+  {
+    "id": "D01",
+    "summary": "Game-specific layout offset scaling omitted",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "original-code plus executed controlled numerical comparison",
+    "priority": "shared UI foundation"
+  },
+  {
+    "id": "D02",
+    "summary": "Any PORT inventory_view overlay pauses simulation instead of original side/modal policy",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "source divergence plus executed original pause predicate",
+    "priority": "gameplay behavior"
+  },
+  {
+    "id": "D03",
+    "summary": "Prior HUD patch delays onClick command to matching release; original subscribes MouseButtonDown",
+    "baseline": "HUD command path missing",
+    "after_prior_patchset": true,
+    "status": "ELF subscription symbol/instruction plus original handler execution",
+    "priority": "correct prior patch"
+  },
+  {
+    "id": "D04",
+    "summary": "PlayButton kept in normal HUD despite original post-load detach",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "original ASM args plus actual current frame probe",
+    "priority": "runtime tree"
+  },
+  {
+    "id": "D05",
+    "summary": "Application does not supply target data to UiHud",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "source confirmed; original target visibility policy not yet restored",
+    "priority": "controller bindings"
+  },
+  {
+    "id": "D06",
+    "summary": "Partial skin extraction is not state-driven CEGUI execution",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "source and original resource inventory; no blanket pixel mismatch count",
+    "priority": "shared renderer"
+  },
+  {
+    "id": "D07",
+    "summary": "Original inventory animation anchors / viewport / item controller not connected",
+    "baseline": true,
+    "after_prior_patchset": true,
+    "status": "original code and actual skeleton metadata; original projection not fully probed",
+    "priority": "complete inventory vertical path"
+  }
+]

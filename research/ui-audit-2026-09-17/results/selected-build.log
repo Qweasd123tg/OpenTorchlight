@@ -1,0 +1,4 @@
+[1/4] Building CXX object CMakeFiles/ui_image_clip_test.dir/tests/ui_image_clip_test.cpp.o
+[2/4] Linking CXX executable ui_image_clip_test
+[3/4] Building CXX object CMakeFiles/ui_hud_input_test.dir/tests/ui_hud_input_test.cpp.o
+[4/4] Linking CXX executable ui_hud_input_test

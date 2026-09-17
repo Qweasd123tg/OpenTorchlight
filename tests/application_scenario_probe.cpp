@@ -72,9 +72,9 @@ public:
             if (!(fields >> step.verb)) continue;
             std::string arg; while (fields >> arg) step.args.push_back(std::move(arg));
             const std::vector<std::pair<std::string,std::size_t>> counts = {
-                {"menu",1},{"button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
+                {"menu",1},{"button",1},{"hud-button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
                 {"walk",2},{"npc",1},{"select-skill",1},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
-                {"resize",2},{"dt",1},{"revision",1},{"quit",0},{"menu-capture",1}};
+                {"resize",2},{"dt",1},{"revision",1},{"quit",0},{"menu-capture",1},{"button-capture",2}};
             const auto spec = std::find_if(counts.begin(),counts.end(),[&](const auto& p){return p.first==step.verb;});
             if (spec == counts.end() || spec->second != step.args.size())
                 throw std::runtime_error("invalid scenario command: " + line);
@@ -102,6 +102,10 @@ public:
     int height() const noexcept override { return height_; }
     std::vector<std::uint32_t> take_key_presses() override { auto out = std::move(keys_); keys_.clear(); return out; }
     std::optional<std::array<int, 2>> take_left_click() override { auto out = click_; click_.reset(); return out; }
+    std::optional<UiPointerClick> take_ui_click() override {
+        auto result = ui_click_; ui_click_.reset(); return result;
+    }
+    UiPointerState ui_pointer_state() const noexcept override { return pointer_; }
     void draw_menu_frame(GlesUiRenderer& renderer, const FrontendFrame& frame) override {
         renderer.draw(frame, width_, height_); readback(); ++menu_frames_;
         if (!menu_capture_.empty()) { write_pixels(menu_capture_); menu_capture_.clear(); }
@@ -127,13 +131,14 @@ public:
         if (cursor_ == steps_.size()) return;
         auto& step = steps_[cursor_];
         if (step.verb == "menu") { if (step.args[0] == page_name(page)) done(); return; }
-        if (step.verb == "button") {
+        if (step.verb == "button" || step.verb == "button-capture") {
             const auto it = std::find_if(frame.buttons.begin(), frame.buttons.end(),
                 [&](const auto& b){return b.id == step.args[0];});
             if (it == frame.buttons.end() || !it->enabled)
                 throw std::runtime_error("requested button absent or disabled: " + step.args[0]);
             click_ = {static_cast<int>(it->rect.x + it->rect.width * 0.5F),
                       static_cast<int>(it->rect.y + it->rect.height * 0.5F)};
+            if (step.verb == "button-capture") menu_capture_ = label(step.args[1]);
             done(); return;
         }
         if (step.verb == "name" && page == FrontendPage::create) {
@@ -154,6 +159,29 @@ public:
         }
         if (step.verb == "level") {
             if (ascii(view.address.dungeon_name) == step.args[0] && view.address.depth == std::stoi(step.args[1])) done();
+        } else if (step.verb == "hud-button") {
+            if (view.page != FrontendPage::playing || view.inventory_open)
+                throw std::runtime_error("HUD input requires unobstructed gameplay");
+            const auto it = std::find_if(last_hud_.buttons.begin(), last_hud_.buttons.end(),
+                [&](const auto& button){ return button.name == step.args[0]; });
+            if (it == last_hud_.buttons.end() || !it->enabled)
+                throw std::runtime_error("requested HUD button absent or disabled: " + step.args[0]);
+            const auto& rect = it->has_clip ? it->clip : it->rect;
+            const std::array<float,2> point = {rect.x + rect.width/2, rect.y + rect.height/2};
+            if (hud_button_at(last_hud_, point[0], point[1]) != &*it)
+                throw std::runtime_error("requested HUD target is obstructed");
+            pointer_.position = point;
+            if (++step.visits == 1) {
+                click_ = {static_cast<int>(point[0]), static_cast<int>(point[1])};
+                pointer_.left_press_origin = point;
+                notice("hud_press", step.args[0]);
+            } else {
+                if (view.moving) throw std::runtime_error("HUD press leaked into world movement");
+                ui_click_ = UiPointerClick{*pointer_.left_press_origin, point};
+                pointer_.left_press_origin.reset();
+                notice("hud_release", step.args[0]);
+                done();
+            }
         } else if (step.verb == "frames") {
             if (++step.visits >= positive(step.args[0])) done();
         } else if (step.verb == "still") {
@@ -509,6 +537,8 @@ private:
     std::optional<DungeonAddress> trigger_source_;
     std::optional<std::uint64_t> combat_target_;
     std::optional<std::array<int,2>> click_;
+    std::optional<UiPointerClick> ui_click_;
+    UiPointerState pointer_;
     std::vector<std::uint32_t> keys_;
     std::vector<unsigned char> pixels_;
     GlesSceneRenderer* last_renderer_ = nullptr;
@@ -530,6 +560,8 @@ extern "C" int run_application_scenario(const char* game, const char* saves, con
         ScenarioHost host(script,output);
         RandomObservationScope observation(&ScenarioHost::random_event,&host);
         ApplicationOptions options;options.game_directory=game;options.save_directory=saves;
+        // Hermetic tests must never apply settings to the user's home directory.
+        options.settings_directory=std::filesystem::path(output)/"settings";
         host.finish(run_application(options,host));
         return 0;
     } catch(const std::exception& e) {

@@ -77,7 +77,7 @@ Options parse_options(int argc, char** argv) {
     if (argc < 2) {
         throw DesktopError(
             "usage: torchlight_desktop /path/to/Torchlight/game "
-            "[--save-dir PATH] [--settings-dir PATH] [--frames N] [--main-stratum N --seed N]");
+            "[--save-dir PATH] [--settings-dir PATH] [--debug-ui 0|1] [--frames N] [--main-stratum N --seed N]");
     }
     Options options;
     options.game_directory = argv[1];
@@ -93,6 +93,10 @@ Options parse_options(int argc, char** argv) {
         } else if (name == "--settings-dir") {
             if (value.empty()) throw DesktopError("empty settings directory");
             options.settings_directory = value;
+        } else if (name == "--debug-ui") {
+            if (value != "0" && value != "1")
+                throw DesktopError("--debug-ui must be 0 or 1");
+            options.debug_ui = value == "1";
         } else if (name == "--frames") {
             const auto parsed = std::from_chars(value.data(), value.data() + value.size(),
                                                 options.frame_limit);
@@ -325,6 +329,16 @@ public:
         return result;
     }
 
+    std::optional<torchlight::UiPointerClick> take_ui_click() override {
+        auto click = ui_click_; ui_click_.reset(); return click;
+    }
+    torchlight::UiPointerState ui_pointer_state() const noexcept override {
+        torchlight::UiPointerState state;
+        if (pointer_inside_) state.position = std::array<float, 2>{
+            static_cast<float>(pointer_x_), static_cast<float>(pointer_y_)};
+        state.left_press_origin = ui_press_origin_;
+        return state;
+    }
     [[nodiscard]] int width() const noexcept { return width_; }
     [[nodiscard]] int height() const noexcept { return height_; }
 
@@ -433,9 +447,14 @@ private:
     static void seat_name(void*, wl_seat*, const char*) {}
     static void pointer_enter(void* data, wl_pointer*, std::uint32_t, wl_surface*, wl_fixed_t x,
                               wl_fixed_t y) {
+        static_cast<DesktopWindow*>(data)->pointer_inside_ = true;
         pointer_motion(data, nullptr, 0, x, y);
     }
-    static void pointer_leave(void*, wl_pointer*, std::uint32_t, wl_surface*) {}
+    static void pointer_leave(void* data, wl_pointer*, std::uint32_t, wl_surface*) {
+        auto &self = *static_cast<DesktopWindow*>(data);
+        self.pointer_inside_ = false;
+        self.ui_press_origin_.reset(); self.ui_click_.reset();
+    }
     static void pointer_motion(void* data, wl_pointer*, std::uint32_t, wl_fixed_t x,
                                wl_fixed_t y) {
         auto& self = *static_cast<DesktopWindow*>(data);
@@ -445,8 +464,16 @@ private:
     static void pointer_button(void* data, wl_pointer*, std::uint32_t, std::uint32_t,
                                std::uint32_t button, std::uint32_t state) {
         auto& self = *static_cast<DesktopWindow*>(data);
-        if (button == BTN_LEFT && state == WL_POINTER_BUTTON_STATE_PRESSED) {
+        if (button != BTN_LEFT) return;
+        if (state == WL_POINTER_BUTTON_STATE_PRESSED) {
             self.left_click_ = {self.pointer_x_, self.pointer_y_};
+            self.ui_press_origin_ = std::array<float, 2>{
+                static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_)};
+        } else if (state == WL_POINTER_BUTTON_STATE_RELEASED) {
+            if (self.pointer_inside_ && self.ui_press_origin_)
+                self.ui_click_ = torchlight::UiPointerClick{*self.ui_press_origin_,
+                    {static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_)}};
+            self.ui_press_origin_.reset();
         }
     }
     static void pointer_axis(void*, wl_pointer*, std::uint32_t, std::uint32_t, wl_fixed_t) {}
@@ -502,6 +529,9 @@ private:
     int height_ = 720;
     int pointer_x_ = 0;
     int pointer_y_ = 0;
+    bool pointer_inside_ = false;
+    std::optional<std::array<float, 2>> ui_press_origin_;
+    std::optional<torchlight::UiPointerClick> ui_click_;
     bool configured_ = false;
     bool running_ = true;
     std::optional<std::array<int, 2>> left_click_;

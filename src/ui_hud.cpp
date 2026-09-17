@@ -28,7 +28,22 @@ float clamp_fraction_low(float value) {
     return value;
 }
 } // namespace
-UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values) const {
+const UiResolvedWidget *hud_button_at(const UiHudFrame &frame, float x, float y) {
+    for (auto it = frame.buttons.rbegin(); it != frame.buttons.rend(); ++it)
+        if (it->visible && it->rect.contains(x, y) &&
+            (!it->has_clip || it->clip.contains(x, y))) return &*it;
+    return nullptr;
+}
+std::optional<std::string> hud_click_callback(const UiHudFrame &frame,
+                                             const UiPointerClick &click) {
+    const auto *pressed = hud_button_at(frame, click.press[0], click.press[1]);
+    const auto *released = hud_button_at(frame, click.release[0], click.release[1]);
+    if (!pressed || released != pressed || !pressed->enabled || pressed->callback.empty())
+        return std::nullopt;
+    return pressed->callback;
+}
+UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values,
+                        const UiPointerState &pointer) const {
     UiHudFrame result;
     if (width <= 0 || height <= 0)
         return result;
@@ -51,6 +66,10 @@ UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values) const 
         else if (name == "TARGETHEALTHBARSUB" && target_present)
             result.bars.push_back(
                 {widget, clamp_fraction_low(*values.target_health_fraction), false, false});
+        else if (!widget.callback.empty())
+            // resource-derived: several bottomhud ImageButtons intentionally
+            // have NormalImage="". The callback/hit rectangle still exists.
+            result.buttons.push_back(widget);
         else if (!widget.image.empty())
             result.images.push_back(widget);
         else if (name == "LEVELNAME" && !values.level_name.empty()) {
@@ -59,6 +78,23 @@ UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values) const 
             result.texts.push_back(std::move(text_widget));
         } else if (!widget.text.empty() && widget.text != "1" && hotkey_label(name))
             result.texts.push_back(widget);
+    }
+    const auto *hover = pointer.position ? hud_button_at(result, (*pointer.position)[0],
+                                                         (*pointer.position)[1]) : nullptr;
+    const auto *pressed = pointer.left_press_origin
+        ? hud_button_at(result, (*pointer.left_press_origin)[0], (*pointer.left_press_origin)[1])
+        : nullptr;
+    for (auto &button : result.buttons) {
+        // Bounded original ImageButton look only. RadioButton selection,
+        // script-updated visibility and other widget types remain separate.
+        if (upper(button.type) != "GUILOOK/IMAGEBUTTON") continue;
+        const char *property = !button.enabled ? "DisabledImage"
+            : &button == pressed ? (&button == hover ? "PushedImage" : "HoverImage")
+            : &button == hover ? "HoverImage" : "NormalImage";
+        // GuiLook/ImageButton StateImagery PushedOff references section hover.
+        const auto value = button.properties.find(property);
+        button.image = value != button.properties.end() ? value->second
+            : resources_->look_default(button.type, property);
     }
     return result;
 }

@@ -19,16 +19,30 @@ struct UiHudBar {
     float fraction = 0.0F;
     bool vertical = false, bottom_anchored = false;
 };
+// Physical pointer state supplied by the host, not keyboard focus. A press
+// origin lets a captured button distinguish Pushed from PushedOff.
+struct UiPointerState {
+    std::optional<std::array<float, 2>> position, left_press_origin;
+};
+struct UiPointerClick {
+    std::array<float, 2> press, release;
+};
 struct UiHudFrame {
-    std::vector<UiResolvedWidget> images, texts;
+    std::vector<UiResolvedWidget> images, texts, buttons;
     std::vector<UiHudBar> bars;
 };
+// Topmost visible callback target; disabled targets still block world input.
+[[nodiscard]] const UiResolvedWidget *hud_button_at(const UiHudFrame &, float x, float y);
+// A click only activates the same enabled button on press AND release.
+[[nodiscard]] std::optional<std::string> hud_click_callback(const UiHudFrame &,
+                                                          const UiPointerClick &);
 class UiHud {
   public:
     explicit UiHud(UiResources &resources) : resources_(&resources) {}
     // Absent layout or unresolvable widgets yield an empty frame, never a
     // fabricated replacement HUD.
-    [[nodiscard]] UiHudFrame frame(int width, int height, const UiHudValues &values) const;
+    [[nodiscard]] UiHudFrame frame(int width, int height, const UiHudValues &values,
+                                   const UiPointerState &pointer = {}) const;
 
   private:
     UiResources *resources_;

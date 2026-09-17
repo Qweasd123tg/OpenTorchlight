@@ -1,0 +1,33 @@
+# PORT regression: settings from gameplay pause, not original-game parity.
+menu main
+button new
+menu create
+button class-0
+name uisettings
+button create
+level Town 0
+dt 0
+frames 2
+capture before
+hud-button InventoryButton
+inventory open
+key I
+inventory closed
+hud-button JournalButton
+hud-button PetButton
+hud-button OptionsButton
+menu pause
+button-capture settings opened_settings
+menu settings
+dt 0.1
+frames 5
+button setting-SHOWBLOOD
+button-capture apply applied_settings
+menu settings
+button decline-settings
+menu pause
+dt 0
+button resume
+frames 2
+capture after
+quit

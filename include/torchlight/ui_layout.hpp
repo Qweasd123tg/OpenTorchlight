@@ -32,10 +32,20 @@ struct UiResolvedWidget {
     bool visible = true, enabled = true;
     std::int32_t parent = -1;
     UiRect clip;
+    // Resolved resource widgets have an authoritative clip, including an empty one.
+    // Hand-authored PORT widgets may omit it; empty must never mean "unclipped".
+    bool has_clip = false;
     std::map<std::string, std::string> properties;
     [[nodiscard]] std::string property(const std::string &key) const;
     [[nodiscard]] UiTextStyle text_style() const;
 };
+// Bounded port of the intersection/UV adjustment in CEGUI::Imageset::draw
+// (bundled libCEGUIBase.so.1 @0xe6f20). Not pixel-rounding/colour parity.
+struct UiImageGeometry {
+    UiRect destination, source;
+};
+[[nodiscard]] std::optional<UiImageGeometry> clip_ui_image(
+    UiRect destination, UiRect source, const UiRect *clip = nullptr);
 class UiLayout {
   public:
     [[nodiscard]] static UiLayout parse(const std::vector<std::uint8_t> &bytes);

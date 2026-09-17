@@ -963,6 +963,44 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         endforeach()
     endif()
 
+    add_executable(ui_image_clip_test tests/ui_image_clip_test.cpp)
+    target_link_libraries(ui_image_clip_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(ui_image_clip_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME ui_image_clip COMMAND ui_image_clip_test)
+
+    if(TARGET gles_ui_probe)
+        add_test(NAME ui_repairs_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui_repairs_render_test.py
+            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${HUD_FIXTURE})
+        set_tests_properties(ui_repairs_render PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
+
+    set(HUD_INPUT_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/hud-input.pak.zip)
+    add_custom_command(OUTPUT ${HUD_INPUT_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_hud_input_fixture.py ${HUD_INPUT_FIXTURE}
+        DEPENDS tests/make_hud_input_fixture.py tests/make_hud_fixture.py VERBATIM)
+    add_custom_target(hud_input_fixture DEPENDS ${HUD_INPUT_FIXTURE})
+    add_executable(ui_hud_input_test tests/ui_hud_input_test.cpp)
+    target_link_libraries(ui_hud_input_test PRIVATE torchlight_core)
+    add_dependencies(ui_hud_input_test hud_input_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(ui_hud_input_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME ui_hud_input COMMAND ui_hud_input_test ${HUD_INPUT_FIXTURE})
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_hud_input COMMAND ui_hud_input_test "${TORCHLIGHT_GAME_DIR}/pak.zip" --original)
+    endif()
+
+    if(TARGET application_scenario_probe AND TORCHLIGHT_GAME_DIR)
+        add_test(NAME paused_settings_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/paused_settings_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/ui-repair-evidence)
+        set_tests_properties(paused_settings_render PROPERTIES TIMEOUT 300 SKIP_RETURN_CODE 77)
+    endif()
+
     # Every registered test has an execution group. Labels describe dependency
     # and evidence, not fidelity: original_* resource tests are NOT ELF parity.
     get_property(_ot_tests DIRECTORY PROPERTY TESTS)

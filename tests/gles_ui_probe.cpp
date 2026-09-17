@@ -125,3 +125,48 @@ extern "C" int render_font_sequence_probe(const char *pak, int step, unsigned ch
         return 1;
     }
 }
+
+// Authored-fixture regression only: no original framebuffer equivalence claim.
+extern "C" int render_ui_repairs_probe(const char *pak, int stage, unsigned char *out,
+                                       char *error, unsigned error_capacity) {
+    try {
+        constexpr int width=256, height=192;
+        PakArchive archive(pak); UiResources resources(archive);
+        GlesUiRenderer renderer(archive, resources);
+        glViewport(0,0,width,height);
+        glClearColor(.045F,.055F,.065F,1);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        if (stage==1) renderer.draw_overlay({},false,width,height);
+        if (stage==2) renderer.draw_overlay({{"PORT DEBUG",false}},false,width,height);
+        if (stage==3) renderer.draw_overlay({},true,width,height);
+        if (stage==4 || stage==5) {
+            UiHudFrame frame; UiResolvedWidget w;
+            w.rect={10,10,100,80}; w.clip=stage==4?UiRect{35,30,20,20}:UiRect{};
+            w.has_clip=true; w.image="set:HudTest image:HealthFill";
+            frame.images.push_back(w); renderer.draw_hud(frame,width,height);
+        }
+        if (stage>=6 && stage<=10) {
+            FrontendFrame frame;
+            if (stage>=7) {
+                FrontendButton button; button.rect={40,50,80,50};
+                button.widget.rect=button.widget.clip=button.rect;
+                button.widget.has_clip=true;
+                button.supplemental=stage==8;
+                if (stage==9) { button.selected=true; button.pushed_image="set:HudTest image:SpareFill"; }
+                if (stage==10) { button.enabled=false; button.image="set:HudTest image:HealthFill";
+                    button.widget.properties["DisabledImage"]=""; }
+                frame.buttons.push_back(button);
+            }
+            renderer.draw(frame,width,height);
+        }
+        if(stage==11) draw_inventory_overlay({},false,width,height);
+        glFinish();
+        if(glGetError()!=GL_NO_ERROR) throw std::runtime_error("ui repairs draw failed");
+        glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,out);
+        if(glGetError()!=GL_NO_ERROR) throw std::runtime_error("ui repairs readback failed");
+        return 0;
+    } catch(const std::exception&e) {
+        if(error&&error_capacity) std::snprintf(error,error_capacity,"%s",e.what());
+        return 1;
+    }
+}

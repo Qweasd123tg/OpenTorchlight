@@ -19,6 +19,8 @@ struct ApplicationOptions {
     std::uint32_t seed = 42;
     std::optional<std::filesystem::path> save_directory;
     std::optional<std::filesystem::path> settings_directory;
+    // PORT diagnostic header. Does not disable inventory, services or death UI.
+    bool debug_ui = false;
     // Menu/world music (plain OGG next to the game). Off unless the host
     // opts in, so scenario tests stay hermetic and silent.
     bool music_enabled = false;
@@ -58,6 +60,10 @@ public:
     virtual ~ApplicationHost() = default;
     virtual bool process_events() = 0;
     virtual std::optional<std::array<int, 2>> take_left_click() = 0;
+    // Optional UI release channel, separate from press-to-move world input.
+    // Old scenario hosts remain valid and report no physical pointer state.
+    virtual std::optional<UiPointerClick> take_ui_click() { return std::nullopt; }
+    virtual UiPointerState ui_pointer_state() const noexcept { return {}; }
     // Backend-neutral physical US scan-code contract; see application_keys.hpp.
     virtual std::vector<std::uint32_t> take_key_presses() = 0;
     virtual int width() const noexcept = 0;

@@ -426,6 +426,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                           pick_music(torchlight::music_track_for_dungeon(dungeon, theme)),
                           options.music_volume, options.music_mute);
         };
+        const auto apply_settings = [&](const torchlight::FrontendRequest &request) {
+            const auto dir = options.settings_directory ? *options.settings_directory
+                                                       : torchlight::settings_directory();
+            torchlight::store_display_settings(dir, request.settings);
+            music.set_levels(request.settings.music_volume, request.settings.music_mute);
+            frontend.applied();
+        };
         torchlight::PlayerPrototype selected_player = players.front();
         torchlight::LevelTransitionState transitions(initial_address);
         std::optional<torchlight::LevelEntryRequest> pending_entry;
@@ -456,6 +463,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 static_cast<void>(frontend.frame(window.width(), window.height()));
                 for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                 if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
+                static_cast<void>(window.take_ui_click());
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
                     // original-code: CContinueGameMenu deleteCharacter @0xc3fd00
@@ -469,13 +477,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         } catch (const std::exception& e) { frontend.error(std::string("CANNOT DELETE SAVE: ") + e.what()); }
                     } else if (request->command == torchlight::FrontendCommand::apply_settings) {
                         try {
-                            const auto dir = options.settings_directory
-                                                 ? *options.settings_directory
-                                                 : torchlight::settings_directory();
-                            torchlight::store_display_settings(dir, request->settings);
-                            music.set_levels(request->settings.music_volume,
-                                             request->settings.music_mute);
-                            frontend.applied();
+                            apply_settings(*request);
                         } catch (const std::exception& e) { frontend.error(std::string("CANNOT SAVE SETTINGS: ") + e.what()); }
                     } else try {
                         torchlight::CampaignCheckpoint candidate;
@@ -963,18 +965,36 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     app_running = false;
                     break;
                 }
-                if (frontend.page() == torchlight::FrontendPage::pause) {
+                // PORT orchestration fix: settings opened from pause is still
+                // a modal frontend page, never a branch of the simulation.
+                if (frontend.page() == torchlight::FrontendPage::pause ||
+                    frontend.page() == torchlight::FrontendPage::settings) {
                     window.observe_frontend(frontend.page(), frontend.frame(window.width(), window.height()), frontend.character_name());
                     static_cast<void>(frontend.frame(window.width(), window.height()));
                     for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                     if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
+                    static_cast<void>(window.take_ui_click());
                     if (const auto request = frontend.take_request()) {
-                        try { checkpoint_now(); frontend.saved(request->command); saved_for_exit = request->command == torchlight::FrontendCommand::save_and_quit; }
-                        catch (const std::exception& e) { frontend.error(std::string("SAVE FAILED: ") + e.what()); }
+                        if (request->command == torchlight::FrontendCommand::apply_settings) {
+                            try { apply_settings(*request); }
+                            catch (const std::exception &e) {
+                                frontend.error(std::string("CANNOT SAVE SETTINGS: ") + e.what());
+                            }
+                        } else if (request->command == torchlight::FrontendCommand::save ||
+                                   request->command == torchlight::FrontendCommand::save_and_menu ||
+                                   request->command == torchlight::FrontendCommand::save_and_quit) {
+                            try {
+                                checkpoint_now(); frontend.saved(request->command);
+                                saved_for_exit = request->command == torchlight::FrontendCommand::save_and_quit;
+                            } catch (const std::exception &e) {
+                                frontend.error(std::string("SAVE FAILED: ") + e.what());
+                            }
+                        } else frontend.error("UNSUPPORTED COMMAND WHILE GAMEPLAY IS PAUSED");
                     }
                     if (frontend.page() == torchlight::FrontendPage::main) { return_to_menu = true; break; }
                     if (frontend.page() == torchlight::FrontendPage::quit) { app_running = false; break; }
-                    if (frontend.page() == torchlight::FrontendPage::pause)
+                    if (frontend.page() == torchlight::FrontendPage::pause ||
+                        frontend.page() == torchlight::FrontendPage::settings)
                         window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
                     previous_frame = window.clock_seconds();
                     continue;
@@ -985,7 +1005,27 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 if (!std::isfinite(elapsed) || elapsed < 0.0F)
                     throw DesktopError("application host clock must be finite and monotonic");
                 previous_frame = current_frame;
-                for (const auto key : window.take_key_presses()) {
+                auto world_click = window.take_left_click();
+                const auto ui_click = window.take_ui_click();
+                auto key_presses = window.take_key_presses();
+                if (!inventory_view.open) {
+                    const auto input_hud = ui_hud.frame(window.width(), window.height(), {});
+                    if (world_click && torchlight::hud_button_at(input_hud,
+                            static_cast<float>((*world_click)[0]), static_cast<float>((*world_click)[1])))
+                        world_click.reset(); // Even transparent/disabled HUD targets block the world.
+                    if (ui_click && player_combat.alive()) {
+                        if (const auto callback = torchlight::hud_click_callback(input_hud, *ui_click)) {
+                            // resource-derived callback names. Presentation remains PORT
+                            // for inventory/skills/quests; journal != quests, stats != inventory.
+                            if (*callback == "guiToggleInventory") key_presses.push_back(torchlight::physical_key::I);
+                            else if (*callback == "guiToggleSkills") key_presses.push_back(torchlight::physical_key::K);
+                            else if (*callback == "guiToggleQuests") key_presses.push_back(torchlight::physical_key::J);
+                            else if (*callback == "guiToggleOptions") key_presses.push_back(torchlight::physical_key::ESC);
+                            else window.notice("hud_callback_unimplemented", *callback);
+                        }
+                    }
+                }
+                for (const auto key : key_presses) {
                     if (!player_combat.alive()) {
                         if (key == torchlight::physical_key::ESC) { frontend.pause(); continue; }
                         if (key != torchlight::physical_key::R) continue;
@@ -1103,7 +1143,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // Shared desktop/scenario simulation phase, not wall-clock catch-up.
                 if (!session.update_vitals(simulation_elapsed))
                     throw std::runtime_error("Invalid player recovery arithmetic");
-                if (const auto click = window.take_left_click();
+                if (const auto &click = world_click;
                     click && rendered_once && !inventory_view.open && player_combat.alive() && !session.skill_cast().active()) {
                     auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
@@ -1700,6 +1740,11 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     if (!session.hardcore()) overlay.push_back({"COST " + std::to_string(session.gold() / 10) +
                         " GOLD. INVENTORY AND FLOOR ARE RETAINED.", false});
                 }
+                // PORT diagnostics are opt-in. Keep the still-unrecovered
+                // interactive panels and recovery prompt usable; do not turn
+                // their removal into a claim of an original UI replacement.
+                if (!inventory_view.open && player_combat.alive() && !options.debug_ui)
+                    overlay.clear();
                 torchlight::UiHudValues hud_values;
                 const auto& vitals = session.health();
                 if (vitals.maximum_health() > 0)
@@ -1716,7 +1761,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         hud_values.experience_fraction =
                             static_cast<float>(session.progression().experience) / gate;
                 }
-                const auto hud = ui_hud.frame(window.width(), window.height(), hud_values);
+                const auto hud = ui_hud.frame(window.width(), window.height(), hud_values,
+                                              window.ui_pointer_state());
                 window.draw_scene_frame(*renderer, ui_renderer, overlay,
                                         inventory_view.open || !player_combat.alive(), hud);
                 observe("after_draw", &player_pose);

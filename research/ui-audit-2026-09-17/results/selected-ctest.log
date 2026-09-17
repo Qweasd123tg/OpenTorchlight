@@ -1,0 +1,16 @@
+Internal ctest changing into directory: /mnt/data/audit-original-ui/build
+Test project /mnt/data/audit-original-ui/build
+    Start 113: ui_image_clip
+1/3 Test #113: ui_image_clip ....................   Passed    0.00 sec
+    Start 115: ui_hud_input
+2/3 Test #115: ui_hud_input .....................   Passed    0.00 sec
+    Start 116: original_ui_hud_input
+3/3 Test #116: original_ui_hud_input ............   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+assets    =   0.04 sec*proc (1 test)
+core      =   0.01 sec*proc (2 tests)
+
+Total Test time (real) =   0.05 sec

@@ -469,8 +469,13 @@ struct GlesUiRenderer::Impl {
         if (source_rect.width > 0 && source_rect.height > 0)
             region = {region.x + region.width * source_rect.x, region.y + region.height * source_rect.y,
                       region.width * source_rect.width, region.height * source_rect.height};
+        const auto geometry = clip_ui_image(widget.rect, region,
+                                             widget.has_clip ? &widget.clip : nullptr);
+        // A valid image entirely outside its clip is successfully handled,
+        // not a missing skin that should produce a fallback rectangle.
+        if (!geometry) return true;
         std::vector<Vertex> vertices;
-        quad(vertices, widget.rect, region);
+        quad(vertices, geometry->destination, geometry->source);
         draw_batch(vertices, {1, 1, 1, 1}, texture->id);
         return true;
     }
@@ -491,14 +496,25 @@ struct GlesUiRenderer::Impl {
             // (UIIcons:CheckChecked, a complete checked box). Load slots and
             // class buttons carry selected without a pushed image, so they
             // keep the previous focus/normal choice.
-            const std::string image_name = !button.enabled && !button.disabled_image.empty()
-                ? button.disabled_image : button.selected && button.enabled && !button.pushed_image.empty()
-                ? button.pushed_image : button.focused && button.enabled && !button.hover_image.empty()
+            const auto explicit_state = [&](const char *name, const std::string &image) {
+                return !image.empty() || (!button.supplemental &&
+                    button.widget.properties.find(name) != button.widget.properties.end());
+            };
+            const std::string image_name = !button.enabled && explicit_state("DisabledImage", button.disabled_image)
+                ? button.disabled_image : button.selected && button.enabled && explicit_state("PushedImage", button.pushed_image)
+                ? button.pushed_image : button.focused && button.enabled && explicit_state("HoverImage", button.hover_image)
                 ? button.hover_image : button.image;
-            UiResolvedWidget background;
+            auto background = button.widget;
             background.rect = button.rect;
             background.image = image_name;
-            if (!draw_image(background, {})) {
+            // Keep the pre-existing diagnostic fallback for a genuinely
+            // missing look (e.g. minimal authored fixtures). A known look or
+            // an explicit image property, even empty, must never acquire it.
+            const bool missing_look = !button.widget.type.empty() &&
+                !resources->widget_images(button.widget.type) &&
+                button.widget.properties.count("NormalImage") == 0 &&
+                button.widget.properties.count("Image") == 0;
+            if (!draw_image(background, {}) && (button.supplemental || missing_look)) {
                 std::vector<Vertex> v; quad(v, button.rect);
                 draw_batch(v, button.enabled
                     ? (button.focused ? std::array<float, 4>{.32F, .30F, .21F, .95F}
@@ -524,9 +540,9 @@ struct GlesUiRenderer::Impl {
                  resources->widget_text_passes(label.type)->empty()))
                 label.properties["VertFormatting"] = "VertCentred";
             draw_widget_text(label);
-            // Keep selection visible even when a real font/skin is available.
-            // This border is explicitly supplemental, not the original tab state.
-            if (button.selected) {
+            // PORT selection chrome belongs only to PORT controls. An original
+            // checkbox/tab must not acquire an invented gold border.
+            if (button.selected && button.supplemental) {
                 std::vector<Vertex> border;
                 quad(border, {button.rect.x, button.rect.y, button.rect.width, 2});
                 quad(border, {button.rect.x, button.rect.y + button.rect.height - 2, button.rect.width, 2});
@@ -570,12 +586,14 @@ struct GlesUiRenderer::Impl {
             widget.rect = rect;
             draw_image(widget, {});
         }
+        for (const auto &w : frame.buttons) draw_image(w, {});
         for (const auto &w : frame.texts) draw_widget_text(w);
         end();
     }
     // The window frame geometry stays prototype; text uses the resource font.
     void draw_overlay(const std::vector<InventoryViewLine> &lines, bool inventory_open, int width,
                       int height) {
+        if (lines.empty() && !inventory_open) return;
         const auto fill_rectangle = [](int x, int y, int w, int h, float r, float g, float b) {
             glEnable(GL_SCISSOR_TEST);
             glScissor(x, y, w, h);
@@ -652,6 +670,7 @@ void GlesUiRenderer::draw_overlay(const std::vector<InventoryViewLine> &lines, b
 }
 void draw_inventory_overlay(const std::vector<InventoryViewLine> &lines, bool inventory_open,
                             int width, int height) {
+    if (lines.empty() && !inventory_open) return;
     const auto fill_rectangle = [](int x, int y, int w, int h, float r, float g, float b) {
         glScissor(x, y, w, h);
         glClearColor(r, g, b, 1.0F);

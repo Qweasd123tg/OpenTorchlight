@@ -288,6 +288,31 @@ UiTextStyle UiResolvedWidget::text_style() const {
         style.vertical = UiTextVertical::bottom;
     return style;
 }
+std::optional<UiImageGeometry> clip_ui_image(UiRect destination, UiRect source,
+                                             const UiRect *clip) {
+    const auto valid = [](const UiRect &r) {
+        return std::isfinite(r.x) && std::isfinite(r.y) && std::isfinite(r.width) &&
+               std::isfinite(r.height) && r.width > 0 && r.height > 0 &&
+               std::isfinite(r.x + r.width) && std::isfinite(r.y + r.height);
+    };
+    if (!valid(destination) || !valid(source)) return std::nullopt;
+    if (clip == nullptr) return UiImageGeometry{destination, source};
+    if (!valid(*clip)) return std::nullopt;
+    const float left = std::max(destination.x, clip->x);
+    const float top = std::max(destination.y, clip->y);
+    const float right = std::min(destination.x + destination.width, clip->x + clip->width);
+    const float bottom = std::min(destination.y + destination.height, clip->y + clip->height);
+    if (right <= left || bottom <= top) return std::nullopt;
+    // original-code structure: intersect the destination and proportionally
+    // move BOTH UV edges. Shrinking geometry alone would squeeze the image.
+    const float u_per_pixel = source.width / destination.width;
+    const float v_per_pixel = source.height / destination.height;
+    UiRect cropped{source.x + (left - destination.x) * u_per_pixel,
+                   source.y + (top - destination.y) * v_per_pixel,
+                   (right - left) * u_per_pixel, (bottom - top) * v_per_pixel};
+    if (!valid(cropped)) return std::nullopt;
+    return UiImageGeometry{{left, top, right - left, bottom - top}, cropped};
+}
 std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
     if (width <= 0 || height <= 0)
         throw std::invalid_argument("invalid UI viewport");
@@ -305,6 +330,7 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
         v.type = node.type;
         v.parent = node.parent;
         v.properties = node.properties;
+        v.has_clip = true;
         v.rect = parent;
         v.text = node.property("Text");
         v.font = node.property("Font");

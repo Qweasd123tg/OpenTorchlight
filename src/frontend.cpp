@@ -522,10 +522,13 @@ FrontendFrame Frontend::frame(int width, int height) {
                 b.pushed_image = images->pushed; b.disabled_image = images->disabled;
             }
             if (!source->image.empty()) b.image = source->image;
-            for (auto item : {std::pair<const char *, std::string *>{"HoverImage", &b.hover_image},
-                              {"PushedImage", &b.pushed_image}, {"DisabledImage", &b.disabled_image}}) {
-                const auto value = source->property(item.first);
-                if (!value.empty()) *item.second = value;
+            for (auto item : {std::pair<const char *, std::string *>{"NormalImage", &b.image},
+                              {"HoverImage", &b.hover_image}, {"PushedImage", &b.pushed_image},
+                              {"DisabledImage", &b.disabled_image}}) {
+                // An explicitly empty property clears the look's default.
+                // It is not the same thing as an absent property.
+                const auto property = source->properties.find(item.first);
+                if (property != source->properties.end()) *item.second = property->second;
             }
         } else {
             // Explicit portable fallback/supplement; never original layout geometry.
