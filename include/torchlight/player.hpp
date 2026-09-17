@@ -23,6 +23,10 @@ struct PlayerPrototype {
     std::int64_t guid = 0;
     std::u16string name;
     std::u16string display_name;
+    // resource-derived: UNIT DESCRIPTION (Alchemist/Destroyer/Vanquisher DAT via
+    // BASEFILE chain). May be empty; never fabricated. Shown in
+    // charactercreate.layout CharacterClassDescription.
+    std::u16string description;
     std::string mesh_path;
     std::vector<std::string> wardrobe_texture_layers;
     float walking_speed = 0.0F;

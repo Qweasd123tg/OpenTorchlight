@@ -51,7 +51,9 @@ void parsing() {
     require(f[1].rect.x == 412 && f[1].rect.y == 40 && f[1].rect.width == 200,
             "unified coordinates wrong");
     const auto small = p.resolve(512, 384);
-    require(small[1].rect.x == 206 && small[1].rect.width == 100, "small window mapping wrong");
+    // original-code: CEGUI scales UnifiedAreaRect against the real window,
+    // no letterbox ({{0.5,-100}} at 512 -> 156, full 200 width).
+    require(small[1].rect.x == 156 && small[1].rect.width == 200, "small window mapping wrong");
     const auto lowercase = UiLayout::parse(bytes(
         "<GUILayout><Window Name='Player1Name'><Property Name='Text' Value='before'/>"
         "<Property name='Text' value='after'/></Window></GUILayout>"));
@@ -137,6 +139,18 @@ int main(int argc, char **argv) {
         click(ui, "scroll-down");
         require(ui.page() == FrontendPage::load, "overridden ScrollDown exit callback executed");
         require(button(ui, "slot-5").enabled, "load list did not scroll");
+        // resource-derived: characterload Delete→guiDelete1 shows DeleteConfirm;
+        // DeleteConfirmButton→guiAccept deletes, Cancel→guiDecline aborts.
+        click(ui, "delete");
+        require(!ui.take_request(), "delete executed without confirmation");
+        click(ui, "decline");
+        require(!ui.take_request(), "decline produced a request");
+        click(ui, "delete");
+        click(ui, "accept");
+        const auto removal = ui.take_request();
+        require(removal && removal->command == FrontendCommand::remove &&
+                    removal->slot == "slot-2",
+                "delete confirmation did not request slot-2 removal");
         ui.key(FrontendKey::back);
         click(ui, "continue");
         load = ui.take_request();
@@ -148,7 +162,8 @@ int main(int argc, char **argv) {
         require(ui.page() == FrontendPage::create, "keyboard menu entry failed");
         for (int i = 0; i < 50; ++i)
             ui.text('x');
-        require(ui.character_name().size() == 32, "name input unbounded");
+        // resource-derived: charactercreate.layout EditBox MaxTextLength=12.
+        require(ui.character_name().size() == 12, "name input unbounded");
         ui.key(FrontendKey::back);
         click(ui, "exit");
         require(ui.page() == FrontendPage::quit, "exit command failed");

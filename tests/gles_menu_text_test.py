@@ -45,25 +45,35 @@ def main():
             probe=lib.render_frontend_probe;probe.restype=integer
             probe.argtypes=[C.c_char_p,integer,integer,integer,C.POINTER(C.c_ubyte),C.c_char_p,C.c_uint]
             frames=[]
-            for w,h,page in [(1024,768,0),(512,384,0),(1024,768,1),(1024,768,2),(1024,768,3)]:
+            for w,h,page in [(1024,768,0),(512,384,0),(1024,768,1),(1024,768,2),(1024,768,3),(1024,768,4)]:
                 pixels=(C.c_ubyte*(w*h*4))()
                 if probe(os.fsencode(a.fixture),w,h,page,pixels,error,len(error)):raise RuntimeError(error.value.decode())
                 im=bytes(pixels);frames.append(im);count_frames+=1
                 if page==0 and w==1024:
                     hover=sample(im,w,h,220,255)
                     normal=sample(im,w,h,220,435)
-                    disabled=sample(im,w,h,620,255)
+                    disabled=sample(im,w,h,220,375)
+                    settings=sample(im,w,h,620,255)
                     assert hover[1]>180 and hover[0]<20,('hover skin',hover)
                     assert normal[0]>180 and normal[1]<20,('normal skin',normal)
                     assert 100<=disabled[0]<=120 and disabled[0]==disabled[1]==disabled[2],('disabled skin',disabled)
+                    assert settings[0]>180 and settings[1]<20,('settings skin',settings)
                     assert bright(im,w,h,(470,550,790,574))>10,'resource CopyrightInfo pixels missing'
                     assert bright(im,w,h,(470,620,790,644))>10,'StaticTextOutline label dropped'
                 if page==2:
                     assert bright(im,w,h,(386,130,638,170))>10,'Options resource title pixels missing'
                 if page==3:
                     assert bright(im,w,h,(100,182,310,200))>10,'saved name pixels missing'
-            assert frames[0]!=frames[2]!=frames[3]!=frames[4],'menus rendered identically'
-            print('5 authored resource menu frames passed: labels, skin states, create, pause, load, resize')
+                if page==4:
+                    # Authored Checkbox look puts labels past the box
+                    # (x+w+5, LeftAligned, degenerate wrap): the look-area clip
+                    # must start at the text top, not below it, or labels vanish;
+                    # forced centring would push them ~200px right of the box.
+                    assert bright(im,w,h,(441,160,560,200))>10,'settings checkbox label dropped'
+                    assert bright(im,w,h,(441,210,560,250))>10,'second settings checkbox label dropped'
+                    assert bright(im,w,h,(600,160,760,200))==0,'settings checkbox label misaligned'
+            assert frames[0]!=frames[2]!=frames[3]!=frames[4]!=frames[5],'menus rendered identically'
+            print('6 authored resource menu frames passed: labels, skin states, create, pause, load, settings, resize')
         if a.font_fixture:
             probe=lib.render_font_sequence_probe;probe.restype=integer
             probe.argtypes=[C.c_char_p,integer,C.POINTER(C.c_ubyte),C.c_char_p,C.c_uint]

@@ -66,6 +66,13 @@ extern "C" int render_frontend_probe(const char *pak, int width, int height, int
             ui.click(i->rect.x+i->rect.width/2,i->rect.y+i->rect.height/2);
             frame=ui.frame(width,height);
         }
+        if (page == 4) {
+            const auto i=std::find_if(frame.buttons.begin(),frame.buttons.end(),
+                                     [](const auto &b){return b.id=="settings";});
+            if(i==frame.buttons.end())throw std::runtime_error("settings button absent");
+            ui.click(i->rect.x+i->rect.width/2,i->rect.y+i->rect.height/2);
+            frame=ui.frame(width,height);
+        }
         GlesUiRenderer renderer(archive, resources);
         renderer.draw(frame, width, height);
         glFinish();

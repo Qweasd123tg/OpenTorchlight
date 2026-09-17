@@ -271,6 +271,13 @@ int main(int argc, char **argv) {
                         "corruption not reported");
                 rejects([&] { static_cast<void>(store.read("../../bad")); },
                         "path traversal accepted");
+                // original-code: deleteCharacter removes the file then reloads.
+                require(store.remove(c.slot), "written save was not deleted");
+                require(store.list().size() == 1, "deleted save still listed");
+                require(!store.remove(c.slot), "absent delete reported removal");
+                require(!store.remove("never-saved"), "absent slot reported removal");
+                rejects([&] { static_cast<void>(store.remove("../../bad")); },
+                        "delete traversal accepted");
                 for (const auto &e : std::filesystem::directory_iterator(argv[2]))
                     require(e.path().filename().string().find(".checkpoint-") != 0,
                             "temporary file leaked after failure");

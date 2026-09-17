@@ -30,6 +30,7 @@ const char* page_name(FrontendPage page) {
     switch (page) {
     case FrontendPage::main: return "main"; case FrontendPage::create: return "create";
     case FrontendPage::load: return "load"; case FrontendPage::pause: return "pause";
+    case FrontendPage::settings: return "settings";
     case FrontendPage::playing: return "playing"; case FrontendPage::quit: return "quit";
     }
     throw std::runtime_error("unknown frontend page");
@@ -499,7 +500,12 @@ private:
     std::size_t cursor_=0;
     unsigned ticks_=0,step_wait_=0,scene_frames_=0,menu_frames_=0;
     double time_seconds_=0.0, delta_seconds_=1.0/60.0;
-    int width_=640,height_=360;
+    // resource-derived: mainmenuframe.layout anchors its buttons at
+    // {{.5,-507}..{.5,251},{1,-64}} for a 1024-wide design (NewGame reaches
+    // x=0 only at W>=1014; CEGUI resolves the same offscreen in the original
+    // below that). The harness therefore meets the layout design minimum
+    // instead of testing below the original's supported modes.
+    int width_=1024,height_=768;
     std::optional<DungeonAddress> trigger_source_;
     std::optional<std::uint64_t> combat_target_;
     std::optional<std::array<int,2>> click_;

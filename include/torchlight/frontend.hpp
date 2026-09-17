@@ -1,22 +1,40 @@
 #pragma once
 #include "torchlight/save_store.hpp"
+#include "torchlight/settings.hpp"
 #include "torchlight/ui_layout.hpp"
 #include "torchlight/inventory_view.hpp"
 
 namespace torchlight {
 // Portable application policy. Original callback names are routed explicitly;
 // this is not the original CGameStateController or an arbitrary script runner.
-enum class FrontendPage { main, create, load, playing, pause, quit };
+enum class FrontendPage { main, create, load, playing, pause, settings, quit };
 enum class FrontendKey { previous, next, accept, back, backspace };
-enum class FrontendCommand { create, load, save, save_and_menu, save_and_quit };
+enum class FrontendCommand { create, load, save, save_and_menu, save_and_quit, remove,
+                             apply_settings };
 struct FrontendRequest {
     FrontendCommand command = FrontendCommand::create;
     std::int64_t class_guid = 0;
     std::string name, slot;
+    DisplaySettings settings;
+    FrontendRequest() = default;
+    FrontendRequest(FrontendCommand command_in, std::int64_t class_guid_in, std::string name_in,
+                    std::string slot_in, DisplaySettings settings_in = {})
+        : command(command_in),
+          class_guid(class_guid_in),
+          name(std::move(name_in)),
+          slot(std::move(slot_in)),
+          settings(std::move(settings_in)) {
+    }
 };
 struct FrontendClass {
     std::int64_t guid = 0;
     std::string name;
+    // resource-derived UNIT DESCRIPTION for CharacterClassDescription. May be empty.
+    std::string description;
+    FrontendClass() = default;
+    FrontendClass(std::int64_t guid_in, std::string name_in, std::string description_in = {})
+        : guid(guid_in), name(std::move(name_in)), description(std::move(description_in)) {
+    }
 };
 struct FrontendButton {
     std::string id, text;
@@ -48,6 +66,11 @@ class Frontend {
     void entered_game();
     void error(std::string message);
     void saved(FrontendCommand command);
+    void removed();
+    void applied();
+    // Pushes current settings data (no page change); the settings page opens
+    // from activate("settings") and returns to the opening page.
+    void sync_settings(DisplaySettings settings);
     void text(char ascii);
     void key(FrontendKey key);
     void click(float x, float y);
@@ -65,6 +88,11 @@ class Frontend {
     FrontendPage page_ = FrontendPage::main;
     std::string name_ = "Hero", status_;
     std::size_t class_index_ = 0, save_index_ = 0, scroll_ = 0, focus_ = 0;
+    std::optional<std::size_t> pending_delete_;
+    bool show_credits_ = false, show_credits_b_ = false;
+    DisplaySettings settings_clean_, settings_draft_;
+    FrontendPage settings_return_ = FrontendPage::main;
+    void leave_settings();
     std::optional<FrontendRequest> request_;
     void activate(const std::string &id);
 };

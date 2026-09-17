@@ -270,27 +270,32 @@ std::string UiResolvedWidget::property(const std::string &key) const {
 }
 UiTextStyle UiResolvedWidget::text_style() const {
     UiTextStyle style;
-    const auto h = upper(property("HorzFormatting"));
+    // resource-derived: layouts align StaticText-like widgets with
+    // HorzTextFormatting (Left/Centre/RightAligned + WordWrap variants, 56
+    // uses) and VertFormatting (Top/Centre/BottomAligned, 32 uses). Bare
+    // HorzFormatting never occurs in the shipped layouts.
+    auto h = upper(property("HorzTextFormatting"));
+    if (h.empty()) h = upper(property("HorzFormatting")); // fallback-port injection only
     style.wrap = h.find("WORDWRAP") != std::string::npos;
     if (h.find("CENTRE") != std::string::npos || h.find("CENTER") != std::string::npos)
         style.horizontal = UiTextHorizontal::centre;
     else if (h.find("RIGHT") != std::string::npos)
         style.horizontal = UiTextHorizontal::right;
     const auto v = upper(property("VertFormatting"));
-    if (v == "VERTCENTRED" || v == "CENTRE" || v == "CENTER" || v == "CENTREALIGNED")
+    if (v.find("CENTRE") != std::string::npos || v.find("CENTER") != std::string::npos)
         style.vertical = UiTextVertical::centre;
-    else if (v == "BOTTOMALIGNED" || v == "BOTTOM")
+    else if (v.find("BOTTOM") != std::string::npos)
         style.vertical = UiTextVertical::bottom;
     return style;
 }
 std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
     if (width <= 0 || height <= 0)
         throw std::invalid_argument("invalid UI viewport");
-    // Portable small-window policy: letterbox the original pixel-offset layout.
-    const float w = static_cast<float>(std::max(width, 1024)),
-                h = static_cast<float>(std::max(height, 768));
-    const float zoom = std::min(width / w, height / h);
-    const float ox = (width - w * zoom) * .5F, oy = (height - h * zoom) * .5F;
+    // original-code: CEGUI resolves UnifiedAreaRect directly against the real
+    // window (per-axis scale, no letterboxing). The old portable small-window
+    // zoom shifted buttons ~32px and shrank them at 1280x720 while fonts ran
+    // full size. Small-window readability (original: netbook mode) stays open.
+    const float w = static_cast<float>(width), h = static_cast<float>(height);
     std::vector<UiResolvedWidget> result;
     for (const auto &node : widgets_) {
         const auto parent = node.parent < 0 ? UiRect{0, 0, w, h}
@@ -362,12 +367,10 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
         result.push_back(std::move(v));
     }
     for (auto &v : result) {
-        v.rect.x = ox + v.rect.x * zoom;
-        v.rect.y = oy + v.rect.y * zoom;
-        v.rect.width *= zoom;
-        v.rect.height *= zoom;
-        v.clip = {ox + v.clip.x * zoom, oy + v.clip.y * zoom,
-                  v.clip.width * zoom, v.clip.height * zoom};
+        v.clip = {std::max(v.clip.x, 0.0F), std::max(v.clip.y, 0.0F),
+                  std::min(v.clip.width, w - v.clip.x), std::min(v.clip.height, h - v.clip.y)};
+        if (v.clip.width < 0) v.clip.width = 0;
+        if (v.clip.height < 0) v.clip.height = 0;
     }
     return result;
 }
@@ -424,49 +427,309 @@ std::optional<UiImage> UiResources::image(const std::string &reference) {
     const auto it = images_.find(key);
     return it == images_.end() ? std::nullopt : std::optional<UiImage>(it->second);
 }
+namespace {
+// resource-derived: evaluates one Falagard edge/size Dim inside a TextComponent
+// Area as (absolute pixels + scale * widget extent). Children forms observed
+// in GuiLook.looknfeel: AbsoluteDim, UnifiedDim(scale, Width|Height) with an
+// optional nested DimOperator, and direct DimOperator. Anything else fails the
+// whole look so the caller keeps its single-pass fallback instead of rendering
+// invented geometry.
+bool dim_value(const std::vector<Node> &nodes, std::size_t dim, float extent,
+               float &absolute, float &scale, std::string &error) {
+    absolute = 0;
+    scale = 0;
+    for (std::size_t i = 0; i < nodes.size(); ++i) {
+        if (nodes[i].parent != static_cast<int>(dim)) continue;
+        if (nodes[i].tag == "AbsoluteDim") {
+            const auto raw = attr(nodes[i], "value");
+            float v = 0;
+            const auto parsed =
+                std::from_chars(raw.data(), raw.data() + raw.size(), v);
+            if (parsed.ec != std::errc{} || parsed.ptr != raw.data() + raw.size() ||
+                !std::isfinite(v)) {
+                error = "bad AbsoluteDim";
+                return false;
+            }
+            absolute += v;
+        } else if (nodes[i].tag == "UnifiedDim") {
+            const auto type = attr(nodes[i], "scale");
+            const auto kind = attr(nodes[i], "type");
+            if (kind != "Width" && kind != "Height") {
+                error = "unsupported UnifiedDim";
+                return false;
+            }
+            float s = 0;
+            const auto parsed =
+                std::from_chars(type.data(), type.data() + type.size(), s);
+            if (parsed.ec != std::errc{} || parsed.ptr != type.data() + type.size() ||
+                !std::isfinite(s)) {
+                error = "bad UnifiedDim scale";
+                return false;
+            }
+            scale += s;
+            for (std::size_t k = 0; k < nodes.size(); ++k) {
+                if (nodes[k].parent != static_cast<int>(i)) continue;
+                if (nodes[k].tag != "DimOperator") {
+                    error = "unsupported UnifiedDim child";
+                    return false;
+                }
+                const auto op = attr(nodes[k], "op");
+                bool have_operand = false;
+                for (std::size_t m = 0; m < nodes.size(); ++m) {
+                    if (nodes[m].parent != static_cast<int>(k) ||
+                        nodes[m].tag != "AbsoluteDim")
+                        continue;
+                    const auto raw = attr(nodes[m], "value");
+                    float v = 0;
+                    const auto operand =
+                        std::from_chars(raw.data(), raw.data() + raw.size(), v);
+                    if (operand.ec != std::errc{} ||
+                        operand.ptr != raw.data() + raw.size() || !std::isfinite(v)) {
+                        error = "bad DimOperator operand";
+                        return false;
+                    }
+                    have_operand = true;
+                    if (op == "Add") absolute += v;
+                    else if (op == "Subtract") absolute -= v;
+                    else {
+                        error = "unsupported DimOperator";
+                        return false;
+                    }
+                    break;
+                }
+                if (!have_operand) {
+                    error = "DimOperator without operand";
+                    return false;
+                }
+            }
+        } else if (nodes[i].tag == "DimOperator") {
+            const auto op = attr(nodes[i], "op");
+            bool have_operand = false;
+            for (std::size_t k = 0; k < nodes.size(); ++k) {
+                if (nodes[k].parent != static_cast<int>(i) ||
+                    nodes[k].tag != "AbsoluteDim")
+                    continue;
+                const auto raw = attr(nodes[k], "value");
+                float v = 0;
+                const auto operand =
+                    std::from_chars(raw.data(), raw.data() + raw.size(), v);
+                if (operand.ec != std::errc{} || operand.ptr != raw.data() + raw.size() ||
+                    !std::isfinite(v)) {
+                    error = "bad DimOperator operand";
+                    return false;
+                }
+                have_operand = true;
+                if (op == "Add") absolute += v;
+                else if (op == "Subtract") absolute -= v;
+                else {
+                    error = "unsupported DimOperator";
+                    return false;
+                }
+                break;
+            }
+            if (!have_operand) {
+                error = "DimOperator without operand";
+                return false;
+            }
+        } else {
+            error = "unsupported Dim child";
+            return false;
+        }
+    }
+    static_cast<void>(extent);
+    return true;
+}
+} // namespace
+void UiResources::ensure_looknfeel() {
+    if (looknfeel_loaded_)
+        return;
+    looknfeel_loaded_ = true;
+    const auto *entry = archive_->find_normalized("media/UI/GuiLook.looknfeel");
+    if (!entry)
+        return;
+    try {
+        const auto text = decode(archive_->read(*entry));
+        std::size_t position = 0;
+        while (true) {
+            const auto start = text.find("<WidgetLook", position);
+            if (start == std::string::npos) break;
+            const auto section_end = text.find("</WidgetLook>", start);
+            if (section_end == std::string::npos)
+                throw std::runtime_error("unterminated WidgetLook");
+            position = section_end + 13;
+            const auto section = text.substr(start, position - start);
+            const auto nodes = parse_xml({section.begin(), section.end()});
+            if (nodes.empty() || nodes.front().tag != "WidgetLook") continue;
+            const auto look = upper(attr(nodes.front(), "name"));
+            UiWidgetImages images;
+            std::map<std::string, std::string> defaults;
+            // Only direct defaults, never similarly named properties
+            // of a Child/ImagerySection or a later WidgetLook.
+            for (const auto &n : nodes) {
+                if (n.parent != 0 || n.tag != "PropertyDefinition") continue;
+                const auto key = attr(n, "name"), value = attr(n, "initialValue");
+                if (key == "NormalImage") images.normal = value;
+                else if (key == "HoverImage") images.hover = value;
+                else if (key == "PushedImage") images.pushed = value;
+                else if (key == "DisabledImage") images.disabled = value;
+                if (!key.empty()) defaults[key] = value;
+            }
+            widget_images_.insert_or_assign(look, std::move(images));
+            look_defaults_.insert_or_assign(look, std::move(defaults));
+            // Ordered TextComponent passes in document order (shadow first).
+            // Areas are widget-relative: absolute pixels plus a multiple of the
+            // widget extent (Checkbox labels start past the box). Width comes
+            // from the first component (Width, or RightEdge minus LeftEdge).
+            std::vector<UiTextPass> passes;
+            UiTextLayout text_layout;
+            bool have_layout = false;
+            std::string failure;
+            for (std::size_t t = 0; t < nodes.size() && failure.empty(); ++t) {
+                if (nodes[t].tag != "TextComponent") continue;
+                UiTextPass pass;
+                bool have_x = false, have_y = false;
+                float left_abs = 0, left_scale = 0, top_abs = 0, top_scale = 0;
+                float width_abs = 0, width_scale = 0, right_abs = 0, right_scale = 0;
+                bool have_width = false, have_right = false;
+                for (std::size_t i = 0; i < nodes.size() && failure.empty(); ++i) {
+                    if (nodes[i].parent != static_cast<int>(t)) continue;
+                    if (nodes[i].tag == "Area") {
+                        for (std::size_t d = 0; d < nodes.size() && failure.empty(); ++d) {
+                            if (nodes[d].parent != static_cast<int>(i) ||
+                                nodes[d].tag != "Dim")
+                                continue;
+                            const auto kind = attr(nodes[d], "type");
+                            float absolute = 0, scale = 0;
+                            if (kind == "LeftEdge") {
+                                if (!dim_value(nodes, d, 0, absolute, scale, failure)) break;
+                                left_abs = absolute;
+                                left_scale = scale;
+                                have_x = true;
+                            } else if (kind == "TopEdge") {
+                                if (!dim_value(nodes, d, 0, absolute, scale, failure)) break;
+                                top_abs = absolute;
+                                top_scale = scale;
+                                have_y = true;
+                            } else if (kind == "Width") {
+                                if (!dim_value(nodes, d, 0, absolute, scale, failure)) break;
+                                width_abs = absolute;
+                                width_scale = scale;
+                                have_width = true;
+                            } else if (kind == "RightEdge") {
+                                if (!dim_value(nodes, d, 0, absolute, scale, failure)) break;
+                                right_abs = absolute;
+                                right_scale = scale;
+                                have_right = true;
+                            } else if (kind == "Height" || kind == "BottomEdge") {
+                                float ignored_abs = 0, ignored_scale = 0;
+                                if (!dim_value(nodes, d, 0, ignored_abs, ignored_scale, failure))
+                                    break;
+                            } else {
+                                failure = "unsupported Area Dim";
+                                break;
+                            }
+                        }
+                    } else if (nodes[i].tag == "ColourProperty") {
+                        pass.colour_property = attr(nodes[i], "name");
+                    } else if (nodes[i].tag == "HorzFormat") {
+                        // resource-derived: Checkbox LeftAligned, StandardButton
+                        // CentreAligned; StaticText/ItemText use *Property and
+                        // stay deferred to the widget (pass fields unset).
+                        const auto format = upper(attr(nodes[i], "type"));
+                        if (format.find("CENTRE") != std::string::npos ||
+                            format.find("CENTER") != std::string::npos)
+                            pass.horz = UiTextHorizontal::centre;
+                        else if (format.find("RIGHT") != std::string::npos)
+                            pass.horz = UiTextHorizontal::right;
+                        else if (format.find("LEFT") != std::string::npos ||
+                                 format.find("JUSTIFIED") != std::string::npos)
+                            pass.horz = UiTextHorizontal::left;
+                    } else if (nodes[i].tag == "VertFormat") {
+                        const auto format = upper(attr(nodes[i], "type"));
+                        if (format.find("CENTRE") != std::string::npos ||
+                            format.find("CENTER") != std::string::npos)
+                            pass.vert = UiTextVertical::centre;
+                        else if (format.find("BOTTOM") != std::string::npos)
+                            pass.vert = UiTextVertical::bottom;
+                        else if (format.find("TOP") != std::string::npos)
+                            pass.vert = UiTextVertical::top;
+                    }
+                }
+                if (!failure.empty()) break;
+                if (!have_x || !have_y) {
+                    failure = "TextComponent without LeftEdge/TopEdge";
+                    break;
+                }
+                pass.dx = left_abs;
+                pass.x_scale = left_scale;
+                pass.dy = top_abs;
+                pass.y_scale = top_scale;
+                if (!have_layout) {
+                    if (have_width) {
+                        text_layout.width_abs = width_abs;
+                        text_layout.width_scale = width_scale;
+                    } else if (have_right) {
+                        text_layout.width_abs = right_abs - left_abs;
+                        text_layout.width_scale = right_scale - left_scale;
+                    } else {
+                        failure = "TextComponent without Width/RightEdge";
+                        break;
+                    }
+                    have_layout = true;
+                }
+                passes.push_back(std::move(pass));
+            }
+            if (failure.empty()) {
+                if (!passes.empty()) {
+                    widget_text_.insert_or_assign(look, std::move(passes));
+                    if (have_layout)
+                        widget_text_origin_.insert_or_assign(look, text_layout);
+                }
+            } else {
+                diagnostics_.push_back("GuiLook.looknfeel " + look + ": " + failure);
+            }
+        }
+    } catch (const std::exception &e) {
+        diagnostics_.push_back("GuiLook.looknfeel: " + std::string(e.what()));
+    }
+}
 std::optional<UiWidgetImages> UiResources::widget_images(const std::string &type) {
     if (type.empty())
         return std::nullopt;
-    if (!looknfeel_loaded_) {
-        looknfeel_loaded_ = true;
-        const auto *entry = archive_->find_normalized("media/UI/GuiLook.looknfeel");
-        if (entry) {
-            try {
-                const auto text = decode(archive_->read(*entry));
-                std::size_t position = 0;
-                while (true) {
-                    const auto start = text.find("<WidgetLook", position);
-                    if (start == std::string::npos) break;
-                    const auto section_end = text.find("</WidgetLook>", start);
-                    if (section_end == std::string::npos)
-                        throw std::runtime_error("unterminated WidgetLook");
-                    position = section_end + 13;
-                    const auto section = text.substr(start, position - start);
-                    const auto nodes = parse_xml({section.begin(), section.end()});
-                    if (nodes.empty() || nodes.front().tag != "WidgetLook") continue;
-                    UiWidgetImages images;
-                    // Only direct defaults, never similarly named properties
-                    // of a Child/ImagerySection or a later WidgetLook.
-                    for (const auto &n : nodes) {
-                        if (n.parent != 0 || n.tag != "PropertyDefinition") continue;
-                        const auto key = attr(n, "name"), value = attr(n, "initialValue");
-                        if (key == "NormalImage") images.normal = value;
-                        else if (key == "HoverImage") images.hover = value;
-                        else if (key == "PushedImage") images.pushed = value;
-                        else if (key == "DisabledImage") images.disabled = value;
-                    }
-                    widget_images_.insert_or_assign(upper(attr(nodes.front(), "name")),
-                                                    std::move(images));
-                }
-            } catch (const std::exception &e) {
-                diagnostics_.push_back("GuiLook.looknfeel: " + std::string(e.what()));
-            }
-        }
-    }
+    ensure_looknfeel();
     const auto it = widget_images_.find(upper(type));
     if (it == widget_images_.end())
         return std::nullopt;
     return it->second;
+}
+std::optional<std::vector<UiTextPass>> UiResources::widget_text_passes(
+    const std::string &type) {
+    if (type.empty())
+        return std::nullopt;
+    ensure_looknfeel();
+    const auto it = widget_text_.find(upper(type));
+    if (it == widget_text_.end())
+        return std::nullopt;
+    return it->second;
+}
+std::optional<UiTextLayout> UiResources::widget_text_layout(const std::string &type) {
+    if (type.empty())
+        return std::nullopt;
+    ensure_looknfeel();
+    const auto it = widget_text_origin_.find(upper(type));
+    if (it == widget_text_origin_.end())
+        return std::nullopt;
+    return it->second;
+}
+std::string UiResources::look_default(const std::string &type, const std::string &key) {
+    if (type.empty() || key.empty())
+        return {};
+    ensure_looknfeel();
+    const auto it = look_defaults_.find(upper(type));
+    if (it == look_defaults_.end())
+        return {};
+    const auto kv = it->second.find(key);
+    return kv == it->second.end() ? std::string{} : kv->second;
 }
 UiFont *UiResources::font(const std::string &name) {
     if (name.empty())

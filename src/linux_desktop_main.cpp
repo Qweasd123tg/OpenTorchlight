@@ -29,6 +29,7 @@
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/skeletal_animation.hpp"
+#include "torchlight/settings.hpp"
 #include "torchlight/spawn_class.hpp"
 #include "torchlight/unit_definition.hpp"
 #include "torchlight/unit_type.hpp"
@@ -40,6 +41,7 @@
 #include <wayland-client.h>
 #include <wayland-egl.h>
 #include <xdg-shell-client-protocol.h>
+#include <pointer-constraints-unstable-v1-client-protocol.h>
 
 #include <algorithm>
 #include <array>
@@ -75,7 +77,7 @@ Options parse_options(int argc, char** argv) {
     if (argc < 2) {
         throw DesktopError(
             "usage: torchlight_desktop /path/to/Torchlight/game "
-            "[--save-dir PATH] [--frames N] [--main-stratum N --seed N]");
+            "[--save-dir PATH] [--settings-dir PATH] [--frames N] [--main-stratum N --seed N]");
     }
     Options options;
     options.game_directory = argv[1];
@@ -88,6 +90,9 @@ Options parse_options(int argc, char** argv) {
         if (name == "--save-dir") {
             if (value.empty()) throw DesktopError("empty save directory");
             options.save_directory = value;
+        } else if (name == "--settings-dir") {
+            if (value.empty()) throw DesktopError("empty settings directory");
+            options.settings_directory = value;
         } else if (name == "--frames") {
             const auto parsed = std::from_chars(value.data(), value.data() + value.size(),
                                                 options.frame_limit);
@@ -130,7 +135,10 @@ void require_egl(bool condition, const char* operation) {
 
 class DesktopWindow : public torchlight::ApplicationHost {
 public:
-    DesktopWindow(int width, int height) : width_(width), height_(height) {
+    DesktopWindow(torchlight::DisplaySettings display_settings)
+        : display_settings_(display_settings),
+          width_(display_settings.res_width),
+          height_(display_settings.res_height) {
         registry_listener_.global = registry_global;
         registry_listener_.global_remove = registry_global_remove;
         wm_base_listener_.ping = wm_base_ping;
@@ -150,6 +158,8 @@ public:
         pointer_listener_.axis_discrete = pointer_axis_discrete;
         keyboard_listener_.keymap = keyboard_keymap;
         keyboard_listener_.enter = keyboard_enter;
+        confined_listener_.confined = confined_confined;
+        confined_listener_.unconfined = confined_unconfined;
         keyboard_listener_.leave = keyboard_leave;
         keyboard_listener_.key = keyboard_key;
         keyboard_listener_.modifiers = keyboard_modifiers;
@@ -171,6 +181,11 @@ public:
         xdg_toplevel_add_listener(toplevel_, &toplevel_listener_, this);
         xdg_toplevel_set_title(toplevel_, "Torchlight Recovery");
         xdg_toplevel_set_app_id(toplevel_, "torchlight-recovery");
+        // Port policy, not original fullscreen: the original starts fullscreen
+        // from settings (FULLSCREEN:1 observed). Ours stays windowed unless the
+        // settings file asks, so no one is trapped without a settings menu.
+        if (display_settings_.fullscreen)
+            xdg_toplevel_set_fullscreen(toplevel_, nullptr);
         wl_surface_commit(surface_);
         while (!configured_ && wl_display_dispatch(display_) >= 0) {
         }
@@ -215,7 +230,12 @@ public:
         require_egl(egl_context_ != EGL_NO_CONTEXT, "eglCreateContext");
         require_egl(eglMakeCurrent(egl_display_, egl_surface_, egl_surface_, egl_context_) == EGL_TRUE,
                     "eglMakeCurrent");
-        eglSwapInterval(egl_display_, 1);
+        eglSwapInterval(egl_display_, display_settings_.vsync ? 1 : 0);
+        maybe_confine();
+        if (constraints_ == nullptr) {
+            std::cerr << "desktop notice: compositor lacks pointer-constraints, "
+                         "the mouse stays unconfined (original grabs it)\n";
+        }
     }
 
     DesktopWindow(const DesktopWindow&) = delete;
@@ -237,6 +257,12 @@ public:
         }
         if (pointer_ != nullptr) {
             wl_pointer_destroy(pointer_);
+        }
+        if (confined_ != nullptr) {
+            zwp_confined_pointer_v1_destroy(confined_);
+        }
+        if (constraints_ != nullptr) {
+            zwp_pointer_constraints_v1_destroy(constraints_);
         }
         if (keyboard_ != nullptr) {
             wl_keyboard_destroy(keyboard_);
@@ -340,6 +366,9 @@ private:
             self.seat_ = static_cast<wl_seat*>(
                 wl_registry_bind(registry, name, &wl_seat_interface, std::min(version, 5U)));
             wl_seat_add_listener(self.seat_, &self.seat_listener_, &self);
+        } else if (interface_name == zwp_pointer_constraints_v1_interface.name) {
+            self.constraints_ = static_cast<zwp_pointer_constraints_v1*>(wl_registry_bind(
+                registry, name, &zwp_pointer_constraints_v1_interface, 1));
         }
     }
 
@@ -367,11 +396,34 @@ private:
     static void toplevel_close(void* data, xdg_toplevel*) {
         static_cast<DesktopWindow*>(data)->running_ = false;
     }
+    // original-code: the SDL2 original grabs the mouse at window creation
+    // (SDL_SetWindowGrab(1)); on Wayland that is pointer confinement to our
+    // surface with persistent lifetime. The compositor still releases it while
+    // the surface is inactive. Without the protocol we stay unconfined.
+    void maybe_confine() {
+        if (confined_ != nullptr || constraints_ == nullptr || pointer_ == nullptr ||
+            surface_ == nullptr) {
+            return;
+        }
+        confined_ = zwp_pointer_constraints_v1_confine_pointer(
+            constraints_, surface_, pointer_, nullptr,
+            ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_PERSISTENT);
+        if (confined_ != nullptr) {
+            zwp_confined_pointer_v1_add_listener(confined_, &confined_listener_, this);
+        }
+    }
+    static void confined_confined(void* data, zwp_confined_pointer_v1*) {
+        static_cast<DesktopWindow*>(data)->confined_active_ = true;
+    }
+    static void confined_unconfined(void* data, zwp_confined_pointer_v1*) {
+        static_cast<DesktopWindow*>(data)->confined_active_ = false;
+    }
     static void seat_capabilities(void* data, wl_seat* seat, std::uint32_t capabilities) {
         auto& self = *static_cast<DesktopWindow*>(data);
         if ((capabilities & WL_SEAT_CAPABILITY_POINTER) != 0 && self.pointer_ == nullptr) {
             self.pointer_ = wl_seat_get_pointer(seat);
             wl_pointer_add_listener(self.pointer_, &self.pointer_listener_, &self);
+            self.maybe_confine();
         }
         if ((capabilities & WL_SEAT_CAPABILITY_KEYBOARD) != 0 && self.keyboard_ == nullptr) {
             self.keyboard_ = wl_seat_get_keyboard(seat);
@@ -429,6 +481,10 @@ private:
     wl_seat* seat_ = nullptr;
     wl_pointer* pointer_ = nullptr;
     wl_keyboard* keyboard_ = nullptr;
+    torchlight::DisplaySettings display_settings_{};
+    zwp_pointer_constraints_v1* constraints_ = nullptr;
+    zwp_confined_pointer_v1* confined_ = nullptr;
+    bool confined_active_ = false;
     wl_egl_window* native_window_ = nullptr;
     wl_registry_listener registry_listener_{};
     xdg_wm_base_listener wm_base_listener_{};
@@ -437,6 +493,7 @@ private:
     wl_seat_listener seat_listener_{};
     wl_pointer_listener pointer_listener_{};
     wl_keyboard_listener keyboard_listener_{};
+    zwp_confined_pointer_v1_listener confined_listener_{};
     EGLDisplay egl_display_ = EGL_NO_DISPLAY;
     EGLConfig configuration_ = nullptr;
     EGLSurface egl_surface_ = EGL_NO_SURFACE;
@@ -455,8 +512,23 @@ private:
 
 int main(int argc, char** argv) {
     try {
-        const auto options = parse_options(argc, argv);
-        DesktopWindow window(1280, 720);
+        auto options = parse_options(argc, argv);
+        const auto settings_dir =
+            options.settings_directory ? *options.settings_directory
+                                       : torchlight::settings_directory();
+        torchlight::DisplaySettings display;
+        try {
+            display = torchlight::load_display_settings(settings_dir);
+        } catch (const std::exception& error) {
+            std::cerr << "desktop notice: settings unreadable (" << error.what()
+                      << "), using portable defaults\n";
+        }
+        DesktopWindow window(display);
+        options.music_enabled = true;
+        options.music_directory = options.game_directory / "music";
+        options.music_volume = display.music_volume;
+        options.music_mute = display.music_mute;
+        options.settings = display;
         return torchlight::run_application(options, window);
     } catch (const std::exception& error) {
         std::cerr << "desktop failed: " << error.what() << '\n';

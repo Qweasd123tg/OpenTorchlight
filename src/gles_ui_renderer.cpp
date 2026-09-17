@@ -9,6 +9,7 @@
 #include <cctype>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -47,6 +48,31 @@ std::string upper(std::string s) {
     for (auto &c : s)
         c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
     return s;
+}
+// resource-derived: CEGUI 0.6.2 TextColour-family values are AARRGGBB hex.
+std::optional<std::array<float, 4>> parse_text_argb(const std::string &raw) {
+    auto hex = [](char c) -> int {
+        if (c >= '0' && c <= '9') return c - '0';
+        if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+        if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+        return -1;
+    };
+    if (raw.size() != 8)
+        return std::nullopt;
+    int v[8];
+    for (int i = 0; i < 8; ++i)
+        if ((v[i] = hex(raw[static_cast<std::size_t>(i)])) < 0)
+            return std::nullopt;
+    return std::array<float, 4>{static_cast<float>(v[2] * 16 + v[3]) / 255.0F,
+                                static_cast<float>(v[4] * 16 + v[5]) / 255.0F,
+                                static_cast<float>(v[6] * 16 + v[7]) / 255.0F,
+                                static_cast<float>(v[0] * 16 + v[1]) / 255.0F};
+}
+// resource-derived + library-derived: CEGUI 0.6.2 TextColour is AARRGGBB hex
+// (layout Value like FFFFFFFF, c2FFFFFF, FFFF0000); Font::DefaultColour is
+// 0xFFFFFFFF (white). Replaces the prototype warm tint.
+std::array<float, 4> text_colour(const UiResolvedWidget &w) {
+    return parse_text_argb(w.property("TextColour")).value_or(std::array<float, 4>{1, 1, 1, 1});
 }
 } // namespace
 struct GlesUiRenderer::Impl {
@@ -306,23 +332,53 @@ struct GlesUiRenderer::Impl {
     }
     void draw_widget_text(const UiResolvedWidget &w) {
         if (!w.visible || w.text.empty() || w.rect.width <= 0 || w.rect.height <= 0) return;
-        auto *texture = prepare_font(w.font.empty() ? "SerifSmall" : w.font,
+        // original-code: CEGUI default font is Serif
+        // (CGameUI::create @0xa9f007 setDefaultFont("Serif", rodata 0xfe4944)).
+        // Windows without Font inherit it; FrizQuadrata was a wrong fallback.
+        auto *texture = prepare_font(w.font.empty() ? "Serif" : w.font,
                                      viewport_width, viewport_height);
-        const auto style = w.text_style();
+        auto style = w.text_style();
+        // resource-derived: an explicit per-TextComponent VertFormat/HorzFormat
+        // (Checkbox Left/CentreAligned, StandardButton Centre/CentreAligned)
+        // wins over the widget properties; components deferring through
+        // *Property (StaticText/ItemText) keep the widget style. The last
+        // specified pass is the main text.
+        const auto passes = resources->widget_text_passes(w.type);
+        if (passes && !passes->empty()) {
+            for (const auto &pass : *passes) {
+                if (pass.horz) style.horizontal = *pass.horz;
+                if (pass.vert) style.vertical = *pass.vert;
+            }
+        }
         const int fallback_scale = viewport_width >= 950 ? 2 : 1;
         const float line_height = texture ? texture->font->line_height() : 8.0F * fallback_scale;
-        const auto lines = ui_text_lines(w.text, w.rect.width, style.wrap, [&](char32_t c) {
+        // resource-derived: Falagard TextComponent passes from GuiLook.looknfeel
+        // (shadow/outline offsets first, main text last). The look's first Area
+        // sets the wrap width; a degenerate area (Checkbox labels past the box)
+        // runs to the viewport edge. Unknown looks keep the widget-rect
+        // single-pass fallback instead of invented geometry.
+        const auto layout = resources->widget_text_layout(w.type);
+        float wrap = w.rect.width;
+        if (passes && !passes->empty() && layout) {
+            const float candidate =
+                layout->width_abs + layout->width_scale * w.rect.width;
+            wrap = candidate > 0 ? candidate
+                                 : static_cast<float>(viewport_width) - w.rect.x;
+            if (!(wrap > 0)) wrap = w.rect.width;
+        }
+        const auto lines = ui_text_lines(w.text, wrap, style.wrap, [&](char32_t c) {
             return texture ? texture->font->advance(c) : 6.0F * fallback_scale;
         });
         float y = w.rect.y;
         const float height = static_cast<float>(lines.size()) * line_height;
         if (style.vertical == UiTextVertical::centre) y += (w.rect.height - height) * .5F;
         else if (style.vertical == UiTextVertical::bottom) y += w.rect.height - height;
+        const float top = y;
         std::vector<Vertex> letters;
         for (const auto &line : lines) {
             float x = w.rect.x;
-            if (style.horizontal == UiTextHorizontal::centre) x += (w.rect.width - line.width) * .5F;
-            else if (style.horizontal == UiTextHorizontal::right) x += w.rect.width - line.width;
+            if (style.horizontal == UiTextHorizontal::centre) x += (wrap - line.width) * .5F;
+            else if (style.horizontal == UiTextHorizontal::right) x += wrap - line.width;
             for (const auto c : line.text) {
                 if (texture) {
                     if (const auto *g = texture->font->glyph(c)) {
@@ -342,10 +398,61 @@ struct GlesUiRenderer::Impl {
             y += line_height;
         }
         sync_font(texture);
-        scissor(w.clip);
-        draw_batch(letters, w.enabled ? std::array<float, 4>{.95F, .93F, .86F, 1}
-                                      : std::array<float, 4>{.55F, .55F, .55F, 1},
-                   texture ? texture->id : 0);
+        if (!passes || passes->empty()) {
+            scissor(w.clip);
+            const auto base = text_colour(w);
+            const std::array<float, 4> tint =
+                w.enabled ? base
+                          : std::array<float, 4>{base[0] * 0.55F, base[1] * 0.55F,
+                                                 base[2] * 0.55F, base[3]};
+            draw_batch(letters, tint, texture ? texture->id : 0);
+        } else {
+            // Text lives in the look Area, which may extend past the widget
+            // (Checkbox labels); clip to the area against the viewport, not to
+            // the widget box. Ancestor-container clipping stays open.
+            float x0 = w.rect.x + passes->front().dx +
+                       passes->front().x_scale * w.rect.width;
+            float x1 = x0;
+            float y0 = top;
+            for (const auto &pass : *passes) {
+                x0 = std::min(x0, w.rect.x + pass.dx + pass.x_scale * w.rect.width);
+                x1 = std::max(x1, w.rect.x + pass.dx + pass.x_scale * w.rect.width);
+                y0 = std::min(y0, top + pass.dy + pass.y_scale * w.rect.height);
+            }
+            UiRect area{x0, y0, (x1 - x0) + wrap, height + (top - y0)};
+            area.x = std::max(area.x, 0.0F);
+            area.y = std::max(area.y, 0.0F);
+            area.width = std::min(area.width, static_cast<float>(viewport_width) - area.x);
+            area.height = std::min(area.height, static_cast<float>(viewport_height) - area.y);
+            scissor(area);
+            for (const auto &pass : *passes) {
+                std::array<float, 4> colour{1, 1, 1, 1};
+                if (pass.colour_property.empty()) {
+                    colour = text_colour(w);
+                } else {
+                    auto raw = w.property(pass.colour_property);
+                    if (raw.empty())
+                        raw = resources->look_default(w.type, pass.colour_property);
+                    colour = parse_text_argb(raw).value_or(std::array<float, 4>{1, 1, 1, 1});
+                }
+                if (!w.enabled) {
+                    colour[0] *= 0.55F;
+                    colour[1] *= 0.55F;
+                    colour[2] *= 0.55F;
+                }
+                const float sx = pass.dx + pass.x_scale * w.rect.width;
+                const float sy = pass.dy + pass.y_scale * w.rect.height;
+                if (sx == 0 && sy == 0) {
+                    draw_batch(letters, colour, texture ? texture->id : 0);
+                } else {
+                    std::vector<Vertex> shifted;
+                    shifted.reserve(letters.size());
+                    for (const auto &v : letters)
+                        shifted.push_back({v.x + sx, v.y + sy, v.u, v.v});
+                    draw_batch(shifted, colour, texture ? texture->id : 0);
+                }
+            }
+        }
         glDisable(GL_SCISSOR_TEST);
     }
     bool draw_image(const UiResolvedWidget &widget, UiRect source_rect) {
@@ -380,8 +487,13 @@ struct GlesUiRenderer::Impl {
             draw_batch(letters, {.92F, .90F, .82F, 1});
         }
         for (const auto &button : frame.buttons) {
+            // resource-derived: checked GuiLook/Checkbox shows PushedImage
+            // (UIIcons:CheckChecked, a complete checked box). Load slots and
+            // class buttons carry selected without a pushed image, so they
+            // keep the previous focus/normal choice.
             const std::string image_name = !button.enabled && !button.disabled_image.empty()
-                ? button.disabled_image : button.focused && button.enabled && !button.hover_image.empty()
+                ? button.disabled_image : button.selected && button.enabled && !button.pushed_image.empty()
+                ? button.pushed_image : button.focused && button.enabled && !button.hover_image.empty()
                 ? button.hover_image : button.image;
             UiResolvedWidget background;
             background.rect = button.rect;
@@ -396,11 +508,21 @@ struct GlesUiRenderer::Impl {
             auto label = button.widget;
             label.rect = button.rect;
             label.text = button.text;
-            label.font = button.font.empty() ? "FrizQuadrata" : button.font;
+            label.font = button.font.empty() ? "Serif" : button.font;
             label.enabled = button.enabled;
-            // Label-area fallback is port policy until full Falagard is decoded.
-            if (label.property("HorzFormatting").empty()) label.properties["HorzFormatting"] = "CentreAligned";
-            if (label.property("VertFormatting").empty()) label.properties["VertFormatting"] = "VertCentred";
+            // Centring is a fallback-port policy only for controls whose look
+            // defines no TextComponent area (supplemental buttons). Real looks
+            // carry their own VertFormat/HorzFormat (Checkbox Left/Centre,
+            // StandardButton Centre/Centre); forcing centre there pushed
+            // checkbox labels hundreds of pixels right of the box.
+            if (label.property("HorzFormatting").empty() && label.property("HorzTextFormatting").empty() &&
+                (!resources->widget_text_passes(label.type) ||
+                 resources->widget_text_passes(label.type)->empty()))
+                label.properties["HorzFormatting"] = "CentreAligned";
+            if (label.property("VertFormatting").empty() &&
+                (!resources->widget_text_passes(label.type) ||
+                 resources->widget_text_passes(label.type)->empty()))
+                label.properties["VertFormatting"] = "VertCentred";
             draw_widget_text(label);
             // Keep selection visible even when a real font/skin is available.
             // This border is explicitly supplemental, not the original tab state.

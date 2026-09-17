@@ -69,6 +69,11 @@ def write_menu(path):
                                       ('ExitGame','guiExitGame','Exit game'),
                                       ('ReturnToGame','guiCloseMenu','Return to game')]):
         pause += button(name,cb,text,386,200+i*90)
+    settings = widget('Title', text='Settings', x=386, y=100, w=252, h=40)
+    settings += widget('Fullscreen', 'GuiLook/Checkbox', text='Fullscreen', x=386, y=160, w=50, h=40)
+    settings += widget('ShowBlood', 'GuiLook/Checkbox', text='ShowBlood', x=386, y=210, w=50, h=40)
+    settings += button('Apply', 'guiAccept', 'Apply resource', 386, 270)
+    settings += button('Cancel', 'guiDecline', 'Cancel resource', 386, 320)
     # Single quotes, reordered attributes and nested decoy defeat the old
     # substring scan. Only direct PropertyDefinition defaults may win.
     look = '''<Falagard><WidgetLook name='GuiLook/StandardButton'>
@@ -77,6 +82,17 @@ def write_menu(path):
     <PropertyDefinition name='PushedImage' initialValue='set:Author image:Pushed'/>
     <PropertyDefinition name='DisabledImage' initialValue='set:Author image:Disabled'/>
     <Child><PropertyDefinition name='NormalImage' initialValue='WRONG'/></Child>
+    </WidgetLook>
+    <WidgetLook name='GuiLook/Checkbox'>
+    <TextComponent>
+    <Area><Dim type='LeftEdge'><UnifiedDim scale='1' type='Width'><DimOperator op='Add'><AbsoluteDim value='5'/></DimOperator></UnifiedDim></Dim><Dim type='TopEdge'><AbsoluteDim value='2'/></Dim><Dim type='Width'><AbsoluteDim value='-5'/></Dim><Dim type='Height'><AbsoluteDim value='20'/></Dim></Area>
+    <VertFormat type='CentreAligned'/><HorzFormat type='LeftAligned'/>
+    <ColourProperty name='DropTextColour'/>
+    </TextComponent>
+    <TextComponent>
+    <Area><Dim type='LeftEdge'><UnifiedDim scale='1' type='Width'><DimOperator op='Add'><AbsoluteDim value='5'/></DimOperator></UnifiedDim></Dim><Dim type='TopEdge'><AbsoluteDim value='0'/></Dim><Dim type='Width'><AbsoluteDim value='-5'/></Dim><Dim type='Height'><AbsoluteDim value='20'/></Dim></Area>
+    <VertFormat type='CentreAligned'/><HorzFormat type='LeftAligned'/>
+    </TextComponent>
     </WidgetLook></Falagard>'''
     # Four solid texels in a PNG let the GLES test distinguish states.
     import struct, zlib
@@ -86,7 +102,7 @@ def write_menu(path):
     images=''.join(f'<Image Name="{n}" XPos="{i}" YPos="0" Width="1" Height="1"/>'
                    for i,n in enumerate(['Normal','Hover','Pushed','Disabled']))
     with zipfile.ZipFile(path,'a',zipfile.ZIP_DEFLATED) as z:
-        for name, body in [('mainmenuframe',main),('charactercreate',create),('characterload',load),('optionsmenu',pause)]:
+        for name, body in [('mainmenuframe',main),('charactercreate',create),('characterload',load),('optionsmenu',pause),('settingsmenu',settings)]:
             z.writestr('media/UI/'+name+'.layout',doc(body))
         z.writestr('media/UI/GuiLook.looknfeel',look)
         z.writestr('media/UI/author.imageset','<Imageset Name="Author" Imagefile="palette.png">'+images+'</Imageset>')

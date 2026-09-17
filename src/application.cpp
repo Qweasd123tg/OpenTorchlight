@@ -25,6 +25,7 @@
 #include "torchlight/player.hpp"
 #include "torchlight/player_session.hpp"
 #include "torchlight/inventory_view.hpp"
+#include "torchlight/music.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
@@ -43,6 +44,7 @@
 #include <iostream>
 #include <limits>
 #include <optional>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -120,6 +122,16 @@ std::string narrow_ascii(std::u16string_view value) {
         }
         result.push_back(static_cast<char>(character));
     }
+    return result;
+}
+
+// resource-derived UNIT DESCRIPTION is display text: lossy ASCII fold, never a
+// load failure. Non-ASCII becomes '?' so the create-screen blurb stays readable.
+std::string narrow_description(std::u16string_view value) {
+    std::string result;
+    result.reserve(value.size());
+    for (const auto character : value)
+        result.push_back(character > 0x7fU ? '?' : static_cast<char>(character));
     return result;
 }
 
@@ -297,6 +309,28 @@ PlayerAnimationResources load_player_animations(
 int torchlight::run_application(const ApplicationOptions& options, ApplicationHost& window) {
     try {
         const torchlight::PakArchive archive(options.game_directory / "pak.zip");
+        // original-code: boot shows LOADING.LAYOUT first (first layout in the
+        // original CEGUI trace), while bulk resources load. TipText source and
+        // the LoadingB fill mapping stay open, so only resource images/texts
+        // draw here — no synthetic title or invented progress.
+        try {
+            torchlight::UiResources early_ui(archive);
+            torchlight::GlesUiRenderer early_renderer(archive, early_ui);
+            if (const auto *loading = early_ui.layout("media/UI/loading.layout")) {
+                torchlight::FrontendFrame splash;
+                splash.original_layout = true;
+                for (const auto &widget : loading->resolve(window.width(), window.height())) {
+                    if (!widget.visible) continue;
+                    if (!widget.image.empty()) splash.decorations.push_back(widget);
+                    else if (!widget.text.empty() && widget.text != "1" &&
+                             widget.callback.empty())
+                        splash.texts.push_back(widget);
+                }
+                window.draw_menu_frame(early_renderer, splash);
+            }
+        } catch (const std::exception &error) {
+            window.notice("loading_splash", error.what());
+        }
         const auto master_document = torchlight::parse_adm(
             archive.read("media/MASTERRESOURCEUNITS.DAT.ADM"));
         const torchlight::MasterResourceIndex index(master_document);
@@ -339,8 +373,11 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         torchlight::GlesUiRenderer ui_renderer(archive, ui_resources);
         torchlight::UiHud ui_hud(ui_resources);
         std::vector<torchlight::FrontendClass> frontend_classes;
-        for (const auto& p : players) frontend_classes.push_back({p.guid, narrow_ascii(p.name)});
+        for (const auto& p : players)
+            frontend_classes.push_back(
+                {p.guid, narrow_ascii(p.name), narrow_description(p.description)});
         torchlight::Frontend frontend(ui_resources, std::move(frontend_classes));
+        frontend.sync_settings(options.settings);
         torchlight::SaveStore saves(options.save_directory ? *options.save_directory : torchlight::SaveStore::default_directory());
         const auto resource_identity = torchlight::checkpoint_resource_identity(archive);
         const auto refresh_saves = [&] {
@@ -348,6 +385,47 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             catch (const std::exception& e) { frontend.set_saves({}); frontend.error(e.what()); }
         };
         refresh_saves();
+        // Menu/world music. Track names follow the observed UPPER(name) shape
+        // (CGameClient::loadLevel uppercases before playMusic); the plural
+        // fallback (MINE -> MINES.OGG) and TITLE/TOWN picks are inferred and
+        // boss/combat tracks stay open. Only files present in the music
+        // directory are ever requested.
+        torchlight::MusicPlayer music;
+        std::set<std::string> music_tracks;
+        if (options.music_enabled) {
+            std::error_code music_error;
+            for (const auto &entry : std::filesystem::directory_iterator(
+                     options.music_directory, music_error)) {
+                auto name = entry.path().filename().string();
+                for (auto &c : name)
+                    if (c >= 'a' && c <= 'z') c = static_cast<char>(c - 'a' + 'A');
+                if (name.size() > 4 && name.compare(name.size() - 4, 4, ".OGG") == 0)
+                    music_tracks.insert(name);
+            }
+        }
+        const auto pick_music = [&](const std::string &track) {
+            if (!options.music_enabled || track.empty()) return std::string{};
+            if (music_tracks.count(track) != 0U) return track;
+            const auto plural = track.substr(0, track.size() - 4) + "S.OGG";
+            if (music_tracks.count(plural) != 0U) return plural;
+            if (music_tracks.count("TOWN.OGG") != 0U) return std::string{"TOWN.OGG"};
+            return std::string{};
+        };
+        const auto music_dir = options.music_directory.string();
+        const auto request_dungeon_music = [&](const std::string &dungeon,
+                                               const std::string &rules_path) {
+            if (!options.music_enabled) return;
+            std::string theme;
+            const auto slash = rules_path.find_last_of("/\\");
+            if (slash != std::string::npos) {
+                const auto parent = rules_path.substr(0, slash);
+                const auto slash2 = parent.find_last_of("/\\");
+                theme = slash2 == std::string::npos ? parent : parent.substr(slash2 + 1);
+            }
+            music.request(music_dir,
+                          pick_music(torchlight::music_track_for_dungeon(dungeon, theme)),
+                          options.music_volume, options.music_mute);
+        };
         torchlight::PlayerPrototype selected_player = players.front();
         torchlight::LevelTransitionState transitions(initial_address);
         std::optional<torchlight::LevelEntryRequest> pending_entry;
@@ -380,7 +458,26 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
-                    try {
+                    // original-code: CContinueGameMenu deleteCharacter @0xc3fd00
+                    // deletes the file then reloads the list; the menu stays open.
+                    if (request->command == torchlight::FrontendCommand::remove) {
+                        try {
+                            // Absent file is fine (idempotent delete); errors throw.
+                            static_cast<void>(saves.remove(request->slot));
+                            refresh_saves();
+                            frontend.removed();
+                        } catch (const std::exception& e) { frontend.error(std::string("CANNOT DELETE SAVE: ") + e.what()); }
+                    } else if (request->command == torchlight::FrontendCommand::apply_settings) {
+                        try {
+                            const auto dir = options.settings_directory
+                                                 ? *options.settings_directory
+                                                 : torchlight::settings_directory();
+                            torchlight::store_display_settings(dir, request->settings);
+                            music.set_levels(request->settings.music_volume,
+                                             request->settings.music_mute);
+                            frontend.applied();
+                        } catch (const std::exception& e) { frontend.error(std::string("CANNOT SAVE SETTINGS: ") + e.what()); }
+                    } else try {
                         torchlight::CampaignCheckpoint candidate;
                         if (request->command == torchlight::FrontendCommand::load) candidate = saves.read(request->slot, resource_identity);
                         else if (request->command == torchlight::FrontendCommand::create) {
@@ -405,7 +502,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         gameplay_active = true; frontend.entered_game(); inventory_view.status.clear();
                     } catch (const std::exception& e) { frontend.error(std::string("CANNOT OPEN GAME: ") + e.what()); }
                 }
-                if (!gameplay_active) window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                if (!gameplay_active) {
+                    if (options.music_enabled)
+                        music.request(music_dir,
+                                      pick_music(torchlight::music_track_for_menu()),
+                                      options.music_volume, options.music_mute);
+                    window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                }
                 continue;
             }
             try {
@@ -428,6 +531,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 transitions.commit(level.address);
             }
             pending_entry.reset();
+            request_dungeon_music(narrow_ascii(level.address.dungeon_name),
+                                  level.rules.source_path);
             torchlight::ActorMotion player_motion(
                 level.player_start, selected_player.running_speed);
             std::optional<torchlight::InteractionRequest> active_interaction;

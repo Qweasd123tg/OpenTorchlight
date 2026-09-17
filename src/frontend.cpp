@@ -17,6 +17,59 @@ std::string leaf(std::string s) {
 std::string number(std::size_t n) {
     return std::to_string(n);
 }
+// original-code data: main-menu credit roll, rodata 0xbf2e30..0xbf313f of the
+// pinned ELF (headers "Designed by Runic Games", "Voice Talents",
+// "Additional QA/Artwork", "Built with Ogre3d, CEGUI, ParticleUniverse, and
+// FMOD"). Inline |c..|u colour markup is stripped: inline spans stay open.
+// Newline joins are inferred (single setText into one ItemText); the exact
+// separator trace stays open.
+std::string main_menu_credits() {
+    static const char *const lines[] = {
+        "Designed by Runic Games",
+        "Adam Perin",
+        "Ben Evans",
+        "Brock Jones",
+        "Erich Schaefer",
+        "Greg Brown",
+        "Ian Welke",
+        "Jamus Thayn",
+        "Jason Beck",
+        "Jason Lamb",
+        "Jeff Mianowski",
+        "Jeremy Huxley",
+        "John Dunbar",
+        "Kevin Green",
+        "Kyle Cornelius",
+        "Leo Miller",
+        "Marsh Lefler",
+        "Matt Lefferts",
+        "Matt Tanwanteng",
+        "Matt Uelmen",
+        "Max Schaefer",
+        "Mike Fisher",
+        "Patrick Blank",
+        "Peter Hu",
+        "Sirio Brozzi",
+        "Travis Baldree",
+        "Wonder Russell",
+        "Voice Talents",
+        "Lani Minella - Sam Mowry",
+        "Eric Newsome - Tim Simmons",
+        "Marc Biagi - Bill Corkery",
+        "Mark Rose - Dave Rivas",
+        "Additional QA",
+        "Nichole Wright - Jeremy Powers",
+        "Additional Artwork",
+        "ArtCoding - Interserv",
+        "Built with Ogre3d, CEGUI, ParticleUniverse, and FMOD",
+    };
+    std::string out;
+    for (const char *line : lines) {
+        if (!out.empty()) out += '\n';
+        out += line;
+    }
+    return out;
+}
 } // namespace
 Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
     : resources_(&r), classes_(std::move(c)) {
@@ -30,12 +83,14 @@ void Frontend::set_saves(std::vector<SaveSlotInfo> saves) {
     buttons_.clear();
     saves_ = std::move(saves);
     save_index_ = std::min(save_index_, saves_.empty() ? 0 : saves_.size() - 1);
+    pending_delete_.reset();
     scroll_ = 0;
 }
 void Frontend::show_main() {
     buttons_.clear();
     page_ = FrontendPage::main;
     focus_ = 0;
+    pending_delete_.reset();
     request_.reset();
     status_.clear();
 }
@@ -44,12 +99,14 @@ void Frontend::pause() {
         buttons_.clear();
         page_ = FrontendPage::pause;
         focus_ = 0;
+        pending_delete_.reset();
         status_.clear();
     }
 }
 void Frontend::entered_game() {
     buttons_.clear();
     page_ = FrontendPage::playing;
+    pending_delete_.reset();
     request_.reset();
     status_.clear();
 }
@@ -65,8 +122,56 @@ void Frontend::saved(FrontendCommand command) {
     else if (command == FrontendCommand::save_and_quit)
         page_ = FrontendPage::quit;
 }
+void Frontend::removed() {
+    request_.reset();
+    pending_delete_.reset();
+    status_ = "SAVE DELETED";
+}
+void Frontend::applied() {
+    request_.reset();
+    settings_clean_ = settings_draft_;
+    status_ = "SETTINGS SAVED";
+}
+void Frontend::sync_settings(DisplaySettings settings) {
+    settings_clean_ = settings;
+    settings_draft_ = settings;
+}
+void Frontend::leave_settings() {
+    settings_draft_ = settings_clean_;
+    status_.clear();
+    if (settings_return_ == FrontendPage::pause) {
+        buttons_.clear();
+        page_ = FrontendPage::pause;
+        focus_ = 0;
+    } else {
+        show_main();
+    }
+}
+namespace {
+// resource-derived: settingsmenu.layout checkbox names to draft flags.
+// Sliders/comboboxes and FSAA have no clean bool mapping and stay display-only.
+const std::pair<const char *, bool DisplaySettings::*> kSettingFlags[] = {
+    {"FULLSCREEN", &DisplaySettings::fullscreen},
+    {"RENDERBEHIND", &DisplaySettings::render_behind},
+    {"RIMLIGHTS", &DisplaySettings::rimlights},
+    {"HARDWARESKINNING", &DisplaySettings::hardware_skinning},
+    {"VSYNC", &DisplaySettings::vsync},
+    {"MUSICMUTE", &DisplaySettings::music_mute},
+    {"SOUNDMUTE", &DisplaySettings::sound_mute},
+    {"SHOWTIPS", &DisplaySettings::show_tips},
+    {"SHOWFLOATYNUMBERS", &DisplaySettings::floaty_numbers},
+    {"SHOWBLOOD", &DisplaySettings::show_blood},
+    {"NETBOOKMODE", &DisplaySettings::netbook_mode},
+};
+bool DisplaySettings::*setting_flag(const std::string &upper_name) {
+    for (const auto &[name, field] : kSettingFlags)
+        if (upper_name == name) return field;
+    return nullptr;
+}
+} // namespace
 void Frontend::text(char c) {
-    if (page_ == FrontendPage::create && name_.size() < 32 &&
+    // resource-derived: charactercreate.layout EditBox MaxTextLength=12.
+    if (page_ == FrontendPage::create && name_.size() < 12 &&
         ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' ' ||
          c == '-' || c == '_'))
         name_ += c;
@@ -77,6 +182,8 @@ void Frontend::key(FrontendKey key) {
     if (key == FrontendKey::back) {
         if (page_ == FrontendPage::pause)
             entered_game();
+        else if (page_ == FrontendPage::settings)
+            leave_settings();
         else if (page_ == FrontendPage::load || page_ == FrontendPage::create)
             show_main();
         return;
@@ -162,6 +269,57 @@ void Frontend::activate(const std::string &id) {
     } else if (id == "scroll-down") {
         if (scroll_ + 5 < saves_.size())
             ++scroll_;
+    } else if (id == "delete") {
+        // original-code: CContinueGameMenu guiDelete1 shows DeleteConfirm;
+        // guiAccept runs deleteCharacter @0xc3fd00, guiDecline hides it.
+        if (page_ == FrontendPage::load && save_index_ < saves_.size()) {
+            pending_delete_ = save_index_;
+            const auto &slot = saves_[save_index_];
+            status_ = "DELETE " + (slot.name.empty() ? slot.slot : slot.name) + "?";
+        }
+    } else if (id == "accept") {
+        if (page_ == FrontendPage::load && pending_delete_ &&
+            *pending_delete_ < saves_.size())
+            request_ = FrontendRequest{FrontendCommand::remove, 0, {},
+                                       saves_[*pending_delete_].slot};
+    } else if (id == "decline") {
+        if (page_ == FrontendPage::load) {
+            pending_delete_.reset();
+            status_.clear();
+        }
+    } else if (id == "credits-a") {
+        // original-code: CMainMenu::onClick toggles the two fullscreen credit
+        // panes (A/B pane @+0xe8, C/D pane @+0xf0). Pane 1 content is the exact
+        // rodata roll below; pane 2 content (likely active mods, cf. update()
+        // getEnabledModNames) stays open, so C/D stay known-inert.
+        if (page_ == FrontendPage::main) show_credits_ = true;
+    } else if (id == "credits-b") {
+        if (page_ == FrontendPage::main) show_credits_ = false;
+    } else if (id == "credits-c" || id == "credits-d") {
+        // Routed so the tabs stop masquerading as unsupported controls; the
+        // second pane has no proven content yet and stays closed.
+        if (page_ == FrontendPage::main) show_credits_b_ = false;
+    } else if (id == "settings") {
+        if (page_ == FrontendPage::main || page_ == FrontendPage::pause) {
+            buttons_.clear();
+            settings_draft_ = settings_clean_;
+            settings_return_ = page_;
+            page_ = FrontendPage::settings;
+            focus_ = 0;
+            request_.reset();
+            status_.clear();
+        }
+    } else if (id == "apply") {
+        if (page_ == FrontendPage::settings)
+            request_ = FrontendRequest{FrontendCommand::apply_settings, 0, {}, {},
+                                       settings_draft_};
+    } else if (id == "decline-settings") {
+        if (page_ == FrontendPage::settings) leave_settings();
+    } else if (id.rfind("setting-", 0) == 0) {
+        if (page_ == FrontendPage::settings) {
+            if (const auto field = setting_flag(upper(id.substr(8))))
+                settings_draft_.*field = !(settings_draft_.*field);
+        }
     } else if (id.rfind("class-", 0) == 0) {
         const auto n = std::stoul(id.substr(6));
         if (n < classes_.size())
@@ -194,6 +352,8 @@ FrontendFrame Frontend::frame(int width, int height) {
         fallback_title = "LOAD CHARACTER"; path = "media/UI/characterload.layout"; break;
     case FrontendPage::pause:
         fallback_title = "PAUSED"; path = "media/UI/optionsmenu.layout"; break;
+    case FrontendPage::settings:
+        fallback_title = "SETTINGS"; path = "media/UI/settingsmenu.layout"; break;
     default: buttons_.clear(); return frame;
     }
     std::vector<UiResolvedWidget> widgets;
@@ -221,6 +381,11 @@ FrontendFrame Frontend::frame(int width, int height) {
             else if (callback == "GUICONTINUEGAMEMENU") action = "loads";
             else if (callback == "GUICONTINUEGAME") action = "continue";
             else if (callback == "GUIEXITAPPLICATION") action = "exit";
+            else if (callback == "GUISETTINGSMENU") action = "settings";
+            else if (callback == "GUISELECTA") action = "credits-a";
+            else if (callback == "GUISELECTB") action = "credits-b";
+            else if (callback == "GUISELECTC") action = "credits-c";
+            else if (callback == "GUISELECTD") action = "credits-d";
         } else if (page_ == FrontendPage::create) {
             if (callback == "GUIBACK") action = "back";
             else if (callback == "GUINEWGAME") action = "create";
@@ -232,22 +397,63 @@ FrontendFrame Frontend::frame(int width, int height) {
             else if (callback == "GUICONTINUEGAME") action = "load";
             else if (callback == "GUISCROLLUP") action = "scroll-up";
             else if (callback == "GUISCROLLDOWN") action = "scroll-down";
+            else if (callback == "GUIDELETE1") action = "delete";
+            else if (callback == "GUIACCEPT") action = "accept";
+            else if (callback == "GUIDECLINE") action = "decline";
             else for (std::size_t i = 0; i < 5; ++i)
                 if (callback == "GUISELECT" + number(i + 1)) action = "slot-" + number(scroll_ + i);
         } else if (page_ == FrontendPage::pause && callback == "GUICLOSEMENU") action = "resume";
+        else if (page_ == FrontendPage::pause && callback == "GUISETTINGSMENU") action = "settings";
+        else if (page_ == FrontendPage::settings) {
+            if (callback == "GUIACCEPT") action = "apply";
+            else if (callback == "GUIDECLINE") action = "decline-settings";
+            else {
+                const auto kind = upper(w.type);
+                if (kind.find("CHECKBOX") != std::string::npos ||
+                    kind.find("SLIDER") != std::string::npos ||
+                    kind.find("COMBOBOX") != std::string::npos)
+                    action = "setting-" + name;
+            }
+        }
         if (!action.empty()) originals[action] = w;
         else if (!w.callback.empty() && w.visible) unsupported.push_back(w);
     }
     for (std::size_t n = 0; n < widgets.size(); ++n) {
         auto w = widgets[n];
+        // Credit panes carry their toggle callback on the text widget itself;
+        // show them only while their tab state is open (both CreditFrames
+        // start Visible=False in the layout).
+        if (page_ == FrontendPage::main && !w.callback.empty()) {
+            const auto pane = upper(leaf(w.name));
+            if (pane == "CREDITS" && show_credits_) {
+                auto open = w;
+                open.text = main_menu_credits();
+                frame.texts.push_back(std::move(open));
+            }
+            continue;
+        }
         if (!w.visible || !w.callback.empty()) continue;
         if (!w.image.empty()) frame.decorations.push_back(w);
         const auto name = upper(leaf(w.name)), type = upper(w.type);
         const bool static_text = type.find("STATICTEXT") != std::string::npos ||
                                  type.find("ITEMTEXT") != std::string::npos;
-        const bool name_entry = page_ == FrontendPage::create && name == "CHARACTERNAME";
+        // resource-derived: the create-screen name field is GuiLook/Editbox
+        // Name=EditBox (MaxTextLength=12); CHARACTERNAME is kept for layouts
+        // that address the field by the legacy name.
+        const bool name_entry = page_ == FrontendPage::create &&
+                                (name == "CHARACTERNAME" || name == "EDITBOX");
         if (!static_text && !name_entry) continue;
         if (name_entry) { w.text = name_; character_name_bound = true; }
+        // resource-derived: charactercreate.layout ships CharacterClass /
+        // CharacterClassDescription with placeholder Text=1; the runtime fills
+        // them from the selected UNIT (NAME/DESCRIPTION). Header keeps resource text.
+        if (page_ == FrontendPage::create && !classes_.empty()) {
+            const auto selected = std::min(class_index_, classes_.size() - 1);
+            if (name == "CHARACTERCLASS" && !classes_[selected].name.empty())
+                w.text = classes_[selected].name;
+            else if (name == "CHARACTERCLASSDESCRIPTION" && !classes_[selected].description.empty())
+                w.text = classes_[selected].description;
+        }
         if (page_ == FrontendPage::load) {
             for (std::size_t i = 0; i < 5; ++i) {
                 if (name == "PLAYER" + number(i + 1) + "NAME") {
@@ -256,10 +462,26 @@ FrontendFrame Frontend::frame(int width, int height) {
                     w.text = index < saves_.size() ?
                         (saves_[index].name.empty() ? saves_[index].slot : saves_[index].name) : "";
                 } else if (name == "PLAYER" + number(i + 1) + "DESC") {
-                    // .otc metadata is not an original .SVB description.
+                    // resource-derived from our own checkpoint (level, class,
+                    // hardcore). The exact original Desc wording (difficulty
+                    // words, playtime, Dead/Retired) stays open.
                     const auto index = scroll_ + i;
-                    w.text = index < saves_.size() ?
-                        (saves_[index].loadable() ? "PORT SAVE (.otc)" : "PORT SAVE: UNREADABLE") : "";
+                    if (index >= saves_.size())
+                        w.text.clear();
+                    else if (!saves_[index].loadable())
+                        w.text = "PORT SAVE: UNREADABLE";
+                    else {
+                        const auto &slot = saves_[index];
+                        std::string class_name;
+                        for (const auto &c : classes_)
+                            if (c.guid == slot.class_guid) {
+                                class_name = c.name;
+                                break;
+                            }
+                        w.text = "Level " + std::to_string(slot.level) +
+                                 (class_name.empty() ? "" : " " + class_name) +
+                                 (slot.hardcore ? ", Hardcore" : "");
+                    }
                 }
             }
         }
@@ -333,11 +555,17 @@ FrontendFrame Frontend::frame(int width, int height) {
                     enabled, selected);
     };
     if (page_ == FrontendPage::main) {
+        // Tabs are pure resource chrome: without the layout widget there is
+        // nothing to anchor, and a portable fallback would steal keyboard
+        // focus and pixels on synthetic layouts. Real mainmenuframe always
+        // provides TabA (RadioTab 50x14).
+        if (originals.find("credits-a") != originals.end()) add("credits-a", "");
         add("new", "NEW CHARACTER");
         add("loads", "LOAD CHARACTER", !saves_.empty());
         add("continue", "CONTINUE LAST", std::any_of(saves_.begin(), saves_.end(),
                                                [](const auto &s) { return s.loadable(); }));
         add("exit", "EXIT");
+        add("settings", "SETTINGS");
         frame.notes.push_back({"PORT: NORMAL ONLY; SAVES USE .otc, NOT ORIGINAL .SVB", false});
     } else if (page_ == FrontendPage::create) {
         for (std::size_t i = 0; i < classes_.size(); ++i)
@@ -353,16 +581,63 @@ FrontendFrame Frontend::frame(int width, int height) {
         }
         add("load", "LOAD SELECTED", save_index_ < saves_.size() && saves_[save_index_].loadable());
         add("scroll-up", "PREVIOUS", scroll_ > 0);
-        add("scroll-down", "NEXT", scroll_ + 5 < saves_.size()); add("back", "BACK");
+        add("scroll-down", "NEXT", scroll_ + 5 < saves_.size());
+        add("delete", "DELETE", !saves_.empty());
+        // original-code: DeleteConfirm pair is visible only while a delete is
+        // pending (CContinueGameMenu shows/hides it around deleteCharacter).
+        if (pending_delete_ && *pending_delete_ < saves_.size()) {
+            add("accept", "DELETE");
+            add("decline", "CANCEL");
+        }
+        add("back", "BACK");
         if (saves_.empty()) frame.notes.push_back({"PORT: NO SAVED CHARACTERS", false});
         else if (save_index_ < saves_.size()) frame.notes.push_back({"PORT SAVE: " + saves_[save_index_].slot, false});
+    } else if (page_ == FrontendPage::settings) {
+        // resource-derived: settingsmenu.layout checkboxes toggle the live
+        // draft; sliders/comboboxes show the draft value but stay disabled
+        // (drag/dropdown interaction stays open). Apply persists the file.
+        for (const auto &widget : widgets) {
+            const auto kind = upper(widget.type);
+            const auto key = upper(leaf(widget.name));
+            if (kind.find("CHECKBOX") != std::string::npos) {
+                if (const auto field = setting_flag(key))
+                    add("setting-" + key, std::string{}, true, settings_draft_.*field);
+                else if (key == "ANTIALIASING")
+                    // No clean bool mapping (FSAA levels, needs restart): show
+                    // the resource footprint display-only like sliders/lists.
+                    add("setting-" + key, std::string{}, false);
+            } else if (kind.find("SLIDER") != std::string::npos ||
+                       kind.find("COMBOBOX") != std::string::npos) {
+                // The looks define no TextComponent: the original renders no
+                // value text here (drag/dropdown interaction stays open), so
+                // the box alone marks the control footprint. Headers from the
+                // layout name the rows.
+                add("setting-" + key, std::string{}, false);
+            }
+        }
+        add("apply", "APPLY");
+        add("decline-settings", "CANCEL");
+        frame.notes.push_back(
+            {"PORT: VIDEO CHANGES NEED A RESTART; SLIDERS, LISTS AND FSAA ARE DISPLAY-ONLY.", false});
     } else {
-        add("resume", "RESUME"); add("save", "SAVE (.otc)");
+        add("resume", "RESUME"); add("settings", "SETTINGS"); add("save", "SAVE (.otc)");
         add("save-menu", "SAVE AND MAIN MENU"); add("save-exit", "SAVE AND EXIT");
         frame.notes.push_back({"PORT: PAUSED. .otc WRITE MUST SUCCEED BEFORE LEAVING.", false});
     }
     for (const auto &w : unsupported) {
         make_button("unsupported:" + w.name, w.text == "1" ? "" : w.text, &w, false, false);
+    }
+    // original-code: the open credit pane is a fullscreen AlwaysOnTop overlay
+    // closed by clicking it (guiSelectB). Its layout source stays invisible,
+    // so the close target is an explicit topmost button, not invented geometry:
+    // it covers exactly the viewport the pane covers.
+    if (page_ == FrontendPage::main && show_credits_) {
+        FrontendButton close;
+        close.id = "credits-b";
+        close.rect = {0, 0, static_cast<float>(width), static_cast<float>(height)};
+        close.widget.rect = close.widget.clip = close.rect;
+        close.enabled = true;
+        frame.buttons.push_back(std::move(close));
     }
     if (!unsupported.empty()) frame.notes.push_back({
         "PORT: DISABLED RESOURCE CONTROLS ARE NOT IMPLEMENTED (SETTINGS / ORIGINAL EXIT / OTHER MENUS).", false});

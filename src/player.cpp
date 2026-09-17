@@ -204,6 +204,14 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         player.progression_rules = load_progression_rules(archive, *definition);
         player.name = text(*definition, u"NAME");
         player.display_name = text(*definition, u"DISPLAYNAME");
+        // resource-derived: UNIT DESCRIPTION for the create-screen blurb. Optional:
+        // absent or non-text DESCRIPTION stays empty instead of failing the load.
+        if (const auto* description = definition->find_property(u"DESCRIPTION");
+            description != nullptr &&
+            (description->type == AdmValueType::string ||
+             description->type == AdmValueType::translation ||
+             description->type == AdmValueType::note))
+            player.description = std::get<std::u16string>(description->value);
         auto directory = ascii(text(*definition, u"RESOURCEDIRECTORY"));
         if (!directory.empty() && directory.back() != '/') {
             directory.push_back('/');

@@ -6,6 +6,17 @@ find_package(PNG REQUIRED)
 # CEGUI 0.6.2 uses FreeType for <Font> resources. Optional: without it the UI
 # keeps the explicitly marked prototype glyph font.
 find_package(Freetype QUIET)
+# Menu music ships as plain OGG next to the game. Optional like FreeType:
+# without vorbisfile/ALSA the player records the requested track but stays
+# silent instead of failing the build (TORCHLIGHT_HAVE_MUSIC unset).
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(VORBISFILE IMPORTED_TARGET vorbisfile)
+    pkg_check_modules(ALSA IMPORTED_TARGET alsa)
+endif()
+if(VORBISFILE_FOUND AND ALSA_FOUND)
+    set(TORCHLIGHT_HAVE_MUSIC TRUE)
+endif()
 set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
 set(TORCHLIGHT_GAME_DIR "" CACHE PATH "Read-only directory containing pak.zip (independent of ELF)")
 if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
@@ -39,6 +50,7 @@ add_library(torchlight_core STATIC
     src/checkpoint.cpp
     src/save_codec.cpp
     src/save_store.cpp
+    src/settings.cpp
     src/ui_layout.cpp
     src/ui_font.cpp
     src/ui_text.cpp
@@ -83,10 +95,18 @@ add_library(torchlight_core STATIC
     src/spawn_class.cpp
     src/stat_graph.cpp
     src/unit_definition.cpp
-    src/unit_type.cpp)
+    src/unit_type.cpp
+    src/music.cpp)
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG)
+if(TORCHLIGHT_HAVE_MUSIC)
+    target_link_libraries(torchlight_core PUBLIC PkgConfig::VORBISFILE PkgConfig::ALSA)
+    target_compile_definitions(torchlight_core PUBLIC TORCHLIGHT_HAVE_MUSIC=1)
+    message(STATUS "Music: vorbisfile + ALSA playback enabled")
+else()
+    message(STATUS "Music: vorbisfile/ALSA not found; silent track tracking only")
+endif()
 if(Freetype_FOUND)
     target_link_libraries(torchlight_core PUBLIC Freetype::Freetype)
     target_compile_definitions(torchlight_core PUBLIC TORCHLIGHT_HAVE_FREETYPE=1)
@@ -171,9 +191,28 @@ if(UNIX AND NOT ANDROID)
         add_library(torchlight_xdg_shell STATIC ${XDG_SHELL_CODE} ${XDG_SHELL_HEADER})
         target_include_directories(torchlight_xdg_shell PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated)
         target_link_libraries(torchlight_xdg_shell PUBLIC PkgConfig::WAYLAND_CLIENT)
+        # original-code: the SDL2 original grabs the mouse at window creation
+        # (SDL_SetWindowGrab(1)); on Wayland that is pointer confinement.
+        # Vendored unstable-v1 protocol, see research/window-policy.md.
+        set(POINTER_CONSTRAINTS_XML ${CMAKE_CURRENT_SOURCE_DIR}/tools/wayland-protocols/pointer-constraints-unstable-v1.xml)
+        set(POINTER_CONSTRAINTS_HEADER ${CMAKE_CURRENT_BINARY_DIR}/generated/pointer-constraints-unstable-v1-client-protocol.h)
+        set(POINTER_CONSTRAINTS_CODE ${CMAKE_CURRENT_BINARY_DIR}/generated/pointer-constraints-unstable-v1-protocol.c)
+        add_custom_command(
+            OUTPUT ${POINTER_CONSTRAINTS_HEADER}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
+            COMMAND ${WAYLAND_SCANNER} client-header ${POINTER_CONSTRAINTS_XML} ${POINTER_CONSTRAINTS_HEADER}
+            DEPENDS ${POINTER_CONSTRAINTS_XML})
+        add_custom_command(
+            OUTPUT ${POINTER_CONSTRAINTS_CODE}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/generated
+            COMMAND ${WAYLAND_SCANNER} private-code ${POINTER_CONSTRAINTS_XML} ${POINTER_CONSTRAINTS_CODE}
+            DEPENDS ${POINTER_CONSTRAINTS_XML})
+        add_library(torchlight_pointer_constraints STATIC ${POINTER_CONSTRAINTS_CODE} ${POINTER_CONSTRAINTS_HEADER})
+        target_include_directories(torchlight_pointer_constraints PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated)
+        target_link_libraries(torchlight_pointer_constraints PUBLIC PkgConfig::WAYLAND_CLIENT)
         add_executable(torchlight_desktop src/linux_desktop_main.cpp)
         target_link_libraries(torchlight_desktop PRIVATE
-            torchlight_application torchlight_gles2 torchlight_xdg_shell PkgConfig::WAYLAND_EGL PkgConfig::EGL)
+            torchlight_application torchlight_gles2 torchlight_xdg_shell torchlight_pointer_constraints PkgConfig::WAYLAND_EGL PkgConfig::EGL)
         target_compile_features(torchlight_desktop PRIVATE cxx_std_17)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(torchlight_desktop PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -352,6 +391,27 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(frontend_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME frontend COMMAND frontend_test ${FRONTEND_FIXTURE})
+    add_executable(music_test tests/music_test.cpp)
+    target_link_libraries(music_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(music_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME music COMMAND music_test)
+    if(TORCHLIGHT_HAVE_MUSIC AND TORCHLIGHT_GAME_DIR)
+        add_executable(music_tracks_probe tests/music_tracks_probe.cpp)
+        target_link_libraries(music_tracks_probe PRIVATE PkgConfig::VORBISFILE)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(music_tracks_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endif()
+        add_test(NAME original_music_tracks
+            COMMAND music_tracks_probe "${TORCHLIGHT_GAME_DIR}/music")
+    endif()
+    add_executable(settings_test tests/settings_test.cpp)
+    target_link_libraries(settings_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(settings_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME settings COMMAND settings_test)
     set(MENU_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/menu-widgets.pak.zip)
     add_custom_command(OUTPUT ${MENU_FIXTURE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_menu_fixture.py ${MENU_FIXTURE}

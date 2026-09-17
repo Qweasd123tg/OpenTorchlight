@@ -41,6 +41,34 @@ int main(int argc, char **argv) {
         Frontend frontend(ui, classes);
         const auto main = frontend.frame(1024, 768);
         require(main.original_layout, "original main menu was not parsed");
+        // resource-derived: credit tabs toggle the fullscreen pane
+        // (CMainMenu::onClick A/B); content is the rodata roll.
+        {
+            const auto press = [&](const char *id) {
+                const auto frame = frontend.frame(1024, 768);
+                const auto it =
+                    std::find_if(frame.buttons.begin(), frame.buttons.end(),
+                                 [&](const auto &b) { return b.id == id; });
+                require(it != frame.buttons.end(), "credit tab absent");
+                frontend.click(it->rect.x + it->rect.width * .5F,
+                               it->rect.y + it->rect.height * .5F);
+            };
+            const auto pane = [&] {
+                const auto frame = frontend.frame(1024, 768);
+                const auto it =
+                    std::find_if(frame.texts.begin(), frame.texts.end(),
+                                 [&](const auto &w) { return w.name == "Credits"; });
+                return it == frame.texts.end() ? std::string{} : it->text;
+            };
+            require(pane().empty(), "credit pane leaked while closed");
+            press("credits-a");
+            const auto open = pane();
+            require(open.find("Runic Games") != std::string::npos &&
+                        open.find("Ogre3d") != std::string::npos,
+                    "credit roll content wrong");
+            press("credits-b");
+            require(pane().empty(), "credit pane stuck open");
+        }
         for (const auto *path : {"media/UI/mainmenuframe.layout", "media/UI/charactercreate.layout",
                                  "media/UI/characterload.layout"}) {
             const auto *layout = ui.layout(path);
@@ -61,6 +89,63 @@ int main(int argc, char **argv) {
                 "original New Game binding changed");
         require(callback_present("media/UI/charactercreate.layout", "guiNewGame"),
                 "original Create binding changed");
+        // resource-derived slot description from checkpoint data on the real
+        // characterload.layout (PlayerNDesc widgets).
+        {
+            std::vector<SaveSlotInfo> slots;
+            for (int i = 0; i < 2; ++i) {
+                SaveSlotInfo slot;
+                slot.slot = "probe-" + std::to_string(i);
+                slot.name = "Probe " + std::to_string(i);
+                slot.class_guid = players[static_cast<std::size_t>(i)].guid;
+                slot.level = 5 + i;
+                slot.hardcore = (i == 1);
+                slots.push_back(slot);
+            }
+            frontend.set_saves(slots);
+            const auto menu = frontend.frame(1024, 768);
+            const auto loads = std::find_if(menu.buttons.begin(), menu.buttons.end(),
+                                            [](const auto &b) { return b.id == "loads"; });
+            require(loads != menu.buttons.end(), "load entry absent");
+            frontend.click(loads->rect.x + loads->rect.width * .5F,
+                           loads->rect.y + loads->rect.height * .5F);
+            const auto load = frontend.frame(1024, 768);
+            const auto desc = [&](const char *name) {
+                const auto it =
+                    std::find_if(load.texts.begin(), load.texts.end(),
+                                 [&](const auto &w) { return w.name == name; });
+                if (it == load.texts.end()) throw std::runtime_error("slot desc absent");
+                return it->text;
+            };
+            const std::string first_class(players[0].name.begin(), players[0].name.end());
+            const std::string second_class(players[1].name.begin(), players[1].name.end());
+            require(desc("Player1Desc") == "Level 5 " + first_class, "slot desc wrong");
+            require(desc("Player2Desc") == "Level 6 " + second_class + ", Hardcore",
+                    "hardcore slot desc wrong");
+        }
+        // resource-derived: Falagard TextComponent passes from GuiLook.looknfeel.
+        const auto static_passes = ui.widget_text_passes("GuiLook/StaticText");
+        require(static_passes && static_passes->size() == 2, "StaticText passes changed");
+        require((*static_passes)[0].dx == 2 && (*static_passes)[0].dy == 2 &&
+                    (*static_passes)[0].colour_property == "DropTextColour",
+                "StaticText shadow pass changed");
+        require((*static_passes)[1].dx == 0 && (*static_passes)[1].dy == 0 &&
+                    (*static_passes)[1].colour_property == "TextColour",
+                "StaticText main pass changed");
+        const auto outline = ui.widget_text_passes("GuiLook/StaticTextOutline");
+        require(outline && outline->size() == 9, "StaticTextOutline passes changed");
+        std::size_t ring = 0;
+        for (std::size_t i = 0; i + 1 < outline->size(); ++i)
+            if ((*outline)[i].colour_property == "DropTextColour")
+                ++ring;
+        require(ring == 8 && (*outline)[8].colour_property == "TextColour",
+                "StaticTextOutline ring changed");
+        const auto item = ui.widget_text_passes("GuiLook/ItemText");
+        require(item && item->size() == 1 && (*item)[0].dx == 0 && (*item)[0].dy == 0,
+                "ItemText passes changed");
+        require(!ui.widget_text_passes("GuiLook/NoSuchLook"), "unknown look invented passes");
+        require(ui.look_default("GuiLook/StaticTextOutline", "DropTextColour") == "FF000000",
+                "StaticTextOutline drop default changed");
         LevelSceneLoader loader(archive);
         LevelsetCatalog levelsets(archive);
         auto town = loader.load_fixed_scene(u"media/dungeons/TOWN.DAT");

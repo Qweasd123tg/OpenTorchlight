@@ -37,12 +37,30 @@ int main(int argc, char **argv) {
         require(b.image == "set:Author image:Normal" && b.hover_image == "set:Author image:Hover" &&
                 b.pushed_image == "set:Author image:Pushed" && b.disabled_image == "set:Author image:Disabled",
                 "look defaults / quote parsing / direct-child scope wrong");
-        require(!button(m,"unsupported:Root/Settings").enabled, "settings became a fake action");
-        click(f,"unsupported:Root/Settings");
-        require(!f.take_request() && f.page() == FrontendPage::main, "unsupported callback dispatched");
+        require(button(m,"settings").enabled, "settings stayed a disabled control");
+        click(f,"settings");
+        require(f.page() == FrontendPage::settings, "settings page did not open");
+        require(!f.take_request(), "settings entry dispatched a command");
+        require(!button(f.frame(1024,768),"setting-FULLSCREEN").selected,
+                "default fullscreen draft wrong");
+        click(f,"setting-FULLSCREEN");
+        require(button(f.frame(1024,768),"setting-FULLSCREEN").selected,
+                "checkbox toggle lost");
+        click(f,"apply");
+        {
+            auto r = f.take_request();
+            require(r && r->command == FrontendCommand::apply_settings &&
+                        r->settings.fullscreen && r->settings.show_blood,
+                    "settings apply did not carry the draft");
+        }
+        click(f,"decline-settings");
+        require(f.page() == FrontendPage::main, "settings decline did not return");
+        f.key(FrontendKey::back);
+        require(f.page() == FrontendPage::main, "settings back did not return");
         auto small = f.frame(512,384);
-        require(text(small,"CopyrightInfo").rect.x == text(m,"CopyrightInfo").rect.x/2,
-                "text resize not shared with layout");
+        // original-code: absolute pixel offsets do not rescale with the window.
+        require(text(small,"CopyrightInfo").rect.x == text(m,"CopyrightInfo").rect.x,
+                "absolute layout offset rescaled");
         click(f,"new");
         require(text(f.frame(1024,768),"CharacterName").text == "Hero", "name field not bound");
         const auto creation=f.frame(1024,768);

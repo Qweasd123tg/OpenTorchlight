@@ -1,5 +1,6 @@
 #pragma once
 #include "torchlight/frontend.hpp"
+#include "torchlight/settings.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
 #include "torchlight/gles_ui_renderer.hpp"
 #include "torchlight/ui_hud.hpp"
@@ -17,6 +18,14 @@ struct ApplicationOptions {
     std::optional<std::size_t> main_stratum;
     std::uint32_t seed = 42;
     std::optional<std::filesystem::path> save_directory;
+    std::optional<std::filesystem::path> settings_directory;
+    // Menu/world music (plain OGG next to the game). Off unless the host
+    // opts in, so scenario tests stay hermetic and silent.
+    bool music_enabled = false;
+    std::filesystem::path music_directory;
+    float music_volume = 1.0F;
+    bool music_mute = false;
+    DisplaySettings settings;
 };
 struct ApplicationView {
     // Borrowed read-only values, valid ONLY during observe_game(). No pointer is

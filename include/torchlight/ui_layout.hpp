@@ -55,6 +55,28 @@ struct UiImage {
 struct UiWidgetImages {
     std::string normal, hover, pushed, disabled;
 };
+// resource-derived: one Falagard TextComponent pass. Coordinates are absolute
+// pixels plus a multiple of the widget size (LeftEdge/TopEdge AbsoluteDim and
+// UnifiedDim(scale, Width|Height) with Add/Subtract); colour names a
+// TextColour-like widget property resolved against the widget, then the look
+// default. Checkbox labels live past the box (x + width + 5).
+struct UiTextPass {
+    float dx = 0, dy = 0;
+    float x_scale = 0, y_scale = 0;
+    std::string colour_property;
+    std::string colour_default{"FFFFFFFF"};
+    // resource-derived: per-TextComponent VertFormat/HorzFormat type.
+    // Unset means the component defers to the widget formatting properties
+    // (HorzFormatProperty/VertFormatProperty, e.g. StaticText/ItemText).
+    std::optional<UiTextHorizontal> horz;
+    std::optional<UiTextVertical> vert;
+};
+// resource-derived: wrap width of the look's first TextComponent Area
+// (Width, or RightEdge minus LeftEdge). Non-positive means the area is
+// degenerate and text runs to the viewport edge (Checkbox labels).
+struct UiTextLayout {
+    float width_abs = 0, width_scale = 0;
+};
 class UiResources {
   public:
     explicit UiResources(const PakArchive &archive) : archive_(&archive) {
@@ -66,16 +88,29 @@ class UiResources {
     [[nodiscard]] UiFont *font(const std::string &name);
     // WidgetLook PropertyDefinition initialValue from media/UI/GuiLook.looknfeel.
     [[nodiscard]] std::optional<UiWidgetImages> widget_images(const std::string &type);
+    // Ordered Falagard TextComponent passes for the look (shadow/outline first,
+    // main text last). Absent when the look defines none: the caller keeps its
+    // single-pass fallback instead of inventing geometry.
+    [[nodiscard]] std::optional<std::vector<UiTextPass>> widget_text_passes(
+        const std::string &type);
+    [[nodiscard]] std::optional<UiTextLayout> widget_text_layout(const std::string &type);
+    // PropertyDefinition initialValue for the look ("" when absent).
+    [[nodiscard]] std::string look_default(const std::string &type,
+                                           const std::string &key);
     [[nodiscard]] const std::vector<std::string> &diagnostics() const noexcept {
         return diagnostics_;
     }
 
   private:
+    void ensure_looknfeel();
     const PakArchive *archive_;
     std::map<std::string, UiLayout> layouts_;
     std::map<std::string, UiImage> images_;
     std::map<std::string, UiFont> fonts_;
     std::map<std::string, UiWidgetImages> widget_images_;
+    std::map<std::string, std::vector<UiTextPass>> widget_text_;
+    std::map<std::string, UiTextLayout> widget_text_origin_;
+    std::map<std::string, std::map<std::string, std::string>> look_defaults_;
     std::vector<std::string> diagnostics_;
     bool images_loaded_ = false, fonts_loaded_ = false, looknfeel_loaded_ = false;
 };

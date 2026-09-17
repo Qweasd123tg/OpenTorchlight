@@ -94,6 +94,25 @@ CampaignCheckpoint SaveStore::read(const std::string &slot, std::uint64_t identi
         throw CheckpointError("save belongs to different game resources");
     return c;
 }
+bool SaveStore::remove(const std::string &slot) const {
+    const auto file = path(slot);
+    std::error_code status_error;
+    const auto status = std::filesystem::symlink_status(file, status_error);
+    if (status_error) {
+        if (status_error == std::errc::no_such_file_or_directory)
+            return false;
+        throw CheckpointError("cannot inspect save slot");
+    }
+    if (!std::filesystem::exists(status))
+        return false;
+    if (status.type() != std::filesystem::file_type::regular)
+        throw CheckpointError("save slot is not a regular file");
+    std::error_code remove_error;
+    const bool removed = std::filesystem::remove(file, remove_error);
+    if (remove_error)
+        throw CheckpointError("cannot delete save slot");
+    return removed;
+}
 std::vector<SaveSlotInfo> SaveStore::list(std::uint64_t identity) const {
     std::vector<SaveSlotInfo> result;
     if (!std::filesystem::exists(directory_))
@@ -113,6 +132,10 @@ std::vector<SaveSlotInfo> SaveStore::list(std::uint64_t identity) const {
             row.class_guid = c.class_guid;
             row.current = c.current;
             row.revision = c.revision;
+            row.hardcore = c.player.hardcore;
+            // Same sanity range as validate_progression; garbage stays at 1.
+            if (c.player.progression && c.player.progression->level >= 1)
+                row.level = c.player.progression->level;
         } catch (const std::exception &error) {
             row.error = error.what();
             row.name = row.slot;
