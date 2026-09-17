@@ -55,7 +55,7 @@ void cycle(const char* path) {
     auto mixed=pickup(f,p,u"MIX_POTION");
     require(p.use_consumable(mixed)==ConsumableUse::used,"mixed potion rejected eligible mana effect");
     require(!p.inventory().find(mixed) && p.active_recovery().size()==2,"mixed bottle not exactly once / duplicate HP");
-    auto saved=checkpoint(p);auto bytes=encode_checkpoint(saved);require(bytes[8]==4,"not save v4");
+    auto saved=checkpoint(p);auto bytes=encode_checkpoint(saved);require(bytes[8]==kCheckpointFormatVersion,"not current save format");
     auto loaded=CheckpointAccess::restore_player(proto,decode_checkpoint(bytes).player,99,&f.hierarchy);
     require(encode_checkpoint(checkpoint(loaded))==bytes,"load rerolled or healed potion state");
     require(loaded.update_vitals(3) && p.update_vitals(3),"expiry spanning update");

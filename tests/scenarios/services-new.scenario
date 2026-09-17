@@ -1,0 +1,12 @@
+# Common application creates actual Town and Alchemist; fixture preparation is separate.
+menu main
+button new
+menu create
+button class-0
+name services
+button create
+level Town 0
+frames 3
+key ESC
+menu pause
+button save-exit

@@ -17,6 +17,7 @@ template <class A, class S> void player_versioned_fields(A& a, S& s) {
     if (a.version >= 2) a(s.progression);
     if (a.version >= 3) a(s.base_health);
     if (a.version >= 4) a(s.active_recovery);
+    if (a.version >= 5) a(s.skills);
 }
 template <class A> void versioned_fields(A& a, PlayerCheckpoint& s) { player_versioned_fields(a, s); }
 template <class A> void versioned_fields(A& a, const PlayerCheckpoint& s) { player_versioned_fields(a, s); }
@@ -34,6 +35,8 @@ template <class A> void versioned_fields(A& a, WeaponPrototype& s) { if (a.versi
 template <class A> void versioned_fields(A& a, const WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); }
 template <class A> void versioned_fields(A& a, AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
 template <class A> void versioned_fields(A& a, const AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
+template <class A> void versioned_fields(A& a, CampaignCheckpoint& s) { if (a.version >= 5) a(s.quests); }
+template <class A> void versioned_fields(A& a, const CampaignCheckpoint& s) { if (a.version >= 5) a(s.quests); }
 #undef V2_FIELDS
 #define FIELDS(T, ...)                                                                             \
     template <class A> void fields(A &a, T &s) {                                                   \
@@ -42,6 +45,11 @@ template <class A> void versioned_fields(A& a, const AttackDescription& s) { if 
     template <class A> void fields(A &a, const T &s) {                                             \
         a(__VA_ARGS__); versioned_fields(a, s);                                                                            \
     }
+FIELDS(QuestFlags, s.name, s.active, s.complete, s.accept_dialog)
+FIELDS(QuestCheckpoint, s.flags, s.completed_count)
+FIELDS(SkillProgress, s.name, s.invested, s.cooldown)
+FIELDS(TimedSkillEffect, s.name, s.unit_theme, s.type, s.damage_type, s.value, s.duration, s.remaining, s.exclusive, s.source_skill)
+FIELDS(SkillCheckpoint, s.skills, s.effects)
 FIELDS(RecoveryEffect, s.name, s.type, s.duration, s.value)
 FIELDS(ConsumableItem, s.count, s.maximum_stack, s.uses, s.level_required, s.dont_use_on_full, s.effects, s.unavailable_reason)
 FIELDS(ActiveRecovery, s.effect, s.remaining, s.source_guid)

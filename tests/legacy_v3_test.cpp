@@ -12,7 +12,7 @@ int main(int argc,char**argv){try{
     const bool continued=std::string(argv[1])=="--continued";
     test_fixture::World f(argv[2]);
     std::ifstream stream(argv[3],std::ios::binary);std::vector<std::uint8_t> bytes((std::istreambuf_iterator<char>(stream)),{});
-    require(bytes.size()>12&&bytes[8]==(continued?4:3),"wrong fixture save version");
+    require(bytes.size()>12&&bytes[8]==(continued?kCheckpointFormatVersion:3),"wrong fixture save version");
     auto checkpoint=decode_checkpoint(bytes);
     const auto players=load_playable_players(f.archive,f.resources,f.definitions);
     auto proto=std::find_if(players.begin(),players.end(),[&](const auto& p){return p.guid==checkpoint.class_guid;});
@@ -39,7 +39,7 @@ int main(int argc,char**argv){try{
     }else require(session.active_recovery().size()==1&&session.active_recovery()[0].remaining==1.5F,"upgraded active timer lost");
     require(session.update_vitals(.5F)&&session.health().health()==(continued?60:50),"legacy finite recovery incorrect");
     checkpoint.player=CheckpointAccess::capture(session);checkpoint.floors[0].world=CheckpointAccess::capture(f.world);
-    bytes=encode_checkpoint(checkpoint);require(bytes[8]==4,"migration did not write v4");
+    bytes=encode_checkpoint(checkpoint);require(bytes[8]==kCheckpointFormatVersion,"migration did not write v4");
     if(!continued){std::ofstream output(argv[4],std::ios::binary);output.write(reinterpret_cast<const char*>(bytes.data()),bytes.size());require(static_cast<bool>(output),"upgrade write");}
     std::cout<<"PASS legacy v3 "<<(continued?"v4 second process":"untouched writer migration")<<"; no refill, reroll, duplicate or respawn\n";
     return 0;

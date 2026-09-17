@@ -1,0 +1,29 @@
+Internal ctest changing into directory: /mnt/data/ot_build
+Test project /mnt/data/ot_build
+    Start  29: read_only_extractors
+1/9 Test  #29: read_only_extractors .............   Passed   15.89 sec
+    Start  48: original_camera_comparison
+2/9 Test  #48: original_camera_comparison .......   Passed    1.58 sec
+    Start 102: skills_runtime
+3/9 Test #102: skills_runtime ...................   Passed    0.02 sec
+    Start 103: original_skills_runtime
+4/9 Test #103: original_skills_runtime ..........   Passed    1.72 sec
+    Start 105: quest_requirements
+5/9 Test #105: quest_requirements ...............   Passed    0.04 sec
+    Start 106: original_quest_controllers
+6/9 Test #106: original_quest_controllers .......   Passed    0.23 sec
+    Start 107: merchant_prices
+7/9 Test #107: merchant_prices ..................   Passed    0.02 sec
+    Start 108: original_merchant_purchases
+8/9 Test #108: original_merchant_purchases ......   Passed    2.57 sec
+    Start 110: gameplay_v4_migration
+9/9 Test #110: gameplay_v4_migration ............   Passed    2.24 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Label Time Summary:
+assets       =   4.53 sec*proc (3 tests)
+core         =  18.21 sec*proc (5 tests)
+reference    =   1.58 sec*proc (1 test)
+
+Total Test time (real) =  24.37 sec

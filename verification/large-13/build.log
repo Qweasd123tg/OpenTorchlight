@@ -1,0 +1,195 @@
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Configuring done (22.4s)
+-- Generating done (0.8s)
+-- Build files have been written to: /mnt/data/ot_build
+[  1%] Built target ogre_camera_reference
+[  1%] Built target ai_cooldown_fixture
+[  2%] Building CXX object CMakeFiles/torchlight_core.dir/src/skills.cpp.o
+[  2%] Built target item_cycle_fixture
+[  2%] Built target ordinary_combat_fixture
+[  3%] Built target menu_fixture
+[  4%] Built target frontend_fixture
+[  5%] Building CXX object CMakeFiles/torchlight_core.dir/src/player_session.cpp.o
+[  5%] Built target ui_font_fixture
+[  5%] Built target hud_fixture
+[  6%] Built target progression_fixture
+[  6%] Built target vitals_fixture
+[  6%] Built target consumable_fixture
+[  6%] Built target population_fixture
+[  6%] Built target ranged_fixture
+[  6%] Built target legacy_v3_fixture
+[  6%] Linking CXX static library libtorchlight_core.a
+[ 30%] Built target torchlight_core
+[ 30%] Linking CXX executable torchlight_bootstrap
+[ 31%] Built target torchlight_application
+[ 32%] Linking CXX executable torchlight_asset_catalog
+[ 32%] Linking CXX executable torchlight_level_rules_dump
+[ 33%] Built target torchlight_level_rules_dump
+[ 33%] Built target torchlight_bootstrap
+[ 33%] Built target torchlight_asset_catalog
+[ 34%] Linking CXX executable torchlight_player_units_dump
+[ 35%] Linking CXX executable torchlight_scene_camera_dump
+[ 35%] Linking CXX executable attack_action_test
+[ 35%] Built target torchlight_player_units_dump
+[ 35%] Built target attack_action_test
+[ 35%] Linking CXX shared library libaction_comparison.so
+[ 35%] Linking CXX shared library libinput_comparison.so
+[ 35%] Built target torchlight_scene_camera_dump
+[ 35%] Built target action_comparison
+[ 35%] Linking CXX shared library librandomizer_comparison.so
+[ 35%] Linking CXX shared library libpathfinder_comparison.so
+[ 36%] Built target input_comparison
+[ 36%] Built target pathfinder_comparison
+[ 36%] Linking CXX shared library libcamera_comparison.so
+[ 37%] Linking CXX executable pak_archive_test
+[ 38%] Built target camera_comparison
+[ 39%] Built target randomizer_comparison
+[ 39%] Linking CXX executable actor_motion_test
+[ 40%] Linking CXX executable collision_mesh_test
+[ 40%] Built target pak_archive_test
+[ 40%] Linking CXX executable adm_document_test
+[ 41%] Built target actor_motion_test
+[ 41%] Linking CXX executable master_resource_index_test
+[ 42%] Built target adm_document_test
+[ 43%] Linking CXX executable unit_definition_test
+[ 43%] Built target collision_mesh_test
+[ 43%] Built target master_resource_index_test
+[ 43%] Linking CXX executable level_scene_test
+[ 44%] Linking CXX executable logic_runtime_test
+[ 44%] Built target unit_definition_test
+[ 44%] Linking CXX executable random_level_test
+[ 45%] Built target level_scene_test
+[ 45%] Linking CXX executable player_test
+[ 45%] Built target logic_runtime_test
+[ 46%] Linking CXX executable ogre_mesh_test
+[ 46%] Built target ogre_mesh_test
+[ 47%] Built target random_level_test
+[ 47%] Linking CXX executable ogre_material_test
+[ 48%] Linking CXX executable ogre_skeleton_test
+[ 49%] Built target player_test
+[ 49%] Linking CXX executable animation_manifest_test
+[ 49%] Built target ogre_skeleton_test
+[ 50%] Built target animation_manifest_test
+[ 50%] Linking CXX executable animation_events_test
+[ 50%] Linking CXX executable skeletal_animation_test
+[ 51%] Built target ogre_material_test
+[ 52%] Built target animation_events_test
+[ 53%] Linking CXX executable dds_texture_test
+[ 53%] Linking CXX executable png_texture_test
+[ 54%] Built target skeletal_animation_test
+[ 55%] Built target png_texture_test
+[ 56%] Linking CXX executable scene_geometry_test
+[ 57%] Linking CXX executable spawn_class_test
+[ 57%] Built target dds_texture_test
+[ 58%] Linking CXX executable entity_world_test
+[ 58%] Built target spawn_class_test
+[ 59%] Linking CXX executable enemy_ai_test
+[ 59%] Built target entity_world_test
+[ 60%] Linking CXX executable unit_type_test
+[ 60%] Built target enemy_ai_test
+[ 60%] Built target unit_type_test
+[ 61%] Linking CXX executable combat_test
+[ 62%] Linking CXX executable damage_test
+[ 62%] Built target scene_geometry_test
+[ 62%] Built target damage_test
+[ 62%] Linking CXX executable equipment_test
+[ 63%] Linking CXX executable level_transition_test
+[ 63%] Built target combat_test
+[ 63%] Built target equipment_test
+[ 64%] Linking CXX executable warp_arrival_test
+[ 64%] Built target level_transition_test
+[ 64%] Linking CXX executable level_entry_test
+[ 65%] Linking CXX executable enemy_ai_cooldown_test
+[ 65%] Built target warp_arrival_test
+[ 65%] Linking CXX executable ai_cooldown_probe
+[ 66%] Built target level_entry_test
+[ 66%] Linking CXX executable inventory_view_test
+[ 66%] Built target enemy_ai_cooldown_test
+[ 66%] Linking CXX executable inventory_test
+[ 67%] Built target ai_cooldown_probe
+[ 67%] Linking CXX executable item_cycle_test
+[ 68%] Built target inventory_test
+[ 68%] Linking CXX executable attack_speed_probe
+[ 69%] Built target inventory_view_test
+[ 69%] Linking CXX executable ordinary_combat_test
+[ 70%] Built target attack_speed_probe
+[ 70%] Linking CXX executable frontend_test
+[ 71%] Built target frontend_test
+[ 72%] Built target ordinary_combat_test
+[ 72%] Linking CXX executable frontend_menu_test
+[ 72%] Linking CXX executable ui_text_test
+[ 73%] Built target item_cycle_test
+[ 74%] Linking CXX executable menu_resource_probe
+[ 74%] Built target frontend_menu_test
+[ 75%] Built target ui_text_test
+[ 75%] Linking CXX executable frontend_resource_test
+[ 75%] Linking CXX executable frontend_cycle_test
+[ 75%] Built target menu_resource_probe
+[ 75%] Linking CXX shared library libgles_ui_probe.so
+[ 76%] Built target frontend_resource_test
+[ 77%] Linking CXX shared library libapplication_scenario_probe.so
+[ 78%] Built target frontend_cycle_test
+[ 79%] Linking CXX executable save_checkpoint_test
+[ 80%] Built target gles_ui_probe
+[ 80%] Linking CXX executable gameplay_continuation_test
+[ 80%] Built target save_checkpoint_test
+[ 80%] Linking CXX executable death_finalization_test
+[ 81%] Built target application_scenario_probe
+[ 81%] Linking CXX executable effect_catalog_probe
+[ 82%] Built target gameplay_continuation_test
+[ 83%] Built target effect_catalog_probe
+[ 83%] Linking CXX executable player_vitals_probe
+[ 83%] Linking CXX executable reward_cycle_test
+[ 83%] Built target death_finalization_test
+[ 84%] Linking CXX executable reward_resource_probe
+[ 85%] Built target player_vitals_probe
+[ 86%] Linking CXX executable world_gold_probe
+[ 87%] Built target reward_cycle_test
+[ 87%] Linking CXX executable checkpoint_upgrade_probe
+[ 87%] Built target world_gold_probe
+[ 87%] Linking CXX executable monster_experience_probe
+[ 87%] Built target reward_resource_probe
+[ 87%] Linking CXX executable item_cycle_resource_test
+[ 87%] Built target monster_experience_probe
+[ 88%] Linking CXX executable parent_dungeon_test
+[ 88%] Built target parent_dungeon_test
+[ 89%] Built target checkpoint_upgrade_probe
+[ 89%] Linking CXX executable random_observation_test
+[ 90%] Linking CXX executable vitals_test
+[ 91%] Built target random_observation_test
+[ 92%] Linking CXX executable consumable_test
+[ 93%] Built target item_cycle_resource_test
+[ 93%] Linking CXX executable population_test
+[ 93%] Built target vitals_test
+[ 93%] Built target consumable_test
+[ 94%] Linking CXX executable gameplay_numeric_probe
+[ 94%] Linking CXX executable ranged_test
+[ 95%] Built target population_test
+[ 95%] Linking CXX executable legacy_v3_test
+[ 95%] Built target gameplay_numeric_probe
+[ 96%] Building CXX object CMakeFiles/skills_test.dir/tests/skills_test.cpp.o
+[ 97%] Built target ranged_test
+[ 98%] Building CXX object CMakeFiles/economy_probe.dir/tests/economy_probe.cpp.o
+[ 99%] Built target legacy_v3_test
+[ 99%] Building CXX object CMakeFiles/quests_test.dir/tests/quests_test.cpp.o
+[ 99%] Linking CXX executable economy_probe
+[ 99%] Built target economy_probe
+[ 99%] Building CXX object CMakeFiles/merchant_test.dir/tests/merchant_test.cpp.o
+[ 99%] Linking CXX executable quests_test
+[ 99%] Linking CXX executable skills_test
+[100%] Linking CXX executable merchant_test
+[100%] Built target quests_test
+[100%] Building CXX object CMakeFiles/service_fixture.dir/tests/service_fixture.cpp.o
+[100%] Built target skills_test
+[100%] Built target merchant_test
+[100%] Linking CXX executable service_fixture
+[100%] Built target service_fixture

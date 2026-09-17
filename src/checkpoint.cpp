@@ -200,7 +200,9 @@ PlayerCheckpoint CheckpointAccess::capture(const PlayerSession &p) {
     s.health = p.health_.health_;
     s.maximum_health = p.health_.maximum_health_;
     s.base_health = p.health_.base_health_;
+    require(!p.skill_cast_.active(), "save requires a completed or cancelled cast");
     s.active_recovery = p.active_recovery_;
+    s.skills = p.skills_;
     s.mana = p.health_.mana_;
     s.maximum_mana = p.health_.maximum_mana_;
     s.base_defense = p.health_.base_damage_defense_;
@@ -241,6 +243,7 @@ EnemyCheckpoint CheckpointAccess::capture(const EnemyController &e) {
 }
 void CheckpointAccess::validate(const PlayerCheckpoint &s) {
     try { validate_active_recovery(s.active_recovery); } catch (const std::exception& e) { throw CheckpointError(e.what()); }
+    if (s.skills) { try { validate_skill_checkpoint(*s.skills); } catch(const std::exception& e) {throw CheckpointError(e.what());} }
     require(s.gold >= 0, "negative saved gold");
     if (s.progression) {
         try { validate_progression(*s.progression); }
@@ -306,10 +309,11 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
     const auto saved_base = s.base_health ? *s.base_health : static_cast<std::int32_t>(s.maximum_health);
     p.health_.base_health_ = saved_base;
     p.active_recovery_ = s.active_recovery;
+    if (s.skills) p.skills_ = *s.skills;
     if (s.progression) {
         require(bool(p.progression_rules_), "saved progression requires class graphs");
         try {
-            validate_progression(*s.progression, *p.progression_rules_);
+            validate_progression(*s.progression, *p.progression_rules_, p.spent_skill_points());
             p.progression_ = *s.progression;
             require(p.attributes()[3] == s.base_defense.defense_attribute,
                     "saved defense disagrees with allocated attributes");
@@ -457,6 +461,7 @@ LevelTransitionState CheckpointAccess::restore_transitions(const CampaignCheckpo
     return result;
 }
 void CheckpointAccess::validate(const CampaignCheckpoint &c) {
+    try { validate_quest_checkpoint(c.quests); } catch (const std::exception& e) { throw CheckpointError(e.what()); }
     require(!c.slot.empty() && c.slot.size() <= 64, "invalid save slot");
     for (const auto ch : c.slot)
         require((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '-',

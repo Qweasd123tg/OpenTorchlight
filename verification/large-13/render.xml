@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuite name="large-13-render-from-single-final-run" tests="5" failures="0" skipped="0"><testcase name="gles_ui_headless" classname="gles_ui_headless" time="2.09123" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render" />
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="2.10681" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render" />
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+5 authored resource menu frames passed: labels, skin states, create, pause, load, resize
+PASS: 5 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+	<testcase name="application_scenario_render" classname="application_scenario_render" time="164.011" status="run">
+		<properties>
+			<property name="cmake_labels" value="render" />
+		</properties>
+		<system-out>PASS: 7 real-resource application processes, 42 assertions; evidence /mnt/data/ot_build/scenario-evidence/application-9sks1rrt
+</system-out>
+	</testcase>
+	<testcase name="application_combat_render" classname="application_combat_render" time="51.8899" status="run">
+		<properties>
+			<property name="cmake_labels" value="render" />
+		</properties>
+		<system-out>PASS: 40 common-app combat assertions, two processes; evidence /mnt/data/ot_build/scenario-evidence/combat-mvg2v9b0
+</system-out>
+	</testcase>
+	<testcase name="application_services_render" classname="application_services_render" time="161.149" status="run">
+		<properties>
+			<property name="cmake_labels" value="render" />
+		</properties>
+		<system-out>PASS 47 service/skill assertions, 3 processes; /mnt/data/ot_build/scenario-evidence/services-69pz7g3d
+</system-out>
+	</testcase>
+	</testsuite>

@@ -241,6 +241,8 @@ void LogicRuntime::invoke_from(std::int64_t source_object_id, std::int64_t targe
     invocations_.push_back(
         {source_object_id, target_object_id, std::u16string(input_name)});
 
+    if (subsystem_input_ && subsystem_input_(object, input_name)) return;
+
     if (input_name == u"Enable") {
         object_state.enabled = true;
         if (object.descriptor == u"Timer") {

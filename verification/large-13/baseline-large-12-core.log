@@ -1,0 +1,118 @@
+Internal ctest changing into directory: /mnt/data/ot_build
+Test project /mnt/data/ot_build
+      Start   1: ordinary_attack_action
+      Start   2: actor_motion
+      Start   3: animation_events
+      Start   4: damage_calculation
+      Start   5: warp_arrival
+      Start   6: level_entry_fallback
+ 1/54 Test   #1: ordinary_attack_action .................   Passed    0.05 sec
+ 2/54 Test   #2: actor_motion ...........................   Passed    0.04 sec
+ 3/54 Test   #3: animation_events .......................   Passed    0.04 sec
+ 4/54 Test   #4: damage_calculation .....................   Passed    0.03 sec
+      Start   7: enemy_ai_cooldown
+      Start   8: ai_cooldown_export_comparison
+      Start   9: desktop_gameplay_syntax
+      Start  10: inventory_view
+ 5/54 Test   #5: warp_arrival ...........................   Passed    0.05 sec
+      Start  11: inventory_instances
+ 6/54 Test  #10: inventory_view .........................   Passed    0.03 sec
+      Start  12: item_cycle
+ 7/54 Test  #11: inventory_instances ....................   Passed    0.03 sec
+      Start  13: attack_speed_export_comparison
+ 8/54 Test   #6: level_entry_fallback ...................   Passed    0.09 sec
+      Start  14: ordinary_combat
+ 9/54 Test  #12: item_cycle .............................   Passed    0.16 sec
+      Start  15: frontend
+10/54 Test   #7: enemy_ai_cooldown ......................   Passed    0.23 sec
+      Start  16: frontend_menu_resources
+11/54 Test  #15: frontend ...............................   Passed    0.04 sec
+12/54 Test  #16: frontend_menu_resources ................   Passed    0.03 sec
+      Start  17: ui_text_layout
+      Start  19: frontend_campaign_cycle
+13/54 Test  #17: ui_text_layout .........................   Passed    0.03 sec
+      Start  20: coverage_map_current
+14/54 Test  #14: ordinary_combat ........................   Passed    0.32 sec
+      Start  21: gles_ui_headless
+15/54 Test   #8: ai_cooldown_export_comparison ..........   Passed    2.93 sec
+      Start  22: gles_menu_text
+16/54 Test  #13: attack_speed_export_comparison .........   Passed    4.08 sec
+      Start  23: save_checkpoint
+17/54 Test  #21: gles_ui_headless .......................   Passed    3.84 sec
+      Start  24: save_fresh_process
+18/54 Test  #20: coverage_map_current ...................   Passed    4.09 sec
+      Start  25: save_atomic_process
+19/54 Test  #23: save_checkpoint ........................   Passed    0.32 sec
+      Start  26: gameplay_continuation
+20/54 Test  #26: gameplay_continuation ..................   Passed    0.11 sec
+      Start  27: death_finalization
+21/54 Test  #27: death_finalization .....................   Passed    0.06 sec
+      Start  28: effect_catalog_source
+22/54 Test  #19: frontend_campaign_cycle ................   Passed    4.58 sec
+      Start  29: read_only_extractors
+23/54 Test  #24: save_fresh_process .....................   Passed    2.58 sec
+      Start  30: combat_inputs_evidence
+24/54 Test  #25: save_atomic_process ....................   Passed    2.66 sec
+      Start  31: player_vitals_export_comparison
+25/54 Test  #22: gles_menu_text .........................   Passed    4.18 sec
+      Start  32: reward_resource_graphs
+26/54 Test  #32: reward_resource_graphs .................   Passed    0.08 sec
+      Start  33: reward_unavailable
+27/54 Test  #33: reward_unavailable .....................   Passed    0.06 sec
+      Start  35: progression_numeric
+28/54 Test  #35: progression_numeric ....................   Passed    0.05 sec
+      Start  36: reward_cycle
+29/54 Test  #36: reward_cycle ...........................   Passed    0.22 sec
+      Start  37: reward_fresh_process
+30/54 Test  #28: effect_catalog_source ..................   Passed    3.02 sec
+      Start  38: legacy_reward_save_migration
+31/54 Test   #9: desktop_gameplay_syntax ................   Passed    8.13 sec
+      Start  39: world_gold_export_comparison
+32/54 Test  #30: combat_inputs_evidence .................   Passed    2.61 sec
+      Start  40: monster_experience_export_comparison
+33/54 Test  #31: player_vitals_export_comparison ........   Passed    3.26 sec
+      Start  43: item_cycle_resource_fixture
+34/54 Test  #43: item_cycle_resource_fixture ............   Passed    0.05 sec
+      Start  80: parent_dungeon
+35/54 Test  #80: parent_dungeon .........................   Passed    0.05 sec
+      Start  81: scenario_first_difference
+36/54 Test  #39: world_gold_export_comparison ...........   Passed    2.90 sec
+      Start  82: asset_catalog_negative
+37/54 Test  #37: reward_fresh_process ...................   Passed    3.56 sec
+      Start  86: random_observation
+38/54 Test  #86: random_observation .....................   Passed    0.02 sec
+      Start  87: verification_driver
+39/54 Test  #38: legacy_reward_save_migration ...........   Passed    4.40 sec
+      Start  88: vitals_numeric
+40/54 Test  #88: vitals_numeric .........................   Passed    0.09 sec
+      Start  89: vitals_resource_cycle
+41/54 Test  #89: vitals_resource_cycle ..................   Passed    0.09 sec
+      Start  90: vitals_fresh_process
+42/54 Test  #40: monster_experience_export_comparison ...   Passed    3.32 sec
+      Start  91: vitals_v2_migration
+43/54 Test  #81: scenario_first_difference ..............   Passed    3.00 sec
+      Start  92: collect_game_inputs_safety
+44/54 Test  #82: asset_catalog_negative .................   Passed    3.39 sec
+      Start  93: consumable_cycle
+45/54 Test  #93: consumable_cycle .......................   Passed    0.12 sec
+      Start  94: consumable_fresh_process
+46/54 Test  #92: collect_game_inputs_safety .............   Passed    2.35 sec
+      Start  96: population_cycle
+47/54 Test  #91: vitals_v2_migration ....................   Passed    3.09 sec
+      Start  98: ranged_cycle
+48/54 Test  #90: vitals_fresh_process ...................   Passed    3.77 sec
+      Start 101: gameplay_v3_migration
+49/54 Test  #98: ranged_cycle ...........................   Passed    0.16 sec
+50/54 Test  #96: population_cycle .......................   Passed    0.28 sec
+51/54 Test  #94: consumable_fresh_process ...............   Passed    3.18 sec
+52/54 Test #101: gameplay_v3_migration ..................   Passed    2.43 sec
+53/54 Test  #87: verification_driver ....................   Passed   10.87 sec
+54/54 Test  #29: read_only_extractors ...................   Passed   20.69 sec
+
+100% tests passed, 0 tests failed out of 54
+
+Label Time Summary:
+core      = 115.84 sec*proc (54 tests)
+render    =   8.03 sec*proc (2 tests)
+
+Total Test time (real) =  25.60 sec

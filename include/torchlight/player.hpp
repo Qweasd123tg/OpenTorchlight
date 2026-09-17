@@ -2,6 +2,7 @@
 
 #include "torchlight/damage.hpp"
 #include "torchlight/vitals.hpp"
+#include "torchlight/skills.hpp"
 #include "torchlight/progression.hpp"
 #include "torchlight/equipment.hpp"
 #include "torchlight/master_resource_index.hpp"
@@ -50,6 +51,7 @@ struct PlayerPrototype {
     AttackLoadout attacks;
     AttackCharacterValues attack_character;
     std::optional<WeaponPrototype> starting_weapon;
+    std::vector<SkillGrant> class_skills{};
 };
 
 [[nodiscard]] std::vector<PlayerPrototype> load_playable_players(

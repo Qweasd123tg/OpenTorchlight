@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "status": "PASSED",
+  "evidence": "port-regression-not-original",
+  "pak_sha256": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8",
+  "script_sha256": "0721c9523845cf6190c408a56936e55f1fe0dd4074c44fb8ef5f7e15edf04e64",
+  "library_sha256": "b9cb6248fd954a7d331b76bc649db989c47d555093d846eb7811f27db11dd314",
+  "clock": "scripted dt; default 1/60, optional [0,0.1]; not original scheduler",
+  "input": "same menu/key/pointer handlers as Wayland; no OS input delivery",
+  "graphics": {
+    "egl": "1.5",
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "version": "OpenGL ES 3.2 Mesa 25.0.7-2",
+    "vendor": "Mesa",
+    "surface": "surfaceless-pbuffer",
+    "window_test": false,
+    "width": 1024,
+    "height": 768
+  }
+}

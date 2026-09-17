@@ -1,0 +1,14 @@
+menu main
+dt 0
+button continue
+level Town 0
+frames 2
+capture restored
+dt 0.1
+frames 400
+dt 0
+frames 1
+capture expired
+key ESC
+menu pause
+button save-exit

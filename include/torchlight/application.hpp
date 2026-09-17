@@ -36,6 +36,7 @@ struct ApplicationView {
     const PlayerSession* session = nullptr;
     const RuntimeEntityWorld* world = nullptr;
     const LogicRuntime* logic = nullptr;
+    const QuestCheckpoint* quests = nullptr;
     const EnemyController* enemies = nullptr;
     const NavigationGrid* navigation = nullptr;
     const LayoutManifest* layout = nullptr;

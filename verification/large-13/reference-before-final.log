@@ -1,0 +1,35 @@
+Internal ctest changing into directory: /mnt/data/ot_build
+Test project /mnt/data/ot_build
+      Start  48: original_camera_comparison
+      Start  49: original_input_comparison
+ 1/13 Test  #48: original_camera_comparison ...............   Passed    4.04 sec
+      Start  50: original_action_comparison
+ 2/13 Test  #50: original_action_comparison ...............   Passed    3.35 sec
+      Start 100: original_gameplay_numeric_comparison
+ 3/13 Test  #49: original_input_comparison ................   Passed    7.44 sec
+      Start 104: original_economy_comparison
+ 4/13 Test #104: original_economy_comparison ..............   Passed    2.66 sec
+      Start  46: original_ai_cooldown_comparison
+ 5/13 Test #100: original_gameplay_numeric_comparison .....   Passed    2.78 sec
+      Start  41: original_world_gold_comparison
+ 6/13 Test  #41: original_world_gold_comparison ...........   Passed    6.18 sec
+      Start  44: original_player_vitals_comparison
+ 7/13 Test  #46: original_ai_cooldown_comparison ..........   Passed    6.23 sec
+      Start  45: original_attack_speed_comparison
+ 8/13 Test  #45: original_attack_speed_comparison .........   Passed    5.24 sec
+      Start  42: original_monster_experience_comparison
+ 9/13 Test  #44: original_player_vitals_comparison ........   Passed    6.00 sec
+      Start  47: original_level_entry_dispatch
+10/13 Test  #42: original_monster_experience_comparison ...   Passed    2.88 sec
+      Start  51: original_randomizer_comparison
+11/13 Test  #47: original_level_entry_dispatch ............   Passed    4.66 sec
+      Start  52: original_pathfinder_comparison
+12/13 Test  #51: original_randomizer_comparison ...........   Passed    4.34 sec
+13/13 Test  #52: original_pathfinder_comparison ...........   Passed    3.62 sec
+
+100% tests passed, 0 tests failed out of 13
+
+Label Time Summary:
+reference    =  59.43 sec*proc (13 tests)
+
+Total Test time (real) =  30.66 sec

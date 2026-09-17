@@ -1,0 +1,38 @@
+{
+  "evidence": "resource-backed port regression; not original or Wayland execution",
+  "output": "/mnt/data/ot_build/scenario-evidence/application-9sks1rrt",
+  "timeout_scale": 1,
+  "scenario_inputs_unchanged": true,
+  "status": "PASSED",
+  "assertions": 42,
+  "runs": [
+    {
+      "scenario": "new",
+      "returncode": 0
+    },
+    {
+      "scenario": "continue",
+      "returncode": 0
+    },
+    {
+      "scenario": "replay",
+      "returncode": 0
+    },
+    {
+      "scenario": "class-0",
+      "returncode": 0
+    },
+    {
+      "scenario": "class-2",
+      "returncode": 0
+    },
+    {
+      "scenario": "dungeon",
+      "returncode": 0
+    },
+    {
+      "scenario": "return-continue",
+      "returncode": 0
+    }
+  ]
+}

@@ -308,12 +308,17 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const torchlight::UnitTypeHierarchy unit_type_hierarchy(archive);
         const torchlight::UnitTypeResourceIndex unit_types(
             archive, unit_type_hierarchy, index, loader);
+        const torchlight::QuestCatalog quest_catalog(archive);
+        const torchlight::PotionMerchantCatalog merchant_catalog(archive, index, loader, spawn_classes, unit_type_hierarchy);
         const torchlight::LevelsetCatalog levelsets(archive);
         const torchlight::LevelSceneLoader scene_loader(archive);
         const auto players = torchlight::load_playable_players(archive, index, loader);
         if (players.empty()) {
             throw DesktopError("no playable player definitions were resolved");
         }
+        std::shared_ptr<const torchlight::SkillCatalog> skills_catalog;
+        if (std::any_of(players.begin(), players.end(), [](const auto& p){ return !p.class_skills.empty(); }))
+            skills_catalog = std::make_shared<torchlight::SkillCatalog>(archive);
         torchlight::DungeonAddress initial_address{u"Town", 0};
         if (options.main_stratum) {
             const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
@@ -393,6 +398,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         auto candidate_transitions = request->command == torchlight::FrontendCommand::load
                             ? torchlight::CheckpointAccess::restore_transitions(candidate)
                             : torchlight::LevelTransitionState(candidate.current);
+                        quest_catalog.validate(candidate.quests);
                         selected_player = *chosen; session = std::move(candidate_session); campaign = std::move(candidate);
                         campaign_seed = campaign.seed; transitions = std::move(candidate_transitions); pending_entry.reset();
                         resume_saved_position = request->command == torchlight::FrontendCommand::load;
@@ -405,6 +411,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             try {
             session.enter_level();
             session.hydrate_consumables(loader, index);
+            if (skills_catalog) session.attach_skill_catalog(skills_catalog);
+            bool skill_panel = false, quest_panel = false;
+            std::size_t selected_skill = 0, selected_quest = 0, selected_offer = 0;
+            std::optional<std::uint64_t> merchant_entity;
             inventory_view.open = false;
             auto player_visual = visual_prototype(session.inventory());
             auto player_animations = load_player_animations(
@@ -432,6 +442,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 level_seed(campaign_seed, level.address.depth),
                 std::max(1, level.address.depth));
             torchlight::EnemyController enemies(level_seed(campaign_seed, level.address.depth) ^ 0x9e3779b9U);
+            torchlight::QuestControllerRuntime quest_runtime(quest_catalog, campaign.quests, level.layout, logic_runtime);
+            std::size_t reported_quest_diagnostics = 0;
             const auto* saved_floor = torchlight::find_floor(campaign, level.address);
             if (saved_floor) {
                 torchlight::CheckpointAccess::restore_floor(*saved_floor, entity_world, logic_runtime, enemies);
@@ -559,7 +571,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             float player_animation_time = 0.0F;
             float player_transition_time = 0.0F;
             float scene_animation_time = 0.0F;
-            enum class PlayerAnimationState { idle, run, attack, death };
+            enum class PlayerAnimationState { idle, run, attack, skill, death };
             PlayerAnimationState player_animation_state = PlayerAnimationState::idle;
             PlayerAnimationState player_transition_from_state =
                 PlayerAnimationState::idle;
@@ -672,6 +684,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                 }
+                while (reported_quest_diagnostics < quest_runtime.diagnostics().size())
+                    std::cout << "quest_unavailable=" << quest_runtime.diagnostics()[reported_quest_diagnostics++] << '\n';
                 logic_event_count += logic_runtime.take_events().size();
                 logic_invocation_count += logic_runtime.take_invocations().size();
                 auto warps = logic_runtime.take_warp_requests();
@@ -683,6 +697,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
 
             // Restored object flags/counters/timers must not be overwritten by activation.
             if (!saved_floor) {
+                quest_runtime.initialize();
                 logic_runtime.activate_level();
                 logic_runtime.update_player_position(player_motion.position());
             }
@@ -831,7 +846,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 view.player_angle = player_facing_angle;
                 view.player_instance = player_instance_index; view.weapon_instance = player_weapon_instance_index;
                 view.inventory_open = inventory_view.open; view.session = &session;
-                view.world = &entity_world; view.logic = &logic_runtime; view.enemies = &enemies;
+                view.quests = &campaign.quests; view.world = &entity_world; view.logic = &logic_runtime; view.enemies = &enemies;
                 view.navigation = &level.navigation; view.layout = &level.layout;
                 view.geometry = &level.geometry; view.renderer = &*renderer;
                 window.observe_game(view);
@@ -894,12 +909,67 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                   << " original_entry_anchor=" << level.recovery_anchor_resolved << '\n';
                         continue;
                     }
-                    if (key == torchlight::physical_key::I) inventory_view.open = !inventory_view.open;
+                    if (key == torchlight::physical_key::I) {
+                        inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
+                        skill_panel = false; quest_panel = false; merchant_entity.reset();
+                    } else if (key == torchlight::physical_key::K) {
+                        inventory_view.open = !skill_panel || !inventory_view.open;
+                        skill_panel = true; quest_panel = false; merchant_entity.reset();
+                    } else if (key == torchlight::physical_key::J) {
+                        inventory_view.open = !quest_panel || !inventory_view.open;
+                        quest_panel = true; skill_panel = false; merchant_entity.reset();
+                    } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
+                        const auto& skills = session.skills().skills;
+                        if (selected_skill < skills.size()) {
+                            const auto result = session.begin_skill(skills[selected_skill].name, resolve_attack);
+                            inventory_view.status = torchlight::skill_use_message(result);
+                            if (result == torchlight::SkillUse::started) {
+                                inventory_view.open = false;
+                                player_motion.stop(); active_path.clear(); next_path_node = 0;
+                                active_interaction.reset(); interactions.cancel(); active_pickup.reset();
+                                std::cout << "skill_started=" << narrow_ascii(skills[selected_skill].name)
+                                          << " mana=" << session.health().mana().value_or(0) << '\n';
+                            }
+                        }
+                    }
                     else if (key == torchlight::physical_key::ESC) {
-                        if (inventory_view.open) inventory_view.open = false;
+                        if (inventory_view.open) { inventory_view.open = false; merchant_entity.reset(); }
                         else frontend.pause();
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
+                    } else if (inventory_view.open && merchant_entity) {
+                        const auto* npc = entity_world.find(*merchant_entity);
+                        if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
+                            merchant_entity.reset(); inventory_view.open = false;
+                            inventory_view.status = "MERCHANT NO LONGER AVAILABLE";
+                        } else {
+                            const auto offers = merchant_catalog.offers(npc->resource_guid, session.progression().level);
+                            if (selected_offer >= offers.size()) selected_offer = 0;
+                            if (key == torchlight::physical_key::UP && selected_offer) --selected_offer;
+                            else if (key == torchlight::physical_key::DOWN && selected_offer + 1 < offers.size()) ++selected_offer;
+                            else if ((key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) && selected_offer < offers.size()) {
+                                const auto dx = npc->position[0] - player_motion.position()[0];
+                                const auto dz = npc->position[2] - player_motion.position()[2];
+                                // prototype: reuse the pre-existing interaction dispatch radius below;
+                                // native merchant distance/gates are not yet recovered (large-13 evidence).
+                                if (std::hypot(dx, dz) > 2.25F) inventory_view.status = "MERCHANT OUT OF REACH";
+                                else {
+                                    const auto result = session.buy_potion(merchant_catalog, npc->resource_guid, offers[selected_offer]->item.resource_guid);
+                                    inventory_view.status = torchlight::purchase_message(result.status);
+                                    if (result.status == torchlight::PurchaseStatus::purchased)
+                                        std::cout << "merchant_purchase=" << result.item << " paid=" << result.paid << " gold=" << session.gold() << '\n';
+                                }
+                            }
+                        }
+                    } else if (inventory_view.open && quest_panel) {
+                        if (key == torchlight::physical_key::UP && selected_quest) --selected_quest;
+                        else if (key == torchlight::physical_key::DOWN && selected_quest + 1 < campaign.quests.flags.size()) ++selected_quest;
+                    } else if (inventory_view.open && skill_panel) {
+                        const auto& skills = session.skills().skills;
+                        if (key == torchlight::physical_key::UP && selected_skill) --selected_skill;
+                        else if (key == torchlight::physical_key::DOWN && selected_skill + 1 < skills.size()) ++selected_skill;
+                        else if ((key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) && selected_skill < skills.size())
+                            inventory_view.status = torchlight::skill_use_message(session.invest_skill(skills[selected_skill].name));
                     } else if (inventory_view.open) {
                         if (key == torchlight::physical_key::UP) inventory_view.move(-1, session.inventory());
                         else if (key == torchlight::physical_key::DOWN) inventory_view.move(1, session.inventory());
@@ -929,7 +999,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 if (!session.update_vitals(simulation_elapsed))
                     throw std::runtime_error("Invalid player recovery arithmetic");
                 if (const auto click = window.take_left_click();
-                    click && rendered_once && !inventory_view.open && player_combat.alive()) {
+                    click && rendered_once && !inventory_view.open && player_combat.alive() && !session.skill_cast().active()) {
                     auto destination = renderer->ground_position_at_pixel(
                         (*click)[0], window.height() - 1 - (*click)[1], window.width(),
                         window.height(), player_motion.position()[1]);
@@ -1014,6 +1084,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         player_motion.stop(); active_path.clear(); next_path_node = 0;
                         inventory_view.status = torchlight::interaction_result_message(result);
                         if (result == torchlight::InteractionResult::triggered) ++interaction_count;
+                        if (result == torchlight::InteractionResult::unsupported_service) {
+                            const auto* npc = entity_world.find(active_interaction->entity_id);
+                            if (npc && merchant_catalog.find(npc->resource_guid)) {
+                                merchant_entity = npc->id; selected_offer = 0;
+                                inventory_view.open = true; skill_panel = false; quest_panel = false;
+                                inventory_view.status = "INFINITE POTIONS ONLY. OTHER MERCHANT SERVICES NOT IMPLEMENTED.";
+                                std::cout << "merchant_opened=" << npc->resource_guid << '\n';
+                            }
+                        }
                         active_interaction.reset(); drain_logic();
                     }
                 }
@@ -1050,7 +1129,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                 }
-                if (!pending_warp && !inventory_view.open && player_combat.alive()) {
+                if (!pending_warp && !inventory_view.open && player_combat.alive() && !session.skill_cast().active()) {
                     std::optional<std::array<float, 3>> combat_target_position;
                     if (const auto* target = combat.target(entity_world)) {
                         combat_target_position = target->position;
@@ -1161,6 +1240,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 const float animation_elapsed = simulation_elapsed;
                 if (!player_combat.alive()) { combat.clear_target(); combat.interrupt_attack(); }
                 combat.advance_animation(animation_elapsed);
+                session.advance_skill_animation(animation_elapsed);
                 enemies.advance_animations(animation_elapsed, entity_world, player_combat);
                 player_attack_animation_active = combat.attack_in_progress();
                 for (auto& [entity_id, playback] : enemy_animation_playback) {
@@ -1252,8 +1332,11 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         ++enemy_animation_updates;
                     }
                 }
+                if (session.skill_cast().active()) player_pose_attack_clip = session.skill_cast().clip();
                 const auto next_animation_state = !player_combat.alive()
                                                       ? PlayerAnimationState::death
+                                                      : session.skill_cast().active()
+                                                      ? PlayerAnimationState::skill
                                                       : player_attack_animation_active
                                                       ? PlayerAnimationState::attack
                                                       : player_motion.moving()
@@ -1272,13 +1355,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
                     player_animation_time = combat.action().playback().time_seconds();
+                } else if (!inventory_view.open && player_animation_state == PlayerAnimationState::skill && session.skill_cast().active()) {
+                    player_animation_time = session.skill_cast().playback().time_seconds();
                 } else {
                     player_animation_time += player_animation_state == PlayerAnimationState::death ?
                         std::min(elapsed, 0.1F) : animation_elapsed;
                 }
                 const auto animation_skeleton = [&](PlayerAnimationState state, bool previous = false)
                     -> const torchlight::OgreSkeleton& {
-                    if (state == PlayerAnimationState::attack) {
+                    if (state == PlayerAnimationState::attack || state == PlayerAnimationState::skill) {
                         const auto& clip = previous ? player_transition_attack_clip : player_pose_attack_clip;
                         if (clip) return clip->animation_skeleton;
                     }
@@ -1291,7 +1376,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 };
                 const auto animation_name = [&](PlayerAnimationState state, bool previous = false)
                     -> const std::string& {
-                    if (state == PlayerAnimationState::attack) {
+                    if (state == PlayerAnimationState::attack || state == PlayerAnimationState::skill) {
                         const auto& clip = previous ? player_transition_attack_clip : player_pose_attack_clip;
                         if (clip) return clip->animation_name;
                     }
@@ -1303,7 +1388,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     return player_animations.idle_name;
                 };
                 const auto animation_playback_mode = [](PlayerAnimationState state) {
-                    return state == PlayerAnimationState::attack || state == PlayerAnimationState::death
+                    return state == PlayerAnimationState::attack || state == PlayerAnimationState::skill || state == PlayerAnimationState::death
                                ? torchlight::AnimationPlaybackMode::clamp
                                : torchlight::AnimationPlaybackMode::loop;
                 };
@@ -1312,7 +1397,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     constexpr float kPlayerTransitionDuration = 0.2F;
                     player_transition_time += animation_elapsed;
                     player_transition_from_time += animation_elapsed *
-                        (player_transition_from_state == PlayerAnimationState::attack ? player_transition_attack_speed : 1.0F);
+                        ((player_transition_from_state == PlayerAnimationState::attack || player_transition_from_state == PlayerAnimationState::skill) ? player_transition_attack_speed : 1.0F);
                     const float linear_amount = std::min(
                         1.0F, player_transition_time / kPlayerTransitionDuration);
                     player_pose = torchlight::sample_ogre_mesh_animation_blend(
@@ -1367,7 +1452,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         *player_weapon_instance_index, weapon_transform);
                 }
                 player_previous_pose_clip = player_pose_attack_clip;
-                player_previous_attack_speed = combat.action().playback().playback_speed();
+                player_previous_attack_speed = session.skill_cast().active() ? session.skill_cast().playback().playback_speed() : combat.action().playback().playback_speed();
                 // The global enemy-before-player order is retained explicitly;
                 // per-character order is advance -> pose -> HIT -> finish.
                 if (!inventory_view.open) {
@@ -1389,12 +1474,23 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
                                 active_interaction.reset(); interactions.cancel(); active_pickup.reset(); inventory_view.open = false;
+                                session.cancel_skill();
                                 std::cout << "player_killed=1\n";
                                 break;
                             }
                         }
                     }
                     enemies.finish_animation_frame();
+                }
+                if (!inventory_view.open && session.skill_cast().active() && player_combat.alive()) {
+                    // Same sampled immutable cast clip supplies the visible pose and HIT.
+                    const auto events = session.skill_cast().playback().frame_events();
+                    for (const auto& event : events) if (event.key.name == "HIT" && session.perform_skill_event(event)) {
+                        inventory_view.status = "SKILL EFFECT APPLIED. ORIGINAL THEME / AUDIO NOT YET RENDERED.";
+                        std::cout << "skill_hit=" << narrow_ascii(session.skill_cast().name())
+                                  << " clip=" << event.source_clip << " key=" << event.key_index << '\n';
+                    }
+                    session.finish_skill_frame();
                 }
                 bool player_hit_processed = false;
                 if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
@@ -1441,10 +1537,54 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 ++player_animation_updates;
                 auto overlay = inventory_view.lines(session,
                     static_cast<std::size_t>(std::max(1, window.height() / (window.width() >= 950 ? 22 : 11) - 10)));
+                if (inventory_view.open && skill_panel) {
+                    overlay.resize(2);
+                    overlay.push_back({"PORT SKILLS | POINTS " + std::to_string(session.progression().skill_points) + " | UP/DOWN SELECT | ENTER INVEST | F CAST", true});
+                    const auto& skills = session.skills().skills;
+                    const auto visible = static_cast<std::size_t>(std::max(1, window.height() / (window.width() >= 950 ? 22 : 11) - 9));
+                    const auto first = selected_skill >= visible ? selected_skill - visible + 1 : 0;
+                    for (auto i = first; i < skills.size() && i < first + visible; ++i) {
+                        const auto* def = skills_catalog ? skills_catalog->find(skills[i].name) : nullptr;
+                        const auto* rank = def ? def->rank(std::max(1, skills[i].invested)) : nullptr;
+                        std::string text = narrow_ascii(def ? def->display_name : skills[i].name) + " [" + std::to_string(skills[i].invested) + "]";
+                        if (rank) text += " MANA " + std::to_string(rank->mana_cost) + (rank->self_buff ? "" : " | NOT IMPLEMENTED");
+                        overlay.push_back({std::move(text), i == selected_skill});
+                    }
+                    overlay.push_back({inventory_view.status, false});
+                }
+                if (inventory_view.open && quest_panel) {
+                    overlay.resize(2);
+                    overlay.push_back({"PORT JOURNAL | SCRIPT FLAGS | COMPLETED " + std::to_string(campaign.quests.completed_count), true});
+                    const auto visible = static_cast<std::size_t>(std::max(1, window.height() / (window.width() >= 950 ? 22 : 11) - 9));
+                    const auto first = selected_quest >= visible ? selected_quest - visible + 1 : 0;
+                    for (auto i = first; i < campaign.quests.flags.size() && i < first + visible; ++i) {
+                        const auto& state = campaign.quests.flags[i];
+                        const auto* def = quest_catalog.find(state.name);
+                        const auto text = narrow_ascii(def ? def->display_name : state.name);
+                        overlay.push_back({(state.complete ? "[COMPLETE] " : state.active ? "[ACTIVE] " : "[INACTIVE] ") + text, i == selected_quest});
+                    }
+                    overlay.push_back({"OBJECTIVES, REWARDS, NPC DIALOG AND FULL CAMPAIGN REMAIN INCOMPLETE.", false});
+                }
+                if (inventory_view.open && merchant_entity) {
+                    overlay.resize(2);
+                    const auto* npc = entity_world.find(*merchant_entity);
+                    const auto* merchant = npc ? merchant_catalog.find(npc->resource_guid) : nullptr;
+                    overlay.push_back({merchant ? narrow_ascii(merchant->name) : "MERCHANT UNAVAILABLE", true});
+                    overlay.push_back({"PORT SHOP | UP/DOWN SELECT | ENTER BUY ONE | ESC CLOSE", false});
+                    if (merchant) {
+                        const auto offers = merchant_catalog.offers(merchant->guid, session.progression().level);
+                        for (std::size_t i = 0; i < offers.size(); ++i) {
+                            const auto* offer = offers[i];
+                            const auto price = torchlight::equipment_buy_price(offer->prices, 1, true, session.barter_percent());
+                            overlay.push_back({narrow_ascii(offer->item.display_name) + " | " + std::to_string(price) + " GOLD", i == selected_offer});
+                        }
+                    }
+                    overlay.push_back({inventory_view.status, false});
+                }
                 if (!inventory_view.open) {
                     overlay.resize(2);
                     overlay.push_back({inventory_view.status.empty()
-                        ? "I INVENTORY | ESC PAUSE / SAVE | CLICK TO MOVE / ATTACK / PICK UP"
+                        ? "I INVENTORY | K SKILLS / F CAST | J JOURNAL | Q/E POTIONS | ESC PAUSE / SAVE"
                         : inventory_view.status, false});
                 }
                 if (!player_combat.alive()) {

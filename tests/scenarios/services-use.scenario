@@ -1,0 +1,36 @@
+# The external test fixture added XP/gold only, not skills/NPCs/gear.
+menu main
+button continue
+level Town 0
+dt 0.1
+frames 2
+npc -7294468752501370402
+inventory open
+capture shop_before
+key ENTER
+frames 2
+capture shop_after
+key ESC
+inventory closed
+key K
+inventory open
+select-skill INFUSE
+key ENTER
+frames 2
+capture learned
+dt 0.0166666667
+key F
+inventory closed
+frames 90
+dt 0
+frames 1
+capture active
+key J
+inventory open
+frames 1
+capture journal
+key ESC
+inventory closed
+key ESC
+menu pause
+button save-exit

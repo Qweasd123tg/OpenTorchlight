@@ -128,7 +128,8 @@ void validate_progression(const ProgressionState& s) {
     for (auto v : s.allocated) if (v < 0 || v > 1000000)
         throw std::invalid_argument("allocated attribute outside supported range");
 }
-void validate_progression(const ProgressionState& s, const ProgressionRules& rules) {
+void validate_progression(const ProgressionState& s, const ProgressionRules& rules, std::int32_t spent_skill_points) {
+    if (spent_skill_points < 0) throw std::invalid_argument("negative invested skill points");
     validate_progression(s);
     if (s.level > rules.maximum_level() || s.experience > rules.gate(rules.maximum_level()) ||
         (s.level < rules.maximum_level() && s.experience >= rules.gate(s.level)))
@@ -138,12 +139,12 @@ void validate_progression(const ProgressionState& s, const ProgressionRules& rul
         stats += rules.at(i).stat_points; skills += rules.at(i).skill_points;
     }
     for (auto v : s.allocated) allocated += v;
-    if (stats != static_cast<std::int64_t>(s.stat_points) + allocated || skills != s.skill_points)
+    if (stats != static_cast<std::int64_t>(s.stat_points) + allocated || skills != static_cast<std::int64_t>(s.skill_points) + spent_skill_points)
         throw std::invalid_argument("saved progression points disagree with level history");
 }
 std::uint32_t advance_progression(ProgressionState& state, const ProgressionRules& rules,
-                                  std::int32_t reward, float bonus_percent) {
-    validate_progression(state, rules);
+                                  std::int32_t reward, float bonus_percent, std::int32_t spent_skill_points) {
+    validate_progression(state, rules, spent_skill_points);
     auto next = state;
     const auto total = static_cast<std::int64_t>(next.experience) + experience_with_bonus(reward, bonus_percent);
     next.experience = static_cast<std::int32_t>(std::clamp<std::int64_t>(total, 0,
@@ -155,7 +156,7 @@ std::uint32_t advance_progression(ProgressionState& state, const ProgressionRule
     }
     if (next.level == rules.maximum_level()) next.experience = std::min(next.experience, rules.gate(next.level));
     const auto count = static_cast<std::uint32_t>(next.level - state.level);
-    validate_progression(next, rules);
+    validate_progression(next, rules, spent_skill_points);
     state = next;
     return count;
 }

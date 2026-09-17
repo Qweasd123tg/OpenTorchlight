@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="20"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="55"
+	timestamp="2026-09-16T23:26:08"
+	>
+	<testcase name="inventory_instances" classname="inventory_instances" time="0.156248" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>inventory_checks=4033
+</system-out>
+	</testcase>
+	<testcase name="item_cycle" classname="item_cycle" time="0.669881" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>synthetic_cycle=death-&gt;model-&gt;pickup-&gt;bag-&gt;equip-&gt;travel checks=339
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="1.37479" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 589 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="save_fresh_process" classname="save_fresh_process" time="3.16212" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 579 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+</system-out>
+	</testcase>
+	<testcase name="save_atomic_process" classname="save_atomic_process" time="4.54886" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 579 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+save_checkpoint race-a: 1 assertions passed (authored resources; not original save compatibility)
+expected competing writer conflict
+save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+</system-out>
+	</testcase>
+	<testcase name="progression_numeric" classname="progression_numeric" time="0.24634" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 29 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="vitals_numeric" classname="vitals_numeric" time="0.413095" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 24018 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_resource_cycle" classname="vitals_resource_cycle" time="0.473118" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 51 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_fresh_process" classname="vitals_fresh_process" time="2.48457" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 6 authored vitals checks; not original ELF execution
+PASS: 5 authored vitals checks; not original ELF execution
+PASS: v3 vitals survive fresh-process load without refilling or double-buffing
+</system-out>
+	</testcase>
+	<testcase name="vitals_v2_migration" classname="vitals_v2_migration" time="2.39717" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 10 authored vitals checks; not original ELF execution
+PASS: 10 authored vitals checks; not original ELF execution
+PASS: two level fixtures from the unchanged-fresh v2 writer -&gt; current format, no refill and no double bonus
+</system-out>
+	</testcase>
+	<testcase name="consumable_cycle" classname="consumable_cycle" time="0.471097" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=71 passed
+</system-out>
+	</testcase>
+	<testcase name="consumable_fresh_process" classname="consumable_fresh_process" time="2.57437" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>written_revision=1
+checks=7 passed
+checks=7 passed
+</system-out>
+	</testcase>
+	<testcase name="original_consumables" classname="original_consumables" time="13.614" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>original_supported_consumables=12 explicitly_unsupported=191
+checks=7 passed
+</system-out>
+	</testcase>
+	<testcase name="skills_runtime" classname="skills_runtime" time="0.224787" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS skills checks=19
+</system-out>
+	</testcase>
+	<testcase name="original_skills_runtime" classname="original_skills_runtime" time="7.48044" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>catalog=407 infuse_ranks=10
+PASS skills checks=86
+</system-out>
+	</testcase>
+	<testcase name="quest_requirements" classname="quest_requirements" time="0.237368" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS quest checks=14
+</system-out>
+	</testcase>
+	<testcase name="original_quest_controllers" classname="original_quest_controllers" time="0.880608" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>quests=111 flag_only=35
+PASS quest checks=34
+</system-out>
+	</testcase>
+	<testcase name="merchant_prices" classname="merchant_prices" time="0.217889" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS merchant checks=8
+</system-out>
+	</testcase>
+	<testcase name="original_merchant_purchases" classname="original_merchant_purchases" time="12.0805" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>Tarn potions=8 unsupported=3 first_price=30
+PASS merchant checks=46
+</system-out>
+	</testcase>
+	<testcase name="gameplay_v4_migration" classname="gameplay_v4_migration" time="2.12288" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=7 passed
+PASS: unchanged v4 writer -&gt; current reader; original file is unchanged
+</system-out>
+	</testcase>
+</testsuite>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="9"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="24"
+	timestamp="2026-09-16T23:23:59"
+	>
+	<testcase name="read_only_extractors" classname="read_only_extractors" time="15.8874" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 21 read-only extractor assertions; synthetic files only, no original execution
+</system-out>
+	</testcase>
+	<testcase name="original_camera_comparison" classname="original_camera_comparison" time="1.57681" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>Creating resource group General
+Creating resource group Internal
+Creating resource group Autodetect
+SceneManagerFactory for type 'DefaultSceneManager' registered.
+Registering ResourceManager for type Material
+Registering ResourceManager for type Mesh
+Registering ResourceManager for type Skeleton
+MovableObjectFactory for type 'ParticleSystem' registered.
+OverlayElementFactory for type Panel registered.
+OverlayElementFactory for type BorderPanel registered.
+OverlayElementFactory for type TextArea registered.
+Registering ResourceManager for type Font
+ArchiveFactory for archive type FileSystem registered.
+ArchiveFactory for archive type Zip registered.
+FreeImage version: 3.13.1
+This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="skills_runtime" classname="skills_runtime" time="0.0172132" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS skills checks=19
+</system-out>
+	</testcase>
+	<testcase name="original_skills_runtime" classname="original_skills_runtime" time="1.72322" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>catalog=407 infuse_ranks=10
+PASS skills checks=86
+</system-out>
+	</testcase>
+	<testcase name="quest_requirements" classname="quest_requirements" time="0.0446488" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS quest checks=14
+</system-out>
+	</testcase>
+	<testcase name="original_quest_controllers" classname="original_quest_controllers" time="0.232076" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>quests=111 flag_only=35
+PASS quest checks=34
+</system-out>
+	</testcase>
+	<testcase name="merchant_prices" classname="merchant_prices" time="0.0200114" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS merchant checks=8
+</system-out>
+	</testcase>
+	<testcase name="original_merchant_purchases" classname="original_merchant_purchases" time="2.57192" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>Tarn potions=8 unsupported=3 first_price=30
+PASS merchant checks=46
+</system-out>
+	</testcase>
+	<testcase name="gameplay_v4_migration" classname="gameplay_v4_migration" time="2.24496" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=7 passed
+PASS: unchanged v4 writer -&gt; current reader; original file is unchanged
+</system-out>
+	</testcase>
+</testsuite>

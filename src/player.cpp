@@ -222,6 +222,7 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
                 player.wardrobe_texture_layers.push_back(std::move(*path));
             }
         }
+        player.class_skills = load_class_skills(*definition);
         player.recovery_rules = recovery_rules;
         player.walking_speed = floating(*definition, u"WALKINGSPEED");
         player.running_speed = floating(*definition, u"RUNNINGSPEED");

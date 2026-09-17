@@ -4,6 +4,20 @@
 поведенческой границе, а не к наличию файла декомпиляции. `verified` означает,
 что доказана только явно описанная часть; это не автоматически вся подсистема.
 
+## Изменение large-13 (донор large-12)
+
+Infuse (10 инвестируемых рангов), исходные cost/level/cast/HIT и конечные
+усиления; покупка бесконечных зелий Тарна; ограниченные quest requirements /
+controller flags / nested events; OTC v5 и подлинный v4 migration writer.
+Сквозной common-loop тест: 47 assertions/3 processes, с явно подготовленными
+XP и золотом. Экономика: 20 600 native результатов. Точные свежие прогоны:
+`../verification/large-13/verification.json`.
+
+Каталоги 407 skills и 111 quests не означают их исполнение. 35 definitions
+пригодны только для flag-only quest slice без rewards/objectives/populate/pet.
+Остальные навыки, missiles/magic, услуги NPC, pet, dialogue/reward/campaign и
+полный UI/FX/desktop остаются. Границы: `../GAMEPLAY_LARGE_13_RESULT_RU.md`.
+
 ## Изменение large-12 (донор large-11)
 
 Теперь есть настоящие pak/ELF. Подключены конечное HP/mana-восстановление от
@@ -67,7 +81,7 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 | Layout/random level/logic | partial | генерация, links, timer, spawn, warp, обычная STRATA-популяция | точное размещение/связность (не все выбранные монстры размещаются), весь command set, re-entrancy, сохранение состояния, special layouts |
 | Boot/game states/menu | partial | frontend New/Load/Continue/pause/save/exit, XML geometry/bindings/images, проверка реального EGL UI | полный Wayland-ввод (Town headless уже проверен), original skins/fonts, splash/loading/settings, IME |
 | Town | partial | геометрия и ходьба, подключён startup/load, частичный dispatcher, checkpoint/cache этажей | оконный интеграционный сеанс, NPC services/quests/stash, исходные interaction radius/gates |
-| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1/v2/v3→v4 проверен, настоящий pak проверен в large-12 |
+| Save/load | partial | собственный versioned .otc, atomic+revision writes, fresh-process player/items/world/floors, corrupt slots | оригинальный формат/quest/timeline/volatile reset, backup/delete UX; v1–v4 читаются в v5, skill/quest срез large-13 сохраняется, не исходный SVB |
 | Melee combat | verified | description → clip → HIT → physical damage | scheduler, factions, полный interrupt/target/damage/effects |
 | Ranged/projectile | partial | direct physical HIT для обычных bows/pistols/rifles/crossbows, статическая LOS | настоящие missiles/skills, динамические препятствия, trail, полная физика |
 | Enemy AI | partial | detection/chase/melee/cooldown | skill selection, flags lifecycle, factions, retarget, группы, боссы |
@@ -75,9 +89,9 @@ reference. Renderer выполняется в Mesa EGL; compositor/OS input harn
 | HP/mana/gold | partial | base/effective HP, passive player regen, max/spend, entry fee, level growth, gold pickup/wallet/save | все остальные временные эффекты, monster/pet regen, original volatile RNG/rank, остальные difficulty, экономика |
 | Loot/inventory/equipment | partial | death → drop → pickup → equip → travel | rarity, affix, все требования/слоты, прочие consumables, visuals |
 | Effects/affixes | partial | passive + ограниченные finite DYNAMIC recovery, OTC таймеры | остальные lifecycle/graphs/conditions/stacking/FX |
-| Skills | researched | центральные классы декомпилированы | data loader, controller, costs, cooldown, targeting, missiles/AOE |
+| Skills | partial | catalog/ranks/costs и исполняемый Infuse, обучение, HIT, finite buffs, save | остальные умения, targeting/missiles/AOE, полный lifecycle/FX |
 | XP/level/fame | partial | portable XP/level/growth/stat+skill points, атрибуты, HUD и save | полный CPlayer levelUp (обычный XP scalar уже сравнен), factions/spawner XP gates, fame, активные skills, полные penalties |
-| Quests/dialogs | researched | quest классы декомпилированы | loader, requirements, state machine, dialog, rewards, persistence |
+| Quests/dialogs | partial | catalog/requirements, ограниченные forced controller flags/events, persistence | NPC offering/dialogue, objectives/rewards/populate/pet, automatic completion, реальный campaign route |
 | NPC/merchant | researched | merchant/dialog classes доступны | interaction, buy/sell, prices, stock, окна и сохранение |
 | Stash/shared stash | researched | классы доступны | UI, перенос экземпляров, disk persistence |
 | Enchant/combine | researched | menu/core классы доступны | рецепты, стоимость, RNG, эффекты и UI |

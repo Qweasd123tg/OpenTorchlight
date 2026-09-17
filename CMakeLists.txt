@@ -32,6 +32,10 @@ add_library(torchlight_core STATIC
     src/line_of_sight.cpp
     src/combat.cpp
     src/consumable.cpp
+    src/merchant.cpp
+    src/economy.cpp
+    src/quests.cpp
+    src/skills.cpp
     src/checkpoint.cpp
     src/save_codec.cpp
     src/save_store.cpp
@@ -843,6 +847,61 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_dependencies(legacy_v3_test legacy_v3_fixture)
     add_test(NAME gameplay_v3_migration COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/legacy_v3_process_test.py --probe $<TARGET_FILE:legacy_v3_test> --fixture ${LEGACY_V3_FIXTURE})
+
+    add_executable(skills_test tests/skills_test.cpp)
+    target_link_libraries(skills_test PRIVATE torchlight_core)
+    target_compile_options(skills_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME skills_runtime COMMAND skills_test)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_skills_runtime COMMAND skills_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    add_executable(economy_probe tests/economy_probe.cpp)
+    target_link_libraries(economy_probe PRIVATE torchlight_core)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_economy_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_economy.py --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:economy_probe>)
+        set_tests_properties(original_economy_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
+    endif()
+
+    add_executable(quests_test tests/quests_test.cpp)
+    target_link_libraries(quests_test PRIVATE torchlight_core)
+    add_test(NAME quest_requirements COMMAND quests_test)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_quest_controllers COMMAND quests_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    add_executable(merchant_test tests/merchant_test.cpp)
+    target_link_libraries(merchant_test PRIVATE torchlight_core)
+    add_test(NAME merchant_prices COMMAND merchant_test)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_merchant_purchases COMMAND merchant_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    add_executable(service_fixture tests/service_fixture.cpp)
+    target_link_libraries(service_fixture PRIVATE torchlight_core)
+    if(TARGET application_scenario_probe AND TORCHLIGHT_GAME_DIR)
+        add_test(NAME application_services_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_services_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --fixture $<TARGET_FILE:service_fixture>
+            --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
+            --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+        set_tests_properties(application_services_render PROPERTIES TIMEOUT 1200)
+        if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
+            set_tests_properties(application_services_render PROPERTIES ENVIRONMENT
+                "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+        endif()
+    endif()
+
+    add_test(NAME gameplay_v4_migration COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/legacy_v4_process_test.py
+        $<TARGET_FILE:consumable_test> ${CONSUMABLE_FIXTURE})
+
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        foreach(_new_target quests_test merchant_test economy_probe service_fixture)
+            target_compile_options(${_new_target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        endforeach()
+    endif()
 
     # Every registered test has an execution group. Labels describe dependency
     # and evidence, not fidelity: original_* resource tests are NOT ELF parity.

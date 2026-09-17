@@ -72,7 +72,7 @@ public:
             std::string arg; while (fields >> arg) step.args.push_back(std::move(arg));
             const std::vector<std::pair<std::string,std::size_t>> counts = {
                 {"menu",1},{"button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
-                {"walk",2},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
+                {"walk",2},{"npc",1},{"select-skill",1},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
                 {"resize",2},{"dt",1},{"revision",1},{"quit",0},{"menu-capture",1}};
             const auto spec = std::find_if(counts.begin(),counts.end(),[&](const auto& p){return p.first==step.verb;});
             if (spec == counts.end() || spec->second != step.args.size())
@@ -177,6 +177,32 @@ public:
             click_ = {static_cast<int>(std::lround(pixel[0])),static_cast<int>(std::lround(pixel[1]))};
             notice("walk_pointer",std::to_string((*click_)[0])+","+std::to_string((*click_)[1]));
             done();
+        } else if (step.verb == "select-skill") {
+            if (!view.inventory_open) throw std::runtime_error("skill selection requires panel");
+            const auto& skills=view.session->skills().skills;
+            const auto found=std::find_if(skills.begin(),skills.end(),[&](const auto& skill){return ascii(skill.name)==step.args[0];});
+            if (found==skills.end()) throw std::runtime_error("requested skill absent from class");
+            keys_.insert(keys_.end(),skills.size(),key::UP);
+            keys_.insert(keys_.end(),static_cast<std::size_t>(found-skills.begin()),key::DOWN);
+            done();
+        } else if (step.verb == "npc") {
+            if (view.inventory_open) { done(); return; }
+            if (view.moving || view.level_frame==0) return;
+            const auto guid=std::stoll(step.args[0]);
+            const RuntimeEntity* npc=nullptr;
+            for (const auto& entity:view.world->entities()) if (entity.resource_guid==guid&&entity.alive&&entity.enabled&&entity.visible) {npc=&entity;break;}
+            if (!npc) throw std::runtime_error("requested real NPC not present in scene");
+            auto destination=npc->position;
+            auto pixel=view.renderer->pixel_position_of_world(destination);
+            if (pixel[0]<0||pixel[1]<0||pixel[0]>=width_||pixel[1]>=height_) {
+                const auto path=view.navigation->find_path(view.player_position,destination);
+                if(path.size()<2)throw std::runtime_error("NPC has no navigation route");
+                destination=path[std::min<std::size_t>(4,path.size()-1)];destination[1]+=view.floor_offset;
+                pixel=view.renderer->pixel_position_of_world(destination);
+            }
+            if(pixel[0]<0||pixel[1]<0||pixel[0]>=width_||pixel[1]>=height_)throw std::runtime_error("NPC approach waypoint offscreen");
+            click_={static_cast<int>(std::lround(pixel[0])),static_cast<int>(std::lround(pixel[1]))};
+            notice("npc_pointer",std::to_string(guid)+" at "+std::to_string((*click_)[0])+","+std::to_string((*click_)[1]));
         } else if (step.verb == "kill-nearest") {
             if (!view.session->health().alive()) throw std::runtime_error("player died in real-input combat scenario");
             if (view.level_frame==0) return;
@@ -408,7 +434,26 @@ private:
             out<<",\"type\":"<<active.effect.type<<",\"remaining\":";json::number(out,active.remaining);
             out<<",\"value\":";json::number(out,active.effect.value);out<<'}';
         }
-        out<<"],\"population_generated\":"<<(world.population_generated?"true":"false");
+        out<<"],\"skills\":[";comma=false;
+        if(player.skills)for(const auto& skill:player.skills->skills) {
+            if(comma)out<<',';
+            comma=true;
+            out<<"{\"name\":";json::string(out,ascii(skill.name));out<<",\"rank\":"<<skill.invested<<",\"cooldown\":";json::number(out,skill.cooldown);out<<'}';
+        }
+        out<<"],\"skill_effects\":[";comma=false;
+        if(player.skills)for(const auto& effect:player.skills->effects) {
+            if(comma)out<<',';
+            comma=true;
+            out<<"{\"name\":";json::string(out,ascii(effect.name));out<<",\"type\":"<<effect.type<<",\"remaining\":";json::number(out,effect.remaining);out<<",\"value\":";json::number(out,effect.value);out<<'}';
+        }
+        out<<"],\"quests\":[";comma=false;
+        if(v.quests)for(const auto& q:v.quests->flags) {
+            if(comma)out<<',';
+            comma=true;
+            out<<"{\"name\":";json::string(out,ascii(q.name));out<<",\"active\":"<<(q.active?"true":"false")<<",\"complete\":"<<(q.complete?"true":"false")<<",\"dialog\":"<<(q.accept_dialog?"true":"false")<<'}';
+        }
+        out<<"],\"completed_quests\":"<<(v.quests?v.quests->completed_count:0);
+        out<<",\"population_generated\":"<<(world.population_generated?"true":"false");
         out << ",\"slots\":[";
         for(std::size_t i=0;i<player.inventory.slots.size();++i){if(i)out<<',';out<<player.inventory.slots[i];}
         out<<"],\"rng\":{\"combat\":"<<player.combat_random<<",\"world\":"<<world.random_state

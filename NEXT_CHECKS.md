@@ -1,76 +1,90 @@
-# Следующий проход после large-12
+# Следующий проход после large-13
 
-## Текущая база
+## Текущая база и запрет выдуманных замен
 
-Донор large-11; новые pak/ELF предоставлены и проверены. Не запрашивать их
-повторно. Их адреса/хеши и границы восстановления зафиксированы в research.
-Новые механики: finite recovery potions, stack/debit, ordinary STRATA population,
-WEIGHT=0 fix, direct physical ranged HIT/LOS, OTC v4 и настоящая v3 migration.
-Описание: `GAMEPLAY_LARGE_12_RESULT_RU.md`.
+Донор large-12. Настоящие pak, ELF и библиотеки уже предоставлены. Не запрашивать
+их повторно и не включать в исходный архив. Доказательства и адреса:
+`research/large-13-subsystem-evidence.md`; результат: `GAMEPLAY_LARGE_13_RESULT_RU.md`.
 
-Основной прогон: core 54/54, assets 33/33, reference 12/12, render 4/4 без
-пропусков (101 уникальный тест); ASan/UBSan 15/15. Отдельно реальный FreeType
-2.13.3/Mesa: 6/6, включая новый сквозной бой/сохранение. Desktop NOT RUN.
-Не переносить эти результаты автоматически на следующий изменённый исходник.
+Подключены Infuse (10 инвестируемых рангов), конечные self-buff эффекты на HIT,
+покупка бесконечных зелий Тарна, ограниченные quest-controller команды/флаги,
+OTC v5. Квестовый каталог 111/35 означает 111 прочитанных и 35 допустимых для
+ограниченного контроллера определений, **не 35 готовых игровых заданий**.
+Сквозной service/skill-тест имеет явную фикстуру XP/золота — не выдавать его за
+прохождение кампании. Текущие результаты в `verification/large-13/verification.json`;
+не переносить их автоматически на следующий изменённый исходник.
 
-## Первый блок: умения и настоящие снаряды
+## Первый блок: настоящая цепочка Ember Bolt
 
-Продолжить `CSkill`, `CEquipment::fireMissiles @0x87f120`, missile lifecycle,
-стоимость/уровень/cooldown, выбор цели и события анимации. Не заменять всё
-одним physical HIT: жезлы с MISSILE и умения оружия сейчас правильно отключены
-в этом пути. Начать с одного настоящего навыка и одного projectile-дескриптора,
-довести до общего loop, затем расширять по фактическим вариантам ресурсов.
+Сопоставить `CSkill` events, layouts `emberfireball`, `CMissile::initialize
+@0xd00650`, `updatePositionByVelocity @0xd02720`, `checkCollision @0xd038a0`.
+Ember Bolt имеет 2/3/4 снаряда по рангам, poison/MAGIC damage и knockback;
+не подменять одиночным огненным instant HIT. Граница полёта и столкновения —
+отдельно от damage/effect evaluator. Homing выполняет нормализованное смешивание
+с шагом 1/30 секунды, не поворот в градусах. Константа проверена в ELF.
 
-Критерий: применение через реальный UI-ввод, одно списание ресурса, недоступность
-при cooldown/нехватке маны, правильный HIT/смерть/XP, отсутствие урона через
-стену, сохранение и продолжение в другом процессе. Прямые обычные физические
-выстрелы уже работают; не переписывать их как фиктивный missile.
+Ещё не восстановлены целиком начальная скорость/разброс и все RNG-потребления,
+acceleration/drift/сплайны, swept-sphere столкновения и modifier/soak pipeline.
+Нужны отдельные bounded comparisons, затем реальный UI-ввод/полёт/HIT/death/XP,
+сохранение и продолжение в другом процессе. Не менять compiler на частичное
+исполнение неподдержанного умения только ради доступной кнопки.
 
-## Размещение и динамические препятствия
+## Квесты, диалоги и зависимости кампании
 
-Разобрать причину: seed 42 resource test 61/61, common-app seed 491 — 51 из 76,
-25 unplaced. Проверить восстановление fine grid и связных областей вокруг
-переходов/лестниц. Не уменьшать счётчик до числа размещённых только ради зелёного
-теста. Затем original formations/champions, special spawners, bosses.
+Уже есть каталог/requirements, forced controller commands, порядок вложенных
+событий и сохраняемые flags; нет нормального NPC offer/dialog pipeline.
+Продолжить reward/objective/populate/pet acceptance и исходные cleanup-правила.
+Source giveQuest принудительно обходит offer requirements — обычное предложение
+NPC не должно пользоваться этим обходом. QUESTCONTROLLERCOMPLETES не означает
+«убить всех врагов». Проверять конкретные objective/controllers и gates.
 
-LOS сейчас проверяет статические треугольники с переносимым body-center ray.
-Динамические двери, исходный muzzle/Physics, угол/ретаргет и путь вокруг стены
-нужны отдельно. Отсутствие кривой полёта у обычного лука не ошибка само по себе:
-оригинальная обычная ветвь direct, визуальный ArrowTrail — другая задача.
+Для IntroPT3 требуется исходное populate side effect, для Mercenary — pet side
+effect; сейчас эти команды блокируются целиком. Последний босс и финал не
+считаются рабочими от наличия имен квестов. Маршрут кампании должен пройти
+через реальные входы/условия без ручной правки flags/здоровья/лутовых предметов.
 
-## После этого
+## Торговля, услуги и питомец
 
-NPC/merchant/stash, предметная экономика и полный набор effects; питомец;
-задания/диалоги/состояния мира; boss gates и реальный маршрут до финала.
-UI/action bar, звук/FX, оконный стенд и платформа — отдельные критерии выпуска.
-План: `FULL_GAME_ROADMAP_RU.md`, реестр: `research/remaining-work-inventory.md`.
+Выполнено: ограниченная покупка бесконечных зелий Тарна, price graphs, atomic
+transfer/debit, совместимость стеков. Открытый остаток: оригинальная частота
+обновления запасов и ranges без explicit MAXLEVEL, finite stock/quality,
+продажа/buyback, идентификация/зачарование/банк, NPC диалоги, pet inventory/AI,
+возврат из торговли/превращения/сохранение. Цена услуги сама по себе не услуга.
+Панели K/F/J и shop — PORT presentation, не исходный Falagard/UI behavior.
 
-## Воспроизводимый запуск проверок
+## Размещение, мир и выпуск
 
-GAME_DIR должен содержать внешние pak.zip и Torchlight.bin.x86_64. Не запускать
-проверки в каталоге пользовательских сохранений и не коммитить оригиналы.
+Осталась проблема large-12: seed 42 resource test 61/61, common-app seed 491 —
+51 из 76, 25 unplaced. Не уменьшать requested count ради зелёного теста.
+Продолжить fine grid/связность, formations/champions, динамические двери,
+вражеские skills/особый AI, боссы; затем полный interface/FX/sound и desktop.
+
+## Воспроизводимые проверки
+
+GAME_DIR — отдельный каталог read-only оригиналов. Нужны pak.zip,
+Torchlight.bin.x86_64 и родные OGRE/CEGUI/FreeImage по обычным путям установки.
+Не запускать сценарии в пользовательских сохранениях.
 
 ```bash
 python3 tools/check.py --core --assets "$GAME_DIR" \
-  --reference "$GAME_DIR/Torchlight.bin.x86_64" --render --jobs 4
+  --reference "$GAME_DIR/Torchlight.bin.x86_64" --render --jobs 2
 ```
 
-На хосте, где non-PIE Python занимает закреплённые адреса original probes,
-проверка обязана сообщить NOT RUN, а не затереть существующую память. Можно
-явно собрать отдельный PIE launcher из SDK установленного Python:
+При конфликте адресов с non-PIE Python нельзя затирать память процесса или
+считать SKIP успешной проверкой. Собрать отдельный PIE launcher из установленного
+matching Python SDK (подробности в tools/testing):
 
 ```bash
 python3 tools/testing/build_pie_python.py --output /tmp/torchlight-python-pie
 python3 tools/check.py --core --assets "$GAME_DIR" \
   --reference "$GAME_DIR/Torchlight.bin.x86_64" \
-  --reference-python /tmp/torchlight-python-pie --render --jobs 4
+  --reference-python /tmp/torchlight-python-pie --render --jobs 2
 ```
 
-Launcher требует Linux, matching shared libpython/headers и C compiler; он
-не содержит оригинальный код игры и не перезаписывает существующий output.
-Для сборки продукта нужен нормальный FreeType/Wayland/GLES SDK. Тестовые
-ABI-декларации из tools/testing — явный обход отсутствующего SDK для стенда,
-не производственный комплект заголовков.
+Для продукта требуется настоящий FreeType/Wayland/GLES SDK. Прототипный fallback
+шрифта и тестовые ABI-декларации не являются выпускной конфигурацией.
+Сохранения v5 необратимы для старых сборок; миграции проверять подлинным файлом
+старого writer, а не сменой одного номера формата.
 
 ---
 

@@ -1,0 +1,232 @@
+Internal ctest changing into directory: /mnt/data/ot_build
+Test project /mnt/data/ot_build
+        Start  10: inventory_view
+        Start  11: inventory_instances
+  1/110 Test  #10: inventory_view ...........................   Passed    0.02 sec
+        Start  29: read_only_extractors
+  2/110 Test  #11: inventory_instances ......................   Passed    0.02 sec
+        Start  48: original_camera_comparison
+  3/110 Test  #48: original_camera_comparison ...............   Passed    1.45 sec
+        Start  84: application_scenario_render
+  4/110 Test  #29: read_only_extractors .....................   Passed   13.52 sec
+        Start 109: application_services_render
+  5/110 Test  #84: application_scenario_render ..............   Passed  164.01 sec
+        Start  83: original_asset_catalog
+  6/110 Test #109: application_services_render ..............   Passed  161.15 sec
+        Start  85: application_combat_render
+  7/110 Test  #85: application_combat_render ................   Passed   51.89 sec
+        Start  62: original_random_levels
+  8/110 Test  #83: original_asset_catalog ...................   Passed   65.72 sec
+        Start  69: original_dds_textures
+  9/110 Test  #69: original_dds_textures ....................   Passed   40.84 sec
+        Start  87: verification_driver
+ 10/110 Test  #62: original_random_levels ...................   Passed   50.71 sec
+        Start  53: original_frontend_checkpoint
+ 11/110 Test  #87: verification_driver ......................   Passed    7.41 sec
+        Start   9: desktop_gameplay_syntax
+ 12/110 Test  #53: original_frontend_checkpoint .............   Passed    6.87 sec
+        Start  99: original_ranged
+ 13/110 Test   #9: desktop_gameplay_syntax ..................   Passed    5.31 sec
+        Start  60: original_level_scene
+ 14/110 Test  #99: original_ranged ..........................   Passed    2.17 sec
+        Start  97: original_population
+ 15/110 Test  #60: original_level_scene .....................   Passed    3.96 sec
+        Start  95: original_consumables
+ 16/110 Test  #97: original_population ......................   Passed    2.68 sec
+        Start  73: original_entity_world
+ 17/110 Test  #95: original_consumables .....................   Passed    2.95 sec
+        Start  77: original_combat
+ 18/110 Test  #73: original_entity_world ....................   Passed    2.73 sec
+        Start  54: original_item_cycle
+ 19/110 Test  #54: original_item_cycle ......................   Passed    1.78 sec
+        Start  51: original_randomizer_comparison
+ 20/110 Test  #77: original_combat ..........................   Passed    2.16 sec
+        Start  49: original_input_comparison
+ 21/110 Test  #51: original_randomizer_comparison ...........   Passed    1.43 sec
+        Start  52: original_pathfinder_comparison
+ 22/110 Test  #52: original_pathfinder_comparison ...........   Passed    1.27 sec
+        Start  76: original_unit_types
+ 23/110 Test  #49: original_input_comparison ................   Passed    2.61 sec
+        Start  47: original_level_entry_dispatch
+ 24/110 Test  #47: original_level_entry_dispatch ............   Passed    1.55 sec
+        Start  22: gles_menu_text
+ 25/110 Test  #76: original_unit_types ......................   Passed    1.94 sec
+        Start  71: original_scene_geometry
+ 26/110 Test  #71: original_scene_geometry ..................   Passed    1.76 sec
+        Start  75: original_enemy_ai
+ 27/110 Test  #22: gles_menu_text ...........................   Passed    2.11 sec
+        Start  78: original_level_transitions
+ 28/110 Test  #75: original_enemy_ai ........................   Passed    2.36 sec
+        Start 104: original_economy_comparison
+ 29/110 Test  #78: original_level_transitions ...............   Passed    2.94 sec
+        Start  59: original_unit_definitions
+ 30/110 Test #104: original_economy_comparison ..............   Passed    0.88 sec
+        Start 103: original_skills_runtime
+ 31/110 Test #103: original_skills_runtime ..................   Passed    1.64 sec
+        Start 110: gameplay_v4_migration
+ 32/110 Test  #59: original_unit_definitions ................   Passed    1.80 sec
+        Start  20: coverage_map_current
+ 33/110 Test #110: gameplay_v4_migration ....................   Passed    1.57 sec
+        Start  38: legacy_reward_save_migration
+ 34/110 Test  #20: coverage_map_current .....................   Passed    2.36 sec
+        Start  44: original_player_vitals_comparison
+ 35/110 Test  #38: legacy_reward_save_migration .............   Passed    1.84 sec
+        Start  64: original_ogre_meshes
+ 36/110 Test  #44: original_player_vitals_comparison ........   Passed    2.00 sec
+        Start  90: vitals_fresh_process
+ 37/110 Test  #64: original_ogre_meshes .....................   Passed    1.47 sec
+        Start  42: original_monster_experience_comparison
+ 38/110 Test  #90: vitals_fresh_process .....................   Passed    1.55 sec
+        Start  46: original_ai_cooldown_comparison
+ 39/110 Test  #42: original_monster_experience_comparison ...   Passed    1.99 sec
+        Start  41: original_world_gold_comparison
+ 40/110 Test  #46: original_ai_cooldown_comparison ..........   Passed    2.02 sec
+        Start  45: original_attack_speed_comparison
+ 41/110 Test  #41: original_world_gold_comparison ...........   Passed    1.87 sec
+        Start   8: ai_cooldown_export_comparison
+ 42/110 Test  #45: original_attack_speed_comparison .........   Passed    1.93 sec
+        Start  21: gles_ui_headless
+ 43/110 Test   #8: ai_cooldown_export_comparison ............   Passed    2.00 sec
+        Start  91: vitals_v2_migration
+ 44/110 Test  #21: gles_ui_headless .........................   Passed    2.09 sec
+        Start  92: collect_game_inputs_safety
+ 45/110 Test  #91: vitals_v2_migration ......................   Passed    1.61 sec
+        Start  31: player_vitals_export_comparison
+ 46/110 Test  #92: collect_game_inputs_safety ...............   Passed    1.54 sec
+        Start  25: save_atomic_process
+ 47/110 Test  #31: player_vitals_export_comparison ..........   Passed    1.96 sec
+        Start  39: world_gold_export_comparison
+ 48/110 Test  #25: save_atomic_process ......................   Passed    1.83 sec
+        Start  37: reward_fresh_process
+ 49/110 Test  #39: world_gold_export_comparison .............   Passed    1.96 sec
+        Start 101: gameplay_v3_migration
+ 50/110 Test  #37: reward_fresh_process .....................   Passed    1.68 sec
+        Start  19: frontend_campaign_cycle
+ 51/110 Test #101: gameplay_v3_migration ....................   Passed    1.69 sec
+        Start 108: original_merchant_purchases
+ 52/110 Test  #19: frontend_campaign_cycle ..................   Passed    1.75 sec
+        Start  13: attack_speed_export_comparison
+ 53/110 Test #108: original_merchant_purchases ..............   Passed    2.43 sec
+        Start  79: original_data_bootstrap
+ 54/110 Test  #13: attack_speed_export_comparison ...........   Passed    1.70 sec
+        Start  81: scenario_first_difference
+ 55/110 Test  #81: scenario_first_difference ................   Passed    1.45 sec
+        Start  40: monster_experience_export_comparison
+ 56/110 Test  #79: original_data_bootstrap ..................   Passed    2.19 sec
+        Start  94: consumable_fresh_process
+ 57/110 Test  #40: monster_experience_export_comparison .....   Passed    1.80 sec
+        Start  82: asset_catalog_negative
+ 58/110 Test  #94: consumable_fresh_process .................   Passed    1.60 sec
+        Start  63: original_players
+ 59/110 Test  #82: asset_catalog_negative ...................   Passed    1.49 sec
+        Start  24: save_fresh_process
+ 60/110 Test  #63: original_players .........................   Passed    1.16 sec
+        Start  70: original_png_textures
+ 61/110 Test  #70: original_png_textures ....................   Passed    1.18 sec
+        Start  72: original_spawn_classes
+ 62/110 Test  #24: save_fresh_process .......................   Passed    1.91 sec
+        Start  28: effect_catalog_source
+ 63/110 Test  #72: original_spawn_classes ...................   Passed    1.09 sec
+        Start  30: combat_inputs_evidence
+ 64/110 Test  #28: effect_catalog_source ....................   Passed    1.57 sec
+        Start  34: original_progression_resource_graphs
+ 65/110 Test  #30: combat_inputs_evidence ...................   Passed    1.61 sec
+        Start  50: original_action_comparison
+ 66/110 Test  #34: original_progression_resource_graphs .....   Passed    1.03 sec
+        Start  66: original_ogre_skeletons
+ 67/110 Test  #50: original_action_comparison ...............   Passed    1.13 sec
+        Start  58: original_master_resource_index
+ 68/110 Test  #66: original_ogre_skeletons ..................   Passed    0.92 sec
+        Start  57: original_adm_document
+ 69/110 Test  #58: original_master_resource_index ...........   Passed    0.70 sec
+        Start 100: original_gameplay_numeric_comparison
+ 70/110 Test  #57: original_adm_document ....................   Passed    0.60 sec
+        Start  56: original_collision_meshes
+ 71/110 Test #100: original_gameplay_numeric_comparison .....   Passed    0.99 sec
+        Start  65: original_ogre_materials
+ 72/110 Test  #56: original_collision_meshes ................   Passed    0.88 sec
+        Start  74: original_equipment
+ 73/110 Test  #74: original_equipment .......................   Passed    0.70 sec
+        Start  61: original_logic_runtime
+ 74/110 Test  #65: original_ogre_materials ..................   Passed    0.87 sec
+        Start 106: original_quest_controllers
+ 75/110 Test #106: original_quest_controllers ...............   Passed    0.17 sec
+        Start  68: original_skeletal_animation
+ 76/110 Test  #61: original_logic_runtime ...................   Passed    0.32 sec
+        Start  67: original_animation_manifests
+ 77/110 Test  #68: original_skeletal_animation ..............   Passed    0.16 sec
+        Start  18: original_menu_presentation
+ 78/110 Test  #67: original_animation_manifests .............   Passed    0.14 sec
+        Start  14: ordinary_combat
+ 79/110 Test  #18: original_menu_presentation ...............   Passed    0.16 sec
+        Start  55: original_pak_archive
+ 80/110 Test  #14: ordinary_combat ..........................   Passed    0.17 sec
+        Start  23: save_checkpoint
+ 81/110 Test  #55: original_pak_archive .....................   Passed    0.15 sec
+        Start   7: enemy_ai_cooldown
+ 82/110 Test  #23: save_checkpoint ..........................   Passed    0.16 sec
+        Start  96: population_cycle
+ 83/110 Test   #7: enemy_ai_cooldown ........................   Passed    0.16 sec
+        Start  26: gameplay_continuation
+ 84/110 Test  #96: population_cycle .........................   Passed    0.12 sec
+        Start   6: level_entry_fallback
+ 85/110 Test  #26: gameplay_continuation ....................   Passed    0.08 sec
+        Start  36: reward_cycle
+ 86/110 Test   #6: level_entry_fallback .....................   Passed    0.08 sec
+        Start  12: item_cycle
+ 87/110 Test  #36: reward_cycle .............................   Passed    0.06 sec
+        Start  98: ranged_cycle
+ 88/110 Test  #12: item_cycle ...............................   Passed    0.07 sec
+        Start  93: consumable_cycle
+ 89/110 Test  #98: ranged_cycle .............................   Passed    0.05 sec
+        Start  33: reward_unavailable
+ 90/110 Test  #93: consumable_cycle .........................   Passed    0.05 sec
+        Start  89: vitals_resource_cycle
+ 91/110 Test  #33: reward_unavailable .......................   Passed    0.04 sec
+        Start  88: vitals_numeric
+ 92/110 Test  #89: vitals_resource_cycle ....................   Passed    0.04 sec
+        Start  27: death_finalization
+ 93/110 Test  #88: vitals_numeric ...........................   Passed    0.03 sec
+        Start 105: quest_requirements
+ 94/110 Test  #27: death_finalization .......................   Passed    0.03 sec
+        Start 107: merchant_prices
+ 95/110 Test #105: quest_requirements .......................   Passed    0.02 sec
+        Start  32: reward_resource_graphs
+ 96/110 Test #107: merchant_prices ..........................   Passed    0.02 sec
+        Start   5: warp_arrival
+ 97/110 Test   #5: warp_arrival .............................   Passed    0.02 sec
+        Start  43: item_cycle_resource_fixture
+ 98/110 Test  #43: item_cycle_resource_fixture ..............   Passed    0.02 sec
+        Start  15: frontend
+ 99/110 Test  #32: reward_resource_graphs ...................   Passed    0.06 sec
+        Start  80: parent_dungeon
+100/110 Test  #15: frontend .................................   Passed    0.03 sec
+101/110 Test  #80: parent_dungeon ...........................   Passed    0.02 sec
+        Start  16: frontend_menu_resources
+        Start   1: ordinary_attack_action
+102/110 Test   #1: ordinary_attack_action ...................   Passed    0.02 sec
+        Start 102: skills_runtime
+103/110 Test  #16: frontend_menu_resources ..................   Passed    0.03 sec
+        Start  35: progression_numeric
+104/110 Test #102: skills_runtime ...........................   Passed    0.02 sec
+        Start   3: animation_events
+105/110 Test  #35: progression_numeric ......................   Passed    0.02 sec
+        Start   4: damage_calculation
+106/110 Test   #3: animation_events .........................   Passed    0.02 sec
+        Start   2: actor_motion
+107/110 Test   #4: damage_calculation .......................   Passed    0.02 sec
+        Start  17: ui_text_layout
+108/110 Test   #2: actor_motion .............................   Passed    0.02 sec
+        Start  86: random_observation
+109/110 Test  #17: ui_text_layout ...........................   Passed    0.02 sec
+110/110 Test  #86: random_observation .......................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 110
+
+Label Time Summary:
+assets       = 211.32 sec*proc (36 tests)
+core         =  68.41 sec*proc (58 tests)
+reference    =  21.11 sec*proc (13 tests)
+render       = 381.25 sec*proc (5 tests)
+
+Total Test time (real) = 338.99 sec

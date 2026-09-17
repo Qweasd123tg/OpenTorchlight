@@ -74,6 +74,10 @@ public:
         return dangling_link_count_;
     }
 
+    // Portable dispatch seam: invoked synchronously, before generic inputs.
+    void set_subsystem_input(std::function<bool(const LayoutObject&, std::u16string_view)> handler) { subsystem_input_ = std::move(handler); }
+    // Schedule a continuation before emitting outputs to preserve native order.
+    void after_current_event(std::function<void()> action) { pending_actions_.push_back(std::move(action)); }
     void activate_level();
     void emit(std::int64_t object_id, std::u16string_view output_name);
     void invoke(std::int64_t object_id, std::u16string_view input_name);
@@ -113,6 +117,7 @@ private:
     void activate_trigger(const LayoutObject& object, LogicObjectState& state);
     [[nodiscard]] const LayoutObject& require_object(std::int64_t object_id) const;
 
+    std::function<bool(const LayoutObject&, std::u16string_view)> subsystem_input_;
     const LayoutManifest* layout_ = nullptr;
     std::vector<LayoutWorldTransform> transforms_;
     std::unordered_map<std::int64_t, std::size_t> object_indices_;

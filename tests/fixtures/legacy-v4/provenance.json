@@ -1,0 +1,14 @@
+{
+  "writer": "unchanged large-12, git baseline Input large-12 baseline",
+  "source_archive_sha256": "a518468137c3f12ee8d6c8e736f2573dd41ee32d58b5067b3d972d75e7f20caf",
+  "source_sha256": {
+    "src/save_codec.cpp": "1c546dc0c2c71014cc1571206e76c78f3d69737e33c8e4a8f9f61b2af578ce40",
+    "src/save_store.cpp": "cac481f3330ba915d4ee218958bcd4726ce81e7548ca6223132cd72d2d550de5",
+    "tests/consumable_test.cpp": "1722481e37ff4e0ae82ca023454667e7643d7784515a53c82beb259d6a1372cc",
+    "tests/make_consumable_fixture.py": "e98ce99a52a419ab4385840f726bb4f9e16753e81dee2a1607c28837dc2bac57"
+  },
+  "command": "consumable_test --write <make_consumable_fixture.py output> <empty directory>",
+  "fixture": "author-created fake resources only; no original resource bytes",
+  "format_version": 4,
+  "save_sha256": "526238b4a5895e02cb59a3ccaa83e0ccedaea8bf5100355fb9e8f727b1696e65"
+}

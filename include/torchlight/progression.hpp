@@ -39,8 +39,8 @@ struct ProgressionState {
     std::array<std::int32_t, 4> allocated{}; // STR, DEX, MAGIC, DEF
 };
 void validate_progression(const ProgressionState&);
-void validate_progression(const ProgressionState&, const ProgressionRules&);
+void validate_progression(const ProgressionState&, const ProgressionRules&, std::int32_t spent_skill_points = 0);
 // Stages all changes, including overflow checks, before replacing state.
 [[nodiscard]] std::uint32_t advance_progression(ProgressionState&, const ProgressionRules&,
-                                               std::int32_t reward, float bonus_percent = 0);
+                                               std::int32_t reward, float bonus_percent = 0, std::int32_t spent_skill_points = 0);
 } // namespace torchlight

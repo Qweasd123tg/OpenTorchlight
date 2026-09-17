@@ -126,8 +126,9 @@ void check_restored(const char *pak, const CampaignCheckpoint &c) {
     auto canonical = c;
     // A legacy DTO gains its previously implicit pre-effect HP at recapture.
     if (!canonical.player.base_health) canonical.player.base_health = session.health().base_health();
+    if (!canonical.player.skills) canonical.player.skills = session.skills();
     require(encode_checkpoint(canonical) == encode_checkpoint(again),
-            "roundtrip changed canonical checkpoint beyond explicit legacy base-HP migration");
+            "roundtrip changed canonical checkpoint beyond explicit legacy base-HP/class-skill migration");
     auto transitions = CheckpointAccess::restore_transitions(c);
     WarpRequest back;
     back.dungeon_name = u"LASTDUNGEON";

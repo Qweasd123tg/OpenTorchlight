@@ -2,6 +2,7 @@
 
 #include "torchlight/player_session.hpp"
 #include "torchlight/level_transition.hpp"
+#include "torchlight/quests.hpp"
 #include <stdexcept>
 
 namespace torchlight {
@@ -29,6 +30,7 @@ struct PlayerCheckpoint {
     // v3: absent only for migration from v1/v2, where max-HP effects were ignored.
     std::optional<std::int32_t> base_health;
     std::vector<ActiveRecovery> active_recovery; // v4, evaluated values and remaining game time
+    std::optional<SkillCheckpoint> skills; // v5; absent only for legacy migration
 };
 struct WorldCheckpoint {
     std::uint64_t next_id = 1, random_state = 0;
@@ -78,6 +80,7 @@ struct CampaignCheckpoint {
     std::optional<DungeonAddress> last_dungeon;
     PlayerCheckpoint player;
     std::vector<FloorCheckpoint> floors;
+    QuestCheckpoint quests; // v5; legacy has no reconstructed quest history
 };
 // One narrow friend controls checkpoint access. restore_* build candidates and
 // validate before committing; active HITs and paths never cross a load boundary.

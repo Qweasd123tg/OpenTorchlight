@@ -1,0 +1,21 @@
+{
+  "evidence": "real common loop/pak/GLES; explicit XP/gold fixture; NOT original behavior trace or campaign completion",
+  "assertions": 47,
+  "runs": [
+    {
+      "name": "new",
+      "returncode": 0
+    },
+    {
+      "name": "use",
+      "returncode": 0
+    },
+    {
+      "name": "continue",
+      "returncode": 0
+    }
+  ],
+  "preparation": "TEST FIXTURE ONLY: earned XP to level 10 + 10000 gold; revision=2",
+  "status": "PASSED",
+  "purchase_price": 68
+}
