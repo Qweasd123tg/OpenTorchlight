@@ -802,6 +802,37 @@
         "tests/menu_create_test.cpp"
       ],
       "comparison": "Profile values spot-checked vs ASM slices; full parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xb05390",
+        "0xb0f540",
+        "0xb3c270",
+        "0xb45080",
+        "0xb7f580",
+        "0xb87ff0",
+        "0xbd6ea0",
+        "0xc404c0",
+        "0xc4a810",
+        "0xc52a10",
+        "0xc5d730",
+        "0xe4c800",
+        "0xe9b180",
+        "0xea58b0"
+      ],
+      "status": "partial",
+      "boundary": "Grab-only createMenus: layout child-lookup key tables (incl. settings 18 widgets, continue 27, waypoint Button/Choice+N dynamics) transcribed to menu_grab_tables.hpp. Mechanical transcription + pinned tests, NO per-function semantic review; fishing/interactive are pipeline-only (no grabs).",
+      "evidence": [
+        "research/batch-menu-pass.json",
+        "research/inventory-open.md"
+      ],
+      "implementation": [
+        "include/torchlight/menu_grab_tables.hpp"
+      ],
+      "tests": [
+        "tests/menu_grab_test.cpp"
+      ],
+      "comparison": "Key tables spot-checked vs ASM slices; behavior parity NOT claimed"
     }
   ],
   "port_systems": [

@@ -316,7 +316,6 @@ npos-ветви — это НЕ логические ветви меню).
   settings-`setOpen` (6, 3) и waypoint-`setOpen` — им нужен свой разбор.
 
 ## Обобщение: один профиль на семью циклов (сгенерировано + проверено)
-
 `tools/gen_menu_profiles.py` транскрибирует batch-отчёт в
 `include/torchlight/menu_create_profiles.hpp` (4 профиля:
 границы петель, базы back-pointer, все ключи захватов, id подписок),
@@ -326,6 +325,17 @@ npos-ветви — это НЕ логические ветви меню).
 везде, ключи и id — по срезам. Открыто и НЕ в профилях: свойства окон,
 имена `createWindow`, `.bss`-имена, доставка событий — поэтому стадии
 трёх `createMenus` остаются `false`, данные — только transcription.
+
+## Grab-only меню: таблицы ключей (сгенерировано + проверено)
+
+`gen_menu_profiles.py --grab-only` → `menu_grab_tables.hpp` (14 таблиц),
+тест 17 утверждений. Extractor к этому проходу выучил: this-регистр
+(`rbx`/`r12`), inline-ключи (`movl`, `XP/HP/Mana` пета), String-ctor ключи
+(`JournalFrame` журнала), префиксы динамик (`Slot/Spell/PetSlot/ItemSlot/
+ItemReward*/Quest*/Button/Choice`). Проверено вручную: settings (18
+виджетов с полями), continue (27), waypoint (`Button/Choice+N`),
+fishing/interactive (пусто — только pipeline). Статус: transcription,
+не перенос; в ledger не вносятся, граница семейства — в реестре.
 
 ## updateLayout @0xb53430: триаж (зависимость конца setOpen)
 

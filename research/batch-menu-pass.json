@@ -1744,8 +1744,14 @@
    "symbol": "CJournalMenu::createMenus()",
    "creates": 1,
    "searches": 5,
-   "static_keys": [],
-   "dynamic_searches": 5,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "JournalFrame",
+    "TopFrame"
+   ],
+   "dynamic_searches": 0,
    "subscriptions": [
     [
      "0xe332d0",
