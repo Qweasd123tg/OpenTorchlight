@@ -21,6 +21,7 @@ import argparse
 import csv
 import json
 import re
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,13 +103,17 @@ def transfer_entry(addr: str) -> dict | None:
     return data.get("functions", {}).get("0x" + addr)
 
 
-def grep_hits(directories: list[Path], patterns: list[str]) -> list[str]:
+def grep_hits(directories: list[Path], patterns: list[str],
+              suffixes: set[str] | None = None) -> list[str]:
     hits: list[str] = []
     for base in directories:
         if not base.is_dir():
             continue
         for path in sorted(base.rglob("*")):
-            if not path.is_file() or path.suffix not in {".c", ".cpp", ".hpp", ".h", ".py"}:
+            if not path.is_file():
+                continue
+            allowed = suffixes or {".c", ".cpp", ".hpp", ".h", ".py"}
+            if path.suffix.lower() not in allowed:
                 continue
             try:
                 text = path.read_text(encoding="utf-8", errors="replace")
@@ -152,9 +157,11 @@ def main() -> int:
     patterns = list(hex_variants) + aliases[:3]
 
     decompiled = grep_hits([ROOT / "research/decompiled-core", ROOT / "research/decompiled"],
-                           patterns)
-    disassembly = grep_hits([ROOT / "research/disassembly"], patterns)
-    port = grep_hits([ROOT / "src", ROOT / "include", ROOT / "tests"], patterns)
+                           patterns, {".c", ".cpp", ".txt"})
+    disassembly = grep_hits([ROOT / "research/disassembly"], patterns,
+                            {".asm", ".txt", ".md"})
+    port = grep_hits([ROOT / "src", ROOT / "include", ROOT / "tests"], patterns,
+                     {".c", ".cpp", ".hpp", ".h", ".py"})
 
     lines = [f"# Function package 0x{addr}", "",
              f"ELF SHA-256 `{ELF_SHA}`.", "",
@@ -205,6 +212,20 @@ def main() -> int:
     lines += [f"  - {hit}" for hit in disassembly[:40]] or ["  - none"]
     lines += ["", "## Port references", ""]
     lines += [f"  - {hit}" for hit in port[:60]] or ["  - none"]
+
+    reuse_tool = ROOT / "tools/reuse_inventory.py"
+    reuse_scopes = ROOT / "research/reuse/scopes.json"
+    if reuse_tool.is_file() and reuse_scopes.is_file():
+        try:
+            sys.path.insert(0, str(ROOT / "tools"))
+            import reuse_inventory  # type: ignore
+            reuse_text = reuse_inventory.context(
+                ROOT, address="0x" + addr, aliases=aliases)
+            lines += ["", reuse_text]
+        except Exception as exc:  # navigation aid must never hide the core packet
+            lines += ["", "## Earlier work to reuse",
+                      f"Reuse index unavailable: {exc}"]
+
     lines += ["", "## Next step for this function",
               "1. Read the full decompilation + ASM for every branch.",
               "2. List field writes, error paths and all call sites with conditions.",

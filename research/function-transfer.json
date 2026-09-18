@@ -14,39 +14,39 @@
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": true
       },
       "evidence": "research/decompiled-core/game_ui.c:1286-1345; research/ui-scale-p1/NOTES.md; research/ui-menu-scale.md",
       "implementation": "src/ui_screen_scale.cpp; src/ui_layout.cpp; src/ui_hud.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json (400 trees / 1200 nodes / 9600 float fields bit-exact) vs tests/ui_screen_scale_test.cpp literals",
-      "notes": "Arithmetic + child-first order compared. Wired=false: only confirmed false/YRATIO call sites are connected; true/XRATIO branch has no confirmed screen, rescale lifecycle is an equivalent (recreate from pristine), CEGUI setPosition/setSize notifications and render parity remain open."
+      "notes": "Arithmetic + child-first order compared. Wired=false: only confirmed false/YRATIO call sites are connected; true/XRATIO branch has no confirmed screen, rescale lifecycle is an equivalent (recreate from pristine), CEGUI setPosition/setSize notifications and render parity remain open. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
     },
     "0x00a83e70": {
       "symbol": "CGameUI::scaledY(float)",
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": true
       },
       "evidence": "research/decompiled-core/game_ui.c; research/ui-scale-p1/NOTES.md",
       "implementation": "src/ui_screen_scale.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json constants 768.0f @0xfa4804",
-      "notes": "Scalar H/768 compared; full caller wiring tracked via 0x00a83ed0."
+      "notes": "Scalar H/768 compared; full caller wiring tracked via 0x00a83ed0. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
     },
     "0x00a83ea0": {
       "symbol": "CGameUI::scaledX(float)",
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": true
       },
       "evidence": "research/decompiled-core/game_ui.c; research/ui-scale-p1/NOTES.md",
       "implementation": "src/ui_screen_scale.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json constants 1/1024 @0xfa4808",
-      "notes": "Scalar W/1024 compared; no confirmed true-branch screen wired yet."
+      "notes": "Scalar W/1024 compared; no confirmed true-branch screen wired yet. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
     },
     "0x00b4eb70": {
       "symbol": "CInventoryMenu::setOpen(bool)",
