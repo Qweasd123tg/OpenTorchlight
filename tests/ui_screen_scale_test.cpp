@@ -45,6 +45,9 @@ const char *kProbeLayout =
     "<Window Name=\"OffsetProbe\" Type=\"StaticImage\">"
     "<Property Name=\"UnifiedAreaRect\" Value=\"{{0,10},{0,20},{0,400},{0,48}}\"/>"
     "</Window>"
+    "<Window Name=\"RoundProbe\" Type=\"StaticImage\">"
+    "<Property Name=\"UnifiedAreaRect\" Value=\"{{0,-25.360240936279297},{0,0},{0,-2197.022705078125},{0,0}}\"/>"
+    "</Window>"
     "</Window>"
     "</GUILayout>";
 } // namespace
@@ -83,6 +86,13 @@ int main() {
         const auto hd = layout.resolve(1920, 1080, 1.40625F);
         require(named(hd, "OffsetProbe").rect.width == 548.4375F, "offset-pair width mismatch");
         require(named(hd, "OffsetProbe").rect.x == 14.0625F, "offset-pair origin mismatch");
+        // Rounding order (audit cross-check): the original scales the
+        // getSize() difference, i.e. (max-min)*ratio with subss-then-mulss
+        // (vendored Window::getSize @0x111bd0, live-verified), NOT
+        // max*ratio-min*ratio. These differ by 1 ULP here.
+        require(named(hd, "RoundProbe").rect.x == -35.662837982177734F, "round origin mismatch");
+        require(named(hd, "RoundProbe").rect.width == -3053.900146484375F,
+                "size must scale the offset difference");
         // Negative control: the legacy unscaled resolve keeps the old defect.
         const auto legacy = layout.resolve(1920, 1080);
         require(named(legacy, "Probe").rect.width == 390.0F, "legacy resolve changed");

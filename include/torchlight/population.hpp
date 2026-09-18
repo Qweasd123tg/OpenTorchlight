@@ -9,6 +9,9 @@
 namespace torchlight {
 struct PopulationReport {
     std::size_t pathable_nodes = 0, reachable_nodes = 0, requested = 0;
+    // reachable_nodes is legacy diagnostic output: the current rejection
+    // sampler evaluates no reachability, so zero means NOT COMPUTED, not
+    // that the floor is unreachable. (Audit P04.)
     std::size_t created = 0, missing_resources = 0, unsupported_resources = 0, unplaced = 0;
     bool already_generated = false;
 };

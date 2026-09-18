@@ -7,7 +7,7 @@ float number(std::uint32_t bits) { float value; std::memcpy(&value, &bits, 4); r
 std::uint32_t bits(float value) { std::uint32_t n; std::memcpy(&n, &value, 4); return n; }
 } // namespace
 // 'o' seed cx cy cz minR maxR -> x y z rng_state (all as bits/u64).
-// Mirrors one CLevel::randomOpenPositionRange(center, minR, maxR) call:
+// Mirrors only one polar candidate PREFIX, NOT a complete randomOpenPositionRange call:
 // r in [minR, maxR], angle in [0, 360), polar offset, y passthrough.
 int main() {
     try {

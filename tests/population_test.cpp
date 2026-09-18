@@ -38,6 +38,12 @@ void cycle(const char* path) {
     require(grid_point_walkable(grid,5,5),"open floor cell rejected");
     require(!grid_point_walkable(grid,35,5),"gap between islands accepted");
     require(!grid_point_walkable(grid,100,100),"out-of-bounds accepted");
+    for(const float v : {std::numeric_limits<float>::quiet_NaN(),
+            std::numeric_limits<float>::infinity(), -std::numeric_limits<float>::infinity(),
+            std::numeric_limits<float>::max(), -std::numeric_limits<float>::max()}) {
+        require(!grid_point_walkable(grid,v,5),"unsafe X index accepted");
+        require(!grid_point_walkable(grid,5,v),"unsafe Z index accepted");
+    }
     {
         // Determinism and bounds of the original-order sampler on an authored grid.
         TorchlightRandom a(5), b(5);
@@ -108,7 +114,7 @@ void original(const char* path) {
         const auto& e=world.entities()[i];require(e.level==1&&e.alive&&e.combat_targetable&&e.maximum_health>0,"real monster invalid");
         require(!e.mesh_path.empty()&&archive.contains_normalized(e.mesh_path),"real population invisible mesh");
     }
-    std::cout<<"original_mine nodes="<<report.pathable_nodes<<" candidates="<<report.reachable_nodes<<" requested="<<report.requested<<" created="<<report.created<<" unplaced="<<report.unplaced<<'\n';
+    std::cout<<"original_mine nodes="<<report.pathable_nodes<<" reachable_not_computed="<<report.reachable_nodes<<" requested="<<report.requested<<" created="<<report.created<<" unplaced="<<report.unplaced<<'\n';
 }
 }
 int main(int argc,char**argv) {try {

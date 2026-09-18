@@ -63,8 +63,9 @@ std::optional<std::array<float, 3>> section_spawn_point(const NavigationGrid& gr
         if (!pick) continue;
         const float px = (*pick)[0], pz = (*pick)[2];
         // ucomiss jne/jp chains: accept unless the whole triple is unchanged
-        // (NaN/unordered accepts, identical to chained !=).
-        if (px != x || kSpawnHeightGuess != height || pz != z) {
+        // (NaN/unordered accepts, identical to chained !=). Compared against
+        // this call's input triple, not the production caller's usual height.
+        if (px != x || (*pick)[1] != height || pz != z) {
             bool inside = false;
             for (const auto& exclusion : exclusions)
                 if ((px - exclusion[0]) * (px - exclusion[0]) +
@@ -84,10 +85,15 @@ bool grid_point_walkable(const NavigationGrid& grid, float x, float z) {
     const float cs = grid.cell_size();
     if (!(cs > 0.0F) || grid.width() == 0 || grid.height() == 0) return false;
     const auto corner = grid.cell_center(0, 0);
-    const long ix = static_cast<long>(std::floor((x - (corner[0] - cs / 2.0F)) / cs));
-    const long iz = static_cast<long>(std::floor((z - (corner[2] - cs / 2.0F)) / cs));
-    if (ix < 0 || iz < 0 || static_cast<std::size_t>(ix) >= grid.width() ||
-        static_cast<std::size_t>(iz) >= grid.height())
+    // Portable input safety (audit P03): reject non-finite/out-of-range
+    // indices BEFORE float-to-integer conversion. NaN/Inf and huge floats
+    // have undefined conversion behaviour in C++; the finite in-range
+    // arithmetic below is unchanged.
+    const float ix = std::floor((x - (corner[0] - cs / 2.0F)) / cs);
+    const float iz = std::floor((z - (corner[2] - cs / 2.0F)) / cs);
+    if (!std::isfinite(ix) || !std::isfinite(iz) || ix < 0 || iz < 0 ||
+        static_cast<double>(ix) >= static_cast<double>(grid.width()) ||
+        static_cast<double>(iz) >= static_cast<double>(grid.height()))
         return false;
     return grid.cell(static_cast<std::size_t>(ix), static_cast<std::size_t>(iz)).walkable;
 }
@@ -134,7 +140,7 @@ PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings
             return grid.cell_center((*near)[0], (*near)[1])[1];
         return entry[1];
     };
-    report.reachable_nodes = report.pathable_nodes;
+    report.reachable_nodes = 0;
     // World changes and RNG must commit together. Definition caches may warm on
     // failure, but no entities, ids, current level or random state are changed.
     auto previous_entities = entities_;

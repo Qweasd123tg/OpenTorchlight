@@ -358,12 +358,20 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
             // original-code: CGameUI::convertToScreenScale @0xa83ed0 scales
             // the four UDim offsets by one ratio, scales preserved. Applied
             // here to freshly parsed pristine values, never written back.
+            // Size subtlety (audit cross-check): the original scales
+            // getPosition()/getSize() UVector2s, and vendored
+            // CEGUI::Window::getSize @0x111bd0 computes the size offset as
+            // max-min with subss BEFORE the scale mult. So the size term is
+            // (max-min)*ratio, NOT max*ratio-min*ratio (float rounding
+            // differs). Position offsets are scaled directly.
             std::array<float, 8> a{parsed[0], parsed[1], parsed[2], parsed[3],
                                    parsed[4], parsed[5], parsed[6], parsed[7]};
             ui_scale_area_offsets(a, screen_scale_ratio);
+            const float size_x = (parsed[5] - parsed[1]) * screen_scale_ratio;
+            const float size_y = (parsed[7] - parsed[3]) * screen_scale_ratio;
             v.rect = {parent.x + parent.width * a[0] + a[1], parent.y + parent.height * a[2] + a[3],
-                      parent.width * (a[4] - a[0]) + a[5] - a[1],
-                      parent.height * (a[6] - a[2]) + a[7] - a[3]};
+                      parent.width * (a[4] - a[0]) + size_x,
+                      parent.height * (a[6] - a[2]) + size_y};
         } else {
             if (const auto p = node.property("UnifiedPosition"); !p.empty()) {
                 const auto parsed = numbers(p);

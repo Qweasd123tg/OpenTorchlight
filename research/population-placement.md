@@ -97,9 +97,12 @@ Consequence: the port's BFS-connected-component + spacing policy was a
 stricter invention and the prime suspect for the 51/76 shortfall — confirmed
 by the scenario re-run (§6).
 
-Consequence: **original ordinary placement does no map-collision filtering at
-this stage at all**. The port's BFS-connected-component + spacing policy is a
-stricter invention and is the prime suspect for the 51/76 shortfall.
+> Audit correction (2026-09-18): the sentence that previously stood here
+> claiming NO map-collision filtering was a leftover of the early dead-scan
+> misread and contradicted §3 item 5. The live scan DOES test
+> `mapPassable`/`positionPassable` per attempt; the port maps both layers to
+> its single walkable flag (open approximation, §5). Do not use the removed
+> sentence as guidance.
 
 ## 4. Per-entry loop (`populateSectionOfLevel`, `b1=0` path, ASM `0x95d548–0x95d690`)
 
@@ -135,9 +138,10 @@ Then per accepted entry:
 
 ## 5. Port boundary for this pass
 
-Port: §4 steps 1–6 + live scan (§3) + `level+1` champion rule (champion naming
-itself stays with the existing `makeChampion` port). Open in the port (no
-code, documented): node branch, formations, item corners, NPCS/CREEPS/PROPS
+Port: §4 steps 1–6 + live scan (§3). The `level+1` champion rule is RECORDED
+from ASM but NOT implemented (no `makeChampion` port exists anywhere in the
+tree — only an XP-formula comment; nothing is wired to this path). Open in
+the port (no code, documented): node branch, formations, item corners, NPCS/CREEPS/PROPS
 sections, section-rect plumbing (the port uses its 0.4-grid bounds as the
 section rect), no-spawn regions (the port tests carried points with the
 original 1.0 radius instead of region boxes), spawn facing (no facing state
@@ -148,8 +152,10 @@ actor-radius inflation, unlike the original path grid).
 Known deviation (documented, not hidden): spawn height. Original passes the
 constant `27.5` and lets the engine settle; the port has no settle step, so it
 samples ground height from its own grid at `(x',z')` (nearest walkable cell,
-entry height fallback). X/Z selection stays bit-comparable; Y does not claim
-parity.
+entry height fallback). Only the isolated sampling-prefix X/Z values have
+been compared bitwise (§6); accepted world positions depend on the
+approximated walkability predicate and a different RNG stream, so they do
+NOT claim parity. Y differs as well.
 
 ## 6. Verification (2026-09-18)
 
