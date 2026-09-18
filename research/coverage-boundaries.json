@@ -964,6 +964,21 @@
         "tests/application_services_test.py"
       ],
       "comparison": "No original-execution proof"
+    },
+    {
+      "addresses": [
+        "0xb4d920",
+        "0xb68ca0",
+        "0xbd87d0"
+      ],
+      "status": "researched",
+      "boundary": "CloseButton: guard + cleanup + marker shape differs per menu (inv: 4 safe-ptrs + 0x62; merch: setTarget null + 0x62; skill: flag machine + setOpen(false)); +0x62 consumer unrecovered. mapEventHandlers: recurse + subscribe handle_onClick on onClick-bearing windows. No port callers for either (no clickable panel buttons, click-time resolve).",
+      "evidence": [
+        "research/menu-event-plumbing.md"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": "No original-execution proof"
     }
   ],
   "port_systems": [

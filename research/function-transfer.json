@@ -759,6 +759,482 @@
       "tests": "",
       "comparison": "",
       "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00b4d920": {
+      "symbol": "CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §1; objdump 0xe8 bytes",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "4x removeSafePointer + menu+0x62=1, no setOpen call. No port caller (no clickable Close)."
+    },
+    "0x00b68ca0": {
+      "symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "+0x62=1 + setTarget(null), no setOpen call. No port caller."
+    },
+    "0x00bd87d0": {
+      "symbol": "CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "+0x3a/+0x3b machine + virtual setOpen(false). Fed path already wired via ESC/I/K/J."
+    },
+    "0x00b4f1b0": {
+      "symbol": "CInventoryMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §2; research/disassembly/b4f1b0-map-handlers.asm",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Recurse + subscribe handle_onClick on onClick-bearing windows. Port resolves at click time; no subscription phase."
+    },
+    "0x00ad4bb0": {
+      "symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00afce10": {
+      "symbol": "CDialogMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b060f0": {
+      "symbol": "CDieMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b17380": {
+      "symbol": "CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b23ba0": {
+      "symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b776f0": {
+      "symbol": "CModalMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b80130": {
+      "symbol": "COptionsMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00b887f0": {
+      "symbol": "CPetMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00ba5510": {
+      "symbol": "CQuestDialogMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00bba040": {
+      "symbol": "CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00bf5f90": {
+      "symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c042c0": {
+      "symbol": "CStatsMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c18c40": {
+      "symbol": "CStatsMenuFill::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c335a0": {
+      "symbol": "CContinueGameMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c42df0": {
+      "symbol": "CDifficultyMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c4b020": {
+      "symbol": "CMainMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00c53f90": {
+      "symbol": "CNewGameMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00e332b0": {
+      "symbol": "CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00e44930": {
+      "symbol": "CTipMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00e9bad0": {
+      "symbol": "CWaypointMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+    },
+    "0x00a97e00": {
+      "symbol": "CGameUI::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00ad7690": {
+      "symbol": "CCombineMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00b179e0": {
+      "symbol": "CDropdownMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00b252c0": {
+      "symbol": "CEnchantMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00b3beb0": {
+      "symbol": "CFishingMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00b6a790": {
+      "symbol": "CMerchantMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00b93070": {
+      "symbol": "CPetMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00bc28c0": {
+      "symbol": "CQuestMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00be1600": {
+      "symbol": "CSkillMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
+    },
+    "0x00bf7900": {
+      "symbol": "CStashMenu::mapEventHandlers(CEGUI::Window*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder."
     }
   }
 }

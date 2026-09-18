@@ -8548,7 +8548,7 @@ address	symbol	subsystem	status	incoming	outgoing	root_distance	priority	boundar
 0x00b4d560	non-virtual thunk to CInventoryMenu::~CInventoryMenu()	items	unseen	0	1	3	62.0	No reviewed boundary annotation					non-virtual thunk to CInventoryMenu::~CInventoryMenu()
 0x00b4d570	CInventoryMenu::~CInventoryMenu()	items	unseen	1	2	2	80.0	No reviewed boundary annotation					CInventoryMenu::~CInventoryMenu()
 0x00b4d590	CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)	items	unseen	0	12	2	97.004	No reviewed boundary annotation					CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)
-0x00b4d920	CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)	items	unseen	0	1	2	70.0	No reviewed boundary annotation					CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)
+0x00b4d920	CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)	items	researched	0	1	2	70.0	CloseButton: guard + cleanup + marker shape differs per menu (inv: 4 safe-ptrs + 0x62; merch: setTarget null + 0x62; skill: flag machine + setOpen(false)); +0x62 consumer unrecovered. mapEventHandlers: recurse + subscribe handle_onClick on onClick-bearing windows. No port callers for either (no clickable panel buttons, click-time resolve).	research/menu-event-plumbing.md			No original-execution proof	CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)
 0x00b4da10	__tcf_15	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_15
 0x00b4daa0	__tcf_10	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_10
 0x00b4db10	__tcf_9	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_9
@@ -8631,7 +8631,7 @@ address	symbol	subsystem	status	incoming	outgoing	root_distance	priority	boundar
 0x00b68510	CMerchantMenu::~CMerchantMenu()	interaction	unseen	1	2	2	92.0	No reviewed boundary annotation					CMerchantMenu::~CMerchantMenu()
 0x00b68530	CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)	interaction	unseen	0	12	2	109.004	No reviewed boundary annotation					CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)
 0x00b688e0	CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)	interaction	unseen	0	12	2	109.004	No reviewed boundary annotation					CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)
-0x00b68ca0	CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)	interaction	unseen	0	3	2	92.0	No reviewed boundary annotation					CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)
+0x00b68ca0	CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)	interaction	researched	0	3	2	92.0	CloseButton: guard + cleanup + marker shape differs per menu (inv: 4 safe-ptrs + 0x62; merch: setTarget null + 0x62; skill: flag machine + setOpen(false)); +0x62 consumer unrecovered. mapEventHandlers: recurse + subscribe handle_onClick on onClick-bearing windows. No port callers for either (no clickable panel buttons, click-time resolve).	research/menu-event-plumbing.md			No original-execution proof	CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)
 0x00b68da0	__tcf_27	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_27
 0x00b68e30	__tcf_26	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_26
 0x00b68ea0	__tcf_25	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_25
@@ -8999,7 +8999,7 @@ address	symbol	subsystem	status	incoming	outgoing	root_distance	priority	boundar
 0x00bd8790	CSettingsMenu::~CSettingsMenu()	other	unseen	0	1	3	38.0	No reviewed boundary annotation					CSettingsMenu::~CSettingsMenu()
 0x00bd87a0	CSettingsMenu::~CSettingsMenu()	other	unseen	0	2	2	51.85	No reviewed boundary annotation					CSettingsMenu::~CSettingsMenu()
 0x00bd87c0	CSkillMenu::setOwner(CCharacter*)	effects_skills	unseen	0	0		24.0	No reviewed boundary annotation					CSkillMenu::setOwner(CCharacter*)
-0x00bd87d0	CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)	effects_skills	unseen	0	0		24.0	No reviewed boundary annotation					CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)
+0x00bd87d0	CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)	effects_skills	researched	0	0		24.0	CloseButton: guard + cleanup + marker shape differs per menu (inv: 4 safe-ptrs + 0x62; merch: setTarget null + 0x62; skill: flag machine + setOpen(false)); +0x62 consumer unrecovered. mapEventHandlers: recurse + subscribe handle_onClick on onClick-bearing windows. No port callers for either (no clickable panel buttons, click-time resolve).	research/menu-event-plumbing.md			No original-execution proof	CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)
 0x00bd87f0	CSkillMenu::clearSkillTooltip()	effects_skills	unseen	1	0		34.0	No reviewed boundary annotation					CSkillMenu::clearSkillTooltip()
 0x00bd8800	CSkillMenu::handle_MouseThrough(CEGUI::EventArgs const&)	effects_skills	unseen	0	0		24.0	No reviewed boundary annotation					CSkillMenu::handle_MouseThrough(CEGUI::EventArgs const&)
 0x00bd8810	CSkillMenu::processInput(void*, float, bool)	effects_skills	unseen	0	0		24.0	No reviewed boundary annotation					CSkillMenu::processInput(void*, float, bool)
