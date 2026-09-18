@@ -24,7 +24,9 @@
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/player_session.hpp"
+#include "torchlight/inventory_menu.hpp"
 #include "torchlight/inventory_view.hpp"
+#include "torchlight/ui_screen_scale.hpp"
 #include "torchlight/music.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_animation.hpp"
@@ -448,6 +450,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         campaign.character_name = "Preview"; campaign.resource_identity = resource_identity; campaign.current = initial_address;
         torchlight::PlayerSession session(selected_player, level_seed(campaign_seed, initial_address.depth), &unit_type_hierarchy);
         torchlight::InventoryView inventory_view;
+        torchlight::InventoryMenuState inventory_menu;
         if (direct_preview) frontend.entered_game();
         const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
             auto prototype = selected_player;
@@ -1036,6 +1039,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         if (key != torchlight::physical_key::R) continue;
                         const auto recovery = session.recover_at_entry(enemies, player_motion, level.recovery_anchor);
                         if (recovery.status != torchlight::RecoveryStatus::recovered) continue;
+                        inventory_menu.set_open(false, false); // keep controller consistent; port recovery owns the reset
                         inventory_view.open = false;
                         active_interaction.reset(); interactions.cancel(); active_pickup = 0; active_path.clear(); next_path_node = 0;
                         player_attack_animation_active = false;
@@ -1060,7 +1064,22 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         continue;
                     }
                     if (key == torchlight::physical_key::I) {
-                        inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
+                        const bool requested = skill_panel || quest_panel || merchant_entity ||
+                                               !inventory_view.open;
+                        // original-code: CInventoryMenu::setOpen @0xb4eb70 flag machine;
+                        // the panel interplay above is the port-side caller (cf. the
+                        // original toggleInventory @0xa8ea20). close_playing=false: the
+                        // port has no wardrobe model to query (open). Reported sound,
+                        // animation, tip and camera effects have no port sink yet (see
+                        // inventory_menu.hpp boundary); the frame already refreshes
+                        // inventory lines from the session, which covers update_layout.
+                        const auto menu_effects = inventory_menu.set_open(requested, false);
+                        if (menu_effects.viewport_recompute)
+                            inventory_menu.ensure_viewport(
+                                window.width(), window.height(),
+                                torchlight::ui_screen_ratio(window.width(), window.height(),
+                                                            torchlight::UiScreenScaleRatio::y_ratio));
+                        inventory_view.open = inventory_menu.open();
                         skill_panel = false; quest_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::K) {
                         inventory_view.open = !skill_panel || !inventory_view.open;
