@@ -1026,6 +1026,19 @@
         "tests/application_missile_test.py"
       ],
       "comparison": "Scenario + unit differential; no original-execution proof"
+    },
+    {
+      "addresses": [
+        "0x8245c0"
+      ],
+      "status": "researched",
+      "boundary": "doWeaponSkill contract: guards, skill loop with +0x6b/0x6d gate, executeSkill per skill, OR-accumulate early return. Not ported: bottoms out in skill-execution engine; skill projectile creation site unrecovered (single fireMissile caller proven).",
+      "evidence": [
+        "research/do-weapon-skill.md"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": "Key sites verified in ASM; loop math subagent-read"
     }
   ],
   "port_systems": [

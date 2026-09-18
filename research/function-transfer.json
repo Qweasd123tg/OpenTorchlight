@@ -2159,6 +2159,20 @@
       "tests": "application_missile_test.py",
       "comparison": "No original-execution proof",
       "notes": "One missile/call; enemy side still refused."
+    },
+    "0x008245c0": {
+      "symbol": "CCharacter::doWeaponSkill(CEquipment*)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/do-weapon-skill.md; entry/loop/OR sites verified in objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Blocked on skill-execution engine (skill missiles bypass fireMissile; creation site unrecovered). weapon_skill refusal stays."
     }
   }
 }

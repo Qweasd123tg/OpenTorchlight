@@ -90,3 +90,17 @@ clear effect list, detach scene nodes. Removable=0. List removal caller-side.
   skill visuals); reflect; ricochet budget; pierce (`+0x142`); homing
   (arch>0, e.g. POISONWAND HOMING SPEED); breakable smash (virtual+0x280);
   enemy casters (enemy gate still refuses).
+
+## 8. Known simplifications vs the original (debt, not fidelity claims)
+
+- Aim: port fires from attacker+0.5 with full-3D normalize; original builds
+  anchor + dir·range·WEAPON_SCALE·0.8, FromAxes orient, ZERO-vector paths,
+  +0.1 `calculateLaunchOrientation` fallback, short-range (4.0) probe.
+- Velocity: template speed passed through; `createNewMissileRef`/preloader
+  scaling unanalyzed (no rodata constant exists either way).
+- World contact: port stops + splashes; original distinguishes wall-slide
+  (grazing, no AOE) from kill+AOEDamage.
+- Lifetime: distance only; original `+0x186` branch and dying-branch timing
+  unmodeled (settle is instant, no animation sink).
+- doWeaponSkill path still refused (cluster analyzed in
+  research/do-weapon-skill.md; blocked on the skill-execution engine).
