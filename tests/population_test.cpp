@@ -33,12 +33,25 @@ void cycle(const char* path) {
     require(rejected,"nonfinite density accepted");
     CollisionScene scene;floor(scene,0,0,30,30);floor(scene,40,0,50,10);
     auto grid=NavigationGrid::build(scene,.4F);
-    auto candidates=population_candidates(grid,{1,0,1},{{15,0,15}});
-    require(!candidates.empty(),"no reachable population candidates");
-    for(const auto& p:candidates) {
-        require(p[0]<31,"disconnected island included");
-        require((p[0]-1)*(p[0]-1)+(p[2]-1)*(p[2]-1)>=25,"entry exclusion violated");
-        require((p[0]-15)*(p[0]-15)+(p[2]-15)*(p[2]-15)>=9,"warp exclusion violated");
+    // original-code: rejection sampling has no connectivity/exclusion policy
+    // (research/population-placement.md). Walkability is per-cell now.
+    require(grid_point_walkable(grid,5,5),"open floor cell rejected");
+    require(!grid_point_walkable(grid,35,5),"gap between islands accepted");
+    require(!grid_point_walkable(grid,100,100),"out-of-bounds accepted");
+    {
+        // Determinism and bounds of the original-order sampler on an authored grid.
+        TorchlightRandom a(5), b(5);
+        const auto pa = section_spawn_point(grid,0,30,0,30,0,{},a);
+        const auto pb = section_spawn_point(grid,0,30,0,30,0,{},b);
+        require(pa.has_value() && pb.has_value(),"authored section point missing");
+        require(*pa==*pb,"same seed section point differs");
+        require((*pa)[0]>=0&&(*pa)[0]<=30&&(*pa)[2]>=0&&(*pa)[2]<=30,"section point outside rect");
+        // Point exclusions use the original 1.0 radius: a wall of exclusions
+        // forces exhaustion to nullopt instead of inventing a placement.
+        std::vector<std::array<float,3>> wall;
+        for(float x=0;x<=30;x+=0.5F) for(float z=0;z<=30;z+=0.5F) wall.push_back({x,0,z});
+        TorchlightRandom c(5);
+        require(!section_spawn_point(grid,0,30,0,30,0,wall,c).has_value(),"exhaustion must yield nullopt");
     }
     test_fixture::World f(path), other(path);EnemyController enemies(1);
     TorchlightRandom choice(1);

@@ -1,3 +1,28 @@
+# Текущая точка: размещение по оригиналу (population-placement)
+
+Закрыта проблема large-12/13: seed 42 даёт 61/61, общий сценарий seed 491 —
+76 из 76 с 0 unplaced (было 51 из 76, 25 unplaced). Причина — выдуманный
+BFS-фильтр связности и полное перемешивание кандидатов: оригинал так не делает.
+Перенесён rejection sampling из `CLevel::populateSectionOfLevel @0x95d220`:
+порядок RNG z,x, полярный pick через `randomOpenPositionRange @0x945770`
+(r в [0,3], угол, sincosf-порядок `MATH::rotateY @0xc7a400`), проверка
+проходимости по клеткам 0.4, no-spawn радиус 1.0, до 50 попыток.
+Дифтест: 3005 пиков побитово + состояния volatile RNG
+(`original_population_placement_comparison`). Высота — снэп к сетке
+(у оригинала константа 27.5 и engine settle, которого в порте нет);
+секции NPCS/CREEPS/PROPS, spawn nodes, formations, регионы no-spawn —
+открыты. Доказательства и границы: `research/population-placement.md`.
+Полный прогон: 137/137 (core 68, assets 43, reference 17, render 11
+с пересечениями групп).
+
+Следующая граница по размещению: upfront `rollSpawnClass` (порт бросает класс
+на каждого монстра внутри цикла, оригинал — один раз до цикла), секции
+NPCS/CREEPS/PROPS, spawn nodes (`CLevel+0xf0`, счётчики `+0x114`), настоящие
+регионы no-spawn (`CLevel+0xd8`), второй слой 0.4-сетки. Ниже сохранена
+история, начиная с large-16.
+
+---
+
 # Текущая точка: large-16 — прямой типизированный оружейный урон
 
 Алхимик снова атакует Moldy Staff, теперь через исходное распределение в яд,

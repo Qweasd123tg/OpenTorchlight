@@ -899,6 +899,18 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         set_tests_properties(original_gameplay_numeric_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
     endif()
 
+    add_executable(population_placement_probe tests/population_placement_probe.cpp)
+    target_link_libraries(population_placement_probe PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(population_placement_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_population_placement_comparison
+            COMMAND ${TORCHLIGHT_REFERENCE_PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_population_placement.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:population_placement_probe>)
+        set_tests_properties(original_population_placement_comparison PROPERTIES TIMEOUT 180 SKIP_RETURN_CODE 77)
+    endif()
+
     set(LEGACY_V3_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/legacy-v3.pak.zip)
     add_custom_command(OUTPUT ${LEGACY_V3_FIXTURE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_legacy_v3_fixture.py ${LEGACY_V3_FIXTURE}

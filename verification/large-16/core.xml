@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="67"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="21"
+	timestamp="2026-09-17T22:45:28"
+	>
+	<testcase name="ordinary_attack_action" classname="ordinary_attack_action" time="0.00361094" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 50 shared attack assertions
+</system-out>
+	</testcase>
+	<testcase name="actor_motion" classname="actor_motion" time="0.00351518" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: actor motion advances by speed and stops at its destination
+</system-out>
+	</testcase>
+	<testcase name="animation_events" classname="animation_events" time="0.00265449" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: retained ordered animation events with clip timing
+</system-out>
+	</testcase>
+	<testcase name="damage_calculation" classname="damage_calculation" time="0.00248439" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: physical and elemental armor match modifyDamage
+</system-out>
+	</testcase>
+	<testcase name="warp_arrival" classname="warp_arrival" time="0.00337409" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: selected same-dungeon reverse Warpers in original order
+</system-out>
+	</testcase>
+	<testcase name="level_entry_fallback" classname="level_entry_fallback" time="0.0501299" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Checked 2730 synthetic ordered-node sequences
+PASS: 5480 level-entry assertions
+</system-out>
+	</testcase>
+	<testcase name="enemy_ai_cooldown" classname="enemy_ai_cooldown" time="0.0995627" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Starts over [0,2]: AI=0 -&gt; 3; AI=2 -&gt; 2
+PASS: 751 AI cooldown assertions; synthetic resources only
+</system-out>
+	</testcase>
+	<testcase name="ai_cooldown_export_comparison" classname="ai_cooldown_export_comparison" time="1.50496" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 42739 bit-exact float32 comparisons against pinned ASM-export slices (ELF not loaded)
+</system-out>
+	</testcase>
+	<testcase name="desktop_gameplay_syntax" classname="desktop_gameplay_syntax" time="2.65803" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Shared application compiled without rewriting. Window ABI/link not tested here.
+</system-out>
+	</testcase>
+	<testcase name="inventory_view" classname="inventory_view" time="0.00626527" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>inventory_view_checks=1801
+</system-out>
+	</testcase>
+	<testcase name="inventory_instances" classname="inventory_instances" time="0.00326749" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>inventory_checks=4033
+</system-out>
+	</testcase>
+	<testcase name="item_cycle" classname="item_cycle" time="0.051363" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>synthetic_cycle=death-&gt;model-&gt;pickup-&gt;bag-&gt;equip-&gt;travel checks=340
+</system-out>
+	</testcase>
+	<testcase name="attack_speed_export_comparison" classname="attack_speed_export_comparison" time="1.1067" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 12392 bit-exact speed cases; pinned export slices with explicit fixture constants, not ELF validation
+</system-out>
+	</testcase>
+	<testcase name="ordinary_combat" classname="ordinary_combat" time="0.147458" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 129 resource-backed ordinary combat assertions (authored fixture)
+</system-out>
+	</testcase>
+	<testcase name="frontend" classname="frontend" time="0.00549458" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>frontend: 37 assertions; authored CEGUI/PNG fixture, no original skin equivalence
+</system-out>
+	</testcase>
+	<testcase name="music" classname="music" time="0.0042165" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>music: 15 assertions; mapping/volume/mixer/state without audio hardware
+</system-out>
+	</testcase>
+	<testcase name="settings" classname="settings" time="0.00867192" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>settings: 14 assertions; authored files plus observed original key names
+</system-out>
+	</testcase>
+	<testcase name="frontend_menu_resources" classname="frontend_menu_resources" time="0.00995086" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>35 authored menu checks passed; no original pak parity claim
+</system-out>
+	</testcase>
+	<testcase name="ui_text_layout" classname="ui_text_layout" time="0.0027488" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>13 text decoding / wrapping / clipping checks passed
+</system-out>
+	</testcase>
+	<testcase name="frontend_campaign_cycle" classname="frontend_campaign_cycle" time="0.890764" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>frontend-cycle write: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle read: 222 assertions (authored resources; not original Town/GUI parity)
+frontend-cycle verify: 4 assertions (authored resources; not original Town/GUI parity)
+Three independent processes completed the authored-resource frontend/campaign cycle.
+</system-out>
+	</testcase>
+	<testcase name="coverage_map_current" classname="coverage_map_current" time="1.73368" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Coverage: 17031 explicit rows; no automatic promotions from decompilation.
+</system-out>
+	</testcase>
+	<testcase name="gles_ui_headless" classname="gles_ui_headless" time="1.32686" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="1.45803" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+6 authored resource menu frames passed: labels, skin states, create, pause, load, settings, resize
+PASS: 6 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="0.135903" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 605 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="save_fresh_process" classname="save_fresh_process" time="1.15072" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 591 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+Separate-process save/load passed for the supplied PAK; not original save-format compatibility.
+</system-out>
+	</testcase>
+	<testcase name="save_atomic_process" classname="save_atomic_process" time="1.38615" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint write: 591 assertions passed (authored resources; not original save compatibility)
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+save_checkpoint race-a: 1 assertions passed (authored resources; not original save compatibility)
+expected competing writer conflict
+save_checkpoint read-revision-2: 16 assertions passed (authored resources; not original save compatibility)
+Atomic checkpoint passed: pre-rename process crash preserves bytes; two competing writers yield one commit, one revision conflict.
+</system-out>
+	</testcase>
+	<testcase name="gameplay_continuation" classname="gameplay_continuation" time="0.0702965" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 390 gameplay continuation assertions (authored resources, no original runtime)
+</system-out>
+	</testcase>
+	<testcase name="death_finalization" classname="death_finalization" time="0.00856721" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 62 deferred death/loot/callback assertions (authored resource graph)
+</system-out>
+	</testcase>
+	<testcase name="effect_catalog_source" classname="effect_catalog_source" time="1.07223" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 6 authoritative catalog path / missing / corrupt / decoy cases; authored data only
+</system-out>
+	</testcase>
+	<testcase name="read_only_extractors" classname="read_only_extractors" time="7.82495" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 21 read-only extractor assertions; synthetic files only, no original execution
+</system-out>
+	</testcase>
+	<testcase name="combat_inputs_evidence" classname="combat_inputs_evidence" time="0.791644" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: seven compiled float32 constants and effect path match integrator pinned-ELF JSON
+</system-out>
+	</testcase>
+	<testcase name="player_vitals_export_comparison" classname="player_vitals_export_comparison" time="1.18651" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: gold=2064, mana=2320, entry fee=2113; unchanged numeric spans, synthetic dependencies; targeted export bytes, NOT whole original game
+</system-out>
+	</testcase>
+	<testcase name="reward_resource_graphs" classname="reward_resource_graphs" time="0.00879485" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>class_guid=5022 max_level=4 cap=1000 awarded_stats=12 awarded_skills=6
+class_guid=5023 max_level=4 cap=1000 awarded_stats=12 awarded_skills=6
+PASS: 2 class templates, 8 level-graph samples; resource compatibility only, XP scalar formula original-code, NOT full original parity
+</system-out>
+	</testcase>
+	<testcase name="reward_unavailable" classname="reward_unavailable" time="0.00859744" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 7 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="progression_numeric" classname="progression_numeric" time="0.00395359" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 29 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="reward_cycle" classname="reward_cycle" time="0.0213825" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 79 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="reward_fresh_process" classname="reward_fresh_process" time="1.21309" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 47 assertions passed; authored resources, NOT original gameplay parity
+reward cycle: 20 assertions passed; authored resources, NOT original gameplay parity
+reward cycle: 20 assertions passed; authored resources, NOT original gameplay parity
+PASS: separate-process reward/vitals/point/rolled-gold restoration; repeat reads do not duplicate rewards
+</system-out>
+	</testcase>
+	<testcase name="legacy_reward_save_migration" classname="legacy_reward_save_migration" time="1.15023" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+PASS: frozen unmodified-large-7 v1 fixture upgraded without retroactive rewards
+save_checkpoint read: 16 assertions passed (authored resources; not original save compatibility)
+PASS: v1 and upgraded checkpoint load the same legacy inventory, floor, vitals and wallet in fresh processes
+</system-out>
+	</testcase>
+	<testcase name="world_gold_export_comparison" classname="world_gold_export_comparison" time="0.926772" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 10107 gold scalar cases; unchanged instructions; native ceilf dependency; targeted exports, NOT original asset/runtime validation
+</system-out>
+	</testcase>
+	<testcase name="monster_experience_export_comparison" classname="monster_experience_export_comparison" time="1.11228" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 20031 monster XP scalar cases; unchanged instructions; targeted exports, NOT original asset/runtime validation
+</system-out>
+	</testcase>
+	<testcase name="item_cycle_resource_fixture" classname="item_cycle_resource_fixture" time="0.00567021" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>resource_cycle deaths=1 dropped_equipment=6 models=10 stored=10 weapons_checked=2 chest_armors_checked=2
+</system-out>
+	</testcase>
+	<testcase name="parent_dungeon" classname="parent_dungeon" time="0.00294828" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>First-floor parent route, metadata identity and unsupported special modes checked
+</system-out>
+	</testcase>
+	<testcase name="scenario_first_difference" classname="scenario_first_difference" time="0.865677" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>..
+----------------------------------------------------------------------
+Ran 2 tests in 0.008s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="asset_catalog_negative" classname="asset_catalog_negative" time="1.45756" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Resource catalog generated; inspect unsupported/missing nodes; not a fidelity certificate
+{"status": "PASSED", "kind": "catalog-schema-and-parser-boundaries", "counts": {"corrupt": 1, "missing": 2, "supported": 91, "unsupported": 5}, "nodes": 99, "edges": 120, "timeout_scale": 1, "evidence": "resource inventory, not game fidelity"} evidence: /mnt/data/work16/build/catalog-evidence/catalog-vn7m5fo3
+</system-out>
+	</testcase>
+	<testcase name="random_observation" classname="random_observation" time="0.00335833" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>RNG sequence, degenerate calls, nested observer and unchanged results checked.
+</system-out>
+	</testcase>
+	<testcase name="verification_driver" classname="verification_driver" time="4.58626" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>....
+----------------------------------------------------------------------
+Ran 4 tests in 3.855s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="vitals_numeric" classname="vitals_numeric" time="0.0200551" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 24018 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_resource_cycle" classname="vitals_resource_cycle" time="0.015149" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 51 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="vitals_fresh_process" classname="vitals_fresh_process" time="0.965334" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 6 authored vitals checks; not original ELF execution
+PASS: 5 authored vitals checks; not original ELF execution
+PASS: v3 vitals survive fresh-process load without refilling or double-buffing
+</system-out>
+	</testcase>
+	<testcase name="vitals_v2_migration" classname="vitals_v2_migration" time="1.48583" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 10 authored vitals checks; not original ELF execution
+PASS: 10 authored vitals checks; not original ELF execution
+PASS: two level fixtures from the unchanged-fresh v2 writer -&gt; current format, no refill and no double bonus
+</system-out>
+	</testcase>
+	<testcase name="collect_game_inputs_safety" classname="collect_game_inputs_safety" time="0.877821" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.010s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="consumable_cycle" classname="consumable_cycle" time="0.0225223" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=71 passed
+</system-out>
+	</testcase>
+	<testcase name="consumable_fresh_process" classname="consumable_fresh_process" time="0.834001" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>written_revision=1
+checks=7 passed
+checks=7 passed
+</system-out>
+	</testcase>
+	<testcase name="population_cycle" classname="population_cycle" time="0.0782157" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>created=12 missing=0 unsupported=0
+checks=15905 passed
+</system-out>
+	</testcase>
+	<testcase name="ranged_cycle" classname="ranged_cycle" time="0.0498438" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ranged checks=2091 passed
+</system-out>
+	</testcase>
+	<testcase name="gameplay_v3_migration" classname="gameplay_v3_migration" time="1.12271" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS legacy v3 untouched writer migration; no refill, reroll, duplicate or respawn
+PASS legacy v3 v4 second process; no refill, reroll, duplicate or respawn
+PASS: frozen unchanged large-11 -&gt; v4, two independent reader processes
+</system-out>
+	</testcase>
+	<testcase name="skills_runtime" classname="skills_runtime" time="0.00474582" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS skills checks=19
+</system-out>
+	</testcase>
+	<testcase name="quest_requirements" classname="quest_requirements" time="0.00335481" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS quest checks=14
+</system-out>
+	</testcase>
+	<testcase name="merchant_prices" classname="merchant_prices" time="0.0026832" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS merchant checks=8
+</system-out>
+	</testcase>
+	<testcase name="gameplay_v4_migration" classname="gameplay_v4_migration" time="0.76893" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=7 passed
+PASS: unchanged v4 writer -&gt; current reader; original file is unchanged
+</system-out>
+	</testcase>
+	<testcase name="ui_image_clip" classname="ui_image_clip" time="0.00505593" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ui_image_clip: 28 assertions; bounded geometry, not full CEGUI parity
+</system-out>
+	</testcase>
+	<testcase name="ui_hud_input" classname="ui_hud_input" time="0.00347261" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ui_hud_input: 15 assertions; authored fixture; no full CEGUI event-pipeline parity claim
+</system-out>
+	</testcase>
+	<testcase name="character_stats_cycle" classname="character_stats_cycle" time="0.0351125" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 34 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_save" classname="character_stats_process_save" time="0.00968856" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 9 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_load" classname="character_stats_process_load" time="0.015672" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 8 checks passed
+</system-out>
+	</testcase>
+	<testcase name="item_graph_cycle" classname="item_graph_cycle" time="0.00224162" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>item_graph: 11 checks passed
+</system-out>
+	</testcase>
+	<testcase name="typed_damage_cycle" classname="typed_damage_cycle" time="0.0147351" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 29 typed damage, transaction, metadata and enemy-HIT checks
+</system-out>
+	</testcase>
+</testsuite>

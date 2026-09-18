@@ -1,0 +1,144 @@
+Internal ctest changing into directory: /mnt/data/work16/build
+Test project /mnt/data/work16/build
+      Start 120: character_stats_process_save
+      Start  31: read_only_extractors
+ 1/67 Test #120: character_stats_process_save ...........   Passed    0.01 sec
+      Start  90: verification_driver
+ 2/67 Test  #90: verification_driver ....................   Passed    4.59 sec
+      Start   9: desktop_gameplay_syntax
+ 3/67 Test   #9: desktop_gameplay_syntax ................   Passed    2.66 sec
+      Start   8: ai_cooldown_export_comparison
+ 4/67 Test  #31: read_only_extractors ...................   Passed    7.82 sec
+      Start  22: coverage_map_current
+ 5/67 Test   #8: ai_cooldown_export_comparison ..........   Passed    1.50 sec
+      Start  24: gles_menu_text
+ 6/67 Test  #22: coverage_map_current ...................   Passed    1.73 sec
+      Start  21: frontend_campaign_cycle
+ 7/67 Test  #24: gles_menu_text .........................   Passed    1.46 sec
+      Start  33: player_vitals_export_comparison
+ 8/67 Test  #21: frontend_campaign_cycle ................   Passed    0.89 sec
+      Start  13: attack_speed_export_comparison
+ 9/67 Test  #33: player_vitals_export_comparison ........   Passed    1.19 sec
+      Start  26: save_fresh_process
+10/67 Test  #13: attack_speed_export_comparison .........   Passed    1.11 sec
+      Start  42: monster_experience_export_comparison
+11/67 Test  #26: save_fresh_process .....................   Passed    1.15 sec
+      Start  30: effect_catalog_source
+12/67 Test  #42: monster_experience_export_comparison ...   Passed    1.11 sec
+      Start  23: gles_ui_headless
+13/67 Test  #30: effect_catalog_source ..................   Passed    1.07 sec
+      Start  27: save_atomic_process
+14/67 Test  #23: gles_ui_headless .......................   Passed    1.33 sec
+      Start  84: scenario_first_difference
+15/67 Test  #84: scenario_first_difference ..............   Passed    0.87 sec
+      Start  97: consumable_fresh_process
+16/67 Test  #27: save_atomic_process ....................   Passed    1.39 sec
+      Start  93: vitals_fresh_process
+17/67 Test  #97: consumable_fresh_process ...............   Passed    0.83 sec
+      Start  95: collect_game_inputs_safety
+18/67 Test  #93: vitals_fresh_process ...................   Passed    0.97 sec
+      Start 113: gameplay_v4_migration
+19/67 Test  #95: collect_game_inputs_safety .............   Passed    0.88 sec
+      Start 104: gameplay_v3_migration
+20/67 Test #113: gameplay_v4_migration ..................   Passed    0.77 sec
+      Start  41: world_gold_export_comparison
+21/67 Test  #41: world_gold_export_comparison ...........   Passed    0.93 sec
+      Start  32: combat_inputs_evidence
+22/67 Test #104: gameplay_v3_migration ..................   Passed    1.12 sec
+      Start  39: reward_fresh_process
+23/67 Test  #32: combat_inputs_evidence .................   Passed    0.79 sec
+      Start  94: vitals_v2_migration
+24/67 Test  #39: reward_fresh_process ...................   Passed    1.21 sec
+      Start  85: asset_catalog_negative
+25/67 Test  #94: vitals_v2_migration ....................   Passed    1.49 sec
+      Start  40: legacy_reward_save_migration
+26/67 Test  #85: asset_catalog_negative .................   Passed    1.46 sec
+      Start  14: ordinary_combat
+27/67 Test  #14: ordinary_combat ........................   Passed    0.15 sec
+      Start  25: save_checkpoint
+28/67 Test  #25: save_checkpoint ........................   Passed    0.14 sec
+      Start   7: enemy_ai_cooldown
+29/67 Test   #7: enemy_ai_cooldown ......................   Passed    0.10 sec
+      Start   6: level_entry_fallback
+30/67 Test   #6: level_entry_fallback ...................   Passed    0.05 sec
+      Start  99: population_cycle
+31/67 Test  #99: population_cycle .......................   Passed    0.08 sec
+      Start  28: gameplay_continuation
+32/67 Test  #28: gameplay_continuation ..................   Passed    0.07 sec
+      Start  12: item_cycle
+33/67 Test  #12: item_cycle .............................   Passed    0.05 sec
+      Start 119: character_stats_cycle
+34/67 Test #119: character_stats_cycle ..................   Passed    0.04 sec
+      Start  38: reward_cycle
+35/67 Test  #38: reward_cycle ...........................   Passed    0.02 sec
+      Start  92: vitals_resource_cycle
+36/67 Test  #92: vitals_resource_cycle ..................   Passed    0.02 sec
+      Start  96: consumable_cycle
+37/67 Test  #40: legacy_reward_save_migration ...........   Passed    1.15 sec
+      Start 101: ranged_cycle
+38/67 Test  #96: consumable_cycle .......................   Passed    0.02 sec
+      Start  91: vitals_numeric
+39/67 Test  #91: vitals_numeric .........................   Passed    0.02 sec
+      Start 127: typed_damage_cycle
+40/67 Test #127: typed_damage_cycle .....................   Passed    0.01 sec
+      Start 121: character_stats_process_load
+41/67 Test #101: ranged_cycle ...........................   Passed    0.05 sec
+      Start  45: item_cycle_resource_fixture
+42/67 Test #121: character_stats_process_load ...........   Passed    0.02 sec
+      Start  29: death_finalization
+43/67 Test  #45: item_cycle_resource_fixture ............   Passed    0.01 sec
+      Start  35: reward_unavailable
+44/67 Test  #29: death_finalization .....................   Passed    0.01 sec
+      Start  15: frontend
+45/67 Test  #35: reward_unavailable .....................   Passed    0.01 sec
+      Start 114: ui_image_clip
+46/67 Test  #15: frontend ...............................   Passed    0.01 sec
+      Start  89: random_observation
+47/67 Test #114: ui_image_clip ..........................   Passed    0.01 sec
+      Start  18: frontend_menu_resources
+48/67 Test  #89: random_observation .....................   Passed    0.00 sec
+      Start  34: reward_resource_graphs
+49/67 Test  #18: frontend_menu_resources ................   Passed    0.01 sec
+50/67 Test  #34: reward_resource_graphs .................   Passed    0.01 sec
+      Start  10: inventory_view
+      Start  17: settings
+51/67 Test  #10: inventory_view .........................   Passed    0.01 sec
+      Start   2: actor_motion
+52/67 Test  #17: settings ...............................   Passed    0.01 sec
+53/67 Test   #2: actor_motion ...........................   Passed    0.00 sec
+      Start  16: music
+      Start 108: quest_requirements
+54/67 Test  #16: music ..................................   Passed    0.00 sec
+55/67 Test #108: quest_requirements .....................   Passed    0.00 sec
+      Start   3: animation_events
+      Start  83: parent_dungeon
+56/67 Test   #3: animation_events .......................   Passed    0.00 sec
+      Start   5: warp_arrival
+57/67 Test  #83: parent_dungeon .........................   Passed    0.00 sec
+      Start  11: inventory_instances
+58/67 Test   #5: warp_arrival ...........................   Passed    0.00 sec
+      Start 116: ui_hud_input
+59/67 Test  #11: inventory_instances ....................   Passed    0.00 sec
+      Start   1: ordinary_attack_action
+60/67 Test #116: ui_hud_input ...........................   Passed    0.00 sec
+      Start 105: skills_runtime
+61/67 Test   #1: ordinary_attack_action .................   Passed    0.00 sec
+      Start   4: damage_calculation
+62/67 Test   #4: damage_calculation .....................   Passed    0.00 sec
+      Start 110: merchant_prices
+63/67 Test #105: skills_runtime .........................   Passed    0.00 sec
+      Start  19: ui_text_layout
+64/67 Test #110: merchant_prices ........................   Passed    0.00 sec
+      Start  37: progression_numeric
+65/67 Test  #19: ui_text_layout .........................   Passed    0.00 sec
+      Start 124: item_graph_cycle
+66/67 Test #124: item_graph_cycle .......................   Passed    0.00 sec
+67/67 Test  #37: progression_numeric ....................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 67
+
+Label Time Summary:
+core      =  42.41 sec*proc (67 tests)
+render    =   2.78 sec*proc (2 tests)
+
+Total Test time (real) =  21.22 sec

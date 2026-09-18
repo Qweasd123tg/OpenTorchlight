@@ -582,7 +582,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                           << " population_missing=" << population.missing_resources
                           << " population_unplaced=" << population.unplaced
                           << " population_pathable=" << population.pathable_nodes
-                          << " population_placement=portable-grid" << '\n';
+                          << " population_placement=original-rejection-sampling+grid-height" << '\n';
             }
             resume_saved_position = false;
             torchlight::InteractionDispatcher interactions(level.layout, entity_world, logic_runtime);

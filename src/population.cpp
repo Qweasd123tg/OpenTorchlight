@@ -3,15 +3,20 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <optional>
 #include <queue>
 #include <stdexcept>
 
 namespace torchlight {
 namespace {
-float distance_squared(const std::array<float, 3>& a, const std::array<float, 3>& b) {
-    const float x = a[0] - b[0], z = a[2] - b[2];
-    return x * x + z * z;
-}
+// The spawn-facing setup uses double-precision pi/180 (cvtps2pd/mulsd/cvtpd2ps
+// at 0x95d723-0x95d736, f64 0xfc4588 = 0.01745329252); the polar pick below
+// uses the f32 path (mulss at 0x9457d2, f32 0xfce49c). Facings are not stored
+// by the port (no facing state). Full pin-down: research/population-placement.md.
+constexpr float kSpawnHeightGuess = 27.5F;   // code immediate at 0x95d59b (0x41dc0000)
+constexpr float kOpenPickRadius = 3.0F;      // DAT_00fa86d4
+constexpr float kNoSpawnTestRadius = 1.0F;   // DAT_00fa47fc
+constexpr int kSpawnAttempts = 50;           // ebp <= 0x31 retry loop
 bool none(std::u16string_view name) {
     return name.empty() || (name.size() == 4 && (name[0] == u'N' || name[0] == u'n') &&
         (name[1] == u'O' || name[1] == u'o') && (name[2] == u'N' || name[2] == u'n') &&
@@ -34,39 +39,72 @@ std::uint32_t population_count(float cmin, float cmax, float dmin, float dmax,
     if (!std::isfinite(n) || n > 50000) throw std::length_error("population exceeds entity budget");
     return static_cast<std::uint32_t>(n);
 }
-std::vector<std::array<float, 3>> population_candidates(const NavigationGrid& grid,
-    const std::array<float, 3>& entry, const std::vector<std::array<float, 3>>& exclusions) {
-    for (const auto v : entry) if (!std::isfinite(v)) throw std::invalid_argument("invalid population entry");
-    // prototype: candidate traversal/exclusion policy is not an original-code
-    // placement reconstruction. See research/large-15-gameplay-fidelity.md G06.
-    std::vector<std::array<float, 3>> result;
-    const auto start = grid.nearest_walkable(entry, 64);
-    if (!start) return result;
-    const auto width = grid.width(), height = grid.height();
-    std::vector<bool> visited(width * height, false);
-    std::queue<std::array<std::size_t, 2>> pending;
-    pending.push(*start); visited[(*start)[1] * width + (*start)[0]] = true;
-    while (!pending.empty()) {
-        const auto p = pending.front(); pending.pop();
-        const auto position = grid.cell_center(p[0], p[1]);
-        bool safe = distance_squared(position, entry) >= 25.0F;
-        for (const auto& exclusion : exclusions)
-            if (distance_squared(position, exclusion) < 9.0F) { safe = false; break; }
-        if (safe) result.push_back(position);
-        constexpr std::array<std::array<int, 2>, 4> offsets{{{1,0},{-1,0},{0,1},{0,-1}}};
-        for (const auto& offset : offsets) {
-            const auto x = static_cast<std::int64_t>(p[0]) + offset[0];
-            const auto z = static_cast<std::int64_t>(p[1]) + offset[1];
-            if (x < 0 || z < 0 || x >= static_cast<std::int64_t>(width) || z >= static_cast<std::int64_t>(height)) continue;
-            const auto ux = static_cast<std::size_t>(x), uz = static_cast<std::size_t>(z);
-            const auto id = uz * width + ux;
-            if (!visited[id] && grid.cell(ux, uz).walkable &&
-                std::abs(grid.cell(ux, uz).height - position[1]) <= 1.5F) {
-                visited[id] = true; pending.push({ux, uz});
-            }
+PolarPick random_open_offset(float minimum_radius, float maximum_radius,
+                             TorchlightRandom& rng) {
+    const float radius = rng.between(minimum_radius, maximum_radius);
+    const float degrees = rng.between(0.0F, 360.0F);
+    // original-code: single-precision degrees * f32 pi/180 here (mulss at
+    // 0x9457d2 with DAT_00fce49c). The facing setup uses the double path
+    // instead (see random_spawn_facing); do not unify them.
+    const float angle = degrees * 0.017453292F;
+    float sine = 0.0F, cosine = 0.0F;
+    ::sincosf(angle, &sine, &cosine);
+    // SSE order of the original: dx = 0*cos + radius*sin, dz = radius*cos - 0*sin.
+    return PolarPick{radius * sine, radius * cosine};
+}
+std::optional<std::array<float, 3>> section_spawn_point(const NavigationGrid& grid,
+    float minimum_x, float maximum_x, float minimum_z, float maximum_z, float height,
+    const std::vector<std::array<float, 3>>& exclusions, TorchlightRandom& rng) {
+    for (int attempt = 0; attempt < kSpawnAttempts; ++attempt) {
+        // Register-verified RNG order: z first, then x (0x95d550/0x95d568).
+        const float z = rng.between(minimum_z, maximum_z);
+        const float x = rng.between(minimum_x, maximum_x);
+        const auto pick = scan_open_point(grid, x, height, z, rng);
+        if (!pick) continue;
+        const float px = (*pick)[0], pz = (*pick)[2];
+        // ucomiss jne/jp chains: accept unless the whole triple is unchanged
+        // (NaN/unordered accepts, identical to chained !=).
+        if (px != x || kSpawnHeightGuess != height || pz != z) {
+            bool inside = false;
+            for (const auto& exclusion : exclusions)
+                if ((px - exclusion[0]) * (px - exclusion[0]) +
+                        (pz - exclusion[2]) * (pz - exclusion[2]) <
+                    kNoSpawnTestRadius * kNoSpawnTestRadius) {
+                    inside = true;
+                    break;
+                }
+            if (!inside) return std::array<float, 3>{px, height, pz};
         }
     }
-    return result;
+    return std::nullopt;
+}
+bool grid_point_walkable(const NavigationGrid& grid, float x, float z) {
+    // original-code: floor((v-o)/0.4) indices, out-of-bounds rejection
+    // (mapPassable @0x938390 / positionPassable @0x938480).
+    const float cs = grid.cell_size();
+    if (!(cs > 0.0F) || grid.width() == 0 || grid.height() == 0) return false;
+    const auto corner = grid.cell_center(0, 0);
+    const long ix = static_cast<long>(std::floor((x - (corner[0] - cs / 2.0F)) / cs));
+    const long iz = static_cast<long>(std::floor((z - (corner[2] - cs / 2.0F)) / cs));
+    if (ix < 0 || iz < 0 || static_cast<std::size_t>(ix) >= grid.width() ||
+        static_cast<std::size_t>(iz) >= grid.height())
+        return false;
+    return grid.cell(static_cast<std::size_t>(ix), static_cast<std::size_t>(iz)).walkable;
+}
+std::optional<std::array<float, 3>> scan_open_point(const NavigationGrid& grid, float cx,
+    float cy, float cz, TorchlightRandom& rng) {
+    // original-code: live scan of randomOpenPositionRange @0x945770. One map
+    // test per attempt; the elaborate x/z loop bounds collapse to a single
+    // evaluation of the polar candidate (GDB-verified control flow; the
+    // redundant evaluations are idempotent).
+    float radius = kOpenPickRadius;
+    for (int attempt = 0; attempt < 100; ++attempt) {
+        const PolarPick pick = random_open_offset(0.0F, radius, rng);
+        if (grid_point_walkable(grid, cx + pick.dx, cz + pick.dz))
+            return std::array<float, 3>{cx + pick.dx, cy, cz + pick.dz};
+        if (attempt >= 5) radius = std::max(5.0F, radius + 0.1F);
+    }
+    return std::nullopt;
 }
 PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings,
     const NavigationGrid& grid, const std::array<float, 3>& entry,
@@ -78,8 +116,25 @@ PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings
     report.pathable_nodes = grid.walkable_cell_count();
     if (report.pathable_nodes > std::numeric_limits<std::uint32_t>::max())
         throw std::length_error("too many population nodes");
-    auto candidates = population_candidates(grid, entry, exclusions);
-    report.reachable_nodes = candidates.size();
+    // original-code: rejection sampling per entry, no connectivity filtering
+    // (research/population-placement.md). The grid bounds stand in for the
+    // template section rect, which the port does not plumb yet (documented
+    // deviation, not a claim of section parity).
+    for (const auto v : entry) if (!std::isfinite(v)) throw std::invalid_argument("invalid population entry");
+    const auto cell = grid.cell_size();
+    const auto corner = grid.cell_center(0, 0);
+    const float minimum_x = corner[0] - cell / 2.0F, minimum_z = corner[2] - cell / 2.0F;
+    const float maximum_x = minimum_x + static_cast<float>(grid.width()) * cell;
+    const float maximum_z = minimum_z + static_cast<float>(grid.height()) * cell;
+    // The original spawns at the constant height guess 27.5 and lets the engine
+    // settle units; the port has no settle step, so Y is snapped to the nearest
+    // walkable cell height (documented deviation; X/Z selection is unaffected).
+    const auto ground_height = [&](float x, float z) {
+        if (const auto near = grid.nearest_walkable({x, entry[1], z}, 16))
+            return grid.cell_center((*near)[0], (*near)[1])[1];
+        return entry[1];
+    };
+    report.reachable_nodes = report.pathable_nodes;
     // World changes and RNG must commit together. Definition caches may warm on
     // failure, but no entities, ids, current level or random state are changed.
     auto previous_entities = entities_;
@@ -111,16 +166,7 @@ PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings
         const auto low = settings.minimum_level < 1 ? previous_level : settings.minimum_level;
         const auto high = settings.maximum_level < 1 ? low : settings.maximum_level;
         if (low > 1000 || high > 1000) throw std::invalid_argument("population level outside supported graph bounds");
-        // prototype: FULL Fisher-Yates over the candidate list. Only population_count
-        // above has native numerical/RNG parity; the placement RNG order does not.
-        // Do not present this finite fallback as original formation/placement logic.
-        for (std::size_t i = candidates.size(); i > 1; --i) {
-            const auto j = static_cast<std::size_t>(random_.integer_between(0, static_cast<std::int32_t>(i - 1)));
-            std::swap(candidates[i - 1], candidates[j]);
-        }
-        std::vector<std::array<float, 3>> occupied;
-        for (const auto& entity : entities_) if (entity.alive && entity.combat_targetable) occupied.push_back(entity.position);
-        std::size_t candidate_index = 0, accounted = 0;
+        std::size_t accounted = 0;
         while (accounted < report.requested) {
             const auto leaves = spawn_classes_->roll(classname, random_);
             if (leaves.empty()) { ++report.missing_resources; ++accounted; continue; }
@@ -137,19 +183,14 @@ PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings
                 if (resource->kind != MasterResourceKind::monster || resource->unit_type != u"MONSTER") {
                     ++report.unsupported_resources; continue;
                 }
-                std::optional<std::array<float, 3>> position;
-                while (candidate_index < candidates.size()) {
-                    const auto point = candidates[candidate_index++];
-                    bool free = true;
-                    for (const auto& prior : occupied)
-                        if (distance_squared(point, prior) < 2.25F) { free = false; break; }
-                    if (free) { position = point; break; }
-                }
+                std::optional<std::array<float, 3>> position =
+                    section_spawn_point(grid, minimum_x, maximum_x, minimum_z, maximum_z,
+                        kSpawnHeightGuess, exclusions, random_);
                 if (!position) { ++report.unplaced; continue; }
+                (*position)[1] = ground_height((*position)[0], (*position)[2]);
                 SpawnResolutionStats created;
                 create_resource(0, *position, *resource, created);
                 report.created += created.entities_created;
-                if (created.entities_created) occupied.push_back(*position);
             }
         }
         spawn_level_ = previous_level;
