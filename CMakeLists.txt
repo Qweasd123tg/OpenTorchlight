@@ -1029,6 +1029,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     endif()
     add_test(NAME inventory_create COMMAND inventory_create_test)
 
+    add_executable(menu_create_test tests/menu_create_test.cpp)
+    target_link_libraries(menu_create_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(menu_create_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME menu_create COMMAND menu_create_test)
+
     add_executable(ui_imageset_test tests/ui_imageset_test.cpp)
     target_link_libraries(ui_imageset_test PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

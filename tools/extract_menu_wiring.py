@@ -136,21 +136,34 @@ def main():
         lp["bytes"] = data.decode("utf-8", "replace") if data else None
     result["copy_loops"] = loops
 
-    # 3. createWindow sites
+    # 3. createWindow sites. this-register first (see section 4 note).
+    from collections import Counter as _Counter
+    _base_hits = _Counter()
+    for _idx, _addr, _text in items:
+        _m = re.search(r"mov\s+%rax,0x[0-9a-f]+\(%(r1[0-5]|r[89]|rbx|r[a-d][xsi]|rbp)\)",
+                       _text)
+        if _m:
+            _base_hits[_m.group(1)] += 1
+    _this_reg = _base_hits.most_common(1)[0][0] if _base_hits else "rbx"
+    result["this_register"] = _this_reg
     creates = []
     for idx, addr, text in items:
         if "WindowManager12createWindow" not in text and "createWindow" not in text:
             continue
         store = "?"
+        _pat = (r"mov\s+%rax,(0x[0-9a-f]+)\(%" +
+                re.escape(_this_reg) + r"\)")
         for k in range(idx + 1, min(idx + 14, len(raw))):
-            m = re.search(r"mov\s+%rax,(0x[0-9a-f]+)\(%rbx\)", raw[k])
+            m = re.search(_pat, raw[k])
             if m:
-                store = m.group(1) + "(%rbx)"
+                store = m.group(1) + "(%menu)"
                 break
         creates.append({"addr": addr, "line": idx + 1, "menu_store": store})
     result["createWindow_sites"] = creates
 
-    # 4. recursiveChildSearch sites + nearest copy-loop key
+    # 4. recursiveChildSearch sites + nearest copy-loop key.
+    # this-register already detected above (most common store base).
+    this_reg = result["this_register"]
     searches = []
     for idx, addr, text in items:
         if "recursiveChildSearch" not in text:
@@ -161,20 +174,40 @@ def main():
                 if key is None or lp["line"] > key["line"]:
                     key = lp
         dynamic = None
+        inline_key = None
         if key is None:
-            window = raw[max(0, idx - 60):idx]
+            window = raw[max(0, idx - 120):idx]
             if any("GetValueAsString" in l for l in window):
                 dynamic = "prefix+GetValueAsString(counter)"
-            elif any("0x14c6b20" in l for l in window):
-                dynamic = "runtime table 0x14c6b20[counter]"
+            else:
+                tab = None
+                for l in window:
+                    m = re.search(r"lea\s+(0x[0-9a-f]+)\(,%r\w+,8\)", l)
+                    if m:
+                        tab = m.group(1)
+                if tab:
+                    dynamic = "runtime table %s[counter]" % tab
+            if dynamic is None:
+                # inline utf32 chars: movl $0xUU,(%reg) sequences (e.g. "XP")
+                chars = []
+                for l in raw[max(0, idx - 30):idx]:
+                    m = re.search(r"movl\s+\$0x([0-9a-f]+),", l)
+                    if m:
+                        v = int(m.group(1), 16)
+                        if 0x20 <= v < 0x110000:
+                            chars.append(chr(v))
+                if 1 <= len(chars) <= 8:
+                    inline_key = "".join(chars)
         store = "?"
+        store_pat = (r"mov\s+%rax,(0x[0-9a-f]+)\(%" +
+                     re.escape(this_reg) + r"\)")
         for k in range(idx + 1, min(idx + 6, len(raw))):
-            m = re.search(r"mov\s+%rax,(0x[0-9a-f]+)\(%rbx\)", raw[k])
+            m = re.search(store_pat, raw[k])
             if m:
-                store = m.group(1) + "(%rbx)"
+                store = m.group(1) + "(%menu)"
                 break
         searches.append({"addr": addr, "line": idx + 1,
-                         "key": key["bytes"] if key else None,
+                         "key": key["bytes"] if key else inline_key,
                          "dynamic": dynamic,
                          "menu_store": store})
     result["child_searches"] = searches
@@ -221,7 +254,7 @@ def main():
     #    and index adjusts (add $IMM,%r13d/%r14d) near them.
     back_ptrs = []
     for idx, addr, text in items:
-        m = re.search(r"lea\s+(0x[0-9a-f]+)\(%rbx,%(r1[0-9]|r[89]|r[a-d][xsi]),4\)",
+        m = re.search(r"lea\s+(0x[0-9a-f]+)\(%r(?:bx|12),%(r1[0-9]|r[89]|r[a-d][xsi]),4\)",
                       text)
         if m:
             back_ptrs.append({"addr": addr, "line": idx + 1,
