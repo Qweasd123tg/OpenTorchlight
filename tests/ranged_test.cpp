@@ -82,14 +82,24 @@ void cycle(const char* path) {
     require(p.combat().perform_attack(hit,{},f.world,f.logic).state==CombatState::missed,"shot hits target outside strike range");
     f.world.find(target)->position={4,0,0};require(p.combat().perform_attack(hit,{},f.world,f.logic).damage==0,"out-of-range HIT replayed");
     p.combat().interrupt_attack();
-    for(const auto* name:{u"MISSILE_PISTOL",u"SKILL_PISTOL",u"MISSILE_SWORD",u"SKILL_SWORD"}){
+    for(const auto* name:{u"SKILL_PISTOL",u"SKILL_SWORD"}){
         auto id=pickup(f,p,name);require(p.equip(id)==InventoryChange::changed,"unsupported weapon equip");
         const auto state=CheckpointAccess::capture(p);
         const auto hp=f.world.find(target)->health;
-        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"missile/skill became ordinary attack");
+        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"skill became ordinary attack");
         const auto after=CheckpointAccess::capture(p);
         require(!p.combat().attack_in_progress()&&hp==f.world.find(target)->health&&
                 state.combat_random==after.combat_random,"refused weapon started action, damaged or advanced RNG");
+    }
+    // Missile delivery now owns a real channel (spawn at HIT, damage at
+    // impact through the frame runtime): the attack starts like an ordinary
+    // one, but update alone deals no damage and fires no missile.
+    for(const auto* name:{u"MISSILE_PISTOL",u"MISSILE_SWORD"}){
+        auto id=pickup(f,p,name);require(p.equip(id)==InventoryChange::changed,"missile weapon equip");
+        const auto hp=f.world.find(target)->health;
+        require(p.combat().update(0,{},f.world).state==CombatState::attacking,"missile attack did not start");
+        require(p.combat().attack_in_progress()&&hp==f.world.find(target)->health,"update dealt missile damage");
+        p.combat().interrupt_attack();
     }
     // Original direct elemental delivery is now implemented, not merely unblocked.
     // Reuse the authored fixture and assert a distinct fire channel, no pre-HIT

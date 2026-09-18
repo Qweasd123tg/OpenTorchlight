@@ -6,6 +6,7 @@
 
 #include <array>
 #include <cstdint>
+#include <optional>
 
 namespace torchlight {
 
@@ -53,6 +54,21 @@ public:
     [[nodiscard]] CombatUpdate perform_attack(const AnimationEventOccurrence& event,
         const std::array<float, 3>& position, RuntimeEntityWorld& world, LogicRuntime& logic);
     void finish_animation_frame() noexcept;
+    // Missile delivery (original fireMissiles path): HIT consumes the event
+    // and snapshots the damage context, but damage lands later through
+    // apply_missile_impact when the application-owned runtime reports a hit.
+    // Gates mirror perform_attack (target/reach/line-of-sight).
+    struct MissileShot {
+        AttackDescription description;
+        AttackLoadout loadout;
+        AttackCharacterValues character;
+        std::uint64_t target_id = 0;
+    };
+    [[nodiscard]] std::optional<MissileShot> begin_missile_attack(
+        const AnimationEventOccurrence& event, const std::array<float, 3>& position,
+        RuntimeEntityWorld& world);
+    [[nodiscard]] CombatUpdate apply_missile_impact(const MissileShot& shot, std::uint64_t victim_id,
+        RuntimeEntityWorld& world, LogicRuntime& logic);
     // Recompute existing physical consumers without replacing the current action.
     void set_attributes(std::int32_t strength, std::int32_t dexterity, std::int32_t magic = 0);
 

@@ -2019,6 +2019,146 @@
       "tests": "",
       "comparison": "",
       "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00d00650": {
+      "symbol": "CMissile::initialize()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §2; subagent table",
+      "implementation": "MissileTemplate defaults (include/missile_runtime.hpp)",
+      "tests": "missile_runtime_test loader prints",
+      "comparison": "Fallback values; template overrides untested per-field",
+      "notes": "Defaults table only; no caller drives init separately."
+    },
+    "0x00d04610": {
+      "symbol": "CMissile::fireMissile(CBaseUnit*,Ogre::Vector3,Ogre::Quaternion const&,CPositionableObject*,Ogre::Vector3)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §2",
+      "implementation": "MissileRuntime::spawn + application HIT hook",
+      "tests": "application_missile_test.py (10: fired/flight/impact/kill/XP)",
+      "comparison": "No original-execution proof",
+      "notes": "Subset: no preloader scaling, no aim branches, no short-range probe."
+    },
+    "0x00d04120": {
+      "symbol": "CMissile::update(float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §3",
+      "implementation": "MissileRuntime::step + take_impacts drain",
+      "tests": "application_missile_test.py; missile_runtime_test",
+      "comparison": "No original-execution proof",
+      "notes": "Subset: distance lifetime only; no +0x186 branch, dying branch, editor cutout."
+    },
+    "0x00d038a0": {
+      "symbol": "CMissile::checkCollision(Ogre::Vector3,Ogre::Vector3,Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,CBaseUnit**)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §4",
+      "implementation": "MissileRuntime::step collision section",
+      "tests": "missile_runtime_test (wall/unit/owner/single-hit); scenario",
+      "comparison": "No original-execution proof",
+      "notes": "Subset: no pierce/ricochet/slide; segment test instead of sphere lists."
+    },
+    "0x00d034c0": {
+      "symbol": "CMissile::handleMissileHitUnit(CBaseUnit*,Ogre::Vector3)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §5",
+      "implementation": "Impact branch in step + apply_missile_impact",
+      "tests": "application_missile_test.py (direct+splash kills)",
+      "comparison": "No original-execution proof",
+      "notes": "Subset: no reflect/ISA branches/veto loop."
+    },
+    "0x00cf9620": {
+      "symbol": "CMissile::doDamageToCharacter(CCharacter*,Ogre::Vector3 const&,float,float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §5",
+      "implementation": "roll_missile_impact_damage (shared loop twin)",
+      "tests": "application_missile_test.py (155/156 damage kills + XP)",
+      "comparison": "Inferred mapping (observable contract, graph decomposition open)",
+      "notes": "Ordinary gate untouched; missile twin asserts delivery==missile."
+    },
+    "0x00d00c20": {
+      "symbol": "CMissile::doAOEDamage(CBaseUnit*)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §5 + decomp read",
+      "implementation": "MissileRuntime::splash",
+      "tests": "missile_runtime_test + scenario splash kill",
+      "comparison": "No original-execution proof",
+      "notes": "Scale feeds hooks only (proven); items/breakables open."
+    },
+    "0x00d014a0": {
+      "symbol": "CMissile::killMissile()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §6",
+      "implementation": "dead flag + take_impacts drain",
+      "tests": "missile_runtime_test (removal asserts)",
+      "comparison": "No original-execution proof",
+      "notes": "Particles/effects open."
+    },
+    "0x00cf9840": {
+      "symbol": "CMissile::handleDeathOfMissile(float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §6",
+      "implementation": "dead flag + drain (instant settle, no animation sink)",
+      "tests": "missile_runtime_test",
+      "comparison": "No original-execution proof",
+      "notes": "Particle drain/detach open."
+    },
+    "0x0087f120": {
+      "symbol": "CEquipment::fireMissiles(CCharacter*,CCharacter*)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/missile-runtime.md §1-2",
+      "implementation": "Delivery decision (existing) + HIT spawn hook",
+      "tests": "application_missile_test.py",
+      "comparison": "No original-execution proof",
+      "notes": "One missile/call; enemy side still refused."
     }
   }
 }

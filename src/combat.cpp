@@ -85,9 +85,14 @@ CombatUpdate CombatController::update(float seconds, const std::array<float, 3>&
     if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
                                  selected->attack_character.collision_radius, attack_range_, has_ranged_weapon(loadout_)))
         return {CombatState::approaching, selected->id, 0, selected->health};
-    if (!ordinary_delivery_supported(*description) || !description->unavailable_reason.empty() ||
-        description->animation_prefix.empty() || (description->traits.ranged && !line_of_sight_)) {
-        last_attack_issue_ = !ordinary_delivery_supported(*description) ? weapon_delivery_issue(description->delivery) :
+    // Missile delivery is supported through the frame runtime (spawn at HIT,
+    // damage at impact); every other gate (range/reach/LOS/clips) applies.
+    const bool missile_delivery = description->delivery == WeaponDelivery::missile;
+    if ((!ordinary_delivery_supported(*description) && !missile_delivery) ||
+        !description->unavailable_reason.empty() || description->animation_prefix.empty() ||
+        (description->traits.ranged && !line_of_sight_)) {
+        last_attack_issue_ = (!ordinary_delivery_supported(*description) && !missile_delivery) ?
+            weapon_delivery_issue(description->delivery) :
             !description->unavailable_reason.empty() ? description->unavailable_reason :
             description->animation_prefix.empty() ? "weapon has no description in this hand" : "ranged collision context is missing";
         return {CombatState::unavailable, selected->id};
@@ -142,4 +147,48 @@ void CombatController::set_attributes(std::int32_t strength, std::int32_t dexter
     refresh_attack_values();
 }
 void CombatController::finish_animation_frame() noexcept { action_.finish_frame(); }
+std::optional<CombatController::MissileShot> CombatController::begin_missile_attack(
+    const AnimationEventOccurrence& event, const std::array<float, 3>& position,
+    RuntimeEntityWorld& world) {
+    // Same gates as perform_attack: consume the HIT, then re-verify the
+    // target at event time. A consumed miss stays consumed, never delayed.
+    if (!action_.consume_hit(event)) return std::nullopt;
+    prefer_left_ = !prefer_left_; // Original performAttack toggles per HIT, not per clip start.
+    const auto* selected = world.find(action_.target_id());
+    if (!selected || selected->id != target_id_ || !selected->alive || !selected->enabled ||
+        !selected->combat_targetable || selected->kind != MasterResourceKind::monster)
+        return std::nullopt;
+    const auto reach = ordinary_strike_range(action_.description(), character_,
+                                             total_attack_effects(loadout_, character_));
+    if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
+                                 selected->attack_character.collision_radius, reach,
+                                 action_.description().traits.ranged))
+        return std::nullopt;
+    if (action_.description().traits.ranged && (!line_of_sight_ || !line_of_sight_(position, selected->position)))
+        return std::nullopt;
+    MissileShot shot;
+    shot.description = action_.description();
+    shot.loadout = loadout_;
+    shot.character = character_;
+    shot.target_id = selected->id;
+    return shot;
+}
+CombatUpdate CombatController::apply_missile_impact(const MissileShot& shot, std::uint64_t victim_id,
+    RuntimeEntityWorld& world, LogicRuntime& logic) {
+    // Mirrors the perform_attack tail: defense at impact time, roll, apply.
+    // Damage is computed at impact (original doDamageToCharacter), not at HIT.
+    const auto* victim = world.find(victim_id);
+    if (!victim || !victim->alive || !victim->enabled || !victim->combat_targetable ||
+        victim->kind != MasterResourceKind::monster)
+        return {CombatState::missed, victim_id, 0, 0, 0};
+    const auto defense = evaluate_damage_defense(victim->damage_defense,
+        total_attack_effects(victim->attacks, victim->attack_character));
+    const auto mitigation = roll_missile_impact_damage(shot.description, shot.loadout, shot.character,
+                                                       defense, random_);
+    const auto result = world.apply_damage(victim_id, static_cast<float>(mitigation.applied), logic, true);
+    if (!result.accepted) return {CombatState::missed, victim_id, 0, result.remaining_health, 0};
+    if (result.killed) target_id_ = 0;
+    return {result.killed ? CombatState::killed : CombatState::attacked, victim_id,
+            mitigation.applied, result.remaining_health, 0};
+}
 } // namespace torchlight

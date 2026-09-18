@@ -1,0 +1,24 @@
+# Fixture granted a rolled FIREWAND wand and wielded it (equip VERB path is
+# proven by town-new; slot disambiguation by name does not exist in verbs).
+# Open the panel to observe, portal to Main 1, kill by missile. No injected
+# entities, damage or kills.
+menu main
+button continue
+level Town 0
+frames 2
+key I
+inventory open
+frames 1
+capture wand_equipped
+key I
+inventory closed
+trigger-nearest
+level Main 1
+frames 3
+capture populated
+kill-nearest
+frames 5
+capture missile_kill
+key ESC
+menu pause
+button save-exit

@@ -122,11 +122,11 @@ OrdinaryDamagePlan ordinary_damage_plan(const AttackDescription& selected,
     }
     return result;
 }
-OrdinaryDamageResult roll_ordinary_damage(const AttackDescription& selected,
-    const AttackLoadout& loadout, const AttackCharacterValues& character,
+namespace {
+// Shared channel roll/mitigation loop for the ordinary HIT branch and the
+// missile impact twin (gates differ; the math is one implementation).
+OrdinaryDamageResult roll_planned_damage(const OrdinaryDamagePlan& plan,
     const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
-    if (!ordinary_delivery_supported(selected)) throw std::invalid_argument("unsupported ordinary damage delivery");
-    const auto plan = ordinary_damage_plan(selected, loadout, character);
     auto staged = random;
     OrdinaryDamageResult result;
     result.count = plan.count; result.maximum = plan.maximum;
@@ -142,5 +142,26 @@ OrdinaryDamageResult roll_ordinary_damage(const AttackDescription& selected,
     }
     random = staged; // Failed evaluation cannot leave a half-consumed stream.
     return result;
+}
+} // namespace
+OrdinaryDamageResult roll_ordinary_damage(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
+    if (!ordinary_delivery_supported(selected)) throw std::invalid_argument("unsupported ordinary damage delivery");
+    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random);
+}
+// Missile impact delivery (original doDamageToCharacter role at impact time;
+// research/missile-runtime.md §5): the missile carries the wielding weapon's
+// ordinary channels to the victim, rolled per victim like the direct path.
+// The original graph-level decomposition (graph value at target stat,
+// per-missile random range/multiplier) stays open — this maps the observable
+// contract (wand deals wand damage), not the formula. The ordinary gate
+// above is untouched: silent substitution stays forbidden.
+OrdinaryDamageResult roll_missile_impact_damage(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
+    if (selected.delivery != WeaponDelivery::missile)
+        throw std::invalid_argument("missile impact roll needs missile delivery");
+    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random);
 }
 } // namespace torchlight

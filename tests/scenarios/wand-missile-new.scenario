@@ -1,0 +1,12 @@
+# Missile runtime proof: real wand grant (fixture) -> equip -> Main 1 -> missile kill.
+menu main
+button new
+menu create
+button class-0
+name wandtest
+button create
+level Town 0
+frames 3
+key ESC
+menu pause
+button save-exit

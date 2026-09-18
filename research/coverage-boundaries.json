@@ -420,11 +420,12 @@
       "addresses": [
         "0x87f120"
       ],
-      "status": "researched",
-      "boundary": "Missile producer chain inspected; no portable fireMissiles implementation. Full projectile movement/collision/attribution remain.",
+      "status": "implemented",
+      "boundary": "Missile producer chain ported: performAttack order (skill, then fireMissiles, then melee); 1 missile per fireMissiles call with owner/safeptr wiring, launch from anchor, velocity = dir * template speed. HIT spawns into the frame runtime (this boundary's packet).",
       "evidence": [
         "research/decompiled-core/equipment.c",
-        "research/ordinary-attack-action.md"
+        "research/ordinary-attack-action.md",
+        "research/missile-runtime.md"
       ],
       "implementation": [],
       "tests": [],
@@ -996,6 +997,35 @@
       "implementation": [],
       "tests": [],
       "comparison": "Census + 6 full reads; no original-execution proof"
+    },
+    {
+      "addresses": [
+        "0xd00650",
+        "0xd04610",
+        "0xd04120",
+        "0xd038a0",
+        "0xd034c0",
+        "0xcf9620",
+        "0xd00c20",
+        "0xd014a0",
+        "0xcf9840"
+      ],
+      "status": "implemented",
+      "boundary": "Missile runtime: FIREWAND template loads from pak; HIT spawns (1/call, owner, dir*speed, no rodata constant); per-frame step (velocity core bit-exact, 1deg/s quirk kept); unit-sphere + segment obstruction; owner exclusion + single-hit; impact damage via missile twin roll + existing pipeline; AOE splash full damage in radius; dead drain. Proven by wand scenario (fired/direct+splash kills/XP). Open: model/particles/trails, reflect/ricochet/pierce/homing, breakables, enemy casters.",
+      "evidence": [
+        "research/missile-runtime.md"
+      ],
+      "implementation": [
+        "src/missile_runtime.cpp",
+        "src/combat.cpp",
+        "src/typed_damage.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/missile_runtime_test.cpp",
+        "tests/application_missile_test.py"
+      ],
+      "comparison": "Scenario + unit differential; no original-execution proof"
     }
   ],
   "port_systems": [

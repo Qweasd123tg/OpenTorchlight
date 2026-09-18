@@ -10,6 +10,8 @@
 #include "torchlight/animation_events.hpp"
 #include "torchlight/collision_scene.hpp"
 #include "torchlight/combat.hpp"
+#include "torchlight/missile_runtime.hpp"
+#include "torchlight/resource_fields.hpp"
 #include "torchlight/entity_world.hpp"
 #include "torchlight/enemy_ai.hpp"
 #include "torchlight/gles_scene_renderer.hpp"
@@ -45,6 +47,7 @@
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <optional>
 #include <set>
 #include <stdexcept>
@@ -459,6 +462,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         torchlight::PanelOpenState merchant_menu{torchlight::panel_profile_merchant()};
         torchlight::PanelOpenState skill_menu{torchlight::panel_profile_skill()};
         torchlight::PanelOpenState quest_menu{torchlight::panel_profile_quest()};
+        // original-code: CMissile frame contract (initialize/fire/update/
+        // collision/hit/kill; research/missile-runtime.md). The runtime owns
+        // live missiles; damage snapshots ride alongside by missile id.
+        // Missile model/particle/trail rendering has no sink (open).
+        torchlight::MissileRuntime missile_runtime;
+        std::map<std::uint64_t, torchlight::CombatController::MissileShot> missile_shots;
+        std::map<std::string, torchlight::MissileTemplate> missile_templates;
         if (direct_preview) frontend.entered_game();
         const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
             auto prototype = selected_player;
@@ -1716,42 +1726,149 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     session.finish_skill_frame();
                 }
                 bool player_hit_processed = false;
+                // Shared damage-outcome tail for direct HITs and missile
+                // impacts (playback/death/counts/drain trigger).
+                const auto handle_combat_hit = [&](const torchlight::CombatUpdate& hit,
+                                                   const std::string& source) {
+                    if (hit.state != torchlight::CombatState::attacked &&
+                        hit.state != torchlight::CombatState::killed) {
+                        return;
+                    }
+                    auto& playback = enemy_animation_playback[hit.target_id];
+                    if (hit.state == torchlight::CombatState::killed) {
+                        enemies.interrupt_attack(hit.target_id);
+                        playback.state = EnemyAnimationState::death; playback.time = 0.0F;
+                    } else {
+                        const auto* active_attack = enemies.action(hit.target_id);
+                        // Do not invent unconditional stagger: ordinary damage
+                        // alone must not replace a still-running attack clip.
+                        if (!active_attack || !active_attack->active()) {
+                            playback.state = EnemyAnimationState::hit; playback.time = 0.0F;
+                        }
+                    }
+                    ++combat_attack_count;
+                    combat_kill_count += static_cast<std::size_t>(
+                        hit.state == torchlight::CombatState::killed);
+                    player_hit_processed = true;
+                    std::cout << "combat_hit=" << hit.target_id
+                              << " damage=" << hit.damage
+                              << " remaining_health=" << hit.remaining_health
+                              << " source=" << source << '\n';
+                };
                 if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
                     for (const auto& event : combat.action().playback().frame_events()) {
                         if (event.key.name != "HIT") {
                             continue;
                         }
-                        const auto hit = combat.perform_attack(
-                            event, player_motion.position(), entity_world, logic_runtime);
-                        if (hit.state != torchlight::CombatState::attacked &&
-                            hit.state != torchlight::CombatState::killed) {
+                        // original-code: performAttack tries doWeaponSkill,
+                        // then CEquipment::fireMissiles, then melee
+                        // (research/missile-runtime.md §1). Missile delivery
+                        // spawns into the frame runtime; damage lands at
+                        // impact through the same tail below.
+                        if (combat.action().description().delivery ==
+                            torchlight::WeaponDelivery::missile) {
+                            auto shot = combat.begin_missile_attack(
+                                event, player_motion.position(), entity_world);
+                            if (!shot) continue; // consumed miss, same as direct
+                            // Missile template name rides the wielded weapon
+                            // definition (same MISSILE property the delivery
+                            // decision reads); cached by template name.
+                            std::string template_name;
+                            if (const auto* item = session.inventory().equipped(
+                                    torchlight::InventorySlot::weapon);
+                                item && item->weapon) {
+                                if (const auto* record = index.find(item->resource_guid)) {
+                                    try {
+                                        const auto definition = loader.load(*record);
+                                        template_name = torchlight::resource_fields::ascii(
+                                            torchlight::resource_fields::text(
+                                                definition->root, u"MISSILE", {}));
+                                    } catch (const std::exception&) {
+                                        template_name.clear();
+                                    }
+                                }
+                            }
+                            const auto cached = missile_templates.find(template_name);
+                            const torchlight::MissileTemplate* missile_template =
+                                cached != missile_templates.end() ? &cached->second : nullptr;
+                            if (missile_template == nullptr && !template_name.empty()) {
+                                if (auto fresh = torchlight::load_missile_template(archive, template_name)) {
+                                    missile_templates.emplace(template_name, *fresh);
+                                    missile_template = &missile_templates.find(template_name)->second;
+                                }
+                            }
+                            if (missile_template == nullptr) {
+                                window.notice("missile_template_missing", template_name);
+                                continue;
+                            }
+                            const auto* target = entity_world.find(shot->target_id);
+                            if (target == nullptr) continue;
+                            // original-code: launch anchor + dir*range-scaled
+                            // offset (research/missile-runtime.md §2); the
+                            // port fires from the attacker at +0.5 height
+                            // (doWeaponSkill Y offset), full-3D aim.
+                            auto origin = player_motion.position();
+                            origin[1] += 0.5F;
+                            std::array<float, 3> dir = {target->position[0] - origin[0],
+                                                        target->position[1] - origin[1],
+                                                        target->position[2] - origin[2]};
+                            const float len = std::sqrt(dir[0] * dir[0] + dir[1] * dir[1] +
+                                                        dir[2] * dir[2]);
+                            if (!(len > 0.0F) || !std::isfinite(len)) continue;
+                            torchlight::MissileSpawn spawn;
+                            spawn.origin = origin;
+                            spawn.direction = dir;
+                            spawn.owner_id = 0; // player-owned; monsters carry real ids
+                            spawn.target_id = shot->target_id;
+                            const auto missile_id = missile_runtime.spawn(*missile_template, spawn);
+                            if (missile_id == 0) {
+                                window.notice("missile_spawn_refused", template_name);
+                                continue;
+                            }
+                            missile_shots.emplace(missile_id, *shot);
+                            std::cout << "missile_fired=" << template_name
+                                      << " target=" << shot->target_id << '\n';
                             continue;
                         }
-                        auto& playback = enemy_animation_playback[hit.target_id];
-                        if (hit.state == torchlight::CombatState::killed) {
-                            enemies.interrupt_attack(hit.target_id);
-                            playback.state = EnemyAnimationState::death; playback.time = 0.0F;
-                        } else {
-                            const auto* active_attack = enemies.action(hit.target_id);
-                            // Do not invent unconditional stagger: ordinary damage
-                            // alone must not replace a still-running attack clip.
-                            if (!active_attack || !active_attack->active()) {
-                                playback.state = EnemyAnimationState::hit; playback.time = 0.0F;
-                            }
-                        }
-                        ++combat_attack_count;
-                        combat_kill_count += static_cast<std::size_t>(
-                            hit.state == torchlight::CombatState::killed);
-                        player_hit_processed = true;
-                        std::cout << "combat_hit=" << hit.target_id
-                                  << " damage=" << hit.damage
-                                  << " remaining_health=" << hit.remaining_health
-                                  << " clip=" << event.source_clip
-                                  << " key=" << event.key_index << '\n';
+                        const auto hit = combat.perform_attack(
+                            event, player_motion.position(), entity_world, logic_runtime);
+                        handle_combat_hit(hit, "clip=" + event.source_clip +
+                                                   " key=" + std::to_string(event.key_index));
                     }
                     combat.finish_animation_frame();
                     player_attack_animation_active = combat.attack_in_progress();
+                }
+                // Missile frame step (original update/checkCollision roles;
+                // research/missile-runtime.md §3-4). Impacts reuse the damage
+                // tail above; dead missiles leave via take_impacts drain.
+                if (!missile_runtime.empty()) {
+                    std::vector<torchlight::MissileCollider> missile_colliders;
+                    for (const auto& entity : entity_world.entities()) {
+                        if (entity.kind != torchlight::MasterResourceKind::monster) continue;
+                        missile_colliders.push_back(
+                            {entity.id, entity.position, entity.attack_character.collision_radius,
+                             entity.alive && entity.enabled && entity.combat_targetable});
+                    }
+                    missile_runtime.step(elapsed, missile_colliders, level.collision);
+                    std::vector<std::uint64_t> spent_missiles;
+                    for (const auto& impact : missile_runtime.take_impacts()) {
+                        const auto shot = missile_shots.find(impact.missile_id);
+                        if (impact.victim_id != 0 && shot != missile_shots.end()) {
+                            const auto hit = combat.apply_missile_impact(
+                                shot->second, impact.victim_id, entity_world, logic_runtime);
+                            handle_combat_hit(hit, std::string("missile") +
+                                                           (impact.splash ? ":splash" : ":direct"));
+                        } else if (impact.victim_id != 0) {
+                            window.notice("missile_impact_without_shot",
+                                          std::to_string(impact.missile_id));
+                        } else {
+                            std::cout << "missile_"
+                                      << (impact.blocked ? "blocked" : "expired") << '\n';
+                        }
+                        spent_missiles.push_back(impact.missile_id);
+                    }
+                    for (const auto id : spent_missiles) missile_shots.erase(id);
                 }
                 if (player_hit_processed) {
                     drain_logic();

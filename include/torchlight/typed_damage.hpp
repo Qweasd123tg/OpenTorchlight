@@ -47,5 +47,8 @@ struct OrdinaryDamageResult {
 [[nodiscard]] OrdinaryDamageResult roll_ordinary_damage(const AttackDescription& selected,
     const AttackLoadout& loadout, const AttackCharacterValues& character,
     const EvaluatedDamageDefense& defense, TorchlightRandom& random);
+[[nodiscard]] OrdinaryDamageResult roll_missile_impact_damage(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    const EvaluatedDamageDefense& defense, TorchlightRandom& random);
 
 } // namespace torchlight

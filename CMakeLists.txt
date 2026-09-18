@@ -46,6 +46,7 @@ add_library(torchlight_core STATIC
     src/consumable.cpp
     src/merchant.cpp
     src/missile_motion.cpp
+    src/missile_runtime.cpp
     src/economy.cpp
     src/quests.cpp
     src/skills.cpp
@@ -976,6 +977,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
 
     add_executable(service_fixture tests/service_fixture.cpp)
     target_link_libraries(service_fixture PRIVATE torchlight_core)
+    add_executable(missile_fixture tests/missile_fixture.cpp)
+    target_link_libraries(missile_fixture PRIVATE torchlight_core)
     if(TARGET application_scenario_probe AND TORCHLIGHT_GAME_DIR)
         add_test(NAME application_services_render COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_services_test.py
@@ -983,6 +986,12 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
             --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
         set_tests_properties(application_services_render PROPERTIES TIMEOUT 1200)
+        add_test(NAME application_missile_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_missile_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --fixture $<TARGET_FILE:missile_fixture>
+            --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
+            --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+        set_tests_properties(application_missile_render PROPERTIES TIMEOUT 1200)
         if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
             set_tests_properties(application_services_render PROPERTIES ENVIRONMENT
                 "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
@@ -1054,6 +1063,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(missile_motion_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME missile_motion COMMAND missile_motion_test)
+
+    add_executable(missile_runtime_test tests/missile_runtime_test.cpp)
+    target_link_libraries(missile_runtime_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(missile_runtime_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME missile_runtime COMMAND missile_runtime_test)
 
     # Donor ui_skin merge: synthetic fixture only (no game assets); the
     # native-probe/render harnesses were not taken (no probe infrastructure).
