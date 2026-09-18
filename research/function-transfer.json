@@ -1235,6 +1235,790 @@
       "tests": "",
       "comparison": "",
       "notes": "Placeholder."
+    },
+    "0x00a83c30": {
+      "symbol": "CGameUI::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00acd460": {
+      "symbol": "CCombineMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b1bc40": {
+      "symbol": "CEnchantMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b4d590": {
+      "symbol": "CInventoryMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b688e0": {
+      "symbol": "CMerchantMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b914d0": {
+      "symbol": "CPetMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00ba5370": {
+      "symbol": "CQuestDialogMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Reward-items hover variant. No port sink."
+    },
+    "0x00bba1e0": {
+      "symbol": "CQuestMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bd8840": {
+      "symbol": "CSkillMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Hovered-skill record (+0x40, +0x3b=1). No port sink."
+    },
+    "0x00bf5830": {
+      "symbol": "CStashMenu::handle_MouseOver",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00a83680": {
+      "symbol": "CGameUI::handle_MouseOut",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "return 1 (4 bytes)."
+    },
+    "0x00acd3d0": {
+      "symbol": "CCombineMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b1bbb0": {
+      "symbol": "CEnchantMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b45d30": {
+      "symbol": "CInventoryMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b611f0": {
+      "symbol": "CMerchantMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b88d40": {
+      "symbol": "CDialogMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00ba52e0": {
+      "symbol": "CPetMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bba120": {
+      "symbol": "CQuestDialogMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bd8870": {
+      "symbol": "CSkillMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bee710": {
+      "symbol": "CSkillMenu::handle_MouseOut",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00a83e20": {
+      "symbol": "CGameUI::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00acd390": {
+      "symbol": "CCombineMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b1bb70": {
+      "symbol": "CEnchantMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b458a0": {
+      "symbol": "CInventoryMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Clears +0x9160/+0x9161, return 1. No port hover tracking."
+    },
+    "0x00b61090": {
+      "symbol": "CMerchantMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b88850": {
+      "symbol": "CDialogMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00ba52d0": {
+      "symbol": "CPetMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bba060": {
+      "symbol": "CQuestDialogMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bd8800": {
+      "symbol": "CSkillMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bee470": {
+      "symbol": "CSkillMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00e332d0": {
+      "symbol": "CJournalMenu::handle_MouseThrough",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00a83690": {
+      "symbol": "CGameUI::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00acd3a0": {
+      "symbol": "CCombineMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00ae15d0": {
+      "symbol": "CCombineMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b194e0": {
+      "symbol": "CDropdownMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued. Dropdown label conversion, unread."
+    },
+    "0x00b1bb80": {
+      "symbol": "CEnchantMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b343d0": {
+      "symbol": "CEnchantMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b458d0": {
+      "symbol": "CInventoryMenu::handle_onClick",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Guard + back-pointer enum dispatch to onClick(ELayoutFunction). Port resolves at click time."
+    },
+    "0x00b610a0": {
+      "symbol": "CMerchantMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b88870": {
+      "symbol": "CDialogMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bba0f0": {
+      "symbol": "CQuestDialogMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bd8880": {
+      "symbol": "CSkillMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00bee480": {
+      "symbol": "CSkillMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00e447d0": {
+      "symbol": "CTipMenu::handle_onClick",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00afcce0": {
+      "symbol": "CDialogMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b060c0": {
+      "symbol": "CDieMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §1; objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "+0x12f9=1 + closeAll(). Frontend buttons use port Frontend instead."
+    },
+    "0x00b77630": {
+      "symbol": "CModalMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00b80100": {
+      "symbol": "COptionsMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00ba5490": {
+      "symbol": "CQuestDialogMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued. Quest-accept, campaign-relevant."
+    },
+    "0x00c18b50": {
+      "symbol": "CStatsMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00c33580": {
+      "symbol": "CContinueGameMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00c42dd0": {
+      "symbol": "CDifficultyMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00c4b000": {
+      "symbol": "CMainMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00c53f70": {
+      "symbol": "CNewGameMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00e44830": {
+      "symbol": "CTipMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
+    },
+    "0x00e9bab0": {
+      "symbol": "CCinematicMenu::handle_ExitButton",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/menu-hover-handlers.md §3 (census only)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; census-triaged, queued."
     }
   }
 }

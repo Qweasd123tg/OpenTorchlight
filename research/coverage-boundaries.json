@@ -979,6 +979,23 @@
       "implementation": [],
       "tests": [],
       "comparison": "No original-execution proof"
+    },
+    {
+      "addresses": [
+        "0xb458a0",
+        "0xa83680",
+        "0xbd8840",
+        "0xba5370",
+        "0xb060c0"
+      ],
+      "status": "researched",
+      "boundary": "Hover/click/exit handler shapes: Through=clear hover bytes; Out=hide/~38insn or return-1; Over=item-hover build or skill/reward record; onClick=guard+enum dispatch; Exit=closeAll+0x12f9 (quest-accept excepted). No port callers (no hover/clickable slots/panel buttons).",
+      "evidence": [
+        "research/menu-hover-handlers.md"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": "Census + 6 full reads; no original-execution proof"
     }
   ],
   "port_systems": [
