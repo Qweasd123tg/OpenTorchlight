@@ -55,6 +55,7 @@ add_library(torchlight_core STATIC
     src/ui_layout.cpp
     src/ui_screen_scale.cpp
     src/inventory_menu.cpp
+    src/inventory_create.cpp
     src/panel_open.cpp
     src/ui_font.cpp
     src/ui_text.cpp
@@ -1020,6 +1021,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(panel_open_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME panel_open COMMAND panel_open_test)
+
+    add_executable(inventory_create_test tests/inventory_create_test.cpp)
+    target_link_libraries(inventory_create_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(inventory_create_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME inventory_create COMMAND inventory_create_test)
 
     add_executable(ui_imageset_test tests/ui_imageset_test.cpp)
     target_link_libraries(ui_imageset_test PRIVATE torchlight_core)
