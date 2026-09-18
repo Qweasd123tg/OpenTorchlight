@@ -1,0 +1,101 @@
+[
+  {
+    "id": "states",
+    "finding": "Выбранное состояние состоит из основы и отметки, а не одной PushedImage",
+    "code_file": "src/ui_skin.cpp",
+    "lines": [
+      404
+    ],
+    "checks": [
+      "ui_skin_contract"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "cache-order",
+    "finding": "Раскрытие ImagerySection и окончательная очередь RenderCache различаются",
+    "code_file": "src/ui_skin.cpp",
+    "lines": [
+      418
+    ],
+    "checks": [
+      "ui_skin_contract",
+      "ui_skin_render"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "image-metadata",
+    "finding": "Imageset имеет собственные смещения и natural scale",
+    "code_file": "src/ui_layout.cpp",
+    "lines": [
+      504
+    ],
+    "checks": [
+      "original_ui_image_metrics"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "frame",
+    "finding": "FrameComponent использует естественные углы и исходные рёбра/фон",
+    "code_file": "src/ui_skin.cpp",
+    "lines": [
+      281
+    ],
+    "checks": [
+      "ui_skin_contract",
+      "original_ui_skin_resources"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "gradient",
+    "finding": "Перемещение окна не меняет закэшированный градиент; исходная диагональ quad",
+    "code_file": "src/gles_ui_renderer.cpp",
+    "lines": [
+      491
+    ],
+    "checks": [
+      "ui_skin_render",
+      "original_ui_image_metrics"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "dimensions",
+    "finding": "Соседний DimOperator после закрытия BaseDim нельзя суммировать с прежним корнем",
+    "code_file": "src/ui_skin.cpp",
+    "lines": [
+      168
+    ],
+    "checks": [
+      "ui_skin_contract"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "coverage",
+    "finding": "Оформленные элементы без Image терялись при сборке меню",
+    "code_file": "src/frontend.cpp",
+    "lines": [
+      456
+    ],
+    "checks": [
+      "frontend_menu_resources"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  },
+  {
+    "id": "resource-dangling",
+    "finding": "Disabled CharacterSlotHighlight ссылается на отсутствующий label в самих данных",
+    "code_file": "src/ui_skin.cpp",
+    "lines": [
+      367
+    ],
+    "checks": [
+      "ui_catalogue_tools"
+    ],
+    "scope": "See research/ui-skin-continuation.md; not complete original controller proof"
+  }
+]

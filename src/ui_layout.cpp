@@ -1,5 +1,6 @@
 #include "torchlight/ui_layout.hpp"
 #include "torchlight/ui_screen_scale.hpp"
+#include "torchlight/ui_skin.hpp"
 #include <algorithm>
 #include <charconv>
 #include <cmath>
@@ -319,15 +320,27 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
 }
 std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
                                                 float screen_scale_ratio) const {
+    UiLayoutState state;
+    state.offset_ratio = screen_scale_ratio;
+    return resolve(width, height, state);
+}
+std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiLayoutState &state) const {
     if (width <= 0 || height <= 0)
         throw std::invalid_argument("invalid UI viewport");
+    // Library stage: CEGUI resolves relative dimensions against the actual
+    // parent, not a letterbox. The game stage is explicit: CGameUI::
+    // convertToScreenScale @0xa83ed0 scales POSITION/SIZE offsets uniformly
+    // by height/768 (false) or width/1024 (true). Fonts have their own scale.
+    // Evaluate from immutable XML: never rescale last frame's rectangles.
+    // Small-window readability (original: netbook mode) stays open.
+    const float w = static_cast<float>(width), h = static_cast<float>(height);
+    const float screen_scale_ratio = state.offset_ratio.value_or(
+        state.screen_scale == UiScreenScale::height
+            ? ui_screen_ratio(width, height, UiScreenScaleRatio::y_ratio)
+            : state.screen_scale == UiScreenScale::width
+                ? ui_screen_ratio(width, height, UiScreenScaleRatio::x_ratio) : 1.0F);
     if (!std::isfinite(screen_scale_ratio) || screen_scale_ratio <= 0.0F)
         throw std::invalid_argument("invalid screen scale ratio");
-    // original-code: CEGUI resolves UnifiedAreaRect directly against the real
-    // window (per-axis scale, no letterboxing). The old portable small-window
-    // zoom shifted buttons ~32px and shrank them at 1280x720 while fonts ran
-    // full size. Small-window readability (original: netbook mode) stays open.
-    const float w = static_cast<float>(width), h = static_cast<float>(height);
     std::vector<UiResolvedWidget> result;
     for (const auto &node : widgets_) {
         const auto parent = node.parent < 0 ? UiRect{0, 0, w, h}
@@ -338,6 +351,15 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
         v.parent = node.parent;
         v.properties = node.properties;
         v.has_clip = true;
+        float alpha = 1.0F;
+        if (const auto raw = node.property("Alpha"); !raw.empty()) {
+            const auto parsed = std::from_chars(raw.data(), raw.data() + raw.size(), alpha);
+            if (parsed.ec != std::errc{} || parsed.ptr != raw.data() + raw.size() ||
+                !std::isfinite(alpha)) xml_error("invalid Alpha");
+        }
+        v.effective_alpha = std::clamp(alpha, 0.0F, 1.0F);
+        if (node.parent >= 0 && upper(node.property("InheritsAlpha")) != "FALSE")
+            v.effective_alpha *= result[static_cast<std::size_t>(node.parent)].effective_alpha;
         v.rect = parent;
         v.text = node.property("Text");
         v.font = node.property("Font");
@@ -346,7 +368,11 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
         if (v.image.empty())
             v.image = node.property("NormalImage");
         // Opening a page makes its root visible; child visibility is retained.
-        v.visible = (node.parent < 0 || upper(node.property("Visible")) != "FALSE") &&
+        const auto visibility = state.visibility.find(node.name);
+        const bool local_visible = visibility == state.visibility.end()
+            ? (node.parent < 0 || upper(node.property("Visible")) != "FALSE")
+            : visibility->second;
+        v.visible = local_visible &&
                     (node.parent < 0 || result[static_cast<std::size_t>(node.parent)].visible);
         v.enabled = upper(node.property("Disabled")) != "TRUE" &&
                     upper(node.property("Enabled")) != "FALSE" &&
@@ -423,6 +449,27 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
         if (v.clip.width < 0) v.clip.width = 0;
         if (v.clip.height < 0) v.clip.height = 0;
     }
+    // Sibling draw order (inferred from CEGUI draw-list semantics; the cited
+    // original addresses could not be confirmed from our symbol list — open):
+    // each child's entire subtree is visited before moving on, and AlwaysOnTop
+    // siblings come later in the draw list. Iterative traversal avoids
+    // unbounded C++ recursion on untrusted XML.
+    std::vector<std::vector<std::size_t>> children(result.size() + 1);
+    for (std::size_t i = 0; i < result.size(); ++i) {
+        const auto parent = result[i].parent;
+        children[parent < 0 ? result.size() : static_cast<std::size_t>(parent)].push_back(i);
+    }
+    for (auto &siblings : children)
+        std::stable_partition(siblings.begin(), siblings.end(), [&](std::size_t i) {
+            return upper(result[i].property("AlwaysOnTop")) != "TRUE";
+        });
+    std::vector<std::size_t> pending(children.back().rbegin(), children.back().rend());
+    std::size_t order = 0;
+    while (!pending.empty()) {
+        const auto i = pending.back(); pending.pop_back();
+        result[i].paint_order = order++;
+        pending.insert(pending.end(), children[i].rbegin(), children[i].rend());
+    }
     return result;
 }
 float pixel_align_ui(float value) noexcept {
@@ -485,6 +532,8 @@ std::optional<UiImage> UiResources::image(const std::string &reference) {
                 const float native_horz = native("NativeHorzRes", 640.0F);
                 const float native_vert = native("NativeVertRes", 480.0F);
                 const bool auto_scaled = upper(attr(nodes.front(), "AutoScaled")) == "TRUE";
+                if (native_horz <= 0 || native_vert <= 0)
+                    xml_error("invalid imageset native resolution");
                 auto base = entry.name.substr(0, entry.name.find_last_of("/\\") + 1);
                 const auto *texture = archive_->find_normalized(file);
                 if (!texture)
@@ -854,5 +903,22 @@ UiFont *UiResources::font(const std::string &name) {
     if (it == fonts_.end())
         return nullptr;
     return &it->second;
+}
+std::vector<UiSkinNode> ui_skin_xml(const std::vector<std::uint8_t>& bytes) {
+    std::vector<UiSkinNode> result;
+    for (const auto& node : parse_xml(bytes))
+        result.push_back({node.tag, node.attrs, node.parent});
+    return result;
+}
+UiSkin& UiResources::skin() {
+    if (!skin_) skin_ = std::make_shared<UiSkin>(*archive_);
+    return *skin_;
+}
+std::array<float, 4> UiImage::scaled_metrics(int w, int h) const {
+    const float sx = auto_scaled ? static_cast<float>(w) / native_horz : 1.0F;
+    const float sy = auto_scaled ? static_cast<float>(h) / native_vert : 1.0F;
+    // Image::setHorz/VertScaling rounds native dimensions AND offsets.
+    return {ui_pixel_aligned(width * sx), ui_pixel_aligned(height * sy),
+            ui_pixel_aligned(offset_x * sx), ui_pixel_aligned(offset_y * sy)};
 }
 } // namespace torchlight

@@ -1,0 +1,42 @@
+{
+  "sha256": "57a888d741b1a0a284915c6d5066fef68c1bcc1ebfd0163f6be8720e3cdda2aa",
+  "regions": {
+    "image-scaling": [
+      "0xe59e0",
+      "0xe5ae0"
+    ],
+    "image-draw": [
+      "0xe5b50",
+      "0xe5bdb"
+    ],
+    "imagery-section": [
+      "0x1b1790",
+      "0x1b18e0"
+    ],
+    "render-cache": [
+      "0xf48a0",
+      "0xf4b82"
+    ],
+    "state-layer-priority": [
+      "0x1bb600",
+      "0x1bb726"
+    ],
+    "frame-gradient-factors": [
+      "0x1adc38",
+      "0x1adcb3"
+    ],
+    "colour-arithmetic": [
+      "0xc7000",
+      "0xc7560"
+    ],
+    "dimension-stack-end": [
+      "0x1d0a20",
+      "0x1d0c20"
+    ],
+    "dimension-operator-start": [
+      "0x1cf760",
+      "0x1cf870"
+    ]
+  },
+  "scope": "bounded static excerpts; not execution trace or whole engine proof"
+}

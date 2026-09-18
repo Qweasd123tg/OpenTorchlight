@@ -53,6 +53,7 @@ add_library(torchlight_core STATIC
     src/save_store.cpp
     src/settings.cpp
     src/ui_layout.cpp
+    src/ui_skin.cpp
     src/ui_screen_scale.cpp
     src/inventory_menu.cpp
     src/inventory_create.cpp
@@ -1042,6 +1043,22 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(menu_grab_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME menu_grab COMMAND menu_grab_test)
+
+    # Donor ui_skin merge: synthetic fixture only (no game assets); the
+    # native-probe/render harnesses were not taken (no probe infrastructure).
+    set(UI_SKIN_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/ui-skin-fixture.zip)
+    add_custom_command(OUTPUT ${UI_SKIN_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_ui_skin_fixture.py ${UI_SKIN_FIXTURE}
+        DEPENDS tests/make_ui_skin_fixture.py VERBATIM)
+    add_custom_target(ui_skin_fixture DEPENDS ${UI_SKIN_FIXTURE})
+    add_executable(ui_skin_test tests/ui_skin_test.cpp)
+    target_link_libraries(ui_skin_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(ui_skin_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_dependencies(ui_skin_test ui_skin_fixture)
+    add_test(NAME ui_skin_contract COMMAND ui_skin_test ${UI_SKIN_FIXTURE})
+    set_tests_properties(ui_skin_contract PROPERTIES TIMEOUT 60)
 
     add_executable(ui_imageset_test tests/ui_imageset_test.cpp)
     target_link_libraries(ui_imageset_test PRIVATE torchlight_core)

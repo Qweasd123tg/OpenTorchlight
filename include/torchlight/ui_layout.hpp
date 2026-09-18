@@ -3,6 +3,8 @@
 #include "torchlight/ui_font.hpp"
 #include <map>
 #include <array>
+#include <limits>
+#include <memory>
 #include <optional>
 
 namespace torchlight {
@@ -26,6 +28,9 @@ struct UiTextStyle {
     UiTextVertical vertical = UiTextVertical::top;
     bool wrap = false;
 };
+// Falagard skin compiler (additive donor module); full CEGUI runtime is out
+// of scope, see research/ui-skin-continuation.md.
+class UiSkin;
 struct UiResolvedWidget {
     std::string name, type, text, callback, image, font;
     UiRect rect;
@@ -38,6 +43,10 @@ struct UiResolvedWidget {
     std::map<std::string, std::string> properties;
     [[nodiscard]] std::string property(const std::string &key) const;
     [[nodiscard]] UiTextStyle text_style() const;
+    float effective_alpha = 1.0F;
+    // Initial CEGUI sibling draw list: normal children, then AlwaysOnTop,
+    // recursively. Runtime moveToFront / reparenting is outside this subset.
+    std::size_t paint_order = std::numeric_limits<std::size_t>::max();
 };
 // Bounded port of the intersection/UV adjustment in CEGUI::Imageset::draw
 // (bundled libCEGUIBase.so.1 @0xe6f20). Not pixel-rounding/colour parity.
@@ -46,6 +55,14 @@ struct UiImageGeometry {
 };
 [[nodiscard]] std::optional<UiImageGeometry> clip_ui_image(
     UiRect destination, UiRect source, const UiRect *clip = nullptr);
+// Runtime resolve overrides (donor ui_skin merge). Axis refers to the game's
+// scale, NOT CEGUI's per-axis relative coordinates.
+enum class UiScreenScale { none, height, width };
+struct UiLayoutState {
+    UiScreenScale screen_scale = UiScreenScale::none;
+    std::map<std::string, bool> visibility;
+    std::optional<float> offset_ratio; // one resolved scale, not an additional multiplier
+};
 class UiLayout {
   public:
     [[nodiscard]] static UiLayout parse(const std::vector<std::uint8_t> &bytes);
@@ -58,6 +75,12 @@ class UiLayout {
     // CGameClient::rescaleUI).
     [[nodiscard]] std::vector<UiResolvedWidget> resolve(int width, int height,
                                                         float screen_scale_ratio) const;
+    // Runtime overrides are separate from immutable resource defaults.
+    // Re-resolving starts from the XML each time; it cannot compound a
+    // previous screen scale. (Donor ui_skin merge; explicit ratio replaces,
+    // never multiplies, the state's screen-scale policy.)
+    [[nodiscard]] std::vector<UiResolvedWidget> resolve(
+        int width, int height, const UiLayoutState &state) const;
     [[nodiscard]] const std::vector<UiWidget> &widgets() const noexcept {
         return widgets_;
     }
@@ -75,6 +98,8 @@ struct UiImage {
     float offset_x = 0, offset_y = 0;
     float native_horz = 640.0F, native_vert = 480.0F;
     bool auto_scaled = false;
+    // Image::setHorz/VertScaling rounds native dimensions AND offsets.
+    [[nodiscard]] std::array<float, 4> scaled_metrics(int w, int h) const;
 };
 // original-code: vendored CEGUI::Image::setHorzScaling @0xe59e0 (vert +0x80)
 // in the shipped libCEGUIBase.so.1: (float)(int)(v + (v > 0 ? +0.5 : -0.5))
@@ -122,6 +147,7 @@ class UiResources {
     }
     [[nodiscard]] const UiLayout *layout(const std::string &path);
     [[nodiscard]] std::optional<UiImage> image(const std::string &reference);
+    [[nodiscard]] UiSkin& skin();
     // Case-insensitive lookup by the original CEGUI <Font Name=...>. The
     // returned cache is mutated by rasterization; callers own the screen size.
     [[nodiscard]] UiFont *font(const std::string &name);
@@ -150,6 +176,7 @@ class UiResources {
     std::map<std::string, std::vector<UiTextPass>> widget_text_;
     std::map<std::string, UiTextLayout> widget_text_origin_;
     std::map<std::string, std::map<std::string, std::string>> look_defaults_;
+    std::shared_ptr<UiSkin> skin_;
     std::vector<std::string> diagnostics_;
     bool images_loaded_ = false, fonts_loaded_ = false, looknfeel_loaded_ = false;
 };
