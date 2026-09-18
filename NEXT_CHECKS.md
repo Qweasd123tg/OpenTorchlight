@@ -1,3 +1,24 @@
+# Текущая точка: перенос от кода, внешние GPT-проходы закрыты
+
+Внешние проходы с архивами (`OpenTorchlight-gpt-pro*.zip`, задания
+`GPT_PRO_*`, `research/reviews/`, `tools/package_gpt_context.sh`) удалены из
+репозитория. Дальше работа идёт только переносом от кода по
+[research/code-first.md](research/code-first.md): единица работы —
+оригинальная функция целиком, стадии разобрана / перенесена / подключена /
+сравнена в `research/function-transfer.json`, scope UI — в
+`research/ui-contour.json`. Реестр обязателен:
+`tests/registry_sync_test.py` не даёт ссылаться на оригинальные входы без
+reviewed-границы.
+
+Первый пакет: `CInventoryMenu::setOpen @0xb4eb70` +
+`CInventoryMenu::createMenus @0xb569e0` с общей картой полей. Проверка пакета:
+`python3 tools/function_package.py --address 0xb4eb70`. Места вызовов
+(`research/original-callsites.tsv`) экспортируются через
+`tools/ghidra/export_call_sites.sh` на машине с ELF и Ghidra-проектом.
+Ниже сохранена история.
+
+---
+
 # Текущая точка: масштаб меню + фон (U06/U02)
 
 Жалоба «шрифт тянется, фона нет» разобрана. Растяжение глифов по осям —
@@ -294,9 +315,9 @@ GUIEXITGAME оставлен disabled; не привязывать его к в�
 
 ---
 
-# Следующий проход после UI-этапа (шрифты/HUD)
+# Следующий проход после UI-этапа (шрифты/HUD) — история
 
-**Текущее задание: `GPT_PRO_UI_TASK.md`** — добить интерфейс (главный экран,
+**Тогдашнее задание (файл удалён при чистке GPT workflow):** добить интерфейс (главный экран,
 меню New/Load, пауза, инвентарь, бит-в-бит сверка шрифтов, Falagard,
 `updateIngameUI @0xab8100`). Ниже — полный контекст и остаток.
 
@@ -450,7 +471,7 @@ coverage, но ничего не повышает до verified/closed. Ката
 
 Актуальный результат: `FRONTEND_CAMPAIGN_RESULT_RU.md`. Границы реализации:
 `research/frontend-save-evidence.md`, формат: `research/checkpoint-format.md`.
-Исходный большой scope остаётся в `GPT_PRO_LARGE_TASK.md`; это не «вся игра».
+Исходный большой scope был в удалённом при чистке `GPT_PRO_LARGE_TASK.md`; это не «вся игра».
 Полный реестр: `research/remaining-work-inventory.md`. Машинная карта:
 `python3 tools/coverage_map.py --check --next 20`.
 
