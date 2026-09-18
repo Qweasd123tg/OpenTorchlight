@@ -743,6 +743,45 @@
         "tests/inventory_menu_test.cpp"
       ],
       "comparison": "Pet (+inventory) viewport literals vs numpy emulation bit-exact; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xb569e0"
+      ],
+      "status": "partial",
+      "boundary": "createMenus phase map + pure-logic subset ported (static grabs incl. TopFrame/BottomFrame re-parent, 12-name table loop, 63 Slot+N loop with back-pointer indices i+0x12, slot handler ids, uniqueName sequences). NOT ported: window creation, properties, layout load, event delivery, +0x38/+0x40 names, .bss event/table/layout names, [+0x9140]+0x1a8 target.",
+      "evidence": [
+        "research/inventory-open.md",
+        "research/disassembly/b569e0-inventory-createmenus.asm",
+        "research/disassembly/c91f60-getvalueasstring-u32.asm",
+        "research/disassembly/c8ea50-uniquename.asm"
+      ],
+      "implementation": [
+        "src/inventory_create.cpp"
+      ],
+      "tests": [
+        "tests/inventory_create_test.cpp"
+      ],
+      "comparison": "Slot keys/indices asserted against recorded ASM behavior and layout Slot1..63; GetValueAsString differential vs snprintf; uniqueName sequence vs ASM. Full-CEGUI parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xc91f60",
+        "0xc8ea50"
+      ],
+      "status": "implemented",
+      "boundary": "STRINGS::GetValueAsString(uint) = C-locale ostringstream decimal; STRINGS::uniqueName = prefix + '_' + decimal(++counter). Refcount/EH boilerplate not ported.",
+      "evidence": [
+        "research/disassembly/c91f60-getvalueasstring-u32.asm",
+        "research/disassembly/c8ea50-uniquename.asm"
+      ],
+      "implementation": [
+        "src/inventory_create.cpp"
+      ],
+      "tests": [
+        "tests/inventory_create_test.cpp"
+      ],
+      "comparison": "GetValueAsString vs snprintf incl. 0 and 2^32-1; uniqueName format step-for-step vs ASM"
     }
   ],
   "port_systems": [

@@ -70,9 +70,10 @@
         "compared": false
       },
       "evidence": "research/inventory-open.md; research/disassembly/b569e0-inventory-createmenus.asm",
-      "implementation": "",
+      "implementation": "src/inventory_create.cpp (pure-logic subset: keys, loops, indices, subs, unique names)",
       "comparison": "",
-      "notes": "Phase structure + 25 single-write field map recovered from machine code: model setup, programmatic windows, loadWindowLayout(media/ui/inventorymenu.layout)->convertToScreenScale(false)@0xb57723->mapToFunctions->mapEventHandlers, tabs/slots, WardrobeCam@0xb5f0ee, CSkillTooltip::load. 620 branches and throw paths NOT yet fully analyzed; shared field map with setOpen holds for +0x9140/+0x9150/+0x9184/+0x9108-30/+0x91a0."
+      "notes": "Full phase map from machine code (see research/inventory-open.md 'createMenus: карта'): prologue model/AABB/getImageset(UIIcons)->+0x1cf8; 4 DefaultWindow roots (+0x20 InventorySheet, +0x30 ISockets, +0x38/+0x40 names open); loadWindowLayout->convertToScreenScale->mapToFunctions->mapEventHandlers on loaded root; 19/19 child-search keys incl. re-parent of TopFrame/BottomFrame; loop A (12 table names) + loop B (63 Slot+N) with shared slot wiring (menu+0x80 back-pointer, handle_ItemClick/handle_MouseOver subs); 7 uniqueName sites = 292 dynamic windows; tail virtual [+0x9140]+0x1a8 (WardrobeCam claim WITHDRAWN) + CSkillTooltip::load(skilltooltip.layout, read from ELF). analyzed stays false: sites 5-11 window props, +0x38/+0x40 names, .bss event/table/layout names, virtual target still open; NOT ported. Ported SUBSET: static grabs, slot/table loops, back-pointer indices, slot handler ids, uniqueName. NOT ported: window creation, properties, layout load, event delivery (no CEGUI in port); analyzed stays false.",
+      "tests": "tests/inventory_create_test.cpp (217 assertions)"
     },
     "0x00b6a220": {
       "symbol": "CMerchantMenu::setOpen(bool)",
@@ -156,6 +157,34 @@
       "implementation": "",
       "comparison": "",
       "notes": "Resize lifecycle. Port currently recreates from pristine as an equivalent; original choreography unverified."
+    },
+    "0x00c91f60": {
+      "symbol": "STRINGS::GetValueAsString(unsigned int)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/disassembly/c91f60-getvalueasstring-u32.asm",
+      "implementation": "src/inventory_create.cpp (original_uint_to_string)",
+      "tests": "tests/inventory_create_test.cpp (differential vs snprintf incl. 0 and 2^32-1)",
+      "comparison": "Port decimal output vs snprintf %u for 0/1/9/10/18/63/100/4294967295: all match",
+      "notes": "Body is pure libstdc++: ostringstream C-locale insert of the uint. Only observable behavior (plain decimal) ported."
+    },
+    "0x00c8ea50": {
+      "symbol": "STRINGS::uniqueName(std::string const&)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/disassembly/c8ea50-uniquename.asm",
+      "implementation": "src/inventory_create.cpp (UniqueNameState)",
+      "tests": "tests/inventory_create_test.cpp (sequence, increment, resumable counter)",
+      "comparison": "Format prefix + '_' (rodata 0xfd3a73) + decimal(++gUniqueNameValue @0x14e6914) asserted step-for-step against ASM; counter made explicit (global in original)",
+      "notes": "Ogre::StringConverter::toString(n, width=0) is plain decimal (library-derived). Refcount/EH boilerplate not ported (no port allocator model)."
     }
   }
 }

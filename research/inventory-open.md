@@ -195,38 +195,102 @@ Viewport-блок (только при `[0x9158] == 0`, сайты `0xb4eec8-0xb
 - Полный разбор ветвей `createMenus` (620 переходов): фазы, писатели остальных
   полей, пути ошибок (`__cxa_throw x14`).
 
-## createMenus: фазы (по машинному коду; ветви внутри фаз открыты)
+## createMenus: карта (машинный код; поправлено по полному проходу)
 
-Порядок опорных событий (`research/disassembly/b569e0-inventory-createmenus.asm`):
+Опорный срез: `research/disassembly/b569e0-inventory-createmenus.asm`
+(7599 строк). Вызовы-функции внутри (прямые, не PLT): `GetInt x2`
+(`RES_WIDTH/HEIGHT`), `createGenericModel`, `generateExtremes`,
+`loadWindowLayout`, `convertToScreenScale`, `mapToFunctions`,
+`mapEventHandlers`, `CSkillTooltip::load`, `GetFloat` (`YRATIO`),
+`GetValueAsString`, `uniqueName x7`, `getFileInfo`. Остальное — CEGUI/Ogre
+PLT и строковые сборки (`__cxa_throw x14`, в основном `length_error`
+npos-ветви — это НЕ логические ветви меню).
 
-1. `GetInt(RES_WIDTH/HEIGHT)`, `createGenericModel` → `this+0x9170`,
-   `generateExtremes`, `GetFloat(YRATIO)`, косвенный вызов `[model+0x58]`,
-   `model->setVisible(false)` (`0xb56b54` — та же vtable-цель `+0x50`).
-2. Программные окна: `this+0x1cf8` (`InventorySheet`?), `this+0x20` (корень),
-   `+0x48/+0x28/+0x30/+0x38/+0x40` (фреймы), `+0x1d00`; свойства
-   `RiseOnClick`/`False`, типы `DefaultWindow`, иконки `UIIcons`.
-3. Загрузка layout: `getFileInfo(L"media/ui/inventorymenu.layout")`
-   (`0xb575fe`, wide-строка — поэтому её нет в char-скане) →
-   `loadWindowLayout` (`0xb57706`) → `convertToScreenScale(w, false/YRATIO)`
-   (`0xb57723`) → `mapToFunctions` → `mapEventHandlers` (рекурсивный обход
-   детей, `inventory_menu.c:2580+`). Масштабируется ЗАГРУЖЕННЫЙ layout, не
-   программные окна.
-4. Табы/радио/слоты (`TabBackpack/TabSpell/TabFish`, `Selected/UnselectedImage`,
-   `SlotsEquipment/Spells/Fish`, `SlotGlow`, `Close`, `PaperdollEquip`,
-   `RotateLeft/Right`): писатели `+0x9120/+0x91b0/+0x93c0/+0x9128/+0x9260/+0x9470/`
-   `+0x9130/+0x9310/+0x9520`, тройка видимости `+0x9108/10/18`.
-5. Хвост: `+0x9190/+0x9198` (`recursiveChildSearch` на `+0x28`: `Money`?,
-   `WeaponSwitch`?), `+0x9148` = камера через virtual `[+0x9140]+0x1a8`
-   (`SceneManager::createCamera`, имя `"WardrobeCam"`, сайт `0xb5f0ee`),
-   `+0x91a0`, `CSkillTooltip::load` (`0xb5f22c`).
-6. Пути ошибок: `__cxa_throw x14` (в основном `length_error` npos-ветви
-   строковых сборок) + landing-pad'ы с `_Unwind_Resume` — какие именно входы
-   их триггерят, открыто.
+Порядок фаз:
 
-Все 25 писателей полей — ровно по одному разу (конструкционная семантика).
-Байт `+0x3e2`, который пишут `createMenus:7793` и `updateLayout`, — поле
-объекта `CEGUI::Window` (`*([0x20])+0x3e2 = 1`), не состояние меню
-(`library-derived` граница, не переносить как поле `CInventoryMenu`).
+1. Пролог: `GetInt(RES_WIDTH/HEIGHT)` → `createGenericModel` → `this+0x9170`
+   → `generateExtremes` → `GetFloat(YRATIO)` → косвенный `[model+0x58]`
+   → AABB ±100000 (`0xc7c35000/0x47c35000`, `0xb56a80`) → `model->setVisible`
+   (vtable `+0x50`, `0xb56b54`) → `getImageset("UIIcons")` → `this+0x1cf8`
+   (исправлено: раньше было записано `InventorySheet` — неверно).
+2. Корневые окна (тип `DefaultWindow`, `createWindow(type, name)` —
+   порядок аргументов подтверждён сайтом 1: `rsi="DefaultWindow"`,
+   `rdx="InventorySheet"`): `+0x20` (`"InventorySheet"`), `+0x30`
+   (`"ISockets"`, под `+0x28`, размер = размер родителя,
+   `RiseOnClick=False`, позиция 0, байт окна `+0x3e2=1`, front),
+   `+0x38`, `+0x40` (имена — открыто, рядом только литерал типа).
+3. Layout: `getFileInfo` (wide-имя, `.bss` — статически не читается) →
+   `loadWindowLayout` (`0xb57706`) → корень layout → на нём
+   `convertToScreenScale(w,false)` → `mapToFunctions` → `mapEventHandlers`.
+   Масштабируется ЗАГРУЖЕННЫЙ layout, не программные окна.
+4. Захваты из layout (`recursiveChildSearch`, 19/19 ключей извлечены):
+   `Blocker` (сразу в дело), `BottomFrame→+0x48`, `TopFrame→+0x28`,
+   `SlotGlow→+0x1d00`, `Close/PaperdollEquip/RotateLeft/RotateRight`
+   (в дело), `TabBackpack→+0x9120`, `TabSpell→+0x9128`, `TabFish→+0x9130`,
+   `SlotsEquipment→+0x9108`, `SlotsSpells→+0x9110`, `SlotsFish→+0x9118`,
+   `Money→+0x9190`, `WeaponSwitch→+0x9198`, + динамический ключ из таблицы
+   `.bss 0x14c6b20` (цикл A) + `"Slot"+N` (цикл B). Перешло: `TopFrame` и
+   `BottomFrame` отцепляются от старого родителя (`window+0xb0`) и
+   переподвешиваются (`BottomFrame` под `+0x20`), `RiseOnClick=False`,
+   `setZOrderingEnabled(false)`; `SlotsSpells/SlotsFish→setVisible(false)`.
+   Проверено по `media/UI/inventorymenu.layout` из `pak.zip` (98 окон):
+   все ключи в нём есть.
+5. Цикл A (`0xb59b00–0xb5b600`, счётчик 0..11): имя из таблицы 12
+   `std::string` (`.bss`), поиск под `TopFrame`, проводка слота (см. 6),
+   обнуление 4 массивов меню `+0x1028/+0x12b8/+0x17d8/+0x1548`
+   (по 8 байт x12) + 3 `createWindow` с `uniqueName`-именами
+   (`'gui_'`-префикс) за итерацию = 36 окон.
+6. Проводка слота (одинакова в цикле A и B): `Window+0x213=0`,
+   `setWantsMultiClickEvents(false)`, `window+0x1d8 = &menu+0x80[k]`
+   (k = счётчик в A; k = счётчик+0x12 в B), две подписки через
+   `MemberFunctionSlot` (vtable `0xfefcd0`): `handle_ItemClick @0xb45810`
+   (событие — глобала `.bss`, имя открыто) +
+   `handle_MouseOver @0xb4d590` (вторая `.bss`-глобала).
+7. Цикл B (`0xb5c4b9–0xb5e20f`, счётчик 1..63): ключ `"Slot"+N`
+   (`GetValueAsString`), поиск под `BottomFrame` (= `Slot1..63` из layout),
+   проводка (6) с `k=i+0x12`, окно слота → `menu+0x10c0[i-1]`,
+   4 `createWindow` с `uniqueName`-именами за итерацию = 252 окна;
+   оверлеи копируют позицию/размер найденного слота, `setMutedState(true)`,
+   `setAlwaysOnTop(true)`; последний → `menu+0x1b00[i-1]`.
+   Итого динамика: 4 + 36 + 252 = 292 окна.
+8. Хвост: `+0x9148` = результат виртуального вызова на `+0x9140`
+   (`[vtable]+0x1a8`, `0xb5f0ee`; исправлено: `"WardrobeCam"` в этом срезе
+   НЕ упоминается — старый claim отозван, цель открыта); `CSkillTooltip`
+   (`new`, поля `+0x10/+0x20=-1/+0x28`) → `+0x91a0`,
+   `CSkillTooltip::load(gameui=+0x70, L"media/UI/skilltooltip.layout")`
+   — имя файла прочитано из ELF как UTF-32 (`0xfe5528`), layout есть в
+   `pak.zip` (`resource-derived`).
+
+Байт окна `+0x3e2` (=1 у созданных/оверлеев) — поле `CEGUI::Window`, не меню
+(`library-derived` граница). `window+0xb0` — родитель (наблюдено в
+`removeChildWindow(0xb0(child))`, `inferred`). `window+0x213` — байт-флаг
+(0 у слотов), смысл открыт.
+
+Открыто по createMenus: имена `+0x38/+0x40`; содержимое таблицы `0x14c6b20`
+и wide-имя layout (`.bss` — нужен рантайм-трейс); имена двух событий подписок
+(`.bss`-глобалы `0x14247e0/0x1423b80`); свойства/позиции 7 групп созданных
+окон (сайты 5–11 детально); цель `[+0x9140]+0x1a8`; какие входы триггерят
+14 `throw`-путей.
+
+## Мелкие помощники: разобраны целиком и перенесены
+
+- `STRINGS::GetValueAsString(uint) @0xc91f60` (168 строк ASM): тело — только
+  libstdc++ (`ostringstream` + `operator<<(unsigned long)` + `str()`),
+  локаль по умолчанию (C). Порт: `original_uint_to_string` (явный decimal),
+  дифференциально сверён с `snprintf %u` (0, 1..63, 100, 2^32-1).
+- `STRINGS::uniqueName @0xc8ea50` (97 строк): `prefix + '_' + decimal(++n)`,
+  разделитель `_` — байт `.rodata 0xfd3a73`, число —
+  `Ogre::StringConverter::toString(n, width=0)` (plain decimal),
+  счётчик — статик `.bss 0x14e6914` (в порту явное состояние
+  `UniqueNameState`). Refcount/EH-шаблон не переносится (нет модели
+  аллокатора). Обе — `analyzed/ported/wired/compared` (scoped).
+- Разбор проводки частично автоматизирован:
+  `tools/extract_menu_wiring.py` (пул литералов, copy-loop→строки, сайты
+  `createWindow`, ключи поисков, подписки→символы, счётчики циклов,
+  внутренние вызовы). Выход на `b569e0` сошёлся с ручной картой 1-в-1
+  (11 сайтов, 19 ключей, циклы 12/64, 21 подписка) + нашёл пропущенные
+  вручную подписки кнопок/спеллов. Механика — да, семантика CEGUI и
+  `.bss`-имена — по-прежнему руками.
 
 ## updateLayout @0xb53430: триаж (зависимость конца setOpen)
 
