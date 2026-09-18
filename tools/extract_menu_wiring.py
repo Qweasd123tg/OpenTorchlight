@@ -161,6 +161,27 @@ def main():
         creates.append({"addr": addr, "line": idx + 1, "menu_store": store})
     result["createWindow_sites"] = creates
 
+    # 4b. CEGUI::String ctor literals: StringC1EPKh/c call sites with a
+    # preceding mov $IMM,%esi give key strings directly.
+    ctor_keys = {}  # line idx -> resolved string
+    for idx, addr, text in items:
+        if "CEGUI6StringC1EPK" not in text:
+            continue
+        for j in range(max(0, idx - 8), idx):
+            m = re.search(r"mov\s+\$0x([0-9a-f]+),%esi", raw[j])
+            if not m:
+                continue
+            va = int(m.group(1), 16)
+            data = resolve(va, 64) if elf is not None else None
+            if data:
+                end = data.find(b"\x00")
+                s = data[:end] if end >= 0 else data
+                if len(s) >= 1 and all(32 <= c < 127 for c in s):
+                    ctor_keys[idx] = s.decode()
+                    break
+    result["string_ctor_keys"] = [
+        {"line": k + 1, "key": v} for k, v in sorted(ctor_keys.items())]
+
     # 4. recursiveChildSearch sites + nearest copy-loop key.
     # this-register already detected above (most common store base).
     this_reg = result["this_register"]
@@ -177,8 +198,21 @@ def main():
         inline_key = None
         if key is None:
             window = raw[max(0, idx - 120):idx]
+            prefix = None
+            for l in reversed(window):
+                m = re.search(r"mov\s+\$0x([0-9a-f]+),%esi", l)
+                if m:
+                    va = int(m.group(1), 16)
+                    data = resolve(va, 40) if elf is not None else None
+                    if data:
+                        end = data.find(b"\x00")
+                        s = data[:end] if end >= 0 else data
+                        if len(s) >= 1 and all(32 <= c < 127 for c in s):
+                            prefix = s.decode()
+                    break
             if any("GetValueAsString" in l for l in window):
-                dynamic = "prefix+GetValueAsString(counter)"
+                dynamic = ((prefix + "+") if prefix else "prefix+") + \
+                    "GetValueAsString(counter)"
             else:
                 tab = None
                 for l in window:
@@ -198,6 +232,14 @@ def main():
                             chars.append(chr(v))
                 if 1 <= len(chars) <= 8:
                     inline_key = "".join(chars)
+            if key is None and inline_key is None and dynamic is None:
+                # CEGUI::String temp built from a literal just above
+                best = None
+                for ck, cv in ctor_keys.items():
+                    if 0 <= idx - ck <= 15 and (best is None or ck > best[0]):
+                        best = (ck, cv)
+                if best:
+                    inline_key = best[1]
         store = "?"
         store_pat = (r"mov\s+%rax,(0x[0-9a-f]+)\(%" +
                      re.escape(this_reg) + r"\)")
