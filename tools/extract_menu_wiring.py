@@ -284,6 +284,42 @@ def main():
                          "inc_line": idx + 1, "bound": bound})
     result["counter_loops"] = counters
 
+    # 6c. stack compare-exit bounds without a visible addl (combine keeps the
+    # counter via reload: cmpl $IMM,slot + jcc).
+    for idx, addr, text in items:
+        m = re.search(r"cmpl?\s+\$(0x[0-9a-f]+),(0x[0-9a-f]+)\(%rsp\)", text)
+        if not m:
+            continue
+        bound = int(m.group(1), 16)
+        if bound == 0 or bound > 0x1000:
+            continue
+        if any(c["slot"] == m.group(2) and c.get("bound") == bound
+               for c in counters):
+            continue
+        nxt = raw[idx + 1] if idx + 1 < len(raw) else ""
+        mj = re.search(r"\bj([a-z]+)\s+", nxt)
+        counters.append({"slot": m.group(2), "inc_addr": None,
+                         "inc_line": None, "bound": bound,
+                         "exit_jump": mj.group(0).strip() if mj else None})
+    result["counter_loops"] = counters
+
+    # 6b. register counters: cmp $IMM,%reg + jcc (register-held loop bounds,
+    # e.g. combine's r13 ItemSlot loop). Heuristic: small immediate.
+    reg_loops = []
+    for idx, addr, text in items:
+        m = re.search(r"cmp\s+\$(0x[0-9a-f]+),%(e[a-z]{2}|r\d+d)\b", text)
+        if not m:
+            continue
+        bound = int(m.group(1), 16)
+        if bound == 0 or bound > 0x1000:
+            continue
+        nxt = raw[idx + 1] if idx + 1 < len(raw) else ""
+        mj = re.search(r"\bj([a-z]+)\s+", nxt)
+        reg_loops.append({"addr": addr, "line": idx + 1,
+                          "reg": m.group(2), "bound": bound,
+                          "jump_next": mj.group(0).strip() if mj else None})
+    result["register_loops"] = reg_loops
+
     # 7. direct internal calls
     internal = []
     for idx, addr, text in items:

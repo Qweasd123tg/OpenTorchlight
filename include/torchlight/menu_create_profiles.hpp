@@ -21,6 +21,14 @@ struct MenuHandler {
     const char* name;
 };
 
+struct MenuKeyLoop {
+    const char* keys; // comma-joined prefixes, or table:0x... for runtime names
+    unsigned first;
+    unsigned last;
+    const char* back_base; // window+0x1d8 base, or "none"
+    const char* back_offset; // index offset, or "none"
+};
+
 struct MenuCreateProfile {
     const char* menu_class;
     const char* address;
@@ -31,34 +39,75 @@ struct MenuCreateProfile {
     const char* index_offset;
     std::vector<MenuGrab> grabs;
     std::vector<MenuHandler> handlers;
+    std::vector<MenuKeyLoop> loops;
 };
 
 inline std::vector<MenuCreateProfile> menu_create_profiles() {
     std::vector<MenuCreateProfile> out;
+    out.push_back(MenuCreateProfile{
+        "CCombineMenu", "0xad7a50",
+        4, 0,
+        "0xf8", "0xf8", "0x0",
+        {
+            {"Title", "0x70"},
+            {"Dialog", "0x78"},
+            {"Accept", "0x80"},
+            {"dynamic:ItemSlot+GetValueAsString(counter)", "live"},
+        },
+        {
+            {0xacd390, "MouseThrough"},
+            {0xacd330, "ItemClick"},
+            {0xacd460, "MouseOver"},
+            {0xacd3d0, "MouseOut"},
+        },
+        {
+            {"ItemSlot", 1, 4, "0xf8", "0x0"},
+        },
+    });
+    out.push_back(MenuCreateProfile{
+        "CEnchantMenu", "0xb2e0a0",
+        0, 0,
+        "none", "none", "none",
+        {
+            {"Title", "0x40"},
+            {"Dialog", "0x48"},
+            {"Accept", "0x50"},
+            {"ItemSlot", "live"},
+        },
+        {
+            {0xb1bb70, "MouseThrough"},
+            {0xb1bb10, "ItemClick"},
+            {0xb1bc40, "MouseOver"},
+            {0xb1bbb0, "MouseOut"},
+        },
+        {
+            {"ItemSlot", 0, 0, "0xc4", "0x0"},
+        },
+    });
     out.push_back(MenuCreateProfile{
         "CInventoryMenu", "0xb569e0",
         12, 64,
         "0x80", "0x80", "0x12",
         {
             {"Blocker", "live"},
-            {"BottomFrame", "0x48(%menu)"},
-            {"TopFrame", "0x28(%menu)"},
-            {"SlotGlow", "0x1d00(%menu)"},
+            {"BottomFrame", "0x48"},
+            {"TopFrame", "0x28"},
+            {"SlotGlow", "0x1d00"},
             {"Close", "live"},
             {"PaperdollEquip", "live"},
             {"RotateLeft", "live"},
             {"RotateRight", "live"},
             {"dynamic:runtime table 0x14c6b20[counter]", "live"},
-            {"TabBackpack", "0x9120(%menu)"},
-            {"TabSpell", "0x9128(%menu)"},
-            {"TabFish", "0x9130(%menu)"},
-            {"SlotsEquipment", "0x9108(%menu)"},
-            {"SlotsSpells", "0x9110(%menu)"},
-            {"SlotsFish", "0x9118(%menu)"},
+            {"TabBackpack", "0x9120"},
+            {"TabSpell", "0x9128"},
+            {"TabFish", "0x9130"},
+            {"SlotsEquipment", "0x9108"},
+            {"SlotsSpells", "0x9110"},
+            {"SlotsFish", "0x9118"},
             {"dynamic:Slot+GetValueAsString(counter)", "live"},
             {"dynamic:Spell+GetValueAsString(counter)", "live"},
-            {"Money", "0x9190(%menu)"},
-            {"WeaponSwitch", "0x9198(%menu)"},
+            {"Money", "0x9190"},
+            {"WeaponSwitch", "0x9198"},
         },
         {
             {0xb458a0, "MouseThrough"},
@@ -74,6 +123,29 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
             {0xb45930, "SpellMouseOut"},
             {0xb45940, "SetSpell"},
         },
+        {
+            {"Slot", 1, 63, "0x80", "0x12"},
+            {"Spell", 1, 4, "none", "none"},
+            {"table:0x14c6b20", 0, 11, "0x80", "0x0"},
+        },
+    });
+    out.push_back(MenuCreateProfile{
+        "CJournalMenu", "0xe3b5e0",
+        0, 0,
+        "none", "none", "none",
+        {
+            {"Blocker", "live"},
+            {"Close", "live"},
+            {"JournalFrame", "0x78"},
+            {"BottomFrame", "0x28"},
+            {"TopFrame", "0x20"},
+        },
+        {
+            {0xe332d0, "MouseThrough"},
+            {0xe332b0, "CloseButton"},
+        },
+        {
+        },
     });
     out.push_back(MenuCreateProfile{
         "CMerchantMenu", "0xb6ed20",
@@ -81,23 +153,23 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
         "0xb0", "0xb0", "0x12",
         {
             {"Blocker", "live"},
-            {"BottomFrame", "0x40(%menu)"},
-            {"TopFrame", "0x28(%menu)"},
-            {"SlotGlow", "0x3448(%menu)"},
+            {"BottomFrame", "0x40"},
+            {"TopFrame", "0x28"},
+            {"SlotGlow", "0x3448"},
             {"Close", "live"},
-            {"TabMisc", "0x3420(%menu)"},
-            {"TabWeapon", "0x3410(%menu)"},
-            {"TabArmor", "0x3418(%menu)"},
-            {"SlotsMisc", "0x3408(%menu)"},
-            {"SlotsWeapons", "0x33f8(%menu)"},
-            {"SlotsArmor", "0x3400(%menu)"},
+            {"TabMisc", "0x3420"},
+            {"TabWeapon", "0x3410"},
+            {"TabArmor", "0x3418"},
+            {"SlotsMisc", "0x3408"},
+            {"SlotsWeapons", "0x33f8"},
+            {"SlotsArmor", "0x3400"},
             {"dynamic:Slot+GetValueAsString(counter)", "live"},
-            {"TabBackpack", "0x33e0(%menu)"},
-            {"TabSpell", "0x33e8(%menu)"},
-            {"TabFish", "0x33f0(%menu)"},
-            {"PetSlotsEquipment", "0x33c8(%menu)"},
-            {"PetSlotsSpells", "0x33d0(%menu)"},
-            {"PetSlotsFish", "0x33d8(%menu)"},
+            {"TabBackpack", "0x33e0"},
+            {"TabSpell", "0x33e8"},
+            {"TabFish", "0x33f0"},
+            {"PetSlotsEquipment", "0x33c8"},
+            {"PetSlotsSpells", "0x33d0"},
+            {"PetSlotsFish", "0x33d8"},
             {"dynamic:PetSlot+GetValueAsString(counter)", "live"},
         },
         {
@@ -110,36 +182,40 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
             {0xb68530, "PetMouseOver"},
             {0xb61140, "PetMouseOut"},
         },
+        {
+            {"Slot", 1, 126, "0xb0", "0x12"},
+            {"PetSlot", 1, 63, "0xb0", "0x12"},
+        },
     });
     out.push_back(MenuCreateProfile{
         "CPetMenu", "0xb93350",
         12, 64,
         "0xa0", "0xa0", "0x12",
         {
-            {"CharacterName", "0x9118(%menu)"},
-            {"Level", "0x9120(%menu)"},
-            {"XP", "0x9158(%menu)"},
-            {"HP", "0x9150(%menu)"},
-            {"Mana", "0x9148(%menu)"},
-            {"MeleeDamage", "0x9128(%menu)"},
-            {"RangedDamage", "0x9130(%menu)"},
-            {"MagicDamage", "0x9138(%menu)"},
-            {"Defense", "0x9140(%menu)"},
+            {"CharacterName", "0x9118"},
+            {"Level", "0x9120"},
+            {"XP", "0x9158"},
+            {"HP", "0x9150"},
+            {"Mana", "0x9148"},
+            {"MeleeDamage", "0x9128"},
+            {"RangedDamage", "0x9130"},
+            {"MagicDamage", "0x9138"},
+            {"Defense", "0x9140"},
             {"Blocker", "live"},
-            {"BottomFrame", "0x48(%menu)"},
-            {"TopFrame", "0x28(%menu)"},
-            {"SlotGlow", "0x9110(%menu)"},
+            {"BottomFrame", "0x48"},
+            {"TopFrame", "0x28"},
+            {"SlotGlow", "0x9110"},
             {"Close", "live"},
             {"PaperdollEquip", "live"},
             {"RotateLeft", "live"},
             {"RotateRight", "live"},
             {"dynamic:runtime table 0x14cc220[counter]", "live"},
-            {"TabBackpack", "0x91d8(%menu)"},
-            {"TabSpell", "0x91e0(%menu)"},
-            {"TabFish", "0x91e8(%menu)"},
-            {"SlotsEquipment", "0x91c0(%menu)"},
-            {"SlotsSpells", "0x91c8(%menu)"},
-            {"SlotsFish", "0x91d0(%menu)"},
+            {"TabBackpack", "0x91d8"},
+            {"TabSpell", "0x91e0"},
+            {"TabFish", "0x91e8"},
+            {"SlotsEquipment", "0x91c0"},
+            {"SlotsSpells", "0x91c8"},
+            {"SlotsFish", "0x91d0"},
             {"dynamic:Slot+GetValueAsString(counter)", "live"},
             {"dynamic:Spell+GetValueAsString(counter)", "live"},
         },
@@ -157,6 +233,101 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
             {0xb888e0, "SpellMouseOut"},
             {0xb88dd0, "SetSpell"},
         },
+        {
+            {"table:0x14cc220", 0, 11, "0xa0", "0x0"},
+            {"Slot", 1, 63, "0xa0", "0x12"},
+            {"Spell", 1, 2, "none", "none"},
+        },
+    });
+    out.push_back(MenuCreateProfile{
+        "CQuestDialogMenu", "0xbb08f0",
+        3, 0,
+        "0x148", "0x148", "0x0",
+        {
+            {"Decline", "0xd8"},
+            {"Accept", "0xd0"},
+            {"Ok", "0xc8"},
+            {"DialogText", "0xe0"},
+            {"Portrait", "0x100"},
+            {"RewardGold", "0xe8"},
+            {"RewardXP", "0xf0"},
+            {"RewardFame", "0xf8"},
+            {"RewardGoldBox", "0x108"},
+            {"RewardXPBox", "0x110"},
+            {"RewardFameBox", "0x118"},
+            {"dynamic:ItemBkg+GetValueAsString(counter)", "live"},
+            {"dynamic:ItemSlot+GetValueAsString(counter)", "live"},
+        },
+        {
+            {0xba5370, "MouseOver"},
+            {0xba52e0, "MouseOut"},
+        },
+        {
+            {"ItemBkg,ItemSlot", 1, 3, "0x148", "0x0"},
+        },
+    });
+    out.push_back(MenuCreateProfile{
+        "CQuestMenu", "0xbc6b90",
+        0, 0,
+        "0xd8", "0xd8", "none",
+        {
+            {"Blocker", "live"},
+            {"Close", "live"},
+            {"DescriptionFrame", "0x30"},
+            {"RewardFrame", "0x38"},
+            {"Abandon", "0x40"},
+            {"Gold", "0x60"},
+            {"XP", "0x68"},
+            {"Fame", "0x70"},
+            {"GoldReward", "0x48"},
+            {"XPReward", "0x50"},
+            {"FameReward", "0x58"},
+            {"dynamic:Quest+GetValueAsString(counter)", "live"},
+            {"dynamic:QuestText+GetValueAsString(counter)", "live"},
+            {"dynamic:ItemRewardBkg+GetValueAsString(counter)", "live"},
+            {"dynamic:ItemRewardSlot+GetValueAsString(counter)", "live"},
+            {"BottomFrame", "0x28"},
+            {"TopFrame", "0x20"},
+        },
+        {
+            {0xbba060, "MouseThrough"},
+            {0xbba040, "CloseButton"},
+            {0xbba070, "QuestClick"},
+            {0xbba1e0, "MouseOver"},
+            {0xbba120, "MouseOut"},
+        },
+        {
+            {"Quest,QuestText", 1, 6, "none", "none"},
+            {"ItemRewardBkg,ItemRewardSlot", 1, 3, "0xd8", "0x0"},
+        },
+    });
+    out.push_back(MenuCreateProfile{
+        "CSkillMenu", "0xbe19c0",
+        0, 0,
+        "none", "none", "none",
+        {
+            {"Blocker", "live"},
+            {"Close", "live"},
+            {"SkillFrameA", "0x90"},
+            {"SkillFrameB", "0x98"},
+            {"SkillFrameC", "0xa0"},
+            {"TabTextA", "0xc8"},
+            {"TabTextB", "0xd0"},
+            {"TabTextC", "0xd8"},
+            {"TabA", "0xb0"},
+            {"TabB", "0xb8"},
+            {"TabC", "0xc0"},
+            {"SpellFrame", "0xa8"},
+            {"Skill Points", "0x88"},
+            {"BottomFrame", "0x28"},
+            {"TopFrame", "0x20"},
+        },
+        {
+            {0xbd8800, "MouseThrough"},
+            {0xbd87d0, "CloseButton"},
+        },
+        {
+        },
     });
     out.push_back(MenuCreateProfile{
         "CStashMenu", "0xbfbe20",
@@ -164,17 +335,17 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
         "0xb0", "0xb0", "0x12",
         {
             {"Blocker", "live"},
-            {"BottomFrame", "0x40(%menu)"},
-            {"TopFrame", "0x28(%menu)"},
-            {"SlotGlow", "0x3418(%menu)"},
+            {"BottomFrame", "0x40"},
+            {"TopFrame", "0x28"},
+            {"SlotGlow", "0x3418"},
             {"Close", "live"},
             {"dynamic:Slot+GetValueAsString(counter)", "live"},
-            {"TabBackpack", "0x33e0(%menu)"},
-            {"TabSpell", "0x33e8(%menu)"},
-            {"TabFish", "0x33f0(%menu)"},
-            {"PetSlotsEquipment", "0x33c8(%menu)"},
-            {"PetSlotsSpells", "0x33d0(%menu)"},
-            {"PetSlotsFish", "0x33d8(%menu)"},
+            {"TabBackpack", "0x33e0"},
+            {"TabSpell", "0x33e8"},
+            {"TabFish", "0x33f0"},
+            {"PetSlotsEquipment", "0x33c8"},
+            {"PetSlotsSpells", "0x33d0"},
+            {"PetSlotsFish", "0x33d8"},
             {"dynamic:PetSlot+GetValueAsString(counter)", "live"},
         },
         {
@@ -186,6 +357,10 @@ inline std::vector<MenuCreateProfile> menu_create_profiles() {
             {0xbee4c0, "PetItemClick"},
             {0xbf5be0, "PetMouseOver"},
             {0xbee510, "PetMouseOut"},
+        },
+        {
+            {"Slot", 1, 42, "0xb0", "0x12"},
+            {"PetSlot", 1, 63, "0xb0", "0x12"},
         },
     });
     return out;

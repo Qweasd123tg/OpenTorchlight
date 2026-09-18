@@ -90,7 +90,8 @@ def emit_grabs(args):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--classes", default="CInventoryMenu,CMerchantMenu,CPetMenu,CStashMenu")
+    ap.add_argument("--classes", default="CInventoryMenu,CMerchantMenu,CPetMenu,CStashMenu,CCombineMenu,CEnchantMenu,CQuestMenu,CQuestDialogMenu,CSkillMenu,CJournalMenu")
+    ap.add_argument("--loops", default=os.path.join(HERE, "research", "menu-key-loops.json"))
     ap.add_argument("--report", default=os.path.join(HERE, "research", "batch-menu-pass.json"))
     ap.add_argument("--batch-dir", default=os.path.join(HERE, "research", "disassembly", "batch"))
     ap.add_argument("--out", default=os.path.join(HERE, "include", "torchlight", "menu_create_profiles.hpp"))
@@ -103,6 +104,16 @@ def main():
         return
 
     report = json.load(open(args.report, encoding="utf-8"))
+    loops_by_class = {}
+    profile_scalars = {}
+    try:
+        with open(args.loops, encoding="utf-8") as fh:
+            sidecar = json.load(fh)
+            for entry in sidecar.get("loops", []):
+                loops_by_class.setdefault(entry["menu"], []).append(entry)
+            profile_scalars = sidecar.get("profile_scalars", {})
+    except OSError:
+        pass
     wanted = args.classes.split(",")
     profiles = []
     for f in report["functions"]:
@@ -117,7 +128,8 @@ def main():
         if wpath is None:
             raise SystemExit("no wiring json for %s" % addr)
         w = json.load(open(wpath, encoding="utf-8"))
-        loops = sorted(w.get("counter_loops", []), key=lambda c: c["inc_line"])
+        loops = sorted(w.get("counter_loops", []),
+                       key=lambda c: (c["inc_line"] is None, c["inc_line"] or 0))
         bounds = [c.get("bound") for c in loops]
         backs = [b["base"] for b in sorted(w.get("back_pointers", []),
                                            key=lambda b: b["line"])]
@@ -129,15 +141,17 @@ def main():
                 handlers.append(h)
         grabs = [(s["key"] or ("dynamic:" + (s["dynamic"] or "?")), s["menu_store"])
                  for s in w.get("child_searches", [])]
+        scalars = profile_scalars.get(f["class"], {})
+        bounds = scalars.get("bounds", [0, 0])
         profiles.append({
             "class": f["class"], "address": addr,
-            "table_bound": bounds[0] if len(bounds) > 0 else None,
-            "slot_bound": bounds[1] if len(bounds) > 1 else None,
+            "table_bound": bounds[0], "slot_bound": bounds[1],
             "table_base": backs[0] if len(backs) > 0 else None,
             "slot_base": backs[1] if len(backs) > 1 else (backs[0] if backs else None),
-            "index_offsets": idxoffs,
+            "index_offset": scalars.get("index_offset", "none"),
             "handlers": handlers,
             "grabs": grabs,
+            "loops": loops_by_class.get(f["class"], []),
         })
 
     missing = set(wanted) - {p["class"] for p in profiles}
@@ -168,6 +182,14 @@ def main():
     L.append("    const char* name;")
     L.append("};")
     L.append("")
+    L.append("struct MenuKeyLoop {")
+    L.append("    const char* keys; // comma-joined prefixes, or table:0x... for runtime names")
+    L.append("    unsigned first;")
+    L.append("    unsigned last;")
+    L.append("    const char* back_base; // window+0x1d8 base, or \"none\"")
+    L.append("    const char* back_offset; // index offset, or \"none\"")
+    L.append("};")
+    L.append("")
     L.append("struct MenuCreateProfile {")
     L.append("    const char* menu_class;")
     L.append("    const char* address;")
@@ -178,6 +200,7 @@ def main():
     L.append("    const char* index_offset;")
     L.append("    std::vector<MenuGrab> grabs;")
     L.append("    std::vector<MenuHandler> handlers;")
+    L.append("    std::vector<MenuKeyLoop> loops;")
     L.append("};")
     L.append("")
     L.append("inline std::vector<MenuCreateProfile> menu_create_profiles() {")
@@ -187,16 +210,23 @@ def main():
         L.append('        "%s", "%s",' % (p["class"], p["address"]))
         L.append("        %s, %s," % (p["table_bound"], p["slot_bound"]))
         L.append('        "%s", "%s", "%s",' % (
-            p["table_base"], p["slot_base"],
-            p["index_offsets"][0] if p["index_offsets"] else "?"))
+            p["table_base"] or "none", p["slot_base"] or "none",
+            p["index_offset"]))
         L.append("        {")
         for key, store in p["grabs"]:
-            field = store.replace("(%rbx)", "") if store != "?" else "live"
+            field = store.replace("(%menu)", "") if store != "?" else "live"
             L.append('            {"%s", "%s"},' % (key, field))
         L.append("        },")
         L.append("        {")
         for hid, hname in p["handlers"]:
             L.append('            {%s, "%s"},' % (hid, hname))
+        L.append("        },")
+        L.append("        {")
+        for lp in p["loops"]:
+            base = '"%s"' % lp["back_base"] if lp["back_base"] else '"none"'
+            off = '"%s"' % lp["back_offset"] if lp["back_offset"] else '"none"'
+            L.append('            {"%s", %d, %d, %s, %s},' % (
+                ",".join(lp["keys"]), lp["first"], lp["last"], base, off))
         L.append("        },")
         L.append("    });")
     L.append("    return out;")

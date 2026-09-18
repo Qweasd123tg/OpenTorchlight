@@ -121,6 +121,8 @@ def main():
                               for s in w.get("subscriptions", [])],
             "counter_loops": [(c["slot"], c.get("bound"))
                               for c in w.get("counter_loops", [])],
+            "register_loops": [(c["reg"], c.get("bound"))
+                               for c in w.get("register_loops", [])],
             "back_pointers": sorted(set(b["base"]
                                         for b in w.get("back_pointers", []))),
             "index_offsets": sorted(set(o["add"]
