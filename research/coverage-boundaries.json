@@ -664,6 +664,29 @@
         "tests/typed_migration_test.cpp"
       ],
       "comparison": "verification/large-16/typed-damage-original.json: unchanged functions and allocation slices, explicit fixture callbacks and preserved operation order."
+    },
+    {
+      "addresses": [
+        "0xa83ed0",
+        "0xa83e70",
+        "0xa83ea0"
+      ],
+      "status": "partial",
+      "boundary": "UI screen-scale arithmetic only: recursive child-first convertToScreenScale with false/YRATIO (H/768) and true/XRATIO (W/1024) branches, offsets-only scaling of getPosition/getSize UDim pairs, pristine-document re-resolve with no accumulation. Connected only at confirmed false call sites. CEGUI setPosition/setSize notifications, final rect rounding/autoscale/render parity, true-branch screens, event subscription and full rescaleUI choreography remain open.",
+      "evidence": [
+        "research/decompiled-core/game_ui.c",
+        "research/ui-scale-p1/NOTES.md",
+        "research/ui-menu-scale.md"
+      ],
+      "implementation": [
+        "src/ui_screen_scale.cpp",
+        "src/ui_layout.cpp",
+        "src/ui_hud.cpp"
+      ],
+      "tests": [
+        "tests/ui_screen_scale_test.cpp"
+      ],
+      "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json: 400 trees / 1200 nodes / 9600 float fields bit-exact vs tests/ui_screen_scale_test.cpp recorded literals (390/365.625/548.4375/731.25); full-CEGUI geometry NOT claimed"
     }
   ],
   "port_systems": [

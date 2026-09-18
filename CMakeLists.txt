@@ -570,6 +570,9 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME read_only_extractors
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/read_only_extractors_test.py)
     set_tests_properties(read_only_extractors PROPERTIES TIMEOUT 30)
+    add_test(NAME registry_sync
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/registry_sync_test.py)
+    set_tests_properties(registry_sync PROPERTIES TIMEOUT 60)
     add_executable(player_vitals_probe tests/player_vitals_probe.cpp)
     target_link_libraries(player_vitals_probe PRIVATE torchlight_core)
     add_test(NAME combat_inputs_evidence

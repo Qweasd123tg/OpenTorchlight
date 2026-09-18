@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "name": "ui-contour",
+  "meaning": "Code-first scope: full UI ring (create, resource load, resize, update, render, input, open/close). Walk original methods with dependencies; do not jump to gameplay. Library CEGUI/OGRE internals are a fixed boundary, not rewritten.",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "class_prefixes": ["CGameUI", "CInventoryMenu", "CMerchantMenu", "CStashMenu", "CEnchantMenu", "CCombineMenu", "CPetMenu", "CQuestMenu", "CJournalMenu", "CMainMenu", "CNewGameMenu", "CContinueGameMenu", "COptionsMenu", "CSettingsMenu", "CDialogMenu", "CDieMenu", "CFishingMenu", "CSkillMenu", "CStatsMenu", "CTipMenu", "CCinematicMenu", "CWaypointMenu", "CModalMenu", "CConsole", "CSkillFoldout", "CSkillTooltip", "CEquipmentTooltip"],
+  "entry_addresses": ["0x00a83ed0", "0x00a83e70", "0x00a83ea0", "0x00a9e4a0", "0x005791c0", "0x00acbb40", "0x00a844d0", "0x00ab8100", "0x00b4eb70", "0x00b569e0"],
+  "method_groups": ["create", "createMenus", "load", "rescaleUI", "convertToScreenScale", "scaledX", "scaledY", "update", "updateMenuUI", "updateIngameUI", "processInput", "processMenuInput", "processIngameInput", "onClick", "handle", "mapEventHandlers", "setOpen", "setVisible", "open", "close", "toggle"],
+  "library_boundary": "CEGUI 0.6.2 + OGRE 1.6.5 behavior from the pinned vendor/library version is reused at the boundary; changes to bundled library behavior are tracked separately.",
+  "first_packet": "scale + inventory open: 0x00a83ed0 family (boundary exists) then 0x00b4eb70 + 0x00b569e0 as one coupled packet with a shared field map."
+}
