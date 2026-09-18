@@ -20,6 +20,21 @@ BFS-фильтр связности и полное перемешивание �
 NPCS/CREEPS/PROPS, spawn nodes (`CLevel+0xf0`, счётчики `+0x114`), настоящие
 регионы no-spawn (`CLevel+0xd8`), второй слой 0.4-сетки.
 
+# Текущая точка: UI-шрифты — флаг автохинта (U14, часть)
+
+Порт грузил глифы с `FT_LOAD_DEFAULT`; оригинал (`updateFont @0xe07b0`,
+`mov edx,0x20` перед `FT_Load_Char` в shipped libCEGUIBase.so.1) — с
+`FT_LOAD_FORCE_AUTOHINT`. На BRLNSDB 11/16px различаются ~213/215 растров и
+~112/215 адвансов: старый вывод был неверным, не просто недоказанным.
+Перенесён флаг; регрессия `original_ui_font_load_flags` сверяет порт с прямым
+рендером 0x20 тем же FreeType + требует отличие от DEFAULT. Формула адванса
+намеренно не тронута (×1/64 == /64 побитово). Метрики ascender/height из
+юнитов — открыты (qword по `face+0xa0]+0x28` не лёг ни на одно поле
+`FT_SizeRec`; см. `research/ui-font-autohint.md`).
+Ниже сохранена история, начиная с UI mesh bindings.
+
+---
+
 # Текущая точка: UI mesh bindings (U03) + UI deep-map
 
 Применён кандидат из внешнего `OpenTorchlight-UI-deep-map(1).zip` (SHA-256

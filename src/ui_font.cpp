@@ -175,7 +175,11 @@ struct UiFont::Impl {
         if (const auto it = glyphs.find(codepoint); it != glyphs.end())
             return &it->second;
 #ifdef TORCHLIGHT_HAVE_FREETYPE
-        if (FT_Load_Char(face, codepoint, FT_LOAD_DEFAULT) != 0)
+        // original-code: CEGUI::FreeTypeFont::updateFont in the shipped
+        // libCEGUIBase.so.1 (SHA-256 57a888d7…dda2aa) loads every glyph with
+        // flags 0x20 (mov edx,0x20 before FT_Load_Char at 0xe0997/0xe099f).
+        // 0x20 is FT_LOAD_FORCE_AUTOHINT. Research: research/ui-font-autohint.md.
+        if (FT_Load_Char(face, codepoint, FT_LOAD_FORCE_AUTOHINT) != 0)
             return nullptr;
         if (FT_Render_Glyph(face->glyph,
                             definition.antialias ? FT_RENDER_MODE_NORMAL : FT_RENDER_MODE_MONO) != 0)
