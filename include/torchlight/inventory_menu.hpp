@@ -55,6 +55,9 @@ public:
     [[nodiscard]] const PanelViewport &viewport() const noexcept { return state_.viewport(); }
 
     InventoryMenuEffects set_open(bool open, bool close_playing);
+    // Tab clicks (onClick 0x0e/0x0f/0x10) are ported but have no caller yet:
+    // the port has no clickable tab widgets, and no synthetic key is
+    // invented for them. Connect when tabs become clickable.
     bool click_tab(int layout_function);
     bool ensure_viewport(int width_px, int height_px, float yratio);
 

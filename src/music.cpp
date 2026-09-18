@@ -136,12 +136,16 @@ void MusicPlayer::request(const std::string &music_directory, const std::string 
         std::int16_t frame[2] = {0, 0};
         while (!impl->stop_flag.load() &&
                (got = ov_read_float(&vorbis, &samples, 4096, &bitstream)) > 0) {
-            const float gain = impl->muted.load() ? 0.0F : impl->volume.load();
+            // Single gain implementation: MusicPlayer::apply_gain (tested in
+            // music_test) owns volume/mute semantics; the worker used to
+            // duplicate it inline, leaving apply_gain without a caller.
+            const float volume = impl->volume.load();
+            const bool muted = impl->muted.load();
             for (long i = 0; i < got && !impl->stop_flag.load(); ++i) {
                 const float left = samples[0][i];
                 const float right = channels > 1 ? samples[1][i] : left;
-                frame[0] = clamp_sample(left, gain);
-                frame[1] = clamp_sample(right, gain);
+                frame[0] = clamp_sample(MusicPlayer::apply_gain(left, volume, muted), 1.0F);
+                frame[1] = clamp_sample(MusicPlayer::apply_gain(right, volume, muted), 1.0F);
 #if defined(__linux__)
                 if (pcm != nullptr) {
                     if (snd_pcm_writei(pcm, frame, 1) < 0)
