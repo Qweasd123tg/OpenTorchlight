@@ -49,6 +49,8 @@ struct PanelProfile {
     bool close_detaches = false; // removeChildWindow on close path
     bool refresh_on_reopen = true; // updateLayout on already-open+open
     bool state_gate = false; // pet: companion state can veto opening (open)
+    int open_sound = -1; // playSample id on open path, -1 none (verified 22)
+    int close_sound = -1; // playSample id on close path, -1 none (66/12/21)
 };
 
 [[nodiscard]] const PanelProfile &panel_profile_inventory();
@@ -60,7 +62,7 @@ struct PanelProfile {
 
 struct PanelOpenEffects {
     bool update_layout = false; // virtual slot +0x48
-    int sound_sample = -1; // 0x16 open, 0x42 close, -1 none (open: no sink)
+    int sound_sample = -1; // profile open/close id, -1 none (open: no sink)
     bool blend_open = false; // OPEN blend when CLOSE is playing (open)
     bool play_open = false; // OPEN play otherwise (open)
     bool queue_idle = false; // IDLE queued (open)

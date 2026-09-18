@@ -39,6 +39,7 @@ blend-OPEN/иначе play-OPEN, всегда `queueBlendAnimation("IDLE",true,0
 | viewport (scaledY×4) | да 124/132/166/192 | НЕТ | да 97/166/135/169 | НЕТ | НЕТ | НЕТ |
 | закрытие: removeChild | условное (+0x91a0) | нет | да | нет | да (+0x750) | нет |
 | queueTip | (0) | 0x0c/0x05 по ISA | 0x0f (одна ветвь) | нет | нет | нет |
+| playSample open/close | 22/66 | 22/12 | 22/66 | 22/66 | 22/66 | 22/66 |
 | уже-открыто+open | store+updateLayout | store+updateLayout | store+updateLayout | только store | только store | только store |
 
 Детали представителя merchant (прочитан целиком): вторая тройка
@@ -60,6 +61,23 @@ Quest ≡ journal: доказано полное скелетное тождес
 различия только в смещениях/адресах переходов/nop). Закрытие идёт через
 shared-эпилог `mov param→flag` (тот же нетто-эффект). Без троек, без типов,
 без viewport, без removeChildWindow.
+
+## Звуки (проверено по путям, не по порядку адресов)
+
+`CSoundBank::playSample(id, null, 0, 0, false)`: open — всегда 22, где звук
+есть; close — 66, кроме merchant (12) и stash (21, профиля пока нет).
+Назначение open/close доказано разбором ветвей флага (inventory/merchant/
+stash/pet/quest/skill; journal — через тождество с quest + тот же порядок).
+Закрытие без открытия молча store'ит флаг (звука нет), анимация закрытия —
+`blendAnimation("CLOSE")` (литерал `0xfe6008`, проверен в inventory/merchant/
+quest/skill). Файлы — `resource-derived` (`media/sounds/UI.DAT.adm`:
+`InventoryOpen→sheet_openright.wav`, `InventoryClose→sheet_close.wav` + …),
+но id — рантайм-хэндлы банка (`addSample` зовут десятки инициализаторов
+юнитов, порядок заполнения = порядок загрузки): связка id→файл требует
+трейса заполнения банка — открыто. Стока семплов в порту нет (open).
+В Batch-проверке ещё 6 звучащих `setOpen` без профилей
+(combine/dropdown/enchant/options/stats + stash): id сняты, назначений
+open/close для них НЕ делалось (их скелеты не разбирались).
 
 ## Перенос: один helper + таблица профилей
 

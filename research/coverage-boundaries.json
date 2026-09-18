@@ -725,7 +725,7 @@
         "0xe3a680"
       ],
       "status": "partial",
-      "boundary": "Panel setOpen family ANALYSIS + PORTED skeleton: shared flag machine with per-menu profile table (tab triples/index, tip rules, viewport consts, detach, refresh rule, pet gate), inventory adapter delegating to the single implementation (its 53 assertions still pass through the wrapper). Pet viewport math compared bit-exact. NOT wired except inventory (no merchant/pet/quest/skill/journal UI exists in the port); engine sinks, key traces and createMenus branches remain open.",
+      "boundary": "Panel setOpen family ANALYSIS + PORTED skeleton: shared flag machine with per-menu profile table (tab triples/index, tip rules, viewport consts, detach, refresh rule, pet gate), inventory adapter delegating to the single implementation (its 53 assertions still pass through the wrapper). Pet viewport math compared bit-exact. NOT wired except inventory (no merchant/pet/quest/skill/journal UI exists in the port); engine sinks, key traces and createMenus branches remain open. Sounds parameterized per profile (open 22; close 66, merchant 12); no sample sink, id->file link open.",
       "evidence": [
         "research/panel-open.md",
         "research/disassembly/b6a220-merchant-setopen.asm",

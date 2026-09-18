@@ -3,16 +3,22 @@
 namespace torchlight {
 namespace {
 // menu, viewport?, consts, triples, indexed, default-on-open, tip, isa-tip,
-// detach, refresh, gate. Const sources: research/panel-open.md.
+// detach, refresh, gate, open-sound, close-sound. Const sources:
+// research/panel-open.md. Sounds verified per member from playSample sites:
+// open is 22 everywhere present; close is 66 except merchant (12) and
+// stash (21, no panel profile yet).
 const PanelProfile kInventory{"inventory", true, {124.0F, 132.0F, 166.0F, 192.0F, 5000.0F}, 1,
-                              false, false, 0, false, true, true, false};
+                              false, false, 0, false, true, true, false, 22, 66};
 const PanelProfile kMerchant{"merchant", false, {}, 2, true, true, -1, true, false, true,
-                             false};
+                             false, 22, 12};
 const PanelProfile kPet{"pet", true, {97.0F, 166.0F, 135.0F, 169.0F, -5000.0F}, 1, false,
-                        false, 15, false, true, true, true};
-const PanelProfile kQuest{"quest", false, {}, 0, false, false, -1, false, false, false, false};
-const PanelProfile kSkill{"skill", false, {}, 3, true, false, -1, false, true, false, false};
-const PanelProfile kJournal{"journal", false, {}, 0, false, false, -1, false, false, false, false};
+                        false, 15, false, true, true, true, 22, 66};
+const PanelProfile kQuest{"quest", false, {}, 0, false, false, -1, false, false, false, false,
+                          22, 66};
+const PanelProfile kSkill{"skill", false, {}, 3, true, false, -1, false, true, false, false,
+                          22, 66};
+const PanelProfile kJournal{"journal", false, {}, 0, false, false, -1, false, false, false,
+                            false, 22, 66};
 } // namespace
 
 const PanelProfile &panel_profile_inventory() { return kInventory; }
@@ -63,7 +69,7 @@ PanelOpenEffects PanelOpenState::set_open(bool open, bool close_playing, int def
             open_ = false;
             return effects;
         }
-        effects.sound_sample = 0x16;
+        effects.sound_sample = profile_->open_sound;
         if (close_playing)
             effects.blend_open = true;
         else
@@ -83,7 +89,7 @@ PanelOpenEffects PanelOpenState::set_open(bool open, bool close_playing, int def
             // sink (detach happens on close, not open — see blend_close).
         }
     } else if (!open) {
-        effects.sound_sample = 0x42;
+        effects.sound_sample = profile_->close_sound;
         effects.blend_close = true;
         effects.detach_child = profile_->close_detaches;
         aux_ = false;

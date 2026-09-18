@@ -40,13 +40,14 @@ void check_skeleton(const PanelProfile &profile) {
         PanelOpenState menu(profile);
         require(no_effects(menu.set_open(false, false)) && !menu.open(), "closed+closed");
     }
-    // Closed + open: sample 0x16, OPEN by play (CLOSE idle), IDLE always.
+    // Closed + open: profile open sample (22 everywhere present), OPEN by
+    // play (CLOSE idle), IDLE always.
     {
         PanelOpenState menu(profile);
         const PanelOpenEffects fx = menu.set_open(true, false);
         require(menu.open(), "open flag");
-        require(fx.sound_sample == 0x16 && !fx.blend_open && fx.play_open && fx.queue_idle &&
-                    !fx.blend_close,
+        require(fx.sound_sample == profile.open_sound && !fx.blend_open && fx.play_open &&
+                    fx.queue_idle && !fx.blend_close,
                 "open samples/animation");
         require(fx.viewport_recompute == profile.has_viewport,
                 "viewport recompute flag follows the block");
@@ -68,13 +69,14 @@ void check_skeleton(const PanelProfile &profile) {
                 "reopen reports nothing but layout");
         require(fx.update_layout == profile.refresh_on_reopen, "reopen refresh rule");
     }
-    // Open + close: sample 0x42, CLOSE blend, flags cleared, no layout.
+    // Open + close: profile close sample (66; merchant 12), CLOSE blend,
+    // flags cleared, no layout.
     {
         PanelOpenState menu(profile);
         menu.set_open(true, false);
         const PanelOpenEffects fx = menu.set_open(false, false);
         require(!menu.open() && !menu.aux(), "close clears flags");
-        require(fx.sound_sample == 0x42 && fx.blend_close && !fx.update_layout &&
+        require(fx.sound_sample == profile.close_sound && fx.blend_close && !fx.update_layout &&
                     fx.detach_child == profile.close_detaches,
                 "close effects");
     }
