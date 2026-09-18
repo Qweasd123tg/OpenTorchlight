@@ -90,4 +90,30 @@ std::size_t weighted_index(const std::vector<float>& weights, TorchlightRandom& 
     return 0;
 }
 
+float VolatileRandom::between(float low, float high) noexcept {
+    // original-code @0xc92b50, transcribed op-for-op. ucomiss(lo,hi): NaN
+    // takes jp into the random path; equal takes je home with low.
+    // (NaN == NaN) is false, so NaN correctly falls through below.
+    if (low == high)
+        return low;
+    const float range_f = high - low;
+    const double range_d = static_cast<double>(range_f);
+    constexpr std::uint64_t kMul = 0x29777B41u;
+    constexpr std::uint64_t kMask44 = 0xFFFFFFFFFFFull;
+    constexpr std::uint64_t kExp = 0x3FF0000000000000ull;
+    const std::uint64_t lo32 = state_ & 0xFFFFFFFFu;
+    const std::uint64_t hi32 = state_ >> 32;
+    const std::uint64_t t2 = lo32 * kMul + hi32;
+    const std::uint64_t t3 = (t2 & 0xFFFFFFFFu) * kMul + (t2 >> 32);
+    state_ = t3;
+    const std::uint64_t bits =
+        ((t3 & 0xFFFFFFFFu) + ((t2 & 0xFFFFFFFFu) << 32)) & kMask44;
+    const std::uint64_t raw = bits | kExp;
+    double frac = 0.0;
+    std::memcpy(&frac, &raw, sizeof(frac));
+    frac = frac - 1.0;
+    const float scaled = static_cast<float>(range_d * frac);
+    return low + scaled;
+}
+
 } // namespace torchlight

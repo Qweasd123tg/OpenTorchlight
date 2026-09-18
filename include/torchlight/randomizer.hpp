@@ -48,4 +48,19 @@ private:
 [[nodiscard]] std::size_t weighted_index(const std::vector<float>& weights,
                                          TorchlightRandom& random);
 
+// The original's separate volatile stream (UTILITIES::randomBetweenVolatile
+// @0xc92b50): 64-bit LCG, multiplier 0x29777B41, process-global state.
+// Bit-exact integer transcription; the double bit-trick yields frac in
+// [0,1). NaN bounds take the random path (jp), equal bounds return low.
+class VolatileRandom {
+public:
+    explicit VolatileRandom(std::uint64_t seed) noexcept : state_(seed) {}
+
+    [[nodiscard]] std::uint64_t state() const noexcept { return state_; }
+    [[nodiscard]] float between(float low, float high) noexcept;
+
+private:
+    std::uint64_t state_;
+};
+
 } // namespace torchlight
