@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "comparisons": 12088,
+  "groups": {
+    "allocation": 3088,
+    "magic": 1500,
+    "defense": 1500,
+    "ordinary_channel_roll": 6000
+  },
+  "generator_seed": 43286,
+  "input_sha256": "02c160fdc27682d78ee017b5d2baa2472f8038e72efd94768284522071cfb894",
+  "expected_sha256": "4edaa7189b5e81749a4eebce7e22ca18c99d20ab5bd31ceb7dc2c49ad4f1e13f",
+  "functions_and_slices": [
+    {
+      "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+      "address": "0x843ed0",
+      "size": 13218,
+      "sha256": "5494d972f916b825195a605ea81276aa3dd09c526cb5e12ece02bdb6ed926bd2"
+    },
+    {
+      "name": "CCharacter::maxDamage(CAttackDescription*, CCharacter*)",
+      "address": "0x815d40",
+      "size": 1417,
+      "sha256": "0e6bd3d0feff909d5404702dd3e8c39b69222bb27d765d9e5fe6cea9116d8283"
+    },
+    {
+      "name": "CCharacter::strength()",
+      "address": "0x813930",
+      "size": 103,
+      "sha256": "8e5a580dfd89511ebcc788f529546c947e091a733479e6872e4fc96487813fda"
+    },
+    {
+      "name": "CCharacter::dexterity()",
+      "address": "0x8139a0",
+      "size": 103,
+      "sha256": "c16b532222056e33f667e8fba4758e9e3c8bc79007a7e38f27069d1f9d14d181"
+    },
+    {
+      "name": "CCharacter::magic()",
+      "address": "0x8144c0",
+      "size": 103,
+      "sha256": "7b5b70eea03c58bb3462ec40ef92dd17b7cfb8b5d78ab6584ca73429763f1939"
+    },
+    {
+      "name": "CCharacter::defense()",
+      "address": "0x814530",
+      "size": 133,
+      "sha256": "c5cbd79cfca267936ee0215e160146b364eb811cc55c577ecbf6ed4a0d8bcb65"
+    },
+    {
+      "name": "CCharacter::armorBonus()",
+      "address": "0x8145c0",
+      "size": 174,
+      "sha256": "340be4b2ebbdd6968a2fd72ff637f4a4588d656574fd2ba79a6bd2a1087077f5"
+    },
+    {
+      "name": "CCharacter::AC()",
+      "address": "0x814670",
+      "size": 97,
+      "sha256": "7e6f5b4f859194cec8b6e704e29ff8675ba0dd1282f1509f0de8955c61865eba"
+    },
+    {
+      "name": "CCharacter::minimumAC()",
+      "address": "0x8146e0",
+      "size": 35,
+      "sha256": "5a8e12ed3d7257c890631802a0c8d2e0bf7f436ae13a920fb3adfe8e2da60560"
+    },
+    {
+      "name": "CCharacter::damageDefense(EDAMAGE_TYPES)",
+      "address": "0x815910",
+      "size": 265,
+      "sha256": "2a0c064c22f7dc3b96ac8095fab56e125ace16e5ef6d4bc8208f7f9434c3aa1e"
+    },
+    {
+      "name": "CCharacter::damageDefensePercent(EDAMAGE_TYPES)",
+      "address": "0x8158c0",
+      "size": 65,
+      "sha256": "52cf63ce897d5f2b9be836eb30599a71468b47dfb2b1bd94290d33f9d11ca6d3"
+    },
+    {
+      "name": "CCharacter::modifyDamage(int, EDAMAGE_TYPES, int, float)",
+      "address": "0x837c00",
+      "size": 2062,
+      "sha256": "47e90a17bf1acc8f4a202fdf2f3dcc38c34b8a9d547aaf1aaffdc2e9fa66fd96"
+    },
+    {
+      "name": "CEquipment::getDamageBonus(EDAMAGE_TYPES)",
+      "address": "0x86d440",
+      "size": 327,
+      "sha256": "3bf117c9ade5709fa1c88c115bf510186fe84733c2c6941e579602130117e553"
+    },
+    {
+      "name": "UTILITIES::randomIntegerBetweenVolatile(int, int)",
+      "address": "0xc92bf0",
+      "size": 61,
+      "sha256": "4230590ae36424d898d89ccba73563ce56c4a47936dd7a587ea0cd3fba2793a9"
+    },
+    {
+      "name": "calculateCombatStats allocation slice",
+      "address": "0x881228",
+      "size": 16,
+      "sha256": "c52149f3099534b5b0055e45ac31c40fbcea64954a3eeaa09ad232d865b4f6ef"
+    },
+    {
+      "name": "calculateCombatStats allocation slice",
+      "address": "0x881281",
+      "size": 26,
+      "sha256": "14c1b6267bee200582b1e1b647823c633ad84173ff6c75f459f1022199e02adb"
+    },
+    {
+      "name": "calculateCombatStats allocation slice",
+      "address": "0x88140c",
+      "size": 30,
+      "sha256": "8c5f8288733c3001c0744406125f239180e1c6b201687af32aa57d057aadf926"
+    },
+    {
+      "name": "calculateCombatStats allocation slice",
+      "address": "0x8816c0",
+      "size": 13,
+      "sha256": "69b0a2dd41844bbac110ed3dcce064ba16efa42030962a8776a14de0c19d0518"
+    }
+  ],
+  "scope": "Integer weapon graph split; MAGIC getter; resolved armor/percentage; ordinary right-hand damage through ordered channel assembly and volatile RNG. No original game launch.",
+  "controlled_inputs": "Constructed memory objects, evaluated effect contributions, one right-hand weapon/type queries; critical=false, no reflect or absorb-shield.",
+  "excluded": [
+    "Dual-hand selection/shield special case",
+    "Effect lifecycle/affixes/sockets",
+    "Critical/glancing/block/procs",
+    "Missiles/weapon skills",
+    "Actual HP, loot, UI or campaign in original executable"
+  ],
+  "domain": "Finite binary32, supported positive graph/bonus range, int32-safe evaluated sums; allocation percentages may be negative for original default/skip branches."
+}

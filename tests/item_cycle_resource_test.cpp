@@ -1,6 +1,8 @@
 #include "torchlight/player_session.hpp"
 #include "torchlight/scene_geometry.hpp"
 #include "torchlight/inventory_view.hpp"
+#include "torchlight/typed_damage.hpp"
+#include "torchlight/save_store.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -89,8 +91,17 @@ int main(int argc, char** argv) {
         const auto count=session.inventory().items().size();
         for(const auto id:weapons) {
             const auto expected=*session.inventory().find(id)->weapon;
+            const auto rng=CheckpointAccess::capture(session).combat_random;
             require(session.equip(id)==InventoryChange::changed,"weapon equip failed");
-            require(session.combat().minimum_damage()==expected.minimum_damage && session.combat().maximum_damage()==expected.maximum_damage,"equip rerolled or ignored resource weapon damage");
+            const auto& loadout=session.combat().attack_loadout();
+            const auto* equipped=loadout.right ? &*loadout.right : loadout.left ? &*loadout.left : nullptr;
+            require(equipped && equipped->minimum_damage==expected.minimum_damage &&
+                equipped->maximum_damage==expected.maximum_damage && equipped->damage_bonus==expected.damage_bonus,
+                "equip rerolled or discarded a resource damage channel");
+            const auto plan=ordinary_damage_plan(*equipped,loadout,session.combat().attack_character());
+            require(session.combat().minimum_damage()==plan.minimum && session.combat().maximum_damage()==plan.maximum,
+                "live totals are not connected to the allocated typed weapon");
+            require(CheckpointAccess::capture(session).combat_random==rng,"equip consumed combat RNG");
             auto visual=prototype;visual.starting_weapon=expected.prototype;
             require(append_player_weapon_geometry(archive,visual,{0,0,0},geometry).has_value(),"resource weapon cannot be attached");
         }

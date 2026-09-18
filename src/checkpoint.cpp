@@ -41,10 +41,12 @@ void traits(const WeaponAttackTraits &t) {
             "invalid saved weapon family");
 }
 void delivery(WeaponDelivery value) {
-    require(static_cast<unsigned>(value) <= static_cast<unsigned>(WeaponDelivery::unsupported_damage), "invalid saved weapon delivery");
+    require(static_cast<unsigned>(value) <= static_cast<unsigned>(WeaponDelivery::direct_typed), "invalid saved weapon delivery");
 }
 void attack(const AttackDescription &a) {
     delivery(a.delivery);
+    for (const auto value : a.damage_bonus) require(value >= 0 && value <= 100000000, "invalid saved damage bonus");
+    require(a.delivery != WeaponDelivery::direct_typed || a.damage_allocation_known, "unresolved saved typed attack");
     require(a.minimum_damage >= 0 && a.maximum_damage >= a.minimum_damage &&
                 a.maximum_damage <= 100000000,
             "invalid saved attack damage");
@@ -66,6 +68,12 @@ void weapon(const WeaponItem &w) {
             "invalid saved item damage");
     const auto &p = w.prototype;
     delivery(p.delivery);
+    for (const auto value : w.damage_bonus) require(value >= 0 && value <= 100000000, "invalid saved item damage bonus");
+    require(p.delivery != WeaponDelivery::direct_typed || p.damage_percent.has_value(), "unresolved saved typed item");
+    if (p.damage_percent) {
+        for (const auto value : *p.damage_percent) require(value >= -1000000 && value <= 1000000, "invalid saved allocation percentage");
+        require((*p.damage_percent)[1] == 0 && (*p.damage_percent)[6] == 0, "unsupported saved allocation channel");
+    }
     require(p.speed > 0 && p.level >= 0 && p.level <= 100000, "invalid saved item speed/level");
     scalar(p.range, "invalid saved weapon range");
     scalar(p.strike_range, "invalid saved strike range");
@@ -150,7 +158,7 @@ void entity(const RuntimeEntity &e) {
          {c.reach_bonus, c.scale, c.range_multiplier, c.collision_radius, c.damage_multiplier})
         scalar(v, "invalid attack character value");
     require(c.strength >= -1000000 && c.strength <= 1000000 && c.dexterity >= -1000000 &&
-                c.dexterity <= 1000000,
+                c.dexterity <= 1000000 && c.magic >= -1000000 && c.magic <= 1000000,
             "saved character attributes outside supported range");
     effects(c.effects);
 }
@@ -415,15 +423,28 @@ void CheckpointAccess::restore_floor(const FloorCheckpoint &s, RuntimeEntityWorl
     // v1-v3 retained potion items without use descriptors. Resolve ONLY missing
     // descriptors from the exact current catalog; never re-roll a v4 value.
     for (auto& e : staged_world) {
-        const auto resolve_delivery = [&](std::int64_t guid, WeaponDelivery& value) {
-            if (value != WeaponDelivery::unverified) return;
-            const auto* record = world.resources_->find(guid);
+        // v1-v5 stored the pre-allocation graph roll. Recover the missing
+        // metadata from the exact GUID and split it once, without an RNG draw.
+        const auto resolve_attack = [&](std::optional<AttackDescription>& attack) {
+            if (!attack || attack->damage_allocation_known) return;
+            const auto* record = world.resources_->find(attack->source_guid);
             if (record && record->kind == MasterResourceKind::item)
-                value = load_weapon_delivery(*world.definitions_->load(*record));
+                hydrate_attack_damage(*attack, *world.definitions_->load(*record));
         };
-        if (e.weapon_item) resolve_delivery(e.weapon_item->prototype.guid, e.weapon_item->prototype.delivery);
-        if (e.attacks.right) resolve_delivery(e.attacks.right->source_guid, e.attacks.right->delivery);
-        if (e.attacks.left) resolve_delivery(e.attacks.left->source_guid, e.attacks.left->delivery);
+        if (e.weapon_item && !e.weapon_item->prototype.damage_percent) {
+            const auto* record = world.resources_->find(e.weapon_item->prototype.guid);
+            if (record && record->kind == MasterResourceKind::item)
+                hydrate_weapon_damage(*e.weapon_item, *world.definitions_->load(*record));
+        }
+        resolve_attack(e.attacks.right); resolve_attack(e.attacks.left);
+        if (!e.attack_character.magic_known && e.kind == MasterResourceKind::monster) {
+            const auto* record = world.resources_->find(e.resource_guid);
+            if (record) {
+                const auto values = load_attack_character_values(*world.definitions_->load(*record), nullptr);
+                e.attack_character.magic = values.magic;
+                e.attack_character.magic_known = true;
+            }
+        }
         if (e.kind != MasterResourceKind::item || e.consumable || e.weapon_item || e.armor_item || !e.inventory_eligible) continue;
         const auto* record = world.resources_->find(e.resource_guid);
         if (record) e.consumable = load_consumable(world.definitions_->archive(), *world.definitions_->load(*record),

@@ -3,6 +3,7 @@
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/collision_scene.hpp"
 #include "torchlight/save_store.hpp"
+#include "torchlight/typed_damage.hpp"
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -81,22 +82,38 @@ void cycle(const char* path) {
     require(p.combat().perform_attack(hit,{},f.world,f.logic).state==CombatState::missed,"shot hits target outside strike range");
     f.world.find(target)->position={4,0,0};require(p.combat().perform_attack(hit,{},f.world,f.logic).damage==0,"out-of-range HIT replayed");
     p.combat().interrupt_attack();
-    for(const auto* name:{u"MISSILE_PISTOL",u"SKILL_PISTOL",u"ELEMENTAL_PISTOL",
-                          u"MISSILE_SWORD",u"SKILL_SWORD",u"ELEMENTAL_SWORD"}){
+    for(const auto* name:{u"MISSILE_PISTOL",u"SKILL_PISTOL",u"MISSILE_SWORD",u"SKILL_SWORD"}){
         auto id=pickup(f,p,name);require(p.equip(id)==InventoryChange::changed,"unsupported weapon equip");
         const auto state=CheckpointAccess::capture(p);
         const auto hp=f.world.find(target)->health;
-        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"missile/skill/elemental became ordinary physical attack");
+        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"missile/skill became ordinary attack");
         const auto after=CheckpointAccess::capture(p);
         require(!p.combat().attack_in_progress()&&hp==f.world.find(target)->health&&
                 state.combat_random==after.combat_random,"refused weapon started action, damaged or advanced RNG");
+    }
+    // Original direct elemental delivery is now implemented, not merely unblocked.
+    // Reuse the authored fixture and assert a distinct fire channel, no pre-HIT
+    // damage, and one committed HP transaction for a multi-channel HIT.
+    for (const auto* name : {u"ELEMENTAL_PISTOL", u"ELEMENTAL_SWORD"}) {
+        const auto id=pickup(f,p,name); require(p.equip(id)==InventoryChange::changed,"typed weapon equip");
+        const auto* description=&*p.combat().attack_loadout().right;
+        require(description->delivery==WeaponDelivery::direct_typed && description->damage_allocation_known &&
+            description->damage_bonus[2]>0, "elemental allocation was discarded");
+        const auto plan=ordinary_damage_plan(*description,p.combat().attack_loadout(),p.combat().attack_character());
+        require(plan.count==2 && plan.channels[1].type==DamageType::fire,"elemental branch became physical only");
+        const auto hp=f.world.find(target)->health; auto typed_hit=player_event(p,f);
+        require(f.world.find(target)->health==hp,"typed attack damages before HIT");
+        const auto applied=p.combat().perform_attack(typed_hit,{},f.world,f.logic);
+        require(applied.damage>0 && f.world.find(target)->health==hp-applied.damage,"typed HP transaction");
+        require(p.combat().perform_attack(typed_hit,{},f.world,f.logic).damage==0,"typed duplicate HIT");
+        p.combat().interrupt_attack();
     }
     const auto sword=pickup(f,p,u"DIRECT_SWORD");
     require(p.equip(sword)==InventoryChange::changed,"direct physical sword equip");
     require(p.combat().update(0,{},f.world).state==CombatState::attacking,"physical sword was overblocked");
     p.combat().interrupt_attack();
     require(p.equip(weapon)==InventoryChange::changed,"reequip pistol");
-    for(const auto* name:{u"ENEMY_MISSILE_SWORD",u"ENEMY_SKILL_SWORD",u"ENEMY_ELEMENTAL_SWORD"}) {
+    for(const auto* name:{u"ENEMY_MISSILE_SWORD",u"ENEMY_SKILL_SWORD"}) {
         test_fixture::World ef(path); ef.spawn(name);
         EnemyController ai(42); PlayerPrototype dummy; dummy.minimum_health=dummy.maximum_health=1000;
         PlayerCombatState victim(dummy,42); ai.set_animation_resolver([&](auto m,auto prefix){return clips.resolve(m,prefix);});
@@ -110,7 +127,7 @@ void cycle(const char* path) {
     FloorCheckpoint floor;floor.address={u"Town",0};floor.layout_identity=1;c.floors.push_back(floor);
     c.player=CheckpointAccess::capture(p);auto bytes=encode_checkpoint(c);auto saved=decode_checkpoint(bytes);
     require(saved.player.inventory.items[0].weapon->prototype.delivery==WeaponDelivery::direct_physical,"save lost ranged metadata");
-    auto old=saved.player;for(auto& i:old.inventory.items)if(i.weapon)i.weapon->prototype.delivery=WeaponDelivery::unverified;
+    auto old=saved.player;for(auto& i:old.inventory.items)if(i.weapon && i.id==weapon) { i.weapon->prototype.delivery=WeaponDelivery::unverified; i.weapon->prototype.damage_percent.reset(); }
     auto restored=CheckpointAccess::restore_player(proto,old,7,&f.hierarchy);
     restored.hydrate_consumables(f.definitions,f.resources);
     auto current=CheckpointAccess::capture(restored);

@@ -1,0 +1,19 @@
+{
+  "evidence": "resource-backed common application regression, not original/Wayland",
+  "output": "/mnt/data/work16/build/scenario-evidence/typed-combat-lmdfspli",
+  "runs": [
+    {
+      "name": "kill",
+      "returncode": 0
+    },
+    {
+      "name": "continue",
+      "returncode": 0
+    }
+  ],
+  "assertions": 44,
+  "status": "PASSED",
+  "entities": 52,
+  "player_kills": 1,
+  "experience": 100
+}

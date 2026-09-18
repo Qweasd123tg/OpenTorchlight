@@ -1,0 +1,30 @@
+{
+  "pak_sha256": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8",
+  "staff": {
+    "path": "media/units/items/staves/STAFF_NORMAL_1A.DAT.adm",
+    "guid": 5521717854978183646,
+    "name": "Moldy Staff",
+    "DAMAGE_PHYSICAL": 0,
+    "DAMAGE_POISON": 100,
+    "scope": "Inherited definition interpreted by UnitDefinitionLoader, verified by original_equipment/combat and real application test."
+  },
+  "infuse": {
+    "path": "media/Affixes/Skills/GAUNTLETENCHANT.DAT.adm",
+    "effects": [
+      {
+        "TYPE": "PERCENT MELEEDAMAGE",
+        "DAMAGE_TYPE": "ALL",
+        "MIN": 30.0,
+        "MAX": 30.0
+      },
+      {
+        "TYPE": "PERCENT RANGEDDAMAGE",
+        "DAMAGE_TYPE": "ALL",
+        "MIN": 30.0,
+        "MAX": 30.0
+      }
+    ],
+    "DURATION": 30.0,
+    "scope": "Direct ADM observation; not all skill/effect lifecycle."
+  }
+}

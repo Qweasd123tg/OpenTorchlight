@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="5"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="19"
+	timestamp="2026-09-17T22:45:41"
+	>
+	<testcase name="ranged_cycle" classname="ranged_cycle" time="0.0121872" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ranged checks=2091 passed
+</system-out>
+	</testcase>
+	<testcase name="typed_damage_cycle" classname="typed_damage_cycle" time="0.00687609" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 29 typed damage, transaction, metadata and enemy-HIT checks
+</system-out>
+	</testcase>
+	<testcase name="original_typed_damage_comparison" classname="original_typed_damage_comparison" time="1.84281" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>{
+  "passed": true,
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "comparisons": 12088,
+  "groups": {
+    "allocation": 3088,
+    "magic": 1500,
+    "defense": 1500,
+    "ordinary_channel_roll": 6000
+  },
+  "generator_seed": 43286,
+  "input_sha256": "02c160fdc27682d78ee017b5d2baa2472f8038e72efd94768284522071cfb894",
+  "expected_sha256": "4edaa7189b5e81749a4eebce7e22ca18c99d20ab5bd31ceb7dc2c49ad4f1e13f",
+  "functions_and_slices": [
+    {
+      "name": "CCharacter::rollAttack(CLevel&amp;, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+      "address": "0x843ed0",
+      "size": 13218,
+      "sha256": "5494d972f916b825195a605ea81276aa3dd09c526cb5e12ece02bdb6ed926bd2"
+    },
+    {
+      "name": "CCharacter::maxDamage(CAttackDescription*, CCharacter*)",
+      "address": "0x815d40",
+      "size": 1417,
+      "sha256": "0e6bd3d0feff909d5404702dd3e8c39b69222bb27d765d9e5fe6cea9116d8283"
+    },
+    {
+      "name": "CCharacter::strength()",
+      "address":...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="original_typed_save_migration" classname="original_typed_save_migration" time="1.32741" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>{
+  "passed": true,
+  "processes": 2,
+  "source_sha256": "d4ed214328527287ad063ea485c24d5eb58b3b7fff948436e8957c228cac1cc2",
+  "runs": [
+    {
+      "input_version": 5,
+      "returncode": 0,
+      "stdout": "PASS 18 legacy/typed checks; input=v5 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    },
+    {
+      "input_version": 6,
+      "returncode": 0,
+      "stdout": "PASS 16 legacy/typed checks; input=v6 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    }
+  ],
+  "v6_sha256": "6a426dfc1f4157b3c2868cd2301ba4f7892246c772fe71b2c5371eef2f020599",
+  "scope": "Original-resource-backed port checkpoint migration, not original SVB or campaign."
+}
+</system-out>
+	</testcase>
+	<testcase name="application_typed_combat_render" classname="application_typed_combat_render" time="17.8238" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: 44 common-app combat assertions, two processes; evidence /mnt/data/work16/release/scenario-evidence/typed-combat-xjifesli
+</system-out>
+	</testcase>
+</testsuite>

@@ -286,20 +286,27 @@
         "0x843ed0"
       ],
       "status": "partial",
-      "boundary": "Supported physical damage/armor/attributes and fixed passive effects only. Crit/block/dodge/all damage channels not closed.",
+      "boundary": "Ordinary direct base + typed bonus channels, evaluated MAGIC/armor/percent and RNG through channel assembly. Original comparator uses one right-hand weapon and critical=false. Crit/glancing/block/procs/shield absorption/missiles and full effect lifecycle remain open.",
       "evidence": [
         "research/ordinary-attack-action.md",
-        "research/combat-runtime.md"
+        "research/combat-runtime.md",
+        "research/large-16-typed-damage.md"
       ],
       "implementation": [
         "src/attack_action.cpp",
-        "src/damage.cpp"
+        "src/damage.cpp",
+        "src/typed_damage.cpp",
+        "src/combat.cpp",
+        "src/enemy_ai.cpp"
       ],
       "tests": [
         "tests/damage_test.cpp",
-        "tests/ordinary_combat_test.cpp"
+        "tests/ordinary_combat_test.cpp",
+        "tests/compare_typed_damage.py",
+        "tests/typed_damage_test.cpp",
+        "tests/application_combat_test.py"
       ],
-      "comparison": ""
+      "comparison": "verification/large-16/typed-damage-original.json: 6000 ordinary channel cases plus isolated allocation/MAGIC/defenses; bounded unchanged ELF instructions, controlled evaluated effects."
     },
     {
       "addresses": [
@@ -633,6 +640,30 @@
         "tests/population_test.cpp"
       ],
       "comparison": ""
+    },
+    {
+      "addresses": [
+        "0x8144c0",
+        "0x8158c0",
+        "0x815910",
+        "0x880950",
+        "0x86d440"
+      ],
+      "status": "partial",
+      "boundary": "Bounded weapon graph allocation, damage bonus arrays, MAGIC and resolved defense getters. Full calculateCombatStats, affixes/sockets, ownership and effect lifecycle are not closed.",
+      "evidence": [
+        "research/large-16-typed-damage.md"
+      ],
+      "implementation": [
+        "src/typed_damage.cpp",
+        "src/equipment.cpp"
+      ],
+      "tests": [
+        "tests/compare_typed_damage.py",
+        "tests/typed_damage_test.cpp",
+        "tests/typed_migration_test.cpp"
+      ],
+      "comparison": "verification/large-16/typed-damage-original.json: unchanged functions and allocation slices, explicit fixture callbacks and preserved operation order."
     }
   ],
   "port_systems": [

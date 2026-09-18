@@ -24,10 +24,11 @@ def main() -> int:
     parser.add_argument('--probe', type=Path, required=True)
     parser.add_argument('--game-dir', type=Path, required=True)
     parser.add_argument('--output-dir', type=Path, required=True)
+    parser.add_argument('--typed', action='store_true', help='Alchemist poison staff instead of Vanquisher physical bow')
     parser.add_argument('--timeout-scale', type=int, choices=range(1, 11), default=1)
     args = parser.parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    work = Path(tempfile.mkdtemp(prefix='combat-', dir=args.output_dir))
+    work = Path(tempfile.mkdtemp(prefix='typed-combat-' if args.typed else 'combat-', dir=args.output_dir))
     result = {'evidence': 'resource-backed common application regression, not original/Wayland',
               'output': str(work), 'runs': [], 'assertions': 0}
     def require(condition, message):
@@ -48,13 +49,19 @@ def main() -> int:
     def state(folder, name):
         return json.loads((folder / (name + '.state.json')).read_text())
     try:
-        first = run('kill', 'ranged-kill.scenario')
+        first = run('kill', 'typed-kill.scenario' if args.typed else 'ranged-kill.scenario')
         populated, killed, frozen = [state(first, name) for name in ('populated', 'killed', 'frozen')]
         require(populated['dungeon'] == 'Main' and populated['depth'] == 1, 'wrong resource floor')
         require(populated['population_generated'], 'population flag not committed')
         require(len(populated['entities']) > 1, 'only placed boss, no ordinary population')
         require(populated['actor_visible_pixels'] > 0, 'player is not rendered')
-        require(populated['inventory'][0]['delivery'] == 1, 'starting bow not direct physical')
+        if args.typed:
+            staff = next(item for item in populated['inventory'] if item['name'] == 'Moldy Staff')
+            require(staff['delivery'] == 5 and staff['damage_percent'] == [0, 0, 0, 0, 0, 100, 0], 'original staff allocation absent')
+            require(staff['damage'] == [0, 0] and staff['damage_bonus'][5] > 0, 'staff remains a physical replacement')
+            require(populated['magic'] > 0, 'class MAGIC not connected')
+        else:
+            require(populated['inventory'][0]['delivery'] == 1, 'starting bow not direct physical')
         deaths = [e for e in killed['entities'] if e['player_kill']]
         require(bool(deaths), 'no actual player HIT kill')
         require(all(not e['alive'] and e['reward_claimed'] for e in deaths), 'unfinished death/reward transaction')
@@ -66,7 +73,7 @@ def main() -> int:
         restored = state(second, 'restored')
         for name in ('class_guid','name','seed','position','angle','recovery_anchor',
                      'hp','max_hp','mana','max_mana','gold','progression','inventory','slots',
-                     'damage','armor','rng','entities','active_recovery','population_generated'):
+                     'damage','armor','rng','entities','active_recovery','population_generated','magic','resolved_defense'):
             difference = first_difference(frozen[name], restored[name])
             require(difference is None, 'fresh process changed ' + name + ': ' + str(difference))
         require(restored['revision'] == 1, 'wrong checkpoint revision')

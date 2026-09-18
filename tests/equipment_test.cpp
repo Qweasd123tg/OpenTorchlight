@@ -68,11 +68,14 @@ int main(int argc, char** argv) {
             *weapon, weapon_random);
         require(weapon->level == 1 && weapon->range == 0.8F &&
                     weapon->base_weapon_damage == 21.0F &&
-                    rolled_weapon.minimum_damage == 11 &&
-                    rolled_weapon.maximum_damage == 22,
-                "Moldy Staff weapon graph calculation changed");
+                    rolled_weapon.minimum_damage == 0 &&
+                    rolled_weapon.maximum_damage == 0 &&
+                    rolled_weapon.damage_bonus[5] == 22 &&
+                    rolled_weapon.prototype.damage_percent &&
+                    (*rolled_weapon.prototype.damage_percent)[5] == 100,
+                "Moldy Staff graph roll was not allocated to original poison channel");
 
-        std::cout << "PASS: rolled original Leather Vest armor=4 and Moldy Staff damage=11-22\n";
+        std::cout << "PASS: rolled original Leather Vest armor=4 and Moldy Staff graph roll=22, physical=0, poison=22\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

@@ -462,9 +462,32 @@ private:
             if(item.weapon) out<<",\"damage\":["<<item.weapon->minimum_damage<<','<<item.weapon->maximum_damage
                 <<"],\"speed\":"<<item.weapon->prototype.speed;
             if(item.armor) out<<",\"armor\":"<<item.armor->armor;
-            if(item.weapon) out<<",\"delivery\":"<<static_cast<unsigned>(item.weapon->prototype.delivery);
+            if(item.weapon) {
+                out<<",\"delivery\":"<<static_cast<unsigned>(item.weapon->prototype.delivery)
+                    <<",\"damage_bonus\":[";
+                for(std::size_t i=0;i<item.weapon->damage_bonus.size();++i) {
+                    if(i)out<<',';
+                    out<<item.weapon->damage_bonus[i];
+                }
+                out<<"],\"damage_percent\":";
+                if(item.weapon->prototype.damage_percent) {
+                    out<<'[';
+                    for(std::size_t i=0;i<item.weapon->prototype.damage_percent->size();++i) {
+                        if(i)out<<',';
+                        out<<(*item.weapon->prototype.damage_percent)[i];
+                    }
+                    out<<']';
+                } else out<<"null";
+            }
             if(item.consumable) out<<",\"stack\":"<<item.consumable->count<<",\"uses\":"<<item.consumable->uses;
             out<<'}';
+        }
+        out << "],\"magic\":"<<v.session->combat().attack_character().magic;
+        out << ",\"resolved_defense\":[";
+        const auto& defense=v.session->health().evaluated_damage_defense();
+        for(std::size_t i=0;i<defense.maximum.size();++i) {
+            if(i)out<<',';
+            out<<'['<<defense.maximum[i]<<','<<defense.percent_taken[i]<<']';
         }
         out << "],\"active_recovery\":[";comma=false;
         for(const auto& active:player.active_recovery){

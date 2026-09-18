@@ -5,6 +5,7 @@
 #include "torchlight/navigation_grid.hpp"
 #include "torchlight/player.hpp"
 #include "torchlight/randomizer.hpp"
+#include "torchlight/typed_damage.hpp"
 
 #include <array>
 #include <cstdint>
@@ -47,6 +48,9 @@ public:
     [[nodiscard]] std::int32_t apply_damage(
         std::int32_t damage, std::int32_t maximum_damage, DamageType type,
         TorchlightRandom& random) noexcept;
+    [[nodiscard]] OrdinaryDamageResult apply_direct_attack(const AttackDescription&, const AttackLoadout&,
+        const AttackCharacterValues&, TorchlightRandom&);
+    [[nodiscard]] const EvaluatedDamageDefense& evaluated_damage_defense() const noexcept { return evaluated_defense_; }
     [[nodiscard]] std::int32_t armor_class() const noexcept {
         return physical_armor_class_;
     }
@@ -66,6 +70,7 @@ private:
     // derived values are rebuilt, never serialized or applied a second time.
     std::int32_t base_armor_bonus_ = 0;
     std::int32_t physical_armor_class_ = 0;
+    EvaluatedDamageDefense evaluated_defense_;
 
     std::optional<std::int32_t> base_mana_;
     std::optional<float> mana_;

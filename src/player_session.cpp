@@ -49,7 +49,7 @@ std::array<std::int32_t, 4> PlayerSession::attributes() const {
 }
 void PlayerSession::refresh_attributes() {
     const auto values = attributes();
-    combat_.set_attributes(values[0], values[1]);
+    combat_.set_attributes(values[0], values[1], values[2]);
     health_.set_defense_attribute(values[3]);
 }
 bool PlayerSession::allocate_attribute(std::size_t index) {
@@ -170,8 +170,8 @@ void PlayerSession::hydrate_consumables(UnitDefinitionLoader& loader, const Mast
     auto bag = inventory_;
     for (auto& item : bag.items_) {
         const auto* record = index.find(item.resource_guid);
-        if (item.weapon && item.weapon->prototype.delivery == WeaponDelivery::unverified && record)
-            item.weapon->prototype.delivery = load_weapon_delivery(*loader.load(*record));
+        if (item.weapon && !item.weapon->prototype.damage_percent && record)
+            hydrate_weapon_damage(*item.weapon, *loader.load(*record));
         if (item.consumable || item.weapon || item.armor) continue;
         if (record && record->kind == MasterResourceKind::item)
             item.consumable = load_consumable(loader.archive(), *loader.load(*record), catalog ? &*catalog : nullptr);

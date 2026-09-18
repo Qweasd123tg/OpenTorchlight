@@ -1,0 +1,42 @@
+[0/1] Re-running CMake...
+-- Checking for module 'vorbisfile'
+--   Package 'vorbisfile', required by 'virtual:world', not found
+-- Checking for module 'alsa'
+--   Package 'alsa', required by 'virtual:world', not found
+-- Music: vorbisfile/ALSA not found; silent track tracking only
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Configuring done (5.7s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work16/release
+ninja: no work to do.
+Internal ctest changing into directory: /mnt/data/work16/release
+Test project /mnt/data/work16/release
+    Start 101: ranged_cycle
+    Start 127: typed_damage_cycle
+1/5 Test #127: typed_damage_cycle .................   Passed    0.01 sec
+    Start 128: original_typed_damage_comparison
+2/5 Test #101: ranged_cycle .......................   Passed    0.01 sec
+    Start 129: original_typed_save_migration
+3/5 Test #129: original_typed_save_migration ......   Passed    1.33 sec
+    Start 130: application_typed_combat_render
+4/5 Test #128: original_typed_damage_comparison ...   Passed    1.84 sec
+5/5 Test #130: application_typed_combat_render ....   Passed   17.82 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Label Time Summary:
+assets       =   1.33 sec*proc (1 test)
+core         =   0.02 sec*proc (2 tests)
+reference    =   1.84 sec*proc (1 test)
+render       =  17.82 sec*proc (1 test)
+
+Total Test time (real) =  19.17 sec

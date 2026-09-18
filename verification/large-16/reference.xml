@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="16"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="9"
+	timestamp="2026-09-17T22:46:58"
+	>
+	<testcase name="original_world_gold_comparison" classname="original_world_gold_comparison" time="0.796282" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 10107 gold scalar cases; unchanged instructions; native ceilf dependency; SHA-checked ELF
+</system-out>
+	</testcase>
+	<testcase name="original_monster_experience_comparison" classname="original_monster_experience_comparison" time="1.3451" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 20031 monster XP scalar cases; unchanged instructions; SHA-checked ELF
+</system-out>
+	</testcase>
+	<testcase name="original_player_vitals_comparison" classname="original_player_vitals_comparison" time="0.97146" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: gold=2064, mana=2320, entry fee=2113; unchanged numeric spans, synthetic dependencies; SHA-checked ELF inputs
+</system-out>
+	</testcase>
+	<testcase name="original_attack_speed_comparison" classname="original_attack_speed_comparison" time="0.886733" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 12392 bit-exact speed cases; SHA-checked ELF slices/constants
+</system-out>
+	</testcase>
+	<testcase name="original_ai_cooldown_comparison" classname="original_ai_cooldown_comparison" time="2.4705" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 42739 bit-exact float32 comparisons against SHA-checked ELF slices
+</system-out>
+	</testcase>
+	<testcase name="original_level_entry_dispatch" classname="original_level_entry_dispatch" time="0.769525" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: original Player Start / Entrance / Exit jump-table entries match
+</system-out>
+	</testcase>
+	<testcase name="original_camera_comparison" classname="original_camera_comparison" time="0.727928" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>Creating resource group General
+Creating resource group Internal
+Creating resource group Autodetect
+SceneManagerFactory for type 'DefaultSceneManager' registered.
+Registering ResourceManager for type Material
+Registering ResourceManager for type Mesh
+Registering ResourceManager for type Skeleton
+MovableObjectFactory for type 'ParticleSystem' registered.
+OverlayElementFactory for type Panel registered.
+OverlayElementFactory for type BorderPanel registered.
+OverlayElementFactory for type TextArea registered.
+Registering ResourceManager for type Font
+ArchiveFactory for archive type FileSystem registered.
+ArchiveFactory for archive type Zip registered.
+FreeImage version: 3.13.1
+This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="original_input_comparison" classname="original_input_comparison" time="3.12045" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 182188 checks, 20000 randomized operations, 7 original state functions
+PASS: 387699 checks, 15000 randomized operations, 7 original frame functions
+PASS: 105384 checks, 8000 randomized operations, 9 original mouse functions
+Original SHA256: 91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b
+</system-out>
+	</testcase>
+	<testcase name="original_action_comparison" classname="original_action_comparison" time="0.867285" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 152064 checks, 20000 randomized cases, 1 original action function
+Original SHA256: 91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b
+</system-out>
+	</testcase>
+	<testcase name="original_randomizer_comparison" classname="original_randomizer_comparison" time="0.821852" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 64004 randomizer and chunk-geometry comparisons match the original
+</system-out>
+	</testcase>
+	<testcase name="original_pathfinder_comparison" classname="original_pathfinder_comparison" time="0.982545" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: 104000 path-grid comparisons match the original
+</system-out>
+	</testcase>
+	<testcase name="original_gameplay_numeric_comparison" classname="original_gameplay_numeric_comparison" time="0.486956" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS: finite recovery 10040 exact binary32 cases; population 10055 counts AND RNG states; bounded native functions, NOT whole game
+</system-out>
+	</testcase>
+	<testcase name="original_economy_comparison" classname="original_economy_comparison" time="0.36457" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>PASS buy/sell native comparisons=20600 cases=10300
+</system-out>
+	</testcase>
+	<testcase name="original_character_stats_comparison" classname="original_character_stats_comparison" time="0.537752" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>{
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "functions": [
+    {
+      "symbol": "CCharacter::walkingSpeed()",
+      "address": "0x815a20",
+      "size": 166,
+      "sha256": "fb9878d3a82a9f5a207624d95eeeb831978e7515e4c4aacd491b4cac79579f5f"
+    },
+    {
+      "symbol": "CCharacter::runningSpeed()",
+      "address": "0x815ad0",
+      "size": 166,
+      "sha256": "94ceb1acf5e12acd3d4d4f4b17d70c6ac311dc1d32f786e9608346286ace1859"
+    },
+    {
+      "symbol": "CCharacter::defense()",
+      "address": "0x814530",
+      "size": 133,
+      "sha256": "c5cbd79cfca267936ee0215e160146b364eb811cc55c577ecbf6ed4a0d8bcb65"
+    },
+    {
+      "symbol": "CCharacter::armorBonus()",
+      "address": "0x8145c0",
+      "size": 174,
+      "sha256": "340be4b2ebbdd6968a2fd72ff637f4a4588d656574fd2ba79a6bd2a1087077f5"
+    },
+    {
+      "symbol": "CCharacter::AC()",
+      "address": "0x814670",
+      "size": 97,
+      "sha256": "7e6f5b4f859194cec8b6e704e29ff8675ba0dd1282f1509f0de8955c6...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="original_item_graph_comparison" classname="original_item_graph_comparison" time="0.393183" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>{
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "functions": [
+    {
+      "symbol": "CEquipment::setGraphDamage(unsigned int)",
+      "address": "0x87dfa0",
+      "size": 276,
+      "sha256": "8b8317404253471cc305459769c2423d05f1414d6a0ad18a75991f61df1f030c"
+    },
+    {
+      "symbol": "CEquipment::setGraphAC(unsigned int)",
+      "address": "0x87e0c0",
+      "size": 268,
+      "sha256": "fca84ddfefd5feb10a8d64f387dc1883e7f88857b9ff33774ebc7c3ead47266f"
+    }
+  ],
+  "comparisons": 24972,
+  "damage_cases": 12486,
+  "armor_cases": 12486,
+  "passed": true,
+  "previous_formula_disagreements": 106,
+  "examples": [
+    {
+      "input": "0 0 0 0",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 1",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 4",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 5",
+      "original": 0,
+      "previous_formula": 1
+    }
+  ],
+  "r...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="original_typed_damage_comparison" classname="original_typed_damage_comparison" time="2.44592" status="run">
+		<properties>
+			<property name="cmake_labels" value="reference"/>
+		</properties>
+		<system-out>{
+  "passed": true,
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "comparisons": 12088,
+  "groups": {
+    "allocation": 3088,
+    "magic": 1500,
+    "defense": 1500,
+    "ordinary_channel_roll": 6000
+  },
+  "generator_seed": 43286,
+  "input_sha256": "02c160fdc27682d78ee017b5d2baa2472f8038e72efd94768284522071cfb894",
+  "expected_sha256": "4edaa7189b5e81749a4eebce7e22ca18c99d20ab5bd31ceb7dc2c49ad4f1e13f",
+  "functions_and_slices": [
+    {
+      "name": "CCharacter::rollAttack(CLevel&amp;, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+      "address": "0x843ed0",
+      "size": 13218,
+      "sha256": "5494d972f916b825195a605ea81276aa3dd09c526cb5e12ece02bdb6ed926bd2"
+    },
+    {
+      "name": "CCharacter::maxDamage(CAttackDescription*, CCharacter*)",
+      "address": "0x815d40",
+      "size": 1417,
+      "sha256": "0e6bd3d0feff909d5404702dd3e8c39b69222bb27d765d9e5fe6cea9116d8283"
+    },
+    {
+      "name": "CCharacter::strength()",
+      "address":...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>

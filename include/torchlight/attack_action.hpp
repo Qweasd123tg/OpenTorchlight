@@ -21,7 +21,7 @@ struct ModelAnimationClip;
 enum class AttackHand { innate, right, left };
 // The original branches on weapon skills and MISSILE, not simply ranged ISA.
 // Unknown metadata must not silently turn a spell/projectile into a physical HIT.
-enum class WeaponDelivery { unverified, direct_physical, missile, weapon_skill, unsupported_damage };
+enum class WeaponDelivery { unverified, direct_physical, missile, weapon_skill, unsupported_damage, direct_typed };
 [[nodiscard]] WeaponDelivery load_weapon_delivery(const UnitDefinition& definition);
 [[nodiscard]] const char* weapon_delivery_issue(WeaponDelivery delivery) noexcept;
 enum class WeaponAttackFamily { slash, bow, crossbow, rifle, pistol, wand, polearm };
@@ -85,6 +85,9 @@ struct AttackDescription {
     AttackEffects effects;
     std::string unavailable_reason;
     WeaponDelivery delivery = WeaponDelivery::unverified;
+    // CEquipment::getDamageBonus channels, separate from the physical description.
+    std::array<std::int32_t, 7> damage_bonus{};
+    bool damage_allocation_known = false;
 };
 // Safety boundary for this port, not an original canAttack predicate. Unknown
 // innate/legacy melee remains the pre-existing boundary; known unsupported
@@ -103,6 +106,8 @@ struct AttackLoadout {
 struct AttackCharacterValues {
     std::int32_t strength = 0;
     std::int32_t dexterity = 0;
+    std::int32_t magic = 0;
+    bool magic_known = false; // false only for unhydrated older DTOs/fixtures
     float reach_bonus = 0.0F;
     float scale = 1.0F;
     float range_multiplier = 1.0F;

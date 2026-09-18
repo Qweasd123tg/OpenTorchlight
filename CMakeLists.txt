@@ -59,6 +59,7 @@ add_library(torchlight_core STATIC
     src/frontend.cpp
     src/interaction.cpp
     src/damage.cpp
+    src/typed_damage.cpp
     src/dds_texture.cpp
     src/equipment.cpp
     src/entity_world.cpp
@@ -117,7 +118,7 @@ else()
 endif()
 set_target_properties(torchlight_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(torchlight_core PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(torchlight_core PRIVATE -Wall -Wextra -Wpedantic -Werror -ffp-contract=off)
 endif()
 
 add_executable(torchlight_asset_catalog src/asset_catalog_main.cpp)
@@ -1087,4 +1088,48 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         endif()
     endforeach()
 
+endif()
+
+if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
+    add_executable(torchlight_typed_damage_probe tests/typed_damage_probe.cpp)
+    target_link_libraries(torchlight_typed_damage_probe PRIVATE torchlight_core)
+    add_executable(typed_damage_test tests/typed_damage_test.cpp)
+    target_link_libraries(typed_damage_test PRIVATE torchlight_core)
+    add_dependencies(typed_damage_test ranged_fixture)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(torchlight_typed_damage_probe PRIVATE -Wall -Wextra -Wpedantic -Werror -ffp-contract=off)
+        target_compile_options(typed_damage_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME typed_damage_cycle COMMAND typed_damage_test ${RANGED_FIXTURE})
+    set_tests_properties(typed_damage_cycle PROPERTIES LABELS "core" TIMEOUT 60)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_typed_damage_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_typed_damage.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:torchlight_typed_damage_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/typed-damage-original.json)
+        set_tests_properties(original_typed_damage_comparison PROPERTIES LABELS "reference" TIMEOUT 180 SKIP_RETURN_CODE 77)
+    endif()
+    add_executable(typed_migration_test tests/typed_migration_test.cpp)
+    target_link_libraries(typed_migration_test PRIVATE torchlight_core)
+    target_compile_options(typed_migration_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_typed_save_migration COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/typed_migration_process.py
+            --probe $<TARGET_FILE:typed_migration_test> --pak ${TORCHLIGHT_GAME_DIR}/pak.zip
+            --legacy ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/typed-v5-player.otc
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/typed-migration-evidence)
+        set_tests_properties(original_typed_save_migration PROPERTIES LABELS "assets" TIMEOUT 300)
+    endif()
+    if(TARGET application_scenario_probe AND TORCHLIGHT_GAME_DIR)
+        add_test(NAME application_typed_combat_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_combat_test.py
+            --typed --probe $<TARGET_FILE:application_scenario_probe>
+            --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
+            --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
+        set_tests_properties(application_typed_combat_render PROPERTIES LABELS "render" TIMEOUT 1200)
+        if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
+            set_tests_properties(application_typed_combat_render PROPERTIES ENVIRONMENT
+                "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+        endif()
+    endif()
 endif()

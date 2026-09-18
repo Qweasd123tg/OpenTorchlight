@@ -36,12 +36,16 @@ struct WeaponPrototype {
     AttackEffects attack_effects;
     float ai_attack_cooldown = 0.0F;
     WeaponDelivery delivery = WeaponDelivery::unverified;
+    // Missing only for legacy saves/programmatic fixtures. Physical -1 means
+    // retain graph damage; positive elemental percentages are not normalized.
+    std::optional<std::array<std::int32_t, 7>> damage_percent;
 };
 
 struct WeaponItem {
     WeaponPrototype prototype;
     std::int32_t minimum_damage = 1;
     std::int32_t maximum_damage = 1;
+    std::array<std::int32_t, 7> damage_bonus{};
 };
 
 enum class ArmorSlot : std::size_t {
@@ -65,6 +69,19 @@ struct ArmorItem {
     DamageDefense damage_defense;
     AttackEffects attack_effects;
 };
+
+struct WeaponDamageAllocation {
+    std::int32_t physical = 0;
+    std::array<std::int32_t, 7> bonus{};
+};
+// Original calculateCombatStats @0x881228: float(graph)/100, then multiply
+// by each integer resource percentage and truncate. No random draw here.
+[[nodiscard]] WeaponDamageAllocation allocate_weapon_damage(std::int32_t graph_damage,
+    const std::array<std::int32_t, 7>& percent);
+[[nodiscard]] std::array<std::int32_t, 7> load_weapon_damage_percent(const UnitDefinition& definition);
+// Entry-only v1-v5 migration: split the saved graph roll without re-rolling it.
+void hydrate_weapon_damage(WeaponItem& item, const UnitDefinition& definition);
+void hydrate_attack_damage(AttackDescription& attack, const UnitDefinition& definition);
 
 [[nodiscard]] AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand);
 

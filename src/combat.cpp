@@ -1,5 +1,6 @@
 #include "torchlight/combat.hpp"
 #include "torchlight/character_stats.hpp"
+#include "torchlight/typed_damage.hpp"
 #include "torchlight/scene_animation.hpp"
 
 #include <cmath>
@@ -17,7 +18,7 @@ CombatController::CombatController(const PlayerPrototype& player, std::uint32_t 
         innate.minimum_damage = player.minimum_damage; innate.maximum_damage = player.maximum_damage;
         loadout_.innate.push_back(innate);
     }
-    character_.strength = player.strength; character_.dexterity = player.dexterity;
+    character_.strength = player.strength; character_.dexterity = player.dexterity; character_.magic = player.magic; character_.magic_known = true;
     character_.reach_bonus = player.reach_bonus;
     base_effects_ = character_.effects;
     if (player.starting_weapon) equip(roll_weapon_item(*player.starting_weapon, random_));
@@ -27,8 +28,8 @@ void CombatController::refresh_attack_values() {
     const auto* selected = loadout_.right ? &*loadout_.right :
         loadout_.left ? &*loadout_.left : loadout_.innate.empty() ? nullptr : &loadout_.innate.front();
     if (!selected) { minimum_damage_ = maximum_damage_ = 0; attack_range_ = 0; return; }
-    const auto damage = ordinary_physical_damage(*selected, loadout_, character_);
-    minimum_damage_ = damage[0]; maximum_damage_ = damage[1];
+    const auto damage = ordinary_damage_plan(*selected, loadout_, character_);
+    minimum_damage_ = damage.minimum; maximum_damage_ = damage.maximum;
     attack_range_ = ordinary_attack_range(*selected, loadout_, character_);
     attack_playback_speed_ = ordinary_attack_speed(selected->speed_denominator,
                                                    total_attack_effects(loadout_, character_), character_.ai_flag_one);
@@ -123,14 +124,9 @@ CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& ev
         return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
     if (action_.description().traits.ranged && (!line_of_sight_ || !line_of_sight_(position, selected->position)))
         return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
-    const auto damage = ordinary_physical_damage(action_.description(), loadout_, character_);
-    const auto rolled = random_.integer_between(damage[0], damage[1]);
-    auto defense = selected->damage_defense;
-    defense.natural_armor = evaluated_character_armor(defense.natural_armor,
-        defense.defense_attribute, total_attack_effects(selected->attacks, selected->attack_character));
-    defense.defense_attribute = 0; // effects/DEF already included in physical AC
-    const auto mitigation = mitigate_damage(rolled, rolled, DamageType::physical, 1,
-                                            defense, random_);
+    const auto defense = evaluate_damage_defense(selected->damage_defense,
+        total_attack_effects(selected->attacks, selected->attack_character));
+    const auto mitigation = roll_ordinary_damage(action_.description(), loadout_, character_, defense, random_);
     const auto id = selected->id;
     const auto result = world.apply_damage(id, static_cast<float>(mitigation.applied), logic, true);
     if (!result.accepted) return {CombatState::missed, id, 0, result.remaining_health, event.execution_id};
@@ -138,9 +134,11 @@ CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& ev
     return {result.killed ? CombatState::killed : CombatState::attacked, id,
             mitigation.applied, result.remaining_health, event.execution_id};
 }
-void CombatController::set_attributes(std::int32_t strength, std::int32_t dexterity) {
+void CombatController::set_attributes(std::int32_t strength, std::int32_t dexterity, std::int32_t magic) {
     character_.strength = strength;
     character_.dexterity = dexterity;
+    character_.magic = magic;
+    character_.magic_known = true;
     refresh_attack_values();
 }
 void CombatController::finish_animation_frame() noexcept { action_.finish_frame(); }

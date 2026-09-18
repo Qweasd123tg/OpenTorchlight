@@ -1,0 +1,38 @@
+Internal ctest changing into directory: /mnt/data/work16/asan
+Test project /mnt/data/work16/asan
+      Start 106: original_typed_save_migration
+      Start  66: original_combat
+ 1/14 Test  #66: original_combat ..................   Passed    8.62 sec
+      Start  90: original_skills_runtime
+ 2/14 Test #106: original_typed_save_migration ....   Passed    8.78 sec
+      Start  82: consumable_fresh_process
+ 3/14 Test  #82: consumable_fresh_process .........   Passed    1.21 sec
+      Start  14: ordinary_combat
+ 4/14 Test  #14: ordinary_combat ..................   Passed    0.82 sec
+      Start  23: save_checkpoint
+ 5/14 Test  #23: save_checkpoint ..................   Passed    1.14 sec
+      Start   7: enemy_ai_cooldown
+ 6/14 Test   #7: enemy_ai_cooldown ................   Passed    0.74 sec
+      Start  86: ranged_cycle
+ 7/14 Test  #90: original_skills_runtime ..........   Passed    4.37 sec
+      Start  81: consumable_cycle
+ 8/14 Test  #86: ranged_cycle .....................   Passed    0.36 sec
+      Start  99: character_stats_cycle
+ 9/14 Test  #81: consumable_cycle .................   Passed    0.15 sec
+      Start 105: typed_damage_cycle
+10/14 Test #105: typed_damage_cycle ...............   Passed    0.08 sec
+      Start   4: damage_calculation
+11/14 Test  #99: character_stats_cycle ............   Passed    0.21 sec
+      Start  89: skills_runtime
+12/14 Test   #4: damage_calculation ...............   Passed    0.05 sec
+      Start  11: inventory_instances
+13/14 Test  #89: skills_runtime ...................   Passed    0.04 sec
+14/14 Test  #11: inventory_instances ..............   Passed    0.03 sec
+
+100% tests passed, 0 tests failed out of 14
+
+Label Time Summary:
+assets    =  21.78 sec*proc (3 tests)
+core      =   4.83 sec*proc (11 tests)
+
+Total Test time (real) =  13.32 sec

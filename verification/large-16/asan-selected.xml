@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="14"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="13"
+	timestamp="2026-09-17T22:44:04"
+	>
+	<testcase name="damage_calculation" classname="damage_calculation" time="0.0545411" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: physical and elemental armor match modifyDamage
+</system-out>
+	</testcase>
+	<testcase name="enemy_ai_cooldown" classname="enemy_ai_cooldown" time="0.743211" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>Starts over [0,2]: AI=0 -&gt; 3; AI=2 -&gt; 2
+PASS: 751 AI cooldown assertions; synthetic resources only
+</system-out>
+	</testcase>
+	<testcase name="inventory_instances" classname="inventory_instances" time="0.0270225" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>inventory_checks=4033
+</system-out>
+	</testcase>
+	<testcase name="ordinary_combat" classname="ordinary_combat" time="0.817161" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 129 resource-backed ordinary combat assertions (authored fixture)
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="1.14493" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 605 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="original_combat" classname="original_combat" time="8.622" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>PASS: refused unsupported Alchemist staff; Destroyer selected, approached, damaged and killed an original monster
+</system-out>
+	</testcase>
+	<testcase name="consumable_cycle" classname="consumable_cycle" time="0.149577" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=71 passed
+</system-out>
+	</testcase>
+	<testcase name="consumable_fresh_process" classname="consumable_fresh_process" time="1.20551" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>written_revision=1
+checks=7 passed
+checks=7 passed
+</system-out>
+	</testcase>
+	<testcase name="ranged_cycle" classname="ranged_cycle" time="0.356287" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ranged checks=2091 passed
+</system-out>
+	</testcase>
+	<testcase name="skills_runtime" classname="skills_runtime" time="0.0399608" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS skills checks=19
+</system-out>
+	</testcase>
+	<testcase name="original_skills_runtime" classname="original_skills_runtime" time="4.37426" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>catalog=407 infuse_ranks=10
+PASS skills checks=86
+</system-out>
+	</testcase>
+	<testcase name="character_stats_cycle" classname="character_stats_cycle" time="0.207012" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 34 checks passed
+</system-out>
+	</testcase>
+	<testcase name="typed_damage_cycle" classname="typed_damage_cycle" time="0.0813254" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 29 typed damage, transaction, metadata and enemy-HIT checks
+</system-out>
+	</testcase>
+	<testcase name="original_typed_save_migration" classname="original_typed_save_migration" time="8.77894" status="run">
+		<properties>
+			<property name="cmake_labels" value="assets"/>
+		</properties>
+		<system-out>{
+  "passed": true,
+  "processes": 2,
+  "source_sha256": "d4ed214328527287ad063ea485c24d5eb58b3b7fff948436e8957c228cac1cc2",
+  "runs": [
+    {
+      "input_version": 5,
+      "returncode": 0,
+      "stdout": "PASS 18 legacy/typed checks; input=v5 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    },
+    {
+      "input_version": 6,
+      "returncode": 0,
+      "stdout": "PASS 16 legacy/typed checks; input=v6 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    }
+  ],
+  "v6_sha256": "6a426dfc1f4157b3c2868cd2301ba4f7892246c772fe71b2c5371eef2f020599",
+  "scope": "Original-resource-backed port checkpoint migration, not original SVB or campaign."
+}
+</system-out>
+	</testcase>
+</testsuite>

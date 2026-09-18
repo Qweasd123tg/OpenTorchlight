@@ -127,8 +127,28 @@ void check_restored(const char *pak, const CampaignCheckpoint &c) {
     // A legacy DTO gains its previously implicit pre-effect HP at recapture.
     if (!canonical.player.base_health) canonical.player.base_health = session.health().base_health();
     if (!canonical.player.skills) canonical.player.skills = session.skills();
+    // Explicit v6 enrichment only in the restored floor: older DTOs lacked
+    // weapon allocation metadata and monster MAGIC. Do not rewrite HP/RNG,
+    // loot flags, clocks, or any other previously serialized field.
+    for (auto& entity : canonical.floors[0].world.entities) {
+        const auto enrich = [&](std::optional<AttackDescription>& attack) {
+            if (!attack || attack->damage_allocation_known) return;
+            const auto* record = f.resources.find(attack->source_guid);
+            if (record) hydrate_attack_damage(*attack, *f.definitions.load(*record));
+        };
+        if (entity.weapon_item && !entity.weapon_item->prototype.damage_percent) {
+            const auto* record=f.resources.find(entity.weapon_item->prototype.guid);
+            if (record) hydrate_weapon_damage(*entity.weapon_item,*f.definitions.load(*record));
+        }
+        enrich(entity.attacks.right); enrich(entity.attacks.left);
+        if (!entity.attack_character.magic_known && entity.kind==MasterResourceKind::monster) {
+            const auto* record=f.resources.find(entity.resource_guid);
+            if (record) { entity.attack_character.magic=load_attack_character_values(*f.definitions.load(*record),nullptr).magic;
+                entity.attack_character.magic_known=true; }
+        }
+    }
     require(encode_checkpoint(canonical) == encode_checkpoint(again),
-            "roundtrip changed canonical checkpoint beyond explicit legacy base-HP/class-skill migration");
+            "roundtrip changed canonical checkpoint beyond explicit legacy HP/skill/weapon-metadata/MAGIC migration");
     auto transitions = CheckpointAccess::restore_transitions(c);
     WarpRequest back;
     back.dungeon_name = u"LASTDUNGEON";

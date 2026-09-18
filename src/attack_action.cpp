@@ -184,6 +184,7 @@ AttackEffects load_constant_attack_effects(const UnitDefinition& definition,
 }
 bool ordinary_delivery_supported(const AttackDescription& attack) noexcept {
     return attack.delivery == WeaponDelivery::direct_physical ||
+        (attack.delivery == WeaponDelivery::direct_typed && attack.damage_allocation_known) ||
         (attack.delivery == WeaponDelivery::unverified && !attack.traits.ranged);
 }
 const AttackDescription* select_ordinary_attack(const AttackLoadout& loadout,
@@ -234,6 +235,8 @@ AttackCharacterValues load_attack_character_values(const UnitDefinition& definit
     AttackCharacterValues result;
     result.strength = checked_int(read(u"STRENGTH", 0));
     result.dexterity = checked_int(read(u"DEXTERITY", 0));
+    result.magic = checked_int(read(u"MAGIC", 0));
+    result.magic_known = true;
     result.reach_bonus = read(u"REACH_BONUS", 0);
     result.range_multiplier = read(u"RANGE_MULTIPLIER", 1);
     result.collision_radius = read(u"COLLISION_RADIUS", 0);

@@ -1,0 +1,91 @@
+Internal ctest changing into directory: /mnt/data/work16/build
+Test project /mnt/data/work16/build
+      Start  86: original_asset_catalog
+      Start  64: original_random_levels
+ 1/41 Test  #64: original_random_levels .................   Passed   33.63 sec
+      Start  71: original_dds_textures
+ 2/41 Test  #86: original_asset_catalog .................   Passed   41.75 sec
+      Start  55: original_frontend_checkpoint
+ 3/41 Test  #55: original_frontend_checkpoint ...........   Passed    4.89 sec
+      Start  62: original_level_scene
+ 4/41 Test  #62: original_level_scene ...................   Passed    2.57 sec
+      Start 129: original_typed_save_migration
+ 5/41 Test #129: original_typed_save_migration ..........   Passed    2.08 sec
+      Start  98: original_consumables
+ 6/41 Test  #98: original_consumables ...................   Passed    1.66 sec
+      Start 102: original_ranged
+ 7/41 Test #102: original_ranged ........................   Passed    1.09 sec
+      Start  79: original_combat
+ 8/41 Test  #79: original_combat ........................   Passed    1.74 sec
+      Start 100: original_population
+ 9/41 Test #100: original_population ....................   Passed    1.93 sec
+      Start  80: original_level_transitions
+10/41 Test  #71: original_dds_textures ..................   Passed   25.98 sec
+      Start  75: original_entity_world
+11/41 Test  #80: original_level_transitions .............   Passed    1.94 sec
+      Start  82: original_resource_configuration
+12/41 Test  #82: original_resource_configuration ........   Passed    1.03 sec
+      Start 111: original_merchant_purchases
+13/41 Test  #75: original_entity_world ..................   Passed    1.40 sec
+      Start  77: original_enemy_ai
+14/41 Test #111: original_merchant_purchases ............   Passed    1.57 sec
+      Start  61: original_unit_definitions
+15/41 Test  #77: original_enemy_ai ......................   Passed    1.42 sec
+      Start  81: original_data_bootstrap
+16/41 Test  #61: original_unit_definitions ..............   Passed    0.83 sec
+      Start 106: original_skills_runtime
+17/41 Test  #81: original_data_bootstrap ................   Passed    1.21 sec
+      Start 126: original_gameplay_catalog
+18/41 Test #106: original_skills_runtime ................   Passed    1.00 sec
+      Start  78: original_unit_types
+19/41 Test #126: original_gameplay_catalog ..............   Passed    0.91 sec
+      Start  56: original_item_cycle
+20/41 Test  #78: original_unit_types ....................   Passed    1.04 sec
+      Start  66: original_ogre_meshes
+21/41 Test  #56: original_item_cycle ....................   Passed    0.86 sec
+      Start  73: original_scene_geometry
+22/41 Test  #66: original_ogre_meshes ...................   Passed    0.85 sec
+      Start  72: original_png_textures
+23/41 Test  #73: original_scene_geometry ................   Passed    0.86 sec
+      Start 122: original_character_stats_resources
+24/41 Test  #72: original_png_textures ..................   Passed    0.58 sec
+      Start  74: original_spawn_classes
+25/41 Test #122: original_character_stats_resources .....   Passed    0.47 sec
+      Start  58: original_collision_meshes
+26/41 Test  #74: original_spawn_classes .................   Passed    0.62 sec
+      Start  65: original_players
+27/41 Test  #58: original_collision_meshes ..............   Passed    0.67 sec
+      Start  36: original_progression_resource_graphs
+28/41 Test  #65: original_players .......................   Passed    0.58 sec
+      Start  68: original_ogre_skeletons
+29/41 Test  #36: original_progression_resource_graphs ...   Passed    0.47 sec
+      Start  67: original_ogre_materials
+30/41 Test  #68: original_ogre_skeletons ................   Passed    0.68 sec
+      Start  76: original_equipment
+31/41 Test  #67: original_ogre_materials ................   Passed    0.57 sec
+      Start  59: original_adm_document
+32/41 Test  #76: original_equipment .....................   Passed    0.26 sec
+      Start  60: original_master_resource_index
+33/41 Test  #59: original_adm_document ..................   Passed    0.25 sec
+      Start  63: original_logic_runtime
+34/41 Test  #63: original_logic_runtime .................   Passed    0.21 sec
+      Start  70: original_skeletal_animation
+35/41 Test  #70: original_skeletal_animation ............   Passed    0.06 sec
+      Start 117: original_ui_hud_input
+36/41 Test #117: original_ui_hud_input ..................   Passed    0.08 sec
+      Start  20: original_menu_presentation
+37/41 Test  #60: original_master_resource_index .........   Passed    0.39 sec
+      Start 109: original_quest_controllers
+38/41 Test  #20: original_menu_presentation .............   Passed    0.06 sec
+      Start  69: original_animation_manifests
+39/41 Test #109: original_quest_controllers .............   Passed    0.07 sec
+      Start  57: original_pak_archive
+40/41 Test  #69: original_animation_manifests ...........   Passed    0.05 sec
+41/41 Test  #57: original_pak_archive ...................   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 41
+
+Label Time Summary:
+assets    = 138.33 sec*proc (41 tests)
+
+Total Test time (real) =  69.19 sec

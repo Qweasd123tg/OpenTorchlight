@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "processes": 2,
+  "source_sha256": "d4ed214328527287ad063ea485c24d5eb58b3b7fff948436e8957c228cac1cc2",
+  "runs": [
+    {
+      "input_version": 5,
+      "returncode": 0,
+      "stdout": "PASS 18 legacy/typed checks; input=v5 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    },
+    {
+      "input_version": 6,
+      "returncode": 0,
+      "stdout": "PASS 16 legacy/typed checks; input=v6 saved_graph_roll=23 physical=0 poison=23 magic=10 rng=491\n",
+      "stderr": ""
+    }
+  ],
+  "v6_sha256": "6a426dfc1f4157b3c2868cd2301ba4f7892246c772fe71b2c5371eef2f020599",
+  "scope": "Original-resource-backed port checkpoint migration, not original SVB or campaign."
+}

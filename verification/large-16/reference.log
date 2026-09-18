@@ -1,0 +1,41 @@
+Internal ctest changing into directory: /mnt/data/work16/build
+Test project /mnt/data/work16/build
+      Start  51: original_input_comparison
+      Start  48: original_ai_cooldown_comparison
+ 1/16 Test  #48: original_ai_cooldown_comparison ..........   Passed    2.47 sec
+      Start 128: original_typed_damage_comparison
+ 2/16 Test  #51: original_input_comparison ................   Passed    3.12 sec
+      Start  44: original_monster_experience_comparison
+ 3/16 Test  #44: original_monster_experience_comparison ...   Passed    1.35 sec
+      Start  47: original_attack_speed_comparison
+ 4/16 Test #128: original_typed_damage_comparison .........   Passed    2.45 sec
+      Start  43: original_world_gold_comparison
+ 5/16 Test  #47: original_attack_speed_comparison .........   Passed    0.89 sec
+      Start  46: original_player_vitals_comparison
+ 6/16 Test  #43: original_world_gold_comparison ...........   Passed    0.80 sec
+      Start  53: original_randomizer_comparison
+ 7/16 Test  #46: original_player_vitals_comparison ........   Passed    0.97 sec
+      Start  54: original_pathfinder_comparison
+ 8/16 Test  #53: original_randomizer_comparison ...........   Passed    0.82 sec
+      Start  52: original_action_comparison
+ 9/16 Test  #54: original_pathfinder_comparison ...........   Passed    0.98 sec
+      Start  49: original_level_entry_dispatch
+10/16 Test  #52: original_action_comparison ...............   Passed    0.87 sec
+      Start  50: original_camera_comparison
+11/16 Test  #49: original_level_entry_dispatch ............   Passed    0.77 sec
+      Start 123: original_character_stats_comparison
+12/16 Test  #50: original_camera_comparison ...............   Passed    0.73 sec
+      Start 103: original_gameplay_numeric_comparison
+13/16 Test #123: original_character_stats_comparison ......   Passed    0.54 sec
+      Start 125: original_item_graph_comparison
+14/16 Test #103: original_gameplay_numeric_comparison .....   Passed    0.49 sec
+      Start 107: original_economy_comparison
+15/16 Test #107: original_economy_comparison ..............   Passed    0.36 sec
+16/16 Test #125: original_item_graph_comparison ...........   Passed    0.39 sec
+
+100% tests passed, 0 tests failed out of 16
+
+Label Time Summary:
+reference    =  17.99 sec*proc (16 tests)
+
+Total Test time (real) =   9.01 sec

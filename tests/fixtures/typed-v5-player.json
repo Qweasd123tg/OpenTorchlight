@@ -1,0 +1,13 @@
+{
+  "checkpoint_sha256": "d4ed214328527287ad063ea485c24d5eb58b3b7fff948436e8957c228cac1cc2",
+  "format": 5,
+  "producer": "Unchanged user-supplied large-15, application_scenario_probe (Debug).",
+  "base_archive": "OpenTorchlight-gpt-pro-large-15.zip",
+  "base_archive_sha256": "de8a4a71670eb502d7c15944f223a449ed6b3f5585f9293264f01b8ece43e4e3",
+  "writer_library_sha256": "0aa34a83a02ce6b1eb8bdb47d4a5032591e99ba9c62c2316c088113c1fc8fdfd",
+  "creation_script": "tests/scenarios/services-new.scenario",
+  "creation_script_sha256": "52e8b786218edc08d0836f74f601313d24bbeae32a98854735c000af3f87f114",
+  "preparation": "Real new-character menu: Alchemist named services; Town; pause save-exit. No level, gold, gear, enemy or HP injection. Version byte was not modified.",
+  "not_original_assets": "This is a port-owned generated checkpoint, not an original game save, pak, ELF, texture, font, sound or library.",
+  "reproduce": "Build the unchanged base, then use tools/run_scenario.py --library <old libapplication_scenario_probe.so> --game-dir <original inputs> --save-dir <empty dir> --script tests/scenarios/services-new.scenario --output <new evidence dir>. Slot names are intentionally random."
+}

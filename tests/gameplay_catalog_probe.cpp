@@ -14,7 +14,7 @@ int main(int argc,char**argv){try {
     if(argc!=3)throw std::runtime_error("usage: gameplay_catalog_probe pak.zip report.json");
     PakArchive pak(argv[1]);UnitDefinitionLoader defs(pak);UnitTypeHierarchy hierarchy(pak);
     MasterResourceIndex resources(parse_adm(pak.read_normalized("media/MASTERRESOURCEUNITS.DAT.ADM")));
-    std::array<unsigned,5> categories{};unsigned seen=0,melee_blocked=0,excluded=0,requirements=0;
+    std::array<unsigned,6> categories{};unsigned seen=0,melee_blocked=0,excluded=0,requirements=0;
     std::ostringstream examples;bool comma=false;unsigned examples_count=0;
     for(const auto&r:resources.records()) {
         if(r.kind!=MasterResourceKind::item)continue;
@@ -29,7 +29,7 @@ int main(int argc,char**argv){try {
         if(!hierarchy.is_a_id(r.unit_type,8))continue;
         ++seen;const auto delivery=load_weapon_delivery(*d);++categories.at(static_cast<std::size_t>(delivery));
         const auto traits=weapon_attack_traits(r.unit_type,hierarchy);
-        AttackDescription attack;attack.delivery=delivery;attack.traits=traits;
+        AttackDescription attack;attack.delivery=delivery;attack.traits=traits;attack.damage_allocation_known=true;
         if(!traits.ranged&&!ordinary_delivery_supported(attack)) {
             ++melee_blocked;
             if(examples_count++<12) {
@@ -47,7 +47,7 @@ int main(int argc,char**argv){try {
        <<"\"weapon_records\":"<<seen<<",\"excluded_DONTCREATE_items\":"<<excluded
        <<",\"items_with_positive_requirement_properties\":"<<requirements
        <<",\"delivery\":{\"unverified\":"<<categories[0]<<",\"direct_physical\":"<<categories[1]
-       <<",\"missile\":"<<categories[2]<<",\"weapon_skill\":"<<categories[3]<<",\"unsupported_damage\":"<<categories[4]
+       <<",\"missile\":"<<categories[2]<<",\"weapon_skill\":"<<categories[3]<<",\"unsupported_damage\":"<<categories[4]<<",\"direct_typed\":"<<categories[5]
        <<"},\"known_unsupported_melee\":"<<melee_blocked<<",\"examples\":["<<examples.str()<<"]}\n";
     if(!out)throw std::runtime_error("cannot write catalog report");
     std::cout<<"weapons="<<seen<<" known_unsupported_melee="<<melee_blocked<<" requirement_records="<<requirements<<'\n';

@@ -31,10 +31,14 @@ template <class A> void versioned_fields(A& a, InventoryItem& s) { if (a.version
 template <class A> void versioned_fields(A& a, const InventoryItem& s) { if (a.version >= 4) a(s.consumable); }
 template <class A> void versioned_fields(A& a, WorldCheckpoint& s) { if (a.version >= 4) a(s.population_generated); }
 template <class A> void versioned_fields(A& a, const WorldCheckpoint& s) { if (a.version >= 4) a(s.population_generated); }
-template <class A> void versioned_fields(A& a, WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); }
-template <class A> void versioned_fields(A& a, const WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); }
-template <class A> void versioned_fields(A& a, AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
-template <class A> void versioned_fields(A& a, const AttackDescription& s) { if (a.version >= 4) a(s.delivery); }
+template <class A> void versioned_fields(A& a, WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); if (a.version >= 6) a(s.damage_percent); }
+template <class A> void versioned_fields(A& a, const WeaponPrototype& s) { if (a.version >= 4) a(s.delivery); if (a.version >= 6) a(s.damage_percent); }
+template <class A> void versioned_fields(A& a, AttackDescription& s) { if (a.version >= 4) a(s.delivery); if (a.version >= 6) a(s.damage_bonus, s.damage_allocation_known); }
+template <class A> void versioned_fields(A& a, const AttackDescription& s) { if (a.version >= 4) a(s.delivery); if (a.version >= 6) a(s.damage_bonus, s.damage_allocation_known); }
+template <class A> void versioned_fields(A& a, WeaponItem& s) { if (a.version >= 6) a(s.damage_bonus); }
+template <class A> void versioned_fields(A& a, const WeaponItem& s) { if (a.version >= 6) a(s.damage_bonus); }
+template <class A> void versioned_fields(A& a, AttackCharacterValues& s) { if (a.version >= 6) a(s.magic, s.magic_known); }
+template <class A> void versioned_fields(A& a, const AttackCharacterValues& s) { if (a.version >= 6) a(s.magic, s.magic_known); }
 template <class A> void versioned_fields(A& a, CampaignCheckpoint& s) { if (a.version >= 5) a(s.quests); }
 template <class A> void versioned_fields(A& a, const CampaignCheckpoint& s) { if (a.version >= 5) a(s.quests); }
 #undef V2_FIELDS

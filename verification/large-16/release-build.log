@@ -1,0 +1,116 @@
+-- The C compiler identification is GNU 14.2.0
+-- The CXX compiler identification is GNU 14.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.3.1")
+-- Found PNG: /usr/lib/x86_64-linux-gnu/libpng.so (found version "1.6.48")
+-- Checking for module 'vorbisfile'
+--   Package 'vorbisfile', required by 'virtual:world', not found
+-- Checking for module 'alsa'
+--   Package 'alsa', required by 'virtual:world', not found
+-- Music: vorbisfile/ALSA not found; silent track tracking only
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Found Python3: /opt/pyvenv/bin/python3 (found version "3.13.5") found components: Interpreter
+-- Configuring done (4.6s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work16/release
+[1/81] Building CXX object CMakeFiles/torchlight_core.dir/src/actor_motion.cpp.o
+[2/81] Building CXX object CMakeFiles/torchlight_core.dir/src/animation_events.cpp.o
+[3/81] Building CXX object CMakeFiles/torchlight_core.dir/src/animation_manifest.cpp.o
+[4/81] Building CXX object CMakeFiles/torchlight_core.dir/src/adm_document.cpp.o
+[5/81] Building CXX object CMakeFiles/torchlight_core.dir/src/character_stats.cpp.o
+[6/81] Building CXX object CMakeFiles/torchlight_core.dir/src/line_of_sight.cpp.o
+[7/81] Building CXX object CMakeFiles/torchlight_core.dir/src/collision_scene.cpp.o
+[8/81] Building CXX object CMakeFiles/torchlight_core.dir/src/attack_action.cpp.o
+[9/81] Building CXX object CMakeFiles/torchlight_core.dir/src/combat.cpp.o
+[10/81] Building CXX object CMakeFiles/torchlight_core.dir/src/consumable.cpp.o
+[11/81] Building CXX object CMakeFiles/torchlight_core.dir/src/economy.cpp.o
+[12/81] Building CXX object CMakeFiles/torchlight_core.dir/src/merchant.cpp.o
+[13/81] Building CXX object CMakeFiles/torchlight_core.dir/src/checkpoint.cpp.o
+[14/81] Building CXX object CMakeFiles/torchlight_core.dir/src/quests.cpp.o
+[15/81] Building CXX object CMakeFiles/torchlight_core.dir/src/skills.cpp.o
+[16/81] Building CXX object CMakeFiles/torchlight_core.dir/src/settings.cpp.o
+[17/81] Building CXX object CMakeFiles/torchlight_core.dir/src/save_codec.cpp.o
+[18/81] Building CXX object CMakeFiles/torchlight_core.dir/src/save_store.cpp.o
+[19/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_text.cpp.o
+[20/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_font.cpp.o
+[21/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_hud.cpp.o
+[22/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ui_layout.cpp.o
+[23/81] Building CXX object CMakeFiles/torchlight_core.dir/src/interaction.cpp.o
+[24/81] Building CXX object CMakeFiles/torchlight_core.dir/src/damage.cpp.o
+[25/81] Building CXX object CMakeFiles/torchlight_core.dir/src/typed_damage.cpp.o
+[26/81] Building CXX object CMakeFiles/torchlight_core.dir/src/dds_texture.cpp.o
+[27/81] Building CXX object CMakeFiles/torchlight_core.dir/src/frontend.cpp.o
+[28/81] Building CXX object CMakeFiles/torchlight_core.dir/src/equipment.cpp.o
+[29/81] Building CXX object CMakeFiles/torchlight_core.dir/src/vitals.cpp.o
+[30/81] Building CXX object CMakeFiles/torchlight_core.dir/src/input_state.cpp.o
+[31/81] Building CXX object CMakeFiles/torchlight_core.dir/src/enemy_ai.cpp.o
+[32/81] Building CXX object CMakeFiles/torchlight_core.dir/src/entity_world.cpp.o
+[33/81] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory_view.cpp.o
+[34/81] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory.cpp.o
+[35/81] Building CXX object CMakeFiles/torchlight_core.dir/src/population.cpp.o
+[36/81] Building CXX object CMakeFiles/torchlight_core.dir/src/progression.cpp.o
+[37/81] Building CXX object CMakeFiles/torchlight_core.dir/src/treasure.cpp.o
+[38/81] Building CXX object CMakeFiles/torchlight_core.dir/src/key_manager.cpp.o
+[39/81] Building CXX object CMakeFiles/torchlight_core.dir/src/level_transition.cpp.o
+[40/81] Building CXX object CMakeFiles/torchlight_core.dir/src/player_session.cpp.o
+[41/81] Building CXX object CMakeFiles/torchlight_core.dir/src/master_resource_index.cpp.o
+[42/81] Building CXX object CMakeFiles/torchlight_core.dir/src/mouse_manager.cpp.o
+[43/81] Building CXX object CMakeFiles/torchlight_core.dir/src/logic_runtime.cpp.o
+[44/81] Building CXX object CMakeFiles/torchlight_core.dir/src/level_scene.cpp.o
+[45/81] Building CXX object CMakeFiles/torchlight_core.dir/src/navigation_grid.cpp.o
+[46/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_material.cpp.o
+[47/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_skeleton.cpp.o
+[48/81] Building CXX object CMakeFiles/torchlight_core.dir/src/pathfinder_rules.cpp.o
+[49/81] Building CXX object CMakeFiles/torchlight_core.dir/src/ogre_mesh.cpp.o
+[50/81] Building CXX object CMakeFiles/torchlight_core.dir/src/pointer_movement.cpp.o
+[51/81] Building CXX object CMakeFiles/torchlight_core.dir/src/pak_archive.cpp.o
+[52/81] Building CXX object CMakeFiles/torchlight_core.dir/src/png_texture.cpp.o
+[53/81] Building CXX object CMakeFiles/torchlight_core.dir/src/randomizer.cpp.o
+[54/81] Building CXX object CMakeFiles/torchlight_core.dir/src/resource_config.cpp.o
+[55/81] Building CXX object CMakeFiles/torchlight_core.dir/src/random_level.cpp.o
+[56/81] Building CXX object CMakeFiles/torchlight_core.dir/src/player.cpp.o
+[57/81] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_math.cpp.o
+[58/81] Building CXX object CMakeFiles/torchlight_core.dir/src/skeletal_animation.cpp.o
+[59/81] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_animation.cpp.o
+[60/81] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_geometry.cpp.o
+[61/81] Building CXX object CMakeFiles/torchlight_core.dir/src/stat_graph.cpp.o
+[62/81] Building CXX object CMakeFiles/torchlight_core.dir/src/spawn_class.cpp.o
+[63/81] Building CXX object CMakeFiles/torchlight_core.dir/src/music.cpp.o
+[64/81] Building CXX object CMakeFiles/torchlight_core.dir/src/unit_definition.cpp.o
+[65/81] Building CXX object CMakeFiles/torchlight_core.dir/src/unit_type.cpp.o
+[66/81] Linking CXX static library libtorchlight_core.a
+[67/81] Generating fixtures/ranged.pak.zip
+Authored combat fixture: 37 units, 74 files; no original assets
+[68/81] Building CXX object CMakeFiles/application_scenario_probe.dir/src/gles_scene_renderer.cpp.o
+[69/81] Building CXX object CMakeFiles/application_scenario_probe.dir/tests/application_scenario_probe.cpp.o
+[70/81] Building CXX object CMakeFiles/torchlight_typed_damage_probe.dir/tests/typed_damage_probe.cpp.o
+[71/81] Building CXX object CMakeFiles/application_scenario_probe.dir/src/gles_ui_renderer.cpp.o
+[72/81] Building CXX object CMakeFiles/typed_migration_test.dir/tests/typed_migration_test.cpp.o
+[73/81] Building CXX object CMakeFiles/ranged_test.dir/tests/ranged_test.cpp.o
+[74/81] Linking CXX executable ranged_test
+[75/81] Linking CXX executable torchlight_typed_damage_probe
+[76/81] Linking CXX executable typed_migration_test
+[77/81] Building CXX object CMakeFiles/torchlight_application.dir/src/application.cpp.o
+[78/81] Linking CXX static library libtorchlight_application.a
+[79/81] Linking CXX shared library libapplication_scenario_probe.so
+[80/81] Building CXX object CMakeFiles/typed_damage_test.dir/tests/typed_damage_test.cpp.o
+[81/81] Linking CXX executable typed_damage_test

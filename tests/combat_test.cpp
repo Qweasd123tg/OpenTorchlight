@@ -101,19 +101,20 @@ int main(int argc, char** argv) {
         static_cast<void>(logic.take_events());
 
         torchlight::AttackAnimationCatalog catalog(archive);
-        // The original Alchemist starting staff is not a 100%-physical weapon.
-        // Earlier this test accidentally required its magical/mixed damage to
-        // be replaced by a physical strike. Keep that case as a refusal test.
+        // Resource-backed poison staff: preserve the physical base separately.
         torchlight::CombatController alchemist(players.front(), 31);
         require(alchemist.attack_loadout().right &&
-                alchemist.attack_loadout().right->delivery == torchlight::WeaponDelivery::unsupported_damage,
-                "original Alchemist staff delivery changed; review its allocation");
+                alchemist.attack_loadout().right->delivery == torchlight::WeaponDelivery::direct_typed &&
+                alchemist.attack_loadout().right->maximum_damage == 0 &&
+                alchemist.attack_loadout().right->damage_bonus[5] > 0,
+                "original Alchemist staff lost its poison allocation");
         alchemist.set_animation_resolver([&](auto mesh,auto prefix){ return catalog.resolve(mesh,prefix); });
         require(alchemist.select_target(world, spawned.position, .5F), "staff target selection");
         const auto unchanged_hp = spawned.health;
-        require(alchemist.update(0, spawned.position, world).state == torchlight::CombatState::unavailable &&
-                !alchemist.attack_in_progress() && spawned.health == unchanged_hp,
-                "unsupported original staff silently became a physical attack");
+        require(alchemist.update(0, spawned.position, world).state == torchlight::CombatState::attacking &&
+                alchemist.attack_in_progress() && spawned.health == unchanged_hp,
+                "original staff failed to start or damaged before HIT");
+        alchemist.interrupt_attack(); // The separate typed resource test exercises its complete HIT chain.
         const auto destroyer = std::find_if(players.begin(), players.end(),
             [](const auto& player){ return player.name == u"Destroyer"; });
         require(destroyer != players.end(), "original Destroyer missing");

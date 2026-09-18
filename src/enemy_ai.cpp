@@ -93,6 +93,8 @@ void PlayerCombatState::set_equipment_vital_effects(const AttackEffects& equipme
     if (!std::isfinite(health_rate) || !std::isfinite(mana_rate))
         throw std::invalid_argument("nonfinite combined passive recovery rate");
     const auto armor = physical_armor(damage_defense_, next_equipment);
+    auto defense = evaluate_damage_defense(damage_defense_, effects);
+    defense.maximum[0] = armor;
     // All allocations/validation finish before committing any derived field.
     using std::swap;
     swap(equipment_vital_effects_, next_equipment);
@@ -103,6 +105,7 @@ void PlayerCombatState::set_equipment_vital_effects(const AttackEffects& equipme
     health_per_second_ = health_rate;
     mana_per_second_ = mana_rate;
     physical_armor_class_ = armor;
+    evaluated_defense_ = defense;
 }
 void PlayerCombatState::set_progression_vitals(std::int32_t maximum_health,
                                               std::optional<std::int32_t> base_mana) {
@@ -180,8 +183,12 @@ void PlayerCombatState::refresh_damage_defense() {
             raw.elemental_armor[index] = add(raw.elemental_armor[index], item->damage_defense.elemental_armor[index]);
     }
     const auto armor = physical_armor(raw, equipment_vital_effects_);
+    auto effects = base_vital_effects_; effects.append(equipment_vital_effects_);
+    auto defense = evaluate_damage_defense(raw, effects);
+    defense.maximum[0] = armor;
     damage_defense_ = raw;
     physical_armor_class_ = armor;
+    evaluated_defense_ = defense;
 }
 
 std::int32_t PlayerCombatState::apply_damage(
@@ -190,15 +197,18 @@ std::int32_t PlayerCombatState::apply_damage(
     if (!alive()) {
         return 0;
     }
-    auto defense = damage_defense_;
-    if (type == DamageType::physical) {
-        defense.natural_armor = physical_armor_class_;
-        defense.defense_attribute = 0; // already evaluated by original AC pipeline
-    }
-    const auto result = mitigate_damage(
-        damage, maximum_damage, type, 1.0F, defense, random);
+    const auto result = mitigate_evaluated_damage(
+        damage, maximum_damage, type, 1.0F, evaluated_defense_, random);
     health_ = std::max(0.0F, health_ - static_cast<float>(result.applied));
     return result.applied;
+}
+
+OrdinaryDamageResult PlayerCombatState::apply_direct_attack(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character, TorchlightRandom& random) {
+    if (!alive()) return {};
+    const auto result = roll_ordinary_damage(selected, loadout, character, evaluated_defense_, random);
+    health_ = std::max(0.0F, health_ - static_cast<float>(result.applied));
+    return result;
 }
 
 void MonsterAiCooldown::update(float seconds) noexcept {
@@ -384,9 +394,8 @@ EnemyAiUpdate EnemyController::perform_attack(std::uint64_t entity_id, const Ani
         return {EnemyAiState::missed, entity_id, false, 0, player.health()};
     if (state.action.description().traits.ranged && (!line_of_sight_ || !line_of_sight_(entity->position, player_position)))
         return {EnemyAiState::missed, entity_id, false, 0, player.health()};
-    const auto damage = ordinary_physical_damage(state.action.description(), entity->attacks, entity->attack_character);
-    const auto rolled = random_.integer_between(damage[0], damage[1]);
-    const auto applied = player.apply_damage(rolled, rolled, DamageType::physical, random_);
+    const auto result = player.apply_direct_attack(state.action.description(), entity->attacks, entity->attack_character, random_);
+    const auto applied = result.applied;
     return {player.alive() ? EnemyAiState::attacked : EnemyAiState::player_killed,
         entity_id, false, applied, player.health()};
 }

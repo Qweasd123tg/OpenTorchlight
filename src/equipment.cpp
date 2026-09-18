@@ -89,35 +89,75 @@ WeaponDelivery load_weapon_delivery(const UnitDefinition& definition) {
             missile->type != AdmValueType::note) throw EquipmentError("MISSILE must be text");
         if (!std::get<std::u16string>(missile->value).empty()) return WeaponDelivery::missile;
     }
-    // Physical allocation is explicit for this supported path. Base resource
-    // templates without a damage allocation remain unverified, not guessed.
-    const auto* physical = definition.find_property(u"DAMAGE_PHYSICAL");
-    if (!physical) return WeaponDelivery::unverified;
-    const auto percent = [&](const char16_t* key) {
-        const auto* p = definition.find_property(key);
-        if (!p) return 0.0F;
-        float value;
-        if (p->type == AdmValueType::integer) value = static_cast<float>(std::get<std::int32_t>(p->value));
-        else if (p->type == AdmValueType::floating) value = std::get<float>(p->value);
-        else throw EquipmentError("Weapon damage allocation must be numeric");
-        if (!std::isfinite(value) || value < 0) throw EquipmentError("Invalid weapon damage allocation");
-        return value;
-    };
-    if (percent(u"DAMAGE_PHYSICAL") != 100) return WeaponDelivery::unsupported_damage;
-    for (const auto* key : {u"DAMAGE_FIRE", u"DAMAGE_ICE", u"DAMAGE_ELECTRIC", u"DAMAGE_ELECTRICAL",
-                           u"DAMAGE_POISON", u"DAMAGE_UNDEFINED"})
-        if (percent(key) != 0) return WeaponDelivery::unsupported_damage;
-    return WeaponDelivery::direct_physical;
+    // Only names actually read by calculateCombatStats are supported. Do not
+    // guess that similarly named mod fields mean the same damage channel.
+    for (const auto* key : {u"DAMAGE_ELECTRICAL", u"DAMAGE_UNDEFINED"}) {
+        const auto* value = definition.find_property(key);
+        if (value && (value->type != AdmValueType::integer || std::get<std::int32_t>(value->value) != 0))
+            return WeaponDelivery::unsupported_damage;
+    }
+    const auto percent = load_weapon_damage_percent(definition);
+    const bool elemental = percent[2] > 0 || percent[3] > 0 || percent[4] > 0 || percent[5] > 0;
+    if (elemental || (percent[0] >= 0 && percent[0] != 100)) return WeaponDelivery::direct_typed;
+    return definition.find_property(u"DAMAGE_PHYSICAL") ? WeaponDelivery::direct_physical : WeaponDelivery::unverified;
 }
 const char* weapon_delivery_issue(WeaponDelivery delivery) noexcept {
     switch (delivery) {
         case WeaponDelivery::direct_physical: return "";
+        case WeaponDelivery::direct_typed: return "";
         case WeaponDelivery::missile: return "weapon requires missile runtime";
         case WeaponDelivery::weapon_skill: return "weapon requires skill runtime";
-        case WeaponDelivery::unsupported_damage: return "weapon elemental/mixed damage is unsupported";
+        case WeaponDelivery::unsupported_damage: return "weapon uses unsupported damage allocation metadata";
         case WeaponDelivery::unverified: return "weapon delivery metadata is unverified";
     }
     return "invalid weapon delivery";
+}
+
+std::array<std::int32_t, 7> load_weapon_damage_percent(const UnitDefinition& definition) {
+    std::array<std::int32_t, 7> result{};
+    result[0] = optional_integer(definition, u"DAMAGE_PHYSICAL", -1);
+    result[2] = optional_integer(definition, u"DAMAGE_FIRE", 0);
+    result[3] = optional_integer(definition, u"DAMAGE_ICE", 0);
+    result[4] = optional_integer(definition, u"DAMAGE_ELECTRIC", 0);
+    result[5] = optional_integer(definition, u"DAMAGE_POISON", 0);
+    return result;
+}
+WeaponDamageAllocation allocate_weapon_damage(std::int32_t graph_damage,
+    const std::array<std::int32_t, 7>& percent) {
+    if (graph_damage < 0 || percent[1] != 0 || percent[6] != 0)
+        throw EquipmentError("unsupported weapon damage allocation");
+    const auto factor = static_cast<float>(graph_damage) / 100.0F;
+    const auto convert = [&](std::int32_t value) {
+        const auto result = static_cast<float>(value) * factor;
+        if (!std::isfinite(result) || result < 0 || static_cast<double>(result) > std::numeric_limits<std::int32_t>::max())
+            throw EquipmentError("weapon allocation outside int32");
+        return static_cast<std::int32_t>(result);
+    };
+    WeaponDamageAllocation result;
+    result.physical = percent[0] < 0 ? graph_damage : convert(percent[0]);
+    for (std::size_t i = 2; i <= 5; ++i) if (percent[i] > 0) result.bonus[i] = convert(percent[i]);
+    return result;
+}
+void hydrate_weapon_damage(WeaponItem& item, const UnitDefinition& definition) {
+    if (item.prototype.damage_percent) return; // Already split; never apply a second time.
+    const auto percent = load_weapon_damage_percent(definition);
+    const auto allocation = allocate_weapon_damage(item.maximum_damage, percent);
+    const auto delivery = load_weapon_delivery(definition);
+    item.maximum_damage = allocation.physical;
+    item.minimum_damage = static_cast<std::int32_t>(std::ceil(static_cast<float>(allocation.physical) * 0.5F));
+    item.damage_bonus = allocation.bonus;
+    item.prototype.damage_percent = percent;
+    item.prototype.delivery = delivery;
+}
+void hydrate_attack_damage(AttackDescription& attack, const UnitDefinition& definition) {
+    if (attack.damage_allocation_known) return;
+    const auto allocation = allocate_weapon_damage(attack.maximum_damage, load_weapon_damage_percent(definition));
+    const auto delivery = load_weapon_delivery(definition);
+    attack.maximum_damage = allocation.physical;
+    attack.minimum_damage = static_cast<std::int32_t>(std::ceil(static_cast<float>(allocation.physical) * 0.5F));
+    attack.damage_bonus = allocation.bonus;
+    attack.damage_allocation_known = true;
+    attack.delivery = delivery;
 }
 
 AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand) {
@@ -131,6 +171,8 @@ AttackDescription describe_weapon_attack(const WeaponItem& item, AttackHand hand
     result.equipment_ai_cooldown = item.prototype.ai_attack_cooldown;
     result.effects = item.prototype.attack_effects;
     result.delivery = item.prototype.delivery;
+    result.damage_bonus = item.damage_bonus;
+    result.damage_allocation_known = item.prototype.damage_percent.has_value();
     return result;
 }
 
@@ -243,6 +285,7 @@ std::optional<WeaponPrototype> load_weapon_prototype(
     }
     WeaponPrototype weapon;
     weapon.delivery = load_weapon_delivery(definition);
+    weapon.damage_percent = load_weapon_damage_percent(definition);
     weapon.guid = resource.guid;
     weapon.name = resource.name;
     weapon.display_name = resource.display_name;
@@ -291,9 +334,12 @@ WeaponItem roll_weapon_item(const WeaponPrototype& prototype,
         static_cast<std::uint32_t>(scaled_percent), heirloom_count, false);
     WeaponItem item;
     item.prototype = prototype;
-    item.maximum_damage = maximum_damage;
+    const auto allocation = prototype.damage_percent ? allocate_weapon_damage(maximum_damage, *prototype.damage_percent)
+        : WeaponDamageAllocation{maximum_damage, {}};
+    item.maximum_damage = allocation.physical;
+    item.damage_bonus = allocation.bonus;
     item.minimum_damage = static_cast<std::int32_t>(std::ceil(
-        static_cast<float>(maximum_damage) * 0.5F));
+        static_cast<float>(item.maximum_damage) * 0.5F));
     return item;
 }
 

@@ -1,0 +1,26 @@
+Internal ctest changing into directory: /mnt/data/work16/build
+Test project /mnt/data/work16/build
+    Start 112: application_services_render
+    Start  87: application_scenario_render
+1/8 Test  #87: application_scenario_render .......   Passed   98.06 sec
+    Start  88: application_combat_render
+2/8 Test #112: application_services_render .......   Passed  109.67 sec
+    Start 130: application_typed_combat_render
+3/8 Test  #88: application_combat_render .........   Passed   33.64 sec
+    Start 118: paused_settings_render
+4/8 Test #118: paused_settings_render ............   Passed   10.84 sec
+    Start  24: gles_menu_text
+5/8 Test  #24: gles_menu_text ....................   Passed    0.98 sec
+    Start  23: gles_ui_headless
+6/8 Test  #23: gles_ui_headless ..................   Passed    0.91 sec
+    Start 115: ui_repairs_render
+7/8 Test #130: application_typed_combat_render ...   Passed   35.53 sec
+8/8 Test #115: ui_repairs_render .................   Passed    0.83 sec
+
+100% tests passed, 0 tests failed out of 8
+
+Label Time Summary:
+core      =   1.89 sec*proc (2 tests)
+render    = 290.46 sec*proc (8 tests)
+
+Total Test time (real) = 145.27 sec

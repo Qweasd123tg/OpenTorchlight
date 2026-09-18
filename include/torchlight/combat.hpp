@@ -54,7 +54,7 @@ public:
         const std::array<float, 3>& position, RuntimeEntityWorld& world, LogicRuntime& logic);
     void finish_animation_frame() noexcept;
     // Recompute existing physical consumers without replacing the current action.
-    void set_attributes(std::int32_t strength, std::int32_t dexterity);
+    void set_attributes(std::int32_t strength, std::int32_t dexterity, std::int32_t magic = 0);
 
 private:
     friend struct CheckpointAccess;

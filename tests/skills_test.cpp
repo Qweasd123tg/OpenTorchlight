@@ -88,7 +88,7 @@ void real(const char* path){
  for(auto& state:forged.skills->skills)if(state.name==u"INFUSE")state.invested=2;
  --forged.progression->skill_points;
  rejects([&]{auto bad=CheckpointAccess::restore_player(proto,forged,91);bad.attach_skill_catalog(catalog);},"rank2 below source gate accepted from save");
- auto bytes=encode_checkpoint(campaign);require(bytes[8]==5,"new skill save version");
+ auto bytes=encode_checkpoint(campaign);require(bytes[8]==kCheckpointFormatVersion,"new skill save version");
  auto decoded=decode_checkpoint(bytes);require(decoded.player.skills&&decoded.player.skills->effects[0].remaining==28,"skill codec loses timer");
  std::cout<<"catalog="<<catalog->definitions().size()<<" infuse_ranks=10\n";
 }
