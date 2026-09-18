@@ -353,6 +353,258 @@
       "tests": "tests/scenarios/paused-settings.scenario (PauseButton->pause->resume) + town-new.scenario (K/J/ESC)",
       "comparison": "No original-execution proof; enum + jump targets are machine-code facts, case bodies decomp-guided",
       "notes": "Wired=false: dispatch subset shares the panel/pause sinks but the 97-way function as a whole has no single port caller. Journal/pet/stats/automap/itemnames/levelup callbacks stay unimplemented (no port sink)."
+    },
+    "0x00ae1600": {
+      "symbol": "CCombineMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00ae1620": {
+      "symbol": "CCombineMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00b34250": {
+      "symbol": "CEnchantMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00b34270": {
+      "symbol": "CEnchantMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00b60ee0": {
+      "symbol": "CInventoryMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00b60f00": {
+      "symbol": "CInventoryMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00b77590": {
+      "symbol": "CMerchantMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00b775b0": {
+      "symbol": "CMerchantMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00ba5190": {
+      "symbol": "CPetMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00ba51b0": {
+      "symbol": "CPetMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00bcca80": {
+      "symbol": "CQuestMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00bccaa0": {
+      "symbol": "CQuestMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00bee2c0": {
+      "symbol": "CSkillMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00bee2e0": {
+      "symbol": "CSkillMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+    },
+    "0x00c04210": {
+      "symbol": "CStashMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00c04230": {
+      "symbol": "CStashMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00c187f0": {
+      "symbol": "CStatsMenu::open()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00c18810": {
+      "symbol": "CStatsMenu::openPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
+      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
+      "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
+      "comparison": "By construction (open_ == LO store sites); no independent differential",
+      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
     }
   }
 }

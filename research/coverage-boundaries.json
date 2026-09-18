@@ -911,6 +911,40 @@
         "tests/scenarios/paused-settings.scenario"
       ],
       "comparison": "Machine-code facts (enum bytes, jump targets); no original-execution proof"
+    },
+    {
+      "addresses": [
+        "0xae1600",
+        "0xae1620",
+        "0xb34250",
+        "0xb34270",
+        "0xb60ee0",
+        "0xb60f00",
+        "0xb77590",
+        "0xb775b0",
+        "0xba5190",
+        "0xba51b0",
+        "0xbcca80",
+        "0xbccaa0",
+        "0xbee2c0",
+        "0xbee2e0",
+        "0xc04210",
+        "0xc04230",
+        "0xc187f0",
+        "0xc18810"
+      ],
+      "status": "implemented",
+      "boundary": "Panel open/openPartial queries: LO=requested flag (== port open_), HI=close-settled bit set by update() (unmodeled, vacuous without close-animation sink). Per-class offsets in research/open-queries.md; offsets never transfer.",
+      "evidence": [
+        "research/open-queries.md"
+      ],
+      "implementation": [
+        "src/panel_open.cpp"
+      ],
+      "tests": [
+        "tests/panel_open_test.cpp"
+      ],
+      "comparison": "By construction; no independent differential"
     }
   ],
   "port_systems": [
