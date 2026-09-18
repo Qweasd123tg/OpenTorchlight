@@ -68,19 +68,20 @@ def lib_sources(lib):
 
 def references(root, short):
     hits = set()
-    for dirpath, _dirnames, filenames in os.walk(os.path.join(root, "src")):
-        for fn in filenames:
-            if not fn.endswith((".cpp", ".hpp", ".h")):
-                continue
-            path = os.path.join(dirpath, fn)
-            rel = os.path.relpath(path, root)
-            try:
-                with open(path, encoding="utf-8", errors="replace") as fh:
-                    text = fh.read()
-            except OSError:
-                continue
-            if re.search(r"(?<![\w:])" + re.escape(short) + r"(?![\w:])", text):
-                hits.add(rel)
+    for top in ("src", "include"):
+        for dirpath, _dirnames, filenames in os.walk(os.path.join(root, top)):
+            for fn in filenames:
+                if not fn.endswith((".cpp", ".hpp", ".h")):
+                    continue
+                path = os.path.join(dirpath, fn)
+                rel = os.path.relpath(path, root)
+                try:
+                    with open(path, encoding="utf-8", errors="replace") as fh:
+                        text = fh.read()
+                except OSError:
+                    continue
+                if re.search(r"(?<!\w)" + re.escape(short) + r"(?!\w)", text):
+                    hits.add(rel)
     return hits
 
 
@@ -91,7 +92,7 @@ def defines(path, short):
     except OSError:
         return False
     return bool(re.search(
-        r"(?<![\w:>.~-])" + re.escape(short) +
+        r"(?m)(?:^|[{;}\s])(?:[\w:]+::)?" + re.escape(short) +
         r"\s*\([{};]*\)\s*(?:const\s*)?(?:noexcept\s*)?(?:override\s*)?[{;]",
         text))
 
@@ -110,7 +111,7 @@ def test_refs(root, short):
                 text = fh.read()
         except OSError:
             continue
-        if re.search(r"(?<![\w:])" + re.escape(short) + r"(?![\w:])", text):
+        if re.search(r"(?<!\w)" + re.escape(short) + r"(?!\w)", text):
             hits.add("tests/" + fn)
     return hits
 
