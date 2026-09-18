@@ -162,11 +162,50 @@ extern "C" int render_ui_repairs_probe(const char *pak, int stage, unsigned char
         if(stage==11) draw_inventory_overlay({},false,width,height);
         glFinish();
         if(glGetError()!=GL_NO_ERROR) throw std::runtime_error("ui repairs draw failed");
-        glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,out);
+        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, out);
         if(glGetError()!=GL_NO_ERROR) throw std::runtime_error("ui repairs readback failed");
         return 0;
     } catch(const std::exception&e) {
         if(error&&error_capacity) std::snprintf(error,error_capacity,"%s",e.what());
+        return 1;
+    }
+}
+
+// Original-skin button states through the real frame path (fixture looks).
+// mode 0: Test/Toggle Normal (red base). 1: focused -> Hover (green).
+// 2: supplemental PORT button (fallback chrome, skin must not engage).
+extern "C" int render_skin_button_probe(const char *pak, int width, int height, int mode,
+                                        unsigned char *out, char *error,
+                                        unsigned error_capacity) {
+    try {
+        PakArchive archive(pak);
+        UiResources resources(archive);
+        GlesUiRenderer renderer(archive, resources);
+        glViewport(0, 0, width, height);
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+        FrontendFrame frame;
+        FrontendButton button;
+        button.id = "skin-probe";
+        button.rect = {40, 40, 80, 64};
+        button.widget.type = "Test/Toggle";
+        button.widget.name = "Widget";
+        button.widget.rect = button.widget.clip = button.rect;
+        button.widget.has_clip = true;
+        button.supplemental = (mode == 2);
+        button.focused = (mode == 1);
+        frame.buttons.push_back(button);
+        renderer.draw(frame, width, height);
+        glFinish();
+        if (glGetError() != GL_NO_ERROR)
+            throw std::runtime_error("skin button draw failed");
+        glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, out);
+        if (glGetError() != GL_NO_ERROR)
+            throw std::runtime_error("skin button readback failed");
+        return 0;
+    } catch (const std::exception &e) {
+        if (error && error_capacity)
+            std::snprintf(error, error_capacity, "%s", e.what());
         return 1;
     }
 }

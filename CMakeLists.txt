@@ -517,7 +517,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             target_compile_options(application_scenario_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
         endif()
-        add_dependencies(gles_ui_probe frontend_fixture hud_fixture menu_fixture ui_font_fixture)
+        add_dependencies(gles_ui_probe frontend_fixture hud_fixture menu_fixture ui_font_fixture ui_skin_fixture)
         add_test(NAME gles_ui_headless COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_ui_headless_test.py
             --probe $<TARGET_FILE:gles_ui_probe> --fixture ${FRONTEND_FIXTURE}
@@ -1076,6 +1076,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui_repairs_render_test.py
             --probe $<TARGET_FILE:gles_ui_probe> --fixture ${HUD_FIXTURE})
         set_tests_properties(ui_repairs_render PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+        add_test(NAME gles_skin_button_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/gles_skin_button_test.py
+            --probe $<TARGET_FILE:gles_ui_probe> --fixture ${UI_SKIN_FIXTURE})
+        set_tests_properties(gles_skin_button_render PROPERTIES LABELS "render" TIMEOUT 60 SKIP_RETURN_CODE 77)
     endif()
 
     set(HUD_INPUT_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/hud-input.pak.zip)

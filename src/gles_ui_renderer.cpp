@@ -1,6 +1,7 @@
 #include "torchlight/gles_ui_renderer.hpp"
 #include "torchlight/dds_texture.hpp"
 #include "torchlight/png_texture.hpp"
+#include "torchlight/ui_skin.hpp"
 #include "torchlight/ui_text.hpp"
 #include <cmath>
 #include <GLES2/gl2.h>
@@ -491,6 +492,79 @@ struct GlesUiRenderer::Impl {
     }
     // prototype: fallback palette, diagnostic glyphs and button chrome. The
     // resource-derived rectangles, images and fonts are not a complete CEGUI skin.
+    // Original-skin path: compile the widget look through UiSkin and emit its
+    // draws with the existing primitives. Anything the skin subset cannot
+    // express (corner gradients — the shader tint is flat; unhandled looks;
+    // compile errors) falls back to the path below. State mapping follows the
+    // established image policy: focused&&enabled selects Hover, selected&&
+    // enabled selects Pushed.
+    bool draw_skin_draw(const UiSkinDraw &d) {
+        const bool flat = d.colours[0] == d.colours[1] && d.colours[0] == d.colours[2] &&
+                          d.colours[0] == d.colours[3];
+        if (!flat)
+            return false;
+        if (d.kind == UiSkinDraw::Kind::image) {
+            if (d.texture.empty())
+                return false;
+            auto *texture = load(d.texture);
+            if (texture == nullptr || texture->width <= 0 || texture->height <= 0)
+                return false;
+            const UiRect uv{d.source.x / texture->width, d.source.y / texture->height,
+                            d.source.width / texture->width, d.source.height / texture->height};
+            const auto geometry = clip_ui_image(d.destination, uv, &d.clip);
+            if (!geometry)
+                return true; // fully clipped: handled, nothing to emit
+            std::vector<Vertex> vertices;
+            quad(vertices, geometry->destination, geometry->source);
+            draw_batch(vertices, d.colours[0], texture->id);
+            return true;
+        }
+        if (d.text.empty())
+            return true;
+        UiResolvedWidget tmp;
+        tmp.text = d.text;
+        tmp.font = d.font;
+        tmp.rect = d.destination;
+        tmp.clip = d.clip;
+        tmp.has_clip = true;
+        tmp.enabled = true;
+        tmp.properties["HorzFormatting"] = d.text_style.horizontal == UiTextHorizontal::centre
+            ? "CentreAligned"
+            : d.text_style.horizontal == UiTextHorizontal::right ? "RightAligned" : "LeftAligned";
+        tmp.properties["VertFormatting"] = d.text_style.vertical == UiTextVertical::centre
+            ? "CentreAligned"
+            : d.text_style.vertical == UiTextVertical::bottom ? "BottomAligned" : "TopAligned";
+        const auto &c = d.colours[0];
+        char argb[9];
+        std::snprintf(argb, sizeof(argb), "%02X%02X%02X%02X",
+                      static_cast<int>(std::clamp(c[3], 0.0F, 1.0F) * 255.0F),
+                      static_cast<int>(std::clamp(c[0], 0.0F, 1.0F) * 255.0F),
+                      static_cast<int>(std::clamp(c[1], 0.0F, 1.0F) * 255.0F),
+                      static_cast<int>(std::clamp(c[2], 0.0F, 1.0F) * 255.0F));
+        tmp.properties["TextColour"] = argb;
+        draw_widget_text(tmp);
+        return true;
+    }
+    bool draw_skin_button(const FrontendButton &button, int width, int height) {
+        if (button.supplemental || button.widget.type.empty())
+            return false;
+        UiSkinState state{button.focused && button.enabled, button.selected && button.enabled,
+                          button.selected};
+        auto widget = button.widget;
+        widget.rect = button.rect;
+        UiSkinFrame frame;
+        try {
+            frame = resources->skin().compile(*resources, widget, state, width, height);
+        } catch (const std::exception &) {
+            return false;
+        }
+        if (!frame.handled || !frame.diagnostics.empty())
+            return false;
+        for (const auto &d : frame.draws)
+            if (!draw_skin_draw(d))
+                return false;
+        return true;
+    }
     void draw(const FrontendFrame &frame, int width, int height) {
         begin(width, height);
         for (const auto &w : frame.decorations)
@@ -502,6 +576,11 @@ struct GlesUiRenderer::Impl {
             draw_batch(letters, {.92F, .90F, .82F, 1});
         }
         for (const auto &button : frame.buttons) {
+            // Original skin first; PORT chrome and state images stay as the
+            // fallback for supplemental controls, unhandled looks and
+            // gradient draws the flat-tint shader cannot express.
+            if (draw_skin_button(button, width, height))
+                continue;
             // resource-derived: checked GuiLook/Checkbox shows PushedImage
             // (UIIcons:CheckChecked, a complete checked box). Load slots and
             // class buttons carry selected without a pushed image, so they
