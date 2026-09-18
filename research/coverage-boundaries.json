@@ -1039,6 +1039,32 @@
       "implementation": [],
       "tests": [],
       "comparison": "Key sites verified in ASM; loop math subagent-read"
+    },
+    {
+      "addresses": [
+        "0x00ca9150",
+        "0x00ca5950",
+        "0x00cc4300",
+        "0x00cb7850",
+        "0x00cb7b70",
+        "0x00cac040",
+        "0x00c938e0",
+        "0x00a167a0",
+        "0x00a0adc0",
+        "0x00d6f520",
+        "0x00cb8360",
+        "0x00cb7670",
+        "0x00ccacb0",
+        "0x00cd45c0"
+      ],
+      "status": "researched",
+      "boundary": "Skill effect/event dispatch chain: startSkill guards+triggerEvent(START); indexed triggerEvent dispatch; startEvent applier fan-out; leaf applier; spawner Missiles branch (SEEKINGSHOT control); createAndFireMissile to shared CMissile runtime; MISSILEHIT/MISSILEDIE posters; 11-event catalog with posters. Correction: fireMissile/createNewMissileRef have two code-refs each (call+jmp).",
+      "evidence": [
+        "research/skill-effect-dispatch.md"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": "Key call/branch/post sites verified in ASM+pak by author; remainder agent-read from graph+decomp, marked as such"
     }
   ],
   "port_systems": [

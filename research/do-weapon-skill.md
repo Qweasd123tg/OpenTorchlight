@@ -40,6 +40,16 @@ the skill-execution engine first — implementing a shape-alike now would be
 exactly the scenario-first invention the project forbids. The weapon_skill
 delivery refusal stays.
 
+CORRECTION (supersedes the "single caller" claim above): `fireMissile` has
+TWO code-refs — `87f56f call d04610` (equipment path) and `a0ae8c jmp
+d04610` (tail-call from `CUnitSpawner::createAndFireMissile @0xa0adc0`).
+The early search matched only `call` and missed `jmp`. Likewise
+`createNewMissileRef`: `87f3d0 call` + `d6f550 jmp` (trivial wrapper
+`createMissile @0xd6f520`). Full proven chain in
+research/skill-effect-dispatch.md §1: skill → triggerEvent → startEvent →
+layout spawner (`Missiles/SEEKINGSHOT`) → createAndFireMissile → the same
+CMissile runtime. Conclusion stands, path recovered.
+
 ## 4. Next code-chosen target
 
 Skill effect application chain (`startSkill` → effect appliers → EVENT

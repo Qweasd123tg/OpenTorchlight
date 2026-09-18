@@ -2173,6 +2173,202 @@
       "tests": "",
       "comparison": "",
       "notes": "Blocked on skill-execution engine (skill missiles bypass fireMissile; creation site unrecovered). weapon_skill refusal stays."
+    },
+    "0x00ca9150": {
+      "symbol": "CSkill::startSkill(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; guards+triggerEvent(0) verified in objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00ca5950": {
+      "symbol": "CSkill::triggerEvent(ESKILL_EVENT_TYPE,...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; indexed dispatch +140/14c branch agent-read, post-sites verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cc4300": {
+      "symbol": "CSkillEvent::startEvent(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; applier calls agent-read from graph+decomp",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cb7850": {
+      "symbol": "CSkillEvent::applyEffects(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; cb8413/cb842b post-sites verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cb7b70": {
+      "symbol": "CSkillEvent::applyWeaponDamage(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; cb8413 post-site verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cac040": {
+      "symbol": "CSkillEffectAndAffixes::applyAffixesAndEffects(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; cb78fd/cb7b05 call-sites agent-read",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00c938e0": {
+      "symbol": "CExecuteSkillProps::executeSkill(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; c939f6 call cd4930 skill-chain, not missile",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00a167a0": {
+      "symbol": "CUnitSpawner::spawnUnitByIndex(uint)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; a16c8a/a16c9e/a16cb4 branch shape verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00a0adc0": {
+      "symbol": "CUnitSpawner::createAndFireMissile(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; a0add9 call + a0ae8c jmp verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00d6f520": {
+      "symbol": "CResourceManager::createMissile(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; d6f550 jmp verified, trivial wrapper",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cb8360": {
+      "symbol": "missileApplyingEffects(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; mov 6 + applier calls + triggerEvent verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cb7670": {
+      "symbol": "missileDieing(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; mov 7 + triggerEvent verified",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00ccacb0": {
+      "symbol": "CSkillManager::triggerSkillEvent(...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; poster fan-in agent-read",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+    },
+    "0x00cd45c0": {
+      "symbol": "CSkillManager::executeSkill(wstring,...)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; :cd47d2 call ca9150 agent-read",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
     }
   }
 }
