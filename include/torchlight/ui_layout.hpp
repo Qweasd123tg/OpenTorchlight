@@ -68,7 +68,28 @@ class UiLayout {
 struct UiImage {
     std::string texture_path;
     float x = 0, y = 0, width = 0, height = 0;
+    // original-code: CEGUI::Imageset::Image render offsets (XOffset/YOffset
+    // XML attrs, 0 when absent) and per-imageset native resolution/autoscale
+    // (NativeHorzRes/NativeVertRes/AutoScaled; defaults 640x480 from the
+    // vendored Imageset constructor immediates 0x44200000/0x43f00000).
+    float offset_x = 0, offset_y = 0;
+    float native_horz = 640.0F, native_vert = 480.0F;
+    bool auto_scaled = false;
 };
+// original-code: vendored CEGUI::Image::setHorzScaling @0xe59e0 (vert +0x80)
+// in the shipped libCEGUIBase.so.1: (float)(int)(v + (v > 0 ? +0.5 : -0.5))
+// with +0.5 @0x1d6c6c and -0.5 @0x1d6c68. NaN takes the -0.5 branch and the
+// cvttss2si converts to INT_MIN; both replicated explicitly because the C++
+// conversion is UB on overflow. noexcept: never throws, even on NaN/inf.
+[[nodiscard]] float pixel_align_ui(float value) noexcept;
+// Scaled render offset of an image for the current screen, in whole pixels.
+// Factors are screen/native per axis when auto-scaled, else 1
+// (CEGUI::Imageset::updateImageScalingFactors). Applied to the destination
+// rect before clipping (CEGUI::Image::draw offsets dest, then Imageset::draw
+// clips). Library-derived: upstream CEGUI v0-6-2 CEGUIImageset.cpp /
+// CEGUIImage.cpp, confirmed against the shipped-library ASM above.
+[[nodiscard]] std::array<float, 2> ui_image_render_offset(const UiImage &image, float screen_width,
+                                                          float screen_height) noexcept;
 // Bounded GuiLook.looknfeel extraction for widget types this renderer draws.
 struct UiWidgetImages {
     std::string normal, hover, pushed, disabled;

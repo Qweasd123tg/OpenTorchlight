@@ -417,6 +417,26 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
     }
     return result;
 }
+float pixel_align_ui(float value) noexcept {
+    // NaN takes the -0.5 branch (ucomiss ja falls through) and converts to
+    // INT_MIN, exactly like the original cvttss2si; infinities convert the
+    // same way. std::trunc reproduces truncation-toward-zero.
+    const float shifted = value + (value > 0.0F ? 0.5F : -0.5F);
+    if (!std::isfinite(shifted))
+        return -2147483648.0F;
+    const float truncated = std::trunc(shifted);
+    if (truncated <= -2147483648.0F || truncated >= 2147483648.0F)
+        return -2147483648.0F;
+    return truncated;
+}
+std::array<float, 2> ui_image_render_offset(const UiImage &image, float screen_width,
+                                            float screen_height) noexcept {
+    const float horz =
+        image.auto_scaled ? screen_width / image.native_horz : 1.0F;
+    const float vert =
+        image.auto_scaled ? screen_height / image.native_vert : 1.0F;
+    return {pixel_align_ui(image.offset_x * horz), pixel_align_ui(image.offset_y * vert)};
+}
 const UiLayout *UiResources::layout(const std::string &path) {
     if (const auto it = layouts_.find(path); it != layouts_.end())
         return &it->second;
@@ -440,6 +460,23 @@ std::optional<UiImage> UiResources::image(const std::string &reference) {
                     continue;
                 const auto set = attr(nodes.front(), "Name"),
                            file = attr(nodes.front(), "Imagefile");
+                // original-code: per-imageset NativeHorzRes/NativeVertRes and
+                // AutoScaled feed CEGUI::Imageset::notifyScreenResolution
+                // (factors screen/native per axis when auto-scaled, else 1).
+                // Defaults 640x480 are constructor immediates in the shipped
+                // libCEGUIBase.so.1; every shipped set declares its own.
+                const auto native = [&](const char *key, float fallback) {
+                    const auto text = attr(nodes.front(), key);
+                    if (text.empty())
+                        return fallback;
+                    const auto list = numbers(text);
+                    if (list.size() != 1)
+                        xml_error("invalid imageset native resolution");
+                    return list[0];
+                };
+                const float native_horz = native("NativeHorzRes", 640.0F);
+                const float native_vert = native("NativeVertRes", 480.0F);
+                const bool auto_scaled = upper(attr(nodes.front(), "AutoScaled")) == "TRUE";
                 auto base = entry.name.substr(0, entry.name.find_last_of("/\\") + 1);
                 const auto *texture = archive_->find_normalized(file);
                 if (!texture)
@@ -448,10 +485,22 @@ std::optional<UiImage> UiResources::image(const std::string &reference) {
                     diagnostics_.push_back("imageset texture absent: " + entry.name);
                     continue;
                 }
+                // Signed: XOffset/YOffset are routinely negative (e.g. -8).
+                const auto offset = [&](const Node &node, const char *key) {
+                    const auto text = attr(node, key);
+                    if (text.empty())
+                        return 0.0F;
+                    const auto list = numbers(text);
+                    if (list.size() != 1)
+                        xml_error("invalid image offset");
+                    return list[0];
+                };
                 for (const auto &n : nodes)
                     if (n.tag == "Image") {
                         UiImage image{texture->name, dimension(n, "XPos"), dimension(n, "YPos"),
-                                      dimension(n, "Width"), dimension(n, "Height")};
+                                      dimension(n, "Width"), dimension(n, "Height"),
+                                      offset(n, "XOffset"), offset(n, "YOffset"), native_horz,
+                                      native_vert, auto_scaled};
                         images_[set + "/" + attr(n, "Name")] = std::move(image);
                     }
             } catch (const std::exception &e) {

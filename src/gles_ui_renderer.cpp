@@ -469,7 +469,17 @@ struct GlesUiRenderer::Impl {
         if (source_rect.width > 0 && source_rect.height > 0)
             region = {region.x + region.width * source_rect.x, region.y + region.height * source_rect.y,
                       region.width * source_rect.width, region.height * source_rect.height};
-        const auto geometry = clip_ui_image(widget.rect, region,
+        // original-code: CEGUI::Image::draw offsets the destination by the
+        // scaled render offset BEFORE clipping (upstream v0-6-2
+        // CEGUIImage.cpp, vendored alignment setHorzScaling @0xe59e0).
+        // Applied unconditionally like the original; zero offsets align to
+        // zero, so unaffected images are bit-identical.
+        UiRect destination = widget.rect;
+        const auto shift = ui_image_render_offset(
+            *image, static_cast<float>(viewport_width), static_cast<float>(viewport_height));
+        destination.x += shift[0];
+        destination.y += shift[1];
+        const auto geometry = clip_ui_image(destination, region,
                                              widget.has_clip ? &widget.clip : nullptr);
         // A valid image entirely outside its clip is successfully handled,
         // not a missing skin that should produce a fallback rectangle.

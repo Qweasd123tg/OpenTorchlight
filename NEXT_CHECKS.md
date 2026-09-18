@@ -20,6 +20,21 @@ BFS-фильтр связности и полное перемешивание �
 NPCS/CREEPS/PROPS, spawn nodes (`CLevel+0xf0`, счётчики `+0x114`), настоящие
 регионы no-spawn (`CLevel+0xd8`), второй слой 0.4-сетки.
 
+# Текущая точка: UI imageset — смещения и автомасштаб (U07)
+
+Порт игнорировал XOffset/YOffset и NativeHorzRes/VertRes/AutoScaled.
+Перенесено по вендорной libCEGUIBase.so.1: парсинг атрибутов, сдвиг
+destination на масштабированное смещение ДО клипа (`Image::draw`),
+выравнивание round-half-away (`setHorzScaling @0xe59e0`, константы ±0.5).
+Примеры: WindowLeftEdge +4 на 1080p → +8, WindowRightEdge −5 → −9,
+MouseTarget (−8,−8). Тест `original_ui_imageset_offsets`: 27 проверок на
+настоящем pak. Открыты: scaled-размеры для Falagard (U09), хотспот курсора
+(софт-курсора нет), editor-копии imageset. Доказательства:
+`research/ui-imageset-offsets.md`.
+Ниже сохранена история, начиная с U06 screen scale.
+
+---
+
 # Текущая точка: UI screen scale возвращён (U06/P1)
 
 `convertToScreenScale @0xa83ed0` снова в дереве: priority-ZIP merge large-16

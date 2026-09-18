@@ -1002,6 +1002,17 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     endif()
     add_test(NAME ui_screen_scale COMMAND ui_screen_scale_test)
 
+    add_executable(ui_imageset_test tests/ui_imageset_test.cpp)
+    target_link_libraries(ui_imageset_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(ui_imageset_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_imageset_offsets
+            COMMAND ui_imageset_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_ui_imageset_offsets PROPERTIES TIMEOUT 120)
+    endif()
+
     if(TARGET gles_ui_probe)
         add_test(NAME ui_repairs_render COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui_repairs_render_test.py
