@@ -782,6 +782,26 @@
         "tests/inventory_create_test.cpp"
       ],
       "comparison": "GetValueAsString vs snprintf incl. 0 and 2^32-1; uniqueName format step-for-step vs ASM"
+    },
+    {
+      "addresses": [
+        "0xb6ed20",
+        "0xb93350",
+        "0xbfbe20"
+      ],
+      "status": "partial",
+      "boundary": "Loop-family createMenus share inventory's machine (11 windows, Slot loop x64, idxoff +0x12); profile data (bounds, bases, grabs, handler ids) transcribed to menu_create_profiles.hpp. NOT ported as code: window creation, props, event delivery.",
+      "evidence": [
+        "research/batch-menu-pass.json",
+        "research/inventory-open.md"
+      ],
+      "implementation": [
+        "include/torchlight/menu_create_profiles.hpp"
+      ],
+      "tests": [
+        "tests/menu_create_test.cpp"
+      ],
+      "comparison": "Profile values spot-checked vs ASM slices; full parity NOT claimed"
     }
   ],
   "port_systems": [

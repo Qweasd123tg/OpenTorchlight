@@ -1,8 +1,8 @@
 {
-  "annotated_function_addresses": 100,
+  "annotated_function_addresses": 103,
   "defined_function_addresses": 17023,
   "inputs": {
-    "research/coverage-boundaries.json": "f057879d690a068973ee909566908d147a157e269b3576b548ee02d845d37427",
+    "research/coverage-boundaries.json": "6ac0dd366ebf3d89d54bb5e7180c6c9c268a977e6f29cfaa2a084e035828f78b",
     "research/original-callgraph.tsv": "f02c52bf533d727b4c24ee9fba3d9f95d26205d75fd0ea16bdc5f655bbb8a827",
     "research/original-symbols.txt": "0ce1b5687c1128ac52434b660c3ba0254ff7a2cd2aa0f5be3894cb1026b67d3d"
   },
@@ -14,9 +14,9 @@
   "status_counts": {
     "closed": 0,
     "implemented": 4,
-    "partial": 66,
+    "partial": 69,
     "researched": 13,
-    "unseen": 16923,
+    "unseen": 16920,
     "verified": 25
   },
   "verification_groups": [

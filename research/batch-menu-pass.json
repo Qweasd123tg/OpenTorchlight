@@ -705,9 +705,10 @@
     "Accept",
     "Decline",
     "Dialog",
+    "Ok",
     "Title"
    ],
-   "dynamic_searches": 1,
+   "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
    "back_pointers": [],
@@ -793,8 +794,10 @@
     "CharacterName",
     "Close",
     "Defense",
+    "HP",
     "Level",
     "MagicDamage",
+    "Mana",
     "MeleeDamage",
     "PaperdollEquip",
     "RangedDamage",
@@ -807,9 +810,10 @@
     "TabBackpack",
     "TabFish",
     "TabSpell",
-    "TopFrame"
+    "TopFrame",
+    "XP"
    ],
-   "dynamic_searches": 6,
+   "dynamic_searches": 3,
    "subscriptions": [
     [
      "0xb88850",
@@ -906,7 +910,9 @@
      64
     ]
    ],
-   "back_pointers": [],
+   "back_pointers": [
+    "0xa0"
+   ],
    "index_offsets": [
     "0x12"
    ],
@@ -970,6 +976,7 @@
     "Accept",
     "Decline",
     "DialogText",
+    "Ok",
     "Portrait",
     "RewardFame",
     "RewardFameBox",
@@ -978,7 +985,7 @@
     "RewardXP",
     "RewardXPBox"
    ],
-   "dynamic_searches": 3,
+   "dynamic_searches": 2,
    "subscriptions": [
     [
      "0xba5370",
@@ -1045,13 +1052,16 @@
     "BottomFrame",
     "Close",
     "DescriptionFrame",
+    "Fame",
     "FameReward",
+    "Gold",
     "GoldReward",
     "RewardFrame",
     "TopFrame",
+    "XP",
     "XPReward"
    ],
-   "dynamic_searches": 7,
+   "dynamic_searches": 4,
    "subscriptions": [
     [
      "0xbba060",
@@ -1195,12 +1205,15 @@
     "SkillFrameB",
     "SkillFrameC",
     "SpellFrame",
+    "TabA",
+    "TabB",
+    "TabC",
     "TabTextA",
     "TabTextB",
     "TabTextC",
     "TopFrame"
    ],
-   "dynamic_searches": 3,
+   "dynamic_searches": 0,
    "subscriptions": [
     [
      "0xbd8800",
@@ -1393,14 +1406,17 @@
     "Defense",
     "Dexterity",
     "ExperienceBar",
+    "Fame",
     "FameBar",
     "FameLevel",
     "Fire Resist",
+    "HP",
     "Ice Resist",
     "Level",
     "Lightning Resist",
     "Magic",
     "Magic Damage",
+    "Mana",
     "Melee Damage",
     "Poison Resist",
     "Ranged Damage",
@@ -1415,9 +1431,10 @@
     "SpendStrength",
     "Stat Points",
     "Strength",
-    "TopFrame"
+    "TopFrame",
+    "XP"
    ],
-   "dynamic_searches": 4,
+   "dynamic_searches": 0,
    "subscriptions": [
     [
      "0xc042c0",
@@ -1665,13 +1682,14 @@
    "creates": 0,
    "searches": 6,
    "static_keys": [
+    "Back",
     "CharacterClass",
     "CharacterClassDescription",
     "CreatePlayer",
     "EditBox",
     "EditBoxPet"
    ],
-   "dynamic_searches": 1,
+   "dynamic_searches": 0,
    "subscriptions": [
     [
      "0xc53f40",
@@ -1784,10 +1802,11 @@
    "searches": 4,
    "static_keys": [
     "Dialog",
+    "Ok",
     "ShowTips",
     "Title"
    ],
-   "dynamic_searches": 1,
+   "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
    "back_pointers": [],
@@ -1835,9 +1854,10 @@
    "searches": 3,
    "static_keys": [
     "Background",
-    "DialogText"
+    "DialogText",
+    "Skip"
    ],
-   "dynamic_searches": 1,
+   "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
    "back_pointers": [],

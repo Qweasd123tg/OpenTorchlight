@@ -315,6 +315,18 @@ npos-ветви — это НЕ логические ветви меню).
 - `setOpen`/`update`: проводки CEGUI нет (флаг-машины), кроме петель
   settings-`setOpen` (6, 3) и waypoint-`setOpen` — им нужен свой разбор.
 
+## Обобщение: один профиль на семью циклов (сгенерировано + проверено)
+
+`tools/gen_menu_profiles.py` транскрибирует batch-отчёт в
+`include/torchlight/menu_create_profiles.hpp` (4 профиля:
+границы петель, базы back-pointer, все ключи захватов, id подписок),
+`tests/menu_create_test.cpp` пинит 112 утверждений. Ручная проверка
+генерата: базы обеих петель совпадают внутри класса
+(inventory `+0x80`, merchant/stash `+0xb0`, pet `+0xa0`), `idxoff +0x12`
+везде, ключи и id — по срезам. Открыто и НЕ в профилях: свойства окон,
+имена `createWindow`, `.bss`-имена, доставка событий — поэтому стадии
+трёх `createMenus` остаются `false`, данные — только transcription.
+
 ## updateLayout @0xb53430: триаж (зависимость конца setOpen)
 
 `research/disassembly/b53430-inventory-updatelayout.asm`, 0x35b0 байт, 269

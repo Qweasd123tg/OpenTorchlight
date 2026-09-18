@@ -185,6 +185,48 @@
       "tests": "tests/inventory_create_test.cpp (sequence, increment, resumable counter)",
       "comparison": "Format prefix + '_' (rodata 0xfd3a73) + decimal(++gUniqueNameValue @0x14e6914) asserted step-for-step against ASM; counter made explicit (global in original)",
       "notes": "Ogre::StringConverter::toString(n, width=0) is plain decimal (library-derived). Refcount/EH boilerplate not ported (no port allocator model)."
+    },
+    "0x00b6ed20": {
+      "symbol": "CMerchantMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00b6ed20-*.asm",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: shares the 11-window/64-slot machine with inventory (table 127, base +0xb0, merchant+pet tab/container keys, 8 subs). Full analysis open: window props, createWindow names, .bss names."
+    },
+    "0x00b93350": {
+      "symbol": "CPetMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00b93350-*.asm",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: shares the 11-window/64-slot machine with inventory (table 12, base +0xa0 (this in r12), stat labels XP/HP/Mana, 12 subs identical set to inventory). Full analysis open: window props, createWindow names, .bss names."
+    },
+    "0x00bfbe20": {
+      "symbol": "CStashMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00bfbe20-*.asm",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: shares the 11-window/64-slot machine with inventory (table 43, base +0xb0, pet-slot keys, 8 subs). Full analysis open: window props, createWindow names, .bss names."
     }
   }
 }
