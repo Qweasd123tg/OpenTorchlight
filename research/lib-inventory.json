@@ -1,0 +1,144 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "dynamic_libraries": [
+    {
+      "soname": "libOgreMain-1.6.5.so",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libOgreMain-1.6.5.so",
+      "dynsym": 7698
+    },
+    {
+      "soname": "libCEGUIOgreRenderer-1.6.5.so",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libCEGUIOgreRenderer-1.6.5.so",
+      "dynsym": 54
+    },
+    {
+      "soname": "libCEGUIBase.so.1",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libCEGUIBase.so.1",
+      "dynsym": 6338
+    },
+    {
+      "soname": "libfmodex-4.36.21.so",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libfmodex-4.36.21.so",
+      "dynsym": 3632
+    },
+    {
+      "soname": "libz.so.1",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libzzip-0.so.13",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libzzip-0.so.13",
+      "dynsym": 72
+    },
+    {
+      "soname": "libfreeimage.so.3",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libfreeimage.so.3",
+      "dynsym": 344
+    },
+    {
+      "soname": "libpcre.so.0",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libpcre.so.0",
+      "dynsym": 50
+    },
+    {
+      "soname": "libXaw.so.7",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libSDL2-2.0.so.0",
+      "shipped": "/home/qweasd123tg/Games/Torchlight/game/lib64/libSDL2-2.0.so.0",
+      "dynsym": 445
+    },
+    {
+      "soname": "libX11.so.6",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libXext.so.6",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libXft.so.2",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libXinerama.so.1",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libfontconfig.so.1",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libdl.so.2",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libstdc++.so.6",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libm.so.6",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libgcc_s.so.1",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libc.so.6",
+      "shipped": null,
+      "dynsym": null
+    },
+    {
+      "soname": "libpthread.so.0",
+      "shipped": null,
+      "dynsym": null
+    }
+  ],
+  "shipped_lib_dir": "/home/qweasd123tg/Games/Torchlight/game/lib64",
+  "main_binary_symbol_lines": 32805,
+  "static_symbol_hits": {
+    "ogre_inline": 781,
+    "stl_libstdcxx": 1673,
+    "cegui_inline": 450,
+    "particle_universe": 9057,
+    "convert_utf": 7,
+    "sdl": 2,
+    "lodepng": 103
+  },
+  "version_strings": {
+    "main_binary": [
+      "/builddir/Torchlight/TorchlightMacPort_09b/Projects_9156/ParticleUniverse/Plugins/ParticleUniverse/include/ParticleAffectors/ParticleUniverseColliderFactory.h",
+      "/builddir/Torchlight/TorchlightMacPort_09b/Projects_9156/ParticleUniverse/Plugins/ParticleUniverse/include/ParticleUniverseContext.h",
+      "/builddir/Torchlight/TorchlightMacPort_09b/Projects_9156/ParticleUniverse/Plugins/ParticleUniverse/include/ParticleUniversePool.h",
+      "/builddir/Torchlight/TorchlightMacPort_09b/Projects_9156/ParticleUniverse/Plugins/ParticleUniverse/include/ParticleUniversePoolMap.h",
+      "GCC: (GNU) 4.1.2 20080704 (Red Hat 4.1.2-51)",
+      "GCC: (GNU) 4.4.6 20120305 (Red Hat 4.4.6-4)",
+      "GCC: (GNU) 4.4.7 20120313 (Red Hat 4.4.7-3)",
+      "_ZN5CEGUI17OgreCEGUIRenderer21setTargetSceneManagerEPN4Ogre12SceneManagerE",
+      "_ZN5CEGUI17OgreCEGUIRendererC1EPN4Ogre12RenderWindowEhbjPNS1_12SceneManagerE",
+      "libCEGUIOgreRenderer-1.6.5.so",
+      "libOgreMain-1.6.5.so",
+      "libfmodex-4.36.21.so"
+    ],
+    "libCEGUIBase": [
+      "+                     Crazy Eddie's GUI System - Event log                    +",
+      "---- Version",
+      ".gnu.version",
+      ".gnu.version_r",
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+    ]
+  }
+}
