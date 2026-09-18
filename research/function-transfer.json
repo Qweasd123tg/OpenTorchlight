@@ -227,6 +227,90 @@
       "tests": "tests/menu_create_test.cpp",
       "comparison": "",
       "notes": "Batch-pass profile: shares the 11-window/64-slot machine with inventory (table 43, base +0xb0, pet-slot keys, 8 subs). Full analysis open: window props, createWindow names, .bss names."
+    },
+    "0x00ad7a50": {
+      "symbol": "CCombineMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00ad7a50-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: ItemSlot 1..4 loop (base +0xf8, plain idx), Title/Dialog/Accept grabs, 4 subs. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00b2e0a0": {
+      "symbol": "CEnchantMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00b2e0a0-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: singleton ItemSlot (base +0xc4, no loop), Title/Dialog/Accept grabs, 4 subs; NOT the combine twin. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00bc6b90": {
+      "symbol": "CQuestMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00bc6b90-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: Quest+QuestText 1..6 loop, ItemRewardBkg+ItemRewardSlot 1..3 loop (base +0xd8), reward frames, QuestClick. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00bb08f0": {
+      "symbol": "CQuestDialogMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00bb08f0-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: ItemBkg+ItemSlot 1..3 shared loop (base +0x148), dialog/reward grabs. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00be19c0": {
+      "symbol": "CSkillMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00be19c0-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: static frames/tabs grabs incl 'Skill Points', no loops, CloseButton+MouseThrough. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00e3b5e0": {
+      "symbol": "CJournalMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/batch-menu-pass.json; research/disassembly/batch/00e3b5e0-*.asm; research/menu-key-loops.json",
+      "implementation": "include/torchlight/menu_create_profiles.hpp (generated profile data)",
+      "tests": "tests/menu_create_test.cpp",
+      "comparison": "",
+      "notes": "Batch-pass profile: static Blocker/Close/JournalFrame/BottomFrame/TopFrame grabs, no loops. Full analysis open: window props, createWindow names, event delivery."
     }
   }
 }

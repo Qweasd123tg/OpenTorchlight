@@ -833,6 +833,30 @@
         "tests/menu_grab_test.cpp"
       ],
       "comparison": "Key tables spot-checked vs ASM slices; behavior parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xad7a50",
+        "0xb2e0a0",
+        "0xbc6b90",
+        "0xbb08f0",
+        "0xbe19c0",
+        "0xe3b5e0"
+      ],
+      "status": "partial",
+      "boundary": "Middle createMenus profiles (combine ItemSlot loop, enchant singleton, quest/questdialog reward loops, skill/journal static grabs) transcribed to menu_create_profiles.hpp with verified key loops. NOT ported as code; window props and event delivery open.",
+      "evidence": [
+        "research/batch-menu-pass.json",
+        "research/menu-key-loops.json",
+        "research/inventory-open.md"
+      ],
+      "implementation": [
+        "include/torchlight/menu_create_profiles.hpp"
+      ],
+      "tests": [
+        "tests/menu_create_test.cpp"
+      ],
+      "comparison": "Profile values spot-checked vs ASM slices; full parity NOT claimed"
     }
   ],
   "port_systems": [

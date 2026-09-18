@@ -71,7 +71,13 @@
      "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)"
     ]
    ],
-   "counter_loops": [],
+   "counter_loops": [
+    [
+     "0x10",
+     4
+    ]
+   ],
+   "register_loops": [],
    "back_pointers": [
     "0xf8"
    ],
@@ -123,6 +129,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -178,6 +185,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -225,6 +233,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 6,
@@ -298,6 +307,7 @@
     ]
    ],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 18,
@@ -330,6 +340,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -377,6 +388,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 2,
@@ -533,6 +545,16 @@
     [
      "0x10",
      64
+    ],
+    [
+     "0x18",
+     4
+    ]
+   ],
+   "register_loops": [
+    [
+     "eax",
+     1000
     ]
    ],
    "back_pointers": [
@@ -654,6 +676,12 @@
      64
     ]
    ],
+   "register_loops": [
+    [
+     "eax",
+     400
+    ]
+   ],
    "back_pointers": [
     "0xb0"
    ],
@@ -711,6 +739,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -760,6 +789,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -908,6 +938,16 @@
     [
      "0x24",
      64
+    ],
+    [
+     "0x24",
+     2
+    ]
+   ],
+   "register_loops": [
+    [
+     "eax",
+     1000
     ]
    ],
    "back_pointers": [
@@ -1000,7 +1040,13 @@
      "CQuestDialogMenu::handle_MouseOut(CEGUI::EventArgs const&)"
     ]
    ],
-   "counter_loops": [],
+   "counter_loops": [
+    [
+     "0x14",
+     3
+    ]
+   ],
+   "register_loops": [],
    "back_pointers": [
     "0x148"
    ],
@@ -1088,7 +1134,18 @@
      "CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&)"
     ]
    ],
-   "counter_loops": [],
+   "counter_loops": [
+    [
+     "0x20",
+     3
+    ]
+   ],
+   "register_loops": [
+    [
+     "r15d",
+     6
+    ]
+   ],
    "back_pointers": [
     "0xd8"
    ],
@@ -1168,6 +1225,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 13,
@@ -1225,6 +1283,7 @@
     ]
    ],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 17,
@@ -1347,6 +1406,12 @@
     [
      "0x24",
      64
+    ]
+   ],
+   "register_loops": [
+    [
+     "eax",
+     400
     ]
    ],
    "back_pointers": [
@@ -1474,6 +1539,7 @@
     ]
    ],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 17,
@@ -1549,6 +1615,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 7,
@@ -1598,6 +1665,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -1623,6 +1691,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 6,
@@ -1701,6 +1770,7 @@
     ]
    ],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 7,
@@ -1763,6 +1833,7 @@
     ]
    ],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 27,
@@ -1815,6 +1886,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -1866,6 +1938,7 @@
    "dynamic_searches": 0,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [],
    "back_pointers": [],
    "index_offsets": [],
    "internal_calls": 5,
@@ -1924,6 +1997,12 @@
    "dynamic_searches": 2,
    "subscriptions": [],
    "counter_loops": [],
+   "register_loops": [
+    [
+     "r13d",
+     50
+    ]
+   ],
    "back_pointers": [],
    "index_offsets": [
     "0x1"
