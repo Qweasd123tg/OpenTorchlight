@@ -94,6 +94,20 @@ tools/ghidra/export_call_sites.sh \
 функцию (реестр, стадии из `research/function-transfer.json`, рёбра графа,
 места вызовов, попадания в декомпиляции, ссылки порта).
 
+Для пакетной выгрузки одной функции в JSON (тело, декомпиляция, границы,
+SHA-гейт на ELF, лимит 1–64 функции, без подмены interior-адреса) есть
+`tools/ghidra/ExportCodeFirstPacket.java`:
+
+```sh
+# targets.txt — по одному адресу на строку; каталог вывода не должен существовать
+"$ghidra_home/support/analyzeHeadless" ... \
+    -postScript ExportCodeFirstPacket.java targets.txt /tmp/packet-out \
+        91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b
+```
+
+Скрипт принят из внешнего toolkit как есть; на этой машине против Ghidra SDK
+не компилировался (нет javac/Ghidra) — перед боевым прогоном проверить.
+
 ## Как использовать результат
 
 Псевдокод Ghidra считается навигацией, а не самодостаточным доказательством.

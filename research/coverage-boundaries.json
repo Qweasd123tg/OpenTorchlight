@@ -687,6 +687,62 @@
         "tests/ui_screen_scale_test.cpp"
       ],
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json: 400 trees / 1200 nodes / 9600 float fields bit-exact vs tests/ui_screen_scale_test.cpp recorded literals (390/365.625/548.4375/731.25); full-CEGUI geometry NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xb4eb70",
+        "0xb4f570",
+        "0xb4f1b0",
+        "0xb458d0",
+        "0xa8ea20",
+        "0xb53430"
+      ],
+      "status": "partial",
+      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; I-key caller drives the original machine. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout contents, createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
+      "evidence": [
+        "research/inventory-open.md",
+        "research/disassembly/b4eb70-inventory-setopen.asm",
+        "research/disassembly/b4f570-onclick.asm",
+        "research/disassembly/b4f1b0-map-handlers.asm",
+        "research/disassembly/a8ea20-toggle-inventory.asm",
+        "research/disassembly/b53430-inventory-updatelayout.asm"
+      ],
+      "implementation": [
+        "src/inventory_menu.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/inventory_menu_test.cpp"
+      ],
+      "comparison": "tools/emulate_inventory_viewport.py (numpy binary32 op-for-op emulation of sites 0xb4eef2-0xb4f004) vs tests/inventory_menu_test.cpp literals: 9 viewports bit-exact incl. 8K reload path; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xb6a220",
+        "0xb92aa0",
+        "0xbc2550",
+        "0xbe1130",
+        "0xe3a680"
+      ],
+      "status": "partial",
+      "boundary": "Panel setOpen family ANALYSIS + PORTED skeleton: shared flag machine with per-menu profile table (tab triples/index, tip rules, viewport consts, detach, refresh rule, pet gate), inventory adapter delegating to the single implementation (its 53 assertions still pass through the wrapper). Pet viewport math compared bit-exact. NOT wired except inventory (no merchant/pet/quest/skill/journal UI exists in the port); engine sinks, key traces and createMenus branches remain open.",
+      "evidence": [
+        "research/panel-open.md",
+        "research/disassembly/b6a220-merchant-setopen.asm",
+        "research/disassembly/b92aa0-pet-setopen.asm",
+        "research/disassembly/bc2550-quest-setopen.asm",
+        "research/disassembly/be1130-skill-setopen.asm",
+        "research/disassembly/e3a680-journal-setopen.asm"
+      ],
+      "implementation": [
+        "src/panel_open.cpp",
+        "src/inventory_menu.cpp"
+      ],
+      "tests": [
+        "tests/panel_open_test.cpp",
+        "tests/inventory_menu_test.cpp"
+      ],
+      "comparison": "Pet (+inventory) viewport literals vs numpy emulation bit-exact; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
     }
   ],
   "port_systems": [

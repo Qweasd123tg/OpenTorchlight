@@ -2,11 +2,21 @@
   "schema": 1,
   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
   "meaning": "Code-first transfer ledger. One entry per original function. Four independent stages: analyzed (branches/actions/unknowns listed), ported (actions mapped to port code), wired (real caller path passes data and uses result), compared (named original-vs-port check with cases). Reading is not porting; porting is not wiring; equal numbers are not full side-effect comparison.",
-  "stages": ["analyzed", "ported", "wired", "compared"],
+  "stages": [
+    "analyzed",
+    "ported",
+    "wired",
+    "compared"
+  ],
   "functions": {
     "0x00a83ed0": {
       "symbol": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
-      "stages": {"analyzed": true, "ported": true, "wired": false, "compared": true},
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": true
+      },
       "evidence": "research/decompiled-core/game_ui.c:1286-1345; research/ui-scale-p1/NOTES.md; research/ui-menu-scale.md",
       "implementation": "src/ui_screen_scale.cpp; src/ui_layout.cpp; src/ui_hud.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json (400 trees / 1200 nodes / 9600 float fields bit-exact) vs tests/ui_screen_scale_test.cpp literals",
@@ -14,7 +24,12 @@
     },
     "0x00a83e70": {
       "symbol": "CGameUI::scaledY(float)",
-      "stages": {"analyzed": true, "ported": true, "wired": false, "compared": true},
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": true
+      },
       "evidence": "research/decompiled-core/game_ui.c; research/ui-scale-p1/NOTES.md",
       "implementation": "src/ui_screen_scale.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json constants 768.0f @0xfa4804",
@@ -22,7 +37,12 @@
     },
     "0x00a83ea0": {
       "symbol": "CGameUI::scaledX(float)",
-      "stages": {"analyzed": true, "ported": true, "wired": false, "compared": true},
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": true
+      },
       "evidence": "research/decompiled-core/game_ui.c; research/ui-scale-p1/NOTES.md",
       "implementation": "src/ui_screen_scale.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json constants 1/1024 @0xfa4808",
@@ -30,23 +50,108 @@
     },
     "0x00b4eb70": {
       "symbol": "CInventoryMenu::setOpen(bool)",
-      "stages": {"analyzed": false, "ported": false, "wired": false, "compared": false},
-      "evidence": "",
-      "implementation": "",
-      "comparison": "",
-      "notes": "First code-first target after scale. 0x632 bytes; direct outgoing includes animation/sound/viewport/scaledY; incoming is empty in the resolved direct graph (event/virtual path). Requires full-branch analysis, field map shared with createMenus/update, per-site call order, and vtable/event subscription recovery. Do not close on 'plays OPEN animation' alone."
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/inventory-open.md; research/disassembly/b4eb70-inventory-setopen.asm; research/disassembly/b4f1b0-map-handlers.asm; research/disassembly/b4f570-onclick.asm; research/disassembly/a8ea20-toggle-inventory.asm; research/decompiled-core/inventory_menu.c:2403-2573",
+      "implementation": "src/inventory_menu.cpp (InventoryMenuState flag/tab machine + provisional viewport math); src/application.cpp (I-key caller drives the machine, viewport latched once)",
+      "comparison": "tools/emulate_inventory_viewport.py vs tests/inventory_menu_test.cpp: 9 viewports bit-exact (viewport math only); 4 state paths + tabs asserted against recorded ASM behavior",
+      "notes": "Wired boundary: I-key path passes open/viewport data and consumes flags+viewport+frame-refresh; audio/model/tip/camera effects reported-open (no port sink). Compared boundary: viewport math only. Open: exact RenderWindow+0x48 target, [model+0x58] indirect call, aspect virtual, queueTip(0), +0x61 writer, KSETTINGS runtime values, key trace into toggleInventory, mapToFunctions, createMenus branches."
     },
     "0x00b569e0": {
       "symbol": "CInventoryMenu::createMenus()",
-      "stages": {"analyzed": false, "ported": false, "wired": false, "compared": false},
-      "evidence": "",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/inventory-open.md; research/disassembly/b569e0-inventory-createmenus.asm",
       "implementation": "",
       "comparison": "",
-      "notes": "Paired with setOpen: shared object fields must get one consistent interpretation. Includes confirmed convertToScreenScale call site."
+      "notes": "Phase structure + 25 single-write field map recovered from machine code: model setup, programmatic windows, loadWindowLayout(media/ui/inventorymenu.layout)->convertToScreenScale(false)@0xb57723->mapToFunctions->mapEventHandlers, tabs/slots, WardrobeCam@0xb5f0ee, CSkillTooltip::load. 620 branches and throw paths NOT yet fully analyzed; shared field map with setOpen holds for +0x9140/+0x9150/+0x9184/+0x9108-30/+0x91a0."
+    },
+    "0x00b6a220": {
+      "symbol": "CMerchantMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/panel-open.md; research/disassembly/b6a220-merchant-setopen.asm; research/decompiled-core/merchant_menu.c",
+      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
+      "comparison": "",
+      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: Shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no port caller exists (no merchant UI) so wired stays false; no numeric differential so compared stays false.",
+      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+    },
+    "0x00b92aa0": {
+      "symbol": "CPetMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": true
+      },
+      "evidence": "research/panel-open.md; research/disassembly/b92aa0-pet-setopen.asm; research/decompiled-core/pet_menu.c",
+      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
+      "comparison": "Pet viewport literals in tests/panel_open_test.cpp vs numpy emulation with pet consts (bit-exact, incl. 8K); state paths asserted against recorded ASM behavior",
+      "notes": "Pre-header gate: open requested but [[0x58]+0x330] in {0x29,0x2a} -> store-only epilogue (state meaning open). Viewport like inventory with consts 97/166/135/169, factory edx=4, base +0x91b4; queueTip(0x0f) via getGameUI in created branch; writes +0x6c=0. Flags 0x68/0x69; model +0x9170, sound +0x9180. Port: Shared skeleton via pet profile (viewport consts 97/166/135/169 base -5000, gate, tip 15); wired false (no pet UI); viewport math compared bit-exact vs numpy literals in test.",
+      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+    },
+    "0x00bc2550": {
+      "symbol": "CQuestMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/panel-open.md; research/disassembly/bc2550-quest-setopen.asm; research/decompiled-core/quest_menu.c",
+      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
+      "comparison": "",
+      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: Shared skeleton via quest profile (minimal, no refresh on reopen); wired/compared false (no quest UI, no numeric differential).",
+      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+    },
+    "0x00be1130": {
+      "symbol": "CSkillMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/panel-open.md; research/disassembly/be1130-skill-setopen.asm",
+      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
+      "comparison": "",
+      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: Shared skeleton via skill profile (3 triples, preserved index, detach); wired/compared false.",
+      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+    },
+    "0x00e3a680": {
+      "symbol": "CJournalMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/panel-open.md; research/disassembly/e3a680-journal-setopen.asm; research/decompiled-core/journal_menu.c",
+      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
+      "comparison": "",
+      "notes": "Skeleton-proven identical to quest (offsets only). Minimal profile, same deltas as quest. Flags 0x38/0x39; settings +0x40, model +0x58, sound +0x80. Port: Shared skeleton via journal profile (minimal); wired/compared false.",
+      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
     },
     "0x005791c0": {
       "symbol": "CGameClient::rescaleUI()",
-      "stages": {"analyzed": false, "ported": false, "wired": false, "compared": false},
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
       "evidence": "",
       "implementation": "",
       "comparison": "",
