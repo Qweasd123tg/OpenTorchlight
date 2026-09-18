@@ -605,6 +605,160 @@
       "tests": "tests/panel_open_test.cpp (shared machine; no port instance)",
       "comparison": "By construction (open_ == LO store sites); no independent differential",
       "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. No port instance/caller yet."
+    },
+    "0x00b53430": {
+      "symbol": "CInventoryMenu::updateLayout()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md; research/disassembly/b53430-inventory-updatelayout.asm",
+      "implementation": "Per-frame session render (data path; pre-existing)",
+      "tests": "town-new: unequip/equip/damage recompute",
+      "comparison": "No original-execution proof",
+      "notes": "Wired=data refresh only; icons/glows/tooltips/z-order have no renderer sink (open)."
+    },
+    "0x00b6dc70": {
+      "symbol": "CMerchantMenu::updateLayout()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md; objdump call census (0x10a5)",
+      "implementation": "Per-frame session render (data path; pre-existing)",
+      "tests": "services-use: buy/debit/bottle",
+      "comparison": "No original-execution proof",
+      "notes": "Wired=data refresh only; icons/glows/tooltips/z-order have no renderer sink (open)."
+    },
+    "0x00adde00": {
+      "symbol": "CCombineMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00b05e70": {
+      "symbol": "CDropdownMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00b2af60": {
+      "symbol": "CEnchantMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00ba26b0": {
+      "symbol": "CPetMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00bc4430": {
+      "symbol": "CQuestMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00be59e0": {
+      "symbol": "CSkillMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00bfad60": {
+      "symbol": "CStashMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00c187d0": {
+      "symbol": "CStatsMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
+    },
+    "0x00e3c460": {
+      "symbol": "CJournalMenu::updateLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/update-layout.md §4 (registered, undumped)",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Placeholder; skill/quest data paths are scenario-proven but bodies unread."
     }
   }
 }

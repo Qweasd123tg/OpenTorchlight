@@ -698,14 +698,15 @@
         "0xb53430"
       ],
       "status": "partial",
-      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; single-writer set_inventory_open drives the machine on all paths (I/K/J/F/ESC/merchant/death/recovery/level-init), viewport latched on recompute. Effect sinks: flag consumed, viewport stored but renderless, animation/sound/tip/camera open. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout contents, createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
+      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; single-writer set_inventory_open drives the machine on all paths (I/K/J/F/ESC/merchant/death/recovery/level-init), viewport latched on recompute. Effect sinks: flag consumed, viewport stored but renderless, animation/sound/tip/camera open. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout presentation (icons/glows/tooltips; data path wired, see update-layout boundary), createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
       "evidence": [
         "research/inventory-open.md",
         "research/disassembly/b4eb70-inventory-setopen.asm",
         "research/disassembly/b4f570-onclick.asm",
         "research/disassembly/b4f1b0-map-handlers.asm",
         "research/disassembly/a8ea20-toggle-inventory.asm",
-        "research/disassembly/b53430-inventory-updatelayout.asm"
+        "research/disassembly/b53430-inventory-updatelayout.asm",
+        "research/update-layout.md"
       ],
       "implementation": [
         "src/inventory_menu.cpp",
@@ -945,6 +946,24 @@
         "tests/panel_open_test.cpp"
       ],
       "comparison": "By construction; no independent differential"
+    },
+    {
+      "addresses": [
+        "0xb6dc70"
+      ],
+      "status": "implemented",
+      "boundary": "Merchant updateLayout skeleton (same detach+rebuild family; setText x2, setSlotIcon+setPetSlotIcon). Data path wired per frame (services 47); presentation has no sink.",
+      "evidence": [
+        "research/update-layout.md"
+      ],
+      "implementation": [
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/scenarios/town-new.scenario",
+        "tests/application_services_test.py"
+      ],
+      "comparison": "No original-execution proof"
     }
   ],
   "port_systems": [
