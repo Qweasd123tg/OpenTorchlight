@@ -90,7 +90,35 @@ TRIGGER/TRIGGER_TWO/CASTERDIE/UNIT_CREATE/END beyond диспетчеризац�
 beyond имён; тождество строки по `0x14abf60` — agent-read из декомпа
 (форма ветки `a16c8a/a16c9e/a16cb4` проверена, имя нет).
 
-## 6. Следующий переносимый срез (по коду, SEEKING — контроль)
+## 6. Переносимый срез §6 — PORTED (SkillEventRuntime)
+
+`include/torchlight/skill_event_runtime.hpp`, `src/skill_event_runtime.cpp`,
+`tests/skill_event_runtime_test.cpp` (54 assertions with pak / 27 without,
+PASS; core 78/78 PASS). Портировано: startSkill гарды/состояние, общий
+диспетчер triggerEvent/hasEvent (поддержаны start + missile callbacks 6/7,
+остальные 8 типов — явный false), каркас startEvent для missile-пути, ветвь
+спавнера Missiles, fire-sink launches (`template_missing`/`spawn_refused`),
+постеры MISSILEHIT (damage open) / MISSILEDIE. Стадии в реестре:
+analyzed+ported+wired; compared=false (дифференциала с вызовом оригинала
+нет, только поведенческий контроль SEEKING).
+
+Найдено при переносе (возвращено в границу, а не угадано):
+- SEEKING-спавн идёт НЕ через флаг SPAWN ON CREATE (в ресурсе false), а через
+  TIMELINEOBJECT `Spawn Units` при TIMEPERCENT=0.0. Парсер layout расширен
+  аддитивно (`LayoutManifest::timeline_points`: timeline/target/input/percent;
+  ремап ID при expand_layout_links с lenient-правилом), чекпоинт-идентичность
+  не тронута. Runtime: при START выполняются точки ровно 0.0 через ту же
+  сцену; точки >0 и висячие — в `take_deferred_timeline_points`, часы
+  таймлайна — open.
+- SEEKING COUNT=3: в launch едет `spawner_count=3 + repeated_count_open`,
+  sink стреляет один раз; мульти-пуск — open.
+- Контроль SEEKING проходит всю цепь без прямого вызова missile runtime из
+  теста и без подмены хендлера: cast → START → сцена (флаг + t=0 Spawn Units)
+  → launch SEEKINGSHOT → sink → MissileRuntime (был пуст) → HIT → MISSILEHIT,
+  второй каст → expiry → MISSILEDIE. Урон скилла (applyWeaponDamage/
+  applyEffects внутри хука) — без синка, помечен в каждой MISSILEHIT-записи.
+
+Исходный план среза (порядок кода):
 
 startSkill гарды+cooldown+triggerEvent(START) → triggerEvent/hasEvent +
 140/14c + CLONE_ALLOWED + рекурсия 8→5 → startEvent каркас (layout start,
@@ -98,3 +126,8 @@ applyEffects/applyWeaponDamage/invokeHitSkills, CExecuteSkillProps
 прямой/random, addListeners) → applyEffects→leaf → спавнер-ветвь
 Missiles→createAndFireMissile→createMissile→createNewMissileRef→fireMissile +
 колбэки →triggerEvent(6/7) к существующему CMissile runtime.
+
+Из него сознательно НЕ портировано (следующие кластеры, не долг): клон-ветвь
+140/14c + CLONE_ALLOWED, рекурсия 8→5, applyEffects/applyWeaponDamage/
+invokeHitSkills тела, CExecuteSkillProps, остальные spawn-типы, часы
+таймлайна, оценка шанса/кулдауна из данных скилла, привязка каста к вводу.

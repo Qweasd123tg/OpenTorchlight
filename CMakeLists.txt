@@ -47,6 +47,7 @@ add_library(torchlight_core STATIC
     src/merchant.cpp
     src/missile_motion.cpp
     src/missile_runtime.cpp
+    src/skill_event_runtime.cpp
     src/economy.cpp
     src/quests.cpp
     src/skills.cpp
@@ -1070,6 +1071,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(missile_runtime_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME missile_runtime COMMAND missile_runtime_test)
+
+    add_executable(skill_event_runtime_test tests/skill_event_runtime_test.cpp)
+    target_link_libraries(skill_event_runtime_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(skill_event_runtime_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    add_test(NAME skill_event_runtime COMMAND skill_event_runtime_test)
 
     # Donor ui_skin merge: synthetic fixture only (no game assets); the
     # native-probe/render harnesses were not taken (no probe infrastructure).

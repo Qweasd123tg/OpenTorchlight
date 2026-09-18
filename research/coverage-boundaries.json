@@ -1057,14 +1057,21 @@
         "0x00ccacb0",
         "0x00cd45c0"
       ],
-      "status": "researched",
-      "boundary": "Skill effect/event dispatch chain: startSkill guards+triggerEvent(START); indexed triggerEvent dispatch; startEvent applier fan-out; leaf applier; spawner Missiles branch (SEEKINGSHOT control); createAndFireMissile to shared CMissile runtime; MISSILEHIT/MISSILEDIE posters; 11-event catalog with posters. Correction: fireMissile/createNewMissileRef have two code-refs each (call+jmp).",
+      "status": "implemented",
+      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime.",
       "evidence": [
         "research/skill-effect-dispatch.md"
       ],
-      "implementation": [],
-      "tests": [],
-      "comparison": "Key call/branch/post sites verified in ASM+pak by author; remainder agent-read from graph+decomp, marked as such"
+      "implementation": [
+        "include/torchlight/skill_event_runtime.hpp",
+        "src/skill_event_runtime.cpp",
+        "src/level_scene.cpp",
+        "tests/skill_event_runtime_test.cpp"
+      ],
+      "tests": [
+        "tests/skill_event_runtime_test.cpp"
+      ],
+      "comparison": "Key call/branch/post sites verified in ASM+pak; remainder agent-read, marked as such. No original-call differential; behavioral SEEKING control case only."
     }
   ],
   "port_systems": [

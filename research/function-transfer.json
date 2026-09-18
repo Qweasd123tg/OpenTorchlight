@@ -2178,43 +2178,43 @@
       "symbol": "CSkill::startSkill(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; guards+triggerEvent(0) verified in objdump",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00ca5950": {
       "symbol": "CSkill::triggerEvent(ESKILL_EVENT_TYPE,...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; indexed dispatch +140/14c branch agent-read, post-sites verified",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00cc4300": {
       "symbol": "CSkillEvent::startEvent(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; applier calls agent-read from graph+decomp",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00cb7850": {
       "symbol": "CSkillEvent::applyEffects(...)",
@@ -2276,71 +2276,71 @@
       "symbol": "CUnitSpawner::spawnUnitByIndex(uint)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; a16c8a/a16c9e/a16cb4 branch shape verified",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00a0adc0": {
       "symbol": "CUnitSpawner::createAndFireMissile(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; a0add9 call + a0ae8c jmp verified",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00d6f520": {
       "symbol": "CResourceManager::createMissile(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; d6f550 jmp verified, trivial wrapper",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00cb8360": {
       "symbol": "missileApplyingEffects(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; mov 6 + applier calls + triggerEvent verified",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00cb7670": {
       "symbol": "missileDieing(...)",
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; mov 7 + triggerEvent verified",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Skill-effect dispatch recon; port slice defined in skill-effect-dispatch.md section 6."
+      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
+      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
+      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
+      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
     },
     "0x00ccacb0": {
       "symbol": "CSkillManager::triggerSkillEvent(...)",

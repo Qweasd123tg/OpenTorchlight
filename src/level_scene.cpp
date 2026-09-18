@@ -283,8 +283,29 @@ std::u16string layout_link_file(const LayoutObject& object) {
     return std::get<std::u16string>(value->value);
 }
 
+void collect_timeline_points(const AdmGroup& timeline_data, std::int64_t timeline_id,
+                             std::vector<LayoutTimelinePoint>& timeline_points) {
+    for (const auto& timeline_object : timeline_data.groups) {
+        if (timeline_object.name != u"TIMELINEOBJECT") continue;
+        const auto target = int64_value(timeline_object, u"OBJECTID", 0);
+        for (const auto& event : timeline_object.groups) {
+            if (event.name != u"TIMELINEOBJECTEVENT") continue;
+            const auto input = text_value(event, u"OBJECTEVENTNAME");
+            if (input.empty()) continue;
+            float time_percent = 0.0F;
+            for (const auto& point : event.groups) {
+                if (point.name != u"TIMELINEPOINT") continue;
+                time_percent = float_value(point, u"TIMEPERCENT", 0.0F);
+                break;
+            }
+            timeline_points.push_back({timeline_id, target, input, time_percent});
+        }
+    }
+}
+
 void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& objects,
-                            std::vector<LayoutLogicGroup>& logic_groups) {
+                            std::vector<LayoutLogicGroup>& logic_groups,
+                            std::vector<LayoutTimelinePoint>& timeline_points) {
     if (group.name == u"BASEOBJECT") {
         const auto* properties = child_group(group, u"PROPERTIES");
         if (properties != nullptr) {
@@ -326,11 +347,14 @@ void collect_layout_objects(const AdmGroup& group, std::vector<LayoutObject>& ob
             if (const auto* logic = child_group(*properties, u"LOGICGROUP")) {
                 logic_groups.push_back(parse_logic_group(*logic, object.id));
             }
+            if (const auto* timeline_data = child_group(*properties, u"TIMELINEDATA")) {
+                collect_timeline_points(*timeline_data, object.id, timeline_points);
+            }
             objects.push_back(std::move(object));
         }
     }
     for (const auto& child : group.groups) {
-        collect_layout_objects(child, objects, logic_groups);
+        collect_layout_objects(child, objects, logic_groups, timeline_points);
     }
 }
 
@@ -525,7 +549,8 @@ LayoutManifest LevelSceneLoader::load_layout(std::string_view compiled_path) con
     result.source_path = entry->name;
     result.version = int_value(document.root, u"VERSION", 0);
     result.declared_count = unsigned_value(document.root, u"COUNT", 0);
-    collect_layout_objects(document.root, result.objects, result.logic_groups);
+    collect_layout_objects(document.root, result.objects, result.logic_groups,
+                           result.timeline_points);
     return result;
 }
 
@@ -772,6 +797,22 @@ LayoutLinkExpansionStats expand_layout_links(const LevelSceneLoader& loader,
                 node.object_id = remapped_id(ids, node.object_id);
             }
             layout.logic_groups.push_back(std::move(group));
+        }
+        // Timeline points reference the same object ID space: remap alongside
+        // objects and logic groups so expanded layouts stay consistent. Unlike
+        // logic links, an unmapped target keeps its ID (it may address the
+        // outer layout): these points were ignored before, throwing would be
+        // a regression on previously loading files.
+        const auto lenient_remap = [&ids](std::int64_t original) {
+            const auto found = ids.find(original);
+            return found == ids.end() ? original : found->second;
+        };
+        layout.timeline_points.reserve(layout.timeline_points.size() +
+                                       source.timeline_points.size());
+        for (auto point : source.timeline_points) {
+            point.timeline_id = lenient_remap(point.timeline_id);
+            point.target_object_id = lenient_remap(point.target_object_id);
+            layout.timeline_points.push_back(std::move(point));
         }
         for (std::size_t index = first_added; index < layout.objects.size(); ++index) {
             if (layout.objects[index].descriptor == u"Layout Link") {

@@ -168,6 +168,16 @@ struct LayoutLogicGroup {
     std::vector<LayoutLogicNode> nodes;
 };
 
+// One TIMELINEOBJECT event: the owning Timeline object, the targeted object
+// (OBJECTID), the input to invoke (OBJECTEVENTNAME) and the playhead position
+// (TIMEPOINT TIMEPERCENT, 0.0 = layout start).
+struct LayoutTimelinePoint {
+    std::int64_t timeline_id = 0;
+    std::int64_t target_object_id = 0;
+    std::u16string input_name;
+    float time_percent = 0.0F;
+};
+
 struct LayoutWorldTransform {
     std::array<float, 3> position{};
     std::array<float, 3> scale{1.0F, 1.0F, 1.0F};
@@ -180,6 +190,10 @@ struct LayoutManifest {
     std::uint32_t declared_count = 0;
     std::vector<LayoutObject> objects;
     std::vector<LayoutLogicGroup> logic_groups;
+    // Timeline object events (TIMELINEDATA/TIMELINEOBJECT/OBJECTEVENTNAME at a
+    // TIMEPOINT). Parsed losslessly; playback timing beyond t=0 needs a
+    // timeline clock (open) and stays unacted.
+    std::vector<LayoutTimelinePoint> timeline_points;
 };
 
 struct LayoutLinkExpansionStats {
