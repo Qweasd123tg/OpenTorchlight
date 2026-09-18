@@ -57,9 +57,9 @@
         "compared": true
       },
       "evidence": "research/inventory-open.md; research/disassembly/b4eb70-inventory-setopen.asm; research/disassembly/b4f1b0-map-handlers.asm; research/disassembly/b4f570-onclick.asm; research/disassembly/a8ea20-toggle-inventory.asm; research/decompiled-core/inventory_menu.c:2403-2573",
-      "implementation": "src/inventory_menu.cpp (InventoryMenuState flag/tab machine + provisional viewport math); src/application.cpp (I-key caller drives the machine, viewport latched once)",
+      "implementation": "src/inventory_menu.cpp (flag/tab machine + viewport math); src/application.cpp (set_inventory_open single writer: I/K/J/F/ESC/merchant/death/recovery/level-init paths; viewport latched on recompute)",
       "comparison": "tools/emulate_inventory_viewport.py vs tests/inventory_menu_test.cpp: 9 viewports bit-exact (viewport math only); 4 state paths + tabs asserted against recorded ASM behavior",
-      "notes": "Wired boundary: I-key path passes open/viewport data and consumes flags+viewport+frame-refresh; audio/model/tip/camera effects reported-open (no port sink). Compared boundary: viewport math only. Open: exact RenderWindow+0x48 target, [model+0x58] indirect call, aspect virtual, queueTip(0), +0x61 writer, KSETTINGS runtime values, key trace into toggleInventory, mapToFunctions, createMenus branches."
+      "notes": "Effect->sink table: open flag -> mirror consumed by all readers (single writer, Esc desync fixed); viewport_recompute -> ensure_viewport computed+stored, viewport() exposed, NO renderer sink yet (open); update_layout -> covered by per-frame session refresh (port-side); OPEN/CLOSE animation, sample, queueTip, camera selection -> reported, NO port sink (open). Compared boundary: viewport math + state paths only. Open: RenderWindow+0x48 target, [model+0x58], aspect virtual, queueTip(0), +0x61 writer, KSETTINGS runtime, key trace into toggleInventory, mapToFunctions, createMenus branches. Scenario gap: prototype InventoryView still renders instead of CEGUI windows; animation/tip/camera unwired."
     },
     "0x00b569e0": {
       "symbol": "CInventoryMenu::createMenus()",

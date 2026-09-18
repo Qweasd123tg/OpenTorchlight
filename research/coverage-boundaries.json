@@ -698,7 +698,7 @@
         "0xb53430"
       ],
       "status": "partial",
-      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; I-key caller drives the original machine. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout contents, createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
+      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; single-writer set_inventory_open drives the machine on all paths (I/K/J/F/ESC/merchant/death/recovery/level-init), viewport latched on recompute. Effect sinks: flag consumed, viewport stored but renderless, animation/sound/tip/camera open. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout contents, createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
       "evidence": [
         "research/inventory-open.md",
         "research/disassembly/b4eb70-inventory-setopen.asm",

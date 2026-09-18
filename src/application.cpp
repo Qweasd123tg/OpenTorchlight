@@ -525,7 +525,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             // Runtime entity IDs start at 1; 0 is the established invalid ID.
             // Explicitly initialized ID avoids GCC optional payload false positives.
             std::uint64_t merchant_entity = 0;
-            inventory_view.open = false;
+            inventory_menu.set_open(false, false); // single-writer invariant: mirror follows controller
+            inventory_view.open = inventory_menu.open();
             auto player_visual = visual_prototype(session.inventory());
             auto player_animations = load_player_animations(
                 archive, player_visual, unit_type_hierarchy);
@@ -1033,14 +1034,28 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                 }
+                // Single writer for the inventory open flag. The ported
+                // setOpen flag machine (CInventoryMenu::setOpen @0xb4eb70)
+                // owns the state; inventory_view.open is only its mirror.
+                // Writing the mirror directly desyncs the controller: Esc
+                // used to do that, so the next I-press silently skipped
+                // the fresh-open branch.
+                auto set_inventory_open = [&](bool requested) {
+                    const auto menu_effects = inventory_menu.set_open(requested, false);
+                    if (menu_effects.viewport_recompute)
+                        inventory_menu.ensure_viewport(
+                            window.width(), window.height(),
+                            torchlight::ui_screen_ratio(window.width(), window.height(),
+                                                        torchlight::UiScreenScaleRatio::y_ratio));
+                    inventory_view.open = inventory_menu.open();
+                };
                 for (const auto key : key_presses) {
                     if (!player_combat.alive()) {
                         if (key == torchlight::physical_key::ESC) { frontend.pause(); continue; }
                         if (key != torchlight::physical_key::R) continue;
                         const auto recovery = session.recover_at_entry(enemies, player_motion, level.recovery_anchor);
                         if (recovery.status != torchlight::RecoveryStatus::recovered) continue;
-                        inventory_menu.set_open(false, false); // keep controller consistent; port recovery owns the reset
-                        inventory_view.open = false;
+                        set_inventory_open(false); // port recovery owns the reset
                         active_interaction.reset(); interactions.cancel(); active_pickup = 0; active_path.clear(); next_path_node = 0;
                         player_attack_animation_active = false;
                         player_animation_state = player_transition_from_state = PlayerAnimationState::idle;
@@ -1065,7 +1080,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     }
                     if (key == torchlight::physical_key::I) {
                         const bool requested = skill_panel || quest_panel || merchant_entity ||
-                                               !inventory_view.open;
+                                               !inventory_menu.open();
                         // original-code: CInventoryMenu::setOpen @0xb4eb70 flag machine;
                         // the panel interplay above is the port-side caller (cf. the
                         // original toggleInventory @0xa8ea20). close_playing=false: the
@@ -1073,19 +1088,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         // animation, tip and camera effects have no port sink yet (see
                         // inventory_menu.hpp boundary); the frame already refreshes
                         // inventory lines from the session, which covers update_layout.
-                        const auto menu_effects = inventory_menu.set_open(requested, false);
-                        if (menu_effects.viewport_recompute)
-                            inventory_menu.ensure_viewport(
-                                window.width(), window.height(),
-                                torchlight::ui_screen_ratio(window.width(), window.height(),
-                                                            torchlight::UiScreenScaleRatio::y_ratio));
-                        inventory_view.open = inventory_menu.open();
+                        // The computed paperdoll viewport is stored in the controller
+                        // (viewport()) but no renderer consumes it yet (open).
+                        set_inventory_open(requested);
                         skill_panel = false; quest_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::K) {
-                        inventory_view.open = !skill_panel || !inventory_view.open;
+                        set_inventory_open(!skill_panel || !inventory_menu.open());
                         skill_panel = true; quest_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::J) {
-                        inventory_view.open = !quest_panel || !inventory_view.open;
+                        set_inventory_open(!quest_panel || !inventory_menu.open());
                         quest_panel = true; skill_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
                         const auto& skills = session.skills().skills;
@@ -1093,7 +1104,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             const auto result = session.begin_skill(skills[selected_skill].name, resolve_attack);
                             inventory_view.status = torchlight::skill_use_message(result);
                             if (result == torchlight::SkillUse::started) {
-                                inventory_view.open = false;
+                                set_inventory_open(false);
                                 player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 active_interaction.reset(); interactions.cancel(); active_pickup = 0;
                                 std::cout << "skill_started=" << narrow_ascii(skills[selected_skill].name)
@@ -1102,14 +1113,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                     else if (key == torchlight::physical_key::ESC) {
-                        if (inventory_view.open) { inventory_view.open = false; merchant_entity = 0; }
+                        if (inventory_view.open) { set_inventory_open(false); merchant_entity = 0; }
                         else frontend.pause();
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open && merchant_entity) {
                         const auto* npc = entity_world.find(merchant_entity);
-                        if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
-                            merchant_entity = 0; inventory_view.open = false;
+                            if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
+                                merchant_entity = 0; set_inventory_open(false);
                             inventory_view.status = "MERCHANT NO LONGER AVAILABLE";
                         } else {
                             const auto offers = merchant_catalog.offers(npc->resource_guid, session.progression().level);
@@ -1258,7 +1269,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             const auto* npc = entity_world.find(active_interaction->entity_id);
                             if (npc && merchant_catalog.find(npc->resource_guid)) {
                                 merchant_entity = npc->id; selected_offer = 0;
-                                inventory_view.open = true; skill_panel = false; quest_panel = false;
+                                set_inventory_open(true); skill_panel = false; quest_panel = false;
                                 inventory_view.status = "INFINITE POTIONS ONLY. OTHER MERCHANT SERVICES NOT IMPLEMENTED.";
                                 std::cout << "merchant_opened=" << npc->resource_guid << '\n';
                             }
@@ -1643,7 +1654,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             if (hit.state == torchlight::EnemyAiState::player_killed) {
                                 ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
-                                active_interaction.reset(); interactions.cancel(); active_pickup = 0; inventory_view.open = false;
+                                active_interaction.reset(); interactions.cancel(); active_pickup = 0;
+                                inventory_menu.set_open(false, false); // single-writer invariant
+                                inventory_view.open = inventory_menu.open();
                                 session.cancel_skill();
                                 std::cout << "player_killed=1\n";
                                 break;
