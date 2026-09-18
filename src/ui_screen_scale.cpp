@@ -33,11 +33,22 @@ void ui_scale_vector_offsets(std::array<float, 4> &vector, float ratio) {
 
 std::optional<UiScreenScaleRatio> ui_screen_scale_for_layout(const std::string &layout_path) {
     // All confirmed call sites pass `false`, i.e. YRATIO for both axes.
+    // HUD/game stage: CGameUI::create call @0xaa07dc (checked against the
+    // decompiled game_ui.c:9464 chain). Controller menus, each verified in
+    // the shipped ELF by xor-edx + call convertToScreenScale in its
+    // createMenus: CMainMenu @0xc52bd5, CNewGameMenu @0xc5d8f5,
+    // CContinueGameMenu @0xc4067d, COptionsMenu @0xb881ad,
+    // CSettingsMenu @0xbd705d. The menu->layout pairing (MainMenu/
+    // mainmenuframe etc.) is resource-derived from layout contents and the
+    // port's page mapping; layouts absent here (e.g. loading) have unknown
+    // policy: no scaling is applied for them rather than an invented one.
     const auto leaf = layout_path.substr(layout_path.find_last_of('/') + 1);
     for (const char *name : {"bottomhud.layout", "pethud.layout", "inventorymenu.layout",
                              "merchantmenu.layout", "petmenu.layout", "journalmenu.layout",
                              "questmenu.layout", "stashmenu.layout", "enchantmenu.layout",
-                             "combinemenu.layout"})
+                             "combinemenu.layout", "mainmenuframe.layout",
+                             "charactercreate.layout", "characterload.layout",
+                             "optionsmenu.layout", "settingsmenu.layout"})
         if (leaf == name)
             return UiScreenScaleRatio::y_ratio;
     return std::nullopt;

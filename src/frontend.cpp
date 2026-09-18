@@ -1,4 +1,5 @@
 #include "torchlight/frontend.hpp"
+#include "torchlight/ui_screen_scale.hpp"
 #include <algorithm>
 #include <cctype>
 #include <stdexcept>
@@ -359,7 +360,13 @@ FrontendFrame Frontend::frame(int width, int height) {
     std::vector<UiResolvedWidget> widgets;
     try {
         if (const auto *layout = resources_->layout(path)) {
-            widgets = layout->resolve(width, height);
+            // original-code: the five controller menus scale their layout
+            // with YRATIO (see ui_screen_scale_for_layout); other pages keep
+            // ratio 1 rather than an invented policy.
+            const auto policy = ui_screen_scale_for_layout(path);
+            const float screen_scale =
+                policy ? ui_screen_ratio(width, height, *policy) : 1.0F;
+            widgets = layout->resolve(width, height, screen_scale);
             frame.original_layout = true;
         }
     } catch (const std::exception &e) { status_ = e.what(); }

@@ -49,17 +49,15 @@ def main():
             # The main-page authored imageset has a 2x2 orange/blue background;
             # sample away from text/buttons, including resized-coordinate mapping.
             # CEGUI-direct mapping (no letterbox): at native size the full image
-            # shows, so the bottom corner is solid blue; at 512x384 only the top
-            # half of the 1024-tall image is visible, so the corner lands in the
-            # orange/blue blend zone (both channels lit, neither saturated).
+            # shows, so the bottom corner is solid blue. The menu background
+            # scales by YRATIO (original CMainMenu::createMenus call), so at
+            # 512x384 it still covers the viewport and the corner stays solid
+            # blue instead of landing in a blend zone.
             if page==0:
                 def pixel(x,y):return tuple(image[((h-1-y)*w+x)*4:((h-1-y)*w+x)*4+4])
                 top=pixel(w-10,20);bottom=pixel(w-10,h-10)
                 assert top[0]>200 and top[2]<40,(top,'atlas top/orientation wrong')
-                if w==1024:
-                    assert bottom[2]>200 and bottom[0]<40,(bottom,'atlas bottom/orientation wrong')
-                else:
-                    assert bottom[0]>80 and bottom[2]>80 and abs(bottom[0]-bottom[2])<40,(bottom,'atlas blend zone wrong')
+                assert bottom[2]>200 and bottom[0]<40,(bottom,'atlas bottom/orientation wrong')
             results.append(image)
             if a.output and w==1024 and page==0:
                 # PPM is only a local test artifact, no dependency on imaging packages.

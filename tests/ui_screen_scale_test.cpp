@@ -108,6 +108,15 @@ int main() {
         require(ui_screen_scale_for_layout("media/UI/inventorymenu.layout") ==
                     UiScreenScaleRatio::y_ratio,
                 "inventory policy lost");
+        // Controller menus, verified per-menu in the shipped ELF (xor edx +
+        // call convertToScreenScale in each createMenus, all false/YRATIO).
+        for (const char *menu : {"media/UI/mainmenuframe.layout", "media/UI/charactercreate.layout",
+                                 "media/UI/characterload.layout", "media/UI/optionsmenu.layout",
+                                 "media/UI/settingsmenu.layout"}) {
+            if (ui_screen_scale_for_layout(menu) != UiScreenScaleRatio::y_ratio)
+                throw std::runtime_error(std::string("menu policy lost: ") + menu);
+            ++checks;
+        }
         require(!ui_screen_scale_for_layout("media/UI/mainmenu.layout").has_value(),
                 "unknown screen invented a policy");
         require(!ui_screen_scale_for_layout("media/UI/characterselect.layout").has_value(),

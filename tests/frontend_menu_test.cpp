@@ -58,9 +58,11 @@ int main(int argc, char **argv) {
         f.key(FrontendKey::back);
         require(f.page() == FrontendPage::main, "settings back did not return");
         auto small = f.frame(512,384);
-        // original-code: absolute pixel offsets do not rescale with the window.
-        require(text(small,"CopyrightInfo").rect.x == text(m,"CopyrightInfo").rect.x,
-                "absolute layout offset rescaled");
+        // original-code: CMainMenu::createMenus scales mainmenuframe offsets
+        // by YRATIO (convertToScreenScale call @0xc52bd5); at 512x384 the
+        // nested 470px chain resolves to exactly half, 235.
+        require(text(small,"CopyrightInfo").rect.x == 235.0F,
+                "main menu offsets ignore YRATIO");
         click(f,"new");
         require(text(f.frame(1024,768),"CharacterName").text == "Hero", "name field not bound");
         const auto creation=f.frame(1024,768);
