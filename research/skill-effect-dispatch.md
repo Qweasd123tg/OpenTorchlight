@@ -131,3 +131,35 @@ Missiles→createAndFireMissile→createMissile→createNewMissileRef→fireMiss
 140/14c + CLONE_ALLOWED, рекурсия 8→5, applyEffects/applyWeaponDamage/
 invokeHitSkills тела, CExecuteSkillProps, остальные spawn-типы, часы
 таймлайна, оценка шанса/кулдауна из данных скилла, привязка каста к вводу.
+
+## 7. Срез appliers — PORTED (hit-hook SkillEventRuntime)
+
+Порядок хука измерен автором (`cb83d3 canEffect → cb8413 weapon → cb842b
+effects → cb8439 hitSkills → cb8463 cmp 6 → cb84a9/cb84c0 trigger(6)`;
+постеры invokeHitSkills `cb72f4 UNITHIT / cb738a UNITDIE` с гейтами `cb72b2 /
+cb7348`; гарды входа applyWeaponDamage `cb7bb4/cb7bbd`): портирован как
+порядок + гейты с портированным смыслом + постеры, не тела вычислений.
+
+Ресурсный путь SEEKING (read-only pak, сверено своим парсером):
+`SEEKING.DAT.adm` root SKILL: 12 LEVEL-рунов, каждый — только EVENT_START
+(warmup.layout) + EVENT_TRIGGER (seeking.layout, WEAPONDAMAGEPCT,
+SOAKSCALEPCT, USEDPS); L1 = 40.0/60.0; EFFECT/AFFIX/DAMAGE записей нет
+вообще. Значит нога effects для SEEKING — ресурсно-доказанный no-op, а нога
+weapon — скаляры лестницы. `DESCRIPTION='Fires 3 projectiles...'` коррелирует
+с COUNT=3, но одновременность трёх пусков не доказана — повторение остаётся
+open (без изменений).
+
+Что портировано: загрузчик `load_skill_trigger_levels` (лестница +
+effect_entries, present=false вместо дефолтов, отсутствие файла — nullopt);
+гейт rung в start_skill (issue `level`, без клампа); привязка rung/caster к
+запуску и далее к missile (роль setSkillOwner); последовательность хита —
+запрос weapon-ноги (точные скаляры rung, число НЕ вычисляется: контракт входа
+будущего бэкенда performAttack/rollAttack), no-op effects-ноги при 0 записей
+/ `take_open_effect_legs` иначе, постеры UNITHIT всегда + UNITDIE по факту
+смерти от вызывающей стороны (у runtime нет HP), затем MISSILEHIT.
+`damage_application_open` остаётся true: открыта именно численность урона.
+
+Семейство (не унифицировано, только каталог callsites): те же appliers зовут
+`characterEffectedByDamageShape @0xcc1c40`, `itemEffectedByDamageShape
+@0xcb84f0`, `startEvent @0xcc4300` (5× applyEffects, weapon, hitSkills,
+2× executeSkill) — общий executor-кандидат на следующий проход по графу.

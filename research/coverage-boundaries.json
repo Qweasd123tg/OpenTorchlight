@@ -1055,10 +1055,12 @@
         "0x00cb8360",
         "0x00cb7670",
         "0x00ccacb0",
-        "0x00cd45c0"
+        "0x00cd45c0",
+        "0x00cb7290",
+        "0x00cb7240"
       ],
       "status": "implemented",
-      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime.",
+      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime. Applier slice: measured hit-hook order canEffect->weapon->effects->hitSkills->trigger(6) with UNITHIT/UNITDIE posters; SEEKING trigger ladder (L1 40/60, zero effect entries: proven no-op leg); rung-gated casts with cast-to-missile binding; weapon-leg request as the damage number's input contract (number still open).",
       "evidence": [
         "research/skill-effect-dispatch.md"
       ],

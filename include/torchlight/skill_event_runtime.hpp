@@ -2,6 +2,7 @@
 
 #include "torchlight/level_scene.hpp"
 #include "torchlight/logic_runtime.hpp"
+#include "torchlight/pak_archive.hpp"
 
 #include <array>
 #include <cstdint>
@@ -13,10 +14,13 @@
 #include <vector>
 
 namespace torchlight {
-// original-code: skill execution entry + event dispatch (CSkill::startSkill
-// @0xca9150, CSkill::triggerEvent @0xca5950, CSkillEvent::startEvent @0xcc4300,
-// CUnitSpawner missile branch in spawnUnitByIndex @0xa167a0,
-// createAndFireMissile @0xa0adc0, missileApplyingEffects @0xcb8360,
+// original-code: skill execution entry + event dispatch + hit appliers
+// (CSkill::startSkill @0xca9150, CSkill::triggerEvent @0xca5950,
+// CSkillEvent::startEvent @0xcc4300, CUnitSpawner missile branch in
+// spawnUnitByIndex @0xa167a0, createAndFireMissile @0xa0adc0,
+// missileApplyingEffects @0xcb8360, canEffectPosObject @0xcb7240,
+// applyWeaponDamage @0xcb7b70, applyEffects @0xcb7850,
+// applyAffixesAndEffects @0xcac040, invokeHitSkills @0xcb7290,
 // missileDieing @0xcb7670; ELF SHA-256
 // 91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b;
 // analysis research/skill-effect-dispatch.md).
@@ -46,6 +50,22 @@ enum class SkillEventType : int {
 // gSKILL_EVENT_TYPE_NAMES order (11 names); unknown values yield empty view.
 [[nodiscard]] std::u16string_view skill_event_type_name(SkillEventType type) noexcept;
 
+// One LEVEL ladder rung from a skill .DAT (EVENT_TRIGGER scalars).
+// effect_entries counts LEVEL subgroups outside EVENT_START/EVENT_TRIGGER:
+// the applyEffects leg input. present=false when the rung has no readable
+// EVENT_TRIGGER (never defaulted scalars).
+struct SkillTriggerLevel {
+    float weapon_damage_pct = 0.0F;
+    float soak_scale_pct = 0.0F;
+    std::uint32_t effect_entries = 0;
+    bool present = false;
+};
+
+// Loads LEVEL1..N rungs from <path> (a skill .DAT.adm). Missing file or an
+// unreadable document -> nullopt (caller keeps the refusal, never defaults).
+[[nodiscard]] std::optional<std::vector<SkillTriggerLevel>> load_skill_trigger_levels(
+    const PakArchive& pak, std::string_view dat_path);
+
 // Caller-owned cast inputs. Chance evaluation and cooldown values live in
 // the caller until skill chance/cooldown data is ported: the runtime gates
 // on the supplied outcome, it never rolls or reads skill data itself.
@@ -57,12 +77,13 @@ struct SkillCastContext {
     bool chance_passed = true; // caller-side rollSkillChance outcome (open)
     float cooldown_remaining = 0.0F; // >0 refuses (getCoolDown analog)
     float cooldown_seconds = 0.0F; // armed on a started cast
+    int skill_level = 1; // 1-based LEVEL ladder rung; gated when rungs loaded
 };
 
 struct SkillStartResult {
     bool started = false;
     // Empty on success, otherwise one of: no_skill_scene, no_caster,
-    // caster_down, chance, cooldown.
+    // caster_down, chance, cooldown, level.
     std::string issue;
 };
 
@@ -75,6 +96,7 @@ struct SkillMissileLaunch {
     std::array<float, 3> origin = {0.0F, 0.0F, 0.0F};
     std::array<float, 3> direction = {0.0F, 0.0F, 1.0F};
     std::uint64_t caster_id = 0;
+    int skill_level = 1; // ladder rung bound at cast (setSkillOwner role)
     std::uint32_t spawner_count = 1;
     bool repeated_count_open = false;
 };
@@ -92,6 +114,26 @@ struct SkillRefusedLaunch {
     std::uint64_t launch_id = 0;
     std::string missile_resource;
     std::string issue; // template_missing | spawn_refused
+};
+
+// Weapon leg output (applyWeaponDamage role): the resource scalars for the
+// future damage backend. The NUMBER is still open (performAttack/rollAttack
+// chain unported): this request is its exact input contract, never a roll.
+struct SkillWeaponDamageRequest {
+    std::uint64_t missile_id = 0;
+    std::uint64_t victim_id = 0;
+    std::uint64_t caster_id = 0;
+    int skill_level = 1;
+    float weapon_damage_pct = 0.0F;
+    float soak_scale_pct = 0.0F;
+    bool scalars_present = false;
+};
+
+// Effects leg with entries to apply (applyEffects role): no leaf backend is
+// ported yet, so the leg is retained open with its input count.
+struct OpenEffectLeg {
+    std::uint64_t missile_id = 0;
+    std::uint32_t entry_count = 0;
 };
 
 // Missile-hook equivalent posters (missileApplyingEffects/missileDieing):
@@ -128,6 +170,7 @@ struct DeferredTimelinePoint {
 class SkillEventRuntime {
 public:
     SkillEventRuntime(std::string skill_name, LayoutManifest skill_scene,
+                      std::vector<SkillTriggerLevel> trigger_levels = {},
                       std::uint32_t random_seed = 1);
 
     [[nodiscard]] const std::string& skill_name() const noexcept { return skill_name_; }
@@ -151,13 +194,17 @@ public:
     // role); refusals ride take_refused_launches, never guessed missiles.
     void drain_launches(const SkillMissileFireSink& sink);
     // Returns false for unknown missile ids (not one of ours): nothing posted.
+    // victim_died is an application-observed fact (the runtime owns no HP):
+    // it selects the UNITDIE poster from invokeHitSkills, it never evaluates.
     bool notify_missile_impact(std::uint64_t missile_id, std::uint64_t victim_id,
-                               bool blocked, bool expired);
+                               bool blocked, bool expired, bool victim_died = false);
 
     [[nodiscard]] std::vector<SkillMissileLaunch> take_missile_launches();
     [[nodiscard]] std::vector<SkillRefusedLaunch> take_refused_launches();
     [[nodiscard]] std::vector<SkillEventRecord> take_skill_events();
     [[nodiscard]] std::vector<UnsupportedSkillSpawn> take_unsupported_spawns();
+    [[nodiscard]] std::vector<SkillWeaponDamageRequest> take_weapon_damage_requests();
+    [[nodiscard]] std::vector<OpenEffectLeg> take_open_effect_legs();
     [[nodiscard]] std::vector<DeferredTimelinePoint> take_deferred_timeline_points();
 
 private:
@@ -165,17 +212,26 @@ private:
 
     std::string skill_name_;
     LayoutManifest skill_scene_;
+    std::vector<SkillTriggerLevel> trigger_levels_;
     LogicRuntime scene_;
     std::uint64_t next_launch_id_ = 1;
     float cooldown_remaining_ = 0.0F;
     std::uint64_t caster_id_ = 0;
+    int pending_level_ = 1;
+    struct LiveSkillMissile {
+        std::uint64_t launch_id = 0;
+        int skill_level = 1;
+        std::uint64_t caster_id = 0;
+    };
     std::array<float, 3> pending_origin_ = {0.0F, 0.0F, 0.0F};
     std::array<float, 3> pending_direction_ = {0.0F, 0.0F, 1.0F};
     bool missile_path_seen_ = false;
-    std::unordered_map<std::uint64_t, std::uint64_t> live_skill_missiles_; // missile id -> launch id
+    std::unordered_map<std::uint64_t, LiveSkillMissile> live_skill_missiles_; // by missile id
     std::vector<SkillMissileLaunch> missile_launches_;
     std::vector<SkillRefusedLaunch> refused_launches_;
     std::vector<SkillEventRecord> skill_events_;
+    std::vector<SkillWeaponDamageRequest> weapon_damage_requests_;
+    std::vector<OpenEffectLeg> open_effect_legs_;
     std::vector<UnsupportedSkillSpawn> unsupported_spawns_;
     std::vector<DeferredTimelinePoint> deferred_timeline_points_;
 };

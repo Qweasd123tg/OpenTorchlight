@@ -153,6 +153,63 @@ int main() {
     }
 
     {
+        // Ladder gate and the no-data / open-leg paths (no pak).
+        torchlight::SkillTriggerLevel rung;
+        rung.weapon_damage_pct = 40.0F;
+        rung.soak_scale_pct = 60.0F;
+        rung.present = true;
+        torchlight::SkillEventRuntime leveled("TEST", spawner_scene(u"Missiles", u"SHOT"),
+                                              {rung});
+        torchlight::SkillCastContext high = live_cast();
+        high.skill_level = 2;
+        auto refused_level = leveled.start_skill(high);
+        require(!refused_level.started && refused_level.issue == "level",
+                "rung outside the ladder refuses");
+        require(leveled.start_skill(live_cast()).started, "rung 1 starts");
+        leveled.drain_launches([](const torchlight::SkillMissileLaunch& launch) {
+            require(launch.skill_level == 1, "launch binds the cast rung");
+            return torchlight::SkillMissileFireOutcome{11, ""};
+        });
+        require(leveled.notify_missile_impact(11, 5, false, false, true), "leveled hit dispatches");
+        auto damage = leveled.take_weapon_damage_requests();
+        require(damage.size() == 1 && damage.front().weapon_damage_pct == 40.0F &&
+                    damage.front().soak_scale_pct == 60.0F && damage.front().scalars_present &&
+                    damage.front().skill_level == 1 && damage.front().victim_id == 5 &&
+                    damage.front().caster_id == 7,
+                "weapon leg carries rung scalars and binding");
+        bool saw_unit_hit = false;
+        bool saw_unit_die = false;
+        for (const auto& event : leveled.take_skill_events()) {
+            if (event.type == SkillEventType::unit_hit && event.victim_id == 5) saw_unit_hit = true;
+            if (event.type == SkillEventType::unit_die && event.victim_id == 5) saw_unit_die = true;
+        }
+        require(saw_unit_hit, "UNITHIT poster observed");
+        require(saw_unit_die, "UNITDIE poster observed on the death fact");
+        require(leveled.take_open_effect_legs().empty(), "zero entries stay a silent no-op");
+
+        torchlight::SkillTriggerLevel rich = rung;
+        rich.effect_entries = 2;
+        torchlight::SkillEventRuntime legged("TEST", spawner_scene(u"Missiles", u"SHOT"), {rich});
+        require(legged.start_skill(live_cast()).started, "rich scene starts");
+        legged.drain_launches([](const torchlight::SkillMissileLaunch&) {
+            return torchlight::SkillMissileFireOutcome{12, ""};
+        });
+        require(legged.notify_missile_impact(12, 5, false, false), "rich hit dispatches");
+        auto open = legged.take_open_effect_legs();
+        require(open.size() == 1 && open.front().entry_count == 2, "entries stay open, never run");
+
+        torchlight::SkillEventRuntime dataless("TEST", spawner_scene(u"Missiles", u"SHOT"));
+        require(dataless.start_skill(live_cast()).started, "dataless scene starts");
+        dataless.drain_launches([](const torchlight::SkillMissileLaunch&) {
+            return torchlight::SkillMissileFireOutcome{13, ""};
+        });
+        require(dataless.notify_missile_impact(13, 5, false, false), "dataless hit dispatches");
+        auto open_damage = dataless.take_weapon_damage_requests();
+        require(open_damage.size() == 1 && !open_damage.front().scalars_present,
+                "missing ladder marks scalars open, never defaults");
+    }
+
+    {
         // Sink refusals ride explicit codes, never guessed missiles.
         torchlight::SkillEventRuntime runtime("TEST", spawner_scene(u"Missiles", u"SHOT"));
         require(runtime.start_skill(live_cast()).started, "missile scene starts");
@@ -174,7 +231,20 @@ int main() {
             const torchlight::PakArchive archive(pak);
             const torchlight::LevelSceneLoader loader(archive);
             auto scene = loader.load_layout("media/skills/vanquisher/seeking/SEEKING.LAYOUT.adm");
-            torchlight::SkillEventRuntime seeking("SEEKING", std::move(scene));
+            const auto trigger_levels = torchlight::load_skill_trigger_levels(
+                archive, "media/skills/vanquisher/seeking/SEEKING.DAT.adm");
+            require(trigger_levels.has_value() && trigger_levels->size() == 12,
+                    "SEEKING trigger ladder loads 12 rungs");
+            if (!trigger_levels.has_value()) return failures == 0 ? 0 : 1;
+            require((*trigger_levels)[0].present &&
+                        (*trigger_levels)[0].weapon_damage_pct == 40.0F &&
+                        (*trigger_levels)[0].soak_scale_pct == 60.0F &&
+                        (*trigger_levels)[0].effect_entries == 0,
+                    "SEEKING rung 1 is 40/60 with no effect entries");
+            require(!torchlight::load_skill_trigger_levels(archive, "media/skills/NOPE.DAT.adm")
+                         .has_value(),
+                    "missing skill DAT refuses");
+            torchlight::SkillEventRuntime seeking("SEEKING", std::move(scene), *trigger_levels);
             require(seeking.has_event(SkillEventType::start), "SEEKING has START");
             require(!seeking.has_event(SkillEventType::missile_hit),
                     "SEEKING has no missile path before the cast");
@@ -260,15 +330,29 @@ int main() {
                 auto events = seeking.take_skill_events();
                 bool saw_start = false;
                 bool saw_hit = false;
+                bool saw_unit_hit = false;
                 for (const auto& event : events) {
                     if (event.type == SkillEventType::start) saw_start = true;
                     if (event.type == SkillEventType::missile_hit &&
                         event.missile_id == hit_missile && event.victim_id == 99 &&
                         event.damage_application_open)
                         saw_hit = true;
+                    if (event.type == SkillEventType::unit_hit && event.victim_id == 99)
+                        saw_unit_hit = true;
                 }
                 require(saw_start, "START event observed on the chain");
                 require(saw_hit, "MISSILEHIT callback observed with open damage");
+                require(saw_unit_hit, "UNITHIT poster observed on the SEEKING chain");
+                auto weapon_hits = seeking.take_weapon_damage_requests();
+                require(weapon_hits.size() == 1 && weapon_hits.front().victim_id == 99 &&
+                            weapon_hits.front().weapon_damage_pct == 40.0F &&
+                            weapon_hits.front().soak_scale_pct == 60.0F &&
+                            weapon_hits.front().scalars_present &&
+                            weapon_hits.front().skill_level == 1 &&
+                            weapon_hits.front().caster_id == 7,
+                        "weapon leg carries the SEEKING rung 40/60 contract");
+                require(seeking.take_open_effect_legs().empty(),
+                        "SEEKING effects leg is a proven no-op");
             }
 
             {
