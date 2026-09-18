@@ -339,6 +339,20 @@
       "tests": "tests/missile_motion_test.cpp (LCG sequences incl. NaN/equal paths)",
       "comparison": "C++ vs numpy integer-exact LCG + float32 tail: states match",
       "notes": "64-bit LCG x0x29777B41, [1,2)-1.0 bit trick. Wired=false: no src caller yet (missile jitter injects it when the runtime lands)."
+    },
+    "0x00a924c0": {
+      "symbol": "CGameUI::onClick(ELayoutFunction)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/hud-onclick-dispatch.md; ELF @0xa924c0 (0x732) + mapToFunctions @0xa980e0 + static-init enum table + jump table @0xfe4370",
+      "implementation": "src/application.cpp (HUD callback dispatch subset: 4 toggles via keys + guiPause via ESC)",
+      "tests": "tests/scenarios/paused-settings.scenario (PauseButton->pause->resume) + town-new.scenario (K/J/ESC)",
+      "comparison": "No original-execution proof; enum + jump targets are machine-code facts, case bodies decomp-guided",
+      "notes": "Wired=false: dispatch subset shares the panel/pause sinks but the 97-way function as a whole has no single port caller. Journal/pet/stats/automap/itemnames/levelup callbacks stay unimplemented (no port sink)."
     }
   }
 }

@@ -9,6 +9,10 @@ level Town 0
 dt 0
 frames 2
 capture before
+# guiPause dispatch (CGameUI::onClick case 0x0b): HUD pause lands in pause.
+hud-button PauseButton
+menu pause
+button resume
 hud-button InventoryButton
 inventory open
 key I

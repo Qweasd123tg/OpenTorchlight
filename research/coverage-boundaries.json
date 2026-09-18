@@ -893,6 +893,24 @@
         "tests/missile_motion_test.cpp"
       ],
       "comparison": "C++ vs numpy integer-exact LCG sequences"
+    },
+    {
+      "addresses": [
+        "0xa924c0",
+        "0xa980e0"
+      ],
+      "status": "implemented",
+      "boundary": "HUD onClick dispatch: 97-name ELayoutFunction table recovered from static-init + rodata; jump table maps handled cases (pause/toggles/automap/itemnames/levelup/modals/petsell) vs no-op returns. Port honors the 4 panel toggles + pause; the rest have no port sink and stay reported.",
+      "evidence": [
+        "research/hud-onclick-dispatch.md"
+      ],
+      "implementation": [
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/scenarios/paused-settings.scenario"
+      ],
+      "comparison": "Machine-code facts (enum bytes, jump targets); no original-execution proof"
     }
   ],
   "port_systems": [

@@ -1037,10 +1037,18 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         if (callback && player_combat.alive()) {
                             window.notice("hud_dispatch_down", *callback);
                             // Existing PORT presentations, not original panel implementations.
+                            // original-code: CGameUI::onClick @0xa924c0 dispatches layout
+                            // onClick names through the KLayoutFunctionNames table
+                            // (ELayoutFunction enum; see research/hud-onclick-dispatch.md).
+                            // guiPause is case 0x0b -> togglePause (closeAll, flip
+                            // pause). This dispatch runs only with the inventory
+                            // closed, so closeAll is a no-op and one ESC (pause
+                            // when nothing is open) matches exactly.
                             if (*callback == "guiToggleInventory") key_presses.push_back(torchlight::physical_key::I);
                             else if (*callback == "guiToggleSkills") key_presses.push_back(torchlight::physical_key::K);
                             else if (*callback == "guiToggleQuests") key_presses.push_back(torchlight::physical_key::J);
                             else if (*callback == "guiToggleOptions") key_presses.push_back(torchlight::physical_key::ESC);
+                            else if (*callback == "guiPause") key_presses.push_back(torchlight::physical_key::ESC);
                             else window.notice("hud_callback_unimplemented", *callback);
                         }
                     }
