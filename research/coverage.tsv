@@ -10535,7 +10535,7 @@ address	symbol	subsystem	status	incoming	outgoing	root_distance	priority	boundar
 0x00d02570	__tcf_10	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_10
 0x00d02600	__tcf_25	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_25
 0x00d02690	__tcf_24	other	unseen	0	1	2	46.0	No reviewed boundary annotation					__tcf_24
-0x00d02720	CMissile::updatePositionByVelocity(float)	ranged	unseen	1	10	2	107.85	No reviewed boundary annotation					CMissile::updatePositionByVelocity(float)
+0x00d02720	CMissile::updatePositionByVelocity(float)	ranged	partial	1	10	2	107.85	Missile velocity update mapped (steer/normalize/homing/arch/splash/spline phases, float consts, field map). ANALYSIS ONLY: not ported, not wired, not compared; virtual targets, spline/RNG/settings deps and engine sinks open.	research/missile-motion.md;research/disassembly/d02720-missile-updatepos.asm				CMissile::updatePositionByVelocity(float)
 0x00d032b0	CMissile::setParticleFile(EMISSILE_PARTICLES, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)	ranged	unseen	5	9	2	111.069	No reviewed boundary annotation					CMissile::setParticleFile(EMISSILE_PARTICLES, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)
 0x00d034c0	CMissile::handleMissileHitUnit(CBaseUnit*, Ogre::Vector3)	ranged	unseen	1	5	2	100.074	No reviewed boundary annotation					CMissile::handleMissileHitUnit(CBaseUnit*, Ogre::Vector3)
 0x00d038a0	CMissile::checkCollision(Ogre::Vector3, Ogre::Vector3, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, CBaseUnit**)	ranged	unseen	2	13	2	112.0	No reviewed boundary annotation					CMissile::checkCollision(Ogre::Vector3, Ogre::Vector3, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, CBaseUnit**)

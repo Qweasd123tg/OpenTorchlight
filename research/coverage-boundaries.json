@@ -857,6 +857,20 @@
         "tests/menu_create_test.cpp"
       ],
       "comparison": "Profile values spot-checked vs ASM slices; full parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xd02720"
+      ],
+      "status": "partial",
+      "boundary": "Missile velocity update mapped (steer/normalize/homing/arch/splash/spline phases, float consts, field map). ANALYSIS ONLY: not ported, not wired, not compared; virtual targets, spline/RNG/settings deps and engine sinks open.",
+      "evidence": [
+        "research/missile-motion.md",
+        "research/disassembly/d02720-missile-updatepos.asm"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": ""
     }
   ],
   "port_systems": [

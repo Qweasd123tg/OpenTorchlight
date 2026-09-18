@@ -311,6 +311,20 @@
       "tests": "tests/menu_create_test.cpp",
       "comparison": "",
       "notes": "Batch-pass profile: static Blocker/Close/JournalFrame/BottomFrame/TopFrame grabs, no loops. Full analysis open: window props, createWindow names, event delivery."
+    },
+    "0x00d02720": {
+      "symbol": "CMissile::updatePositionByVelocity(float)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/missile-motion.md; research/disassembly/d02720-missile-updatepos.asm",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Steer/normalize/homing/arch/splash/spline phases mapped; all float consts read from ELF (1e-8/1.0/0.0/1-30/0.01/0.02/NaN/-0.0); +0x148 quirk found (velocity, not position). Open: 4 virtual targets, spline/path deps, RNG/settings runtime, rescan-bound invariant, engine sinks (placeSphere/trails/setTarget). NOT ported yet."
     }
   }
 }
