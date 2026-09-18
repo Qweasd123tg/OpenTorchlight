@@ -200,12 +200,26 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
         except (ValueError, OSError, TypeError):
             tiny = {}
 
+    auto_triage = {}
+    triage_path = root / "research/auto-triage.json"
+    if triage_path.is_file():
+        try:
+            tj = json.loads(triage_path.read_text(encoding="utf-8"))
+            auto_triage = {
+                "total_functions": tj.get("total_functions", 0),
+                "headline": tj.get("headline", {}),
+                "primary_classes": tj.get("primary_classes", {}),
+            }
+        except (ValueError, OSError, TypeError):
+            auto_triage = {}
+
     return {
         "schema": 1,
         "meaning": "Work-selection aid only. Counts are not product completion percentages.",
         "scope": {"subsystem": subsystem or "all", "functions": len(rows)},
         "technical_noise": dict(noise),
         "tiny_mechanical_shapes": tiny,
+        "auto_triage": auto_triage,
         "near_term": {
             "ported_not_wired": integration,
             "integration_groups": integration_groups,
@@ -262,6 +276,15 @@ def render(data: dict, top: int) -> str:
         for k, v in sorted(tiny.items(), key=lambda kv: (-kv[1], kv[0])):
             lines.append(f"- `{k}`: {v}")
         lines.append("These still need caller/field review, but should normally be processed by pattern rather than scheduled one by one.")
+    triage = data.get("auto_triage", {})
+    if triage:
+        h = triage.get("headline", {})
+        lines += ["", "## Whole-binary automatic routing", "",
+                  "Mutually-exclusive scheduling routes from `research/auto-triage.json` (not completion):", "",
+                  f"- no individual deep-reverse pass now: **{h.get('no_individual_deep_reverse_now', 0)}**",
+                  f"- source-match before machine-code reverse: **{h.get('source_match_before_reverse', 0)}**",
+                  f"- batch/target review: **{h.get('batch_before_individual', 0)}**",
+                  f"- residual manual queue: **{h.get('manual_reverse_remaining', 0)}**"]
     lines += ["", "Recommended order: **ported→wired**, then **wired→compared**, then a high-reuse family. Do not expand the global registry merely to increase coverage counts.", ""]
     return "\n".join(lines)
 

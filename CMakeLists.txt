@@ -578,6 +578,9 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME registry_sync
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/registry_sync_test.py)
     set_tests_properties(registry_sync PROPERTIES TIMEOUT 60)
+    add_test(NAME function_auto_triage
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/function_auto_triage_test.py)
+    set_tests_properties(function_auto_triage PROPERTIES TIMEOUT 120)
     add_executable(player_vitals_probe tests/player_vitals_probe.cpp)
     target_link_libraries(player_vitals_probe PRIVATE torchlight_core)
     add_test(NAME combat_inputs_evidence

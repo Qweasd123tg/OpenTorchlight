@@ -1,0 +1,3360 @@
+{
+  "schema": 1,
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "meaning": "Exact normalized machine-shape batching hints for residual manual functions; not semantic equivalence.",
+  "manual_with_known_size": 3165,
+  "all_shapes": 2818,
+  "multi_member_clusters": 196,
+  "clustered_members": 543,
+  "representative_passes_saved_if_all_deltas_validate": 347,
+  "clusters": [
+    {
+      "size": 10,
+      "representative": "0x007f5ff0",
+      "members": [
+        {
+          "address": "0x007f5ff0",
+          "symbol": "CBaseUnit::getMinBounds()"
+        },
+        {
+          "address": "0x007f6010",
+          "symbol": "CBaseUnit::getMaxBounds()"
+        },
+        {
+          "address": "0x007f6030",
+          "symbol": "CBaseUnit::getLocalMinBounds()"
+        },
+        {
+          "address": "0x007f6050",
+          "symbol": "CBaseUnit::getLocalMaxBounds()"
+        },
+        {
+          "address": "0x00ba52b0",
+          "symbol": "CQuestDialogMenu::getCameraOffset()"
+        },
+        {
+          "address": "0x00c9ce10",
+          "symbol": "CSkill::getSkillIcon()"
+        },
+        {
+          "address": "0x00c9ce30",
+          "symbol": "CSkill::getSkillIconInactive()"
+        },
+        {
+          "address": "0x00c9ce50",
+          "symbol": "CSkill::getName()"
+        },
+        {
+          "address": "0x00c9ce70",
+          "symbol": "CSkill::getSkillUsageDescription()"
+        },
+        {
+          "address": "0x00c9ce90",
+          "symbol": "CSkill::getDisplayName()"
+        }
+      ]
+    },
+    {
+      "size": 10,
+      "representative": "0x0080efb0",
+      "members": [
+        {
+          "address": "0x0080efb0",
+          "symbol": "CCharacter::getWardrobeHelmTexture()"
+        },
+        {
+          "address": "0x0080eff0",
+          "symbol": "CCharacter::getWardrobeBootsTexture()"
+        },
+        {
+          "address": "0x0080f030",
+          "symbol": "CCharacter::getWardrobeGlovesTexture()"
+        },
+        {
+          "address": "0x0080f070",
+          "symbol": "CCharacter::getWardrobeChestTexture()"
+        },
+        {
+          "address": "0x0080f0b0",
+          "symbol": "CCharacter::getWardrobeShoulderMesh()"
+        },
+        {
+          "address": "0x0080f0f0",
+          "symbol": "CCharacter::getWardrobeHelmMesh()"
+        },
+        {
+          "address": "0x0080f130",
+          "symbol": "CCharacter::getWardrobeBootsMesh()"
+        },
+        {
+          "address": "0x0080f170",
+          "symbol": "CCharacter::getWardrobeGlovesMesh()"
+        },
+        {
+          "address": "0x0080f1b0",
+          "symbol": "CCharacter::getWardrobeChestMesh()"
+        },
+        {
+          "address": "0x0080f1f0",
+          "symbol": "CCharacter::getModelPath()"
+        }
+      ]
+    },
+    {
+      "size": 9,
+      "representative": "0x00a1f600",
+      "members": [
+        {
+          "address": "0x00a1f600",
+          "symbol": "CGeometryRotateWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a21060",
+          "symbol": "CJetWrapper::setDynamicPropAcceleration(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a24920",
+          "symbol": "CScaleWrapper::setDynamicPropZScale(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a249a0",
+          "symbol": "CScaleWrapper::setDynamicPropYScale(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a249c0",
+          "symbol": "CScaleWrapper::setDynamicPropXScale(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a27510",
+          "symbol": "CTextureAnimateWrapper::setDynamicPropAnimationSpeed(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a28260",
+          "symbol": "CTextureRotateWrapper::setDynamicPropRotation(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a282a0",
+          "symbol": "CTextureRotateWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a28ff0",
+          "symbol": "CVortexWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 8,
+      "representative": "0x006f90a0",
+      "members": [
+        {
+          "address": "0x006f90a0",
+          "symbol": "CDescriptor::GetInputLogicWrapper(unsigned int)"
+        },
+        {
+          "address": "0x006f9150",
+          "symbol": "CDescriptor::GetOutputLogicWrapper(unsigned int)"
+        },
+        {
+          "address": "0x006f9200",
+          "symbol": "CDescriptor::GetPropertyByIndex(unsigned int)"
+        },
+        {
+          "address": "0x006f9240",
+          "symbol": "CDescriptor::GetProperty(unsigned int)"
+        },
+        {
+          "address": "0x00795bb0",
+          "symbol": "CLogicGroup::GetLogicObjectByIndex(unsigned int)"
+        },
+        {
+          "address": "0x007a7c10",
+          "symbol": "CLogicObject::GetLogicLinkByIndex(unsigned int)"
+        },
+        {
+          "address": "0x00e08a20",
+          "symbol": "CSets::getSet(unsigned int)"
+        },
+        {
+          "address": "0x00e73a10",
+          "symbol": "CCinematics::getCinematic(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 8,
+      "representative": "0x00a1a090",
+      "members": [
+        {
+          "address": "0x00a1a090",
+          "symbol": "CAlignWrapper::CAlignWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a1fe50",
+          "symbol": "CGeometryRotateWrapper::CGeometryRotateWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a20b60",
+          "symbol": "CGravityWrapper::CGravityWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a218b0",
+          "symbol": "CJetWrapper::CJetWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a225c0",
+          "symbol": "CLinearForceWrapper::CLinearForceWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a25f50",
+          "symbol": "CSineForceWrapper::CSineForceWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a27d60",
+          "symbol": "CTextureAnimateWrapper::CTextureAnimateWrapper(CResourceManager*)"
+        },
+        {
+          "address": "0x00a28af0",
+          "symbol": "CTextureRotateWrapper::CTextureRotateWrapper(CResourceManager*)"
+        }
+      ]
+    },
+    {
+      "size": 7,
+      "representative": "0x00f70450",
+      "members": [
+        {
+          "address": "0x00f70450",
+          "symbol": "ZOLu33026715730109_br_find_etc_dir"
+        },
+        {
+          "address": "0x00f704d0",
+          "symbol": "ZOLu33026715730109_br_find_libexec_dir"
+        },
+        {
+          "address": "0x00f70550",
+          "symbol": "ZOLu33026715730109_br_find_lib_dir"
+        },
+        {
+          "address": "0x00f705d0",
+          "symbol": "ZOLu33026715730109_br_find_data_dir"
+        },
+        {
+          "address": "0x00f70650",
+          "symbol": "ZOLu33026715730109_br_find_locale_dir"
+        },
+        {
+          "address": "0x00f706d0",
+          "symbol": "ZOLu33026715730109_br_find_sbin_dir"
+        },
+        {
+          "address": "0x00f70750",
+          "symbol": "ZOLu33026715730109_br_find_bin_dir"
+        }
+      ]
+    },
+    {
+      "size": 6,
+      "representative": "0x00556770",
+      "members": [
+        {
+          "address": "0x00556770",
+          "symbol": "CGame::getGameCamera()"
+        },
+        {
+          "address": "0x0079b180",
+          "symbol": "CLogicLink::GetObjectIDInitiatingLink()"
+        },
+        {
+          "address": "0x00936550",
+          "symbol": "CLevel::getPlayer()"
+        },
+        {
+          "address": "0x00a837e0",
+          "symbol": "CGameUI::getQuestDialogNPC()"
+        },
+        {
+          "address": "0x00c9d0d0",
+          "symbol": "CSkill::getMasterOwner()"
+        },
+        {
+          "address": "0x00d0c700",
+          "symbol": "CQuest::getPlayer()"
+        }
+      ]
+    },
+    {
+      "size": 6,
+      "representative": "0x00724460",
+      "members": [
+        {
+          "address": "0x00724460",
+          "symbol": "reloadRecipes()"
+        },
+        {
+          "address": "0x00724540",
+          "symbol": "reloadUnitThemes()"
+        },
+        {
+          "address": "0x00724580",
+          "symbol": "reloadQuests()"
+        },
+        {
+          "address": "0x00724620",
+          "symbol": "reloadModFileFilter()"
+        },
+        {
+          "address": "0x00724770",
+          "symbol": "reloadMissiles()"
+        },
+        {
+          "address": "0x007247b0",
+          "symbol": "reloadCinematics()"
+        }
+      ]
+    },
+    {
+      "size": 6,
+      "representative": "0x00a328e0",
+      "members": [
+        {
+          "address": "0x00a328e0",
+          "symbol": "CParticleEmitterWrapper::setBoxDepth(float)"
+        },
+        {
+          "address": "0x00a32910",
+          "symbol": "CParticleEmitterWrapper::setBoxHeight(float)"
+        },
+        {
+          "address": "0x00a32940",
+          "symbol": "CParticleEmitterWrapper::setBoxWidth(float)"
+        },
+        {
+          "address": "0x00a329c0",
+          "symbol": "CParticleEmitterWrapper::setMaxLineDeviation(float)"
+        },
+        {
+          "address": "0x00a329f0",
+          "symbol": "CParticleEmitterWrapper::setMaxLineIncrement(float)"
+        },
+        {
+          "address": "0x00a32a20",
+          "symbol": "CParticleEmitterWrapper::setMinLineIncrement(float)"
+        }
+      ]
+    },
+    {
+      "size": 6,
+      "representative": "0x00c92cb0",
+      "members": [
+        {
+          "address": "0x00c92cb0",
+          "symbol": "UTILITIES::getAvailableRAM()"
+        },
+        {
+          "address": "0x00c92cc0",
+          "symbol": "UTILITIES::getProcessorSpeed()"
+        },
+        {
+          "address": "0x00f64e50",
+          "symbol": "lodepng_clear_text(LodePNGInfo*)"
+        },
+        {
+          "address": "0x00f64f30",
+          "symbol": "lodepng_clear_itext(LodePNGInfo*)"
+        },
+        {
+          "address": "0x00f64f60",
+          "symbol": "lodepng_color_mode_cleanup(LodePNGColorMode*)"
+        },
+        {
+          "address": "0x00f7e360",
+          "symbol": "fd_callback(int, void*)"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x005568b0",
+      "members": [
+        {
+          "address": "0x005568b0",
+          "symbol": "CGame::editorUpdateSceneOnce(int)"
+        },
+        {
+          "address": "0x0056e840",
+          "symbol": "CGameClient::updateCursor()"
+        },
+        {
+          "address": "0x0056e890",
+          "symbol": "CGameClient::questEventFire(EQUEST_EVENTS, CCharacter*, CBaseUnit*)"
+        },
+        {
+          "address": "0x00e4d280",
+          "symbol": "CFileSystem::getEnabledModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)"
+        },
+        {
+          "address": "0x00e4d2a0",
+          "symbol": "CFileSystem::getModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x0080ee30",
+      "members": [
+        {
+          "address": "0x0080ee30",
+          "symbol": "CCharacter::getAnimationSpeed()"
+        },
+        {
+          "address": "0x00c9cf70",
+          "symbol": "CSkill::getAnimationSpeedMult()"
+        },
+        {
+          "address": "0x00c9cfc0",
+          "symbol": "CSkill::getRange()"
+        },
+        {
+          "address": "0x00c9d010",
+          "symbol": "CSkill::getRandomRange()"
+        },
+        {
+          "address": "0x00c9d060",
+          "symbol": "CSkill::getMinimumTime()"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x0080ee60",
+      "members": [
+        {
+          "address": "0x0080ee60",
+          "symbol": "CCharacter::getAnimationLoop()"
+        },
+        {
+          "address": "0x00936570",
+          "symbol": "CLevel::isDormant()"
+        },
+        {
+          "address": "0x00a07e40",
+          "symbol": "CSoundObject::isLooping()"
+        },
+        {
+          "address": "0x00c9cd70",
+          "symbol": "CSkill::getIsExclusive()"
+        },
+        {
+          "address": "0x00c9cdd0",
+          "symbol": "CSkill::getCanBeInterrupted()"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x008325e0",
+      "members": [
+        {
+          "address": "0x008325e0",
+          "symbol": "CCharacter::getDescription()"
+        },
+        {
+          "address": "0x00834700",
+          "symbol": "CCharacter::getMimicName()"
+        },
+        {
+          "address": "0x00834ad0",
+          "symbol": "CCharacter::getIntroCinematic()"
+        },
+        {
+          "address": "0x0087d5f0",
+          "symbol": "CEquipment::getFlavorDescription()"
+        },
+        {
+          "address": "0x0087d6b0",
+          "symbol": "CEquipment::getSet()"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x008501f0",
+      "members": [
+        {
+          "address": "0x008501f0",
+          "symbol": "CCharacter::setWardrobeShoulderMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x008502a0",
+          "symbol": "CCharacter::setWardrobeHelmMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00850350",
+          "symbol": "CCharacter::setWardrobeBootsMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00850400",
+          "symbol": "CCharacter::setWardrobeGlovesMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x008504b0",
+          "symbol": "CCharacter::setWardrobeChestMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x00a1f620",
+      "members": [
+        {
+          "address": "0x00a1f620",
+          "symbol": "CGeometryRotateWrapper::getDynamicPropRotationSpeed(unsigned int&)"
+        },
+        {
+          "address": "0x00a27530",
+          "symbol": "CTextureAnimateWrapper::getDynamicPropAnimationSpeed(unsigned int&)"
+        },
+        {
+          "address": "0x00a28280",
+          "symbol": "CTextureRotateWrapper::getDynamicPropRotation(unsigned int&)"
+        },
+        {
+          "address": "0x00a282c0",
+          "symbol": "CTextureRotateWrapper::getDynamicPropRotationSpeed(unsigned int&)"
+        },
+        {
+          "address": "0x00a29010",
+          "symbol": "CVortexWrapper::getDynamicPropRotationSpeed(unsigned int&)"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x00a8e5f0",
+      "members": [
+        {
+          "address": "0x00a8e5f0",
+          "symbol": "CGameUI::togglePet()"
+        },
+        {
+          "address": "0x00a8e6a0",
+          "symbol": "CGameUI::toggleStats()"
+        },
+        {
+          "address": "0x00a8e750",
+          "symbol": "CGameUI::toggleQuest()"
+        },
+        {
+          "address": "0x00a8e840",
+          "symbol": "CGameUI::toggleJournal()"
+        },
+        {
+          "address": "0x00a8e930",
+          "symbol": "CGameUI::toggleSkill()"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x00c739b0",
+      "members": [
+        {
+          "address": "0x00c739b0",
+          "symbol": "FILESYSTEM::GetWindowsTempPath()"
+        },
+        {
+          "address": "0x00c739c0",
+          "symbol": "FILESYSTEM::GetLocalPath()"
+        },
+        {
+          "address": "0x00c8dc80",
+          "symbol": "STRINGS::StringConvertUTF8ToWide(std::string const&)"
+        },
+        {
+          "address": "0x00c8dc90",
+          "symbol": "STRINGS::StringConvertToUTF8(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00f65ec0",
+          "symbol": "lodepng::State::operator=(lodepng::State const&)"
+        }
+      ]
+    },
+    {
+      "size": 5,
+      "representative": "0x00c9ceb0",
+      "members": [
+        {
+          "address": "0x00c9ceb0",
+          "symbol": "CSkill::getAnimationIndex()"
+        },
+        {
+          "address": "0x00c9ced0",
+          "symbol": "CSkill::getAnimationIndexDW()"
+        },
+        {
+          "address": "0x00c9cef0",
+          "symbol": "CSkill::getAnimationIndexLoopInto()"
+        },
+        {
+          "address": "0x00c9cf10",
+          "symbol": "CSkill::getAnimationIndexLoopEnd()"
+        },
+        {
+          "address": "0x00c9cf50",
+          "symbol": "CSkill::getAnimationIndexDWLoopInto()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00591af0",
+      "members": [
+        {
+          "address": "0x00591af0",
+          "symbol": "TSafePointer<CCharacter>::setObject(CCharacter*)"
+        },
+        {
+          "address": "0x00591b80",
+          "symbol": "TSafePointer<CItem>::setObject(CItem*)"
+        },
+        {
+          "address": "0x00acbc30",
+          "symbol": "TSafePointer<CEquipment>::setObject(CEquipment*)"
+        },
+        {
+          "address": "0x00cab000",
+          "symbol": "TSafePointer<CBaseUnit>::setObject(CBaseUnit*)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x005a7540",
+      "members": [
+        {
+          "address": "0x005a7540",
+          "symbol": "CCollisionList::getVertex(unsigned int)"
+        },
+        {
+          "address": "0x005a7550",
+          "symbol": "CCollisionList::getNormal(unsigned int)"
+        },
+        {
+          "address": "0x005a7570",
+          "symbol": "CCollisionList::getMinFaceBounds(unsigned int)"
+        },
+        {
+          "address": "0x005a7580",
+          "symbol": "CCollisionList::getMaxFaceBounds(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x005a75d0",
+      "members": [
+        {
+          "address": "0x005a75d0",
+          "symbol": "CCollisionList::getVertexIndexA(unsigned int)"
+        },
+        {
+          "address": "0x005a75e0",
+          "symbol": "CCollisionList::getVertexIndexB(unsigned int)"
+        },
+        {
+          "address": "0x005a75f0",
+          "symbol": "CCollisionList::getVertexIndexC(unsigned int)"
+        },
+        {
+          "address": "0x005a7600",
+          "symbol": "CCollisionList::getMaterial(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x007e9ae0",
+      "members": [
+        {
+          "address": "0x007e9ae0",
+          "symbol": "CEffectGroupManager::getAffixNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)"
+        },
+        {
+          "address": "0x00a53360",
+          "symbol": "CHierarchy::getTypeNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)"
+        },
+        {
+          "address": "0x00d2e700",
+          "symbol": "CQuestManager::getQuestNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)"
+        },
+        {
+          "address": "0x00e0e4e0",
+          "symbol": "CSets::getSetNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x007f6280",
+      "members": [
+        {
+          "address": "0x007f6280",
+          "symbol": "CBaseUnit::removeAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x0080fe90",
+          "symbol": "CCharacter::animationExists(std::string const&) const"
+        },
+        {
+          "address": "0x00811630",
+          "symbol": "CCharacter::animationQueued(std::string const&) const"
+        },
+        {
+          "address": "0x00a84140",
+          "symbol": "CGameUI::getConsoleIsOpen()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x0080ead0",
+      "members": [
+        {
+          "address": "0x0080ead0",
+          "symbol": "CCharacter::spendMeleePoint()"
+        },
+        {
+          "address": "0x0080eaf0",
+          "symbol": "CCharacter::spendRangedPoint()"
+        },
+        {
+          "address": "0x0080eb10",
+          "symbol": "CCharacter::spendDefensePoint()"
+        },
+        {
+          "address": "0x0080eb30",
+          "symbol": "CCharacter::spendMagicPoint()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x0080eb50",
+      "members": [
+        {
+          "address": "0x0080eb50",
+          "symbol": "CCharacter::reclaimMeleePoint()"
+        },
+        {
+          "address": "0x0080eb70",
+          "symbol": "CCharacter::reclaimRangedPoint()"
+        },
+        {
+          "address": "0x0080eb90",
+          "symbol": "CCharacter::reclaimDefensePoint()"
+        },
+        {
+          "address": "0x0080ebb0",
+          "symbol": "CCharacter::reclaimMagicPoint()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x0080ee10",
+      "members": [
+        {
+          "address": "0x0080ee10",
+          "symbol": "CCharacter::getAnimationPlaying()"
+        },
+        {
+          "address": "0x00899f00",
+          "symbol": "CGenericModel::getAnimationCount() const"
+        },
+        {
+          "address": "0x00c9d090",
+          "symbol": "CSkill::getTargetType()"
+        },
+        {
+          "address": "0x00c9d0b0",
+          "symbol": "CSkill::getUnitTypeToTarget()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00811af0",
+      "members": [
+        {
+          "address": "0x00811af0",
+          "symbol": "CCharacter::updateSkill(float)"
+        },
+        {
+          "address": "0x00936a60",
+          "symbol": "CLevel::questEventFire(EQUEST_EVENTS, CCharacter*, CBaseUnit*)"
+        },
+        {
+          "address": "0x00938810",
+          "symbol": "CLevel::zoomAutomap(float)"
+        },
+        {
+          "address": "0x00a84c80",
+          "symbol": "CGameUI::setActiveMenu(EMenu)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x008326a0",
+      "members": [
+        {
+          "address": "0x008326a0",
+          "symbol": "CCharacter::diesOnWarp()"
+        },
+        {
+          "address": "0x00832750",
+          "symbol": "CCharacter::getSpawnInvisible()"
+        },
+        {
+          "address": "0x00832800",
+          "symbol": "CCharacter::getDestroyOnDeath()"
+        },
+        {
+          "address": "0x008328b0",
+          "symbol": "CCharacter::attachesToMaster()"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x0086d800",
+      "members": [
+        {
+          "address": "0x0086d800",
+          "symbol": "CEquipment::getDefenseRequirement(CCharacter*)"
+        },
+        {
+          "address": "0x0086d970",
+          "symbol": "CEquipment::getMagicRequirement(CCharacter*)"
+        },
+        {
+          "address": "0x0086dae0",
+          "symbol": "CEquipment::getDexterityRequirement(CCharacter*)"
+        },
+        {
+          "address": "0x0086dc50",
+          "symbol": "CEquipment::getStrengthRequirement(CCharacter*)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x0086eb70",
+      "members": [
+        {
+          "address": "0x0086eb70",
+          "symbol": "CEquipment::playDropSound(Ogre::SceneNode*)"
+        },
+        {
+          "address": "0x0086eba0",
+          "symbol": "CEquipment::playTakeSound(Ogre::SceneNode*)"
+        },
+        {
+          "address": "0x008c2700",
+          "symbol": "CItemGold::playDropSound(Ogre::SceneNode*)"
+        },
+        {
+          "address": "0x008c2730",
+          "symbol": "CItemGold::playTakeSound(Ogre::SceneNode*)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00a02cf0",
+      "members": [
+        {
+          "address": "0x00a02cf0",
+          "symbol": "CShape::setAngleOffset(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a02d50",
+          "symbol": "CShape::setAngleOfRelease(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a02db0",
+          "symbol": "CShape::setMinRadius(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a02e10",
+          "symbol": "CShape::setMaxRadius(float const*, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00a21080",
+      "members": [
+        {
+          "address": "0x00a21080",
+          "symbol": "CJetWrapper::getDynamicPropAcceleration(unsigned int&)"
+        },
+        {
+          "address": "0x00a24940",
+          "symbol": "CScaleWrapper::getDynamicPropZScale(unsigned int&)"
+        },
+        {
+          "address": "0x00a24960",
+          "symbol": "CScaleWrapper::getDynamicPropYScale(unsigned int&)"
+        },
+        {
+          "address": "0x00a24980",
+          "symbol": "CScaleWrapper::getDynamicPropXScale(unsigned int&)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00a32cd0",
+      "members": [
+        {
+          "address": "0x00a32cd0",
+          "symbol": "CParticleEmitterWrapper::setCircleStep(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a32db0",
+          "symbol": "CParticleEmitterWrapper::setCircleDegrees(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a32e50",
+          "symbol": "CParticleEmitterWrapper::setMaxRadius(float const*, unsigned int)"
+        },
+        {
+          "address": "0x00a32ef0",
+          "symbol": "CParticleEmitterWrapper::setMinRadius(float const*, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00a8e800",
+      "members": [
+        {
+          "address": "0x00a8e800",
+          "symbol": "CGameUI::handle_ToggleQuest(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00a8e8f0",
+          "symbol": "CGameUI::handle_ToggleJournal(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00a8e9e0",
+          "symbol": "CGameUI::handle_ToggleSkill(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00a8eb50",
+          "symbol": "CGameUI::handle_ToggleInventory(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00c04310",
+      "members": [
+        {
+          "address": "0x00c04310",
+          "symbol": "CStatsMenu::handle_ReclaimMagic(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00c04370",
+          "symbol": "CStatsMenu::handle_ReclaimDefense(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00c043d0",
+          "symbol": "CStatsMenu::handle_ReclaimRanged(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00c04430",
+          "symbol": "CStatsMenu::handle_ReclaimMelee(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00d619e0",
+      "members": [
+        {
+          "address": "0x00d619e0",
+          "symbol": "compressAllFiles()"
+        },
+        {
+          "address": "0x00f710a0",
+          "symbol": "nothing(Fl_Widget*)"
+        },
+        {
+          "address": "0x00f7a320",
+          "symbol": "nothing()"
+        },
+        {
+          "address": "0x00f9f670",
+          "symbol": "__libc_csu_fini"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00f6cb80",
+      "members": [
+        {
+          "address": "0x00f6cb80",
+          "symbol": "lodepng_decode24(unsigned char**, unsigned int*, unsigned int*, unsigned char const*, unsigned long)"
+        },
+        {
+          "address": "0x00f6cba0",
+          "symbol": "lodepng_decode32(unsigned char**, unsigned int*, unsigned int*, unsigned char const*, unsigned long)"
+        },
+        {
+          "address": "0x00f6eae0",
+          "symbol": "lodepng_encode24(unsigned char**, unsigned long*, unsigned char const*, unsigned int, unsigned int)"
+        },
+        {
+          "address": "0x00f6eb00",
+          "symbol": "lodepng_encode32(unsigned char**, unsigned long*, unsigned char const*, unsigned int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 4,
+      "representative": "0x00f6cc60",
+      "members": [
+        {
+          "address": "0x00f6cc60",
+          "symbol": "lodepng_decode24_file(unsigned char**, unsigned int*, unsigned int*, char const*)"
+        },
+        {
+          "address": "0x00f6cc80",
+          "symbol": "lodepng_decode32_file(unsigned char**, unsigned int*, unsigned int*, char const*)"
+        },
+        {
+          "address": "0x00f6eb80",
+          "symbol": "lodepng_encode24_file(char const*, unsigned char const*, unsigned int, unsigned int)"
+        },
+        {
+          "address": "0x00f6eba0",
+          "symbol": "lodepng_encode32_file(char const*, unsigned char const*, unsigned int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x005566e0",
+      "members": [
+        {
+          "address": "0x005566e0",
+          "symbol": "CGame::destroyMasterResourceManager()"
+        },
+        {
+          "address": "0x00556710",
+          "symbol": "CGame::destroyGameClient()"
+        },
+        {
+          "address": "0x00e4d230",
+          "symbol": "CFileSystem::clean()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0059f4e0",
+      "members": [
+        {
+          "address": "0x0059f4e0",
+          "symbol": "CPositionableObject::setForward(Ogre::Vector3 const&)"
+        },
+        {
+          "address": "0x0059f570",
+          "symbol": "CPositionableObject::setRight(Ogre::Vector3 const&)"
+        },
+        {
+          "address": "0x0059f610",
+          "symbol": "CPositionableObject::setUp(Ogre::Vector3 const&)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0059f500",
+      "members": [
+        {
+          "address": "0x0059f500",
+          "symbol": "CPositionableObject::setForward(float, float, float)"
+        },
+        {
+          "address": "0x0059f590",
+          "symbol": "CPositionableObject::setRight(float, float, float)"
+        },
+        {
+          "address": "0x0059f630",
+          "symbol": "CPositionableObject::setUp(float, float, float)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0059f720",
+      "members": [
+        {
+          "address": "0x0059f720",
+          "symbol": "CPositionableObject::getUpAbsolute()"
+        },
+        {
+          "address": "0x0059f790",
+          "symbol": "CPositionableObject::getRightAbsolute()"
+        },
+        {
+          "address": "0x0059f800",
+          "symbol": "CPositionableObject::getForwardAbsolute()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x005a95d0",
+      "members": [
+        {
+          "address": "0x005a95d0",
+          "symbol": "CCollisionList::addNormal(Ogre::Vector3 const&, int)"
+        },
+        {
+          "address": "0x005a9630",
+          "symbol": "CCollisionList::addColor(Ogre::Vector3 const&, int)"
+        },
+        {
+          "address": "0x005a9690",
+          "symbol": "CCollisionList::addVertex(Ogre::Vector3 const&, int)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x005cab30",
+      "members": [
+        {
+          "address": "0x005cab30",
+          "symbol": "Set_CLayoutDescriptorKLAYOUT_TYPE_UNIT_TRIGGERParam2()"
+        },
+        {
+          "address": "0x005cace0",
+          "symbol": "Set_CLayoutDescriptorKLAYOUT_TYPE_TIMELINEParam2()"
+        },
+        {
+          "address": "0x005cae90",
+          "symbol": "Set_CLayoutDescriptorKLAYOUT_TYPE_PARTICLEParam2()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0069b670",
+      "members": [
+        {
+          "address": "0x0069b670",
+          "symbol": "CAlignDescriptor::CAlignDescriptor()"
+        },
+        {
+          "address": "0x006d2980",
+          "symbol": "CSineForceAffectorDescriptor::CSineForceAffectorDescriptor()"
+        },
+        {
+          "address": "0x006e3a70",
+          "symbol": "CVortexAffectorDescriptor::CVortexAffectorDescriptor()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x006a88c0",
+      "members": [
+        {
+          "address": "0x006a88c0",
+          "symbol": "CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor()"
+        },
+        {
+          "address": "0x006c9eb0",
+          "symbol": "CPlaneColliderDescriptor::CPlaneColliderDescriptor()"
+        },
+        {
+          "address": "0x006d6ca0",
+          "symbol": "CSphereColliderDescriptor::CSphereColliderDescriptor()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x006acbe0",
+      "members": [
+        {
+          "address": "0x006acbe0",
+          "symbol": "CColorAffectorDescriptor::CColorAffectorDescriptor()"
+        },
+        {
+          "address": "0x006b9650",
+          "symbol": "CGravityAffectorDescriptor::CGravityAffectorDescriptor()"
+        },
+        {
+          "address": "0x006bd760",
+          "symbol": "CJetAffectorDescriptor::CJetAffectorDescriptor()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x006b5110",
+      "members": [
+        {
+          "address": "0x006b5110",
+          "symbol": "CGeometryRotateDescriptor::CGeometryRotateDescriptor()"
+        },
+        {
+          "address": "0x006dafc0",
+          "symbol": "CTextureAnimateDescriptor::CTextureAnimateDescriptor()"
+        },
+        {
+          "address": "0x006df4f0",
+          "symbol": "CTextureRotateDescriptor::CTextureRotateDescriptor()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0075ef30",
+      "members": [
+        {
+          "address": "0x0075ef30",
+          "symbol": "CLayoutScene::CLayoutScene()"
+        },
+        {
+          "address": "0x0076ad20",
+          "symbol": "CModelViewerScene::CModelViewerScene()"
+        },
+        {
+          "address": "0x0076f910",
+          "symbol": "CParticleScene::CParticleScene()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x007887d0",
+      "members": [
+        {
+          "address": "0x007887d0",
+          "symbol": "CPOV::AccelerateUpDown(float)"
+        },
+        {
+          "address": "0x00788830",
+          "symbol": "CPOV::Accelerate(float)"
+        },
+        {
+          "address": "0x00788890",
+          "symbol": "CPOV::AccelerateX(float)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0079b240",
+      "members": [
+        {
+          "address": "0x0079b240",
+          "symbol": "CLogicLink::GetObjectInitiatingLink()"
+        },
+        {
+          "address": "0x00d6fa50",
+          "symbol": "CResourceManager::getCurrentLevelSeed()"
+        },
+        {
+          "address": "0x00e4d260",
+          "symbol": "CFileSystem::getNumberOfMods()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00813930",
+      "members": [
+        {
+          "address": "0x00813930",
+          "symbol": "CCharacter::strength()"
+        },
+        {
+          "address": "0x008139a0",
+          "symbol": "CCharacter::dexterity()"
+        },
+        {
+          "address": "0x008144c0",
+          "symbol": "CCharacter::magic()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0084ff40",
+      "members": [
+        {
+          "address": "0x0084ff40",
+          "symbol": "CCharacter::setWardrobeHelmTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x0084fff0",
+          "symbol": "CCharacter::setWardrobeBootsTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x008500a0",
+          "symbol": "CCharacter::setWardrobeGlovesTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0086ced0",
+      "members": [
+        {
+          "address": "0x0086ced0",
+          "symbol": "CDynamicRenderable::CDynamicRenderable()"
+        },
+        {
+          "address": "0x00a54a50",
+          "symbol": "BatchModelRef::BatchModelRef()"
+        },
+        {
+          "address": "0x00a54a80",
+          "symbol": "CollisionModelRef::CollisionModelRef()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x008e4e00",
+      "members": [
+        {
+          "address": "0x008e4e00",
+          "symbol": "CPlayer::getSkillPointsAwardedForFameLevel(unsigned int)"
+        },
+        {
+          "address": "0x008e4e80",
+          "symbol": "CPlayer::getSkillPointsAwardedForLevel(unsigned int)"
+        },
+        {
+          "address": "0x008e4f00",
+          "symbol": "CPlayer::getStatsPointsAwardedForLevel(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x0091b780",
+      "members": [
+        {
+          "address": "0x0091b780",
+          "symbol": "CInventory::getStackSizeOfEquipment(CEquipment*)"
+        },
+        {
+          "address": "0x0091b790",
+          "symbol": "CInventory::getMaxStackSizeOfEquipment(CEquipment*)"
+        },
+        {
+          "address": "0x00cca570",
+          "symbol": "CSkillManager::getSkillLevel(CSkill*)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x009de280",
+      "members": [
+        {
+          "address": "0x009de280",
+          "symbol": "CLayout::resume()"
+        },
+        {
+          "address": "0x009de290",
+          "symbol": "CLayout::pause()"
+        },
+        {
+          "address": "0x009de2b0",
+          "symbol": "CLayout::startBackwards()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00a51ea0",
+      "members": [
+        {
+          "address": "0x00a51ea0",
+          "symbol": "CGraphManager::getGraphByFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00a51fa0",
+          "symbol": "CGraphManager::getGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00d2dda0",
+          "symbol": "CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00a544f0",
+      "members": [
+        {
+          "address": "0x00a544f0",
+          "symbol": "CMasterResourceManager::removeCollisionModel(CCollisionModel*)"
+        },
+        {
+          "address": "0x00a54550",
+          "symbol": "CMasterResourceManager::removeBatchModel(CGenericModel*)"
+        },
+        {
+          "address": "0x00a545b0",
+          "symbol": "CMasterResourceManager::removeAnimationSet(CAnimationSet*)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00a5c700",
+      "members": [
+        {
+          "address": "0x00a5c700",
+          "symbol": "CMasterResourceManager::getCollisionModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00a5c780",
+          "symbol": "CMasterResourceManager::getAnimationSet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00a5c800",
+          "symbol": "CMasterResourceManager::getBatchModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00a82950",
+      "members": [
+        {
+          "address": "0x00a82950",
+          "symbol": "CGameUI::getDieMenuIsOpen()"
+        },
+        {
+          "address": "0x00a82a50",
+          "symbol": "CGameUI::questDialogOpen()"
+        },
+        {
+          "address": "0x00a83520",
+          "symbol": "CGameUI::isCinematicMenuOpen()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00a84230",
+      "members": [
+        {
+          "address": "0x00a84230",
+          "symbol": "CGameUI::captureProcessInput()"
+        },
+        {
+          "address": "0x00c2b980",
+          "symbol": "CMenuManager::captureProcessInput()"
+        },
+        {
+          "address": "0x00f64fc0",
+          "symbol": "lodepng_state_cleanup(LodePNGState*)"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00c79490",
+      "members": [
+        {
+          "address": "0x00c79490",
+          "symbol": "CMouseHandler::MouseCenterButtonDown()"
+        },
+        {
+          "address": "0x00c794b0",
+          "symbol": "CMouseHandler::MouseRightButtonDown()"
+        },
+        {
+          "address": "0x00c794d0",
+          "symbol": "CMouseHandler::MouseLeftButtonDown()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00c9cfa0",
+      "members": [
+        {
+          "address": "0x00c9cfa0",
+          "symbol": "CSkill::getFindTargetAngle()"
+        },
+        {
+          "address": "0x00c9cff0",
+          "symbol": "CSkill::getRangeMin()"
+        },
+        {
+          "address": "0x00c9d040",
+          "symbol": "CSkill::getRandomRangeMin()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00f61dd0",
+      "members": [
+        {
+          "address": "0x00f61dd0",
+          "symbol": "LinuxUtils::GetHomeDir()"
+        },
+        {
+          "address": "0x00f61df0",
+          "symbol": "LinuxUtils::GetTempDir()"
+        },
+        {
+          "address": "0x00f61e10",
+          "symbol": "LinuxUtils::GetAppDir()"
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "representative": "0x00f63680",
+      "members": [
+        {
+          "address": "0x00f63680",
+          "symbol": "lodepng_chunk_ancillary(unsigned char const*)"
+        },
+        {
+          "address": "0x00f63690",
+          "symbol": "lodepng_chunk_private(unsigned char const*)"
+        },
+        {
+          "address": "0x00f636a0",
+          "symbol": "lodepng_chunk_safetocopy(unsigned char const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00557bf0",
+      "members": [
+        {
+          "address": "0x00557bf0",
+          "symbol": "CGame::createFrameListener()"
+        },
+        {
+          "address": "0x00a237f0",
+          "symbol": "CPlaneColliderWrapper::updatePlane()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0056e110",
+      "members": [
+        {
+          "address": "0x0056e110",
+          "symbol": "CGameClient::destroyGameUI()"
+        },
+        {
+          "address": "0x00a54460",
+          "symbol": "CMasterResourceManager::destroyStash()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x005922b0",
+      "members": [
+        {
+          "address": "0x005922b0",
+          "symbol": "CAstarPathfinder::getNodeX()"
+        },
+        {
+          "address": "0x005922e0",
+          "symbol": "CAstarPathfinder::getNodeY()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00592310",
+      "members": [
+        {
+          "address": "0x00592310",
+          "symbol": "CAstarPathfinder::getNextNodeX()"
+        },
+        {
+          "address": "0x00592340",
+          "symbol": "CAstarPathfinder::getNextNodeY()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00592400",
+      "members": [
+        {
+          "address": "0x00592400",
+          "symbol": "CAstarPathfinder::openNode(unsigned int)"
+        },
+        {
+          "address": "0x00592430",
+          "symbol": "CAstarPathfinder::closedNode(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0059f090",
+      "members": [
+        {
+          "address": "0x0059f090",
+          "symbol": "CPositionableObject::setX(float)"
+        },
+        {
+          "address": "0x0059f290",
+          "symbol": "CPositionableObject::setScaleX(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0059f100",
+      "members": [
+        {
+          "address": "0x0059f100",
+          "symbol": "CPositionableObject::setY(float)"
+        },
+        {
+          "address": "0x0059f2f0",
+          "symbol": "CPositionableObject::setScaleY(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0059f170",
+      "members": [
+        {
+          "address": "0x0059f170",
+          "symbol": "CPositionableObject::setZ(float)"
+        },
+        {
+          "address": "0x0059f350",
+          "symbol": "CPositionableObject::setScaleZ(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0059f4c0",
+      "members": [
+        {
+          "address": "0x0059f4c0",
+          "symbol": "CPositionableObject::getForward(Ogre::Vector3&)"
+        },
+        {
+          "address": "0x0059f5f0",
+          "symbol": "CPositionableObject::getUp(Ogre::Vector3&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x005c6840",
+      "members": [
+        {
+          "address": "0x005c6840",
+          "symbol": "getSingleton()"
+        },
+        {
+          "address": "0x00c92a50",
+          "symbol": "UTILITIES::GetDesktopBPP(void*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0067d4b0",
+      "members": [
+        {
+          "address": "0x0067d4b0",
+          "symbol": "CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)"
+        },
+        {
+          "address": "0x00683f90",
+          "symbol": "CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006c18c0",
+      "members": [
+        {
+          "address": "0x006c18c0",
+          "symbol": "CLineAffectorDescriptor::CLineAffectorDescriptor()"
+        },
+        {
+          "address": "0x006ce1d0",
+          "symbol": "CScaleAffectorDescriptor::CScaleAffectorDescriptor()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006f90e0",
+      "members": [
+        {
+          "address": "0x006f90e0",
+          "symbol": "CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*)"
+        },
+        {
+          "address": "0x006f9190",
+          "symbol": "CDescriptor::GetOutputLogicFuncIndexByWrapper(CLogicWrapper*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006fcec0",
+      "members": [
+        {
+          "address": "0x006fcec0",
+          "symbol": "CDescriptor::GetOutputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x006fcf70",
+          "symbol": "CDescriptor::GetInputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006fd5e0",
+      "members": [
+        {
+          "address": "0x006fd5e0",
+          "symbol": "CDescriptor::GetPropertyID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00c5e6b0",
+          "symbol": "CStringRepository::GetStringID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006fd830",
+      "members": [
+        {
+          "address": "0x006fd830",
+          "symbol": "CDescriptor::HasProperty(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00c8abf0",
+          "symbol": "CCmdLineParser::HasCommand(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x006fe220",
+      "members": [
+        {
+          "address": "0x006fe220",
+          "symbol": "CDescriptor::AddOutputLogic(EOUTPUT_EVENTS)"
+        },
+        {
+          "address": "0x006fe2d0",
+          "symbol": "CDescriptor::AddInputLogic(EINPUT_EVENTS)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00754ae0",
+      "members": [
+        {
+          "address": "0x00754ae0",
+          "symbol": "CAllDescriptorsScene::CAllDescriptorsScene()"
+        },
+        {
+          "address": "0x0078a5b0",
+          "symbol": "CRefManagerInterpreterFunc::CRefManagerInterpreterFunc()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0079b1a0",
+      "members": [
+        {
+          "address": "0x0079b1a0",
+          "symbol": "CLogicLink::GetEventIDForOutput()"
+        },
+        {
+          "address": "0x00c9cf30",
+          "symbol": "CSkill::getChanceToCast()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007a7ec0",
+      "members": [
+        {
+          "address": "0x007a7ec0",
+          "symbol": "CLogicObject::SetXPosition(int)"
+        },
+        {
+          "address": "0x007a7ee0",
+          "symbol": "CLogicObject::SetYPosition(int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007b6820",
+      "members": [
+        {
+          "address": "0x007b6820",
+          "symbol": "CTimeline::GetPropertyPointValue(long long, int, int, unsigned int&)"
+        },
+        {
+          "address": "0x007b68b0",
+          "symbol": "CTimeline::SetPropertyPointValueByString(long long, int, int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007bb0f0",
+      "members": [
+        {
+          "address": "0x007bb0f0",
+          "symbol": "CTimeline::StopToBeginning()"
+        },
+        {
+          "address": "0x007bb150",
+          "symbol": "CTimeline::StopToEnd()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007bb200",
+      "members": [
+        {
+          "address": "0x007bb200",
+          "symbol": "CTimeline::rewindToStart()"
+        },
+        {
+          "address": "0x007bb250",
+          "symbol": "CTimeline::fastFowardToEnd()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007bb2a0",
+      "members": [
+        {
+          "address": "0x007bb2a0",
+          "symbol": "CTimeline::Reset_To_Beginning()"
+        },
+        {
+          "address": "0x007bb300",
+          "symbol": "CTimeline::Reset_To_End()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007f60e0",
+      "members": [
+        {
+          "address": "0x007f60e0",
+          "symbol": "CBaseUnit::hasUnitTheme(long long)"
+        },
+        {
+          "address": "0x007ffe50",
+          "symbol": "CBaseUnit::removeUnitTheme(long long)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x007ffd60",
+      "members": [
+        {
+          "address": "0x007ffd60",
+          "symbol": "CBaseUnit::removeUnitTheme(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00800d90",
+          "symbol": "CBaseUnit::addUnitTheme(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x008029d0",
+      "members": [
+        {
+          "address": "0x008029d0",
+          "symbol": "CBaseUnit::getUnitDataName()"
+        },
+        {
+          "address": "0x008f52a0",
+          "symbol": "CPlayer::getPlayerClassName()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080e8f0",
+      "members": [
+        {
+          "address": "0x0080e8f0",
+          "symbol": "CCharacter::performingAttack()"
+        },
+        {
+          "address": "0x0080e910",
+          "symbol": "CCharacter::performingAttackLoose()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080ea90",
+      "members": [
+        {
+          "address": "0x0080ea90",
+          "symbol": "CCharacter::spendPerkPoint()"
+        },
+        {
+          "address": "0x0080eab0",
+          "symbol": "CCharacter::spendSkillPoint()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080eef0",
+      "members": [
+        {
+          "address": "0x0080eef0",
+          "symbol": "CCharacter::getArmorAndTrinketLevelCanEquip(bool)"
+        },
+        {
+          "address": "0x0080ef50",
+          "symbol": "CCharacter::getWeaponLevelCanEquip(bool)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080f7c0",
+      "members": [
+        {
+          "address": "0x0080f7c0",
+          "symbol": "CCharacter::mana()"
+        },
+        {
+          "address": "0x0080f7e0",
+          "symbol": "CCharacter::HP()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080fc50",
+      "members": [
+        {
+          "address": "0x0080fc50",
+          "symbol": "CCharacter::getWeaponInRightHand()"
+        },
+        {
+          "address": "0x00ae1df0",
+          "symbol": "CConsole::getVisible()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0080fd00",
+      "members": [
+        {
+          "address": "0x0080fd00",
+          "symbol": "CCharacter::maximumSkillDamageForDisplay()"
+        },
+        {
+          "address": "0x0080fd40",
+          "symbol": "CCharacter::minimumSkillDamageForDisplay()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00813470",
+      "members": [
+        {
+          "address": "0x00813470",
+          "symbol": "CCharacter::setPaperdollItemSecondary(EEQUIP_LOCATIONS, Ogre::Entity*)"
+        },
+        {
+          "address": "0x00813550",
+          "symbol": "CCharacter::setPaperdollItem(EEQUIP_LOCATIONS, Ogre::Entity*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00815a20",
+      "members": [
+        {
+          "address": "0x00815a20",
+          "symbol": "CCharacter::walkingSpeed()"
+        },
+        {
+          "address": "0x00815ad0",
+          "symbol": "CCharacter::runningSpeed()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00816de0",
+      "members": [
+        {
+          "address": "0x00816de0",
+          "symbol": "CCharacter::hideCharacterText()"
+        },
+        {
+          "address": "0x008b6070",
+          "symbol": "CItem::hideItemText()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00816e20",
+      "members": [
+        {
+          "address": "0x00816e20",
+          "symbol": "CCharacter::showCharacterText()"
+        },
+        {
+          "address": "0x008b60b0",
+          "symbol": "CItem::showItemText()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00816e60",
+      "members": [
+        {
+          "address": "0x00816e60",
+          "symbol": "CCharacter::destroyCharacterText()"
+        },
+        {
+          "address": "0x008b67a0",
+          "symbol": "CItem::destroyItemText()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00835ba0",
+      "members": [
+        {
+          "address": "0x00835ba0",
+          "symbol": "CCharacter::setAltSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00835c60",
+          "symbol": "CCharacter::setActiveSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0086d640",
+      "members": [
+        {
+          "address": "0x0086d640",
+          "symbol": "CEquipment::resetVisualLayout()"
+        },
+        {
+          "address": "0x00a83550",
+          "symbol": "CGameUI::closeCinematicMenu()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x0086f080",
+      "members": [
+        {
+          "address": "0x0086f080",
+          "symbol": "CEquipment::unequip()"
+        },
+        {
+          "address": "0x0086f0a0",
+          "symbol": "CEquipment::equip()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x008e06c0",
+      "members": [
+        {
+          "address": "0x008e06c0",
+          "symbol": "CMonster::idleAIResurrecter(float, CLevel&, bool)"
+        },
+        {
+          "address": "0x008e06d0",
+          "symbol": "CMonster::idleAIDefender(float, CLevel&, bool)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x008e3e70",
+      "members": [
+        {
+          "address": "0x008e3e70",
+          "symbol": "CPlayer::clearSkillMap()"
+        },
+        {
+          "address": "0x008e3ea0",
+          "symbol": "CPlayer::clearSkillFunctionMap()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x008e3ed0",
+      "members": [
+        {
+          "address": "0x008e3ed0",
+          "symbol": "CPlayer::setMappedFunctionSkill(unsigned int, long long)"
+        },
+        {
+          "address": "0x008e3f20",
+          "symbol": "CPlayer::setLeftMappedFunctionSkill(unsigned int, long long)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x008e4d60",
+      "members": [
+        {
+          "address": "0x008e4d60",
+          "symbol": "CPlayer::calculateMaxMana()"
+        },
+        {
+          "address": "0x008e4f80",
+          "symbol": "CPlayer::calculateMaxHP()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00926260",
+      "members": [
+        {
+          "address": "0x00926260",
+          "symbol": "TArrayList<CEquipmentRef*>::add(CEquipmentRef*)"
+        },
+        {
+          "address": "0x009ca560",
+          "symbol": "TArrayList<CBaseUnit*>::add(CBaseUnit*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x009361e0",
+      "members": [
+        {
+          "address": "0x009361e0",
+          "symbol": "CLevel::topLeftX()"
+        },
+        {
+          "address": "0x00936200",
+          "symbol": "CLevel::topLeftY()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x009366f0",
+      "members": [
+        {
+          "address": "0x009366f0",
+          "symbol": "CLevel::getLevelChampionSpawnClass()"
+        },
+        {
+          "address": "0x00936740",
+          "symbol": "CLevel::getLevelMonsterSpawnClass()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00937860",
+      "members": [
+        {
+          "address": "0x00937860",
+          "symbol": "CLevel::decrementMapPassability(Ogre::Vector3 const&)"
+        },
+        {
+          "address": "0x009381b0",
+          "symbol": "CLevel::decrementObjectPassability(Ogre::Vector3 const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00937950",
+      "members": [
+        {
+          "address": "0x00937950",
+          "symbol": "CLevel::incrementMapPassability(Ogre::Vector3 const&)"
+        },
+        {
+          "address": "0x009382a0",
+          "symbol": "CLevel::incrementObjectPassability(Ogre::Vector3 const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00945740",
+      "members": [
+        {
+          "address": "0x00945740",
+          "symbol": "CLevel::randomOpenItemPosition(Ogre::Vector3 const&, float, bool)"
+        },
+        {
+          "address": "0x009459a0",
+          "symbol": "CLevel::randomOpenPosition(Ogre::Vector3 const&, float, bool)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x009459d0",
+      "members": [
+        {
+          "address": "0x009459d0",
+          "symbol": "CLevel::incrementObjectPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)"
+        },
+        {
+          "address": "0x009468b0",
+          "symbol": "CLevel::incrementMapPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00945ce0",
+      "members": [
+        {
+          "address": "0x00945ce0",
+          "symbol": "CLevel::decrementObjectPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)"
+        },
+        {
+          "address": "0x00946bc0",
+          "symbol": "CLevel::decrementMapPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00945ff0",
+      "members": [
+        {
+          "address": "0x00945ff0",
+          "symbol": "CLevel::decrementObjectPassability(Ogre::AxisAlignedBox const&, float)"
+        },
+        {
+          "address": "0x00946ed0",
+          "symbol": "CLevel::decrementMapPassability(Ogre::AxisAlignedBox const&, float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00967100",
+      "members": [
+        {
+          "address": "0x00967100",
+          "symbol": "unsigned int* std::__uninitialized_copy_a<unsigned int*, unsigned int*, unsigned int>(unsigned int*, unsigned int*, unsigned int*, std::allocator<unsigned int>&)"
+        },
+        {
+          "address": "0x00c89da0",
+          "symbol": "float* std::__uninitialized_move_a<float*, float*, std::allocator<float> >(float*, float*, float*, std::allocator<float>&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x009704b0",
+      "members": [
+        {
+          "address": "0x009704b0",
+          "symbol": "CLevelState::addLogicState(CLogicNodeState*, CLevel&)"
+        },
+        {
+          "address": "0x00a5cc80",
+          "symbol": "CMasterResourceManager::addAnimationSet(CAnimationSet*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x009d3b30",
+      "members": [
+        {
+          "address": "0x009d3b30",
+          "symbol": "CLayout::setCacheingParticlesForLevel(bool)"
+        },
+        {
+          "address": "0x00f77bb0",
+          "symbol": "recent_timeout(void*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a01c90",
+      "members": [
+        {
+          "address": "0x00a01c90",
+          "symbol": "CSceneNodeObject::sceneNodeRemoveFromParent()"
+        },
+        {
+          "address": "0x00a07ec0",
+          "symbol": "CSoundObject::pause()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a3cf50",
+      "members": [
+        {
+          "address": "0x00a3cf50",
+          "symbol": "CParticleTechWrapper::setRibbonLength(float)"
+        },
+        {
+          "address": "0x00a3cf80",
+          "symbol": "CParticleTechWrapper::setRibbonWidth(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a454a0",
+      "members": [
+        {
+          "address": "0x00a454a0",
+          "symbol": "CParticleTechWrapper::setVScroll(float)"
+        },
+        {
+          "address": "0x00a454f0",
+          "symbol": "CParticleTechWrapper::setUScroll(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a49fc0",
+      "members": [
+        {
+          "address": "0x00a49fc0",
+          "symbol": "CWeaponTrail::setSegmentStartInitialColourValue(Ogre::ColourValue const&)"
+        },
+        {
+          "address": "0x00a49fe0",
+          "symbol": "CWeaponTrail::setSegmentEndInitialColourValue(Ogre::ColourValue const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a544a0",
+      "members": [
+        {
+          "address": "0x00a544a0",
+          "symbol": "CMasterResourceManager::getCollisionModel(CCollisionModel*)"
+        },
+        {
+          "address": "0x00a54500",
+          "symbol": "CMasterResourceManager::getBatchModel(CGenericModel*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a54940",
+      "members": [
+        {
+          "address": "0x00a54940",
+          "symbol": "CMasterResourceManager::fameGate(int)"
+        },
+        {
+          "address": "0x00a549d0",
+          "symbol": "CMasterResourceManager::experienceGate(int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a60f40",
+      "members": [
+        {
+          "address": "0x00a60f40",
+          "symbol": "CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuidByClosestGuid(long long)"
+        },
+        {
+          "address": "0x00a63140",
+          "symbol": "CSoundBankDataInformation::getSoundDataObjectByGuidThatIsClosest(long long)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a68370",
+      "members": [
+        {
+          "address": "0x00a68370",
+          "symbol": "CUnitThemes::CUnitThemes(wchar_t const*)"
+        },
+        {
+          "address": "0x00e08960",
+          "symbol": "CRecipes::CRecipes(wchar_t const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a7eda0",
+      "members": [
+        {
+          "address": "0x00a7eda0",
+          "symbol": "CSpawnClassParser::getSpawnClassDataByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00a7ef00",
+          "symbol": "CSpawnClassParser::getSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a838e0",
+      "members": [
+        {
+          "address": "0x00a838e0",
+          "symbol": "CGameUI::getWindowHeight()"
+        },
+        {
+          "address": "0x00a83900",
+          "symbol": "CGameUI::getWindowWidth()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a83e70",
+      "members": [
+        {
+          "address": "0x00a83e70",
+          "symbol": "CGameUI::scaledY(float)"
+        },
+        {
+          "address": "0x00a83ea0",
+          "symbol": "CGameUI::scaledX(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a8e010",
+      "members": [
+        {
+          "address": "0x00a8e010",
+          "symbol": "CGameUI::handle_TogglePet(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00a8e050",
+          "symbol": "CGameUI::handle_ToggleStats(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00a8ec10",
+      "members": [
+        {
+          "address": "0x00a8ec10",
+          "symbol": "CGameUI::toggleDeath()"
+        },
+        {
+          "address": "0x00a8edc0",
+          "symbol": "CGameUI::toggleWaypointMenu()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b17e70",
+      "members": [
+        {
+          "address": "0x00b17e70",
+          "symbol": "CDropdownMenu::setTitle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00e4b810",
+          "symbol": "CTipMenu::setContents(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b45900",
+      "members": [
+        {
+          "address": "0x00b45900",
+          "symbol": "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00b888b0",
+          "symbol": "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b45f00",
+      "members": [
+        {
+          "address": "0x00b45f00",
+          "symbol": "CInventoryMenu::checkForUpdate(CEquipment*)"
+        },
+        {
+          "address": "0x00b89020",
+          "symbol": "CPetMenu::checkForUpdate(CEquipment*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b610f0",
+      "members": [
+        {
+          "address": "0x00b610f0",
+          "symbol": "CMerchantMenu::handle_PetItemClick(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00bee4c0",
+          "symbol": "CStashMenu::handle_PetItemClick(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b61140",
+      "members": [
+        {
+          "address": "0x00b61140",
+          "symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00bee510",
+          "symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b6ab50",
+      "members": [
+        {
+          "address": "0x00b6ab50",
+          "symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)"
+        },
+        {
+          "address": "0x00bf7cc0",
+          "symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00b885b0",
+      "members": [
+        {
+          "address": "0x00b885b0",
+          "symbol": "COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)"
+        },
+        {
+          "address": "0x00bd8650",
+          "symbol": "CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c188e0",
+      "members": [
+        {
+          "address": "0x00c188e0",
+          "symbol": "CStatsMenuFill::getStatInvestment(ESTATSMENU_STATS)"
+        },
+        {
+          "address": "0x00c18940",
+          "symbol": "CStatsMenuFill::getStatBarCurrentAmount(ESTATSMENU_STATS)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c18b80",
+      "members": [
+        {
+          "address": "0x00c18b80",
+          "symbol": "CStatsMenuFill::handle_AddToStat(CEGUI::EventArgs const&)"
+        },
+        {
+          "address": "0x00c18be0",
+          "symbol": "CStatsMenuFill::handle_RemoveFromStat(CEGUI::EventArgs const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c4adf0",
+      "members": [
+        {
+          "address": "0x00c4adf0",
+          "symbol": "CDifficultyMenu::CDifficultyMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)"
+        },
+        {
+          "address": "0x00c5e3b0",
+          "symbol": "CNewGameMenu::CNewGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c5ee20",
+      "members": [
+        {
+          "address": "0x00c5ee20",
+          "symbol": "CDataGroup::GetGroupName()"
+        },
+        {
+          "address": "0x00c62dd0",
+          "symbol": "CDataValue::GetDataValueName()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c5f3e0",
+      "members": [
+        {
+          "address": "0x00c5f3e0",
+          "symbol": "CDataGroup::GetDataValueType(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00cd3420",
+          "symbol": "CSkillManager::getSkillLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c62ec0",
+      "members": [
+        {
+          "address": "0x00c62ec0",
+          "symbol": "CDataValue::SetValueInt32(int)"
+        },
+        {
+          "address": "0x00c62ed0",
+          "symbol": "CDataValue::SetValueUInt32(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c65420",
+      "members": [
+        {
+          "address": "0x00c65420",
+          "symbol": "CBinaryStyle::Get32BitData(std::basic_ifstream<char, std::char_traits<char> >&)"
+        },
+        {
+          "address": "0x00c68790",
+          "symbol": "COgreResourceFile::Get32BitData(COgreReader*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c65450",
+      "members": [
+        {
+          "address": "0x00c65450",
+          "symbol": "CBinaryStyle::Get64BitData(std::basic_ifstream<char, std::char_traits<char> >&)"
+        },
+        {
+          "address": "0x00c687c0",
+          "symbol": "COgreResourceFile::Get64BitData(COgreReader*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c77410",
+      "members": [
+        {
+          "address": "0x00c77410",
+          "symbol": "FILESYSTEM::GetFileCreationTime(wchar_t const*)"
+        },
+        {
+          "address": "0x00c77530",
+          "symbol": "FILESYSTEM::GetFileTime(wchar_t const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c816a0",
+      "members": [
+        {
+          "address": "0x00c816a0",
+          "symbol": "CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00c817a0",
+          "symbol": "CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c87680",
+      "members": [
+        {
+          "address": "0x00c87680",
+          "symbol": "CPath::GetPointDistance(unsigned int)"
+        },
+        {
+          "address": "0x00c876b0",
+          "symbol": "CPath::GetSegmentAngle(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c876e0",
+      "members": [
+        {
+          "address": "0x00c876e0",
+          "symbol": "CPath::GetRadiusLeft(unsigned int)"
+        },
+        {
+          "address": "0x00c87730",
+          "symbol": "CPath::GetRadiusRight(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c87780",
+      "members": [
+        {
+          "address": "0x00c87780",
+          "symbol": "CPath::SetRadiusLeft(unsigned int, float)"
+        },
+        {
+          "address": "0x00c877a0",
+          "symbol": "CPath::SetRadiusRight(unsigned int, float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c877c0",
+      "members": [
+        {
+          "address": "0x00c877c0",
+          "symbol": "CPath::GetTweenedRadiusRight(float)"
+        },
+        {
+          "address": "0x00c878d0",
+          "symbol": "CPath::GetTweenedRadiusLeft(float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c8d800",
+      "members": [
+        {
+          "address": "0x00c8d800",
+          "symbol": "STRINGS::StringIsLower(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00c8d8c0",
+          "symbol": "STRINGS::StringIsUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c8d860",
+      "members": [
+        {
+          "address": "0x00c8d860",
+          "symbol": "STRINGS::StringIsLower(std::string const&)"
+        },
+        {
+          "address": "0x00c8d920",
+          "symbol": "STRINGS::StringIsUpper(std::string const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c8daa0",
+      "members": [
+        {
+          "address": "0x00c8daa0",
+          "symbol": "STRINGS::GetValueAsString(bool)"
+        },
+        {
+          "address": "0x00c8dca0",
+          "symbol": "STRINGS::GetValueAsWString(bool)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c8def0",
+      "members": [
+        {
+          "address": "0x00c8def0",
+          "symbol": "STRINGS::replaceString(std::string, std::string const&, std::string const&)"
+        },
+        {
+          "address": "0x00c8df60",
+          "symbol": "STRINGS::replaceWString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c910b0",
+      "members": [
+        {
+          "address": "0x00c910b0",
+          "symbol": "STRINGS::GetValueAsWString(unsigned int)"
+        },
+        {
+          "address": "0x00c913a0",
+          "symbol": "STRINGS::GetValueAsWString(int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c92a70",
+      "members": [
+        {
+          "address": "0x00c92a70",
+          "symbol": "UTILITIES::randomBetween(float, float)"
+        },
+        {
+          "address": "0x00c92b50",
+          "symbol": "UTILITIES::randomBetweenVolatile(float, float)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c92b10",
+      "members": [
+        {
+          "address": "0x00c92b10",
+          "symbol": "UTILITIES::randomIntegerBetween(int, int)"
+        },
+        {
+          "address": "0x00c92bf0",
+          "symbol": "UTILITIES::randomIntegerBetweenVolatile(int, int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c92c30",
+      "members": [
+        {
+          "address": "0x00c92c30",
+          "symbol": "UTILITIES::setSeedVolatile(int)"
+        },
+        {
+          "address": "0x00c92c70",
+          "symbol": "UTILITIES::setSeed(int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c93100",
+      "members": [
+        {
+          "address": "0x00c93100",
+          "symbol": "UTILITIES::ClearQueue(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >&)"
+        },
+        {
+          "address": "0x00c93210",
+          "symbol": "UTILITIES::ClearQueue(std::queue<std::string, std::deque<std::string, std::allocator<std::string> > >&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c9d3c0",
+      "members": [
+        {
+          "address": "0x00c9d3c0",
+          "symbol": "CSkill::getMaximumDamage()"
+        },
+        {
+          "address": "0x00c9d420",
+          "symbol": "CSkill::getMinimumDamage()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00c9db10",
+      "members": [
+        {
+          "address": "0x00c9db10",
+          "symbol": "CSkill::rollCancelChance()"
+        },
+        {
+          "address": "0x00c9db40",
+          "symbol": "CSkill::rollCastChance()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00ca52b0",
+      "members": [
+        {
+          "address": "0x00ca52b0",
+          "symbol": "CSkill::getSkillLevelDescription(CBaseUnit*, unsigned int)"
+        },
+        {
+          "address": "0x00ca5420",
+          "symbol": "CSkill::getSkillLevelStats(CBaseUnit*, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00cdbd20",
+      "members": [
+        {
+          "address": "0x00cdbd20",
+          "symbol": "CSkillParser::getSkillData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        },
+        {
+          "address": "0x00d0a2b0",
+          "symbol": "CMissilePreloader::getMissileRef(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00ce9ea0",
+      "members": [
+        {
+          "address": "0x00ce9ea0",
+          "symbol": "CCameraControl::getMaxDistanceToDolly()"
+        },
+        {
+          "address": "0x00ce9ec0",
+          "symbol": "CCameraControl::getDefaultDistanceToDolly()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00cf8ee0",
+      "members": [
+        {
+          "address": "0x00cf8ee0",
+          "symbol": "CMissile::getRateOFire()"
+        },
+        {
+          "address": "0x00ece420",
+          "symbol": "CSteamStats::getPlayerStatFloat(ESTATS)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00d86ca0",
+      "members": [
+        {
+          "address": "0x00d86ca0",
+          "symbol": "CAISkillManager::skillRemoved(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        },
+        {
+          "address": "0x00d86cd0",
+          "symbol": "CAISkillManager::skillAdded(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00de6ab0",
+      "members": [
+        {
+          "address": "0x00de6ab0",
+          "symbol": "CQuestController::questHasBeenAccepted(bool)"
+        },
+        {
+          "address": "0x00de6af0",
+          "symbol": "CQuestController::questHasBeenCompleted(bool)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00e0ed80",
+      "members": [
+        {
+          "address": "0x00e0ed80",
+          "symbol": "CSets::getSet(wchar_t const*)"
+        },
+        {
+          "address": "0x00e79560",
+          "symbol": "CCinematics::getCinematic(wchar_t const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00e20620",
+      "members": [
+        {
+          "address": "0x00e20620",
+          "symbol": "CSkillController::stopSkill()"
+        },
+        {
+          "address": "0x00e20650",
+          "symbol": "CSkillController::startSkill()"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00eaa440",
+      "members": [
+        {
+          "address": "0x00eaa440",
+          "symbol": "CWaypointActivator::CWaypointActivator(CResourceManager*)"
+        },
+        {
+          "address": "0x00eb2670",
+          "symbol": "CDungeonObject::CDungeonObject(CResourceManager*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f60f40",
+      "members": [
+        {
+          "address": "0x00f60f40",
+          "symbol": "WriteFile(void*, void const*, unsigned long, unsigned long*, void*)"
+        },
+        {
+          "address": "0x00f61050",
+          "symbol": "ReadFile(void*, void*, unsigned long, unsigned long*, void*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f63240",
+      "members": [
+        {
+          "address": "0x00f63240",
+          "symbol": "SetCursorPos(int, int)"
+        },
+        {
+          "address": "0x00f893f0",
+          "symbol": "xgetimageerrhandler(_XDisplay*, XErrorEvent*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f63260",
+      "members": [
+        {
+          "address": "0x00f63260",
+          "symbol": "GetAsyncKeyState(unsigned int)"
+        },
+        {
+          "address": "0x00f63280",
+          "symbol": "GetKeyState(unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f633c0",
+      "members": [
+        {
+          "address": "0x00f633c0",
+          "symbol": "lodepng_read32bitInt(unsigned char const*)"
+        },
+        {
+          "address": "0x00f63640",
+          "symbol": "lodepng_chunk_length(unsigned char const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f636b0",
+      "members": [
+        {
+          "address": "0x00f636b0",
+          "symbol": "lodepng_chunk_data(unsigned char*)"
+        },
+        {
+          "address": "0x00f636c0",
+          "symbol": "lodepng_chunk_data_const(unsigned char const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f63790",
+      "members": [
+        {
+          "address": "0x00f63790",
+          "symbol": "lodepng_chunk_next(unsigned char*)"
+        },
+        {
+          "address": "0x00f637c0",
+          "symbol": "lodepng_chunk_next_const(unsigned char const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f64da0",
+      "members": [
+        {
+          "address": "0x00f64da0",
+          "symbol": "ucvector_cleanup(void*)"
+        },
+        {
+          "address": "0x00f65290",
+          "symbol": "uivector_cleanup(void*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f68930",
+      "members": [
+        {
+          "address": "0x00f68930",
+          "symbol": "zlib_decompress(unsigned char**, unsigned long*, unsigned char const*, unsigned long, LodePNGDecompressSettings const*)"
+        },
+        {
+          "address": "0x00f6b300",
+          "symbol": "zlib_compress(unsigned char**, unsigned long*, unsigned char const*, unsigned long, LodePNGCompressSettings const*)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f68950",
+      "members": [
+        {
+          "address": "0x00f68950",
+          "symbol": "lodepng::decompress(std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned char const*, unsigned long, LodePNGDecompressSettings const&)"
+        },
+        {
+          "address": "0x00f6b320",
+          "symbol": "lodepng::compress(std::vector<unsigned char, std::allocator<unsigned char> >&, unsigned char const*, unsigned long, LodePNGCompressSettings const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f689c0",
+      "members": [
+        {
+          "address": "0x00f689c0",
+          "symbol": "lodepng::decompress(std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> > const&, LodePNGDecompressSettings const&)"
+        },
+        {
+          "address": "0x00f6b390",
+          "symbol": "lodepng::compress(std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> > const&, LodePNGCompressSettings const&)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f6ea80",
+      "members": [
+        {
+          "address": "0x00f6ea80",
+          "symbol": "lodepng::encode(std::vector<unsigned char, std::allocator<unsigned char> >&, std::vector<unsigned char, std::allocator<unsigned char> > const&, unsigned int, unsigned int, LodePNGColorType, unsigned int)"
+        },
+        {
+          "address": "0x00f6ee70",
+          "symbol": "lodepng::encode(std::string const&, std::vector<unsigned char, std::allocator<unsigned char> > const&, unsigned int, unsigned int, LodePNGColorType, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f707d0",
+      "members": [
+        {
+          "address": "0x00f707d0",
+          "symbol": "ZOLu33026715730109_br_find_exe_dir"
+        },
+        {
+          "address": "0x00f70800",
+          "symbol": "ZOLu33026715730109_br_find_exe"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f83690",
+      "members": [
+        {
+          "address": "0x00f83690",
+          "symbol": "rrrx_converter(unsigned char const*, unsigned char*, int, int)"
+        },
+        {
+          "address": "0x00f83730",
+          "symbol": "xrrr_converter(unsigned char const*, unsigned char*, int, int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f85d80",
+      "members": [
+        {
+          "address": "0x00f85d80",
+          "symbol": "gtk_thin_down_frame(int, int, int, int, unsigned int)"
+        },
+        {
+          "address": "0x00f86720",
+          "symbol": "gtk_thin_up_frame(int, int, int, int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f87f00",
+      "members": [
+        {
+          "address": "0x00f87f00",
+          "symbol": "down_frame(int, int, int, int, unsigned int)"
+        },
+        {
+          "address": "0x00f87f20",
+          "symbol": "up_frame(int, int, int, int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f88a60",
+      "members": [
+        {
+          "address": "0x00f88a60",
+          "symbol": "down_round(int, int, int, int, unsigned int)"
+        },
+        {
+          "address": "0x00f88ad0",
+          "symbol": "up_round(int, int, int, int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f89270",
+      "members": [
+        {
+          "address": "0x00f89270",
+          "symbol": "thin_up_box(int, int, int, int, unsigned int)"
+        },
+        {
+          "address": "0x00f89330",
+          "symbol": "up_box(int, int, int, int, unsigned int)"
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "representative": "0x00f9d6a0",
+      "members": [
+        {
+          "address": "0x00f9d6a0",
+          "symbol": "error(char const*, ...)"
+        },
+        {
+          "address": "0x00f9d760",
+          "symbol": "warning(char const*, ...)"
+        }
+      ]
+    }
+  ]
+}
