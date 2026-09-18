@@ -63,12 +63,6 @@ public:
     // Optional UI release channel, separate from press-to-move world input.
     // Old scenario hosts remain valid and report no physical pointer state.
     virtual std::optional<UiPointerClick> take_ui_click() { return std::nullopt; }
-    // Optional physical left-button press position. The in-game HUD chain runs
-    // its command on MouseButtonDown (original-code CGameUI::mapEventHandlers
-    // @0xa97e00 / handle_onClick @0xa83690), so the application needs the
-    // press independently of the release-formed click above. Old hosts report
-    // none; the release channel is then drained without dispatching.
-    virtual std::optional<std::array<float, 2>> take_ui_press() { return std::nullopt; }
     virtual UiPointerState ui_pointer_state() const noexcept { return {}; }
     // Backend-neutral physical US scan-code contract; see application_keys.hpp.
     virtual std::vector<std::uint32_t> take_key_presses() = 0;

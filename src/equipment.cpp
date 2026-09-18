@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 
 namespace torchlight {
@@ -113,8 +114,8 @@ const char* weapon_delivery_issue(WeaponDelivery delivery) noexcept {
         case WeaponDelivery::direct_physical: return "";
         case WeaponDelivery::missile: return "weapon requires missile runtime";
         case WeaponDelivery::weapon_skill: return "weapon requires skill runtime";
-        case WeaponDelivery::unsupported_damage: return "ranged elemental/mixed damage is unsupported";
-        case WeaponDelivery::unverified: return "ranged delivery metadata is unverified";
+        case WeaponDelivery::unsupported_damage: return "weapon elemental/mixed damage is unsupported";
+        case WeaponDelivery::unverified: return "weapon delivery metadata is unverified";
     }
     return "invalid weapon delivery";
 }
@@ -160,10 +161,26 @@ std::optional<ArmorSlot> armor_slot_for_unit_type(
     return std::nullopt;
 }
 
+std::int32_t item_graph_stat(float graph_value, std::uint32_t scaled_percent,
+                             std::int32_t heirloom_count, bool armor) {
+    if (!std::isfinite(graph_value) || heirloom_count < 0)
+        throw EquipmentError("Invalid item graph input");
+    // Match original uint32 addition, then cvtsi2ss of the zero-extended value.
+    const auto percent = scaled_percent + static_cast<std::uint32_t>(
+        std::min(heirloom_count, 5) * 10);
+    const float multiplier = static_cast<float>(percent) / 100.0F;
+    const float value = std::ceil(graph_value * multiplier);
+    if (!std::isfinite(value) || static_cast<double>(value) < std::numeric_limits<std::int32_t>::min() ||
+        static_cast<double>(value) > std::numeric_limits<std::int32_t>::max())
+        throw EquipmentError("Item graph result exceeds int32");
+    const auto result = static_cast<std::int32_t>(value);
+    return armor ? std::max(1, result) : result;
+}
+
 std::optional<ArmorItem> roll_armor_item(
     const MasterResourceRecord& resource, const UnitDefinition& definition,
     const StatGraph& armor_graph, TorchlightRandom& random,
-    std::int32_t rarity_rank) {
+    std::int32_t heirloom_count) {
     const auto slot = armor_slot_for_unit_type(resource.unit_type);
     if (!slot) {
         return std::nullopt;
@@ -186,11 +203,8 @@ std::optional<ArmorItem> roll_armor_item(
         (static_cast<float>(rarity_modifier) / 100.0F) *
         (static_cast<float>(special_modifier) / 100.0F));
     const auto level = std::max(1, optional_integer(definition, u"LEVEL", 1));
-    const auto graph_percent = scaled_percent +
-        std::clamp(rarity_rank, 0, 5) * 10;
-    const auto armor = std::max(1, static_cast<std::int32_t>(std::ceil(
-        armor_graph.value(static_cast<float>(level)) *
-        static_cast<float>(graph_percent) / 100.0F)));
+    const auto armor = item_graph_stat(armor_graph.value(static_cast<float>(level)),
+        static_cast<std::uint32_t>(scaled_percent), heirloom_count, true);
 
     ArmorItem item;
     item.guid = resource.guid;
@@ -262,20 +276,19 @@ std::optional<WeaponPrototype> load_weapon_prototype(
 
 WeaponItem roll_weapon_item(const WeaponPrototype& prototype,
                             TorchlightRandom& random,
-                            std::int32_t rarity_rank) noexcept {
-    const auto rank = std::clamp(rarity_rank, 0, 5);
-    const auto raw_damage = rank > 0
-                                ? prototype.maximum_damage_percent
-                                : random.integer_between(
-                                      prototype.minimum_damage_percent,
-                                      prototype.maximum_damage_percent);
+                            std::int32_t heirloom_count) {
+    if (heirloom_count < 0) throw EquipmentError("Negative heirloom count");
+    // original-code: calculateCombatStats @0x8815d8 calls the RNG BEFORE
+    // choosing MAXDAMAGE for a previously inherited weapon. Do not skip its draw.
+    const auto rolled = random.integer_between(prototype.minimum_damage_percent,
+                                                prototype.maximum_damage_percent);
+    const auto raw_damage = heirloom_count > 0 ? prototype.maximum_damage_percent : rolled;
     const auto scaled_percent = static_cast<std::int32_t>(
         static_cast<float>(raw_damage) *
         (static_cast<float>(prototype.rarity_damage_modifier) / 100.0F) *
         (static_cast<float>(prototype.speed_damage_modifier) / 100.0F));
-    const auto maximum_damage = std::max(1, static_cast<std::int32_t>(std::ceil(
-        prototype.base_weapon_damage *
-        static_cast<float>(scaled_percent + rank * 10) / 100.0F)));
+    const auto maximum_damage = item_graph_stat(prototype.base_weapon_damage,
+        static_cast<std::uint32_t>(scaled_percent), heirloom_count, false);
     WeaponItem item;
     item.prototype = prototype;
     item.maximum_damage = maximum_damage;

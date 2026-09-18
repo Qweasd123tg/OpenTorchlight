@@ -57,7 +57,7 @@ def effect(name, value, **extra):
     return group('EFFECT', props)
 
 
-def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool = False, with_consumables: bool = False, with_ranged: bool = False):
+def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool = False, with_consumables: bool = False, with_ranged: bool = False, with_stats: bool = False, with_delivery_cases: bool = False):
     entries = {}
     units, records = [], []
     def add(name, category='MONSTERS', unit_type='MONSTER', props=(), children=(), directory='media/combat/'):
@@ -163,12 +163,39 @@ def write_fixture(path: Path, *, with_rewards: bool = False, with_vitals: bool =
         add('MISSILE_PISTOL','ITEMS','PISTOL',ranged_props+[('MISSILE',5,'TEST_MISSILE')])
         add('SKILL_PISTOL','ITEMS','PISTOL',ranged_props,[group('SKILLS',[('SKILL',5,'TEST_SKILL')])])
         add('ELEMENTAL_PISTOL','ITEMS','PISTOL',[(k,t,50 if k=='DAMAGE_PHYSICAL' else v) for k,t,v in ranged_props]+[('DAMAGE_FIRE',1,50)])
+        if with_delivery_cases:
+            for name, props, groups in [
+                    ('DIRECT_SWORD', ranged_props, []),
+                    ('MISSILE_SWORD', ranged_props+[('MISSILE',5,'TEST_MISSILE')], []),
+                    ('SKILL_SWORD', ranged_props, [group('SKILLS',[('SKILL',5,'TEST_SKILL')])]),
+                    ('ELEMENTAL_SWORD', [(k,t,50 if k=='DAMAGE_PHYSICAL' else v) for k,t,v in ranged_props]+[('DAMAGE_FIRE',1,50)], [])]:
+                add(name,'ITEMS','SWORD',props,groups)
+                add('ENEMY_'+name,props=base,children=[equip(RIGHTHAND=name)])
+    if with_stats:
+        stat_player=[(k,t,10 if k in ('DEFENSE','ARMOR') else v) for k,t,v in playerbase]
+        innate=group('EFFECT',[('TYPE',5,'ARMOR BONUS'),('ACTIVATION',5,'PASSIVE'),('DURATION',5,'ALWAYS'),
+            ('MIN',1,20),('MAX',1,20),('NAME',5,'INNATEARMOR'),('UNIQUE',6,True),('SAVE',6,True)])
+        add('STAT_PLAYER','PLAYERS','PLAYER',stat_player,[innate])
+        armor=[('ARMORMIN',1,100),('ARMORMAX',1,100),('ARMOR_PHYSICAL',1,100)]
+        add('STAT_CHEST','ITEMS','NORMAL CHEST ARMOR',armor,[
+            effect('FIXTURE_ARMOR_PERCENT',50),effect('ARMOR BONUS',7),
+            effect('FIXTURE_DEFENSE_PERCENT',10,DAMAGE_TYPE='ALL'),effect('FIXTURE_DEFENSE_FLAT',2.1),
+            effect('FIXTURE_DEGRADE',1.1),effect('FIXTURE_MOVE_SPEED',50)])
+        add('BAD_STAT_CHEST','ITEMS','NORMAL CHEST ARMOR',[(k,t,1000 if k in ('ARMORMIN','ARMORMAX') else v) for k,t,v in armor],[effect('FIXTURE_ARMOR_PERCENT',1e9)])
+        speed=group('EFFECT',[('TYPE',5,'FIXTURE_MOVE_SPEED'),('ACTIVATION',5,'PASSIVE'),('DURATION',5,'ALWAYS'),
+                            ('MIN',1,50),('MAX',1,50),('SAVE',6,True)])
+        add('MOVEMENT_BONUS',props=base,children=[speed])
+        add('ARMOR_BONUS_MONSTER',props=[(k,t,10000 if k in ('MINHP','MAXHP') else v) for k,t,v in base],
+            children=[effect('ARMOR BONUS',10000)])
     for name, definition in units: entries[f'media/units/{name}.dat.adm']=adm(definition)
     master=adm(group('UNITS',children=records))
     entries['media/master.adm']=master
     entries['media/MASTERRESOURCEUNITS.DAT.ADM']=master
     names={4:'FIXTURE_MANA_FLAT',0x13:'FIXTURE_MANA_PERCENT',0x16:'FIXTURE_HASTE',0x8c:'FIXTURE_SLOW_RESIST',0x0f:'FIXTURE_MELEE_PERCENT',
            0x47:'FIXTURE_STR_PERCENT',0x45:'FIXTURE_STR_FLAT',0x19:'FIXTURE_DAMAGE_PERCENT'}
+    if with_stats:
+        names.update({8:'ARMOR BONUS',0x17:'FIXTURE_ARMOR_PERCENT',0x11:'FIXTURE_DEFENSE_PERCENT',
+            2:'FIXTURE_DEFENSE_FLAT',0x42:'FIXTURE_DEGRADE',0x15:'FIXTURE_MOVE_SPEED'})
     if with_vitals:
         names.update({5:'FIXTURE_HP_FLAT',0x14:'FIXTURE_HP_PERCENT',7:'FIXTURE_HP_REGEN',
             6:'FIXTURE_MANA_REGEN',0x34:'FIXTURE_DAMAGE_OVER_TIME'})

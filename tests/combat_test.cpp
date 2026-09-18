@@ -101,7 +101,26 @@ int main(int argc, char** argv) {
         static_cast<void>(logic.take_events());
 
         torchlight::AttackAnimationCatalog catalog(archive);
-        torchlight::CombatController combat(players.front(), 31);
+        // The original Alchemist starting staff is not a 100%-physical weapon.
+        // Earlier this test accidentally required its magical/mixed damage to
+        // be replaced by a physical strike. Keep that case as a refusal test.
+        torchlight::CombatController alchemist(players.front(), 31);
+        require(alchemist.attack_loadout().right &&
+                alchemist.attack_loadout().right->delivery == torchlight::WeaponDelivery::unsupported_damage,
+                "original Alchemist staff delivery changed; review its allocation");
+        alchemist.set_animation_resolver([&](auto mesh,auto prefix){ return catalog.resolve(mesh,prefix); });
+        require(alchemist.select_target(world, spawned.position, .5F), "staff target selection");
+        const auto unchanged_hp = spawned.health;
+        require(alchemist.update(0, spawned.position, world).state == torchlight::CombatState::unavailable &&
+                !alchemist.attack_in_progress() && spawned.health == unchanged_hp,
+                "unsupported original staff silently became a physical attack");
+        const auto destroyer = std::find_if(players.begin(), players.end(),
+            [](const auto& player){ return player.name == u"Destroyer"; });
+        require(destroyer != players.end(), "original Destroyer missing");
+        torchlight::CombatController combat(*destroyer, 31);
+        require(combat.attack_loadout().right &&
+                combat.attack_loadout().right->delivery == torchlight::WeaponDelivery::direct_physical,
+                "Destroyer test must exercise a resource-backed physical weapon");
         combat.set_animation_resolver([&](std::string_view mesh, std::string_view prefix) {
             return catalog.resolve(mesh, prefix);
         });
@@ -154,7 +173,7 @@ int main(int argc, char** argv) {
         require(has_event(events, spawner, u"Monster Killed") &&
                 has_event(events, spawner, u"All Monsters Dead"), "kill did not continue spawner logic");
         require(!combat.select_target(world, corpse_position, 1), "corpse remained selectable");
-        std::cout << "PASS: selected, approached, damaged and killed an original monster\n";
+        std::cout << "PASS: refused unsupported Alchemist staff; Destroyer selected, approached, damaged and killed an original monster\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

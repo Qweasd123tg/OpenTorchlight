@@ -1,0 +1,503 @@
++ cmake -S /mnt/data/work15/source -B /mnt/data/work15/build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=ON -DTORCHLIGHT_ENABLE_DESKTOP=OFF -DTORCHLIGHT_ENABLE_RENDER=ON -DTORCHLIGHT_GAME_DIR=/mnt/data/work15/game -DTORCHLIGHT_ORIGINAL=/mnt/data/work15/game/Torchlight.bin.x86_64 -DTORCHLIGHT_REFERENCE_PYTHON=/mnt/data/work15/python-pie
+-- Checking for module 'vorbisfile'
+--   Package 'vorbisfile', required by 'virtual:world', not found
+-- Checking for module 'alsa'
+--   Package 'alsa', required by 'virtual:world', not found
+-- Music: vorbisfile/ALSA not found; silent track tracking only
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Configuring done (5.6s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work15/build
++ cmake --build /mnt/data/work15/build --parallel 3
+[1/170] Building CXX object CMakeFiles/torchlight_core.dir/src/merchant.cpp.o
+[2/170] Building CXX object CMakeFiles/torchlight_core.dir/src/combat.cpp.o
+[3/170] Building CXX object CMakeFiles/torchlight_core.dir/src/attack_action.cpp.o
+[4/170] Building CXX object CMakeFiles/torchlight_core.dir/src/save_codec.cpp.o
+[5/170] Building CXX object CMakeFiles/torchlight_core.dir/src/skills.cpp.o
+[6/170] Building CXX object CMakeFiles/torchlight_core.dir/src/checkpoint.cpp.o
+[7/170] Building CXX object CMakeFiles/torchlight_core.dir/src/interaction.cpp.o
+[8/170] Building CXX object CMakeFiles/torchlight_core.dir/src/save_store.cpp.o
+[9/170] Building CXX object CMakeFiles/torchlight_core.dir/src/frontend.cpp.o
+[10/170] Building CXX object CMakeFiles/torchlight_core.dir/src/equipment.cpp.o
+[11/170] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory.cpp.o
+[12/170] Building CXX object CMakeFiles/torchlight_core.dir/src/entity_world.cpp.o
+[13/170] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory_view.cpp.o
+[14/170] Building CXX object CMakeFiles/torchlight_core.dir/src/enemy_ai.cpp.o
+[15/170] Building CXX object CMakeFiles/torchlight_core.dir/src/player_session.cpp.o
+[16/170] Building CXX object CMakeFiles/torchlight_core.dir/src/population.cpp.o
+[17/170] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_animation.cpp.o
+[18/170] Building CXX object CMakeFiles/torchlight_core.dir/src/player.cpp.o
+[19/170] Generating fixtures/ordinary-combat.pak.zip
+Authored combat fixture: 24 units, 60 files; no original assets
+[20/170] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_geometry.cpp.o
+[21/170] Generating fixtures/frontend.pak.zip
+Authored combat fixture: 24 units, 60 files; no original assets
+[22/170] Generating fixtures/progression.pak.zip
+Authored combat fixture: 29 units, 71 files; no original assets
+[23/170] Linking CXX static library libtorchlight_core.a
+[24/170] Generating fixtures/vitals.pak.zip
+Authored combat fixture: 33 units, 76 files; no original assets
+[25/170] Generating consumables.pak.zip
+Authored combat fixture: 36 units, 78 files; no original assets
+[26/170] Generating fixtures/population.pak.zip
+Authored combat fixture: 36 units, 78 files; no original assets
+[27/170] Building CXX object CMakeFiles/torchlight_application.dir/src/application.cpp.o
+[28/170] Generating fixtures/ranged.pak.zip
+Authored combat fixture: 37 units, 74 files; no original assets
+[29/170] Generating fixtures/legacy-v3.pak.zip
+Authored combat fixture: 36 units, 73 files; no original assets
+[30/170] Linking CXX static library libtorchlight_application.a
+[31/170] Generating fixtures/character-stats.pak.zip
+Authored combat fixture: 29 units, 65 files; no original assets
+[32/170] Building CXX object CMakeFiles/torchlight_scene_camera_dump.dir/tools/scene_camera_dump.cpp.o
+[33/170] Building CXX object CMakeFiles/torchlight_asset_catalog.dir/src/asset_catalog_main.cpp.o
+[34/170] Building CXX object CMakeFiles/torchlight_bootstrap.dir/src/bootstrap_main.cpp.o
+[35/170] Building CXX object CMakeFiles/attack_action_test.dir/tests/attack_action_test.cpp.o
+[36/170] Building CXX object CMakeFiles/collision_mesh_test.dir/tests/collision_mesh_test.cpp.o
+[37/170] Building CXX object CMakeFiles/ogre_material_test.dir/tests/ogre_material_test.cpp.o
+[38/170] Building CXX object CMakeFiles/player_test.dir/tests/player_test.cpp.o
+[39/170] Building CXX object CMakeFiles/skeletal_animation_test.dir/tests/skeletal_animation_test.cpp.o
+[40/170] Building CXX object CMakeFiles/scene_geometry_test.dir/tests/scene_geometry_test.cpp.o
+[41/170] Building CXX object CMakeFiles/enemy_ai_test.dir/tests/enemy_ai_test.cpp.o
+[42/170] Building CXX object CMakeFiles/combat_test.dir/tests/combat_test.cpp.o
+[43/170] Building CXX object CMakeFiles/entity_world_test.dir/tests/entity_world_test.cpp.o
+[44/170] Building CXX object CMakeFiles/equipment_test.dir/tests/equipment_test.cpp.o
+[45/170] Building CXX object CMakeFiles/ai_cooldown_probe.dir/tests/ai_cooldown_probe.cpp.o
+[46/170] Building CXX object CMakeFiles/level_entry_test.dir/tests/level_entry_test.cpp.o
+[47/170] Building CXX object CMakeFiles/inventory_test.dir/tests/inventory_test.cpp.o
+[48/170] Building CXX object CMakeFiles/inventory_view_test.dir/tests/inventory_view_test.cpp.o
+[49/170] Building CXX object CMakeFiles/enemy_ai_cooldown_test.dir/tests/enemy_ai_cooldown_test.cpp.o
+[50/170] Building CXX object CMakeFiles/frontend_menu_test.dir/tests/frontend_menu_test.cpp.o
+[51/170] Building CXX object CMakeFiles/menu_resource_probe.dir/tests/menu_resource_probe.cpp.o
+[52/170] Building CXX object CMakeFiles/frontend_resource_test.dir/tests/frontend_resource_test.cpp.o
+[53/170] Building CXX object CMakeFiles/item_cycle_test.dir/tests/item_cycle_test.cpp.o
+[54/170] Building CXX object CMakeFiles/application_scenario_probe.dir/src/gles_scene_renderer.cpp.o
+[55/170] Building CXX object CMakeFiles/application_scenario_probe.dir/tests/application_scenario_probe.cpp.o
+[56/170] Building CXX object CMakeFiles/application_scenario_probe.dir/src/gles_ui_renderer.cpp.o
+[57/170] Building CXX object CMakeFiles/player_vitals_probe.dir/tests/player_vitals_probe.cpp.o
+[58/170] Building CXX object CMakeFiles/death_finalization_test.dir/tests/death_finalization_test.cpp.o
+[59/170] Building CXX object CMakeFiles/checkpoint_upgrade_probe.dir/tests/checkpoint_upgrade_probe.cpp.o
+[60/170] Building CXX object CMakeFiles/item_cycle_resource_test.dir/tests/item_cycle_resource_test.cpp.o
+[61/170] Building CXX object CMakeFiles/quests_test.dir/tests/quests_test.cpp.o
+[62/170] Building CXX object CMakeFiles/skills_test.dir/tests/skills_test.cpp.o
+[63/170] Building CXX object CMakeFiles/merchant_test.dir/tests/merchant_test.cpp.o
+[64/170] Building CXX object CMakeFiles/service_fixture.dir/tests/service_fixture.cpp.o
+[65/170] Building CXX object CMakeFiles/item_graph_test.dir/tests/item_graph_test.cpp.o
+[66/170] Building CXX object CMakeFiles/item_graph_probe.dir/tests/item_graph_probe.cpp.o
+[67/170] Building CXX object CMakeFiles/gameplay_catalog_probe.dir/tests/gameplay_catalog_probe.cpp.o
+[68/170] Building CXX object CMakeFiles/ordinary_combat_test.dir/tests/ordinary_combat_test.cpp.o
+[69/170] Building CXX object CMakeFiles/save_checkpoint_test.dir/tests/save_checkpoint_test.cpp.o
+[70/170] Building CXX object CMakeFiles/frontend_test.dir/tests/frontend_test.cpp.o
+[71/170] Building CXX object CMakeFiles/gameplay_continuation_test.dir/tests/gameplay_continuation_test.cpp.o
+[72/170] Building CXX object CMakeFiles/gles_ui_probe.dir/tests/gles_ui_probe.cpp.o
+[73/170] Building CXX object CMakeFiles/frontend_cycle_test.dir/tests/frontend_cycle_test.cpp.o
+[74/170] Building CXX object CMakeFiles/gles_ui_probe.dir/src/gles_ui_renderer.cpp.o
+[75/170] Building CXX object CMakeFiles/reward_resource_probe.dir/tests/reward_resource_probe.cpp.o
+[76/170] Building CXX object CMakeFiles/vitals_test.dir/tests/vitals_test.cpp.o
+[77/170] Building CXX object CMakeFiles/consumable_test.dir/tests/consumable_test.cpp.o
+[78/170] Building CXX object CMakeFiles/reward_cycle_test.dir/tests/reward_cycle_test.cpp.o
+[79/170] Building CXX object CMakeFiles/population_test.dir/tests/population_test.cpp.o
+[80/170] Building CXX object CMakeFiles/legacy_v3_test.dir/tests/legacy_v3_test.cpp.o
+[81/170] Building CXX object CMakeFiles/ranged_test.dir/tests/ranged_test.cpp.o
+[82/170] Linking CXX executable torchlight_asset_catalog
+[83/170] Linking CXX executable torchlight_level_rules_dump
+[84/170] Linking CXX executable torchlight_bootstrap
+[85/170] Linking CXX executable torchlight_player_units_dump
+[86/170] Linking CXX executable torchlight_scene_camera_dump
+[87/170] Linking CXX executable attack_action_test
+[88/170] Linking CXX shared library libinput_comparison.so
+[89/170] Linking CXX shared library libaction_comparison.so
+[90/170] Linking CXX shared library libpathfinder_comparison.so
+[91/170] Linking CXX shared library libcamera_comparison.so
+[92/170] Linking CXX shared library librandomizer_comparison.so
+[93/170] Linking CXX executable pak_archive_test
+[94/170] Linking CXX executable actor_motion_test
+[95/170] Linking CXX executable adm_document_test
+[96/170] Linking CXX executable master_resource_index_test
+[97/170] Linking CXX executable collision_mesh_test
+[98/170] Linking CXX executable unit_definition_test
+[99/170] Linking CXX executable level_scene_test
+[100/170] Linking CXX executable logic_runtime_test
+[101/170] Linking CXX executable player_test
+[102/170] Linking CXX executable ogre_mesh_test
+[103/170] Linking CXX executable random_level_test
+[104/170] Linking CXX executable ogre_material_test
+[105/170] Linking CXX executable ogre_skeleton_test
+[106/170] Linking CXX executable animation_manifest_test
+[107/170] Linking CXX executable animation_events_test
+[108/170] Linking CXX executable skeletal_animation_test
+[109/170] Linking CXX executable dds_texture_test
+[110/170] Building CXX object CMakeFiles/character_stats_test.dir/tests/character_stats_test.cpp.o
+[111/170] Linking CXX executable png_texture_test
+[112/170] Linking CXX executable spawn_class_test
+[113/170] Linking CXX executable scene_geometry_test
+[114/170] Linking CXX executable enemy_ai_test
+[115/170] Linking CXX executable unit_type_test
+[116/170] Linking CXX executable entity_world_test
+[117/170] Linking CXX executable damage_test
+[118/170] Linking CXX executable level_transition_test
+[119/170] Linking CXX executable equipment_test
+[120/170] Linking CXX executable warp_arrival_test
+[121/170] Linking CXX executable combat_test
+[122/170] Linking CXX executable level_entry_test
+[123/170] Linking CXX executable ai_cooldown_probe
+[124/170] Linking CXX executable enemy_ai_cooldown_test
+[125/170] Linking CXX executable inventory_test
+[126/170] Linking CXX executable inventory_view_test
+[127/170] Linking CXX executable attack_speed_probe
+[128/170] Linking CXX executable frontend_test
+[129/170] Linking CXX executable music_test
+[130/170] Linking CXX executable settings_test
+[131/170] Linking CXX executable frontend_menu_test
+[132/170] Linking CXX executable ordinary_combat_test
+[133/170] Linking CXX executable item_cycle_test
+[134/170] Linking CXX executable ui_text_test
+[135/170] Linking CXX executable menu_resource_probe
+[136/170] Linking CXX shared library libgles_ui_probe.so
+[137/170] Linking CXX executable frontend_resource_test
+[138/170] Linking CXX executable frontend_cycle_test
+[139/170] Linking CXX executable gameplay_continuation_test
+[140/170] Linking CXX executable save_checkpoint_test
+[141/170] Linking CXX shared library libapplication_scenario_probe.so
+[142/170] Linking CXX executable death_finalization_test
+[143/170] Linking CXX executable effect_catalog_probe
+[144/170] Linking CXX executable reward_resource_probe
+[145/170] Linking CXX executable player_vitals_probe
+[146/170] Linking CXX executable world_gold_probe
+[147/170] Linking CXX executable reward_cycle_test
+[148/170] Linking CXX executable monster_experience_probe
+[149/170] Linking CXX executable parent_dungeon_test
+[150/170] Linking CXX executable random_observation_test
+[151/170] Linking CXX executable item_cycle_resource_test
+[152/170] Linking CXX executable checkpoint_upgrade_probe
+[153/170] Linking CXX executable vitals_test
+[154/170] Linking CXX executable consumable_test
+[155/170] Linking CXX executable population_test
+[156/170] Linking CXX executable gameplay_numeric_probe
+[157/170] Linking CXX executable ranged_test
+[158/170] Linking CXX executable legacy_v3_test
+[159/170] Linking CXX executable economy_probe
+[160/170] Linking CXX executable skills_test
+[161/170] Linking CXX executable quests_test
+[162/170] Linking CXX executable merchant_test
+[163/170] Linking CXX executable ui_image_clip_test
+[164/170] Linking CXX executable ui_hud_input_test
+[165/170] Linking CXX executable service_fixture
+[166/170] Linking CXX executable character_stats_probe
+[167/170] Linking CXX executable item_graph_test
+[168/170] Linking CXX executable item_graph_probe
+[169/170] Linking CXX executable gameplay_catalog_probe
+[170/170] Linking CXX executable character_stats_test
++ ctest --test-dir /mnt/data/work15/build -L ^core$ --output-on-failure --no-tests=error --output-junit /mnt/data/work15/build/verification-logs/core.xml --parallel 3
+Internal ctest changing into directory: /mnt/data/work15/build
+Test project /mnt/data/work15/build
+      Start 119: character_stats_process_save
+      Start  31: read_only_extractors
+      Start  89: verification_driver
+ 1/66 Test #119: character_stats_process_save ...........   Passed    0.01 sec
+      Start   9: desktop_gameplay_syntax
+ 2/66 Test   #9: desktop_gameplay_syntax ................   Passed    3.14 sec
+      Start  22: coverage_map_current
+ 3/66 Test  #22: coverage_map_current ...................   Passed    1.56 sec
+      Start  23: gles_ui_headless
+ 4/66 Test  #23: gles_ui_headless .......................   Passed    1.24 sec
+      Start 103: gameplay_v3_migration
+ 5/66 Test  #89: verification_driver ....................   Passed    6.55 sec
+      Start  93: vitals_v2_migration
+ 6/66 Test  #93: vitals_v2_migration ....................   Passed    2.02 sec
+      Start 112: gameplay_v4_migration
+ 7/66 Test #103: gameplay_v3_migration ..................   Passed    2.66 sec
+      Start  24: gles_menu_text
+ 8/66 Test #112: gameplay_v4_migration ..................   Passed    1.26 sec
+      Start  33: player_vitals_export_comparison
+ 9/66 Test  #24: gles_menu_text .........................   Passed    1.30 sec
+      Start  27: save_atomic_process
+10/66 Test  #31: read_only_extractors ...................   Passed   11.42 sec
+      Start  21: frontend_campaign_cycle
+11/66 Test  #27: save_atomic_process ....................   Passed    2.30 sec
+      Start  41: world_gold_export_comparison
+12/66 Test  #33: player_vitals_export_comparison ........   Passed    2.39 sec
+      Start   8: ai_cooldown_export_comparison
+13/66 Test  #21: frontend_campaign_cycle ................   Passed    1.69 sec
+      Start  42: monster_experience_export_comparison
+14/66 Test  #41: world_gold_export_comparison ...........   Passed    1.29 sec
+      Start  92: vitals_fresh_process
+15/66 Test  #42: monster_experience_export_comparison ...   Passed    1.32 sec
+      Start  83: scenario_first_difference
+16/66 Test   #8: ai_cooldown_export_comparison ..........   Passed    2.95 sec
+      Start  13: attack_speed_export_comparison
+17/66 Test  #92: vitals_fresh_process ...................   Passed    2.03 sec
+      Start  26: save_fresh_process
+18/66 Test  #83: scenario_first_difference ..............   Passed    1.14 sec
+      Start  39: reward_fresh_process
+19/66 Test  #13: attack_speed_export_comparison .........   Passed    1.39 sec
+      Start  40: legacy_reward_save_migration
+20/66 Test  #39: reward_fresh_process ...................   Passed    1.04 sec
+      Start  32: combat_inputs_evidence
+21/66 Test  #26: save_fresh_process .....................   Passed    1.42 sec
+      Start  30: effect_catalog_source
+22/66 Test  #32: combat_inputs_evidence .................   Passed    0.98 sec
+      Start  94: collect_game_inputs_safety
+23/66 Test  #40: legacy_reward_save_migration ...........   Passed    1.05 sec
+      Start  84: asset_catalog_negative
+24/66 Test  #30: effect_catalog_source ..................   Passed    0.90 sec
+      Start  96: consumable_fresh_process
+25/66 Test  #94: collect_game_inputs_safety .............   Passed    1.05 sec
+      Start  14: ordinary_combat
+26/66 Test  #84: asset_catalog_negative .................   Passed    1.08 sec
+      Start  98: population_cycle
+27/66 Test  #96: consumable_fresh_process ...............   Passed    0.90 sec
+      Start   7: enemy_ai_cooldown
+28/66 Test  #14: ordinary_combat ........................   Passed    0.14 sec
+      Start  25: save_checkpoint
+29/66 Test  #98: population_cycle .......................   Passed    0.08 sec
+      Start 100: ranged_cycle
+30/66 Test #100: ranged_cycle ...........................   Passed    0.04 sec
+      Start   6: level_entry_fallback
+31/66 Test   #6: level_entry_fallback ...................   Passed    0.04 sec
+      Start  28: gameplay_continuation
+32/66 Test   #7: enemy_ai_cooldown ......................   Passed    0.11 sec
+      Start  38: reward_cycle
+33/66 Test  #25: save_checkpoint ........................   Passed    0.12 sec
+      Start  12: item_cycle
+34/66 Test  #38: reward_cycle ...........................   Passed    0.02 sec
+      Start 118: character_stats_cycle
+35/66 Test  #28: gameplay_continuation ..................   Passed    0.05 sec
+      Start  45: item_cycle_resource_fixture
+36/66 Test #118: character_stats_cycle ..................   Passed    0.02 sec
+      Start  95: consumable_cycle
+37/66 Test  #45: item_cycle_resource_fixture ............   Passed    0.01 sec
+      Start  34: reward_resource_graphs
+38/66 Test  #34: reward_resource_graphs .................   Passed    0.01 sec
+      Start  90: vitals_numeric
+39/66 Test  #12: item_cycle .............................   Passed    0.04 sec
+      Start  35: reward_unavailable
+40/66 Test  #95: consumable_cycle .......................   Passed    0.03 sec
+      Start  91: vitals_resource_cycle
+41/66 Test  #35: reward_unavailable .....................   Passed    0.01 sec
+      Start 120: character_stats_process_load
+42/66 Test  #90: vitals_numeric .........................   Passed    0.02 sec
+      Start  18: frontend_menu_resources
+43/66 Test  #18: frontend_menu_resources ................   Passed    0.01 sec
+      Start  29: death_finalization
+44/66 Test #120: character_stats_process_load ...........   Passed    0.01 sec
+      Start  82: parent_dungeon
+45/66 Test  #91: vitals_resource_cycle ..................   Passed    0.02 sec
+      Start  15: frontend
+46/66 Test  #82: parent_dungeon .........................   Passed    0.00 sec
+      Start  19: ui_text_layout
+47/66 Test  #29: death_finalization .....................   Passed    0.01 sec
+      Start  17: settings
+48/66 Test  #19: ui_text_layout .........................   Passed    0.00 sec
+      Start  88: random_observation
+49/66 Test  #15: frontend ...............................   Passed    0.01 sec
+      Start 104: skills_runtime
+50/66 Test  #17: settings ...............................   Passed    0.00 sec
+      Start   3: animation_events
+51/66 Test  #88: random_observation .....................   Passed    0.00 sec
+52/66 Test #104: skills_runtime .........................   Passed    0.00 sec
+      Start   5: warp_arrival
+      Start 107: quest_requirements
+53/66 Test   #3: animation_events .......................   Passed    0.00 sec
+      Start   1: ordinary_attack_action
+54/66 Test   #5: warp_arrival ...........................   Passed    0.00 sec
+      Start 113: ui_image_clip
+55/66 Test #107: quest_requirements .....................   Passed    0.00 sec
+56/66 Test   #1: ordinary_attack_action .................   Passed    0.00 sec
+      Start  37: progression_numeric
+      Start   4: damage_calculation
+57/66 Test #113: ui_image_clip ..........................   Passed    0.00 sec
+      Start 115: ui_hud_input
+58/66 Test  #37: progression_numeric ....................   Passed    0.00 sec
+      Start 109: merchant_prices
+59/66 Test   #4: damage_calculation .....................   Passed    0.00 sec
+      Start  10: inventory_view
+60/66 Test #115: ui_hud_input ...........................   Passed    0.00 sec
+      Start   2: actor_motion
+61/66 Test #109: merchant_prices ........................   Passed    0.00 sec
+      Start  16: music
+62/66 Test  #10: inventory_view .........................   Passed    0.00 sec
+      Start  11: inventory_instances
+63/66 Test   #2: actor_motion ...........................   Passed    0.00 sec
+      Start 123: item_graph_cycle
+64/66 Test  #16: music ..................................   Passed    0.00 sec
+65/66 Test  #11: inventory_instances ....................   Passed    0.00 sec
+66/66 Test #123: item_graph_cycle .......................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 66
+
+Label Time Summary:
+core      =  56.95 sec*proc (66 tests)
+render    =   2.55 sec*proc (2 tests)
+
+Total Test time (real) =  19.00 sec
++ ctest --test-dir /mnt/data/work15/build -L ^assets$ --output-on-failure --no-tests=error --output-junit /mnt/data/work15/build/verification-logs/assets.xml --parallel 3
+Internal ctest changing into directory: /mnt/data/work15/build
+Test project /mnt/data/work15/build
+      Start  85: original_asset_catalog
+      Start  64: original_random_levels
+      Start  71: original_dds_textures
+ 1/39 Test  #71: original_dds_textures ..................   Passed   33.44 sec
+      Start  55: original_frontend_checkpoint
+ 2/39 Test  #55: original_frontend_checkpoint ...........   Passed    4.87 sec
+      Start  62: original_level_scene
+ 3/39 Test  #85: original_asset_catalog .................   Passed   39.64 sec
+      Start  80: original_level_transitions
+ 4/39 Test  #80: original_level_transitions .............   Passed    1.54 sec
+      Start  75: original_entity_world
+ 5/39 Test  #62: original_level_scene ...................   Passed    3.71 sec
+      Start  97: original_consumables
+ 6/39 Test  #75: original_entity_world ..................   Passed    1.73 sec
+      Start  99: original_population
+ 7/39 Test  #97: original_consumables ...................   Passed    1.92 sec
+      Start 110: original_merchant_purchases
+ 8/39 Test  #99: original_population ....................   Passed    2.19 sec
+      Start  77: original_enemy_ai
+ 9/39 Test #110: original_merchant_purchases ............   Passed    1.95 sec
+      Start  79: original_combat
+10/39 Test  #77: original_enemy_ai ......................   Passed    1.44 sec
+      Start  73: original_scene_geometry
+11/39 Test  #64: original_random_levels .................   Passed   47.52 sec
+      Start 101: original_ranged
+12/39 Test  #73: original_scene_geometry ................   Passed    1.01 sec
+      Start  56: original_item_cycle
+13/39 Test  #79: original_combat ........................   Passed    1.68 sec
+      Start  66: original_ogre_meshes
+14/39 Test  #66: original_ogre_meshes ...................   Passed    0.92 sec
+      Start  81: original_data_bootstrap
+15/39 Test  #56: original_item_cycle ....................   Passed    1.47 sec
+      Start  61: original_unit_definitions
+16/39 Test #101: original_ranged ........................   Passed    1.65 sec
+      Start  78: original_unit_types
+17/39 Test  #81: original_data_bootstrap ................   Passed    1.42 sec
+      Start 105: original_skills_runtime
+18/39 Test  #78: original_unit_types ....................   Passed    0.99 sec
+      Start  72: original_png_textures
+19/39 Test  #61: original_unit_definitions ..............   Passed    1.25 sec
+      Start  65: original_players
+20/39 Test #105: original_skills_runtime ................   Passed    0.94 sec
+      Start 121: original_character_stats_resources
+21/39 Test  #72: original_png_textures ..................   Passed    0.83 sec
+      Start  68: original_ogre_skeletons
+22/39 Test  #65: original_players .......................   Passed    0.78 sec
+      Start  74: original_spawn_classes
+23/39 Test #121: original_character_stats_resources .....   Passed    0.68 sec
+      Start  58: original_collision_meshes
+24/39 Test  #74: original_spawn_classes .................   Passed    0.52 sec
+      Start  36: original_progression_resource_graphs
+25/39 Test  #68: original_ogre_skeletons ................   Passed    0.72 sec
+      Start  67: original_ogre_materials
+26/39 Test  #36: original_progression_resource_graphs ...   Passed    0.53 sec
+      Start  60: original_master_resource_index
+27/39 Test  #58: original_collision_meshes ..............   Passed    0.66 sec
+      Start  76: original_equipment
+28/39 Test  #67: original_ogre_materials ................   Passed    0.55 sec
+      Start  59: original_adm_document
+29/39 Test  #60: original_master_resource_index .........   Passed    0.44 sec
+      Start  63: original_logic_runtime
+30/39 Test  #59: original_adm_document ..................   Passed    0.30 sec
+      Start 108: original_quest_controllers
+31/39 Test  #76: original_equipment .....................   Passed    0.46 sec
+      Start  20: original_menu_presentation
+32/39 Test #108: original_quest_controllers .............   Passed    0.11 sec
+      Start  70: original_skeletal_animation
+33/39 Test  #63: original_logic_runtime .................   Passed    0.17 sec
+      Start 116: original_ui_hud_input
+34/39 Test  #20: original_menu_presentation .............   Passed    0.08 sec
+      Start  69: original_animation_manifests
+35/39 Test  #70: original_skeletal_animation ............   Passed    0.07 sec
+      Start  57: original_pak_archive
+36/39 Test #116: original_ui_hud_input ..................   Passed    0.07 sec
+      Start 125: original_gameplay_catalog
+37/39 Test  #57: original_pak_archive ...................   Passed    0.06 sec
+38/39 Test  #69: original_animation_manifests ...........   Passed    0.07 sec
+39/39 Test #125: original_gameplay_catalog ..............   Passed    0.80 sec
+
+100% tests passed, 0 tests failed out of 39
+
+Label Time Summary:
+assets    = 159.18 sec*proc (39 tests)
+
+Total Test time (real) =  53.59 sec
++ ctest --test-dir /mnt/data/work15/build -L ^reference$ --output-on-failure --no-tests=error --output-junit /mnt/data/work15/build/verification-logs/reference.xml --parallel 3
+Internal ctest changing into directory: /mnt/data/work15/build
+Test project /mnt/data/work15/build
+      Start  51: original_input_comparison
+      Start  48: original_ai_cooldown_comparison
+      Start  46: original_player_vitals_comparison
+ 1/15 Test  #46: original_player_vitals_comparison ........   Passed    1.04 sec
+      Start  47: original_attack_speed_comparison
+ 2/15 Test  #48: original_ai_cooldown_comparison ..........   Passed    1.65 sec
+      Start  44: original_monster_experience_comparison
+ 3/15 Test  #47: original_attack_speed_comparison .........   Passed    0.98 sec
+      Start  43: original_world_gold_comparison
+ 4/15 Test  #51: original_input_comparison ................   Passed    2.40 sec
+      Start  53: original_randomizer_comparison
+ 5/15 Test  #44: original_monster_experience_comparison ...   Passed    0.95 sec
+      Start  49: original_level_entry_dispatch
+ 6/15 Test  #43: original_world_gold_comparison ...........   Passed    0.94 sec
+      Start  54: original_pathfinder_comparison
+ 7/15 Test  #53: original_randomizer_comparison ...........   Passed    0.87 sec
+      Start  50: original_camera_comparison
+ 8/15 Test  #49: original_level_entry_dispatch ............   Passed    0.85 sec
+      Start  52: original_action_comparison
+ 9/15 Test  #54: original_pathfinder_comparison ...........   Passed    0.74 sec
+      Start 122: original_character_stats_comparison
+10/15 Test  #50: original_camera_comparison ...............   Passed    0.78 sec
+      Start 124: original_item_graph_comparison
+11/15 Test  #52: original_action_comparison ...............   Passed    0.64 sec
+      Start 102: original_gameplay_numeric_comparison
+12/15 Test #122: original_character_stats_comparison ......   Passed    0.62 sec
+      Start 106: original_economy_comparison
+13/15 Test #124: original_item_graph_comparison ...........   Passed    0.48 sec
+14/15 Test #102: original_gameplay_numeric_comparison .....   Passed    0.49 sec
+15/15 Test #106: original_economy_comparison ..............   Passed    0.40 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Label Time Summary:
+reference    =  13.84 sec*proc (15 tests)
+
+Total Test time (real) =   4.74 sec
++ ctest --test-dir /mnt/data/work15/build -L ^render$ --output-on-failure --no-tests=error --output-junit /mnt/data/work15/build/verification-logs/render.xml --parallel 3
+Internal ctest changing into directory: /mnt/data/work15/build
+Test project /mnt/data/work15/build
+    Start 111: application_services_render
+    Start  86: application_scenario_render
+    Start  87: application_combat_render
+1/7 Test  #87: application_combat_render ........   Passed   39.25 sec
+    Start 117: paused_settings_render
+2/7 Test #117: paused_settings_render ...........   Passed   15.03 sec
+    Start  23: gles_ui_headless
+3/7 Test  #23: gles_ui_headless .................   Passed    1.16 sec
+    Start 114: ui_repairs_render
+4/7 Test #114: ui_repairs_render ................   Passed    1.21 sec
+    Start  24: gles_menu_text
+5/7 Test  #24: gles_menu_text ...................   Passed    1.26 sec
+6/7 Test  #86: application_scenario_render ......   Passed  117.38 sec
+7/7 Test #111: application_services_render ......   Passed  127.71 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Label Time Summary:
+core      =   2.42 sec*proc (2 tests)
+render    = 303.00 sec*proc (7 tests)
+
+Total Test time (real) = 127.71 sec
+
+GROUP       STATUS       PASS / FAIL / SKIP    REASON
+core        PASSED         66 /    0 /    0
+assets      PASSED         39 /    0 /    0
+reference   PASSED         15 /    0 /    0
+render      PASSED          7 /    0 /    0
+desktop     NOT RUN         0 /    0 /    0    Not requested
+Report: /mnt/data/work15/build/verification.json

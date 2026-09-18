@@ -33,17 +33,9 @@ struct UiHudFrame {
 };
 // Topmost visible callback target; disabled targets still block world input.
 [[nodiscard]] const UiResolvedWidget *hud_button_at(const UiHudFrame &, float x, float y);
-// original-code: CGameUI::mapEventHandlers @0xa97e00 subscribes the in-game
-// HUD onClick to CEGUI::Window::EventMouseButtonDown (@0x14247e0), and
-// handle_onClick @0xa83690 dispatches the command immediately for mouse
-// button code 0 with a window present. The game command therefore runs on
-// press, never on a matching release; dragging off after the press cannot
-// cancel it. Visual Pushed/PushedOff state is separate from dispatch.
-// (Corrects the prior patchset press+release policy; ELF SHA-256
-// 91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b.)
-// Confirmed only for this HUD chain: other menus need their own subscription.
-[[nodiscard]] std::optional<std::string> hud_press_callback(const UiHudFrame &, float x,
-                                                            float y);
+// Original CGameUI::mapEventHandlers maps onClick to MouseButtonDown.
+// Dispatch once at the press position, not at release; release never repeats it.
+[[nodiscard]] std::optional<std::string> hud_press_callback(const UiHudFrame &, float x, float y);
 class UiHud {
   public:
     explicit UiHud(UiResources &resources) : resources_(&resources) {}

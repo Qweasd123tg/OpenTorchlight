@@ -1,0 +1,137 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "symbols": [
+    {
+      "symbol": "CCharacter::walkingSpeed()",
+      "address": "0x815a20",
+      "size": 166,
+      "sha256": "fb9878d3a82a9f5a207624d95eeeb831978e7515e4c4aacd491b4cac79579f5f"
+    },
+    {
+      "symbol": "CCharacter::runningSpeed()",
+      "address": "0x815ad0",
+      "size": 166,
+      "sha256": "94ceb1acf5e12acd3d4d4f4b17d70c6ac311dc1d32f786e9608346286ace1859"
+    },
+    {
+      "symbol": "CCharacter::defense()",
+      "address": "0x814530",
+      "size": 133,
+      "sha256": "c5cbd79cfca267936ee0215e160146b364eb811cc55c577ecbf6ed4a0d8bcb65"
+    },
+    {
+      "symbol": "CCharacter::armorBonus()",
+      "address": "0x8145c0",
+      "size": 174,
+      "sha256": "340be4b2ebbdd6968a2fd72ff637f4a4588d656574fd2ba79a6bd2a1087077f5"
+    },
+    {
+      "symbol": "CCharacter::AC()",
+      "address": "0x814670",
+      "size": 97,
+      "sha256": "7e6f5b4f859194cec8b6e704e29ff8675ba0dd1282f1509f0de8955c61865eba"
+    },
+    {
+      "symbol": "CEquipment::canEquip(CCharacter*, bool)",
+      "address": "0x86f150",
+      "size": 513,
+      "sha256": "e25f99d9db3ab4cfc8f40858bd84708febc9e14e97440e28670f0d1b14d529b4"
+    },
+    {
+      "symbol": "CEquipment::getLevelRequirement(CCharacter*)",
+      "address": "0x86ddc0",
+      "size": 283,
+      "sha256": "f291aa1a63dc17c4e441099c349b74323473c212a9c7fb040d377f0e33c2c5ca"
+    },
+    {
+      "symbol": "CEquipment::getStrengthRequirement(CCharacter*)",
+      "address": "0x86dc50",
+      "size": 354,
+      "sha256": "e0b21875343f947a9aeb84502ddb1f28ca52264b8754b333593ee3acd0dd0984"
+    },
+    {
+      "symbol": "CEquipment::getDefenseRequirement(CCharacter*)",
+      "address": "0x86d800",
+      "size": 354,
+      "sha256": "5e3ba029c0d83ba0c246e13f2ce1e1917446b7fb0b1ec55ac9e2f6c030cea1ee"
+    },
+    {
+      "symbol": "CEquipment::setRequirements()",
+      "address": "0x880030",
+      "size": 2335,
+      "sha256": "0d0a9404710156804e7f577bf0e5a1a4b085a19a2fa7495cbaa2672d62c37944"
+    },
+    {
+      "symbol": "CEquipment::calculateCombatStats(bool)",
+      "address": "0x880950",
+      "size": 6615,
+      "sha256": "c84e3434b06edc90c053724094cbde874a6898ee2a16aa0e5fa07dbb3867889c"
+    },
+    {
+      "symbol": "CEquipment::setGraphDamage(unsigned int)",
+      "address": "0x87dfa0",
+      "size": 276,
+      "sha256": "8b8317404253471cc305459769c2423d05f1414d6a0ad18a75991f61df1f030c"
+    },
+    {
+      "symbol": "CEquipment::setGraphAC(unsigned int)",
+      "address": "0x87e0c0",
+      "size": 268,
+      "sha256": "fca84ddfefd5feb10a8d64f387dc1883e7f88857b9ff33774ebc7c3ead47266f"
+    },
+    {
+      "symbol": "CEquipment::improveHeirloom()",
+      "address": "0x882330",
+      "size": 446,
+      "sha256": "5886956c5acc56bae509952b2646c8d33d52dfd5e2f142a1244ae0a1d0e537b7"
+    },
+    {
+      "symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+      "address": "0xb29650",
+      "size": 298,
+      "sha256": "2d30689c73ca0b39b83061d9af218396d7b42af436374207c9c6547b226438e7"
+    },
+    {
+      "symbol": "CInventory::getPaneSize(EINVENTORY_PANES)",
+      "address": "0x91b0b0",
+      "size": 64,
+      "sha256": "9e5f876a4df81f5f88897aca9729a1b762855eb10dfa6340d4654fb3cea936ee"
+    },
+    {
+      "symbol": "CInventory::canPickup(CEquipment*, bool)",
+      "address": "0x91bc50",
+      "size": 186,
+      "sha256": "07ff03be3bf6da49443698f8bb46df0391418e37456837adcc61e262dc41c63d"
+    },
+    {
+      "symbol": "CInventory::CInventory(CCharacter*, unsigned int)",
+      "address": "0x926000",
+      "size": 604,
+      "sha256": "ddd73db9978c041709c3ef94cd01a1e8b42da8c3d7f84d2928bcde28aac4120e"
+    },
+    {
+      "symbol": "CCharacter::performAttack(CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+      "address": "0x847280",
+      "size": 5382,
+      "sha256": "0b69458a3d34af7ba3e4586553a5f9359c525460f32e67c1326329f0f0198d45"
+    },
+    {
+      "symbol": "CGameUI::mapEventHandlers(CEGUI::Window*)",
+      "address": "0xa97e00",
+      "size": 732,
+      "sha256": "9e8aaedccb397717be29222d64dbd5bb94154530cc0981ae420483274578c527"
+    },
+    {
+      "symbol": "CGameUI::handle_onClick(CEGUI::EventArgs const&)",
+      "address": "0xa83690",
+      "size": 46,
+      "sha256": "f16920dfc4bec2c8d3e02597e76d014e7f193f64dbc94ffff24cd3d9818ec273"
+    },
+    {
+      "symbol": "CEnchantMenu::performInteraction()",
+      "address": "0xb26290",
+      "size": 13234,
+      "sha256": "4258e1a6457dcb18b15984d798e66c876e0265d4713466f18c208571e7e489ed"
+    }
+  ]
+}

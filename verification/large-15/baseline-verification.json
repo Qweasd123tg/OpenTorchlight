@@ -1,0 +1,669 @@
+{
+  "schema": 1,
+  "kind": "verification-run",
+  "groups": {
+    "core": {
+      "status": "PASSED",
+      "passed": 62,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "ordinary_attack_action",
+          "status": "PASSED",
+          "seconds": "0.00510156"
+        },
+        {
+          "name": "actor_motion",
+          "status": "PASSED",
+          "seconds": "0.00406854"
+        },
+        {
+          "name": "animation_events",
+          "status": "PASSED",
+          "seconds": "0.00497928"
+        },
+        {
+          "name": "damage_calculation",
+          "status": "PASSED",
+          "seconds": "0.00393395"
+        },
+        {
+          "name": "warp_arrival",
+          "status": "PASSED",
+          "seconds": "0.00437593"
+        },
+        {
+          "name": "level_entry_fallback",
+          "status": "PASSED",
+          "seconds": "0.0472991"
+        },
+        {
+          "name": "enemy_ai_cooldown",
+          "status": "PASSED",
+          "seconds": "0.112891"
+        },
+        {
+          "name": "ai_cooldown_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.21992"
+        },
+        {
+          "name": "desktop_gameplay_syntax",
+          "status": "PASSED",
+          "seconds": "4.30484"
+        },
+        {
+          "name": "inventory_view",
+          "status": "PASSED",
+          "seconds": "0.00399108"
+        },
+        {
+          "name": "inventory_instances",
+          "status": "PASSED",
+          "seconds": "0.00307014"
+        },
+        {
+          "name": "item_cycle",
+          "status": "PASSED",
+          "seconds": "0.0273794"
+        },
+        {
+          "name": "attack_speed_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.35201"
+        },
+        {
+          "name": "ordinary_combat",
+          "status": "PASSED",
+          "seconds": "0.145391"
+        },
+        {
+          "name": "frontend",
+          "status": "PASSED",
+          "seconds": "0.00998582"
+        },
+        {
+          "name": "music",
+          "status": "PASSED",
+          "seconds": "0.00398467"
+        },
+        {
+          "name": "settings",
+          "status": "PASSED",
+          "seconds": "0.0109169"
+        },
+        {
+          "name": "frontend_menu_resources",
+          "status": "PASSED",
+          "seconds": "0.0118089"
+        },
+        {
+          "name": "ui_text_layout",
+          "status": "PASSED",
+          "seconds": "0.0123033"
+        },
+        {
+          "name": "frontend_campaign_cycle",
+          "status": "PASSED",
+          "seconds": "1.51403"
+        },
+        {
+          "name": "coverage_map_current",
+          "status": "PASSED",
+          "seconds": "1.34438"
+        },
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "2.24557"
+        },
+        {
+          "name": "gles_menu_text",
+          "status": "PASSED",
+          "seconds": "1.82601"
+        },
+        {
+          "name": "save_checkpoint",
+          "status": "PASSED",
+          "seconds": "0.0918989"
+        },
+        {
+          "name": "save_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.22964"
+        },
+        {
+          "name": "save_atomic_process",
+          "status": "PASSED",
+          "seconds": "1.21337"
+        },
+        {
+          "name": "gameplay_continuation",
+          "status": "PASSED",
+          "seconds": "0.04069"
+        },
+        {
+          "name": "death_finalization",
+          "status": "PASSED",
+          "seconds": "0.0102636"
+        },
+        {
+          "name": "effect_catalog_source",
+          "status": "PASSED",
+          "seconds": "0.976281"
+        },
+        {
+          "name": "read_only_extractors",
+          "status": "PASSED",
+          "seconds": "9.53154"
+        },
+        {
+          "name": "combat_inputs_evidence",
+          "status": "PASSED",
+          "seconds": "1.11474"
+        },
+        {
+          "name": "player_vitals_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.4649"
+        },
+        {
+          "name": "reward_resource_graphs",
+          "status": "PASSED",
+          "seconds": "0.0238251"
+        },
+        {
+          "name": "reward_unavailable",
+          "status": "PASSED",
+          "seconds": "0.0173286"
+        },
+        {
+          "name": "progression_numeric",
+          "status": "PASSED",
+          "seconds": "0.00434521"
+        },
+        {
+          "name": "reward_cycle",
+          "status": "PASSED",
+          "seconds": "0.0539733"
+        },
+        {
+          "name": "reward_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.32291"
+        },
+        {
+          "name": "legacy_reward_save_migration",
+          "status": "PASSED",
+          "seconds": "1.24429"
+        },
+        {
+          "name": "world_gold_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.13052"
+        },
+        {
+          "name": "monster_experience_export_comparison",
+          "status": "PASSED",
+          "seconds": "1.40368"
+        },
+        {
+          "name": "item_cycle_resource_fixture",
+          "status": "PASSED",
+          "seconds": "0.0372086"
+        },
+        {
+          "name": "parent_dungeon",
+          "status": "PASSED",
+          "seconds": "0.0151604"
+        },
+        {
+          "name": "scenario_first_difference",
+          "status": "PASSED",
+          "seconds": "1.21236"
+        },
+        {
+          "name": "asset_catalog_negative",
+          "status": "PASSED",
+          "seconds": "0.898658"
+        },
+        {
+          "name": "random_observation",
+          "status": "PASSED",
+          "seconds": "0.0088341"
+        },
+        {
+          "name": "verification_driver",
+          "status": "PASSED",
+          "seconds": "4.94197"
+        },
+        {
+          "name": "vitals_numeric",
+          "status": "PASSED",
+          "seconds": "0.0182928"
+        },
+        {
+          "name": "vitals_resource_cycle",
+          "status": "PASSED",
+          "seconds": "0.0174872"
+        },
+        {
+          "name": "vitals_fresh_process",
+          "status": "PASSED",
+          "seconds": "1.44339"
+        },
+        {
+          "name": "vitals_v2_migration",
+          "status": "PASSED",
+          "seconds": "1.24277"
+        },
+        {
+          "name": "collect_game_inputs_safety",
+          "status": "PASSED",
+          "seconds": "0.993042"
+        },
+        {
+          "name": "consumable_cycle",
+          "status": "PASSED",
+          "seconds": "0.0192213"
+        },
+        {
+          "name": "consumable_fresh_process",
+          "status": "PASSED",
+          "seconds": "0.900766"
+        },
+        {
+          "name": "population_cycle",
+          "status": "PASSED",
+          "seconds": "0.177779"
+        },
+        {
+          "name": "ranged_cycle",
+          "status": "PASSED",
+          "seconds": "0.0772767"
+        },
+        {
+          "name": "gameplay_v3_migration",
+          "status": "PASSED",
+          "seconds": "1.33336"
+        },
+        {
+          "name": "skills_runtime",
+          "status": "PASSED",
+          "seconds": "0.00493464"
+        },
+        {
+          "name": "quest_requirements",
+          "status": "PASSED",
+          "seconds": "0.00465701"
+        },
+        {
+          "name": "merchant_prices",
+          "status": "PASSED",
+          "seconds": "0.00458082"
+        },
+        {
+          "name": "gameplay_v4_migration",
+          "status": "PASSED",
+          "seconds": "1.27911"
+        },
+        {
+          "name": "ui_image_clip",
+          "status": "PASSED",
+          "seconds": "0.0044791"
+        },
+        {
+          "name": "ui_hud_input",
+          "status": "PASSED",
+          "seconds": "0.00458365"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 13.449
+    },
+    "assets": {
+      "status": "PASSED",
+      "passed": 37,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "original_menu_presentation",
+          "status": "PASSED",
+          "seconds": "0.0921849"
+        },
+        {
+          "name": "original_progression_resource_graphs",
+          "status": "PASSED",
+          "seconds": "0.513442"
+        },
+        {
+          "name": "original_frontend_checkpoint",
+          "status": "PASSED",
+          "seconds": "4.20056"
+        },
+        {
+          "name": "original_item_cycle",
+          "status": "PASSED",
+          "seconds": "1.45784"
+        },
+        {
+          "name": "original_pak_archive",
+          "status": "PASSED",
+          "seconds": "0.0682183"
+        },
+        {
+          "name": "original_collision_meshes",
+          "status": "PASSED",
+          "seconds": "0.755872"
+        },
+        {
+          "name": "original_adm_document",
+          "status": "PASSED",
+          "seconds": "0.275888"
+        },
+        {
+          "name": "original_master_resource_index",
+          "status": "PASSED",
+          "seconds": "0.458367"
+        },
+        {
+          "name": "original_unit_definitions",
+          "status": "PASSED",
+          "seconds": "1.29596"
+        },
+        {
+          "name": "original_level_scene",
+          "status": "PASSED",
+          "seconds": "3.29417"
+        },
+        {
+          "name": "original_logic_runtime",
+          "status": "PASSED",
+          "seconds": "0.215759"
+        },
+        {
+          "name": "original_random_levels",
+          "status": "PASSED",
+          "seconds": "37.3459"
+        },
+        {
+          "name": "original_players",
+          "status": "PASSED",
+          "seconds": "0.855668"
+        },
+        {
+          "name": "original_ogre_meshes",
+          "status": "PASSED",
+          "seconds": "1.26208"
+        },
+        {
+          "name": "original_ogre_materials",
+          "status": "PASSED",
+          "seconds": "0.476592"
+        },
+        {
+          "name": "original_ogre_skeletons",
+          "status": "PASSED",
+          "seconds": "0.745283"
+        },
+        {
+          "name": "original_animation_manifests",
+          "status": "PASSED",
+          "seconds": "0.0749528"
+        },
+        {
+          "name": "original_skeletal_animation",
+          "status": "PASSED",
+          "seconds": "0.0844901"
+        },
+        {
+          "name": "original_dds_textures",
+          "status": "PASSED",
+          "seconds": "25.6093"
+        },
+        {
+          "name": "original_png_textures",
+          "status": "PASSED",
+          "seconds": "0.852369"
+        },
+        {
+          "name": "original_scene_geometry",
+          "status": "PASSED",
+          "seconds": "1.30219"
+        },
+        {
+          "name": "original_spawn_classes",
+          "status": "PASSED",
+          "seconds": "0.744737"
+        },
+        {
+          "name": "original_entity_world",
+          "status": "PASSED",
+          "seconds": "2.00817"
+        },
+        {
+          "name": "original_equipment",
+          "status": "PASSED",
+          "seconds": "0.436216"
+        },
+        {
+          "name": "original_enemy_ai",
+          "status": "PASSED",
+          "seconds": "1.61595"
+        },
+        {
+          "name": "original_unit_types",
+          "status": "PASSED",
+          "seconds": "0.971946"
+        },
+        {
+          "name": "original_combat",
+          "status": "PASSED",
+          "seconds": "1.60939"
+        },
+        {
+          "name": "original_level_transitions",
+          "status": "PASSED",
+          "seconds": "2.18879"
+        },
+        {
+          "name": "original_data_bootstrap",
+          "status": "PASSED",
+          "seconds": "1.10497"
+        },
+        {
+          "name": "original_asset_catalog",
+          "status": "PASSED",
+          "seconds": "37.8941"
+        },
+        {
+          "name": "original_consumables",
+          "status": "PASSED",
+          "seconds": "2.55705"
+        },
+        {
+          "name": "original_population",
+          "status": "PASSED",
+          "seconds": "2.14745"
+        },
+        {
+          "name": "original_ranged",
+          "status": "PASSED",
+          "seconds": "1.60476"
+        },
+        {
+          "name": "original_skills_runtime",
+          "status": "PASSED",
+          "seconds": "0.995922"
+        },
+        {
+          "name": "original_quest_controllers",
+          "status": "PASSED",
+          "seconds": "0.103953"
+        },
+        {
+          "name": "original_merchant_purchases",
+          "status": "PASSED",
+          "seconds": "1.96923"
+        },
+        {
+          "name": "original_ui_hud_input",
+          "status": "PASSED",
+          "seconds": "0.081289"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 49.059
+    },
+    "reference": {
+      "status": "PASSED",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "original_world_gold_comparison",
+          "status": "PASSED",
+          "seconds": "1.08457"
+        },
+        {
+          "name": "original_monster_experience_comparison",
+          "status": "PASSED",
+          "seconds": "1.33352"
+        },
+        {
+          "name": "original_player_vitals_comparison",
+          "status": "PASSED",
+          "seconds": "1.411"
+        },
+        {
+          "name": "original_attack_speed_comparison",
+          "status": "PASSED",
+          "seconds": "1.03504"
+        },
+        {
+          "name": "original_ai_cooldown_comparison",
+          "status": "PASSED",
+          "seconds": "1.55232"
+        },
+        {
+          "name": "original_level_entry_dispatch",
+          "status": "PASSED",
+          "seconds": "0.936219"
+        },
+        {
+          "name": "original_camera_comparison",
+          "status": "PASSED",
+          "seconds": "1.08653"
+        },
+        {
+          "name": "original_input_comparison",
+          "status": "PASSED",
+          "seconds": "1.658"
+        },
+        {
+          "name": "original_action_comparison",
+          "status": "PASSED",
+          "seconds": "0.7791"
+        },
+        {
+          "name": "original_randomizer_comparison",
+          "status": "PASSED",
+          "seconds": "1.30842"
+        },
+        {
+          "name": "original_pathfinder_comparison",
+          "status": "PASSED",
+          "seconds": "1.17033"
+        },
+        {
+          "name": "original_gameplay_numeric_comparison",
+          "status": "PASSED",
+          "seconds": "0.418047"
+        },
+        {
+          "name": "original_economy_comparison",
+          "status": "PASSED",
+          "seconds": "0.381776"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 3.784
+    },
+    "render": {
+      "status": "PASSED",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "tests": [
+        {
+          "name": "gles_ui_headless",
+          "status": "PASSED",
+          "seconds": "1.53131"
+        },
+        {
+          "name": "gles_menu_text",
+          "status": "PASSED",
+          "seconds": "1.0297"
+        },
+        {
+          "name": "application_scenario_render",
+          "status": "PASSED",
+          "seconds": "112.657"
+        },
+        {
+          "name": "application_combat_render",
+          "status": "PASSED",
+          "seconds": "40.8136"
+        },
+        {
+          "name": "application_services_render",
+          "status": "PASSED",
+          "seconds": "118.194"
+        },
+        {
+          "name": "ui_repairs_render",
+          "status": "PASSED",
+          "seconds": "1.33569"
+        },
+        {
+          "name": "paused_settings_render",
+          "status": "PASSED",
+          "seconds": "18.4412"
+        }
+      ],
+      "reason": "",
+      "requested": true,
+      "seconds": 119.243
+    },
+    "desktop": {
+      "requested": false,
+      "status": "NOT RUN",
+      "reason": "Not requested"
+    }
+  },
+  "inputs": {
+    "pak": {
+      "path": "/mnt/data/work15/game/pak.zip",
+      "sha256": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8"
+    },
+    "elf": {
+      "path": "/mnt/data/work15/game/Torchlight.bin.x86_64",
+      "sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+    }
+  },
+  "evidence": {
+    "core": "authored fixtures and bounded export comparisons",
+    "assets": "resource-derived; not ELF parity",
+    "reference": "pinned original comparisons",
+    "render": "actual GL; self snapshots are regression only",
+    "desktop": "full window adapter; not original-game parity"
+  },
+  "test_timeout_scale": 1,
+  "reference_python": "/mnt/data/work15/python-pie"
+}

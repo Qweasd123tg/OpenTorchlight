@@ -29,22 +29,17 @@ int main(int argc,char**argv) {
         require(named(pushed,"InventoryButton").image==inv.property("PushedImage"),"pressed image lost");
         const auto off=hud.frame(1280,720,{},{{std::array<float,2>{-10,-10}},{std::array<float,2>{x,y}}});
         require(named(off,"InventoryButton").image==inv.property("HoverImage"),"PushedOff must reference hover section");
-        // original-code P2 (CGameUI::mapEventHandlers @0xa97e00 on
-        // EventMouseButtonDown @0x14247e0; handle_onClick @0xa83690): the
-        // command runs on press, before any release exists. Dragging off
-        // after the press cannot cancel it; this corrects the prior
-        // patchset press+release policy enforced here before.
-        require(hud_press_callback(frame,x,y)=="guiToggleInventory","press did not dispatch");
-        require(hud_press_callback(frame,x,y)=="guiToggleInventory","press-then-drag-off cancelled");
-        require(!hud_press_callback(frame,-10,-10),"world press created a GUI command");
+        require(hud_press_callback(frame,x,y)=="guiToggleInventory","original MouseButtonDown dispatch lost");
+        require(!hud_press_callback(frame,-10,-10),"world press activated HUD");
+        // No release argument exists: moving off after the press cannot cancel
+        // an already dispatched original command. Common-loop test checks no replay.
         require(!hud_button_at(frame,inv.rect.x+inv.rect.width,inv.rect.y),"right edge inclusive");
         if(argc==2) {
             require(frame.buttons.size()==2,"hidden button resurrected");
             const auto& disabled=named(frame,"DisabledButton");
             require(disabled.image=="set:HudTest image:Disabled","disabled skin lost");
             require(hud_button_at(frame,100,40)==&disabled,"disabled area does not block world");
-            require(!hud_press_callback(frame,100,40),"disabled button activated on press");
-            require(hud_press_callback(frame,x,y)=="guiToggleInventory","press-then-drag-off cancelled");
+            require(!hud_press_callback(frame,100,40),"disabled button activated");
             auto clipped=frame; clipped.buttons[0].clip={0,0,0,0};
             require(!hud_button_at(clipped,x,y),"empty clip still hit-testable");
         } else {
@@ -55,7 +50,7 @@ int main(int argc,char**argv) {
                     "journal and quests incorrectly conflated");
         }
         std::cout<<"ui_hud_input: "<<checks<<" assertions; "<<(argc==3?"original resource":"authored fixture")
-                 <<"; HUD command on MouseButtonDown, no release re-dispatch; no full CEGUI event-pipeline parity claim\n";
+                 <<"; no full CEGUI event-pipeline parity claim\n";
         return 0;
     }catch(const std::exception&e){std::cerr<<e.what()<<'\n';return 1;}
 }

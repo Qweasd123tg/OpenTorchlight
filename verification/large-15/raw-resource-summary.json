@@ -1,0 +1,5740 @@
+{
+  "scope": "Raw local ADM groups; counts are not active instances and do not resolve BASEFILE inheritance.",
+  "unit_files": 3469,
+  "effect_types": {
+    "SLOW RESISTANCE": 7,
+    "CHARM RESISTANCE": 9,
+    "STUN RESISTANCE": 6,
+    "INTERRUPT RESISTANCE": 20,
+    "FLEE RESIST": 30,
+    "PERCENT SPEED": 59,
+    "PERCENT ATTACK SPEED": 83,
+    "PERCENT CAST SPEED": 42,
+    "UNIT THEME": 79,
+    "PERCENT DAMAGE BONUS": 183,
+    "CAST SKILL ON STRUCK": 7,
+    "DAMAGE": 78,
+    "PERCENT ARMOR BONUS": 27,
+    "DEGRADE ARMOR": 18,
+    "DEXTERITY BONUS": 21,
+    "DAMAGE BONUS": 54,
+    "ELECTRICAL DEFENSE": 25,
+    "ARMOR BONUS": 20,
+    "POISON DEFENSE": 21,
+    "MANA STEAL": 19,
+    "MAGIC": 21,
+    "HP RECHARGE PLAYER": 11,
+    "CRITICAL CHANCE": 59,
+    "STRENGTH BONUS": 21,
+    "FIRE DEFENSE": 26,
+    "ICE DEFENSE": 25,
+    "LIFE STEAL": 18,
+    "DEFENSE": 21,
+    "MAX HP": 21,
+    "MAX MANA": 21,
+    "DAMAGE REFLECTION": 26,
+    "KNOCK BACK": 38,
+    "PERCENT BLOCK CHANCE": 19,
+    "PERCENT GOLD DROP": 20,
+    "PERCENT KNOCK BACK RESISTANCE": 47,
+    "XP GAIN BONUS": 14,
+    "PERCENT MAGICAL DROP": 24,
+    "MISSILE REFLECT": 35,
+    "PERCENT BLOCK CHANCE BASE": 24,
+    "SKILL BONUS": 60,
+    "PERCENT CRITICAL DAMAGE": 7,
+    "BURN": 6,
+    "FREEZE": 13,
+    "POISON": 4,
+    "SHOCK": 4,
+    "FISHING LUCK": 7,
+    "FLEE EFFECT": 26,
+    "PERCENT MELEEDAMAGE": 16,
+    "MISSILE RANGE BONUS": 5,
+    "PERCENT DAMAGE TAKEN": 22,
+    "PERCENT PET ARMOR": 7,
+    "PERCENT PET DAMAGE": 8,
+    "PERCENT PET HEALTH": 6,
+    "PET DEPARTURE TIME": 3,
+    "PERCENT PET VELOCITY": 5,
+    "POTION EFFICIENCY": 8,
+    "PRICE REDUCTION": 6,
+    "PERCENT RANGEDDAMAGE": 16,
+    "REDUCED ITEM REQUIREMENTS": 2,
+    "RANGED ITEM REQUIREMENTS": 3,
+    "TURN ALIGNMENT": 21,
+    "KNOCK BACK EFFECT": 51,
+    "PERCENT SIGHT BONUS": 4,
+    "VIEW ANGLE BONUS": 1,
+    "PERCENT ACTIVE DISTANCE BONUS": 23,
+    "MANA RECHARGE": 7,
+    "STUN": 44,
+    "SUMMON DURATION": 55,
+    "INTERRUPT CHANCE": 18,
+    "SHIELD BUFFER": 12,
+    "PERCENT HP": 14,
+    "SILENCE": 12,
+    "FAME GAIN BONUS": 1,
+    "ARMOR ITEM REQUIREMENTS": 1,
+    "ATTACK SPELL BONUS": 1,
+    "CHARM SPELL BONUS": 1,
+    "DEFENSE SPELL BONUS": 1,
+    "DUAL WIELDING BONUS": 1,
+    "MAGIC ITEM REQUIREMENTS": 1,
+    "PERCENT MAGIC ITEM DAMAGE BONUS": 1,
+    "MARTIAL ITEM REQUIREMENTS": 1,
+    "PERCENT MARTIAL ITEM DAMAGE BONUS": 1,
+    "PERCENT RANGED ITEM DAMAGE BONUS": 1,
+    "SPELL REQUIREMENTS": 1,
+    "CAST SKILL": 1,
+    "PERCENT DAMAGE REFLECTED": 1,
+    "DESUMMON ON DEATH": 10,
+    "PERCENT LIFE STOLEN MASTER": 3,
+    "TRANSFORM": 25,
+    "TRANSFORM PERMANENT": 15,
+    "EMOTIONAL DAMAGE": 2,
+    "JAUNTINESS": 2,
+    "SOCKS": 2,
+    "FUTURISTICNESS": 2,
+    "LOGIC RESISTANCE": 2,
+    "NOODLE ARMS": 2,
+    "OPEN PORTAL": 13,
+    "MANA RECHARGE PLAYER": 2,
+    "PERMANENT DEFENSE": 1,
+    "PERMANENT HEALTH": 1,
+    "RESPEC": 1,
+    "IDENTIFY": 1,
+    "OPEN TOWN PORTAL": 1,
+    "LEARN SKILL": 104,
+    "CAST SKILL ON DEATH": 16,
+    "PERCENT LIFE STOLEN": 1
+  },
+  "examples": {
+    "SLOW RESISTANCE": [
+      {
+        "path": "media/Affixes/ChampionAffixes/BOSS_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "MIN": 75.0,
+          "MAX": 75.0
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMP_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD1.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "SAVE": true,
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "SAVE": true,
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD3.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "SAVE": true,
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD4.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SLOW RESISTANCE",
+          "SAVE": true,
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "CHARM RESISTANCE": [
+      {
+        "path": "media/Affixes/ChampionAffixes/BOSS_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "CHARM RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMP_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "CHARM RESISTANCE",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD1.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CHARM RESISTANCE",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CHARM RESISTANCE",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD3.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CHARM RESISTANCE",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD4.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CHARM RESISTANCE",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "STUN RESISTANCE": [
+      {
+        "path": "media/Affixes/ChampionAffixes/BOSS_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMP_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Dragonspawn/DRAGONSPAWN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "SAVE": true,
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Dragonspawn/DRAGONSPAWNORDRAK.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "SAVE": true,
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/units/monsters/QuestUnits/FirstHenchmen/FIRSTHENCHMEN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "SAVE": true,
+          "MIN": 70.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/units/monsters/ShadowDragonspawn/SHADOWDRAGON.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "STUN RESISTANCE",
+          "SAVE": true,
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      }
+    ],
+    "INTERRUPT RESISTANCE": [
+      {
+        "path": "media/Affixes/ChampionAffixes/BOSS_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMP_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Construct/CONSTRUCT.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Construct/CONSTRUCT_CHAMPION.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Construct/CONSTRUCT_CHANGEDONE.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Dragonspawn/DRAGONSPAWN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "INTERRUPT RESISTANCE",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "FLEE RESIST": [
+      {
+        "path": "media/Affixes/ChampionAffixes/BOSS_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "RESISTANCE": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMP_RESISTS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "RESISTANCE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Construct/CONSTRUCT.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD1.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "SAVE": true,
+          "RESISTANCE": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "SAVE": true,
+          "RESISTANCE": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/cursedsword/CURSEDSWORD3.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FLEE RESIST",
+          "SAVE": true,
+          "RESISTANCE": -1.0
+        }
+      }
+    ],
+    "PERCENT SPEED": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONCOLD.DAT.adm",
+        "properties": {
+          "NAME": "CHAMPIONCOLDSLOW",
+          "SAVE": true,
+          "EXCLUSIVE": true,
+          "ACTIVATION": "TRANSFER",
+          "TYPE": "PERCENT SPEED",
+          "VALUE": -30.0,
+          "DURATION": "2"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZEN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT SPEED",
+          "MIN": -40.0,
+          "MAX": -40.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZENPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT SPEED",
+          "MIN": -25.0,
+          "MAX": -25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHECHEETAH.DAT.adm",
+        "properties": {
+          "NAME": "OFTHECHEETAH PERCENT SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT SPEED",
+          "MIN": 4.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHECHEETAH5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHECHEETAH PERCENT SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT SPEED",
+          "MIN": 8.0,
+          "MAX": 14.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_VELOCITY.DAT.adm",
+        "properties": {
+          "NAME": "OFTHECHEETAH PERCENT SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT SPEED",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      }
+    ],
+    "PERCENT ATTACK SPEED": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONCOLD.DAT.adm",
+        "properties": {
+          "NAME": "CHAMPIONCOLDSLOWATTACK",
+          "SAVE": true,
+          "EXCLUSIVE": true,
+          "ACTIVATION": "TRANSFER",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "VALUE": -30.0,
+          "DURATION": "2"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZEN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "MIN": -50.0,
+          "MAX": -50.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZENPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "MIN": -33.0,
+          "MAX": -33.0
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_FISH_DEVIL.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_ATTACK_SPEED.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_ATTACK_SPEED2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ATTACK SPEED",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      }
+    ],
+    "PERCENT CAST SPEED": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONCOLD.DAT.adm",
+        "properties": {
+          "NAME": "CHAMPIONCOLDSLOWCAST",
+          "SAVE": true,
+          "EXCLUSIVE": true,
+          "ACTIVATION": "TRANSFER",
+          "TYPE": "PERCENT CAST SPEED",
+          "VALUE": -30.0,
+          "DURATION": "2"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZEN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT CAST SPEED",
+          "MIN": -50.0,
+          "MAX": -50.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZENPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT CAST SPEED",
+          "MIN": -33.0,
+          "MAX": -33.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_CAST_SPEED.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CAST SPEED",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_CAST_SPEED2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CAST SPEED",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEARCHER5.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CAST SPEED",
+          "MIN": 7.0,
+          "MAX": 7.0
+        }
+      }
+    ],
+    "UNIT THEME": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONCOLD.DAT.adm",
+        "properties": {
+          "NAME": "CHAMPIONCOLDTHEMESELF",
+          "SAVE": true,
+          "EXCLUSIVE": true,
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Frozen"
+        }
+      },
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONCOLD.DAT.adm",
+        "properties": {
+          "NAME": "CHAMPIONCOLDSLOWTHEME",
+          "SAVE": true,
+          "EXCLUSIVE": true,
+          "ACTIVATION": "TRANSFER",
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Frozen",
+          "DURATION": "2"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTELECTRICITY.DAT.adm",
+        "properties": {
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Electricity"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTELECTRICITYPLAYER.DAT.adm",
+        "properties": {
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Electricity"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZEN.DAT.adm",
+        "properties": {
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Frozen",
+          "VALUE": -1.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTFROZENPLAYER.DAT.adm",
+        "properties": {
+          "TYPE": "UNIT THEME",
+          "UNITTHEME": "Frozen",
+          "VALUE": -1.0
+        }
+      }
+    ],
+    "PERCENT DAMAGE BONUS": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONDOUBLEDAMAGE.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "CHAMPIONDAMAGE",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 100.0,
+          "MAX": 100.0,
+          "DURATION": "ALWAYS"
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTPOISONED.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "MIN": -33.0,
+          "MAX": -33.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTPOISONEDPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "MIN": -33.0,
+          "MAX": -33.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_PERCENT_ALL.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_PERCENT_ALL2.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 3.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_PERCENT_ALL3.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 5.0,
+          "MAX": 6.0
+        }
+      }
+    ],
+    "CAST SKILL ON STRUCK": [
+      {
+        "path": "media/Affixes/ChampionAffixes/CHAMPIONSHOCKING.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "SAVE": true,
+          "NAME": "CHAMPION SHOCK",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "DURATION": "ALWAYS",
+          "VALUE": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTELECTRICITY.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "LEVEL": 1,
+          "NAME": "PROC CHARGEDBOLT",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTELECTRICITYPLAYER.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "LEVEL": 1,
+          "NAME": "PROC CHARGEDBOLT",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/FROSTSHIELD.DAT.adm",
+        "properties": {
+          "NAME": "Frost Shock",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "10",
+          "EXCLUSIVE": true,
+          "MIN": 45.0,
+          "MAX": 45.0
+        }
+      },
+      {
+        "path": "media/units/monsters/RatMan/RATMANCHUTE.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "RATLIN FLEE",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/RatMan/RATMANCHUTE2.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "RATLIN FLEE",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON STRUCK",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      }
+    ],
+    "DAMAGE": [
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTONFIRE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 12.0,
+          "MAX": 12.0,
+          "MINFORCE": 0.0,
+          "MAXFORCE": 0.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTONFIREPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 8.0,
+          "MAX": 8.0,
+          "MINFORCE": 0.0,
+          "MAXFORCE": 0.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/AOESPORES.DAT.adm",
+        "properties": {
+          "NAME": "AOESPORESDRAIN",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "1",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "EXCLUSIVE": true,
+          "MIN": 30.0,
+          "MAX": 40.0,
+          "MINFORCE": 0.0,
+          "MAXFORCE": 0.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARROWHAIL.DAT.adm",
+        "properties": {
+          "NAME": "ARROWHAIL DAMAGE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "RANGED",
+          "STATMODIFYPERCENT": "50",
+          "MIN": 120.0,
+          "MAX": 160.0,
+          "MINFORCE": 4.0,
+          "MAXFORCE": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/AURA_OF_THORNS.DAT.adm",
+        "properties": {
+          "NAME": "THORNAURA",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "MAGICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "EXCLUSIVE": true,
+          "MIN": 20.0,
+          "MAX": 100.0,
+          "MINFORCE": 0.0,
+          "MAXFORCE": 0.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/BLADESWEEP.DAT.adm",
+        "properties": {
+          "NAME": "BLADESWEEP",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "DAMAGE",
+          "DAMAGE_TYPE": "ICE",
+          "STATMODIFYNAME": "RANGED,MAGIC",
+          "STATMODIFYPERCENT": "50,50",
+          "MIN": 30.0,
+          "MAX": 60.0,
+          "MINFORCE": 4.0,
+          "MAXFORCE": 5.0
+        }
+      }
+    ],
+    "PERCENT ARMOR BONUS": [
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTPOISONED.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": -50.0,
+          "MAX": -50.0
+        }
+      },
+      {
+        "path": "media/Affixes/DamageEffectAffixes/DAMAGEEFFECTPOISONEDPLAYER.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": -50.0,
+          "MAX": -50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_ARMOR_PERCENT_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_ARMOR_PERCENT_BONUS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_ARMOR_PERCENT_BONUS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": 6.0,
+          "MAX": 6.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_ARMOR_PERCENT_BONUS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT ARMOR BONUS",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      }
+    ],
+    "DEGRADE ARMOR": [
+      {
+        "path": "media/Affixes/Gems/GEM_AMETHYST.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVAGE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 6.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVAGE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 12.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVAGE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 18.0,
+          "MAX": 24.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVAGE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 35.0,
+          "MAX": 45.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESOLDIER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESOLDIER DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEGRADE ARMOR",
+          "MIN": 6.0,
+          "MAX": 10.0
+        }
+      }
+    ],
+    "DEXTERITY BONUS": [
+      {
+        "path": "media/Affixes/Gems/GEM_AMETHYST_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_DEXTERITY.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_DEXTERITY2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEXTERITY.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 51.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEXTERITY2.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 90.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEXTERITY3.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEXTERITY BONUS",
+          "MIN": 150.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "DAMAGE BONUS": [
+      {
+        "path": "media/Affixes/Gems/GEM_CITRINE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_DIAMOND.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "MIN": 18.0,
+          "MAX": 18.0
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_EMERALD.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_RUBY.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_SAPHIRE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFFLAME.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE BONUS",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      }
+    ],
+    "ELECTRICAL DEFENSE": [
+      {
+        "path": "media/Affixes/Gems/GEM_CITRINE_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 16.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE POISON DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE5.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE POISON DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ELECTRICDEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ELECTRICDEFENSE ELECTRICAL DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ELECTRICDEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ELECTRICDEFENSE ELECTRICAL DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 12.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ELECTRICDEFENSE3.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ELECTRICDEFENSE ELECTRICAL DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ELECTRICAL DEFENSE",
+          "DAMAGE_TYPE": "ELECTRIC",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      }
+    ],
+    "ARMOR BONUS": [
+      {
+        "path": "media/Affixes/Gems/GEM_DIAMOND_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETURTLE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 5.0,
+          "MAX": 6.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETURTLE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 8.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETURTLE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 12.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETURTLE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 20.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_ARMOR_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ARMOR BONUS",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      }
+    ],
+    "POISON DEFENSE": [
+      {
+        "path": "media/Affixes/Gems/GEM_EMERALD_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 16.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE ELECTRICAL DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE5.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE ELECTRICAL DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_POISONDEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_POISONDEFENSE POISON DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_POISONDEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_POISONDEFENSE POISON DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 12.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_POISONDEFENSE3.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_POISONDEFENSE POISON DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON DEFENSE",
+          "DAMAGE_TYPE": "POISON",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      }
+    ],
+    "MANA STEAL": [
+      {
+        "path": "media/Affixes/Gems/GEM_EYE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "MANA STEAL",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEDRAKE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "MANA STEAL",
+          "MIN": 10.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVANT.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVANT MANA STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MANA STEAL",
+          "MIN": 100.0,
+          "MAX": 150.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAVANT5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVANT MANA STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MANA STEAL",
+          "MIN": 200.0,
+          "MAX": 250.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEWIZARD.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEWIZARD MANA STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MANA STEAL",
+          "MIN": 50.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEWIZARD2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEWIZARD MANA STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MANA STEAL",
+          "MIN": 60.0,
+          "MAX": 70.0
+        }
+      }
+    ],
+    "MAGIC": [
+      {
+        "path": "media/Affixes/Gems/GEM_EYE_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "MAGIC",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_MAGIC.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAGIC",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_MAGIC2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAGIC",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_MAGIC.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAGIC",
+          "MIN": 51.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_MAGIC2.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAGIC",
+          "MIN": 90.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_MAGIC3.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAGIC",
+          "MIN": 150.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "HP RECHARGE PLAYER": [
+      {
+        "path": "media/Affixes/Gems/GEM_FISH_BONE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "HP RECHARGE PLAYER",
+          "MIN": 1.5,
+          "MAX": 1.5
+        }
+      },
+      {
+        "path": "media/Affixes/Gems/GEM_PEARL.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "HP RECHARGE PLAYER",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PETSPELL_HEALALL.DAT.adm",
+        "properties": {
+          "NAME": "HEAL",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "HP RECHARGE PLAYER",
+          "MIN": 2000.0,
+          "MAX": 2000.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SPELL_HEALSELF.DAT.adm",
+        "properties": {
+          "NAME": "HEAL",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "4",
+          "TYPE": "HP RECHARGE PLAYER",
+          "MIN": 1100.0,
+          "MAX": 1100.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/FISHPOTION.DAT.adm",
+        "properties": {
+          "NAME": "FISHHPRECHARGE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "HP RECHARGE PLAYER",
+          "PARTICLE_FX": "HEALTH_POTION",
+          "MIN": 9374.0,
+          "MAX": 9374.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/FISHPOTION2.DAT.adm",
+        "properties": {
+          "NAME": "FISHHPRECHARGE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "1",
+          "TYPE": "HP RECHARGE PLAYER",
+          "PARTICLE_FX": "HEALTH_POTION",
+          "MIN": 37496.0,
+          "MAX": 37496.0
+        }
+      }
+    ],
+    "CRITICAL CHANCE": [
+      {
+        "path": "media/Affixes/Gems/GEM_FISH_UNICORN.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 2.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_CRIT_CHANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_CRIT_CHANCE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEARCHER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEARCHER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEARCHER5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEARCHER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMASTER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "CRITICAL CHANCE",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      }
+    ],
+    "STRENGTH BONUS": [
+      {
+        "path": "media/Affixes/Gems/GEM_PEARL_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "STRENGTH BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_STRENGTH.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "STRENGTH BONUS",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_STRENGTH2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "STRENGTH BONUS",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_STRENGTH.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "STRENGTH BONUS",
+          "MIN": 51.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_STRENGTH2.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "STRENGTH BONUS",
+          "MIN": 90.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_STRENGTH3.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "STRENGTH BONUS",
+          "MIN": 150.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "FIRE DEFENSE": [
+      {
+        "path": "media/Affixes/Gems/GEM_RUBY_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 16.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE ICE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE5.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE ICE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEDRAKE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEDRAKE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 10.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_FIREDEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_FIREDEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FIRE DEFENSE",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 12.0,
+          "MAX": 16.0
+        }
+      }
+    ],
+    "ICE DEFENSE": [
+      {
+        "path": "media/Affixes/Gems/GEM_SAPPHIRE_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 16.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFRESISTANCE5.DAT.adm",
+        "properties": {
+          "NAME": "OFRESISTANCE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ICEDEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ICEDEFENSE ICE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ICEDEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ICEDEFENSE ICE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 12.0,
+          "MAX": 16.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ICEDEFENSE3.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_ICEDEFENSE ICE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "ICE DEFENSE",
+          "DAMAGE_TYPE": "ICE",
+          "MIN": 20.0,
+          "MAX": 24.0
+        }
+      }
+    ],
+    "LIFE STEAL": [
+      {
+        "path": "media/Affixes/Gems/GEM_SKULL.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "LIFE STEAL",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEVAMPIRE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEVAMPIRE LIFE STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "LIFE STEAL",
+          "MIN": 80.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEVAMPIRE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEVAMPIRE LIFE STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "LIFE STEAL",
+          "MIN": 140.0,
+          "MAX": 180.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEVAMPIRE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEVAMPIRE LIFE STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "LIFE STEAL",
+          "MIN": 220.0,
+          "MAX": 260.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEVAMPIRE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEVAMPIRE LIFE STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "LIFE STEAL",
+          "MIN": 400.0,
+          "MAX": 500.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_LIFE_STEAL.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEVAMPIRE LIFE STEAL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "LIFE STEAL",
+          "MIN": 70.0,
+          "MAX": 70.0
+        }
+      }
+    ],
+    "DEFENSE": [
+      {
+        "path": "media/Affixes/Gems/GEM_SKULL_ARMOR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "DEFENSE",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_DEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEFENSE",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_STAT_DEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEFENSE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEFENSE",
+          "MIN": 51.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEFENSE2.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEFENSE",
+          "MIN": 90.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OF_ATTRIB_DEFENSE3.DAT.adm",
+        "properties": {
+          "NAME": "OFFLAME DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DEFENSE",
+          "MIN": 150.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "MAX HP": [
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_HP.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_HP2.DAT.adm",
+        "properties": {
+          "NAME": "4",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/HP_ADDER.DAT.adm",
+        "properties": {
+          "NAME": "HP_ADDER MAX HP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 4.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/HP_ADDER_2.DAT.adm",
+        "properties": {
+          "NAME": "HP_ADDER_2 MAX HP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 8.0,
+          "MAX": 11.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/HP_ADDER_3.DAT.adm",
+        "properties": {
+          "NAME": "HP_ADDER_3 MAX HP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 12.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/HP_ADDER_5.DAT.adm",
+        "properties": {
+          "NAME": "HP_ADDER_3 MAX HP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX HP",
+          "MIN": 20.0,
+          "MAX": 25.0
+        }
+      }
+    ],
+    "MAX MANA": [
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_MANA.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_MANA2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/MANA_ADDER.DAT.adm",
+        "properties": {
+          "NAME": "MANA_ADDER MAX MANA",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 4.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/MANA_ADDER_2.DAT.adm",
+        "properties": {
+          "NAME": "MANA_ADDER_2 MAX MANA",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 8.0,
+          "MAX": 11.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/MANA_ADDER_3.DAT.adm",
+        "properties": {
+          "NAME": "MANA_ADDER_3 MAX MANA",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 12.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/MANA_ADDER_5.DAT.adm",
+        "properties": {
+          "NAME": "MANA_ADDER_3 MAX MANA",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MAX MANA",
+          "MIN": 20.0,
+          "MAX": 25.0
+        }
+      }
+    ],
+    "DAMAGE REFLECTION": [
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_THORNS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/GEM_RANDOM_THORNS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 7.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETHORN.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETHORN DAMAGE REFLECTION",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 3.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETHORN2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETHORN DAMAGE REFLECTION",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 6.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETHORN3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETHORN DAMAGE REFLECTION",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 9.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHETHORN5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETHORN DAMAGE REFLECTION",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "DAMAGE REFLECTION",
+          "MIN": 18.0,
+          "MAX": 22.0
+        }
+      }
+    ],
+    "KNOCK BACK": [
+      {
+        "path": "media/Affixes/Items/INTRINSIC_RIFLE_KNOCKBACK.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 30.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFHTERAM.DAT.adm",
+        "properties": {
+          "NAME": "OFHTERAM KNOCK BACK EFFECT",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFHTERAM2.DAT.adm",
+        "properties": {
+          "NAME": "OFHTERAM KNOCK BACK EFFECT",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFHTERAM3.DAT.adm",
+        "properties": {
+          "NAME": "OFHTERAM KNOCK BACK EFFECT",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 30.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFHTERAM5.DAT.adm",
+        "properties": {
+          "NAME": "OFHTERAM KNOCK BACK EFFECT",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEARCHER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEARCHER KNOCK BACK",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "KNOCK BACK",
+          "FORCE": 15.0
+        }
+      }
+    ],
+    "PERCENT BLOCK CHANCE": [
+      {
+        "path": "media/Affixes/Items/OFTHEBATTLEMENTS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEBATTLEMENTS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEBATTLEMENTS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEBATTLEMENTS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 6.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SHADOWARMORPLAYER.DAT.adm",
+        "properties": {
+          "NAME": "SHADOWARMORPLAYER",
+          "EXCLUSIVE": true,
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SHADOWARMORPLAYER10.DAT.adm",
+        "properties": {
+          "NAME": "SHADOWARMORPLAYER",
+          "EXCLUSIVE": true,
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT BLOCK CHANCE",
+          "MIN": 31.0,
+          "MAX": 31.0
+        }
+      }
+    ],
+    "PERCENT GOLD DROP": [
+      {
+        "path": "media/Affixes/Items/OFTHEMISER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMISER2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 2.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMISER3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 4.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMISER5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 6.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_GOLD_DROP.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_GOLD_DROP2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMISER PERCENT GOLD DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT GOLD DROP",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      }
+    ],
+    "PERCENT KNOCK BACK RESISTANCE": [
+      {
+        "path": "media/Affixes/Items/OFTHEMULE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMULE PERCENT KNOCK BACK RESISTANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "RESISTANCE": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMULE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMULE PERCENT KNOCK BACK RESISTANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "RESISTANCE": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMULE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMULE PERCENT KNOCK BACK RESISTANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "RESISTANCE": 30.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEMULE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMULE PERCENT KNOCK BACK RESISTANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "RESISTANCE": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELDKNOCKBACK",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "EXCLUSIVE": true,
+          "RESISTANCE": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD10.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELDKNOCKBACK",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT KNOCK BACK RESISTANCE",
+          "EXCLUSIVE": true,
+          "RESISTANCE": 100.0
+        }
+      }
+    ],
+    "XP GAIN BONUS": [
+      {
+        "path": "media/Affixes/Items/OFTHESAGE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAGE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAGE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESAGE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_XP_GAIN.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_XP_GAIN2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "XP GAIN BONUS",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      }
+    ],
+    "PERCENT MAGICAL DROP": [
+      {
+        "path": "media/Affixes/Items/OFTHESEEKER.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 1.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESEEKER2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 3.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESEEKER3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 5.0,
+          "MAX": 6.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESEEKER5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 8.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_LUCK.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_LUCK2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESEEKER PERCENT MAGICAL DROP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MAGICAL DROP",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      }
+    ],
+    "MISSILE REFLECT": [
+      {
+        "path": "media/Affixes/Items/OFTHESTORMS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 10.0,
+          "MAX": 15.0,
+          "DMGPCTMIN": 80.0,
+          "DMGPCTMAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESTORMS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 20.0,
+          "MAX": 25.0,
+          "DMGPCTMIN": 80.0,
+          "DMGPCTMAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESTORMS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 30.0,
+          "MAX": 35.0,
+          "DMGPCTMIN": 80.0,
+          "DMGPCTMAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHESTORMS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 50.0,
+          "MAX": 60.0,
+          "DMGPCTMIN": 80.0,
+          "DMGPCTMAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEWINDS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 10.0,
+          "MAX": 10.0,
+          "DMGPCTMIN": 50.0,
+          "DMGPCTMAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/OFTHEWINDS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE REFLECT",
+          "MIN": 15.0,
+          "MAX": 15.0,
+          "DMGPCTMIN": 50.0,
+          "DMGPCTMAX": 50.0
+        }
+      }
+    ],
+    "PERCENT BLOCK CHANCE BASE": [
+      {
+        "path": "media/Affixes/Items/SET_BLOCK_CHANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_BLOCK_CHANCE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_BLOCK_CHANCE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 6.0,
+          "MAX": 6.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SET_BLOCK_CHANCE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_BLOCK_CHANCE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_BLOCK_CHANCE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT BLOCK CHANCE BASE",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      }
+    ],
+    "SKILL BONUS": [
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_BURNINGBIND.DAT.adm",
+        "properties": {
+          "NAME": "Burning Bind",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_EMBERBOLT.DAT.adm",
+        "properties": {
+          "NAME": "Ember Bolt",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_EMBERLANCE.DAT.adm",
+        "properties": {
+          "NAME": "Ember Lance",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_EMBERLIGHTNING.DAT.adm",
+        "properties": {
+          "NAME": "Ember Lightning",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_EMBERPHASE.DAT.adm",
+        "properties": {
+          "NAME": "Ember Phase",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/SKILL_ADD_ALCHEMIST_EMBERSENTRY.DAT.adm",
+        "properties": {
+          "NAME": "Ember Sentry",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SKILL BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      }
+    ],
+    "PERCENT CRITICAL DAMAGE": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS4.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 40.0,
+          "MAX": 40.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS6.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS8.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_CRITICAL_DAMAGE_BONUS8XXX.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT CRITICAL DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 200.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "BURN": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_BURN_PERCENT_05.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "BURN",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_BURN_PERCENT_10.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "BURN",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_BURN_PERCENT_20.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "BURN",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_BURN_PERCENT_ALWAYS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "BURN",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/WARRIORQUAKE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "BURN",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/units/monsters/ShockTrap/FLAMETRAP.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "BURN",
+          "SAVE": true,
+          "VALUE": -1.0,
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      }
+    ],
+    "FREEZE": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_FREEZE_PERCENT_05.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FREEZE",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_FREEZE_PERCENT_10.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FREEZE",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_FREEZE_PERCENT_20.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FREEZE",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_FREEZE_PERCENT_ALWAYS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FREEZE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EXPLODEPOTION.DAT.adm",
+        "properties": {
+          "NAME": "EMBERICEPOTIONFREEZE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "5",
+          "TYPE": "FREEZE",
+          "DAMAGE_TYPE": "ICE",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "5",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/FROSTSHIELDPROC.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "FROSTSHIELDPROC",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "FREEZE",
+          "DAMAGE_TYPE": "ICE",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "5",
+          "MIN": 40.0,
+          "MAX": 40.0
+        }
+      }
+    ],
+    "POISON": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_POISON_PERCENT_05.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_POISON_PERCENT_10.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_POISON_PERCENT_20.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_POISON_PERCENT_ALWAYS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POISON",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "SHOCK": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_SHOCK_PERCENT_05.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "SHOCK",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_SHOCK_PERCENT_10.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "SHOCK",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_SHOCK_PERCENT_20.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "SHOCK",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_DIRECT_SHOCK_PERCENT_ALWAYS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMASTER CRITICAL CHANCE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "SHOCK",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "FISHING LUCK": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_FISHING_LUCK.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FISHING LUCK",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FISHING_LUCK2.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FISHING LUCK",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FISHING_LUCK3.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FISHING LUCK",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FISHING_LUCK5.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FISHING LUCK",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FISHING_LUCK9.DAT.adm",
+        "properties": {
+          "NAME": "TRINKET_FIREDEFENSE FIRE DEFENSE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "FISHING LUCK",
+          "DAMAGE_TYPE": "FIRE",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/FISH_MINES_02.DAT.adm",
+        "properties": {
+          "NAME": "FISHGOLDDROP",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "1200",
+          "TYPE": "FISHING LUCK",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "FLEE EFFECT": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION7.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 7.0,
+          "MAX": 7.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_FLEE_LONG_DURATION9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEELEPHANT MAX HP",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "12",
+          "TYPE": "FLEE EFFECT",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      }
+    ],
+    "PERCENT MELEEDAMAGE": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_MELEE_DAMAGE_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MELEE_DAMAGE_BONUS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MELEE_DAMAGE_BONUS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MELEE_DAMAGE_BONUS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/GAUNTLETENCHANT.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "GAUNTLETMELEEBONUS",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 30.0,
+          "MAX": 30.0,
+          "DURATION": "30"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/GAUNTLETENCHANT10.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "GAUNTLETMELEEBONUS",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT MELEEDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 75.0,
+          "MAX": 75.0,
+          "DURATION": "75"
+        }
+      }
+    ],
+    "MISSILE RANGE BONUS": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_MISSILE_RANGE_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE RANGE BONUS",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MISSILE_RANGE_BONUS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE RANGE BONUS",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MISSILE_RANGE_BONUS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE RANGE BONUS",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MISSILE_RANGE_BONUS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE RANGE BONUS",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_MISSILE_RANGE_BONUS_NEG2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETIGER PERCENT ATTACK SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "MISSILE RANGE BONUS",
+          "MIN": -2.0,
+          "MAX": -2.0
+        }
+      }
+    ],
+    "PERCENT DAMAGE TAKEN": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PERCENT_DAMAGE_TAKEN.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": -1.100000023841858,
+          "MAX": -1.100000023841858
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PERCENT_DAMAGE_TAKEN2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": -2.0,
+          "MAX": -2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PERCENT_DAMAGE_TAKEN3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": -3.0,
+          "MAX": -3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PERCENT_DAMAGE_TAKEN5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": -5.0,
+          "MAX": -5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PERCENT_DAMAGE_TAKENXXX.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": -10.0,
+          "MAX": -10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF ELEMENTALBONUS",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "10",
+          "TYPE": "PERCENT DAMAGE TAKEN",
+          "DAMAGE_TYPE": "ALL",
+          "EXCLUSIVE": true,
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      }
+    ],
+    "PERCENT PET ARMOR": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR7.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 35.0,
+          "MAX": 35.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_ARMOR9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET ARMOR",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "PERCENT PET DAMAGE": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE7.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 35.0,
+          "MAX": 35.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_DAMAGE9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET DAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "PERCENT PET HEALTH": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH7.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 35.0,
+          "MAX": 35.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_HEALTH9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET HEALTH",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "PET DEPARTURE TIME": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_TOWN_RETURN3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PET DEPARTURE TIME",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_TOWN_RETURN5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PET DEPARTURE TIME",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PET_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "PETSKILLP",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PET DEPARTURE TIME",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 200.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "PERCENT PET VELOCITY": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_TOWN_RETURN9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET VELOCITY",
+          "MIN": 40.0,
+          "MAX": 40.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_VELOCITY.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET VELOCITY",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_VELOCITY2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET VELOCITY",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_VELOCITY3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET VELOCITY",
+          "MIN": 30.0,
+          "MAX": 30.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PET_VELOCITY5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT PET VELOCITY",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "POTION EFFICIENCY": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 15.0,
+          "MAX": 15.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY7.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 35.0,
+          "MAX": 35.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_POTION_EFFICIENCY9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHESAVAGE DEGRADE ARMOR",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "POTION EFFICIENCY",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      }
+    ],
+    "PRICE REDUCTION": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_PRICE_REDUCTION.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PRICE REDUCTION",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PRICE_REDUCTION2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PRICE REDUCTION",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PRICE_REDUCTION3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PRICE REDUCTION",
+          "MIN": 3.0,
+          "MAX": 3.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PRICE_REDUCTION5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PRICE REDUCTION",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_PRICE_REDUCTION9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEMAGE PERCENT CAST SPEED",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PRICE REDUCTION",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SKILL_BARTER_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "BARTER",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PRICE REDUCTION",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 150.0,
+          "MAX": 150.0
+        }
+      }
+    ],
+    "PERCENT RANGEDDAMAGE": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_RANGED_DAMAGE_BONUS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 4.0,
+          "MAX": 4.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_RANGED_DAMAGE_BONUS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_RANGED_DAMAGE_BONUS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 12.0,
+          "MAX": 12.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_RANGED_DAMAGE_BONUS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHEBEAR DAMAGE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/GAUNTLETENCHANT.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "GAUNTLETRANGEDBONUS",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 30.0,
+          "MAX": 30.0,
+          "DURATION": "30"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/GAUNTLETENCHANT10.DAT.adm",
+        "properties": {
+          "EXCLUSIVE": true,
+          "NAME": "GAUNTLETRANGEDBONUS",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT RANGEDDAMAGE",
+          "DAMAGE_TYPE": "ALL",
+          "MIN": 75.0,
+          "MAX": 75.0,
+          "DURATION": "75"
+        }
+      }
+    ],
+    "REDUCED ITEM REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_REDUCED_REQS.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "REDUCED ITEM REQUIREMENTS",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_REDUCED_REQS3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "REDUCED ITEM REQUIREMENTS",
+          "MIN": 30.0,
+          "MAX": 30.0
+        }
+      }
+    ],
+    "RANGED ITEM REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_REDUCED_REQS2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "RANGED ITEM REQUIREMENTS",
+          "MIN": 20.0,
+          "MAX": 20.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_REDUCED_REQS5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "0",
+          "TYPE": "RANGED ITEM REQUIREMENTS",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SKILL_RANGED_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MARTIALSKILL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "RANGED ITEM REQUIREMENTS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "TURN ALIGNMENT": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_LONG_DURATION2.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "20",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_LONG_DURATION3.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "40",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_LONG_DURATION5.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "60",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_LONG_DURATION9.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "120",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_LONG_DURATIONXXX.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "60",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      },
+      {
+        "path": "media/Affixes/Items/UNIQUE_TURN_ALIGNMENT_SHORT_DURATION.DAT.adm",
+        "properties": {
+          "NAME": "OFTHETURTLE ARMOR BONUS",
+          "ACTIVATION": "TRANSFER",
+          "DURATION": "5",
+          "TYPE": "TURN ALIGNMENT",
+          "UNITTHEME": "turned",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      }
+    ],
+    "KNOCK BACK EFFECT": [
+      {
+        "path": "media/Affixes/Items/UNIQUE_WEAPON_JUGGERNAUT_MACE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 40.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF KNOCK BACK EFFECT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF10.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF KNOCK BACK EFFECT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 23.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF11.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF KNOCK BACK EFFECT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF12.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF KNOCK BACK EFFECT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 27.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF2.DAT.adm",
+        "properties": {
+          "NAME": "ARMORDEBUFF KNOCK BACK EFFECT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "KNOCK BACK EFFECT",
+          "FORCE": 7.0
+        }
+      }
+    ],
+    "PERCENT SIGHT BONUS": [
+      {
+        "path": "media/Affixes/Monsters/MONSTER_HUNT.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT SIGHT BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "20",
+          "TYPE": "PERCENT SIGHT BONUS",
+          "MIN": 100.0,
+          "MAX": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS2.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT SIGHT BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT SIGHT BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS3.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT SIGHT BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT SIGHT BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Lich/LICH.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT SIGHT BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT SIGHT BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": -1.0
+        }
+      }
+    ],
+    "VIEW ANGLE BONUS": [
+      {
+        "path": "media/Affixes/Monsters/MONSTER_HUNT.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT VIEW ANGLE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "20",
+          "TYPE": "VIEW ANGLE BONUS",
+          "MIN": 360.0,
+          "MAX": -1.0
+        }
+      }
+    ],
+    "PERCENT ACTIVE DISTANCE BONUS": [
+      {
+        "path": "media/Affixes/Monsters/MONSTER_HUNT.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT ACTIVE DISTANCE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "20",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "MIN": 200.0,
+          "MAX": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ember_Colossus/EMBER_COLOSSUS.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "SAVE": true,
+          "MIN": 200.0,
+          "MAX": 200.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS1.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": 2000.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS1.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT ACTIVE DISTANCE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": -1.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": 2000.0
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS2.DAT.adm",
+        "properties": {
+          "NAME": "MONSTER_HUNT PERCENT ACTIVE DISTANCE BONUS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT ACTIVE DISTANCE BONUS",
+          "SAVE": true,
+          "MIN": 2000.0,
+          "MAX": -1.0
+        }
+      }
+    ],
+    "MANA RECHARGE": [
+      {
+        "path": "media/Affixes/Skills/AOESPORES.DAT.adm",
+        "properties": {
+          "NAME": "AOESPORESDRAIN2",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "1",
+          "TYPE": "MANA RECHARGE",
+          "EXCLUSIVE": true,
+          "MIN": -1000.0,
+          "MAX": -1000.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SKILL_SPELLCASTING_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MANARECHARGE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "MANA RECHARGE",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 30.0,
+          "MAX": 30.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/MANAPOTION.DAT.adm",
+        "properties": {
+          "NAME": "MANABONUS",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "4",
+          "TYPE": "MANA RECHARGE",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 520.0,
+          "MAX": 520.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/MANAPOTION2.DAT.adm",
+        "properties": {
+          "NAME": "MANABONUS",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "4",
+          "TYPE": "MANA RECHARGE",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 1040.0,
+          "MAX": 1040.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/MANAPOTION3.DAT.adm",
+        "properties": {
+          "NAME": "MANABONUS",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "4",
+          "TYPE": "MANA RECHARGE",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 1560.0,
+          "MAX": 1560.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/MANAPOTION4.DAT.adm",
+        "properties": {
+          "NAME": "MANABONUS",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "4",
+          "TYPE": "MANA RECHARGE",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 2080.0,
+          "MAX": 2080.0
+        }
+      }
+    ],
+    "STUN": [
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF10.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 70.0,
+          "MAX": 70.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF11.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 75.0,
+          "MAX": 75.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF12.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 80.0,
+          "MAX": 80.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 30.0,
+          "MAX": 30.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ARMORDEBUFF3.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "3",
+          "TYPE": "STUN",
+          "MIN": 35.0,
+          "MAX": 35.0
+        }
+      }
+    ],
+    "SUMMON DURATION": [
+      {
+        "path": "media/Affixes/Skills/ARMORTRAP_DUR.DAT.adm",
+        "properties": {
+          "NAME": "ARMORTRAP SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "10",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "LEVEL",
+          "SAVE": true,
+          "MIN": 120.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSENTRY.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "EMBERSENTRY SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "60",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "LEVEL,MAGIC",
+          "STATMODIFYPERCENT": "50,50",
+          "MIN": 60.0,
+          "MAX": 60.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSENTRY10.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "EMBERSENTRY SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "60",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "MAGIC",
+          "STATMODIFYPERCENT": "50",
+          "MIN": 110.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSENTRY11.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSENTRY SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "60",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "MAGIC",
+          "STATMODIFYPERCENT": "50",
+          "SAVE": true,
+          "MIN": 110.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSENTRY12.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSENTRY SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "60",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "MAGIC",
+          "STATMODIFYPERCENT": "50",
+          "SAVE": true,
+          "MIN": 110.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSENTRY2.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "EMBERSENTRY SUMMON DURATION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "40",
+          "TYPE": "SUMMON DURATION",
+          "STATMODIFYNAME": "MAGIC",
+          "STATMODIFYPERCENT": "50",
+          "MIN": 110.0,
+          "MAX": 110.0
+        }
+      }
+    ],
+    "INTERRUPT CHANCE": [
+      {
+        "path": "media/Affixes/Skills/AURA_OF_ENTROPY.DAT.adm",
+        "properties": {
+          "NAME": "ENTROPYINTERRUPT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "INTERRUPT CHANCE",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "10",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/AURA_OF_ENTROPY_ONE.DAT.adm",
+        "properties": {
+          "NAME": "ENTROPYINTERRUPT",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "INTERRUPT CHANCE",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/ICESHOT.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "INTERRUPT CHANCE",
+          "VALUE": -1.0,
+          "MIN": -100.0,
+          "MAX": -100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/THUNDERPUNCH.DAT.adm",
+        "properties": {
+          "NAME": "THUNDERPUNCH INTERRUPT CHANCE",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "INTERRUPT CHANCE",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "300",
+          "DURATION": "INSTANT",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/WHIRLINGGUST.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "INTERRUPT CHANCE",
+          "MIN": 50.0,
+          "MAX": 50.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/WHIRLINGGUST10.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "INTERRUPT CHANCE",
+          "MIN": 86.0,
+          "MAX": 86.0
+        }
+      }
+    ],
+    "SHIELD BUFFER": [
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK",
+          "MIN": 120.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD10.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "MIN": 390.0,
+          "MAX": 390.0,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD11.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "MIN": 420.0,
+          "MAX": 420.0,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD12.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "MIN": 450.0,
+          "MAX": 450.0,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD2.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "MIN": 150.0,
+          "MAX": 150.0,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK"
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/EMBERSHIELD3.DAT.adm",
+        "properties": {
+          "NAME": "EMBERSHIELD1",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "SHIELD BUFFER",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "MAGIC,DEFENSE",
+          "STATMODIFYPERCENT": "50,50",
+          "UNITTHEME": "EmberShield1",
+          "EXCLUSIVE": true,
+          "MIN": 180.0,
+          "MAX": 180.0,
+          "LINK_NAME": "EMBERSHIELDKNOCKBACK"
+        }
+      }
+    ],
+    "PERCENT HP": [
+      {
+        "path": "media/Affixes/Skills/PHALANX.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "DURATION": "0",
+          "MIN": 110.0,
+          "MAX": 110.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PHALANX10.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "DURATION": "0",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "MIN": 210.0,
+          "MAX": 210.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PHALANX2.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "DURATION": "0",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "MIN": 130.0,
+          "MAX": 130.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PHALANX3.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "DURATION": "0",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "MIN": 140.0,
+          "MAX": 140.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PHALANX4.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "DURATION": "0",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "MIN": 160.0,
+          "MAX": 160.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/PHALANX5.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PHALANX PERCENT HP",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "PERCENT HP",
+          "DURATION": "0",
+          "STATMODIFYNAME": "DEFENSE",
+          "STATMODIFYPERCENT": "100",
+          "MIN": 150.0,
+          "MAX": 150.0
+        }
+      }
+    ],
+    "SILENCE": [
+      {
+        "path": "media/Affixes/Skills/SILENCE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "6",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SILENCE10.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "15",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SILENCE11.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "16",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SILENCE12.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "17",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SILENCE2.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "7",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SILENCE3.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "8",
+          "TYPE": "SILENCE",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "FAME GAIN BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_ADVENTURER_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "FAMEGAIN",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "FAME GAIN BONUS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 200.0,
+          "MAX": 200.0
+        }
+      }
+    ],
+    "ARMOR ITEM REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_ARMOR_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "ARMORSKILL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "ARMOR ITEM REQUIREMENTS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "ATTACK SPELL BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_ATTACKMAGIC_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "ATTACKSPELL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "ATTACK SPELL BONUS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "CHARM SPELL BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_CHARMMAGIC_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "CHARMSPELL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "CHARM SPELL BONUS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "DEFENSE SPELL BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_DEFENSEMAGIC_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "DEFENSESPELL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "DEFENSE SPELL BONUS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "DUAL WIELDING BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_DUALWIELD_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "DUALWIELD",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "DUAL WIELDING BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 150.0,
+          "MAX": 150.0
+        }
+      }
+    ],
+    "MAGIC ITEM REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_MAGIC_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MAGESKILL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "MAGIC ITEM REQUIREMENTS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "PERCENT MAGIC ITEM DAMAGE BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_MAGIC_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MAGESKILLD",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT MAGIC ITEM DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "MARTIAL ITEM REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_MARTIAL_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MARTIALSKILL",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "MARTIAL ITEM REQUIREMENTS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "PERCENT MARTIAL ITEM DAMAGE BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_MARTIAL_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MARTIALSKILLD",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT MARTIAL ITEM DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "PERCENT RANGED ITEM DAMAGE BONUS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_RANGED_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "MARTIALSKILLD",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT RANGED ITEM DAMAGE BONUS",
+          "DAMAGE_TYPE": "ALL",
+          "GRAPHOVERRIDE": "MASTERY_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "SPELL REQUIREMENTS": [
+      {
+        "path": "media/Affixes/Skills/SKILL_SPELLCASTING_MASTERY.DAT.adm",
+        "properties": {
+          "NAME": "SPELLREQS",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "SPELL REQUIREMENTS",
+          "GRAPHOVERRIDE": "LINEAR_GRAPH",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "CAST SKILL": [
+      {
+        "path": "media/Affixes/Skills/SPECTRALECHO1.DAT.adm",
+        "properties": {
+          "NAME": "SPECTRAL WASH",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "30",
+          "TYPE": "CAST SKILL",
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      }
+    ],
+    "PERCENT DAMAGE REFLECTED": [
+      {
+        "path": "media/Affixes/Skills/SPELL_RETRIBUTION.DAT.adm",
+        "properties": {
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "TYPE": "PERCENT DAMAGE REFLECTED",
+          "DAMAGE_TYPE": "PHYSICAL",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "25",
+          "MIN": 8.0,
+          "MAX": 8.0
+        }
+      }
+    ],
+    "DESUMMON ON DEATH": [
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_ALOEGEL_DUR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "SAVE": true
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_ARCHERS_DUR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "SAVE": true
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_SKELETON_DUR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "SAVE": true
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_SWORD_DUR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "MIN": -1.0,
+          "MAX": -1.0,
+          "SAVE": true
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_ZOMBIES_DUR.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "SAVE": true
+        }
+      },
+      {
+        "path": "media/units/monsters/Ghost/GHOST_MINIEBOSS1.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "ALWAYS",
+          "TYPE": "DESUMMON ON DEATH",
+          "SAVE": true
+        }
+      }
+    ],
+    "PERCENT LIFE STOLEN MASTER": [
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_ZOMBIES.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT LIFE STOLEN MASTER",
+          "STATMODIFYNAME": "LEVEL",
+          "STATMODIFYPERCENT": "20",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/Affixes/Skills/SUMMON_SPELL_ZOMBIES_ONE.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT LIFE STOLEN MASTER",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/units/monsters/SkeletonWarrior/SKILL_BLOODSKELETON.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT LIFE STOLEN MASTER",
+          "SAVE": true,
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      }
+    ],
+    "TRANSFORM": [
+      {
+        "path": "media/units/items/fish/FISH_ADZEFISH.DAT.adm",
+        "properties": {
+          "NAME": "Pet Gel",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 120.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_ADZEFISH_BIG.DAT.adm",
+        "properties": {
+          "NAME": "Pet Gel",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 3600.0,
+          "MAX": 3600.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BATFISH.DAT.adm",
+        "properties": {
+          "NAME": "Pet Varkolyn",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 120.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BATFISH_BIG.DAT.adm",
+        "properties": {
+          "NAME": "Pet Varkolyn",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 3600.0,
+          "MAX": 3600.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BIRDFISH.DAT.adm",
+        "properties": {
+          "NAME": "CaveFlierPet",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 120.0,
+          "MAX": 120.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BIRDFISH_BIG.DAT.adm",
+        "properties": {
+          "NAME": "CaveFlierPet",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 3600.0,
+          "MAX": 3600.0
+        }
+      }
+    ],
+    "TRANSFORM PERMANENT": [
+      {
+        "path": "media/units/items/fish/FISH_ADZEFISH_PERM.DAT.adm",
+        "properties": {
+          "NAME": "Pet Gel",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BATFISH_PERM.DAT.adm",
+        "properties": {
+          "NAME": "Pet Varkolyn",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_BIRDFISH_PERM.DAT.adm",
+        "properties": {
+          "NAME": "CaveFlierPet",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_CAT_RETURN.DAT.adm",
+        "properties": {
+          "NAME": "cat",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_DOG_RETURN.DAT.adm",
+        "properties": {
+          "NAME": "dog",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/fish/FISH_FIRE_ELEMENTAL_PERM.DAT.adm",
+        "properties": {
+          "NAME": "Pet ElementalFire",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "TRANSFORM PERMANENT",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      }
+    ],
+    "EMOTIONAL DAMAGE": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "EMOTIONAL DAMAGE",
+          "MIN": 59.0,
+          "MAX": 59.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "EMOTIONAL DAMAGE",
+          "MIN": 59.0,
+          "MAX": 59.0
+        }
+      }
+    ],
+    "JAUNTINESS": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "JAUNTINESS",
+          "MIN": 18.0,
+          "MAX": 18.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "JAUNTINESS",
+          "MIN": 18.0,
+          "MAX": 18.0
+        }
+      }
+    ],
+    "SOCKS": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "SOCKS",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "SOCKS",
+          "MIN": 5.0,
+          "MAX": 5.0
+        }
+      }
+    ],
+    "FUTURISTICNESS": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "FUTURISTICNESS",
+          "MIN": 42.0,
+          "MAX": 42.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "FUTURISTICNESS",
+          "MIN": 42.0,
+          "MAX": 42.0
+        }
+      }
+    ],
+    "LOGIC RESISTANCE": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "LOGIC RESISTANCE",
+          "VALUE": -1.0,
+          "MIN": 1285.0,
+          "MAX": 1285.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "LOGIC RESISTANCE",
+          "VALUE": -1.0,
+          "MIN": 1285.0,
+          "MAX": 1285.0
+        }
+      }
+    ],
+    "NOODLE ARMS": [
+      {
+        "path": "media/units/items/itemstier2/swords/EPICSWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "NOODLE ARMS",
+          "VALUE": -1.0,
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      },
+      {
+        "path": "media/units/items/swords/SWORD_UNIQUE_SWORDOFADAM.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "NOODLE ARMS",
+          "VALUE": -1.0,
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      }
+    ],
+    "OPEN PORTAL": [
+      {
+        "path": "media/units/items/maps/CAVE_MAP_10-20.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "randomcave10-20",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "OPEN PORTAL",
+          "DURATION": "INSTANT",
+          "VALUE": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/maps/CRYPTPUZZLEMAP.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PuzzleCrypt",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "OPEN PORTAL",
+          "DURATION": "INSTANT",
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/maps/CRYPT_MAP_1-10.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "randomcrypt1-10",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "OPEN PORTAL",
+          "DURATION": "INSTANT",
+          "VALUE": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/maps/FORTRESSPUZZLEMAP.DAT.adm",
+        "properties": {
+          "NAME": "PuzzleFortress",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "OPEN PORTAL",
+          "SAVE": true,
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/maps/FORTRESS_MAP_15-30.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "randomfortress15-30",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "OPEN PORTAL",
+          "DURATION": "INSTANT",
+          "VALUE": 0.0
+        }
+      },
+      {
+        "path": "media/units/items/maps/LAVAPUZZLEMAP.DAT.adm",
+        "properties": {
+          "NAME": "PuzzleLava",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "OPEN PORTAL",
+          "SAVE": true,
+          "MIN": 0.0,
+          "MAX": 0.0
+        }
+      }
+    ],
+    "MANA RECHARGE PLAYER": [
+      {
+        "path": "media/units/items/potions/FISHPOTION.DAT.adm",
+        "properties": {
+          "NAME": "FISHMANARECHARGE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "2",
+          "TYPE": "MANA RECHARGE PLAYER",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 1860.0,
+          "MAX": 1860.0
+        }
+      },
+      {
+        "path": "media/units/items/potions/FISHPOTION2.DAT.adm",
+        "properties": {
+          "NAME": "FISHMANARECHARGE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "1",
+          "TYPE": "MANA RECHARGE PLAYER",
+          "PARTICLE_FX": "MANA_POTION",
+          "MIN": 6200.0,
+          "MAX": 6200.0
+        }
+      }
+    ],
+    "PERMANENT DEFENSE": [
+      {
+        "path": "media/units/items/potions/POTION_BROMS_DEFENSE.DAT.adm",
+        "properties": {
+          "NAME": "ROUGHHIDE",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "PERMANENT DEFENSE",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 2.0,
+          "MAX": 2.0
+        }
+      }
+    ],
+    "PERMANENT HEALTH": [
+      {
+        "path": "media/units/items/potions/POTION_LICHKING.DAT.adm",
+        "properties": {
+          "NAME": "LICHHEALTH",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "PERMANENT HEALTH",
+          "PARTICLE_FX": "GENERICPOTION",
+          "MIN": 25.0,
+          "MAX": 25.0
+        }
+      }
+    ],
+    "RESPEC": [
+      {
+        "path": "media/units/items/potions/RESPECPOTION.DAT.adm",
+        "properties": {
+          "NAME": "RESPECPOTION",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "RESPEC",
+          "PARTICLE_FX": "GENERICPOTION"
+        }
+      }
+    ],
+    "IDENTIFY": [
+      {
+        "path": "media/units/items/scrolls/IDENTIFYSCROLL.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "IDENTIFY",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "IDENTIFY",
+          "DURATION": "INSTANT",
+          "VALUE": 1.0
+        }
+      }
+    ],
+    "OPEN TOWN PORTAL": [
+      {
+        "path": "media/units/items/scrolls/TOWNPORTALSCROLL.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "NAME": "PORTAL",
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "OPEN TOWN PORTAL",
+          "DURATION": "INSTANT",
+          "VALUE": 1.0
+        }
+      }
+    ],
+    "LEARN SKILL": [
+      {
+        "path": "media/units/items/spells/BEESWARMSPELL.DAT.adm",
+        "properties": {
+          "NAME": "BEE SWARM",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/units/items/spells/CHARMSPELL.DAT.adm",
+        "properties": {
+          "NAME": "Charm I",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/units/items/spells/CHARMSPELL2.DAT.adm",
+        "properties": {
+          "NAME": "Charm II",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/units/items/spells/CHARMSPELL3.DAT.adm",
+        "properties": {
+          "NAME": "Charm III",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/units/items/spells/CHARMSPELL4.DAT.adm",
+        "properties": {
+          "NAME": "Charm IV",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      },
+      {
+        "path": "media/units/items/spells/CHARMSPELL5.DAT.adm",
+        "properties": {
+          "NAME": "Charm V",
+          "ACTIVATION": "DYNAMIC",
+          "DURATION": "INSTANT",
+          "TYPE": "LEARN SKILL",
+          "MIN": 1.0,
+          "MAX": 1.0
+        }
+      }
+    ],
+    "CAST SKILL ON DEATH": [
+      {
+        "path": "media/units/monsters/GoblinPygmy/PYGMY.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "PYGMY FLEE",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON DEATH",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/GoblinWarrior/GOBLINWARRIOR.DAT.adm",
+        "properties": {
+          "NAME": "GOBLINWARRIOR FLEE",
+          "ACTIVATION": "PASSIVE",
+          "DURATION": "ALWAYS",
+          "LEVEL": 1,
+          "TYPE": "CAST SKILL ON DEATH",
+          "SAVE": true,
+          "MIN": 100.0,
+          "MAX": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/PhaseBeast/PHASEBEAST.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "PHASEBEASTPORTAL",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON DEATH",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/PhaseBeast/PHASEBEAST_CAVE.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "PHASEBEASTPORTAL_CAVE",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON DEATH",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/PhaseBeast/PHASEBEAST_CRYPT.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "PHASEBEASTPORTAL_CRYPT",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON DEATH",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      },
+      {
+        "path": "media/units/monsters/PhaseBeast/PHASEBEAST_FORTRESS.DAT.adm",
+        "properties": {
+          "SAVE": true,
+          "LEVEL": 1,
+          "NAME": "PHASEBEASTPORTAL_FORTRESS",
+          "ACTIVATION": "PASSIVE",
+          "TYPE": "CAST SKILL ON DEATH",
+          "DURATION": "ALWAYS",
+          "VALUE": 100.0
+        }
+      }
+    ],
+    "PERCENT LIFE STOLEN": [
+      {
+        "path": "media/units/monsters/SkeletonWarrior/SKILL_BLOODSKELETON.DAT.adm",
+        "properties": {
+          "ACTIVATION": "DYNAMIC",
+          "TYPE": "PERCENT LIFE STOLEN",
+          "SAVE": true,
+          "MIN": 10.0,
+          "MAX": 10.0
+        }
+      }
+    ]
+  },
+  "list_sizes": {
+    "requirements": 1973,
+    "effects": 2015,
+    "errors": 0
+  }
+}

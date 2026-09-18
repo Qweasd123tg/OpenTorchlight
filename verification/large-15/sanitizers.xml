@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="11"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="2"
+	timestamp="2026-09-17T17:01:48"
+	>
+	<testcase name="actor_motion" classname="actor_motion" time="0.0359116" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: actor motion advances by speed and stops at its destination
+</system-out>
+	</testcase>
+	<testcase name="save_checkpoint" classname="save_checkpoint" time="1.06123" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>save_checkpoint self: 593 assertions passed (authored resources; not original save compatibility)
+</system-out>
+	</testcase>
+	<testcase name="progression_numeric" classname="progression_numeric" time="0.0596339" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>reward cycle: 29 assertions passed; authored resources, NOT original gameplay parity
+</system-out>
+	</testcase>
+	<testcase name="vitals_resource_cycle" classname="vitals_resource_cycle" time="0.184094" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>PASS: 51 authored vitals checks; not original ELF execution
+</system-out>
+	</testcase>
+	<testcase name="consumable_cycle" classname="consumable_cycle" time="0.311062" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>checks=71 passed
+</system-out>
+	</testcase>
+	<testcase name="ranged_cycle" classname="ranged_cycle" time="0.423125" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ranged checks=2083 passed
+</system-out>
+	</testcase>
+	<testcase name="ui_hud_input" classname="ui_hud_input" time="0.0224257" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>ui_hud_input: 15 assertions; authored fixture; no full CEGUI event-pipeline parity claim
+</system-out>
+	</testcase>
+	<testcase name="character_stats_cycle" classname="character_stats_cycle" time="0.255837" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 34 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_save" classname="character_stats_process_save" time="0.130701" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 9 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_load" classname="character_stats_process_load" time="0.147636" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 8 checks passed
+</system-out>
+	</testcase>
+	<testcase name="item_graph_cycle" classname="item_graph_cycle" time="0.0231958" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>item_graph: 11 checks passed
+</system-out>
+	</testcase>
+</testsuite>

@@ -155,6 +155,9 @@ AttackEffects load_constant_attack_effects(const UnitDefinition& definition,
             const auto key = upper16(property.name);
             if (key == u"TYPE" || key == u"ACTIVATION" || key == u"DURATION" ||
                 key == u"MIN" || key == u"MAX" || key == u"DAMAGE_TYPE") continue;
+            // CEffect's SAVE flag only controls persistence. For an immutable
+            // PASSIVE/ALWAYS constant it does not alter the numeric value.
+            if (key == u"SAVE" && std::holds_alternative<bool>(property.value)) continue;
             // No silent acceptance of graph/rank/theme/target/unit restrictions.
             conditional = true;
         }
@@ -178,6 +181,10 @@ AttackEffects load_constant_attack_effects(const UnitDefinition& definition,
         result.add(*type, *minimum, damage_type);
     }
     return result;
+}
+bool ordinary_delivery_supported(const AttackDescription& attack) noexcept {
+    return attack.delivery == WeaponDelivery::direct_physical ||
+        (attack.delivery == WeaponDelivery::unverified && !attack.traits.ranged);
 }
 const AttackDescription* select_ordinary_attack(const AttackLoadout& loadout,
                                                 bool prefer_left, TorchlightRandom& random) {

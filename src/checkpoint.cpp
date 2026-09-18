@@ -299,6 +299,14 @@ PlayerSession CheckpointAccess::restore_player(const PlayerPrototype &proto,
     p.inventory_.equipped_ = s.inventory.slots;
     p.gold_ = s.gold;
     p.health_.base_damage_defense_ = s.base_defense;
+    // Legacy v1-v5 stored the class flat-armor roll in raw base armor. Recover
+    // that same roll rather than rerolling it or applying a percent to it.
+    const auto armor_bonus = static_cast<std::int64_t>(s.base_defense.natural_armor) -
+        proto.damage_defense.natural_armor;
+    require(armor_bonus >= std::min(proto.minimum_armor_bonus, proto.maximum_armor_bonus) &&
+            armor_bonus <= std::max(proto.minimum_armor_bonus, proto.maximum_armor_bonus),
+            "saved class armor roll disagrees with resource range");
+    p.health_.base_armor_bonus_ = static_cast<std::int32_t>(armor_bonus);
     // V1/v2 stored only the then-unmodified maximum. It is the migration base,
     // never the already-buffed maximum in a v3 save.
     require(s.base_health || (std::trunc(s.maximum_health) == s.maximum_health &&

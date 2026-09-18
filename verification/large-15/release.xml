@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="4"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="0"
+	timestamp="2026-09-17T17:02:15"
+	>
+	<testcase name="character_stats_cycle" classname="character_stats_cycle" time="0.0112561" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 34 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_save" classname="character_stats_process_save" time="0.00623492" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 9 checks passed
+</system-out>
+	</testcase>
+	<testcase name="character_stats_process_load" classname="character_stats_process_load" time="0.00742896" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>character_stats: 8 checks passed
+</system-out>
+	</testcase>
+	<testcase name="item_graph_cycle" classname="item_graph_cycle" time="0.00451126" status="run">
+		<properties>
+			<property name="cmake_labels" value="core"/>
+		</properties>
+		<system-out>item_graph: 11 checks passed
+</system-out>
+	</testcase>
+</testsuite>

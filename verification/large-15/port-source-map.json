@@ -1,0 +1,212 @@
+[
+  {
+    "file": "src/character_stats.cpp",
+    "line": 29,
+    "needle": "float evaluated_movement_speed(float base, float percent",
+    "purpose": "Скорость и сопротивление замедлению",
+    "sha256": "3bec0caff451c1c6f34c1a9d9aa7774e403888152ee31ac1ef216f381dba5289"
+  },
+  {
+    "file": "src/character_stats.cpp",
+    "line": 41,
+    "needle": "std::int32_t evaluated_defense_attribute(std::int32_t base,",
+    "purpose": "DEF, два исходных канала",
+    "sha256": "3bec0caff451c1c6f34c1a9d9aa7774e403888152ee31ac1ef216f381dba5289"
+  },
+  {
+    "file": "src/character_stats.cpp",
+    "line": 50,
+    "needle": "std::int32_t evaluated_physical_armor",
+    "purpose": "armorBonus → AC",
+    "sha256": "3bec0caff451c1c6f34c1a9d9aa7774e403888152ee31ac1ef216f381dba5289"
+  },
+  {
+    "file": "src/attack_action.cpp",
+    "line": 134,
+    "needle": "AttackEffects load_constant_attack_effects",
+    "purpose": "Приём только фиксированного SAVE-эффекта",
+    "sha256": "9f9b37470746c7e22b7b1feaa6a5bf31adbf3e0eea1906bb06966eacfebf8acc"
+  },
+  {
+    "file": "src/attack_action.cpp",
+    "line": 185,
+    "needle": "bool ordinary_delivery_supported",
+    "purpose": "Общее ограничение известной неподдержанной доставки",
+    "sha256": "9f9b37470746c7e22b7b1feaa6a5bf31adbf3e0eea1906bb06966eacfebf8acc"
+  },
+  {
+    "file": "src/actor_motion.cpp",
+    "line": 24,
+    "needle": "void ActorMotion::set_speed",
+    "purpose": "Смена скорости без потери маршрута",
+    "sha256": "cccb84c36b4dbc71995231c70f5b62fac6b80e98ab2eae0e101266ea0fc70ca7"
+  },
+  {
+    "file": "src/application.cpp",
+    "line": 1023,
+    "needle": "window.notice(\"hud_dispatch_down\"",
+    "purpose": "Команда HUD в общей ветви MouseButtonDown",
+    "sha256": "76f54e35350880bc0452d038db73d6ef06f474447594b30bcc5bb8125d7a3143"
+  },
+  {
+    "file": "src/application.cpp",
+    "line": 1201,
+    "needle": "player_motion.set_speed",
+    "purpose": "Подключение скорости к общему игровому циклу",
+    "sha256": "76f54e35350880bc0452d038db73d6ef06f474447594b30bcc5bb8125d7a3143"
+  },
+  {
+    "file": "src/application.cpp",
+    "line": 524,
+    "needle": "std::uint64_t merchant_entity = 0",
+    "purpose": "Release: явно инициализированный ID",
+    "sha256": "76f54e35350880bc0452d038db73d6ef06f474447594b30bcc5bb8125d7a3143"
+  },
+  {
+    "file": "src/application.cpp",
+    "line": 543,
+    "needle": "std::uint64_t active_pickup = 0",
+    "purpose": "Release: явно инициализированный ID",
+    "sha256": "76f54e35350880bc0452d038db73d6ef06f474447594b30bcc5bb8125d7a3143"
+  },
+  {
+    "file": "src/enemy_ai.cpp",
+    "line": 151,
+    "needle": "std::int32_t PlayerCombatState::physical_armor",
+    "purpose": "Отделение классового flat-roll от сырого base",
+    "sha256": "e40fc5451b1f1cfc9fe89c01abada23a50671c238e910e50f34b6a548a7744e5"
+  },
+  {
+    "file": "src/enemy_ai.cpp",
+    "line": 163,
+    "needle": "float PlayerCombatState::movement_speed",
+    "purpose": "Итоговые эффекты скорости персонажа",
+    "sha256": "e40fc5451b1f1cfc9fe89c01abada23a50671c238e910e50f34b6a548a7744e5"
+  },
+  {
+    "file": "src/enemy_ai.cpp",
+    "line": 168,
+    "needle": "void PlayerCombatState::refresh_damage_defense",
+    "purpose": "Безопасный пересчёт экипировки/AC",
+    "sha256": "e40fc5451b1f1cfc9fe89c01abada23a50671c238e910e50f34b6a548a7744e5"
+  },
+  {
+    "file": "src/enemy_ai.cpp",
+    "line": 187,
+    "needle": "std::int32_t PlayerCombatState::apply_damage",
+    "purpose": "Применение AC без второго DEF",
+    "sha256": "e40fc5451b1f1cfc9fe89c01abada23a50671c238e910e50f34b6a548a7744e5"
+  },
+  {
+    "file": "src/enemy_ai.cpp",
+    "line": 224,
+    "needle": "bool EnemyController::advance_toward_player",
+    "purpose": "Реальное движение врага",
+    "sha256": "e40fc5451b1f1cfc9fe89c01abada23a50671c238e910e50f34b6a548a7744e5"
+  },
+  {
+    "file": "src/checkpoint.cpp",
+    "line": 304,
+    "needle": "const auto armor_bonus =",
+    "purpose": "Восстановление класса без нового roll",
+    "sha256": "ab4727742a8c9153fabcd9d85670e19c2fc324f5d1c70328a94c40a7bdf00c74"
+  },
+  {
+    "file": "src/combat.cpp",
+    "line": 129,
+    "needle": "defense.natural_armor = evaluated_character_armor",
+    "purpose": "Учет AC и эффектов монстра на HIT",
+    "sha256": "cf6f8775e00320a8d4d0c7f0925a81a25e69124351e6034d1b5f109406766cd8"
+  },
+  {
+    "file": "src/equipment.cpp",
+    "line": 164,
+    "needle": "std::int32_t item_graph_stat",
+    "purpose": "Binary32, ceilf, минимум только для брони",
+    "sha256": "6a46a98226396542d2f0c7741424b2a7f649120191efd2bb2a7dc65f84be6d5e"
+  },
+  {
+    "file": "src/equipment.cpp",
+    "line": 277,
+    "needle": "WeaponItem roll_weapon_item",
+    "purpose": "RNG перед наследованным MAX",
+    "sha256": "6a46a98226396542d2f0c7741424b2a7f649120191efd2bb2a7dc65f84be6d5e"
+  },
+  {
+    "file": "src/ui_hud.cpp",
+    "line": 37,
+    "needle": "hud_press_callback",
+    "purpose": "Поиск callback на нажатии",
+    "sha256": "7565ef8b750e88b0c672bde1c5f315e31643bcbebb22abddb993cfeed9e8a765"
+  },
+  {
+    "file": "tests/character_stats_test.cpp",
+    "line": 46,
+    "needle": "void verify_restored",
+    "purpose": "Один roll, прежние HP/mana/RNG, снятие",
+    "sha256": "c80adbf6c54ad29b96abfe23f9af2cbb337dfd46db3de5f62865c1cf8b370b94"
+  },
+  {
+    "file": "tests/character_stats_test.cpp",
+    "line": 76,
+    "needle": "Public low-level setters",
+    "purpose": "Атомарность отказов low-level API",
+    "sha256": "c80adbf6c54ad29b96abfe23f9af2cbb337dfd46db3de5f62865c1cf8b370b94"
+  },
+  {
+    "file": "tests/combat_test.cpp",
+    "line": 109,
+    "needle": "unsupported_damage",
+    "purpose": "Отказ от подмены посоха оригинального алхимика",
+    "sha256": "639e8e3029a0ef5605a609c045dbf730d9d45c1ab39ceb88f97cf110323fa774"
+  },
+  {
+    "file": "tests/item_graph_test.cpp",
+    "line": 8,
+    "needle": "int main",
+    "purpose": "Авторские регрессии формулы предметов",
+    "sha256": "99bfb0e1df64b4ace8ff49b1b7ba38bf4f60c0c54d570be2639e0170ccae4075"
+  },
+  {
+    "file": "tests/compare_character_stats.py",
+    "line": 34,
+    "needle": "class Native",
+    "purpose": "Исполнение пяти оригинальных функций",
+    "sha256": "2832465a6773bce022e35ddc90d4b41cb5e5286dfa8dacf91ddeadf88674f248"
+  },
+  {
+    "file": "tests/compare_item_graph.py",
+    "line": 23,
+    "needle": "class Native",
+    "purpose": "Исполнение оригинальных item graph функций",
+    "sha256": "058336c16053d8e3b0eb1854e18f80613da01da744b3e9204d08cdf629624105"
+  },
+  {
+    "file": "tests/gameplay_catalog_probe.cpp",
+    "line": 13,
+    "needle": "int main",
+    "purpose": "Каталог через текущий наследующий loader",
+    "sha256": "45394c710e40083a6a3cc04443e9c31caf2df412e55f870c324c2cc487d2cb99"
+  },
+  {
+    "file": "tests/gameplay_before_after_probe.cpp",
+    "line": 9,
+    "needle": "int main",
+    "purpose": "Одинаковый probe для старой и новой библиотеки",
+    "sha256": "34c0df33c3dddf2fa1b58413a8a2783fb24218e00b8f96409d95bab5cfea8662"
+  },
+  {
+    "file": "src/player_session.cpp",
+    "line": 334,
+    "needle": "void PlayerSession::refresh_effect_contributions",
+    "purpose": "Существующая связь эффектов экипировки/умений с derived stats",
+    "sha256": "bac66f828f7d3a4be83e1e92661407a18688b42ef639724ce42d586ff4ae8927"
+  },
+  {
+    "file": "src/population.cpp",
+    "line": 114,
+    "needle": "Fisher",
+    "purpose": "Точный статус полного перемешивания prototype",
+    "sha256": "32f1c37501ed7ce79e3d2ea53df5b17ee802841529543cc73ae07595311eb3d8"
+  }
+]

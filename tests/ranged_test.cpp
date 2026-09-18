@@ -81,11 +81,29 @@ void cycle(const char* path) {
     require(p.combat().perform_attack(hit,{},f.world,f.logic).state==CombatState::missed,"shot hits target outside strike range");
     f.world.find(target)->position={4,0,0};require(p.combat().perform_attack(hit,{},f.world,f.logic).damage==0,"out-of-range HIT replayed");
     p.combat().interrupt_attack();
-    for(const auto* name:{u"MISSILE_PISTOL",u"SKILL_PISTOL",u"ELEMENTAL_PISTOL"}){
+    for(const auto* name:{u"MISSILE_PISTOL",u"SKILL_PISTOL",u"ELEMENTAL_PISTOL",
+                          u"MISSILE_SWORD",u"SKILL_SWORD",u"ELEMENTAL_SWORD"}){
         auto id=pickup(f,p,name);require(p.equip(id)==InventoryChange::changed,"unsupported weapon equip");
-        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"missile/skill/elemental became ordinary physical shot");
+        const auto state=CheckpointAccess::capture(p);
+        const auto hp=f.world.find(target)->health;
+        require(p.combat().update(0,{},f.world).state==CombatState::unavailable,"missile/skill/elemental became ordinary physical attack");
+        const auto after=CheckpointAccess::capture(p);
+        require(!p.combat().attack_in_progress()&&hp==f.world.find(target)->health&&
+                state.combat_random==after.combat_random,"refused weapon started action, damaged or advanced RNG");
     }
+    const auto sword=pickup(f,p,u"DIRECT_SWORD");
+    require(p.equip(sword)==InventoryChange::changed,"direct physical sword equip");
+    require(p.combat().update(0,{},f.world).state==CombatState::attacking,"physical sword was overblocked");
+    p.combat().interrupt_attack();
     require(p.equip(weapon)==InventoryChange::changed,"reequip pistol");
+    for(const auto* name:{u"ENEMY_MISSILE_SWORD",u"ENEMY_SKILL_SWORD",u"ENEMY_ELEMENTAL_SWORD"}) {
+        test_fixture::World ef(path); ef.spawn(name);
+        EnemyController ai(42); PlayerPrototype dummy; dummy.minimum_health=dummy.maximum_health=1000;
+        PlayerCombatState victim(dummy,42); ai.set_animation_resolver([&](auto m,auto prefix){return clips.resolve(m,prefix);});
+        const auto updates=ai.update(0,{1,0,0},victim,ef.world);
+        require(updates.size()==1&&updates[0].state==EnemyAiState::unavailable,"enemy melee bypassed delivery guard");
+        require(victim.health()==1000&&ai.action(ef.world.entities()[0].id)&&!ai.action(ef.world.entities()[0].id)->active(),"refused enemy attack changed health/action");
+    }
     // v4 metadata is serialized; legacy hydration changes neither rolled damage,
     // HP, weapon instance ID nor RNG. No second random weapon is generated.
     CampaignCheckpoint c;c.slot="ranged";c.class_guid=proto.guid;c.resource_identity=1;c.character_name="Ranged";

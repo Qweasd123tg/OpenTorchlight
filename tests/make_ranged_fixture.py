@@ -5,4 +5,4 @@ import argparse
 from make_attack_fixture import write_fixture
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('output',type=Path)
-write_fixture(p.parse_args().output, with_ranged=True)
+write_fixture(p.parse_args().output, with_ranged=True, with_delivery_cases=True)

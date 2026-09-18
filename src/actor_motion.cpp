@@ -21,6 +21,10 @@ void ActorMotion::set_destination(const std::array<float, 3>& destination) noexc
     moving_ = destination_ != position_;
 }
 
+void ActorMotion::set_speed(float speed) noexcept {
+    if (std::isfinite(speed) && speed >= 0.0F) speed_ = speed;
+}
+
 void ActorMotion::stop() noexcept {
     destination_ = position_;
     moving_ = false;

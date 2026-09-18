@@ -1,4 +1,5 @@
 #include "torchlight/combat.hpp"
+#include "torchlight/character_stats.hpp"
 #include "torchlight/scene_animation.hpp"
 
 #include <cmath>
@@ -83,11 +84,11 @@ CombatUpdate CombatController::update(float seconds, const std::array<float, 3>&
     if (!within_character_attack_reach(position, selected->position, character_.collision_radius,
                                  selected->attack_character.collision_radius, attack_range_, has_ranged_weapon(loadout_)))
         return {CombatState::approaching, selected->id, 0, selected->health};
-    if (!description->unavailable_reason.empty() || description->animation_prefix.empty() ||
-        (description->traits.ranged && (description->delivery != WeaponDelivery::direct_physical || !line_of_sight_))) {
-        last_attack_issue_ = description->traits.ranged ?
-            (description->delivery != WeaponDelivery::direct_physical ? weapon_delivery_issue(description->delivery) : "ranged collision context is missing") :
-            !description->unavailable_reason.empty() ? description->unavailable_reason : "weapon has no description in this hand";
+    if (!ordinary_delivery_supported(*description) || !description->unavailable_reason.empty() ||
+        description->animation_prefix.empty() || (description->traits.ranged && !line_of_sight_)) {
+        last_attack_issue_ = !ordinary_delivery_supported(*description) ? weapon_delivery_issue(description->delivery) :
+            !description->unavailable_reason.empty() ? description->unavailable_reason :
+            description->animation_prefix.empty() ? "weapon has no description in this hand" : "ranged collision context is missing";
         return {CombatState::unavailable, selected->id};
     }
     AttackClips clips;
@@ -124,8 +125,12 @@ CombatUpdate CombatController::perform_attack(const AnimationEventOccurrence& ev
         return {CombatState::missed, selected->id, 0, selected->health, event.execution_id};
     const auto damage = ordinary_physical_damage(action_.description(), loadout_, character_);
     const auto rolled = random_.integer_between(damage[0], damage[1]);
+    auto defense = selected->damage_defense;
+    defense.natural_armor = evaluated_character_armor(defense.natural_armor,
+        defense.defense_attribute, total_attack_effects(selected->attacks, selected->attack_character));
+    defense.defense_attribute = 0; // effects/DEF already included in physical AC
     const auto mitigation = mitigate_damage(rolled, rolled, DamageType::physical, 1,
-                                            selected->damage_defense, random_);
+                                            defense, random_);
     const auto id = selected->id;
     const auto result = world.apply_damage(id, static_cast<float>(mitigation.applied), logic, true);
     if (!result.accepted) return {CombatState::missed, id, 0, result.remaining_health, event.execution_id};

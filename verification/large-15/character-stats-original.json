@@ -1,0 +1,45 @@
+{
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "functions": [
+    {
+      "symbol": "CCharacter::walkingSpeed()",
+      "address": "0x815a20",
+      "size": 166,
+      "sha256": "fb9878d3a82a9f5a207624d95eeeb831978e7515e4c4aacd491b4cac79579f5f"
+    },
+    {
+      "symbol": "CCharacter::runningSpeed()",
+      "address": "0x815ad0",
+      "size": 166,
+      "sha256": "94ceb1acf5e12acd3d4d4f4b17d70c6ac311dc1d32f786e9608346286ace1859"
+    },
+    {
+      "symbol": "CCharacter::defense()",
+      "address": "0x814530",
+      "size": 133,
+      "sha256": "c5cbd79cfca267936ee0215e160146b364eb811cc55c577ecbf6ed4a0d8bcb65"
+    },
+    {
+      "symbol": "CCharacter::armorBonus()",
+      "address": "0x8145c0",
+      "size": 174,
+      "sha256": "340be4b2ebbdd6968a2fd72ff637f4a4588d656574fd2ba79a6bd2a1087077f5"
+    },
+    {
+      "symbol": "CCharacter::AC()",
+      "address": "0x814670",
+      "size": 97,
+      "sha256": "7e6f5b4f859194cec8b6e704e29ff8675ba0dd1282f1509f0de8955c61865eba"
+    }
+  ],
+  "comparisons": 21696,
+  "groups": {
+    "walking": 4420,
+    "running": 4420,
+    "defense": 6280,
+    "physical_AC": 6576
+  },
+  "passed": true,
+  "scope": "Unchanged bounded original functions, controlled evaluated effects/objects, host ceilf. No effect lifecycle, elemental defense, UI, AI or constructed original character.",
+  "domain": "Finite binary32 inputs; integer intermediates fit int32. NaN/infinity and integer overflow excluded."
+}

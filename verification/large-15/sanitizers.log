@@ -1,0 +1,86 @@
+-- Checking for module 'vorbisfile'
+--   Package 'vorbisfile', required by 'virtual:world', not found
+-- Checking for module 'alsa'
+--   Package 'alsa', required by 'virtual:world', not found
+-- Music: vorbisfile/ALSA not found; silent track tracking only
+-- UI fonts: FreeType not found; prototype glyph fallback only
+-- Checking for module 'egl'
+--   Package 'egl', required by 'virtual:world', not found
+-- Checking for module 'glesv2'
+--   Package 'glesv2', required by 'virtual:world', not found
+-- Checking for module 'wayland-client'
+--   Package 'wayland-client', required by 'virtual:world', not found
+-- Checking for module 'wayland-egl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+-- Desktop shell disabled: Wayland, EGL, GLES2, or xdg-shell files are missing
+-- Original comparison not configured: set TORCHLIGHT_ORIGINAL to run it
+-- Configuring done (6.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /mnt/data/work15/build-san
+[1/36] Building CXX object CMakeFiles/torchlight_core.dir/src/combat.cpp.o
+[2/36] Building CXX object CMakeFiles/torchlight_core.dir/src/attack_action.cpp.o
+[3/36] Building CXX object CMakeFiles/torchlight_core.dir/src/merchant.cpp.o
+[4/36] Building CXX object CMakeFiles/torchlight_core.dir/src/skills.cpp.o
+[5/36] Building CXX object CMakeFiles/torchlight_core.dir/src/checkpoint.cpp.o
+[6/36] Building CXX object CMakeFiles/torchlight_core.dir/src/save_store.cpp.o
+[7/36] Building CXX object CMakeFiles/torchlight_core.dir/src/save_codec.cpp.o
+[8/36] Building CXX object CMakeFiles/torchlight_core.dir/src/interaction.cpp.o
+[9/36] Building CXX object CMakeFiles/torchlight_core.dir/src/equipment.cpp.o
+[10/36] Building CXX object CMakeFiles/torchlight_core.dir/src/frontend.cpp.o
+[11/36] Building CXX object CMakeFiles/torchlight_core.dir/src/entity_world.cpp.o
+[12/36] Building CXX object CMakeFiles/torchlight_core.dir/src/enemy_ai.cpp.o
+[13/36] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory.cpp.o
+[14/36] Building CXX object CMakeFiles/torchlight_core.dir/src/inventory_view.cpp.o
+[15/36] Building CXX object CMakeFiles/torchlight_core.dir/src/population.cpp.o
+[16/36] Building CXX object CMakeFiles/torchlight_core.dir/src/player_session.cpp.o
+[17/36] Building CXX object CMakeFiles/torchlight_core.dir/src/player.cpp.o
+[18/36] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_animation.cpp.o
+[19/36] Building CXX object CMakeFiles/torchlight_core.dir/src/scene_geometry.cpp.o
+[20/36] Linking CXX static library libtorchlight_core.a
+[21/36] Building CXX object CMakeFiles/save_checkpoint_test.dir/tests/save_checkpoint_test.cpp.o
+[22/36] Building CXX object CMakeFiles/reward_cycle_test.dir/tests/reward_cycle_test.cpp.o
+[23/36] Building CXX object CMakeFiles/consumable_test.dir/tests/consumable_test.cpp.o
+[24/36] Building CXX object CMakeFiles/vitals_test.dir/tests/vitals_test.cpp.o
+[25/36] Building CXX object CMakeFiles/ranged_test.dir/tests/ranged_test.cpp.o
+[26/36] Building CXX object CMakeFiles/item_graph_test.dir/tests/item_graph_test.cpp.o
+[27/36] Linking CXX executable actor_motion_test
+[28/36] Linking CXX executable save_checkpoint_test
+[29/36] Building CXX object CMakeFiles/character_stats_test.dir/tests/character_stats_test.cpp.o
+[30/36] Linking CXX executable reward_cycle_test
+[31/36] Linking CXX executable vitals_test
+[32/36] Linking CXX executable consumable_test
+[33/36] Linking CXX executable ui_hud_input_test
+[34/36] Linking CXX executable ranged_test
+[35/36] Linking CXX executable character_stats_test
+[36/36] Linking CXX executable item_graph_test
+Internal ctest changing into directory: /mnt/data/work15/build-san
+Test project /mnt/data/work15/build-san
+      Start  2: actor_motion
+ 1/11 Test  #2: actor_motion .....................   Passed    0.04 sec
+      Start 22: save_checkpoint
+ 2/11 Test #22: save_checkpoint ..................   Passed    1.06 sec
+      Start 33: progression_numeric
+ 3/11 Test #33: progression_numeric ..............   Passed    0.06 sec
+      Start 46: vitals_resource_cycle
+ 4/11 Test #46: vitals_resource_cycle ............   Passed    0.18 sec
+      Start 50: consumable_cycle
+ 5/11 Test #50: consumable_cycle .................   Passed    0.31 sec
+      Start 53: ranged_cycle
+ 6/11 Test #53: ranged_cycle .....................   Passed    0.42 sec
+      Start 60: ui_hud_input
+ 7/11 Test #60: ui_hud_input .....................   Passed    0.02 sec
+      Start 61: character_stats_cycle
+ 8/11 Test #61: character_stats_cycle ............   Passed    0.26 sec
+      Start 62: character_stats_process_save
+ 9/11 Test #62: character_stats_process_save .....   Passed    0.13 sec
+      Start 63: character_stats_process_load
+10/11 Test #63: character_stats_process_load .....   Passed    0.15 sec
+      Start 64: item_graph_cycle
+11/11 Test #64: item_graph_cycle .................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 11
+
+Label Time Summary:
+core    =   2.65 sec*proc (11 tests)
+
+Total Test time (real) =   2.66 sec

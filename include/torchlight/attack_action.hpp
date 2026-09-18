@@ -86,6 +86,10 @@ struct AttackDescription {
     std::string unavailable_reason;
     WeaponDelivery delivery = WeaponDelivery::unverified;
 };
+// Safety boundary for this port, not an original canAttack predicate. Unknown
+// innate/legacy melee remains the pre-existing boundary; known unsupported
+// weapon delivery must never be replaced by an ordinary physical HIT.
+[[nodiscard]] bool ordinary_delivery_supported(const AttackDescription&) noexcept;
 struct AttackLoadout {
     std::vector<AttackDescription> innate;
     std::optional<AttackDescription> right;

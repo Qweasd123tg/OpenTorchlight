@@ -1,5 +1,4 @@
 #include "torchlight/ui_hud.hpp"
-#include "torchlight/ui_screen_scale.hpp"
 #include <algorithm>
 #include <cctype>
 
@@ -49,14 +48,8 @@ UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values,
     const auto *layout = resources_->layout("media/UI/bottomhud.layout");
     if (layout == nullptr)
         return result;
-    // original-code: CGameUI::create calls convertToScreenScale(bottomhud,
-    // false) (game_ui.c:9464), i.e. YRATIO for both axes. Unknown layouts keep
-    // ratio 1: no invented scaling.
-    const auto policy = ui_screen_scale_for_layout("media/UI/bottomhud.layout");
-    const float screen_scale =
-        policy ? ui_screen_ratio(width, height, *policy) : 1.0F;
     const bool target_present = values.target_health_fraction.has_value();
-    for (const auto &widget : layout->resolve(width, height, screen_scale)) {
+    for (const auto &widget : layout->resolve(width, height)) {
         if (!widget.visible)
             continue;
         const auto name = leaf_upper(widget.name);

@@ -464,7 +464,6 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                 if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
                 static_cast<void>(window.take_ui_click());
-                static_cast<void>(window.take_ui_press());
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
                     // original-code: CContinueGameMenu deleteCharacter @0xc3fd00
@@ -520,7 +519,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             if (skills_catalog) session.attach_skill_catalog(skills_catalog);
             bool skill_panel = false, quest_panel = false;
             std::size_t selected_skill = 0, selected_quest = 0, selected_offer = 0;
-            std::optional<std::uint64_t> merchant_entity;
+            // Runtime entity IDs start at 1; 0 is the established invalid ID.
+            // Explicitly initialized ID avoids GCC optional payload false positives.
+            std::uint64_t merchant_entity = 0;
             inventory_view.open = false;
             auto player_visual = visual_prototype(session.inventory());
             auto player_animations = load_player_animations(
@@ -539,7 +540,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             torchlight::ActorMotion player_motion(
                 level.player_start, selected_player.running_speed);
             std::optional<torchlight::InteractionRequest> active_interaction;
-            std::optional<std::uint64_t> active_pickup;
+            std::uint64_t active_pickup = 0;
             std::vector<std::array<float, 3>> active_path;
             std::size_t next_path_node = 0;
 
@@ -975,7 +976,6 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
                     if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
                     static_cast<void>(window.take_ui_click());
-                    static_cast<void>(window.take_ui_press());
                     if (const auto request = frontend.take_request()) {
                         if (request->command == torchlight::FrontendCommand::apply_settings) {
                             try { apply_settings(*request); }
@@ -1008,44 +1008,24 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     throw DesktopError("application host clock must be finite and monotonic");
                 previous_frame = current_frame;
                 auto world_click = window.take_left_click();
+                // Release state remains useful for host button visuals, but this HUD
+                // subscribes to MouseButtonDown in the original, not EventClicked.
                 static_cast<void>(window.take_ui_click());
-                const auto ui_press = window.take_ui_press();
                 auto key_presses = window.take_key_presses();
-                // Shared panel actions for real keys and HUD commands alike:
-                // the HUD callback names a command, never a synthetic key.
-                const auto toggle_inventory_panel = [&] {
-                    inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
-                    skill_panel = false; quest_panel = false; merchant_entity.reset();
-                };
-                const auto toggle_skills_panel = [&] {
-                    inventory_view.open = !skill_panel || !inventory_view.open;
-                    skill_panel = true; quest_panel = false; merchant_entity.reset();
-                };
-                const auto toggle_quests_panel = [&] {
-                    inventory_view.open = !quest_panel || !inventory_view.open;
-                    quest_panel = true; skill_panel = false; merchant_entity.reset();
-                };
-                const auto toggle_options_panel = [&] {
-                    if (inventory_view.open) { inventory_view.open = false; merchant_entity.reset(); }
-                    else frontend.pause();
-                };
-                if (!inventory_view.open) {
+                if (!inventory_view.open && world_click) {
                     const auto input_hud = ui_hud.frame(window.width(), window.height(), {});
-                    if (world_click && torchlight::hud_button_at(input_hud,
-                            static_cast<float>((*world_click)[0]), static_cast<float>((*world_click)[1])))
-                        world_click.reset(); // Even transparent/disabled HUD targets block the world.
-                    // original-code: the HUD onClick fires on MouseButtonDown
-                    // (CGameUI::mapEventHandlers @0xa97e00, handle_onClick
-                    // @0xa83690), so the press dispatches immediately. The
-                    // release channel above is drained, never re-dispatched.
-                    if (ui_press && player_combat.alive()) {
-                        if (const auto callback = torchlight::hud_press_callback(input_hud, (*ui_press)[0], (*ui_press)[1])) {
-                            // resource-derived callback names. Presentation remains PORT
-                            // for inventory/skills/quests; journal != quests, stats != inventory.
-                            if (*callback == "guiToggleInventory") toggle_inventory_panel();
-                            else if (*callback == "guiToggleSkills") toggle_skills_panel();
-                            else if (*callback == "guiToggleQuests") toggle_quests_panel();
-                            else if (*callback == "guiToggleOptions") toggle_options_panel();
+                    const float x = static_cast<float>((*world_click)[0]);
+                    const float y = static_cast<float>((*world_click)[1]);
+                    if (torchlight::hud_button_at(input_hud, x, y)) {
+                        const auto callback = torchlight::hud_press_callback(input_hud, x, y);
+                        world_click.reset(); // Transparent/disabled targets also consume the press.
+                        if (callback && player_combat.alive()) {
+                            window.notice("hud_dispatch_down", *callback);
+                            // Existing PORT presentations, not original panel implementations.
+                            if (*callback == "guiToggleInventory") key_presses.push_back(torchlight::physical_key::I);
+                            else if (*callback == "guiToggleSkills") key_presses.push_back(torchlight::physical_key::K);
+                            else if (*callback == "guiToggleQuests") key_presses.push_back(torchlight::physical_key::J);
+                            else if (*callback == "guiToggleOptions") key_presses.push_back(torchlight::physical_key::ESC);
                             else window.notice("hud_callback_unimplemented", *callback);
                         }
                     }
@@ -1057,7 +1037,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         const auto recovery = session.recover_at_entry(enemies, player_motion, level.recovery_anchor);
                         if (recovery.status != torchlight::RecoveryStatus::recovered) continue;
                         inventory_view.open = false;
-                        active_interaction.reset(); interactions.cancel(); active_pickup.reset(); active_path.clear(); next_path_node = 0;
+                        active_interaction.reset(); interactions.cancel(); active_pickup = 0; active_path.clear(); next_path_node = 0;
                         player_attack_animation_active = false;
                         player_animation_state = player_transition_from_state = PlayerAnimationState::idle;
                         player_animation_time = player_transition_time = 0;
@@ -1080,11 +1060,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         continue;
                     }
                     if (key == torchlight::physical_key::I) {
-                        toggle_inventory_panel();
+                        inventory_view.open = skill_panel || quest_panel || merchant_entity || !inventory_view.open;
+                        skill_panel = false; quest_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::K) {
-                        toggle_skills_panel();
+                        inventory_view.open = !skill_panel || !inventory_view.open;
+                        skill_panel = true; quest_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::J) {
-                        toggle_quests_panel();
+                        inventory_view.open = !quest_panel || !inventory_view.open;
+                        quest_panel = true; skill_panel = false; merchant_entity = 0;
                     } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
                         const auto& skills = session.skills().skills;
                         if (selected_skill < skills.size()) {
@@ -1093,20 +1076,21 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             if (result == torchlight::SkillUse::started) {
                                 inventory_view.open = false;
                                 player_motion.stop(); active_path.clear(); next_path_node = 0;
-                                active_interaction.reset(); interactions.cancel(); active_pickup.reset();
+                                active_interaction.reset(); interactions.cancel(); active_pickup = 0;
                                 std::cout << "skill_started=" << narrow_ascii(skills[selected_skill].name)
                                           << " mana=" << session.health().mana().value_or(0) << '\n';
                             }
                         }
                     }
                     else if (key == torchlight::physical_key::ESC) {
-                        toggle_options_panel();
+                        if (inventory_view.open) { inventory_view.open = false; merchant_entity = 0; }
+                        else frontend.pause();
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open && merchant_entity) {
-                        const auto* npc = entity_world.find(*merchant_entity);
+                        const auto* npc = entity_world.find(merchant_entity);
                         if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
-                            merchant_entity.reset(); inventory_view.open = false;
+                            merchant_entity = 0; inventory_view.open = false;
                             inventory_view.status = "MERCHANT NO LONGER AVAILABLE";
                         } else {
                             const auto offers = merchant_catalog.offers(npc->resource_guid, session.progression().level);
@@ -1173,7 +1157,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         const auto* selected = combat.target(entity_world);
                         destination = selected->position;
                         active_interaction.reset(); interactions.cancel();
-                        active_pickup.reset();
+                        active_pickup = 0;
                         ++selected_target_count;
                         std::cout << "selected_target=" << selected->id
                                   << " health=" << selected->health << '/'
@@ -1188,7 +1172,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                   << " name=" << narrow_ascii(item->name) << '\n';
                     } else if (const auto interaction = interactions.select(destination, 3.0F)) {
                         combat.clear_target();
-                        active_pickup.reset();
+                        active_pickup = 0;
                         active_interaction = *interaction;
                         destination = interaction->position;
                         inventory_view.status = "SELECTED: " + narrow_ascii(interaction->label);
@@ -1196,7 +1180,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     } else {
                         combat.clear_target();
                         active_interaction.reset(); interactions.cancel();
-                        active_pickup.reset();
+                        active_pickup = 0;
                     }
                     active_path = level.navigation.find_path(
                         player_motion.position(), destination);
@@ -1214,6 +1198,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     }
                 }
                 const auto previous_player_position = player_motion.position();
+                player_motion.set_speed(player_combat.movement_speed(selected_player.running_speed));
                 player_motion.advance(simulation_elapsed);
                 while (player_combat.alive() && !inventory_view.open && !player_motion.moving() && next_path_node < active_path.size()) {
                     ++next_path_node;
@@ -1263,10 +1248,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     }
                 }
                 if (player_combat.alive() && !inventory_view.open && active_pickup) {
-                    const auto* item = entity_world.find(*active_pickup);
+                    const auto* item = entity_world.find(active_pickup);
                     if (item == nullptr || !item->alive ||
                         item->kind != torchlight::MasterResourceKind::item) {
-                        active_pickup.reset();
+                        active_pickup = 0;
                     } else {
                         const auto dx = item->position[0] - player_motion.position()[0];
                         const auto dz = item->position[2] - player_motion.position()[2];
@@ -1290,7 +1275,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                           << " gold_amount=" << (gold ? *gold : 0) << " wallet=" << session.gold()
                                           << " bag_count=" << session.inventory().items().size() << '\n';
                             } else inventory_view.status = "CANNOT PICK UP: NOT SUPPORTED EQUIPMENT OR PLAYER DEAD.";
-                            active_pickup.reset();
+                            active_pickup = 0;
                             drain_logic();
                         }
                     }
@@ -1639,7 +1624,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             if (hit.state == torchlight::EnemyAiState::player_killed) {
                                 ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
-                                active_interaction.reset(); interactions.cancel(); active_pickup.reset(); inventory_view.open = false;
+                                active_interaction.reset(); interactions.cancel(); active_pickup = 0; inventory_view.open = false;
                                 session.cancel_skill();
                                 std::cout << "player_killed=1\n";
                                 break;
@@ -1733,7 +1718,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 }
                 if (inventory_view.open && merchant_entity) {
                     overlay.resize(2);
-                    const auto* npc = entity_world.find(*merchant_entity);
+                    const auto* npc = entity_world.find(merchant_entity);
                     const auto* merchant = npc ? merchant_catalog.find(npc->resource_guid) : nullptr;
                     overlay.push_back({merchant ? narrow_ascii(merchant->name) : "MERCHANT UNAVAILABLE", true});
                     overlay.push_back({"PORT SHOP | UP/DOWN SELECT | ENTER BUY ONE | ESC CLOSE", false});

@@ -1,5 +1,4 @@
 #include "torchlight/ui_layout.hpp"
-#include "torchlight/ui_screen_scale.hpp"
 #include <algorithm>
 #include <charconv>
 #include <cmath>
@@ -315,14 +314,8 @@ std::optional<UiImageGeometry> clip_ui_image(UiRect destination, UiRect source,
     return UiImageGeometry{{left, top, right - left, bottom - top}, cropped};
 }
 std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height) const {
-    return resolve(width, height, 1.0F);
-}
-std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
-                                                float screen_scale_ratio) const {
     if (width <= 0 || height <= 0)
         throw std::invalid_argument("invalid UI viewport");
-    if (!std::isfinite(screen_scale_ratio) || screen_scale_ratio <= 0.0F)
-        throw std::invalid_argument("invalid screen scale ratio");
     // original-code: CEGUI resolves UnifiedAreaRect directly against the real
     // window (per-axis scale, no letterboxing). The old portable small-window
     // zoom shifted buttons ~32px and shrank them at 1280x720 while fonts ran
@@ -352,34 +345,24 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height,
                     upper(node.property("Enabled")) != "FALSE" &&
                     (node.parent < 0 || result[static_cast<std::size_t>(node.parent)].enabled);
         if (const auto area = node.property("UnifiedAreaRect"); !area.empty()) {
-            const auto parsed = numbers(area);
-            if (parsed.size() != 8)
+            const auto a = numbers(area);
+            if (a.size() != 8)
                 xml_error("area must contain eight values");
-            // original-code: CGameUI::convertToScreenScale @0xa83ed0 scales
-            // the four UDim offsets by one ratio, scales preserved. Applied
-            // here to freshly parsed pristine values, never written back.
-            std::array<float, 8> a{parsed[0], parsed[1], parsed[2], parsed[3],
-                                   parsed[4], parsed[5], parsed[6], parsed[7]};
-            ui_scale_area_offsets(a, screen_scale_ratio);
             v.rect = {parent.x + parent.width * a[0] + a[1], parent.y + parent.height * a[2] + a[3],
                       parent.width * (a[4] - a[0]) + a[5] - a[1],
                       parent.height * (a[6] - a[2]) + a[7] - a[3]};
         } else {
             if (const auto p = node.property("UnifiedPosition"); !p.empty()) {
-                const auto parsed = numbers(p);
-                if (parsed.size() != 4)
+                const auto a = numbers(p);
+                if (a.size() != 4)
                     xml_error("position must contain four values");
-                std::array<float, 4> a{parsed[0], parsed[1], parsed[2], parsed[3]};
-                ui_scale_vector_offsets(a, screen_scale_ratio);
                 v.rect.x = parent.x + parent.width * a[0] + a[1];
                 v.rect.y = parent.y + parent.height * a[2] + a[3];
             }
             if (const auto s = node.property("UnifiedSize"); !s.empty()) {
-                const auto parsed = numbers(s);
-                if (parsed.size() != 4)
+                const auto a = numbers(s);
+                if (a.size() != 4)
                     xml_error("size must contain four values");
-                std::array<float, 4> a{parsed[0], parsed[1], parsed[2], parsed[3]};
-                ui_scale_vector_offsets(a, screen_scale_ratio);
                 v.rect.width = parent.width * a[0] + a[1];
                 v.rect.height = parent.height * a[2] + a[3];
             }

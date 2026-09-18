@@ -40,7 +40,7 @@ public:
     // Compatibility name retained for older callers; now also updates HP.
     void set_equipment_mana_effects(const AttackEffects& effects) { set_equipment_vital_effects(effects); }
     void set_progression_vitals(std::int32_t maximum_health, std::optional<std::int32_t> base_mana);
-    void set_defense_attribute(std::int32_t value) noexcept;
+    void set_defense_attribute(std::int32_t value);
     // Restores vitals only: no stat reroll, equipment reset, or level rebuild.
     void restore_after_death() noexcept;
     [[nodiscard]] float collision_radius() const noexcept { return collision_radius_; }
@@ -48,10 +48,11 @@ public:
         std::int32_t damage, std::int32_t maximum_damage, DamageType type,
         TorchlightRandom& random) noexcept;
     [[nodiscard]] std::int32_t armor_class() const noexcept {
-        return damage_defense_.effective(DamageType::physical);
+        return physical_armor_class_;
     }
-    void equip(const ArmorItem& item) noexcept;
-    void unequip(ArmorSlot slot) noexcept;
+    [[nodiscard]] float movement_speed(float base) const;
+    void equip(const ArmorItem& item);
+    void unequip(ArmorSlot slot);
     [[nodiscard]] const std::optional<ArmorItem>& equipped(
         ArmorSlot slot) const noexcept {
         return equipped_armor_[static_cast<std::size_t>(slot)];
@@ -59,7 +60,12 @@ public:
 
 private:
     friend struct CheckpointAccess;
-    void refresh_damage_defense() noexcept;
+    void refresh_damage_defense();
+    [[nodiscard]] std::int32_t physical_armor(const DamageDefense&, const AttackEffects&) const;
+    // Checkpoints retain the historical raw base (including this roll). These
+    // derived values are rebuilt, never serialized or applied a second time.
+    std::int32_t base_armor_bonus_ = 0;
+    std::int32_t physical_armor_class_ = 0;
 
     std::optional<std::int32_t> base_mana_;
     std::optional<float> mana_;
@@ -155,7 +161,7 @@ private:
     static bool advance_toward_player(float seconds,
                                       const std::array<float, 3>& player_position,
                                       float stopping_distance,
-                                      RuntimeEntity& entity, State& state) noexcept;
+                                      RuntimeEntity& entity, State& state);
 
     AttackClipResolver resolver_;
     AttackLineOfSight line_of_sight_;

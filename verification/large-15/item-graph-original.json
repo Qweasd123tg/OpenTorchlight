@@ -1,0 +1,129 @@
+{
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "functions": [
+    {
+      "symbol": "CEquipment::setGraphDamage(unsigned int)",
+      "address": "0x87dfa0",
+      "size": 276,
+      "sha256": "8b8317404253471cc305459769c2423d05f1414d6a0ad18a75991f61df1f030c"
+    },
+    {
+      "symbol": "CEquipment::setGraphAC(unsigned int)",
+      "address": "0x87e0c0",
+      "size": 268,
+      "sha256": "fca84ddfefd5feb10a8d64f387dc1883e7f88857b9ff33774ebc7c3ead47266f"
+    }
+  ],
+  "comparisons": 24972,
+  "damage_cases": 12486,
+  "armor_cases": 12486,
+  "passed": true,
+  "previous_formula_disagreements": 106,
+  "examples": [
+    {
+      "input": "0 0 0 0",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 1",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 4",
+      "original": 0,
+      "previous_formula": 1
+    },
+    {
+      "input": "0 0 0 5",
+      "original": 0,
+      "previous_formula": 1
+    }
+  ],
+  "rounding_examples": [
+    {
+      "input": "0 1112014848 30 0",
+      "original": 16,
+      "previous_formula": 15
+    },
+    {
+      "input": "1 1112014848 30 0",
+      "original": 16,
+      "previous_formula": 15
+    },
+    {
+      "input": "0 1112014848 110 1",
+      "original": 61,
+      "previous_formula": 60
+    },
+    {
+      "input": "1 1112014848 110 1",
+      "original": 61,
+      "previous_formula": 60
+    },
+    {
+      "input": "0 1120403456 30 0",
+      "original": 31,
+      "previous_formula": 30
+    },
+    {
+      "input": "1 1120403456 30 0",
+      "original": 31,
+      "previous_formula": 30
+    },
+    {
+      "input": "0 1120403456 57 5",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "1 1120403456 57 5",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "0 1120403456 57 6",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "1 1120403456 57 6",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "0 1120403456 57 10",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "1 1120403456 57 10",
+      "original": 108,
+      "previous_formula": 107
+    },
+    {
+      "input": "0 1120403456 110 1",
+      "original": 121,
+      "previous_formula": 120
+    },
+    {
+      "input": "1 1120403456 110 1",
+      "original": 121,
+      "previous_formula": 120
+    },
+    {
+      "input": "0 1158220914 1240 2",
+      "original": 27630,
+      "previous_formula": 27629
+    },
+    {
+      "input": "1 1158220914 1240 2",
+      "original": 27630,
+      "previous_formula": 27629
+    }
+  ],
+  "rounding_disagreements": 44,
+  "scope": "Unchanged numeric functions and stores; evaluated graph value/string manager stubbed. No constructors, RNG, full item generation, retirement or requirement lifecycle.",
+  "domain": "Finite binary32 graph values, nonnegative heirloom count, final result fits int32. uint32 percentage input."
+}

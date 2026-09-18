@@ -1,4 +1,5 @@
 #include "torchlight/enemy_ai.hpp"
+#include "torchlight/character_stats.hpp"
 #include "torchlight/scene_animation.hpp"
 #include <stdexcept>
 
@@ -43,9 +44,14 @@ PlayerCombatState::PlayerCombatState(const PlayerPrototype& prototype,
     maximum_health_ = static_cast<float>(base_health_);
     health_ = maximum_health_;
     base_damage_defense_ = prototype.damage_defense;
-    base_damage_defense_.natural_armor += random.integer_between(
+    base_armor_bonus_ = random.integer_between(
         std::min(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus),
         std::max(prototype.minimum_armor_bonus, prototype.maximum_armor_bonus));
+    const auto raw_armor = static_cast<std::int64_t>(base_damage_defense_.natural_armor) + base_armor_bonus_;
+    if (raw_armor < 0 || raw_armor > std::numeric_limits<std::int32_t>::max())
+        throw std::invalid_argument("player base armor roll outside int32");
+    base_damage_defense_.natural_armor = static_cast<std::int32_t>(raw_armor);
+    base_vital_effects_ = prototype.attack_character.effects;
     refresh_damage_defense();
     base_mana_ = prototype.base_mana;
     recovery_rules_ = prototype.recovery_rules;
@@ -86,6 +92,7 @@ void PlayerCombatState::set_equipment_vital_effects(const AttackEffects& equipme
     const auto mana_rate = evaluated_mana_rate(effects);
     if (!std::isfinite(health_rate) || !std::isfinite(mana_rate))
         throw std::invalid_argument("nonfinite combined passive recovery rate");
+    const auto armor = physical_armor(damage_defense_, next_equipment);
     // All allocations/validation finish before committing any derived field.
     using std::swap;
     swap(equipment_vital_effects_, next_equipment);
@@ -95,6 +102,7 @@ void PlayerCombatState::set_equipment_vital_effects(const AttackEffects& equipme
     if (mana_) mana_ = mana_max ? std::optional<float>(std::min(*mana_, *mana_max)) : std::nullopt;
     health_per_second_ = health_rate;
     mana_per_second_ = mana_rate;
+    physical_armor_class_ = armor;
 }
 void PlayerCombatState::set_progression_vitals(std::int32_t maximum_health,
                                               std::optional<std::int32_t> base_mana) {
@@ -108,42 +116,72 @@ void PlayerCombatState::set_progression_vitals(std::int32_t maximum_health,
     using std::swap;
     swap(*this, staged);
 }
-void PlayerCombatState::set_defense_attribute(std::int32_t value) noexcept {
-    base_damage_defense_.defense_attribute = value;
-    refresh_damage_defense();
+void PlayerCombatState::set_defense_attribute(std::int32_t value) {
+    auto staged = *this;
+    staged.base_damage_defense_.defense_attribute = value;
+    staged.refresh_damage_defense();
+    using std::swap;
+    swap(*this, staged);
 }
 void PlayerCombatState::restore_after_death() noexcept {
     health_ = maximum_health_;
     mana_ = maximum_mana_;
 }
 
-void PlayerCombatState::equip(const ArmorItem& item) noexcept {
+void PlayerCombatState::equip(const ArmorItem& item) {
     const auto index = static_cast<std::size_t>(item.slot);
     if (index >= equipped_armor_.size()) return;
-    equipped_armor_[index] = item;
-    refresh_damage_defense();
+    auto staged = *this;
+    staged.equipped_armor_[index] = item;
+    staged.refresh_damage_defense();
+    using std::swap;
+    swap(*this, staged);
 }
 
-void PlayerCombatState::unequip(ArmorSlot slot) noexcept {
+void PlayerCombatState::unequip(ArmorSlot slot) {
     const auto index = static_cast<std::size_t>(slot);
     if (index >= equipped_armor_.size()) return;
-    equipped_armor_[index].reset();
-    refresh_damage_defense();
+    auto staged = *this;
+    staged.equipped_armor_[index].reset();
+    staged.refresh_damage_defense();
+    using std::swap;
+    swap(*this, staged);
 }
 
-void PlayerCombatState::refresh_damage_defense() noexcept {
-    damage_defense_ = base_damage_defense_;
+std::int32_t PlayerCombatState::physical_armor(
+    const DamageDefense& raw, const AttackEffects& equipment) const {
+    auto effects = base_vital_effects_;
+    // The legacy class path has already rolled all passive flat ARMOR BONUS.
+    // Do not apply it twice or multiply it as if it were UNIT/inventory armor.
+    effects.values.erase(std::remove_if(effects.values.begin(), effects.values.end(),
+        [](const AttackEffectValue& value) { return value.type == 8; }), effects.values.end());
+    effects.add(8, static_cast<float>(base_armor_bonus_));
+    effects.append(equipment);
+    return evaluated_character_armor(raw.natural_armor - base_armor_bonus_,
+        raw.defense_attribute, effects);
+}
+float PlayerCombatState::movement_speed(float base) const {
+    auto effects = base_vital_effects_;
+    effects.append(equipment_vital_effects_);
+    return evaluated_movement_speed(base, effects);
+}
+void PlayerCombatState::refresh_damage_defense() {
+    auto raw = base_damage_defense_;
+    const auto add = [](std::int32_t a, std::int32_t b) {
+        const auto n = static_cast<std::int64_t>(a) + b;
+        if (n < 0 || n > std::numeric_limits<std::int32_t>::max())
+            throw std::invalid_argument("equipped armor outside int32");
+        return static_cast<std::int32_t>(n);
+    };
     for (const auto& item : equipped_armor_) {
-        if (!item) {
-            continue;
-        }
-        damage_defense_.natural_armor += item->damage_defense.natural_armor;
-        for (std::size_t index = 0;
-             index < damage_defense_.elemental_armor.size(); ++index) {
-            damage_defense_.elemental_armor[index] +=
-                item->damage_defense.elemental_armor[index];
-        }
+        if (!item) continue;
+        raw.natural_armor = add(raw.natural_armor, item->damage_defense.natural_armor);
+        for (std::size_t index = 0; index < raw.elemental_armor.size(); ++index)
+            raw.elemental_armor[index] = add(raw.elemental_armor[index], item->damage_defense.elemental_armor[index]);
     }
+    const auto armor = physical_armor(raw, equipment_vital_effects_);
+    damage_defense_ = raw;
+    physical_armor_class_ = armor;
 }
 
 std::int32_t PlayerCombatState::apply_damage(
@@ -152,8 +190,13 @@ std::int32_t PlayerCombatState::apply_damage(
     if (!alive()) {
         return 0;
     }
+    auto defense = damage_defense_;
+    if (type == DamageType::physical) {
+        defense.natural_armor = physical_armor_class_;
+        defense.defense_attribute = 0; // already evaluated by original AC pipeline
+    }
     const auto result = mitigate_damage(
-        damage, maximum_damage, type, 1.0F, damage_defense_, random);
+        damage, maximum_damage, type, 1.0F, defense, random);
     health_ = std::max(0.0F, health_ - static_cast<float>(result.applied));
     return result.applied;
 }
@@ -180,8 +223,9 @@ float EnemyController::distance_xz(const std::array<float, 3>& left,
 
 bool EnemyController::advance_toward_player(
     float seconds, const std::array<float, 3>& player_position,
-    float stopping_distance, RuntimeEntity& entity, State& state) noexcept {
-    auto travel = entity.running_speed * seconds;
+    float stopping_distance, RuntimeEntity& entity, State& state) {
+    const auto effects = total_attack_effects(entity.attacks, entity.attack_character);
+    auto travel = evaluated_movement_speed(entity.running_speed, effects) * seconds;
     const auto remaining_to_player =
         std::max(0.0F, distance_xz(entity.position, player_position) - stopping_distance);
     travel = std::min(travel, remaining_to_player);
@@ -266,11 +310,11 @@ std::vector<EnemyAiUpdate> EnemyController::update(
                 updates.push_back({EnemyAiState::waiting, entity.id, false, 0, player.health()});
                 continue;
             }
-            if ((description->traits.ranged && (description->delivery != WeaponDelivery::direct_physical || !line_of_sight_)) || !description->unavailable_reason.empty() ||
-                description->animation_prefix.empty()) {
-                state.attack_issue = description->traits.ranged ?
-                    (description->delivery != WeaponDelivery::direct_physical ? weapon_delivery_issue(description->delivery) : "ranged collision context is missing") :
-                    !description->unavailable_reason.empty() ? description->unavailable_reason : "no weapon description in selected hand";
+            if (!ordinary_delivery_supported(*description) || !description->unavailable_reason.empty() ||
+                description->animation_prefix.empty() || (description->traits.ranged && !line_of_sight_)) {
+                state.attack_issue = !ordinary_delivery_supported(*description) ? weapon_delivery_issue(description->delivery) :
+                    !description->unavailable_reason.empty() ? description->unavailable_reason :
+                    description->animation_prefix.empty() ? "no weapon description in selected hand" : "ranged collision context is missing";
                 updates.push_back({EnemyAiState::unavailable, entity.id, false, 0, player.health()});
                 continue;
             }

@@ -37,6 +37,8 @@ std::uint32_t population_count(float cmin, float cmax, float dmin, float dmax,
 std::vector<std::array<float, 3>> population_candidates(const NavigationGrid& grid,
     const std::array<float, 3>& entry, const std::vector<std::array<float, 3>>& exclusions) {
     for (const auto v : entry) if (!std::isfinite(v)) throw std::invalid_argument("invalid population entry");
+    // prototype: candidate traversal/exclusion policy is not an original-code
+    // placement reconstruction. See research/large-15-gameplay-fidelity.md G06.
     std::vector<std::array<float, 3>> result;
     const auto start = grid.nearest_walkable(entry, 64);
     if (!start) return result;
@@ -109,7 +111,9 @@ PopulationReport RuntimeEntityWorld::populate(const PopulationSettings& settings
         const auto low = settings.minimum_level < 1 ? previous_level : settings.minimum_level;
         const auto high = settings.maximum_level < 1 ? low : settings.maximum_level;
         if (low > 1000 || high > 1000) throw std::invalid_argument("population level outside supported graph bounds");
-        // Partial Fisher-Yates: stable, finite, no retries stuck on blocked cells.
+        // prototype: FULL Fisher-Yates over the candidate list. Only population_count
+        // above has native numerical/RNG parity; the placement RNG order does not.
+        // Do not present this finite fallback as original formation/placement logic.
         for (std::size_t i = candidates.size(); i > 1; --i) {
             const auto j = static_cast<std::size_t>(random_.integer_between(0, static_cast<std::int32_t>(i - 1)));
             std::swap(candidates[i - 1], candidates[j]);

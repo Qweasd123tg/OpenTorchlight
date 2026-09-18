@@ -75,12 +75,20 @@ struct ArmorItem {
     std::u16string_view unit_type) noexcept;
 
 // Recreates CEquipment::calculateCombatStats and setGraphAC for armor items.
-// rarity_rank is the generated item's quality rank (0..5), separate from the
-// RARITY weight stored in its data file.
+// original-code: equipment+0x28c is the heirloom/retirement count, NOT
+// rarity or the data file RARITY selection weight (CEnchantMenu::performInteraction @0xb26290).
+// Full retirement gameplay is not implemented; ordinary generated items use 0.
+// original-code: CEquipment::setGraphDamage @0x87dfa0 / setGraphAC @0x87e0c0.
+// Division precedes multiplication in binary32; armor alone has a minimum of 1.
+// Only the numeric graph stage; no rarity, enchantment or retirement lifecycle.
+[[nodiscard]] std::int32_t item_graph_stat(
+    float graph_value, std::uint32_t scaled_percent, std::int32_t heirloom_count,
+    bool armor);
+
 [[nodiscard]] std::optional<ArmorItem> roll_armor_item(
     const MasterResourceRecord& resource, const UnitDefinition& definition,
     const StatGraph& armor_graph, TorchlightRandom& random,
-    std::int32_t rarity_rank = 0);
+    std::int32_t heirloom_count = 0);
 
 [[nodiscard]] std::optional<WeaponPrototype> load_weapon_prototype(
     const MasterResourceRecord& resource, const UnitDefinition& definition,
@@ -88,6 +96,6 @@ struct ArmorItem {
 
 [[nodiscard]] WeaponItem roll_weapon_item(
     const WeaponPrototype& prototype, TorchlightRandom& random,
-    std::int32_t rarity_rank = 0) noexcept;
+    std::int32_t heirloom_count = 0);
 
 } // namespace torchlight

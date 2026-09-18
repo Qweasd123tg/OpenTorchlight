@@ -83,8 +83,11 @@ void synthetic(const char* path) {
     require(session.equip(belt)==InventoryChange::changed,"other slot armor");
     require(session.health().armor_class()==18,"other armor combines");
     require(session.equip(chest_b)==InventoryChange::changed,"replace chest");
-    require(session.health().armor_class()==38,"replacement not cumulative stacking");
-    require(session.equip(chest_b)==InventoryChange::unchanged && session.health().armor_class()==38,"idempotent defense");
+    // original-code setGraphAC divides percent before multiplying: in binary32
+    // ceil(100 * (30 / 100)) = 31, not the old reassociated result 30.
+    require(session.inventory().find(chest_b)->armor->armor==31,"original graph rounding for chest B");
+    require(session.health().armor_class()==39,"replacement not cumulative stacking");
+    require(session.equip(chest_b)==InventoryChange::unchanged && session.health().armor_class()==39,"idempotent defense");
     require(session.equip(token)==InventoryChange::unsupported,"unknown effects are not invented");
     // A selected model can be attached from the stored item, including after travel.
     auto equipped_visual = prototype();
@@ -112,7 +115,7 @@ void synthetic(const char* path) {
     test_fixture::World next(path,u"EXPLICIT");
     require(session.health().health()==hp && session.health().maximum_health()==max_hp,"transition cannot heal or reroll HP");
     require(session.inventory().items().size()==6 && session.weapon()->id==b,"transition retains ownership and slots");
-    require(session.combat().maximum_damage()==40 && session.health().armor_class()==38,"transition retains derived stats");
+    require(session.combat().maximum_damage()==40 && session.health().armor_class()==39,"transition retains derived stats");
     require(session.combat().target_id()==0 && !session.combat().attack_in_progress(),"floor references invalidated");
     require(session.combat().perform_attack(stale_event,{0,0,0},next.world,next.logic).state==CombatState::idle,"stale HIT cannot target reused ID");
     require(next.world.kill(next.world.entities().front().id,next.logic),"next floor death");

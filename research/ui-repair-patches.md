@@ -1,3 +1,9 @@
+> Historical report. The large-15 original-code audit supersedes the HUD
+> release-to-activate policy in section 3: these CGameUI callbacks execute on
+> MouseButtonDown. See large-15-gameplay-fidelity.md G08 and the current
+> ui_hud_input / paused_settings tests. Clipping, empty skins, diagnostic opt-in
+> and pause/settings repairs remain. The old report's test counts are historical.
+
 # UI repair patchset for the exact user-provided large-14
 
 This is a bounded UI repair, not large-15/full-game or CEGUI fidelity certification.

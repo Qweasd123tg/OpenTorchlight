@@ -44,11 +44,11 @@ int main(int argc, char** argv) {
                     normal->damage_defense.natural_armor == 4,
                 "Leather Vest armor graph calculation changed");
 
-        torchlight::TorchlightRandom rare_random(123);
-        const auto rare = torchlight::roll_armor_item(
-            *leather, *definition, armor_graph, rare_random, 5);
-        require(rare && rare->armor == 9,
-                "generated rarity rank was not added to graph armor");
+        torchlight::TorchlightRandom heirloom_random(123);
+        const auto heirloom = torchlight::roll_armor_item(
+            *leather, *definition, armor_graph, heirloom_random, 5);
+        require(heirloom && heirloom->armor == 9,
+                "heirloom count was not added to graph armor");
         require(torchlight::armor_slot_for_unit_type(u"MAGIC HELMET") ==
                     torchlight::ArmorSlot::helmet &&
                     !torchlight::armor_slot_for_unit_type(u"MAGIC SWORD"),

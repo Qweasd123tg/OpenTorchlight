@@ -1,0 +1,22 @@
+{
+  "scope": "Authored fixture, unchanged old writer; not original Torchlight SVB or full UI save path.",
+  "old_source_commit": "0457ed1499aae4a19a8852e9e9cf5550fc12a405",
+  "old_tree_clean": true,
+  "old_source_base": "Exact uploaded large-14 plus previously delivered UI patchset, before all current changes",
+  "public_probe": "tests/gameplay_before_after_probe.cpp",
+  "probe_sha256": "34c0df33c3dddf2fa1b58413a8a2783fb24218e00b8f96409d95bab5cfea8662",
+  "fixture_generator": "tests/make_stats_fixture.py",
+  "fixture_sha256": "87eefe2461365659be09108c9852759b537361216beedd399fd88af8f0769e28",
+  "old_save_sha256": "c4020cee2cbd314cb752a4cc2afe53ba88ba707b7d81818b0377b8116a4cb505",
+  "new_save_sha256": "c4020cee2cbd314cb752a4cc2afe53ba88ba707b7d81818b0377b8116a4cb505",
+  "unchanged_format": 5,
+  "load_new_process_command": [
+    "/mnt/data/work15/build/character_stats_test",
+    "--read",
+    "/mnt/data/work15/build/fixtures/character-stats.pak.zip",
+    "/mnt/data/work15/audit/stats-old-v5.otc"
+  ],
+  "load_exit_code": 0,
+  "load_stdout": "character_stats: 8 checks passed\n",
+  "result": "Old raw armor roll and HP preserved; corrected derived AC 219; no reroll/RNG mutation or healing; unequip removes effects."
+}

@@ -10,6 +10,9 @@ public:
 
     void set_destination(float x, float z) noexcept;
     void set_destination(const std::array<float, 3>& destination) noexcept;
+    // Updating evaluated movement speed must preserve the destination and path.
+    // Invalid input is rejected without changing the previous speed.
+    void set_speed(float speed) noexcept;
     void stop() noexcept;
     void advance(float seconds) noexcept;
 

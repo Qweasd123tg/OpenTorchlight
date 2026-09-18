@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-c++"
+	tests="7"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="localhost"
+	time="127"
+	timestamp="2026-09-17T17:03:24"
+	>
+	<testcase name="gles_ui_headless" classname="gles_ui_headless" time="1.16247" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL renderer: llvmpipe (LLVM 19.1.7, 256 bits) version: OpenGL ES 3.2 Mesa 25.0.7-2
+4 real GLES UI frames and 2 HUD bar frames passed: atlas crop/orientation, resize, create, pause, original bottomhud geometry, bar fractions. No original assets or Wayland used.
+</system-out>
+	</testcase>
+	<testcase name="gles_menu_text" classname="gles_menu_text" time="1.2625" status="run">
+		<properties>
+			<property name="cmake_labels" value="core;render"/>
+		</properties>
+		<system-out>Actual GL: llvmpipe (LLVM 19.1.7, 256 bits) OpenGL ES 3.2 Mesa 25.0.7-2
+6 authored resource menu frames passed: labels, skin states, create, pause, load, settings, resize
+PASS: 6 actual GLES frames; no original pak, CEGUI or Wayland parity claim
+</system-out>
+	</testcase>
+	<testcase name="application_scenario_render" classname="application_scenario_render" time="117.381" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: 7 real-resource application processes, 42 assertions; evidence /mnt/data/work15/build/scenario-evidence/application-hxk6tcwe
+</system-out>
+	</testcase>
+	<testcase name="application_combat_render" classname="application_combat_render" time="39.2465" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: 40 common-app combat assertions, two processes; evidence /mnt/data/work15/build/scenario-evidence/combat-95o5jh9c
+</system-out>
+	</testcase>
+	<testcase name="application_services_render" classname="application_services_render" time="127.711" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS 47 service/skill assertions, 3 processes; /mnt/data/work15/build/scenario-evidence/services-ht_w3ib4
+</system-out>
+	</testcase>
+	<testcase name="ui_repairs_render" classname="ui_repairs_render" time="1.20583" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: 12 actual GLES frames; clipping, empty skins, selection chrome, opt-in diagnostics
+</system-out>
+	</testcase>
+	<testcase name="paused_settings_render" classname="paused_settings_render" time="15.0306" status="run">
+		<properties>
+			<property name="cmake_labels" value="render"/>
+		</properties>
+		<system-out>PASS: rendered settings, Apply, return through pause; 21 state fields unchanged; four original HUD down routes, off-target releases do not replay; no accidental OTC save; /mnt/data/work15/build/ui-repair-evidence/paused-settings-hhg1zhg4
+</system-out>
+	</testcase>
+</testsuite>

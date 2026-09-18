@@ -39,6 +39,7 @@ add_library(torchlight_core STATIC
     src/animation_events.cpp
     src/animation_manifest.cpp
     src/attack_action.cpp
+    src/character_stats.cpp
     src/collision_scene.cpp
     src/line_of_sight.cpp
     src/combat.cpp
@@ -52,7 +53,6 @@ add_library(torchlight_core STATIC
     src/save_store.cpp
     src/settings.cpp
     src/ui_layout.cpp
-    src/ui_screen_scale.cpp
     src/ui_font.cpp
     src/ui_text.cpp
     src/ui_hud.cpp
@@ -971,13 +971,6 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     endif()
     add_test(NAME ui_image_clip COMMAND ui_image_clip_test)
 
-    add_executable(ui_screen_scale_test tests/ui_screen_scale_test.cpp)
-    target_link_libraries(ui_screen_scale_test PRIVATE torchlight_core)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        target_compile_options(ui_screen_scale_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
-    endif()
-    add_test(NAME ui_screen_scale COMMAND ui_screen_scale_test)
-
     if(TARGET gles_ui_probe)
         add_test(NAME ui_repairs_render COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui_repairs_render_test.py
@@ -1007,6 +1000,61 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
             --output-dir ${CMAKE_CURRENT_BINARY_DIR}/ui-repair-evidence)
         set_tests_properties(paused_settings_render PROPERTIES TIMEOUT 300 SKIP_RETURN_CODE 77)
+    endif()
+
+    set(STATS_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/character-stats.pak.zip)
+    add_custom_command(OUTPUT ${STATS_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_stats_fixture.py ${STATS_FIXTURE}
+        DEPENDS tests/make_stats_fixture.py tests/make_attack_fixture.py tests/make_ai_cooldown_fixture.py tests/make_item_cycle_fixture.py VERBATIM)
+    add_custom_target(character_stats_fixture DEPENDS ${STATS_FIXTURE})
+    add_executable(character_stats_test tests/character_stats_test.cpp)
+    target_link_libraries(character_stats_test PRIVATE torchlight_core)
+    add_dependencies(character_stats_test character_stats_fixture)
+    target_compile_options(character_stats_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME character_stats_cycle COMMAND character_stats_test ${STATS_FIXTURE})
+    add_test(NAME character_stats_process_save COMMAND character_stats_test --write ${STATS_FIXTURE} ${CMAKE_CURRENT_BINARY_DIR}/stats-process.otc)
+    set_tests_properties(character_stats_process_save PROPERTIES FIXTURES_SETUP stats_process)
+    add_test(NAME character_stats_process_load COMMAND character_stats_test --read ${STATS_FIXTURE} ${CMAKE_CURRENT_BINARY_DIR}/stats-process.otc)
+    set_tests_properties(character_stats_process_load PROPERTIES FIXTURES_REQUIRED stats_process)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_character_stats_resources COMMAND character_stats_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+
+    add_executable(character_stats_probe tests/character_stats_probe.cpp)
+    target_link_libraries(character_stats_probe PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(character_stats_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_character_stats_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_character_stats.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:character_stats_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/character-stats-original.json)
+        set_tests_properties(original_character_stats_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
+    endif()
+
+    add_executable(item_graph_test tests/item_graph_test.cpp)
+    target_link_libraries(item_graph_test PRIVATE torchlight_core)
+    target_compile_options(item_graph_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME item_graph_cycle COMMAND item_graph_test)
+
+    add_executable(item_graph_probe tests/item_graph_probe.cpp)
+    target_link_libraries(item_graph_probe PRIVATE torchlight_core)
+    target_compile_options(item_graph_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_item_graph_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_item_graph.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:item_graph_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/item-graph-original.json)
+        set_tests_properties(original_item_graph_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
+    endif()
+
+    add_executable(gameplay_catalog_probe tests/gameplay_catalog_probe.cpp)
+    target_link_libraries(gameplay_catalog_probe PRIVATE torchlight_core)
+    target_compile_options(gameplay_catalog_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_gameplay_catalog COMMAND gameplay_catalog_probe
+            "${TORCHLIGHT_GAME_DIR}/pak.zip" ${CMAKE_CURRENT_BINARY_DIR}/gameplay-catalog.json)
     endif()
 
     # Every registered test has an execution group. Labels describe dependency
