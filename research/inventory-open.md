@@ -292,6 +292,29 @@ npos-ветви — это НЕ логические ветви меню).
   вручную подписки кнопок/спеллов. Механика — да, семантика CEGUI и
   `.bss`-имена — по-прежнему руками.
 
+## Крупный проход: все createMenus/setOpen/update меню (автоматически)
+
+`tools/batch_menu_pass.py` + `research/batch-menu-pass.json` (76 функций;
+срезы — рабочий материал в `research/disassembly/batch/`, не коммитятся).
+Итог по `createMenus` (26 меню):
+
+- **Семья циклов** (`creates=11`, второй счётчик =64 — Slot-петля общая):
+  inventory (таблица 12, база `+0x80`), merchant (таблица 127, `+0xb0`,
+  табы Armor/Misc/Weapon + Pet-варианты), pet (таблица 12, проводка иной
+  формы — открыто, стат-лейблы), stash (таблица 43, `+0xb0`). Везде
+  `idxoff +0x12`, захваты `Blocker/BottomFrame/TopFrame/SlotGlow/Close`,
+  подписки `{CloseButton, ItemClick, MouseOut, MouseOver, MouseThrough}` +
+  классовые (у inventory≡pet — 12 одинаковых; у merchant≡stash — 8 с
+  Pet*-вариантами). Один обобщённый helper + 4 таблицы профилей.
+- **Близнецы** `creates=8/searches=4/subs=5`: combine ≡ enchant.
+- **Только захваты** (`creates=0`): dialog, die, fishing, interactive, modal,
+  options, difficulty, mainmenu, newgame, tip, cinematic, waypoint +
+  settings (18 поисков), continue (27 поисков) — портабельны как таблицы
+  ключей без fresh-окон.
+- **Средние**: questdialog (5), quest (6), skill/journal/stats (1).
+- `setOpen`/`update`: проводки CEGUI нет (флаг-машины), кроме петель
+  settings-`setOpen` (6, 3) и waypoint-`setOpen` — им нужен свой разбор.
+
 ## updateLayout @0xb53430: триаж (зависимость конца setOpen)
 
 `research/disassembly/b53430-inventory-updatelayout.asm`, 0x35b0 байт, 269

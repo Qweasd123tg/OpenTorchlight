@@ -1,0 +1,1909 @@
+{
+ "methods": [
+  "createMenus",
+  "setOpen",
+  "update"
+ ],
+ "functions": [
+  {
+   "address": "0xad4f10",
+   "size": 975,
+   "class": "CCombineMenu",
+   "method": "update",
+   "symbol": "CCombineMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 8,
+   "literals": 2
+  },
+  {
+   "address": "0xad52e0",
+   "size": 1120,
+   "class": "CCombineMenu",
+   "method": "setOpen",
+   "symbol": "CCombineMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 15,
+   "literals": 3
+  },
+  {
+   "address": "0xad7a50",
+   "size": 24134,
+   "class": "CCombineMenu",
+   "method": "createMenus",
+   "symbol": "CCombineMenu::createMenus()",
+   "creates": 8,
+   "searches": 4,
+   "static_keys": [
+    "Accept",
+    "Dialog",
+    "Title"
+   ],
+   "dynamic_searches": 1,
+   "subscriptions": [
+    [
+     "0xacd390",
+     "CCombineMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xacd330",
+     "CCombineMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xacd460",
+     "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xacd460",
+     "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xacd3d0",
+     "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [
+    "0xf8"
+   ],
+   "index_offsets": [],
+   "internal_calls": 20,
+   "literals": 33
+  },
+  {
+   "address": "0xafce80",
+   "size": 63,
+   "class": "CDialogMenu",
+   "method": "update",
+   "symbol": "CDialogMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 1,
+   "literals": 0
+  },
+  {
+   "address": "0xafcec0",
+   "size": 77,
+   "class": "CDialogMenu",
+   "method": "setOpen",
+   "symbol": "CDialogMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 1,
+   "literals": 0
+  },
+  {
+   "address": "0xb05390",
+   "size": 2399,
+   "class": "CDialogMenu",
+   "method": "createMenus",
+   "symbol": "CDialogMenu::createMenus()",
+   "creates": 0,
+   "searches": 1,
+   "static_keys": [
+    "Title"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 4
+  },
+  {
+   "address": "0xb06110",
+   "size": 265,
+   "class": "CDieMenu",
+   "method": "update",
+   "symbol": "CDieMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 4,
+   "literals": 0
+  },
+  {
+   "address": "0xb0dbd0",
+   "size": 6511,
+   "class": "CDieMenu",
+   "method": "setOpen",
+   "symbol": "CDieMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 32,
+   "literals": 1
+  },
+  {
+   "address": "0xb0f540",
+   "size": 2943,
+   "class": "CDieMenu",
+   "method": "createMenus",
+   "symbol": "CDieMenu::createMenus()",
+   "creates": 0,
+   "searches": 7,
+   "static_keys": [
+    "Choice1",
+    "Choice2",
+    "Choice3",
+    "Resurrect1",
+    "Resurrect2",
+    "Resurrect3",
+    "Title"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 7
+  },
+  {
+   "address": "0xb176b0",
+   "size": 811,
+   "class": "CDropdownMenu",
+   "method": "update",
+   "symbol": "CDropdownMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 8,
+   "literals": 2
+  },
+  {
+   "address": "0xb18e50",
+   "size": 1154,
+   "class": "CDropdownMenu",
+   "method": "setOpen",
+   "symbol": "CDropdownMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 13,
+   "literals": 3
+  },
+  {
+   "address": "0xb196f0",
+   "size": 8192,
+   "class": "CDropdownMenu",
+   "method": "createMenus",
+   "symbol": "CDropdownMenu::createMenus()",
+   "creates": 3,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 6,
+   "literals": 8
+  },
+  {
+   "address": "0xb23fd0",
+   "size": 999,
+   "class": "CEnchantMenu",
+   "method": "update",
+   "symbol": "CEnchantMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 9,
+   "literals": 2
+  },
+  {
+   "address": "0xb243c0",
+   "size": 3829,
+   "class": "CEnchantMenu",
+   "method": "setOpen",
+   "symbol": "CEnchantMenu::setOpen(bool, EAIState)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 47,
+   "literals": 3
+  },
+  {
+   "address": "0xb2e0a0",
+   "size": 23696,
+   "class": "CEnchantMenu",
+   "method": "createMenus",
+   "symbol": "CEnchantMenu::createMenus()",
+   "creates": 8,
+   "searches": 4,
+   "static_keys": [
+    "Accept",
+    "Dialog",
+    "ItemSlot",
+    "Title"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [
+    [
+     "0xb1bb70",
+     "CEnchantMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb1bb10",
+     "CEnchantMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb1bc40",
+     "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb1bc40",
+     "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb1bbb0",
+     "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 18,
+   "literals": 34
+  },
+  {
+   "address": "0xb343a0",
+   "size": 14,
+   "class": "CEnchantMenu",
+   "method": "setOpen",
+   "symbol": "CEnchantMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 0,
+   "literals": 0
+  },
+  {
+   "address": "0xb3c270",
+   "size": 1459,
+   "class": "CFishingMenu",
+   "method": "createMenus",
+   "symbol": "CFishingMenu::createMenus()",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 1
+  },
+  {
+   "address": "0xb3c8b0",
+   "size": 2298,
+   "class": "CFishingMenu",
+   "method": "update",
+   "symbol": "CFishingMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 1,
+   "literals": 5
+  },
+  {
+   "address": "0xb3d2f0",
+   "size": 356,
+   "class": "CInteractiveMenu",
+   "method": "update",
+   "symbol": "CInteractiveMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 0,
+   "literals": 0
+  },
+  {
+   "address": "0xb45080",
+   "size": 1680,
+   "class": "CInteractiveMenu",
+   "method": "createMenus",
+   "symbol": "CInteractiveMenu::createMenus()",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 2,
+   "literals": 2
+  },
+  {
+   "address": "0xb4eb70",
+   "size": 1586,
+   "class": "CInventoryMenu",
+   "method": "setOpen",
+   "symbol": "CInventoryMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 14,
+   "literals": 3
+  },
+  {
+   "address": "0xb4f9d0",
+   "size": 8731,
+   "class": "CInventoryMenu",
+   "method": "update",
+   "symbol": "CInventoryMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 42,
+   "literals": 4
+  },
+  {
+   "address": "0xb569e0",
+   "size": 40324,
+   "class": "CInventoryMenu",
+   "method": "createMenus",
+   "symbol": "CInventoryMenu::createMenus()",
+   "creates": 11,
+   "searches": 19,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "Money",
+    "PaperdollEquip",
+    "RotateLeft",
+    "RotateRight",
+    "SlotGlow",
+    "SlotsEquipment",
+    "SlotsFish",
+    "SlotsSpells",
+    "TabBackpack",
+    "TabFish",
+    "TabSpell",
+    "TopFrame",
+    "WeaponSwitch"
+   ],
+   "dynamic_searches": 3,
+   "subscriptions": [
+    [
+     "0xb458a0",
+     "CInventoryMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb4d920",
+     "CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45810",
+     "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45860",
+     "CInventoryMenu::handle_RotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45870",
+     "CInventoryMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45870",
+     "CInventoryMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45880",
+     "CInventoryMenu::handle_RotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45890",
+     "CInventoryMenu::handle_EndRotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45890",
+     "CInventoryMenu::handle_EndRotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45810",
+     "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb4d590",
+     "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb4d590",
+     "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45d30",
+     "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45810",
+     "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb4d590",
+     "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb4d590",
+     "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45d30",
+     "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45900",
+     "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45900",
+     "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45930",
+     "CInventoryMenu::handle_SpellMouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb45940",
+     "CInventoryMenu::handle_SetSpell(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [
+    [
+     "0x10",
+     12
+    ],
+    [
+     "0x10",
+     64
+    ]
+   ],
+   "back_pointers": [
+    "0x80"
+   ],
+   "index_offsets": [
+    "0x12"
+   ],
+   "internal_calls": 28,
+   "literals": 45
+  },
+  {
+   "address": "0xb69c00",
+   "size": 1555,
+   "class": "CMerchantMenu",
+   "method": "update",
+   "symbol": "CMerchantMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 13,
+   "literals": 4
+  },
+  {
+   "address": "0xb6a220",
+   "size": 1379,
+   "class": "CMerchantMenu",
+   "method": "setOpen",
+   "symbol": "CMerchantMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 13,
+   "literals": 3
+  },
+  {
+   "address": "0xb6ed20",
+   "size": 34170,
+   "class": "CMerchantMenu",
+   "method": "createMenus",
+   "symbol": "CMerchantMenu::createMenus()",
+   "creates": 11,
+   "searches": 19,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "PetSlotsEquipment",
+    "PetSlotsFish",
+    "PetSlotsSpells",
+    "SlotGlow",
+    "SlotsArmor",
+    "SlotsMisc",
+    "SlotsWeapons",
+    "TabArmor",
+    "TabBackpack",
+    "TabFish",
+    "TabMisc",
+    "TabSpell",
+    "TabWeapon",
+    "TopFrame"
+   ],
+   "dynamic_searches": 2,
+   "subscriptions": [
+    [
+     "0xb61090",
+     "CMerchantMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb68ca0",
+     "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb61040",
+     "CMerchantMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb688e0",
+     "CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb688e0",
+     "CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb611f0",
+     "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb610f0",
+     "CMerchantMenu::handle_PetItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb68530",
+     "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb68530",
+     "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb61140",
+     "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [
+    [
+     "0x24",
+     127
+    ],
+    [
+     "0x24",
+     64
+    ]
+   ],
+   "back_pointers": [
+    "0xb0"
+   ],
+   "index_offsets": [
+    "0x12"
+   ],
+   "internal_calls": 26,
+   "literals": 44
+  },
+  {
+   "address": "0xb77760",
+   "size": 5,
+   "class": "CModalMenu",
+   "method": "update",
+   "symbol": "CModalMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 0,
+   "literals": 0
+  },
+  {
+   "address": "0xb77770",
+   "size": 9,
+   "class": "CModalMenu",
+   "method": "setOpen",
+   "symbol": "CModalMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 0,
+   "literals": 0
+  },
+  {
+   "address": "0xb7f580",
+   "size": 2415,
+   "class": "CModalMenu",
+   "method": "createMenus",
+   "symbol": "CModalMenu::createMenus()",
+   "creates": 0,
+   "searches": 5,
+   "static_keys": [
+    "Accept",
+    "Decline",
+    "Dialog",
+    "Title"
+   ],
+   "dynamic_searches": 1,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 4
+  },
+  {
+   "address": "0xb80140",
+   "size": 98,
+   "class": "COptionsMenu",
+   "method": "update",
+   "symbol": "COptionsMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 1,
+   "literals": 0
+  },
+  {
+   "address": "0xb86f50",
+   "size": 1154,
+   "class": "COptionsMenu",
+   "method": "setOpen",
+   "symbol": "COptionsMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 13,
+   "literals": 3
+  },
+  {
+   "address": "0xb87ff0",
+   "size": 1461,
+   "class": "COptionsMenu",
+   "method": "createMenus",
+   "symbol": "COptionsMenu::createMenus()",
+   "creates": 0,
+   "searches": 1,
+   "static_keys": [
+    "Title"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 1
+  },
+  {
+   "address": "0xb92aa0",
+   "size": 1474,
+   "class": "CPetMenu",
+   "method": "setOpen",
+   "symbol": "CPetMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 15,
+   "literals": 3
+  },
+  {
+   "address": "0xb93350",
+   "size": 30488,
+   "class": "CPetMenu",
+   "method": "createMenus",
+   "symbol": "CPetMenu::createMenus()",
+   "creates": 11,
+   "searches": 26,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "CharacterName",
+    "Close",
+    "Defense",
+    "Level",
+    "MagicDamage",
+    "MeleeDamage",
+    "PaperdollEquip",
+    "RangedDamage",
+    "RotateLeft",
+    "RotateRight",
+    "SlotGlow",
+    "SlotsEquipment",
+    "SlotsFish",
+    "SlotsSpells",
+    "TabBackpack",
+    "TabFish",
+    "TabSpell",
+    "TopFrame"
+   ],
+   "dynamic_searches": 6,
+   "subscriptions": [
+    [
+     "0xb88850",
+     "CPetMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb887f0",
+     "CPetMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb887a0",
+     "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88810",
+     "CPetMenu::handle_RotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88820",
+     "CPetMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88820",
+     "CPetMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88830",
+     "CPetMenu::handle_RotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88840",
+     "CPetMenu::handle_EndRotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88840",
+     "CPetMenu::handle_EndRotateRight(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb887a0",
+     "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb914d0",
+     "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb914d0",
+     "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88d40",
+     "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb887a0",
+     "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb914d0",
+     "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb914d0",
+     "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88d40",
+     "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb888b0",
+     "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb888b0",
+     "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb888e0",
+     "CPetMenu::handle_SpellMouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xb88dd0",
+     "CPetMenu::handle_SetSpell(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [
+    [
+     "0x24",
+     12
+    ],
+    [
+     "0x24",
+     64
+    ]
+   ],
+   "back_pointers": [],
+   "index_offsets": [
+    "0x12"
+   ],
+   "internal_calls": 42,
+   "literals": 43
+  },
+  {
+   "address": "0xb9b0d0",
+   "size": 26069,
+   "class": "CPetMenu",
+   "method": "update",
+   "symbol": "CPetMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 179,
+   "literals": 10
+  },
+  {
+   "address": "0xbae150",
+   "size": 492,
+   "class": "CQuestDialogMenu",
+   "method": "setOpen",
+   "symbol": "CQuestDialogMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 8,
+   "literals": 0
+  },
+  {
+   "address": "0xbb0140",
+   "size": 883,
+   "class": "CQuestDialogMenu",
+   "method": "update",
+   "symbol": "CQuestDialogMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 20,
+   "literals": 0
+  },
+  {
+   "address": "0xbb08f0",
+   "size": 19340,
+   "class": "CQuestDialogMenu",
+   "method": "createMenus",
+   "symbol": "CQuestDialogMenu::createMenus()",
+   "creates": 5,
+   "searches": 13,
+   "static_keys": [
+    "Accept",
+    "Decline",
+    "DialogText",
+    "Portrait",
+    "RewardFame",
+    "RewardFameBox",
+    "RewardGold",
+    "RewardGoldBox",
+    "RewardXP",
+    "RewardXPBox"
+   ],
+   "dynamic_searches": 3,
+   "subscriptions": [
+    [
+     "0xba5370",
+     "CQuestDialogMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xba5370",
+     "CQuestDialogMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xba52e0",
+     "CQuestDialogMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [
+    "0x148"
+   ],
+   "index_offsets": [],
+   "internal_calls": 13,
+   "literals": 34
+  },
+  {
+   "address": "0xbc2020",
+   "size": 1328,
+   "class": "CQuestMenu",
+   "method": "update",
+   "symbol": "CQuestMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 11,
+   "literals": 3
+  },
+  {
+   "address": "0xbc2550",
+   "size": 880,
+   "class": "CQuestMenu",
+   "method": "setOpen",
+   "symbol": "CQuestMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 9,
+   "literals": 3
+  },
+  {
+   "address": "0xbc6b90",
+   "size": 23360,
+   "class": "CQuestMenu",
+   "method": "createMenus",
+   "symbol": "CQuestMenu::createMenus()",
+   "creates": 6,
+   "searches": 17,
+   "static_keys": [
+    "Abandon",
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "DescriptionFrame",
+    "FameReward",
+    "GoldReward",
+    "RewardFrame",
+    "TopFrame",
+    "XPReward"
+   ],
+   "dynamic_searches": 7,
+   "subscriptions": [
+    [
+     "0xbba060",
+     "CQuestMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbba040",
+     "CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbba070",
+     "CQuestMenu::handle_QuestClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbba1e0",
+     "CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbba1e0",
+     "CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbba120",
+     "CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [
+    "0xd8"
+   ],
+   "index_offsets": [
+    "0x1"
+   ],
+   "internal_calls": 26,
+   "literals": 38
+  },
+  {
+   "address": "0xbd47e0",
+   "size": 3446,
+   "class": "CSettingsMenu",
+   "method": "update",
+   "symbol": "CSettingsMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 120,
+   "literals": 0
+  },
+  {
+   "address": "0xbd5560",
+   "size": 6459,
+   "class": "CSettingsMenu",
+   "method": "setOpen",
+   "symbol": "CSettingsMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [
+    [
+     "0x18",
+     6
+    ],
+    [
+     "0x18",
+     3
+    ]
+   ],
+   "internal_calls": 52,
+   "literals": 2
+  },
+  {
+   "address": "0xbd6ea0",
+   "size": 6063,
+   "class": "CSettingsMenu",
+   "method": "createMenus",
+   "symbol": "CSettingsMenu::createMenus()",
+   "creates": 0,
+   "searches": 18,
+   "static_keys": [
+    "Antialiasing",
+    "Fullscreen",
+    "HardwareSkinning",
+    "MusicMute",
+    "MusicVolume",
+    "NetbookMode",
+    "ParticleDropdown",
+    "RenderBehind",
+    "ResolutionDropdown",
+    "Rimlights",
+    "ShadowDropdown",
+    "ShowBlood",
+    "ShowFloatyNumbers",
+    "ShowTips",
+    "SoundMute",
+    "SoundVolume",
+    "Title",
+    "VSync"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 13,
+   "literals": 18
+  },
+  {
+   "address": "0xbe1130",
+   "size": 1221,
+   "class": "CSkillMenu",
+   "method": "setOpen",
+   "symbol": "CSkillMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 9,
+   "literals": 3
+  },
+  {
+   "address": "0xbe19c0",
+   "size": 8221,
+   "class": "CSkillMenu",
+   "method": "createMenus",
+   "symbol": "CSkillMenu::createMenus()",
+   "creates": 1,
+   "searches": 15,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "Skill Points",
+    "SkillFrameA",
+    "SkillFrameB",
+    "SkillFrameC",
+    "SpellFrame",
+    "TabTextA",
+    "TabTextB",
+    "TabTextC",
+    "TopFrame"
+   ],
+   "dynamic_searches": 3,
+   "subscriptions": [
+    [
+     "0xbd8800",
+     "CSkillMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbd87d0",
+     "CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 17,
+   "literals": 17
+  },
+  {
+   "address": "0xbe3e10",
+   "size": 7120,
+   "class": "CSkillMenu",
+   "method": "update",
+   "symbol": "CSkillMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 55,
+   "literals": 4
+  },
+  {
+   "address": "0xbf6ef0",
+   "size": 1555,
+   "class": "CStashMenu",
+   "method": "update",
+   "symbol": "CStashMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 13,
+   "literals": 4
+  },
+  {
+   "address": "0xbf7510",
+   "size": 997,
+   "class": "CStashMenu",
+   "method": "setOpen",
+   "symbol": "CStashMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 11,
+   "literals": 3
+  },
+  {
+   "address": "0xbfbe20",
+   "size": 33050,
+   "class": "CStashMenu",
+   "method": "createMenus",
+   "symbol": "CStashMenu::createMenus()",
+   "creates": 11,
+   "searches": 13,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "Close",
+    "PetSlotsEquipment",
+    "PetSlotsFish",
+    "PetSlotsSpells",
+    "SlotGlow",
+    "TabBackpack",
+    "TabFish",
+    "TabSpell",
+    "TopFrame"
+   ],
+   "dynamic_searches": 2,
+   "subscriptions": [
+    [
+     "0xbee470",
+     "CStashMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbf5f90",
+     "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbee420",
+     "CStashMenu::handle_ItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbf5830",
+     "CStashMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbf5830",
+     "CStashMenu::handle_MouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbee710",
+     "CStashMenu::handle_MouseOut(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbee4c0",
+     "CStashMenu::handle_PetItemClick(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbf5be0",
+     "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbf5be0",
+     "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xbee510",
+     "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [
+    [
+     "0x24",
+     43
+    ],
+    [
+     "0x24",
+     64
+    ]
+   ],
+   "back_pointers": [
+    "0xb0"
+   ],
+   "index_offsets": [
+    "0x12"
+   ],
+   "internal_calls": 26,
+   "literals": 38
+  },
+  {
+   "address": "0xc0b370",
+   "size": 869,
+   "class": "CStatsMenu",
+   "method": "setOpen",
+   "symbol": "CStatsMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 9,
+   "literals": 3
+  },
+  {
+   "address": "0xc0c4e0",
+   "size": 33659,
+   "class": "CStatsMenu",
+   "method": "update",
+   "symbol": "CStatsMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 314,
+   "literals": 8
+  },
+  {
+   "address": "0xc14860",
+   "size": 15365,
+   "class": "CStatsMenu",
+   "method": "createMenus",
+   "symbol": "CStatsMenu::createMenus()",
+   "creates": 1,
+   "searches": 36,
+   "static_keys": [
+    "Blocker",
+    "BottomFrame",
+    "CharacterName",
+    "CharacterTitle",
+    "Close",
+    "Damage Absorb",
+    "Defense",
+    "Dexterity",
+    "ExperienceBar",
+    "FameBar",
+    "FameLevel",
+    "Fire Resist",
+    "Ice Resist",
+    "Level",
+    "Lightning Resist",
+    "Magic",
+    "Magic Damage",
+    "Melee Damage",
+    "Poison Resist",
+    "Ranged Damage",
+    "ReclaimDefense",
+    "ReclaimDexterity",
+    "ReclaimMagic",
+    "ReclaimStrength",
+    "SpendDefense",
+    "SpendDexterity",
+    "SpendMagic",
+    "SpendPoints",
+    "SpendStrength",
+    "Stat Points",
+    "Strength",
+    "TopFrame"
+   ],
+   "dynamic_searches": 4,
+   "subscriptions": [
+    [
+     "0xc042c0",
+     "CStatsMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04580",
+     "CStatsMenu::handle_SpendMelee(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04430",
+     "CStatsMenu::handle_ReclaimMelee(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04530",
+     "CStatsMenu::handle_SpendRanged(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc043d0",
+     "CStatsMenu::handle_ReclaimRanged(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04490",
+     "CStatsMenu::handle_SpendMagic(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04310",
+     "CStatsMenu::handle_ReclaimMagic(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc044e0",
+     "CStatsMenu::handle_SpendDefense(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc04370",
+     "CStatsMenu::handle_ReclaimDefense(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 17,
+   "literals": 37
+  },
+  {
+   "address": "0xc3a350",
+   "size": 1197,
+   "class": "CContinueGameMenu",
+   "method": "update",
+   "symbol": "CContinueGameMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 2,
+   "literals": 1
+  },
+  {
+   "address": "0xc40010",
+   "size": 68,
+   "class": "CContinueGameMenu",
+   "method": "setOpen",
+   "symbol": "CContinueGameMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 3,
+   "literals": 0
+  },
+  {
+   "address": "0xc404c0",
+   "size": 8141,
+   "class": "CContinueGameMenu",
+   "method": "createMenus",
+   "symbol": "CContinueGameMenu::createMenus()",
+   "creates": 0,
+   "searches": 27,
+   "static_keys": [
+    "CharacterModsWarning",
+    "CharacterName",
+    "Continue",
+    "Delete",
+    "DeleteConfirm",
+    "Player1",
+    "Player1Desc",
+    "Player1Name",
+    "Player2",
+    "Player2Desc",
+    "Player2Name",
+    "Player3",
+    "Player3Desc",
+    "Player3Name",
+    "Player4",
+    "Player4Desc",
+    "Player4Name",
+    "Player5",
+    "Player5Desc",
+    "Player5Name",
+    "PlayerHighlight1",
+    "PlayerHighlight2",
+    "PlayerHighlight3",
+    "PlayerHighlight4",
+    "PlayerHighlight5",
+    "ScrollDown",
+    "ScrollUp"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 7,
+   "literals": 27
+  },
+  {
+   "address": "0xc42e00",
+   "size": 5,
+   "class": "CDifficultyMenu",
+   "method": "update",
+   "symbol": "CDifficultyMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 0,
+   "literals": 0
+  },
+  {
+   "address": "0xc42e10",
+   "size": 76,
+   "class": "CDifficultyMenu",
+   "method": "setOpen",
+   "symbol": "CDifficultyMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 1,
+   "literals": 0
+  },
+  {
+   "address": "0xc4a810",
+   "size": 1494,
+   "class": "CDifficultyMenu",
+   "method": "createMenus",
+   "symbol": "CDifficultyMenu::createMenus()",
+   "creates": 0,
+   "searches": 1,
+   "static_keys": [
+    "Hardcore"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 1
+  },
+  {
+   "address": "0xc52a10",
+   "size": 4345,
+   "class": "CMainMenu",
+   "method": "createMenus",
+   "symbol": "CMainMenu::createMenus()",
+   "creates": 0,
+   "searches": 7,
+   "static_keys": [
+    "CharacterModsWarning",
+    "ContinueLast",
+    "CopyrightInfo",
+    "CreditFrame",
+    "CreditFrameB",
+    "Credits",
+    "DemoVersion"
+   ],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 6,
+   "literals": 8
+  },
+  {
+   "address": "0xc53b70",
+   "size": 928,
+   "class": "CMainMenu",
+   "method": "update",
+   "symbol": "CMainMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 6,
+   "literals": 0
+  },
+  {
+   "address": "0xc5c5a0",
+   "size": 1679,
+   "class": "CNewGameMenu",
+   "method": "setOpen",
+   "symbol": "CNewGameMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 3,
+   "literals": 3
+  },
+  {
+   "address": "0xc5cc30",
+   "size": 2814,
+   "class": "CNewGameMenu",
+   "method": "update",
+   "symbol": "CNewGameMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 8,
+   "literals": 1
+  },
+  {
+   "address": "0xc5d730",
+   "size": 3186,
+   "class": "CNewGameMenu",
+   "method": "createMenus",
+   "symbol": "CNewGameMenu::createMenus()",
+   "creates": 0,
+   "searches": 6,
+   "static_keys": [
+    "CharacterClass",
+    "CharacterClassDescription",
+    "CreatePlayer",
+    "EditBox",
+    "EditBoxPet"
+   ],
+   "dynamic_searches": 1,
+   "subscriptions": [
+    [
+     "0xc53f40",
+     "CNewGameMenu::handle_Submit(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xc5c2f0",
+     "CNewGameMenu::handle_SubmitPet(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 7,
+   "literals": 5
+  },
+  {
+   "address": "0xe3a180",
+   "size": 1278,
+   "class": "CJournalMenu",
+   "method": "update",
+   "symbol": "CJournalMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 11,
+   "literals": 3
+  },
+  {
+   "address": "0xe3a680",
+   "size": 848,
+   "class": "CJournalMenu",
+   "method": "setOpen",
+   "symbol": "CJournalMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 9,
+   "literals": 3
+  },
+  {
+   "address": "0xe3b5e0",
+   "size": 2692,
+   "class": "CJournalMenu",
+   "method": "createMenus",
+   "symbol": "CJournalMenu::createMenus()",
+   "creates": 1,
+   "searches": 5,
+   "static_keys": [],
+   "dynamic_searches": 5,
+   "subscriptions": [
+    [
+     "0xe332d0",
+     "CJournalMenu::handle_MouseThrough(CEGUI::EventArgs const&)"
+    ],
+    [
+     "0xe332b0",
+     "CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&)"
+    ]
+   ],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 27,
+   "literals": 10
+  },
+  {
+   "address": "0xe448c0",
+   "size": 100,
+   "class": "CTipMenu",
+   "method": "update",
+   "symbol": "CTipMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 2,
+   "literals": 0
+  },
+  {
+   "address": "0xe44950",
+   "size": 284,
+   "class": "CTipMenu",
+   "method": "setOpen",
+   "symbol": "CTipMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 4,
+   "literals": 0
+  },
+  {
+   "address": "0xe4c800",
+   "size": 2181,
+   "class": "CTipMenu",
+   "method": "createMenus",
+   "symbol": "CTipMenu::createMenus()",
+   "creates": 0,
+   "searches": 4,
+   "static_keys": [
+    "Dialog",
+    "ShowTips",
+    "Title"
+   ],
+   "dynamic_searches": 1,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 3
+  },
+  {
+   "address": "0xe98e50",
+   "size": 455,
+   "class": "CCinematicMenu",
+   "method": "setOpen",
+   "symbol": "CCinematicMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 10,
+   "literals": 0
+  },
+  {
+   "address": "0xe99800",
+   "size": 572,
+   "class": "CCinematicMenu",
+   "method": "update",
+   "symbol": "CCinematicMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 17,
+   "literals": 0
+  },
+  {
+   "address": "0xe9b180",
+   "size": 1941,
+   "class": "CCinematicMenu",
+   "method": "createMenus",
+   "symbol": "CCinematicMenu::createMenus()",
+   "creates": 0,
+   "searches": 3,
+   "static_keys": [
+    "Background",
+    "DialogText"
+   ],
+   "dynamic_searches": 1,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [],
+   "internal_calls": 5,
+   "literals": 2
+  },
+  {
+   "address": "0xea34b0",
+   "size": 210,
+   "class": "CWaypointMenu",
+   "method": "update",
+   "symbol": "CWaypointMenu::update(float)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [],
+   "internal_calls": 4,
+   "literals": 0
+  },
+  {
+   "address": "0xea4970",
+   "size": 3902,
+   "class": "CWaypointMenu",
+   "method": "setOpen",
+   "symbol": "CWaypointMenu::setOpen(bool)",
+   "creates": 0,
+   "searches": 0,
+   "static_keys": [],
+   "dynamic_searches": 0,
+   "subscriptions": [],
+   "counter_loops": [
+    [
+     "0xc",
+     null
+    ],
+    [
+     "0x24",
+     null
+    ]
+   ],
+   "internal_calls": 21,
+   "literals": 1
+  },
+  {
+   "address": "0xea58b0",
+   "size": 2537,
+   "class": "CWaypointMenu",
+   "method": "createMenus",
+   "symbol": "CWaypointMenu::createMenus()",
+   "creates": 0,
+   "searches": 3,
+   "static_keys": [
+    "Title"
+   ],
+   "dynamic_searches": 2,
+   "subscriptions": [],
+   "counter_loops": [],
+   "back_pointers": [],
+   "index_offsets": [
+    "0x1"
+   ],
+   "internal_calls": 9,
+   "literals": 3
+  }
+ ]
+}

@@ -24,3 +24,6 @@ core
 core.*
 *.profraw
 *.profdata
+
+# Batch disassembly working material (regenerable via tools/batch_menu_pass.py).
+/research/disassembly/batch/

@@ -217,6 +217,24 @@ def main():
             internal.append({"addr": addr, "target": m.group(1)})
     result["internal_calls"] = internal
 
+    # 8. back-pointer wiring: lea IMM(%rbx,REG,4) (menu array slot refs)
+    #    and index adjusts (add $IMM,%r13d/%r14d) near them.
+    back_ptrs = []
+    for idx, addr, text in items:
+        m = re.search(r"lea\s+(0x[0-9a-f]+)\(%rbx,%(r1[0-9]|r[89]|r[a-d][xsi]),4\)",
+                      text)
+        if m:
+            back_ptrs.append({"addr": addr, "line": idx + 1,
+                              "base": m.group(1), "index_reg": m.group(2)})
+    result["back_pointers"] = back_ptrs
+    index_offsets = []
+    for idx, addr, text in items:
+        m = re.search(r"add\s+\$(0x[0-9a-f]+),%(r1[0-9]d)", text)
+        if m:
+            index_offsets.append({"addr": addr, "line": idx + 1,
+                                  "add": m.group(1), "reg": m.group(2)})
+    result["index_offsets"] = index_offsets
+
     text_report = []
     text_report.append("literal pool: %d strings" % len(pool))
     text_report.append("copy loops: %d" % len(loops))
@@ -236,6 +254,12 @@ def main():
     for c in result["counter_loops"]:
         text_report.append("  slot %s bound=%s" % (c["slot"], c.get("bound")))
     text_report.append("internal calls: %d" % len(internal))
+    if back_ptrs:
+        text_report.append("back pointers: %s"
+                           % sorted(set(b["base"] for b in back_ptrs)))
+    if index_offsets:
+        text_report.append("index offsets: %s"
+                           % sorted(set(o["add"] for o in index_offsets)))
     print("\n".join(text_report))
 
     if args.json_out:
