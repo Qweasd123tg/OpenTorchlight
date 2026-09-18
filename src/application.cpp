@@ -451,6 +451,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         torchlight::PlayerSession session(selected_player, level_seed(campaign_seed, initial_address.depth), &unit_type_hierarchy);
         torchlight::InventoryView inventory_view;
         torchlight::InventoryMenuState inventory_menu;
+        // original-code: panel setOpen family — CMerchantMenu @0xb6a220,
+        // CSkillMenu @0xbe1130, CQuestMenu @0xbc2550 share the panel_open
+        // flag machine (profiles in panel_open.hpp); pet/journal have no
+        // port caller yet (open) and stay out. Exactly one writer each,
+        // mirroring set_inventory_open below.
+        torchlight::PanelOpenState merchant_menu{torchlight::panel_profile_merchant()};
+        torchlight::PanelOpenState skill_menu{torchlight::panel_profile_skill()};
+        torchlight::PanelOpenState quest_menu{torchlight::panel_profile_quest()};
         if (direct_preview) frontend.entered_game();
         const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
             auto prototype = selected_player;
@@ -526,6 +534,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             // Explicitly initialized ID avoids GCC optional payload false positives.
             std::uint64_t merchant_entity = 0;
             inventory_menu.set_open(false, false); // single-writer invariant: mirror follows controller
+            merchant_menu.set_open(false, false);
+            skill_menu.set_open(false, false);
+            quest_menu.set_open(false, false);
             inventory_view.open = inventory_menu.open();
             auto player_visual = visual_prototype(session.inventory());
             auto player_animations = load_player_animations(
@@ -1049,6 +1060,27 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                                         torchlight::UiScreenScaleRatio::y_ratio));
                     inventory_view.open = inventory_menu.open();
                 };
+                // Single writers for the merchant/skill/quest panel states.
+                // Sounds/tips from the profiles have no port sink (reported,
+                // see panel_open.hpp boundary); the three profiles carry no
+                // viewport, so there is no ensure_viewport here. The plain
+                // bools/merchant_entity stay as derived mirrors read by the
+                // pre-existing dispatch below; only these lambdas write them.
+                auto set_skill_open = [&](bool requested) {
+                    static_cast<void>(skill_menu.set_open(requested, false));
+                    skill_panel = skill_menu.open();
+                };
+                auto set_quest_open = [&](bool requested) {
+                    static_cast<void>(quest_menu.set_open(requested, false));
+                    quest_panel = quest_menu.open();
+                };
+                auto set_merchant_open = [&](std::uint64_t entity) {
+                    merchant_entity = entity;
+                    // isa_merchant/default_tab are original inputs with no
+                    // port source (open): entities are not RTTI; the tip ids
+                    // they select have no sink either.
+                    static_cast<void>(merchant_menu.set_open(entity != 0, false));
+                };
                 for (const auto key : key_presses) {
                     if (!player_combat.alive()) {
                         if (key == torchlight::physical_key::ESC) { frontend.pause(); continue; }
@@ -1091,13 +1123,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         // The computed paperdoll viewport is stored in the controller
                         // (viewport()) but no renderer consumes it yet (open).
                         set_inventory_open(requested);
-                        skill_panel = false; quest_panel = false; merchant_entity = 0;
+                        set_skill_open(false); set_quest_open(false); set_merchant_open(0);
                     } else if (key == torchlight::physical_key::K) {
                         set_inventory_open(!skill_panel || !inventory_menu.open());
-                        skill_panel = true; quest_panel = false; merchant_entity = 0;
+                        set_skill_open(true); set_quest_open(false); set_merchant_open(0);
                     } else if (key == torchlight::physical_key::J) {
                         set_inventory_open(!quest_panel || !inventory_menu.open());
-                        quest_panel = true; skill_panel = false; merchant_entity = 0;
+                        set_quest_open(true); set_skill_open(false); set_merchant_open(0);
                     } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
                         const auto& skills = session.skills().skills;
                         if (selected_skill < skills.size()) {
@@ -1113,14 +1145,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                     else if (key == torchlight::physical_key::ESC) {
-                        if (inventory_view.open) { set_inventory_open(false); merchant_entity = 0; }
+                        if (inventory_view.open) { set_inventory_open(false); set_merchant_open(0); }
                         else frontend.pause();
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open && merchant_entity) {
                         const auto* npc = entity_world.find(merchant_entity);
                             if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
-                                merchant_entity = 0; set_inventory_open(false);
+                                set_merchant_open(0); set_inventory_open(false);
                             inventory_view.status = "MERCHANT NO LONGER AVAILABLE";
                         } else {
                             const auto offers = merchant_catalog.offers(npc->resource_guid, session.progression().level);
@@ -1268,8 +1300,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         if (result == torchlight::InteractionResult::unsupported_service) {
                             const auto* npc = entity_world.find(active_interaction->entity_id);
                             if (npc && merchant_catalog.find(npc->resource_guid)) {
-                                merchant_entity = npc->id; selected_offer = 0;
-                                set_inventory_open(true); skill_panel = false; quest_panel = false;
+                                set_merchant_open(npc->id); selected_offer = 0;
+                                set_inventory_open(true); set_skill_open(false); set_quest_open(false);
                                 inventory_view.status = "INFINITE POTIONS ONLY. OTHER MERCHANT SERVICES NOT IMPLEMENTED.";
                                 std::cout << "merchant_opened=" << npc->resource_guid << '\n';
                             }

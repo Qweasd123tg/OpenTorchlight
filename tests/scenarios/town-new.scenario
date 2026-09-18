@@ -23,6 +23,16 @@ frames 1
 capture rearmed
 key I
 inventory closed
+# Panel interplay (setOpen family integration): K/J must open through the
+# shared flag machine, ESC must close; a desync fails the verbs below.
+key K
+inventory open
+key ESC
+inventory closed
+key J
+inventory open
+key ESC
+inventory closed
 resize 800 450
 frames 3
 capture town_resized

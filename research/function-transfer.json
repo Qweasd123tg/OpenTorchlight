@@ -80,14 +80,14 @@
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/panel-open.md; research/disassembly/b6a220-merchant-setopen.asm; research/decompiled-core/merchant_menu.c",
-      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
-      "comparison": "",
-      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: Shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no port caller exists (no merchant UI) so wired stays false; no numeric differential so compared stays false.",
-      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
+      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
+      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: Shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no port caller exists (no merchant UI) so wired stays false; no numeric differential so compared stays false. Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00b92aa0": {
       "symbol": "CPetMenu::setOpen(bool)",
@@ -108,28 +108,28 @@
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/panel-open.md; research/disassembly/bc2550-quest-setopen.asm; research/decompiled-core/quest_menu.c",
-      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
-      "comparison": "",
-      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: Shared skeleton via quest profile (minimal, no refresh on reopen); wired/compared false (no quest UI, no numeric differential).",
-      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
+      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
+      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: Shared skeleton via quest profile (minimal, no refresh on reopen); wired/compared false (no quest UI, no numeric differential). Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00be1130": {
       "symbol": "CSkillMenu::setOpen(bool)",
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": false
       },
       "evidence": "research/panel-open.md; research/disassembly/be1130-skill-setopen.asm",
-      "implementation": "src/panel_open.cpp (PanelOpenState shared skeleton + PanelProfile table)",
-      "comparison": "",
-      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: Shared skeleton via skill profile (3 triples, preserved index, detach); wired/compared false.",
-      "tests": "tests/panel_open_test.cpp (skeleton loop x6 profiles + deltas)"
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
+      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
+      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: Shared skeleton via skill profile (3 triples, preserved index, detach); wired/compared false. Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00e3a680": {
       "symbol": "CJournalMenu::setOpen(bool)",
