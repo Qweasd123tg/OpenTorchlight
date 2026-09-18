@@ -217,7 +217,7 @@
         "0x847280"
       ],
       "status": "partial",
-      "boundary": "Melee and positively classified ordinary physical direct ranged HIT paths; portable static LOS. Missiles, weapon skills and mixed damage remain unavailable.",
+      "boundary": "Melee and positively classified ordinary physical direct ranged HIT paths; portable static LOS. Missiles, weapon skills and mixed damage remain unavailable. Skill-missile branch walk (research/skill-effect-dispatch.md section 8): applier callsite cb7dab with flags 0x171F (base 0x30F + USEDPS/NOSTEAL bits), ranged-ISA/in-range path with proc/weaponSkill/fireMissiles skips to the rollAttack call; bodies beyond the branch selection stay unported.",
       "evidence": [
         "research/ranged-direct-evidence.md",
         "research/decompiled-core/character.c"
@@ -286,7 +286,7 @@
         "0x843ed0"
       ],
       "status": "partial",
-      "boundary": "Ordinary direct base + typed bonus channels, evaluated MAGIC/armor/percent and RNG through channel assembly. Original comparator uses one right-hand weapon and critical=false. Crit/glancing/block/procs/shield absorption/missiles and full effect lifecycle remain open.",
+      "boundary": "Ordinary direct base + typed bonus channels, evaluated MAGIC/armor/percent and RNG through channel assembly. Original comparator uses one right-hand weapon and critical=false. Crit/glancing/block/procs/shield absorption/missiles and full effect lifecycle remain open. Skill weapon-applier profile implemented on the same core (research/skill-effect-dispatch.md section 8): roll_skill_weapon_damage reuses the plan + channel loop with only the USEDPS/pct pre-scales and soak multiplier as new math (neutral == ordinary roll proven); criticals/glancing/block/procs/reflect stay open.",
       "evidence": [
         "research/ordinary-attack-action.md",
         "research/combat-runtime.md",
@@ -1060,7 +1060,7 @@
         "0x00cb7240"
       ],
       "status": "implemented",
-      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime. Applier slice: measured hit-hook order canEffect->weapon->effects->hitSkills->trigger(6) with UNITHIT/UNITDIE posters; SEEKING trigger ladder (L1 40/60, zero effect entries: proven no-op leg); rung-gated casts with cast-to-missile binding; weapon-leg request as the damage number's input contract (number still open).",
+      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime. Applier slice: measured hit-hook order canEffect->weapon->effects->hitSkills->trigger(6) with UNITHIT/UNITDIE posters; SEEKING trigger ladder (L1 40/60, zero effect entries: proven no-op leg); rung-gated casts with cast-to-missile binding; weapon-leg request as the damage number's input contract (number still open). rollAttack reachable slice: measured performAttack flags (0x171F) and branch skips to rollAttack; USEDPS/pct pre-scales + soak multiplier as the only new math on the shared CombatRoll core (neutral == ordinary roll proven); SEEKING kill chain to HP/death/UNITDIE through the existing world backend, no test damage.",
       "evidence": [
         "research/skill-effect-dispatch.md"
       ],

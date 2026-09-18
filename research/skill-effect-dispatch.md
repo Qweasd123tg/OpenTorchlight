@@ -163,3 +163,34 @@ effect_entries, present=false вместо дефолтов, отсутстви�
 `characterEffectedByDamageShape @0xcc1c40`, `itemEffectedByDamageShape
 @0xcb84f0`, `startEvent @0xcc4300` (5× applyEffects, weapon, hitSkills,
 2× executeSkill) — общий executor-кандидат на следующий проход по графу.
+
+## 8. Reachable rollAttack slice — PORTED (SkillWeaponRoll)
+
+Вход applier измерен автором: `cb7dab call performAttack`, сборка флагов
+`cb7cfb..cb7d48` (base `0x30F` при missile `param_5=1`, USEDPS→`0x400`,
+NOSTRIKE→`0x800`, NOSTEAL→`0x1000`, всегда `0x10`; SEEKING USEDPS=true
+проверен в ресурсе → `edx=0x171F`), `847ffb call rollAttack`, USEDPS-ветвь
+`84530f` (`div (SPEED*0.7333333)`, константа сверена в rodata `0xfce530` =
+0.7333333), pct-ветвь `845338` (`trunc(max*0.4)`), mitigate с `0.6`
+(`0x844226/@0x844a05`). Входные floats applier (`param0/1 = 1.0`) —
+изолированный вызов, open. SPEED-источник: спил `0x98(rsp)` ←
+`attackDesc+0x70` (`844157`, автор); маппинг на поля equipment — open,
+`dps_speed` едет данным вызывающей стороны.
+
+Портирован ровно reachable-путь: `roll_skill_weapon_damage`
+(`src/typed_damage.cpp`) вызывает СУЩЕСТВУЮЩИЕ `ordinary_damage_plan` +
+общий цикл (новый параметр-множитель; старые вызовы шлют `1.0F`, поведение
+не изменилось). Новый код — только два пре-скейла на базовый максимум и
+множитель soak; нейтральные скейлы (100/100/без DPS) побайтово равны
+`roll_ordinary_damage` на том же сиде — доказательство в
+`tests/typed_damage_test.cpp::skill_profile`, третьего калькулятора нет.
+Крит/блок/glance/procs/reflect/theme — каталог условий входа, open.
+
+Критерий закрыт end-to-end (`tests/skill_event_runtime_test.cpp`, 89/89 с
+pak): SEEKING → START → timeline → SEEKINGSHOT → CMissile → MISSILEHIT →
+weapon-запрос 40/60 → `roll_skill_weapon_damage` с реальным луком Vanquisher
+(left-hand fallback как в applier) → `world.apply_damage` → HP 10→0,
+`UNITDIE` ровно на убившем хите, `MISSILEHIT` закрывает каждый хит, смерть
+уходит в `resolve_death_loot`. Тестового `damage=123` и самодельного
+multiplier нет. XP — application/session sink поверх того же
+`player_kill`-флага, что у weapon-пути (интеграция, не формула).

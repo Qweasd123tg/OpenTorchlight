@@ -2397,6 +2397,34 @@
       "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
       "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
       "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+    },
+    "0x00847280": {
+      "symbol": "CCharacter::performAttack(CEquipment*,uint,float,float,EDAMAGE_TYPES)",
+      "stages": {
+        "analyzed": true,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; cb7dab call-site + cb7cfb flag assembly + 847ffb verified in objdump",
+      "implementation": "",
+      "tests": "",
+      "comparison": "",
+      "notes": "Branch walk only (0x10/0x4/0x2 skips, ranged ISA, inStrikeRange, rollAttack call); bodies not ported."
+    },
+    "0x00843ed0": {
+      "symbol": "CCharacter::rollAttack(CLevel&,CCharacter*,CEquipment*,uint,float,float,EDAMAGE_TYPES)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "evidence": "research/skill-effect-dispatch.md; 84530f USEDPS + 845338 pct + 844226/844a05 soak sites verified in objdump, 0.7333333 in rodata",
+      "implementation": "src/typed_damage.cpp roll_skill_weapon_damage (ordinary_damage_plan + shared roll/mitigation core; only the two pre-scales + soak multiplier are new)",
+      "tests": "tests/typed_damage_test.cpp skill_profile (neutral == ordinary roll; exact pct/DPS placement) + tests/skill_event_runtime_test.cpp SEEKING kill chain (89 pak / 41 nopak)",
+      "comparison": "Behavioral control cases, no original-call differential",
+      "notes": "Reachable skill-missile slice via roll_skill_weapon_damage (shared core reuse). compared=false."
     }
   }
 }

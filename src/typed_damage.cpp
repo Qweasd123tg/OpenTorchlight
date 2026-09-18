@@ -126,7 +126,7 @@ namespace {
 // Shared channel roll/mitigation loop for the ordinary HIT branch and the
 // missile impact twin (gates differ; the math is one implementation).
 OrdinaryDamageResult roll_planned_damage(const OrdinaryDamagePlan& plan,
-    const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
+    const EvaluatedDamageDefense& defense, TorchlightRandom& random, float armor_multiplier) {
     auto staged = random;
     OrdinaryDamageResult result;
     result.count = plan.count; result.maximum = plan.maximum;
@@ -137,7 +137,7 @@ OrdinaryDamageResult roll_planned_damage(const OrdinaryDamagePlan& plan,
         result.rolled = add(result.rolled, rolled);
         if (i == 0 || rolled > 0)
             result.channels[i] = mitigate_evaluated_damage(rolled, i == 0 ? rolled : plan.maximum,
-                channel.type, 1.0F, defense, staged);
+                channel.type, armor_multiplier, defense, staged);
         result.applied = add(result.applied, result.channels[i].applied);
     }
     random = staged; // Failed evaluation cannot leave a half-consumed stream.
@@ -148,7 +148,8 @@ OrdinaryDamageResult roll_ordinary_damage(const AttackDescription& selected,
     const AttackLoadout& loadout, const AttackCharacterValues& character,
     const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
     if (!ordinary_delivery_supported(selected)) throw std::invalid_argument("unsupported ordinary damage delivery");
-    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random);
+    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random,
+                               1.0F);
 }
 // Missile impact delivery (original doDamageToCharacter role at impact time;
 // research/missile-runtime.md §5): the missile carries the wielding weapon's
@@ -162,6 +163,37 @@ OrdinaryDamageResult roll_missile_impact_damage(const AttackDescription& selecte
     const EvaluatedDamageDefense& defense, TorchlightRandom& random) {
     if (selected.delivery != WeaponDelivery::missile)
         throw std::invalid_argument("missile impact roll needs missile delivery");
-    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random);
+    return roll_planned_damage(ordinary_damage_plan(selected, loadout, character), defense, random,
+                               1.0F);
+}
+OrdinaryDamageResult roll_skill_weapon_damage(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    const EvaluatedDamageDefense& defense, const SkillWeaponRoll& roll,
+    TorchlightRandom& random) {
+    // Reachable rollAttack slice for the skill missile path. The caller owns
+    // weapon selection and the performAttack preconditions (right-hand ranged
+    // weapon, live foe, in range): this maps the roll, not the gates.
+    auto plan = ordinary_damage_plan(selected, loadout, character);
+    if (plan.count == 0) return roll_planned_damage(plan, defense, random, 1.0F);
+    // WEAPONDAMAGEPCT @0x845338: f0==0 skips the scale, else trunc(base*frac)
+    // with the ctor-role max(0, pct/100) fraction.
+    const float fraction = std::max(0.0F, roll.weapon_damage_pct / 100.0F);
+    std::int32_t base_maximum = plan.channels[0].maximum;
+    if (fraction != 0.0F)
+        base_maximum = checked(std::trunc(static_cast<float>(base_maximum) * fraction));
+    if (roll.use_dps) {
+        // USEDPS @0x84530f: ceil(scaled / (SPEED * 0.7333333)), rodata @0xfce530.
+        const float divisor = roll.dps_speed * 0.7333333F;
+        if (!(divisor > 0.0F) || !std::isfinite(divisor))
+            throw std::invalid_argument("skill DPS speed must be positive");
+        base_maximum = checked(std::ceil(static_cast<float>(base_maximum) / divisor));
+    }
+    // Only the base maximum is pre-scaled; bonus channels and all minimums
+    // ride the shared plan untouched.
+    plan.maximum = add(base_maximum, plan.maximum - plan.channels[0].maximum);
+    plan.channels[0].maximum = base_maximum;
+    // SOAK @0x844226/@0x844a05: the mitigate multiplier (ctor-role fraction).
+    const float soak = std::max(0.0F, roll.soak_scale_pct / 100.0F);
+    return roll_planned_damage(plan, defense, random, soak);
 }
 } // namespace torchlight

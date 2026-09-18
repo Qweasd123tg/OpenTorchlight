@@ -51,4 +51,26 @@ struct OrdinaryDamageResult {
     const AttackLoadout& loadout, const AttackCharacterValues& character,
     const EvaluatedDamageDefense& defense, TorchlightRandom& random);
 
+// Skill weapon-applier profile of CCharacter::rollAttack: the reachable slice
+// from CSkillEvent::applyWeaponDamage in the missile path (performAttack
+// @0x847280 flags 0x171F -> rollAttack @0x843ed0; research/skill-effect-
+// dispatch.md §8). Reuses ordinary_damage_plan + the shared channel
+// roll/mitigation core: the ONLY new math is the two pre-scales on the base
+// maximum (WEAPONDAMAGEPCT @0x845338, USEDPS @0x84530f with the 0.7333333
+// rodata constant @0xfce530) and the soak multiplier at mitigation
+// (@0x844226/@0x844a05). Excludes criticals, glancing/block/reflect, procs,
+// special flags and the equipment-missile sibling call.
+struct SkillWeaponRoll {
+    float weapon_damage_pct = 0.0F; // WEAPONDAMAGEPCT rung, resource units
+    float soak_scale_pct = 0.0F; // SOAKSCALEPCT rung, resource units
+    bool use_dps = false; // USEDPS rung flag
+    // Native attackDesc+0x70 SPEED units (rollAttack 0x98(rsp) spill). The
+    // mapping from equipment fields is caller-side and stays open.
+    float dps_speed = 1.0F;
+};
+[[nodiscard]] OrdinaryDamageResult roll_skill_weapon_damage(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    const EvaluatedDamageDefense& defense, const SkillWeaponRoll& roll,
+    TorchlightRandom& random);
+
 } // namespace torchlight

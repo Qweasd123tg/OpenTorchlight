@@ -14,12 +14,24 @@
 // through a chain-produced record, and never substitutes the event handler.
 #include "torchlight/skill_event_runtime.hpp"
 
+#include "torchlight/attack_action.hpp"
+#include "torchlight/combat.hpp"
+#include "torchlight/entity_world.hpp"
+#include "torchlight/master_resource_index.hpp"
 #include "torchlight/missile_runtime.hpp"
 #include "torchlight/pak_archive.hpp"
+#include "torchlight/player.hpp"
+#include "torchlight/randomizer.hpp"
+#include "torchlight/spawn_class.hpp"
+#include "torchlight/typed_damage.hpp"
+#include "torchlight/unit_definition.hpp"
+#include "torchlight/unit_type.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <stdexcept>
 #include <string>
 
 namespace {
@@ -30,6 +42,8 @@ void require(bool cond, const char* what) {
     if (!cond) {
         ++failures;
         std::printf("FAIL: %s\n", what);
+        std::fflush(stdout);
+        throw std::runtime_error(what);
     }
 }
 
@@ -72,7 +86,7 @@ torchlight::SkillCastContext live_cast() {
 }
 } // namespace
 
-int main() {
+int run() {
     using torchlight::SkillEventType;
 
     require(torchlight::skill_event_type_name(SkillEventType::start) == u"EVENT_START",
@@ -388,6 +402,131 @@ int main() {
                 require(saw_die, "MISSILEDIE callback observed");
             }
             require(!seeking.has_event(SkillEventType::end), "effect engine still bounded");
+
+            {
+                // WORLD-BACKED KILL CHAIN: the weapon-leg request feeds the
+                // shared roll core with the wielded Vanquisher bow, damage
+                // lands through the existing world backend, death posts
+                // UNITDIE. No test damage constant, no invented multiplier:
+                // 40/60 ride the resource rung, the math is the ported core.
+                const auto master = torchlight::parse_adm(
+                    archive.read("media/MASTERRESOURCEUNITS.DAT.ADM"));
+                const torchlight::MasterResourceIndex resources(master);
+                torchlight::UnitDefinitionLoader definitions(archive);
+                const torchlight::SpawnClassCatalog spawn_classes(archive);
+                const torchlight::UnitTypeHierarchy hierarchy(archive);
+                const torchlight::UnitTypeResourceIndex unit_types(
+                    archive, hierarchy, resources, definitions);
+                const auto combat_layout =
+                    loader.load_layout("media/layouts/test/LOGICTEST.LAYOUT.adm");
+                const auto players =
+                    torchlight::load_playable_players(archive, resources, definitions);
+                const auto vanquisher =
+                    std::find_if(players.begin(), players.end(), [](const auto& player) {
+                        return player.name == u"Vanquisher";
+                    });
+                require(vanquisher != players.end(), "original Vanquisher missing");
+                torchlight::CombatController archer(*vanquisher, 31);
+                // Right-then-left selection mirrors the applier weapon reads.
+                const auto* wielded = archer.attack_loadout().right
+                                          ? &*archer.attack_loadout().right
+                                          : (archer.attack_loadout().left
+                                                 ? &*archer.attack_loadout().left
+                                                 : nullptr);
+                require(wielded != nullptr && wielded->traits.ranged,
+                        "Vanquisher must wield a ranged weapon for the skill path");
+                const auto bow = *wielded;
+                const auto archer_values = archer.attack_character();
+                const auto archer_loadout = archer.attack_loadout();
+                std::printf("bow max=%d speed_den=%.3f\n", bow.maximum_damage,
+                            bow.speed_denominator);
+                torchlight::LogicRuntime combat_logic(combat_layout, 31);
+                torchlight::RuntimeEntityWorld combat_world(combat_layout, resources, definitions,
+                                                            spawn_classes, unit_types, 31, 1);
+                constexpr std::int64_t spawner = 4789864784197325278LL;
+                const auto spawned = combat_world.consume_spawn_requests(
+                    {{spawner, u"Skeletal Warrior", u"Monsters", 1}}, combat_logic);
+                require(spawned.entities_created == 1, "skill target did not spawn");
+                const std::uint64_t victim = combat_world.entities().front().id;
+                const auto monster_pos = combat_world.entities().front().position;
+                const float full_health = combat_world.entities().front().health;
+                require(full_health > 0.0F, "skill target spawned dead");
+                torchlight::TorchlightRandom combat_rng(31);
+                const torchlight::CollisionScene empty_scene{};
+                bool killed = false;
+                int casts = 0;
+                int hits = 0;
+                for (; casts < 60 && !killed; ++casts) {
+                    torchlight::SkillCastContext aimed = live_cast();
+                    aimed.origin = {monster_pos[0] - 8.0F, monster_pos[1], monster_pos[2]};
+                    aimed.direction = {1.0F, 0.0F, 0.0F};
+                    require(seeking.start_skill(aimed).started, "aimed SEEKING cast starts");
+                    seeking.drain_launches(sink);
+                    const auto* foe = combat_world.find(victim);
+                    require(foe != nullptr, "skill target lost");
+                    const torchlight::MissileCollider collider{
+                        victim, foe->position, foe->attack_character.collision_radius,
+                        foe->alive && foe->enabled && foe->combat_targetable};
+                    std::uint64_t hit_missile = 0;
+                    bool hit_blocked = false;
+                    bool hit_expired = false;
+                    for (int step = 0; step < 600 && hit_missile == 0; ++step) {
+                        missiles.step(1.0F / 60.0F, {collider}, empty_scene);
+                        for (const auto& impact : missiles.take_impacts()) {
+                            if (impact.missile_id == 0) continue;
+                            if (impact.victim_id != 0) {
+                                hit_missile = impact.missile_id;
+                                hit_blocked = impact.blocked;
+                                hit_expired = impact.expired;
+                            }
+                        }
+                    }
+                    require(hit_missile != 0, "SEEKINGSHOT reaches the world target");
+                    if (hit_missile == 0) return 1;
+                    const auto* target = combat_world.find(victim);
+                    const auto defense = torchlight::evaluate_damage_defense(
+                        target->damage_defense,
+                        torchlight::total_attack_effects(target->attacks,
+                                                         target->attack_character));
+                    const torchlight::SkillWeaponRoll profile{40.0F, 60.0F, true,
+                                                              bow.speed_denominator};
+                    const auto rolled = torchlight::roll_skill_weapon_damage(
+                        bow, archer_loadout, archer_values, defense, profile, combat_rng);
+                    require(rolled.applied > 0, "skill roll must move HP");
+                    const auto outcome = combat_world.apply_damage(
+                        victim, static_cast<float>(rolled.applied), combat_logic, true);
+                    require(outcome.accepted, "world refused skill damage");
+                    ++hits;
+                    killed = outcome.killed;
+                    if (hits == 1)
+                        std::printf("first skill hit: applied=%d remaining=%.1f\n",
+                                    rolled.applied, outcome.remaining_health);
+                    require(seeking.notify_missile_impact(hit_missile, victim, hit_blocked,
+                                                          hit_expired, killed),
+                            "world impact dispatches");
+                    const auto pending = seeking.take_weapon_damage_requests();
+                    require(pending.size() == 1 && pending.front().scalars_present &&
+                                pending.front().weapon_damage_pct == 40.0F &&
+                                pending.front().soak_scale_pct == 60.0F,
+                            "world hit carries the rung contract");
+                }
+                const auto* corpse = combat_world.find(victim);
+                require(killed && corpse != nullptr && !corpse->alive && corpse->health == 0.0F,
+                        "SEEKING chain did not kill the world target");
+                require(hits == casts, "every cast landed its hit callback");
+                static_cast<void>(combat_world.resolve_death_loot(combat_logic));
+                int unit_die = 0;
+                int missile_hit = 0;
+                for (const auto& event : seeking.take_skill_events()) {
+                    if (event.type == SkillEventType::unit_die && event.victim_id == victim)
+                        ++unit_die;
+                    if (event.type == SkillEventType::missile_hit && event.victim_id == victim)
+                        ++missile_hit;
+                }
+                require(unit_die == 1, "UNITDIE posted exactly on the killing hit");
+                require(missile_hit == hits, "MISSILEHIT closed every world hit");
+                std::printf("seeking kill: casts=%d hits=%d\n", casts, hits);
+            }
         } catch (const std::exception& e) {
             std::printf("FAIL: SEEKING chain threw: %s\n", e.what());
             ++failures;
@@ -397,5 +536,13 @@ int main() {
     }
 
     std::printf("skill_event_runtime: %d assertions, %d failures\n", assertions, failures);
-    return failures == 0 ? 0 : 1;
+    return failures;
+}
+int main() {
+    try {
+        return run() == 0 ? 0 : 1;
+    } catch (const std::exception& e) {
+        std::printf("ABORT: %s (%d assertions, %d failures)\n", e.what(), assertions, failures);
+        return 1;
+    }
 }

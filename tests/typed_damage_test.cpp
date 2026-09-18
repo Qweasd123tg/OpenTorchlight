@@ -105,11 +105,77 @@ void metadata(const char* path) {
     attack.damage_allocation_known=false;
     require(!ordinary_delivery_supported(attack),"typed descriptor enabled before allocation hydration");
 }
+void skill_profile() {
+    // Skill weapon-applier profile of rollAttack (reachable slice from
+    // CSkillEvent::applyWeaponDamage): neutral scales reproduce the ordinary
+    // roll exactly (shared-core proof), pre-scales land only on the base
+    // maximum, soak flows to mitigation. No pak needed.
+    AttackDescription bow;
+    bow.hand = AttackHand::right;
+    bow.delivery = WeaponDelivery::direct_physical;
+    bow.damage_allocation_known = true;
+    bow.traits.ranged = true;
+    bow.maximum_damage = 100;
+    bow.minimum_damage = 50;
+    AttackLoadout loadout;
+    loadout.right = bow;
+    loadout.use_weapon_damage = true;
+    AttackCharacterValues character;
+    const auto plan = ordinary_damage_plan(bow, loadout, character);
+    require(plan.count == 1, "synthetic bow plan has no bonus channels");
+    const std::int32_t base_maximum = plan.channels[0].maximum;
+    require(base_maximum > 0, "synthetic bow base is degenerate");
+    const SkillWeaponRoll neutral{100.0F, 100.0F, false, 1.0F};
+    TorchlightRandom ordinary_rng(7);
+    const auto ordinary = roll_ordinary_damage(bow, loadout, character, {}, ordinary_rng);
+    TorchlightRandom skill_rng(7);
+    const auto neutral_hit =
+        roll_skill_weapon_damage(bow, loadout, character, {}, neutral, skill_rng);
+    require(neutral_hit.maximum == ordinary.maximum && neutral_hit.rolled == ordinary.rolled &&
+                neutral_hit.applied == ordinary.applied && neutral_hit.count == ordinary.count &&
+                skill_rng.state() == ordinary_rng.state(),
+            "neutral skill profile diverged from the ordinary roll");
+    const SkillWeaponRoll scaled{40.0F, 100.0F, false, 1.0F};
+    TorchlightRandom scaled_rng(7);
+    const auto scaled_hit =
+        roll_skill_weapon_damage(bow, loadout, character, {}, scaled, scaled_rng);
+    const std::int32_t expected_scaled =
+        static_cast<std::int32_t>(static_cast<float>(base_maximum) * 0.4F);
+    require(scaled_hit.maximum == expected_scaled,
+            "WEAPONDAMAGEPCT scale missed the base maximum");
+    const SkillWeaponRoll zero{0.0F, 100.0F, false, 1.0F};
+    TorchlightRandom zero_rng(7);
+    const auto zero_hit = roll_skill_weapon_damage(bow, loadout, character, {}, zero, zero_rng);
+    require(zero_hit.maximum == base_maximum, "zero pct must skip the scale like f0==0");
+    const SkillWeaponRoll dps{100.0F, 100.0F, true, 2.0F};
+    TorchlightRandom dps_rng(7);
+    const auto dps_hit = roll_skill_weapon_damage(bow, loadout, character, {}, dps, dps_rng);
+    const std::int32_t expected_dps =
+        static_cast<std::int32_t>(std::ceil(static_cast<float>(base_maximum) / (2.0F * 0.7333333F)));
+    require(dps_hit.maximum == expected_dps, "USEDPS scale missed the divisor");
+    const SkillWeaponRoll bad_dps{100.0F, 100.0F, true, 0.0F};
+    TorchlightRandom bad_rng(7);
+    const auto bad_before = bad_rng.state();
+    rejects([&] { static_cast<void>(roll_skill_weapon_damage(bow, loadout, character, {}, bad_dps, bad_rng)); },
+            "non-positive DPS speed accepted");
+    require(bad_rng.state() == bad_before, "refused DPS roll consumed randomness");
+    const SkillWeaponRoll soaked{100.0F, 50.0F, false, 1.0F};
+    TorchlightRandom soak_rng(7);
+    const auto soaked_hit =
+        roll_skill_weapon_damage(bow, loadout, character, {}, soaked, soak_rng);
+    require(soaked_hit.maximum == base_maximum && soaked_hit.applied <= neutral_hit.applied,
+            "soak must not touch the plan maximum and must mitigate");
+    TorchlightRandom soak_repeat(7);
+    const auto soaked_again =
+        roll_skill_weapon_damage(bow, loadout, character, {}, soaked, soak_repeat);
+    require(soaked_again.applied == soaked_hit.applied && soaked_again.rolled == soaked_hit.rolled,
+            "skill roll is not deterministic on a fixed stream");
+}
 } // namespace
 int main(int argc,char**argv) {
     try {
         if (argc!=2) throw std::invalid_argument("typed_damage_test authored-ranged.pak.zip");
-        numeric();enemy_cycle(argv[1]);metadata(argv[1]);
+        numeric();skill_profile();enemy_cycle(argv[1]);metadata(argv[1]);
         std::cout<<"PASS: "<<checks<<" typed damage, transaction, metadata and enemy-HIT checks\n";
     } catch(const std::exception& e) { std::cerr<<e.what()<<'\n';return 1; }
 }
