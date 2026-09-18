@@ -104,7 +104,11 @@ int main(int argc, char** argv) {
                 "OGRE geometry has no primary vertex normals");
         require(colored_geometries == 360 && colored_vertices == 591528,
                 "unexpected original vertex-color coverage");
-        require(bone_assignments == 477008, "unexpected vertex bone-assignment count");
+        // resource-derived: 477008 baseline + 72 local bone assignments from
+        // 7 shipped UI meshes whose submesh chunks under-report their end
+        // (U03, research/ui-deep-map/). Verified per-file against pak bytes;
+        // dropdown's 6 shared bindings use a different path and are excluded.
+        require(bone_assignments == 477080, "unexpected vertex bone-assignment count");
         std::cout << "PASS: parsed 3312 OGRE v1.40 meshes, 1939624 vertices, "
                      "2461269 indices, 5105 submeshes and "
                   << bone_assignments << " bone assignments\n";

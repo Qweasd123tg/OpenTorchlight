@@ -1,0 +1,828 @@
+[
+  {
+    "path": "media/UI/models/character/character.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 878,
+    "actual_size": 1131,
+    "submeshes": [
+      {
+        "material": "Character_Top/Character_Top",
+        "start": 32,
+        "declared_end": 306,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 316,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 332,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 348,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 364,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 308,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 308,
+        "operation": 4
+      },
+      {
+        "material": "Character_Top/Character_Top2",
+        "start": 380,
+        "declared_end": 655,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 665,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 681,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 697,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 713,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 657,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 657,
+        "operation": 4
+      },
+      {
+        "material": "Character_Bottom",
+        "start": 729,
+        "declared_end": 992,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 1002,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1018,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1034,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1050,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 994,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 994,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "character.skeleton"
+  },
+  {
+    "path": "media/UI/models/dropdown/dropdown.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 345,
+    "actual_size": 534,
+    "submeshes": [
+      {
+        "material": "Dropdown_",
+        "start": 320,
+        "declared_end": 398,
+        "shared": true,
+        "indices": 12,
+        "assignments": [],
+        "after_geometry": 366,
+        "port_submesh_loop_enters": true,
+        "operation_offset": 366,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [
+      {
+        "offset": 398,
+        "vertex": 0,
+        "bone": 0,
+        "weight": 1.0
+      },
+      {
+        "offset": 414,
+        "vertex": 1,
+        "bone": 0,
+        "weight": 1.0
+      },
+      {
+        "offset": 430,
+        "vertex": 2,
+        "bone": 0,
+        "weight": 1.0
+      },
+      {
+        "offset": 446,
+        "vertex": 3,
+        "bone": 0,
+        "weight": 1.0
+      },
+      {
+        "offset": 462,
+        "vertex": 4,
+        "bone": 2,
+        "weight": 1.0
+      },
+      {
+        "offset": 478,
+        "vertex": 5,
+        "bone": 2,
+        "weight": 1.0
+      }
+    ],
+    "unhandled": [
+      {
+        "offset": 32,
+        "id": "0x5000"
+      }
+    ],
+    "skeleton": "dropdown.skeleton"
+  },
+  {
+    "path": "media/UI/models/inventory/inventory.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 589,
+    "actual_size": 768,
+    "submeshes": [
+      {
+        "material": "Inventory_Top",
+        "start": 32,
+        "declared_end": 292,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 302,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 318,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 334,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 350,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 294,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 294,
+        "operation": 4
+      },
+      {
+        "material": "Inventory_Bottom",
+        "start": 366,
+        "declared_end": 629,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 639,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 655,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 671,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 687,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 631,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 631,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "inventory.skeleton"
+  },
+  {
+    "path": "media/UI/models/journal/journal.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 866,
+    "actual_size": 1119,
+    "submeshes": [
+      {
+        "material": "Skill_Middle/Skill_Middle",
+        "start": 32,
+        "declared_end": 304,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 314,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 330,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 346,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 362,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 306,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 306,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Middle/Skill_Middleb",
+        "start": 378,
+        "declared_end": 651,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 661,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 677,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 693,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 709,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 653,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 653,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Bottom",
+        "start": 725,
+        "declared_end": 984,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 994,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1010,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1026,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1042,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 986,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 986,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "skill.skeleton"
+  },
+  {
+    "path": "media/UI/models/merchant/merchant.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 585,
+    "actual_size": 764,
+    "submeshes": [
+      {
+        "material": "Merchant_Top",
+        "start": 32,
+        "declared_end": 291,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 301,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 317,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 333,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 349,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 293,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 293,
+        "operation": 4
+      },
+      {
+        "material": "MerchantBottom",
+        "start": 365,
+        "declared_end": 626,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 636,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 652,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 668,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 684,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 628,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 628,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "merchant.skeleton"
+  },
+  {
+    "path": "media/UI/models/pet/pet.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 580,
+    "actual_size": 759,
+    "submeshes": [
+      {
+        "material": "Merchant_Top",
+        "start": 32,
+        "declared_end": 291,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 301,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 317,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 333,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 349,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 293,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 293,
+        "operation": 4
+      },
+      {
+        "material": "MerchantBottom",
+        "start": 365,
+        "declared_end": 626,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 636,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 652,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 668,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 684,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 628,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 628,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "pet.skeleton"
+  },
+  {
+    "path": "media/UI/models/quest/quest.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 866,
+    "actual_size": 1119,
+    "submeshes": [
+      {
+        "material": "Skill_Middle/Skill_Middle",
+        "start": 32,
+        "declared_end": 304,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 314,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 330,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 346,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 362,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 306,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 306,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Middle/Skill_Middleb",
+        "start": 378,
+        "declared_end": 651,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 661,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 677,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 693,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 709,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 653,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 653,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Bottom",
+        "start": 725,
+        "declared_end": 984,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 994,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1010,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1026,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1042,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 986,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 986,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "quest.skeleton"
+  },
+  {
+    "path": "media/UI/models/skill/skill.MESH",
+    "root_id": "0x3000",
+    "advertised_root_end": 866,
+    "actual_size": 1119,
+    "submeshes": [
+      {
+        "material": "Skill_Middle/Skill_Middle",
+        "start": 32,
+        "declared_end": 304,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 314,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 330,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 346,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 362,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 306,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 306,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Middle/Skill_Middleb",
+        "start": 378,
+        "declared_end": 651,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 661,
+            "vertex": 0,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 677,
+            "vertex": 1,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 693,
+            "vertex": 2,
+            "bone": 2,
+            "weight": 1.0
+          },
+          {
+            "offset": 709,
+            "vertex": 3,
+            "bone": 2,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 653,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 653,
+        "operation": 4
+      },
+      {
+        "material": "Skill_Bottom",
+        "start": 725,
+        "declared_end": 984,
+        "shared": false,
+        "indices": 6,
+        "assignments": [
+          {
+            "offset": 994,
+            "vertex": 0,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1010,
+            "vertex": 1,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1026,
+            "vertex": 2,
+            "bone": 0,
+            "weight": 1.0
+          },
+          {
+            "offset": 1042,
+            "vertex": 3,
+            "bone": 0,
+            "weight": 1.0
+          }
+        ],
+        "vertices": 4,
+        "after_geometry": 986,
+        "port_submesh_loop_enters": false,
+        "operation_offset": 986,
+        "operation": 4
+      }
+    ],
+    "shared_assignments": [],
+    "unhandled": [],
+    "skeleton": "skill.skeleton"
+  }
+]

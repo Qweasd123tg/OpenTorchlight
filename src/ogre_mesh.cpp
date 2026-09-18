@@ -407,13 +407,26 @@ OgreSubmesh parse_submesh(Reader& reader, const Chunk& chunk) {
         }
         submesh.geometry = parse_geometry(reader, geometry_chunk);
     }
-    while (reader.can_read(6, chunk.end)) {
-        const auto next_id = reader.peek_u16(chunk.end);
+    // Resource-derived: shipped UI meshes under-report the submesh end. Their
+    // local geometry can finish past chunk.end; operation/bone records still
+    // follow it in the physical stream. Do not silently drop those bindings.
+    // Only the known submesh-child IDs are consumed; the next root/submesh
+    // stays for the outer parser. All reads remain bounded by the actual file.
+    while (reader.can_read(6, reader.size())) {
+        const auto next_id = reader.peek_u16(reader.size());
         if (next_id != kSubmeshOperation && next_id != kSubmeshBoneAssignment &&
             next_id != 0x4200) {
             break;
         }
-        const auto child = reader.read_chunk(chunk.end);
+        // read_chunk(file_size) has a legacy truncated-chunk fallback; do not
+        // use that relaxation for these trailing submesh records.
+        const auto child_id = reader.read_u16(reader.size(), "submesh child ID");
+        const auto length = reader.read_u32(reader.size(), "submesh child length");
+        if (length < 6U || static_cast<std::size_t>(length - 6U) >
+                                reader.size() - reader.position()) {
+            throw OgreMeshError("OGRE submesh child exceeds the physical stream");
+        }
+        const Chunk child{child_id, reader.position() + static_cast<std::size_t>(length - 6U)};
         if (child.id == kSubmeshOperation) {
             submesh.operation_type = reader.read_u16(child.end, "submesh operation");
         } else if (child.id == kSubmeshBoneAssignment) {
