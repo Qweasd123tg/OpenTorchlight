@@ -209,6 +209,7 @@ PlayerCheckpoint CheckpointAccess::capture(const PlayerSession &p) {
     s.maximum_health = p.health_.maximum_health_;
     s.base_health = p.health_.base_health_;
     require(!p.skill_cast_.active(), "save requires a completed or cancelled cast");
+    require(!p.has_pending_skill_missiles(), "save requires completed skill projectiles");
     s.active_recovery = p.active_recovery_;
     s.skills = p.skills_;
     s.mana = p.health_.mana_;

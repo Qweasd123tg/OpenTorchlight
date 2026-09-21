@@ -2,6 +2,7 @@
 #include "torchlight/resource_fields.hpp"
 #include "torchlight/original_combat_inputs.hpp"
 #include "torchlight/scene_animation.hpp"
+#include "torchlight/skill_event_program.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -125,6 +126,7 @@ const SkillRank* SkillDefinition::rank(std::int32_t n) const noexcept {
     return n>0&&static_cast<std::size_t>(n)<=ranks.size()?&ranks[static_cast<std::size_t>(n-1)]:nullptr;
 }
 SkillCatalog::SkillCatalog(const PakArchive& pak) {
+    const LevelSceneLoader scenes(pak);
     const auto effects=parse_adm(pak.read_normalized(original_combat_inputs::effect_catalog_compiled_path));
     const AttackEffectCatalog catalog(effects);
     std::unordered_map<std::u16string,AdmGroup> affixes;
@@ -160,7 +162,9 @@ SkillCatalog::SkillCatalog(const PakArchive& pak) {
             try {
                 if(r.cooldown<0 || r.monster_cooldown<0 || !(r.speed>0) || r.mana_cost<0)
                     throw std::invalid_argument("invalid cast cost/cooldown/speed");
-                r.self_buff=compile_self_buff(evaluated,*raw,affixes,catalog,effects,def.guid);
+                if (rf::upper(rf::text(evaluated,u"TARGET_TYPE"))==u"SELF")
+                    r.self_buff=compile_self_buff(evaluated,*raw,affixes,catalog,effects,def.guid);
+                else r.event_program=std::make_shared<const SkillEventProgram>(compile_skill_event_program(evaluated,scenes));
             }
             catch(const std::exception& e) { r.unavailable_reason=e.what(); }
             def.ranks.push_back(std::move(r));previous=std::move(evaluated);
@@ -213,7 +217,7 @@ bool advance_timed_skill_effects(std::vector<TimedSkillEffect>& active,float sec
     active.erase(std::remove_if(active.begin(),active.end(),[](const auto& e){return e.remaining==0;}),active.end());
     return active.size()!=before;
 }
-void SelfBuffCast::start(std::uint64_t execution,std::u16string name,SelfBuffProgram program,AttackClip clip,float speed) {
+void SkillCast::start(std::uint64_t execution,std::u16string name,SelfBuffProgram program,AttackClip clip,float speed) {
     if(!clip||clip->event_keys.empty())throw std::invalid_argument("skill animation has no event keys");
     if(std::none_of(clip->event_keys.begin(),clip->event_keys.end(),[](const auto& k){return k.name=="HIT";}))throw std::invalid_argument("skill animation has no HIT");
     validate_skill_checkpoint({{},program.effects});
@@ -221,8 +225,8 @@ void SelfBuffCast::start(std::uint64_t execution,std::u16string name,SelfBuffPro
     std::vector<bool> consumed(clip->event_keys.size(),false);
     name_=std::move(name);program_=std::move(program);clip_=std::move(clip);playback_=std::move(next);consumed_=std::move(consumed);active_=true;
 }
-void SelfBuffCast::advance(float seconds){if(active_)playback_.advance(seconds);}
-bool SelfBuffCast::consume(const AnimationEventOccurrence& event) {
+void SkillCast::advance(float seconds){if(active_)playback_.advance(seconds);}
+bool SkillCast::consume(const AnimationEventOccurrence& event) {
     if(!active_||event.key.name!="HIT"||event.key_index>=consumed_.size()||consumed_[event.key_index])return false;
     const auto& issued=playback_.frame_events();
     const auto match=std::find_if(issued.begin(),issued.end(),[&](const auto& k){return k.execution_id==event.execution_id&&k.playback_generation==event.playback_generation&&
@@ -230,8 +234,8 @@ bool SelfBuffCast::consume(const AnimationEventOccurrence& event) {
     if(match==issued.end())return false;
     consumed_[event.key_index]=true;return true;
 }
-void SelfBuffCast::finish_frame() noexcept {if(active_&&playback_.finished())active_=false;}
-void SelfBuffCast::cancel() noexcept {playback_.stop();active_=false;}
+void SkillCast::finish_frame() noexcept {if(active_&&playback_.finished())active_=false;}
+void SkillCast::cancel() noexcept {playback_.stop();active_=false;}
 const char* skill_use_message(SkillUse s) noexcept {
     switch(s) {
     case SkillUse::started:return "CAST STARTED";case SkillUse::learned:return "SKILL RANK INCREASED";

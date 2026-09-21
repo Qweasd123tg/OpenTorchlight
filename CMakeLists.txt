@@ -49,6 +49,7 @@ add_library(torchlight_core STATIC
     src/missile_motion.cpp
     src/missile_runtime.cpp
     src/skill_event_runtime.cpp
+    src/skill_event_program.cpp
     src/economy.cpp
     src/quests.cpp
     src/skills.cpp
@@ -1000,6 +1001,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence
             --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
         set_tests_properties(application_services_render PROPERTIES TIMEOUT 1200)
+        add_test(NAME application_skill_projectile_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_skill_projectile_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --fixture $<TARGET_FILE:service_fixture>
+            --game-dir ${TORCHLIGHT_GAME_DIR} --output-dir ${CMAKE_CURRENT_BINARY_DIR}/scenario-evidence)
+        set_tests_properties(application_skill_projectile_render PROPERTIES TIMEOUT 720)
         add_test(NAME application_missile_render COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/application_missile_test.py
             --probe $<TARGET_FILE:application_scenario_probe> --fixture $<TARGET_FILE:missile_fixture>
@@ -1007,7 +1013,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --timeout-scale ${TORCHLIGHT_TEST_TIMEOUT_SCALE})
         set_tests_properties(application_missile_render PROPERTIES TIMEOUT 1200)
         if(TORCHLIGHT_PYTHON_ASAN_PRELOAD)
-            set_tests_properties(application_services_render PROPERTIES ENVIRONMENT
+            set_tests_properties(application_services_render application_skill_projectile_render PROPERTIES ENVIRONMENT
                 "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
         endif()
     endif()
@@ -1091,6 +1097,24 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         target_compile_options(skill_event_runtime_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_test(NAME skill_event_runtime COMMAND skill_event_runtime_test)
+    add_executable(skill_event_program_test tests/skill_event_program_test.cpp)
+    add_executable(skill_production_test tests/skill_production_test.cpp)
+    target_link_libraries(skill_production_test PRIVATE torchlight_core)
+    target_link_libraries(skill_event_program_test PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(skill_event_program_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        target_compile_options(skill_production_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_skill_event_program COMMAND skill_event_program_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_skill_event_program PROPERTIES LABELS "assets" TIMEOUT 60)
+        add_test(NAME original_skill_production COMMAND skill_production_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_skill_production PROPERTIES LABELS "assets" TIMEOUT 60)
+        add_test(NAME original_skill_event_resource_composition COMMAND skill_event_runtime_test)
+        set_tests_properties(original_skill_event_resource_composition PROPERTIES
+            LABELS "assets" TIMEOUT 60
+            ENVIRONMENT "TORCHLIGHT_GAME_DIR=${TORCHLIGHT_GAME_DIR}")
+    endif()
 
     # Donor ui_skin merge: synthetic fixture only (no game assets); the
     # native-probe/render harnesses were not taken (no probe infrastructure).
@@ -1262,6 +1286,30 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:torchlight_typed_damage_probe>
             --output ${CMAKE_CURRENT_BINARY_DIR}/typed-damage-original.json)
         set_tests_properties(original_typed_damage_comparison PROPERTIES LABELS "reference" TIMEOUT 180 SKIP_RETURN_CODE 77)
+        add_test(NAME original_skill_weapon_damage_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_skill_weapon_damage.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:torchlight_typed_damage_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/skill-weapon-original.json)
+        set_tests_properties(original_skill_weapon_damage_comparison PROPERTIES LABELS "reference" TIMEOUT 180 SKIP_RETURN_CODE 77)
+        add_test(NAME original_skill_missile_hook_trace COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/trace_skill_missile_hooks.py
+            --original ${TORCHLIGHT_ORIGINAL}
+            --output ${CMAKE_CURRENT_BINARY_DIR}/skill-missile-hooks.json)
+        set_tests_properties(original_skill_missile_hook_trace PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+        if(TORCHLIGHT_GAME_DIR)
+            add_test(NAME original_skill_event_trace COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+                ${CMAKE_CURRENT_SOURCE_DIR}/tests/trace_skill_events.py
+                --original ${TORCHLIGHT_ORIGINAL} --pak ${TORCHLIGHT_GAME_DIR}/pak.zip
+                --output ${CMAKE_CURRENT_BINARY_DIR}/skill-event-native-trace.json)
+            set_tests_properties(original_skill_event_trace PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+        endif()
+        if(TORCHLIGHT_LODEPNG_SOURCE_DIR)
+            add_test(NAME original_lodepng_source_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+                ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_lodepng_source.py
+                --original ${TORCHLIGHT_ORIGINAL} --source-dir ${TORCHLIGHT_LODEPNG_SOURCE_DIR}
+                --output ${CMAKE_CURRENT_BINARY_DIR}/lodepng-source-original.json)
+            set_tests_properties(original_lodepng_source_comparison PROPERTIES LABELS "reference" TIMEOUT 180 SKIP_RETURN_CODE 77)
+        endif()
     endif()
     add_executable(typed_migration_test tests/typed_migration_test.cpp)
     target_link_libraries(typed_migration_test PRIVATE torchlight_core)

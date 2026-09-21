@@ -71,6 +71,11 @@ public:
             std::istringstream fields(line); Step step;
             if (!(fields >> step.verb)) continue;
             std::string arg; while (fields >> arg) step.args.push_back(std::move(arg));
+            if (step.verb=="select-skill" && step.args.size()>1) {
+                std::string name=step.args.front();
+                for(std::size_t i=1;i<step.args.size();++i) name+=' '+step.args[i];
+                step.args={std::move(name)};
+            }
             const std::vector<std::pair<std::string,std::size_t>> counts = {
                 {"menu",1},{"button",1},{"hud-button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
                 {"walk",2},{"npc",1},{"select-skill",1},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},

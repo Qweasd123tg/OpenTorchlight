@@ -9,6 +9,7 @@
 #include <optional>
 
 namespace torchlight {
+struct SkillWeaponDamageRequest;
 
 enum class CombatState { idle, approaching, waiting, attacking, attacked, killed, missed, unavailable };
 struct CombatUpdate {
@@ -68,6 +69,8 @@ public:
         const AnimationEventOccurrence& event, const std::array<float, 3>& position,
         RuntimeEntityWorld& world);
     [[nodiscard]] CombatUpdate apply_missile_impact(const MissileShot& shot, std::uint64_t victim_id,
+        RuntimeEntityWorld& world, LogicRuntime& logic);
+    [[nodiscard]] CombatUpdate apply_skill_weapon_impact(const SkillWeaponDamageRequest&,
         RuntimeEntityWorld& world, LogicRuntime& logic);
     // Recompute existing physical consumers without replacing the current action.
     void set_attributes(std::int32_t strength, std::int32_t dexterity, std::int32_t magic = 0);

@@ -4,6 +4,8 @@
 #include "torchlight/enemy_ai.hpp"
 #include "torchlight/inventory.hpp"
 #include "torchlight/merchant.hpp"
+#include "torchlight/skill_event_runtime.hpp"
+#include <map>
 
 namespace torchlight {
 // Session lifetime, not floor lifetime. No file saves or hidden references to a
@@ -54,17 +56,25 @@ public:
     // Repositions atomically with validation; never loads or regenerates a floor.
     [[nodiscard]] RecoveryResult recover_at_entry(EnemyController& enemies, ActorMotion& motion,
         const std::array<float, 3>& anchor);
-    void enter_level() noexcept { combat_.reset_level_context(); skill_cast_.cancel(); }
+    void enter_level() noexcept { combat_.reset_level_context(); cancel_skill(); }
     void attach_skill_catalog(std::shared_ptr<const SkillCatalog>);
     [[nodiscard]] const SkillCheckpoint& skills() const noexcept { return skills_; }
     [[nodiscard]] const SkillCatalog* skill_catalog() const noexcept { return skill_catalog_.get(); }
     [[nodiscard]] SkillUse invest_skill(std::u16string_view name);
-    [[nodiscard]] SkillUse begin_skill(std::u16string_view name, const AttackClipResolver& resolver);
+    [[nodiscard]] SkillUse begin_skill(std::u16string_view name, const AttackClipResolver& resolver,
+                                     SkillCastContext context = {});
     void advance_skill_animation(float seconds);
     [[nodiscard]] bool perform_skill_event(const AnimationEventOccurrence&);
-    void finish_skill_frame() noexcept { skill_cast_.finish_frame(); }
-    void cancel_skill() noexcept { skill_cast_.cancel(); }
-    [[nodiscard]] const SelfBuffCast& skill_cast() const noexcept { return skill_cast_; }
+    void finish_skill_frame() noexcept;
+    void cancel_skill() noexcept { skill_cast_.cancel(); skill_event_casts_.clear(); }
+    void drain_skill_launches(const SkillMissileFireSink&);
+    [[nodiscard]] bool notify_skill_missile_impact(std::uint64_t missile, std::uint64_t victim,
+        bool blocked, bool expired, const SkillWeaponDamageSink&);
+    void retire_skill_missile(std::uint64_t missile);
+    [[nodiscard]] bool has_pending_skill_missiles() const noexcept;
+    [[nodiscard]] std::vector<SkillEventRecord> take_skill_events();
+    [[nodiscard]] std::vector<SkillRefusedLaunch> take_skill_refused_launches();
+    [[nodiscard]] const SkillCast& skill_cast() const noexcept { return skill_cast_; }
     [[nodiscard]] const InventoryItem* weapon() const noexcept {
         return inventory_.equipped(InventorySlot::weapon);
     }
@@ -87,7 +97,8 @@ private:
     std::vector<SkillGrant> class_skills_;
     std::shared_ptr<const SkillCatalog> skill_catalog_;
     SkillCheckpoint skills_;
-    SelfBuffCast skill_cast_;
+    SkillCast skill_cast_;
+    std::map<std::uint64_t,SkillEventRuntime> skill_event_casts_;
     std::string skill_mesh_;
     std::uint64_t next_skill_execution_ = 1;
 };

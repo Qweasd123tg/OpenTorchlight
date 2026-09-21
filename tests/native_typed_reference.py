@@ -93,9 +93,11 @@ class Native(Memory):
         self.flags = set()
         self.output = None
         self.critical = False
+        self.left_hand = False
         for obj, off, val in [(self.actor, 1168, c.addressof(self.inv)), (self.target, 1168, c.addressof(self.tinv)), (self.actor, 912, c.addressof(self.desc)), (self.actor, 1176, c.addressof(self.weapon)), (self.weapon, 672, c.addressof(self.desc)), (self.weapon, 848, c.addressof(self.indexes)), (self.weapon, 856, c.addressof(self.indexes) + 28), (self.weapon, 872, c.addressof(self.values)), (self.weapon, 896, c.addressof(self.zeros))]:
             struct.pack_into('<Q', obj, off, val)
         struct.pack_into('<?', self.actor, 1184, True)
+        struct.pack_into('<Q', self.weapon, 0x2a8, c.addressof(self.desc))
         struct.pack_into('<f', self.actor, 1824, 1.0)
         struct.pack_into('<f', self.desc, 112, 1.0)
         cf = c.CFUNCTYPE
@@ -109,9 +111,9 @@ class Native(Memory):
         self.callback(8468448, cf(c.c_float, c.c_void_p, c.c_uint, c.c_uint), effect)
         self.callback(8468240, cf(c.c_float, c.c_void_p, c.c_uint, c.c_uint, c.c_uint), lambda a, t, h, d: effect(a, t, d))
         self.callback(8348320, cf(c.c_bool, c.c_void_p, c.c_uint), lambda a, t: a == c.addressof(self.weapon) and t in self.flags)
-        self.callback(9548896, cf(c.c_void_p, c.c_void_p, c.c_uint), lambda a, h: c.addressof(self.weapon) if a == c.addressof(self.inv) and h == 0 else 0)
-        self.callback(8453152, cf(c.c_void_p, c.c_void_p), lambda a: 0)
-        self.callback(8453200, cf(c.c_void_p, c.c_void_p), lambda a: c.addressof(self.weapon))
+        self.callback(9548896, cf(c.c_void_p, c.c_void_p, c.c_uint), lambda a, h: c.addressof(self.weapon) if a == c.addressof(self.inv) and h == int(self.left_hand) else 0)
+        self.callback(8453152, cf(c.c_void_p, c.c_void_p), lambda a: c.addressof(self.weapon) if self.left_hand else 0)
+        self.callback(8453200, cf(c.c_void_p, c.c_void_p), lambda a: 0 if self.left_hand else c.addressof(self.weapon))
         self.callback(8479648, cf(c.c_float, c.c_void_p), lambda a: 0.0)
         self.callback(8619024, cf(c.c_bool, c.c_void_p, c.c_void_p), lambda a, b: self.critical)
         self.callback(13034560, cf(c.c_int, c.c_void_p, c.c_uint), lambda a, b: 0)
@@ -156,11 +158,16 @@ class Native(Memory):
         struct.pack_into('<i', self.weapon, 820, graph)
         return self.allocation(c.addressof(self.weapon), percent, int(physical))
 
-    def run(self, base, bonus, strength=0, dexterity=0, magic=0, effects=(), armor=0, defense=0, elemental=None, target_effects=(), seed=1, flags=()):
+    def run(self, base, bonus, strength=0, dexterity=0, magic=0, effects=(), armor=0, defense=0, elemental=None, target_effects=(), seed=1, flags=(), *, damage_fraction=1.0, soak_multiplier=1.0, use_dps=False, dps_speed=1.0, left_hand=False):
+        self.left_hand = left_hand
         self.flags = set(flags)
         self.effects = list(effects)
         self.target_effects = list(target_effects)
         struct.pack_into('<i', self.desc, 36, base)
+        # original-code: rollAttack reads attackDesc+0x70 at 0x844157.
+        # The existing oracle already maps the 0.7333333 constant at 0xfce530.
+        # These are controlled roll inputs, not recovered equipment/skill wiring.
+        struct.pack_into('<f', self.desc, 0x70, dps_speed)
         for off, val in [(1068, strength), (1064, dexterity), (1076, magic)]:
             struct.pack_into('<i', self.actor, off, val)
         struct.pack_into('<i', self.target, 1060, armor)
@@ -170,5 +177,6 @@ class Native(Memory):
             struct.pack_into('<i', self.target, 1568 + 4 * i, (elemental or [0] * 7)[i])
         c.c_uint64.from_address(21940984).value = seed
         self.output = None
-        self.roll(c.addressof(self.actor), 0, c.addressof(self.target), c.addressof(self.weapon), 0, 1.0, 1.0, 7)
+        self.roll(c.addressof(self.actor), 0, c.addressof(self.target), c.addressof(self.weapon),
+                  0x400 if use_dps else 0, damage_fraction, soak_multiplier, 7)
         return (self.output, c.c_uint64.from_address(21940984).value)

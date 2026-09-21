@@ -87,19 +87,36 @@ DamageMitigation mitigate_evaluated_damage(std::int32_t damage, std::int32_t max
     return result;
 }
 
-OrdinaryDamagePlan ordinary_damage_plan(const AttackDescription& selected,
-    const AttackLoadout& loadout, const AttackCharacterValues& character) {
+namespace {
+OrdinaryDamagePlan attack_damage_plan(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character,
+    float fraction = 1.0F, bool use_dps = false, float speed = 1.0F) {
+    // original-code: 0xfce530 is float bits 0x3f3bbbbc. Decimal 0.7333333F
+    // is the adjacent float and changes ceil(99 / divisor) from 135 to 136.
+    const float divisor = speed * 0x1.777778p-1F;
+    if (use_dps && (!(divisor > 0.0F) || !std::isfinite(divisor)))
+        throw std::invalid_argument("skill DPS speed must be positive");
+    const auto scale = [fraction](std::int32_t value) {
+        return fraction == 1.0F ? value : checked(static_cast<float>(value) * fraction);
+    };
+    const auto dps = [use_dps, divisor](std::int32_t value) {
+        return use_dps ? checked(std::ceil(static_cast<float>(value) / divisor)) : value;
+    };
     const auto base = ordinary_physical_damage(selected, loadout, character);
+    const auto base_maximum = dps(scale(base[1]));
+    const auto base_minimum = minimum(base_maximum); // @0x844180, after both scales
     OrdinaryDamagePlan result;
-    result.channels[result.count++] = {DamageType::physical, base[0], base[1]};
-    result.maximum = base[1]; result.minimum = base[0];
+    result.channels[result.count++] = {DamageType::physical, base_minimum, base_maximum};
+    result.maximum = base_maximum; result.minimum = base_minimum;
     const auto global = total_attack_effects(loadout, character);
     const bool weapon = selected.hand != AttackHand::innate;
     const auto attribute = combat_attribute(character, global, selected.traits.ranged);
     for (std::size_t i = 0; i < selected.damage_bonus.size(); ++i) {
-        const auto bonus = selected.damage_bonus[i];
+        const auto raw_bonus = selected.damage_bonus[i];
         const auto flat = checked(std::ceil(global.get(10, static_cast<std::uint8_t>(i))));
-        if (bonus <= 0 && flat <= 0) continue;
+        if (raw_bonus <= 0 && flat <= 0) continue;
+        // @0x8442bc and @0x844738 scale the raw bonus before enhancement.
+        const auto bonus = scale(raw_bonus);
         // rollAttack @0x8442db..0x844524 / @0x844838..0x844d8b.
         // Unlike maxDamage, these additions include both hands' evaluated effects.
         auto percent = global.get(0x19, static_cast<std::uint8_t>(i)) / 100.0F;
@@ -112,15 +129,23 @@ OrdinaryDamagePlan ordinary_damage_plan(const AttackDescription& selected,
         if (weapon && i > 0) percent += static_cast<float>(evaluated_magic(character.magic, global)) / 100.0F;
         if (loadout.left && loadout.right) percent += global.get(0x58) / 100.0F;
         const auto enhanced = add(bonus, checked(std::ceil(static_cast<float>(bonus) * percent)));
-        const auto maximum = add(enhanced, flat);
+        // The original's two passes differ: total maximum adds flat AFTER
+        // DPS (@0x8444e2..0x84451e), channel roll BEFORE (@0x844958..0x844995).
+        // Preserve this distinction for the elemental mitigation denominator.
+        const auto maximum = dps(add(enhanced, flat));
         // Negative raw contributions are not new healing semantics for attacks.
         if (maximum < 0) throw std::invalid_argument("negative ordinary channel damage");
         const auto low = minimum(maximum);
         result.channels[result.count++] = {static_cast<DamageType>(i), low, maximum};
-        result.maximum = add(result.maximum, maximum);
+        result.maximum = add(result.maximum, add(dps(enhanced), flat));
         result.minimum = add(result.minimum, low);
     }
     return result;
+}
+} // namespace
+OrdinaryDamagePlan ordinary_damage_plan(const AttackDescription& selected,
+    const AttackLoadout& loadout, const AttackCharacterValues& character) {
+    return attack_damage_plan(selected, loadout, character);
 }
 namespace {
 // Shared channel roll/mitigation loop for the ordinary HIT branch and the
@@ -171,27 +196,13 @@ OrdinaryDamageResult roll_skill_weapon_damage(const AttackDescription& selected,
     const EvaluatedDamageDefense& defense, const SkillWeaponRoll& roll,
     TorchlightRandom& random) {
     // Reachable rollAttack slice for the skill missile path. The caller owns
-    // weapon selection and the performAttack preconditions (right-hand ranged
+    // weapon selection and the performAttack preconditions (single ranged
     // weapon, live foe, in range): this maps the roll, not the gates.
-    auto plan = ordinary_damage_plan(selected, loadout, character);
-    if (plan.count == 0) return roll_planned_damage(plan, defense, random, 1.0F);
-    // WEAPONDAMAGEPCT @0x845338: f0==0 skips the scale, else trunc(base*frac)
-    // with the ctor-role max(0, pct/100) fraction.
+    // original-code: @0x844150 compares the fraction with 1, not 0;
+    // @0x845338 truncates base*frac. See research/skill-weapon-oracle.md.
     const float fraction = std::max(0.0F, roll.weapon_damage_pct / 100.0F);
-    std::int32_t base_maximum = plan.channels[0].maximum;
-    if (fraction != 0.0F)
-        base_maximum = checked(std::trunc(static_cast<float>(base_maximum) * fraction));
-    if (roll.use_dps) {
-        // USEDPS @0x84530f: ceil(scaled / (SPEED * 0.7333333)), rodata @0xfce530.
-        const float divisor = roll.dps_speed * 0.7333333F;
-        if (!(divisor > 0.0F) || !std::isfinite(divisor))
-            throw std::invalid_argument("skill DPS speed must be positive");
-        base_maximum = checked(std::ceil(static_cast<float>(base_maximum) / divisor));
-    }
-    // Only the base maximum is pre-scaled; bonus channels and all minimums
-    // ride the shared plan untouched.
-    plan.maximum = add(base_maximum, plan.maximum - plan.channels[0].maximum);
-    plan.channels[0].maximum = base_maximum;
+    const auto plan = attack_damage_plan(selected, loadout, character,
+                                        fraction, roll.use_dps, roll.dps_speed);
     // SOAK @0x844226/@0x844a05: the mitigate multiplier (ctor-role fraction).
     const float soak = std::max(0.0F, roll.soak_scale_pct / 100.0F);
     return roll_planned_damage(plan, defense, random, soak);

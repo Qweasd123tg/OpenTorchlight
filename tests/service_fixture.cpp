@@ -6,7 +6,7 @@
 using namespace torchlight;
 int main(int argc,char**argv) {
     try {
-        if(argc!=3)throw std::invalid_argument("service_fixture PAK SAVE_DIR");
+        if(argc!=3 && argc!=4)throw std::invalid_argument("service_fixture PAK SAVE_DIR [SKILL_NAME]");
         PakArchive pak(argv[1]);MasterResourceIndex index(parse_adm(pak.read_normalized("media/masterresourceunits.dat.adm")));
         UnitDefinitionLoader loader(pak);UnitTypeHierarchy types(pak);SaveStore saves(argv[2]);
         auto slots=saves.list(checkpoint_resource_identity(pak));
@@ -15,8 +15,10 @@ int main(int argc,char**argv) {
         for(const auto& proto:players)if(proto.guid==c.class_guid) {
             auto session=CheckpointAccess::restore_player(proto,c.player,c.seed,&types);
             session.attach_skill_catalog(std::make_shared<SkillCatalog>(pak));
-            bool infuse=false;for(const auto& skill:session.skills().skills)infuse|=skill.name==u"INFUSE";
-            if(!infuse)throw std::invalid_argument("fixture must select the Alchemist class");
+            const std::string requested=argc==4?argv[3]:"INFUSE";
+            const std::u16string skill_name(requested.begin(),requested.end());
+            bool available=false;for(const auto& skill:session.skills().skills)available|=skill.name==skill_name;
+            if(!available)throw std::invalid_argument("fixture class does not have requested skill");
             if(session.progression().level!=1)throw std::invalid_argument("fixture must start at level 1");
             while(session.progression().level<10) {
                 const auto gate=session.progression_rules()->gate(session.progression().level);

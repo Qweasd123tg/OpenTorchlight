@@ -108,8 +108,8 @@ void metadata(const char* path) {
 void skill_profile() {
     // Skill weapon-applier profile of rollAttack (reachable slice from
     // CSkillEvent::applyWeaponDamage): neutral scales reproduce the ordinary
-    // roll exactly (shared-core proof), pre-scales land only on the base
-    // maximum, soak flows to mitigation. No pak needed.
+    // roll exactly; numerical regressions below come from unchanged original
+    // instructions (research/skill-weapon-oracle.md). No pak needed.
     AttackDescription bow;
     bow.hand = AttackHand::right;
     bow.delivery = WeaponDelivery::direct_physical;
@@ -136,23 +136,52 @@ void skill_profile() {
                 skill_rng.state() == ordinary_rng.state(),
             "neutral skill profile diverged from the ordinary roll");
     const SkillWeaponRoll scaled{40.0F, 100.0F, false, 1.0F};
-    TorchlightRandom scaled_rng(7);
+    TorchlightRandom scaled_rng(1);
     const auto scaled_hit =
         roll_skill_weapon_damage(bow, loadout, character, {}, scaled, scaled_rng);
     const std::int32_t expected_scaled =
         static_cast<std::int32_t>(static_cast<float>(base_maximum) * 0.4F);
     require(scaled_hit.maximum == expected_scaled,
             "WEAPONDAMAGEPCT scale missed the base maximum");
+    require(scaled_hit.rolled == 23 && scaled_hit.applied == 23 &&
+                scaled_rng.state() == UINT64_C(695696193),
+            "original 40pct roll must recompute the minimum and consume RNG");
     const SkillWeaponRoll zero{0.0F, 100.0F, false, 1.0F};
     TorchlightRandom zero_rng(7);
     const auto zero_hit = roll_skill_weapon_damage(bow, loadout, character, {}, zero, zero_rng);
-    require(zero_hit.maximum == base_maximum, "zero pct must skip the scale like f0==0");
+    require(zero_hit.maximum == 0 && zero_hit.rolled == 0 && zero_hit.applied == 1 &&
+                zero_rng.state() == 7, "original zero pct scales to zero; physical floor remains one");
     const SkillWeaponRoll dps{100.0F, 100.0F, true, 2.0F};
     TorchlightRandom dps_rng(7);
     const auto dps_hit = roll_skill_weapon_damage(bow, loadout, character, {}, dps, dps_rng);
     const std::int32_t expected_dps =
-        static_cast<std::int32_t>(std::ceil(static_cast<float>(base_maximum) / (2.0F * 0.7333333F)));
+        static_cast<std::int32_t>(std::ceil(static_cast<float>(base_maximum) / (2.0F * 0x1.777778p-1F)));
     require(dps_hit.maximum == expected_dps, "USEDPS scale missed the divisor");
+    auto ninety_nine = bow;
+    ninety_nine.maximum_damage = 99;
+    AttackLoadout dps_loadout = loadout;
+    dps_loadout.right = ninety_nine;
+    TorchlightRandom rounding_rng(1);
+    const auto rounded = roll_skill_weapon_damage(ninety_nine, dps_loadout, character, {},
+        {100.0F, 100.0F, true, 1.0F}, rounding_rng);
+    require(rounded.maximum == 135 && rounded.rolled == 93,
+            "DPS constant must match original float bits 0x3f3bbbbc");
+    auto elemental_bow = bow;
+    elemental_bow.damage_bonus[2] = 10;
+    AttackLoadout elemental_loadout = loadout;
+    elemental_loadout.right = elemental_bow;
+    AttackCharacterValues elemental_character;
+    elemental_character.effects.add(10, 3.0F, 2);
+    TorchlightRandom elemental_rng(1);
+    const auto elemental_hit = roll_skill_weapon_damage(elemental_bow, elemental_loadout,
+        elemental_character, {}, {40.0F, 100.0F, true, 2.0F}, elemental_rng);
+    // Original: base max 28, aggregate bonus ceil(4/divisor)+3 = 6,
+    // rolled bonus max ceil((4+3)/divisor) = 5. Distinct passes are required.
+    require(elemental_hit.count == 2 && elemental_hit.maximum == 34 &&
+                elemental_hit.rolled == 22 && elemental_hit.applied == 22 &&
+                elemental_hit.channels[0].applied == 17 && elemental_hit.channels[1].applied == 5 &&
+                elemental_rng.state() == UINT64_C(483993192954693249),
+            "original bonus percentage/DPS and two-pass flat ordering diverged");
     const SkillWeaponRoll bad_dps{100.0F, 100.0F, true, 0.0F};
     TorchlightRandom bad_rng(7);
     const auto bad_before = bad_rng.state();

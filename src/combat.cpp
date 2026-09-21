@@ -2,6 +2,7 @@
 #include "torchlight/character_stats.hpp"
 #include "torchlight/typed_damage.hpp"
 #include "torchlight/scene_animation.hpp"
+#include "torchlight/skill_event_runtime.hpp"
 
 #include <cmath>
 #include <stdexcept>
@@ -190,5 +191,27 @@ CombatUpdate CombatController::apply_missile_impact(const MissileShot& shot, std
     if (result.killed) target_id_ = 0;
     return {result.killed ? CombatState::killed : CombatState::attacked, victim_id,
             mitigation.applied, result.remaining_health, 0};
+}
+CombatUpdate CombatController::apply_skill_weapon_impact(const SkillWeaponDamageRequest& request,
+    RuntimeEntityWorld& world, LogicRuntime& logic) {
+    const auto* victim = world.find(request.victim_id);
+    const auto* weapon=loadout_.right ? &*loadout_.right : loadout_.left ? &*loadout_.left : nullptr;
+    // Bounded single-weapon branch (right, otherwise left). Native applyWeaponDamage reads current
+    // equipment at impact, not the ordinary missile's attack snapshot.
+    if (request.blocked || request.expired || !victim || !victim->alive || !victim->enabled ||
+        !victim->combat_targetable || victim->kind != MasterResourceKind::monster ||
+        !weapon || (loadout_.right && loadout_.left) || !weapon->traits.ranged ||
+        !ordinary_delivery_supported(*weapon))
+        return {CombatState::missed, request.victim_id, 0, 0, 0};
+    const auto defense = evaluate_damage_defense(victim->damage_defense,
+        total_attack_effects(victim->attacks, victim->attack_character));
+    const SkillWeaponRoll profile{request.weapon_damage_pct, request.soak_scale_pct,
+        request.use_dps, weapon->speed_denominator};
+    const auto damage = roll_skill_weapon_damage(*weapon, loadout_, character_, defense, profile, random_);
+    const auto result = world.apply_damage(request.victim_id, static_cast<float>(damage.applied), logic, true);
+    if (!result.accepted) return {CombatState::missed, request.victim_id, 0, result.remaining_health, 0};
+    if (result.killed && target_id_ == request.victim_id) target_id_ = 0;
+    return {result.killed ? CombatState::killed : CombatState::attacked, request.victim_id,
+        damage.applied, result.remaining_health, 0};
 }
 } // namespace torchlight

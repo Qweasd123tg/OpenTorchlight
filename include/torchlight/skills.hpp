@@ -4,6 +4,7 @@
 #include <memory>
 #include <unordered_map>
 namespace torchlight {
+struct SkillEventProgram;
 struct SkillGrant {
     std::u16string name;
     std::int32_t rank = 0, level_required = 0;
@@ -37,6 +38,7 @@ struct SkillRank {
     float cooldown = 0, monster_cooldown = 0, speed = 1;
     AdmGroup resource;
     std::optional<SelfBuffProgram> self_buff;
+    std::shared_ptr<const SkillEventProgram> event_program;
     std::string unavailable_reason;
 };
 struct SkillDefinition {
@@ -64,7 +66,7 @@ void add_timed_skill_effects(std::vector<TimedSkillEffect>&, const std::vector<T
 [[nodiscard]] bool advance_timed_skill_effects(std::vector<TimedSkillEffect>&, float seconds);
 // A finite, non-looping cast with the same immutable clip for pose and HIT.
 // Portable event ownership guards prevent forged/replayed HIT consumption.
-class SelfBuffCast {
+class SkillCast {
 public:
     void start(std::uint64_t execution, std::u16string name, SelfBuffProgram, AttackClip, float speed);
     void advance(float seconds);

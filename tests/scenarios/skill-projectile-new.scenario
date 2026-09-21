@@ -1,0 +1,12 @@
+# Normal frontend creates Vanquisher. Separate test fixture grants XP/gold only.
+menu main
+button new
+menu create
+button class-2
+name seeking
+button create
+level Town 0
+frames 3
+key ESC
+menu pause
+button save-exit

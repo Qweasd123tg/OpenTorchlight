@@ -130,7 +130,7 @@ RecoveryResult PlayerSession::recover_at_entry(EnemyController& enemies, ActorMo
     staged.combat_.interrupt_attack();
     staged.active_recovery_.clear();
     staged.skills_.effects.clear();
-    staged.skill_cast_.cancel();
+    staged.cancel_skill();
     staged.refresh_effect_contributions();
     staged.health_.restore_after_death();
     // Finish potentially allocating derived-state work before the transaction commits.
@@ -252,7 +252,7 @@ ConsumableUse PlayerSession::use_recovery(bool hp) {
 bool PlayerSession::update_vitals(float seconds) {
     if (!std::isfinite(seconds) || seconds < 0) return false;
     if (!health_.alive()) {
-        active_recovery_.clear(); skill_cast_.cancel();
+        active_recovery_.clear(); cancel_skill();
         if (!skills_.effects.empty()) { skills_.effects.clear(); refresh_effect_contributions(); }
         return true;
     }
@@ -367,7 +367,7 @@ void PlayerSession::attach_skill_catalog(std::shared_ptr<const SkillCatalog> cat
             state.cooldown > (rank ? std::max(0.0F, rank->cooldown) : 0.0F))
             throw std::invalid_argument("saved skill cooldown disagrees with resources");
         if (state.invested > grant->rank &&
-            (!rank->self_buff || progression_.level < std::max(grant->level_required, rank->level_required)))
+            ((!rank->self_buff && !rank->event_program) || progression_.level < std::max(grant->level_required, rank->level_required)))
             throw std::invalid_argument("saved purchased skill is unavailable at the player level");
     }
     for (const auto& active : skills_.effects) {
@@ -394,13 +394,13 @@ SkillUse PlayerSession::invest_skill(std::u16string_view name) {
     if (state==skills_.skills.end()||grant==class_skills_.end()||!def) return SkillUse::unknown;
     if (state->invested>=def->maximum_investment) return SkillUse::maximum_rank;
     const auto* rank=def->rank(state->invested+1);
-    if (!rank||!rank->self_buff) return SkillUse::unsupported;
+    if (!rank||(!rank->self_buff && !rank->event_program)) return SkillUse::unsupported;
     if (progression_.level<std::max(rank->level_required,grant->level_required)) return SkillUse::level_required;
     if (progression_.skill_points<=0) return SkillUse::no_points;
     ++state->invested; --progression_.skill_points;
     return SkillUse::learned;
 }
-SkillUse PlayerSession::begin_skill(std::u16string_view name,const AttackClipResolver& resolver) {
+SkillUse PlayerSession::begin_skill(std::u16string_view name,const AttackClipResolver& resolver,SkillCastContext context) {
     if (!health_.alive()) return SkillUse::dead;
     if (skill_cast_.active()||combat_.attack_in_progress()) return SkillUse::busy;
     const auto key=resource_fields::upper(std::u16string(name));
@@ -409,32 +409,58 @@ SkillUse PlayerSession::begin_skill(std::u16string_view name,const AttackClipRes
     if (state==skills_.skills.end()||!def) return SkillUse::unknown;
     if (state->invested<=0) return SkillUse::unlearned;
     const auto* rank=def->rank(state->invested);
-    if (!rank||!rank->self_buff) return SkillUse::unsupported;
+    if (!rank||(!rank->self_buff && !rank->event_program)) return SkillUse::unsupported;
     if (state->cooldown>0) return SkillUse::cooldown;
     if (!health_.mana()||std::trunc(*health_.mana())<rank->mana_cost) return SkillUse::no_mana;
     AttackClips clips;
-    try { if (resolver) clips=resolver(skill_mesh_,def->animation); } catch(const std::exception&) {return SkillUse::missing_animation;}
+    auto prefix=def->animation;
+    if (rank->event_program) {
+        const auto& loadout=combat_.attack_loadout();
+        // assignSkillAnimations selects the equipped weapon's prefix for
+        // USEWEAPONANIMATION. Single right or left (Vanquisher bow); dual and
+        // random multi-clip stay refused, not silently assigned to the right hand.
+        const auto* weapon=loadout.right ? &*loadout.right : loadout.left ? &*loadout.left : nullptr;
+        if (!weapon || (loadout.right && loadout.left) || !weapon->traits.ranged ||
+            !ordinary_delivery_supported(*weapon)) return SkillUse::unsupported;
+        prefix=weapon->animation_prefix;
+    }
+    try { if (resolver) clips=resolver(skill_mesh_,prefix); } catch(const std::exception&) {return SkillUse::missing_animation;}
     // Single-clip branch: do not invent original random selection for casts.
     if (clips.size()!=1) return SkillUse::missing_animation;
     const auto effects=total_attack_effects(combat_.attack_loadout(),combat_.attack_character());
     const auto speed=original_cast_speed(effects.get(0x1d),effects.get(0x8c),rank->speed);
     auto next=skill_cast_;
     if (!next_skill_execution_) throw std::overflow_error("skill execution IDs exhausted");
-    try { next.start(next_skill_execution_,key,*rank->self_buff,clips.front(),speed); }
+    try { next.start(next_skill_execution_,key,rank->self_buff.value_or(SelfBuffProgram{}),clips.front(),speed); }
     catch(const std::invalid_argument&) {return SkillUse::missing_animation;}
     auto vitals=health_;
     if (!vitals.spend_mana(static_cast<float>(rank->mana_cost))) return SkillUse::no_mana;
+    if (rank->event_program) {
+        context.skill_level=state->invested;
+        context.cooldown_remaining=state->cooldown; context.cooldown_seconds=rank->cooldown;
+        context.caster_alive=health_.alive();
+        SkillEventRuntime runtime(resource_fields::ascii(key),rank->event_program);
+        if (!runtime.start_skill(context).started) return SkillUse::unsupported;
+        skill_event_casts_.emplace(next_skill_execution_,std::move(runtime));
+    }
     // CCharacter::castSkill debits mana after successful start, before animation HIT.
     skill_cast_=std::move(next); health_=std::move(vitals);state->cooldown=rank->cooldown;
     ++next_skill_execution_; combat_.clear_target();
     return SkillUse::started;
 }
 void PlayerSession::advance_skill_animation(float seconds) {
-    if (!health_.alive()) skill_cast_.cancel(); else skill_cast_.advance(seconds);
+    if (!health_.alive()) cancel_skill(); else skill_cast_.advance(seconds);
 }
 bool PlayerSession::perform_skill_event(const AnimationEventOccurrence& event) {
     if (!health_.alive()) return false;
     auto next_cast=skill_cast_; if (!next_cast.consume(event)) return false;
+    const auto runtime=skill_event_casts_.find(event.execution_id);
+    if (runtime!=skill_event_casts_.end()) {
+        auto staged=runtime->second;
+        if (!staged.trigger(SkillEventType::trigger)) return false;
+        runtime->second=std::move(staged); skill_cast_=std::move(next_cast);
+        return true;
+    }
     auto next_effects=skills_.effects;
     add_timed_skill_effects(next_effects,next_cast.program().effects);
     // Stage derived combat values too: allocation/validation failure cannot eat HIT.
@@ -442,5 +468,50 @@ bool PlayerSession::perform_skill_event(const AnimationEventOccurrence& event) {
     skill_cast_=std::move(next_cast);skills_.effects.swap(next.skills_.effects);
     std::swap(combat_,next.combat_);std::swap(health_,next.health_);
     return true;
+}
+void PlayerSession::finish_skill_frame() noexcept {
+    skill_cast_.finish_frame();
+    if (!skill_cast_.active()) {
+        const auto it=skill_event_casts_.find(skill_cast_.playback().execution_id());
+        if (it!=skill_event_casts_.end()) it->second.stop();
+    }
+}
+void PlayerSession::drain_skill_launches(const SkillMissileFireSink& sink) {
+    if (!health_.alive()) { cancel_skill(); return; }
+    for (auto& [id,runtime]:skill_event_casts_) { (void)id; runtime.drain_launches(sink); }
+}
+bool PlayerSession::notify_skill_missile_impact(std::uint64_t missile,std::uint64_t victim,
+    bool blocked,bool expired,const SkillWeaponDamageSink& sink) {
+    if (!health_.alive()) { cancel_skill(); return false; }
+    for (auto& [id,runtime]:skill_event_casts_) {
+        (void)id;
+        if (runtime.notify_missile_impact(missile,victim,blocked,expired,sink)) return true;
+    }
+    return false;
+}
+void PlayerSession::retire_skill_missile(std::uint64_t missile) {
+    for (auto& [id,runtime]:skill_event_casts_) { (void)id; runtime.retire_missile(missile); }
+}
+bool PlayerSession::has_pending_skill_missiles() const noexcept {
+    return std::any_of(skill_event_casts_.begin(),skill_event_casts_.end(),
+        [](const auto& p){return p.second.has_pending_missiles();});
+}
+std::vector<SkillEventRecord> PlayerSession::take_skill_events() {
+    std::vector<SkillEventRecord> result;
+    for (auto it=skill_event_casts_.begin();it!=skill_event_casts_.end();) {
+        auto events=it->second.take_skill_events();
+        result.insert(result.end(),std::make_move_iterator(events.begin()),std::make_move_iterator(events.end()));
+        if (!it->second.active() && !it->second.has_pending_missiles()) it=skill_event_casts_.erase(it);
+        else ++it;
+    }
+    return result;
+}
+std::vector<SkillRefusedLaunch> PlayerSession::take_skill_refused_launches() {
+    std::vector<SkillRefusedLaunch> result;
+    for (auto& [id,runtime]:skill_event_casts_) {
+        (void)id; auto refusals=runtime.take_refused_launches();
+        result.insert(result.end(),std::make_move_iterator(refusals.begin()),std::make_move_iterator(refusals.end()));
+    }
+    return result;
 }
 } // namespace torchlight

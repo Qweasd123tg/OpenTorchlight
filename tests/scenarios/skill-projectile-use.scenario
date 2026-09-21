@@ -1,0 +1,27 @@
+menu main
+button continue
+level Town 0
+dt 0
+key K
+inventory open
+select-skill SEEKING SHOT
+key ENTER
+frames 1
+capture learned
+key F
+inventory closed
+frames 1
+dt 0.0166666667
+frames 10
+key I
+inventory open
+frames 30
+key ESC
+inventory closed
+frames 240
+dt 0
+frames 1
+capture after
+key ESC
+menu pause
+button save-exit

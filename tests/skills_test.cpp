@@ -30,7 +30,7 @@ void core(){
  rejects([&]{add_timed_skill_effects(active,{invalid});},"negative effect timer");require(active.size()==1,"failed add mutated active list");
  auto clip=std::make_shared<ModelAnimationClip>();clip->duration=1;clip->skeleton_path="test.skeleton";clip->animation_name="test";
  AnimationEventKey key;key.name="HIT";key.frame=6;clip->event_keys.push_back(key);
- SelfBuffCast cast;cast.start(1,u"TEST",{{b},false},clip,1);cast.advance(.3F);
+ SkillCast cast;cast.start(1,u"TEST",{{b},false},clip,1);cast.advance(.3F);
  require(cast.playback().frame_events().size()==1,"cast HIT time");
  auto event=cast.playback().frame_events().front();auto forged=event;forged.playback_generation++;
  require(!cast.consume(forged),"forged cast event");require(cast.consume(event),"valid cast event");require(!cast.consume(event),"duplicate cast event");

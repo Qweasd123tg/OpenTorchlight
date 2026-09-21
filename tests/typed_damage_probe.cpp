@@ -4,6 +4,9 @@
 #include <iostream>
 #include <stdexcept>
 using namespace torchlight;
+static float float_bits(std::uint32_t bits) {
+    float value; std::memcpy(&value, &bits, sizeof(value)); return value;
+}
 static AttackEffects effects() {
     unsigned count; if (!(std::cin >> count) || count > 100) throw std::runtime_error("invalid effect count");
     AttackEffects result;
@@ -42,7 +45,13 @@ int main() {
                 for (const auto value : result.percent_taken) std::cout << value << ' ';
                 std::cout << '\n'; continue;
             }
-            if (mode != 'R') throw std::runtime_error("invalid mode");
+            if (mode != 'R' && mode != 'S' && mode != 'L') throw std::runtime_error("invalid mode");
+            SkillWeaponRoll skill;
+            if (mode == 'S' || mode == 'L') {
+                std::uint32_t weapon, soak, speed; unsigned dps;
+                if (!(std::cin >> weapon >> soak >> dps >> speed) || dps > 1) return 2;
+                skill = {float_bits(weapon), float_bits(soak), dps != 0, float_bits(speed)};
+            }
             AttackCharacterValues character; AttackLoadout loadout; AttackDescription attack;
             attack.hand=AttackHand::right; attack.delivery=WeaponDelivery::direct_typed; attack.damage_allocation_known=true;
             unsigned flags; DamageDefense raw; std::uint64_t seed;
@@ -54,10 +63,14 @@ int main() {
             for (auto& value : attack.damage_bonus) if (!(std::cin >> value)) return 2;
             for (auto& value : raw.elemental_armor) if (!(std::cin >> value)) return 2;
             character.effects=effects(); const auto target=effects();
-            loadout.right=attack;
+            if (mode == 'L') { attack.hand=AttackHand::left; loadout.left=attack; }
+            else loadout.right=attack;
             if (!seed || seed > UINT32_MAX) throw std::runtime_error("invalid seed");
             TorchlightRandom random(static_cast<std::uint32_t>(seed));
-            const auto result=roll_ordinary_damage(attack,loadout,character,evaluate_damage_defense(raw,target),random);
+            const auto evaluated = evaluate_damage_defense(raw, target);
+            const auto result = mode != 'R'
+                ? roll_skill_weapon_damage(attack, loadout, character, evaluated, skill, random)
+                : roll_ordinary_damage(attack, loadout, character, evaluated, random);
             std::cout << result.count << ' ' << result.maximum << ' ' << result.rolled << ' ' << result.applied << ' ' << random.state();
             for (std::size_t i=0; i<result.count; ++i) std::cout << ' ' << static_cast<unsigned>(result.types[i]) << ' ' << result.channels[i].applied;
             std::cout << '\n';

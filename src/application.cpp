@@ -1151,7 +1151,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     } else if (key == torchlight::physical_key::F && (!inventory_view.open || skill_panel)) {
                         const auto& skills = session.skills().skills;
                         if (selected_skill < skills.size()) {
-                            const auto result = session.begin_skill(skills[selected_skill].name, resolve_attack);
+                            torchlight::SkillCastContext cast_context;
+                            cast_context.caster_id = 1; // non-null session-local caster token, not a world entity ID
+                            cast_context.origin = player_motion.position();
+                            constexpr float degrees_to_radians = 0.017453292519943295F;
+                            const auto facing = player_facing_angle * degrees_to_radians;
+                            // prototype caller aim/anchor: facing direction. Original
+                            // FINDTARGETANGLE/anchor/homing remain explicit open branches.
+                            cast_context.direction = {std::sin(facing), 0, std::cos(facing)};
+                            const auto result = session.begin_skill(skills[selected_skill].name, resolve_attack, cast_context);
                             inventory_view.status = torchlight::skill_use_message(result);
                             if (result == torchlight::SkillUse::started) {
                                 set_inventory_open(false);
@@ -1708,6 +1716,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 inventory_menu.set_open(false, false); // single-writer invariant
                                 inventory_view.open = inventory_menu.open();
                                 session.cancel_skill();
+                                missile_runtime = {}; missile_shots.clear();
                                 std::cout << "player_killed=1\n";
                                 break;
                             }
@@ -1719,7 +1728,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     // Same sampled immutable cast clip supplies the visible pose and HIT.
                     const auto events = session.skill_cast().playback().frame_events();
                     for (const auto& event : events) if (event.key.name == "HIT" && session.perform_skill_event(event)) {
-                        inventory_view.status = "SKILL EFFECT APPLIED. ORIGINAL THEME / AUDIO NOT YET RENDERED.";
+                        inventory_view.status = session.skill_cast().program().effects.empty()
+                            ? "SKILL TRIGGERED. PROJECTILE AIM / VISUALS PARTIAL."
+                            : "SKILL EFFECT APPLIED. ORIGINAL THEME / AUDIO NOT YET RENDERED.";
                         std::cout << "skill_hit=" << narrow_ascii(session.skill_cast().name())
                                   << " clip=" << event.source_clip << " key=" << event.key_index << '\n';
                     }
@@ -1842,7 +1853,25 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // Missile frame step (original update/checkCollision roles;
                 // research/missile-runtime.md §3-4). Impacts reuse the damage
                 // tail above; dead missiles leave via take_impacts drain.
-                if (!missile_runtime.empty()) {
+                session.drain_skill_launches([&](const torchlight::SkillMissileLaunch& launch) {
+                    auto found = missile_templates.find(launch.missile_resource);
+                    if (found == missile_templates.end()) {
+                        const auto loaded = torchlight::load_missile_template(archive, launch.missile_resource);
+                        if (!loaded) return torchlight::SkillMissileFireOutcome{0, "template_unavailable"};
+                        found = missile_templates.emplace(launch.missile_resource, *loaded).first;
+                    }
+                    torchlight::MissileSpawn spawn;
+                    spawn.origin = launch.origin; spawn.direction = launch.direction;
+                    spawn.owner_id = 0; // canonical player owner in this world's collider view
+                    const auto id = missile_runtime.spawn(found->second, spawn);
+                    if (launch.repeated_count_open)
+                        window.notice("skill_spawner_count_partial", std::to_string(launch.spawner_count));
+                    if (id) std::cout << "skill_missile_fired=" << launch.missile_resource << " id=" << id << '\n';
+                    return torchlight::SkillMissileFireOutcome{id, id ? "" : "spawn_refused"};
+                });
+                for (const auto& refused : session.take_skill_refused_launches())
+                    window.notice("skill_missile_refused", refused.missile_resource + ":" + refused.issue);
+                if (!missile_runtime.empty() && simulation_elapsed > 0 && player_combat.alive()) {
                     std::vector<torchlight::MissileCollider> missile_colliders;
                     for (const auto& entity : entity_world.entities()) {
                         if (entity.kind != torchlight::MasterResourceKind::monster) continue;
@@ -1850,7 +1879,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             {entity.id, entity.position, entity.attack_character.collision_radius,
                              entity.alive && entity.enabled && entity.combat_targetable});
                     }
-                    missile_runtime.step(elapsed, missile_colliders, level.collision);
+                    missile_runtime.step(simulation_elapsed, missile_colliders, level.collision);
                     std::vector<std::uint64_t> spent_missiles;
                     for (const auto& impact : missile_runtime.take_impacts()) {
                         const auto shot = missile_shots.find(impact.missile_id);
@@ -1859,6 +1888,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 shot->second, impact.victim_id, entity_world, logic_runtime);
                             handle_combat_hit(hit, std::string("missile") +
                                                            (impact.splash ? ":splash" : ":direct"));
+                        } else if (session.notify_skill_missile_impact(impact.missile_id, impact.victim_id,
+                            impact.blocked, impact.expired, [&](const torchlight::SkillWeaponDamageRequest& request) {
+                                const auto hit = combat.apply_skill_weapon_impact(request, entity_world, logic_runtime);
+                                handle_combat_hit(hit, "skill_missile");
+                                return torchlight::SkillWeaponDamageOutcome{
+                                    hit.state == torchlight::CombatState::attacked || hit.state == torchlight::CombatState::killed,
+                                    hit.state == torchlight::CombatState::killed};
+                            })) {
+                            // Weapon outcome drives unit-hit/death after the pre-damage MISSILEHIT.
                         } else if (impact.victim_id != 0) {
                             window.notice("missile_impact_without_shot",
                                           std::to_string(impact.missile_id));
@@ -1868,8 +1906,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                         spent_missiles.push_back(impact.missile_id);
                     }
-                    for (const auto id : spent_missiles) missile_shots.erase(id);
+                    for (const auto id : spent_missiles) {
+                        missile_shots.erase(id); session.retire_skill_missile(id);
+                    }
                 }
+                for (const auto& event : session.take_skill_events())
+                    std::cout << "skill_event=" << narrow_ascii(torchlight::skill_event_type_name(event.type))
+                              << " missile=" << event.missile_id << " victim=" << event.victim_id
+                              << " damage_open=" << event.damage_application_open << '\n';
                 if (player_hit_processed) {
                     drain_logic();
                     renderer->set_mesh_pose(player_pose);
@@ -1887,7 +1931,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         const auto* def = skills_catalog ? skills_catalog->find(skills[i].name) : nullptr;
                         const auto* rank = def ? def->rank(std::max(1, skills[i].invested)) : nullptr;
                         std::string text = narrow_ascii(def ? def->display_name : skills[i].name) + " [" + std::to_string(skills[i].invested) + "]";
-                        if (rank) text += " MANA " + std::to_string(rank->mana_cost) + (rank->self_buff ? "" : " | NOT IMPLEMENTED");
+                        if (rank) text += " MANA " + std::to_string(rank->mana_cost) +
+                            (rank->self_buff ? "" : rank->event_program ? " | PARTIAL PROJECTILE" : " | NOT IMPLEMENTED");
                         overlay.push_back({std::move(text), i == selected_skill});
                     }
                     overlay.push_back({inventory_view.status, false});
