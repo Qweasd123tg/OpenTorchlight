@@ -1,6 +1,8 @@
 #pragma once
+#include <functional>
 #include "torchlight/pak_archive.hpp"
 #include "torchlight/ui_font.hpp"
+#include "torchlight/ui_function_bindings.hpp"
 #include <map>
 #include <array>
 #include <limits>
@@ -20,6 +22,8 @@ struct UiWidget {
     std::int32_t parent = -1;
     std::map<std::string, std::string> properties;
     [[nodiscard]] std::string property(const std::string &key) const;
+    // nullopt is unbound, distinct from the original explicit NONE command.
+    std::optional<UiLayoutFunction> layout_function;
 };
 enum class UiTextHorizontal { left, centre, right };
 enum class UiTextVertical { top, centre, bottom };
@@ -44,10 +48,18 @@ struct UiResolvedWidget {
     [[nodiscard]] std::string property(const std::string &key) const;
     [[nodiscard]] UiTextStyle text_style() const;
     float effective_alpha = 1.0F;
-    // Initial CEGUI sibling draw list: normal children, then AlwaysOnTop,
-    // recursively. Runtime moveToFront / reparenting is outside this subset.
+    // CEGUI sibling draw list: normal children, then AlwaysOnTop recursively,
+    // including the explicit programmatic move_to_front presentation writes.
+    // Native reparenting/activation lifetime remains outside this subset.
     std::size_t paint_order = std::numeric_limits<std::size_t>::max();
+    std::optional<UiLayoutFunction> layout_function;
 };
+// Pinned CEGUI Window::getTargetChildAtPosition @0x1110a0 on the resolved
+// rectangular tree. Children precede parents in reverse paint order;
+// MousePassThroughEnabled skips only the window, not its descendants.
+// Capture/modal state and specialized isHit overrides are outside this query.
+[[nodiscard]] std::optional<std::size_t> ui_target_at_position(
+    const std::vector<UiResolvedWidget>& widgets, float x, float y);
 // Bounded port of the intersection/UV adjustment in CEGUI::Imageset::draw
 // (bundled libCEGUIBase.so.1 @0xe6f20). Not pixel-rounding/colour parity.
 struct UiImageGeometry {
@@ -62,10 +74,19 @@ struct UiLayoutState {
     UiScreenScale screen_scale = UiScreenScale::none;
     std::map<std::string, bool> visibility;
     std::optional<float> offset_ratio; // one resolved scale, not an additional multiplier
+    // Programmatic moveToFront draw-list effects, in call order. Includes
+    // ancestors and preserves the AlwaysOnTop partition; activation events
+    // are outside this immutable presentation query.
+    std::vector<std::string> move_to_front;
+    // Node indices whose UDim position is reset before alignment. CMainMenu
+    // applies this to the bound layout root while retaining its size.
+    std::vector<std::size_t> zero_position_nodes;
 };
 class UiLayout {
   public:
     [[nodiscard]] static UiLayout parse(const std::vector<std::uint8_t> &bytes);
+    // Validated adapter for already parsed, persistent wrapper trees.
+    [[nodiscard]] static UiLayout from_widgets(std::vector<UiWidget> widgets);
     [[nodiscard]] std::vector<UiResolvedWidget> resolve(int width, int height) const;
     // original-code: CGameUI::convertToScreenScale @0xa83ed0 scales the four
     // UDim offset members by one ratio before CEGUI resolution, scales
@@ -145,6 +166,17 @@ class UiResources {
   public:
     explicit UiResources(const PakArchive &archive) : archive_(&archive) {
     }
+    [[nodiscard]] const PakArchive& archive() const noexcept { return *archive_; }
+    // Per-window factory/renderer bindings. Immutable shared fonts/images
+    // outlive these instances; destroying one window drops only its caches.
+    void attach_window_renderer(const std::string& name, const std::string& type);
+    void detach_window_renderer(const std::string& name);
+    void destroy_window_renderer(const std::string& name);
+    void destroy_window_factory(const std::string& name);
+    [[nodiscard]] std::optional<std::string> window_renderer(const std::string& name) const;
+    using CacheInvalidator = std::function<void(const std::string&)>;
+    std::size_t subscribe_window_cache(CacheInvalidator);
+    void unsubscribe_window_cache(std::size_t);
     [[nodiscard]] const UiLayout *layout(const std::string &path);
     [[nodiscard]] std::optional<UiImage> image(const std::string &reference);
     [[nodiscard]] UiSkin& skin();
@@ -167,6 +199,11 @@ class UiResources {
     }
 
   private:
+    struct RendererInstance { std::string type, renderer; bool attached = true; };
+    std::map<std::string, RendererInstance> window_renderers_;
+    std::map<std::string, std::size_t> window_factories_;
+    std::map<std::size_t, CacheInvalidator> cache_invalidators_;
+    std::size_t next_cache_invalidator_ = 0;
     void ensure_looknfeel();
     const PakArchive *archive_;
     std::map<std::string, UiLayout> layouts_;

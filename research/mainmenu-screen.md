@@ -1,108 +1,63 @@
-# Главный экран: кнопки, класс, имя — resource-derived
+# Главный экран: действующая граница
 
-Статус: кнопки/тексты — `resource-derived`; 3D-превью персонажа — открыто.
+Текущий пакет — [CMainMenu и painter](mainmenu-controller-painter.md).
+Процесс — [code-first](code-first.md). Единица полного закрытия — исходная
+функция; рабочий пакет связывает её эффекты с кадром и вводом приложения.
 
-## Ресурсы (read-only pak `8650ad75…`)
+## Входное меню
 
-- `media/UI/mainmenuframe.layout`: кнопки `NewGame→guiNewGameMenu`,
-  `ContinueGame→guiContinueGameMenu`, `ContinueLast→guiContinueGame`,
-  `Settings→guiSettingsMenu`, `ExitGame→guiExitApplication`; тексты
-  `CopyrightInfo`, `TabTextA/B`, `Credits`. Табы `guiSelectA/C`, кредиты
-  `guiSelectB/D` остаются disabled (не реализованы).
-- `media/UI/charactercreate.layout`: `Back→guiBack`, `CreatePlayer→guiNewGame`,
-  `Destroyer/Vanquisher/Alchemist→guiSelect1` (RadioButton),
-  `Dog/Cat/Ferret→guiPet1` (питомец не реализован — disabled с текстом ресурса),
-  `CharacterClassHeader/CharacterClass/CharacterClassDescription` Text=1
-  (заполняются в рантайме), `EditBox` MaxTextLength=12, `PortraitBox` 140x400
-  без привязки (заполняется 3D-превью, см. ниже).
-- Имя/описание класса — UNIT DAT через BASEFILE-цепочку:
-  `NAME/DISPLAYNAME/DESCRIPTION` (напр. Alchemist: "The Alchemist channels the
-  power of Ember…"). Порт: `PlayerPrototype::description` → `FrontendClass`
-  → `CharacterClassDescription`; `CharacterClass` ← имя класса.
+Источники: pinned ELF `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`,
+внешние `media/UI/mainmenuframe.layout`, `GuiLook.looknfeel`, `GuiLookSkin.scheme`.
 
-## Оригинал (ELF `91b41ae9…`)
+- `CMainMenu::createMenus @0xc52a10` задаёт свойства поверх XML: скрывает
+  DemoVersion, предупреждение о модах и панели credits, заполняет Credits
+  и CopyrightInfo. Продакшен-перенос и остаток описаны в текущем пакете.
+- `CMainMenu::update @0xc53b70` обновляет Continue и предупреждение о модах.
+  Continue подключён к адаптеру `.otc`; исходный `.SVB` producer открыт.
+- `CMainMenu::onClick @0xc4ae80` содержит диспетчер по ELayoutFunction.
+  Общий [mapToFunctions](ui-function-bindings.md) связывает layout с enum;
+  [диспетчер](dropdown-mainmenu.md) переносит все ветви и порядок вызовов.
+  Frontend потребляет запросы состояния и credits через явные адаптеры.
+- `CDropdownMenu::mapEventHandlers @0xb179e0` подписывает непустой onClick
+  после обхода детей: multi-click, MouseButtonDown, MouseDoubleClick.
+  Down-подписки подключены; double-click delivery и CEGUI ownership открыты.
+  CMainMenu flags=1 выбирает model-null: его флаги/attachment подключены,
+  полный контейнерный и анимированный runtime остаётся в остатке.
+- `CreditFrame/Credits` содержит Runic credits из rodata @0xff2e30.
+  `CreditFrameB/CreditsB` содержит Linux credits из layout. Обе панели
+  открываются и закрываются через собственные ресурсные окна.
+- Общий paint list сохраняет порядок между изображениями, кнопками и текстом.
+  Falagard компилируется для каждого окна; проверяются свойство enabled,
+  форматирование, clip и последовательность команд. Inline colour spans,
+  полный lifetime/events и динамический sibling order остаются открытыми.
 
-- `CMainMenu::onClick @0xc4ae80` — диспетчер главного меню (switch по
-  `ELayoutFunction`: `0x40/0x42/0x43/0x5e/0x01/0x03/0x04/0x05…`, ветви
-  `closeAll`, `toggleSettings`, `canLoad`-гейт).
-- `CNewGameMenu::onClick @0xc5c040`, `setOpen @0xc5c5a0`, `update @0xc5cc30`,
-  `createMenus @0xc5d730`, `getEmptySave`, `handle_Submit(Pet)` — выбор
-  класса/питомца и сабмит. Конструктор берёт `Ogre::SceneManager/Camera`:
-  превью персонажа — настоящая 3D-сцена, не картинка.
-- `CMenuManager::create @0xc2bbb0`, `setActiveMenu`, `reloadMenuCharacters`,
-  `CGameUI::updateMenuUI @0xa844d0`, `CGameUI::onClick @0xa924c0`.
+## Связанные страницы
 
-Порт повторяет маршутизацию по имени колбэка (регистронезависимо) из
-`research/ui-actions.json`, а не по числовому enum — поведение то же,
-числа enum не заявляются.
+`CNewGameMenu::onClick @0xc5c040`, `setOpen @0xc5c5a0`,
+`update @0xc5cc30`, `createMenus @0xc5d730` определяют выбор героя/питомца.
+Порт заполняет CharacterClass/CharacterClassDescription по UNIT NAME и
+DESCRIPTION, EditBox по имени `.otc`. Полные исходные выбор питомца,
+сложность, getEmptySave и переходы контроллера требуют переноса.
 
-## Что сделано в порте
+`CContinueGameMenu::updateCharacterList @0xc3b2f0` формирует описания
+оригинальных сохранений. Порт использует свои `.otc` name/level/class/hardcore.
+Описание времени, сложности, Dead/Retired и `.SVB` читается отдельным контрактом.
+`deleteCharacter @0xc3fd00` задаёт последовательность удаления и обновления
+списка; текущий SaveStore удаляет только собственные `.otc` через подтверждение.
 
-- `FrontendClass::description` + `PlayerPrototype::description` (пусто, если нет).
-- `frame(create)`: `CHARACTERCLASS←имя`, `CHARACTERCLASSDESCRIPTION←описание`.
-- `EditBox` — поле имени; лимит `32→12` по `MaxTextLength`.
-- Питомец/Dog/Cat/Ferret, Settings — disabled с ресурсным текстом; табы
-  кредитов работают (ниже).
+Исходная сцена меню и персонажи прослеживаются через CMenuManager/CGameUI;
+ресурс PortraitBox сам по себе описывает лишь окно. Состояние сцены:
+[menu-background.md](menu-background.md).
 
-## Табы кредитов (original-code семантика + точный контент, сделано)
+## Проверки
 
-- `CMainMenu::onClick @0xc4ae80`: `GUISELECTA/B/C/D` (id 64–67) тогглят две
-  фулскрин-панели: A/B — окно @+0xe8 (показать/скрыть), C/D — окно @+0xf0.
-  Порт повторяет состояние флагами `show_credits_/show_credits_b_`.
-- Контент панели 1 — статический roll из rodata `0xbf2e30..0xbf313f`
-  (37 строк: Runic team, Voice Talents, QA/Art, Ogre3d/CEGUI/PU/FMOD).
-  Разделитель `\n` — inferred (один setText в один ItemText); `|c..|u`
-  инлайн-цвета не поддерживаются рендером (открыто).
-- Панель 2 (вероятно моды — `update()` дёргает `getEnabledModNames`) без
-  доказанного контента: C/D роучены (не шумят как unsupported), но кнопок не
-  создают и панель не открывают. Таб A — только из ресурсов (без фолбэка,
-  чтобы не красть фокус на синтетике); закрытие — модальной кнопкой поверх.
-- Проверка `frontend_resource_test` на настоящем layout: закрыто→пусто,
-  открыто→Runic/Ogre3d, закрытие→пусто.
+`ui_dropdown_contract` проверяет исходные ветви, флаги, порядок вызовов,
+подписки и границы исключений на значениях функций.
+`original_ui_dropdown_contract` добавляет свойства настоящего layout.
+`ui_layout_property` и `original_ui_layout_property` закрепляют выбор
+Value/body. Подключение устанавливается по callers/полям/consumers;
+полное закрытие записывается в function-transfer.json.
 
-## Доразбор: превью персонажа и update()
-
-- `CNewGameMenu::update @0xc5cc30` вызывает `CDataGroup::GetDataValue`,
-  `CCharacter::getDescription` и дважды `CEGUI::Window::setText` (+`setVisible`):
-  это заполнение `CharacterClass`/`CharacterClassDescription` из данных персонажа.
-  Порт повторяет источник (`UNIT DESCRIPTION`), сам `getDescription`-диспетчер
-  побитово не сверен.
-- `CNewGameMenu::setOpen @0xc5c5a0`: `setText/setVisible`, `setCreationClass`,
-  `setCreationPet` — выбор класса/питомца уходит в `CGameClient`.
-- `CNewGameMenu::createMenus @0xc5d730`: только CEGUI — `loadWindowLayout`,
-  `convertToScreenScale`, `mapToFunctions`, `addChildWindow`. Ogre-вызовов нет.
-- `PortraitBox` отсутствует в строках ELF (есть только `CharacterClass`,
-  `CharacterClassDescription` @`0xbf316d/0xbf3187`): код его не трогает,
-  это статическая пустая рамка 140x400. 3D-превью персонажа в create-меню нет.
-- Фон главного меню (`media/layouts/MainMenus/MAINMENU_*.LAYOUT`): жёсткой ссылки
-  в бинарнике нет (нет строк `MAINMENU`/`.layout`) — выбор сцены идёт через данные,
-  отдельное исследование. Порт фон не рисует; кнопки/тексты поверх — по ресурсам.
-
-## Открыто
-
-- Числовой `ELayoutFunction`-диспетчер `CMainMenu/CNewGameMenu::onClick`
-  побитово не сверен (маршрутизация по имени эквивалентна по ресурсам).
-- Pet-выбор `guiPet1`, difficulty, `getEmptySave`→слот.
-- Дата-драйвен фон меню из `media/layouts/MainMenus/` (см. выше).
-
-## Удаление персонажа (original-code, сделано)
-
-- `CContinueGameMenu::onClick @0xc3fe80` зовёт `deleteCharacter @0xc3fd00`;
-  тот делает `GetSaveDataPath` + `AssembleAbsolutePath` + `DeleteFile`, затем
-  `reloadFiles` + `selectCharacter` + `updateCharacterList`.
-- Порт: `SaveStore::remove` (только свой каталог, `valid_slot` против
-  траверса, идемпотентный false на отсутствующем), `Frontend` confirm-стейт
-  (`delete`→`accept`/`decline`, `FrontendCommand::remove`), кнопки
-  accept/decline видны только пока висит confirm — как `DeleteConfirm` в
-  оригинале. Проверки: `frontend_test` (без подтверждения не удаляет) и
-  `save_checkpoint_test` (удаление/повтор/траверс).
-
-## Описание слота (resource-derived из .otc, сделано)
-
-- Оригинал собирает Desc в `updateCharacterList @0xc3b2f0` из кусочков
-  `g_Level/g_Difficulty/g_Easy/Normal/Hard/VeryHard/Hardcore/g_Hrs/Mins/Secs/
-  g_Dead/g_Retired` — точная склейка и .SVB-поля (время игры) у нас открыты.
-- Порт пишет из своих данных: `Level {level} {Class}` + `, Hardcore`
-  (уровень/хардкор добавлены в `SaveSlotInfo` из чекпоинта; класс — по guid).
-  Проверка `frontend_resource_test` на настоящем layout. Точные слова
-  сложности, время и Dead/Retired — открыто.
+Сохранённые `mainmenu_presentation_test`, `frontend_menu_test` и
+`gles_skin_button_render` относятся к отдельно запрашиваемой группе
+UI-интеграции. Для текущего переноса выбираются проверки контрактов выше.

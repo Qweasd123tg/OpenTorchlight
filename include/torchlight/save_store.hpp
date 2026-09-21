@@ -19,6 +19,9 @@ struct SaveSlotInfo {
     DungeonAddress current;
     std::uint64_t revision = 0;
     std::filesystem::file_time_type modified{};
+    // Our decoded PlayerCheckpoint::health. Trailing default preserves existing
+    // aggregate fixtures while supplying CContinueGameMenu's health > 0 guard.
+    float health = 1.0F;
     [[nodiscard]] bool loadable() const noexcept {
         return error.empty();
     }

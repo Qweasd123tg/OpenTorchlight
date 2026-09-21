@@ -39,6 +39,10 @@ extern "C" int render_frontend_probe(const char *pak, int width, int height, int
         PakArchive archive(pak);
         UiResources resources(archive);
         Frontend ui(resources, {{1, "DESTROYER"}, {2, "VANQUISHER"}, {3, "ALCHEMIST"}});
+        // Keep the authored disabled Continue control visible to test its skin.
+        // Empty-save visibility is checked by mainmenu_presentation_test.
+        SaveSlotInfo available; available.slot="fixture"; available.class_guid=1;
+        ui.set_saves({available});
         auto frame = ui.frame(width, height);
         if (page == 1) {
             const auto i = std::find_if(frame.buttons.begin(), frame.buttons.end(),
@@ -194,7 +198,23 @@ extern "C" int render_skin_button_probe(const char *pak, int width, int height, 
         button.widget.has_clip = true;
         button.supplemental = (mode == 2);
         button.focused = (mode == 1);
+        button.widget.paint_order = 1;
         frame.buttons.push_back(button);
+        if (mode == 3 || mode == 4) {
+            // Later static window covers the earlier button, across kinds.
+            // Test/Image also exercises the skin compiler outside buttons.
+            UiResolvedWidget cover;
+            cover.name="cover"; cover.type="Test/Image";
+            cover.image="set:Fixture image:Green";
+            cover.rect=cover.clip=button.rect; cover.has_clip=true;
+            cover.paint_order=mode==3?2:0;
+            frame.decorations.push_back(cover);
+        }
+        if (mode == 5) {
+            // Disabled is an empty StateImagery in this look. The renderer
+            // consumes the controller state, not stale widget.enabled.
+            frame.buttons[0].enabled=false;
+        }
         renderer.draw(frame, width, height);
         glFinish();
         if (glGetError() != GL_NO_ERROR)

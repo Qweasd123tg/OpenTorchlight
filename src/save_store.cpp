@@ -133,6 +133,7 @@ std::vector<SaveSlotInfo> SaveStore::list(std::uint64_t identity) const {
             row.current = c.current;
             row.revision = c.revision;
             row.hardcore = c.player.hardcore;
+            row.health = c.player.health;
             // Same sanity range as validate_progression; garbage stays at 1.
             if (c.player.progression && c.player.progression->level >= 1)
                 row.level = c.player.progression->level;

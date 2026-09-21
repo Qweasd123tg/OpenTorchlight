@@ -557,7 +557,12 @@ public:
         float center_y = (minimum_.y + maximum_.y) * 0.5F;
         float scale_x = 0.0F;
         float scale_y = 0.0F;
-        if (camera_target_.has_value()) {
+        if (explicit_camera_.has_value()) {
+            const auto& camera = *explicit_camera_;
+            last_camera_ = make_camera_projection(camera.position, camera.target,
+                aspect, camera.fov_degrees, camera.near_clip, camera.far_clip);
+            last_perspective_ready_ = true;
+        } else if (camera_target_.has_value()) {
             const auto pose = game_camera_pose(*camera_target_, camera_distance_);
             last_camera_ = make_camera_projection(
                 pose.position, pose.target,
@@ -599,8 +604,8 @@ public:
         glUniform3fv(camera_up_location_, 1, last_camera_.up.data());
         glUniform3fv(camera_forward_location_, 1, last_camera_.forward.data());
         glUniform4f(camera_projection_location_, last_camera_.tangent_half_fov, aspect,
-                    kOriginalCameraNearClip, kOriginalCameraFarClip);
-        glUniform1f(perspective_camera_location_, camera_target_.has_value() ? 1.0F : 0.0F);
+                    last_camera_.near_clip, last_camera_.far_clip);
+        glUniform1f(perspective_camera_location_, last_perspective_ready_ ? 1.0F : 0.0F);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
@@ -840,9 +845,21 @@ public:
         }
         camera_target_ = target;
         camera_distance_ = camera_distance;
+        explicit_camera_.reset();
     }
 
-    void clear_camera_target() noexcept { camera_target_.reset(); }
+    void set_camera_pose(const Vector3& position, const Vector3& target,
+                         float fov_degrees, float near_clip, float far_clip) {
+        static_cast<void>(make_camera_projection(position, target, 1.0F,
+            fov_degrees, near_clip, far_clip));
+        explicit_camera_ = ExplicitCamera{position, target, fov_degrees, near_clip, far_clip};
+        camera_target_.reset();
+    }
+
+    void clear_camera_target() noexcept {
+        camera_target_.reset();
+        explicit_camera_.reset();
+    }
 
     [[nodiscard]] std::array<float, 3> ground_position_at_pixel(
         int pixel_x, int pixel_y_from_bottom, int width, int height,
@@ -1191,6 +1208,14 @@ private:
     ProjectedPoint minimum_;
     ProjectedPoint maximum_;
     std::optional<std::array<float, 3>> camera_target_;
+    struct ExplicitCamera {
+        Vector3 position;
+        Vector3 target;
+        float fov_degrees;
+        float near_clip;
+        float far_clip;
+    };
+    std::optional<ExplicitCamera> explicit_camera_;
     float camera_distance_ = 28.5F;
     int last_width_ = 0;
     int last_height_ = 0;
@@ -1253,6 +1278,11 @@ void GlesSceneRenderer::set_camera_target(const std::array<float, 3>& target,
 
 void GlesSceneRenderer::clear_camera_target() noexcept {
     implementation_->clear_camera_target();
+}
+
+void GlesSceneRenderer::set_camera_pose(const Vector3& position, const Vector3& target,
+                                      float fov_degrees, float near_clip, float far_clip) {
+    implementation_->set_camera_pose(position, target, fov_degrees, near_clip, far_clip);
 }
 
 std::array<float, 3> GlesSceneRenderer::ground_position_at_pixel(

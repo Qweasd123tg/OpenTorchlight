@@ -35,6 +35,21 @@ enum class AnimationPlaybackMode {
     clamp,
 };
 
+struct OgreAnimationLayer {
+    const OgreSkeleton* skeleton = nullptr;
+    std::string_view animation_name;
+    float time_seconds = 0.0F;
+    float weight = 1.0F;
+    AnimationPlaybackMode playback_mode = AnimationPlaybackMode::loop;
+};
+
+// Applies an arbitrary number of enabled OGRE AnimationState layers in their
+// enabled-list order. Callers are responsible for OGRE average-mode weight
+// normalization before sampling.
+[[nodiscard]] OgreMeshPose sample_ogre_mesh_animation_layers(
+    const OgreMesh& mesh, const OgreSkeleton& bind_skeleton,
+    const std::vector<OgreAnimationLayer>& layers);
+
 [[nodiscard]] OgreMeshPose sample_ogre_mesh_animation(
     const OgreMesh& mesh, const OgreSkeleton& bind_skeleton,
     const OgreSkeleton& animation_skeleton, std::string_view animation_name,

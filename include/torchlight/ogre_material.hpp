@@ -46,6 +46,7 @@ struct OgreMaterial {
     OgreTextureColorOperation texture_color_operation =
         OgreTextureColorOperation::modulate;
     bool depth_write = true;
+    bool depth_check = true;
     bool lighting = true;
     bool texture_clamp = false;
     bool texture_filter_linear = true;

@@ -30,12 +30,15 @@ struct UiPointerClick {
 struct UiHudFrame {
     std::vector<UiResolvedWidget> images, texts, buttons;
     std::vector<UiHudBar> bars;
+    // Ordered resource-preview layers drawn after the HUD, without a clear.
+    std::vector<UiResolvedWidget> overlays;
 };
 // Topmost visible callback target; disabled targets still block world input.
 [[nodiscard]] const UiResolvedWidget *hud_button_at(const UiHudFrame &, float x, float y);
 // Original CGameUI::mapEventHandlers maps onClick to MouseButtonDown.
 // Dispatch once at the press position, not at release; release never repeats it.
 [[nodiscard]] std::optional<std::string> hud_press_callback(const UiHudFrame &, float x, float y);
+[[nodiscard]] std::optional<UiLayoutFunction> hud_press_function(const UiHudFrame &, float x, float y);
 class UiHud {
   public:
     explicit UiHud(UiResources &resources) : resources_(&resources) {}

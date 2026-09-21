@@ -1,4 +1,5 @@
 #include "torchlight/application.hpp"
+#include "torchlight/menu_scene.hpp"
 #include "torchlight/application_keys.hpp"
 #include "torchlight/interaction.hpp"
 #include "torchlight/frontend.hpp"
@@ -27,9 +28,11 @@
 #include "torchlight/player.hpp"
 #include "torchlight/player_session.hpp"
 #include "torchlight/inventory_menu.hpp"
+#include "torchlight/ui_inventory.hpp"
 #include "torchlight/inventory_view.hpp"
 #include "torchlight/ui_screen_scale.hpp"
 #include "torchlight/music.hpp"
+#include "torchlight/ui_sound.hpp"
 #include "torchlight/random_level.hpp"
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/scene_geometry.hpp"
@@ -339,25 +342,36 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const auto master_document = torchlight::parse_adm(
             archive.read("media/MASTERRESOURCEUNITS.DAT.ADM"));
         const torchlight::MasterResourceIndex index(master_document);
-        const torchlight::SpawnClassCatalog spawn_classes(archive);
         torchlight::UnitDefinitionLoader loader(archive);
-        for (const auto& record : index.records()) {
-            static_cast<void>(loader.load(record));
-        }
         const torchlight::UnitTypeHierarchy unit_type_hierarchy(archive);
-        const torchlight::UnitTypeResourceIndex unit_types(
-            archive, unit_type_hierarchy, index, loader);
-        const torchlight::QuestCatalog quest_catalog(archive);
-        const torchlight::PotionMerchantCatalog merchant_catalog(archive, index, loader, spawn_classes, unit_type_hierarchy);
         const torchlight::LevelsetCatalog levelsets(archive);
         const torchlight::LevelSceneLoader scene_loader(archive);
         const auto players = torchlight::load_playable_players(archive, index, loader);
         if (players.empty()) {
             throw DesktopError("no playable player definitions were resolved");
         }
+        // Port startup policy: world catalogs are unnecessary for menu-only
+        // sessions. UnitDefinitionLoader resolves and caches definitions on demand.
+        std::optional<torchlight::SpawnClassCatalog> gameplay_spawn_classes;
+        std::optional<torchlight::UnitTypeResourceIndex> gameplay_unit_types;
+        std::optional<torchlight::QuestCatalog> gameplay_quests;
+        std::optional<torchlight::PotionMerchantCatalog> gameplay_merchants;
         std::shared_ptr<const torchlight::SkillCatalog> skills_catalog;
-        if (std::any_of(players.begin(), players.end(), [](const auto& p){ return !p.class_skills.empty(); }))
-            skills_catalog = std::make_shared<torchlight::SkillCatalog>(archive);
+        bool gameplay_catalogs_ready = false;
+        const auto ensure_gameplay_catalogs = [&] {
+            if (gameplay_catalogs_ready) return;
+            if (!gameplay_spawn_classes) gameplay_spawn_classes.emplace(archive);
+            if (!gameplay_unit_types)
+                gameplay_unit_types.emplace(archive, unit_type_hierarchy, index, loader);
+            if (!gameplay_quests) gameplay_quests.emplace(archive);
+            if (!gameplay_merchants)
+                gameplay_merchants.emplace(archive, index, loader,
+                                           *gameplay_spawn_classes, unit_type_hierarchy);
+            if (!skills_catalog && std::any_of(players.begin(), players.end(),
+                    [](const auto& p){ return !p.class_skills.empty(); }))
+                skills_catalog = std::make_shared<torchlight::SkillCatalog>(archive);
+            gameplay_catalogs_ready = true;
+        };
         torchlight::DungeonAddress initial_address{u"Town", 0};
         if (options.main_stratum) {
             const auto main = scene_loader.load_dungeon(u"media/dungeons/MAIN.DAT");
@@ -376,13 +390,96 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const torchlight::OgreMaterialCatalog materials(archive);
         torchlight::UiResources ui_resources(archive);
         torchlight::GlesUiRenderer ui_renderer(archive, ui_resources);
+        std::unique_ptr<torchlight::GlesSceneRenderer> menu_renderer;
+        bool menu_scene_attempted = false;
+        const auto draw_frontend = [&](const torchlight::FrontendFrame& frame) {
+            if (!menu_scene_attempted) {
+                menu_scene_attempted = true;
+                try {
+                    auto scene = torchlight::build_main_menu_scene(archive, levelsets,
+                                                                   options.settings.netbook_mode);
+                    menu_renderer = std::make_unique<torchlight::GlesSceneRenderer>(
+                        scene.geometry, archive, materials);
+                    menu_renderer->set_camera_pose(scene.camera.position, scene.camera.target,
+                        scene.camera.fov_degrees, scene.camera.near_clip, scene.camera.far_clip);
+                } catch (const std::exception& error) {
+                    window.notice("menu_scene_unavailable", error.what());
+                }
+            }
+            if (menu_renderer) window.draw_menu_scene(*menu_renderer, ui_renderer, frame);
+            else window.draw_menu_frame(ui_renderer, frame);
+        };
         torchlight::UiHud ui_hud(ui_resources);
         std::vector<torchlight::FrontendClass> frontend_classes;
         for (const auto& p : players)
             frontend_classes.push_back(
                 {p.guid, narrow_ascii(p.name), narrow_description(p.description)});
         torchlight::Frontend frontend(ui_resources, std::move(frontend_classes));
-        frontend.sync_settings(options.settings);
+        auto display_resolutions = window.display_resolutions();
+        frontend.set_resolutions(display_resolutions);
+        const auto refresh_display_resolutions = [&] {
+            auto current = window.display_resolutions();
+            if (current == display_resolutions) return;
+            display_resolutions = std::move(current);
+            frontend.set_resolutions(display_resolutions);
+        };
+        std::unique_ptr<torchlight::UiSoundPlayer> ui_sound;
+        if (archive.find_normalized("media/sounds/UI.DAT.adm"))
+            ui_sound = std::make_unique<torchlight::UiSoundPlayer>(archive);
+        const auto dispatch_frontend_sounds = [&] {
+            const auto& settings = frontend.audio_settings();
+            if (ui_sound) ui_sound->set_levels(settings.sound_volume, settings.sound_mute);
+            for (const auto sound : frontend.take_dropdown_sounds())
+                if (ui_sound) ui_sound->play(sound);
+        };
+        auto frontend_clock = window.clock_seconds();
+        const auto advance_frontend_to = [&](double target) {
+            const auto delta = target - frontend_clock;
+            if (!std::isfinite(target) || !std::isfinite(delta) || delta < 0)
+                throw DesktopError("application host clock must be finite and monotonic");
+            frontend_clock = target;
+            if (delta > 0) frontend.advance(static_cast<float>(delta));
+            dispatch_frontend_sounds();
+        };
+        const auto dispatch_frontend_events = [&](const std::vector<torchlight::UiPointerEvent>& events,
+                                                   double now, bool forward_button_down) {
+            if (!std::isfinite(now) || now < frontend_clock)
+                throw DesktopError("application host clock must be finite and monotonic");
+            for (const auto& event : events) {
+                auto event_time = frontend_clock;
+                if (event.time_seconds) {
+                    if (!std::isfinite(*event.time_seconds))
+                        throw DesktopError("application host pointer clock must be finite");
+                    event_time = std::clamp(*event.time_seconds, frontend_clock, now);
+                }
+                advance_frontend_to(event_time);
+                if (forward_button_down || event.kind != torchlight::UiPointerEventKind::button_down) {
+                    // Each event sees timer and tree mutations made before its timestamp.
+                    static_cast<void>(frontend.frame(window.width(), window.height()));
+                    auto delivered = event;
+                    if (delivered.time_seconds) delivered.time_seconds = event_time;
+                    frontend.pointer_event(delivered);
+                    dispatch_frontend_sounds();
+                }
+            }
+            advance_frontend_to(now);
+        };
+        const auto dispatch_frontend_pointer = [&](double now) {
+            const auto legacy_click = window.take_left_click();
+            if (window.has_ui_pointer_events()) {
+                dispatch_frontend_events(window.take_ui_pointer_events(), now, true);
+            } else {
+                advance_frontend_to(now);
+                if (legacy_click)
+                    frontend.click(static_cast<float>((*legacy_click)[0]), static_cast<float>((*legacy_click)[1]));
+            }
+            static_cast<void>(window.take_ui_click());
+            dispatch_frontend_sounds();
+        };
+        auto applied_settings = options.settings;
+        applied_settings.music_volume = options.music_volume;
+        applied_settings.music_mute = options.music_mute;
+        frontend.sync_settings(applied_settings);
         torchlight::SaveStore saves(options.save_directory ? *options.save_directory : torchlight::SaveStore::default_directory());
         const auto resource_identity = torchlight::checkpoint_resource_identity(archive);
         const auto refresh_saves = [&] {
@@ -392,9 +489,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         refresh_saves();
         // Menu/world music. Track names follow the observed UPPER(name) shape
         // (CGameClient::loadLevel uppercases before playMusic); the plural
-        // fallback (MINE -> MINES.OGG) and TITLE/TOWN picks are inferred and
+        // fallback (MINE -> MINES.OGG) and TOWN fallback are inferred and
         // boss/combat tracks stay open. Only files present in the music
-        // directory are ever requested.
+        // directory are ever requested. Menu Title.ogg is explicit in
+        // loadMenuLevel @0x584dea; see research/menu-scene.md.
         torchlight::MusicPlayer music;
         std::set<std::string> music_tracks;
         if (options.music_enabled) {
@@ -429,12 +527,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             }
             music.request(music_dir,
                           pick_music(torchlight::music_track_for_dungeon(dungeon, theme)),
-                          options.music_volume, options.music_mute);
+                          applied_settings.music_volume, applied_settings.music_mute);
         };
         const auto apply_settings = [&](const torchlight::FrontendRequest &request) {
             const auto dir = options.settings_directory ? *options.settings_directory
                                                        : torchlight::settings_directory();
             torchlight::store_display_settings(dir, request.settings);
+            applied_settings = request.settings;
             music.set_levels(request.settings.music_volume, request.settings.music_mute);
             frontend.applied();
         };
@@ -454,6 +553,11 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         torchlight::PlayerSession session(selected_player, level_seed(campaign_seed, initial_address.depth), &unit_type_hierarchy);
         torchlight::InventoryView inventory_view;
         torchlight::InventoryMenuState inventory_menu;
+        std::optional<torchlight::UiInventoryPreview> inventory_ui;
+        if (options.inventory_ui_preview) {
+            inventory_ui.emplace(ui_resources);
+            window.notice("inventory_ui_boundary", "resource_coordinates_no_animated_model_no_item_mouse_actions");
+        }
         // original-code: panel setOpen family — CMerchantMenu @0xb6a220,
         // CSkillMenu @0xbe1130, CQuestMenu @0xbc2550 share the panel_open
         // flag machine (profiles in panel_open.hpp); pet/journal have no
@@ -479,12 +583,15 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         };
         while (app_running) {
             if (!gameplay_active) {
+                frontend.pointer(window.ui_pointer_state());
                 window.observe_frontend(frontend.page(), frontend.frame(window.width(), window.height()), frontend.character_name());
                 if (!window.process_events()) break;
+                const auto frontend_now = window.clock_seconds();
+                refresh_display_resolutions();
+                frontend.pointer(window.ui_pointer_state());
                 static_cast<void>(frontend.frame(window.width(), window.height()));
                 for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
-                if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
-                static_cast<void>(window.take_ui_click());
+                dispatch_frontend_pointer(frontend_now);
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
                     // original-code: CContinueGameMenu deleteCharacter @0xc3fd00
@@ -512,13 +619,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         } else throw DesktopError("unexpected command outside gameplay");
                         const auto chosen = std::find_if(players.begin(), players.end(), [&](const auto& p) { return p.guid == candidate.class_guid; });
                         if (chosen == players.end()) throw DesktopError("saved class is unavailable in this resource set");
+                        ensure_gameplay_catalogs();
                         auto candidate_session = request->command == torchlight::FrontendCommand::load
                             ? torchlight::CheckpointAccess::restore_player(*chosen, candidate.player, candidate.seed, &unit_type_hierarchy)
                             : torchlight::PlayerSession(*chosen, candidate.seed, &unit_type_hierarchy);
                         auto candidate_transitions = request->command == torchlight::FrontendCommand::load
                             ? torchlight::CheckpointAccess::restore_transitions(candidate)
                             : torchlight::LevelTransitionState(candidate.current);
-                        quest_catalog.validate(candidate.quests);
+                        gameplay_quests->validate(candidate.quests);
                         selected_player = *chosen; session = std::move(candidate_session); campaign = std::move(candidate);
                         campaign_seed = campaign.seed; transitions = std::move(candidate_transitions); pending_entry.reset();
                         resume_saved_position = request->command == torchlight::FrontendCommand::load;
@@ -526,16 +634,26 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     } catch (const std::exception& e) { frontend.error(std::string("CANNOT OPEN GAME: ") + e.what()); }
                 }
                 if (!gameplay_active) {
+                    const auto& audio = frontend.audio_settings();
                     if (options.music_enabled)
                         music.request(music_dir,
                                       pick_music(torchlight::music_track_for_menu()),
-                                      options.music_volume, options.music_mute);
-                    window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                                      audio.music_volume, audio.music_mute);
+                    music.set_levels(audio.music_volume, audio.music_mute);
+                    frontend.pointer(window.ui_pointer_state());
+                    draw_frontend(frontend.frame(window.width(), window.height()));
                 }
                 continue;
             }
             try {
+            ensure_gameplay_catalogs();
+            const auto& spawn_classes = *gameplay_spawn_classes;
+            const auto& unit_types = *gameplay_unit_types;
+            const auto& quest_catalog = *gameplay_quests;
+            const auto& merchant_catalog = *gameplay_merchants;
             session.enter_level();
+            // Entity IDs and projectile ownership are floor-local.
+            missile_runtime = {}; missile_shots.clear();
             session.hydrate_consumables(loader, index);
             if (skills_catalog) session.attach_skill_catalog(skills_catalog);
             bool skill_panel = false, quest_panel = false;
@@ -980,6 +1098,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 view.player_angle = player_facing_angle;
                 view.player_instance = player_instance_index; view.weapon_instance = player_weapon_instance_index;
                 view.inventory_open = inventory_view.open; view.session = &session;
+                view.inventory_tab = static_cast<int>(inventory_menu.tab());
                 view.quests = &campaign.quests; view.world = &entity_world; view.logic = &logic_runtime; view.enemies = &enemies;
                 view.navigation = &level.navigation; view.layout = &level.layout;
                 view.geometry = &level.geometry; view.renderer = &*renderer;
@@ -992,15 +1111,17 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     app_running = false;
                     break;
                 }
+                const auto frontend_now = window.clock_seconds();
+                refresh_display_resolutions();
                 // PORT orchestration fix: settings opened from pause is still
                 // a modal frontend page, never a branch of the simulation.
                 if (frontend.page() == torchlight::FrontendPage::pause ||
-                    frontend.page() == torchlight::FrontendPage::settings) {
+                    frontend.page() == torchlight::FrontendPage::settings || frontend.has_closing_windows()) {
+                    frontend.pointer(window.ui_pointer_state());
                     window.observe_frontend(frontend.page(), frontend.frame(window.width(), window.height()), frontend.character_name());
                     static_cast<void>(frontend.frame(window.width(), window.height()));
                     for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
-                    if (const auto click = window.take_left_click()) frontend.click(static_cast<float>((*click)[0]), static_cast<float>((*click)[1]));
-                    static_cast<void>(window.take_ui_click());
+                    dispatch_frontend_pointer(frontend_now);
                     if (const auto request = frontend.take_request()) {
                         if (request->command == torchlight::FrontendCommand::apply_settings) {
                             try { apply_settings(*request); }
@@ -1018,21 +1139,30 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             }
                         } else frontend.error("UNSUPPORTED COMMAND WHILE GAMEPLAY IS PAUSED");
                     }
+                    const auto& audio = frontend.audio_settings();
+                    music.set_levels(audio.music_volume, audio.music_mute);
                     if (frontend.page() == torchlight::FrontendPage::main) { return_to_menu = true; break; }
                     if (frontend.page() == torchlight::FrontendPage::quit) { app_running = false; break; }
                     if (frontend.page() == torchlight::FrontendPage::pause ||
-                        frontend.page() == torchlight::FrontendPage::settings)
+                        frontend.page() == torchlight::FrontendPage::settings || frontend.has_closing_windows()) {
+                        frontend.pointer(window.ui_pointer_state());
                         window.draw_menu_frame(ui_renderer, frontend.frame(window.width(), window.height()));
+                    }
                     previous_frame = window.clock_seconds();
                     continue;
                 }
-                const auto current_frame = window.clock_seconds();
+                const auto current_frame = frontend_now;
                 const float elapsed =
                     static_cast<float>(current_frame - previous_frame);
                 if (!std::isfinite(elapsed) || elapsed < 0.0F)
                     throw DesktopError("application host clock must be finite and monotonic");
                 previous_frame = current_frame;
                 auto world_click = window.take_left_click();
+                const auto pointer_events = window.take_ui_pointer_events();
+                // A dropdown may detach while its button still owns capture.
+                // Its later release must reach ButtonBase; world/HUD retain
+                // ownership of new presses here.
+                dispatch_frontend_events(pointer_events, frontend_now, false);
                 // Release state remains useful for host button visuals, but this HUD
                 // subscribes to MouseButtonDown in the original, not EventClicked.
                 static_cast<void>(window.take_ui_click());
@@ -1043,6 +1173,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     const float y = static_cast<float>((*world_click)[1]);
                     if (torchlight::hud_button_at(input_hud, x, y)) {
                         const auto callback = torchlight::hud_press_callback(input_hud, x, y);
+                        const auto function = torchlight::hud_press_function(input_hud, x, y);
                         world_click.reset(); // Transparent/disabled targets also consume the press.
                         if (callback && player_combat.alive()) {
                             window.notice("hud_dispatch_down", *callback);
@@ -1054,11 +1185,12 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             // pause). This dispatch runs only with the inventory
                             // closed, so closeAll is a no-op and one ESC (pause
                             // when nothing is open) matches exactly.
-                            if (*callback == "guiToggleInventory") key_presses.push_back(torchlight::physical_key::I);
-                            else if (*callback == "guiToggleSkills") key_presses.push_back(torchlight::physical_key::K);
-                            else if (*callback == "guiToggleQuests") key_presses.push_back(torchlight::physical_key::J);
-                            else if (*callback == "guiToggleOptions") key_presses.push_back(torchlight::physical_key::ESC);
-                            else if (*callback == "guiPause") key_presses.push_back(torchlight::physical_key::ESC);
+                            using Function = torchlight::UiLayoutFunction;
+                            if (function == Function::toggle_inventory) key_presses.push_back(torchlight::physical_key::I);
+                            else if (function == Function::toggle_skills) key_presses.push_back(torchlight::physical_key::K);
+                            else if (function == Function::toggle_quests) key_presses.push_back(torchlight::physical_key::J);
+                            else if (function == Function::toggle_options) key_presses.push_back(torchlight::physical_key::ESC);
+                            else if (function == Function::pause) key_presses.push_back(torchlight::physical_key::ESC);
                             else window.notice("hud_callback_unimplemented", *callback);
                         }
                     }
@@ -1099,6 +1231,22 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     // they select have no sink either.
                     static_cast<void>(merchant_menu.set_open(entity != 0, false));
                 };
+                if (inventory_ui && inventory_menu.open() && !skill_panel && !quest_panel && !merchant_entity && player_combat.alive() && world_click) {
+                    const auto frame = inventory_ui->frame(window.width(), window.height(), inventory_menu);
+                    const auto action = torchlight::UiInventoryPreview::press(frame,
+                        static_cast<float>((*world_click)[0]), static_cast<float>((*world_click)[1]));
+                    world_click.reset(); // The existing port panel remains modal; no world click-through.
+                    if (action.action == torchlight::InventoryUiAction::tab) {
+                        if (inventory_menu.click_tab(action.function))
+                            window.notice("inventory_tab_down", std::to_string(action.function));
+                    } else if (action.action == torchlight::InventoryUiAction::close) {
+                        // Bounded CloseButton/processInput adaptation: no drag safe
+                        // pointers exist in the preview; the original queued +0x62
+                        // request is consumed here through the existing single writer.
+                        set_inventory_open(false);
+                        window.notice("inventory_close_down", "close");
+                    }
+                }
                 for (const auto key : key_presses) {
                     if (!player_combat.alive()) {
                         if (key == torchlight::physical_key::ESC) { frontend.pause(); continue; }
@@ -1208,7 +1356,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         else if (key == torchlight::physical_key::DOWN && selected_skill + 1 < skills.size()) ++selected_skill;
                         else if ((key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) && selected_skill < skills.size())
                             inventory_view.status = torchlight::skill_use_message(session.invest_skill(skills[selected_skill].name));
-                    } else if (inventory_view.open) {
+                    } else if (inventory_view.open && !inventory_ui) {
+                        // The resource preview hides the legacy selected-item
+                        // list: do not equip/consume/spend points on invisible rows.
                         if (key == torchlight::physical_key::UP) inventory_view.move(-1, session.inventory());
                         else if (key == torchlight::physical_key::DOWN) inventory_view.move(1, session.inventory());
                         else if (key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) {
@@ -2001,10 +2151,18 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         hud_values.experience_fraction =
                             static_cast<float>(session.progression().experience) / gate;
                 }
-                const auto hud = ui_hud.frame(window.width(), window.height(), hud_values,
+                auto hud = ui_hud.frame(window.width(), window.height(), hud_values,
                                               window.ui_pointer_state());
+                const bool inventory_preview_visible = inventory_ui && inventory_menu.open() &&
+                    !skill_panel && !quest_panel && !merchant_entity && player_combat.alive();
+                if (inventory_preview_visible) {
+                    hud.overlays = inventory_ui->frame(window.width(), window.height(), inventory_menu,
+                                                       window.ui_pointer_state()).widgets;
+                    overlay = {{"RESOURCE UI PREVIEW: NO ANIMATED FRAME / ITEM MOUSE ACTIONS", false},
+                               {"I / ESC CLOSE | TABS + CLOSE USE MOUSE DOWN", false}};
+                }
                 window.draw_scene_frame(*renderer, ui_renderer, overlay,
-                                        inventory_view.open || !player_combat.alive(), hud);
+                                        (inventory_view.open && !inventory_preview_visible) || !player_combat.alive(), hud);
                 observe("after_draw", &player_pose);
                 rendered_once = true;
                 ++level_frames;

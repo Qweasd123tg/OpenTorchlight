@@ -1,29 +1,22 @@
-# Фон главного меню: механизм найден, тема по умолчанию открыта
+# Фон главного меню
 
-## Доказано (original-code, ELF `91b41ae9…`)
+Актуальные адреса, хеши, ресурсная цепочка и граница реализации:
+[menu-scene.md](menu-scene.md).
 
-- Фон — настоящая 3D-сцена: `CGameClient::loadMenuLevel(int,int,wstring)`
-  @`0x584b80` делает `getLevelTemplateDataForDepth` + `CLevel` + `loadRoomLayout`
-  + `Camera::setPosition/lookAt` + `stopMusic/playMusic`. Вызывается из
-  `CGameClient::setGameState` (3 сайта) для меню-состояний.
-- Имя данжа хранится в `CGameClient+0x1098` (`setCurrentDungeon`), с
-  оверрайдом через командную строку (`CCmdLineParser::GetStringParam`).
-- Формат правил меню — обычный LEVEL `.adm`: `MAINMENU_TOWNRULES` и др.
-  грузятся существующим `LevelSceneLoader::load_rules` (проверено пробой:
-  OK, `randomized=0`). Генератор портя их соберёт без нового парсера.
-- В бинарнике НОЛЬ байтовых/UTF-16 вхождений `MAINMENU/TOWNRULES/1X1SINGLE`:
-  выбор темы идёт через данные/строковую таблицу, не хардкод.
-- Музыка рядом: `playMusic` зовётся из `loadMenuLevel` и из `loadLevel`
-  (имя файла = `StringUpper(...)` от имени уровня). Маппинг тем→треки
-  (`MINES.OGG` и т.д.) и роль `TITLE.OGG` — открыты.
-- Живой трейс оригинала (`~/.runicgames/.../CEGUI.log`, 19с, убит на
-  сплэше) подтверждает порядок загрузки: `LOADING.LAYOUT` первый, затем
-  bulk-прелоад всех меню. До меню-состояния трейс не дошёл.
+`original-code`: при отсутствии загруженного сохранённого персонажа
+`CGameClient::setGameState` вызывает `loadMenuLevel(seed,1,TOWN)` в `0x590c48`.
+`TOWN` хранится как UTF-32LE в `0xfa83a8`. Вызов выбирает `MAINMENURULES`
+из town rules, загружает `MAINMENU_TOWN.LAYOUT` и устанавливает мировые
+положения узлов `Camera Position` / `Camera Target`.
 
-## Открыто следующим шагом
+Рабочий desktop создаёт эту сцену один раз, рисует её перед окнами меню,
+затем накладывает UI с сохранением framebuffer. Проекция PlayerCam:
+FOV 35°, near 1, far 90 (45 при netbook mode), auto aspect.
+Музыка `Title.ogg` явно задана в `loadMenuLevel` (`0x584dea`), а не выведена
+из имени данжа.
 
-- Дефолтное имя данжа (глобальный wstring-инит `CGameClient`, таблица
-  @`0x1424558`) и значения камеры меню: нужен Ghidra-разбор `setGameState`
-  или живой трейс до меню (здесь нет Xvfb).
-- До тех пор порт фон НЕ рисует (не выдумывать тему) — но сплэш загрузки
-  `loading.layout` уже показывается первым кадром по механизму оригинала.
+Подключён статический Town-фон и камера. Темы из сохранённого персонажа,
+персонажи/питомец, skybox, частицы, water/projector/light passes остаются
+отдельными частями функции. Текущий renderer сохраняет свою частичную
+реализацию материалов и освещения. Числовые и ресурсные проверки описаны
+в актуальном исследовании; полнота отрисовки ими не объявляется.

@@ -29,7 +29,7 @@ def main() -> int:
             probe.restype = C.c_int
             width, height = 256, 192
             frames = []
-            for mode in (0, 1, 2):
+            for mode in range(6):
                 pixels = (C.c_ubyte * (width * height * 4))()
                 error = C.create_string_buffer(2048)
                 if probe(os.fsencode(args.fixture), width, height, mode,
@@ -49,7 +49,10 @@ def main() -> int:
             assert fallback[:3] not in ((255, 0, 0), (0, 255, 0)), (
                 'skin path engaged for supplemental button', fallback)
             assert frames[0] != frames[1], 'focus changed nothing'
-            print('PASS: 3 actual GLES frames; skin Normal/Hover states, PORT fallback kept')
+            assert pixel(frames[3],80,72)[:3] == (0,255,0), 'later static window painted behind button'
+            assert pixel(frames[4],80,72)[:3] == (255,0,0), 'earlier static window painted over button'
+            assert pixel(frames[5],80,72)[:3] not in ((255,0,0),(0,255,0)), 'live disabled state lost'
+            print('PASS: 6 actual GLES frames; per-window order, Normal/Hover/Disabled, PORT fallback')
         return 0
     except Unavailable as exc:
         print('NOT RUN:', exc)

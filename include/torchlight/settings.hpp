@@ -41,6 +41,11 @@ struct DisplaySettings {
     int shadows_detail = 1;
     bool rimlights = true;
     int max_particles = 5000;
+    // original-code CSettings combobox selections; local_settings.txt keys
+    // LIGHTING_ENABLED, SHADOWRESOLUTION, PARTICLEFPS, PARTICLE_EMIT_PCT.
+    bool lighting_enabled = true;
+    int shadow_resolution = 128;
+    float particle_fps = 20.0F, particle_percent = 10.0F;
     bool show_tips = true, show_blood = true, floaty_numbers = true;
     bool netbook_mode = false;
     bool sound_mute = false, music_mute = false;

@@ -33,6 +33,9 @@ int main(int argc,char**argv) {
                 // Dynamic .otc names/descriptions are verified in the authored test;
                 // no original .SVB metadata is inferred here.
                 if(leaf.rfind("Player",0)==0 || leaf=="CharacterName")continue;
+                // createMenus changes these XML defaults before presentation.
+                if(frontend.page()==FrontendPage::main &&
+                   (leaf=="DemoVersion" || leaf=="CharacterModsWarning" || leaf=="CopyrightInfo"))continue;
                 const auto found=std::find_if(frame.texts.begin(),frame.texts.end(),[&](const auto&t){return t.name==w.name;});
                 require(found!=frame.texts.end() && found->text==w.text && found->font==w.font,
                         "visible original static label lost or replaced");

@@ -1,21 +1,63 @@
-# Текущая точка: перенос от кода, внешние GPT-проходы закрыты
+# Действующий пакет и история переноса
 
-Внешние проходы с архивами (`OpenTorchlight-gpt-pro*.zip`, задания
-`GPT_PRO_*`, `research/reviews/`, `tools/package_gpt_context.sh`) удалены из
-репозитория. Дальше работа идёт только переносом от кода по
-[research/code-first.md](research/code-first.md): единица работы —
-оригинальная функция целиком, стадии разобрана / перенесена / подключена /
-сравнена в `research/function-transfer.json`, scope UI — в
-`research/ui-contour.json`. Реестр обязателен:
-`tests/registry_sync_test.py` не даёт ссылаться на оригинальные входы без
-reviewed-границы.
+Текущий пакет — CMainMenu + CDropdownMenu и их исходная библиотечная цепочка внутри
+`research/ui-contour.json`. Процесс —
+[research/code-first.md](research/code-first.md), схема и инструменты —
+[research/codefirst-tooling.md](research/codefirst-tooling.md).
+`python3 tools/work_frontier.py --scope ui` помогает найти остаток
+функций и зависимостей этого пакета.
 
-Первый пакет: `CInventoryMenu::setOpen @0xb4eb70` +
-`CInventoryMenu::createMenus @0xb569e0` с общей картой полей. Проверка пакета:
-`python3 tools/function_package.py --address 0xb4eb70`. Места вызовов
-(`research/original-callsites.tsv`) экспортируются через
-`tools/ghidra/export_call_sites.sh` на машине с ELF и Ghidra-проектом.
-Ниже сохранена история.
+Подключённый production-срез описан в
+[menu-production-state.md](research/menu-production-state.md): список персонажей,
+удаление, ползунки/применение звука, физические Hover/Pushed, кеш Falagard и
+отложенная загрузка игровых каталогов. [Town scene](research/menu-scene.md)
+и [inline text](research/ui-inline-text.md) подключены к desktop.
+Следующие исходные цепочки: preview персонажа/питомца, pet/difficulty producer,
+темы из сохранения и scene FX, resolution/FSAA, native saves и общий CEGUI runtime.
+
+1. Продолжи исходную цепочку CDropdownMenu, используемую CMainMenu:
+   библиотечное значение Window+0x3e2, ownership трёх DefaultWindow,
+   handle_onClick/handle_onDoubleClick и реальную доставку подписанных событий.
+   Карта полей, ветви создания/обновления и исходные вызовы записаны в
+   `research/dropdown-mainmenu.md`. Диспетчер CMainMenu, down-подписки и
+   model-null флаги подключены. CMainMenu передаёт flags=1 и живёт без
+   dropdown-модели; анимированная ветвь нужна другим членам семейства.
+   Выбор Value/body из CEGUI `text`, `elementPropertyStart`, `elementPropertyEnd`
+   подключён к UiLayout и проверен на значениях XML/ресурсе CreditsB.
+   Фильтр свойств, CEGUI errors/lifetime и CDATA сохраняются в остатке.
+   Используй `research/mainmenu-controller-painter.md` и готовые пакеты в их границе.
+2. Разбери полный контракт участников по ASM, ресурсам и закреплённым
+   библиотекам: базовые блоки, поля, ветви, цели и порядок вызовов,
+   ошибки, cleanup и различия семейства.
+3. Сопоставь эффекты с реальным runtime: сцена, камера, библиотечные
+   состояния, кадр, ввод, resize и освобождение. Переноси связанный путь
+   сразу с производственным потребителем каждого эффекта.
+4. Установи подключение по коду callers/полей/consumers. Сверь перевод
+   с исходным ASM и закреплёнными библиотеками с адресами. Оригинальный
+   стенд или трассу выбирай по конкретному нерешённому вопросу.
+5. Собери затронутый код и выполни узкие проверки известного контракта.
+   UI-клики, скриншоты, покадровые и сквозные сценарии выполняются отдельной
+   явно запрошенной пользователем задачей. Производительность измеряй отдельно.
+6. Зафиксируй reviewed-срез и остаток. Полное completion требует ревью всего
+   контракта, достаточного оригинального свидетельства и реального потребителя.
+   integration хранит проверенную цепочку кода/данных, original_comparison —
+   reviewed-сравнение с оригинальными источниками и адресами.
+   `tests/registry_sync_test.py` проверяет структуру и актуальность реестра.
+
+Пакет функции: `python3 tools/function_package.py --address 0x...`.
+Семейство: `tools/prepare_family_packet.py`, начиная с `ENTRY.md`.
+Места вызовов `research/original-callsites.tsv` экспортируются через
+`tools/ghidra/export_call_sites.sh`; условия и виртуальные цели разбираются
+по ASM. Стадии разобрана / перенесена / подключена / сравнена в
+`research/function-transfer.json` описывают reviewed-срез; целое закрытие
+учитывается отдельным `completion`.
+
+## Исторические записи
+
+Ниже сохранены результаты и планы прежних проходов в их исходной границе.
+Заголовки «Текущая точка», прежние inventory/gameplay-приоритеты и числа
+проверок относятся к соответствующему историческому снимку. Действующую
+очередь задаёт пакет CMainMenu + CDropdownMenu выше.
 
 ---
 

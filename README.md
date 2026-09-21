@@ -1,11 +1,118 @@
 # Torchlight: восстановление исходного кода
 
-Сначала восстанавливается совместимая ПК-версия первой Torchlight. После
-рабочего вертикального среза тот же переносимый код будет собран для OnePlus 7
-с Android 16 и получит сенсорное управление. Требования и исходные находки:
+Сначала восстанавливается поведение ПК-версии первой Torchlight по исходным
+функциям, ресурсам и закреплённым библиотекам. После подтверждённой ПК-версии
+тот же переносимый код будет собран для OnePlus 7 с Android 16 и получит
+сенсорное управление. Требования и исходные находки:
 [PORTING.md](PORTING.md).
 
-## Текущий проход: large-16 — настоящий прямой элементальный урон
+## Действующий процесс и границы
+
+Основной процесс — [code-first](research/code-first.md), правила —
+[AGENTS.md](AGENTS.md), текущий scope — [UI-контур](research/ui-contour.json).
+Функция — единица учёта и полного закрытия; связанное семейство или цепочка кода —
+единица выполнения. Контракт каждого базового блока устанавливаем по ASM,
+ресурсам и закреплённым библиотекам: ветви, поля, порядок, ошибки, зависимости.
+Эффекты включаем в рабочую цепочку приложения и проверяем их потребителей.
+
+Четыре legacy-стадии [function-transfer](research/function-transfer.json)
+относятся к явно проверенной границе. Полноту функции отражает `completion`
+с ревью всего контракта и точным остатком. Структурная проверка контролирует учёт;
+ревью по ASM и библиотеке — перевод; callers, поля и реальные consumers —
+подключение. Сборка и узкие проверки закрепляют известный контракт.
+Оригинальный стенд или трасса отвечают на конкретный нерешённый вопрос.
+UI-клики, скриншоты, кадры и сквозные сценарии выполняются отдельной явно
+запрошенной задачей. Измерения скорости — отдельная задача производительности.
+
+[Реестр возможностей](research/capabilities.json) — вторичная инвентаризация
+совместимости и smoke-проверок. Числа feature-checklist, включая 30/38,
+не являются готовностью code-first. Исторические gameplay-результаты сохраняются
+для повторного использования и регрессий, но не расширяют UI scope. Среди них:
+[подключение skill projectile](research/skill-production-dispatch.md):
+COUNT/anchor/homing и полный lifecycle остаются открытыми. Кампания и выпуск
+не завершены.
+
+[Скриптовая автоматизация](research/scripted-automation.md) работает без моделей,
+ключей и сетевых API: CTest/Ninja выбирают проверки, binutils экспортирует прямые
+места вызова, Python собирает пакеты и отчёт проверок возможностей с контролем
+актуальности. Этот отчёт не аттестует полноту исходных функций.
+
+[Инструменты code-first](research/codefirst-tooling.md) собирают UI-frontier
+и пакет семейства одним чтением индексов; exact normalized shapes помогают
+выбрать представителей, но не доказывают эквивалентность поведения.
+
+Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).
+В рабочий frontend подключены начальные свойства `CMainMenu::createMenus`,
+видимость Continue и обе панели credits. Отрисовщик обходит окна в общем
+порядке и исполняет Falagard каждого окна. Кеш кадра обновляется при изменении
+состояния или размера. Загрузчик сохраняет текст тела XML Property при пустом
+или отсутствующем Value, включая CreditsB, по контракту shipped CEGUI.
+Подключены [диспетчер CMainMenu и подписки CDropdownMenu](research/dropdown-mainmenu.md):
+исходные enum-команды, порядок вызовов, флаги статического открытия/закрытия,
+MouseButtonDown. При пустом списке Load Character ведёт к созданию персонажа.
+Выбор цели [по полному дереву окон](research/mainmenu-pointer-routing.md)
+учитывает начальный Z-order, MousePassThroughEnabled и подписку предка.
+Неподписанное перекрывающее окно блокирует нижних siblings; credits используют
+собственный фон из layout. [Общий оконный runtime](research/dropdown-container-lifecycle.md)
+владеет root/back/content, capture/modal, activation, widget pressed/hover и
+отложенным destroy. Ordered down/up/move от desktop проходят через capture;
+Checkbox и Slider Thumb меняют настройки, RadioTab переключает исходную группу; Falagard читает состояние
+тех же окон. Detach сохраняет окна и capture. Modal поддерживается manager,
+но Options/Settings не получают выдуманную модальность: AlwaysOnTop — Z-order.
+CMainMenu flags=1 остаётся без модели. В Options подключены исходные
+[OPEN/CLOSE/IDLE, tag position, mesh и звуки 22/66](research/dropdown-animation-lifecycle.md);
+закрывающееся дерево остаётся до завершения CLOSE. Settings override открывается
+без анимации. Звуковой PCM backend и RNG — явно обозначенные адаптеры.
+[Оставшаяся CEGUI-цепочка frontend закрыта по коду](research/cegui-frontend-closure.md):
+tooltip/fade, renderer/cache/factory teardown, repeat/double-click и три Settings
+Combobox имеют реальные consumers. Доступные разрешения поступают от Wayland;
+выбор записывается в настройки. GameClient safe pointers, внешнее CGameUI,
+общие CGenericModel/FMOD и произвольные CEGUI классы остаются за этим срезом.
+Реестр сохраняет `partial` полных исходных игровых функций.
+В desktop подключён [Town-фон с исходной камерой](research/menu-scene.md).
+[Список персонажей и настройки](research/menu-production-state.md) получают
+runtime visibility, выбранное имя, highlights, prompt удаления и актуальные
+audio levels. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
+и RGBA каждого угла. Подготовка игровых каталогов отложена до входа в игру;
+команды Falagard кешируются. FPS и время старта отдельно не измерены.
+Остаток: preview персонажей/питомца, pet/difficulty, resolution list/FSAA,
+темы сохранённого персонажа, эффекты сцены, `.SVB`/моды и полный CEGUI runtime.
+Completion остаётся `partial`; контрактные проверки и сборка отделены от запуска UI.
+
+Предыдущий UI-проход: [mapToFunctions](research/ui-function-bindings.md) — общая
+привязка 97 команд из layout, подключённая к frontend/HUD. 469 деревьев /
+2312 узлов сравнены с исходным телом при явных библиотечных адаптерах;
+полный CEGUI runtime и создание инвентаря остаются открытыми.
+
+Для ручной проверки добавлен [интерактивный preview инвентаря](research/inventory-ui-preview.md):
+`--inventory-ui-preview 1`. Он использует оригинальные layout/изображения и
+MouseButtonDown для вкладок/Close; 81 дерево подписок и 198 случаев выбора
+вкладки сравнены с машинным кодом. **Анимированная рамка, персонаж в окне и
+мышиные действия с предметами ещё отсутствуют.** XML-положение не объявляется
+восстановленной позой. Без флага остаётся прежний инвентарь.
+
+```sh
+./build/torchlight_desktop /path/to/Torchlight/game --inventory-ui-preview 1 \
+  --save-dir ./build/inventory-preview-saves --settings-dir ./build/inventory-preview-settings
+```
+
+Создай персонажа, войди в город и нажми I. Проверь вкладки, изменение размера,
+Close и переоткрытие (снова должна быть выбрана первая вкладка). Сохранения
+этого запуска изолированы указанными каталогами.
+
+```sh
+python3 tools/work_frontier.py --scope ui --out /tmp/frontier.md --json /tmp/frontier.json
+python3 tools/check.py --core --test ui_layout_property
+python3 tools/check.py --assets /path/to/game --test original_ui_layout_property
+python3 tools/check.py --core --assets /path/to/game --test ui_dropdown_contract --test original_ui_dropdown_contract
+```
+
+`--test NAME` повторяется для нескольких проверок. `--plan` показывает выбор.
+`--core` отключает графический адаптер; каталог игры позиционным аргументом
+выбирает core/assets/reference. Сценарные группы доступны отдельно через
+`--render`, `--desktop`, `--all`. Частичная проверка описывает выбранную границу.
+
+## Исторический проход: large-16 — настоящий прямой элементальный урон
 
 Донор — **large-15**. Moldy Staff больше не заблокирован и не подменён физическим
 оружием: проценты ресурсов распределяют сохранённый графовый бросок в яд,
@@ -20,7 +127,7 @@ MAGIC участвует в бонусной ветви, каждый канал
 [Результат](GAMEPLAY_LARGE_16_RESULT_RU.md) ·
 [Доказательства](research/large-16-typed-damage.md) ·
 [Проверки](verification/large-16/verification.json) ·
-[Следующие пакеты](NEXT_PATCHES_LARGE_16_RU.md).
+[План того прохода](NEXT_PATCHES_LARGE_16_RU.md).
 
 Ниже — исторические отчёты. Их числа не заменяют проверки текущего исходника.
 Описание Infuse как исключительно физического усиления уточнено: исходный
@@ -681,23 +788,34 @@ python3 tools/function_package.py --address 0xb4eb70
 
 ## Сборка и сравнение с оригиналом
 
-Для текущей установки весь цикл запускается одной командой:
+Проверка метода восстановления:
+[три ограниченных пилота](research/recovery-method-pilots.md) — 2 126
+сравнений skill-арифметики с ELF, 15 оригинальных сценариев диспетчеризации
+событий и сопоставление двух функций lodepng с закреплённым upstream.
+Они входят в группу `reference` (lodepng — при явно указанном внешнем
+checkout). Следующий [production-транш](research/skill-production-dispatch.md)
+подключил SEEKING к меню/F: START warmup → HIT/TRIGGER → снаряд → расчёт
+по запросу → HP. В исходном cb8360 отдельно проверены 6 сценариев порядка
+MISSILEHIT/weapon/effects. Это **частичная реализация**, не полный SEEKING:
+COUNT=3 пока даёт один launch, прицеливание/якорь/самонаведение, полные gates
+и визуальные эффекты остаются открытыми. В меню это помечено PARTIAL PROJECTILE.
+
+Для текущего контракта загрузчика меню:
 
 ```sh
-./tools/check.sh
+./tools/check.sh --core --test ui_layout_property
 ```
 
-Для независимых тестов без оригинальных файлов:
+Для общей переносимой регрессии без оригинальных файлов:
 
 ```sh
 bash tools/check.sh --portable
 ```
 
-Этот режим использует отдельный каталог `build-portable` и не запускает
-сравнение с оригиналом или аудит ресурсов. Он не подтверждает совместимость
-с игрой.
+Этот режим использует `build-verification` (или явный `--build-dir`) с
+отключёнными render/desktop. Его граница — переносимые контракты ядра.
 
-Если игра лежит в другом месте, передайте каталог `game` аргументом:
+Для общей проверки core/assets/reference передайте каталог `game` аргументом:
 
 ```sh
 ./tools/check.sh /путь/к/Torchlight/game
@@ -708,11 +826,12 @@ bash tools/check.sh --portable
 требуется.
 
 ```sh
-cmake -S . -B build -G Ninja \
+cmake -S . -B build-verification -G Ninja \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+  -DTORCHLIGHT_ENABLE_RENDER=OFF -DTORCHLIGHT_ENABLE_DESKTOP=OFF \
   -DTORCHLIGHT_ORIGINAL=/home/qweasd123tg/Games/Torchlight/game/Torchlight.bin.x86_64
-cmake --build build
-ctest --test-dir build --output-on-failure -V
+cmake --build build-verification --target ui_layout_property_test
+ctest --test-dir build-verification -R '^ui_layout_property$' --output-on-failure
 ```
 
 После сборки запуск восстановленного этапа загрузки данных:
@@ -782,8 +901,10 @@ python3 tools/audit_original.py \
 
 ## Следующий участок
 
-Повторить полную интеграцию и ручной death/R-сценарий на настоящих ресурсах.
-Затем ranged/projectile с реальным collision-sweep и мировой CItemGold по точным
-исходным ключам; минимальный read-only дамп перечислен в `NEXT_CHECKS.md`.
-Полный lifecycle эффектов/AI flags, развитие и disk saves остаются отдельными
-границами. Android и полноценный UI следуют после подтверждённого ПК-среза.
+В пределах [UI-контура](research/ui-contour.json) выбрать связанное семейство
+по [действующему процессу](research/code-first.md): повторно использовать пакет,
+проверить представителей и все различия, подключить потребителей эффектов,
+сопоставить перевод с ASM/библиотекой, собрать код и проверить известный контракт.
+Текущий участок CMainMenu + CDropdownMenu записан в [NEXT_CHECKS.md](NEXT_CHECKS.md).
+Полное закрытие принимается отдельно от стадий частичного среза.
+Large-N планы сохраняются как исторические входы.

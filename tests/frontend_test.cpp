@@ -90,8 +90,9 @@ int main(int argc, char **argv) {
         require(image && image->width == 2, "imageset crop absent");
         const auto png = decode_png(archive.read_normalized(image->texture_path));
         require(png.width == 2 && png.height == 2, "authored PNG not loaded");
-        require(!button(ui, "loads").enabled && !button(ui, "continue").enabled,
-                "empty save buttons active");
+        require(button(ui, "loads").enabled &&
+                std::none_of(f.buttons.begin(),f.buttons.end(),[](const auto &b){return b.id=="continue";}),
+                "empty saves keep Load enabled and hide Continue (original dispatch/update)");
         click(ui, "new", 512, 384);
         require(ui.page() == FrontendPage::create, "scaled click did not open new game");
         for (std::size_t i = 0; i < 4; ++i)

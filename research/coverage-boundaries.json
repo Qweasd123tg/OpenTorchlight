@@ -3,6 +3,183 @@
   "boundaries": [
     {
       "addresses": [
+        "0xb196f0"
+      ],
+      "status": "partial",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md.",
+      "evidence": [
+        "research/dropdown-container-lifecycle.md",
+        "research/dropdown-mainmenu.md",
+        "research/ui-capture-modal-lifecycle.md",
+        "research/dropdown-animation-lifecycle.md",
+        "research/cegui-frontend-closure.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "src/ui_window_runtime.cpp",
+        "src/ui_dropdown_animation.cpp",
+        "src/ui_sound.cpp",
+        "src/frontend.cpp",
+        "src/application.cpp",
+        "src/gles_ui_renderer.cpp"
+      ],
+      "tests": [
+        "tests/ui_dropdown_test.cpp",
+        "tests/ui_window_runtime_test.cpp",
+        "tests/ui_dropdown_animation_test.cpp",
+        "tests/ui_sound_test.cpp"
+      ],
+      "comparison": "Shipped create callsites/defaults and CEGUI parent/draw-list operations statically compared with the scoped tree; pure tree contracts and external mainmenuframe resource resolution checks."
+    },
+    {
+      "addresses": [
+        "0xc3b2f0",
+        "0xc3a350",
+        "0xc3fe80"
+      ],
+      "status": "partial",
+      "boundary": "Five-row visibility, selection highlights and programmatic draw-order writes, selected name, and delete prompt show/hide/order consumed by the frontend. Save/preview producers remain .otc adapters; full descriptions, mod checks, native lifetime and remaining original branches are open.",
+      "evidence": [
+        "research/menu-production-state.md"
+      ],
+      "implementation": [
+        "src/frontend.cpp",
+        "src/ui_layout.cpp"
+      ],
+      "tests": [
+        "tests/ui_menu_state_test.cpp"
+      ],
+      "comparison": "Pinned static branch/site review and pure state/resource contracts; no original or UI execution."
+    },
+    {
+      "addresses": [
+        "0xbd5560",
+        "0xbd47e0"
+      ],
+      "status": "partial",
+      "boundary": "Linear 0..1 volume fields with draft preview, successful-write apply and cancel rollback. Original horizontal slider geometry/value mapping consumed by frontend/skin. Full graphics settings lifecycle, native mixer and original ownership remain open.",
+      "evidence": [
+        "research/menu-production-state.md",
+        "research/ui-slider.md"
+      ],
+      "implementation": [
+        "src/frontend.cpp",
+        "src/ui_skin.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/ui_slider_test.cpp"
+      ],
+      "comparison": "Static original field/call mapping and pure numeric/resource slider contracts."
+    },
+    {
+      "addresses": [
+        "0x5613f0"
+      ],
+      "status": "partial",
+      "boundary": "PlayerCam creation FOV/near/far/netbook/auto-aspect values used by the explicit menu camera. Full camera creation, other cameras and subsequent runtime mutations remain open.",
+      "evidence": [
+        "research/menu-scene.md"
+      ],
+      "implementation": [
+        "src/menu_scene.cpp",
+        "src/gles_scene_renderer.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/menu_scene_test.cpp"
+      ],
+      "comparison": "Pinned constants and OGRE virtual-slot relocations; pure camera/projection contracts."
+    },
+    {
+      "addresses": [
+        "0xc4ae80"
+      ],
+      "status": "partial",
+      "boundary": "Full CMainMenu onClick switch/guard/call order translated; production frontend consumes bound enums, credits and state requests. Native GameUI/state-controller/save ownership remains adapted.",
+      "evidence": [
+        "research/dropdown-mainmenu.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "src/frontend.cpp",
+        "include/torchlight/ui_dropdown.hpp"
+      ],
+      "tests": [
+        "tests/ui_dropdown_test.cpp"
+      ],
+      "comparison": "Static full-body ASM review and narrow call-sequence checks; no native execution or UI scenario."
+    },
+    {
+      "addresses": [
+        "0xb179e0"
+      ],
+      "status": "partial",
+      "boundary": "Child-first mapper, nonempty-property gate, multi-click/down/double subscriptions and local exception boundary translated. Frontend consumes down and double-click subscriptions with source timing and receiver dispatch; native SubscriberSlot ownership remains an adapter (research/cegui-frontend-closure.md).",
+      "evidence": [
+        "research/dropdown-mainmenu.md",
+        "research/cegui-frontend-closure.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "src/frontend.cpp",
+        "include/torchlight/ui_dropdown.hpp"
+      ],
+      "tests": [
+        "tests/ui_dropdown_test.cpp"
+      ],
+      "comparison": "Static full-body ASM review, subscription order/error checks and actual layout property bindings."
+    },
+    {
+      "addresses": [
+        "0xb18e50",
+        "0xc2b700"
+      ],
+      "status": "partial",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md.",
+      "evidence": [
+        "research/dropdown-mainmenu.md",
+        "research/dropdown-container-lifecycle.md",
+        "research/ui-capture-modal-lifecycle.md",
+        "research/dropdown-animation-lifecycle.md",
+        "research/cegui-frontend-closure.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "src/ui_window_runtime.cpp",
+        "src/ui_dropdown_animation.cpp",
+        "src/ui_sound.cpp",
+        "src/frontend.cpp",
+        "src/application.cpp",
+        "src/gles_ui_renderer.cpp"
+      ],
+      "tests": [
+        "tests/ui_dropdown_test.cpp",
+        "tests/ui_window_runtime_test.cpp",
+        "tests/ui_dropdown_animation_test.cpp",
+        "tests/ui_sound_test.cpp"
+      ],
+      "comparison": "Shipped setOpen and CEGUI add/remove/moveToBack address review; pure owned-tree open/close/reopen, geometry, subscription and sheet fallback checks."
+    },
+    {
+      "addresses": [
+        "0xb1b6f0",
+        "0xb102a0",
+        "0xb17380",
+        "0xc53b10",
+        "0xa828f0"
+      ],
+      "status": "researched",
+      "boundary": "Full bodies inspected for the main-menu dependency packet. Model flag, container creation, animation/tag positioning, deferred close, ownership and state request fields recorded; no full portable implementation claimed.",
+      "evidence": [
+        "research/dropdown-mainmenu.md"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": ""
+    },
+    {
+      "addresses": [
         "0x862130",
         "0x862eb0"
       ],
@@ -74,22 +251,23 @@
         "0x584b80"
       ],
       "status": "partial",
-      "boundary": "Original callback/layout inputs reused in a bounded frontend. No original CGameStateController/3D menu or full CEGUI skin parity.",
+      "boundary": "No-save Town MAINMENURULES route, fixed menu geometry and world camera markers are consumed by the desktop scene/UI overlay. Town is the current portable default even with .otc saves. Save-dependent themes, preview objects, lights/projectors/skybox/water/particles and full lifecycle remain open.",
       "evidence": [
         "research/decompiled-core/game_client.c",
-        "research/ui-actions.json",
+        "research/menu-scene.md",
         "research/frontend-save-evidence.md"
       ],
       "implementation": [
-        "src/frontend.cpp",
-        "src/ui_layout.cpp",
+        "src/menu_scene.cpp",
+        "src/application.cpp",
+        "src/linux_desktop_main.cpp",
+        "src/gles_scene_renderer.cpp",
         "src/gles_ui_renderer.cpp"
       ],
       "tests": [
-        "tests/frontend_test.cpp",
-        "tests/gles_ui_headless_test.py"
+        "tests/menu_scene_test.cpp"
       ],
-      "comparison": ""
+      "comparison": "Static original branch/site review and external resource/camera contracts; no rendered parity claimed."
     },
     {
       "addresses": [
@@ -286,11 +464,13 @@
         "0x843ed0"
       ],
       "status": "partial",
-      "boundary": "Ordinary direct base + typed bonus channels, evaluated MAGIC/armor/percent and RNG through channel assembly. Original comparator uses one right-hand weapon and critical=false. Crit/glancing/block/procs/shield absorption/missiles and full effect lifecycle remain open. Skill weapon-applier profile implemented on the same core (research/skill-effect-dispatch.md section 8): roll_skill_weapon_damage reuses the plan + channel loop with only the USEDPS/pct pre-scales and soak multiplier as new math (neutral == ordinary roll proven); criticals/glancing/block/procs/reflect stay open.",
+      "boundary": "Partial rollAttack through channel assembly, ordinary and skill percentage/DPS/soak paths, exact float constants and volatile RNG; single right or left weapon. Production skill request drives combat HP sink. Equipment SPEED/100 mapping confirmed statically. Full flags, crit/glancing/block/procs/shields and native HP event behavior remain open.",
       "evidence": [
         "research/ordinary-attack-action.md",
         "research/combat-runtime.md",
-        "research/large-16-typed-damage.md"
+        "research/large-16-typed-damage.md",
+        "research/skill-weapon-oracle.md",
+        "research/skill-production-dispatch.md"
       ],
       "implementation": [
         "src/attack_action.cpp",
@@ -304,9 +484,11 @@
         "tests/ordinary_combat_test.cpp",
         "tests/compare_typed_damage.py",
         "tests/typed_damage_test.cpp",
-        "tests/application_combat_test.py"
+        "tests/application_combat_test.py",
+        "tests/compare_skill_weapon_damage.py",
+        "tests/skill_production_test.cpp"
       ],
-      "comparison": "verification/large-16/typed-damage-original.json: 6000 ordinary channel cases plus isolated allocation/MAGIC/defenses; bounded unchanged ELF instructions, controlled evaluated effects."
+      "comparison": "tests/compare_typed_damage.py: 12088 existing allocation/MAGIC/defense/ordinary comparisons; tests/compare_skill_weapon_damage.py: 2126 skill-profile comparisons against bounded unchanged original instructions, including ordered channels and final RNG. Reports in the configured build directory."
     },
     {
       "addresses": [
@@ -692,14 +874,12 @@
     {
       "addresses": [
         "0xb4eb70",
-        "0xb4f570",
-        "0xb4f1b0",
         "0xb458d0",
         "0xa8ea20",
         "0xb53430"
       ],
       "status": "partial",
-      "boundary": "Inventory open flag/tab state machine (4 setOpen paths, tabs 0x0e/0x0f/0x10, toggleInventory virtual slot +0x40 choreography, event chain through handle_onClick to onClick) and provisional viewport math ported exactly; single-writer set_inventory_open drives the machine on all paths (I/K/J/F/ESC/merchant/death/recovery/level-init), viewport latched on recompute. Effect sinks: flag consumed, viewport stored but renderless, animation/sound/tip/camera open. NOT ported: CEGUI windows, Ogre viewport/camera creation, model animation, sound samples, queueTip, updateLayout presentation (icons/glows/tooltips; data path wired, see update-layout boundary), createMenus branches (phases only), key trace into toggleInventory, mapToFunctions.",
+      "boundary": "Inventory open flag machine (4 setOpen paths, including fresh-open tab reset), toggleInventory virtual slot +0x40 choreography and provisional viewport math. Single-writer set_inventory_open drives all port paths. Flag consumed; viewport stored but renderless; animation/sound/tip/camera open. Opt-in static resource UI now consumes selected/visible tabs; mapper and onClick have a separate boundary. Complete CEGUI windows, viewport/camera/model, updateLayout icons/tooltips, createMenus and original scheduler/input parity remain open. mapToFunctions is separately transferred, not a remaining unknown algorithm.",
       "evidence": [
         "research/inventory-open.md",
         "research/disassembly/b4eb70-inventory-setopen.asm",
@@ -717,6 +897,30 @@
         "tests/inventory_menu_test.cpp"
       ],
       "comparison": "tools/emulate_inventory_viewport.py (numpy binary32 op-for-op emulation of sites 0xb4eef2-0xb4f004) vs tests/inventory_menu_test.cpp literals: 9 viewports bit-exact incl. 8K reload path; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xb4f1b0",
+        "0xb4f570"
+      ],
+      "status": "partial",
+      "boundary": "Inventory event mapper and tab dispatch at explicit library boundaries. Child-first subscriptions on nonempty onClick; local mapper catch-all; tab selected/visible/alert/image/update order. Wired to opt-in resource-coordinate preview in the real application. Native unchanged bodies compared with synthetic CEGUI/subscription/updateLayout adapters; actual CEGUI connection lifetime/unwind, alert source, full icon refresh, animated frame and window creation remain open. Close is a documented port adaptation, not a complete recovered drag/processInput path.",
+      "evidence": [
+        "research/inventory-ui-preview.md",
+        "research/decompiled-core/inventory_menu.c"
+      ],
+      "implementation": [
+        "src/inventory_events.cpp",
+        "src/inventory_menu.cpp",
+        "src/ui_inventory.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/inventory_events_test.cpp",
+        "tests/compare_inventory_events.py",
+        "tests/inventory_ui_test.py"
+      ],
+      "comparison": "81 native mapping trees / 1926 nodes and 198 native tab cases; exact ordered library-boundary trace. Portable faults separately tested. Real-resource application scenario checks MouseButtonDown, no release replay, resize/reopen and unchanged gameplay fields, not original-game visual parity."
     },
     {
       "addresses": [
@@ -816,7 +1020,6 @@
         "0xbd6ea0",
         "0xc404c0",
         "0xc4a810",
-        "0xc52a10",
         "0xc5d730",
         "0xe4c800",
         "0xe9b180",
@@ -835,6 +1038,35 @@
         "tests/menu_grab_test.cpp"
       ],
       "comparison": "Key tables spot-checked vs ASM slices; behavior parity NOT claimed"
+    },
+    {
+      "addresses": [
+        "0xc52a10",
+        "0xc53b70"
+      ],
+      "status": "partial",
+      "boundary": "Main create/update presentation and shared window manager feed painter and ordered capture/selection/timing handlers. Main stays model-null; Options animation, tooltip lifecycle, renderer/cache/factory teardown and Settings Combobox consumers are connected. Native .SVB/mod/state owners, arbitrary CEGUI classes/SubscriberSlot/exception ABI remain outside this bounded packet.",
+      "evidence": [
+        "research/mainmenu-controller-painter.md",
+        "research/dropdown-container-lifecycle.md",
+        "research/cegui-frontend-closure.md"
+      ],
+      "implementation": [
+        "include/torchlight/menu_grab_tables.hpp",
+        "src/frontend.cpp",
+        "src/gles_ui_renderer.cpp",
+        "src/ui_dropdown.cpp",
+        "src/ui_pointer_timing.cpp",
+        "src/ui_tooltip.cpp",
+        "src/ui_combobox.cpp"
+      ],
+      "tests": [
+        "tests/mainmenu_presentation_test.cpp",
+        "tests/frontend_menu_test.cpp",
+        "tests/gles_skin_button_test.py",
+        "tests/ui_dropdown_test.cpp"
+      ],
+      "comparison": "Reviewed ASM/resource contract plus production-command and authored GLES regressions; native whole-controller comparison pending."
     },
     {
       "addresses": [
@@ -898,8 +1130,7 @@
     },
     {
       "addresses": [
-        "0xa924c0",
-        "0xa980e0"
+        "0xa924c0"
       ],
       "status": "implemented",
       "boundary": "HUD onClick dispatch: 97-name ELayoutFunction table recovered from static-init + rodata; jump table maps handled cases (pause/toggles/automap/itemnames/levelup/modals/petsell) vs no-op returns. Port honors the 4 panel toggles + pause; the rest have no port sink and stay reported.",
@@ -913,6 +1144,32 @@
         "tests/scenarios/paused-settings.scenario"
       ],
       "comparison": "Machine-code facts (enum bytes, jump targets); no original-execution proof"
+    },
+    {
+      "addresses": [
+        "0xa980e0"
+      ],
+      "status": "partial",
+      "boundary": "mapToFunctions algorithm: child-first traversal, repeated property read, missing/empty NONE, unknown preserves prior binding, C-string NUL boundary, C-locale command lookup and last-match rule, property catch-all. Wired through UiLayout load/resolve to frontend and HUD command consumers. Typed IDs project original enum-pointer roles; full CEGUI userdata alias/lifetime, library exception behavior and inventory runtime/event creation remain open.",
+      "evidence": [
+        "research/ui-function-bindings.md",
+        "research/ui-actions.json",
+        "research/decompiled-core/game_ui.c"
+      ],
+      "implementation": [
+        "include/torchlight/ui_function_bindings.hpp",
+        "src/ui_function_bindings.cpp",
+        "src/ui_layout.cpp",
+        "src/frontend.cpp",
+        "src/ui_hud.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/ui_function_bindings_test.cpp",
+        "tests/compare_ui_bindings.py",
+        "tests/paused_settings_test.py"
+      ],
+      "comparison": "469 trees / 2312 nodes: unchanged original mapToFunctions body vs port binding values and property-read order; explicit synthetic CEGUI/std::string/C-locale adapters, not native library exception or full UI parity. Catch-all type statically verified from LSDA 0x119c4d0; port error paths tested separately."
     },
     {
       "addresses": [
@@ -1059,21 +1316,74 @@
         "0x00cb7290",
         "0x00cb7240"
       ],
-      "status": "implemented",
-      "boundary": "SkillEventRuntime slice: startSkill guards/state, triggerEvent/hasEvent (start+missile callbacks supported, rest explicit false), startEvent skeleton (spawner scene incl. t=0 TIMELINEOBJECT routing via the scene; timed points deferred), spawner Missiles branch (COUNT rides the record, repetition open), fire-sink launches with template_missing/spawn_refused codes, MISSILEHIT (damage open) / MISSILEDIE posters. SEEKING control passes end-to-end into the shared CMissile runtime. Applier slice: measured hit-hook order canEffect->weapon->effects->hitSkills->trigger(6) with UNITHIT/UNITDIE posters; SEEKING trigger ladder (L1 40/60, zero effect entries: proven no-op leg); rung-gated casts with cast-to-missile binding; weapon-leg request as the damage number's input contract (number still open). rollAttack reachable slice: measured performAttack flags (0x171F) and branch skips to rollAttack; USEDPS/pct pre-scales + soak multiplier as the only new math on the shared CombatRoll core (neutral == ordinary roll proven); SEEKING kill chain to HP/death/UNITDIE through the existing world backend, no test damage.",
+      "status": "partial",
+      "boundary": "Bounded production START warmup -> authenticated animation HIT/TRIGGER seeking -> resource missile launch -> synchronous weapon request/HP sink. MISSILEHIT precedes weapon application, unit hooks consume actual outcome. One weapon, no affix/effect programs. Full canEffect/native duplicate death posts, cloning, COUNT repetition, target/anchor/spread/homing and nonzero timeline/visual execution stay open.",
       "evidence": [
-        "research/skill-effect-dispatch.md"
+        "research/skill-effect-dispatch.md",
+        "research/skill-event-native-trace.md",
+        "research/skill-weapon-oracle.md",
+        "research/skill-production-dispatch.md"
       ],
       "implementation": [
-        "include/torchlight/skill_event_runtime.hpp",
+        "src/skill_event_program.cpp",
         "src/skill_event_runtime.cpp",
-        "src/level_scene.cpp",
-        "tests/skill_event_runtime_test.cpp"
+        "src/skills.cpp",
+        "src/player_session.cpp",
+        "src/combat.cpp",
+        "src/application.cpp"
       ],
       "tests": [
-        "tests/skill_event_runtime_test.cpp"
+        "tests/skill_event_runtime_test.cpp",
+        "tests/skill_event_program_test.cpp",
+        "tests/skill_production_test.cpp",
+        "tests/application_skill_projectile_test.py",
+        "tests/trace_skill_events.py",
+        "tests/trace_skill_missile_hooks.py"
       ],
-      "comparison": "Key call/branch/post sites verified in ASM+pak; remainder agent-read, marked as such. No original-call differential; behavioral SEEKING control case only."
+      "comparison": "15 original start/dispatch cases + 6 original missile-hook cases (native-only traces); local resource/session/world/common-loop regressions. Not full original-vs-port lifecycle parity. Numeric damage compared separately."
+    },
+    {
+      "addresses": [
+        "0x00cc71d0"
+      ],
+      "status": "partial",
+      "boundary": "Resource scalar/default subset and FILE layout loading for strict START/TRIGGER ranged event programs; full original constructor excluded.",
+      "evidence": [
+        "research/skill-production-dispatch.md",
+        "research/decompiled-core/skill_event.c"
+      ],
+      "implementation": [
+        "src/skill_event_program.cpp"
+      ],
+      "tests": [
+        "tests/skill_event_program_test.cpp"
+      ],
+      "comparison": "Resource-derived, not constructor differential."
+    },
+    {
+      "addresses": [
+        "0xb176b0"
+      ],
+      "status": "partial",
+      "boundary": "Original Options dropdown three-clip update, tag projection, model visibility and deferred detach/exit consumed by frontend clock and GLES painter. General CGenericModel event/family/scene ownership and unwind remain open.",
+      "evidence": [
+        "research/dropdown-animation-lifecycle.md",
+        "research/dropdown-container-lifecycle.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "src/ui_window_runtime.cpp",
+        "src/ui_dropdown_animation.cpp",
+        "src/ui_sound.cpp",
+        "src/frontend.cpp",
+        "src/application.cpp",
+        "src/gles_ui_renderer.cpp"
+      ],
+      "tests": [
+        "tests/ui_dropdown_animation_test.cpp",
+        "tests/ui_dropdown_test.cpp"
+      ],
+      "comparison": "Pinned update 0xb176b0 and shipped OGRE/resource numeric contracts; no UI execution."
     }
   ],
   "port_systems": [

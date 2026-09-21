@@ -176,6 +176,10 @@ DisplaySettings load_display_settings(const std::filesystem::path &directory) {
     settings.shadows_detail = file.get_int("SHADOWS_DETAIL", settings.shadows_detail);
     settings.rimlights = file.get_int("RIMLIGHTS_ENABLED", 1) != 0;
     settings.max_particles = file.get_int("MAX_PARTICLES", settings.max_particles);
+    settings.lighting_enabled = file.get_int("LIGHTING_ENABLED", 1) != 0;
+    settings.shadow_resolution = file.get_int("SHADOWRESOLUTION", settings.shadow_resolution);
+    settings.particle_fps = file.get_float("PARTICLEFPS", settings.particle_fps);
+    settings.particle_percent = file.get_float("PARTICLE_EMIT_PCT", settings.particle_percent);
     settings.show_tips = file.get_int("SHOW TIPS", 1) != 0;
     settings.show_blood = file.get_int("SHOW BLOOD", 1) != 0;
     settings.floaty_numbers = file.get_int("FLOATY_NUMBERS", 1) != 0;
@@ -211,6 +215,10 @@ void store_display_settings(const std::filesystem::path &directory,
     file.set_int("SHADOWS_DETAIL", settings.shadows_detail);
     file.set_int("RIMLIGHTS_ENABLED", settings.rimlights ? 1 : 0);
     file.set_int("MAX_PARTICLES", settings.max_particles);
+    file.set_int("LIGHTING_ENABLED", settings.lighting_enabled ? 1 : 0);
+    file.set_int("SHADOWRESOLUTION", settings.shadow_resolution);
+    file.set_float("PARTICLEFPS", settings.particle_fps);
+    file.set_float("PARTICLE_EMIT_PCT", settings.particle_percent);
     file.set_int("SHOW TIPS", settings.show_tips ? 1 : 0);
     file.set_int("SHOW BLOOD", settings.show_blood ? 1 : 0);
     file.set_int("FLOATY_NUMBERS", settings.floaty_numbers ? 1 : 0);

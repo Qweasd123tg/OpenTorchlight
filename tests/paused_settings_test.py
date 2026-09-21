@@ -31,10 +31,10 @@ def main() -> int:
         assert 'SHOW BLOOD :0' in settings, 'Apply did not store the toggled value'
         events=[json.loads(line) for line in (output/'events.jsonl').read_text().splitlines()]
         releases=[e['value'] for e in events if e['kind']=='hud_release']
-        assert releases==['InventoryButton','JournalButton','PetButton','OptionsButton'], 'HUD route was bypassed'
+        assert releases==['PauseButton','InventoryButton','JournalButton','PetButton','OptionsButton'], 'HUD route was bypassed'
         dispatches=[(i,e) for i,e in enumerate(events) if e['kind']=='hud_dispatch_down']
         release_events=[(i,e) for i,e in enumerate(events) if e['kind']=='hud_release']
-        assert [e['value'] for _,e in dispatches]==['guiToggleInventory','guiToggleJournal','guiTogglePet','guiToggleOptions'], 'down command missing or release replayed it'
+        assert [e['value'] for _,e in dispatches]==['guiPause','guiToggleInventory','guiToggleJournal','guiTogglePet','guiToggleOptions'], 'down command missing or release replayed it'
         for (di,_),(ri,_) in zip(dispatches,release_events):
             assert di<ri, 'HUD command waited for release'
         unsupported=[e['value'] for e in events if e['kind']=='hud_callback_unimplemented']
@@ -51,7 +51,7 @@ def main() -> int:
         for field in fields:
             assert before[field]==after[field], 'paused settings changed '+field
         print('PASS: rendered settings, Apply, return through pause; '+str(len(fields))+
-              ' state fields unchanged; four original HUD down routes, off-target releases do not replay; no accidental OTC save; '+str(work))
+              ' state fields unchanged; five original HUD down routes, off-target releases do not replay; no accidental OTC save; '+str(work))
         return 0
     except Exception as exc:
         print('FAIL:',exc,'evidence:',work,file=sys.stderr); return 1

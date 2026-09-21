@@ -43,12 +43,23 @@ int main() {
         changed.vsync = false;
         changed.shadows_enabled = true;
         changed.music_mute = true;
+        changed.lighting_enabled = false;
+        changed.shadow_resolution = 512;
+        changed.particle_fps = 40.0F;
+        changed.particle_percent = 100.0F;
         store_display_settings(dir, changed);
         const auto back = load_display_settings(dir);
         require(back.res_width == 800 && back.res_height == 600, "res roundtrip wrong");
         require(back.fullscreen && !back.vsync, "flags roundtrip wrong");
         require(back.shadows_enabled && back.music_mute, "render/audio roundtrip wrong");
+        require(!back.lighting_enabled && back.shadow_resolution == 512 &&
+                    back.particle_fps == 40.0F && back.particle_percent == 100.0F &&
+                    back.max_particles == 5000, "settings combo fields did not roundtrip independently");
         const auto raw = SettingsFile::load(dir / "local_settings.txt");
+        require(raw.get("LIGHTING_ENABLED") == "0" && raw.get("SHADOWRESOLUTION") == "512" &&
+                    raw.get_float("PARTICLEFPS", 0) == 40.0F &&
+                    raw.get_float("PARTICLE_EMIT_PCT", 0) == 100.0F,
+                "settings combo source keys differ");
         require(raw.get("CUSTOM FUTURE KEY") == "7", "unknown key dropped");
         require(raw.get("X_RATIO") == "0.781250", "derived X_RATIO wrong");
         require(raw.get("Y_RATIO") == "0.781250", "derived Y_RATIO wrong");

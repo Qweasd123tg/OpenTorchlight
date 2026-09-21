@@ -12,7 +12,7 @@ class GlesUiRenderer {
     ~GlesUiRenderer();
     GlesUiRenderer(const GlesUiRenderer &) = delete;
     GlesUiRenderer &operator=(const GlesUiRenderer &) = delete;
-    void draw(const FrontendFrame &, int width, int height);
+    void draw(const FrontendFrame &, int width, int height, bool clear_background = true);
     // Resource-derived HUD images and bars plus CEGUI-compatible font text.
     void draw_hud(const UiHudFrame &, int width, int height);
     // Same overlay content as draw_inventory_overlay, with font text when a

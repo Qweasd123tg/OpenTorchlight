@@ -13,6 +13,13 @@ UiResolvedWidget widget(const char* type){UiResolvedWidget w;w.name="fixture";w.
 int main(int argc,char**argv){try{
     if(argc!=2&&argc!=3)throw std::runtime_error("usage: ui_skin_test pak.zip [original]");
     PakArchive pak(argv[1]);UiResources r(pak);auto& skin=r.skin();
+    const auto colours=ui_colours("tl:FFFF0000 tr:FF00FF00 bl:FF0000FF br:FFFFFFFF");
+    const auto vertices=ui_quad_vertices({10,20,30,40},{.1F,.2F,.3F,.4F},colours);
+    require(vertices[0].colour==colours[0]&&vertices[1].colour==colours[2]&&
+            vertices[2].colour==colours[3]&&vertices[3].colour==colours[0]&&
+            vertices[4].colour==colours[3]&&vertices[5].colour==colours[1],"default quad split/corner colours");
+    eq(vertices[2].x,40,"quad right");eq(vertices[2].y,60,"quad bottom");
+    eq(vertices[2].u,.4F,"quad UV right");eq(vertices[2].v,.6F,"quad UV bottom");
     if(argc==3){
         auto w=widget("GuiLook/WeaponSwitch");auto base=skin.compile(r,w,{},1024,768);auto selected=skin.compile(r,w,{false,false,true},1024,768);
         require(base.handled&&base.diagnostics.empty(),"original WeaponSwitch baseline");
@@ -45,6 +52,20 @@ int main(int argc,char**argv){try{
         require(layouts==35,"original layout count changed");require(compiled>800,"too few original windows compiled");
         std::cout<<"original layouts="<<layouts<<" handled widgets="<<compiled<<"\n";
     }else{
+        UiSkinCache cache(r);auto cached=widget("Test/Toggle");
+        static_cast<void>(cache.compile(cached,{},256,192));
+        for(int i=0;i<100;++i)static_cast<void>(cache.compile(cached,{},256,192));
+        require(cache.compile_count()==1,"unchanged frame recompiled skin");
+        static_cast<void>(cache.compile(cached,{true,false,false},256,192));
+        require(cache.compile_count()==2,"hover change reused stale imagery");
+        cached.clip.width=20;
+        static_cast<void>(cache.compile(cached,{true,false,false},256,192));
+        require(cache.compile_count()==3,"clip change reused stale geometry");
+        cached.properties["Selected"]="True";
+        static_cast<void>(cache.compile(cached,{true,false,false},256,192));
+        require(cache.compile_count()==4,"runtime property change reused stale state");
+        static_cast<void>(cache.compile(cached,{true,false,false},512,384));
+        require(cache.compile_count()==5,"resize reused stale source scaling");
         auto w=widget("Test/Toggle");auto a=skin.compile(r,w,{},256,192);
         require(a.handled&&a.diagnostics.empty()&&a.draws.size()==1,"normal toggle");eq(a.draws[0].source.x,0,"normal image");
         a=skin.compile(r,w,{false,false,true},256,192);require(a.draws.size()==2,"selected needs 2 layers");eq(a.draws[0].source.x,0,"selected lost base");eq(a.draws[1].source.x,16,"selected mark missing");

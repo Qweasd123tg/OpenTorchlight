@@ -52,6 +52,7 @@
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -77,7 +78,7 @@ Options parse_options(int argc, char** argv) {
     if (argc < 2) {
         throw DesktopError(
             "usage: torchlight_desktop /path/to/Torchlight/game "
-            "[--save-dir PATH] [--settings-dir PATH] [--debug-ui 0|1] [--frames N] [--main-stratum N --seed N]");
+            "[--save-dir PATH] [--settings-dir PATH] [--debug-ui 0|1] [--inventory-ui-preview 0|1] [--frames N] [--main-stratum N --seed N]");
     }
     Options options;
     options.game_directory = argv[1];
@@ -97,6 +98,10 @@ Options parse_options(int argc, char** argv) {
             if (value != "0" && value != "1")
                 throw DesktopError("--debug-ui must be 0 or 1");
             options.debug_ui = value == "1";
+        } else if (name == "--inventory-ui-preview") {
+            if (value != "0" && value != "1")
+                throw DesktopError("--inventory-ui-preview must be 0 or 1");
+            options.inventory_ui_preview = value == "1";
         } else if (name == "--frames") {
             const auto parsed = std::from_chars(value.data(), value.data() + value.size(),
                                                 options.frame_limit);
@@ -168,6 +173,10 @@ public:
         keyboard_listener_.key = keyboard_key;
         keyboard_listener_.modifiers = keyboard_modifiers;
         keyboard_listener_.repeat_info = keyboard_repeat_info;
+        output_listener_.geometry = output_geometry;
+        output_listener_.mode = output_mode;
+        output_listener_.done = output_done;
+        output_listener_.scale = output_scale;
 
         display_ = wl_display_connect(nullptr);
         if (display_ == nullptr) {
@@ -177,6 +186,12 @@ public:
         wl_registry_add_listener(registry_, &registry_listener_, this);
         if (wl_display_roundtrip(display_) < 0 || compositor_ == nullptr || wm_base_ == nullptr) {
             throw DesktopError("Wayland compositor does not expose xdg-shell");
+        }
+        // Output bindings are created while the registry's first event batch is
+        // dispatched. A second roundtrip sends those requests and receives the
+        // compositor's actual mode list before the settings frontend is built.
+        if (wl_display_roundtrip(display_) < 0) {
+            throw DesktopError("Wayland compositor did not report display modes");
         }
         surface_ = wl_compositor_create_surface(compositor_);
         xdg_surface_ = xdg_wm_base_get_xdg_surface(wm_base_, surface_);
@@ -274,6 +289,11 @@ public:
         if (seat_ != nullptr) {
             wl_seat_destroy(seat_);
         }
+        for (auto& [name, record] : outputs_) {
+            (void)name;
+            if (record->output != nullptr) wl_output_destroy(record->output);
+        }
+        outputs_.clear();
         if (toplevel_ != nullptr) {
             xdg_toplevel_destroy(toplevel_);
         }
@@ -339,8 +359,25 @@ public:
         state.left_press_origin = ui_press_origin_;
         return state;
     }
+    bool has_ui_pointer_events() const noexcept override { return true; }
+    std::vector<torchlight::UiPointerEvent> take_ui_pointer_events() override {
+        auto events = std::move(ui_pointer_events_);
+        ui_pointer_events_.clear();
+        return events;
+    }
     [[nodiscard]] int width() const noexcept { return width_; }
     [[nodiscard]] int height() const noexcept { return height_; }
+    [[nodiscard]] std::vector<torchlight::UiResolution> display_resolutions() const override {
+        std::vector<torchlight::UiResolution> result;
+        for (const auto& [name, record] : outputs_) {
+            (void)name;
+            for (const auto mode : record->modes)
+                if (std::find(result.begin(), result.end(), mode) == result.end())
+                    result.push_back(mode);
+        }
+        if (result.empty()) result.push_back({width_, height_});
+        return result;
+    }
 
     [[nodiscard]] std::vector<std::uint32_t> take_key_presses() {
         auto keys = std::move(key_presses_);
@@ -364,7 +401,23 @@ public:
         require_egl(eglSwapBuffers(egl_display_, egl_surface_) == EGL_TRUE, "eglSwapBuffers");
     }
 
+    void draw_menu_scene(torchlight::GlesSceneRenderer& scene,
+                         torchlight::GlesUiRenderer& ui,
+                         const torchlight::FrontendFrame& frame) override {
+        scene.draw(width_, height_);
+        ui.draw(frame, width_, height_, false);
+        if (glGetError() != GL_NO_ERROR) throw DesktopError("OpenGL ES failed while drawing the menu scene");
+        require_egl(eglSwapBuffers(egl_display_, egl_surface_) == EGL_TRUE, "eglSwapBuffers");
+    }
+
 private:
+    struct OutputRecord {
+        DesktopWindow* owner = nullptr;
+        std::uint32_t global_name = 0;
+        wl_output* output = nullptr;
+        std::vector<torchlight::UiResolution> modes;
+    };
+
     static void registry_global(void* data, wl_registry* registry, std::uint32_t name,
                                 const char* interface, std::uint32_t version) {
         auto& self = *static_cast<DesktopWindow*>(data);
@@ -380,13 +433,40 @@ private:
             self.seat_ = static_cast<wl_seat*>(
                 wl_registry_bind(registry, name, &wl_seat_interface, std::min(version, 5U)));
             wl_seat_add_listener(self.seat_, &self.seat_listener_, &self);
+        } else if (interface_name == wl_output_interface.name) {
+            auto record = std::make_unique<OutputRecord>();
+            record->owner = &self;
+            record->global_name = name;
+            record->output = static_cast<wl_output*>(wl_registry_bind(
+                registry, name, &wl_output_interface, std::min(version, 2U)));
+            wl_output_add_listener(record->output, &self.output_listener_, record.get());
+            self.outputs_.emplace(name, std::move(record));
         } else if (interface_name == zwp_pointer_constraints_v1_interface.name) {
             self.constraints_ = static_cast<zwp_pointer_constraints_v1*>(wl_registry_bind(
                 registry, name, &zwp_pointer_constraints_v1_interface, 1));
         }
     }
 
-    static void registry_global_remove(void*, wl_registry*, std::uint32_t) {}
+    static void registry_global_remove(void* data, wl_registry*, std::uint32_t name) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        const auto found = self.outputs_.find(name);
+        if (found == self.outputs_.end()) return;
+        if (found->second->output != nullptr) wl_output_destroy(found->second->output);
+        self.outputs_.erase(found);
+    }
+    static void output_geometry(void*, wl_output*, std::int32_t, std::int32_t,
+                                std::int32_t, std::int32_t, std::int32_t,
+                                const char*, const char*, std::int32_t) {}
+    static void output_mode(void* data, wl_output*, std::uint32_t, std::int32_t width,
+                            std::int32_t height, std::int32_t) {
+        auto& record = *static_cast<OutputRecord*>(data);
+        if (width <= 0 || height <= 0) return;
+        const torchlight::UiResolution mode{width, height};
+        if (std::find(record.modes.begin(), record.modes.end(), mode) == record.modes.end())
+            record.modes.push_back(mode);
+    }
+    static void output_done(void*, wl_output*) {}
+    static void output_scale(void*, wl_output*, std::int32_t) {}
     static void wm_base_ping(void*, xdg_wm_base* wm_base, std::uint32_t serial) {
         xdg_wm_base_pong(wm_base, serial);
     }
@@ -452,6 +532,8 @@ private:
     }
     static void pointer_leave(void* data, wl_pointer*, std::uint32_t, wl_surface*) {
         auto &self = *static_cast<DesktopWindow*>(data);
+        self.ui_pointer_events_.push_back({torchlight::UiPointerEventKind::leave,
+            static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_), 0, self.clock_seconds()});
         self.pointer_inside_ = false;
         self.ui_press_origin_.reset(); self.ui_click_.reset();
     }
@@ -460,10 +542,20 @@ private:
         auto& self = *static_cast<DesktopWindow*>(data);
         self.pointer_x_ = wl_fixed_to_int(x);
         self.pointer_y_ = wl_fixed_to_int(y);
+        self.ui_pointer_events_.push_back({torchlight::UiPointerEventKind::move,
+            static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_), 0, self.clock_seconds()});
     }
     static void pointer_button(void* data, wl_pointer*, std::uint32_t, std::uint32_t,
                                std::uint32_t button, std::uint32_t state) {
         auto& self = *static_cast<DesktopWindow*>(data);
+        if (button == BTN_LEFT || button == BTN_RIGHT || button == BTN_MIDDLE) {
+            self.ui_pointer_events_.push_back({
+                state == WL_POINTER_BUTTON_STATE_PRESSED
+                    ? torchlight::UiPointerEventKind::button_down
+                    : torchlight::UiPointerEventKind::button_up,
+                static_cast<float>(self.pointer_x_), static_cast<float>(self.pointer_y_),
+                static_cast<std::uint8_t>(button == BTN_LEFT ? 0 : button == BTN_RIGHT ? 1 : 2), self.clock_seconds()});
+        }
         if (button != BTN_LEFT) return;
         if (state == WL_POINTER_BUTTON_STATE_PRESSED) {
             self.left_click_ = {self.pointer_x_, self.pointer_y_};
@@ -520,7 +612,9 @@ private:
     wl_seat_listener seat_listener_{};
     wl_pointer_listener pointer_listener_{};
     wl_keyboard_listener keyboard_listener_{};
+    wl_output_listener output_listener_{};
     zwp_confined_pointer_v1_listener confined_listener_{};
+    std::map<std::uint32_t, std::unique_ptr<OutputRecord>> outputs_;
     EGLDisplay egl_display_ = EGL_NO_DISPLAY;
     EGLConfig configuration_ = nullptr;
     EGLSurface egl_surface_ = EGL_NO_SURFACE;
@@ -532,6 +626,7 @@ private:
     bool pointer_inside_ = false;
     std::optional<std::array<float, 2>> ui_press_origin_;
     std::optional<torchlight::UiPointerClick> ui_click_;
+    std::vector<torchlight::UiPointerEvent> ui_pointer_events_;
     bool configured_ = false;
     bool running_ = true;
     std::optional<std::array<int, 2>> left_click_;

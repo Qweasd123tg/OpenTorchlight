@@ -4,6 +4,7 @@
 #include "torchlight/ui_skin.hpp"
 #include "torchlight/ui_text.hpp"
 #include <cmath>
+#include <cstddef>
 #include <GLES2/gl2.h>
 #include <algorithm>
 #include <array>
@@ -31,9 +32,7 @@ GLuint shader(GLenum kind, const char *source) {
     }
     return handle;
 }
-struct Vertex {
-    float x, y, u, v;
-};
+using Vertex = UiSkinVertex;
 struct Texture {
     GLuint id = 0;
     int width = 0, height = 0;
@@ -75,25 +74,33 @@ std::optional<std::array<float, 4>> parse_text_argb(const std::string &raw) {
 std::array<float, 4> text_colour(const UiResolvedWidget &w) {
     return parse_text_argb(w.property("TextColour")).value_or(std::array<float, 4>{1, 1, 1, 1});
 }
+std::array<float, 4> inline_colour(std::uint32_t argb) {
+    return {static_cast<float>((argb >> 16) & 0xffU) / 255.0F,
+            static_cast<float>((argb >> 8) & 0xffU) / 255.0F,
+            static_cast<float>(argb & 0xffU) / 255.0F,
+            static_cast<float>((argb >> 24) & 0xffU) / 255.0F};
+}
 } // namespace
 struct GlesUiRenderer::Impl {
     const PakArchive *archive;
     UiResources *resources;
+    UiSkinCache skin_cache;
     GLuint program = 0, buffer = 0;
-    GLint screen = -1, color = -1, textured = -1, sampler = -1;
+    GLint screen = -1, color = -1, textured = -1, sampler = -1, alpha_reject = -1;
     std::map<std::string, Texture> textures;
     std::set<std::string> failed;
     std::map<std::string, FontTexture> fonts;
     std::set<std::string> failed_fonts;
     int viewport_width = 0, viewport_height = 0;
-    explicit Impl(const PakArchive &a, UiResources &r) : archive(&a), resources(&r) {
+    explicit Impl(const PakArchive &a, UiResources &r) : archive(&a), resources(&r), skin_cache(r) {
         const char *vs = "attribute vec2 position; attribute vec2 texcoord; uniform vec2 screen; "
-                         "varying vec2 uv; void "
-                         "main(){uv=texcoord;gl_Position=vec4(position.x*2.0/"
+                         "attribute vec4 vertexColour; varying mediump vec4 rgba; varying mediump vec2 uv; void "
+                         "main(){uv=texcoord;rgba=vertexColour;gl_Position=vec4(position.x*2.0/"
                          "screen.x-1.0,1.0-position.y*2.0/screen.y,0.0,1.0);}";
-        const char *fs = "precision mediump float; varying vec2 uv; uniform vec4 color; uniform "
-                         "sampler2D image; uniform bool textured; void "
-                         "main(){gl_FragColor=textured?texture2D(image,uv)*color:color;}";
+        const char *fs = "precision mediump float; varying mediump vec2 uv; varying mediump vec4 rgba; uniform vec4 color; uniform "
+                         "sampler2D image; uniform bool textured; uniform float alphaReject; void "
+                         "main(){vec4 result=(textured?texture2D(image,uv):vec4(1.0))*color*rgba;"
+                         "if(alphaReject>=0.0&&result.a<=alphaReject)discard;gl_FragColor=result;}";
         const auto vertex = shader(GL_VERTEX_SHADER, vs);
         GLuint fragment = 0;
         try {
@@ -107,6 +114,7 @@ struct GlesUiRenderer::Impl {
         glAttachShader(program, fragment);
         glBindAttribLocation(program, 0, "position");
         glBindAttribLocation(program, 1, "texcoord");
+        glBindAttribLocation(program, 2, "vertexColour");
         glLinkProgram(program);
         glDeleteShader(vertex);
         glDeleteShader(fragment);
@@ -121,6 +129,7 @@ struct GlesUiRenderer::Impl {
         color = glGetUniformLocation(program, "color");
         textured = glGetUniformLocation(program, "textured");
         sampler = glGetUniformLocation(program, "image");
+        alpha_reject = glGetUniformLocation(program, "alphaReject");
         glGenBuffers(1, &buffer);
     }
     ~Impl() {
@@ -133,13 +142,10 @@ struct GlesUiRenderer::Impl {
         if (program)
             glDeleteProgram(program);
     }
-    static void quad(std::vector<Vertex> &out, UiRect r, UiRect uv = {0, 0, 1, 1}) {
-        out.insert(out.end(), {{r.x, r.y, uv.x, uv.y},
-                               {r.x + r.width, r.y, uv.x + uv.width, uv.y},
-                               {r.x, r.y + r.height, uv.x, uv.y + uv.height},
-                               {r.x, r.y + r.height, uv.x, uv.y + uv.height},
-                               {r.x + r.width, r.y, uv.x + uv.width, uv.y},
-                               {r.x + r.width, r.y + r.height, uv.x + uv.width, uv.y + uv.height}});
+    static void quad(std::vector<Vertex> &out, UiRect r, UiRect uv = {0, 0, 1, 1},
+                     const UiColours& colours = ui_white()) {
+        const auto vertices = ui_quad_vertices(r, uv, colours);
+        out.insert(out.end(), vertices.begin(), vertices.end());
     }
     void begin_state(int width, int height) {
         viewport_width = width;
@@ -153,21 +159,28 @@ struct GlesUiRenderer::Impl {
         glUseProgram(program);
         glUniform2f(screen, static_cast<float>(width), static_cast<float>(height));
         glUniform1i(sampler, 0);
+        glUniform1f(alpha_reject, -1.0F);
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
                               reinterpret_cast<const void *>(2 * sizeof(float)));
+        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+                              reinterpret_cast<const void *>(offsetof(Vertex, colour)));
     }
-    void begin(int width, int height) {
+    void begin(int width, int height, bool clear_background = true) {
         begin_state(width, height);
-        glClearColor(.045F, .055F, .065F, 1);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (clear_background) {
+            glClearColor(.045F, .055F, .065F, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        }
     }
     void end() {
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glUseProgram(0);
         glDisable(GL_BLEND);
@@ -184,6 +197,38 @@ struct GlesUiRenderer::Impl {
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)),
                      vertices.data(), GL_STREAM_DRAW);
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size()));
+    }
+    void draw_dropdown_batches(const std::vector<UiDropdownMeshBatch>& batches) {
+        for (const auto& batch : batches) {
+            auto* texture = load(batch.texture);
+            if (texture == nullptr)
+                continue;
+            if (batch.scene_blend == OgreSceneBlend::replace) {
+                glDisable(GL_BLEND);
+            } else {
+                glEnable(GL_BLEND);
+                if (batch.scene_blend == OgreSceneBlend::alpha)
+                    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                else if (batch.scene_blend == OgreSceneBlend::add)
+                    glBlendFunc(GL_ONE, GL_ONE);
+                else
+                    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+            }
+            if (batch.depth_check) glEnable(GL_DEPTH_TEST);
+            else glDisable(GL_DEPTH_TEST);
+            glDepthMask(batch.depth_write ? GL_TRUE : GL_FALSE);
+            const float reject = batch.alpha_compare == OgreAlphaCompare::always
+                                     ? -1.0F
+                                     : static_cast<float>(batch.alpha_rejection) / 255.0F;
+            glUniform1f(alpha_reject, reject);
+            draw_batch(batch.vertices, {1.0F, 1.0F, 1.0F, 1.0F}, texture->id);
+        }
+        // CEGUI's UI pass resumes with its fixed alpha blend and no depth.
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glUniform1f(alpha_reject, -1.0F);
     }
     Texture *load(const std::string &path) {
         if (auto it = textures.find(path); it != textures.end())
@@ -331,13 +376,13 @@ struct GlesUiRenderer::Impl {
         glEnable(GL_SCISSOR_TEST);
         glScissor(x0, viewport_height - y1, std::max(0, x1 - x0), std::max(0, y1 - y0));
     }
-    void draw_widget_text(const UiResolvedWidget &w) {
+    void draw_widget_text(const UiResolvedWidget &w, const UiColours* skin_colours = nullptr) {
         if (!w.visible || w.text.empty() || w.rect.width <= 0 || w.rect.height <= 0) return;
         // original-code: CEGUI default font is Serif
         // (CGameUI::create @0xa9f007 setDefaultFont("Serif", rodata 0xfe4944)).
         // Windows without Font inherit it; FrizQuadrata was a wrong fallback.
-        auto *texture = prepare_font(w.font.empty() ? "Serif" : w.font,
-                                     viewport_width, viewport_height);
+        const std::string font_name = w.font.empty() ? "Serif" : w.font;
+        auto *texture = prepare_font(font_name, viewport_width, viewport_height);
         auto style = w.text_style();
         // resource-derived: an explicit per-TextComponent VertFormat/HorzFormat
         // (Checkbox Left/CentreAligned, StandardButton Centre/CentreAligned)
@@ -369,24 +414,32 @@ struct GlesUiRenderer::Impl {
         }
         const auto lines = ui_text_lines(w.text, wrap, style.wrap, [&](char32_t c) {
             return texture ? texture->font->advance(c) : 6.0F * fallback_scale;
-        });
+        }, ui_font_uses_inline_colours(font_name));
         float y = w.rect.y;
         const float height = static_cast<float>(lines.size()) * line_height;
         if (style.vertical == UiTextVertical::centre) y += (w.rect.height - height) * .5F;
         else if (style.vertical == UiTextVertical::bottom) y += w.rect.height - height;
         const float top = y;
         std::vector<Vertex> letters;
+        std::vector<std::optional<UiColour>> inline_vertices;
         for (const auto &line : lines) {
             float x = w.rect.x;
             if (style.horizontal == UiTextHorizontal::centre) x += (wrap - line.width) * .5F;
             else if (style.horizontal == UiTextHorizontal::right) x += wrap - line.width;
-            for (const auto c : line.text) {
+            for (std::size_t index = 0; index < line.text.size(); ++index) {
+                const auto c = line.text[index];
+                std::optional<UiColour> glyph_colour;
+                if (index < line.colors.size() && line.colors[index].has_value()) {
+                    glyph_colour = inline_colour(*line.colors[index]);
+                }
                 if (texture) {
                     if (const auto *g = texture->font->glyph(c)) {
                         if (g->width > 0 && g->height > 0)
                             quad(letters, {x + g->bearing_x, y + texture->font->ascent() - g->bearing_y,
                                            g->width, g->height},
                                  {g->u0, g->v0, g->u1 - g->u0, g->v1 - g->v0});
+                        if (g->width > 0 && g->height > 0)
+                            inline_vertices.insert(inline_vertices.end(), 6, glyph_colour);
                         x += g->advance;
                     }
                 } else {
@@ -399,14 +452,35 @@ struct GlesUiRenderer::Impl {
             y += line_height;
         }
         sync_font(texture);
+        const auto colour_letters = [&](const UiColours *corners, const UiColour &base) {
+            auto result = letters;
+            constexpr std::size_t corner[] = {0, 2, 3, 0, 3, 1};
+            for (std::size_t i = 0; i < result.size(); ++i) {
+                const UiColour source = corners ? (*corners)[corner[i % 6]] : base;
+                if (i < inline_vertices.size() && inline_vertices[i].has_value()) {
+                    const auto &markup = *inline_vertices[i];
+                    result[i].colour = {markup[0], markup[1], markup[2], markup[3] * source[3]};
+                } else {
+                    result[i].colour = source;
+                }
+            }
+            return result;
+        };
         if (!passes || passes->empty()) {
             scissor(w.clip);
+            if (skin_colours) {
+                const auto coloured = colour_letters(skin_colours, {1, 1, 1, 1});
+                draw_batch(coloured, {1, 1, 1, 1}, texture ? texture->id : 0);
+                glDisable(GL_SCISSOR_TEST);
+                return;
+            }
             const auto base = text_colour(w);
             const std::array<float, 4> tint =
                 w.enabled ? base
                           : std::array<float, 4>{base[0] * 0.55F, base[1] * 0.55F,
                                                  base[2] * 0.55F, base[3]};
-            draw_batch(letters, tint, texture ? texture->id : 0);
+            const auto coloured = colour_letters(nullptr, tint);
+            draw_batch(coloured, {1, 1, 1, 1}, texture ? texture->id : 0);
         } else {
             // Text lives in the look Area, which may extend past the widget
             // (Checkbox labels); clip to the area against the viewport, not to
@@ -444,13 +518,15 @@ struct GlesUiRenderer::Impl {
                 const float sx = pass.dx + pass.x_scale * w.rect.width;
                 const float sy = pass.dy + pass.y_scale * w.rect.height;
                 if (sx == 0 && sy == 0) {
-                    draw_batch(letters, colour, texture ? texture->id : 0);
+                    const auto coloured = colour_letters(nullptr, colour);
+                    draw_batch(coloured, {1, 1, 1, 1}, texture ? texture->id : 0);
                 } else {
                     std::vector<Vertex> shifted;
-                    shifted.reserve(letters.size());
-                    for (const auto &v : letters)
-                        shifted.push_back({v.x + sx, v.y + sy, v.u, v.v});
-                    draw_batch(shifted, colour, texture ? texture->id : 0);
+                    const auto coloured = colour_letters(nullptr, colour);
+                    shifted.reserve(coloured.size());
+                    for (const auto &v : coloured)
+                        shifted.push_back({v.x + sx, v.y + sy, v.u, v.v, v.colour});
+                    draw_batch(shifted, {1, 1, 1, 1}, texture ? texture->id : 0);
                 }
             }
         }
@@ -494,15 +570,10 @@ struct GlesUiRenderer::Impl {
     // resource-derived rectangles, images and fonts are not a complete CEGUI skin.
     // Original-skin path: compile the widget look through UiSkin and emit its
     // draws with the existing primitives. Anything the skin subset cannot
-    // express (corner gradients — the shader tint is flat; unhandled looks;
-    // compile errors) falls back to the path below. State mapping follows the
-    // established image policy: focused&&enabled selects Hover, selected&&
-    // enabled selects Pushed.
+    // express (unhandled looks or compile errors) falls back to the path below.
+    // State mapping follows the established image policy: hovered&&enabled
+    // selects Hover, pressed&&enabled selects Pushed.
     bool draw_skin_draw(const UiSkinDraw &d) {
-        const bool flat = d.colours[0] == d.colours[1] && d.colours[0] == d.colours[2] &&
-                          d.colours[0] == d.colours[3];
-        if (!flat)
-            return false;
         if (d.kind == UiSkinDraw::Kind::image) {
             if (d.texture.empty())
                 return false;
@@ -515,8 +586,8 @@ struct GlesUiRenderer::Impl {
             if (!geometry)
                 return true; // fully clipped: handled, nothing to emit
             std::vector<Vertex> vertices;
-            quad(vertices, geometry->destination, geometry->source);
-            draw_batch(vertices, d.colours[0], texture->id);
+            quad(vertices, geometry->destination, geometry->source, d.colours);
+            draw_batch(vertices, {1,1,1,1}, texture->id);
             return true;
         }
         if (d.text.empty())
@@ -531,67 +602,73 @@ struct GlesUiRenderer::Impl {
         tmp.properties["HorzFormatting"] = d.text_style.horizontal == UiTextHorizontal::centre
             ? "CentreAligned"
             : d.text_style.horizontal == UiTextHorizontal::right ? "RightAligned" : "LeftAligned";
+        if (d.text_style.wrap)
+            tmp.properties["HorzFormatting"] = "WordWrap" + tmp.properties["HorzFormatting"];
         tmp.properties["VertFormatting"] = d.text_style.vertical == UiTextVertical::centre
             ? "CentreAligned"
             : d.text_style.vertical == UiTextVertical::bottom ? "BottomAligned" : "TopAligned";
-        const auto &c = d.colours[0];
-        char argb[9];
-        std::snprintf(argb, sizeof(argb), "%02X%02X%02X%02X",
-                      static_cast<int>(std::clamp(c[3], 0.0F, 1.0F) * 255.0F),
-                      static_cast<int>(std::clamp(c[0], 0.0F, 1.0F) * 255.0F),
-                      static_cast<int>(std::clamp(c[1], 0.0F, 1.0F) * 255.0F),
-                      static_cast<int>(std::clamp(c[2], 0.0F, 1.0F) * 255.0F));
-        tmp.properties["TextColour"] = argb;
-        draw_widget_text(tmp);
+        draw_widget_text(tmp, &d.colours);
         return true;
     }
-    bool draw_skin_button(const FrontendButton &button, int width, int height) {
-        if (button.supplemental || button.widget.type.empty())
+    bool draw_skin_widget(const UiResolvedWidget &widget, UiSkinState state, int width, int height) {
+        if (widget.type.empty())
             return false;
-        UiSkinState state{button.focused && button.enabled, button.selected && button.enabled,
-                          button.selected};
-        auto widget = button.widget;
-        widget.rect = button.rect;
-        UiSkinFrame frame;
+        const UiSkinFrame* cached = nullptr;
         try {
-            frame = resources->skin().compile(*resources, widget, state, width, height);
+            cached = &skin_cache.compile(widget, state, width, height);
         } catch (const std::exception &) {
             return false;
         }
+        const auto& frame = *cached;
         if (!frame.handled || !frame.diagnostics.empty())
             return false;
+        // Preflight the complete cache before emitting any part of a window.
+        for (const auto &d : frame.draws) {
+            if (d.kind == UiSkinDraw::Kind::image && (d.texture.empty() || !load(d.texture)))
+                return false;
+        }
         for (const auto &d : frame.draws)
             if (!draw_skin_draw(d))
                 return false;
         return true;
     }
-    void draw(const FrontendFrame &frame, int width, int height) {
-        begin(width, height);
-        for (const auto &w : frame.decorations)
-            draw_image(w, {});
+    void draw(const FrontendFrame &frame, int width, int height, bool clear_background) {
+        begin(width, height, clear_background);
+        draw_dropdown_batches(frame.dropdown_meshes);
         if (!draw_text("FrizQuadrataBig", frame.title, 24, 16, static_cast<float>(width) - 24,
                        {.92F, .90F, .82F, 1})) {
             std::vector<Vertex> letters;
             text(letters, frame.title, 24, 20, width >= 950 ? 2 : 1, width);
             draw_batch(letters, {.92F, .90F, .82F, 1});
         }
-        for (const auto &button : frame.buttons) {
-            // Original skin first; PORT chrome and state images stay as the
-            // fallback for supplemental controls, unhandled looks and
-            // gradient draws the flat-tint shader cannot express.
-            if (draw_skin_button(button, width, height))
+        for (const auto &item : frontend_paint_list(frame)) {
+            if (item.direct_draw) {
+                static_cast<void>(draw_skin_draw(*item.direct_draw));
                 continue;
-            // resource-derived: checked GuiLook/Checkbox shows PushedImage
-            // (UIIcons:CheckChecked, a complete checked box). Load slots and
-            // class buttons carry selected without a pushed image, so they
-            // keep the previous focus/normal choice.
+            }
+            if (!item.button) {
+                if (!draw_skin_widget(item.widget, item.state, width, height)) {
+                    draw_image(item.widget, {});
+                    draw_widget_text(item.widget);
+                }
+                continue;
+            }
+            const auto &button = frame.buttons[*item.button];
+            // Original skin first; PORT chrome and state images stay as the
+            // fallback for supplemental controls and unhandled looks.
+            const UiSkinState state{button.hovered && button.enabled,
+                                    button.pressed && button.enabled, button.selected};
+            if (!button.supplemental && draw_skin_widget(item.widget, state, width, height))
+                continue;
+            // resource-derived: an actually pressed control shows PushedImage;
+            // selected remains a skin state for checkbox/class styling.
             const auto explicit_state = [&](const char *name, const std::string &image) {
                 return !image.empty() || (!button.supplemental &&
                     button.widget.properties.find(name) != button.widget.properties.end());
             };
             const std::string image_name = !button.enabled && explicit_state("DisabledImage", button.disabled_image)
-                ? button.disabled_image : button.selected && button.enabled && explicit_state("PushedImage", button.pushed_image)
-                ? button.pushed_image : button.focused && button.enabled && explicit_state("HoverImage", button.hover_image)
+                ? button.disabled_image : button.pressed && button.enabled && explicit_state("PushedImage", button.pushed_image)
+                ? button.pushed_image : button.hovered && button.enabled && explicit_state("HoverImage", button.hover_image)
                 ? button.hover_image : button.image;
             auto background = button.widget;
             background.rect = button.rect;
@@ -606,7 +683,7 @@ struct GlesUiRenderer::Impl {
             if (!draw_image(background, {}) && (button.supplemental || missing_look)) {
                 std::vector<Vertex> v; quad(v, button.rect);
                 draw_batch(v, button.enabled
-                    ? (button.focused ? std::array<float, 4>{.32F, .30F, .21F, .95F}
+                    ? ((button.hovered || (button.supplemental && button.focused)) ? std::array<float, 4>{.32F, .30F, .21F, .95F}
                                       : std::array<float, 4>{.12F, .15F, .17F, .95F})
                     : std::array<float, 4>{.08F, .09F, .1F, .85F});
             }
@@ -638,7 +715,6 @@ struct GlesUiRenderer::Impl {
                 draw_batch(border, {.9F, .75F, .3F, 1});
             }
         }
-        for (const auto &w : frame.texts) draw_widget_text(w);
         float y = 48.0F;
         auto *note_font = prepare_font("SerifSmall", width, height);
         for (const auto &line : frame.notes) {
@@ -677,6 +753,10 @@ struct GlesUiRenderer::Impl {
         }
         for (const auto &w : frame.buttons) draw_image(w, {});
         for (const auto &w : frame.texts) draw_widget_text(w);
+        for (const auto &w : frame.overlays) {
+            if (!w.image.empty()) draw_image(w, {});
+            if (!w.text.empty()) draw_widget_text(w);
+        }
         end();
     }
     // The window frame geometry stays prototype; text uses the resource font.
@@ -747,8 +827,8 @@ GlesUiRenderer::GlesUiRenderer(const PakArchive &a, UiResources &r)
     : impl_(std::make_unique<Impl>(a, r)) {
 }
 GlesUiRenderer::~GlesUiRenderer() = default;
-void GlesUiRenderer::draw(const FrontendFrame &f, int w, int h) {
-    impl_->draw(f, w, h);
+void GlesUiRenderer::draw(const FrontendFrame &f, int w, int h, bool clear_background) {
+    impl_->draw(f, w, h, clear_background);
 }
 void GlesUiRenderer::draw_hud(const UiHudFrame &f, int w, int h) {
     impl_->draw_hud(f, w, h);

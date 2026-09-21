@@ -2,7 +2,15 @@
 
 namespace torchlight {
 InventoryMenuEffects InventoryMenuState::set_open(bool open, bool close_playing) {
+    const bool fresh_open = open && !state_.open();
     const PanelOpenEffects got = state_.set_open(open, close_playing);
+    if (fresh_open) {
+        // setOpen b4edf9..b4ee4a resets the visible/selected group on EVERY
+        // fresh open, not only on construction. Reopening does not clear alerts.
+        selected_ = visible_ = {true, false, false};
+        tab_ = InventoryMenuTab::backpack;
+    }
+    if (got.update_layout) update_layout();
     InventoryMenuEffects effects;
     effects.update_layout = got.update_layout;
     effects.sound_sample = got.sound_sample;
@@ -16,13 +24,8 @@ InventoryMenuEffects InventoryMenuState::set_open(bool open, bool close_playing)
 }
 
 bool InventoryMenuState::click_tab(int layout_function) {
-    if (!state_.open())
-        return false; // site 0xb4f57c: clicks ignored unless open
-    const auto tab = static_cast<InventoryMenuTab>(layout_function);
-    if (tab != InventoryMenuTab::backpack && tab != InventoryMenuTab::spells &&
-        tab != InventoryMenuTab::fish)
-        return false; // unknown values fall through to `return 1`
-    tab_ = tab;
+    if (!dispatch_inventory_tab(state_.open(), layout_function, *this)) return false;
+    tab_ = static_cast<InventoryMenuTab>(layout_function);
     return true;
 }
 

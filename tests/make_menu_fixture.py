@@ -103,7 +103,7 @@ def write_menu(path):
                    for i,n in enumerate(['Normal','Hover','Pushed','Disabled']))
     with zipfile.ZipFile(path,'a',zipfile.ZIP_DEFLATED) as z:
         for name, body in [('mainmenuframe',main),('charactercreate',create),('characterload',load),('optionsmenu',pause),('settingsmenu',settings)]:
-            z.writestr('media/UI/'+name+'.layout',doc(body))
+            z.writestr('media/UI/'+name+'.layout',doc(body, root_visible=name == 'mainmenuframe'))
         z.writestr('media/UI/GuiLook.looknfeel',look)
         z.writestr('media/UI/author.imageset','<Imageset Name="Author" Imagefile="palette.png">'+images+'</Imageset>')
         z.writestr('media/UI/palette.png',palette)

@@ -9,8 +9,288 @@
     "compared"
   ],
   "functions": {
+    "0x00c3b2f0": {
+      "symbol": "CContinueGameMenu::updateCharacterList()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full PlayerNDesc formula, original save objects and all error/cleanup branches."
+        ]
+      },
+      "evidence": "research/menu-production-state.md",
+      "implementation": "src/frontend.cpp: continue_menu_layout_state; src/ui_layout.cpp: draw-order effects",
+      "tests": "tests/ui_menu_state_test.cpp",
+      "comparison": "Pure state/resource contracts for the reviewed visibility/highlight slice, not full-function comparison."
+    },
+    "0x00c3a350": {
+      "symbol": "CContinueGameMenu::update(float)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Original preview-character producer and remaining update lifecycle."
+        ]
+      },
+      "evidence": "research/menu-production-state.md",
+      "implementation": "src/frontend.cpp: selected .otc name replaces resource placeholder",
+      "comparison": "Static CharacterName source/write-site review only."
+    },
+    "0x00c3fe80": {
+      "symbol": "CContinueGameMenu::onClick(ELayoutFunction, std::wstring)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Original save/state-controller and dropdown lifecycle; portable confirmation lock is an application policy."
+        ]
+      },
+      "evidence": "research/menu-production-state.md",
+      "implementation": "src/frontend.cpp: prompt show/hide-before-delete and .otc request",
+      "tests": "tests/ui_menu_state_test.cpp",
+      "comparison": "Pinned command table and effect ordering reviewed; pure visibility inputs checked, no UI event scenario."
+    },
+    "0x00bd5560": {
+      "symbol": "CSettingsMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Remaining settings fields, native scene/window ownership and full graphics lifecycle."
+        ]
+      },
+      "evidence": "research/menu-production-state.md; research/ui-slider.md",
+      "implementation": "src/frontend.cpp: 0..1 audio slider draft; src/ui_skin.cpp: resource thumb geometry",
+      "tests": "tests/ui_slider_test.cpp",
+      "comparison": "Static field/range review and pure library/resource contracts."
+    },
+    "0x00bd47e0": {
+      "symbol": "CSettingsMenu::update(float)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Original mixer/effects sound, graphics settings, close animation and remaining commit/rollback branches."
+        ]
+      },
+      "evidence": "research/menu-production-state.md; research/ui-slider.md",
+      "implementation": "src/application.cpp; src/frontend.cpp: preview/apply/cancel consumers",
+      "comparison": "Static audio field/call review; no native update execution."
+    },
+    "0x00584b80": {
+      "symbol": "CGameClient::loadMenuLevel(int, int, std::wstring)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Save-dependent themes, preview objects, skybox/particles/water/light/projector passes and full level lifecycle."
+        ]
+      },
+      "evidence": "research/menu-scene.md",
+      "implementation": "src/menu_scene.cpp; src/application.cpp; src/gles_scene_renderer.cpp; src/linux_desktop_main.cpp",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "No-save resource route and world camera/projection numeric contracts; original not executed."
+    },
+    "0x005613f0": {
+      "symbol": "CGame::createCamera()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Remaining camera setup, objects and subsequent mutations."
+        ]
+      },
+      "evidence": "research/menu-scene.md",
+      "implementation": "include/torchlight/menu_scene.hpp; src/menu_scene.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Pinned PlayerCam projection constants and OGRE slot identities."
+    },
+    "0x00c4ae80": {
+      "symbol": "CMainMenu::onClick(ELayoutFunction, std::wstring)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "GameUI request/closeAll/settings calls use the existing portable frontend policy; native state-controller and settings overlay are open.",
+          "Save-list and Continue producers are .otc adapters; original .SVB and full CEGUI/safe-pointer ownership remain open."
+        ]
+      },
+      "evidence": "research/dropdown-mainmenu.md",
+      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; include/torchlight/ui_dropdown.hpp",
+      "comparison": "Full-body pinned ASM review c4ae80..c4aff1 plus tests/ui_dropdown_test.cpp: all command values -2..99, flag combinations, load/optional-panel branches, ordered effects and exception propagation. Static comparison; original not executed.",
+      "notes": "All four stages describe the explicit call-boundary adapter. Actual frontend key/press path passes bound enum and consumes requests/credits/close state. Native dependencies remain partial."
+    },
+    "0x00b18e50": {
+      "symbol": "CDropdownMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Four GameClient safe-pointer removals and external native CGameUI/state ownership remain open.",
+          "Main model-null and Options animated attach/close/sound consumers are connected. Full CGenericModel/ResourceManager, FMOD/global RNG, general CEGUI exception ABI and arbitrary callback contracts remain partial; backend lifetime uses explicit portable adapters."
+        ]
+      },
+      "evidence": "research/dropdown-container-lifecycle.md",
+      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp",
+      "comparison": "Pinned setOpen 0xb18e50..0xb192d1 plus shipped CEGUI capture/activation/attachment and original three-clip/sound contracts mapped to shared window state, ordered host input, Options tag/mesh/audio consumers. Pure dropdown/window/animation/sound contracts; no UI execution.",
+      "notes": "CMainMenu flags=1 stays model-null. Options retains attachment during CLOSE and defers exit request until closed. Settings uses its nonanimated override. See research/dropdown-animation-lifecycle.md and research/ui-capture-modal-lifecycle.md; full-function completion remains partial."
+    },
+    "0x00b176b0": {
+      "symbol": "CDropdownMenu::update(float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full CGenericModel::updateAnimation families/events, ResourceManager/scene ownership and native exception paths remain outside the original dropdown three-clip slice."
+        ]
+      },
+      "evidence": "research/dropdown-animation-lifecycle.md",
+      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp",
+      "comparison": "Original update 0xb176b0, queued/playing CLOSE checks, tag-derived h/768 projection and pinned dropdown mesh/material/clips statically mapped to advance/content/renderer and deferred detach; pure numeric/resource tests in tests/ui_dropdown_animation_test.cpp.",
+      "notes": "Options is the real model-enabled consumer; main flags=1 is model-null and Settings update override is nonanimated. Legacy stages cover this bounded dependency chain, not all original model functions."
+    },
+    "0x00b196f0": {
+      "symbol": "CDropdownMenu::createMenus()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full imageset/ResourceManager/SoundBank construction, original string/allocation/unwind and external CGameUI ownership remain open.",
+          "Main/Options containers use shared registry, capture/activation/events and deferred destruction. Frontend tooltip/window-renderer/factory teardown is connected (research/cegui-frontend-closure.md); arbitrary callback/exception ABI and general model/FMOD dependencies remain partial."
+        ]
+      },
+      "evidence": "research/dropdown-container-lifecycle.md",
+      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "comparison": "Shipped createMenus callsites 0xb19cac..0xb1ad55, CMainMenu layout attachment 0xc52bf8 and pinned CEGUI defaults/add/remove/Z-order compared with owned parent edges and reachable resolution; tests/ui_dropdown_test.cpp checks translated tree properties and the external pak.",
+      "notes": "Legacy stages cover Main model-null containers and the Options model/resource chain. Settings flags=0 constructor does not override its nonanimated setOpen/update behavior. Full function completion remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
+    },
+    "0x00c52a10": {
+      "symbol": "CMainMenu::createMenus()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Root/back/content, shared capture/modal/activation/lifecycle state and class-specific pointer consumers are connected (research/dropdown-container-lifecycle.md). Frontend double-click/auto-repeat, three Settings Combobox autochildren and tooltip/renderer/factory teardown are connected; general CEGUI exception ABI/classes remain outside this packet (research/cegui-frontend-closure.md).",
+          "Credits retain original inline markup consumed by Serif glyph batches (research/ui-inline-text.md); full library string/exception behavior remains open.",
+          "Full CEGUI window/render contracts remain open; narrow static review does not close those dependencies."
+        ]
+      },
+      "evidence": "research/mainmenu-controller-painter.md",
+      "implementation": "src/frontend.cpp; src/gles_ui_renderer.cpp; include/torchlight/menu_grab_tables.hpp; src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "comparison": "tests/mainmenu_presentation_test.cpp and tests/gles_skin_button_test.py are reviewed-contract/resource and integration regressions.",
+      "notes": "Full body inspected, including null guards, cleanup and string branches. Stage flags describe the connected presentation slice. Full function acceptance remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
+    },
+    "0x00c53b70": {
+      "symbol": "CMainMenu::update(float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "CDropdownMenu::update Options animation/tag/deferred-close slice is connected; main flags=1 remains model-null. General model families and native ownership remain open.",
+          "Continue availability comes from the .otc adapter; original selected .SVB object and field +0xe0 producer remain open.",
+          "Ordered case-insensitive mod comparison and absent-character warning retention remain open."
+        ]
+      },
+      "evidence": "research/mainmenu-controller-painter.md",
+      "implementation": "src/frontend.cpp",
+      "comparison": "tests/mainmenu_presentation_test.cpp checks available/unavailable transitions in the port adapter.",
+      "notes": "Full ASM body inspected. Only the Continue visibility consumer is ported/wired; warning initialization belongs to createMenus."
+    },
+    "0x00a980e0": {
+      "symbol": "CGameUI::mapToFunctions(CEGUI::Window*)",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Typed binding IDs do not yet establish general CEGUI userData pointer alias/lifetime or dynamic inventory-slot ownership.",
+          "Native comparison uses explicit CEGUI/string/C-locale adapters; actual library exception unwinding, allocation failures and other locales remain unverified.",
+          "Inventory createMenus/mapEventHandlers and its full clickable window graph remain open; existing frontend/HUD paths consume the new binding."
+        ]
+      },
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ui-function-bindings.md; research/ui-actions.json; research/decompiled-core/game_ui.c:5324-5454",
+      "implementation": "src/ui_function_bindings.cpp; src/ui_layout.cpp; src/frontend.cpp; src/ui_hud.cpp; src/application.cpp",
+      "comparison": "tests/compare_ui_bindings.py: 469 native trees / 2312 nodes; binding values plus exact presence/get order. tests/ui_function_bindings_test.cpp: catch-all/static LSDA contract, remap, duplicate matches, original inventory tabs and HUD press consumer.",
+      "notes": "Original child-first traversal and every property/lookup branch are implemented through a narrow tree adapter; missing/empty maps to NONE, unknown nonempty preserves userData, second read and first-NUL truncation retained. UiLayout binds once at load and resolve preserves IDs. Frontend and HUD/application consume the bound ID; callback text stays diagnostic. Four flags describe this reviewed adapter boundary, not full CEGUI or inventory closure."
+    },
     "0x00a83ed0": {
       "symbol": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "CEGUI setPosition/setSize notifications and full rescale lifecycle are not reproduced.",
+          "The true/XRATIO branch has no confirmed connected screen; arithmetic/order comparison is not render parity."
+        ]
+      },
       "stages": {
         "analyzed": true,
         "ported": true,
@@ -20,7 +300,7 @@
       "evidence": "research/decompiled-core/game_ui.c:1286-1345; research/ui-scale-p1/NOTES.md; research/ui-menu-scale.md",
       "implementation": "src/ui_screen_scale.cpp; src/ui_layout.cpp; src/ui_hud.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json (400 trees / 1200 nodes / 9600 float fields bit-exact) vs tests/ui_screen_scale_test.cpp literals",
-      "notes": "Arithmetic + child-first order compared. Wired=false: only confirmed false/YRATIO call sites are connected; true/XRATIO branch has no confirmed screen, rescale lifecycle is an equivalent (recreate from pristine), CEGUI setPosition/setSize notifications and render parity remain open. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
+      "notes": "Arithmetic + child-first order compared. Bounded wiring only: confirmed false/YRATIO call sites are connected; true/XRATIO branch has no confirmed screen, rescale lifecycle is an equivalent (recreate from pristine), CEGUI setPosition/setSize notifications and render parity remain open. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
     },
     "0x00a83e70": {
       "symbol": "CGameUI::scaledY(float)",
@@ -50,6 +330,14 @@
     },
     "0x00b4eb70": {
       "symbol": "CInventoryMenu::setOpen(bool)",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Computed viewport has no renderer consumer; the prototype InventoryView is not the original CEGUI window graph.",
+          "OPEN/CLOSE animations, queueTip, sound samples and camera selection still lack their original effect consumers.",
+          "Shared field ownership, complete createMenus/event wiring and original scenario comparison remain incomplete; opt-in static preview is not animated CEGUI parity."
+        ]
+      },
       "stages": {
         "analyzed": true,
         "ported": true,
@@ -63,6 +351,14 @@
     },
     "0x00b569e0": {
       "symbol": "CInventoryMenu::createMenus()",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full window creation/properties and event delivery have no CEGUI-equivalent runtime; opt-in preview now loads the original layout and wires tabs/Close at a bounded adapter boundary.",
+          "Window names/fields, BSS tables and the final virtual target require original-code review.",
+          "Static grabs/slot loops are a bounded helper, not a complete menu creation scenario."
+        ]
+      },
       "stages": {
         "analyzed": false,
         "ported": false,
@@ -86,7 +382,7 @@
       "evidence": "research/panel-open.md; research/disassembly/b6a220-merchant-setopen.asm; research/decompiled-core/merchant_menu.c",
       "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
       "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: Shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no port caller exists (no merchant UI) so wired stays false; no numeric differential so compared stays false. Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no independent numeric differential so compared stays false. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
       "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00b92aa0": {
@@ -114,7 +410,7 @@
       "evidence": "research/panel-open.md; research/disassembly/bc2550-quest-setopen.asm; research/decompiled-core/quest_menu.c",
       "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
       "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: Shared skeleton via quest profile (minimal, no refresh on reopen); wired/compared false (no quest UI, no numeric differential). Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: shared skeleton via quest profile (minimal, no refresh on reopen); no independent numeric differential so compared stays false. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
       "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00be1130": {
@@ -128,7 +424,7 @@
       "evidence": "research/panel-open.md; research/disassembly/be1130-skill-setopen.asm",
       "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
       "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: Shared skeleton via skill profile (3 triples, preserved index, detach); wired/compared false. Wired: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
+      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: shared skeleton via skill profile (3 triples, preserved index, detach); comparison remains open. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
       "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
     },
     "0x00e3a680": {
@@ -804,17 +1100,46 @@
     },
     "0x00b4f1b0": {
       "symbol": "CInventoryMenu::mapEventHandlers(CEGUI::Window*)",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Native CEGUI subscription allocation, connection ownership and exception unwind remain outside the comparison adapters.",
+          "Wired only through opt-in static resource preview; complete inventory createMenus, runtime reparenting and original event delivery are not restored."
+        ]
+      },
       "stages": {
         "analyzed": true,
-        "ported": false,
-        "wired": false,
-        "compared": false
+        "ported": true,
+        "wired": true,
+        "compared": true
       },
-      "evidence": "research/menu-event-plumbing.md §2; research/disassembly/b4f1b0-map-handlers.asm",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Recurse + subscribe handle_onClick on onClick-bearing windows. Port resolves at click time; no subscription phase."
+      "evidence": "research/inventory-ui-preview.md; research/menu-event-plumbing.md; live pinned ELF body b4f1b0/0x3b2",
+      "implementation": "src/inventory_events.cpp; src/ui_inventory.cpp; src/application.cpp",
+      "tests": "tests/inventory_events_test.cpp; tests/compare_inventory_events.py; tests/inventory_ui_test.py",
+      "comparison": "81 trees / 1926 nodes: unchanged native body versus port, explicit property/allocation/subscription adapters; ordered present/get/subscribe trace and virtual slot encoding checked",
+      "notes": "Local catch-all differs from CGameUI Ogre-only catch. No type/visibility/recognized-command filter at mapping. Preview runtime resolves visibility/enabled at press. Full library ownership and native exceptions remain open."
+    },
+    "0x00b4f570": {
+      "symbol": "CInventoryMenu::onClick(ELayoutFunction)",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "updateLayout call has only tab presentation/state consumers here, not complete original icon/tooltip behavior.",
+          "Preview has no new-item alert producer; restoring immutable default images does not close the alert lifecycle.",
+          "Native CEGUI notifications, string allocation failures/unwind and full runtime inventory graph remain open."
+        ]
+      },
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/inventory-ui-preview.md; live pinned ELF body b4f570/0x451",
+      "implementation": "src/inventory_events.cpp; src/inventory_menu.cpp; src/ui_inventory.cpp; src/application.cpp",
+      "tests": "tests/inventory_events_test.cpp; tests/compare_inventory_events.py; tests/inventory_ui_test.py",
+      "comparison": "198 unchanged-body cases: open/closed x commands -1..97; ordered selected/visible/alert/image/update trace, saved-image source pointer and flag timing; explicit CEGUI/updateLayout adapters",
+      "notes": "Real MouseButtonDown input through opt-in preview. Unknown/closed inputs have no effects. Tab sink errors propagate. Static XML positioning is resource-derived and does not replace original animated model anchors."
     },
     "0x00ad4bb0": {
       "symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
@@ -861,16 +1186,16 @@
     "0x00b17380": {
       "symbol": "CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&)",
       "stages": {
-        "analyzed": false,
+        "analyzed": true,
         "ported": false,
         "wired": false,
         "compared": false
       },
-      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
+      "evidence": "research/dropdown-mainmenu.md; pinned ELF full body b17380/0xd6",
       "implementation": "",
       "tests": "",
       "comparison": "",
-      "notes": "Placeholder; expect per-menu cleanup deltas, do not assume inventory shape."
+      "notes": "Mouse button zero sets +0x32 and removes/nulls four GameClient safe pointers; always returns true. processInput b102a0 consumes the marker. Native owners and this general CloseButton path are not yet ported."
     },
     "0x00b23ba0": {
       "symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
@@ -1127,16 +1452,23 @@
     "0x00b179e0": {
       "symbol": "CDropdownMenu::mapEventHandlers(CEGUI::Window*)",
       "stages": {
-        "analyzed": false,
-        "ported": false,
-        "wired": false,
-        "compared": false
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
       },
-      "evidence": "research/menu-event-plumbing.md §3 (registered, unread)",
-      "implementation": "",
-      "tests": "",
-      "comparison": "",
-      "notes": "Placeholder."
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "The desktop consumes mouse-down and double-click subscriptions with per-receiver grouping and source base/Continue handlers. Native SubscriberSlot ownership remains an adapter.",
+          "Native CEGUI string/allocation/SubscriberSlot/connection lifetime and event prefix decoding remain open."
+        ]
+      },
+      "evidence": "research/dropdown-mainmenu.md",
+      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "tests": "tests/ui_dropdown_test.cpp",
+      "comparison": "Full pinned ASM review and narrow child-first/order/error/duplicate/unknown-property checks; resource binding checks use external mainmenuframe.layout.",
+      "notes": "Local errors are swallowed after preserving effects; recursion is outside local catch. Four stages describe the documented tree adapter and down/double-click consumers, not full CEGUI closure. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
     },
     "0x00b252c0": {
       "symbol": "CEnchantMenu::mapEventHandlers(CEGUI::Window*)",
@@ -2182,11 +2514,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; guards+triggerEvent(0) verified in objdump",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; guards+triggerEvent(0) verified in objdump; research/skill-event-native-trace.md; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00ca5950": {
       "symbol": "CSkill::triggerEvent(ESKILL_EVENT_TYPE,...)",
@@ -2196,11 +2528,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; indexed dispatch +140/14c branch agent-read, post-sites verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; indexed dispatch +140/14c branch agent-read, post-sites verified; research/skill-event-native-trace.md; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cc4300": {
       "symbol": "CSkillEvent::startEvent(...)",
@@ -2210,25 +2542,25 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; applier calls agent-read from graph+decomp",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; applier calls agent-read from graph+decomp; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cb7850": {
       "symbol": "CSkillEvent::applyEffects(...)",
       "stages": {
         "analyzed": true,
-        "ported": true,
-        "wired": true,
+        "ported": false,
+        "wired": false,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; cb8413/cb842b post-sites verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (hit-hook order+gates+posters; trigger ladder loader; rung-gated casts; weapon-leg request contract; proven no-op / open effects leg)",
-      "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
-      "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
-      "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+      "implementation": "",
+      "tests": "tests/skill_event_program_test.cpp (refuses unsupported effect groups); tests/trace_skill_missile_hooks.py (callback gate only)",
+      "comparison": "No implementation comparison.",
+      "notes": "Removed the old helper's misleading effect/canEffect facade. Strict event compiler admits the no-affix/effect resource branch only. Production monster eligibility is a port admission policy, not this original function."
     },
     "0x00cb7b70": {
       "symbol": "CSkillEvent::applyWeaponDamage(...)",
@@ -2238,25 +2570,25 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; cb8413 post-site verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (hit-hook order+gates+posters; trigger ladder loader; rung-gated casts; weapon-leg request contract; proven no-op / open effects leg)",
-      "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
-      "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
-      "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+      "evidence": "research/skill-effect-dispatch.md; cb8413 post-site verified; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cac040": {
       "symbol": "CSkillEffectAndAffixes::applyAffixesAndEffects(...)",
       "stages": {
         "analyzed": true,
-        "ported": true,
-        "wired": true,
+        "ported": false,
+        "wired": false,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; cb78fd/cb7b05 call-sites agent-read",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (hit-hook order+gates+posters; trigger ladder loader; rung-gated casts; weapon-leg request contract; proven no-op / open effects leg)",
-      "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
-      "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
-      "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+      "implementation": "",
+      "tests": "tests/skill_event_program_test.cpp (refuses unsupported effect groups); tests/trace_skill_missile_hooks.py (callback gate only)",
+      "comparison": "No implementation comparison.",
+      "notes": "Removed the old helper's misleading effect/canEffect facade. Strict event compiler admits the no-affix/effect resource branch only. Production monster eligibility is a port admission policy, not this original function."
     },
     "0x00c938e0": {
       "symbol": "CExecuteSkillProps::executeSkill(...)",
@@ -2280,11 +2612,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; a16c8a/a16c9e/a16cb4 branch shape verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; a16c8a/a16c9e/a16cb4 branch shape verified; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00a0adc0": {
       "symbol": "CUnitSpawner::createAndFireMissile(...)",
@@ -2294,11 +2626,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; a0add9 call + a0ae8c jmp verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; a0add9 call + a0ae8c jmp verified; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00d6f520": {
       "symbol": "CResourceManager::createMissile(...)",
@@ -2308,11 +2640,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; d6f550 jmp verified, trivial wrapper",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; d6f550 jmp verified, trivial wrapper; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cb8360": {
       "symbol": "missileApplyingEffects(...)",
@@ -2322,11 +2654,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; mov 6 + applier calls + triggerEvent verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; mov 6 + applier calls + triggerEvent verified; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cb7670": {
       "symbol": "missileDieing(...)",
@@ -2336,11 +2668,11 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; mov 7 + triggerEvent verified",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (startSkill guards/state, triggerEvent/hasEvent, startEvent skeleton for the missile path, spawner Missiles branch incl. t=0 timeline routing, fire-sink launches, MISSILEHIT/DIE posters)",
-      "tests": "tests/skill_event_runtime_test.cpp (54 assertions with pak incl. SEEKING end-to-end, 27 without)",
-      "comparison": "Behavioral control case (SEEKING chain), no original-call differential",
-      "notes": "Ported slice per skill-effect-dispatch.md section 6. compared=false: no isolated original call."
+      "evidence": "research/skill-effect-dispatch.md; mov 7 + triggerEvent verified; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00ccacb0": {
       "symbol": "CSkillManager::triggerSkillEvent(...)",
@@ -2378,25 +2710,25 @@
         "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; UNITHIT/UNITDIE posters cb72f4/cb73a5 verified in objdump",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (hit-hook order+gates+posters; trigger ladder loader; rung-gated casts; weapon-leg request contract; proven no-op / open effects leg)",
-      "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
-      "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
-      "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+      "evidence": "research/skill-effect-dispatch.md; UNITHIT/UNITDIE posters cb72f4/cb73a5 verified in objdump; research/skill-production-dispatch.md",
+      "implementation": "src/skills.cpp; src/skill_event_program.cpp; src/skill_event_runtime.cpp; src/player_session.cpp; src/combat.cpp; src/application.cpp (bounded real START -> authenticated HIT/TRIGGER -> launch -> request-driven impact -> HP path)",
+      "tests": "tests/skill_event_runtime_test.cpp; tests/skill_event_program_test.cpp; tests/skill_production_test.cpp; tests/application_skill_projectile_test.py",
+      "comparison": "Original startSkill/triggerEvent trace (15 cases) and missileApplyingEffects hook trace (6 cases) are native-only evidence, not port lifecycle differential. Weapon math is compared separately under rollAttack.",
+      "notes": "Partial production path. START warmup and TRIGGER seeking are distinct real resource scenes. Single right/otherwise-left ranged weapon, live equipment at impact. Full canEffect, native duplicate death-post semantics, caller flags, COUNT repetition, spread/anchor/homing, nonzero timelines and visuals remain open."
     },
     "0x00cb7240": {
       "symbol": "CSkillEvent::canEffectPosObject(...)",
       "stages": {
         "analyzed": true,
-        "ported": true,
-        "wired": true,
+        "ported": false,
+        "wired": false,
         "compared": false
       },
       "evidence": "research/skill-effect-dispatch.md; cb83d3 hook call-site verified in objdump",
-      "implementation": "include/torchlight/skill_event_runtime.hpp, src/skill_event_runtime.cpp (hit-hook order+gates+posters; trigger ladder loader; rung-gated casts; weapon-leg request contract; proven no-op / open effects leg)",
-      "tests": "tests/skill_event_runtime_test.cpp (74 assertions with pak incl. SEEKING 40/60 weapon contract + UNITHIT, 41 without)",
-      "comparison": "Behavioral control case (SEEKING hit chain), no original-call differential",
-      "notes": "Applier slice per skill-effect-dispatch.md section 7. compared=false."
+      "implementation": "",
+      "tests": "tests/skill_event_program_test.cpp (refuses unsupported effect groups); tests/trace_skill_missile_hooks.py (callback gate only)",
+      "comparison": "No implementation comparison.",
+      "notes": "Removed the old helper's misleading effect/canEffect facade. Strict event compiler admits the no-affix/effect resource branch only. Production monster eligibility is a port admission policy, not this original function."
     },
     "0x00847280": {
       "symbol": "CCharacter::performAttack(CEquipment*,uint,float,float,EDAMAGE_TYPES)",
@@ -2418,13 +2750,27 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
+        "compared": true
+      },
+      "evidence": "research/large-16-typed-damage.md; research/skill-weapon-oracle.md (original instructions, exact float 0x3f3bbbbc)",
+      "implementation": "src/typed_damage.cpp: shared attack_damage_plan + channel roll/mitigation; percentage/DPS on base and bonuses; distinct flat-bonus ordering in total/roll passes",
+      "tests": "tests/compare_typed_damage.py; tests/compare_skill_weapon_damage.py; tests/typed_damage_test.cpp; tests/skill_production_test.cpp",
+      "comparison": "12088 existing allocation/MAGIC/defense/ordinary cases plus 2126 skill-profile cases against unchanged original instructions through channel assembly, including ordered channels and final RNG.",
+      "notes": "Partial function only: controlled getters, critical=false, one selected weapon. Compared 2078 right-hand + 48 left-hand cases. Ordinary and skill numeric paths now have production callers. DPS speed mapping from SPEED/100 confirmed by calculateCombatStats stores. Full performAttack flags, crit/block/procs/reflect and native HP event sequencing remain open."
+    },
+    "0x00cc71d0": {
+      "symbol": "CSkillEvent::CSkillEvent(...)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
         "compared": false
       },
-      "evidence": "research/skill-effect-dispatch.md; 84530f USEDPS + 845338 pct + 844226/844a05 soak sites verified in objdump, 0.7333333 in rodata",
-      "implementation": "src/typed_damage.cpp roll_skill_weapon_damage (ordinary_damage_plan + shared roll/mitigation core; only the two pre-scales + soak multiplier are new)",
-      "tests": "tests/typed_damage_test.cpp skill_profile (neutral == ordinary roll; exact pct/DPS placement) + tests/skill_event_runtime_test.cpp SEEKING kill chain (89 pak / 41 nopak)",
-      "comparison": "Behavioral control cases, no original-call differential",
-      "notes": "Reachable skill-missile slice via roll_skill_weapon_damage (shared core reuse). compared=false."
+      "evidence": "research/skill-production-dispatch.md; research/decompiled-core/skill_event.c",
+      "implementation": "src/skill_event_program.cpp (bounded resource scalar/event scene compilation)",
+      "tests": "tests/skill_event_program_test.cpp; tests/skill_production_test.cpp",
+      "comparison": "Resource-derived checks only, not constructor differential.",
+      "notes": "Only FILE/ATTACHES/WEAPONDAMAGEPCT/SOAKSCALEPCT/USEDPS for the strict supported scene subset. Full constructor and defaults outside that subset remain open."
     }
   }
 }

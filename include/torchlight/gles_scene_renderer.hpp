@@ -47,6 +47,10 @@ public:
     void set_instance_pose(std::size_t instance_index, const OgreMeshPose& pose);
     void set_camera_target(const std::array<float, 3>& target,
                            float camera_distance = 28.5F);
+    // Explicit resource-authored camera, without the gameplay orbit formula.
+    void set_camera_pose(const Vector3& position, const Vector3& target,
+                         float fov_degrees, float near_clip, float far_clip);
+    // Clears either explicit or gameplay camera, restoring overview mode.
     void clear_camera_target() noexcept;
     [[nodiscard]] std::array<float, 3> ground_position_at_pixel(
         int pixel_x, int pixel_y_from_bottom, int width, int height,

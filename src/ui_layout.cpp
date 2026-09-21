@@ -12,6 +12,7 @@ namespace torchlight {
 namespace {
 struct Node {
     std::string tag;
+    std::string text;
     std::map<std::string, std::string> attrs;
     int parent = -1;
 };
@@ -126,6 +127,17 @@ std::vector<Node> parse_xml(const std::vector<std::uint8_t> &bytes) {
         const auto next = text.find('<', p);
         if (next == text.npos)
             break;
+        if (!stack.empty() && nodes[static_cast<std::size_t>(stack.back())].tag == "Property") {
+            std::string body;
+            for (auto i = p; i < next; ++i) {
+                // XML line-end normalization precedes character references.
+                if (text[i] == '\r') {
+                    if (i + 1 < next && text[i + 1] == '\n') ++i;
+                    body += '\n';
+                } else body += text[i];
+            }
+            nodes[static_cast<std::size_t>(stack.back())].text += unescape(body);
+        }
         p = next;
         if (text.compare(p, 4, "<!--") == 0) {
             auto end = text.find("-->", p + 4);
@@ -229,6 +241,25 @@ float dimension(const Node &n, const std::string &key) {
         xml_error("invalid image region");
     return list[0];
 }
+
+// Production adapter for the immutable resource tree. Event subscription,
+// dynamic slot userData and CEGUI object lifetimes are separate contracts.
+class LayoutFunctions final : public UiFunctionTree {
+  public:
+    explicit LayoutFunctions(std::vector<UiWidget> &widgets) : widgets_(widgets), children_(widgets.size()) {
+        for (std::size_t i = 0; i < widgets.size(); ++i)
+            if (widgets[i].parent >= 0)
+                children_.at(static_cast<std::size_t>(widgets[i].parent)).push_back(i);
+    }
+    std::size_t child_count(Node n) const override { return children_[n].size(); }
+    Node child(Node n, std::size_t i) const override { return children_[n][i]; }
+    bool has_click_property(Node n) const override { return widgets_[n].properties.count("onClick") != 0; }
+    std::string click_property(Node n) const override { return widgets_[n].property("onClick"); }
+    void set_function(Node n, UiLayoutFunction value) noexcept override { widgets_[n].layout_function = value; }
+  private:
+    std::vector<UiWidget> &widgets_;
+    std::vector<std::vector<Node>> children_;
+};
 } // namespace
 std::string UiWidget::property(const std::string &key) const {
     const auto i = properties.find(key);
@@ -258,17 +289,51 @@ UiLayout UiLayout::parse(const std::vector<std::uint8_t> &bytes) {
             // attribute and ignores a Property whose resulting name is empty.
             if (key.empty())
                 continue;
+            // original-code: shipped GUILayout_xmlHandler::elementPropertyStart
+            // @0xe4e80 sets a nonempty Value immediately. Otherwise text()
+            // @0xe3560 accumulates the body; elementPropertyEnd @0xe3090 sets it.
+            // Full adapter boundary: research/mainmenu-controller-painter.md.
+            const auto value = attr(node, "Value");
             result.widgets_[static_cast<std::size_t>(parent)].properties[key] =
-                attr(node, "Value"); // LAST wins
+                value.empty() ? node.text : value; // LAST wins
         }
     }
     if (result.widgets_.empty())
         xml_error("layout without windows");
+    LayoutFunctions bindings(result.widgets_);
+    for (std::size_t i = 0; i < result.widgets_.size(); ++i)
+        if (result.widgets_[i].parent < 0)
+            map_ui_functions(bindings, i);
+    return result;
+}
+UiLayout UiLayout::from_widgets(std::vector<UiWidget> widgets) {
+    if (widgets.empty()) throw std::invalid_argument("layout without windows");
+    for (std::size_t i = 0; i < widgets.size(); ++i) {
+        if (widgets[i].name.empty()) throw std::invalid_argument("window without name");
+        if (widgets[i].parent < -1 ||
+            (widgets[i].parent >= 0 && static_cast<std::size_t>(widgets[i].parent) >= i))
+            throw std::invalid_argument("invalid window parent order");
+    }
+    UiLayout result;
+    result.widgets_ = std::move(widgets);
     return result;
 }
 std::string UiResolvedWidget::property(const std::string &key) const {
     const auto i = properties.find(key);
     return i == properties.end() ? std::string{} : i->second;
+}
+std::optional<std::size_t> ui_target_at_position(
+    const std::vector<UiResolvedWidget>& widgets, float x, float y) {
+    std::optional<std::size_t> target;
+    for (std::size_t i = 0; i < widgets.size(); ++i) {
+        const auto& w = widgets[i];
+        // visible/enabled already include ancestors. A fully transparent
+        // window still participates: original targeting never tests alpha.
+        if (!w.visible || !w.enabled || upper(w.property("MousePassThroughEnabled")) == "TRUE" ||
+            !w.rect.contains(x, y) || (w.has_clip && !w.clip.contains(x, y))) continue;
+        if (!target || w.paint_order >= widgets[*target].paint_order) target = i;
+    }
+    return target;
 }
 UiTextStyle UiResolvedWidget::text_style() const {
     UiTextStyle style;
@@ -342,7 +407,8 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiL
     if (!std::isfinite(screen_scale_ratio) || screen_scale_ratio <= 0.0F)
         throw std::invalid_argument("invalid screen scale ratio");
     std::vector<UiResolvedWidget> result;
-    for (const auto &node : widgets_) {
+    for (std::size_t node_index = 0; node_index < widgets_.size(); ++node_index) {
+        const auto& node = widgets_[node_index];
         const auto parent = node.parent < 0 ? UiRect{0, 0, w, h}
                                             : result.at(static_cast<std::size_t>(node.parent)).rect;
         UiResolvedWidget v;
@@ -364,6 +430,7 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiL
         v.text = node.property("Text");
         v.font = node.property("Font");
         v.callback = node.property("onClick");
+        v.layout_function = node.layout_function;
         v.image = node.property("Image");
         if (v.image.empty())
             v.image = node.property("NormalImage");
@@ -418,6 +485,11 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiL
                 v.rect.height = parent.height * a[2] + a[3];
             }
         }
+        if (std::find(state.zero_position_nodes.begin(), state.zero_position_nodes.end(),
+                      node_index) != state.zero_position_nodes.end()) {
+            v.rect.x = parent.x;
+            v.rect.y = parent.y;
+        }
         const auto horizontal = upper(node.property("HorizontalAlignment"));
         const auto vertical = upper(node.property("VerticalAlignment"));
         if (horizontal == "CENTRE" || horizontal == "CENTER")
@@ -449,8 +521,8 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiL
         if (v.clip.width < 0) v.clip.width = 0;
         if (v.clip.height < 0) v.clip.height = 0;
     }
-    // Sibling draw order (inferred from CEGUI draw-list semantics; the cited
-    // original addresses could not be confirmed from our symbol list — open):
+    // original-code: bundled Window::addWindowToDrawList @0x1163d0 inserts
+    // ordinary siblings before the AlwaysOnTop group. Initial add order:
     // each child's entire subtree is visited before moving on, and AlwaysOnTop
     // siblings come later in the draw list. Iterative traversal avoids
     // unbounded C++ recursion on untrusted XML.
@@ -463,6 +535,33 @@ std::vector<UiResolvedWidget> UiLayout::resolve(int width, int height, const UiL
         std::stable_partition(siblings.begin(), siblings.end(), [&](std::size_t i) {
             return upper(result[i].property("AlwaysOnTop")) != "TRUE";
         });
+    // Window::moveToFront_impl(false) @0x116550: first raise ancestors,
+    // then remove/reinsert this window at the end of its own Z-order group.
+    // ZOrderingEnabled gates reordering, independently of visibility.
+    for (const auto& name : state.move_to_front) {
+        const auto found = std::find_if(result.begin(), result.end(),
+            [&](const auto& widget) { return widget.name == name; });
+        if (found == result.end()) continue;
+        std::vector<std::size_t> lineage;
+        for (auto index = static_cast<std::size_t>(found - result.begin());;) {
+            lineage.push_back(index);
+            if (result[index].parent < 0) break;
+            index = static_cast<std::size_t>(result[index].parent);
+        }
+        for (auto entry = lineage.rbegin(); entry != lineage.rend(); ++entry) {
+            const auto index = *entry;
+            const auto parent = result[index].parent;
+            if (parent < 0 || upper(result[index].property("ZOrderingEnabled")) == "FALSE") continue;
+            auto& siblings = children[static_cast<std::size_t>(parent)];
+            siblings.erase(std::find(siblings.begin(), siblings.end(), index));
+            const bool on_top = upper(result[index].property("AlwaysOnTop")) == "TRUE";
+            const auto position = on_top ? siblings.end() :
+                std::find_if(siblings.begin(), siblings.end(), [&](std::size_t sibling) {
+                    return upper(result[sibling].property("AlwaysOnTop")) == "TRUE";
+                });
+            siblings.insert(position, index);
+        }
+    }
     std::vector<std::size_t> pending(children.back().rbegin(), children.back().rend());
     std::size_t order = 0;
     while (!pending.empty()) {
@@ -492,6 +591,40 @@ std::array<float, 2> ui_image_render_offset(const UiImage &image, float screen_w
         image.auto_scaled ? screen_height / image.native_vert : 1.0F;
     return {pixel_align_ui(image.offset_x * horz), pixel_align_ui(image.offset_y * vert)};
 }
+void UiResources::attach_window_renderer(const std::string& name, const std::string& type) {
+    if (window_renderers_.count(name)) throw std::invalid_argument("duplicate live UI renderer instance");
+    const auto renderer = type == "DefaultWindow" ? std::string{} : skin().renderer(type);
+    // Name registration ends at destroy(), while factory objects remain in
+    // the dead pool. A replacement may legitimately reuse the same name.
+    ++window_factories_[name];
+    if (!renderer.empty()) window_renderers_.emplace(name, RendererInstance{type, renderer, true});
+}
+void UiResources::detach_window_renderer(const std::string& name) {
+    const auto it = window_renderers_.find(name);
+    if (it == window_renderers_.end()) return;
+    it->second.attached = false;
+    // RenderCache owns commands and copied text, not the shared texture/font.
+    const auto listeners = cache_invalidators_;
+    for (const auto& [token, invalidate] : listeners) { (void)token; invalidate(name); }
+}
+void UiResources::destroy_window_renderer(const std::string& name) {
+    window_renderers_.erase(name);
+}
+void UiResources::destroy_window_factory(const std::string& name) {
+    const auto it = window_factories_.find(name);
+    if (it != window_factories_.end() && --it->second == 0) window_factories_.erase(it);
+}
+std::optional<std::string> UiResources::window_renderer(const std::string& name) const {
+    const auto it = window_renderers_.find(name);
+    if (it == window_renderers_.end()) return std::nullopt;
+    return it->second.attached ? it->second.renderer : std::string{};
+}
+std::size_t UiResources::subscribe_window_cache(CacheInvalidator callback) {
+    const auto token = ++next_cache_invalidator_;
+    cache_invalidators_.emplace(token, std::move(callback));
+    return token;
+}
+void UiResources::unsubscribe_window_cache(std::size_t token) { cache_invalidators_.erase(token); }
 const UiLayout *UiResources::layout(const std::string &path) {
     if (const auto it = layouts_.find(path); it != layouts_.end())
         return &it->second;

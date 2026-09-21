@@ -41,6 +41,12 @@ std::optional<std::string> hud_press_callback(const UiHudFrame &frame, float x, 
         return std::nullopt;
     return pressed->callback;
 }
+std::optional<UiLayoutFunction> hud_press_function(const UiHudFrame &frame, float x, float y) {
+    const auto *pressed = hud_button_at(frame, x, y);
+    if (!pressed || !pressed->enabled || pressed->callback.empty())
+        return std::nullopt;
+    return pressed->layout_function;
+}
 UiHudFrame UiHud::frame(int width, int height, const UiHudValues &values,
                         const UiPointerState &pointer) const {
     UiHudFrame result;

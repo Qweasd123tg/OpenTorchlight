@@ -71,13 +71,19 @@ public:
             std::istringstream fields(line); Step step;
             if (!(fields >> step.verb)) continue;
             std::string arg; while (fields >> arg) step.args.push_back(std::move(arg));
+            if (step.verb == "inventory-preview") {
+                if (step.args != std::vector<std::string>{"1"} || !steps_.empty())
+                    throw std::runtime_error("inventory-preview 1 must precede scenario actions");
+                inventory_preview_ = true;
+                continue;
+            }
             if (step.verb=="select-skill" && step.args.size()>1) {
                 std::string name=step.args.front();
                 for(std::size_t i=1;i<step.args.size();++i) name+=' '+step.args[i];
                 step.args={std::move(name)};
             }
             const std::vector<std::pair<std::string,std::size_t>> counts = {
-                {"menu",1},{"button",1},{"hud-button",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
+                {"menu",1},{"button",1},{"hud-button",1},{"inventory-button",1},{"inventory-tab",1},{"name",1},{"level",2},{"frames",1},{"capture",1},
                 {"walk",2},{"npc",1},{"select-skill",1},{"kill-nearest",0},{"trigger-nearest",0},{"still",0},{"key",1},{"inventory",1},{"unequip",1},{"equip",1},
                 {"resize",2},{"dt",1},{"revision",1},{"quit",0},{"menu-capture",1},{"button-capture",2}};
             const auto spec = std::find_if(counts.begin(),counts.end(),[&](const auto& p){return p.first==step.verb;});
@@ -101,6 +107,7 @@ public:
         }
         return true;
     }
+    bool inventory_preview() const { return inventory_preview_; }
     double clock_seconds() override { return time_seconds_; }
     std::uint32_t new_campaign_seed() override { return 491; }
     int width() const noexcept override { return width_; }
@@ -198,6 +205,33 @@ public:
             click_ = {static_cast<int>(point[0]), static_cast<int>(point[1])};
             pointer_.left_press_origin = point;
             notice("hud_press", step.args[0]);
+        } else if (step.verb == "inventory-button") {
+            if (step.visits) {
+                if (view.moving) throw std::runtime_error("inventory press leaked into movement");
+                if (step.args[0]=="Close") {
+                    if(view.inventory_open) throw std::runtime_error("Close did not close on down");
+                } else {
+                    const int expected=step.args[0]=="TabBackpack"?14:step.args[0]=="TabSpell"?15:16;
+                    if(!view.inventory_open || view.inventory_tab!=expected)
+                        throw std::runtime_error("tab did not change on down");
+                }
+                pointer_.position=std::array<float,2>{-10,-10};
+                ui_click_=UiPointerClick{*pointer_.left_press_origin,*pointer_.position};
+                pointer_.left_press_origin.reset();
+                notice("inventory_release",step.args[0]);done();return;
+            }
+            if(!view.inventory_open || !inventory_preview_) throw std::runtime_error("inventory preview closed");
+            const auto it=std::find_if(last_hud_.overlays.begin(),last_hud_.overlays.end(),[&](const auto& w){return w.name==step.args[0];});
+            if(it==last_hud_.overlays.end() || !it->visible || !it->enabled)
+                throw std::runtime_error("missing inventory target "+step.args[0]);
+            const auto& rect=it->rect;
+            const std::array<float,2> point={rect.x+rect.width/2,rect.y+rect.height/2};
+            pointer_.position=point;pointer_.left_press_origin=point;
+            click_={static_cast<int>(point[0]),static_cast<int>(point[1])};
+            ++step.visits;notice("inventory_press",step.args[0]);
+        } else if (step.verb == "inventory-tab") {
+            if(view.inventory_tab!=std::stoi(step.args[0])) throw std::runtime_error("unexpected inventory tab");
+            done();
         } else if (step.verb == "frames") {
             if (++step.visits >= positive(step.args[0])) done();
         } else if (step.verb == "still") {
@@ -441,6 +475,7 @@ private:
             <<",\"name\":"; json::string(out,v.character_name);
         out << ",\"dungeon\":"; json::string(out,ascii(v.address.dungeon_name));
         out << ",\"depth\":"<<v.address.depth<<",\"position\":"; json::array(out,v.player_position);
+        out << ",\"inventory_tab\":"<<v.inventory_tab;
         out << ",\"angle\":"; json::number(out,v.player_angle);
         out << ",\"recovery_anchor\":"; json::array(out,v.recovery_anchor);
         out << ",\"walkable\":"<<(checkpoint_position_walkable(*v.navigation,v.player_position,v.floor_offset)?"true":"false")
@@ -588,7 +623,7 @@ private:
     std::ofstream events_,rng_;
     std::unordered_set<std::string> labels_;
     std::uint64_t rng_sequence_=0;
-    bool trace_failed_=false;
+    bool trace_failed_=false, inventory_preview_=false;
     std::string failure_,menu_capture_;
 };
 }
@@ -599,6 +634,7 @@ extern "C" int run_application_scenario(const char* game, const char* saves, con
         ScenarioHost host(script,output);
         RandomObservationScope observation(&ScenarioHost::random_event,&host);
         ApplicationOptions options;options.game_directory=game;options.save_directory=saves;
+        options.inventory_ui_preview=host.inventory_preview();
         // Hermetic tests must never apply settings to the user's home directory.
         options.settings_directory=std::filesystem::path(output)/"settings";
         host.finish(run_application(options,host));

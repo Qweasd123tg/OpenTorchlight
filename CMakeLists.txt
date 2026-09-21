@@ -58,6 +58,16 @@ add_library(torchlight_core STATIC
     src/save_store.cpp
     src/settings.cpp
     src/ui_layout.cpp
+    src/ui_function_bindings.cpp
+    src/ui_dropdown.cpp
+    src/ui_window_runtime.cpp
+    src/ui_pointer_timing.cpp
+    src/ui_tooltip.cpp
+    src/ui_combobox.cpp
+    src/ui_dropdown_animation.cpp
+    src/ui_sound.cpp
+    src/inventory_events.cpp
+    src/ui_inventory.cpp
     src/ui_skin.cpp
     src/ui_screen_scale.cpp
     src/inventory_menu.cpp
@@ -65,6 +75,7 @@ add_library(torchlight_core STATIC
     src/panel_open.cpp
     src/ui_font.cpp
     src/ui_text.cpp
+    src/menu_scene.cpp
     src/ui_hud.cpp
     src/frontend.cpp
     src/interaction.cpp
@@ -442,6 +453,20 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     endforeach()
     add_test(NAME frontend_menu_resources COMMAND frontend_menu_test ${MENU_FIXTURE})
     add_test(NAME ui_text_layout COMMAND ui_text_test)
+    add_executable(menu_scene_test tests/menu_scene_test.cpp)
+    target_link_libraries(menu_scene_test PRIVATE torchlight_core)
+    add_test(NAME menu_scene_contract COMMAND menu_scene_test)
+    add_executable(ui_menu_state_test tests/ui_menu_state_test.cpp)
+    target_link_libraries(ui_menu_state_test PRIVATE torchlight_core)
+    add_test(NAME ui_menu_state_contract COMMAND ui_menu_state_test)
+    add_executable(ui_slider_test tests/ui_slider_test.cpp)
+    target_link_libraries(ui_slider_test PRIVATE torchlight_core)
+    add_test(NAME ui_slider_contract COMMAND ui_slider_test)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_menu_scene_resources COMMAND menu_scene_test --original "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_ui_menu_state_contract COMMAND ui_menu_state_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_ui_slider_contract COMMAND ui_slider_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
     set_tests_properties(frontend_menu_resources ui_text_layout PROPERTIES TIMEOUT 30)
     set(UI_FONT_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ui-font.pak.zip)
     add_custom_command(OUTPUT ${UI_FONT_FIXTURE}
@@ -459,11 +484,65 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         set_tests_properties(ui_font_atlas PROPERTIES TIMEOUT 30)
     endif()
     add_executable(menu_resource_probe tests/menu_resource_probe.cpp)
+    add_executable(ui_layout_property_test tests/ui_layout_property_test.cpp)
+    add_executable(ui_sound_test tests/ui_sound_test.cpp)
+    target_link_libraries(ui_sound_test PRIVATE torchlight_core)
+    add_test(NAME ui_sound_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_sound_test>)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_sound_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_sound_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+    foreach(contract ui_pointer_timing ui_window_lifecycle ui_tooltip ui_combobox ui_combobox_skin)
+        add_executable(${contract}_test tests/${contract}_test.cpp)
+        target_link_libraries(${contract}_test PRIVATE torchlight_core)
+        target_compile_options(${contract}_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        if(contract STREQUAL "ui_pointer_timing" OR contract STREQUAL "ui_window_lifecycle")
+            add_test(NAME ${contract}_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:${contract}_test>)
+        endif()
+    endforeach()
+    if(TORCHLIGHT_GAME_DIR)
+        foreach(contract ui_window_lifecycle ui_tooltip ui_combobox ui_combobox_skin)
+            add_test(NAME original_${contract}_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:${contract}_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        endforeach()
+    endif()
+    add_executable(ui_window_runtime_test tests/ui_window_runtime_test.cpp)
+    target_link_libraries(ui_window_runtime_test PRIVATE torchlight_core)
+    add_test(NAME ui_window_runtime_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_window_runtime_test>)
+    add_executable(ui_dropdown_animation_test tests/ui_dropdown_animation_test.cpp)
+    target_link_libraries(ui_dropdown_animation_test PRIVATE torchlight_core)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_dropdown_animation_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_dropdown_animation_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+    add_executable(ui_dropdown_test tests/ui_dropdown_test.cpp)
+    add_executable(ui_pointer_target_test tests/ui_pointer_target_test.cpp)
+    target_link_libraries(ui_pointer_target_test PRIVATE torchlight_core)
+    target_compile_options(ui_pointer_target_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME ui_pointer_targets COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_pointer_target_test>)
+    target_link_libraries(ui_dropdown_test PRIVATE torchlight_core)
+    target_compile_options(ui_dropdown_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME ui_dropdown_contract COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_dropdown_test>)
+    target_link_libraries(ui_layout_property_test PRIVATE torchlight_core)
+    target_compile_options(ui_layout_property_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    # The existing CMake launcher keeps the target path in CTest discovery
+    # before the executable is built, enabling a cold --test targeted build.
+    add_test(NAME ui_layout_property COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_layout_property_test>)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_dropdown_contract
+            COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_dropdown_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_ui_layout_property
+            COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_layout_property_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_mainmenu_pointer_targets
+            COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:ui_pointer_target_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+    add_executable(mainmenu_presentation_test tests/mainmenu_presentation_test.cpp)
+    target_link_libraries(mainmenu_presentation_test PRIVATE torchlight_core)
+    target_compile_options(mainmenu_presentation_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
     target_link_libraries(menu_resource_probe PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(menu_resource_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_mainmenu_controller_presentation
+            COMMAND mainmenu_presentation_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_menu_presentation
             COMMAND menu_resource_probe "${TORCHLIGHT_GAME_DIR}/pak.zip")
     endif()
@@ -1176,6 +1255,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
             --output-dir ${CMAKE_CURRENT_BINARY_DIR}/ui-repair-evidence)
         set_tests_properties(paused_settings_render PROPERTIES TIMEOUT 300 SKIP_RETURN_CODE 77)
+        add_test(NAME inventory_ui_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/inventory_ui_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/inventory-ui-evidence)
+        set_tests_properties(inventory_ui_render PROPERTIES TIMEOUT 300 SKIP_RETURN_CODE 77)
     endif()
 
     set(STATS_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/character-stats.pak.zip)
@@ -1270,6 +1354,38 @@ endif()
 
 if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(torchlight_typed_damage_probe tests/typed_damage_probe.cpp)
+    add_executable(ui_function_bindings_test tests/ui_function_bindings_test.cpp)
+    add_executable(inventory_events_test tests/inventory_events_test.cpp)
+    target_link_libraries(inventory_events_test PRIVATE torchlight_core)
+    target_compile_options(inventory_events_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME inventory_events COMMAND inventory_events_test)
+    set_tests_properties(inventory_events PROPERTIES LABELS "core" TIMEOUT 30)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_inventory_events COMMAND inventory_events_test --pak ${TORCHLIGHT_GAME_DIR}/pak.zip)
+        set_tests_properties(original_inventory_events PROPERTIES LABELS "assets" TIMEOUT 60)
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_inventory_event_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_inventory_events.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:inventory_events_test>
+            --output ${CMAKE_BINARY_DIR}/inventory-events-original.json)
+        set_tests_properties(original_inventory_event_comparison PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
+    target_link_libraries(ui_function_bindings_test PRIVATE torchlight_core)
+    target_compile_options(ui_function_bindings_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_test(NAME ui_function_bindings COMMAND ui_function_bindings_test --self-test)
+    set_tests_properties(ui_function_bindings PROPERTIES LABELS "core" TIMEOUT 30)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_ui_function_bindings COMMAND ui_function_bindings_test --pak ${TORCHLIGHT_GAME_DIR}/pak.zip)
+        set_tests_properties(original_ui_function_bindings PROPERTIES LABELS "assets" TIMEOUT 60)
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_ui_binding_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_bindings.py --original ${TORCHLIGHT_ORIGINAL}
+            --probe $<TARGET_FILE:ui_function_bindings_test>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/ui-bindings-original.json)
+        set_tests_properties(original_ui_binding_comparison PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
     target_link_libraries(torchlight_typed_damage_probe PRIVATE torchlight_core)
     add_executable(typed_damage_test tests/typed_damage_test.cpp)
     target_link_libraries(typed_damage_test PRIVATE torchlight_core)

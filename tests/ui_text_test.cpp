@@ -20,6 +20,28 @@ int main() {
         require(ui_text_lines("ABC",1,false,advance)[0].text==U"ABC", "clipped text was silently changed");
         require(ui_text_lines("",20,true,advance).empty(), "empty label made a line");
         require(ui_text_lines("A",0,true,advance).empty(), "zero width not handled");
+        require(ui_font_uses_inline_colours("Serif") && ui_font_uses_inline_colours("SerifBig") &&
+                ui_font_uses_inline_colours("SerifHuge") && ui_font_uses_inline_colours("SerifSmall") &&
+                !ui_font_uses_inline_colours("FrizQuadrata"), "font inline-colour allowlist wrong");
+        const auto markup = ui_text_lines("A|cFF112233BC|uD",100,false,advance,true);
+        require(markup.size() == 1 && markup[0].text == U"ABCD" && markup[0].colors.size() == 4,
+                "inline tags were not removed");
+        require(!markup[0].colors[0].has_value() && markup[0].colors[1] == 0xff112233U &&
+                markup[0].colors[2] == 0xff112233U && !markup[0].colors[3].has_value(),
+                "inline colour/reset state wrong");
+        const auto truncated = ui_text_lines("A|cFF",100,false,advance,true);
+        require(truncated[0].text == U"A|cFF" && truncated[0].colors.size() == 5,
+                "truncated colour tag was not literal");
+        const auto malformed = ui_text_lines("A|cGGGGGGGGB",100,false,advance,true);
+        require(malformed[0].text == U"AB" && malformed[0].colors[1] == 0U,
+                "full malformed colour payload was not consumed");
+        const auto wrapped_markup = ui_text_lines("|cFF112233AB",5,true,advance,true);
+        require(wrapped_markup.size() == 2 && wrapped_markup[0].colors[0] == 0xff112233U &&
+                !wrapped_markup[1].colors[0].has_value(),
+                "colour leaked across wrapped physical lines");
+        const auto utf_markup = ui_text_lines("|cFF112233\xCE\xA9",100,false,advance,true);
+        require(utf_markup[0].text == U"Ω" && utf_markup[0].colors[0] == 0xff112233U,
+                "UTF8 inline colour failed");
         std::string xml="<Window Name='root'><Property Name='UnifiedSize' Value='{{0,100},{0,100}}'/>"
                         "<Window Name='child'><Property Name='UnifiedPosition' Value='{{0,80},{0,90}}'/>"
                         "<Property Name='UnifiedSize' Value='{{0,80},{0,40}}'/>"

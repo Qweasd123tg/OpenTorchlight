@@ -29,7 +29,8 @@ int main(int argc, char **argv) {
         auto m = f.frame(1024,768);
         require(m.original_layout && m.title.empty(), "resource page got synthetic title");
         require(m.texts.size() == 3, "lost/duplicated static text or leaked placeholder/hidden label");
-        require(text(m,"CopyrightInfo").text == "Authored Copyright Π", "resource Unicode text changed");
+        require(text(m,"CopyrightInfo").text == "(v1.15) Torchlight (C) 2009 Runic Games Inc.",
+                "controller copyright write missing");
         require(text(m,"CopyrightInfo").font == "Fixture", "resource text font lost");
         require(text(m,"TabTextB").type == "GuiLook/StaticTextOutline", "outline label dropped");
         const auto b = button(m,"new");
@@ -38,6 +39,30 @@ int main(int argc, char **argv) {
                 b.pushed_image == "set:Author image:Pushed" && b.disabled_image == "set:Author image:Disabled",
                 "look defaults / quote parsing / direct-child scope wrong");
         require(button(m,"settings").enabled, "settings stayed a disabled control");
+        const auto builds = f.frame_build_count();
+        for (int i=0; i<100; ++i) static_cast<void>(f.frame(1024,768));
+        require(f.frame_build_count()==builds, "unchanged menu rebuilt");
+        static_cast<void>(f.frame(512,384));
+        require(f.frame_build_count()==builds+1, "resize reused stale geometry");
+        static_cast<void>(f.frame(1024,768));
+        // Paint list is per window across all kinds, preserving one cache for
+        // a widget which appears in both image and text compatibility views.
+        {
+            FrontendFrame mixed;
+            UiResolvedWidget front, back;
+            front.name="front"; front.paint_order=2; front.text="front text";
+            back.name="back"; back.paint_order=0; back.text="back text";
+            mixed.decorations={front}; mixed.texts={back,front};
+            FrontendButton middle; middle.widget.name="middle"; middle.widget.paint_order=1;
+            middle.text="live label"; middle.enabled=false;
+            mixed.buttons={middle};
+            const auto paint=frontend_paint_list(mixed);
+            require(paint.size()==3 && paint[0].widget.name=="back" &&
+                    paint[1].widget.name=="middle" && paint[2].widget.name=="front",
+                    "window order split by renderer type or duplicate cache");
+            require(!paint[1].widget.enabled && paint[1].widget.text=="live label",
+                    "painter lost controller overrides");
+        }
         click(f,"settings");
         require(f.page() == FrontendPage::settings, "settings page did not open");
         require(!f.take_request(), "settings entry dispatched a command");

@@ -9,9 +9,9 @@ def window(name, callback='', pos=(0,0), size=(300,40), extra=''):
       f'<Property Name="UnifiedPosition" Value="{{{{0,{pos[0]}}},{{0,{pos[1]}}}}}"/>'
       f'<Property Name="UnifiedSize" Value="{{{{0,{size[0]}}},{{0,{size[1]}}}}}"/>'
       f'<Property Name="onClick" Value="{callback}"/>{extra}</Window>')
-def doc(body):
+def doc(body, *, root_visible=False):
     return ('<?xml version="1.0" encoding="UTF-16"?><GUILayout><Window Type="DefaultWindow" Name="Root">'
-      '<Property Name="Visible" Value="False"/>'+body+'</Window></GUILayout>').encode('utf-16')
+      f'<Property Name="Visible" Value="{"True" if root_visible else "False"}"/>'+body+'</Window></GUILayout>').encode('utf-16')
 def png():
     def chunk(tag,data): return struct.pack('>I',len(data))+tag+data+struct.pack('>I',zlib.crc32(tag+data))
     return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',2,2,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(b'\0'+b'\xff\x80\0\xff'*2+b'\0'+b'\0\x40\xff\xff'*2))+chunk(b'IEND',b'')
@@ -28,7 +28,9 @@ def main():
     load+=window('ScrollDown','guiExitApplication',(500,460),extra='<Property Name="onClick" Value="guiScrollDown"/>')
     load+=window('ScrollUp','guiScrollUp',(500,400))
     with zipfile.ZipFile(path,'a',zipfile.ZIP_DEFLATED) as z:
-        z.writestr('media/UI/mainmenuframe.layout',doc(main_ui))
+        # The original main root is visible under the dropdown container;
+        # attachment must not override an explicitly hidden resource window.
+        z.writestr('media/UI/mainmenuframe.layout',doc(main_ui, root_visible=True))
         z.writestr('media/UI/charactercreate.layout',doc(create))
         z.writestr('media/UI/characterload.layout',doc(load))
         z.writestr('media/UI/imagesets/author.imageset','<Imageset Name="Author" Imagefile="author.png"><Image Name="Background" XPos="0" YPos="0" Width="2" Height="2"/></Imageset>')

@@ -1,5 +1,8 @@
 # large-10: menu text, pause and glyph upload
 
+Historical integration record. Current method: [code-first](code-first.md).
+Current menu boundary and successor checks: [controller/painter](mainmenu-controller-painter.md).
+
 ## Evidence recorded before implementation
 
 Input: complete `OpenTorchlight-gpt-pro-large-9.zip`. No original pak.zip,

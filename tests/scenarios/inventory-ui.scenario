@@ -1,0 +1,51 @@
+# Resource/event preview, not animated inventory or original-game frame parity.
+inventory-preview 1
+menu main
+button new
+menu create
+button class-0
+name inventoryui
+button create
+level Town 0
+dt 0
+frames 2
+capture before
+hud-button InventoryButton
+inventory open
+inventory-tab 14
+frames 1
+capture backpack
+# Hidden legacy list controls must not mutate items or attribute points.
+key ENTER
+key U
+key 1
+key DOWN
+inventory-button TabSpell
+inventory-tab 15
+frames 1
+capture spells
+inventory-button TabFish
+inventory-tab 16
+resize 800 600
+frames 2
+inventory-tab 16
+capture fish_resized
+inventory-button TabBackpack
+inventory-tab 14
+inventory-button Close
+inventory closed
+key I
+inventory open
+inventory-tab 14
+inventory-button TabFish
+key ESC
+inventory closed
+key I
+inventory open
+inventory-tab 14
+inventory-button Close
+inventory closed
+resize 1024 768
+frames 2
+capture after
+quit

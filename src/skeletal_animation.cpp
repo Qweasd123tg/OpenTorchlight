@@ -267,7 +267,10 @@ void apply_animation_layer(
         !std::isfinite(layer.weight)) {
         throw OgreSkeletonError("OGRE animation layer is invalid");
     }
-    const float weight = std::clamp(layer.weight, 0.0F, 1.0F);
+    // Ogre::AnimationState::setWeight stores an unclamped float. Negative
+    // weights are reachable during interrupted CGenericModel blends and OGRE
+    // passes them through NodeAnimationTrack::applyToNode.
+    const float weight = layer.weight;
     if (weight == 0.0F) {
         return;
     }
@@ -397,6 +400,21 @@ OgreMeshPose sample_ogre_mesh_animation(const OgreMesh& mesh,
     return sample_layers(mesh, bind_skeleton,
                          {{&animation_skeleton, animation_name, time_seconds, 1.0F,
                            playback_mode}});
+}
+
+OgreMeshPose sample_ogre_mesh_animation_layers(
+    const OgreMesh& mesh, const OgreSkeleton& bind_skeleton,
+    const std::vector<OgreAnimationLayer>& layers) {
+    std::vector<AnimationLayer> internal;
+    internal.reserve(layers.size());
+    for (const auto& layer : layers) {
+        if (layer.skeleton == nullptr) {
+            throw OgreSkeletonError("OGRE animation layer has no skeleton");
+        }
+        internal.push_back({layer.skeleton, layer.animation_name, layer.time_seconds,
+                            layer.weight, layer.playback_mode});
+    }
+    return sample_layers(mesh, bind_skeleton, internal);
 }
 
 OgreMeshPose sample_ogre_mesh_animation_blend(

@@ -256,6 +256,8 @@ void parse_first_pass(const std::vector<std::string>& tokens,
                 parse_byte(tokens[index + 2U], "alpha_rejection");
         } else if (directive == "depth_write" && index + 1U < close) {
             material.depth_write = lowercase(tokens[index + 1U]) != "off";
+        } else if (directive == "depth_check" && index + 1U < close) {
+            material.depth_check = lowercase(tokens[index + 1U]) != "off";
         } else if (directive == "lighting" && index + 1U < close) {
             material.lighting = lowercase(tokens[index + 1U]) != "off";
         }

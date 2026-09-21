@@ -1,4 +1,5 @@
 #include "torchlight/ui_skin.hpp"
+#include <tuple>
 #include <algorithm>
 #include <charconv>
 #include <cmath>
@@ -74,6 +75,18 @@ UiRect ui_intersect(UiRect a, UiRect b) {
 float ui_pixel_aligned(float value) {
     const float rounded=std::trunc(value+(value>0.0F?0.5F:-0.5F));
     return rounded==0.0F?0.0F:rounded; // cvttss2si/cvtsi2ss yields positive zero
+}
+float ui_slider_value_from_thumb(float pixel_x, const UiRect& parent, float thumb_width, float max) {
+    if (!std::isfinite(pixel_x) || !std::isfinite(parent.x) ||
+        !std::isfinite(parent.width) || !std::isfinite(thumb_width) ||
+        !std::isfinite(max) || max <= 0 || thumb_width < 0 || parent.width <= thumb_width)
+        return 0;
+    const float travel = parent.width - thumb_width;
+    const float local = std::clamp(pixel_x - parent.x, 0.0F, travel);
+    const float unit = travel / max;
+    if (!std::isfinite(unit) || unit <= 0) return 0;
+    // library-derived: FalagardSlider::getValueFromThumb @0x32cf8.
+    return std::clamp(ui_pixel_aligned(local) / unit, 0.0F, max);
 }
 
 struct UiSkin::Impl {
@@ -182,8 +195,10 @@ struct UiSkin::Impl {
             if(x.tag=="AbsoluteDim") v=number(attr(x,"value"));
             else if(x.tag=="UnifiedDim") {
                 const auto type=attr(x,"type");
-                if(type!="Width" && type!="Height") throw std::runtime_error("unsupported-unified-axis:"+type);
-                v=number(attr(x,"scale"))*(type=="Width"?w.rect.width:w.rect.height)+number(attr(x,"offset"));
+                const bool horizontal=type=="Width"||type=="LeftEdge"||type=="RightEdge";
+                const bool vertical=type=="Height"||type=="TopEdge"||type=="BottomEdge";
+                if(!horizontal && !vertical) throw std::runtime_error("unsupported-unified-axis:"+type);
+                v=number(attr(x,"scale"))*(horizontal?w.rect.width:w.rect.height)+number(attr(x,"offset"));
             } else if(x.tag=="ImageDim") {
                 const auto image=resources.image(image_ref(x));
                 if(!image) throw std::runtime_error("missing-dimension-image:"+image_ref(x));
@@ -392,15 +407,92 @@ std::vector<std::string> UiSkin::states(const std::string& type) const {
 std::size_t UiSkin::automatic_children(const std::string& type) const {
     const auto* l=impl_->look(type);return l?l->auto_children:0;
 }
+std::optional<UiRect> UiSkin::named_area(UiResources& resources,
+    const UiResolvedWidget& w, const std::string& name, int width, int height) const {
+    const auto* look = impl_->look(w.type);
+    if (!look || width <= 0 || height <= 0) return std::nullopt;
+    Impl::Compiler compiler{*impl_, resources, w, *look, width, height, {},
+        {0, 0, static_cast<float>(width), static_cast<float>(height)}};
+    for (const auto index : impl_->children[look->node])
+        if (impl_->nodes[index].tag == "NamedArea" && attr(impl_->nodes[index], "name") == name)
+            return compiler.area(index);
+    return std::nullopt;
+}
+UiSkinDraw UiSkin::combobox_text_item(std::string_view text, UiRect row, UiRect clip,
+                                     float effective_alpha) const {
+    if (!std::isfinite(row.x) || !std::isfinite(row.y) ||
+        !std::isfinite(row.width) || !std::isfinite(row.height) ||
+        !std::isfinite(clip.x) || !std::isfinite(clip.y) ||
+        !std::isfinite(clip.width) || !std::isfinite(clip.height) ||
+        !std::isfinite(effective_alpha))
+        throw std::invalid_argument("invalid combobox text item geometry");
+    UiSkinDraw draw;
+    draw.kind = UiSkinDraw::Kind::text;
+    draw.destination = row;
+    draw.clip = ui_intersect(row, clip);
+    draw.text = std::string(text);
+    draw.font = "Serif";
+    draw.section = "ListboxTextItem";
+    draw.text_style.vertical = UiTextVertical::centre;
+    draw.colours = ui_white();
+    for (auto& colour : draw.colours)
+        colour[3] *= std::clamp(effective_alpha, 0.0F, 1.0F);
+    return draw;
+}
+std::optional<UiResolvedWidget> UiSkin::slider_thumb(UiResources& resources,
+    const UiResolvedWidget& w,float value,float max,int width,int height) const {
+    const auto* look=impl_->look(w.type);
+    if(w.type!="GuiLook/Slider"||!look||look->auto_children!=1||
+       renderer(w.type)!="Falagard/Slider"||width<=0||height<=0||
+       !std::isfinite(value)||!std::isfinite(max)||max<=0||
+       !std::isfinite(w.rect.x)||!std::isfinite(w.rect.y)||
+       !std::isfinite(w.rect.width)||!std::isfinite(w.rect.height)||
+       w.rect.width<=0||w.rect.height<=0)return std::nullopt;
+    Impl::Compiler c{*impl_,resources,w,*look,width,height,{}, {0,0,float(width),float(height)}};
+    if(truth(c.prop("VerticalSlider"))||truth(c.prop("ReversedDirection")))return std::nullopt;
+    int track=-1,child=-1;
+    for(int n:impl_->children[look->node]) {
+        const auto& node=impl_->nodes[n];
+        if(node.tag=="NamedArea"&&attr(node,"name")=="ThumbTrackArea")track=n;
+        if(node.tag=="Child"&&attr(node,"nameSuffix")=="__auto_thumb__"&&
+           attr(node,"type")=="GuiLook/SliderThumb")child=n;
+    }
+    if(track<0||child<0||renderer("GuiLook/SliderThumb")!="Falagard/Button")return std::nullopt;
+    try {
+        const auto tr=c.area(track),cr=c.area(child);
+        // Only the source full-window track is admitted: input's inverse has
+        // this same explicit boundary. Unknown child properties/layout remain diagnostics.
+        if(tr.x!=w.rect.x||tr.y!=w.rect.y||tr.width!=w.rect.width||tr.height!=w.rect.height||
+           cr.x!=w.rect.x||cr.y!=w.rect.y||impl_->children[child].size()!=1)return std::nullopt;
+        const float tw=ui_pixel_aligned(cr.width),th=ui_pixel_aligned(cr.height);
+        if(tw<=0||th<=0||tw>=tr.width||th>tr.height)return std::nullopt;
+        const float scale=(((tr.width-tw)/max)*std::clamp(value,0.0F,max))/w.rect.width;
+        if(!std::isfinite(scale))return std::nullopt;
+        UiResolvedWidget thumb;
+        thumb.name=w.name+"__auto_thumb__";thumb.type="GuiLook/SliderThumb";
+        thumb.rect={w.rect.x+ui_pixel_aligned(w.rect.width*scale),w.rect.y,tw,th};
+        thumb.visible=w.visible;thumb.enabled=w.enabled;thumb.effective_alpha=w.effective_alpha;
+        thumb.clip=ui_intersect(w.has_clip?w.clip:c.viewport,w.rect);thumb.has_clip=true;
+        return thumb;
+    } catch(const std::exception&) {return std::nullopt;}
+}
 UiSkinFrame UiSkin::compile(UiResources& resources,const UiResolvedWidget& w,UiSkinState input,int width,int height) const {
-    const auto* look=impl_->look(w.type);const auto render=renderer(w.type);
+    const auto* look=impl_->look(w.type);const auto render=resources.window_renderer(w.name).value_or(renderer(w.type));
     if(!look||render.empty())return {};
     Impl::Compiler c{*impl_,resources,w,*look,width,height,{}, {0,0,float(width),float(height)}};
-    const std::set<std::string> supported={"Falagard/Button","Falagard/ToggleButton","Falagard/Default","Falagard/StaticImage","Falagard/Slider","Falagard/Scrollbar","Falagard/Listbox"};
+    const std::set<std::string> supported={"Falagard/Button","Falagard/ToggleButton","Falagard/Default","Falagard/StaticImage","Falagard/Slider","Falagard/Scrollbar","Falagard/Listbox","Falagard/Tooltip","Falagard/Editbox"};
     if(!supported.count(render)){c.out.diagnostics.push_back("unsupported-renderer:"+render);return c.out;}
     c.out.handled=true;
     if(!w.visible||width<=0||height<=0)return c.out;
-    if(look->auto_children)c.out.diagnostics.push_back("automatic-children-not-instantiated:"+std::to_string(look->auto_children));
+    std::optional<UiResolvedWidget> thumb;
+    if(render=="Falagard/Slider") {
+        try {thumb=slider_thumb(resources,w,number(c.prop("CurrentValue")),number(c.prop("MaximumValue"),1),width,height);}
+        catch(const std::exception& e){c.out.diagnostics.push_back(e.what());}
+    }
+    const bool production_combobox_children =
+        w.type == "GuiLook/Combobox" || w.type == "GuiLook/ComboDropList";
+    if(look->auto_children&&!thumb&&!production_combobox_children)
+        c.out.diagnostics.push_back("automatic-children-not-instantiated:"+std::to_string(look->auto_children));
     if(render=="Falagard/Button"||render=="Falagard/ToggleButton") {
         const bool selected=input.selected||truth(c.prop("Selected"));
         const std::string prefix=render=="Falagard/ToggleButton"&&selected?"Selected":"";
@@ -414,6 +506,34 @@ UiSkinFrame UiSkin::compile(UiResources& resources,const UiResolvedWidget& w,UiS
         if(bg)c.state((frame?"WithFrame":"NoFrame")+enabled+"Background");
         c.state(enabled);
         if(!w.image.empty())c.state(!frame&&look->states.count("NoFrameImage")?"NoFrameImage":"WithFrameImage");
+    } else if(render=="Falagard/Editbox") {
+        c.state(!w.enabled ? "Disabled" : truth(c.prop("ReadOnly")) ? "ReadOnly" : "Enabled");
+        if (!w.text.empty()) {
+            try {
+                int text_area = -1;
+                for (const auto child : impl_->children[look->node])
+                    if (impl_->nodes[child].tag == "NamedArea" &&
+                        attr(impl_->nodes[child], "name") == "TextArea") {
+                        text_area = child;
+                        break;
+                    }
+                if (text_area < 0) throw std::runtime_error("missing-named-area:TextArea");
+                UiSkinDraw text;
+                text.kind = UiSkinDraw::Kind::text;
+                text.destination = c.area(text_area);
+                text.clip = ui_intersect(text.destination, w.has_clip ? w.clip : c.viewport);
+                text.text = w.text;
+                text.font = c.prop("Font");
+                if (text.font.empty()) text.font = "Serif";
+                text.section = "EditboxText";
+                text.text_style.vertical = UiTextVertical::centre;
+                text.colours = ui_colours(c.prop("NormalTextColour"));
+                for (auto& colour : text.colours) colour[3] *= w.effective_alpha;
+                c.out.draws.push_back(std::move(text));
+            } catch (const std::exception& e) {
+                c.out.diagnostics.push_back(e.what());
+            }
+        }
     } else c.state(w.enabled?"Enabled":"Disabled");
     // The compiler above expands sections; RenderCache::render @0xf48a0
     // then visits the image cache before the text cache FOR THIS WINDOW.
@@ -422,6 +542,49 @@ UiSkinFrame UiSkin::compile(UiResources& resources,const UiResolvedWidget& w,UiS
     std::stable_partition(c.out.draws.begin(),c.out.draws.end(),[](const UiSkinDraw& q){
         return q.kind==UiSkinDraw::Kind::image;
     });
+    if(thumb) {
+        auto child=compile(resources,*thumb,input,width,height);
+        c.out.draws.insert(c.out.draws.end(),child.draws.begin(),child.draws.end());
+        c.out.states.insert(c.out.states.end(),child.states.begin(),child.states.end());
+        c.out.diagnostics.insert(c.out.diagnostics.end(),child.diagnostics.begin(),child.diagnostics.end());
+    }
     return std::move(c.out);
+}
+std::array<UiSkinVertex, 6> ui_quad_vertices(UiRect r, UiRect uv, const UiColours& c) {
+    const UiSkinVertex tl{r.x,r.y,uv.x,uv.y,c[0]};
+    const UiSkinVertex tr{r.x+r.width,r.y,uv.x+uv.width,uv.y,c[1]};
+    const UiSkinVertex bl{r.x,r.y+r.height,uv.x,uv.y+uv.height,c[2]};
+    const UiSkinVertex br{r.x+r.width,r.y+r.height,uv.x+uv.width,uv.y+uv.height,c[3]};
+    // original-code: RenderCache::render @0xf497b supplies QuadSplitMode=0.
+    return {tl, bl, br, tl, br, tr};
+}
+UiSkinCache::UiSkinCache(UiResources& resources) : resources_(&resources) {
+    subscription_ = resources.subscribe_window_cache([this](const std::string& name) {
+        for (auto it = entries_.begin(); it != entries_.end();) {
+            if (it->second.widget.name == name) it = entries_.erase(it);
+            else ++it;
+        }
+    });
+}
+UiSkinCache::~UiSkinCache() { resources_->unsubscribe_window_cache(subscription_); }
+const UiSkinFrame& UiSkinCache::compile(const UiResolvedWidget& w, UiSkinState state,
+                                       int width, int height) {
+    const auto signature = [](const UiResolvedWidget& a) {
+        return std::tie(a.type,a.text,a.image,a.font,a.visible,a.enabled,a.properties,
+                        a.effective_alpha,a.has_clip,a.rect.x,a.rect.y,a.rect.width,a.rect.height,
+                        a.clip.x,a.clip.y,a.clip.width,a.clip.height);
+    };
+    const auto key = w.name + '\0' + w.type;
+    auto it = entries_.find(key);
+    if (it != entries_.end()) {
+        const auto& e = it->second;
+        if (e.width==width && e.height==height && e.state.hover==state.hover &&
+            e.state.pushed==state.pushed && e.state.selected==state.selected &&
+            signature(e.widget)==signature(w)) return e.frame;
+    }
+    auto frame = resources_->skin().compile(*resources_, w, state, width, height);
+    ++compile_count_;
+    if (it == entries_.end() && entries_.size() >= 512) entries_.clear();
+    return entries_.insert_or_assign(key, Entry{w,state,width,height,std::move(frame)}).first->second.frame;
 }
 } // namespace torchlight

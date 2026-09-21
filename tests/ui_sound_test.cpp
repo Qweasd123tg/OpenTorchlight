@@ -1,0 +1,87 @@
+#include "torchlight/pak_archive.hpp"
+#include "torchlight/ui_sound.hpp"
+
+#include <cmath>
+#include <iostream>
+#include <stdexcept>
+#include <string>
+
+namespace {
+void require(bool value, const char* message) {
+    if (!value) throw std::runtime_error(message);
+}
+void put16(std::vector<std::uint8_t>& bytes, std::uint16_t value) {
+    bytes.push_back(static_cast<std::uint8_t>(value));
+    bytes.push_back(static_cast<std::uint8_t>(value >> 8U));
+}
+void put32(std::vector<std::uint8_t>& bytes, std::uint32_t value) {
+    put16(bytes, static_cast<std::uint16_t>(value));
+    put16(bytes, static_cast<std::uint16_t>(value >> 16U));
+}
+std::vector<std::uint8_t> wav() {
+    std::vector<std::uint8_t> result;
+    const auto tag = [&](const char* text) {
+        result.insert(result.end(), text, text + 4);
+    };
+    tag("RIFF"); put32(result, 40); tag("WAVE");
+    tag("fmt "); put32(result, 16); put16(result, 1); put16(result, 1);
+    put32(result, 44100); put32(result, 88200); put16(result, 2); put16(result, 16);
+    tag("data"); put32(result, 4); put16(result, 16384); put16(result, 32767);
+    return result;
+}
+} // namespace
+
+int main(int argc, char** argv) {
+    try {
+        require(argc == 1 || argc == 2, "usage: ui_sound_test [original-pak.zip]");
+        const auto decoded = torchlight::UiSoundPlayer::decode_pcm16_wav(wav());
+        require(decoded.sample_rate == 44100U && decoded.channels == 1U &&
+                    decoded.samples.size() == 2U && decoded.samples[0] == 16384 &&
+                    decoded.samples[1] == 32767,
+                "bounded PCM16 WAV decoder changed");
+
+        torchlight::VolatileRandom random(0x12345678U);
+        const auto gain = torchlight::UiSoundPlayer::channel_gain(0.2F, 0.2F, random);
+        require(gain >= 0.2F && gain < 0.4F && random.state() != 0x12345678U,
+                "original additive [volume,volume+variation) gain changed");
+        torchlight::VolatileRandom capped_random(7U);
+        require(torchlight::UiSoundPlayer::channel_gain(0.9F, 0.2F, capped_random) <= 1.0F,
+                "channel gain lost original min(result,1) cap");
+
+        auto sound = decoded;
+        std::vector<torchlight::UiSoundVoice> voices{{&sound, 0U, 1.0F}};
+        auto mixed = torchlight::UiSoundPlayer::mix(voices, 2U, 0.5F, false);
+        require(mixed.size() == 4U && mixed[0] == 8192 && mixed[1] == 8192 &&
+                    mixed[2] == 16383 && mixed[3] == 16383 && voices.empty(),
+                "mono one-shot mix/group gain or completion changed");
+        voices.push_back({&sound, 0U, 1.0F});
+        mixed = torchlight::UiSoundPlayer::mix(voices, 1U, 1.0F, true);
+        require(mixed[0] == 0 && mixed[1] == 0,
+                "sound group mute did not silence an active voice");
+
+        if (argc == 1) {
+            std::cout << "PASS: PCM16 decode, additive gain, mute and mixer completion\n";
+            return 0;
+        }
+        const torchlight::PakArchive archive(argv[1]);
+        // Constructor parses resources and starts no output thread/device.
+        torchlight::UiSoundPlayer player(archive);
+        const auto& open = player.sound(torchlight::DropdownSoundRequest::open);
+        const auto& close = player.sound(torchlight::DropdownSoundRequest::close);
+        require(open.sample_rate == 44100U && open.channels == 1U &&
+                    open.samples.size() == 30622U && close.sample_rate == 44100U &&
+                    close.channels == 1U && close.samples.size() == 27986U,
+                "CenterOpen/CenterClose WAV resources changed");
+        require(std::abs(open.volume - 0.2F) < 0.000001F &&
+                    std::abs(open.volume_variation - 0.2F) < 0.000001F &&
+                    std::abs(close.volume - 0.2F) < 0.000001F &&
+                    std::abs(close.volume_variation - 0.2F) < 0.000001F,
+                "UI.DAT channel gain parameters changed");
+        player.stop();
+        std::cout << "PASS: UI.DAT mapping, PCM16 decode, original additive gain and bounded mixer\n";
+        return 0;
+    } catch (const std::exception& error) {
+        std::cerr << error.what() << '\n';
+        return 1;
+    }
+}

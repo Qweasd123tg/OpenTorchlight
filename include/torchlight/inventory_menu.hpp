@@ -1,5 +1,7 @@
 #pragma once
 #include "torchlight/panel_open.hpp"
+#include "torchlight/inventory_events.hpp"
+#include <array>
 
 namespace torchlight {
 // original-code: CInventoryMenu::setOpen @0xb4eb70 with tabs from onClick
@@ -12,7 +14,9 @@ namespace torchlight {
 // PanelOpenState with the inventory profile, so there is exactly one
 // implementation of the family skeleton. Tab clicks stay here: values
 // 0x0e/0x0f/0x10 come from the analyzed inventory onClick only.
-// Boundary: see panel_open.hpp. Not ported: CEGUI/Ogre/model/sound/tip sinks.
+// Boundary: see panel_open.hpp and research/inventory-ui-preview.md. Tab
+// imagery/visibility has an opt-in static-resource consumer. Full CEGUI,
+// Ogre/model/sound/tip sinks and original animated positioning remain open.
 enum class InventoryMenuTab : int {
     backpack = 0x0e, // TabBackpack strings precede the +0x9120 writer
     spells = 0x0f, // TabSpell strings precede the +0x9128 writer
@@ -46,7 +50,7 @@ struct InventoryMenuEffects {
     bool queue_tip = false;
 };
 
-class InventoryMenuState {
+class InventoryMenuState : private InventoryTabSink {
 public:
     [[nodiscard]] bool open() const noexcept { return state_.open(); }
     [[nodiscard]] bool aux() const noexcept { return state_.aux(); }
@@ -55,14 +59,27 @@ public:
     [[nodiscard]] const PanelViewport &viewport() const noexcept { return state_.viewport(); }
 
     InventoryMenuEffects set_open(bool open, bool close_playing);
-    // Tab clicks (onClick 0x0e/0x0f/0x10) are ported but have no caller yet:
-    // the port has no clickable tab widgets, and no synthetic key is
-    // invented for them. Connect when tabs become clickable.
+    // Called by the opt-in resource UI's real MouseButtonDown route.
     bool click_tab(int layout_function);
     bool ensure_viewport(int width_px, int height_px, float yratio);
+    [[nodiscard]] bool tab_selected(std::size_t i) const { return selected_.at(i); }
+    [[nodiscard]] bool container_visible(std::size_t i) const { return visible_.at(i); }
+    [[nodiscard]] bool tab_alert(std::size_t i) const { return alerts_.at(i); }
+    [[nodiscard]] bool restored_image(std::size_t i) const { return restored_.at(i); }
+    [[nodiscard]] unsigned layout_revision() const { return layout_revision_; }
 
 private:
+    void select(std::size_t i, bool value) override { selected_.at(i) = value; }
+    void show(std::size_t i, bool value) override { visible_.at(i) = value; }
+    void clear_alert(std::size_t i) override { alerts_.at(i) = false; }
+    void restore_unselected_image(std::size_t i) override { restored_.at(i) = true; }
+    // Consumer re-resolves the resource UI from this state; full original
+    // icon/tooltip updateLayout effects remain open.
+    void update_layout() override { ++layout_revision_; }
     PanelOpenState state_{panel_profile_inventory()};
     InventoryMenuTab tab_ = InventoryMenuTab::backpack;
+    std::array<bool, 3> selected_{true, false, false}, visible_{true, false, false};
+    std::array<bool, 3> alerts_{}, restored_{};
+    unsigned layout_revision_ = 0;
 };
 } // namespace torchlight
