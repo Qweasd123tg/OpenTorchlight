@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "scope_complete": false,
+  "meaning": "Secondary smoke/compatibility inventory of the existing playable slices, NOT code-first completion or scheduling authority. Whole-function acceptance lives in function-transfer.json completion; current scope is ui-contour.json. Tests prove named slices only and never promote full restoration.",
+  "capabilities": [
+    {
+      "id": "resources", "title": "Ресурсы и сцена", "stage": "partial",
+      "boundary": "Чтение настоящего pak, UNIT, геометрии, скелетов и анимаций; не полное представление оригинала.",
+      "code": ["src/pak_archive.cpp", "src/unit_definition.cpp", "src/skeletal_animation.cpp"],
+      "evidence": ["research/remaining-work-inventory.md"],
+      "tests": ["original_pak_archive", "original_unit_definitions", "original_ogre_meshes", "original_skeletal_animation"],
+      "blockers": ["Полный blend graph, attachments и специальные состояния", "Материалы, частицы и прочие визуальные ветви не закрыты целиком"]
+    },
+    {
+      "id": "loop-save", "title": "Основной цикл и сохранение", "stage": "partial",
+      "boundary": "New/Continue, переносимое OTC-состояние, межпроцессные проверки; не совместимость с оригинальным SVB.",
+      "code": ["src/application.cpp", "src/checkpoint.cpp", "src/save_store.cpp"],
+      "evidence": ["research/skill-production-dispatch.md", "research/checkpoint-format.md"],
+      "tests": ["frontend_campaign_cycle", "save_fresh_process", "save_atomic_process", "original_frontend_checkpoint"],
+      "blockers": ["Исходный формат сохранений не восстановлен", "Состояния полной кампании/квестов и transient skill missiles не сериализуются; сохранение при летящих skill missiles запрещено"]
+    },
+    {
+      "id": "combat", "title": "Бой и развитие", "stage": "partial",
+      "boundary": "Обычный HIT, численные damage/defense ветви, XP и переносимое развитие; не полный combat pipeline.",
+      "code": ["src/combat.cpp", "src/typed_damage.cpp", "src/progression.cpp"],
+      "evidence": ["FULL_GAME_ROADMAP_RU.md", "research/skill-production-dispatch.md"],
+      "tests": ["ordinary_combat", "typed_damage_cycle", "original_typed_damage_comparison", "reward_fresh_process"],
+      "blockers": ["Полные crit/block/glancing/proc/reflect и target gates", "Специальный AI, группы и боссы"]
+    },
+    {
+      "id": "skills", "title": "Умения, эффекты и снаряды", "stage": "partial",
+      "boundary": "Infuse и ограниченный resource-driven SEEKING: START → настоящий HIT → missile → HP. Числовые сравнения не закрывают lifecycle.",
+      "code": ["src/skills.cpp", "src/skill_event_program.cpp", "src/skill_event_runtime.cpp", "src/missile_runtime.cpp"],
+      "evidence": ["research/skill-production-dispatch.md"],
+      "tests": ["original_skill_event_program", "original_skill_production", "original_skill_weapon_damage_comparison", "application_skill_projectile_render"],
+      "blockers": ["SEEKING COUNT=3 пока один запуск; timing/spread/anchor/homing открыты", "Общий lifecycle эффектов и все семейства навыков", "Полное соответствие порядка UNITDIE и target gates"]
+    },
+    {
+      "id": "services", "title": "Предметы и услуги NPC", "stage": "partial",
+      "boundary": "Инвентарь, экипировка и ограниченная покупка зелий Тарна; цены проверены отдельно от полноты торговли.",
+      "code": ["src/inventory.cpp", "src/merchant.cpp", "src/economy.cpp"],
+      "evidence": ["FULL_GAME_ROADMAP_RU.md"],
+      "tests": ["inventory_instances", "original_merchant_purchases", "original_economy_comparison", "application_services_render"],
+      "blockers": ["Полные buy/sell/stock, stash, enchant/combine", "Все affix/requirements/socket/identification ветви", "Полный жизненный цикл питомца"]
+    },
+    {
+      "id": "campaign", "title": "Квесты и кампания", "stage": "open",
+      "boundary": "Есть каталог и ограниченные controller flags; это не прохождение заданий или кампании.",
+      "code": ["src/quests.cpp", "src/level_transition.cpp"],
+      "evidence": ["FULL_GAME_ROADMAP_RU.md"],
+      "tests": ["quest_requirements", "original_quest_controllers"],
+      "blockers": ["Диалоги, цели, награды и автоматическое завершение заданий", "Боссы, campaign gates и финал", "Сквозное прохождение без тестовой выдачи XP/золота"]
+    },
+    {
+      "id": "presentation", "title": "Интерфейс, звук и эффекты", "stage": "partial",
+      "boundary": "Частично подключённые UI-профили, скины, текст и музыка; не полный исходный UI/FX.",
+      "code": ["src/ui_hud.cpp", "src/ui_skin.cpp", "src/music.cpp"],
+      "evidence": ["research/sink-backlog.md", "research/ui-contour.json"],
+      "tests": ["ui_skin_contract", "ui_hud_input", "original_music_tracks", "gles_skin_button_render"],
+      "blockers": ["Полные menu/window/event/tooltip пути", "SFX sinks, particles, lighting и все renderer states", "Полный визуальный differential, а не только собственные snapshots"]
+    },
+    {
+      "id": "release", "title": "Платформы и выпуск", "stage": "open",
+      "boundary": "Headless GLES-сценарии не доказывают desktop input или готовность Android.",
+      "code": ["src/application.cpp"],
+      "evidence": ["FULL_GAME_ROADMAP_RU.md", "research/automatic-verification.md"],
+      "tests": [],
+      "blockers": ["Свежая полная оконная проверка и длительная игровая сессия", "Android lifecycle/touch/packaging и измерения на устройстве", "Реестр ещё не исчерпывает все требования выпуска"]
+    }
+  ]
+}

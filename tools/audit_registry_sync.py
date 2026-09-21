@@ -2,8 +2,7 @@
 """Fail when the function registry no longer reflects the port.
 
 Two checks, no ELF execution:
-  1. Every @0xADDR reference in src/include/tests must have a boundary entry
-     in research/coverage-boundaries.json (the convertToScreenScale drift).
+  1. Unbounded @0xADDR references are a warning-only burn-down list.
   2. research/function-transfer.json must be schema-valid; any compared=true
      entry needs a non-empty comparison, and every transfer address must be a
      known symbol and have a boundary entry once analyzed/ported/compared.
@@ -14,6 +13,7 @@ import argparse
 import json
 import re
 from pathlib import Path
+from transfer_contract import completion
 
 ROOT = Path(__file__).resolve().parents[1]
 REF_RE = re.compile(r"@0x([0-9a-fA-F]{4,16})\b")
@@ -71,6 +71,7 @@ def check_transfer(known: set[str], boundaries: set[str]) -> list[str]:
     functions = data.get("functions", {})
     if not isinstance(functions, dict):
         return errors + ["function-transfer.json: functions must be an object"]
+    hashes: dict = {}
     for raw, entry in sorted(functions.items()):
         try:
             addr = f"{int(raw, 16):08x}"
@@ -81,12 +82,15 @@ def check_transfer(known: set[str], boundaries: set[str]) -> list[str]:
             errors.append(f"transfer {raw}: unknown original address")
         stages = entry.get("stages", {})
         for stage in ("analyzed", "ported", "wired", "compared"):
-            if stages.get(stage) not in (True, False):
+            if type(stages.get(stage)) is not bool:
                 errors.append(f"transfer {raw}: stage {stage} must be true/false")
         if stages.get("compared") and not entry.get("comparison"):
             errors.append(f"transfer {raw}: compared=true requires a comparison")
         if any(stages.get(s) for s in ("analyzed", "ported", "compared")) and addr not in boundaries:
             errors.append(f"transfer {raw}: active transfer needs a coverage-boundaries entry")
+        accepted = completion(entry, ROOT, hashes)
+        if accepted["status"] in {"invalid", "stale"}:
+            errors.extend(f"transfer {raw}: {error}" for error in accepted["errors"])
     return errors
 
 

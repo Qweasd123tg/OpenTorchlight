@@ -1,7 +1,9 @@
 # Upstream source matching + static pipeline, layer 1
 
 ELF SHA-256 `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
-All reads static; game never executed. Toolchain lives OUTSIDE the repo
+Initial inventory reads were static; game never executed. The later
+[source pilot](lodepng-source-pilot.md) executes two isolated original
+functions against pinned upstream source. Toolchain lives OUTSIDE the repo
 (`~/.local/toolchain`, never committed).
 
 ## 1. Library inventory (tool `tools/lib_inventory.py`, data `lib-inventory.*`)
@@ -57,9 +59,13 @@ New working layout:
 - Next: scripted export pass (decomp/ASM/CFG/callers/callees/xrefs/strings/
   field refs → JSON per function). Full auto-analysis is RAM-risky here
   (7 GB box, ~1 GB free) — run sharded or with capped analyzers.
-- BSim ships with Ghidra (`support/bsim`) but needs PostgreSQL, which is NOT
-  installed (no sudo/apt) — BSim/BinDiff stay "scripts-ready, DB pending";
-  no vapor was added for them.
+- Correction (2026-09-19): BSim does **not** require PostgreSQL. Its local
+  H2 backend needs no database server and accepts local Ghidra projects
+  ([official BSim introduction](https://ghidra.re/ghidra_docs/GhidraClass/BSim/BSimTutorial_Intro.html)).
+  No BSim match is claimed here; use it for candidate discovery when symbols
+  and source pins are insufficient. Similarity is not behavioral equivalence.
+  Tool paths above are the historical 2026-09-18 report, not a current
+  installation guarantee.
 
 ## 5. Open / next
 

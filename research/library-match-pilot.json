@@ -1,0 +1,629 @@
+{
+  "schema": 1,
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "query_export_sha256": "747b2fffc98588e2ec7db877bac370818d97805587d2bf11572f0a69616e2101",
+  "candidate_export_sha256": "97f28da468c3585e54adca8bd842698fb8d348136d1484cda999083ac34a188e",
+  "candidate_elf_sha256": "8a27d70835a47d0d98822db0b92de1f41df6c249daad5030da3a17b36846c7cc",
+  "targets_sha256": "bfa053980b7d1c90f2b35f96a2b3d12dba9c2066eb77fc3b1cf67ef71e51c2fa",
+  "ghidra_version": "12.1.3",
+  "weights_sha256": "1b0795effc4f696082faca3a2145e714c1b120aed7461a0f32d3ba29a0056912",
+  "analysis_completeness": "not established by feature exports; inspect headless analysis logs",
+  "signature_settings": 73,
+  "candidate_count": 150,
+  "candidate_bsim_statuses": {
+    "ok": 149,
+    "incomplete_instructions": 1
+  },
+  "query_count": 20,
+  "outcomes": {
+    "different_top_candidate": 10,
+    "expected_unique_top": 7,
+    "expected_in_top_tie": 3
+  },
+  "fid_query_available_count": 20,
+  "fid_expected_specific_unique_count": 1,
+  "candidate_feature_seconds": 2.945084467,
+  "query_and_compare_seconds": 0.476436962,
+  "known_tail_reference": {
+    "target": "0x00d04610",
+    "caller": "0x00a0adc0",
+    "site": "0x00a0ae8c",
+    "instruction": "JMP 0x00d04610",
+    "incoming_types": [
+      "UNCONDITIONAL_CALL"
+    ],
+    "recorded_incoming_count": 5,
+    "manifest_sha256": "a62ef756cd45449908e1351112bff7634c09402c588ded0b7393d73cd05c8f1a",
+    "scope": "known tail jump and recorded entry references, not all runtime callers"
+  },
+  "functions": [
+    {
+      "address": "0x00f633c0",
+      "expected_symbol": "lodepng_read32bitInt",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 27.72820651521863,
+      "expected_rank": 70,
+      "expected_score": {
+        "address": "0x00104060",
+        "name": "lodepng_read32bitInt",
+        "similarity": 0.04292808385069796,
+        "significance": 2.2055723680155923
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.2799785538164888,
+          "significance": 9.311830382289825
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63550",
+      "expected_symbol": "lodepng_compress_settings_init",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 18.878597897244745,
+      "expected_rank": 7,
+      "expected_score": {
+        "address": "0x00108700",
+        "name": "lodepng_compress_settings_init",
+        "similarity": 0.3382882317548409,
+        "significance": 8.14725910922288
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010f600",
+          "name": "lodepng_encoder_settings_init",
+          "similarity": 0.48166202018400006,
+          "significance": 10.534051147221177
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63580",
+      "expected_symbol": "lodepng_decompress_settings_init",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 15.76162017438902,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x00108730",
+        "name": "lodepng_decompress_settings_init",
+        "similarity": 0.5881360980678135,
+        "significance": 10.217980055912903
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x00108730",
+          "name": "lodepng_decompress_settings_init",
+          "similarity": 0.5881360980678135,
+          "significance": 10.217980055912903
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f635a0",
+      "expected_symbol": "lodepng_crc32",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 85.63443482191147,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x00108750",
+        "name": "lodepng_crc32",
+        "similarity": 0.28848832004495273,
+        "significance": 13.441572458709928
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x00108750",
+          "name": "lodepng_crc32",
+          "similarity": 0.28848832004495273,
+          "significance": 13.441572458709928
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63640",
+      "expected_symbol": "lodepng_chunk_length",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 27.72820651521863,
+      "expected_rank": 107,
+      "expected_score": {
+        "address": "0x001087b0",
+        "name": "lodepng_chunk_length",
+        "similarity": 0.0,
+        "significance": 0.6284496741041554
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.2799785538164888,
+          "significance": 9.311830382289825
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63660",
+      "expected_symbol": "lodepng_chunk_type",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 26.19065404880021,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x001087c0",
+        "name": "lodepng_chunk_type",
+        "similarity": 0.4140442815720379,
+        "significance": 11.274029756682204
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087c0",
+          "name": "lodepng_chunk_type",
+          "similarity": 0.4140442815720379,
+          "significance": 11.274029756682204
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63680",
+      "expected_symbol": "lodepng_chunk_ancillary",
+      "bsim_status": "ok",
+      "outcome": "expected_in_top_tie",
+      "self_significance": 13.211429826388134,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x00108840",
+        "name": "lodepng_chunk_ancillary",
+        "similarity": 1.0,
+        "significance": 13.211429826388134
+      },
+      "top_tie_count": 3,
+      "top_candidates": [
+        {
+          "address": "0x00108840",
+          "name": "lodepng_chunk_ancillary",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108850",
+          "name": "lodepng_chunk_private",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108860",
+          "name": "lodepng_chunk_safetocopy",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63690",
+      "expected_symbol": "lodepng_chunk_private",
+      "bsim_status": "ok",
+      "outcome": "expected_in_top_tie",
+      "self_significance": 13.211429826388134,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x00108850",
+        "name": "lodepng_chunk_private",
+        "similarity": 1.0,
+        "significance": 13.211429826388134
+      },
+      "top_tie_count": 3,
+      "top_candidates": [
+        {
+          "address": "0x00108840",
+          "name": "lodepng_chunk_ancillary",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108850",
+          "name": "lodepng_chunk_private",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108860",
+          "name": "lodepng_chunk_safetocopy",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f636a0",
+      "expected_symbol": "lodepng_chunk_safetocopy",
+      "bsim_status": "ok",
+      "outcome": "expected_in_top_tie",
+      "self_significance": 13.211429826388134,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x00108860",
+        "name": "lodepng_chunk_safetocopy",
+        "similarity": 1.0,
+        "significance": 13.211429826388134
+      },
+      "top_tie_count": 3,
+      "top_candidates": [
+        {
+          "address": "0x00108840",
+          "name": "lodepng_chunk_ancillary",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108850",
+          "name": "lodepng_chunk_private",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        },
+        {
+          "address": "0x00108860",
+          "name": "lodepng_chunk_safetocopy",
+          "similarity": 1.0,
+          "significance": 13.211429826388134
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f636d0",
+      "expected_symbol": "lodepng_chunk_check_crc",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 61.42888114208798,
+      "expected_rank": 94,
+      "expected_score": {
+        "address": "0x00108890",
+        "name": "lodepng_chunk_check_crc",
+        "similarity": 0.01971742636500694,
+        "significance": -0.8321953469563157
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.18026041901372375,
+          "significance": 4.262888347890807
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63730",
+      "expected_symbol": "lodepng_chunk_generate_crc",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 51.97107806577926,
+      "expected_rank": 77,
+      "expected_score": {
+        "address": "0x001088d0",
+        "name": "lodepng_chunk_generate_crc",
+        "similarity": 0.03602340180738872,
+        "significance": -0.7532746138122199
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.20280101018878519,
+          "significance": 6.328043035760572
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63790",
+      "expected_symbol": "lodepng_chunk_next",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 32.26648579521864,
+      "expected_rank": 107,
+      "expected_score": {
+        "address": "0x00108900",
+        "name": "lodepng_chunk_next",
+        "similarity": 0.0,
+        "significance": 1.7908599012738913
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.2543834858478639,
+          "significance": 8.65936342921059
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f637c0",
+      "expected_symbol": "lodepng_chunk_next_const",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 32.26648579521864,
+      "expected_rank": 107,
+      "expected_score": {
+        "address": "0x00108920",
+        "name": "lodepng_chunk_next_const",
+        "similarity": 0.0,
+        "significance": 1.7908599012738913
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001087e0",
+          "name": "lodepng_chunk_type_equals",
+          "similarity": 0.2543834858478639,
+          "significance": 8.65936342921059
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63840",
+      "expected_symbol": "lodepng_color_mode_init",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 21.420729423882996,
+      "expected_rank": 10,
+      "expected_score": {
+        "address": "0x00108fc0",
+        "name": "lodepng_color_mode_init",
+        "similarity": 0.20794708250257357,
+        "significance": 5.817861559868547
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010f600",
+          "name": "lodepng_encoder_settings_init",
+          "similarity": 0.35032978591958036,
+          "significance": 8.393237938007072
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63910",
+      "expected_symbol": "lodepng_get_bpp",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 25.32271249857364,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x001091a0",
+        "name": "lodepng_get_bpp",
+        "similarity": 0.9999999999999998,
+        "significance": 25.322712498573637
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x001091a0",
+          "name": "lodepng_get_bpp",
+          "similarity": 0.9999999999999998,
+          "significance": 25.322712498573637
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63930",
+      "expected_symbol": "lodepng_get_channels",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 22.307217450848324,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x0010a520",
+        "name": "lodepng_get_channels",
+        "similarity": 1.0,
+        "significance": 22.307217450848324
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010a520",
+          "name": "lodepng_get_channels",
+          "similarity": 1.0,
+          "significance": 22.307217450848324
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63950",
+      "expected_symbol": "lodepng_is_greyscale_type",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 13.848297481627863,
+      "expected_rank": 2,
+      "expected_score": {
+        "address": "0x0010a540",
+        "name": "lodepng_is_greyscale_type",
+        "similarity": 0.27439673839801926,
+        "significance": 6.555315392316663
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010a560",
+          "name": "lodepng_is_palette_type",
+          "similarity": 0.5398327342225941,
+          "significance": 8.470119508321254
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63970",
+      "expected_symbol": "lodepng_is_alpha_type",
+      "bsim_status": "ok",
+      "outcome": "different_top_candidate",
+      "self_significance": 12.715935597395251,
+      "expected_rank": 13,
+      "expected_score": {
+        "address": "0x0010a550",
+        "name": "lodepng_is_alpha_type",
+        "similarity": 0.12558608803737997,
+        "significance": 5.196451769970281
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010a560",
+          "name": "lodepng_is_palette_type",
+          "similarity": 0.34665671930069664,
+          "significance": 6.90070862815782
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    },
+    {
+      "address": "0x00f63980",
+      "expected_symbol": "lodepng_is_palette_type",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 11.012976903950156,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x0010a560",
+        "name": "lodepng_is_palette_type",
+        "similarity": 1.0,
+        "significance": 11.012976903950156
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010a560",
+          "name": "lodepng_is_palette_type",
+          "similarity": 1.0,
+          "significance": 11.012976903950156
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [
+        {
+          "address": "0x0010a560",
+          "name": "lodepng_is_palette_type"
+        }
+      ],
+      "fid_specific_matches": [
+        {
+          "address": "0x0010a560",
+          "name": "lodepng_is_palette_type"
+        }
+      ]
+    },
+    {
+      "address": "0x00f63990",
+      "expected_symbol": "lodepng_has_palette_alpha",
+      "bsim_status": "ok",
+      "outcome": "expected_unique_top",
+      "self_significance": 38.60285919490727,
+      "expected_rank": 1,
+      "expected_score": {
+        "address": "0x0010a570",
+        "name": "lodepng_has_palette_alpha",
+        "similarity": 0.3697918640873808,
+        "significance": 12.772954621622162
+      },
+      "top_tie_count": 1,
+      "top_candidates": [
+        {
+          "address": "0x0010a570",
+          "name": "lodepng_has_palette_alpha",
+          "similarity": 0.3697918640873808,
+          "significance": 12.772954621622162
+        }
+      ],
+      "compared_candidates": 149,
+      "fid_available": true,
+      "fid_full_matches": [],
+      "fid_specific_matches": []
+    }
+  ],
+  "completion_statuses_changed": false,
+  "boundary": "symbol-label retrieval on a pinned source candidate; neither source-version proof nor semantic equivalence"
+}

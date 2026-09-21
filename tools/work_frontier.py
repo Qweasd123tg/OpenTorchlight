@@ -10,8 +10,8 @@ Inputs are read-only: coverage.tsv, function-transfer.json, original-symbols.txt
 original callgraph/callsites when present.  The tool never promotes statuses.
 
 Examples:
-  python3 tools/work_frontier.py --out research/work-frontier.md --json research/work-frontier.json
-  python3 tools/work_frontier.py --subsystem frontend --top 40
+  python3 tools/work_frontier.py --out build-verification/work-frontier.md
+  python3 tools/work_frontier.py --scope all --top 40
 """
 from __future__ import annotations
 
@@ -21,6 +21,9 @@ import json
 import re
 from collections import Counter, defaultdict
 from pathlib import Path
+from automation_state import validate_output
+from transfer_contract import completion, in_scope, load_scope
+import auto_triage
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -108,8 +111,11 @@ def implementation_group(item: dict) -> str:
     return item["address"]
 
 
-def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bool = False) -> dict:
+def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bool = False,
+          scope_name: str = "ui") -> dict:
+    scope = load_scope(root, scope_name)
     rows = [r for r in load_coverage(root) if not r["address"].startswith("port:")]
+    rows = [r for r in rows if in_scope(r["symbol"], r["address"], scope)]
     if subsystem:
         rows = [r for r in rows if r.get("subsystem") == subsystem]
     transfer = load_transfer(root)
@@ -119,11 +125,16 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
     analyzed_only = []
     families: dict[str, list[dict]] = defaultdict(list)
     noise = Counter()
+    completion_counts = Counter()
+    whole_function_open = []
+    hashes: dict = {}
 
     for r in rows:
         address = addr_key(r["address"])
         entry = transfer.get(address)
         a, p, w, c = stages(entry)
+        accepted = completion(entry, root, hashes)
+        completion_counts[accepted["status"]] += 1
         item = {
             "address": address,
             "symbol": r["symbol"],
@@ -136,7 +147,10 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
             "implementation": (entry or {}).get("implementation", r.get("implementation", "")),
             "tests": (entry or {}).get("tests", r.get("tests", "")),
             "notes": (entry or {}).get("notes", ""),
+            "completion": accepted,
         }
+        if entry and accepted["status"] != "reviewed_full":
+            whole_function_open.append(item)
         if p and not w:
             integration.append(item)
         if w and not c:
@@ -181,7 +195,11 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
     integration.sort(key=lambda x: (-x["priority"], -x["incoming"], x["address"]))
     comparison.sort(key=lambda x: (-x["priority"], -x["incoming"], x["address"]))
     integration_groups_map: dict[str, list[dict]] = defaultdict(list)
-    for item in integration:
+    # Include bounded wired implementations too: reported-but-unconsumed effects
+    # must not disappear merely because wired=true was recorded for a slice.
+    for item in whole_function_open:
+        if not item["stages"]["ported"]:
+            continue
         integration_groups_map[implementation_group(item)].append(item)
     integration_groups = [
         {"implementation_group": key, "members": members}
@@ -190,6 +208,8 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
     integration_groups.sort(key=lambda g: (-len(g["members"]), g["implementation_group"]))
     analyzed_only.sort(key=lambda x: (-x["priority"], -x["incoming"], x["address"]))
     fam_rows.sort(key=lambda x: (-x["reuse_score"], -x["members"], x["method"]))
+    whole_function_open.sort(key=lambda x: (
+        x["completion"]["status"] == "unassessed", -x["priority"], x["address"]))
 
     tiny = {}
     tiny_path = root / "research/tiny-functions.json"
@@ -200,27 +220,20 @@ def build(root: Path, subsystem: str | None, min_family: int, include_vendor: bo
         except (ValueError, OSError, TypeError):
             tiny = {}
 
-    auto_triage = {}
-    triage_path = root / "research/auto-triage.json"
-    if triage_path.is_file():
-        try:
-            tj = json.loads(triage_path.read_text(encoding="utf-8"))
-            auto_triage = {
-                "total_functions": tj.get("total_functions", 0),
-                "headline": tj.get("headline", {}),
-                "primary_classes": tj.get("primary_classes", {}),
-            }
-        except (ValueError, OSError, TypeError):
-            auto_triage = {}
+    # Recompute cheap routing rather than trusting a potentially stale JSON export.
+    tj = auto_triage.build(root, min_family)
+    routing = {key: tj[key] for key in ("total_functions", "headline", "primary_classes")}
 
     return {
         "schema": 1,
         "meaning": "Work-selection aid only. Counts are not product completion percentages.",
-        "scope": {"subsystem": subsystem or "all", "functions": len(rows)},
+        "scope": {**scope, "subsystem": subsystem or "all", "functions": len(rows)},
+        "whole_function_completion": dict(sorted(completion_counts.items())),
         "technical_noise": dict(noise),
         "tiny_mechanical_shapes": tiny,
-        "auto_triage": auto_triage,
+        "auto_triage": routing,
         "near_term": {
+            "whole_function_open": whole_function_open,
             "ported_not_wired": integration,
             "integration_groups": integration_groups,
             "wired_not_compared": comparison,
@@ -236,9 +249,20 @@ def render(data: dict, top: int) -> str:
         "",
         "> This is a prioritisation aid, not a readiness percentage. It never promotes function-transfer stages.",
         "",
-        f"Scope: **{data['scope']['functions']}** original function addresses; subsystem `{data['scope']['subsystem']}`.",
+        f"Scope: `{data['scope']['name']}`, **{data['scope']['functions']}** original function addresses; subsystem `{data['scope']['subsystem']}`.",
         "",
-        "## Cheap wins: implementation exists but integration is incomplete",
+        "## Whole-function acceptance (separate from legacy slice stages)", "",
+        "Four true stages do NOT close a function. Unassessed means no full review, not no implementation.",
+        "Validated review claims are not automatic semantic proofs or a readiness percentage.", "",
+        *[f"- `{key}`: {value}" for key, value in data["whole_function_completion"].items()],
+        "", "### Tracked functions still requiring whole-function work/review", "",
+        "| Address | Function | Acceptance | Explicit remaining work |", "|---|---|---|---|",
+        *[f"| `{r['address']}` | `{r['symbol']}` | {r['completion']['status']} | " +
+          ("; ".join(r['completion']['open_items'] + r['completion']['errors']) or
+           "No structured full-function review; inspect existing boundary/notes") .replace("|", "/") + " |"
+          for r in data['near_term']['whole_function_open'][:top]],
+        "",
+        "## Existing bounded implementations requiring integration review",
         "",
     ]
     rows = data["near_term"]["ported_not_wired"][:top]
@@ -250,7 +274,7 @@ def render(data: dict, top: int) -> str:
             lines.append(f"| `{r['address']}` | `{r['symbol']}` | {r['subsystem']} | {'yes' if r['stages']['compared'] else 'no'} |")
     groups = data["near_term"].get("integration_groups", [])
     if groups:
-        lines += ["", "### Collapse those cheap wins into integration packets", "",
+        lines += ["", "### Group shared implementations for integration review", "",
                   "| Shared implementation | Functions |", "|---|---:|"]
         for g in groups:
             lines.append(f"| `{g['implementation_group']}` | {len(g['members'])} |")
@@ -272,7 +296,7 @@ def render(data: dict, top: int) -> str:
         lines.append(f"- `{k}`: {v}")
     tiny = data.get("tiny_mechanical_shapes", {})
     if tiny:
-        lines += ["", "### Tiny machine-code shapes already mechanically classified", ""]
+        lines += ["", "### Whole-binary tiny shapes (not the scoped function count)", ""]
         for k, v in sorted(tiny.items(), key=lambda kv: (-kv[1], kv[0])):
             lines.append(f"- `{k}`: {v}")
         lines.append("These still need caller/field review, but should normally be processed by pattern rather than scheduled one by one.")
@@ -280,12 +304,12 @@ def render(data: dict, top: int) -> str:
     if triage:
         h = triage.get("headline", {})
         lines += ["", "## Whole-binary automatic routing", "",
-                  "Mutually-exclusive scheduling routes from `research/auto-triage.json` (not completion):", "",
+                  "Fresh mutually-exclusive scheduling routes from coverage/tiny classifications (not completion):", "",
                   f"- no individual deep-reverse pass now: **{h.get('no_individual_deep_reverse_now', 0)}**",
                   f"- source-match before machine-code reverse: **{h.get('source_match_before_reverse', 0)}**",
                   f"- batch/target review: **{h.get('batch_before_individual', 0)}**",
                   f"- residual manual queue: **{h.get('manual_reverse_remaining', 0)}**"]
-    lines += ["", "Recommended order: **ported→wired**, then **wired→compared**, then a high-reuse family. Do not expand the global registry merely to increase coverage counts.", ""]
+    lines += ["", "Finish the current scoped family: review full-function gaps, connect every effect, compare and exercise its scenario before expanding. Stage queues above are bounded work hints, not completion or cost promises.", ""]
     return "\n".join(lines)
 
 
@@ -293,6 +317,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--root", type=Path, default=ROOT)
     ap.add_argument("--subsystem", default="")
+    ap.add_argument("--scope", choices=("ui", "all"), default="ui")
     ap.add_argument("--min-family", type=int, default=4)
     ap.add_argument("--top", type=int, default=30)
     ap.add_argument("--include-vendor", action="store_true",
@@ -300,7 +325,18 @@ def main() -> int:
     ap.add_argument("--out", type=Path)
     ap.add_argument("--json", type=Path)
     args = ap.parse_args()
-    data = build(args.root.resolve(), args.subsystem or None, args.min_family, args.include_vendor)
+    if args.top < 1 or args.min_family < 1:
+        ap.error("--top and --min-family must be positive")
+    try:
+        outputs = [p for p in (args.out, args.json) if p]
+        if len({p.resolve() for p in outputs}) != len(outputs):
+            raise ValueError("--out and --json must be different files")
+        for path in outputs:
+            validate_output(args.root, path)
+        data = build(args.root.resolve(), args.subsystem or None, args.min_family,
+                     args.include_vendor, args.scope)
+    except (OSError, ValueError) as exc:
+        ap.error(str(exc))
     text = render(data, args.top)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

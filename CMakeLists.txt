@@ -19,6 +19,7 @@ if(VORBISFILE_FOUND AND ALSA_FOUND)
 endif()
 set(TORCHLIGHT_ORIGINAL "" CACHE FILEPATH "Original Linux executable for behavioral comparison")
 set(TORCHLIGHT_GAME_DIR "" CACHE PATH "Read-only directory containing pak.zip (independent of ELF)")
+set(TORCHLIGHT_LODEPNG_SOURCE_DIR "" CACHE PATH "Optional read-only pinned lodepng checkout for the source-match pilot; never downloaded automatically")
 if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
     get_filename_component(_TORCHLIGHT_GAME_DIR "${TORCHLIGHT_ORIGINAL}" DIRECTORY)
     set(TORCHLIGHT_GAME_DIR "${_TORCHLIGHT_GAME_DIR}" CACHE PATH "Read-only directory containing pak.zip" FORCE)
@@ -840,6 +841,18 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME verification_driver
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/verification_driver_test.py)
     set_tests_properties(verification_driver PROPERTIES TIMEOUT 40)
+    add_test(NAME deterministic_automation
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/automation_test.py)
+    set_tests_properties(deterministic_automation PROPERTIES TIMEOUT 60)
+    add_test(NAME function_package_automation
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/function_package_test.py)
+    set_tests_properties(function_package_automation PROPERTIES TIMEOUT 60)
+    add_test(NAME codefirst_tools
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/codefirst_tools_test.py)
+    set_tests_properties(codefirst_tools PROPERTIES TIMEOUT 60)
+    add_test(NAME library_match_report
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/library_match_report_test.py)
+    set_tests_properties(library_match_report PROPERTIES TIMEOUT 30)
 
     set(VITALS_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/vitals.pak.zip)
     add_custom_command(OUTPUT ${VITALS_FIXTURE}
@@ -1198,9 +1211,16 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
 
     # Every registered test has an execution group. Labels describe dependency
     # and evidence, not fidelity: original_* resource tests are NOT ELF parity.
+    # Legacy UI flows are explicitly requested integration work. Pure layout,
+    # binding and command-compiler contract checks stay in core/assets.
+    set(_ot_ui_integration_tests frontend frontend_menu_resources frontend_campaign_cycle
+        original_menu_presentation original_mainmenu_controller_presentation
+        original_frontend_checkpoint gles_ui_headless gles_menu_text)
     get_property(_ot_tests DIRECTORY PROPERTY TESTS)
     foreach(_ot_test IN LISTS _ot_tests)
-        if(_ot_test MATCHES "^original_.*_comparison$" OR _ot_test STREQUAL "original_level_entry_dispatch")
+        if(_ot_test IN_LIST _ot_ui_integration_tests)
+            set_tests_properties(${_ot_test} PROPERTIES LABELS "render;ui-integration")
+        elseif(_ot_test MATCHES "^original_.*_comparison$" OR _ot_test STREQUAL "original_level_entry_dispatch")
             set_tests_properties(${_ot_test} PROPERTIES LABELS "reference")
         elseif(_ot_test MATCHES "_render$" OR _ot_test STREQUAL "gles_render_smoke")
             set_tests_properties(${_ot_test} PROPERTIES LABELS "render")
@@ -1210,10 +1230,6 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 # ~216s alone; parallel core+render load pushed it past 240s.
                 set_tests_properties(${_ot_test} PROPERTIES TIMEOUT 600)
             endif()
-        elseif(_ot_test STREQUAL "gles_ui_headless" OR _ot_test STREQUAL "gles_menu_text")
-            # Retain the historical portable UI runtime probe while making it
-            # discoverable in render as well. Its skip is NOT a pass in check.py.
-            set_tests_properties(${_ot_test} PROPERTIES LABELS "core;render")
         else()
             set_tests_properties(${_ot_test} PROPERTIES LABELS "core")
         endif()

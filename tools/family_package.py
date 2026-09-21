@@ -5,7 +5,7 @@ The point is to analyse a family once, then keep an explicit delta table for
 members.  This does not claim identical semantics just because names match.
 
 Example:
-  python3 tools/family_package.py setOpen --out research/families/setOpen.md
+  python3 tools/family_package.py setOpen --out build-verification/setOpen.md
   python3 tools/family_package.py updateLayout --subsystem frontend --out /tmp/updateLayout.md
 """
 from __future__ import annotations
@@ -14,8 +14,11 @@ import argparse
 import csv
 import json
 import re
+from functools import lru_cache
 from collections import Counter
 from pathlib import Path
+from automation_state import validate_output
+from transfer_contract import completion, in_scope, load_scope
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -39,8 +42,9 @@ def transfer(root: Path) -> dict[str, dict]:
     return json.loads(p.read_text(encoding="utf-8")).get("functions", {}) if p.is_file() else {}
 
 
-def file_mentions(root: Path, needle: str, bases: list[str], suffixes: set[str], limit: int = 12) -> list[str]:
-    hits = []
+@lru_cache(maxsize=4)
+def search_corpus(root: Path, bases: tuple[str, ...], suffixes: frozenset[str]) -> tuple:
+    corpus = []
     for base in bases:
         path = root / base
         if not path.exists():
@@ -52,11 +56,13 @@ def file_mentions(root: Path, needle: str, bases: list[str], suffixes: set[str],
                 text = f.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
-            if needle.lower() in text.lower() or needle.lower().replace("0x", "") in f.name.lower():
-                hits.append(str(f.relative_to(root)))
-                if len(hits) >= limit:
-                    return hits
-    return hits
+            corpus.append((str(f.relative_to(root)), f.name.lower(), text.lower()))
+    return tuple(corpus)
+
+
+def file_mentions(root: Path, needle: str, bases: list[str], suffixes: set[str], limit: int = 12) -> list[str]:
+    return [relative for relative, filename, text in search_corpus(root, tuple(bases), frozenset(suffixes))
+            if needle.lower() in text or needle.lower().replace("0x", "") in filename][:limit]
 
 
 def main() -> int:
@@ -64,15 +70,21 @@ def main() -> int:
     ap.add_argument("method")
     ap.add_argument("--root", type=Path, default=ROOT)
     ap.add_argument("--subsystem", default="")
+    ap.add_argument("--scope", choices=("ui", "all"), default="ui")
     ap.add_argument("--class-regex", default="")
     ap.add_argument("--out", type=Path)
     args = ap.parse_args()
     root = args.root.resolve()
+    scope = load_scope(root, args.scope)
+    if args.out:
+        validate_output(root, args.out)
     tx = transfer(root)
     rows = []
     with (root / "research/coverage.tsv").open(newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
             if r["address"].startswith("port:") or method(r["symbol"]) != args.method:
+                continue
+            if not in_scope(r["symbol"], r["address"], scope):
                 continue
             if args.subsystem and r["subsystem"] != args.subsystem:
                 continue
@@ -90,20 +102,27 @@ def main() -> int:
                 "evidence": e.get("evidence", r.get("evidence", "")),
                 "implementation": e.get("implementation", r.get("implementation", "")),
                 "notes": e.get("notes", ""),
+                "completion": completion(e, root),
                 "source_files": file_mentions(root, a, ["research/decompiled-core", "research/decompiled", "research/disassembly"], {".c", ".asm", ".txt", ".md"}),
             })
     rows.sort(key=lambda r: int(r["address"], 16))
     if not rows:
         raise SystemExit(f"no original methods named {args.method!r} in scope")
+    if len(rows) > 64:
+        raise SystemExit("family exceeds 64 members; narrow --class-regex or --subsystem")
     subs = Counter(r["subsystem"] for r in rows)
     lines = [f"# Family packet: `{args.method}`", "",
              f"Members: **{len(rows)}**. Subsystems: " + ", ".join(f"{k}={v}" for k,v in subs.most_common()) + ".", "",
-             "> Same method name is a batching hint, not proof of identical behavior. Pick a representative, then record every member delta.", "",
+             "> Same method name is a batching hint, not proof of identical behavior. Pick a representative, then record every member delta. A/P/W/C are bounded stages, not full closure.", "",
              "## Member matrix", "",
              "| Address | Class | Subsystem | A | P | W | C | Evidence/source |", "|---|---|---|:---:|:---:|:---:|:---:|---|"]
     for r in rows:
         src = r["source_files"][0] if r["source_files"] else (r["evidence"] or "—")
         lines.append(f"| `{r['address']}` | `{r['class']}` | {r['subsystem']} | {'✓' if r['analyzed'] else ''} | {'✓' if r['ported'] else ''} | {'✓' if r['wired'] else ''} | {'✓' if r['compared'] else ''} | `{src}` |")
+    lines += ["", "## Whole-function acceptance", ""]
+    lines += [f"- `{r['address']}`: {r['completion']['status']}; " +
+              ("; ".join(r['completion']['open_items'] + r['completion']['errors']) or
+               "No explicit open items here; consult the full review, not just stage flags.") for r in rows]
     lines += ["", "## Delta checklist (fill per member; do not infer from the representative)", "",
               "For each member record: early exits; field writes; constants; loop bounds; resource names; direct/indirect callees; event subscriptions; RNG source/order; ownership/lifetime; error path; side effects; caller wiring.", "",
               "## Suggested workflow", "",

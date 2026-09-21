@@ -13,6 +13,36 @@ check = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(check)
 
 class Driver(unittest.TestCase):
+    def test_default_and_positional_directory_keep_integration_explicit(self):
+        for argv, expected in [([], {'core'}), (['--core'], {'core'}),
+                               (['/external/game'], {'core', 'assets', 'reference'}),
+                               (['--render'], {'render'}), (['--desktop'], {'desktop'}),
+                               (['/external/game', '--render'], {'core', 'assets', 'reference', 'render'}),
+                               (['--all'], set(check.GROUPS))]:
+            with self.subTest(argv=argv):
+                groups = check.requested_groups(check.parser().parse_args(argv))
+                self.assertEqual(groups, expected)
+                self.assertIn('-DTORCHLIGHT_ENABLE_RENDER=' +
+                              ('ON' if groups & {'render', 'desktop'} else 'OFF'),
+                              check.adapter_options(groups))
+                self.assertIn('-DTORCHLIGHT_ENABLE_DESKTOP=' +
+                              ('ON' if 'desktop' in groups else 'OFF'), check.adapter_options(groups))
+
+    def test_repeatable_named_selection(self):
+        args = check.parser().parse_args(['--test', 'layout', '--test', 'binding'])
+        self.assertEqual(args.test, ['layout', 'binding'])
+        self.assertIsNone(args.changed)
+        self.assertIsNone(args.since_report)
+
+    def test_evidence_roles_are_independent_of_name_and_green_status(self):
+        for labels, expected in [(['core'], 'unit-regression'),
+                                 (['assets'], 'resource-contract'),
+                                 (['core', 'render'], 'integration-regression'),
+                                 (['desktop'], 'integration-regression'),
+                                 (['reference'], 'bounded-reference-comparison')]:
+            test = {'name': 'original_everything_complete', 'properties': [
+                {'name': 'LABELS', 'value': labels}]}
+            self.assertEqual(check.evidence_role(test), expected)
     def test_required_inputs_are_not_green(self):
         for argument in ('--assets', '--reference'):
             with self.subTest(argument=argument), tempfile.TemporaryDirectory() as folder:
@@ -25,6 +55,7 @@ class Driver(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0, result.stdout)
                 data = json.loads(report.read_text())
                 self.assertEqual(data['groups'][argument[2:]]['status'], 'NOT RUN')
+                self.assertEqual(data['assessment']['original_status_promotions'], 0)
                 self.assertFalse((base / 'never-built/CMakeCache.txt').exists())
                 self.assertIn('NOT RUN', result.stdout)
 

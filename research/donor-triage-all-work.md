@@ -1,5 +1,9 @@
 # Триаж архива OpenTorchlight-all-work-reconciled.zip
 
+> Историческая приёмка конкретного архива, не действующая очередь задач.
+> Текущие границы и инструменты: [code-first.md](code-first.md),
+> [codefirst-tooling.md](codefirst-tooling.md).
+
 Вход: `/home/qweasd123tg/Загрузки/OpenTorchlight-all-work-reconciled.zip`
 (1012 файлов). База архива — снимок эпохи `15a00bd` (его ledger: 11 записей
 против наших 22; нет batch-проходов, профилей, звуков, single-writer фикса).

@@ -22,6 +22,8 @@ import re
 import subprocess
 from difflib import SequenceMatcher
 from pathlib import Path
+from automation_state import validate_output
+from transfer_contract import in_scope, load_scope
 
 ROOT = Path(__file__).resolve().parents[1]
 PINNED_SHA256 = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
@@ -49,14 +51,17 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def symbols_for(name: str, class_regex: str) -> list[dict]:
+def symbols_for(name: str, class_regex: str, scope_name: str = "ui") -> list[dict]:
     out = []
     cre = re.compile(class_regex) if class_regex else None
+    scope = load_scope(ROOT, scope_name)
     for line in (ROOT / "research/original-symbols.txt").read_text(encoding="utf-8", errors="replace").splitlines():
         m = SYM_RE.match(line.strip())
         if not m:
             continue
         address, size, _typ, symbol = m.groups()
+        if not in_scope(symbol, address, scope):
+            continue
         if method(symbol) != name:
             continue
         c = cls(symbol)
@@ -72,13 +77,17 @@ def symbols_for(name: str, class_regex: str) -> list[dict]:
     return sorted(by.values(), key=lambda r: r["address"])
 
 
-def dump(elf: Path, start: int, size: int) -> list[str]:
+def dump_text(elf: Path, start: int, size: int) -> str:
     if size <= 0:
-        return []
+        raise ValueError(f"No sized original body at 0x{start:x}")
     cmd = ["objdump", "-d", "--no-show-raw-insn", f"--start-address={start}", f"--stop-address={start+size}", str(elf)]
     p = subprocess.run(cmd, check=True, capture_output=True, text=True)
+    return p.stdout
+
+
+def instructions(assembly: str) -> list[str]:
     ins = []
-    for line in p.stdout.splitlines():
+    for line in assembly.splitlines():
         m = re.match(r"\s*[0-9a-f]+:\s+([a-zA-Z][a-zA-Z0-9.]*)\s*(.*)$", line)
         if not m:
             continue
@@ -86,6 +95,10 @@ def dump(elf: Path, start: int, size: int) -> list[str]:
         operands = operands.split("#", 1)[0].strip()
         ins.append(mnemonic + (" " + operands if operands else ""))
     return ins
+
+
+def dump(elf: Path, start: int, size: int) -> list[str]:
+    return instructions(dump_text(elf, start, size))
 
 
 def normalize_instruction(text: str, semantic_calls: bool = False) -> str:
@@ -122,17 +135,41 @@ def main() -> int:
     ap.add_argument("method")
     ap.add_argument("--elf", type=Path, required=True)
     ap.add_argument("--class-regex", default="^C", help="default: game-style C* classes")
-    ap.add_argument("--near", type=float, default=0.90)
+    ap.add_argument("--scope", choices=("ui", "all"), default="ui")
+    ap.add_argument("--near", type=float, default=None,
+                    help="opt-in quadratic near-shape comparisons; exact grouping is the default")
+    ap.add_argument("--max-members", type=int, default=64)
+    ap.add_argument("--assembly-dir", type=Path, help="keep the same decoded member bodies for delta review")
     ap.add_argument("--out", type=Path)
     ap.add_argument("--json", type=Path, help="machine-readable cluster report")
     args = ap.parse_args()
+    if args.near is not None and not 0 < args.near <= 1:
+        ap.error("--near must be in (0, 1]")
+    if not 1 <= args.max_members <= 64:
+        ap.error("--max-members must be in 1..64; split larger families explicitly")
+    for path in (args.out, args.json, args.assembly_dir):
+        if path:
+            validate_output(ROOT, path, [args.elf], directory=path == args.assembly_dir)
+    if args.out and args.json and args.out.resolve() == args.json.resolve():
+        ap.error("--out and --json must differ")
     if sha256(args.elf) != PINNED_SHA256:
         raise SystemExit("ELF fingerprint mismatch; refusing to compare a different build")
-    rows = symbols_for(args.method, args.class_regex)
+    rows = symbols_for(args.method, args.class_regex, args.scope)
     if not rows:
         raise SystemExit(f"no methods named {args.method!r}")
+    if len(rows) > args.max_members:
+        ap.error(f"{len(rows)} members exceed budget {args.max_members}; narrow --class-regex")
+    if args.assembly_dir:
+        args.assembly_dir.mkdir(parents=True, exist_ok=True)
     for r in rows:
-        raw = dump(args.elf, r["address"], r["size"])
+        assembly = dump_text(args.elf, r["address"], r["size"])
+        if args.assembly_dir:
+            destination = args.assembly_dir / f"0x{r['address']:08x}.asm"
+            validate_output(ROOT, destination, [args.elf])
+            destination.write_text(assembly, encoding="utf-8")
+        raw = instructions(assembly)
+        if not raw:
+            raise ValueError(f"Empty disassembly at 0x{r['address']:x}; not an equivalent empty function")
         r["raw_count"] = len(raw)
         r["shape"] = [normalize_instruction(x, False) for x in raw]
         r["semantic"] = [normalize_instruction(x, True) for x in raw]
@@ -146,6 +183,8 @@ def main() -> int:
     # Only compare cluster representatives; avoids quadratic blow-up on duplicates.
     reps = [g[0] for g in clusters]
     for i, a in enumerate(reps):
+        if args.near is None:
+            break
         for b in reps[i+1:]:
             ratio = SequenceMatcher(a=a["shape"], b=b["shape"], autojunk=False).ratio()
             if ratio >= args.near:
@@ -167,7 +206,7 @@ def main() -> int:
         for ratio, a, b in near[:40]:
             lines.append(f"- {ratio:.3f}: `0x{a['address']:08x}` {a['class']} ↔ `0x{b['address']:08x}` {b['class']}")
     else:
-        lines.append("None at the selected threshold.")
+        lines.append("Not requested (use --near to opt in)." if args.near is None else "None at the selected threshold.")
     lines += ["", "## Use", "",
               "Start with the largest exact cluster. Compare constants, field offsets, call targets and callers per member; encode true deltas as profile data. Split any semantic exception instead of adding guessed flags.", ""]
     text = "\n".join(lines)
@@ -181,6 +220,8 @@ def main() -> int:
         payload = {
             "schema": 1,
             "method": args.method,
+            "scope": args.scope,
+            "near_threshold": args.near,
             "elf_sha256": PINNED_SHA256,
             "members": len(rows),
             "clusters": [

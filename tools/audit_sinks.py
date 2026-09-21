@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
-"""Backlog of port code with no caller/sink: implementation + evidence, unwired.
+"""Lexical candidates for caller/sink review, NOT proof of wiring or its absence.
 
 Pass 1: defined text symbols from the built static libs (nm), demangled to
 torchlight:: names. Pass 2: inline/header-defined functions.
-A symbol is SINKLESS when no file under src/ references it outside its own
-definition file. Test-only use is reported separately (tested but unwired).
+Read each source file once. Header declarations never count as production
+consumers. Same-file callers, overloads, comments and indirect dispatch require
+manual review; the tool does not mark functions wired/unwired.
 
 This is a work-list, not a gate: entry points, probes (dlopen) and
 transcription data without a runtime executor are expected hits, kept in the
 allowlist or marked accordingly.
 
 Usage:
-  python3 tools/audit_sinks.py --root . [--lib build-verification/libtorchlight_core.a ...]
+  python3 tools/audit_sinks.py --root . --symbol panel_profile [--lib build-verification/libtorchlight_core.a]
 """
 import argparse
 import os
 import re
 import subprocess
+from pathlib import Path
+from functools import lru_cache
 
 SKIP_NAMESPACES = ("std::", "__gnu_cxx::", "__detail::")
 ENTRYPOINTS = ("main",)
@@ -66,23 +69,23 @@ def lib_sources(lib):
     return mapping
 
 
+@lru_cache(maxsize=4)
+def reference_index(root):
+    """One process-local snapshot; no mtime cache or semantic claims."""
+    result = {"src": {}, "include": {}, "tests": {}}
+    for top in result:
+        for path in sorted((Path(root) / top).rglob("*")):
+            if not path.is_file() or path.suffix not in {".cpp", ".hpp", ".h", ".py"}:
+                continue
+            text = path.read_text(encoding="utf-8", errors="replace")
+            relative = str(path.relative_to(root))
+            for token in set(re.findall(r"[A-Za-z_]\w*", text)):
+                result[top].setdefault(token, set()).add(relative)
+    return result
+
+
 def references(root, short):
-    hits = set()
-    for top in ("src", "include"):
-        for dirpath, _dirnames, filenames in os.walk(os.path.join(root, top)):
-            for fn in filenames:
-                if not fn.endswith((".cpp", ".hpp", ".h")):
-                    continue
-                path = os.path.join(dirpath, fn)
-                rel = os.path.relpath(path, root)
-                try:
-                    with open(path, encoding="utf-8", errors="replace") as fh:
-                        text = fh.read()
-                except OSError:
-                    continue
-                if re.search(r"(?<!\w)" + re.escape(short) + r"(?!\w)", text):
-                    hits.add(rel)
-    return hits
+    return set(reference_index(root)["src"].get(short, ()))
 
 
 def defines(path, short):
@@ -98,22 +101,7 @@ def defines(path, short):
 
 
 def test_refs(root, short):
-    hits = set()
-    d = os.path.join(root, "tests")
-    if not os.path.isdir(d):
-        return hits
-    for fn in os.listdir(d):
-        if not fn.endswith((".cpp", ".py")):
-            continue
-        try:
-            with open(os.path.join(d, fn), encoding="utf-8",
-                      errors="replace") as fh:
-                text = fh.read()
-        except OSError:
-            continue
-        if re.search(r"(?<!\w)" + re.escape(short) + r"(?!\w)", text):
-            hits.add("tests/" + fn)
-    return hits
+    return set(reference_index(root)["tests"].get(short, ()))
 
 
 def header_functions(root):
@@ -139,6 +127,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=".")
     ap.add_argument("--lib", action="append", default=[])
+    ap.add_argument("--symbol", default="", help="limit review to a name substring")
     args = ap.parse_args()
     root = args.root
     libs = args.lib or [os.path.join(root, "build-verification",
@@ -152,39 +141,35 @@ def main():
             print("skip missing lib %s" % lib)
             continue
         for mangled, full in nm_symbols(lib):
+            if args.symbol and args.symbol not in full:
+                continue
             short = full.split("::")[-1]
             if short in ENTRYPOINTS or short.startswith(PROBE_PREFIXES):
                 continue
             refs = references(root, short)
-            if len(refs) == 1:
-                only = next(iter(refs))
-                if defines(os.path.join(root, only), short):
-                    refs = set()
             entries.append((full, short, refs))
 
     for name, defns in sorted(header_functions(root).items()):
+        if args.symbol and args.symbol not in name:
+            continue
         refs = references(root, name)
-        if len(refs) == 1:
-            only = next(iter(refs))
-            if only in defns or defines(os.path.join(root, only), name):
-                refs = set()
         entries.append(("header:" + name, name, refs))
 
-    sinkless, wired = [], []
+    candidates, multiple_files = [], []
     for full, short, refs in entries:
-        if refs:
-            wired.append((full, len(refs)))
+        if len(refs) > 1:
+            multiple_files.append((full, len(refs)))
         else:
-            sinkless.append((full, short))
+            candidates.append((full, short, tuple(sorted(refs))))
 
-    print("defined symbols tracked: %d; wired: %d; sinkless: %d"
-          % (len(entries), len(wired), len(sinkless)))
-    print("--- sinkless in src/ (tested-but-unwired marked *) ---")
-    for full, short in sorted(set(sinkless)):
+    print("lexical symbols: %d; multiple src files: %d; zero/single-file candidates: %d"
+          % (len(entries), len(multiple_files), len(candidates)))
+    print("Not a wiring gate: same-file calls, overloads, comments and indirect consumers require review.")
+    for full, short, refs in sorted(set(candidates)):
         tested = test_refs(root, short)
         mark = " *" if tested else ""
         extra = (" tested-by " + ",".join(sorted(tested))) if tested else ""
-        print("  %s%s%s" % (full, mark, extra))
+        print("  %s%s src=%s%s" % (full, mark, ",".join(refs) or "none", extra))
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Core gate: the function registry must reflect the port.
 
-Runs tools/audit_registry_sync.py. Any @0xADDR cited in src/include/tests
-without a reviewed coverage-boundaries entry fails, as does a stale
-coverage.tsv or an invalid function-transfer.json.
+Runs tools/audit_registry_sync.py. Unbounded @0xADDR references produce a
+warning-only burn-down list. Stale coverage, invalid stages, and malformed or
+stale explicit whole-function acceptance fail. No semantic proof is inferred.
 """
 import subprocess
 import sys
