@@ -6,7 +6,7 @@
         "0xb196f0"
       ],
       "status": "partial",
-      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; Settings/Options now also use native controls and retained animation; create/load/HUD retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; Settings/Options now also use native controls and retained animation; create now uses native Editbox/class consumers; load/HUD retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-container-lifecycle.md",
         "research/dropdown-mainmenu.md",
@@ -14,7 +14,8 @@
         "research/dropdown-animation-lifecycle.md",
         "research/cegui-frontend-closure.md",
         "research/cegui-source-integration.md",
-        "research/cegui-settings-options.md"
+        "research/cegui-settings-options.md",
+        "research/cegui-character-creation.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
@@ -1014,7 +1015,6 @@
         "0xb7f580",
         "0xc404c0",
         "0xc4a810",
-        "0xc5d730",
         "0xe4c800",
         "0xe9b180",
         "0xea58b0"
@@ -1419,6 +1419,40 @@
         "tests/scenarios/paused-settings.scenario"
       ],
       "comparison": "Original ASM field/call/order review with named addresses and pinned library/resource contract tests; Application/GL isolated Settings/Apply/resume smoke. No original frame/runtime graphics comparison."
+    },
+    {
+      "addresses": [
+        "0xc53f40",
+        "0xc5c040",
+        "0xc5c2f0",
+        "0xc5c5a0",
+        "0xc5cc30",
+        "0xc5d730",
+        "0xc5e3b0"
+      ],
+      "status": "partial",
+      "boundary": "Pinned CEGUI source owns create layout/Editbox/Falagard, resource MaxTextLength and UTF-8 editing, original Name/PetName focus/visibility/submit gates, default Destroyer and class text/GUID consumer. Existing portable campaign/OTC path consumes name/class. Pet selection/name persistence/gameplay, character/pet preview, difficulty, original save filename/SVB and pending state, localization, native owners and complete unwind remain open. XKB/Wayland transport is a platform adapter; OS editing smoke not accepted.",
+      "evidence": [
+        "research/cegui-character-creation.md",
+        "research/ui-inline-text.md",
+        "research/batch-menu-pass.json",
+        "research/inventory-open.md"
+      ],
+      "implementation": [
+        "src/cegui_menu.cpp",
+        "src/frontend.cpp",
+        "src/application.cpp",
+        "src/linux_desktop_main.cpp",
+        "include/torchlight/cegui_menu.hpp",
+        "include/torchlight/ui_pointer_event.hpp",
+        "include/torchlight/menu_grab_tables.hpp"
+      ],
+      "tests": [
+        "tests/cegui_creation_test.cpp",
+        "tests/application_scenario_probe.cpp",
+        "tests/menu_grab_test.cpp"
+      ],
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
     }
   ],
   "port_systems": [

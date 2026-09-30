@@ -73,6 +73,8 @@ public:
     virtual std::vector<UiPointerEvent> take_ui_pointer_events() { return {}; }
     // Backend-neutral physical US scan-code contract; see application_keys.hpp.
     virtual std::vector<std::uint32_t> take_key_presses() = 0;
+    virtual bool has_ui_keyboard_events() const noexcept { return false; }
+    virtual std::vector<UiKeyboardEvent> take_ui_keyboard_events() { return {}; }
     virtual int width() const noexcept = 0;
     virtual int height() const noexcept = 0;
     // Physical modes exposed by the host. Deterministic/minimal hosts retain

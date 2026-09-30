@@ -53,6 +53,7 @@
 #include <map>
 #include <optional>
 #include <set>
+#include <CEGUIString.h>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -65,8 +66,8 @@
 namespace {
 constexpr float kCameraDistance = 28.5F;
 class DesktopError : public std::runtime_error { public: using std::runtime_error::runtime_error; };
-// Prototype text input: physical US A-Z / digits. Arbitrary UTF-8 save names are
-// retained by the codec; full compositor/IME input is a separate UI boundary.
+// Minimal/scenario hosts retain physical US A-Z/digits. Desktop text comes
+// from its XKB layout/compose stream and is delivered to the native Editbox.
 void frontend_key(torchlight::Frontend& frontend, std::uint32_t key) {
     using K = torchlight::FrontendKey;
     if (key == torchlight::physical_key::ESC) frontend.key(K::back);
@@ -133,14 +134,21 @@ std::string narrow_ascii(std::u16string_view value) {
     return result;
 }
 
-// resource-derived UNIT DESCRIPTION is display text: lossy ASCII fold, never a
-// load failure. Non-ASCII becomes '?' so the create-screen blurb stays readable.
+// Resource strings are UTF-16; CEGUI owns the UTF-32/UTF-8 conversion.
+// Only the surrogate-pair boundary differs from original Linux wchar_t.
 std::string narrow_description(std::u16string_view value) {
-    std::string result;
-    result.reserve(value.size());
-    for (const auto character : value)
-        result.push_back(character > 0x7fU ? '?' : static_cast<char>(character));
-    return result;
+    CEGUI::String text;
+    for (std::size_t n = 0; n < value.size(); ++n) {
+        CEGUI::utf32 codepoint = value[n];
+        if (codepoint >= 0xd800 && codepoint <= 0xdbff) {
+            if (n + 1 == value.size() || value[n + 1] < 0xdc00 || value[n + 1] > 0xdfff)
+                throw DesktopError("invalid UTF-16 display string");
+            codepoint = 0x10000 + ((codepoint - 0xd800) << 10) + (value[++n] - 0xdc00);
+        } else if (codepoint >= 0xdc00 && codepoint <= 0xdfff)
+            throw DesktopError("invalid UTF-16 display string");
+        text.append(1, codepoint);
+    }
+    return reinterpret_cast<const char*>(text.c_str());
 }
 
 torchlight::LayoutManifest load_static_layout(
@@ -413,7 +421,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::vector<torchlight::FrontendClass> frontend_classes;
         for (const auto& p : players)
             frontend_classes.push_back(
-                {p.guid, narrow_ascii(p.name), narrow_description(p.description)});
+                {p.guid, narrow_ascii(p.name), narrow_description(p.description), narrow_description(p.display_name)});
         torchlight::Frontend frontend(ui_resources, std::move(frontend_classes));
         auto display_resolutions = window.display_resolutions();
         frontend.set_resolutions(display_resolutions);
@@ -445,29 +453,39 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                                    double now, bool forward_button_down) {
             if (!std::isfinite(now) || now < frontend_clock)
                 throw DesktopError("application host clock must be finite and monotonic");
-            for (const auto& event : events) {
-                auto event_time = frontend_clock;
-                if (event.time_seconds) {
-                    if (!std::isfinite(*event.time_seconds))
-                        throw DesktopError("application host pointer clock must be finite");
-                    event_time = std::clamp(*event.time_seconds, frontend_clock, now);
-                }
-                advance_frontend_to(event_time);
-                if (forward_button_down || event.kind != torchlight::UiPointerEventKind::button_down) {
-                    // Each event sees timer and tree mutations made before its timestamp.
-                    static_cast<void>(frontend.frame(window.width(), window.height()));
-                    auto delivered = event;
-                    if (delivered.time_seconds) delivered.time_seconds = event_time;
+            const auto keys = window.take_ui_keyboard_events();
+            struct Event {
+                double time;
+                const torchlight::UiPointerEvent* pointer;
+                const torchlight::UiKeyboardEvent* keyboard;
+            };
+            std::vector<Event> timeline;
+            const auto event_time = [&](const std::optional<double>& time) {
+                if (time && !std::isfinite(*time)) throw DesktopError("application host input clock must be finite");
+                return time ? std::clamp(*time, frontend_clock, now) : frontend_clock;
+            };
+            for (const auto& event : events) timeline.push_back({event_time(event.time_seconds), &event, nullptr});
+            for (const auto& event : keys) timeline.push_back({event_time(event.time_seconds), nullptr, &event});
+            std::stable_sort(timeline.begin(), timeline.end(), [](const auto& a, const auto& b) { return a.time < b.time; });
+            for (const auto& entry : timeline) {
+                advance_frontend_to(entry.time);
+                static_cast<void>(frontend.frame(window.width(), window.height()));
+                if (entry.keyboard) frontend.keyboard_event(*entry.keyboard);
+                else if (forward_button_down || entry.pointer->kind != torchlight::UiPointerEventKind::button_down) {
+                    auto delivered = *entry.pointer;
+                    if (delivered.time_seconds) delivered.time_seconds = entry.time;
                     frontend.pointer_event(delivered);
-                    dispatch_frontend_sounds();
                 }
+                dispatch_frontend_sounds();
             }
             advance_frontend_to(now);
         };
         const auto dispatch_frontend_pointer = [&](double now) {
             const auto legacy_click = window.take_left_click();
-            if (window.has_ui_pointer_events()) {
+            if (window.has_ui_pointer_events() || window.has_ui_keyboard_events()) {
                 dispatch_frontend_events(window.take_ui_pointer_events(), now, true);
+                if (!window.has_ui_pointer_events() && legacy_click)
+                    frontend.click(static_cast<float>((*legacy_click)[0]), static_cast<float>((*legacy_click)[1]));
             } else {
                 advance_frontend_to(now);
                 if (legacy_click)
@@ -590,7 +608,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 refresh_display_resolutions();
                 frontend.pointer(window.ui_pointer_state());
                 static_cast<void>(frontend.frame(window.width(), window.height()));
-                for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                if (!window.has_ui_keyboard_events())
+                    for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                else static_cast<void>(window.take_key_presses());
                 dispatch_frontend_pointer(frontend_now);
                 if (frontend.page() == torchlight::FrontendPage::quit) break;
                 if (const auto request = frontend.take_request()) {
@@ -1120,7 +1140,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     frontend.pointer(window.ui_pointer_state());
                     window.observe_frontend(frontend.page(), frontend.frame(window.width(), window.height()), frontend.character_name());
                     static_cast<void>(frontend.frame(window.width(), window.height()));
-                    for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                    if (!window.has_ui_keyboard_events())
+                        for (const auto key : window.take_key_presses()) { frontend_key(frontend, key); static_cast<void>(frontend.frame(window.width(), window.height())); }
+                    else static_cast<void>(window.take_key_presses());
                     dispatch_frontend_pointer(frontend_now);
                     if (const auto request = frontend.take_request()) {
                         if (request->command == torchlight::FrontendCommand::apply_settings) {

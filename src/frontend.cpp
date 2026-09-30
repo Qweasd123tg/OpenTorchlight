@@ -1,4 +1,5 @@
 #include "torchlight/frontend.hpp"
+#include "torchlight/application_keys.hpp"
 #include "torchlight/ui_screen_scale.hpp"
 #include "torchlight/ui_skin.hpp"
 #include <algorithm>
@@ -371,6 +372,11 @@ float DisplaySettings::*setting_volume(const std::string& name) {
 } // namespace
 void Frontend::text(char c) {
     cached_frame_.reset();
+    if (cegui_menu_ && page_ == FrontendPage::create) {
+        cegui_menu_->keyboard_event({UiKeyboardEventKind::text, 0, std::string(1, c)});
+        read_native_creation();
+        return;
+    }
     // resource-derived: charactercreate.layout EditBox MaxTextLength=12.
     if (page_ == FrontendPage::create && name_.size() < 12 &&
         ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == ' ' ||
@@ -391,6 +397,15 @@ void Frontend::key(FrontendKey key) {
             leave_settings();
         else if (page_ == FrontendPage::load || page_ == FrontendPage::create)
             show_main();
+        return;
+    }
+    if (cegui_menu_ && page_ == FrontendPage::create) {
+        const auto code = key == FrontendKey::backspace ? physical_key::BACKSPACE :
+            key == FrontendKey::accept ? physical_key::ENTER :
+            key == FrontendKey::next ? physical_key::TAB : physical_key::UP;
+        cegui_menu_->keyboard_event({UiKeyboardEventKind::key_down, code, {}});
+        cegui_menu_->keyboard_event({UiKeyboardEventKind::key_up, code, {}});
+        read_native_creation();
         return;
     }
     if (key == FrontendKey::backspace) {
@@ -459,6 +474,7 @@ void Frontend::pointer(const UiPointerState& state) {
             (*state.position)[0], (*state.position)[1]});
         else cegui_menu_->pointer_event({UiPointerEventKind::leave});
         read_native_settings();
+        read_native_creation();
         pointer_ = state;
         return;
     }
@@ -542,6 +558,7 @@ void Frontend::click(float x, float y) {
         cegui_menu_->pointer_event({UiPointerEventKind::button_down, x, y});
         cegui_menu_->pointer_event({UiPointerEventKind::button_up, x, y});
         read_native_settings();
+        read_native_creation();
         return;
     }
     cached_frame_.reset();
@@ -733,16 +750,49 @@ bool Frontend::main_can_load() const {
     return !saves_.empty();
 }
 bool Frontend::native_input() const noexcept {
-    return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::settings || page_ == FrontendPage::pause);
+    return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::create || page_ == FrontendPage::settings || page_ == FrontendPage::pause);
 }
 void Frontend::read_native_settings() {
     if (cegui_menu_ && page_ == FrontendPage::settings)
         settings_draft_ = cegui_menu_->settings_values(settings_draft_);
 }
+void Frontend::read_native_creation() {
+    if (cegui_menu_ && page_ == FrontendPage::create) name_ = cegui_menu_->creation_name();
+}
+void Frontend::keyboard_event(const UiKeyboardEvent& event) {
+    cached_frame_.reset();
+    const bool editing = cegui_menu_ && page_ == FrontendPage::create;
+    if (cegui_menu_) {
+        cegui_menu_->keyboard_event(event);
+        read_native_creation();
+        read_native_settings();
+    }
+    if (page_ == FrontendPage::playing || page_ == FrontendPage::quit || event.kind != UiKeyboardEventKind::key_down) return;
+    if (event.key == physical_key::ESC) key(FrontendKey::back);
+    else if (!editing) {
+        if (event.key == physical_key::UP) key(FrontendKey::previous);
+        else if (event.key == physical_key::DOWN || event.key == physical_key::TAB) key(FrontendKey::next);
+        else if (event.key == physical_key::ENTER || event.key == physical_key::KPENTER) key(FrontendKey::accept);
+        else if (event.key == physical_key::BACKSPACE) key(FrontendKey::backspace);
+    }
+}
 void Frontend::native_action(CeguiPage source, const std::string& name, UiLayoutFunction function) {
     if (request_) return;
     if (source == CeguiPage::main) {
         dispatch_main_menu(main_open_, !main_open_, function, *this);
+    } else if (source == CeguiPage::create && page_ == FrontendPage::create) {
+        read_native_creation();
+        if (function == UiLayoutFunction::back) show_main();
+        else if (function == UiLayoutFunction::select1) {
+            const auto found = std::find_if(classes_.begin(), classes_.end(), [&](const auto& c) { return upper(c.name) == upper(name); });
+            if (found != classes_.end()) class_index_ = static_cast<std::size_t>(found - classes_.begin());
+            sync_cegui_menu();
+            cegui_menu_->focus(CeguiPage::create, "EditBox"); // c5c10b..c5c112
+        } else if (function == UiLayoutFunction::new_game) {
+            // Native name is already validated/limited by the resource Editbox.
+            // Preserve whitespace/UTF-8; the earlier ASCII/trim policy is a fixture fallback.
+            request_ = FrontendRequest{FrontendCommand::create, classes_.at(class_index_).guid, name_, {}};
+        }
     } else if (source == CeguiPage::options && page_ == FrontendPage::pause) {
         // COptionsMenu::onClick b800a0: 0 Exit, 6 Close, 94 Settings.
         if (function == UiLayoutFunction::exit_game) activate("exit-game");
@@ -767,6 +817,9 @@ void Frontend::sync_cegui_menu() {
     const bool can_continue = std::any_of(saves_.begin(), saves_.end(), [](const auto& save) { return save.loadable(); });
     cegui_menu_->state(main_open_, can_continue, show_credits_, show_credits_b_);
     cegui_menu_->settings_state(page_ == FrontendPage::settings, settings_draft_, resolutions_);
+    const auto& selected = classes_.at(class_index_);
+    cegui_menu_->creation_state(page_ == FrontendPage::create, selected.name, selected.display_name, selected.description);
+    read_native_creation();
     const bool attached = options_animation_ ? options_animation_->visible() : page_ == FrontendPage::pause;
     const auto position = options_animation_ ? options_animation_->content_position(
         cached_width_ > 0 ? cached_width_ : 1024, cached_height_ > 0 ? cached_height_ : 768) : std::array<float, 2>{};
@@ -777,6 +830,10 @@ void Frontend::main_request_state(int state, int menu) {
     // the existing application policy; native CGameStateController is open.
     if (state == 0 && (menu == 1 || menu == 3)) {
         page_ = menu == 1 ? FrontendPage::create : FrontendPage::load;
+        if (page_ == FrontendPage::create && cegui_menu_) {
+            const auto found = std::find_if(classes_.begin(), classes_.end(), [](const auto& c) { return upper(c.name) == "DESTROYER"; });
+            if (found != classes_.end()) class_index_ = static_cast<std::size_t>(found - classes_.begin());
+        }
         focus_ = 0;
         status_.clear();
     } else if (state == 2 && menu == 0) {
@@ -849,7 +906,7 @@ void Frontend::sync_windows() {
         !(page_ == FrontendPage::settings && settings_return_ == FrontendPage::main))
         main_set_open(false);
     for (auto page : {FrontendPage::create, FrontendPage::load, FrontendPage::settings}) {
-        if (cegui_menu_ && page == FrontendPage::settings) continue;
+        if (cegui_menu_ && (page == FrontendPage::settings || page == FrontendPage::create)) continue;
         const bool wanted = page_ == page;
         if (wanted || dropdowns_.count(page)) {
             if (page == FrontendPage::settings) dropdown(page).set_settings_open(wanted);
@@ -961,6 +1018,7 @@ void Frontend::advance(float seconds) {
     if (cegui_menu_) {
         cegui_menu_->advance(seconds);
         read_native_settings();
+        read_native_creation();
         if (seconds > 0) cached_frame_.reset();
     }
     pointer_clock_ += seconds;
@@ -1007,8 +1065,16 @@ FrontendFrame Frontend::compose_frame(int width, int height) {
             if (!widget.text.empty()) result.texts.push_back(widget);
             std::string id;
             const auto owner = widget.page == CeguiPage::main ? FrontendPage::main :
-                widget.page == CeguiPage::settings ? FrontendPage::settings : FrontendPage::pause;
-            if (owner == FrontendPage::settings) {
+                widget.page == CeguiPage::settings ? FrontendPage::settings :
+                widget.page == CeguiPage::create ? FrontendPage::create : FrontendPage::pause;
+            if (owner == FrontendPage::create) {
+                if (widget.layout_function == UiLayoutFunction::back) id = "back";
+                else if (widget.layout_function == UiLayoutFunction::new_game) id = "create";
+                else if (widget.layout_function == UiLayoutFunction::select1) {
+                    const auto found = std::find_if(classes_.begin(), classes_.end(), [&](const auto& c) { return upper(c.name) == upper(leaf(widget.name)); });
+                    if (found != classes_.end()) id = "class-" + std::to_string(found - classes_.begin());
+                }
+            } else if (owner == FrontendPage::settings) {
                 if (widget.layout_function == UiLayoutFunction::accept) id = "apply";
                 else if (widget.layout_function == UiLayoutFunction::decline) id = "decline-settings";
                 else if (widget.type == "GuiLook/Checkbox" || widget.type == "GuiLook/Slider" || widget.type == "GuiLook/Combobox")
@@ -1208,6 +1274,7 @@ void Frontend::pointer_event(const UiPointerEvent& event) {
         sync_cegui_menu();
         cegui_menu_->pointer_event(event);
         read_native_settings();
+        read_native_creation();
         // Preserve host position across the native-menu -> legacy-page handoff.
         if (event.kind == UiPointerEventKind::leave) pointer_.position.reset();
         else {

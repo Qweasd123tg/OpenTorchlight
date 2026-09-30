@@ -22,7 +22,7 @@ struct CeguiQuad {
     float z = 0;
     bool bottom_left_to_top_right = false;
 };
-enum class CeguiPage { main, options, settings };
+enum class CeguiPage { main, options, settings, create };
 struct CeguiWidget : UiResolvedWidget {
     CeguiPage page = CeguiPage::main;
 };
@@ -43,6 +43,10 @@ class CeguiMenu {
     [[nodiscard]] DisplaySettings settings_values(DisplaySettings base, bool applying = false) const;
     void options_state(bool attached, const std::array<float, 2>& content_position);
     void focus(CeguiPage, const std::string& window_name);
+    void creation_state(bool open, const std::string& class_name,
+        const std::string& display_name, const std::string& description);
+    [[nodiscard]] std::string creation_name() const;
+    void keyboard_event(const UiKeyboardEvent&);
     void resize(int width, int height);
     void pointer_event(const UiPointerEvent&);
     void advance(float seconds);

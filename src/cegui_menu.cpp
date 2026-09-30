@@ -8,8 +8,11 @@
 #include <falagard/CEGUIFalWidgetLookFeel.h>
 #include <falagard/CEGUIFalNamedArea.h>
 #include <tuple>
+#include <set>
+#include "torchlight/application_keys.hpp"
 #include <algorithm>
 #include <cmath>
+#include <cctype>
 #include <cstring>
 #include <iostream>
 #include <limits>
@@ -219,6 +222,7 @@ struct CeguiMenu::Impl {
     int width = 0, height = 0;
     bool settings_initialized = false;
     std::vector<UiResolution> resolutions;
+    std::set<CEGUI::uint> held_keys;
     std::vector<std::tuple<CeguiPage, std::string, UiLayoutFunction>> pending;
     Impl(const PakArchive& archive, Action callback)
         : provider(archive), renderer(archive), action(std::move(callback)) {
@@ -258,6 +262,17 @@ struct CeguiMenu::Impl {
             // Constructor bd86a9 reads UTF-32LE "Settings" at ff10a0,
             // then setTitle b17e70 -> Window::setText b17f87.
             settings.named.at("Title")->setText("Settings");
+        }
+        if (archive.contains_normalized("media/UI/charactercreate.layout")) {
+            auto& v = make_view(CeguiPage::create, "create", "charactercreate", false);
+            static_cast<CEGUI::Editbox*>(v.named.at("EditBox"))->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
+                CEGUI::Event::Subscriber(&Impl::submit_name, this)); // c5db84 -> c53f40
+            static_cast<CEGUI::Editbox*>(v.named.at("EditBoxPet"))->subscribeEvent(CEGUI::Editbox::EventTextAccepted,
+                CEGUI::Event::Subscriber(&Impl::submit_pet_name, this)); // c5dd34 -> c5c2f0
+            // Existing portable capability boundary: companion preview/spawn
+            // has no recovered application consumer. Preserve its disabled
+            // choice controls rather than expose an executable pet choice.
+            for (const auto* name : {"Dog", "Cat", "Ferret"}) v.named.at(name)->disable();
         }
         auto& main = views.at(CeguiPage::main);
         main.named.at("DemoVersion")->hide();
@@ -329,6 +344,26 @@ struct CeguiMenu::Impl {
         return true;
     }
     bool double_click(const CEGUI::EventArgs&) { return true; }
+    bool submit_name(const CEGUI::EventArgs&) {
+        auto& v = views.at(CeguiPage::create);
+        if (!v.named.at("EditBox")->getText().empty()) v.named.at("EditBoxPet")->activate(); // c53f44..c53f5c
+        return true;
+    }
+    bool submit_pet_name(const CEGUI::EventArgs&) {
+        auto& v = views.at(CeguiPage::create);
+        if (v.named.at("EditBoxPet")->getText().empty()) return true; // c5c30d
+        if (v.named.at("EditBox")->getText().empty()) v.named.at("EditBox")->activate(); // c5c470
+        else pending.emplace_back(CeguiPage::create, "EditBoxPet", UiLayoutFunction::new_game);
+        return true;
+    }
+    void update_creation() {
+        const auto found = views.find(CeguiPage::create);
+        if (found == views.end()) return;
+        auto& v = found->second;
+        // c5cca6..c5cdb1: length checks, with no ASCII whitelist or trim.
+        v.named.at("CreatePlayer")->setVisible(!v.named.at("EditBox")->getText().empty() &&
+            !v.named.at("EditBoxPet")->getText().empty());
+    }
     void subscribe(CEGUI::Window* window) {
         for (std::size_t child = 0; child < window->getChildCount(); ++child)
             subscribe(window->getChildAtIdx(child));
@@ -343,6 +378,7 @@ struct CeguiMenu::Impl {
         } catch (...) {} // Original local subscription catch; prior effects survive.
     }
     void deliver() {
+        update_creation();
         auto requests = std::move(pending);
         pending.clear();
         for (const auto& [page, name, function] : requests) action(page, name, function);
@@ -496,7 +532,7 @@ struct CeguiMenu::Impl {
                 window->setSize(size);
             };
             scale(scale, v.layout);
-            if (page == CeguiPage::main) v.layout->setPosition({{0, 0}, {0, 0}});
+            if (page == CeguiPage::main || page == CeguiPage::create) v.layout->setPosition({{0, 0}, {0, 0}});
         }
         width = w; height = h;
         if (settings_initialized) size_combos();
@@ -547,6 +583,7 @@ CeguiMenuFrame CeguiMenu::frame(int width, int height) {
     return library_call([&] {
     auto& i = *impl_;
     i.resize(width, height);
+    i.update_creation();
     i.system->renderGUI();
     CeguiMenuFrame result;
     result.quads = i.renderer.quads;
@@ -593,6 +630,76 @@ void CeguiMenu::options_state(bool attached, const std::array<float, 2>& positio
         auto& v = found->second;
         impl_->attach(v, attached);
         v.content->setPosition({{0, position[0]}, {0, position[1]}});
+    });
+}
+void CeguiMenu::creation_state(bool open, const std::string& class_name,
+    const std::string& display_name, const std::string& description) {
+    library_call([&] {
+        const auto found = impl_->views.find(CeguiPage::create);
+        if (found == impl_->views.end()) { if (open) throw std::runtime_error("missing native creation layout"); return; }
+        auto& v = found->second;
+        const bool opening = open && !v.attached;
+        impl_->attach(v, open);
+        if (opening) {
+            v.named.at("EditBox")->setText(""); // c5c67a
+            v.named.at("EditBox")->activate(); // c5c697
+            v.named.at("EditBoxPet")->setText("Spot"); // UTF-8 ff3168 -> c5c826
+        }
+        if (open) {
+            v.named.at("CharacterClass")->setText(display_name); // DISPLAYNAME, c5cdf6 -> c5cfa9
+            v.named.at("CharacterClassDescription")->setText(description);
+            for (const auto* name : {"Destroyer", "Vanquisher", "Alchemist"}) {
+                auto internal = std::string(name);
+                std::transform(internal.begin(), internal.end(), internal.begin(), [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+                auto selected = class_name;
+                std::transform(selected.begin(), selected.end(), selected.begin(), [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+                static_cast<CEGUI::RadioButton*>(v.named.at(name))->setSelected(internal == selected);
+            }
+        }
+        impl_->update_creation();
+    });
+}
+std::string CeguiMenu::creation_name() const {
+    return library_call([&] { return string(impl_->views.at(CeguiPage::create).named.at("EditBox")->getText()); });
+}
+namespace {
+CEGUI::uint scan_code(std::uint32_t physical) {
+    // Linux/host -> CEGUI's documented DirectInput scan-code namespace.
+    // The unextended US block has identical values; extended evdev codes do not.
+    if (physical > 0 && physical <= physical_key::F12) return physical;
+    switch (physical) {
+    case physical_key::KPENTER: return CEGUI::Key::NumpadEnter;
+    case physical_key::RIGHTCTRL: return CEGUI::Key::RightControl;
+    case physical_key::KPSLASH: return CEGUI::Key::Divide;
+    case physical_key::RIGHTALT: return CEGUI::Key::RightAlt;
+    case physical_key::HOME: return CEGUI::Key::Home;
+    case physical_key::UP: return CEGUI::Key::ArrowUp;
+    case physical_key::PAGEUP: return CEGUI::Key::PageUp;
+    case physical_key::LEFT: return CEGUI::Key::ArrowLeft;
+    case physical_key::RIGHT: return CEGUI::Key::ArrowRight;
+    case physical_key::END: return CEGUI::Key::End;
+    case physical_key::DOWN: return CEGUI::Key::ArrowDown;
+    case physical_key::PAGEDOWN: return CEGUI::Key::PageDown;
+    case physical_key::INSERT: return CEGUI::Key::Insert;
+    case physical_key::DELETE: return CEGUI::Key::Delete;
+    default: return 0;
+    }
+}
+}
+void CeguiMenu::keyboard_event(const UiKeyboardEvent& event) {
+    library_call([&] {
+        auto& i = *impl_;
+        if (event.kind == UiKeyboardEventKind::text) {
+            const CEGUI::String text(reinterpret_cast<const CEGUI::utf8*>(event.text.c_str()));
+            for (std::size_t n = 0; n < text.length(); ++n) i.system->injectChar(text[n]);
+        } else if (event.kind == UiKeyboardEventKind::leave) {
+            const auto keys = std::move(i.held_keys); i.held_keys.clear();
+            for (const auto key : keys) i.system->injectKeyUp(key);
+        } else if (const auto code = scan_code(event.key)) {
+            if (event.kind == UiKeyboardEventKind::key_down) { i.held_keys.insert(code); i.system->injectKeyDown(code); }
+            else { i.held_keys.erase(code); i.system->injectKeyUp(code); }
+        }
+        i.deliver();
     });
 }
 void CeguiMenu::focus(CeguiPage page, const std::string& name) {

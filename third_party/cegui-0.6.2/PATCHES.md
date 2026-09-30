@@ -21,12 +21,17 @@ Local source changes:
    fragment; see `research/mainmenu-controller-painter.md`.
 2. `src/CEGUIFont.cpp`: recognize Torchlight's `|cAARRGGBB` and `|u` tags on
    `Serif`, `SerifBig`, `SerifHuge`, and `SerifSmall`, including measurement,
-   hit position, normal drawing, and justified drawing. A complete tag has no
+   normal drawing, and justified drawing. A complete tag has no
    advance; `|c` uses hex stream prefix parsing and modulates its alpha with
    the supplied colour; `|u` restores that colour. Incomplete `|c` remains
    literal. Each drawn physical line begins with its supplied colour. The
    game ELF registration and shipped library behavior are recorded with
    addresses in `research/ui-inline-text.md`.
+   `getCharAtPixel` retains the upstream literal-glyph loop: the shipped
+   function at `0xd1830..0xd18df` does not skip display colour tags. The earlier
+   inferred hit-position adaptation was removed after this ASM comparison.
+   Justified drawing remains an explicitly bounded adaptation, not a full
+   reviewed translation of the shipped function.
 
 3. `XMLParserModules/expatParser/CEGUIExpatParser.cpp`: retain the upstream
    parser/callback contract and add RAII ownership for parser and raw resource

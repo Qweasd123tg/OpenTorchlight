@@ -111,7 +111,7 @@ int main(int argc, char** argv) { try {
         f = ui.frame(1024, 768);
         require(f.cegui && frontend_paint_list(f).empty(), "Settings used legacy skin compilation");
         ui.key(FrontendKey::back); command(ui, "new");
-        require(ui.page() == FrontendPage::create && !ui.frame(1024, 768).cegui, "native detach/new-game dispatch failed");
+        require(ui.page() == FrontendPage::create && ui.frame(1024, 768).cegui, "native new-game dispatch failed");
         ui.key(FrontendKey::back); require(ui.frame(1024, 768).cegui.has_value(), "retained native tree failed to reopen");
     }
     require(!CEGUI::System::getSingletonPtr(), "System leaked after frontend teardown");

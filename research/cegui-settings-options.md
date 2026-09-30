@@ -142,5 +142,6 @@ recreation original update остаётся открытым. Подключен
 UiSoundPlayer levels; полный FMOD mixer/game-effect groups не восстановлен.
 Original .SVB/game-state/global menu-owner/localization остаются адаптерами.
 Не утверждается полное закрытие create/setOpen/update/onClick или общий UI.
-Character create/load и HUD пока на прежнем runtime; следующий пакет —
-character create с actual Editbox и реальным producer имени/класса.
+Character create теперь использует native Editbox и producer имени/класса;
+контракт и остаток — в [cegui-character-creation.md](cegui-character-creation.md).
+Load и HUD пока на прежнем runtime.

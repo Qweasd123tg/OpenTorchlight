@@ -67,12 +67,17 @@ def main() -> int:
         for key in ('class_guid','name','seed','position','angle','recovery_anchor','hp','max_hp','mana','max_mana',
                     'gold','progression','inventory','slots','damage','armor'):
             require(first_difference(before[key],after[key]) is None,'fresh process changed '+key)
-        require(after['revision']==2,'actual save-and-exit did not write the second revision')
+        require(after['revision']==1,'original Options Exit route did not write the exit checkpoint')
         require(after['walkable'],'loaded position not on navigation grid')
-        for suffix in ('.rgba','.render.json','.actor-mask.bin'):
-            require((resumed/('frozen_before_pause'+suffix)).read_bytes()==
-                    (resumed/('frozen_after_pause'+suffix)).read_bytes(),
-                    'UI -> world changed frozen renderer state or pixels: '+suffix)
+        # Native OPEN/CLOSE needs clock progress. The script deliberately
+        # permits world frames after CLOSE, so actor poses/pixels are no longer
+        # a frozen-clock oracle. Check the quiescent gameplay state instead.
+        pause_before=state(resumed,'frozen_before_pause')
+        pause_after=state(resumed,'frozen_after_pause')
+        for key in ('class_guid','name','seed','position','angle','hp','max_hp','mana','max_mana',
+                    'gold','progression','inventory','slots','damage','armor','revision'):
+            require(first_difference(pause_before[key],pause_after[key]) is None,
+                    'native Options resume changed stationary gameplay '+key)
 
         # Execute again in a fresh process and empty save store. Exact output
         # comparison (including RNG call order), not a screenshot similarity score.
@@ -94,7 +99,11 @@ frames 3
 capture selected
 key ESC
 menu pause
-button save-exit
+dt 0.1
+frames 5
+button exit-game
+menu main
+button exit
 ''')
             sample=run('class-'+str(index),script,work/('saves-class-'+str(index)))
             selected=state(sample,'selected');guids.add(selected['class_guid'])

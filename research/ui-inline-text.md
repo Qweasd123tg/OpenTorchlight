@@ -35,6 +35,15 @@ word/ex-tent path. Each eventual `drawTextLine` starts from its supplied
 ColourRect, so color does not persist across an explicit newline or a
 wrapped physical line unless the markup is repeated in that line.
 
+`original-code`: `Font::getCharAtPixel @0xd1830..0xd18df` has a different,
+literal-glyph contract. It returns start when pixel <= 0, visits the UTF-32
+codepoint at `0xd1881`, obtains its glyph at `0xd188d`, multiplies advance
+by x_scale at `0xd18a2`, accumulates at `0xd18a7`, and returns the current
+index when pixel < accumulated advance (`ja @0xd18b0`). It does not recognize
+colour tags. The native source retains this upstream loop; the earlier
+inferred tag-skipping caret adaptation was removed. See
+`cegui-character-creation.md` for the native Editbox consumer and check.
+
 ## Port contract
 
 `ui_text_lines(..., inline_markup=true)` implements only this bounded

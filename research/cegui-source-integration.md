@@ -92,8 +92,10 @@ Property body и игнорирование неизвестного onClick у 
   `ui-inline-text.md` (shipped getTextExtent `0xd1dd0`, drawTextLine `0xd23d0`).
   Неполный tag остаётся текстом; полный malformed payload потребляется;
   исходный ColourRect восстанавливается на `|u` и границе physical line.
-  Применение к getCharAtPixel/justified drawing — согласующая адаптация
-  upstream, не отдельное full-ревью этих shipped функций.
+  `getCharAtPixel @0xd1830..0xd18df` после ASM-сверки оставлен upstream:
+  caret посещает буквальные glyphs, включая символы display tags.
+  Прежняя inferred-адаптация hit position удалена. Justified drawing остаётся
+  согласующей адаптацией upstream без отдельного full-ревью shipped функции.
 - `library-derived`: upstream FreeType уже использует FORCE_AUTOHINT;
   повторное восстановление этого механизма не потребовалось.
 - `library-derived`: после Main исходный Expat модуль той же версии подключён
@@ -118,4 +120,6 @@ XML Property, function bindings). `torchlight_desktop` собран успешн
 и покадровая parity по-прежнему не измерены. Остаток: остальные меню и HUD ещё на прежнем runtime;
 native state/SVB/mod producers, OGRE scene/model families и полное сравнение
 Runic vendor delta. Settings/Options теперь также на CEGUI; актуальные runtime проверки и точный
-остаток — в `cegui-settings-options.md`. Следующая цепочка — character create. Completion игровых функций остаётся partial.
+остаток — в `cegui-settings-options.md`. Character create теперь использует
+тот же native System: [имя/класс и ввод](cegui-character-creation.md).
+Load и HUD остаются на прежнем runtime. Completion игровых функций остаётся partial.

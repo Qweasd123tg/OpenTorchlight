@@ -237,49 +237,23 @@ float Font::getTextExtent(const String& text, float x_scale)
 *************************************************************************/
 size_t Font::getCharAtPixel(const String& text, size_t start_char, float pixel, float x_scale)
 {
+    // Shipped CEGUI @d1830..d18df matches upstream: caret hit testing
+    // deliberately visits literal glyphs, even for Runic display colour tags.
     const FontGlyph* glyph;
     float cur_extent = 0;
     size_t char_count = text.length();
-    const bool inline_colours = usesTorchlightInlineColours(d_name);
-
-    // handle simple cases
-    if (char_count <= start_char)
-        return start_char;
-    if (pixel <= 0)
-    {
-        if (inline_colours)
-            while (start_char < char_count)
-            {
-                const size_t tag_length = torchlightTagLength(text, start_char);
-                if (!tag_length)
-                    break;
-                start_char += tag_length;
-            }
-        return start_char;
-    }
-
+    if (char_count <= start_char || pixel <= 0) return start_char;
     for (size_t c = start_char; c < char_count; ++c)
     {
-        const size_t tag_length = inline_colours ? torchlightTagLength(text, c) : 0;
-        if (tag_length)
-        {
-            c += tag_length - 1;
-            continue;
-        }
         glyph = getGlyphData(text[c]);
-
         if (glyph)
         {
             cur_extent += glyph->getAdvance(x_scale);
-
-            if (pixel < cur_extent)
-                return c;
+            if (pixel < cur_extent) return c;
         }
     }
-
     return char_count;
 }
-
 
 /*************************************************************************
     Return the number of lines the given text would be formatted to.

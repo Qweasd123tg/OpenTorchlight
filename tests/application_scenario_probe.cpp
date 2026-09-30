@@ -112,6 +112,13 @@ public:
     std::uint32_t new_campaign_seed() override { return 491; }
     int width() const noexcept override { return width_; }
     int height() const noexcept override { return height_; }
+    bool has_ui_keyboard_events() const noexcept override { return true; }
+    std::vector<UiKeyboardEvent> take_ui_keyboard_events() override { auto out = std::move(ui_keys_); ui_keys_.clear(); return out; }
+    void add_key(std::uint32_t value) {
+        keys_.push_back(value);
+        ui_keys_.push_back({UiKeyboardEventKind::key_down, value, {}, time_seconds_});
+        ui_keys_.push_back({UiKeyboardEventKind::key_up, value, {}, time_seconds_});
+    }
     std::vector<std::uint32_t> take_key_presses() override { auto out = std::move(keys_); keys_.clear(); return out; }
     std::optional<std::array<int, 2>> take_left_click() override { auto out = click_; click_.reset(); return out; }
     std::optional<UiPointerClick> take_ui_click() override {
@@ -171,8 +178,8 @@ public:
             done(); return;
         }
         if (step.verb == "name" && page == FrontendPage::create) {
-            keys_.insert(keys_.end(), name.size(), key::BACKSPACE);
-            for (char ch : step.args[0]) keys_.push_back(physical(std::string(1,ch)));
+            for (std::size_t n = 0; n < name.size(); ++n) add_key(key::BACKSPACE);
+            ui_keys_.push_back({UiKeyboardEventKind::text, 0, step.args[0], time_seconds_});
             done(); return;
         }
         if (step.verb == "menu-capture") { menu_capture_ = label(step.args[0]); done(); return; }
@@ -395,7 +402,7 @@ private:
         return value;
     }
     void general(const Step& step) {
-        if (step.verb == "key") { keys_.push_back(physical(step.args[0])); done(); }
+        if (step.verb == "key") { add_key(physical(step.args[0])); done(); }
         else if (step.verb == "dt") {
             std::size_t used=0; const auto value=std::stod(step.args[0],&used);
             if(used!=step.args[0].size() || !std::isfinite(value) || value<0 || value>0.1)
@@ -614,6 +621,7 @@ private:
     std::optional<UiPointerClick> ui_click_;
     UiPointerState pointer_;
     std::vector<std::uint32_t> keys_;
+    std::vector<UiKeyboardEvent> ui_keys_;
     std::vector<unsigned char> pixels_;
     GlesSceneRenderer* last_renderer_ = nullptr;
     GlesUiRenderer* last_ui_renderer_ = nullptr;

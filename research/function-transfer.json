@@ -2923,6 +2923,139 @@
       "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/gles_ui_renderer.cpp; src/application.cpp",
       "tests": "tests/cegui_settings_test.cpp; tests/paused_settings_test.py; tests/scenarios/paused-settings.scenario",
       "comparison": "Addressed ASM/library contract review for the connected UI/value/animation slice plus isolated Application/GL smoke; not full original execution or graphics recreation."
+    },
+    "0x00c53f40": {
+      "symbol": "CNewGameMenu::handle_Submit(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5c040": {
+      "symbol": "CNewGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5c2f0": {
+      "symbol": "CNewGameMenu::handle_SubmitPet(CEGUI::EventArgs const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5c5a0": {
+      "symbol": "CNewGameMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5cc30": {
+      "symbol": "CNewGameMenu::update(float)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5d730": {
+      "symbol": "CNewGameMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c5e3b0": {
+      "symbol": "CNewGameMenu::CNewGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full function including native creation/save/state/preview/pet/difficulty, localization and all ownership/error paths remains open; stages describe only the connected UI/name/class slice."
+        ]
+      },
+      "evidence": "research/cegui-character-creation.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
+      "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
+      "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
     }
   }
 }

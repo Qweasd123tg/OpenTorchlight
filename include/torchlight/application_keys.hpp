@@ -48,4 +48,16 @@ inline constexpr std::uint32_t W = 17;
 inline constexpr std::uint32_t X = 45;
 inline constexpr std::uint32_t Y = 21;
 inline constexpr std::uint32_t Z = 44;
+inline constexpr std::uint32_t F12 = 88;
+inline constexpr std::uint32_t RIGHTCTRL = 97;
+inline constexpr std::uint32_t KPSLASH = 98;
+inline constexpr std::uint32_t RIGHTALT = 100;
+inline constexpr std::uint32_t HOME = 102;
+inline constexpr std::uint32_t PAGEUP = 104;
+inline constexpr std::uint32_t LEFT = 105;
+inline constexpr std::uint32_t RIGHT = 106;
+inline constexpr std::uint32_t END = 107;
+inline constexpr std::uint32_t PAGEDOWN = 109;
+inline constexpr std::uint32_t INSERT = 110;
+inline constexpr std::uint32_t DELETE = 111;
 }

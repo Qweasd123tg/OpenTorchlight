@@ -41,9 +41,10 @@ struct FrontendClass {
     std::string name;
     // resource-derived UNIT DESCRIPTION for CharacterClassDescription. May be empty.
     std::string description;
+    std::string display_name;
     FrontendClass() = default;
-    FrontendClass(std::int64_t guid_in, std::string name_in, std::string description_in = {})
-        : guid(guid_in), name(std::move(name_in)), description(std::move(description_in)) {
+    FrontendClass(std::int64_t guid_in, std::string name_in, std::string description_in = {}, std::string display_name_in = {})
+        : guid(guid_in), name(std::move(name_in)), description(std::move(description_in)), display_name(std::move(display_name_in)) {
     }
 };
 struct FrontendButton {
@@ -117,6 +118,7 @@ class Frontend : private MainMenuActions {
     [[nodiscard]] std::vector<DropdownSoundRequest> take_dropdown_sounds();
     void text(char ascii);
     void key(FrontendKey key);
+    void keyboard_event(const UiKeyboardEvent&);
     void click(float x, float y);
     [[nodiscard]] FrontendFrame frame(int width, int height);
     [[nodiscard]] std::optional<FrontendRequest> take_request();
@@ -146,6 +148,7 @@ class Frontend : private MainMenuActions {
     [[nodiscard]] bool native_input() const noexcept;
     void native_action(CeguiPage, const std::string&, UiLayoutFunction);
     void read_native_settings();
+    void read_native_creation();
     UiWindowRuntime windows_;
     std::unique_ptr<UiTooltips> tooltips_;
     std::unique_ptr<UiSettingsComboboxes> comboboxes_;

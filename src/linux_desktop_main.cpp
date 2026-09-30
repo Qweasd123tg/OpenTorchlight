@@ -40,6 +40,11 @@
 #include <poll.h>
 #include <wayland-client.h>
 #include <wayland-egl.h>
+#include <xkbcommon/xkbcommon.h>
+#include <xkbcommon/xkbcommon-compose.h>
+#include <sys/mman.h>
+#include <cstdlib>
+#include <memory>
 #include <xdg-shell-client-protocol.h>
 #include <pointer-constraints-unstable-v1-client-protocol.h>
 
@@ -148,6 +153,8 @@ public:
         : display_settings_(display_settings),
           width_(display_settings.res_width),
           height_(display_settings.res_height) {
+        xkb_context_.reset(xkb_context_new(XKB_CONTEXT_NO_FLAGS));
+        if (!xkb_context_) throw DesktopError("cannot create XKB context");
         registry_listener_.global = registry_global;
         registry_listener_.global_remove = registry_global_remove;
         wm_base_listener_.ping = wm_base_ping;
@@ -261,6 +268,10 @@ public:
     DesktopWindow& operator=(const DesktopWindow&) = delete;
 
     ~DesktopWindow() {
+        if (compose_state_) xkb_compose_state_unref(compose_state_);
+        if (compose_table_) xkb_compose_table_unref(compose_table_);
+        if (xkb_state_) xkb_state_unref(xkb_state_);
+        if (xkb_keymap_) xkb_keymap_unref(xkb_keymap_);
         if (egl_display_ != EGL_NO_DISPLAY) {
             eglMakeCurrent(egl_display_, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
             if (egl_context_ != EGL_NO_CONTEXT) {
@@ -340,6 +351,11 @@ public:
         } else {
             wl_display_flush(display_);
         }
+        const auto now = clock_seconds();
+        while (repeat_key_ && repeat_rate_ > 0 && next_repeat_ <= now) {
+            deliver_keyboard_key(*repeat_key_, true, next_repeat_, false);
+            next_repeat_ += 1.0 / repeat_rate_;
+        }
         return running_;
     }
 
@@ -383,6 +399,13 @@ public:
         auto keys = std::move(key_presses_);
         key_presses_.clear();
         return keys;
+    }
+
+    bool has_ui_keyboard_events() const noexcept override { return true; }
+    std::vector<torchlight::UiKeyboardEvent> take_ui_keyboard_events() override {
+        auto result = std::move(ui_keyboard_events_);
+        ui_keyboard_events_.clear();
+        return result;
     }
 
     void draw_scene_frame(torchlight::GlesSceneRenderer& renderer,
@@ -573,22 +596,96 @@ private:
     static void pointer_axis_source(void*, wl_pointer*, std::uint32_t) {}
     static void pointer_axis_stop(void*, wl_pointer*, std::uint32_t, std::uint32_t) {}
     static void pointer_axis_discrete(void*, wl_pointer*, std::uint32_t, std::int32_t) {}
-    static void keyboard_keymap(void*, wl_keyboard*, std::uint32_t, std::int32_t fd,
-                                std::uint32_t) {
-        if (fd >= 0) {
-            close(fd);
-        }
+    static void keyboard_keymap(void* data, wl_keyboard*, std::uint32_t format, std::int32_t fd,
+                                std::uint32_t size) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        if (fd < 0) return;
+        if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1 || !size) { close(fd); return; }
+        auto* mapping = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd, 0);
+        close(fd);
+        if (mapping == MAP_FAILED) { std::cerr << "cannot map Wayland keyboard keymap\n"; return; }
+        auto* keymap = xkb_keymap_new_from_string(self.xkb_context_.get(), static_cast<const char*>(mapping),
+            XKB_KEYMAP_FORMAT_TEXT_V1, XKB_KEYMAP_COMPILE_NO_FLAGS);
+        munmap(mapping, size);
+        if (!keymap) { std::cerr << "cannot compile Wayland keyboard keymap\n"; return; }
+        auto* state = xkb_state_new(keymap);
+        if (!state) { xkb_keymap_unref(keymap); std::cerr << "cannot create Wayland keyboard state\n"; return; }
+        if (self.xkb_state_) xkb_state_unref(self.xkb_state_);
+        if (self.xkb_keymap_) xkb_keymap_unref(self.xkb_keymap_);
+        self.xkb_keymap_ = keymap; self.xkb_state_ = state;
+        self.repeat_key_.reset();
+        if (self.compose_state_) { xkb_compose_state_unref(self.compose_state_); self.compose_state_ = nullptr; }
+        if (self.compose_table_) { xkb_compose_table_unref(self.compose_table_); self.compose_table_ = nullptr; }
+        const char* locale = std::getenv("LC_ALL");
+        if (!locale || !*locale) locale = std::getenv("LC_CTYPE");
+        if (!locale || !*locale) locale = std::getenv("LANG");
+        if (!locale || !*locale) locale = "C";
+        self.compose_table_ = xkb_compose_table_new_from_locale(self.xkb_context_.get(), locale, XKB_COMPOSE_COMPILE_NO_FLAGS);
+        if (self.compose_table_) self.compose_state_ = xkb_compose_state_new(self.compose_table_, XKB_COMPOSE_STATE_NO_FLAGS);
     }
-    static void keyboard_enter(void*, wl_keyboard*, std::uint32_t, wl_surface*, wl_array*) {}
-    static void keyboard_leave(void*, wl_keyboard*, std::uint32_t, wl_surface*) {}
+    static void keyboard_enter(void* data, wl_keyboard*, std::uint32_t, wl_surface*, wl_array* keys) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        const auto* values = static_cast<const std::uint32_t*>(keys->data);
+        for (std::size_t n = 0; n < keys->size / sizeof(*values); ++n)
+            self.ui_keyboard_events_.push_back({torchlight::UiKeyboardEventKind::key_down, values[n], {}, self.clock_seconds()});
+    }
+    static void keyboard_leave(void* data, wl_keyboard*, std::uint32_t, wl_surface*) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        self.ui_keyboard_events_.push_back({torchlight::UiKeyboardEventKind::leave, 0, {}, self.clock_seconds()});
+        if (self.compose_state_) xkb_compose_state_reset(self.compose_state_);
+        self.repeat_key_.reset();
+    }
     static void keyboard_key(void* data, wl_keyboard*, std::uint32_t, std::uint32_t,
                              std::uint32_t key, std::uint32_t state) {
-        if (state == WL_KEYBOARD_KEY_STATE_PRESSED)
-            static_cast<DesktopWindow*>(data)->key_presses_.push_back(key);
+        auto& self = *static_cast<DesktopWindow*>(data);
+        const bool down = state == WL_KEYBOARD_KEY_STATE_PRESSED;
+        const auto now = self.clock_seconds();
+        self.deliver_keyboard_key(key, down, now, true);
+        if (down && self.repeat_rate_ > 0 && self.xkb_keymap_ && xkb_keymap_key_repeats(self.xkb_keymap_, key + 8)) {
+            self.repeat_key_ = key;
+            self.next_repeat_ = now + self.repeat_delay_ / 1000.0;
+        } else if (!down && self.repeat_key_ == key) self.repeat_key_.reset();
     }
-    static void keyboard_modifiers(void*, wl_keyboard*, std::uint32_t, std::uint32_t,
-                                   std::uint32_t, std::uint32_t, std::uint32_t) {}
-    static void keyboard_repeat_info(void*, wl_keyboard*, std::int32_t, std::int32_t) {}
+    void deliver_keyboard_key(std::uint32_t key, bool down, double now, bool physical_press) {
+        auto& self = *this;
+        self.ui_keyboard_events_.push_back({down ? torchlight::UiKeyboardEventKind::key_down : torchlight::UiKeyboardEventKind::key_up,
+            key, {}, now});
+        if (!down) return;
+        if (physical_press) self.key_presses_.push_back(key); // Existing gameplay press channel excludes UI repeats.
+        if (!self.xkb_state_) return;
+        const auto code = key + 8; // wl_keyboard key is evdev; XKB keycode includes the offset.
+        bool composed = false;
+        if (self.compose_state_) {
+            xkb_compose_state_feed(self.compose_state_, xkb_state_key_get_one_sym(self.xkb_state_, code));
+            switch (xkb_compose_state_get_status(self.compose_state_)) {
+            case XKB_COMPOSE_COMPOSING: return;
+            case XKB_COMPOSE_CANCELLED: xkb_compose_state_reset(self.compose_state_); return;
+            case XKB_COMPOSE_COMPOSED: composed = true; break;
+            case XKB_COMPOSE_NOTHING: break;
+            }
+        }
+        const int count = composed ? xkb_compose_state_get_utf8(self.compose_state_, nullptr, 0) :
+            xkb_state_key_get_utf8(self.xkb_state_, code, nullptr, 0);
+        if (count > 0) {
+            std::string text(static_cast<std::size_t>(count) + 1, '\0');
+            if (composed) xkb_compose_state_get_utf8(self.compose_state_, text.data(), text.size());
+            else xkb_state_key_get_utf8(self.xkb_state_, code, text.data(), text.size());
+            text.resize(static_cast<std::size_t>(count));
+            self.ui_keyboard_events_.push_back({torchlight::UiKeyboardEventKind::text, 0, std::move(text), now});
+        }
+        if (composed) xkb_compose_state_reset(self.compose_state_);
+    }
+    static void keyboard_modifiers(void* data, wl_keyboard*, std::uint32_t, std::uint32_t depressed,
+                                   std::uint32_t latched, std::uint32_t locked, std::uint32_t group) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        if (self.xkb_state_) xkb_state_update_mask(self.xkb_state_, depressed, latched, locked, 0, 0, group);
+    }
+    static void keyboard_repeat_info(void* data, wl_keyboard*, std::int32_t rate, std::int32_t delay) {
+        auto& self = *static_cast<DesktopWindow*>(data);
+        self.repeat_rate_ = std::max(0, rate); self.repeat_delay_ = std::max(0, delay);
+        if (!self.repeat_rate_) self.repeat_key_.reset();
+        else if (self.repeat_key_) self.next_repeat_ = self.clock_seconds() + self.repeat_delay_ / 1000.0;
+    }
 
     wl_display* display_ = nullptr;
     wl_registry* registry_ = nullptr;
@@ -631,6 +728,15 @@ private:
     bool running_ = true;
     std::optional<std::array<int, 2>> left_click_;
     std::vector<std::uint32_t> key_presses_;
+    std::vector<torchlight::UiKeyboardEvent> ui_keyboard_events_;
+    std::unique_ptr<xkb_context, decltype(&xkb_context_unref)> xkb_context_{nullptr, xkb_context_unref};
+    xkb_keymap* xkb_keymap_ = nullptr;
+    xkb_state* xkb_state_ = nullptr;
+    xkb_compose_table* compose_table_ = nullptr;
+    xkb_compose_state* compose_state_ = nullptr;
+    std::optional<std::uint32_t> repeat_key_;
+    std::int32_t repeat_rate_ = 0, repeat_delay_ = 0;
+    double next_repeat_ = 0;
 };
 
 } // namespace
