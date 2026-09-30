@@ -83,10 +83,10 @@ std::vector<UiComboOption> UiSettingsComboboxes::resolution_options(
 }
 
 std::vector<UiComboOption> UiSettingsComboboxes::shadow_options() {
-    // The shipped strings are translated at runtime.  IDs and effects are
-    // original-code; these stable English fallbacks describe those effects.
-    return {{"Lighting Off", 0}, {"Shadows Off", 1}, {"Shadows 128", 2},
-            {"Shadows 256", 3}, {"Shadows 512", 4}, {"Shadows 1024", 5}};
+    // original-code: static string constructors bd0795..bd082d, consumed
+    // by CSettingsMenu::setOpen bd5e1f..bd61b1 through CStringTranslate.
+    return {{"Off", 0}, {"Lighting Only", 1}, {"Low", 2},
+            {"Medium", 3}, {"High", 4}, {"Very High", 5}};
 }
 
 std::vector<UiComboOption> UiSettingsComboboxes::particle_options() {
@@ -386,8 +386,10 @@ void UiSettingsComboboxes::apply(const UiComboSelection& selection,
         settings.shadows_detail = static_cast<int>(selection.option.id);
         settings.shadows_enabled = selection.option.id >= 2;
         settings.lighting_enabled = selection.option.id != 0;
-        if (selection.option.id >= 2 && selection.option.id <= 5)
-            settings.shadow_resolution = 128 << (selection.option.id - 2);
+        // update jump table ff10c8: ID0/1 flow through bd4edf to
+        // bd4f02 and also write 128, even while shadows are disabled.
+        if (selection.option.id <= 5)
+            settings.shadow_resolution = selection.option.id < 2 ? 128 : 128 << (selection.option.id - 2);
     } else if (selection.kind == UiSettingsComboKind::particle) {
         settings.particle_fps = selection.option.particle_fps;
         settings.particle_percent = selection.option.particle_percent;

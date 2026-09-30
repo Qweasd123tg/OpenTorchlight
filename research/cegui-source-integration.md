@@ -20,7 +20,8 @@
   `mainmenuframe.layout`, перечисленные scheme imagesets/fonts и их
   изображения/TTF из внешнего `pak.zip`. Оригинальные данные не изменяются и
   не копируются в репозиторий. Текущие хеши — `cegui-source-inputs.json`.
-- CEGUI собирается статически с исходным Falagard и встроенным TinyXML.
+- CEGUI собирается статически с исходным Falagard и Expat parser.
+  Settings/Options и смена parser разобраны в [актуальном пакете](cegui-settings-options.md).
   FreeType 2.14.3 и PCRE 8.45 в проверенной Linux-сборке — библиотеки хоста;
   побитовый растр оригинальной версии FreeType не подтверждён.
 
@@ -95,10 +96,9 @@ Property body и игнорирование неизвестного onClick у 
   upstream, не отдельное full-ревью этих shipped функций.
 - `library-derived`: upstream FreeType уже использует FORCE_AUTOHINT;
   повторное восстановление этого механизма не потребовалось.
-- `port-native`: TinyXML выбран из-за отсутствующего Expat SDK. Его default
-  whitespace condensation отключена; сырой XML CRLF/CR нормализуется до LF
-  перед entity expansion, как в XML 1.0/исходном Expat пути. `&#13;` сохраняет
-  своё значение. CreditsB сравнивается с независимым текущим XML parser порта.
+- `library-derived`: после Main исходный Expat модуль той же версии подключён
+  для настоящего UTF-16 Options layout. Host runtime Expat 2.8.3; RAII cleanup
+  исключений — явно обозначенная локальная адаптация. TinyXML больше не собран.
 
 ## Проверка и остаток
 
@@ -109,13 +109,13 @@ buttons, Settings overlay, detach/reattach, resize, texture lifetime и повт
 System lifecycle. `cegui_error_boundary` проверяет malformed авторскую scheme,
 перевод исключения и освобождение owners без ресурсов игры.
 
-Именованный gate прошёл 9/9: 5 core (ошибка CEGUI, dropdown, XML Property,
+Исторический Main gate прошёл 9/9: 5 core (ошибка CEGUI, dropdown, XML Property,
 function bindings, registry) и 4 assets (настоящий CEGUI Main, dropdown,
 XML Property, function bindings). `torchlight_desktop` собран успешно.
 
-Это CPU/library/resource проверки без окна и GL-контекста. Desktop/GLES путь
-собирается; UI-клики, снимки, кадровые, сквозные и performance сценарии здесь
-не выполняются. Остаток: остальные меню и HUD ещё на прежнем runtime;
+Это CPU/library/resource проверки без окна и GL-контекста. Первый Main срез проверял только сборку Desktop/GLES. Settings/Options
+пакет дополнительно выполнил ограниченный Application/GL smoke; performance
+и покадровая parity по-прежнему не измерены. Остаток: остальные меню и HUD ещё на прежнем runtime;
 native state/SVB/mod producers, OGRE scene/model families и полное сравнение
-Runic vendor delta. Следующая связанная цепочка — Settings через ту же CEGUI,
-после отдельного выбора scope. Completion игровых функций остаётся partial.
+Runic vendor delta. Settings/Options теперь также на CEGUI; актуальные runtime проверки и точный
+остаток — в `cegui-settings-options.md`. Следующая цепочка — character create. Completion игровых функций остаётся partial.

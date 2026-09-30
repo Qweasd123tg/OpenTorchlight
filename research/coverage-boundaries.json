@@ -6,14 +6,15 @@
         "0xb196f0"
       ],
       "status": "partial",
-      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; Settings/Options now also use native controls and retained animation; create/load/HUD retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-container-lifecycle.md",
         "research/dropdown-mainmenu.md",
         "research/ui-capture-modal-lifecycle.md",
         "research/dropdown-animation-lifecycle.md",
         "research/cegui-frontend-closure.md",
-        "research/cegui-source-integration.md"
+        "research/cegui-source-integration.md",
+        "research/cegui-settings-options.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
@@ -54,27 +55,6 @@
         "tests/ui_menu_state_test.cpp"
       ],
       "comparison": "Pinned static branch/site review and pure state/resource contracts; no original or UI execution."
-    },
-    {
-      "addresses": [
-        "0xbd5560",
-        "0xbd47e0"
-      ],
-      "status": "partial",
-      "boundary": "Linear 0..1 volume fields with draft preview, successful-write apply and cancel rollback. Original horizontal slider geometry/value mapping consumed by frontend/skin. Full graphics settings lifecycle, native mixer and original ownership remain open.",
-      "evidence": [
-        "research/menu-production-state.md",
-        "research/ui-slider.md"
-      ],
-      "implementation": [
-        "src/frontend.cpp",
-        "src/ui_skin.cpp",
-        "src/application.cpp"
-      ],
-      "tests": [
-        "tests/ui_slider_test.cpp"
-      ],
-      "comparison": "Static original field/call mapping and pure numeric/resource slider contracts."
     },
     {
       "addresses": [
@@ -1032,8 +1012,6 @@
         "0xb3c270",
         "0xb45080",
         "0xb7f580",
-        "0xb87ff0",
-        "0xbd6ea0",
         "0xc404c0",
         "0xc4a810",
         "0xc5d730",
@@ -1042,7 +1020,7 @@
         "0xea58b0"
       ],
       "status": "partial",
-      "boundary": "Grab-only createMenus: layout child-lookup key tables (incl. settings 18 widgets, continue 27, waypoint Button/Choice+N dynamics) transcribed to menu_grab_tables.hpp. Mechanical transcription + pinned tests, NO per-function semantic review; fishing/interactive are pipeline-only (no grabs).",
+      "boundary": "Grab-only createMenus: layout child-lookup key tables (incl. continue 27, waypoint Button/Choice+N dynamics) transcribed to menu_grab_tables.hpp. Mechanical transcription + pinned tests, NO per-function semantic review; fishing/interactive are pipeline-only (no grabs).",
       "evidence": [
         "research/batch-menu-pass.json",
         "research/inventory-open.md"
@@ -1403,6 +1381,44 @@
         "tests/ui_dropdown_test.cpp"
       ],
       "comparison": "Pinned update 0xb176b0 and shipped OGRE/resource numeric contracts; no UI execution."
+    },
+    {
+      "addresses": [
+        "0xbd5560",
+        "0xbd47e0",
+        "0xbd6ea0",
+        "0xbccb20",
+        "0xbd8650",
+        "0xb800a0",
+        "0xb80140",
+        "0xb86f50",
+        "0xb87ff0",
+        "0xa849d0"
+      ],
+      "status": "partial",
+      "boundary": "Native CEGUI Settings/Options resource/control/input/focus/capture/Falagard path with typed widget-value Apply/Cancel and existing Music/UI sound consumers. Source FSAA bool, Netbook override, shadow/particle tables, item metrics/sizeComboList and constructor Title are connected. Options retained model/tag/OPEN/CLOSE/sound and delayed exit have native window and GLES consumers. Full graphics recreation, OGRE viewport/shadows, FMOD effect groups, native pending flags/state owners/SVB/localization remain open.",
+      "evidence": [
+        "research/cegui-settings-options.md",
+        "research/cegui-source-integration.md",
+        "research/ui-combobox.md",
+        "research/ui-slider.md",
+        "research/dropdown-animation-lifecycle.md"
+      ],
+      "implementation": [
+        "src/cegui_menu.cpp",
+        "src/frontend.cpp",
+        "src/ui_combobox.cpp",
+        "src/gles_ui_renderer.cpp",
+        "src/application.cpp",
+        "cmake/CEGUI062.cmake"
+      ],
+      "tests": [
+        "tests/cegui_settings_test.cpp",
+        "tests/mainmenu_presentation_test.cpp",
+        "tests/paused_settings_test.py",
+        "tests/scenarios/paused-settings.scenario"
+      ],
+      "comparison": "Original ASM field/call/order review with named addresses and pinned library/resource contract tests; Application/GL isolated Settings/Apply/resume smoke. No original frame/runtime graphics comparison."
     }
   ],
   "port_systems": [

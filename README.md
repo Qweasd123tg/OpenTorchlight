@@ -8,18 +8,21 @@
 
 ## Действующий процесс и границы
 
-Главное меню и credits теперь используют [исходную CEGUI 0.6.2](research/cegui-source-integration.md)
-из закреплённого тега, включая WindowManager, события, Falagard и шрифты.
-Наш GLES получает готовые библиотечные quad-команды; собственные UiWindowRuntime
-и UiSkin больше не исполняют это меню на оригинальных ресурсах. Сохранены
-подтверждённые Runic Serif-теги и игровая привязка команд. Options/Settings,
-создание/загрузка персонажа и HUD ещё требуют переноса на эту библиотечную
-основу. Linux-сборка теперь требует FreeType и PCRE; исходники CEGUI/TinyXML
-включены в репозиторий с лицензиями. Android этим срезом не проверен.
+Главное меню, credits, Settings и Options используют
+[исходную CEGUI 0.6.2](research/cegui-source-integration.md) из закреплённого
+тега: WindowManager, события, реальные controls, Falagard и шрифты. GLES
+получает библиотечные quad-команды; собственного второго UI-дерева для этих
+страниц нет. [Settings/Options](research/cegui-settings-options.md) сохраняют
+Apply/Cancel, исходные значения настроек и анимационную цепочку Options.
+Создание/загрузка персонажа и HUD ещё требуют переноса. Linux-сборка требует
+FreeType, PCRE и Expat runtime; CEGUI и fallback Expat headers включены с
+лицензиями. Android этим срезом не проверен.
 
-Узкие проверки: `cegui_error_boundary` и `original_cegui_mainmenu_contract`.
-Они проверяют библиотечный код, ресурсы и подключение к контроллеру без окна
-и GL-контекста; визуальный запуск и производительность — отдельные проверки.
+Узкие CPU-проверки: `cegui_error_boundary`, `original_cegui_mainmenu_contract`,
+`original_cegui_settings_contract`. `paused_settings_render` также прошёл в
+общем цикле приложения с GL, изолированными saves/settings и фактическими
+кадрами. Полная graphics recreation оригинала и FMOD groups остаются открыты;
+покадровое сравнение с оригинальной игрой и performance не утверждаются.
 
 Основной процесс — [code-first](research/code-first.md), правила —
 [AGENTS.md](AGENTS.md), текущий scope — [UI-контур](research/ui-contour.json).

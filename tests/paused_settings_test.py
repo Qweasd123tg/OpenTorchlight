@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Actual common loop + original pak: pause/settings must stay modal and not save a character."""
+"""Actual common loop + original pak: pause/settings must intercept input and not save a character."""
 from __future__ import annotations
 import argparse
 import json

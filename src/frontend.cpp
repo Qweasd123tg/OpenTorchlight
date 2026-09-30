@@ -238,7 +238,7 @@ Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
     });
     if (CeguiMenu::available(r.archive())) {
         cegui_menu_ = std::make_unique<CeguiMenu>(r.archive(),
-            [this](const std::string& name, UiLayoutFunction function) { activate(name, function); });
+            [this](CeguiPage page, const std::string& name, UiLayoutFunction function) { native_action(page, name, function); });
         main_linux_credits_ = cegui_menu_->has_linux_credits();
     } else main_dropdown_ = std::make_unique<StaticDropdownState>(
         windows_, sheet_, "__opentorchlight/main", false, true);
@@ -402,6 +402,14 @@ void Frontend::key(FrontendKey key) {
         return;
     if (key == FrontendKey::accept) {
         if (focus_ < buttons_.size() && buttons_[focus_].enabled && buttons_[focus_].owner == page_) {
+            if (native_input()) {
+                // Existing portable keyboard navigation requests a control
+                // activation through the same native pointer path. CEGUI owns
+                // the resulting checkbox/capture/callback state.
+                const auto rect = buttons_[focus_].rect;
+                click(rect.x + rect.width / 2, rect.y + rect.height / 2);
+                return;
+            }
             const auto action = buttons_[focus_].id;
             const auto function = buttons_[focus_].widget.layout_function;
             activate(action, function);
@@ -414,6 +422,11 @@ void Frontend::key(FrontendKey key) {
                          : (focus_ + buttons_.size() - 1) % buttons_.size();
         if (buttons_[focus_].enabled && buttons_[focus_].owner == page_)
             break;
+    }
+    if (native_input() && focus_ < buttons_.size()) {
+        const auto owner = page_ == FrontendPage::main ? CeguiPage::main :
+            page_ == FrontendPage::settings ? CeguiPage::settings : CeguiPage::options;
+        cegui_menu_->focus(owner, buttons_[focus_].widget.name);
     }
 }
 std::optional<std::size_t> Frontend::button_at(float x, float y) const {
@@ -440,11 +453,12 @@ std::optional<std::size_t> Frontend::button_at(float x, float y) const {
     return std::nullopt;
 }
 void Frontend::pointer(const UiPointerState& state) {
-    if (cegui_menu_ && page_ == FrontendPage::main && !ordered_pointer_) {
+    if (native_input() && !ordered_pointer_) {
         cached_frame_.reset();
         if (state.position) cegui_menu_->pointer_event({UiPointerEventKind::move,
             (*state.position)[0], (*state.position)[1]});
         else cegui_menu_->pointer_event({UiPointerEventKind::leave});
+        read_native_settings();
         pointer_ = state;
         return;
     }
@@ -522,11 +536,12 @@ FrontendFrame Frontend::pointer_frame(FrontendFrame frame) const {
     return frame;
 }
 void Frontend::click(float x, float y) {
-    if (cegui_menu_ && page_ == FrontendPage::main) {
+    if (native_input()) {
         cached_frame_.reset();
         sync_cegui_menu();
         cegui_menu_->pointer_event({UiPointerEventKind::button_down, x, y});
         cegui_menu_->pointer_event({UiPointerEventKind::button_up, x, y});
+        read_native_settings();
         return;
     }
     cached_frame_.reset();
@@ -717,10 +732,45 @@ bool Frontend::main_can_load() const {
     // still our .otc adapter, not the original .SVB reader.
     return !saves_.empty();
 }
+bool Frontend::native_input() const noexcept {
+    return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::settings || page_ == FrontendPage::pause);
+}
+void Frontend::read_native_settings() {
+    if (cegui_menu_ && page_ == FrontendPage::settings)
+        settings_draft_ = cegui_menu_->settings_values(settings_draft_);
+}
+void Frontend::native_action(CeguiPage source, const std::string& name, UiLayoutFunction function) {
+    if (request_) return;
+    if (source == CeguiPage::main) {
+        dispatch_main_menu(main_open_, !main_open_, function, *this);
+    } else if (source == CeguiPage::options && page_ == FrontendPage::pause) {
+        // COptionsMenu::onClick b800a0: 0 Exit, 6 Close, 94 Settings.
+        if (function == UiLayoutFunction::exit_game) activate("exit-game");
+        else if (function == UiLayoutFunction::close_menu) activate("resume");
+        else if (function == UiLayoutFunction::settings_menu) activate("settings");
+    } else if (source == CeguiPage::settings && page_ == FrontendPage::settings) {
+        // bccb20: accepted/declined commands close, then update consumes the
+        // retained controls. Persistence remains the application's transaction.
+        if (function == UiLayoutFunction::accept) {
+            settings_draft_ = cegui_menu_->settings_values(settings_draft_, true);
+            activate("apply");
+            page_ = settings_return_;
+            cached_frame_.reset();
+        } else leave_settings();
+    }
+    static_cast<void>(name);
+    sync_windows();
+    cached_frame_.reset();
+}
 void Frontend::sync_cegui_menu() {
     if (!cegui_menu_) return;
     const bool can_continue = std::any_of(saves_.begin(), saves_.end(), [](const auto& save) { return save.loadable(); });
     cegui_menu_->state(main_open_, can_continue, show_credits_, show_credits_b_);
+    cegui_menu_->settings_state(page_ == FrontendPage::settings, settings_draft_, resolutions_);
+    const bool attached = options_animation_ ? options_animation_->visible() : page_ == FrontendPage::pause;
+    const auto position = options_animation_ ? options_animation_->content_position(
+        cached_width_ > 0 ? cached_width_ : 1024, cached_height_ > 0 ? cached_height_ : 768) : std::array<float, 2>{};
+    cegui_menu_->options_state(attached, position);
 }
 void Frontend::main_request_state(int state, int menu) {
     // CGameUI::requestSetGameState @0xa828f0 stores this pair. Consume it in
@@ -799,6 +849,7 @@ void Frontend::sync_windows() {
         !(page_ == FrontendPage::settings && settings_return_ == FrontendPage::main))
         main_set_open(false);
     for (auto page : {FrontendPage::create, FrontendPage::load, FrontendPage::settings}) {
+        if (cegui_menu_ && page == FrontendPage::settings) continue;
         const bool wanted = page_ == page;
         if (wanted || dropdowns_.count(page)) {
             if (page == FrontendPage::settings) dropdown(page).set_settings_open(wanted);
@@ -814,14 +865,18 @@ void Frontend::sync_windows() {
         if (resources_->archive().find_normalized("media/ui/models/dropdown/dropdown.mesh"))
             options_animation_ = std::make_unique<DropdownAnimation>(resources_->archive());
     }
-    if (wanted || dropdowns_.count(FrontendPage::pause)) {
+    if (cegui_menu_) {
+        if (options_animation_ && options_animation_->open() != wanted)
+            options_animation_->set_open(wanted);
+        sync_cegui_menu();
+    } else if (wanted || dropdowns_.count(FrontendPage::pause)) {
         auto& options = dropdown(FrontendPage::pause);
         if (options_animation_) {
             if (options_animation_->open() != wanted) {
                 options_animation_->set_open(wanted);
                 if (wanted) {
                     options.attach(false);
-                    windows_.move_to_front(options.root()); // COptionsMenu @0xb87229
+                    windows_.move_to_front(options.root());
                 }
             }
             if (!wanted && options_animation_->closed()) options.detach();
@@ -905,6 +960,7 @@ void Frontend::advance(float seconds) {
     if (!std::isfinite(seconds) || seconds < 0) throw std::invalid_argument("invalid frontend delta");
     if (cegui_menu_) {
         cegui_menu_->advance(seconds);
+        read_native_settings();
         if (seconds > 0) cached_frame_.reset();
     }
     pointer_clock_ += seconds;
@@ -921,8 +977,9 @@ void Frontend::advance(float seconds) {
     }
     if (options_animation_ && options_animation_->visible()) {
         options_animation_->advance(seconds);
-        if (!options_animation_->open() && options_animation_->closed())
+        if (!options_animation_->open() && options_animation_->closed() && !cegui_menu_)
             dropdown(FrontendPage::pause).detach();
+        sync_cegui_menu();
         cached_frame_.reset();
     }
     if (pending_options_exit_ && (!options_animation_ || options_animation_->closed()) && !request_)
@@ -942,15 +999,25 @@ std::vector<DropdownSoundRequest> Frontend::take_dropdown_sounds() {
 FrontendFrame Frontend::compose_frame(int width, int height) {
     FrontendFrame result;
     sync_cegui_menu();
-    if (cegui_menu_ && main_open_) {
+    if (cegui_menu_ && (main_open_ || native_input() || has_closing_windows())) {
         result.cegui = cegui_menu_->frame(width, height);
         result.original_layout = true;
         for (const auto& widget : result.cegui->widgets) {
             if (!widget.visible) continue;
             if (!widget.text.empty()) result.texts.push_back(widget);
             std::string id;
-            if (widget.callback.empty()) continue;
-            switch (widget.layout_function.value_or(UiLayoutFunction::none)) {
+            const auto owner = widget.page == CeguiPage::main ? FrontendPage::main :
+                widget.page == CeguiPage::settings ? FrontendPage::settings : FrontendPage::pause;
+            if (owner == FrontendPage::settings) {
+                if (widget.layout_function == UiLayoutFunction::accept) id = "apply";
+                else if (widget.layout_function == UiLayoutFunction::decline) id = "decline-settings";
+                else if (widget.type == "GuiLook/Checkbox" || widget.type == "GuiLook/Slider" || widget.type == "GuiLook/Combobox")
+                    id = "setting-" + upper(leaf(widget.name));
+            } else if (owner == FrontendPage::pause) {
+                if (widget.layout_function == UiLayoutFunction::close_menu) id = "resume";
+                else if (widget.layout_function == UiLayoutFunction::exit_game) id = "exit-game";
+                else if (widget.layout_function == UiLayoutFunction::settings_menu) id = "settings";
+            } else switch (widget.layout_function.value_or(UiLayoutFunction::none)) {
             case UiLayoutFunction::new_game_menu: id = "new"; break;
             case UiLayoutFunction::continue_game_menu: id = "loads"; break;
             case UiLayoutFunction::continue_game: id = "continue"; break;
@@ -963,11 +1030,13 @@ FrontendFrame Frontend::compose_frame(int width, int height) {
             default: continue;
             }
             FrontendButton button;
-            button.owner = FrontendPage::main;
+            if (id.empty()) continue;
+            button.owner = owner;
             button.id = std::move(id);
             button.text = widget.text;
             button.rect = widget.rect;
             button.enabled = widget.enabled;
+            button.selected = widget.property("Selected") == "True";
             button.supplemental = false;
             button.widget = widget;
             result.buttons.push_back(std::move(button));
@@ -1024,7 +1093,7 @@ FrontendFrame Frontend::frame(int width, int height) {
     sync_windows();
     if (cached_frame_ && cached_width_ == width && cached_height_ == height &&
         cached_revision_ == windows_.revision())
-        return cegui_menu_ && page_ == FrontendPage::main ? *cached_frame_ : pointer_frame(*cached_frame_);
+        return native_input() ? *cached_frame_ : pointer_frame(*cached_frame_);
     cached_width_ = width;
     cached_height_ = height;
     ++frame_build_count_;
@@ -1042,8 +1111,8 @@ FrontendFrame Frontend::frame(int width, int height) {
     buttons_ = result.buttons;
     cached_revision_ = windows_.revision();
     cached_frame_ = result;
-    if (ordered_pointer_ && !(cegui_menu_ && page_ == FrontendPage::main)) retarget_pointer();
-    return cegui_menu_ && page_ == FrontendPage::main ? result : pointer_frame(std::move(result));
+    if (ordered_pointer_ && !(native_input())) retarget_pointer();
+    return native_input() ? result : pointer_frame(std::move(result));
 }
 void Frontend::retarget_pointer() {
     if (retargeting_ || cached_width_ <= 0 || cached_height_ <= 0) return;
@@ -1132,12 +1201,13 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
 void Frontend::pointer_event(const UiPointerEvent& event) {
     ordered_pointer_ = true;
     const bool held_native = std::any_of(cegui_buttons_.begin(), cegui_buttons_.end(), [](bool held) { return held; });
-    if (cegui_menu_ && (page_ == FrontendPage::main ||
+    if (cegui_menu_ && (native_input() ||
         ((event.kind == UiPointerEventKind::move || event.kind == UiPointerEventKind::leave) && held_native) ||
         (event.kind == UiPointerEventKind::button_up && event.button < cegui_buttons_.size() && cegui_buttons_[event.button]))) {
         cached_frame_.reset();
         sync_cegui_menu();
         cegui_menu_->pointer_event(event);
+        read_native_settings();
         // Preserve host position across the native-menu -> legacy-page handoff.
         if (event.kind == UiPointerEventKind::leave) pointer_.position.reset();
         else {

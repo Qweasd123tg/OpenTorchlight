@@ -1,21 +1,25 @@
 {
   "date": "2026-09-30",
   "source_commit": "3ed5c719c3bb27b877b192e034ef2c0b05ea722c",
-  "vendor_tree_sha256": "46ff562ca8c4284cb9899f876ae973ec1291352dc0afc6e9725ca473e8a39f67",
+  "vendor_tree_sha256": "d71cc7ff41e3931ed3ae511b032b032f0badb7b49f2950785a621afe567ac9b8",
   "vendor_tree_digest": "sorted relative path, NUL, binary sha256 for every vendored file",
   "original_inputs": {
     "Torchlight.bin.x86_64": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
     "lib64/libCEGUIBase.so.1": "57a888d741b1a0a284915c6d5066fef68c1bcc1ebfd0163f6be8720e3cdda2aa",
-    "pak.zip": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8"
+    "pak.zip": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8",
+    "lib64/libCEGUIExpatParser.so": "7fcde2e0baf1a8d3d483ee54df1dd73d4e3de22c9a5a81043c6513bcfff9ff1f"
   },
   "resources_sha256": {
     "media/UI/GuiLookSkin.scheme": "006c21ae3754dea3638ff9233701d4e815b656cc415fd60823ec5c53ff1cddc0",
     "media/UI/GuiLook.looknfeel": "2cc118a13f7421c8f1e9d5b25f29f4b7962042898110a5e71b333b2b8766ef43",
-    "media/UI/mainmenuframe.layout": "60bccb2941daebd326205413905f9e8e34210df4c33e775a128a7bd20adb1ba0"
+    "media/UI/mainmenuframe.layout": "60bccb2941daebd326205413905f9e8e34210df4c33e775a128a7bd20adb1ba0",
+    "media/UI/settingsmenu.layout": "dd4b17748afaeb5e9e21525847757f2d6aa4ef6f6cf53756f7f9bde0305c6751",
+    "media/UI/optionsmenu.layout": "4e45960d7f4e179840ba2eff4edd34f0910b129882fb7bb47f84070bdb43b844"
   },
   "host_dependencies": {
     "FreeType": "2.14.3",
-    "PCRE": "8.45"
+    "PCRE": "8.45",
+    "Expat": "2.8.3"
   },
-  "boundary": "Pinned CEGUI source and reviewed main-menu vendor adaptations; no claim of original ABI or glyph/frame parity"
+  "boundary": "Pinned CEGUI source, reviewed Main/Settings/Options vendor adaptations and Expat module; no full original ABI, graphics recreation, glyph/frame or FMOD parity"
 }

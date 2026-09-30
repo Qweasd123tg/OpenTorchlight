@@ -2,8 +2,12 @@
 #include "torchlight/dds_texture.hpp"
 #include "torchlight/png_texture.hpp"
 #include <CEGUI.h>
-#include <CEGUITinyXMLParser.h>
+#include <CEGUIExpatParser.h>
 #include <FalModule.h>
+#include <falagard/CEGUIFalWidgetLookManager.h>
+#include <falagard/CEGUIFalWidgetLookFeel.h>
+#include <falagard/CEGUIFalNamedArea.h>
+#include <tuple>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -195,85 +199,139 @@ std::string leaf(const std::string& name) {
 } // namespace
 
 struct CeguiMenu::Impl {
+    struct View {
+        CeguiPage page;
+        std::string prefix;
+        CEGUI::Window *root = nullptr, *content = nullptr, *layout = nullptr;
+        FunctionTree bindings;
+        std::map<std::string, CEGUI::Window*> named;
+        std::map<CEGUI::Window*, std::pair<CEGUI::UVector2, CEGUI::UVector2>> original_geometry;
+        bool attached = false;
+    };
     ArchiveProvider provider;
     QuadRenderer renderer;
-    CEGUI::TinyXMLParser parser;
+    CEGUI::ExpatParser parser;
     std::unique_ptr<CEGUI::System> system;
     CEGUI::Window* sheet = nullptr;
-    CEGUI::Window* root = nullptr;
-    CEGUI::Window* layout = nullptr;
-    FunctionTree bindings;
-    std::map<std::string, CEGUI::Window*> named;
-    std::vector<std::pair<CEGUI::Window*, CEGUI::URect>> original_areas;
+    CEGUI::Window* ingame_sheet = nullptr;
+    std::map<CeguiPage, View> views;
     Action action;
     int width = 0, height = 0;
-    bool open = true;
+    bool settings_initialized = false;
+    std::vector<UiResolution> resolutions;
+    std::vector<std::tuple<CeguiPage, std::string, UiLayoutFunction>> pending;
     Impl(const PakArchive& archive, Action callback)
         : provider(archive), renderer(archive), action(std::move(callback)) {
         if (CEGUI::System::getSingletonPtr())
             throw std::logic_error("only one CEGUI frontend may own the library System");
-        new LibraryLogger(); // CEGUI::System destroys its logger on normal teardown.
+        new LibraryLogger();
         system = std::make_unique<CEGUI::System>(&renderer, &provider, &parser);
         registerAllFactoriesFunction();
         CEGUI::SchemeManager::getSingleton().loadScheme("media/UI/GuiLookSkin.scheme");
         system->setDefaultFont("Serif");
         CEGUI::MouseCursor::getSingleton().hide();
-        auto& manager = CEGUI::WindowManager::getSingleton();
-        sheet = manager.createWindow("DefaultWindow", "__cegui/sheet");
+        sheet = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "__cegui/sheet");
         sheet->setSize({{1, 0}, {1, 0}});
-        root = manager.createWindow("DefaultWindow", "__cegui/main/root");
-        root->setSize({{1, 0}, {1, 0}});
-        root->setProperty("RiseOnClick", "False");
-        root->setMousePassThroughEnabled(false);
-        root->setZOrderingEnabled(false);
-        sheet->addChildWindow(root);
-        auto* back = manager.createWindow("DefaultWindow", "__cegui/main/back");
-        root->addChildWindow(back);
+        // CGameUI aa3666 uses Ingame UI Sheet (+488) for Options;
+        // aa36e0 and aa4016 use Sheet (+470) for Settings and Main.
+        ingame_sheet = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "__cegui/ingame_sheet");
+        ingame_sheet->setSize({{1, 0}, {1, 0}});
+        ingame_sheet->setMousePassThroughEnabled(true);
+        ingame_sheet->setZOrderingEnabled(false);
+        sheet->addChildWindow(ingame_sheet);
+        make_view(CeguiPage::main, "main", "mainmenuframe", false);
+        if (archive.contains_normalized("media/UI/optionsmenu.layout"))
+            make_view(CeguiPage::options, "options", "optionsmenu", true);
+        if (archive.contains_normalized("media/UI/settingsmenu.layout")) {
+            auto& settings = make_view(CeguiPage::settings, "settings", "settingsmenu", true);
+            // CSettingsMenu::createMenus @bd7fbd..bd80e9. The library creates
+            // and owns Editbox/DropList/Button and scrollbar children.
+            for (const auto* name : {"ResolutionDropdown", "ShadowDropdown", "ParticleDropdown"}) {
+                auto* combo = static_cast<CEGUI::Combobox*>(settings.named.at(name));
+                combo->getDropList()->setAlwaysOnTop(true);
+                combo->getDropList()->setAutoArmEnabled(true);
+                combo->setSingleClickEnabled(true);
+                combo->getDropList()->setClippedByParent(false);
+                combo->setClippedByParent(false);
+            }
+            settings.named.at("HardwareSkinning")->hide(); // bd801e..bd8027
+            // Constructor bd86a9 reads UTF-32LE "Settings" at ff10a0,
+            // then setTitle b17e70 -> Window::setText b17f87.
+            settings.named.at("Title")->setText("Settings");
+        }
+        auto& main = views.at(CeguiPage::main);
+        main.named.at("DemoVersion")->hide();
+        if (main.named.count("CharacterModsWarning")) main.named.at("CharacterModsWarning")->hide();
+        main.named.at("CreditFrame")->hide();
+        if (main.named.count("CreditFrameB")) main.named.at("CreditFrameB")->hide();
+        main.named.at("Credits")->setText(main_menu_credit_text());
+        if (main.named.count("CopyrightInfo"))
+            main.named.at("CopyrightInfo")->setText("(v1.15) Torchlight (C) 2009 Runic Games Inc.");
+        attach(main, true);
+        system->setGUISheet(sheet);
+        resize(1024, 768);
+    }
+    View& make_view(CeguiPage page, const std::string& name, const std::string& layout_name, bool in_content) {
+        auto& v = views.emplace(page, View{page, "__cegui/" + name + "/", nullptr, nullptr,
+            nullptr, {}, {}, {}, false}).first->second;
+        auto& manager = CEGUI::WindowManager::getSingleton();
+        v.root = manager.createWindow("DefaultWindow", v.prefix + "root");
+        v.root->setSize({{1, 0}, {1, 0}});
+        v.root->setProperty("RiseOnClick", "False");
+        v.root->setMousePassThroughEnabled(false);
+        v.root->setZOrderingEnabled(false);
+        auto* back = manager.createWindow("DefaultWindow", v.prefix + "back");
+        v.root->addChildWindow(back);
         back->setSize({{1, 0}, {1, 0}});
         back->setProperty("RiseOnClick", "False");
         back->moveToBack();
         back->setZOrderingEnabled(false);
-        auto* content = manager.createWindow("DefaultWindow", "__cegui/main/content");
-        root->addChildWindow(content);
-        content->setSize({{1, 0}, {1, 0}});
-        content->setProperty("RiseOnClick", "False");
-        content->setMousePassThroughEnabled(true);
-        content->moveToFront();
-        content->setZOrderingEnabled(false);
-        layout = manager.loadWindowLayout("media/UI/mainmenuframe.layout", CEGUI::String("__cegui/main/"));
-        bindings.collect(layout);
-        map_ui_functions(bindings, 0);
-        for (auto* window : bindings.windows) {
-            named.emplace(leaf(string(window->getName())), window);
-            original_areas.emplace_back(window, window->getArea());
+        v.content = manager.createWindow("DefaultWindow", v.prefix + "content");
+        v.root->addChildWindow(v.content);
+        v.content->setSize({{1, 0}, {1, 0}});
+        v.content->setProperty("RiseOnClick", "False");
+        v.content->setMousePassThroughEnabled(true);
+        v.content->moveToFront();
+        v.content->setZOrderingEnabled(false);
+        v.layout = manager.loadWindowLayout("media/UI/" + layout_name + ".layout", v.prefix);
+        v.bindings.collect(v.layout);
+        map_ui_functions(v.bindings, 0);
+        for (auto* window : v.bindings.windows) {
+            v.named.emplace(leaf(string(window->getName())), window);
+            v.original_geometry.emplace(window, std::make_pair(window->getPosition(), window->getSize()));
         }
-        subscribe(layout);
-        root->addChildWindow(layout);
-        layout->setPosition({{0, 0}, {0, 0}});
-        // CMainMenu::createMenus, including required versus optional windows.
-        named.at("DemoVersion")->hide();
-        if (named.count("CharacterModsWarning")) named.at("CharacterModsWarning")->hide();
-        named.at("CreditFrame")->hide();
-        if (named.count("CreditFrameB")) named.at("CreditFrameB")->hide();
-        named.at("Credits")->setText(main_menu_credit_text());
-        if (named.count("CopyrightInfo"))
-            named.at("CopyrightInfo")->setText("(v1.15) Torchlight (C) 2009 Runic Games Inc.");
-        system->setGUISheet(sheet);
-        resize(1024, 768);
+        subscribe(v.layout);
+        // Main attaches to root; Settings/Options to content (bd7079/b8828e).
+        (in_content ? v.content : v.root)->addChildWindow(v.layout);
+        v.layout->setPosition({{0, 0}, {0, 0}});
+        if (page == CeguiPage::options) v.root->setAlwaysOnTop(true); // b8829a
+        return v;
+    }
+    void attach(View& v, bool value) {
+        if (v.attached == value) return;
+        if (value) {
+            (v.page == CeguiPage::options ? ingame_sheet : sheet)->addChildWindow(v.root);
+            v.root->moveToBack(); // CSettingsMenu bd5640; CDropdown b178fc
+            if (v.page == CeguiPage::options) v.root->moveToFront(); // b87229
+        } else (v.page == CeguiPage::options ? ingame_sheet : sheet)->removeChildWindow(v.root);
+        v.attached = value;
     }
     bool down(const CEGUI::EventArgs& args) {
         const auto& event = static_cast<const CEGUI::MouseEventArgs&>(args);
         if (event.button != CEGUI::LeftButton) return true;
-        // Queue rather than mutate controller during a library callback. Frontend
-        // consumes after inject returns, preserving safe event/window ownership.
-        pending.emplace_back(leaf(string(event.window->getName())), bindings.functions.at(event.window));
+        for (auto& [page, v] : views) {
+            const auto function = v.bindings.functions.find(event.window);
+            if (function != v.bindings.functions.end()) {
+                pending.emplace_back(page, leaf(string(event.window->getName())), function->second);
+                break;
+            }
+        }
         return true;
     }
     bool double_click(const CEGUI::EventArgs&) { return true; }
     void subscribe(CEGUI::Window* window) {
-        const auto count = window->getChildCount();
-        for (std::size_t child = 0; child < count; ++child) subscribe(window->getChildAtIdx(child));
-        // CDropdownMenu::mapEventHandlers: child-first; down before double.
+        for (std::size_t child = 0; child < window->getChildCount(); ++child)
+            subscribe(window->getChildAtIdx(child));
         try {
             if (window->isPropertyPresent("onClick") && !window->getProperty("onClick").empty()) {
                 window->setWantsMultiClickEvents(true);
@@ -284,27 +342,164 @@ struct CeguiMenu::Impl {
             }
         } catch (...) {} // Original local subscription catch; prior effects survive.
     }
-    std::vector<std::pair<std::string, UiLayoutFunction>> pending;
     void deliver() {
         auto requests = std::move(pending);
         pending.clear();
-        for (const auto& item : requests) action(item.first, item.second);
+        for (const auto& [page, name, function] : requests) action(page, name, function);
+    }
+    static CEGUI::Combobox* combo(View& v, const char* name) {
+        return static_cast<CEGUI::Combobox*>(v.named.at(name));
+    }
+    static CEGUI::Checkbox* checkbox(View& v, const char* name) {
+        return static_cast<CEGUI::Checkbox*>(v.named.at(name));
+    }
+    static CEGUI::Slider* slider(View& v, const char* name) {
+        return static_cast<CEGUI::Slider*>(v.named.at(name));
+    }
+    // CGameUI::sizeComboList @a849d0..a84bc2: real item metrics, named
+    // rendering area, edit height and CEGUI's signed nearest-pixel Y rounding.
+    static void size_combo(CEGUI::Combobox* c) {
+        auto* list = c->getDropList();
+        const float edit_height = c->getEditbox()->getPixelSize().d_height;
+        const float list_height = list->getPixelSize().d_height;
+        const auto& look = CEGUI::WidgetLookManager::getSingleton().getWidgetLook(list->getLookNFeel());
+        const auto& name = list->getHorzScrollbar()->isVisible(false)
+            ? "ItemRenderingAreaHScroll" : "ItemRenderingArea";
+        const auto area = look.getNamedArea(name).getArea().getPixelRect(*list);
+        // The shipped Rect ABI packs top/bottom before left/right. This is
+        // rendering-area height, not a width (verified a84af3..a84b17).
+        const float border = list_height - area.getHeight();
+        const auto& y = list->getYPosition();
+        const float scaled_y = y.d_scale * c->getPixelSize().d_height;
+        const float offset_y = static_cast<float>(static_cast<int>(scaled_y + (scaled_y > 0 ? .5F : -.5F))) + y.d_offset;
+        c->setHeight({0, list->getTotalItemsHeight() + edit_height + border + offset_y - edit_height});
+    }
+    void size_combos() {
+        auto& v = views.at(CeguiPage::settings);
+        for (const auto* name : {"ResolutionDropdown", "ShadowDropdown", "ParticleDropdown"})
+            size_combo(combo(v, name));
+    }
+    static void fill(CEGUI::Combobox* c, const std::vector<UiComboOption>& options) {
+        for (const auto& option : options) {
+            auto item = std::make_unique<CEGUI::ListboxTextItem>(option.text, static_cast<CEGUI::uint>(option.id));
+            item->setSelectionColours(CEGUI::colour(1, .5F, .5F, 1));
+            c->addItem(item.get());
+            item.release(); // Listbox owns auto-deleted items, original constructor arg r9=1.
+        }
+    }
+    static void select(CEGUI::Combobox* c, std::size_t index) {
+        c->setItemSelectState(index, true);
+    }
+    void set_settings(const DisplaySettings& value, const std::vector<UiResolution>& modes) {
+        auto& v = views.at(CeguiPage::settings);
+        checkbox(v, "Fullscreen")->setSelected(value.fullscreen);
+        checkbox(v, "Antialiasing")->setSelected(value.fsaa != 0); // bd5692..bd56a1
+        checkbox(v, "RenderBehind")->setSelected(value.render_behind);
+        checkbox(v, "Rimlights")->setSelected(value.rimlights);
+        checkbox(v, "HardwareSkinning")->setSelected(value.hardware_skinning);
+        checkbox(v, "VSync")->setSelected(value.vsync);
+        checkbox(v, "SoundMute")->setSelected(value.sound_mute);
+        checkbox(v, "MusicMute")->setSelected(value.music_mute);
+        checkbox(v, "ShowTips")->setSelected(value.show_tips);
+        checkbox(v, "ShowFloatyNumbers")->setSelected(value.floaty_numbers);
+        checkbox(v, "ShowBlood")->setSelected(value.show_blood);
+        checkbox(v, "NetbookMode")->setSelected(value.netbook_mode);
+        slider(v, "SoundVolume")->setMaxValue(1);
+        slider(v, "SoundVolume")->setCurrentValue(value.sound_volume);
+        slider(v, "MusicVolume")->setMaxValue(1);
+        slider(v, "MusicVolume")->setCurrentValue(value.music_volume);
+        auto* resolution = combo(v, "ResolutionDropdown");
+        if (!settings_initialized || resolutions != modes) {
+            resolution->resetList();
+            resolutions = modes;
+            fill(resolution, UiSettingsComboboxes::resolution_options(modes));
+        }
+        if (resolution->getItemCount()) {
+            select(resolution, 0); // bd692e: default row before matching current dimensions
+            for (std::size_t n = 0; n < resolution->getItemCount(); ++n) {
+                const auto id = resolution->getListboxItemFromIndex(n)->getID();
+                if (modes.at(id) == UiResolution{value.res_width, value.res_height}) select(resolution, n);
+            }
+        }
+        auto* shadow = combo(v, "ShadowDropdown");
+        auto* particle = combo(v, "ParticleDropdown");
+        if (!settings_initialized) {
+            fill(shadow, UiSettingsComboboxes::shadow_options());
+            fill(particle, UiSettingsComboboxes::particle_options());
+        }
+        select(shadow, 0);
+        if (value.shadows_detail >= 0 && value.shadows_detail < 6)
+            select(shadow, static_cast<std::size_t>(value.shadows_detail));
+        select(particle, 0);
+        for (std::size_t n = 0; n < 3; ++n) {
+            if (UiSettingsComboboxes::particle_options()[n].particle_fps >= value.particle_fps) {
+                select(particle, n);
+                break;
+            }
+        }
+        settings_initialized = true;
+        size_combos();
+        for (auto* c : {resolution, shadow, particle}) { c->moveToFront(); c->getDropList()->moveToFront(); }
+    }
+    DisplaySettings settings_values(DisplaySettings value, bool applying) {
+        auto& v = views.at(CeguiPage::settings);
+        value.fullscreen = checkbox(v, "Fullscreen")->isSelected();
+        value.fsaa = checkbox(v, "Antialiasing")->isSelected() ? 1 : 0; // bd53c6..bd53d4
+        value.render_behind = checkbox(v, "RenderBehind")->isSelected();
+        value.rimlights = checkbox(v, "Rimlights")->isSelected();
+        value.hardware_skinning = checkbox(v, "HardwareSkinning")->isSelected();
+        value.vsync = checkbox(v, "VSync")->isSelected();
+        value.sound_mute = checkbox(v, "SoundMute")->isSelected();
+        value.music_mute = checkbox(v, "MusicMute")->isSelected();
+        value.show_tips = checkbox(v, "ShowTips")->isSelected();
+        value.floaty_numbers = checkbox(v, "ShowFloatyNumbers")->isSelected();
+        value.show_blood = checkbox(v, "ShowBlood")->isSelected();
+        value.netbook_mode = checkbox(v, "NetbookMode")->isSelected();
+        value.sound_volume = slider(v, "SoundVolume")->getCurrentValue();
+        value.music_volume = slider(v, "MusicVolume")->getCurrentValue();
+        if (const auto* item = combo(v, "ResolutionDropdown")->getSelectedItem()) {
+            const auto mode = resolutions.at(item->getID());
+            value.res_width = mode.width; value.res_height = mode.height;
+        }
+        if (const auto* item = combo(v, "ShadowDropdown")->getSelectedItem())
+            UiSettingsComboboxes::apply({UiSettingsComboKind::shadow, 0,
+                UiSettingsComboboxes::shadow_options().at(item->getID())}, value);
+        if (const auto* item = combo(v, "ParticleDropdown")->getSelectedItem())
+            UiSettingsComboboxes::apply({UiSettingsComboKind::particle, 0,
+                UiSettingsComboboxes::particle_options().at(item->getID())}, value);
+        // bd4a11..bd4a42 / bd4c58: Netbook overrides only on Apply.
+        if (applying && value.netbook_mode) {
+            value.fsaa = 0; value.render_behind = false; value.rimlights = false;
+            UiSettingsComboboxes::apply({UiSettingsComboKind::shadow, 0,
+                UiSettingsComboboxes::shadow_options().front()}, value);
+            UiSettingsComboboxes::apply({UiSettingsComboKind::particle, 0,
+                UiSettingsComboboxes::particle_options().front()}, value);
+        }
+        return value;
     }
     void resize(int w, int h) {
         if (width == w && height == h) return;
         renderer.resize(w, h);
         const float ratio = static_cast<float>(h) / 768.0F;
-        for (const auto& item : original_areas) {
-            auto area = item.second;
-            area.d_min.d_x.d_offset *= ratio;
-            area.d_min.d_y.d_offset *= ratio;
-            area.d_max.d_x.d_offset *= ratio;
-            area.d_max.d_y.d_offset *= ratio;
-            item.first->setArea(area);
+        for (auto& [page, v] : views) {
+            // convertToScreenScale a83ed0 is child-first and scales the
+            // four position/size offsets, not min/max area offsets. Keeping
+            // pristine geometry makes this host resize adapter noncumulative.
+            const auto scale = [&](const auto& self, CEGUI::Window* window) -> void {
+                for (std::size_t n = 0; n < window->getChildCount(); ++n)
+                    self(self, window->getChildAtIdx(n));
+                auto position = v.original_geometry.at(window).first;
+                auto size = v.original_geometry.at(window).second;
+                position.d_x.d_offset *= ratio; position.d_y.d_offset *= ratio;
+                size.d_x.d_offset *= ratio; size.d_y.d_offset *= ratio;
+                window->setPosition(position);
+                window->setSize(size);
+            };
+            scale(scale, v.layout);
+            if (page == CeguiPage::main) v.layout->setPosition({{0, 0}, {0, 0}});
         }
-        layout->setPosition({{0, 0}, {0, 0}});
-        width = w;
-        height = h;
+        width = w; height = h;
+        if (settings_initialized) size_combos();
     }
 };
 
@@ -319,14 +514,11 @@ void CeguiMenu::state(bool open, bool can_continue, bool credits, bool linux_cre
     library_call([&] {
     auto& i = *impl_;
     // Retain the library tree when closing; reattach the same windows on open.
-    if (i.open != open) {
-        if (open) i.sheet->addChildWindow(i.root);
-        else i.sheet->removeChildWindow(i.root);
-        i.open = open;
-    }
-    i.named.at("ContinueLast")->setVisible(can_continue);
-    i.named.at("CreditFrame")->setVisible(credits);
-    if (i.named.count("CreditFrameB")) i.named.at("CreditFrameB")->setVisible(linux_credits);
+    auto& v = i.views.at(CeguiPage::main);
+    i.attach(v, open);
+    v.named.at("ContinueLast")->setVisible(can_continue);
+    v.named.at("CreditFrame")->setVisible(credits);
+    if (v.named.count("CreditFrameB")) v.named.at("CreditFrameB")->setVisible(linux_credits);
     });
 }
 void CeguiMenu::resize(int width, int height) { library_call([&] { impl_->resize(width, height); }); }
@@ -358,22 +550,52 @@ CeguiMenuFrame CeguiMenu::frame(int width, int height) {
     i.system->renderGUI();
     CeguiMenuFrame result;
     result.quads = i.renderer.quads;
-    for (auto* window : i.bindings.windows) {
-        UiResolvedWidget widget;
-        widget.name = leaf(string(window->getName()));
+    for (auto& [page, v] : i.views) for (auto* window : v.bindings.windows) {
+        CeguiWidget widget;
+        widget.page = page;
+        widget.name = page == CeguiPage::main ? leaf(string(window->getName())) : string(window->getName());
         widget.type = string(window->getType());
         widget.text = string(window->getText());
+        if (window->getFont()) widget.font = string(window->getFont()->getProperty("Name"));
         widget.rect = rectangle(window->getUnclippedPixelRect());
         widget.clip = rectangle(window->getPixelRect());
         widget.has_clip = true;
-        widget.visible = i.open && window->isVisible();
+        widget.visible = v.attached && window->isVisible();
         widget.enabled = !window->isDisabled();
-        widget.layout_function = i.bindings.functions.at(window);
+        widget.layout_function = v.bindings.functions.at(window);
+        if (window->isPropertyPresent("Selected")) widget.properties["Selected"] = string(window->getProperty("Selected"));
+        if (window->isPropertyPresent("CurrentValue")) widget.properties["CurrentValue"] = string(window->getProperty("CurrentValue"));
         if (window->isPropertyPresent("onClick")) widget.callback = string(window->getProperty("onClick"));
         result.widgets.push_back(std::move(widget));
     }
     return result;
     });
 }
-bool CeguiMenu::has_linux_credits() const { return impl_->named.count("CreditFrameB") != 0; }
+bool CeguiMenu::has_linux_credits() const { return impl_->views.at(CeguiPage::main).named.count("CreditFrameB") != 0; }
+void CeguiMenu::settings_state(bool open, const DisplaySettings& value, const std::vector<UiResolution>& modes) {
+    library_call([&] {
+        auto& i = *impl_;
+        const auto found = i.views.find(CeguiPage::settings);
+        if (found == i.views.end()) { if (open) throw std::runtime_error("missing native settings layout"); return; }
+        auto& v = found->second;
+        const bool opening = open && !v.attached;
+        i.attach(v, open);
+        if (opening || (open && i.resolutions != modes)) i.set_settings(value, modes);
+    });
+}
+DisplaySettings CeguiMenu::settings_values(DisplaySettings base, bool applying) const {
+    return library_call([&] { return impl_->settings_values(base, applying); });
+}
+void CeguiMenu::options_state(bool attached, const std::array<float, 2>& position) {
+    library_call([&] {
+        const auto found = impl_->views.find(CeguiPage::options);
+        if (found == impl_->views.end()) { if (attached) throw std::runtime_error("missing native options layout"); return; }
+        auto& v = found->second;
+        impl_->attach(v, attached);
+        v.content->setPosition({{0, position[0]}, {0, position[1]}});
+    });
+}
+void CeguiMenu::focus(CeguiPage page, const std::string& name) {
+    library_call([&] { impl_->views.at(page).named.at(leaf(name))->activate(); });
+}
 } // namespace torchlight

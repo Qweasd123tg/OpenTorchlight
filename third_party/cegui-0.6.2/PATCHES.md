@@ -5,7 +5,7 @@ Source: official CEGUI `v0-6-2` tag, commit
 The source archive used for this import has SHA-256
 `fe7509fce6a16fc307032254e08cff70dce2f7eb5233ee57bc24bc27b733cc84`.
 The import includes `src`, `include`, `WindowRendererSets/Falagard`,
-`XMLParserModules/TinyXMLParser`, `COPYING`, and `AUTHORS`. Original source
+`XMLParserModules/TinyXMLParser`, `XMLParserModules/expatParser`, `COPYING`, and `AUTHORS`. Original source
 notices are retained. The bundled `ceguitinyxml` files retain Lee Thomason's
 licence and attribution in their headers. This file marks the altered version.
 
@@ -28,9 +28,16 @@ Local source changes:
    game ELF registration and shipped library behavior are recorded with
    addresses in `research/ui-inline-text.md`.
 
+3. `XMLParserModules/expatParser/CEGUIExpatParser.cpp`: retain the upstream
+   parser/callback contract and add RAII ownership for parser and raw resource
+   when ResourceProvider/XMLHandler throws. Expat is now the production parser,
+   including UTF-16 Options. The earlier TinyXML changes are retained as
+   historical source changes but TinyXML is no longer compiled.
+
 Build integration is in `cmake/CEGUI062.cmake`. It defines static
-`CEGUI062::Base` and `CEGUI062::Falagard` targets; Base includes bundled
-TinyXML, FreeType, PCRE, and `dl`. The original renderer modules, Lua, and
+`CEGUI062::Base` and `CEGUI062::Falagard` targets; Base uses host
+Expat, FreeType, PCRE, and `dl`. Static libraries are PIC for the existing
+shared Application scenario probe. The original renderer modules, Lua, and
 sample programs are outside this import. The upstream FreeType source already
 uses `FT_LOAD_FORCE_AUTOHINT` for preload and rendering, matching the shipped
 library's `updateFont` load flag `0x20` at `0xe0997` recorded in

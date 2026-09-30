@@ -40,7 +40,7 @@ int main(int argc, char** argv) { try {
     if (argc == 3 && std::string(argv[1]) == "--invalid") {
         PakArchive broken(argv[2]);
         bool caught = false;
-        try { CeguiMenu menu(broken, [](const auto&, auto) {}); }
+        try { CeguiMenu menu(broken, [](auto, const auto&, auto) {}); }
         catch (const std::runtime_error& e) { caught = std::string(e.what()).find("CEGUI:") == 0; }
         require(caught, "non-std library exception escaped the production boundary");
         require(!CEGUI::System::getSingletonPtr(), "failed resource load leaked System");
@@ -109,7 +109,7 @@ int main(int argc, char** argv) { try {
             "resize compounded original offsets");
         command(ui, "settings"); require(ui.page() == FrontendPage::settings, "application command not consumed");
         f = ui.frame(1024, 768);
-        require(f.cegui && !frontend_paint_list(f).empty(), "Settings lost native backing menu");
+        require(f.cegui && frontend_paint_list(f).empty(), "Settings used legacy skin compilation");
         ui.key(FrontendKey::back); command(ui, "new");
         require(ui.page() == FrontendPage::create && !ui.frame(1024, 768).cegui, "native detach/new-game dispatch failed");
         ui.key(FrontendKey::back); require(ui.frame(1024, 768).cegui.has_value(), "retained native tree failed to reopen");

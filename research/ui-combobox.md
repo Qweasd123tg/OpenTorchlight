@@ -98,12 +98,18 @@ Shadow создаёт 6 переведённых строк (`@0xbd5df5..0xbd61b
 
 | ID | LIGHTING | SHADOWS | resolution |
 |---:|---:|---:|---:|
-| 0 | 0 | 0 | unchanged |
-| 1 | 1 | 0 | unchanged |
+| 0 | 0 | 0 | 128 |
+| 1 | 1 | 0 | 128 |
 | 2 | 1 | 1 | 128 |
 | 3 | 1 | 1 | 256 |
 | 4 | 1 | 1 | 512 |
 | 5 | 1 | 1 | 1024 |
+
+Повторная ASM-сверка 2026-09-30 исправила прежний ошибочный `unchanged`
+для ID0/1. Jump table даёт targets `bd5300`, `bd52b8`, `bd4ea0`,
+`bd5150`, `bd51c8`, `bd5240`. ID0/1 идут через `bd52f4 -> bd4edf`,
+после SHADOWS write проходят `bd4ee8..bd4f07`, где `edx=128` @bd4f02.
+Следовательно выключение теней тоже сбрасывает размер карты в 128.
 
 `DisplaySettings` хранит `shadows_detail`, `shadows_enabled`,
 `lighting_enabled` и `shadow_resolution`; accepted ID применяет всю таблицу

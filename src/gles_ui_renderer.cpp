@@ -720,9 +720,9 @@ struct GlesUiRenderer::Impl {
     }
     void draw(const FrontendFrame &frame, int width, int height, bool clear_background) {
         begin(width, height, clear_background);
+        draw_dropdown_batches(frame.dropdown_meshes);
         if (frame.cegui)
             draw_cegui(*frame.cegui);
-        draw_dropdown_batches(frame.dropdown_meshes);
         if (!draw_text("FrizQuadrataBig", frame.title, 24, 16, static_cast<float>(width) - 24,
                        {.92F, .90F, .82F, 1})) {
             std::vector<Vertex> letters;

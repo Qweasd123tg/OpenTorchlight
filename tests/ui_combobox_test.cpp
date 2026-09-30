@@ -133,9 +133,12 @@ int main(int argc, char** argv) {
                 "shadow-off mapping differs");
         require(settings.lighting_enabled,
                 "shadow-off ID 1 incorrectly disabled lighting");
+        require(settings.shadow_resolution == 128, "ID1 skipped the original 128 map-size write");
+        settings.shadow_resolution = 1024;
         UiSettingsComboboxes::apply(
             {UiSettingsComboKind::shadow, 0, UiSettingsComboboxes::shadow_options()[0]},
             settings);
+        require(settings.shadow_resolution == 128, "ID0 skipped the original 128 map-size write");
         require(!settings.lighting_enabled && !settings.shadows_enabled,
                 "lighting-off ID 0 mapping differs");
         const auto particles = UiSettingsComboboxes::particle_options();

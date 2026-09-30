@@ -12,7 +12,11 @@ capture before
 # guiPause dispatch (CGameUI::onClick case 0x0b): HUD pause lands in pause.
 hud-button PauseButton
 menu pause
+dt 0.1
+frames 5
 button resume
+frames 3
+dt 0
 hud-button InventoryButton
 inventory open
 key I
@@ -21,17 +25,19 @@ hud-button JournalButton
 hud-button PetButton
 hud-button OptionsButton
 menu pause
+dt 0.1
+frames 5
 button-capture settings opened_settings
 menu settings
 dt 0.1
 frames 5
 button setting-SHOWBLOOD
 button-capture apply applied_settings
-menu settings
-button decline-settings
 menu pause
-dt 0
+frames 5
 button resume
+frames 3
+dt 0
 frames 2
 capture after
 quit

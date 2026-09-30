@@ -143,6 +143,9 @@ class Frontend : private MainMenuActions {
     std::unique_ptr<CeguiMenu> cegui_menu_;
     std::array<bool, 8> cegui_buttons_{};
     void sync_cegui_menu();
+    [[nodiscard]] bool native_input() const noexcept;
+    void native_action(CeguiPage, const std::string&, UiLayoutFunction);
+    void read_native_settings();
     UiWindowRuntime windows_;
     std::unique_ptr<UiTooltips> tooltips_;
     std::unique_ptr<UiSettingsComboboxes> comboboxes_;

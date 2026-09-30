@@ -538,6 +538,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(mainmenu_presentation_test tests/mainmenu_presentation_test.cpp)
     target_link_libraries(mainmenu_presentation_test PRIVATE torchlight_core)
     target_compile_options(mainmenu_presentation_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    add_executable(cegui_settings_test tests/cegui_settings_test.cpp)
+    target_link_libraries(cegui_settings_test PRIVATE torchlight_core)
+    target_compile_options(cegui_settings_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_cegui_settings_contract
+            COMMAND cegui_settings_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
     set(CEGUI_FAILURE_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/cegui-invalid.pak.zip)
     add_custom_command(OUTPUT ${CEGUI_FAILURE_FIXTURE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_cegui_failure_fixture.py ${CEGUI_FAILURE_FIXTURE}

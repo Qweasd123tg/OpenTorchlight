@@ -1,6 +1,8 @@
 #pragma once
 #include "torchlight/ui_layout.hpp"
 #include "torchlight/ui_pointer_event.hpp"
+#include "torchlight/settings.hpp"
+#include "torchlight/ui_combobox.hpp"
 #include <functional>
 #include <memory>
 
@@ -20,19 +22,27 @@ struct CeguiQuad {
     float z = 0;
     bool bottom_left_to_top_right = false;
 };
+enum class CeguiPage { main, options, settings };
+struct CeguiWidget : UiResolvedWidget {
+    CeguiPage page = CeguiPage::main;
+};
 struct CeguiMenuFrame {
     std::vector<CeguiQuad> quads;
-    std::vector<UiResolvedWidget> widgets;
+    std::vector<CeguiWidget> widgets;
 };
 class CeguiMenu {
   public:
-    using Action = std::function<void(const std::string&, UiLayoutFunction)>;
+    using Action = std::function<void(CeguiPage, const std::string&, UiLayoutFunction)>;
     CeguiMenu(const PakArchive&, Action);
     ~CeguiMenu();
     CeguiMenu(const CeguiMenu&) = delete;
     CeguiMenu& operator=(const CeguiMenu&) = delete;
     static bool available(const PakArchive&);
     void state(bool open, bool can_continue, bool credits, bool linux_credits);
+    void settings_state(bool open, const DisplaySettings&, const std::vector<UiResolution>&);
+    [[nodiscard]] DisplaySettings settings_values(DisplaySettings base, bool applying = false) const;
+    void options_state(bool attached, const std::array<float, 2>& content_position);
+    void focus(CeguiPage, const std::string& window_name);
     void resize(int width, int height);
     void pointer_event(const UiPointerEvent&);
     void advance(float seconds);
