@@ -123,7 +123,9 @@ visibility/focus/submit gates, но не заявляется сохранённ
 полный unwind/cleanup и vendor delta больших методов остаются открытыми.
 Callbacks после inject и direct portable campaign creation — адаптеры.
 
-Следующая полезная цепочка: native Character Load -> действующий `.otc`
-list/selection/load/delete consumer, с отдельной границей original SVB/mod/preview.
+Следующий пакет native Character Load -> `.otc` list/selection/load/delete
+теперь подключён: [граница и проверки](cegui-character-load.md).
+Обнаруженная при этом байтовая конвертация class display/description исправлена:
+потребитель использует UTF-8 конструктор CEGUI; тест включает не-ASCII class text.
 OGRE/FreeImage исходники доступны в cache, однако производственная интеграция
 этим пакетом не выполнялась.

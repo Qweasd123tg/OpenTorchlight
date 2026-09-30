@@ -139,6 +139,7 @@ class Frontend : private MainMenuActions {
     std::string name_ = "Hero", status_;
     std::size_t class_index_ = 0, save_index_ = 0, scroll_ = 0, focus_ = 0;
     std::optional<std::size_t> pending_delete_;
+    std::optional<std::size_t> remove_selection_;
     bool show_credits_ = false, show_credits_b_ = false;
     struct ResourceWindows;
     std::unique_ptr<ResourceWindows> resource_windows_;

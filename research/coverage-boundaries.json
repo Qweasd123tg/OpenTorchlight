@@ -6,7 +6,7 @@
         "0xb196f0"
       ],
       "status": "partial",
-      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; Settings/Options now also use native controls and retained animation; create now uses native Editbox/class consumers; load/HUD retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; Settings/Options now also use native controls and retained animation; create now uses native Editbox/class consumers; Load now also uses native CEGUI and real OTC consumers; HUD retains the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-container-lifecycle.md",
         "research/dropdown-mainmenu.md",
@@ -15,7 +15,8 @@
         "research/cegui-frontend-closure.md",
         "research/cegui-source-integration.md",
         "research/cegui-settings-options.md",
-        "research/cegui-character-creation.md"
+        "research/cegui-character-creation.md",
+        "research/cegui-character-load.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
@@ -36,26 +37,6 @@
         "tests/mainmenu_presentation_test.cpp"
       ],
       "comparison": "Shipped create callsites/defaults and CEGUI parent/draw-list operations statically compared with the scoped tree; pure tree contracts and external mainmenuframe resource resolution checks. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
-    },
-    {
-      "addresses": [
-        "0xc3b2f0",
-        "0xc3a350",
-        "0xc3fe80"
-      ],
-      "status": "partial",
-      "boundary": "Five-row visibility, selection highlights and programmatic draw-order writes, selected name, and delete prompt show/hide/order consumed by the frontend. Save/preview producers remain .otc adapters; full descriptions, mod checks, native lifetime and remaining original branches are open.",
-      "evidence": [
-        "research/menu-production-state.md"
-      ],
-      "implementation": [
-        "src/frontend.cpp",
-        "src/ui_layout.cpp"
-      ],
-      "tests": [
-        "tests/ui_menu_state_test.cpp"
-      ],
-      "comparison": "Pinned static branch/site review and pure state/resource contracts; no original or UI execution."
     },
     {
       "addresses": [
@@ -1013,7 +994,6 @@
         "0xb3c270",
         "0xb45080",
         "0xb7f580",
-        "0xc404c0",
         "0xc4a810",
         "0xe4c800",
         "0xe9b180",
@@ -1453,6 +1433,48 @@
         "tests/menu_grab_test.cpp"
       ],
       "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    {
+      "addresses": [
+        "0xc3b2f0",
+        "0xc3a350",
+        "0xc3fe80",
+        "0xc334e0",
+        "0xc3e2a0",
+        "0xc3e2c0",
+        "0xc3fd00",
+        "0xc40010",
+        "0xc404c0",
+        "0xc3f8c0",
+        "0xc3e420",
+        "0xc42490"
+      ],
+      "status": "partial",
+      "boundary": "Pinned source CEGUI owns native Load resource/tree/Falagard and five-row visibility/text/highlight order; original scroll/absolute selection/reopen, health and four-row double-click guards, nonmodal confirmation and previous selection after delete have real OTC load/remove/refresh consumers. UTF-8 view conversion uses the library decoder. Original SVB reload/sorting/description/localization/mod/preview owners, pending state and all unwind/cleanup remain open; disk/transaction/input timing are explicit adapters.",
+      "evidence": [
+        "research/cegui-character-load.md",
+        "research/menu-production-state.md",
+        "research/batch-menu-pass.json",
+        "research/inventory-open.md",
+        "research/disassembly/continue-menu-native-ui.asm"
+      ],
+      "implementation": [
+        "src/cegui_menu.cpp",
+        "src/frontend.cpp",
+        "src/application.cpp",
+        "src/save_store.cpp",
+        "include/torchlight/cegui_menu.hpp",
+        "src/ui_layout.cpp",
+        "include/torchlight/menu_grab_tables.hpp"
+      ],
+      "tests": [
+        "tests/cegui_load_test.cpp",
+        "tests/character_load_test.py",
+        "tests/cegui_creation_test.cpp",
+        "tests/ui_menu_state_test.cpp",
+        "tests/menu_grab_test.cpp"
+      ],
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
     }
   ],
   "port_systems": [

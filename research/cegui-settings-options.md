@@ -144,4 +144,5 @@ Original .SVB/game-state/global menu-owner/localization остаются ада�
 Не утверждается полное закрытие create/setOpen/update/onClick или общий UI.
 Character create теперь использует native Editbox и producer имени/класса;
 контракт и остаток — в [cegui-character-creation.md](cegui-character-creation.md).
-Load и HUD пока на прежнем runtime.
+Load теперь также использует CEGUI: [граница](cegui-character-load.md).
+HUD пока на прежнем runtime.

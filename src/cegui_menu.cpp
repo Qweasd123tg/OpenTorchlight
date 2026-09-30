@@ -30,6 +30,11 @@ template<class Function> auto library_call(Function&& function) -> decltype(func
 std::string string(const CEGUI::String& value) {
     return reinterpret_cast<const char*>(value.c_str());
 }
+CEGUI::String utf8(const std::string& value) {
+    // CEGUI 0.6.2 std::string/char constructors are unencoded codepoints
+    // 0..255. Resource/save UTF-8 must use the explicit utf8 constructor.
+    return CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(value.c_str()));
+}
 UiRect rectangle(const CEGUI::Rect& value) {
     return {value.d_left, value.d_top, value.getWidth(), value.getHeight()};
 }
@@ -274,6 +279,8 @@ struct CeguiMenu::Impl {
             // choice controls rather than expose an executable pet choice.
             for (const auto* name : {"Dog", "Cat", "Ferret"}) v.named.at(name)->disable();
         }
+        if (archive.contains_normalized("media/UI/characterload.layout"))
+            make_view(CeguiPage::load, "load", "characterload", false); // c406a0: root, flags=1
         auto& main = views.at(CeguiPage::main);
         main.named.at("DemoVersion")->hide();
         if (main.named.count("CharacterModsWarning")) main.named.at("CharacterModsWarning")->hide();
@@ -343,7 +350,21 @@ struct CeguiMenu::Impl {
         }
         return true;
     }
-    bool double_click(const CEGUI::EventArgs&) { return true; }
+    bool double_click(const CEGUI::EventArgs& args) {
+        const auto& event = static_cast<const CEGUI::MouseEventArgs&>(args);
+        if (event.button != CEGUI::LeftButton) return true;
+        const auto found = views.find(CeguiPage::load);
+        if (found != views.end() && found->second.attached) {
+            const auto binding = found->second.bindings.functions.find(event.window);
+            // CContinueGameMenu::onDoubleClick c33537..c3357a: 14..17,
+            // deliberately excludes the fifth row. Frontend consumes the
+            // selected save/health guard through the same Play path.
+            if (binding != found->second.bindings.functions.end() &&
+                static_cast<int>(binding->second) >= 14 && static_cast<int>(binding->second) <= 17)
+                pending.emplace_back(CeguiPage::load, leaf(string(event.window->getName())), UiLayoutFunction::continue_game);
+        }
+        return true;
+    }
     bool submit_name(const CEGUI::EventArgs&) {
         auto& v = views.at(CeguiPage::create);
         if (!v.named.at("EditBox")->getText().empty()) v.named.at("EditBoxPet")->activate(); // c53f44..c53f5c
@@ -646,8 +667,8 @@ void CeguiMenu::creation_state(bool open, const std::string& class_name,
             v.named.at("EditBoxPet")->setText("Spot"); // UTF-8 ff3168 -> c5c826
         }
         if (open) {
-            v.named.at("CharacterClass")->setText(display_name); // DISPLAYNAME, c5cdf6 -> c5cfa9
-            v.named.at("CharacterClassDescription")->setText(description);
+            v.named.at("CharacterClass")->setText(utf8(display_name)); // DISPLAYNAME, c5cdf6 -> c5cfa9
+            v.named.at("CharacterClassDescription")->setText(utf8(description));
             for (const auto* name : {"Destroyer", "Vanquisher", "Alchemist"}) {
                 auto internal = std::string(name);
                 std::transform(internal.begin(), internal.end(), internal.begin(), [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
@@ -661,6 +682,38 @@ void CeguiMenu::creation_state(bool open, const std::string& class_name,
 }
 std::string CeguiMenu::creation_name() const {
     return library_call([&] { return string(impl_->views.at(CeguiPage::create).named.at("EditBox")->getText()); });
+}
+void CeguiMenu::load_state(bool open, const std::vector<CeguiLoadEntry>& entries,
+    std::size_t scroll, std::size_t selected, bool confirmation) {
+    library_call([&] {
+        const auto found = impl_->views.find(CeguiPage::load);
+        if (found == impl_->views.end()) { if (open) throw std::runtime_error("missing native load layout"); return; }
+        auto& v = found->second;
+        impl_->attach(v, open);
+        if (!open) return;
+        for (std::size_t row = 0; row < 5; ++row) {
+            const auto suffix = std::to_string(row + 1);
+            const bool occupied = scroll < entries.size() && row < entries.size() - scroll;
+            auto* slot = v.named.at("Player" + suffix);
+            auto* name = v.named.at("Player" + suffix + "Name");
+            auto* description = v.named.at("Player" + suffix + "Desc");
+            auto* highlight = v.named.at("PlayerHighlight" + suffix);
+            // c3b3a9..c3b3cd, c3b725..c3b752: show occupied rows.
+            slot->setVisible(occupied); name->setVisible(occupied); description->setVisible(occupied);
+            name->setText(utf8(occupied ? entries[scroll + row].name : ""));
+            description->setText(utf8(occupied ? entries[scroll + row].description : ""));
+            highlight->setVisible(occupied && selected == scroll + row);
+            if (occupied) highlight->moveToFront(); // c3c571 -> c3c57e, even when hidden
+        }
+        v.named.at("ScrollUp")->setVisible(scroll != 0); // c3b78b / c3d5ad
+        v.named.at("ScrollDown")->setVisible(scroll < entries.size() && entries.size() - scroll > 5);
+        v.named.at("Continue")->setVisible(!entries.empty()); // c3b7eb
+        v.named.at("Delete")->setVisible(!entries.empty()); // c3b815
+        v.named.at("CharacterName")->setText(utf8(selected < entries.size() ? entries[selected].name : ""));
+        // Original uses enabled-mod/SVB comparison. OTC has no such producer.
+        v.named.at("CharacterModsWarning")->hide();
+        v.named.at("DeleteConfirm")->setVisible(confirmation);
+    });
 }
 namespace {
 CEGUI::uint scan_code(std::uint32_t physical) {

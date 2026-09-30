@@ -546,6 +546,13 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         add_test(NAME original_cegui_creation_contract
             COMMAND cegui_creation_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
     endif()
+    add_executable(cegui_load_test tests/cegui_load_test.cpp)
+    target_link_libraries(cegui_load_test PRIVATE torchlight_core)
+    target_compile_options(cegui_load_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_cegui_load_contract
+            COMMAND cegui_load_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
     add_executable(cegui_settings_test tests/cegui_settings_test.cpp)
     target_link_libraries(cegui_settings_test PRIVATE torchlight_core)
     target_compile_options(cegui_settings_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -1280,6 +1287,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
             --output-dir ${CMAKE_CURRENT_BINARY_DIR}/ui-repair-evidence)
         set_tests_properties(paused_settings_render PROPERTIES TIMEOUT 300 SKIP_RETURN_CODE 77)
+        add_test(NAME character_load_render COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/character_load_test.py
+            --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/ui-repair-evidence)
+        set_tests_properties(character_load_render PROPERTIES TIMEOUT 600 SKIP_RETURN_CODE 77)
         add_test(NAME inventory_ui_render COMMAND ${Python3_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/inventory_ui_test.py
             --probe $<TARGET_FILE:application_scenario_probe> --game-dir ${TORCHLIGHT_GAME_DIR}

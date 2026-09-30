@@ -8,7 +8,7 @@
 
 ## Действующий процесс и границы
 
-Главное меню, credits, Settings, Options и создание персонажа используют
+Главное меню, credits, Settings, Options, создание и загрузка персонажа используют
 [исходную CEGUI 0.6.2](research/cegui-source-integration.md) из закреплённого
 тега: WindowManager, события, реальные controls, Falagard и шрифты. GLES
 получает библиотечные quad-команды; собственного второго UI-дерева для этих
@@ -17,16 +17,22 @@ Apply/Cancel, исходные значения настроек и анимац
 В [создании персонажа](research/cegui-character-creation.md) подключены
 настоящие Editbox, UTF-8 имя, лимит ресурса, caret/selection, исходные focus и
 submit gates, выбор класса и его текст. Pet preview/runtime и difficulty остаются
-открытыми; загрузка и HUD ещё требуют переноса. Linux-сборка требует
+открытыми. [Character Load](research/cegui-character-load.md) теперь имеет
+native пять строк, прокрутку, выбор, Play и подтверждение удаления с настоящими
+`.otc` consumers; SVB/mod/preview и HUD ещё требуют переноса. Linux-сборка требует
 FreeType, PCRE, Expat runtime и xkbcommon; CEGUI и fallback Expat headers включены с
 лицензиями. Android этим срезом не проверен.
 
 Узкие CPU-проверки: `cegui_error_boundary`, `original_cegui_mainmenu_contract`,
-`original_cegui_settings_contract`, `original_cegui_creation_contract`.
+`original_cegui_settings_contract`, `original_cegui_creation_contract`,
+`original_cegui_load_contract`.
 Создание с именем `Éclair` проверено в общем цикле с GL и `.otc` сохранением.
 `paused_settings_render` также прошёл в
 общем цикле приложения с GL, изолированными saves/settings и фактическими
-кадрами. Полная graphics recreation оригинала и FMOD groups остаются открыты;
+кадрами. `character_load_render` проверяет выбор и загрузку одного из двух
+реальных сохранений, отсутствие дисковых изменений при Cancel и удаление только
+выбранного при Accept. Не-ASCII текст передаётся UTF-8 конструктору CEGUI.
+Полная graphics recreation оригинала и FMOD groups остаются открыты;
 покадровое сравнение с оригинальной игрой и performance не утверждаются.
 
 Основной процесс — [code-first](research/code-first.md), правила —

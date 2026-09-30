@@ -39,7 +39,7 @@ int main(int argc, char** argv) { try {
     require(argc == 2, "expected external pak.zip");
     PakArchive pak(argv[1]); UiResources resources(pak);
     Frontend ui(resources, {{11,"Vanquisher","Vanquisher description","Vanquisher"},
-        {12,"Alchemist","Alchemist description","Alchemist"}, {13,"Destroyer","Destroyer description","Destroyer"}});
+        {12,"Alchemist","Alchemist description É","Alchimiste Érudit"}, {13,"Destroyer","Destroyer description","Destroyer"}});
     open(ui);
     require(ui.page() == FrontendPage::create && ui.character_name().empty(), "setOpen did not clear original name");
     require(edit("EditBox")->hasInputFocus(), "setOpen did not activate original Editbox");
@@ -67,8 +67,9 @@ int main(int argc, char** argv) { try {
     require(ui.character_name() == "Éclai", "Backspace did not use UTF-32 caret");
     click(ui, window("Alchemist"));
     require(edit("EditBox")->hasInputFocus() && ui.character_name() == "Éclai", "class selection lost original editor activation/name");
-    require(window("CharacterClass")->getText() == "Alchemist" &&
-        window("CharacterClassDescription")->getText() == "Alchemist description", "class text producer has no native consumer");
+    require(window("CharacterClass")->getText() == CEGUI::String(reinterpret_cast<const CEGUI::utf8*>("Alchimiste Érudit")) &&
+        window("CharacterClassDescription")->getText() == CEGUI::String(reinterpret_cast<const CEGUI::utf8*>("Alchemist description É")),
+        "UTF-8 class text producer has no native consumer");
     key(ui, physical_key::ENTER);
     require(edit("EditBoxPet")->hasInputFocus() && !ui.take_request(), "handle_Submit did not activate pet-name field");
     select_all(ui); key(ui, physical_key::BACKSPACE);

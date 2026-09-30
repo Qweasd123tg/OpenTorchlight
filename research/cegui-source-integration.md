@@ -122,4 +122,5 @@ native state/SVB/mod producers, OGRE scene/model families и полное сра
 Runic vendor delta. Settings/Options теперь также на CEGUI; актуальные runtime проверки и точный
 остаток — в `cegui-settings-options.md`. Character create теперь использует
 тот же native System: [имя/класс и ввод](cegui-character-creation.md).
-Load и HUD остаются на прежнем runtime. Completion игровых функций остаётся partial.
+Load также перешёл на native CEGUI: [выбор/загрузка/удаление](cegui-character-load.md).
+HUD остаётся на прежнем runtime. Completion игровых функций остаётся partial.

@@ -15,7 +15,8 @@
     "media/UI/mainmenuframe.layout": "60bccb2941daebd326205413905f9e8e34210df4c33e775a128a7bd20adb1ba0",
     "media/UI/settingsmenu.layout": "dd4b17748afaeb5e9e21525847757f2d6aa4ef6f6cf53756f7f9bde0305c6751",
     "media/UI/optionsmenu.layout": "4e45960d7f4e179840ba2eff4edd34f0910b129882fb7bb47f84070bdb43b844",
-    "media/UI/charactercreate.layout": "9f7da83889bfc0226b773f256af6fa7cefdaf63a2006282542533a42673d4f6e"
+    "media/UI/charactercreate.layout": "9f7da83889bfc0226b773f256af6fa7cefdaf63a2006282542533a42673d4f6e",
+    "media/UI/characterload.layout": "c599acad94eefcd2a542c50533a13af8974ba702c9389e0e39e78bc3d265ce71"
   },
   "host_dependencies": {
     "FreeType": "2.14.3",
@@ -23,5 +24,5 @@
     "Expat": "2.8.3",
     "xkbcommon": "1.13.1"
   },
-  "boundary": "Pinned CEGUI source, reviewed Main/Settings/Options/create UI slice and Expat module; XKB host transport adapter; no full original ABI, pet/preview/difficulty/SVB, graphics recreation, glyph/frame or FMOD parity"
+  "boundary": "Pinned CEGUI source, reviewed Main/Settings/Options/create/load UI slices and Expat module; XKB and OTC adapters; no full original ABI, pet/preview/difficulty/SVB/mod, graphics recreation, glyph/frame or FMOD parity"
 }

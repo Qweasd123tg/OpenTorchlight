@@ -9,7 +9,7 @@ release-архивы. Это инвентаризация доступности
 
 | Подсистема | Подтверждённое состояние | Следующее использование |
 |---|---|---|
-| CEGUI 0.6.2 + Falagard + Expat | Исходники в `third_party/cegui-0.6.2`, собраны и используются Main/credits/Settings/Options/character create | Load и HUD через ту же библиотеку |
+| CEGUI 0.6.2 + Falagard + Expat | Исходники в `third_party/cegui-0.6.2`, собраны и используются Main/credits/Settings/Options/character create/load | HUD и подтверждённые preview consumers через ту же библиотеку |
 | OGRE 1.6.5 | Точный release source найден, скачан и проверен по version macros | Проверить переиспользование serializers, skeleton/animation, scene/resource ownership; renderer требует отдельного решения |
 | FreeImage 3.13.1 | Версия shipped ELF установлена по инструкциям; соответствующий source release скачан | Кандидат для DDS/image codecs вместо нового ручного декодирования |
 | LodePNG, candidate 2014 | Два исходных файла скачаны по закреплённому commit; хеши совпали с прежним исследованием | Источник для границы оригинальных PNG-операций; текущий production decoder уже использует libpng |
@@ -123,9 +123,10 @@ SDK/header/example исходники не равны реализации FMOD 
 
 Первый пакет Settings/Options подключён и проверен: [доказательства](cegui-settings-options.md).
 Пакет character create подключил библиотечные Editbox и настоящий consumer
-имени/класса: [граница](cegui-character-creation.md). Следующая полезная цепочка —
-character load через тот же System и действующий `.otc` store с сохранением
-открытой границы `.SVB`/модов/preview. Исторический выбор первого пакета:
+имени/класса: [граница](cegui-character-creation.md). Character Load теперь также
+подключён к тому же System и действующему `.otc` store:
+[выбор/загрузка/удаление](cegui-character-load.md). `.SVB`/моды/preview остаются
+открытыми. Исторический выбор первого пакета:
 окна, controls, focus/capture, текст, Falagard, callback → settings/audio
 consumers и Options animation. Следом — создание/загрузка персонажа через
 тот же System, если выбранный scope и проверки завершены.

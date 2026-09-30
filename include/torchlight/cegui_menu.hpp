@@ -22,7 +22,10 @@ struct CeguiQuad {
     float z = 0;
     bool bottom_left_to_top_right = false;
 };
-enum class CeguiPage { main, options, settings, create };
+enum class CeguiPage { main, options, settings, create, load };
+// The strings are supplied by the portable save adapter. Native CEGUI owns
+// the five-row view; original SVB descriptions/preview are a separate boundary.
+struct CeguiLoadEntry { std::string name, description; };
 struct CeguiWidget : UiResolvedWidget {
     CeguiPage page = CeguiPage::main;
 };
@@ -46,6 +49,8 @@ class CeguiMenu {
     void creation_state(bool open, const std::string& class_name,
         const std::string& display_name, const std::string& description);
     [[nodiscard]] std::string creation_name() const;
+    void load_state(bool open, const std::vector<CeguiLoadEntry>&,
+        std::size_t scroll, std::size_t selected, bool delete_confirmation);
     void keyboard_event(const UiKeyboardEvent&);
     void resize(int width, int height);
     void pointer_event(const UiPointerEvent&);

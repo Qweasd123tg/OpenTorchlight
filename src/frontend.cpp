@@ -30,6 +30,15 @@ std::string scalar(float value) {
     if (result.ec != std::errc{}) throw std::runtime_error("cannot format UI scalar");
     return {buffer, result.ptr};
 }
+// Existing OTC presentation boundary; this is not the original SVB
+// difficulty/playtime/Dead/Retired description formula.
+std::string save_description(const SaveSlotInfo& slot, const std::vector<FrontendClass>& classes) {
+    if (!slot.loadable()) return "PORT SAVE: UNREADABLE";
+    std::string class_name;
+    for (const auto& c : classes) if (c.guid == slot.class_guid) { class_name = c.name; break; }
+    return "Level " + std::to_string(slot.level) + (class_name.empty() ? "" : " " + class_name) +
+        (slot.hardcore ? ", Hardcore" : "");
+}
 // original-code data: main-menu credit roll, rodata 0xff2e30 of the
 // pinned ELF (headers "Designed by Runic Games", "Voice Talents",
 // "Additional QA/Artwork", "Built with Ogre3d, CEGUI, ParticleUniverse, and
@@ -264,6 +273,7 @@ void Frontend::show_main() {
     main_set_open(true);
     focus_ = 0;
     pending_delete_.reset();
+    remove_selection_.reset();
     request_.reset();
     status_.clear();
 }
@@ -291,6 +301,7 @@ void Frontend::error(std::string message) {
     cached_frame_.reset();
     status_ = std::move(message);
     request_.reset();
+    remove_selection_.reset();
     // The .otc adapter returns a failed load to its originating menu.
     if (page_ == FrontendPage::main) main_set_open(true);
 }
@@ -307,6 +318,9 @@ void Frontend::removed() {
     cached_frame_.reset();
     request_.reset();
     pending_delete_.reset();
+    if (remove_selection_) save_index_ = std::min(*remove_selection_, saves_.empty() ? 0 : saves_.size() - 1);
+    remove_selection_.reset();
+    sync_cegui_menu();
     status_ = "SAVE DELETED";
 }
 void Frontend::applied() {
@@ -440,7 +454,8 @@ void Frontend::key(FrontendKey key) {
     }
     if (native_input() && focus_ < buttons_.size()) {
         const auto owner = page_ == FrontendPage::main ? CeguiPage::main :
-            page_ == FrontendPage::settings ? CeguiPage::settings : CeguiPage::options;
+            page_ == FrontendPage::settings ? CeguiPage::settings :
+            page_ == FrontendPage::load ? CeguiPage::load : CeguiPage::options;
         cegui_menu_->focus(owner, buttons_[focus_].widget.name);
     }
 }
@@ -610,7 +625,7 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
     const auto previous_page = page_;
     // Portable confirmation input policy: preserve the selected save while
     // awaiting a destructive choice. The original show's/hide's are below.
-    if (pending_delete_ && page_ == FrontendPage::load && id != "accept" && id != "decline") return;
+    if (!cegui_menu_ && pending_delete_ && page_ == FrontendPage::load && id != "accept" && id != "decline") return;
     if (page_ == FrontendPage::main && function) {
         dispatch_main_menu(main_open_, !main_open_, *function, *this);
         if (page_ != previous_page) {
@@ -686,6 +701,9 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
             *pending_delete_ < saves_.size()) {
             request_ = FrontendRequest{FrontendCommand::remove, 0, {},
                                        saves_[*pending_delete_].slot};
+            // c3fd81..c3fda0: after deletion, select max(old selected-1,0).
+            // Apply on successful consumer completion, not before filesystem IO.
+            remove_selection_ = *pending_delete_ ? *pending_delete_ - 1 : 0;
             // onClick @0xc3ff57 hides the prompt before deleteCharacter.
             pending_delete_.reset();
             status_.clear();
@@ -733,6 +751,7 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
         const auto n = std::stoul(id.substr(5));
         if (n < saves_.size()) {
             save_index_ = n;
+            if (cegui_menu_ && pending_delete_) pending_delete_ = n;
             status_ = saves_[n].error;
         }
     }
@@ -750,7 +769,7 @@ bool Frontend::main_can_load() const {
     return !saves_.empty();
 }
 bool Frontend::native_input() const noexcept {
-    return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::create || page_ == FrontendPage::settings || page_ == FrontendPage::pause);
+    return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::create || page_ == FrontendPage::load || page_ == FrontendPage::settings || page_ == FrontendPage::pause);
 }
 void Frontend::read_native_settings() {
     if (cegui_menu_ && page_ == FrontendPage::settings)
@@ -780,6 +799,22 @@ void Frontend::native_action(CeguiPage source, const std::string& name, UiLayout
     if (request_) return;
     if (source == CeguiPage::main) {
         dispatch_main_menu(main_open_, !main_open_, function, *this);
+    } else if (source == CeguiPage::load && page_ == FrontendPage::load) {
+        if (function == UiLayoutFunction::back) show_main();
+        else if (function == UiLayoutFunction::continue_game) {
+            // c3feda..c3fee9: ordered health > 0; failed OTC decode is an
+            // additional portable boundary, not a fabricated original branch.
+            if (save_index_ < saves_.size() && saves_[save_index_].loadable() && saves_[save_index_].health > 0)
+                activate("load");
+        } else if (function == UiLayoutFunction::scroll_up) activate("scroll-up");
+        else if (function == UiLayoutFunction::scroll_down) activate("scroll-down");
+        else if (function == UiLayoutFunction::delete1) activate("delete");
+        else if (function == UiLayoutFunction::accept) activate("accept");
+        else if (function == UiLayoutFunction::decline) activate("decline");
+        else if (static_cast<int>(function) >= 14 && static_cast<int>(function) <= 18) {
+            const auto row = static_cast<std::size_t>(static_cast<int>(function) - 14);
+            if (scroll_ < saves_.size() && row < saves_.size() - scroll_) activate("slot-" + number(scroll_ + row));
+        }
     } else if (source == CeguiPage::create && page_ == FrontendPage::create) {
         read_native_creation();
         if (function == UiLayoutFunction::back) show_main();
@@ -820,6 +855,10 @@ void Frontend::sync_cegui_menu() {
     const auto& selected = classes_.at(class_index_);
     cegui_menu_->creation_state(page_ == FrontendPage::create, selected.name, selected.display_name, selected.description);
     read_native_creation();
+    std::vector<CeguiLoadEntry> entries;
+    if (page_ == FrontendPage::load) for (const auto& save : saves_)
+        entries.push_back({save.name.empty() ? save.slot : save.name, save_description(save, classes_)});
+    cegui_menu_->load_state(page_ == FrontendPage::load, entries, scroll_, save_index_, pending_delete_.has_value());
     const bool attached = options_animation_ ? options_animation_->visible() : page_ == FrontendPage::pause;
     const auto position = options_animation_ ? options_animation_->content_position(
         cached_width_ > 0 ? cached_width_ : 1024, cached_height_ > 0 ? cached_height_ : 768) : std::array<float, 2>{};
@@ -830,6 +869,9 @@ void Frontend::main_request_state(int state, int menu) {
     // the existing application policy; native CGameStateController is open.
     if (state == 0 && (menu == 1 || menu == 3)) {
         page_ = menu == 1 ? FrontendPage::create : FrontendPage::load;
+        if (page_ == FrontendPage::load) {
+            scroll_ = 0; save_index_ = 0; pending_delete_.reset(); // reloadFiles c3e439; forced select c4004f
+        }
         if (page_ == FrontendPage::create && cegui_menu_) {
             const auto found = std::find_if(classes_.begin(), classes_.end(), [](const auto& c) { return upper(c.name) == "DESTROYER"; });
             if (found != classes_.end()) class_index_ = static_cast<std::size_t>(found - classes_.begin());
@@ -906,7 +948,7 @@ void Frontend::sync_windows() {
         !(page_ == FrontendPage::settings && settings_return_ == FrontendPage::main))
         main_set_open(false);
     for (auto page : {FrontendPage::create, FrontendPage::load, FrontendPage::settings}) {
-        if (cegui_menu_ && (page == FrontendPage::settings || page == FrontendPage::create)) continue;
+        if (cegui_menu_ && (page == FrontendPage::settings || page == FrontendPage::create || page == FrontendPage::load)) continue;
         const bool wanted = page_ == page;
         if (wanted || dropdowns_.count(page)) {
             if (page == FrontendPage::settings) dropdown(page).set_settings_open(wanted);
@@ -1066,8 +1108,20 @@ FrontendFrame Frontend::compose_frame(int width, int height) {
             std::string id;
             const auto owner = widget.page == CeguiPage::main ? FrontendPage::main :
                 widget.page == CeguiPage::settings ? FrontendPage::settings :
+                widget.page == CeguiPage::load ? FrontendPage::load :
                 widget.page == CeguiPage::create ? FrontendPage::create : FrontendPage::pause;
-            if (owner == FrontendPage::create) {
+            if (owner == FrontendPage::load) {
+                if (widget.layout_function == UiLayoutFunction::back) id = "back";
+                else if (widget.layout_function == UiLayoutFunction::continue_game) id = "load";
+                else if (widget.layout_function == UiLayoutFunction::scroll_up) id = "scroll-up";
+                else if (widget.layout_function == UiLayoutFunction::scroll_down) id = "scroll-down";
+                else if (widget.layout_function == UiLayoutFunction::delete1) id = "delete";
+                else if (widget.layout_function == UiLayoutFunction::accept) id = "accept";
+                else if (widget.layout_function == UiLayoutFunction::decline) id = "decline";
+                else if (widget.layout_function && static_cast<int>(*widget.layout_function) >= 14 &&
+                         static_cast<int>(*widget.layout_function) <= 18)
+                    id = "slot-" + number(scroll_ + static_cast<int>(*widget.layout_function) - 14);
+            } else if (owner == FrontendPage::create) {
                 if (widget.layout_function == UiLayoutFunction::back) id = "back";
                 else if (widget.layout_function == UiLayoutFunction::new_game) id = "create";
                 else if (widget.layout_function == UiLayoutFunction::select1) {
@@ -1103,6 +1157,8 @@ FrontendFrame Frontend::compose_frame(int width, int height) {
             button.rect = widget.rect;
             button.enabled = widget.enabled;
             button.selected = widget.property("Selected") == "True";
+            if (owner == FrontendPage::load && button.id.rfind("slot-", 0) == 0)
+                button.selected = button.id == "slot-" + number(save_index_);
             button.supplemental = false;
             button.widget = widget;
             result.buttons.push_back(std::move(button));
@@ -1590,20 +1646,7 @@ FrontendFrame Frontend::build_frame(FrontendPage render_page, int width, int hei
                     const auto index = scroll_ + i;
                     if (index >= saves_.size())
                         w.text.clear();
-                    else if (!saves_[index].loadable())
-                        w.text = "PORT SAVE: UNREADABLE";
-                    else {
-                        const auto &slot = saves_[index];
-                        std::string class_name;
-                        for (const auto &c : classes_)
-                            if (c.guid == slot.class_guid) {
-                                class_name = c.name;
-                                break;
-                            }
-                        w.text = "Level " + std::to_string(slot.level) +
-                                 (class_name.empty() ? "" : " " + class_name) +
-                                 (slot.hardcore ? ", Hardcore" : "");
-                    }
+                    else w.text = save_description(saves_[index], classes_);
                 }
             }
         }

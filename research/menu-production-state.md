@@ -50,6 +50,14 @@ object, полная строка description и проверка модов о�
 передают значения count/scroll/selected/confirmation непосредственно в чистую
 функцию и проверяют свойства, наследование видимости и порядок окон.
 
+Актуализация 2026-09-30: production Load теперь использует исходную CEGUI,
+а чистый UiLayoutState выше остаётся прежним контрактом/fallback. Native
+окна напрямую потребляют visibility, text и moveToFront; данные пока OTC.
+В native пути убрана прежняя confirmation lock: оригинальный onClick допускает
+смену выбора при видимом prompt, Accept удаляет текущий выбор. После успешного
+удаления выбирается предыдущая запись, как `0xc3fd81..0xc3fda0`.
+Реальные дисковые consumers и точный остаток: [cegui-character-load.md](cegui-character-load.md).
+
 ## Звук и указатель
 
 `CSettingsMenu::setOpen @0xbd5560`: MusicVolume получает max=1 (`0xbd5827`)

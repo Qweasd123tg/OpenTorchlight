@@ -20,13 +20,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Full PlayerNDesc formula, original save objects and all error/cleanup branches."
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
         ]
       },
-      "evidence": "research/menu-production-state.md",
-      "implementation": "src/frontend.cpp: continue_menu_layout_state; src/ui_layout.cpp: draw-order effects",
-      "tests": "tests/ui_menu_state_test.cpp",
-      "comparison": "Pure state/resource contracts for the reviewed visibility/highlight slice, not full-function comparison."
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
     },
     "0x00c3a350": {
       "symbol": "CContinueGameMenu::update(float)",
@@ -39,15 +39,16 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Original preview-character producer and remaining update lifecycle."
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
         ]
       },
-      "evidence": "research/menu-production-state.md",
-      "implementation": "src/frontend.cpp: selected .otc name replaces resource placeholder",
-      "comparison": "Static CharacterName source/write-site review only."
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence.",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp"
     },
     "0x00c3fe80": {
-      "symbol": "CContinueGameMenu::onClick(ELayoutFunction, std::wstring)",
+      "symbol": "CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
       "stages": {
         "analyzed": false,
         "ported": true,
@@ -57,13 +58,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Original save/state-controller and dropdown lifecycle; portable confirmation lock is an application policy."
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
         ]
       },
-      "evidence": "research/menu-production-state.md",
-      "implementation": "src/frontend.cpp: prompt show/hide-before-delete and .otc request",
-      "tests": "tests/ui_menu_state_test.cpp",
-      "comparison": "Pinned command table and effect ordering reviewed; pure visibility inputs checked, no UI event scenario."
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
     },
     "0x00bd5560": {
       "symbol": "CSettingsMenu::setOpen(bool)",
@@ -3056,6 +3057,177 @@
       "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/linux_desktop_main.cpp; include/torchlight/cegui_menu.hpp; include/torchlight/ui_pointer_event.hpp",
       "tests": "tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp",
       "comparison": "Addressed static ASM/resource/library comparison for the connected create slice; native library/resource tests and isolated common Application/GL UTF-8 creation. Full functions and original-process/frame equivalence are not claimed."
+    },
+    "0x00c334e0": {
+      "symbol": "CContinueGameMenu::onDoubleClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c3e2a0": {
+      "symbol": "CContinueGameMenu::scrollUp()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c3e2c0": {
+      "symbol": "CContinueGameMenu::scrollDown()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c3fd00": {
+      "symbol": "CContinueGameMenu::deleteCharacter()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c40010": {
+      "symbol": "CContinueGameMenu::setOpen(bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c404c0": {
+      "symbol": "CContinueGameMenu::createMenus()",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c3f8c0": {
+      "symbol": "CContinueGameMenu::selectCharacter(int, bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c3e420": {
+      "symbol": "CContinueGameMenu::reloadFiles(bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00c42490": {
+      "symbol": "CContinueGameMenu::CContinueGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full original save/preview/mod/state objects, SVB reload/sorting/description/localization, pending flags and all ownership/error paths remain open. Legacy stages describe only the connected native UI/OTC consumer slice."
+        ]
+      },
+      "evidence": "research/cegui-character-load.md; research/menu-production-state.md",
+      "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
+      "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
+      "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
     }
   }
 }
