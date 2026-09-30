@@ -26,6 +26,7 @@ if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
 endif()
 option(TORCHLIGHT_ENABLE_RENDER "Build available offscreen rendering targets" ON)
 option(TORCHLIGHT_ENABLE_DESKTOP "Build the Wayland adapter when its SDK is available" ON)
+include(cmake/CEGUI062.cmake)
 # Same test inputs/assertions; instrumentation may need a larger wall-clock budget.
 # Explicit cache value is reported by check.py, never inferred from a failed test.
 set(TORCHLIGHT_TEST_TIMEOUT_SCALE 1 CACHE STRING "Wall-clock multiplier (1-10), e.g. 4 for sanitizer builds")
@@ -78,6 +79,7 @@ add_library(torchlight_core STATIC
     src/menu_scene.cpp
     src/ui_hud.cpp
     src/frontend.cpp
+    src/cegui_menu.cpp
     src/interaction.cpp
     src/damage.cpp
     src/typed_damage.cpp
@@ -122,7 +124,7 @@ add_library(torchlight_core STATIC
     src/music.cpp)
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
-target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG)
+target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG CEGUI062::Falagard)
 if(TORCHLIGHT_HAVE_MUSIC)
     target_link_libraries(torchlight_core PUBLIC PkgConfig::VORBISFILE PkgConfig::ALSA)
     target_compile_definitions(torchlight_core PUBLIC TORCHLIGHT_HAVE_MUSIC=1)
@@ -536,13 +538,21 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(mainmenu_presentation_test tests/mainmenu_presentation_test.cpp)
     target_link_libraries(mainmenu_presentation_test PRIVATE torchlight_core)
     target_compile_options(mainmenu_presentation_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    set(CEGUI_FAILURE_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/cegui-invalid.pak.zip)
+    add_custom_command(OUTPUT ${CEGUI_FAILURE_FIXTURE}
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_cegui_failure_fixture.py ${CEGUI_FAILURE_FIXTURE}
+        DEPENDS tests/make_cegui_failure_fixture.py)
+    add_custom_target(cegui_failure_fixture DEPENDS ${CEGUI_FAILURE_FIXTURE})
+    add_dependencies(mainmenu_presentation_test cegui_failure_fixture)
+    add_test(NAME cegui_error_boundary
+        COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:mainmenu_presentation_test> --invalid ${CEGUI_FAILURE_FIXTURE})
     target_link_libraries(menu_resource_probe PRIVATE torchlight_core)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(menu_resource_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     if(TORCHLIGHT_GAME_DIR)
-        add_test(NAME original_mainmenu_controller_presentation
-            COMMAND mainmenu_presentation_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        add_test(NAME original_cegui_mainmenu_contract
+            COMMAND ${CMAKE_COMMAND} -E env $<TARGET_FILE:mainmenu_presentation_test> "${TORCHLIGHT_GAME_DIR}/pak.zip")
         add_test(NAME original_menu_presentation
             COMMAND menu_resource_probe "${TORCHLIGHT_GAME_DIR}/pak.zip")
     endif()
@@ -1322,7 +1332,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     # Legacy UI flows are explicitly requested integration work. Pure layout,
     # binding and command-compiler contract checks stay in core/assets.
     set(_ot_ui_integration_tests frontend frontend_menu_resources frontend_campaign_cycle
-        original_menu_presentation original_mainmenu_controller_presentation
+        original_menu_presentation
         original_frontend_checkpoint gles_ui_headless gles_menu_text)
     get_property(_ot_tests DIRECTORY PROPERTY TESTS)
     foreach(_ot_test IN LISTS _ot_tests)

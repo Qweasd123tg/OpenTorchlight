@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-30",
+  "source_commit": "3ed5c719c3bb27b877b192e034ef2c0b05ea722c",
+  "vendor_tree_sha256": "46ff562ca8c4284cb9899f876ae973ec1291352dc0afc6e9725ca473e8a39f67",
+  "vendor_tree_digest": "sorted relative path, NUL, binary sha256 for every vendored file",
+  "original_inputs": {
+    "Torchlight.bin.x86_64": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+    "lib64/libCEGUIBase.so.1": "57a888d741b1a0a284915c6d5066fef68c1bcc1ebfd0163f6be8720e3cdda2aa",
+    "pak.zip": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8"
+  },
+  "resources_sha256": {
+    "media/UI/GuiLookSkin.scheme": "006c21ae3754dea3638ff9233701d4e815b656cc415fd60823ec5c53ff1cddc0",
+    "media/UI/GuiLook.looknfeel": "2cc118a13f7421c8f1e9d5b25f29f4b7962042898110a5e71b333b2b8766ef43",
+    "media/UI/mainmenuframe.layout": "60bccb2941daebd326205413905f9e8e34210df4c33e775a128a7bd20adb1ba0"
+  },
+  "host_dependencies": {
+    "FreeType": "2.14.3",
+    "PCRE": "8.45"
+  },
+  "boundary": "Pinned CEGUI source and reviewed main-menu vendor adaptations; no claim of original ABI or glyph/frame parity"
+}

@@ -1,83 +1,123 @@
 #include "torchlight/frontend.hpp"
-#include "torchlight/ui_skin.hpp"
+#include <CEGUI.h>
 #include <algorithm>
-#include <chrono>
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 using namespace torchlight;
 namespace {
-void require(bool b, const char *message) { if (!b) throw std::runtime_error(message); }
-std::string leaf(const std::string &s) { return s.substr(s.find_last_of('/') == s.npos ? 0 : s.find_last_of('/') + 1); }
-bool has(const FrontendFrame &frame, const std::string &name) {
-    const auto paint = frontend_paint_list(frame);
-    return std::any_of(paint.begin(), paint.end(), [&](const auto &p) { return leaf(p.widget.name) == name; });
+void require(bool v, const char* m) { if (!v) throw std::runtime_error(m); }
+const UiResolvedWidget& widget(const FrontendFrame& f, const std::string& name) {
+    require(f.cegui.has_value(), "production main menu did not use CEGUI");
+    const auto& ws = f.cegui->widgets;
+    const auto it = std::find_if(ws.begin(), ws.end(), [&](const auto& w) { return w.name == name; });
+    require(it != ws.end(), "native menu window missing");
+    return *it;
 }
-void click(Frontend &ui, const std::string &id) {
-    const auto frame = ui.frame(1024,768);
-    const auto it = std::find_if(frame.buttons.begin(), frame.buttons.end(), [&](const auto &b) { return b.id == id; });
-    require(it != frame.buttons.end(), "missing menu target");
-    ui.click(it->rect.x + it->rect.width/2, it->rect.y + it->rect.height/2);
-}
-}
-int main(int argc, char **argv) { try {
-    require(argc == 2, "expected external pak.zip");
-    PakArchive pak(argv[1]); UiResources resources(pak);
-    Frontend ui(resources, {{1,"Destroyer"}});
-    auto frame = ui.frame(1024,768);
-    require(frame.original_layout && frame.notes.empty(), "main layout has diagnostic presentation chrome");
-    require(!has(frame,"DemoVersion") && !has(frame,"CharacterModsWarning"), "createMenus visibility writes lost");
-    require(!has(frame,"ContinueLast"), "update must hide Continue when adapter has no save");
-    require(!has(frame,"CreditFrame") && !has(frame,"CreditFrameB"), "closed credit windows rendered");
-    require(has(frame,"TabB") && has(frame,"TabTextB"), "Linux credit tab absent");
-    const auto inspect = [&](const FrontendFrame &f) {
-        const auto paint = frontend_paint_list(f);
-        require(std::is_sorted(paint.begin(), paint.end(), [](const auto &a, const auto &b) {
-            return a.widget.paint_order < b.widget.paint_order;
-        }), "painter order differs from resolved window order");
-        for (const auto &item : paint) {
-            const auto &w = item.widget;
-            if (w.type == "DefaultWindow") continue;
-            UiSkinState state;
-            if (item.button) {
-                const auto &b=f.buttons[*item.button];
-                state={b.focused&&b.enabled,b.selected&&b.enabled,b.selected};
-            }
-            const auto skin = resources.skin().compile(resources,w,state,1024,768);
-            for (const auto &d : skin.diagnostics) std::cerr << w.name << ": " << d << '\n';
-            require(skin.handled && skin.diagnostics.empty(), "main-menu window needs an unreviewed skin fallback");
-            for (const auto &d : skin.draws)
-                require(d.colours[0]==d.colours[1] && d.colours[0]==d.colours[2] && d.colours[0]==d.colours[3],
-                        "main-menu colour exceeds GLES flat-tint adapter");
-        }
-    };
-    inspect(frame);
-    const auto count = ui.frame_build_count();
-    const auto start = std::chrono::steady_clock::now();
-    for (int i=0;i<1000;++i) static_cast<void>(ui.frame(1024,768));
-    const auto us=std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now()-start).count();
-    require(ui.frame_build_count()==count, "idle presentation rebuilt");
-    SaveSlotInfo save; save.slot="read-only-probe"; save.class_guid=1;
-    ui.set_saves({save}); frame=ui.frame(1024,768);
-    require(has(frame,"ContinueLast"), "canContinue adapter update not delivered");
-    save.error="unreadable"; ui.set_saves({save});
-    require(!has(ui.frame(1024,768),"ContinueLast"), "invalid save leaves stale Continue");
-    for (const auto &[open, close, pane, text] : {
-            std::array<const char *,4>{"credits-a","credits-b","CreditFrame","Credits"},
-            std::array<const char *,4>{"credits-c","credits-d","CreditFrameB","CreditsB"}}) {
-        click(ui,open); frame=ui.frame(1024,768); inspect(frame);
-        require(has(frame,pane) && has(frame,text), "credit root/child did not inherit open state");
-        const auto paint=frontend_paint_list(frame);
-        auto parent=std::find_if(paint.begin(),paint.end(),[&](const auto &p){return leaf(p.widget.name)==pane;});
-        auto child=std::find_if(paint.begin(),paint.end(),[&](const auto &p){return leaf(p.widget.name)==text;});
-        require(parent<child, "credit text painted behind its backing window");
-        require(child->widget.text.find(std::string(text)=="CreditsB" ? "OutOfOrder Games" : "Designed by Runic Games")
-                    != std::string::npos, "credit window exists but its content was lost");
-        require(child->widget.text.find("|c")==std::string::npos, "inline control code leaked through plain-text adapter");
-        click(ui,close); require(!has(ui.frame(1024,768),pane), "credit close left stale frame");
+void inspect(const FrontendFrame& f) {
+    require(f.original_layout && f.notes.empty(), "diagnostic chrome in native menu");
+    require(f.cegui && !f.cegui->quads.empty(), "CEGUI produced no imagery");
+    require(frontend_paint_list(f).empty(), "custom Falagard compiler still paints the native menu");
+    for (const auto& q : f.cegui->quads) {
+        require(q.texture && q.texture->width && q.texture->height, "library quad has no texture");
+        require(q.texture->rgba.size() == static_cast<std::size_t>(q.texture->width) * q.texture->height * 4,
+            "invalid atlas transport");
+        require(std::isfinite(q.z) && std::isfinite(q.destination.x) && std::isfinite(q.destination.y) &&
+            q.destination.width > 0 && q.destination.height > 0, "invalid clipped quad");
     }
-    static_cast<void>(ui.frame(640,480)); const auto resized=ui.frame_build_count();
-    static_cast<void>(ui.frame(640,480)); require(ui.frame_build_count()==resized, "stable resize rebuilt");
-    std::cout << "PASS: reviewed controller properties -> resolved tree -> per-window skin commands; "
-                 "1000 cached frame copies " << us << " us (host metric, not desktop FPS or original-frame parity)\n";
+}
+void command(Frontend& ui, const std::string& id) {
+    const auto f = ui.frame(1024, 768);
+    const auto it = std::find_if(f.buttons.begin(), f.buttons.end(), [&](const auto& b) { return b.id == id; });
+    require(it != f.buttons.end(), "bound command missing");
+    const float x = it->rect.x + it->rect.width / 2, y = it->rect.y + it->rect.height / 2;
+    ui.pointer_event({UiPointerEventKind::button_down, x, y});
+    ui.pointer_event({UiPointerEventKind::button_up, x, y});
+}
+}
+// Library/state/resource contract: no window, GL context or desktop input.
+int main(int argc, char** argv) { try {
+    if (argc == 3 && std::string(argv[1]) == "--invalid") {
+        PakArchive broken(argv[2]);
+        bool caught = false;
+        try { CeguiMenu menu(broken, [](const auto&, auto) {}); }
+        catch (const std::runtime_error& e) { caught = std::string(e.what()).find("CEGUI:") == 0; }
+        require(caught, "non-std library exception escaped the production boundary");
+        require(!CEGUI::System::getSingletonPtr(), "failed resource load leaked System");
+        std::cout << "PASS: CEGUI load failure translated and library owners released\n";
+        return 0;
+    }
+    require(argc == 2, "expected external pak.zip");
+    PakArchive pak(argv[1]);
+    std::shared_ptr<const CeguiTextureData> retained;
+    {
+        UiResources resources(pak); Frontend ui(resources, {{1, "Destroyer"}});
+        auto f = ui.frame(1024, 768); inspect(f);
+        const auto target = std::find_if(f.buttons.begin(), f.buttons.end(), [](const auto& b) { return b.id == "new"; });
+        require(target != f.buttons.end(), "new-game binding missing");
+        const float tx = target->rect.x + target->rect.width / 2, ty = target->rect.y + target->rect.height / 2;
+        for (std::uint8_t button : {std::uint8_t{1}, std::uint8_t{2}}) {
+            ui.pointer_event({UiPointerEventKind::button_down, tx, ty, button});
+            ui.pointer_event({UiPointerEventKind::button_up, tx, ty, button});
+            require(ui.page() == FrontendPage::main, "non-left button executed a game command");
+        }
+        bool rejected = false;
+        try { ui.pointer_event({UiPointerEventKind::button_down, tx, ty, 7}); }
+        catch (const std::invalid_argument&) { rejected = true; }
+        require(rejected && ui.page() == FrontendPage::main, "invalid button corrupted native routing");
+        retained = f.cegui->quads.front().texture;
+        for (const auto* name : {"DemoVersion", "CharacterModsWarning", "ContinueLast", "CreditFrame", "CreditFrameB"})
+            require(!widget(f, name).visible, "initial controller visibility wrong");
+        require(widget(f, "TabB").visible && widget(f, "TabTextB").visible, "Linux credit tab missing");
+        const auto* layout = resources.layout("media/UI/mainmenuframe.layout");
+        require(layout != nullptr, "resource oracle missing");
+        const auto source = std::find_if(layout->widgets().begin(), layout->widgets().end(),
+            [](const auto& w) { return w.name == "CreditsB"; });
+        if (source != layout->widgets().end() && widget(f, "CreditsB").text != source->property("Text")) {
+            const auto& native = widget(f, "CreditsB").text;
+            const auto expected = source->property("Text");
+            const auto pos = std::mismatch(native.begin(), native.end(), expected.begin(), expected.end());
+            std::cerr << "Property body lengths " << native.size() << '/' << expected.size()
+                      << " first mismatch at " << (pos.first - native.begin()) << '\n';
+        }
+        require(source != layout->widgets().end() && widget(f, "CreditsB").text == source->property("Text"),
+            "XML Property body whitespace/entities changed");
+        auto* serif = CEGUI::FontManager::getSingleton().getFont("Serif");
+        require(serif->getTextExtent("|cFFFFBA00ABC|u") == serif->getTextExtent("ABC"), "tag advance wrong");
+        require(serif->getTextExtent("|cGGGGGGGGABC|u") == serif->getTextExtent("ABC"), "malformed full tag not consumed");
+        require(serif->getTextExtent("|cFF") > 0, "incomplete tag should stay literal");
+        auto* plain = CEGUI::FontManager::getSingleton().getFont("FrizQuadrata");
+        require(plain->getTextExtent("|cFFFFBA00ABC|u") > plain->getTextExtent("ABC"), "tag patch leaked to other fonts");
+        static_cast<void>(ui.frame(1024, 768));
+        const auto count = ui.frame_build_count(); static_cast<void>(ui.frame(1024, 768));
+        require(ui.frame_build_count() == count, "idle transport rebuilt");
+        SaveSlotInfo save; save.slot = "probe"; save.class_guid = 1; ui.set_saves({save});
+        require(widget(ui.frame(1024, 768), "ContinueLast").visible, "save adapter not consumed");
+        save.error = "unreadable"; ui.set_saves({save});
+        require(!widget(ui.frame(1024, 768), "ContinueLast").visible, "bad save left Continue visible");
+        for (const auto& c : {std::array<const char*, 4>{"credits-a", "credits-b", "CreditFrame", "Credits"},
+                              std::array<const char*, 4>{"credits-c", "credits-d", "CreditFrameB", "CreditsB"}}) {
+            command(ui, c[0]); f = ui.frame(1024, 768); inspect(f);
+            require(widget(f, c[2]).visible && widget(f, c[3]).visible, "command/child visibility chain broken");
+            require(widget(f, c[3]).text.find(std::string(c[3]) == "CreditsB" ? "OutOfOrder Games" : "Designed by Runic Games")
+                != std::string::npos, "credit body missing");
+            command(ui, c[1]); require(!widget(ui.frame(1024, 768), c[2]).visible, "credit close lost");
+        }
+        f = ui.frame(640, 480); inspect(f); const auto small = widget(f, "TabB").rect;
+        static_cast<void>(ui.frame(1024, 768)); f = ui.frame(640, 480);
+        require(widget(f, "TabB").rect.x == small.x && widget(f, "TabB").rect.width == small.width,
+            "resize compounded original offsets");
+        command(ui, "settings"); require(ui.page() == FrontendPage::settings, "application command not consumed");
+        f = ui.frame(1024, 768);
+        require(f.cegui && !frontend_paint_list(f).empty(), "Settings lost native backing menu");
+        ui.key(FrontendKey::back); command(ui, "new");
+        require(ui.page() == FrontendPage::create && !ui.frame(1024, 768).cegui, "native detach/new-game dispatch failed");
+        ui.key(FrontendKey::back); require(ui.frame(1024, 768).cegui.has_value(), "retained native tree failed to reopen");
+    }
+    require(!CEGUI::System::getSingletonPtr(), "System leaked after frontend teardown");
+    require(retained && !retained->rgba.empty(), "submitted texture died after library teardown");
+    { UiResources r(pak); Frontend ui(r, {{1, "Destroyer"}}); inspect(ui.frame(1024, 768)); }
+    std::cout << "PASS: original menu through pinned CEGUI windows/events/Falagard/fonts, controller, resize and teardown; no GL\n";
     return 0;
-} catch (const std::exception &e) { std::cerr << e.what() << '\n'; return 1; } }
+} catch (const CEGUI::Exception& e) { std::cerr << e.getMessage().c_str() << '\n'; return 1;
+} catch (const std::exception& e) { std::cerr << e.what() << '\n'; return 1; } }

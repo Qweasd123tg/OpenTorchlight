@@ -2,7 +2,7 @@
   "annotated_function_addresses": 199,
   "defined_function_addresses": 17023,
   "inputs": {
-    "research/coverage-boundaries.json": "6fd582e660389a82ad699bbec4b8d58f6feb2747a2f063111d81b3248f70ae81",
+    "research/coverage-boundaries.json": "77a24079833421d21a059529f8c4eabe0be83424c6b9a058be8344ba2721c49c",
     "research/original-callgraph.tsv": "f02c52bf533d727b4c24ee9fba3d9f95d26205d75fd0ea16bdc5f655bbb8a827",
     "research/original-symbols.txt": "0ce1b5687c1128ac52434b660c3ba0254ff7a2cd2aa0f5be3894cb1026b67d3d"
   },

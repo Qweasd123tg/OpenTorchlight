@@ -12,6 +12,7 @@
 #include "torchlight/ui_window_runtime.hpp"
 #include "torchlight/ui_hud.hpp"
 #include "torchlight/inventory_view.hpp"
+#include "torchlight/cegui_menu.hpp"
 
 namespace torchlight {
 // Portable application policy. Original callback names are routed explicitly;
@@ -62,6 +63,7 @@ struct FrontendListItem {
     std::size_t paint_order = 0;
 };
 struct FrontendFrame {
+    std::optional<CeguiMenuFrame> cegui;
     std::vector<FrontendListItem> list_items;
     std::map<std::string, UiSkinState> window_states;
     std::vector<UiDropdownMeshBatch> dropdown_meshes;
@@ -138,6 +140,9 @@ class Frontend : private MainMenuActions {
     bool show_credits_ = false, show_credits_b_ = false;
     struct ResourceWindows;
     std::unique_ptr<ResourceWindows> resource_windows_;
+    std::unique_ptr<CeguiMenu> cegui_menu_;
+    std::array<bool, 8> cegui_buttons_{};
+    void sync_cegui_menu();
     UiWindowRuntime windows_;
     std::unique_ptr<UiTooltips> tooltips_;
     std::unique_ptr<UiSettingsComboboxes> comboboxes_;
@@ -146,7 +151,8 @@ class Frontend : private MainMenuActions {
     UiPointerTiming pointer_timing_;
     double pointer_clock_ = 0;
     UiWindowId sheet_;
-    StaticDropdownState main_dropdown_;
+    std::unique_ptr<StaticDropdownState> main_dropdown_;
+    bool main_open_ = false;
     std::map<FrontendPage, std::unique_ptr<StaticDropdownState>> dropdowns_;
     std::map<FrontendPage, const UiLayout*> bound_layouts_;
     std::unique_ptr<DropdownAnimation> options_animation_;

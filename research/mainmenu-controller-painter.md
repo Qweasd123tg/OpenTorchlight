@@ -1,5 +1,10 @@
 # Входное меню: свойства контроллера и единый painter
 
+2026-09-30: Main/credits перенесены на [исходную CEGUI](cegui-source-integration.md).
+Ниже сохранён контракт оригинала и прежнего собственного painter.
+Текущая проверка `tests/mainmenu_presentation_test.cpp` проверяет библиотечный
+путь; CTest name — `original_cegui_mainmenu_contract`. Полный completion по-прежнему partial.
+
 ## Источники и граница
 
 ELF `Torchlight.bin.x86_64`, SHA-256

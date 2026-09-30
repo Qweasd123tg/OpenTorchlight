@@ -11,6 +11,7 @@
 #include <cctype>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <optional>
 #include <set>
 #include <stdexcept>
@@ -43,6 +44,12 @@ struct FontTexture {
     int width = 0, height = 0;
     float screen_width = 0, screen_height = 0;
     std::uint64_t uploaded_revision = 0;
+};
+struct CeguiTexture {
+    std::weak_ptr<const CeguiTextureData> identity;
+    GLuint id = 0;
+    std::uint64_t uploaded_revision = 0;
+    bool uploaded = false;
 };
 std::string upper(std::string s) {
     for (auto &c : s)
@@ -91,6 +98,7 @@ struct GlesUiRenderer::Impl {
     std::set<std::string> failed;
     std::map<std::string, FontTexture> fonts;
     std::set<std::string> failed_fonts;
+    std::map<const CeguiTextureData*, CeguiTexture> cegui_textures;
     int viewport_width = 0, viewport_height = 0;
     explicit Impl(const PakArchive &a, UiResources &r) : archive(&a), resources(&r), skin_cache(r) {
         const char *vs = "attribute vec2 position; attribute vec2 texcoord; uniform vec2 screen; "
@@ -137,6 +145,8 @@ struct GlesUiRenderer::Impl {
             glDeleteTextures(1, &pair.second.id);
         for (auto &pair : fonts)
             glDeleteTextures(1, &pair.second.id);
+        for (auto &pair : cegui_textures)
+            glDeleteTextures(1, &pair.second.id);
         if (buffer)
             glDeleteBuffers(1, &buffer);
         if (program)
@@ -147,7 +157,24 @@ struct GlesUiRenderer::Impl {
         const auto vertices = ui_quad_vertices(r, uv, colours);
         out.insert(out.end(), vertices.begin(), vertices.end());
     }
+    static void cegui_quad(std::vector<Vertex>& out, const CeguiQuad& source) {
+        const auto& r = source.destination;
+        const auto& uv = source.uv;
+        const auto& c = source.colours;
+        const Vertex tl{r.x, r.y, uv.x, uv.y, c[0]};
+        const Vertex tr{r.x + r.width, r.y, uv.x + uv.width, uv.y, c[1]};
+        const Vertex bl{r.x, r.y + r.height, uv.x, uv.y + uv.height, c[2]};
+        const Vertex br{r.x + r.width, r.y + r.height,
+                        uv.x + uv.width, uv.y + uv.height, c[3]};
+        if (source.bottom_left_to_top_right)
+            out.insert(out.end(), {tl, bl, tr, tr, bl, br});
+        else
+            out.insert(out.end(), {tl, bl, br, tl, br, tr});
+    }
     void begin_state(int width, int height) {
+        // The same renderer survives menu -> gameplay transitions, where draw()
+        // may stop but draw_hud() continues. Release abandoned CEGUI atlases.
+        prune_cegui_textures();
         viewport_width = width;
         viewport_height = height;
         glViewport(0, 0, width, height);
@@ -197,6 +224,65 @@ struct GlesUiRenderer::Impl {
         glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(vertices.size() * sizeof(Vertex)),
                      vertices.data(), GL_STREAM_DRAW);
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size()));
+    }
+    void prune_cegui_textures() {
+        for (auto it = cegui_textures.begin(); it != cegui_textures.end();) {
+            if (it->second.identity.expired()) {
+                glDeleteTextures(1, &it->second.id);
+                it = cegui_textures.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+    GLuint sync_cegui_texture(const std::shared_ptr<const CeguiTextureData>& data) {
+        if (!data || !data->width || !data->height ||
+            data->rgba.size() != static_cast<std::size_t>(data->width) * data->height * 4)
+            throw std::runtime_error("invalid CEGUI RGBA texture");
+        auto [it, inserted] = cegui_textures.try_emplace(data.get());
+        auto& cached = it->second;
+        if (inserted) {
+            cached.identity = data;
+            glGenTextures(1, &cached.id);
+        }
+        if (!cached.uploaded || cached.uploaded_revision != data->revision) {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, cached.id);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(data->width),
+                         static_cast<GLsizei>(data->height), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                         data->rgba.data());
+            cached.uploaded_revision = data->revision;
+            cached.uploaded = true;
+        }
+        return cached.id;
+    }
+    void draw_cegui(const CeguiMenuFrame& frame) {
+        std::vector<const CeguiQuad*> order;
+        order.reserve(frame.quads.size());
+        for (const auto& q : frame.quads) order.push_back(&q);
+        // CEGUI 0.6.2 OpenGLRenderer::QuadInfo::operator< draws greater z
+        // first. Stable ties preserve addQuad order for transparent overlays.
+        std::stable_sort(order.begin(), order.end(), [](const auto* a, const auto* b) {
+            return a->z > b->z;
+        });
+        std::vector<Vertex> vertices;
+        GLuint batch_texture = 0;
+        const auto flush = [&] {
+            draw_batch(vertices, {1, 1, 1, 1}, batch_texture);
+            vertices.clear();
+        };
+        for (const auto* q : order) {
+            const auto texture = sync_cegui_texture(q->texture);
+            if (batch_texture && texture != batch_texture)
+                flush();
+            batch_texture = texture;
+            cegui_quad(vertices, *q);
+        }
+        flush();
     }
     void draw_dropdown_batches(const std::vector<UiDropdownMeshBatch>& batches) {
         for (const auto& batch : batches) {
@@ -634,6 +720,8 @@ struct GlesUiRenderer::Impl {
     }
     void draw(const FrontendFrame &frame, int width, int height, bool clear_background) {
         begin(width, height, clear_background);
+        if (frame.cegui)
+            draw_cegui(*frame.cegui);
         draw_dropdown_batches(frame.dropdown_meshes);
         if (!draw_text("FrizQuadrataBig", frame.title, 24, 16, static_cast<float>(width) - 24,
                        {.92F, .90F, .82F, 1})) {

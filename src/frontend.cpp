@@ -89,6 +89,7 @@ std::string main_menu_credits() {
     return out;
 }
 } // namespace
+std::string main_menu_credit_text() { return main_menu_credits(); }
 UiLayoutState continue_menu_layout_state(const UiLayout& layout, std::size_t count,
                                         std::size_t scroll, std::size_t selected,
                                         bool delete_confirmation) {
@@ -123,6 +124,8 @@ UiLayoutState continue_menu_layout_state(const UiLayout& layout, std::size_t cou
 std::vector<FrontendPaintItem> frontend_paint_list(const FrontendFrame &frame) {
     std::vector<FrontendPaintItem> result;
     const auto append = [&](const UiResolvedWidget &widget, std::optional<std::size_t> button) {
+        if (frame.cegui && std::any_of(frame.cegui->widgets.begin(), frame.cegui->widgets.end(),
+            [&](const auto& native) { return native.name == widget.name; })) return;
         if (!widget.visible) return;
         // A resource window may provide both an image and a text component.
         // Keep its cache together and execute it once.
@@ -223,7 +226,7 @@ Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
           sheet.type = "DefaultWindow";
           sheet.properties["UnifiedSize"] = "{{1,0},{1,0}}";
           return windows_.create(std::move(sheet));
-      }()), main_dropdown_(windows_, sheet_, "__opentorchlight/main", false, true) {
+      }()) {
     windows_.set_sheet(sheet_);
     tooltips_ = std::make_unique<UiTooltips>(windows_, r);
     comboboxes_ = std::make_unique<UiSettingsComboboxes>(windows_, r);
@@ -233,6 +236,12 @@ Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
         if (event.type == UiWindowEventType::capture_lost &&
             windows_.capture() != event.window) dragging_slider_.clear();
     });
+    if (CeguiMenu::available(r.archive())) {
+        cegui_menu_ = std::make_unique<CeguiMenu>(r.archive(),
+            [this](const std::string& name, UiLayoutFunction function) { activate(name, function); });
+        main_linux_credits_ = cegui_menu_->has_linux_credits();
+    } else main_dropdown_ = std::make_unique<StaticDropdownState>(
+        windows_, sheet_, "__opentorchlight/main", false, true);
     main_set_open(true);
 }
 void Frontend::set_saves(std::vector<SaveSlotInfo> saves) {
@@ -242,6 +251,7 @@ void Frontend::set_saves(std::vector<SaveSlotInfo> saves) {
     save_index_ = std::min(save_index_, saves_.empty() ? 0 : saves_.size() - 1);
     pending_delete_.reset();
     scroll_ = 0;
+    sync_cegui_menu();
 }
 void Frontend::show_main() {
     pending_options_exit_ = false;
@@ -430,6 +440,14 @@ std::optional<std::size_t> Frontend::button_at(float x, float y) const {
     return std::nullopt;
 }
 void Frontend::pointer(const UiPointerState& state) {
+    if (cegui_menu_ && page_ == FrontendPage::main && !ordered_pointer_) {
+        cached_frame_.reset();
+        if (state.position) cegui_menu_->pointer_event({UiPointerEventKind::move,
+            (*state.position)[0], (*state.position)[1]});
+        else cegui_menu_->pointer_event({UiPointerEventKind::leave});
+        pointer_ = state;
+        return;
+    }
     // Ordered events own this state. A host summary already includes later
     // queued events and must not move the cursor/release before their timestamps.
     if (ordered_pointer_) return;
@@ -504,6 +522,13 @@ FrontendFrame Frontend::pointer_frame(FrontendFrame frame) const {
     return frame;
 }
 void Frontend::click(float x, float y) {
+    if (cegui_menu_ && page_ == FrontendPage::main) {
+        cached_frame_.reset();
+        sync_cegui_menu();
+        cegui_menu_->pointer_event({UiPointerEventKind::button_down, x, y});
+        cegui_menu_->pointer_event({UiPointerEventKind::button_up, x, y});
+        return;
+    }
     cached_frame_.reset();
     if (request_)
         return;
@@ -511,10 +536,10 @@ void Frontend::click(float x, float y) {
         // Production route: resolved resource tree -> single topmost window
         // -> subscribed ancestor -> bound command -> CMainMenu dispatcher.
         // Empty buttons mark invalidated/stale input after a page/list change.
-        if (buttons_.empty() || !main_dropdown_.attached()) return;
+        if (buttons_.empty() || !main_dropdown_ || !main_dropdown_->attached()) return;
         std::optional<UiWindowId> receiver;
         for (const auto id : windows_.dispatch_path(windows_.target_at_position(window_snapshot_, x, y)))
-            if (main_dropdown_.subscription(id).mouse_down) { receiver = id; break; }
+            if (main_dropdown_->subscription(id).mouse_down) { receiver = id; break; }
         if (!receiver) return;
         const auto widget = windows_.window(*receiver);
         for (std::size_t i = 0; i < buttons_.size(); ++i)
@@ -555,7 +580,7 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
     // awaiting a destructive choice. The original show's/hide's are below.
     if (pending_delete_ && page_ == FrontendPage::load && id != "accept" && id != "decline") return;
     if (page_ == FrontendPage::main && function) {
-        dispatch_main_menu(main_dropdown_.open(), main_dropdown_.closed(), *function, *this);
+        dispatch_main_menu(main_open_, !main_open_, *function, *this);
         if (page_ != previous_page) {
             buttons_.clear();
             pressed_window_.clear();
@@ -692,6 +717,11 @@ bool Frontend::main_can_load() const {
     // still our .otc adapter, not the original .SVB reader.
     return !saves_.empty();
 }
+void Frontend::sync_cegui_menu() {
+    if (!cegui_menu_) return;
+    const bool can_continue = std::any_of(saves_.begin(), saves_.end(), [](const auto& save) { return save.loadable(); });
+    cegui_menu_->state(main_open_, can_continue, show_credits_, show_credits_b_);
+}
 void Frontend::main_request_state(int state, int menu) {
     // CGameUI::requestSetGameState @0xa828f0 stores this pair. Consume it in
     // the existing application policy; native CGameStateController is open.
@@ -706,7 +736,9 @@ void Frontend::main_request_state(int state, int menu) {
     } else throw std::logic_error("unsupported main-menu state pair");
 }
 void Frontend::main_set_open(bool value) {
-    main_dropdown_.set_open(value);
+    main_open_ = value;
+    if (main_dropdown_) main_dropdown_->set_open(value);
+    sync_cegui_menu();
     cached_frame_.reset();
     buttons_.clear();
     input_widgets_.clear();
@@ -721,6 +753,7 @@ void Frontend::main_toggle_settings() { activate("settings"); }
 bool Frontend::main_has_linux_credits() const { return main_linux_credits_; }
 void Frontend::main_show_credits(bool linux_panel, bool visible) {
     (linux_panel ? show_credits_b_ : show_credits_) = visible;
+    sync_cegui_menu();
     cached_frame_.reset();
     buttons_.clear(); // input is enabled again after resolving the changed tree
 }
@@ -739,13 +772,16 @@ Frontend::~Frontend() {
         (void)page;
         if (windows_.alive(container->root())) windows_.destroy(container->root());
     }
-    if (windows_.alive(main_dropdown_.root())) windows_.destroy(main_dropdown_.root());
+    if (main_dropdown_ && windows_.alive(main_dropdown_->root())) windows_.destroy(main_dropdown_->root());
     if (tooltips_) tooltips_->shutdown();
     windows_.clean_dead_pool();
     windows_.set_lifecycle({});
 }
 StaticDropdownState& Frontend::dropdown(FrontendPage page) {
-    if (page == FrontendPage::main) return main_dropdown_;
+    if (page == FrontendPage::main) {
+        if (!main_dropdown_) throw std::logic_error("CEGUI owns the main menu tree");
+        return *main_dropdown_;
+    }
     auto& result = dropdowns_[page];
     if (!result) {
         const bool content = page == FrontendPage::pause || page == FrontendPage::settings;
@@ -759,9 +795,9 @@ StaticDropdownState& Frontend::dropdown(FrontendPage page) {
     return *result;
 }
 void Frontend::sync_windows() {
-    if (page_ != FrontendPage::main &&
+    if (main_open_ && page_ != FrontendPage::main &&
         !(page_ == FrontendPage::settings && settings_return_ == FrontendPage::main))
-        main_dropdown_.set_open(false);
+        main_set_open(false);
     for (auto page : {FrontendPage::create, FrontendPage::load, FrontendPage::settings}) {
         const bool wanted = page_ == page;
         if (wanted || dropdowns_.count(page)) {
@@ -867,6 +903,10 @@ void Frontend::resolve_windows(int width, int height) {
 }
 void Frontend::advance(float seconds) {
     if (!std::isfinite(seconds) || seconds < 0) throw std::invalid_argument("invalid frontend delta");
+    if (cegui_menu_) {
+        cegui_menu_->advance(seconds);
+        if (seconds > 0) cached_frame_.reset();
+    }
     pointer_clock_ += seconds;
     sync_windows();
     windows_.advance(seconds, [this](UiWindowId id, std::uint8_t button) {
@@ -901,10 +941,42 @@ std::vector<DropdownSoundRequest> Frontend::take_dropdown_sounds() {
 }
 FrontendFrame Frontend::compose_frame(int width, int height) {
     FrontendFrame result;
+    sync_cegui_menu();
+    if (cegui_menu_ && main_open_) {
+        result.cegui = cegui_menu_->frame(width, height);
+        result.original_layout = true;
+        for (const auto& widget : result.cegui->widgets) {
+            if (!widget.visible) continue;
+            if (!widget.text.empty()) result.texts.push_back(widget);
+            std::string id;
+            if (widget.callback.empty()) continue;
+            switch (widget.layout_function.value_or(UiLayoutFunction::none)) {
+            case UiLayoutFunction::new_game_menu: id = "new"; break;
+            case UiLayoutFunction::continue_game_menu: id = "loads"; break;
+            case UiLayoutFunction::continue_game: id = "continue"; break;
+            case UiLayoutFunction::exit_application: id = "exit"; break;
+            case UiLayoutFunction::settings_menu: id = "settings"; break;
+            case UiLayoutFunction::select_a: id = "credits-a"; break;
+            case UiLayoutFunction::select_b: id = "credits-b"; break;
+            case UiLayoutFunction::select_c: id = "credits-c"; break;
+            case UiLayoutFunction::select_d: id = "credits-d"; break;
+            default: continue;
+            }
+            FrontendButton button;
+            button.owner = FrontendPage::main;
+            button.id = std::move(id);
+            button.text = widget.text;
+            button.rect = widget.rect;
+            button.enabled = widget.enabled;
+            button.supplemental = false;
+            button.widget = widget;
+            result.buttons.push_back(std::move(button));
+        }
+    }
     // Each page contributes windows from the one WindowManager snapshot.
     // Global paint_order keeps overlapping and closing trees in CEGUI order.
     std::vector<FrontendPage> pages;
-    if (main_dropdown_.attached()) pages.push_back(FrontendPage::main);
+    if (main_dropdown_ && main_dropdown_->attached()) pages.push_back(FrontendPage::main);
     for (const auto& [page, container] : dropdowns_)
         if (container->attached()) pages.push_back(page);
     // Bind every participating tree before assigning snapshot/paint indices.
@@ -951,7 +1023,8 @@ FrontendFrame Frontend::frame(int width, int height) {
     if (width <= 0 || height <= 0) throw std::invalid_argument("invalid UI viewport");
     sync_windows();
     if (cached_frame_ && cached_width_ == width && cached_height_ == height &&
-        cached_revision_ == windows_.revision()) return pointer_frame(*cached_frame_);
+        cached_revision_ == windows_.revision())
+        return cegui_menu_ && page_ == FrontendPage::main ? *cached_frame_ : pointer_frame(*cached_frame_);
     cached_width_ = width;
     cached_height_ = height;
     ++frame_build_count_;
@@ -969,8 +1042,8 @@ FrontendFrame Frontend::frame(int width, int height) {
     buttons_ = result.buttons;
     cached_revision_ = windows_.revision();
     cached_frame_ = result;
-    if (ordered_pointer_) retarget_pointer();
-    return pointer_frame(std::move(result));
+    if (ordered_pointer_ && !(cegui_menu_ && page_ == FrontendPage::main)) retarget_pointer();
+    return cegui_menu_ && page_ == FrontendPage::main ? result : pointer_frame(std::move(result));
 }
 void Frontend::retarget_pointer() {
     if (retargeting_ || cached_width_ <= 0 || cached_height_ <= 0) return;
@@ -999,7 +1072,7 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
         const auto widget = windows_.window(id);
         const auto kind = decision.dispatch_kind(upper(widget.property("WantsMultiClickEvents")) != "FALSE");
         const auto subscribed = [&](bool double_click) {
-            auto sub = main_dropdown_.subscription(id);
+            auto sub = main_dropdown_ ? main_dropdown_->subscription(id) : DropdownSubscriptions{};
             if (double_click ? sub.double_click : sub.mouse_down) return true;
             for (const auto& [page, container] : dropdowns_) {
                 (void)page;
@@ -1026,9 +1099,9 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
         const auto dispatch = [&](UiWindowId receiver) {
             if (request_) return;
             const auto receiver_widget = windows_.window(receiver);
-            if (main_dropdown_.subscription(receiver).mouse_down) {
+            if (main_dropdown_ && main_dropdown_->subscription(receiver).mouse_down) {
                 if (receiver_widget.layout_function)
-                    dispatch_main_menu(main_dropdown_.open(), main_dropdown_.closed(),
+                    dispatch_main_menu(main_open_, !main_open_,
                         *receiver_widget.layout_function, *this);
                 command_handled = true;
                 return;
@@ -1058,6 +1131,27 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
 }
 void Frontend::pointer_event(const UiPointerEvent& event) {
     ordered_pointer_ = true;
+    const bool held_native = std::any_of(cegui_buttons_.begin(), cegui_buttons_.end(), [](bool held) { return held; });
+    if (cegui_menu_ && (page_ == FrontendPage::main ||
+        ((event.kind == UiPointerEventKind::move || event.kind == UiPointerEventKind::leave) && held_native) ||
+        (event.kind == UiPointerEventKind::button_up && event.button < cegui_buttons_.size() && cegui_buttons_[event.button]))) {
+        cached_frame_.reset();
+        sync_cegui_menu();
+        cegui_menu_->pointer_event(event);
+        // Preserve host position across the native-menu -> legacy-page handoff.
+        if (event.kind == UiPointerEventKind::leave) pointer_.position.reset();
+        else {
+            last_pointer_position_ = {event.x, event.y};
+            pointer_.position = last_pointer_position_;
+        }
+        if (event.kind == UiPointerEventKind::button_down) cegui_buttons_.at(event.button) = true;
+        else if (event.kind == UiPointerEventKind::button_up) cegui_buttons_.at(event.button) = false;
+        if (event.button == 0) {
+            if (event.kind == UiPointerEventKind::button_down) pointer_.left_press_origin = last_pointer_position_;
+            else if (event.kind == UiPointerEventKind::button_up) pointer_.left_press_origin.reset();
+        }
+        return;
+    }
     if (event.kind == UiPointerEventKind::leave) pointer_.position.reset();
     else {
         last_pointer_position_ = {event.x, event.y};
@@ -1253,7 +1347,7 @@ FrontendFrame Frontend::build_frame(FrontendPage render_page, int width, int hei
         const auto name = upper(leaf(w.name));
         auto &action = actions[n];
         if (render_page == FrontendPage::main) {
-            if (main_dropdown_.subscription(window_snapshot_.source_ids[n]).mouse_down == 0) continue;
+            if (main_dropdown_->subscription(window_snapshot_.source_ids[n]).mouse_down == 0) continue;
             if (callback == "GUINEWGAMEMENU") action = "new";
             else if (callback == "GUICONTINUEGAMEMENU") action = "loads";
             else if (callback == "GUICONTINUEGAME") action = "continue";

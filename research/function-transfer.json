@@ -156,9 +156,9 @@
         ]
       },
       "evidence": "research/dropdown-mainmenu.md",
-      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; include/torchlight/ui_dropdown.hpp",
+      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; include/torchlight/ui_dropdown.hpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "comparison": "Full-body pinned ASM review c4ae80..c4aff1 plus tests/ui_dropdown_test.cpp: all command values -2..99, flag combinations, load/optional-panel branches, ordered effects and exception propagation. Static comparison; original not executed.",
-      "notes": "All four stages describe the explicit call-boundary adapter. Actual frontend key/press path passes bound enum and consumes requests/credits/close state. Native dependencies remain partial."
+      "notes": "All four stages describe the explicit call-boundary adapter. Actual frontend key/press path passes bound enum and consumes requests/credits/close state. Native dependencies remain partial. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00b18e50": {
       "symbol": "CDropdownMenu::setOpen(bool)",
@@ -176,9 +176,9 @@
         ]
       },
       "evidence": "research/dropdown-container-lifecycle.md",
-      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp",
+      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "comparison": "Pinned setOpen 0xb18e50..0xb192d1 plus shipped CEGUI capture/activation/attachment and original three-clip/sound contracts mapped to shared window state, ordered host input, Options tag/mesh/audio consumers. Pure dropdown/window/animation/sound contracts; no UI execution.",
-      "notes": "CMainMenu flags=1 stays model-null. Options retains attachment during CLOSE and defers exit request until closed. Settings uses its nonanimated override. See research/dropdown-animation-lifecycle.md and research/ui-capture-modal-lifecycle.md; full-function completion remains partial."
+      "notes": "CMainMenu flags=1 stays model-null. Options retains attachment during CLOSE and defers exit request until closed. Settings uses its nonanimated override. See research/dropdown-animation-lifecycle.md and research/ui-capture-modal-lifecycle.md; full-function completion remains partial. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00b176b0": {
       "symbol": "CDropdownMenu::update(float)",
@@ -215,9 +215,9 @@
         ]
       },
       "evidence": "research/dropdown-container-lifecycle.md",
-      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "implementation": "src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_dropdown_animation.cpp; src/ui_sound.cpp; src/frontend.cpp; src/application.cpp; src/gles_ui_renderer.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "comparison": "Shipped createMenus callsites 0xb19cac..0xb1ad55, CMainMenu layout attachment 0xc52bf8 and pinned CEGUI defaults/add/remove/Z-order compared with owned parent edges and reachable resolution; tests/ui_dropdown_test.cpp checks translated tree properties and the external pak.",
-      "notes": "Legacy stages cover Main model-null containers and the Options model/resource chain. Settings flags=0 constructor does not override its nonanimated setOpen/update behavior. Full function completion remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
+      "notes": "Legacy stages cover Main model-null containers and the Options model/resource chain. Settings flags=0 constructor does not override its nonanimated setOpen/update behavior. Full function completion remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00c52a10": {
       "symbol": "CMainMenu::createMenus()",
@@ -230,15 +230,14 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Root/back/content, shared capture/modal/activation/lifecycle state and class-specific pointer consumers are connected (research/dropdown-container-lifecycle.md). Frontend double-click/auto-repeat, three Settings Combobox autochildren and tooltip/renderer/factory teardown are connected; general CEGUI exception ABI/classes remain outside this packet (research/cegui-frontend-closure.md).",
-          "Credits retain original inline markup consumed by Serif glyph batches (research/ui-inline-text.md); full library string/exception behavior remains open.",
-          "Full CEGUI window/render contracts remain open; narrow static review does not close those dependencies."
+          "Pinned CEGUI source owns actual Main/credits windows, event delivery, Falagard, fonts and factory teardown. Full Runic vendor delta/ABI/string/exception comparison outside this reviewed menu is still open.",
+          "Native CGameUI/ResourceManager ownership and whole original-function acceptance remain open; read research/cegui-source-integration.md for source adaptation and queued callback boundary."
         ]
       },
       "evidence": "research/mainmenu-controller-painter.md",
-      "implementation": "src/frontend.cpp; src/gles_ui_renderer.cpp; include/torchlight/menu_grab_tables.hpp; src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "implementation": "src/frontend.cpp; src/gles_ui_renderer.cpp; include/torchlight/menu_grab_tables.hpp; src/ui_dropdown.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "comparison": "tests/mainmenu_presentation_test.cpp and tests/gles_skin_button_test.py are reviewed-contract/resource and integration regressions.",
-      "notes": "Full body inspected, including null guards, cleanup and string branches. Stage flags describe the connected presentation slice. Full function acceptance remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
+      "notes": "Full body inspected, including null guards, cleanup and string branches. Stage flags describe the connected presentation slice. Full function acceptance remains partial. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00c53b70": {
       "symbol": "CMainMenu::update(float)",
@@ -251,15 +250,15 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "CDropdownMenu::update Options animation/tag/deferred-close slice is connected; main flags=1 remains model-null. General model families and native ownership remain open.",
-          "Continue availability comes from the .otc adapter; original selected .SVB object and field +0xe0 producer remain open.",
+          "Main is model-null and uses library-owned presentation/events. Other dropdown pages/general model families and native state ownership remain open.",
+          "Continue availability is supplied by the .otc adapter; original selected .SVB object and +0xe0 producer remain open.",
           "Ordered case-insensitive mod comparison and absent-character warning retention remain open."
         ]
       },
       "evidence": "research/mainmenu-controller-painter.md",
-      "implementation": "src/frontend.cpp",
+      "implementation": "src/frontend.cpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "comparison": "tests/mainmenu_presentation_test.cpp checks available/unavailable transitions in the port adapter.",
-      "notes": "Full ASM body inspected. Only the Continue visibility consumer is ported/wired; warning initialization belongs to createMenus."
+      "notes": "Full ASM body inspected. Only the Continue visibility consumer is ported/wired; warning initialization belongs to createMenus. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00a980e0": {
       "symbol": "CGameUI::mapToFunctions(CEGUI::Window*)",
@@ -1465,10 +1464,10 @@
         ]
       },
       "evidence": "research/dropdown-mainmenu.md",
-      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp",
+      "implementation": "src/ui_dropdown.cpp; src/frontend.cpp; src/ui_window_runtime.cpp; src/ui_pointer_timing.cpp; src/ui_tooltip.cpp; src/ui_combobox.cpp; src/cegui_menu.cpp; include/torchlight/cegui_menu.hpp",
       "tests": "tests/ui_dropdown_test.cpp",
       "comparison": "Full pinned ASM review and narrow child-first/order/error/duplicate/unknown-property checks; resource binding checks use external mainmenuframe.layout.",
-      "notes": "Local errors are swallowed after preserving effects; recursion is outside local catch. Four stages describe the documented tree adapter and down/double-click consumers, not full CEGUI closure. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md."
+      "notes": "Local errors are swallowed after preserving effects; recursion is outside local catch. Four stages describe the documented tree adapter and down/double-click consumers, not full CEGUI closure. Frontend CEGUI closure and explicit adapter limits: research/cegui-frontend-closure.md. 2026-09-30: Main/credits production path uses pinned source CEGUI tree/event/Falagard/font ownership (research/cegui-source-integration.md), verified by CPU/library contract. Earlier runtime remains on other pages; completion remains partial and stages retain their earlier reviewed boundary."
     },
     "0x00b252c0": {
       "symbol": "CEnchantMenu::mapEventHandlers(CEGUI::Window*)",

@@ -6,13 +6,14 @@
         "0xb196f0"
       ],
       "status": "partial",
-      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md.",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-container-lifecycle.md",
         "research/dropdown-mainmenu.md",
         "research/ui-capture-modal-lifecycle.md",
         "research/dropdown-animation-lifecycle.md",
-        "research/cegui-frontend-closure.md"
+        "research/cegui-frontend-closure.md",
+        "research/cegui-source-integration.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
@@ -21,15 +22,18 @@
         "src/ui_sound.cpp",
         "src/frontend.cpp",
         "src/application.cpp",
-        "src/gles_ui_renderer.cpp"
+        "src/gles_ui_renderer.cpp",
+        "src/cegui_menu.cpp",
+        "include/torchlight/cegui_menu.hpp"
       ],
       "tests": [
         "tests/ui_dropdown_test.cpp",
         "tests/ui_window_runtime_test.cpp",
         "tests/ui_dropdown_animation_test.cpp",
-        "tests/ui_sound_test.cpp"
+        "tests/ui_sound_test.cpp",
+        "tests/mainmenu_presentation_test.cpp"
       ],
-      "comparison": "Shipped create callsites/defaults and CEGUI parent/draw-list operations statically compared with the scoped tree; pure tree contracts and external mainmenuframe resource resolution checks."
+      "comparison": "Shipped create callsites/defaults and CEGUI parent/draw-list operations statically compared with the scoped tree; pure tree contracts and external mainmenuframe resource resolution checks. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
     },
     {
       "addresses": [
@@ -96,39 +100,47 @@
         "0xc4ae80"
       ],
       "status": "partial",
-      "boundary": "Full CMainMenu onClick switch/guard/call order translated; production frontend consumes bound enums, credits and state requests. Native GameUI/state-controller/save ownership remains adapted.",
+      "boundary": "Full CMainMenu onClick switch/guard/call order translated; production frontend consumes bound enums, credits and state requests. Native GameUI/state-controller/save ownership remains adapted. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
-        "research/dropdown-mainmenu.md"
+        "research/dropdown-mainmenu.md",
+        "research/cegui-source-integration.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
         "src/frontend.cpp",
-        "include/torchlight/ui_dropdown.hpp"
+        "include/torchlight/ui_dropdown.hpp",
+        "src/cegui_menu.cpp",
+        "include/torchlight/cegui_menu.hpp"
       ],
       "tests": [
-        "tests/ui_dropdown_test.cpp"
+        "tests/ui_dropdown_test.cpp",
+        "tests/mainmenu_presentation_test.cpp"
       ],
-      "comparison": "Static full-body ASM review and narrow call-sequence checks; no native execution or UI scenario."
+      "comparison": "Static full-body ASM review and narrow call-sequence checks; no native execution or UI scenario. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
     },
     {
       "addresses": [
         "0xb179e0"
       ],
       "status": "partial",
-      "boundary": "Child-first mapper, nonempty-property gate, multi-click/down/double subscriptions and local exception boundary translated. Frontend consumes down and double-click subscriptions with source timing and receiver dispatch; native SubscriberSlot ownership remains an adapter (research/cegui-frontend-closure.md).",
+      "boundary": "Child-first mapper, nonempty-property gate, multi-click/down/double subscriptions and local exception boundary translated. Frontend consumes down and double-click subscriptions with source timing and receiver dispatch; native SubscriberSlot ownership remains an adapter (research/cegui-frontend-closure.md). Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-mainmenu.md",
-        "research/cegui-frontend-closure.md"
+        "research/cegui-frontend-closure.md",
+        "research/cegui-source-integration.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
         "src/frontend.cpp",
-        "include/torchlight/ui_dropdown.hpp"
+        "include/torchlight/ui_dropdown.hpp",
+        "src/cegui_menu.cpp",
+        "include/torchlight/cegui_menu.hpp"
       ],
       "tests": [
-        "tests/ui_dropdown_test.cpp"
+        "tests/ui_dropdown_test.cpp",
+        "tests/mainmenu_presentation_test.cpp"
       ],
-      "comparison": "Static full-body ASM review, subscription order/error checks and actual layout property bindings."
+      "comparison": "Static full-body ASM review, subscription order/error checks and actual layout property bindings. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
     },
     {
       "addresses": [
@@ -136,13 +148,14 @@
         "0xc2b700"
       ],
       "status": "partial",
-      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md.",
+      "boundary": "Shared retained root/back/content/resource tree, activation/capture/modal and deferred manager destruction have real frontend input/painter consumers. Options model/animation/tag/sound chain is connected; Main stays model-null and Settings override is nonanimated. Full imageset/ResourceManager/SoundBank, GameClient safepointers/external tree, general CEGUI exception ABI/classes and FMOD/global RNG remain open. Frontend tooltip/renderer/factory teardown, timing and Settings Combobox are connected: research/cegui-frontend-closure.md. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/dropdown-mainmenu.md",
         "research/dropdown-container-lifecycle.md",
         "research/ui-capture-modal-lifecycle.md",
         "research/dropdown-animation-lifecycle.md",
-        "research/cegui-frontend-closure.md"
+        "research/cegui-frontend-closure.md",
+        "research/cegui-source-integration.md"
       ],
       "implementation": [
         "src/ui_dropdown.cpp",
@@ -151,15 +164,18 @@
         "src/ui_sound.cpp",
         "src/frontend.cpp",
         "src/application.cpp",
-        "src/gles_ui_renderer.cpp"
+        "src/gles_ui_renderer.cpp",
+        "src/cegui_menu.cpp",
+        "include/torchlight/cegui_menu.hpp"
       ],
       "tests": [
         "tests/ui_dropdown_test.cpp",
         "tests/ui_window_runtime_test.cpp",
         "tests/ui_dropdown_animation_test.cpp",
-        "tests/ui_sound_test.cpp"
+        "tests/ui_sound_test.cpp",
+        "tests/mainmenu_presentation_test.cpp"
       ],
-      "comparison": "Shipped setOpen and CEGUI add/remove/moveToBack address review; pure owned-tree open/close/reopen, geometry, subscription and sheet fallback checks."
+      "comparison": "Shipped setOpen and CEGUI add/remove/moveToBack address review; pure owned-tree open/close/reopen, geometry, subscription and sheet fallback checks. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
     },
     {
       "addresses": [
@@ -1045,11 +1061,12 @@
         "0xc53b70"
       ],
       "status": "partial",
-      "boundary": "Main create/update presentation and shared window manager feed painter and ordered capture/selection/timing handlers. Main stays model-null; Options animation, tooltip lifecycle, renderer/cache/factory teardown and Settings Combobox consumers are connected. Native .SVB/mod/state owners, arbitrary CEGUI classes/SubscriberSlot/exception ABI remain outside this bounded packet.",
+      "boundary": "Main create/update presentation and shared window manager feed painter and ordered capture/selection/timing handlers. Main stays model-null; Options animation, tooltip lifecycle, renderer/cache/factory teardown and Settings Combobox consumers are connected. Native .SVB/mod/state owners, arbitrary CEGUI classes/SubscriberSlot/exception ABI remain outside this bounded packet. Main/credits on complete original resources now use pinned CEGUI 0.6.2 source for tree/events/Falagard/fonts through the GLES quad adapter; other pages retain the earlier runtime. Reviewed vendor delta and native ownership remain partial.",
       "evidence": [
         "research/mainmenu-controller-painter.md",
         "research/dropdown-container-lifecycle.md",
-        "research/cegui-frontend-closure.md"
+        "research/cegui-frontend-closure.md",
+        "research/cegui-source-integration.md"
       ],
       "implementation": [
         "include/torchlight/menu_grab_tables.hpp",
@@ -1058,7 +1075,9 @@
         "src/ui_dropdown.cpp",
         "src/ui_pointer_timing.cpp",
         "src/ui_tooltip.cpp",
-        "src/ui_combobox.cpp"
+        "src/ui_combobox.cpp",
+        "src/cegui_menu.cpp",
+        "include/torchlight/cegui_menu.hpp"
       ],
       "tests": [
         "tests/mainmenu_presentation_test.cpp",
@@ -1066,7 +1085,7 @@
         "tests/gles_skin_button_test.py",
         "tests/ui_dropdown_test.cpp"
       ],
-      "comparison": "Reviewed ASM/resource contract plus production-command and authored GLES regressions; native whole-controller comparison pending."
+      "comparison": "Reviewed ASM/resource contract plus production-command and authored GLES regressions; native whole-controller comparison pending. Added pinned-upstream/shipped contract mapping and CPU library/resource main-menu contract, including malformed scheme/exception cleanup; no GL/window run."
     },
     {
       "addresses": [
