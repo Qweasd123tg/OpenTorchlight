@@ -76,6 +76,12 @@ COUNT/anchor/homing и полный lifecycle остаются открытым�
 кеша; `summary.json` позволяет начинать с краткой сводки без чтения всего пакета.
 Применение к Main/Dropdown и границы: [автоматизация подготовки](research/menu-preparation-automation.md).
 
+Автоматизация включает и рабочий перенос принятых контрактов:
+`tools/check.py --recover /path/to/game` повторно извлекает source data,
+генерирует используемые приложением UI binding/RNG алгоритмы, собирает consumers
+и запускает original/resource/registry gates. Общая процедура и остаток:
+[recovery automation](research/recovery-automation.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).

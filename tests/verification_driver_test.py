@@ -28,6 +28,21 @@ class Driver(unittest.TestCase):
                 self.assertIn('-DTORCHLIGHT_ENABLE_DESKTOP=' +
                               ('ON' if 'desktop' in groups else 'OFF'), check.adapter_options(groups))
 
+    def test_recovery_requires_complete_inputs_and_does_not_configure_partial_chain(self):
+        args = check.parser().parse_args(['--recover'])
+        self.assertEqual(check.requested_groups(args), {'core', 'assets', 'reference'})
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            result = subprocess.run([sys.executable, str(ROOT / 'tools/check.py'), '--recover',
+                '--assets', str(base / 'absent'), '--report', str(base / 'report.json'),
+                '--build-dir', str(base / 'never-built')], capture_output=True, text=True, timeout=15)
+            self.assertNotEqual(result.returncode, 0)
+            report = json.loads((base / 'report.json').read_text())
+            self.assertTrue(report['recovery_requested'])
+            self.assertTrue(all(report['groups'][g]['status'] == 'NOT RUN' for g in ('core', 'assets', 'reference')))
+            self.assertEqual(report['assessment']['original_status_promotions'], 0)
+            self.assertFalse((base / 'never-built/CMakeCache.txt').exists())
+
     def test_repeatable_named_selection(self):
         args = check.parser().parse_args(['--test', 'layout', '--test', 'binding'])
         self.assertEqual(args.test, ['layout', 'binding'])

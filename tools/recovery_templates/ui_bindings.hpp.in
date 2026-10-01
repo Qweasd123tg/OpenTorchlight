@@ -1,0 +1,34 @@
+// Generated from reviewed mapToFunctions @0xa980e0 and command initializer.
+// UiFunctionTree is the reviewed adapter; original CEGUI/exception ABI remains open.
+#pragma once
+#include "torchlight/ui_function_bindings.hpp"
+
+namespace torchlight::recovered {
+inline constexpr UiFunctionNames command_names{{
+@command_names@
+}};
+
+inline void map_functions(UiFunctionTree& tree, UiFunctionTree::Node root,
+                          const UiFunctionNames& names) {
+    const auto count = tree.child_count(root);
+    for (std::size_t i = 0; i < count; ++i)
+        recovered::map_functions(tree, tree.child(root, i), names);
+    try {
+        if (!tree.has_click_property(root) || tree.click_property(root).empty()) {
+            tree.set_function(root, UiLayoutFunction::none);
+            return;
+        }
+        auto command = tree.click_property(root); // second read is intentional
+        if (const auto nul = command.find('\0'); nul != std::string::npos)
+            command.resize(nul);
+        for (char& byte : command)
+            if (byte >= 'a' && byte <= 'z')
+                byte = static_cast<char>(byte - 'a' + 'A');
+        for (std::size_t i = 0; i < names.size(); ++i)
+            if (command == names[i]) // preserve last-match and unknown prior value
+                tree.set_function(root, static_cast<UiLayoutFunction>(i));
+    } catch (...) {
+        tree.set_function(root, UiLayoutFunction::none);
+    }
+}
+} // namespace torchlight::recovered

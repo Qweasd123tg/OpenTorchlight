@@ -278,10 +278,10 @@
         "wired": true,
         "compared": true
       },
-      "evidence": "research/ui-function-bindings.md; research/ui-actions.json; research/decompiled-core/game_ui.c:5324-5454",
-      "implementation": "src/ui_function_bindings.cpp; src/ui_layout.cpp; src/frontend.cpp; src/ui_hud.cpp; src/application.cpp",
+      "evidence": "research/ui-function-bindings.md; research/ui-actions.json; research/decompiled-core/game_ui.c:5324-5454; research/recovery-automation.md; research/recovery-contracts.json",
+      "implementation": "src/ui_function_bindings.cpp; src/ui_layout.cpp; src/frontend.cpp; src/ui_hud.cpp; src/application.cpp; tools/recovery_templates/ui_bindings.hpp.in; cmake/RecoveredCode.cmake",
       "comparison": "tests/compare_ui_bindings.py: 469 native trees / 2312 nodes; binding values plus exact presence/get order. tests/ui_function_bindings_test.cpp: catch-all/static LSDA contract, remap, duplicate matches, original inventory tabs and HUD press consumer.",
-      "notes": "Original child-first traversal and every property/lookup branch are implemented through a narrow tree adapter; missing/empty maps to NONE, unknown nonempty preserves userData, second read and first-NUL truncation retained. UiLayout binds once at load and resolve preserves IDs. Frontend and HUD/application consume the bound ID; callback text stays diagnostic. Four flags describe this reviewed adapter boundary, not full CEGUI or inventory closure."
+      "notes": "Original child-first traversal and every property/lookup branch are implemented through a narrow tree adapter; missing/empty maps to NONE, unknown nonempty preserves userData, second read and first-NUL truncation retained. UiLayout binds once at load and resolve preserves IDs. Frontend and HUD/application consume the bound ID; callback text stays diagnostic. Four flags describe this reviewed adapter boundary, not full CEGUI or inventory closure. Production algorithm is now emitted from a reviewed adapter recipe, guarded by full pinned source-body hashes and source data. Generation/build/original comparison are automatic; completion remains partial."
     },
     "0x00a83ed0": {
       "symbol": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
@@ -631,11 +631,11 @@
         "wired": true,
         "compared": true
       },
-      "evidence": "research/volatile-random-fraction.md; research/volatile-random-comparison.json; research/disassembly/volatile-random-fraction.asm; research/dropdown-animation-lifecycle.md",
-      "implementation": "src/randomizer.cpp; src/ui_sound.cpp; include/torchlight/randomizer.hpp; include/torchlight/ui_sound.hpp",
+      "evidence": "research/volatile-random-fraction.md; research/volatile-random-comparison.json; research/disassembly/volatile-random-fraction.asm; research/dropdown-animation-lifecycle.md; research/recovery-automation.md; research/recovery-contracts.json",
+      "implementation": "src/randomizer.cpp; src/ui_sound.cpp; include/torchlight/randomizer.hpp; include/torchlight/ui_sound.hpp; tools/recovery_templates/mwc_float.hpp.in; cmake/RecoveredCode.cmake",
       "tests": "tests/compare_original_random.py; tests/randomizer_c_api.cpp; tests/missile_motion_test.cpp; tests/ui_sound_test.cpp",
       "comparison": "28000 original-ASM vs C++ float-bit/state comparisons and 4000 actual UI channel-gain/state comparisons; 64004 prior numeric/geometry comparisons preserved. Old 44-bit-mask discrepancy reproduced, literals recaptured from original function; global/frame/device equivalence not claimed.",
-      "notes": "The previous C++/numpy comparison shared a 44-bit mask bug and proved only states. Corrected to source 52 bits @0xc92ba8; private original function execution is now the numeric oracle. UI gain is the real consumer; missile jitter callback ownership remains separate.",
+      "notes": "The previous C++/numpy comparison shared a 44-bit mask bug and proved only states. Corrected to source 52 bits @0xc92ba8; private original function execution is now the numeric oracle. UI gain is the real consumer; missile jitter callback ownership remains separate. Production algorithm is now emitted from a reviewed adapter recipe, guarded by full pinned source-body hashes and source data. Generation/build/original comparison are automatic; completion remains partial.",
       "completion": {
         "status": "partial",
         "open_items": [
@@ -3557,6 +3557,26 @@
       "implementation": "",
       "tests": "tests/menu_scene_test.cpp",
       "comparison": "Static source/resource comparison of one-room result and production geometry/camera/actor path; no original process, RNG/catalog or frame comparison."
+    },
+    "0x00c92a70": {
+      "symbol": "UTILITIES::randomBetween(float, float)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-automation.md; research/recovery-contracts.json",
+      "implementation": "src/randomizer.cpp; src/random_level.cpp; tools/recovery_templates/mwc_float.hpp.in; cmake/RecoveredCode.cmake",
+      "tests": "tests/compare_original_random.py; tests/randomizer_c_api.cpp; tests/recovery_codegen_test.py",
+      "comparison": "Complete 151-byte body @0xc92a70 read; same operations/operands as volatile @0xc92b50 with distinct original global storage. Generated production helper participates in existing 64004 normal RNG/weighted/geometry bit/state comparisons.",
+      "notes": "Float subss range, two unsigned64 multiply-with-carry steps, 52-bit mantissa, equal/unordered dispatch and rounded double->float->add order retained. TorchlightRandom wrapper retains its real observer event. Source g_Rand global initialization and total caller ordering are not replaced by a local raw-state adapter.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Raw-state numeric contract and live consumers are transferred; original process-global RNG seed/clock/shared-stream ownership and complete call ordering remain outside the port-owned adapter."
+        ]
+      }
     }
   }
 }

@@ -19,12 +19,14 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from automation_state import changed_paths, snapshot_changes, source_snapshot, validate_output, write_json
-from check_selection import close_fixtures, dependency_index, make_plan, properties
+from check_selection import close_fixtures, command_output, dependency_index, make_plan, properties
 
 GROUPS = ("core", "assets", "reference", "render", "desktop")
 
 
 def requested_groups(args: argparse.Namespace) -> set[str]:
+    if args.recover:
+        return {"core", "assets", "reference"}
     if args.all:
         return set(GROUPS)
     selected = {g for g in GROUPS if bool(getattr(args, g))}
@@ -118,6 +120,8 @@ def parser() -> argparse.ArgumentParser:
                            help="compare content against a prior full successful report, including a dirty checkout")
     selection.add_argument("--test", action="append", metavar="NAME",
                            help="run exact named contract check (repeatable), plus required fixtures")
+    selection.add_argument("--recover", action="store_true",
+                           help="generate reviewed production recipes, build their real consumers and run original/resource/registry gates")
     p.add_argument("--plan", action="store_true", help="configure/discover and report selection without building/running tests")
     p.add_argument("--jobs", type=int, default=int(os.environ.get("TORCHLIGHT_BUILD_JOBS", "2")))
     return p
@@ -125,6 +129,8 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    if args.recover and (args.render or args.desktop or args.all):
+        parser().error("--recover selects the reviewed CPU/resource/reference chain; integration groups are separate")
     if args.reference_python is not None and (not args.reference_python.is_file() or
                                             not os.access(args.reference_python, os.X_OK)):
         parser().error("--reference-python must be an executable file")
@@ -176,6 +182,7 @@ def main(argv: list[str] | None = None) -> int:
               "started_at": datetime.now(timezone.utc).isoformat(),
               "source": before, "plan_only": args.plan,
               "baseline": str(args.since_report) if args.since_report else None,
+              "recovery_requested": args.recover,
               "assessment": {"original_status_promotions": 0,
                              "function_completion_source": "research/function-transfer.json",
                              "test_counts_measure": "executed checks within their recorded boundaries"},
@@ -199,6 +206,10 @@ def main(argv: list[str] | None = None) -> int:
     for group, reason in unavailable.items():
         report["groups"][group]["reason"] = reason
     runnable = selected - unavailable.keys()
+    if args.recover and unavailable:
+        for group in runnable:
+            report["groups"][group]["reason"] = "Recovery chain requires all original/resource inputs; build not attempted"
+        runnable = set()
     plan = None
     try:
         for name, path in (("pak", game / "pak.zip" if game else None), ("elf", original)):
@@ -258,13 +269,33 @@ def main(argv: list[str] | None = None) -> int:
                         runnable.remove(group)
                 if runnable:
                     index, graph_error = None, ""
-                    if args.changed is not None or args.since_report is not None or args.test is not None:
+                    if args.changed is not None or args.since_report is not None or args.test is not None or args.recover:
                         try:
                             index = dependency_index(root, build, registered)
                         except (OSError, ValueError) as exc:
                             graph_error = str(exc)
+                    requested_tests = args.test
+                    recovery = None
+                    if args.recover:
+                        recovery = json.loads((build / "recovery-plan.json").read_text())
+                        if (recovery.get("schema") != 1 or recovery.get("kind") != "reviewed-recovery-chain"
+                                or recovery.get("build_target") != "torchlight_recovery_gates"
+                                or recovery.get("generated_dir") != "generated/recovered/torchlight/recovered"
+                                or not isinstance(recovery.get("required_tests"), list)
+                                or not 1 <= len(recovery["required_tests"]) <= 64
+                                or any(not isinstance(name, str) for name in recovery["required_tests"])
+                                or len(set(recovery["required_tests"])) != len(recovery["required_tests"])):
+                            raise ValueError("Unsupported reviewed recovery plan")
+                        target_list = command_output(build, "targets", "all")
+                        if "torchlight_recovery_gates: phony" not in target_list.splitlines():
+                            raise ValueError("Reviewed recovery build closure is missing from Ninja")
+                        requested_tests = recovery["required_tests"]
+                        report["recovery"] = recovery
                     plan = make_plan(registered, runnable, None if baseline_reason else changes, index,
-                                     graph_error, requested_tests=args.test)
+                                     graph_error, requested_tests=requested_tests)
+                    if recovery:
+                        plan.update(build_all=False, build_targets=[recovery["build_target"]])
+                        plan["reasons"] = ["Explicit CMake build closure for the reviewed recovery recipes"]
                     if baseline_reason:
                         plan.update(mode="fallback-full", changed_files=changes)
                         plan["reasons"].append(baseline_reason)
@@ -275,10 +306,19 @@ def main(argv: list[str] | None = None) -> int:
                         print("  " + reason)
                     if not args.plan and plan["tests"]:
                         phase = "build"
+                        if recovery:
+                            phase = "recovery-generate"
+                            code = run([sys.executable, str(root / "tools/generate_recovered.py"),
+                                "--original", str(original), "--out-dir", str(build / recovery["generated_dir"]),
+                                "--report", str(build / "recovery-generation.json")], phase)
                         command = ["cmake", "--build", str(build), "--parallel", str(args.jobs)]
                         if not plan["build_all"]:
                             command += ["--target", *plan["build_targets"]]
-                        code = run(command, phase)
+                        if not code:
+                            phase = "build"
+                            code = run(command, phase)
+                        if recovery and (build / "recovery-generation.json").is_file():
+                            report["recovery"]["generation"] = json.loads((build / "recovery-generation.json").read_text())
             if code:
                 for group in runnable:
                     report["groups"][group].update(status="FAILED", reason=f"{phase} failed: exit {code}")

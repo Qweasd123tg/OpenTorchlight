@@ -93,6 +93,8 @@ Global ctor/dtor/static initializer routing сохраняет review effects.
 ## Остаток
 
 Произвольный ASM -> производственный C++ автоперенос не реализован.
+Для уже принятых контрактов подключена генерация рабочего UI binding/RNG кода
+и весь build/comparison/registry путь: [recovery-automation.md](recovery-automation.md).
 Повторные поиски исходников, сбор тел/дельт и выбор/исполнение известных проверок
 теперь автоматизированы существующим маршрутом. Общая реализация семейства
 принимается после проверки member deltas и реальных consumers.

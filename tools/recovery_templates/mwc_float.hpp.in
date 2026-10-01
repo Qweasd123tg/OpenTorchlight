@@ -1,0 +1,28 @@
+// Generated from reviewed MWC float recipe and pinned original operands.
+// Source bodies: randomBetween @0xc92a70 / randomBetweenVolatile @0xc92b50.
+// Global RNG ownership and clock initialization remain outside this adapter.
+#pragma once
+#include <cstdint>
+#include <cstring>
+
+namespace torchlight::recovered {
+inline float mwc_between(std::uint64_t& state, float low, float high) noexcept {
+    if (low == high) return low; // unordered (NaN) takes the two-step path
+    const float range = high - low;
+    constexpr std::uint64_t multiplier = UINT64_C(@multiplier@);
+    constexpr std::uint64_t low_mask = UINT64_C(@low_mask@);
+    constexpr unsigned shift = @shift@;
+    const std::uint64_t first = (state & low_mask) * multiplier + (state >> shift);
+    const std::uint64_t second = (first & low_mask) * multiplier + (first >> shift);
+    state = second;
+    const std::uint64_t fraction = ((second & low_mask) + (first << shift)) & UINT64_C(@fraction_mask@);
+    const std::uint64_t raw = fraction | UINT64_C(@exponent_bits@);
+    constexpr std::uint64_t one_bits = UINT64_C(@one_bits@);
+    double unit = 0.0, one = 0.0;
+    std::memcpy(&unit, &raw, sizeof(unit));
+    std::memcpy(&one, &one_bits, sizeof(one));
+    unit -= one;
+    const float scaled = static_cast<float>(static_cast<double>(range) * unit);
+    return low + scaled;
+}
+} // namespace torchlight::recovered

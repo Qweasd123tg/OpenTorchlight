@@ -1,4 +1,5 @@
 #include "torchlight/randomizer.hpp"
+#include "torchlight/recovered/mwc_float.hpp"
 
 #include <cstring>
 #include <stdexcept>
@@ -56,17 +57,9 @@ float TorchlightRandom::between(float low, float high) noexcept {
         }
         return result;
     };
-    if (high == low) return finish(low);
-    const auto first = advance();
-    const auto second = advance();
-    const std::uint64_t mantissa =
-        (static_cast<std::uint64_t>(static_cast<std::uint32_t>(second)) + (first << 32U)) &
-        UINT64_C(0x000fffffffffffff);
-    const std::uint64_t bits = UINT64_C(0x3ff0000000000000) | mantissa;
-    double unit = 0.0;
-    std::memcpy(&unit, &bits, sizeof(unit));
-    unit -= 1.0;
-    return finish(low + static_cast<float>(static_cast<double>(high - low) * unit));
+    // original-code @0xc92a70: shared reviewed recipe with volatile @0xc92b50.
+    // One finish/observer event remains owned by this production wrapper.
+    return finish(recovered::mwc_between(state_, low, high));
 }
 
 std::size_t weighted_index(const std::vector<float>& weights, TorchlightRandom& random) {
@@ -91,31 +84,8 @@ std::size_t weighted_index(const std::vector<float>& weights, TorchlightRandom& 
 }
 
 float VolatileRandom::between(float low, float high) noexcept {
-    // original-code @0xc92b50, transcribed op-for-op. ucomiss(lo,hi): NaN
-    // takes jp into the random path; equal takes je home with low.
-    // (NaN == NaN) is false, so NaN correctly falls through below.
-    if (low == high)
-        return low;
-    const float range_f = high - low;
-    const double range_d = static_cast<double>(range_f);
-    constexpr std::uint64_t kMul = 0x29777B41u;
-    // original-code @0xc92ba8: movabs $0xfffffffffffff (52 fraction bits).
-    // Keeping only 44 bits incorrectly restricts the fraction to [0,1/256).
-    constexpr std::uint64_t kMask52 = UINT64_C(0x000fffffffffffff);
-    constexpr std::uint64_t kExp = 0x3FF0000000000000ull;
-    const std::uint64_t lo32 = state_ & 0xFFFFFFFFu;
-    const std::uint64_t hi32 = state_ >> 32;
-    const std::uint64_t t2 = lo32 * kMul + hi32;
-    const std::uint64_t t3 = (t2 & 0xFFFFFFFFu) * kMul + (t2 >> 32);
-    state_ = t3;
-    const std::uint64_t bits =
-        ((t3 & 0xFFFFFFFFu) + ((t2 & 0xFFFFFFFFu) << 32)) & kMask52;
-    const std::uint64_t raw = bits | kExp;
-    double frac = 0.0;
-    std::memcpy(&frac, &raw, sizeof(frac));
-    frac = frac - 1.0;
-    const float scaled = static_cast<float>(range_d * frac);
-    return low + scaled;
+    // original-code @0xc92b50; port-owned stream, original global lifetime open.
+    return recovered::mwc_between(state_, low, high);
 }
 
 } // namespace torchlight

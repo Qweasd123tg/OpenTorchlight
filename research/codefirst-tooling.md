@@ -7,6 +7,13 @@
 
 ## Единый маршрут
 
+После принятия контракта доступен полный локальный путь `check.py --recover`:
+source extraction/check → production C++ generation → real consumer build →
+original/resource/regression/registry gates. Принятые UI/RNG рецепты уже входят
+в обычную CMake сборку; [точный контракт и команда](recovery-automation.md).
+Неизвестные типы/вызовы не получают шаблон по сходству. Completion остаётся
+отдельным whole-function review; generated outputs его не повышают.
+
 1. `tools/work_frontier.py` — текущий UI scope, уже существующие реализации,
    открытое полное закрытие, связанные семейства.
 2. `tools/prepare_family_packet.py` — ограниченный пакет семейства из pinned

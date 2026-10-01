@@ -1,0 +1,621 @@
+{
+  "schema": 1,
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "recipes": [
+    "ui_binding_adapter_v1",
+    "mwc_float_adapter_v1"
+  ],
+  "source_functions": [
+    {
+      "name": "CGameUI::mapToFunctions(CEGUI::Window*)",
+      "address": "0xa980e0",
+      "size": 884,
+      "body_sha256": "e5d99feeacf01fc1e70d24261bed0a118bbf2ce98a83f76900c635d13673740e"
+    },
+    {
+      "name": "UTILITIES::randomBetween(float, float)",
+      "address": "0xc92a70",
+      "size": 151,
+      "body_sha256": "029823ef315b58d8a9be2cc5a3fb4b0152187a73aa80dead361adcdfb4278014"
+    },
+    {
+      "name": "UTILITIES::randomBetweenVolatile(float, float)",
+      "address": "0xc92b50",
+      "size": 151,
+      "body_sha256": "a3aabbf2806b39bc69df1d47004b7bbe68ed593c70a11373e465cd2f2b57ec67"
+    }
+  ],
+  "ui_commands": [
+    {
+      "id": 0,
+      "name": "GUIEXITGAME",
+      "string_address": "0xf9fa15",
+      "initializer_call": "0xa850d1"
+    },
+    {
+      "id": 1,
+      "name": "GUIEXITAPPLICATION",
+      "string_address": "0xf9fa21",
+      "initializer_call": "0xa850ea"
+    },
+    {
+      "id": 2,
+      "name": "GUINEWGAME",
+      "string_address": "0xf9fa34",
+      "initializer_call": "0xa85103"
+    },
+    {
+      "id": 3,
+      "name": "GUICONTINUEGAME",
+      "string_address": "0xf9fa3f",
+      "initializer_call": "0xa8511c"
+    },
+    {
+      "id": 4,
+      "name": "GUINEWGAMEMENU",
+      "string_address": "0xf9fa4f",
+      "initializer_call": "0xa85135"
+    },
+    {
+      "id": 5,
+      "name": "GUICONTINUEGAMEMENU",
+      "string_address": "0xf9fa5e",
+      "initializer_call": "0xa8514e"
+    },
+    {
+      "id": 6,
+      "name": "GUICLOSEMENU",
+      "string_address": "0xf9fa72",
+      "initializer_call": "0xa85167"
+    },
+    {
+      "id": 7,
+      "name": "GUIBACK",
+      "string_address": "0xf9fa7f",
+      "initializer_call": "0xa85180"
+    },
+    {
+      "id": 8,
+      "name": "GUIDECLINE",
+      "string_address": "0xf9fa87",
+      "initializer_call": "0xa85199"
+    },
+    {
+      "id": 9,
+      "name": "GUIACCEPT",
+      "string_address": "0xf9fa92",
+      "initializer_call": "0xa851b2"
+    },
+    {
+      "id": 10,
+      "name": "GUIOK",
+      "string_address": "0xf9fa9c",
+      "initializer_call": "0xa851cb"
+    },
+    {
+      "id": 11,
+      "name": "GUIPAUSE",
+      "string_address": "0xf9faa2",
+      "initializer_call": "0xa851e4"
+    },
+    {
+      "id": 12,
+      "name": "GUISCROLLUP",
+      "string_address": "0xf9faab",
+      "initializer_call": "0xa851fd"
+    },
+    {
+      "id": 13,
+      "name": "GUISCROLLDOWN",
+      "string_address": "0xf9fab7",
+      "initializer_call": "0xa85216"
+    },
+    {
+      "id": 14,
+      "name": "GUISELECT1",
+      "string_address": "0xf9fac5",
+      "initializer_call": "0xa8522f"
+    },
+    {
+      "id": 15,
+      "name": "GUISELECT2",
+      "string_address": "0xf9fad0",
+      "initializer_call": "0xa85248"
+    },
+    {
+      "id": 16,
+      "name": "GUISELECT3",
+      "string_address": "0xf9fadb",
+      "initializer_call": "0xa85261"
+    },
+    {
+      "id": 17,
+      "name": "GUISELECT4",
+      "string_address": "0xf9fae6",
+      "initializer_call": "0xa8527a"
+    },
+    {
+      "id": 18,
+      "name": "GUISELECT5",
+      "string_address": "0xf9faf1",
+      "initializer_call": "0xa85293"
+    },
+    {
+      "id": 19,
+      "name": "GUISELECT6",
+      "string_address": "0xf9fafc",
+      "initializer_call": "0xa852ac"
+    },
+    {
+      "id": 20,
+      "name": "GUISELECT7",
+      "string_address": "0xf9fb07",
+      "initializer_call": "0xa852c5"
+    },
+    {
+      "id": 21,
+      "name": "GUISELECT8",
+      "string_address": "0xf9fb12",
+      "initializer_call": "0xa852de"
+    },
+    {
+      "id": 22,
+      "name": "GUISELECT9",
+      "string_address": "0xf9fb1d",
+      "initializer_call": "0xa852f7"
+    },
+    {
+      "id": 23,
+      "name": "GUISELECT10",
+      "string_address": "0xf9fb28",
+      "initializer_call": "0xa85310"
+    },
+    {
+      "id": 24,
+      "name": "GUISELECT11",
+      "string_address": "0xf9fb34",
+      "initializer_call": "0xa85329"
+    },
+    {
+      "id": 25,
+      "name": "GUISELECT12",
+      "string_address": "0xf9fb40",
+      "initializer_call": "0xa85342"
+    },
+    {
+      "id": 26,
+      "name": "GUISELECT13",
+      "string_address": "0xf9fb4c",
+      "initializer_call": "0xa8535b"
+    },
+    {
+      "id": 27,
+      "name": "GUISELECT14",
+      "string_address": "0xf9fb58",
+      "initializer_call": "0xa85374"
+    },
+    {
+      "id": 28,
+      "name": "GUISELECT15",
+      "string_address": "0xf9fb64",
+      "initializer_call": "0xa8538d"
+    },
+    {
+      "id": 29,
+      "name": "GUISELECT16",
+      "string_address": "0xf9fb70",
+      "initializer_call": "0xa853a6"
+    },
+    {
+      "id": 30,
+      "name": "GUISELECT17",
+      "string_address": "0xf9fb7c",
+      "initializer_call": "0xa853bf"
+    },
+    {
+      "id": 31,
+      "name": "GUISELECT18",
+      "string_address": "0xf9fb88",
+      "initializer_call": "0xa853d8"
+    },
+    {
+      "id": 32,
+      "name": "GUISELECT19",
+      "string_address": "0xf9fb94",
+      "initializer_call": "0xa853f1"
+    },
+    {
+      "id": 33,
+      "name": "GUISELECT20",
+      "string_address": "0xf9fba0",
+      "initializer_call": "0xa8540a"
+    },
+    {
+      "id": 34,
+      "name": "GUISELECT21",
+      "string_address": "0xf9fbac",
+      "initializer_call": "0xa85423"
+    },
+    {
+      "id": 35,
+      "name": "GUISELECT22",
+      "string_address": "0xf9fbb8",
+      "initializer_call": "0xa8543c"
+    },
+    {
+      "id": 36,
+      "name": "GUISELECT23",
+      "string_address": "0xf9fbc4",
+      "initializer_call": "0xa85455"
+    },
+    {
+      "id": 37,
+      "name": "GUISELECT24",
+      "string_address": "0xf9fbd0",
+      "initializer_call": "0xa8546e"
+    },
+    {
+      "id": 38,
+      "name": "GUISELECT25",
+      "string_address": "0xf9fbdc",
+      "initializer_call": "0xa85487"
+    },
+    {
+      "id": 39,
+      "name": "GUISELECT26",
+      "string_address": "0xf9fbe8",
+      "initializer_call": "0xa854a0"
+    },
+    {
+      "id": 40,
+      "name": "GUISELECT27",
+      "string_address": "0xf9fbf4",
+      "initializer_call": "0xa854b9"
+    },
+    {
+      "id": 41,
+      "name": "GUISELECT28",
+      "string_address": "0xf9fc00",
+      "initializer_call": "0xa854d2"
+    },
+    {
+      "id": 42,
+      "name": "GUISELECT29",
+      "string_address": "0xf9fc0c",
+      "initializer_call": "0xa854eb"
+    },
+    {
+      "id": 43,
+      "name": "GUISELECT30",
+      "string_address": "0xf9fc18",
+      "initializer_call": "0xa85504"
+    },
+    {
+      "id": 44,
+      "name": "GUISELECT31",
+      "string_address": "0xf9fc24",
+      "initializer_call": "0xa8551d"
+    },
+    {
+      "id": 45,
+      "name": "GUISELECT32",
+      "string_address": "0xf9fc30",
+      "initializer_call": "0xa85536"
+    },
+    {
+      "id": 46,
+      "name": "GUISELECT33",
+      "string_address": "0xf9fc3c",
+      "initializer_call": "0xa8554f"
+    },
+    {
+      "id": 47,
+      "name": "GUISELECT34",
+      "string_address": "0xf9fc48",
+      "initializer_call": "0xa85568"
+    },
+    {
+      "id": 48,
+      "name": "GUISELECT35",
+      "string_address": "0xf9fc54",
+      "initializer_call": "0xa85581"
+    },
+    {
+      "id": 49,
+      "name": "GUISELECT36",
+      "string_address": "0xf9fc60",
+      "initializer_call": "0xa8559a"
+    },
+    {
+      "id": 50,
+      "name": "GUISELECT37",
+      "string_address": "0xf9fc6c",
+      "initializer_call": "0xa855b3"
+    },
+    {
+      "id": 51,
+      "name": "GUISELECT38",
+      "string_address": "0xf9fc78",
+      "initializer_call": "0xa855cc"
+    },
+    {
+      "id": 52,
+      "name": "GUISELECT39",
+      "string_address": "0xf9fc84",
+      "initializer_call": "0xa855e5"
+    },
+    {
+      "id": 53,
+      "name": "GUISELECT40",
+      "string_address": "0xf9fc90",
+      "initializer_call": "0xa855fe"
+    },
+    {
+      "id": 54,
+      "name": "GUISELECT41",
+      "string_address": "0xf9fc9c",
+      "initializer_call": "0xa85617"
+    },
+    {
+      "id": 55,
+      "name": "GUISELECT42",
+      "string_address": "0xf9fca8",
+      "initializer_call": "0xa85630"
+    },
+    {
+      "id": 56,
+      "name": "GUISELECT43",
+      "string_address": "0xf9fcb4",
+      "initializer_call": "0xa85649"
+    },
+    {
+      "id": 57,
+      "name": "GUISELECT44",
+      "string_address": "0xf9fcc0",
+      "initializer_call": "0xa85662"
+    },
+    {
+      "id": 58,
+      "name": "GUISELECT45",
+      "string_address": "0xf9fccc",
+      "initializer_call": "0xa8567b"
+    },
+    {
+      "id": 59,
+      "name": "GUISELECT46",
+      "string_address": "0xf9fcd8",
+      "initializer_call": "0xa85694"
+    },
+    {
+      "id": 60,
+      "name": "GUISELECT47",
+      "string_address": "0xf9fce4",
+      "initializer_call": "0xa856ad"
+    },
+    {
+      "id": 61,
+      "name": "GUISELECT48",
+      "string_address": "0xf9fcf0",
+      "initializer_call": "0xa856c6"
+    },
+    {
+      "id": 62,
+      "name": "GUISELECT49",
+      "string_address": "0xf9fcfc",
+      "initializer_call": "0xa856df"
+    },
+    {
+      "id": 63,
+      "name": "GUISELECT50",
+      "string_address": "0xf9fd08",
+      "initializer_call": "0xa856f8"
+    },
+    {
+      "id": 64,
+      "name": "GUISELECTA",
+      "string_address": "0xf9fd14",
+      "initializer_call": "0xa85711"
+    },
+    {
+      "id": 65,
+      "name": "GUISELECTB",
+      "string_address": "0xf9fd1f",
+      "initializer_call": "0xa8572a"
+    },
+    {
+      "id": 66,
+      "name": "GUISELECTC",
+      "string_address": "0xf9fd2a",
+      "initializer_call": "0xa85743"
+    },
+    {
+      "id": 67,
+      "name": "GUISELECTD",
+      "string_address": "0xf9fd35",
+      "initializer_call": "0xa8575c"
+    },
+    {
+      "id": 68,
+      "name": "GUIFEEDPET",
+      "string_address": "0xf9fd40",
+      "initializer_call": "0xa85775"
+    },
+    {
+      "id": 69,
+      "name": "GUIPETPASSIVE",
+      "string_address": "0xf9fd4b",
+      "initializer_call": "0xa8578e"
+    },
+    {
+      "id": 70,
+      "name": "GUIPETAGGRESSIVE",
+      "string_address": "0xf9fd59",
+      "initializer_call": "0xa857a7"
+    },
+    {
+      "id": 71,
+      "name": "GUIPETDEFENSIVE",
+      "string_address": "0xf9fd6a",
+      "initializer_call": "0xa857c0"
+    },
+    {
+      "id": 72,
+      "name": "GUITOGGLEINVENTORY",
+      "string_address": "0xf9fd7a",
+      "initializer_call": "0xa857d9"
+    },
+    {
+      "id": 73,
+      "name": "GUITOGGLEQUESTS",
+      "string_address": "0xf9fd8d",
+      "initializer_call": "0xa857f2"
+    },
+    {
+      "id": 74,
+      "name": "GUITOGGLESTATS",
+      "string_address": "0xf9fd9d",
+      "initializer_call": "0xa8580b"
+    },
+    {
+      "id": 75,
+      "name": "GUITOGGLESKILLS",
+      "string_address": "0xf9fdac",
+      "initializer_call": "0xa85824"
+    },
+    {
+      "id": 76,
+      "name": "GUITOGGLEPERKS",
+      "string_address": "0xf9fdbc",
+      "initializer_call": "0xa8583d"
+    },
+    {
+      "id": 77,
+      "name": "GUITOGGLEJOURNAL",
+      "string_address": "0xf9fdcb",
+      "initializer_call": "0xa85856"
+    },
+    {
+      "id": 78,
+      "name": "GUITOGGLEPET",
+      "string_address": "0xf9fddc",
+      "initializer_call": "0xa8586f"
+    },
+    {
+      "id": 79,
+      "name": "GUITOGGLEAUTOMAP",
+      "string_address": "0xf9fde9",
+      "initializer_call": "0xa85888"
+    },
+    {
+      "id": 80,
+      "name": "GUITOGGLEOPTIONS",
+      "string_address": "0xf9fdfa",
+      "initializer_call": "0xa858a1"
+    },
+    {
+      "id": 81,
+      "name": "GUITOGGLEITEMNAMES",
+      "string_address": "0xf9fe0b",
+      "initializer_call": "0xa858ba"
+    },
+    {
+      "id": 82,
+      "name": "GUIAUTOMAPZOOMIN",
+      "string_address": "0xf9fe1e",
+      "initializer_call": "0xa858d6"
+    },
+    {
+      "id": 83,
+      "name": "GUIAUTOMAPZOOMOUT",
+      "string_address": "0xf9fe2f",
+      "initializer_call": "0xa858f2"
+    },
+    {
+      "id": 84,
+      "name": "GUILEVELUP",
+      "string_address": "0xf9fe41",
+      "initializer_call": "0xa8590e"
+    },
+    {
+      "id": 85,
+      "name": "GUISTATSUP",
+      "string_address": "0xf9fe4c",
+      "initializer_call": "0xa8592a"
+    },
+    {
+      "id": 86,
+      "name": "GUISKILLUP",
+      "string_address": "0xf9fe57",
+      "initializer_call": "0xa85946"
+    },
+    {
+      "id": 87,
+      "name": "GUIPET1",
+      "string_address": "0xf9fe62",
+      "initializer_call": "0xa85962"
+    },
+    {
+      "id": 88,
+      "name": "GUIPET2",
+      "string_address": "0xf9fe6a",
+      "initializer_call": "0xa8597e"
+    },
+    {
+      "id": 89,
+      "name": "GUIPET3",
+      "string_address": "0xf9fe72",
+      "initializer_call": "0xa8599a"
+    },
+    {
+      "id": 90,
+      "name": "GUIDELETE1",
+      "string_address": "0xf9fe7a",
+      "initializer_call": "0xa859b6"
+    },
+    {
+      "id": 91,
+      "name": "GUIDELETE2",
+      "string_address": "0xf9fe85",
+      "initializer_call": "0xa859d2"
+    },
+    {
+      "id": 92,
+      "name": "GUIDELETE3",
+      "string_address": "0xf9fe90",
+      "initializer_call": "0xa859ee"
+    },
+    {
+      "id": 93,
+      "name": "GUIDELETE4",
+      "string_address": "0xf9fe9b",
+      "initializer_call": "0xa85a0a"
+    },
+    {
+      "id": 94,
+      "name": "GUISETTINGSMENU",
+      "string_address": "0xf9fea6",
+      "initializer_call": "0xa85a26"
+    },
+    {
+      "id": 95,
+      "name": "GUIPETSELL",
+      "string_address": "0xf9feb6",
+      "initializer_call": "0xa85a42"
+    },
+    {
+      "id": 96,
+      "name": "NONE",
+      "string_address": "0xf9fec1",
+      "initializer_call": "0xa85a5b"
+    }
+  ],
+  "mwc_operands": {
+    "multiplier": "0x29777b41",
+    "low_mask": "0xffffffff",
+    "shift": 32,
+    "fraction_mask": "0xfffffffffffff",
+    "exponent_bits": "0x3ff0000000000000",
+    "one_bits": "0x3ff0000000000000"
+  },
+  "content_sha256": "8955c3dd36ef0bad2f278eb77c17095eac99639b662eaf3ecd54ddc9aa99a071"
+}

@@ -125,6 +125,7 @@ add_library(torchlight_core STATIC
     src/unit_type.cpp
     src/music.cpp)
 target_include_directories(torchlight_core PUBLIC include)
+include(cmake/RecoveredCode.cmake)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG CEGUI062::Falagard)
 target_link_libraries(torchlight_core PRIVATE OGRE165::Math)
@@ -1493,4 +1494,5 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
                 "LD_PRELOAD=${TORCHLIGHT_PYTHON_ASAN_PRELOAD};ASAN_OPTIONS=detect_leaks=0:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
         endif()
     endif()
+    include(cmake/RecoveryChecks.cmake)
 endif()

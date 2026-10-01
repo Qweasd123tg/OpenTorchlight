@@ -1124,24 +1124,29 @@
         "0xc92b50"
       ],
       "status": "verified",
-      "boundary": "Full numeric volatile MWC float function: two uint64 low32/carry steps, original 52-bit fraction mask, binary32/double rounding and equal/NaN branches. Actual UI sound channel-gain/mix consumer is wired through a port-owned local stream. Original global RNG/seed/time/thread/FMOD ownership, menu Group seed prefix and full source lifecycle remain open; completion is partial.",
+      "boundary": "Full numeric volatile MWC float function: two uint64 low32/carry steps, original 52-bit fraction mask, binary32/double rounding and equal/NaN branches. Actual UI sound channel-gain/mix consumer is wired through a port-owned local stream. Original global RNG/seed/time/thread/FMOD ownership, menu Group seed prefix and full source lifecycle remain open; completion is partial. Production body/data now come from a full-source-hash-guarded reviewed generation recipe; original completion remains partial.",
       "evidence": [
         "research/volatile-random-fraction.md",
         "research/volatile-random-comparison.json",
         "research/disassembly/volatile-random-fraction.asm",
-        "research/dropdown-animation-lifecycle.md"
+        "research/dropdown-animation-lifecycle.md",
+        "research/recovery-automation.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
         "src/randomizer.cpp",
         "src/ui_sound.cpp",
         "include/torchlight/randomizer.hpp",
-        "include/torchlight/ui_sound.hpp"
+        "include/torchlight/ui_sound.hpp",
+        "cmake/RecoveredCode.cmake",
+        "tools/recovery_templates/mwc_float.hpp.in"
       ],
       "tests": [
         "tests/compare_original_random.py",
         "tests/randomizer_c_api.cpp",
         "tests/missile_motion_test.cpp",
-        "tests/ui_sound_test.cpp"
+        "tests/ui_sound_test.cpp",
+        "tests/recovery_codegen_test.py"
       ],
       "comparison": "Private original-machine-function image vs actual C++: 28000 float-bit/state comparisons, 4000 production channel-gain/state comparisons, existing 64004 normal RNG/weighted/intersection comparisons. Prior 44-bit regression reproduced before fix. No game/UI/frame/audio-device execution or global stream lifecycle equivalence."
     },
@@ -1167,11 +1172,13 @@
         "0xa980e0"
       ],
       "status": "partial",
-      "boundary": "mapToFunctions algorithm: child-first traversal, repeated property read, missing/empty NONE, unknown preserves prior binding, C-string NUL boundary, C-locale command lookup and last-match rule, property catch-all. Wired through UiLayout load/resolve to frontend and HUD command consumers. Typed IDs project original enum-pointer roles; full CEGUI userdata alias/lifetime, library exception behavior and inventory runtime/event creation remain open.",
+      "boundary": "mapToFunctions algorithm: child-first traversal, repeated property read, missing/empty NONE, unknown preserves prior binding, C-string NUL boundary, C-locale command lookup and last-match rule, property catch-all. Wired through UiLayout load/resolve to frontend and HUD command consumers. Typed IDs project original enum-pointer roles; full CEGUI userdata alias/lifetime, library exception behavior and inventory runtime/event creation remain open. Production body/data now come from a full-source-hash-guarded reviewed generation recipe; original completion remains partial.",
       "evidence": [
         "research/ui-function-bindings.md",
         "research/ui-actions.json",
-        "research/decompiled-core/game_ui.c"
+        "research/decompiled-core/game_ui.c",
+        "research/recovery-automation.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
         "include/torchlight/ui_function_bindings.hpp",
@@ -1179,12 +1186,15 @@
         "src/ui_layout.cpp",
         "src/frontend.cpp",
         "src/ui_hud.cpp",
-        "src/application.cpp"
+        "src/application.cpp",
+        "cmake/RecoveredCode.cmake",
+        "tools/recovery_templates/ui_bindings.hpp.in"
       ],
       "tests": [
         "tests/ui_function_bindings_test.cpp",
         "tests/compare_ui_bindings.py",
-        "tests/paused_settings_test.py"
+        "tests/paused_settings_test.py",
+        "tests/recovery_codegen_test.py"
       ],
       "comparison": "469 trees / 2312 nodes: unchanged original mapToFunctions body vs port binding values and property-read order; explicit synthetic CEGUI/std::string/C-locale adapters, not native library exception or full UI parity. Catch-all type statically verified from LSDA 0x119c4d0; port error paths tested separately."
     },
@@ -1676,6 +1686,29 @@
         "tests/menu_scene_test.cpp"
       ],
       "comparison": ""
+    },
+    {
+      "addresses": [
+        "0xc92a70"
+      ],
+      "status": "verified",
+      "boundary": "Complete 151-byte normal float RNG numeric body shares the reviewed generated raw64-state adapter with volatile RNG: same two-step unsigned64 MWC, 52-bit mantissa, equal/unordered branch and float/double rounding order; original global addresses differ. TorchlightRandom retains its observer and real weighted/generation consumers. Global seed/clock/shared-stream ownership and total source call ordering remain open; completion partial.",
+      "evidence": [
+        "research/recovery-automation.md",
+        "research/recovery-contracts.json"
+      ],
+      "implementation": [
+        "src/randomizer.cpp",
+        "src/random_level.cpp",
+        "cmake/RecoveredCode.cmake",
+        "tools/recovery_templates/mwc_float.hpp.in"
+      ],
+      "tests": [
+        "tests/compare_original_random.py",
+        "tests/randomizer_c_api.cpp",
+        "tests/recovery_codegen_test.py"
+      ],
+      "comparison": "Full source body and family operand differences read at original c92a70/c92b50. Generated helper matches existing private-original normal RNG/weighted/intersection bit/state gate (64004 comparisons); observer remains in the production wrapper. No global process initialization or full game parity claim."
     }
   ],
   "port_systems": [
