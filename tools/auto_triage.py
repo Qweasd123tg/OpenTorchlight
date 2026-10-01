@@ -9,7 +9,8 @@ Primary work classes are mutually exclusive so counts can be added safely:
   compiler_glue          compiler-generated ctor/dtor registration wrappers
   external_source_first  third-party code where source matching is cheaper than RE
   modified_library       bundled/modified library boundary (CEGUI needs delta review)
-  editor_tooling         editor/FLTK surface, defer for playable-game milestone
+  editor_tooling         FLTK UI surface, candidate for deferred editor work
+  shared_scene_candidate editor-named scene/descriptor code; check runtime callers
   descriptor_binding     generated/repetitive descriptor registration glue
   exact_leaf             tiny function with directly decoded leaf semantics
   exact_routing          thunk/forwarder; review moves to the target function
@@ -87,10 +88,16 @@ def modified_library(symbol: str) -> str | None:
 
 
 def editor_tooling(symbol: str) -> bool:
+    # Editor-named game objects also load scenes and descriptors at runtime.
+    # Only the separate FLTK UI boundary is a deferral candidate by name.
+    base = strip_thunk(symbol)
+    return bool(re.match(r"^(?:Fl(?:_|::)|fl_|Fl_)", base))
+
+
+def shared_scene_candidate(symbol: str) -> bool:
     base = strip_thunk(symbol)
     return bool(
-        re.match(r"^(?:Fl(?:_|::)|fl_|Fl_)", base)
-        or re.match(r"^CEditor[A-Za-z0-9_]*::", base)
+        re.match(r"^CEditor[A-Za-z0-9_]*::", base)
         or base.startswith("Editor")
         or "CEditorScene*" in base
         or "CEditorBaseObject*" in base
@@ -154,6 +161,12 @@ def classify(row: dict, tiny: dict[str, dict], families: dict[str, dict]) -> tup
     address = row["address"].lower()
     symbol = row["symbol"]
     if compiler_glue(symbol):
+        if symbol.startswith(("global constructors keyed to ",
+                              "global destructors keyed to ",
+                              "__static_initialization_and_destruction_0")):
+            # E.g. @0xc92eb0 initializes the original RNG globals. Registration
+            # shape does not make its state writes or call targets dispensable.
+            return "compiler_glue", {"initialization_effects": "review_required"}, "batch_or_target_review"
         return "compiler_glue", {}, "no_individual_pass"
     source = source_boundary(symbol)
     if source:
@@ -163,6 +176,8 @@ def classify(row: dict, tiny: dict[str, dict], families: dict[str, dict]) -> tup
         return "modified_library", {"library": lib}, "source_plus_binary_delta"
     if editor_tooling(symbol):
         return "editor_tooling", {}, "defer_for_playable_game"
+    if shared_scene_candidate(symbol):
+        return "shared_scene_candidate", {}, "check_runtime_dependencies"
     if descriptor_binding_glue(symbol):
         return "descriptor_binding", {}, "batch_representative"
 
@@ -215,6 +230,7 @@ def build(root: Path, min_family: int) -> dict:
             "no_individual_deep_reverse_now": no_individual,
             "source_match_before_reverse": actions["source_match_first"] + actions["source_plus_binary_delta"],
             "batch_before_individual": actions["batch_representative"] + actions["batch_or_target_review"],
+            "runtime_dependency_review": actions["check_runtime_dependencies"],
             "manual_reverse_remaining": actions["manual_reverse"],
         },
         "functions": out,
@@ -236,8 +252,10 @@ def render(data: dict) -> str:
               f"- No individual deep-reverse pass needed at this stage: **{h['no_individual_deep_reverse_now']}**.",
               f"- Match public/bundled source before reversing machine code: **{h['source_match_before_reverse']}**.",
               f"- Review as a family/target instead of one function at a time: **{h['batch_before_individual']}**.",
+              f"- Editor-named shared scene/descriptor candidates; check runtime dependencies: **{h['runtime_dependency_review']}**.",
               f"- Still falls through to individual/manual reverse: **{h['manual_reverse_remaining']}**.", "",
               "The categories above are mutually exclusive, so these headline counts can be added. A forwarding wrapper still depends on its target; a destructor wrapper does not prove the base destructor is trivial.", "",
+              "Source candidates do not mean that matching source is locally available or integrated. Name-based FLTK deferral is a scheduling candidate, not proof of runtime unreachability. Compiler initialization effects and editor-named scene loaders must not be discarded.", "",
               "## External-source candidates", ""]
     for k,v in data["external_source_candidates"].items(): lines.append(f"- `{k}`: {v}")
     lines += ["", "## Recommended use", "",

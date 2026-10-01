@@ -39,7 +39,19 @@ def main():
  require(tri['primary_classes']['compiler_glue']>5000,'compiler glue no longer isolated')
  require(tri['headline']['source_match_before_reverse']>3500,'external-source-first queue unexpectedly shrank')
  require(tri['headline']['manual_reverse_remaining']<3300,'manual queue reduction regressed')
- require(tri['headline']['no_individual_deep_reverse_now']>8500,'automatic/deferred queue reduction regressed')
+ require(sum(tri['headline'].values())==tri['total_functions'],'headline routes overlap or omit functions')
+ by_address={r['address']:r for r in tri['functions']}
+ for address in ('0x0074ce10','0x007502c0','0x0074c900'):
+  require(by_address[address]['recommended_action']=='check_runtime_dependencies',
+          f'runtime scene loader/group path {address} incorrectly deferred as editor-only')
+ initializer=by_address['0x00c92eb0']
+ require(initializer['recommended_action']=='batch_or_target_review',
+         'RNG global initializer incorrectly discarded as compiler glue')
+ require(initializer['meta']['initialization_effects']=='review_required',
+         'compiler initializer state effects need explicit review')
+ require(auto_triage.editor_tooling('Fl_Widget::draw()'),'FLTK boundary no longer isolated')
+ require(not auto_triage.editor_tooling('CEditorScene::loadScene()'),
+         'editor name alone must not imply a runtime-unreachable UI function')
 
  shape=json.loads((ROOT/'research/manual-shape-clusters.json').read_text(encoding='utf8'))
  require(shape['clustered_members']>=500,'residual structural batching unexpectedly regressed')

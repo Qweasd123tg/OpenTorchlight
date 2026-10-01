@@ -308,6 +308,7 @@ def render(data: dict, top: int) -> str:
                   f"- no individual deep-reverse pass now: **{h.get('no_individual_deep_reverse_now', 0)}**",
                   f"- source-match before machine-code reverse: **{h.get('source_match_before_reverse', 0)}**",
                   f"- batch/target review: **{h.get('batch_before_individual', 0)}**",
+                  f"- shared scene/descriptor runtime dependencies to review: **{h.get('runtime_dependency_review', 0)}**",
                   f"- residual manual queue: **{h.get('manual_reverse_remaining', 0)}**"]
     lines += ["", "Finish the current scoped family: review full-function gaps, connect every effect, compare and exercise its scenario before expanding. Stage queues above are bounded work hints, not completion or cost promises.", ""]
     return "\n".join(lines)

@@ -152,6 +152,69 @@ class CodeFirstToolsTest(unittest.TestCase):
             factory.assert_called_once_with(self.root, callsites_path=None)
             builder.document.assert_called_once_with(["0x1000", "0x2000"])
 
+    def test_contract_plan_uses_graph_and_fixtures_and_excludes_ui_execution(self):
+        def test(name, labels, **props):
+            return {"name": name, "command": [], "properties": [
+                {"name": "LABELS", "value": labels},
+                *[{"name": key, "value": value} for key, value in props.items()]]}
+        tests = [test("cpu", ["core"], FIXTURES_REQUIRED=["data"]),
+                 test("data_setup", ["assets"], FIXTURES_SETUP=["data"]),
+                 test("window", ["render"]), test("unrelated", ["core"])]
+        index = {name: {"inputs": {"tests/sample.cpp"} if name in {"cpu", "window"} else set(),
+                        "targets": {name + "_target"}, "opaque": False}
+                 for name in ("cpu", "window", "data_setup", "unrelated")}
+        document = {"functions": [{"registry": {"tests": "tests/sample.cpp;tests/unknown.py"}}]}
+        with patch.object(family.subprocess, "run") as command, patch.object(family, "dependency_index", return_value=index):
+            command.return_value.stdout = json.dumps({"tests": tests})
+            plan = family.contract_test_plan(self.root, document, self.root / "build")
+        self.assertEqual(plan["selection"]["tests"], ["cpu", "data_setup"])
+        self.assertEqual(plan["excluded_integration_tests"], ["window"])
+        self.assertEqual(plan["unmapped_files"], ["tests/unknown.py"])
+        self.assertFalse(plan["selection"]["build_all"])
+        self.assertEqual(plan["test_command"][-1], "^(cpu|data_setup)$")
+        self.assertEqual(command.call_count, 1)  # discovery only, never build/run
+        self.assertIn("--show-only=json-v1", command.call_args.args[0])
+
+    def test_contract_plan_without_registered_tests_has_no_execution_commands(self):
+        document = {"functions": [{"registry": {"tests": ""}}]}
+        with patch.object(family.subprocess, "run") as command, patch.object(family, "dependency_index", return_value={}):
+            command.return_value.stdout = json.dumps({"tests": []})
+            plan = family.contract_test_plan(self.root, document, self.root / "build")
+        self.assertEqual(plan["selection"]["tests"], [])
+        self.assertIsNone(plan["build_command"])
+        self.assertIsNone(plan["test_command"])
+
+    def test_automated_checks_reject_skips_changed_sources_and_wrong_test_names(self):
+        plan = {"selection": {"tests": ["cpu"]}, "build_command": ["cmake", "--build", "build"],
+                "test_command": ["ctest", "--test-dir", "build"]}
+        for xml, after, expected in (
+                ('<testcase name="cpu"/>', "same", "PASSED"),
+                ('<testcase name="cpu"><skipped/></testcase>', "same", "NOT RUN"),
+                ('<testcase name="cpu"/>', "changed", "FAILED"),
+                ('<testcase name="other"/>', "same", "FAILED")):
+            with self.subTest(xml=xml, after=after):
+                out = self.root / ("check-" + str(len(list(self.root.glob('check-*')))))
+                out.mkdir()
+                def run(command, **kwargs):
+                    if command[0] == "ctest":
+                        (out / "checks.xml").write_text("<testsuite>" + xml + "</testsuite>")
+                    return subprocess.CompletedProcess(command, 0)
+                with patch.object(family, "source_snapshot", side_effect=[{"sha256": "same"}, {"sha256": after}]), \
+                     patch.object(family.subprocess, "run", side_effect=run):
+                    result = family.run_contract_checks(self.root, plan, out, 2)
+                self.assertEqual(result["status"], expected)
+                self.assertEqual(json.loads((out / "checks.json").read_text())["status"], expected)
+
+    def test_build_failure_does_not_execute_contract_tests(self):
+        plan = {"selection": {"tests": ["cpu"]}, "build_command": ["cmake"], "test_command": ["ctest"]}
+        out = self.root / "failed-build"
+        out.mkdir()
+        with patch.object(family, "source_snapshot", return_value={"sha256": "same"}), \
+             patch.object(family.subprocess, "run", return_value=subprocess.CompletedProcess([], 1)) as command:
+            result = family.run_contract_checks(self.root, plan, out, 2)
+        self.assertEqual(result["status"], "FAILED")
+        self.assertEqual(command.call_count, 1)
+
     def test_header_declaration_is_not_counted_as_production_consumer(self):
         self.write("include/sample.hpp", "void only_declared();\n")
         self.write("tests/sample.cpp", "only_declared();\n")

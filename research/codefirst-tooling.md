@@ -11,6 +11,12 @@
    открытое полное закрытие, связанные семейства.
 2. `tools/prepare_family_packet.py` — ограниченный пакет семейства из pinned
    ELF; одна загрузка индексов, каждое тело декодируется один раз, отдельные member deltas.
+   Карточки находят локальные vendor-source spelling candidates собственных
+   символов и прямых callees, включая external names без сигнатур в старом графе.
+   Source corpus читается один раз на batch; namespace библиотеки разделяет
+   одинаковые Class::method. Хеши исходников и доступных version manifests
+   входят в packet fingerprint. Spelling hit может быть вызовом или другой
+   перегрузкой; source/binary contract автоматически не аттестуется.
 3. `tools/prepare_integration_packet.py` — повторное использование уже
    написанного общего кода, включая функции с частичным `wired=true`.
 4. Содержательное ревью и перенос всего контракта — работа по пакету.
@@ -24,6 +30,31 @@
 Не нужен второй реестр, отдельный сервис очередей или новый LLM-оркестратор.
 Ghidra headless, GNU binutils и CTest/Ninja остаются используемыми механизмами;
 установка нового набора инструментов для этого цикла не требуется.
+
+Для одного запуска подготовки текущей цепочки:
+
+```sh
+python3 tools/prepare_family_packet.py createMenus \
+  --elf /path/to/game/Torchlight.bin.x86_64 \
+  --class-regex '^(CMainMenu|CDropdownMenu)$' \
+  --callsites build-cegui/research/original-callsites.tsv \
+  --build-dir build-cegui --check --out /tmp/menu-create-packet
+```
+
+`--build-dir` читает существующую CTest discovery и Ninja graph без изменения
+CMake cache. `test-plan.json` содержит команды сборки/CTest для test files,
+уже записанных в карточках, и fixture closure через общий `check_selection`.
+Файлы без зарегистрированного соответствия и исключённые render/desktop/UI
+сценарии перечисляются отдельно. Без `--check` план ничего не исполняет.
+С `--check` этот же запуск собирает выбранные цели и выполняет ограниченные
+проверки, сохраняя `checks.json`, `checks.log` и JUnit `checks.xml`.
+Используются общие правила `check.py`/`automation_state.py`: skip не PASS,
+имена результатов должны совпасть с выбором, изменение tracked/nonignored
+входов во время проверки делает результат FAILED. Пустой выбор — NOT RUN.
+Текущий CMake cache не перенастраивается; `--jobs` по умолчанию 2.
+Этот прогон не заменяет общую проверку изменений.
+Проверенный пример и актуальная граница сортировки:
+[menu-preparation-automation.md](menu-preparation-automation.md).
 
 Проверка готовых механизмов: [BSim/FID + static refs pilot](library-match-pilot.md).
 В 20 запросах BSim дал 7 однозначных ожидаемых top-кандидатов и 3 ties;

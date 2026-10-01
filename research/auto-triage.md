@@ -1,5 +1,10 @@
 # Automatic function triage
 
+> Historical generated snapshot. Recompute with `tools/auto_triage.py` into
+> ignored build or `/tmp`. The 2026-10-02 correction no longer defers editor-named
+> shared scene/descriptor code and preserves compiler initializer review:
+> [current accepted boundary](menu-preparation-automation.md).
+
 > Scheduling reduction only. These counts are not game-completion percentages and never promote function-transfer stages.
 
 Original function addresses: **17023**.

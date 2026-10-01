@@ -119,6 +119,38 @@ class FunctionPackageTest(unittest.TestCase):
         self.assertEqual(["research/evidence.md", "src/a.cpp", "tests/a.cpp", "original-vs-port"],
                          packet["known_references"])
 
+    def test_vendor_lookup_is_namespace_specific_and_reports_missing_members(self) -> None:
+        self.write("third_party/cegui-0.6.2/src/Window.cpp", "void Window::show() {}\nvoid Window::showExtra() {}\n")
+        self.write("third_party/ogre-1.6.5-math/Window.cpp", "void Window::show() {}\n")
+        self.write("research/cegui-source-inputs.json", '{"source_commit":"pinned"}')
+        builder = function_package.FunctionPackageBuilder(self.root)
+        result = builder.vendor_sources(["CEGUI::Window::show()", "<EXTERNAL>::CEGUI::Window::show",
+                                         "ParticleUniverse::Thing::update()"])
+        cegui, particle = result["symbols"]
+        self.assertEqual(["third_party/cegui-0.6.2/src/Window.cpp"], [h["path"] for h in cegui["hits"]])
+        self.assertEqual(1, cegui["total_hits"])
+        self.assertEqual(2, len(cegui["original_symbols"]))
+        self.assertEqual("research/cegui-source-inputs.json", cegui["identity_evidence"])
+        self.assertEqual("no_local_spelling_hit", particle["status"])
+        index = builder._vendor_index
+        builder.vendor_sources(["CEGUI::Window::show()"])
+        self.assertIs(index, builder._vendor_index)  # one vendor scan per batch
+
+    def test_outgoing_vendor_sources_are_fingerprinted_and_inputs_untouched(self) -> None:
+        self.write("research/original-callgraph.tsv",
+            "caller_address\tcaller_symbol\tcallee_address\tcallee_symbol\n"
+            "0x1000\tFuncA\t0x2000\tCEGUI::Window::show()\n")
+        path = "third_party/cegui-0.6.2/src/Window.cpp"
+        self.write(path, "void Window::show() {}\n")
+        before = self.snapshot()
+        first = function_package.FunctionPackageBuilder(self.root).document(["0x1000"])
+        self.assertEqual(before, self.snapshot())
+        self.assertEqual("source_candidate", first["functions"][0]["vendor_sources"]["symbols"][0]["status"])
+        self.assertIn(path, [item["path"] for item in first["source_fingerprint"]["inputs"]])
+        self.write(path, "void Window::show() { changed(); }\n")
+        second = function_package.FunctionPackageBuilder(self.root).document(["0x1000"])
+        self.assertNotEqual(first["source_fingerprint"]["sha256"], second["source_fingerprint"]["sha256"])
+
     def test_callsites_keep_repeats_and_instruction_order(self) -> None:
         self.write(
             "research/original-callsites.tsv",

@@ -28,6 +28,11 @@ ELF_PATH = "/home/qweasd123tg/Games/Torchlight/game/Torchlight.bin.x86_64"
 ELF_SHA = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
 MAX_BATCH = 64
 MAX_HITS = 60
+VENDOR_FAMILIES = {
+    "CEGUI": ("cegui-", "research/cegui-source-inputs.json"),
+    "Ogre": ("ogre-", "third_party/ogre-1.6.5-math/source-inputs.json"),
+    "ParticleUniverse": ("particle", None),
+}
 CALLSITE_FIELDS = ("caller_address", "caller_symbol", "callsite_address",
                    "callee_address", "callee_symbol", "mnemonic")
 SYMBOL_RE = re.compile(r"^([0-9a-fA-F]+) (?:([0-9a-fA-F]+) )?([TtWw]) (.+)$")
@@ -67,6 +72,7 @@ class FunctionPackageBuilder:
         self._fingerprints: dict[str, dict[str, object]] = {}
         self.input_paths: list[Path] = []
         self._corpora: dict[str, tuple[SearchFile, ...]] = {}
+        self._vendor_index: dict | None = None
         self.callsites_path = (callsites_path.resolve() if callsites_path else
                                self.root / "research/original-callsites.tsv")
         self.callsites_metadata: dict | None = None
@@ -274,6 +280,51 @@ class FunctionPackageBuilder:
                             values.append(part)
         return values
 
+    def vendor_sources(self, symbols: list[str]) -> dict:
+        """Locate vendored definition/call spellings once per batch, not an ABI match."""
+        queries = {}
+        for symbol in symbols:
+            # The historical callgraph strips external argument lists, whereas
+            # the callsite index preserves the demangled signature and @plt.
+            match = re.search(r"\b(CEGUI|Ogre|ParticleUniverse)::(?:\w+::)*([\w~]+)::([\w~]+)(?=\(|$)", symbol)
+            if match:
+                queries.setdefault(match.groups(), []).append(symbol)
+        if not queries:
+            return {"meaning": "Local source navigation only; no source/binary equivalence claim.", "symbols": []}
+        if self._vendor_index is None:
+            index = {}
+            vendor = self.root / "third_party"
+            if vendor.is_dir():
+                for path in sorted(vendor.rglob("*")):
+                    if (path.suffix.lower() not in {".c", ".cpp", ".h", ".hpp", ".inl"}
+                            or not path.is_file() or path.is_symlink()
+                            or not path.resolve().is_relative_to(self.root)):
+                        continue
+                    relative = path.relative_to(self.root).as_posix()
+                    family = next((name for name, (prefix, _) in VENDOR_FAMILIES.items()
+                                   if path.relative_to(vendor).parts[0].lower().startswith(prefix)), None)
+                    if family is None:
+                        continue
+                    for number, line in enumerate(self._read_text(relative).splitlines(), 1):
+                        for match in re.finditer(r"\b([\w~]+)\s*::\s*([\w~]+)\s*\(", line):
+                            key = (family, *match.groups())
+                            index.setdefault(key, []).append({"path": relative, "line": number,
+                                "text": line.strip()[:220]})
+            self._vendor_index = index
+        results = []
+        for key, names in sorted(queries.items()):
+            hits = self._vendor_index.get(key, [])
+            manifest = VENDOR_FAMILIES[key[0]][1]
+            if manifest and (self.root / manifest).is_file():
+                self._read_bytes(manifest)
+            results.append({"library": key[0], "member": "::".join(key[1:]),
+                "original_symbols": sorted(set(names)), "hits": hits[:MAX_HITS],
+                "total_hits": len(hits), "truncated": len(hits) > MAX_HITS,
+                "identity_evidence": manifest if manifest and (self.root / manifest).is_file() else None,
+                "status": "source_candidate" if hits else "no_local_spelling_hit"})
+        return {"meaning": "Local source navigation only. Hits can include calls or different overloads; review pinned version, ABI and binary deltas before reuse. Missing spelling is not proof source is unavailable.",
+                "symbols": results}
+
     def packet(self, requested: str) -> dict:
         address = self.resolve_address(requested)
         symbol = self.symbols[address]
@@ -289,6 +340,9 @@ class FunctionPackageBuilder:
             "port_references": self._search("port", ("src", "include", "tests"),
                                              frozenset({".c", ".cpp", ".hpp", ".h", ".py"}), patterns),
         }
+        vendor_sources = self.vendor_sources([*aliases, *[
+            row["callee_symbol"] for row in self.callgraph_out.get(address, [])], *[
+            row["callee_symbol"] for row in self.callsite_out.get(address, [])]])
         unresolved: list[dict[str, str]] = []
         if registry is None:
             unresolved.append({"code": "coverage_row_missing", "detail": "Regenerate/review coverage.tsv."})
@@ -349,6 +403,7 @@ class FunctionPackageBuilder:
                           "incoming": list(self.callsite_in.get(address, [])),
                           "outgoing": list(self.callsite_out.get(address, []))},
             "known_references": self._known_references(registry, transfer),
+            "vendor_sources": vendor_sources,
             "evidence_hits": evidence, "unresolved_work": unresolved,
         }
 
@@ -451,6 +506,12 @@ def render_markdown(document: dict) -> str:
         lines += _hit_lines(packet["evidence_hits"]["decompilation"])
         lines += ["", "## Disassembly hits", ""] + _hit_lines(packet["evidence_hits"]["disassembly"])
         lines += ["", "## Port references", ""] + _hit_lines(packet["evidence_hits"]["port_references"])
+        vendor = packet.get("vendor_sources", {})
+        if vendor.get("symbols"):
+            lines += ["", "## Reuse local library source first", "", vendor["meaning"], ""]
+            for candidate in vendor["symbols"]:
+                lines.append(f"- {candidate['library']}::{candidate['member']}: {candidate['status']}; identity evidence: {candidate['identity_evidence'] or 'not recorded'}")
+                lines += _hit_lines(candidate)
         lines += ["", "## Machine-readable unresolved work", ""]
         lines += ([f"- `{item['code']}`: {item['detail']}" for item in packet["unresolved_work"]]
                   or ["- none recorded"])
