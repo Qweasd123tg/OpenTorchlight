@@ -628,14 +628,20 @@
       "stages": {
         "analyzed": true,
         "ported": true,
-        "wired": false,
+        "wired": true,
         "compared": true
       },
-      "evidence": "research/missile-motion.md; ELF @0xc92b50 (0x97 bytes, fully read)",
-      "implementation": "src/randomizer.cpp (VolatileRandom)",
-      "tests": "tests/missile_motion_test.cpp (LCG sequences incl. NaN/equal paths)",
-      "comparison": "C++ vs numpy integer-exact LCG + float32 tail: states match",
-      "notes": "64-bit LCG x0x29777B41, [1,2)-1.0 bit trick. Wired=false: no src caller yet (missile jitter injects it when the runtime lands)."
+      "evidence": "research/volatile-random-fraction.md; research/volatile-random-comparison.json; research/disassembly/volatile-random-fraction.asm; research/dropdown-animation-lifecycle.md",
+      "implementation": "src/randomizer.cpp; src/ui_sound.cpp; include/torchlight/randomizer.hpp; include/torchlight/ui_sound.hpp",
+      "tests": "tests/compare_original_random.py; tests/randomizer_c_api.cpp; tests/missile_motion_test.cpp; tests/ui_sound_test.cpp",
+      "comparison": "28000 original-ASM vs C++ float-bit/state comparisons and 4000 actual UI channel-gain/state comparisons; 64004 prior numeric/geometry comparisons preserved. Old 44-bit-mask discrepancy reproduced, literals recaptured from original function; global/frame/device equivalence not claimed.",
+      "notes": "The previous C++/numpy comparison shared a 44-bit mask bug and proved only states. Corrected to source 52 bits @0xc92ba8; private original function execution is now the numeric oracle. UI gain is the real consumer; missile jitter callback ownership remains separate.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Numeric body is directly compared and UI sound consumer is connected. Original process-global g_RandVolatile/initializer/GetTickCount/other callers/thread/FMOD ownership, menu Group prefix and complete source runtime lifecycle remain outside the port-owned local stream acceptance."
+        ]
+      }
     },
     "0x00a924c0": {
       "symbol": "CGameUI::onClick(ELayoutFunction)",

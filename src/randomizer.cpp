@@ -99,7 +99,9 @@ float VolatileRandom::between(float low, float high) noexcept {
     const float range_f = high - low;
     const double range_d = static_cast<double>(range_f);
     constexpr std::uint64_t kMul = 0x29777B41u;
-    constexpr std::uint64_t kMask44 = 0xFFFFFFFFFFFull;
+    // original-code @0xc92ba8: movabs $0xfffffffffffff (52 fraction bits).
+    // Keeping only 44 bits incorrectly restricts the fraction to [0,1/256).
+    constexpr std::uint64_t kMask52 = UINT64_C(0x000fffffffffffff);
     constexpr std::uint64_t kExp = 0x3FF0000000000000ull;
     const std::uint64_t lo32 = state_ & 0xFFFFFFFFu;
     const std::uint64_t hi32 = state_ >> 32;
@@ -107,7 +109,7 @@ float VolatileRandom::between(float low, float high) noexcept {
     const std::uint64_t t3 = (t2 & 0xFFFFFFFFu) * kMul + (t2 >> 32);
     state_ = t3;
     const std::uint64_t bits =
-        ((t3 & 0xFFFFFFFFu) + ((t2 & 0xFFFFFFFFu) << 32)) & kMask44;
+        ((t3 & 0xFFFFFFFFu) + ((t2 & 0xFFFFFFFFu) << 32)) & kMask52;
     const std::uint64_t raw = bits | kExp;
     double frac = 0.0;
     std::memcpy(&frac, &raw, sizeof(frac));

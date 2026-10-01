@@ -114,7 +114,8 @@ Palace и Caves. Камера и позиция героя берутся из l
 комнаты; случайный декор остаётся unsupported; выделение строки Load сохраняет текущий фон.
 [Список персонажей и настройки](research/menu-production-state.md) получают
 runtime visibility, выбранное имя, highlights, prompt удаления и актуальные
-audio levels. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
+audio levels. Исправлена [52-битная fraction mask volatile RNG](research/volatile-random-fraction.md);
+UI variation проверена с original ASM, прежний узкий диапазон устранён. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
 и RGBA каждого угла. Подготовка игровых каталогов отложена до входа в игру;
 команды Falagard кешируются. FPS и время старта отдельно не измерены.
 Остаток: initial/dead preview, экипированная броня/питомец, pet/difficulty, resolution list/FSAA,

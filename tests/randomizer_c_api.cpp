@@ -1,11 +1,13 @@
 #include "torchlight/randomizer.hpp"
 #include "torchlight/random_level.hpp"
+#include "torchlight/ui_sound.hpp"
 
 #include <cstdint>
 #include <memory>
 
 namespace {
 std::unique_ptr<torchlight::TorchlightRandom> randomizer;
+std::unique_ptr<torchlight::VolatileRandom> volatile_randomizer;
 }
 
 extern "C" {
@@ -32,6 +34,22 @@ std::size_t recovered_weighted_index(const float* weights, std::size_t count) {
 
 std::uint64_t recovered_random_state() {
     return randomizer->state();
+}
+
+void recovered_volatile_seed(std::uint64_t state) {
+    volatile_randomizer = std::make_unique<torchlight::VolatileRandom>(state);
+}
+
+float recovered_volatile_between(float low, float high) {
+    return volatile_randomizer->between(low, high);
+}
+
+std::uint64_t recovered_volatile_state() {
+    return volatile_randomizer->state();
+}
+
+float recovered_ui_channel_gain(float volume, float variation) {
+    return torchlight::UiSoundPlayer::channel_gain(volume, variation, *volatile_randomizer);
 }
 
 bool recovered_chunks_intersect(float tile_basis, float width_basis, float height_basis,

@@ -461,7 +461,9 @@ channel.setPaused(false)
 и не является `.2 * random(...)`. Верхнее ограничение1 подтверждено
 `minss` @0xa6cd4f; нижнего clamp в этом участке нет. RNG использует исходный
 volatile stream @0xc92b50; готовый `VolatileRandom::between` в
-`randomizer.hpp/.cpp` уже транскрибирует его. Выбор явно отдельного локального
+`randomizer.hpp/.cpp` транскрибирует его. Исправление52-bit mask и прямое
+ASM comparison зафиксированы в [volatile-random-fraction.md](volatile-random-fraction.md):
+прежняя44-bit маска сжимала variation. Выбор явно отдельного локального
 seed — адаптер порта, не доказательство совпадения глобальной RNG sequence.
 
 FREQUENCYVARIATION=0 в обоих ресурсах; playSound не вызывает setFrequency.

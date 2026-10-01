@@ -96,3 +96,10 @@ splash (интервал/lateral/таймер); `+0x268/264/26c` splash-rate/cap
 - `randomBetweenVolatile` — сверить с volatile-RNG порта.
 - `KSETTINGS_SHOW_MISSILE_TRAILS` в рантайме; инвариант `+0x2a4>=+0x2a0`.
 - `placeSphere`, spawn следов, `setTarget` сайд-эффекты — движковые стоки.
+
+## Correction 2026-10-02: volatile fraction mask
+
+Старый C++/numpy LCG gate разделял ошибку44-bit mask и подтверждал state,
+но не исходные float samples. [volatile-random-fraction.md](volatile-random-fraction.md)
+исправляет52-bit mask по ASM и заменяет восемь literals данными прямого вызова
+original machine function. Полный production missile jitter по-прежнему open.

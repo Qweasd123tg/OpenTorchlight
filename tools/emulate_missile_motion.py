@@ -32,7 +32,7 @@ def lcg_between(state, lo, hi):
     t2 = (lo32 * K + hi32) & M
     t3 = ((t2 & 0xFFFFFFFF) * K + (t2 >> 32)) & M
     state = t3
-    raw = (((t3 & 0xFFFFFFFF) + ((t2 & 0xFFFFFFFF) << 32)) & 0xFFFFFFFFFFF) | 0x3FF0000000000000
+    raw = (((t3 & 0xFFFFFFFF) + ((t2 & 0xFFFFFFFF) << 32)) & 0xFFFFFFFFFFFFF) | 0x3FF0000000000000
     frac = struct.unpack("<d", struct.pack("<Q", raw))[0] - 1.0
     span = np.float64(np.float32(hi - lo)) * frac
     return state, F32(lo + np.float32(span))

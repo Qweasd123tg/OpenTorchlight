@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-02",
+  "original_elf": "/home/qweasd123tg/Games/Torchlight/game/Torchlight.bin.x86_64",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "function": "UTILITIES::randomBetweenVolatile(float, float)",
+  "address": "0xc92b50",
+  "size": 151,
+  "function_bytes_sha256": "a3aabbf2806b39bc69df1d47004b7bbe68ed593c70a11373e465cd2f2b57ec67",
+  "double_one_rodata": {
+    "address": "0xfc8170",
+    "bytes": "000000000000f03f"
+  },
+  "before_fix": {
+    "input_state": "0x1",
+    "bounds": [
+      -2.5,
+      7.25
+    ],
+    "port_float_bits": "0xc01e4900",
+    "original_float_bits": "0x4003c700",
+    "state_after_both": "0x06b77d3ea3c58681",
+    "cause": "44-bit fraction mask; original uses 52 bits"
+  },
+  "checks": {
+    "volatile_float_bits_and_states": 28000,
+    "production_ui_gain_and_states": 4000,
+    "existing_randomizer_and_geometry": 64004
+  },
+  "inputs": "Raw private reference image state, including zero, 32-bit seeds and 64-bit continuation states; equal/reversed/signed-zero/NaN/infinite/finite bounds. Actual game process and UI/device playback not executed.",
+  "source_libraries": "Same compiler/source-library inputs as current menu/audio path; no new dependency.",
+  "production_consumer": "UiSoundPlayer::play -> channel_gain -> VolatileRandom::between -> UiSoundVoice.gain -> mix/worker. Local seed and ALSA adapter remain distinct from original global FMOD/RNG lifecycle."
+}

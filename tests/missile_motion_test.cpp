@@ -40,21 +40,22 @@ torchlight::MissileMotionDeps base_deps() {
 int main() {
     using namespace torchlight;
 
-    // Volatile LCG: exact integer transcription (seed 1 then a wide seed).
+    // Captured from pinned original randomBetweenVolatile @0xc92b50.
+    // Earlier numpy-derived literals shared the port's incorrect 44-bit mask.
     {
         VolatileRandom rng(1);
-        require(be(rng.between(-2.5F, 7.25F), 0xc01e4900u), "lcg s1");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01db70du), "lcg s2");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01fff73u), "lcg s3");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01dcc1au), "lcg s4");
+        require(be(rng.between(-2.5F, 7.25F), 0x4003c700u), "lcg s1");
+        require(be(rng.between(-2.5F, 7.25F), 0x3f6ce3ccu), "lcg s2");
+        require(be(rng.between(-2.5F, 7.25F), 0x40e45846u), "lcg s3");
+        require(be(rng.between(-2.5F, 7.25F), 0x3f764f98u), "lcg s4");
         require(rng.state() == 0x216c061c7d80da7dull, "lcg state");
     }
     {
         VolatileRandom rng(0x123456789ABCDEFULL);
-        require(be(rng.between(-2.5F, 7.25F), 0xc01f60a5u), "lcg wide 1");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01fbde5u), "lcg wide 2");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01e0ae3u), "lcg wide 3");
-        require(be(rng.between(-2.5F, 7.25F), 0xc01e7b36u), "lcg wide 4");
+        require(be(rng.between(-2.5F, 7.25F), 0x40b51faeu), "lcg wide 1");
+        require(be(rng.between(-2.5F, 7.25F), 0x3f3dc86cu), "lcg wide 2");
+        require(be(rng.between(-2.5F, 7.25F), 0x4006751eu), "lcg wide 3");
+        require(be(rng.between(-2.5F, 7.25F), 0x401234cau), "lcg wide 4");
         require(rng.state() == 0x0985711c0be88810ull, "lcg wide state");
     }
     {

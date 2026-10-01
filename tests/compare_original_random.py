@@ -24,6 +24,7 @@ class OriginalRandom:
             ("UTILITIES::randomBetween(float, float)", 0xC92A70, 0x97),
             ("UTILITIES::randomIntegerBetween(int, int)", 0xC92B10, 0x3D),
             ("UTILITIES::setSeed(int)", 0xC92C70, 0x33),
+            ("UTILITIES::randomBetweenVolatile(float, float)", 0xC92B50, 0x97),
         ]
         for name, address, size in definitions:
             symbol = original.symbol(name)
@@ -50,6 +51,7 @@ class OriginalRandom:
             self.seed = c.CFUNCTYPE(None, c.c_int32)(0xC92C70)
             self.integer = c.CFUNCTYPE(c.c_int32, c.c_int32, c.c_int32)(0xC92B10)
             self.between = c.CFUNCTYPE(c.c_float, c.c_float, c.c_float)(0xC92A70)
+            self.between_volatile = c.CFUNCTYPE(c.c_float, c.c_float, c.c_float)(0xC92B50)
             self.get_random = c.CFUNCTYPE(c.c_int32, c.c_void_p)(0xC8AA10)
             self.intersects = c.CFUNCTYPE(c.c_bool, c.c_void_p, c.c_void_p, c.c_void_p)(
                 0x972980
@@ -66,6 +68,13 @@ class OriginalRandom:
 
     def state(self):
         return c.c_uint64.from_address(0x14ECAF0).value
+
+    def seed_volatile_state(self, state):
+        # Owned reference image's input state, not setSeedVolatile(0)'s clock.
+        c.c_uint64.from_address(0x14ECAF8).value = state
+
+    def volatile_state(self):
+        return c.c_uint64.from_address(0x14ECAF8).value
 
     def weighted_index(self, weights):
         choices = (c.c_int32 * len(weights))(*range(len(weights)))
@@ -134,6 +143,18 @@ class RecoveredRandom:
         self.state = self.library.recovered_random_state
         self.state.restype = c.c_uint64
         self.state.argtypes = []
+        self.seed_volatile_state = self.library.recovered_volatile_seed
+        self.seed_volatile_state.restype = None
+        self.seed_volatile_state.argtypes = [c.c_uint64]
+        self.between_volatile = self.library.recovered_volatile_between
+        self.between_volatile.restype = c.c_float
+        self.between_volatile.argtypes = [c.c_float, c.c_float]
+        self.volatile_state = self.library.recovered_volatile_state
+        self.volatile_state.restype = c.c_uint64
+        self.volatile_state.argtypes = []
+        self.ui_channel_gain = self.library.recovered_ui_channel_gain
+        self.ui_channel_gain.restype = c.c_float
+        self.ui_channel_gain.argtypes = [c.c_float, c.c_float]
         self.chunks_intersect = self.library.recovered_chunks_intersect
         self.chunks_intersect.restype = c.c_bool
         self.chunks_intersect.argtypes = [
@@ -220,6 +241,53 @@ def compare(old, new):
     return checks
 
 
+def compare_volatile(old, new):
+    checks = 0
+    generator = random.Random(0x564F4C4154494C45)
+    special = ((-2.5, 7.25), (0.0, 1.0), (1.0, -1.0),
+               (-0.0, 0.0), (0.0, -0.0), (2.0, 2.0),
+               (float("nan"), 1.0), (1.0, float("nan")),
+               (float("nan"), float("nan")),
+               (float("inf"), float("inf")),
+               (-float("inf"), float("inf")), (1.0, float("inf")))
+    for seed in (0, 1, 17, 0x7FFFFFFF, 0xFFFFFFFF,
+                 0x123456789ABCDEF, 0xFFFFFFFFFFFFFFFF):
+        old.seed_volatile_state(seed)
+        new.seed_volatile_state(seed)
+        for step in range(2000):
+            if step < len(special):
+                low, high = special[step]
+            else:
+                low = c.c_float(generator.uniform(-1000.0, 1000.0)).value
+                high = c.c_float(generator.uniform(-1000.0, 1000.0)).value
+            actual = float_bits(new.between_volatile(low, high))
+            expected = float_bits(old.between_volatile(low, high))
+            if actual != expected or new.volatile_state() != old.volatile_state():
+                raise AssertionError(
+                    f"volatile state={seed:#x} step={step} bounds={low},{high}: "
+                    f"recovered={actual.hex()}/{new.volatile_state():#x}, "
+                    f"original={expected.hex()}/{old.volatile_state():#x}")
+            checks += 2
+    return checks
+
+
+def compare_ui_gain(old, new):
+    checks = 0
+    for seed in (1, 17, 0x12345678, 0xFFFFFFFF):
+        old.seed_volatile_state(seed)
+        new.seed_volatile_state(seed)
+        for step in range(500):
+            volume, variation = ((0.2, 0.2), (0.9, 0.2), (0.0, 1.0), (1.0, 0.0))[step % 4]
+            volume, variation = c.c_float(volume).value, c.c_float(variation).value
+            # Source additive/capped gain contract, driven by original ASM RNG.
+            expected = min(c.c_float(volume + old.between_volatile(0.0, variation)).value, 1.0)
+            actual = new.ui_channel_gain(volume, variation)
+            if float_bits(actual) != float_bits(expected) or new.volatile_state() != old.volatile_state():
+                raise AssertionError(f"UI gain seed={seed:#x} step={step}: {actual} != {expected}")
+            checks += 2
+    return checks
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--original", required=True, type=Path)
@@ -231,7 +299,12 @@ def main():
         print(f"SKIP: original random code cannot be mapped: {error}")
         return 77
     try:
-        checks = compare(old, RecoveredRandom(args.library))
+        new = RecoveredRandom(args.library)
+        volatile_checks = compare_volatile(old, new)
+        ui_checks = compare_ui_gain(old, new)
+        checks = compare(old, new)
+        print(f"PASS: {volatile_checks} volatile float-bit/state comparisons match the original")
+        print(f"PASS: {ui_checks} production UI gain/state comparisons use original RNG")
         print(f"PASS: {checks} randomizer and chunk-geometry comparisons match the original")
         return 0
     finally:

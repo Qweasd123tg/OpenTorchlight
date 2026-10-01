@@ -49,7 +49,8 @@ private:
                                          TorchlightRandom& random);
 
 // The original's separate volatile stream (UTILITIES::randomBetweenVolatile
-// @0xc92b50): 64-bit LCG, multiplier 0x29777B41, process-global state.
+// @0xc92b50): uint64 multiply-with-carry, multiplier 0x29777B41,
+// process-global state; the port owns an explicitly scoped state instead.
 // Bit-exact integer transcription; the double bit-trick yields frac in
 // [0,1). NaN bounds take the random path (jp), equal bounds return low.
 class VolatileRandom {

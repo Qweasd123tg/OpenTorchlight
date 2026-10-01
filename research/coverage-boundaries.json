@@ -1123,18 +1123,27 @@
       "addresses": [
         "0xc92b50"
       ],
-      "status": "implemented",
-      "boundary": "Volatile LCG stream (x0x29777B41, [1,2) bit trick) ported bit-exact; NaN/equal paths match. No src caller yet (missile jitter injects it when the runtime lands).",
+      "status": "verified",
+      "boundary": "Full numeric volatile MWC float function: two uint64 low32/carry steps, original 52-bit fraction mask, binary32/double rounding and equal/NaN branches. Actual UI sound channel-gain/mix consumer is wired through a port-owned local stream. Original global RNG/seed/time/thread/FMOD ownership, menu Group seed prefix and full source lifecycle remain open; completion is partial.",
       "evidence": [
-        "research/missile-motion.md"
+        "research/volatile-random-fraction.md",
+        "research/volatile-random-comparison.json",
+        "research/disassembly/volatile-random-fraction.asm",
+        "research/dropdown-animation-lifecycle.md"
       ],
       "implementation": [
-        "src/randomizer.cpp"
+        "src/randomizer.cpp",
+        "src/ui_sound.cpp",
+        "include/torchlight/randomizer.hpp",
+        "include/torchlight/ui_sound.hpp"
       ],
       "tests": [
-        "tests/missile_motion_test.cpp"
+        "tests/compare_original_random.py",
+        "tests/randomizer_c_api.cpp",
+        "tests/missile_motion_test.cpp",
+        "tests/ui_sound_test.cpp"
       ],
-      "comparison": "C++ vs numpy integer-exact LCG sequences"
+      "comparison": "Private original-machine-function image vs actual C++: 28000 float-bit/state comparisons, 4000 production channel-gain/state comparisons, existing 64004 normal RNG/weighted/intersection comparisons. Prior 44-bit regression reproduced before fix. No game/UI/frame/audio-device execution or global stream lifecycle equivalence."
     },
     {
       "addresses": [
