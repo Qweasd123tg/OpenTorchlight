@@ -3,6 +3,7 @@
 #include "torchlight/checkpoint.hpp"
 #include "torchlight/diagnostic_json.hpp"
 #include "torchlight/skeletal_animation.hpp"
+#include "torchlight/gles_scene_renderer.hpp"
 #include <GLES2/gl2.h>
 #include <algorithm>
 #include <cmath>
@@ -129,6 +130,19 @@ public:
         renderer.draw(frame, width_, height_); readback(); ++menu_frames_;
         if (!menu_capture_.empty()) { write_pixels(menu_capture_); menu_capture_.clear(); }
     }
+    void draw_menu_scene(GlesSceneRenderer& scene, GlesUiRenderer& ui,
+                         const FrontendFrame& frame) override {
+        scene.draw(width_, height_);
+        ui.draw(frame, width_, height_, false);
+        readback(); ++menu_frames_;
+        if (!menu_capture_.empty()) {
+            write_pixels(menu_capture_);
+            std::ofstream out(output_ / (menu_capture_ + ".render.json"));
+            scene.write_diagnostics(out); out << '\n';
+            if (!out) throw std::runtime_error("menu render diagnostic write failed");
+            menu_capture_.clear();
+        }
+    }
     void draw_scene_frame(GlesSceneRenderer& renderer, GlesUiRenderer& ui_renderer,
                           const std::vector<InventoryViewLine>& lines, bool bag,
                           const UiHudFrame& hud) override {
@@ -183,6 +197,7 @@ public:
             done(); return;
         }
         if (step.verb == "menu-capture") { menu_capture_ = label(step.args[0]); done(); return; }
+        if (step.verb == "frames") { if (++step.visits >= positive(step.args[0])) done(); return; }
         general(step);
     }
     void observe_game(const ApplicationView& view) override {

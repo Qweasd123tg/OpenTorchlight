@@ -1,5 +1,6 @@
 #include "torchlight/application.hpp"
 #include "torchlight/menu_scene.hpp"
+#include "torchlight/menu_player.hpp"
 #include "torchlight/application_keys.hpp"
 #include "torchlight/interaction.hpp"
 #include "torchlight/frontend.hpp"
@@ -398,25 +399,6 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const torchlight::OgreMaterialCatalog materials(archive);
         torchlight::UiResources ui_resources(archive);
         torchlight::GlesUiRenderer ui_renderer(archive, ui_resources);
-        std::unique_ptr<torchlight::GlesSceneRenderer> menu_renderer;
-        bool menu_scene_attempted = false;
-        const auto draw_frontend = [&](const torchlight::FrontendFrame& frame) {
-            if (!menu_scene_attempted) {
-                menu_scene_attempted = true;
-                try {
-                    auto scene = torchlight::build_main_menu_scene(archive, levelsets,
-                                                                   options.settings.netbook_mode);
-                    menu_renderer = std::make_unique<torchlight::GlesSceneRenderer>(
-                        scene.geometry, archive, materials);
-                    menu_renderer->set_camera_pose(scene.camera.position, scene.camera.target,
-                        scene.camera.fov_degrees, scene.camera.near_clip, scene.camera.far_clip);
-                } catch (const std::exception& error) {
-                    window.notice("menu_scene_unavailable", error.what());
-                }
-            }
-            if (menu_renderer) window.draw_menu_scene(*menu_renderer, ui_renderer, frame);
-            else window.draw_menu_frame(ui_renderer, frame);
-        };
         torchlight::UiHud ui_hud(ui_resources);
         std::vector<torchlight::FrontendClass> frontend_classes;
         for (const auto& p : players)
@@ -505,6 +487,86 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             catch (const std::exception& e) { frontend.set_saves({}); frontend.error(e.what()); }
         };
         refresh_saves();
+        std::optional<torchlight::MenuScene> menu_scene;
+        std::unique_ptr<torchlight::MenuPlayerPreview> menu_player;
+        std::unique_ptr<torchlight::GlesSceneRenderer> menu_renderer;
+        bool menu_scene_attempted = false;
+        std::string menu_player_key;
+        double menu_player_started = 0;
+        const auto create_menu_renderer = [&](const torchlight::FixedSceneGeometry& geometry) {
+            auto renderer = std::make_unique<torchlight::GlesSceneRenderer>(geometry, archive, materials);
+            const auto& camera = menu_scene->camera;
+            renderer->set_camera_pose(camera.position, camera.target, camera.fov_degrees,
+                                      camera.near_clip, camera.far_clip);
+            return renderer;
+        };
+        const auto draw_frontend = [&](const torchlight::FrontendFrame& frame) {
+            if (!menu_scene_attempted) {
+                menu_scene_attempted = true;
+                try {
+                    menu_scene.emplace(torchlight::build_main_menu_scene(archive, levelsets,
+                                                                        options.settings.netbook_mode));
+                    menu_renderer = create_menu_renderer(menu_scene->geometry);
+                } catch (const std::exception& error) {
+                    window.notice("menu_scene_unavailable", error.what());
+                }
+            }
+            if (menu_scene) {
+                const auto class_guid = frontend.preview_class();
+                const auto* save = frontend.preview_save();
+                const auto key = class_guid ? "create:" + std::to_string(*class_guid)
+                    : save ? "load:" + save->slot + ":" + std::to_string(save->revision) : std::string{};
+                // Original menu actors survive Back/Settings: those actions do
+                // not call removeCharacter. Recreate only on a new selection.
+                if (!key.empty() && key != menu_player_key) {
+                    menu_player_key = key; // Cache failures too; no I/O retry each frame.
+                    try {
+                        if (save && (!save->loadable() || save->health <= 0))
+                            throw DesktopError("dead/unreadable saved preview is outside the alive actor slice");
+                        const auto guid = class_guid.value_or(save ? save->class_guid : 0);
+                        const auto chosen = std::find_if(players.begin(), players.end(),
+                            [&](const auto& player) { return player.guid == guid; });
+                        if (chosen == players.end()) throw DesktopError("menu preview class is unavailable");
+                        auto prototype = *chosen;
+                        if (save) {
+                            const auto checkpoint = saves.read(save->slot, resource_identity);
+                            if (checkpoint.class_guid != chosen->guid || checkpoint.revision != save->revision)
+                                throw DesktopError("menu preview save changed since list refresh");
+                            const auto restored = torchlight::CheckpointAccess::restore_player(*chosen,
+                                checkpoint.player, checkpoint.seed, &unit_type_hierarchy);
+                            prototype.starting_weapon.reset();
+                            if (const auto* item = restored.inventory().equipped(torchlight::InventorySlot::weapon);
+                                item && item->weapon) prototype.starting_weapon = item->weapon->prototype;
+                        }
+                        auto candidate = std::make_unique<torchlight::MenuPlayerPreview>(
+                            torchlight::build_menu_player_preview(archive, *menu_scene, prototype));
+                        auto renderer = create_menu_renderer(candidate->geometry);
+                        // Renderer retains source-geometry pointers. Destroy it
+                        // before releasing its owning model, on every path.
+                        menu_renderer.reset(); menu_player = std::move(candidate);
+                        menu_renderer = std::move(renderer);
+                        menu_player_started = frontend_clock;
+                        window.notice("menu_player_selected", key);
+                    } catch (const std::exception& error) {
+                        menu_renderer.reset(); menu_player.reset();
+                        window.notice("menu_player_unavailable", error.what());
+                        try { menu_renderer = create_menu_renderer(menu_scene->geometry); }
+                        catch (const std::exception& scene_error) {
+                            window.notice("menu_scene_unavailable", scene_error.what());
+                        }
+                    }
+                }
+                if (menu_player && menu_renderer) {
+                    const float time = static_cast<float>(std::fmod(frontend_clock - menu_player_started,
+                                                                   menu_player->idle.duration));
+                    const auto pose = torchlight::sample_menu_player_preview(*menu_player, time);
+                    menu_renderer->set_instance_pose(menu_player->body_instance, pose.body);
+                    if (pose.weapon) menu_renderer->set_instance_transform(*menu_player->weapon_instance, *pose.weapon);
+                }
+            }
+            if (menu_renderer) window.draw_menu_scene(*menu_renderer, ui_renderer, frame);
+            else window.draw_menu_frame(ui_renderer, frame);
+        };
         // Menu/world music. Track names follow the observed UPPER(name) shape
         // (CGameClient::loadLevel uppercases before playMusic); the plural
         // fallback (MINE -> MINES.OGG) and TOWN fallback are inferred and

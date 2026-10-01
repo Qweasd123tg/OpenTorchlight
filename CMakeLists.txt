@@ -27,6 +27,7 @@ endif()
 option(TORCHLIGHT_ENABLE_RENDER "Build available offscreen rendering targets" ON)
 option(TORCHLIGHT_ENABLE_DESKTOP "Build the Wayland adapter when its SDK is available" ON)
 include(cmake/CEGUI062.cmake)
+include(cmake/OGRE165Math.cmake)
 # Same test inputs/assertions; instrumentation may need a larger wall-clock budget.
 # Explicit cache value is reported by check.py, never inferred from a failed test.
 set(TORCHLIGHT_TEST_TIMEOUT_SCALE 1 CACHE STRING "Wall-clock multiplier (1-10), e.g. 4 for sanitizer builds")
@@ -77,6 +78,7 @@ add_library(torchlight_core STATIC
     src/ui_font.cpp
     src/ui_text.cpp
     src/menu_scene.cpp
+    src/menu_player.cpp
     src/ui_hud.cpp
     src/frontend.cpp
     src/cegui_menu.cpp
@@ -125,6 +127,9 @@ add_library(torchlight_core STATIC
 target_include_directories(torchlight_core PUBLIC include)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG CEGUI062::Falagard)
+target_link_libraries(torchlight_core PRIVATE OGRE165::Math)
+# CMake 3.16 does not propagate link options through private static libraries.
+target_link_options(torchlight_core INTERFACE "LINKER:--gc-sections")
 if(TORCHLIGHT_HAVE_MUSIC)
     target_link_libraries(torchlight_core PUBLIC PkgConfig::VORBISFILE PkgConfig::ALSA)
     target_compile_definitions(torchlight_core PUBLIC TORCHLIGHT_HAVE_MUSIC=1)
@@ -139,7 +144,8 @@ if(Freetype_FOUND)
 else()
     message(STATUS "UI fonts: FreeType not found; prototype glyph fallback only")
 endif()
-set_target_properties(torchlight_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(torchlight_core PROPERTIES POSITION_INDEPENDENT_CODE ON
+    CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(torchlight_core PRIVATE -Wall -Wextra -Wpedantic -Werror -ffp-contract=off)
 endif()

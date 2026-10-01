@@ -3228,6 +3228,120 @@
       "implementation": "src/cegui_menu.cpp; src/frontend.cpp; src/application.cpp; src/save_store.cpp; include/torchlight/cegui_menu.hpp",
       "tests": "tests/cegui_load_test.cpp; tests/character_load_test.py; tests/cegui_creation_test.cpp",
       "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    "0x00582d00": {
+      "symbol": "CGameClient::setCreationClass(std::wstring)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x00584460": {
+      "symbol": "CGameClient::applyCharacterState(CCharacterSaveState*, std::wstring&, CCharacterSaveState*)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x008126e0": {
+      "symbol": "CCharacter::setToward(Ogre::Vector3 const&)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x00c7a2a0": {
+      "symbol": "MATH::matrixRotationY(Ogre::Matrix4&, float)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x009e8600": {
+      "symbol": "CPropertyNode::CPropertyNode(CResourceManager*)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x009df820": {
+      "symbol": "CLayout::editorObjectCreated(CEditorBaseObject*)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+        ]
+      },
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
+      "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
     }
   }
 }

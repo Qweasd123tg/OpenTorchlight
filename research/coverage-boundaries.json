@@ -319,19 +319,32 @@
         "0x9622f0"
       ],
       "status": "partial",
-      "boundary": "Existing resource scene loading and ordinary property-node arrival fallback; full room lifecycle not closed.",
+      "boundary": "Existing resource scene loading and ordinary property-node arrival fallback; full room lifecycle not closed. Menu entry3 marker TYPE default/direction consumers and editor-Group versus layout-root scene-parent correction are connected in research/menu-player-preview.md; full room/group lifecycle stays open.",
       "evidence": [
         "research/level-entry-fallback.md",
-        "research/decompiled-core/level.c"
+        "research/decompiled-core/level.c",
+        "research/menu-player-preview.md"
       ],
       "implementation": [
         "src/level_scene.cpp",
-        "src/level_transition.cpp"
+        "src/level_transition.cpp",
+        "src/menu_scene.cpp",
+        "src/menu_player.cpp",
+        "include/torchlight/menu_player.hpp",
+        "src/frontend.cpp",
+        "include/torchlight/frontend.hpp",
+        "src/application.cpp",
+        "src/gles_scene_renderer.cpp"
       ],
       "tests": [
-        "tests/level_entry_test.cpp"
+        "tests/level_entry_test.cpp",
+        "tests/menu_scene_test.cpp",
+        "tests/cegui_creation_test.cpp",
+        "tests/application_scenario_probe.cpp",
+        "tests/scenarios/menu-player.scenario",
+        "tests/character_load_test.py"
       ],
-      "comparison": ""
+      "comparison": "Addressed marker/entry branches, Group GUID vs graphic parent field/callback and pinned OGRE math source/shipped instructions; authored/pak CPU contracts and production GL regression. No full room/Group/OS/frame equivalence."
     },
     {
       "addresses": [
@@ -1475,6 +1488,41 @@
         "tests/menu_grab_test.cpp"
       ],
       "comparison": "Addressed ASM/resource/library review of the connected Load slice, native CPU contract, and common Application/GL 4-process 25-check real OTC select/load/cancel/delete test. No original process/OS input/frame/full-function equivalence."
+    },
+    {
+      "addresses": [
+        "0x582d00",
+        "0x584460",
+        "0x8126e0",
+        "0xc7a2a0",
+        "0x9e8600",
+        "0x9df820"
+      ],
+      "status": "partial",
+      "boundary": "Create/alive OTC selected actor uses resource placement/toward, exact OGRE1.6.5 Quaternion subset, gameplay mesh/base wardrobe/steady IDLE and equipped-weapon hand tag through Application/GLES. Group editor GUID is distinguished from real layout-root scene parent. Original ABI/player/pet/pending flags/unwind, initial/dead/retired/menu themes, gameplay-return preview refresh, equipped armor and initial animation blending/events remain open. No whole-function equivalence.",
+      "evidence": [
+        "research/menu-player-preview.md",
+        "research/menu-player-inputs.json",
+        "research/disassembly/menu-player-preview.asm",
+        "research/disassembly/ogre165-menu-math.asm"
+      ],
+      "implementation": [
+        "src/menu_scene.cpp",
+        "src/menu_player.cpp",
+        "include/torchlight/menu_player.hpp",
+        "src/frontend.cpp",
+        "include/torchlight/frontend.hpp",
+        "src/application.cpp",
+        "src/gles_scene_renderer.cpp"
+      ],
+      "tests": [
+        "tests/menu_scene_test.cpp",
+        "tests/cegui_creation_test.cpp",
+        "tests/application_scenario_probe.cpp",
+        "tests/scenarios/menu-player.scenario",
+        "tests/character_load_test.py"
+      ],
+      "comparison": "Full small-body and bounded large-body ASM plus original resources and unchanged pinned OGRE source review; CPU three-class animation/placement, native selection consumer and 34-check common Application/GL replacement/retention/no-save-write regression. Original process/OS/frame comparison not performed."
     }
   ],
   "port_systems": [

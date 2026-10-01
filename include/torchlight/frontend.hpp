@@ -125,6 +125,15 @@ class Frontend : private MainMenuActions {
     [[nodiscard]] const std::string &character_name() const noexcept {
         return name_;
     }
+    // Read-only selection consumed by the menu level actor. Back/Settings do
+    // not select another actor; the level retains the most recent selection.
+    [[nodiscard]] std::optional<std::int64_t> preview_class() const noexcept {
+        if (page_ == FrontendPage::create && class_index_ < classes_.size()) return classes_[class_index_].guid;
+        return std::nullopt;
+    }
+    [[nodiscard]] const SaveSlotInfo* preview_save() const noexcept {
+        return page_ == FrontendPage::load && save_index_ < saves_.size() ? &saves_[save_index_] : nullptr;
+    }
     [[nodiscard]] std::size_t frame_build_count() const noexcept { return frame_build_count_; }
 
   private:

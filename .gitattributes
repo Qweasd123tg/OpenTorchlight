@@ -23,3 +23,5 @@ research/ui-actions.json text eol=lf linguist-generated=true
 
 # Preserve the pinned upstream formatting; local source keeps normal checks.
 third_party/cegui-0.6.2/** -text -whitespace
+third_party/ogre-1.6.5-math/OgreMain/** -text -whitespace
+third_party/ogre-1.6.5-math/COPYING -text -whitespace

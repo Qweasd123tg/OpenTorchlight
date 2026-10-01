@@ -46,6 +46,7 @@ int main(int argc, char** argv) { try {
     require(edit("EditBoxPet")->getText() == "Spot", "original ff3168 pet name differs");
     require(!window("CreatePlayer")->isVisible(false), "empty name did not hide OK");
     require(window("CharacterClass")->getText() == "Destroyer", "original default class was replaced by catalog order");
+    require(ui.preview_class() == 13 && !ui.preview_save(), "native default class has no menu actor selection");
     require(ui.frame(1024,768).cegui && frontend_paint_list(ui.frame(1024,768)).empty(), "create uses a duplicate custom painter");
     auto* font = edit("EditBox")->getFont();
     require(font->isCodepointAvailable(0xe9), "external edit font lacks the test glyph");
@@ -66,6 +67,7 @@ int main(int argc, char** argv) { try {
     key(ui, physical_key::END); key(ui, physical_key::BACKSPACE);
     require(ui.character_name() == "Éclai", "Backspace did not use UTF-32 caret");
     click(ui, window("Alchemist"));
+    require(ui.preview_class() == 12, "native class action left a stale actor selection");
     require(edit("EditBox")->hasInputFocus() && ui.character_name() == "Éclai", "class selection lost original editor activation/name");
     require(window("CharacterClass")->getText() == CEGUI::String(reinterpret_cast<const CEGUI::utf8*>("Alchimiste Érudit")) &&
         window("CharacterClassDescription")->getText() == CEGUI::String(reinterpret_cast<const CEGUI::utf8*>("Alchemist description É")),
@@ -94,6 +96,7 @@ int main(int argc, char** argv) { try {
     require(edit("EditBox")->getCaratIndex() == 1 && !edit("EditBox")->getSelectionLength(), "keyboard leave retained Shift state");
     ui.key(FrontendKey::back);
     require(ui.page() == FrontendPage::main, "creation cancel failed");
+    require(!ui.preview_class() && !ui.preview_save(), "Back unexpectedly selects another menu actor");
     std::cout << "PASS: original create resource Editbox/class/focus/submit gates and UTF-8 typed consumer; no GL or pet gameplay claim\n";
     return 0;
 } catch (const CEGUI::Exception& e) { std::cerr << e.getMessage().c_str() << '\n'; return 1;

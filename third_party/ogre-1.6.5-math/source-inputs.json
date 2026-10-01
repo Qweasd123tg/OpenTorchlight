@@ -1,0 +1,24 @@
+{
+  "version": "1.6.5",
+  "archive_sha256": "7fc0e948679c1c1f10751756d267a41d0e3395a6520a23f7853a0ae39a1281f5",
+  "source_archive": "https://sourceforge.net/projects/ogre/files/ogre/1.6.5/ogre-v1-6-5.tar.bz2/download",
+  "files": {
+    "COPYING": "d25aa3bc4da4ccb51ab18b7dee1289ddcf395b9153bb7470437dfe589e28fbfa",
+    "OgreMain/include/OgreAlignedAllocator.h": "b33d3f164d8e3bdc0f3a2e31b926d12ba39852292df51773b0ea7e3424b00bd5",
+    "OgreMain/include/OgreConfig.h": "a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf",
+    "OgreMain/include/OgreMath.h": "01516be146b17a6a3700f2001f2f33e89953b0f738b5c23ca4475075f33b88f1",
+    "OgreMain/include/OgreMatrix3.h": "f701fb8317329123034b21e315b40c71e23fa86eaa8f8e022d3872bbc5e91744",
+    "OgreMain/include/OgreMemoryAllocatedObject.h": "769489c2d7260a4ab919338728a71e51cfb2f0131020924854b7fbf3016ff311",
+    "OgreMain/include/OgreMemoryAllocatorConfig.h": "80fe5786bde1ca7148d410e24f6a5aa2f81c11e39108020cf1f0307bcabb0bc6",
+    "OgreMain/include/OgreMemorySTLAllocator.h": "cd83b553ec3df877b8d460898303140afc233f5d471e2434ad35cdc484d38a9e",
+    "OgreMain/include/OgreMemoryStdAlloc.h": "45f99d554796d62db295b8cc2c44fe3760996ad47b808469ffa7ef2665bfb975",
+    "OgreMain/include/OgreMemoryTracker.h": "4b7dc9ff281874ce9f560f74d4d387e92ea96102305e27e835858bb6711199bd",
+    "OgreMain/include/OgrePlatform.h": "2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5",
+    "OgreMain/include/OgrePrerequisites.h": "50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a",
+    "OgreMain/include/OgreQuaternion.h": "58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9",
+    "OgreMain/include/OgreStableHeaders.h": "adb2431ac0da9ffa61c77651e8e935692d40a7b88bf2a9cb0ce88c7c39527967",
+    "OgreMain/include/OgreStdHeaders.h": "17be3e34ce0660e795183f8cfe6631ad80231d2fd8fb41f421910002c2115a23",
+    "OgreMain/include/OgreVector3.h": "3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051",
+    "OgreMain/src/OgreQuaternion.cpp": "ec243e8c258f3d955365164d8234493f97abe8e8b7e9ff240bab84852368a729"
+  }
+}

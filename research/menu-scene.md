@@ -36,10 +36,14 @@ those vectors to `Camera::setPosition/lookAt`.
 
 `getPosition(true) @0x9e70ce` calls node virtual slot `+0x200`:
 OGRE SceneNode vtable relocation `0x619110` resolves to
-`Ogre::Node::_getDerivedPosition`. The port therefore resolves parent
-transforms before using marker coordinates. Node IDs in the Town menu are
-`8012869437876343262` and `8012869442171310558`, both beneath Group Properties
-`8012869433581375966` at `(69,0,14)`. Marker-local positions are respectively
+`Ogre::Node::_getDerivedPosition`. **Correction 2026-09-30:** this does not
+make editor PARENTID a graphical parent. `CLayout::editorObjectCreated
+@0x9df820` attaches scene nodes to the owning layout through pointer `+0x50`;
+Group child membership uses editor GUID `+0x18` instead. Detailed ASM/field
+comparison and production correction: [menu-player-preview.md](menu-player-preview.md).
+Town camera IDs `8012869437876343262` and `8012869442171310558` are editor
+members of Group Properties `8012869433581375966`, but its pivot `(69,0,14)`
+is not added. Their runtime layout-root positions are
 `(73.345703125,2.5,10.848299980163574)` and
 `(65.12799835205078,1.0199999809265137,9.146269798278809)`.
 
@@ -54,8 +58,8 @@ audit of subsequent projection mutations remains open.
 
 ## Port and verification boundary
 
-`build_main_menu_scene` uses existing ADM/layout/mesh loaders and hierarchy
-math. `menu_scene_camera` exposes the world-marker selection independently
+`build_main_menu_scene` uses existing ADM/layout/mesh loaders and a transform view that excludes
+editor Group edges but preserves expanded Layout Link transforms. `menu_scene_camera` exposes the world-marker selection independently
 of GL. The explicit renderer camera pose uses the existing projection math;
 the gameplay camera path keeps its previous parameters.
 
@@ -71,7 +75,9 @@ resource route passed; the existing geometry builder produced 10 instances
 using 10 meshes. New builder, test, and renderer compiled with
 `-Wall -Wextra -Wpedantic -Werror`; no graphics calls were executed.
 
-Open: save-dependent themes, menu player/pet, skybox, particles, water,
+Menu player Create/alive OTC IDLE is now connected in the bounded
+[preview slice](menu-player-preview.md). Open: save-dependent themes, initial
+Main actor, pet, skybox, particles, water,
 projector/light passes, and complete original menu lifecycle. The existing
 mesh renderer still has its documented shading approximations. Game assets
 remain external read-only inputs. No game, GUI, or frame capture is required.

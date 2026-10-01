@@ -10,7 +10,7 @@ release-архивы. Это инвентаризация доступности
 | Подсистема | Подтверждённое состояние | Следующее использование |
 |---|---|---|
 | CEGUI 0.6.2 + Falagard + Expat | Исходники в `third_party/cegui-0.6.2`, собраны и используются Main/credits/Settings/Options/character create/load | HUD и подтверждённые preview consumers через ту же библиотеку |
-| OGRE 1.6.5 | Точный release source найден, скачан и проверен по version macros | Проверить переиспользование serializers, skeleton/animation, scene/resource ownership; renderer требует отдельного решения |
+| OGRE 1.6.5 | Точный release source найден; Quaternion math subset подключён и проверен, остальные механизмы открыты | Проверить переиспользование serializers, skeleton/animation, scene/resource ownership; renderer требует отдельного решения |
 | FreeImage 3.13.1 | Версия shipped ELF установлена по инструкциям; соответствующий source release скачан | Кандидат для DDS/image codecs вместо нового ручного декодирования |
 | LodePNG, candidate 2014 | Два исходных файла скачаны по закреплённому commit; хеши совпали с прежним исследованием | Источник для границы оригинальных PNG-операций; текущий production decoder уже использует libpng |
 | ParticleUniverse | Статически в игровом ELF; исследование указывает 1.0/pre-1.01, исходники именно этой версии не найдены | Более новый source — кандидат с обязательной проверкой отличий, не готовая замена |
@@ -72,7 +72,10 @@ renderer не соответствует существующему Wayland/EGL/
 
 Архив `COPYING` — LGPL 2.1 с OGRE exceptions; для OGRE 1.6 нельзя брать
 MIT-условия современного релиза. [Официальная страница версий лицензии](https://www.ogre3d.org/licensing).
-Сборка и интеграция OGRE в этом аудите не выполнялись.
+В исходном аудите сборка не выполнялась. Следующий принятый срез подключил
+неизменённый Quaternion math subset1.6.5 с license/header closure и SHA
+manifest; это [реальный menu placement consumer](menu-player-preview.md),
+не полный OGRE renderer/resource/animation runtime.
 
 ### FreeImage
 

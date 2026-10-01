@@ -99,12 +99,16 @@ Combobox имеют реальные consumers. Доступные разреш�
 общие CGenericModel/FMOD и произвольные CEGUI классы остаются за этим срезом.
 Реестр сохраняет `partial` полных исходных игровых функций.
 В desktop подключён [Town-фон с исходной камерой](research/menu-scene.md).
+[Preview Create/живых OTC персонажей](research/menu-player-preview.md) использует
+игровую модель, idle, wardrobe layers и выбранное оружие. Неизменённая математика
+OGRE 1.6.5 подключена из исходников. Исправлен лишний сдвиг камеры/героя:
+редакторский Group pivot не является графическим parent.
 [Список персонажей и настройки](research/menu-production-state.md) получают
 runtime visibility, выбранное имя, highlights, prompt удаления и актуальные
 audio levels. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
 и RGBA каждого угла. Подготовка игровых каталогов отложена до входа в игру;
 команды Falagard кешируются. FPS и время старта отдельно не измерены.
-Остаток: preview персонажей/питомца, pet/difficulty, resolution list/FSAA,
+Остаток: initial/dead preview, экипированная броня/питомец, pet/difficulty, resolution list/FSAA,
 темы сохранённого персонажа, эффекты сцены, `.SVB`/моды и полный CEGUI runtime.
 Completion остаётся `partial`; контрактные проверки и сборка отделены от запуска UI.
 

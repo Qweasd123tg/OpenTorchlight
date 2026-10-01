@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-30",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "pak_sha256": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8",
+  "ogre_library": {
+    "path": "lib64/libOgreMain-1.6.5.so",
+    "version": "1.6.5",
+    "sha256": "bef109bfdc1210ede92731ead4a2b3fae76a8905f10bac14d5fdb54ae5474c31"
+  },
+  "stock_source_manifest": "third_party/ogre-1.6.5-math/source-inputs.json",
+  "resources": {
+    "media/layouts/MainMenus/1X1SINGLE_ROOM_TOWN/MAINMENU_TOWN.LAYOUT.adm": "e46135eec5be5402012e096c0ebb50512cc2c5c2bdd6328083047096685f59b9",
+    "media/models/Alchemist/alchemist.animation": "e62a71cdb1edff9b57d9f16e7ec438c7f270c0929034f4387e78dcbbb5a024f2",
+    "media/models/Vanquisher/vanquisher.animation": "577bd307f554c52c6af905a26f1c173dfcc4aeafc0147d5bcaa4c2e33e059105",
+    "media/models/warrior/player.animation": "19507b5f06c02bdd38e5cfecba50365abdb5610c5bb4cd5c1de1da9bf5f159fb"
+  },
+  "boundary": "No-save Town room, runtime layout-root marker placement, three player IDLE models and alive OTC equipped-weapon adapter. No original ABI, SVB, pet, equipped armor, menu themes or frame parity."
+}
