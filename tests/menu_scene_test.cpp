@@ -88,6 +88,16 @@ void authored_contract() {
     layout.objects = {parent, marker(2, u"Camera Position", {1, 2, 3}), marker(3, u"Camera Target", {0, 0, 0})};
     layout.objects[0].descriptor = u"Group";
     require(menu_scene_camera(layout).position == Vector3{1, 2, 3}, "editor Group pivot applied to camera node");
+    AdmProperty choice;
+    choice.name = u"CHOICE"; choice.type = AdmValueType::string; choice.value = std::u16string(u"Weight");
+    layout.objects[0].properties.push_back(choice);
+    require(menu_scene_camera(layout).position == Vector3{1, 2, 3}, "direct marker was treated as a child-Group alternative");
+    auto child_group = parent; child_group.id = 5; child_group.parent_id = 1; child_group.descriptor = u"Group";
+    layout.objects.push_back(child_group);
+    layout.objects[1].parent_id = 5; layout.objects[2].parent_id = 5;
+    rejects([&] { static_cast<void>(menu_scene_camera(layout)); }, "random camera alternatives displayed together");
+    layout.objects[0].properties[0].value = std::u16string(u"ALL");
+    require(menu_scene_camera(layout).position == Vector3{1, 2, 3}, "ALL camera Group was treated as random");
     layout.objects = {parent};
     rejects([&] { static_cast<void>(menu_player_placement(layout)); }, "missing player marker silently invented");
 }
@@ -118,6 +128,46 @@ void original_resources(const char* pak_path) {
     UnitDefinitionLoader definitions(archive);
     const auto players = load_playable_players(archive, resources, definitions);
     require(players.size() == 3, "supported class family changed");
+    struct Theme {
+        std::int32_t first, last;
+        const char* layout;
+        Vector3 camera, target, player;
+    };
+    // resource-derived: MAIN.DAT strata -> gameplay rules MAINMENURULES ->
+    // expanded source layout. These are OTC depths, not the original save ABI.
+    const Theme themes[] = {
+        {1, 4, "MAINMENU_MINES.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
+        {5, 8, "MAINMENU_CRYPT.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
+        {9, 16, "MAINMENU_SUNKENTEMPLE.LAYOUT", {5.61003017F,3.5150001F,-7.15001011F}, {1.20000005F,0.829999983F,-0.00999784004F}, {1.80999994F,1.83000004F,-1.00999999F}},
+        {21, 24, "MAINMENU_LAVA.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
+        {25, 29, "MAINMENU_FORTRESS.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
+        {30, 35, "MAINMENU_PALACE.LAYOUT", {-1.63998997F,3.5150001F,-0.490007997F}, {-6.05000019F,0.829999983F,6.64999008F}, {-5.44000006F,1.83000004F,5.64999008F}},
+    };
+    for (const auto& theme : themes) {
+        for (const auto depth : {theme.first, theme.last}) {
+            const auto saved_menu = build_saved_menu_scene(archive, levelsets, {u"Main", depth});
+            require(saved_menu.level.layout.source_path.find(theme.layout) != std::string::npos,
+                    "saved floor resolved to the wrong menu theme at stratum boundary");
+            require(near(saved_menu.camera.position, theme.camera) && near(saved_menu.camera.target, theme.target),
+                    "saved theme camera differs from source markers");
+            require(!saved_menu.geometry.instances.empty(), "saved theme has no geometry consumer");
+            const auto saved_preview = build_menu_player_preview(archive, saved_menu, players.front());
+            require(near(saved_preview.geometry.instances[saved_preview.body_instance].transform.position, theme.player),
+                    "actor retained the previous theme's player marker");
+            require(sample_menu_player_preview(saved_preview, 0).weapon.has_value(), "theme replacement lost weapon hand consumer");
+            if (theme.first == 1)
+                require(saved_menu.omitted_random_room_pieces > 0, "Mine random alternatives were silently drawn together");
+            std::cout << "Saved menu depth " << depth << ": " << saved_menu.level.layout.source_path
+                      << ", " << saved_menu.geometry.instances.size() << " instances, "
+                      << saved_menu.omitted_random_room_pieces << " random props omitted\n";
+        }
+    }
+    for (const auto depth : {17, 20})
+        rejects([&] { static_cast<void>(build_saved_menu_scene(archive, levelsets, {u"Main", depth})); },
+                "random Caves menu silently substituted a fixed theme");
+    const auto saved_town = build_saved_menu_scene(archive, levelsets, {u"Town", 0});
+    require(saved_town.camera.position == position && saved_town.camera.target == target &&
+            saved_town.omitted_random_room_pieces == 0, "saved Town changed the existing no-save route");
     for (const auto& prototype : players) {
         const auto preview = build_menu_player_preview(archive, menu, prototype);
         require(preview.geometry.instances.size() == menu.geometry.instances.size() + 2 && preview.weapon_instance,

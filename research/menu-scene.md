@@ -75,14 +75,18 @@ resource route passed; the existing geometry builder produced 10 instances
 using 10 meshes. New builder, test, and renderer compiled with
 `-Wall -Wextra -Wpedantic -Werror`; no graphics calls were executed.
 
+The fixed-theme saved-return extension is documented in [menu-themes.md](menu-themes.md):
+committed Save & Menu selects the checkpoint's gameplay stratum MAINMENURULES;
+initial Main still defaults to Town, Caves/random decorations remain unsupported.
+
 Menu player Create/alive OTC IDLE is now connected in the bounded
-[preview slice](menu-player-preview.md). Open: save-dependent themes, initial
+[preview slice](menu-player-preview.md). Open: initial saved theme selection, random themes/decorations, initial
 Main actor, pet, skybox, particles, water,
 projector/light passes, and complete original menu lifecycle. The existing
 mesh renderer still has its documented shading approximations. Game assets
 remain external read-only inputs. No game, GUI, or frame capture is required.
 
-The desktop currently uses this Town scene as its portable default even when
-`.otc` saves exist; it does not claim the original save-dependent theme branch.
-`run_application` creates the scene once and `DesktopWindow::draw_menu_scene`
+The desktop uses Town as its initial portable default even when `.otc` saves
+exist. Save & Menu now replaces it through the bounded fixed-theme adapter;
+ordinary Load-row selection does not replace the level. `DesktopWindow::draw_menu_scene`
 draws it before `GlesUiRenderer::draw(..., false)`, preserving the background.

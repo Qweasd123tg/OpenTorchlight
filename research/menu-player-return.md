@@ -70,8 +70,10 @@ consumers прежние. `menu_player_visual` читает const PlayerSession;
 
 Новый путь не пишет дополнительный checkpoint, не меняет gameplay inventory,
 health, gold или RNG и не подставляет starting weapon вместо unequipped slot.
-Контроль ошибок read/revision/resource — прежний Load consumer. Theme остаётся
-portable Town; исходный saved-dungeon selection не заявляется перенесённым.
+Контроль ошибок read/revision/resource — прежний Load consumer. В этом
+историческом проходе theme оставалась portable Town; последующее
+[menu-themes.md](menu-themes.md) подключает фиксированные темы через committed
+OTC floor adapter, сохраняя partial для native save/depth/RNG и random themes.
 Runtime-error recovery, initial Main selection, pet/dead/retired appearance,
 equipped armor, initial blending и native ownership остаются открытыми.
 

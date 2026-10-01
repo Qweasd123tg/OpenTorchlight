@@ -229,13 +229,16 @@
         "0x584b80"
       ],
       "status": "partial",
-      "boundary": "No-save Town MAINMENURULES route, fixed menu geometry and world camera markers are consumed by the desktop scene/UI overlay. Town is the current portable default even with .otc saves. Save-dependent themes, initial/pet/dead preview objects, lights/projectors/skybox/water/particles and full lifecycle remain open. Create/alive OTC actor placement and committed Save & Menu refresh are connected; native player/level ABI and saved themes stay partial.",
+      "boundary": "No-save Town and committed OTC Save & Menu fixed-theme MAINMENURULES route -> room geometry, source camera and actor placement are consumed by the desktop. OTC stratum adapter preserves gameplay depth; ordinary Load row keeps the current scene. Caves/random pools and conditional child-Group decorations are explicitly unsupported, not approximated. Initial selection, native save/depth/RNG ABI, pet/dead/retired, lights/projectors/skybox/water/particles and full lifecycle remain open.",
       "evidence": [
         "research/decompiled-core/game_client.c",
         "research/menu-scene.md",
         "research/frontend-save-evidence.md",
         "research/menu-player-return.md",
-        "research/disassembly/menu-player-return.asm"
+        "research/disassembly/menu-player-return.asm",
+        "research/menu-themes.md",
+        "research/menu-theme-inputs.json",
+        "research/disassembly/menu-themes.asm"
       ],
       "implementation": [
         "src/menu_scene.cpp",
@@ -246,13 +249,14 @@
         "src/menu_player.cpp",
         "src/player.cpp",
         "include/torchlight/menu_player.hpp",
-        "include/torchlight/player.hpp"
+        "include/torchlight/player.hpp",
+        "include/torchlight/menu_scene.hpp"
       ],
       "tests": [
         "tests/menu_scene_test.cpp",
         "tests/save_checkpoint_test.cpp"
       ],
-      "comparison": "Static original branch/site review and external resource/camera contracts; no rendered parity claimed."
+      "comparison": "Instruction-aligned loadMenuLevel/depth/template/Group source review, pinned library math and original resources; CPU first/last depths of all six Main fixed themes, camera/player/geometry/weapon consumers, Town and explicit Caves rejection. No original process, UI/frame or full-function parity."
     },
     {
       "addresses": [
@@ -587,10 +591,13 @@
         "0x934720"
       ],
       "status": "researched",
-      "boundary": "Difficulty graph selection and dungeon configuration reviewed; normal/depth-based runtime does not close exact monster-rank resolver.",
+      "boundary": "Difficulty graph selection and dungeon configuration reviewed; normal/depth-based runtime does not close exact monster-rank resolver. Additional addressed floor-array/FLOORS source review informs the documented OTC menu stratum adapter; native load/dungeon ABI is not ported.",
       "evidence": [
         "research/decompiled-core/resource_manager.c",
-        "research/remaining-work-inventory.md"
+        "research/remaining-work-inventory.md",
+        "research/menu-themes.md",
+        "research/menu-theme-inputs.json",
+        "research/disassembly/menu-themes.asm"
       ],
       "implementation": [],
       "tests": [],
@@ -1537,17 +1544,22 @@
         "0x58fa90"
       ],
       "status": "partial",
-      "boundary": "Successful portable Save & Menu queues exact committed OTC slot/class/revision/health through SaveStore read -> restore_player -> shared equipped-weapon visual -> menu model/GLES consumer. Whole original state machine, native objects, SVB, pet/dead/retired, saved themes, cleanup/unwind and runtime-error recovery remain open. This extension has code integration and CPU/resource comparison, no new UI/frame/original process run.",
+      "boundary": "Successful portable Save & Menu queues exact committed OTC identity through SaveStore read -> fixed menu-theme selection from checkpoint.current -> actor restore -> model/GLES new camera consumer. Ordinary Load selection retains current theme. Full original state machine, initial saved selection, native objects/SVB/depth/RNG, Caves/random pools/decor, pet/dead/retired, cleanup/unwind and runtime-error recovery remain open; code/CPU comparison only, no new UI/frame run.",
       "evidence": [
         "research/menu-player-return.md",
-        "research/disassembly/menu-player-return.asm"
+        "research/disassembly/menu-player-return.asm",
+        "research/menu-themes.md",
+        "research/menu-theme-inputs.json",
+        "research/disassembly/menu-themes.asm"
       ],
       "implementation": [
         "src/application.cpp",
         "src/menu_player.cpp",
         "src/player.cpp",
         "include/torchlight/menu_player.hpp",
-        "include/torchlight/player.hpp"
+        "include/torchlight/player.hpp",
+        "src/menu_scene.cpp",
+        "include/torchlight/menu_scene.hpp"
       ],
       "tests": [
         "tests/menu_scene_test.cpp",
@@ -1567,6 +1579,29 @@
       ],
       "implementation": [],
       "tests": [],
+      "comparison": ""
+    },
+    {
+      "addresses": [
+        "0x9340a0",
+        "0x9337f0",
+        "0x8267e0",
+        "0x9f26e0",
+        "0x9f1a60",
+        "0x74b2c0",
+        "0x9f9c00"
+      ],
+      "status": "researched",
+      "boundary": "Addressed source windows for saved floor writer, zero-based template resolution and CRandomGroup choice/default/child-Group distinction. Used as source evidence and explicit unsupported guard for fixed OTC menu theme adapter; complete native function transfer, conditional predicates, RNG, ownership/unwind and original execution remain open.",
+      "evidence": [
+        "research/menu-themes.md",
+        "research/menu-theme-inputs.json",
+        "research/disassembly/menu-themes.asm"
+      ],
+      "implementation": [],
+      "tests": [
+        "tests/menu_scene_test.cpp"
+      ],
       "comparison": ""
     }
   ],

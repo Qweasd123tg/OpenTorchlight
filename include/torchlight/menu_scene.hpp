@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torchlight/scene_geometry.hpp"
+#include "torchlight/level_transition.hpp"
 
 namespace torchlight {
 
@@ -17,6 +18,8 @@ struct MenuScene {
     FixedLevelScene level;
     FixedSceneGeometry geometry;
     MenuSceneCamera camera;
+    // Explicitly omitted room-piece variants whose Group CHOICE needs RNG.
+    std::size_t omitted_random_room_pieces = 0;
 };
 
 struct MenuPlayerPlacement {
@@ -39,5 +42,13 @@ struct MenuPlayerPlacement {
 [[nodiscard]] MenuScene build_main_menu_scene(const PakArchive& archive,
                                              const LevelsetCatalog& levelsets,
                                              bool netbook_mode = false);
+
+// OTC address adapter: choose the same stratum as the committed gameplay floor,
+// then consume its original MAINMENURULES. Fixed single-room themes only.
+// Selecting a Load row does not call this; Save & Menu does.
+[[nodiscard]] MenuScene build_saved_menu_scene(const PakArchive& archive,
+                                              const LevelsetCatalog& levelsets,
+                                              const DungeonAddress& address,
+                                              bool netbook_mode = false);
 
 } // namespace torchlight

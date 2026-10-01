@@ -13,7 +13,8 @@
 
 namespace torchlight {
 namespace {
-LayoutManifest runtime_menu_layout(const LayoutManifest& layout) {
+LayoutManifest runtime_menu_layout(const LayoutManifest& layout,
+                                  std::size_t* omitted_random_room_pieces = nullptr) {
     // original-code: PARENTID -> editor field +0x18 (setParentGuid
     // 0x59f070), while CLayout::editorObjectCreated @0x9df9d8 attaches
     // scene nodes to the owning CLayout through the separate +0x50 edge.
@@ -25,6 +26,41 @@ LayoutManifest runtime_menu_layout(const LayoutManifest& layout) {
     std::unordered_map<std::int64_t, const LayoutObject*> ids;
     for (const auto& object : layout.objects) ids.emplace(object.id, &object);
     for (auto& object : runtime.objects) {
+        // original-code: ctor @0x9f2752 defaults CHOICE enum+0x11c to
+        // ALL=0; SetRandomType @0x9f1a65 accepts 0..2. Weight/Random Chance
+        // need the original random-selection chain, which remains open.
+        // Omit those room-piece effects rather than displaying every variant.
+        if (object.descriptor == u"Room Piece" || object.descriptor == u"Property Node") {
+            auto parent_id = object.parent_id;
+            const auto* child = &object;
+            while (parent_id != -1) {
+                const auto* parent = ids.at(parent_id);
+                if (parent->descriptor == u"Group") {
+                    const auto* property = parent->find_property(u"CHOICE");
+                    const auto* choice = property ? std::get_if<std::u16string>(&property->value) : nullptr;
+                    if (property && !choice) throw std::invalid_argument("Menu Group CHOICE is not text");
+                    if (choice && *choice != u"ALL") {
+                        if (*choice != u"Weight" && *choice != u"Random Chance")
+                            throw std::invalid_argument("Menu Group CHOICE is unknown");
+                        // chooseChildrenByRandomChoice @0x9f9c1a checks the
+                        // child-Group array; direct non-Group children are not
+                        // random alternatives. Only a selected Group edge
+                        // makes this descendant conditional.
+                        if (child->descriptor == u"Group") {
+                            if (object.descriptor == u"Property Node")
+                                throw std::invalid_argument("Menu marker depends on random Group choice");
+                            if (object.piece_guid) {
+                                object.piece_guid.reset();
+                                if (omitted_random_room_pieces) ++*omitted_random_room_pieces;
+                            }
+                            break;
+                        }
+                    }
+                }
+                child = parent;
+                parent_id = parent->parent_id;
+            }
+        }
         while (object.parent_id != -1) {
             const auto* parent = ids.at(object.parent_id);
             if (parent->descriptor != u"Group") break;
@@ -125,17 +161,28 @@ MenuSceneCamera menu_scene_camera(const LayoutManifest& layout, bool netbook_mod
 
 MenuScene build_main_menu_scene(const PakArchive& archive, const LevelsetCatalog& levelsets,
                                 bool netbook_mode) {
+    // original-code: no-save setGameState @0x590c48 selects TOWN depth 1.
+    // Its one-template dungeon clamps that index to zero @0x9340ad.
+    return build_saved_menu_scene(archive, levelsets, {u"Town", 0}, netbook_mode);
+}
+
+MenuScene build_saved_menu_scene(const PakArchive& archive, const LevelsetCatalog& levelsets,
+                                 const DungeonAddress& address, bool netbook_mode) {
     const LevelSceneLoader loader(archive);
     MenuScene result;
-    // original-code: setGameState 0x590c48 selects TOWN, depth 1 when no
-    // saved player loads. This boundary does not select save-dependent themes.
-    result.level.dungeon = loader.load_dungeon(u"media/dungeons/TOWN.DAT");
-    const auto& first = result.level.dungeon.strata.front();
-    if (first.floors < 1) throw std::invalid_argument("Town has no depth-one stratum");
-    const auto town_rules = parse_adm(archive.read_normalized(compiled_adm_path(first.ruleset)));
-    if (town_rules.root.name != u"LEVEL") throw std::invalid_argument("Town rules are not LEVEL");
-    const auto menu_rules = resource_fields::text(town_rules.root, u"MAINMENURULES");
-    if (menu_rules.empty()) throw std::invalid_argument("Town rules lack MAINMENURULES");
+    if (address.dungeon_name.empty() || address.depth < 0)
+        throw std::invalid_argument("Menu dungeon address is invalid");
+    result.level.dungeon = loader.load_dungeon(u"media/dungeons/" + address.dungeon_name + u".DAT");
+    // portable adapter: OTC uses Town=0, ordinary depths=1..N. This is the
+    // existing gameplay stratum selector, not the original zero-based save ABI.
+    const auto floor = select_dungeon_floor(result.level.dungeon, address.depth);
+    const auto& stratum = result.level.dungeon.strata[floor.stratum_index];
+    const auto level_rules = parse_adm(archive.read_normalized(compiled_adm_path(stratum.ruleset)));
+    if (level_rules.root.name != u"LEVEL") throw std::invalid_argument("Dungeon rules are not LEVEL");
+    // original-code: loadMenuLevel @0x584c91 reads template+0x6f0,
+    // CLevelTemplateData::load @0x977272 writes MAINMENURULES there.
+    const auto menu_rules = resource_fields::text(level_rules.root, u"MAINMENURULES");
+    if (menu_rules.empty()) throw std::invalid_argument("Dungeon rules lack MAINMENURULES");
     result.level.rules = loader.load_rules(menu_rules);
     const auto& rules = result.level.rules;
     if (rules.randomized || rules.chunks.size() != 1)
@@ -150,7 +197,7 @@ MenuScene build_main_menu_scene(const PakArchive& archive, const LevelsetCatalog
     static_cast<void>(expand_layout_links(loader, result.level.layout));
     result.camera = menu_scene_camera(result.level.layout, netbook_mode);
     auto render_level = result.level;
-    render_level.layout = runtime_menu_layout(result.level.layout);
+    render_level.layout = runtime_menu_layout(result.level.layout, &result.omitted_random_room_pieces);
     result.geometry = build_room_piece_geometry(archive, levelsets, render_level);
     return result;
 }

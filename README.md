@@ -105,13 +105,18 @@ OGRE 1.6.5 подключена из исходников. Исправлен л
 редакторский Group pivot не является графическим parent.
 После [Save & Menu](research/menu-player-return.md) preview восстанавливается
 из записанного checkpoint, включая смену или снятие оружия.
+[Фиксированная тема](research/menu-themes.md) после Save & Menu выбирается по
+этажу этого checkpoint: Town, Mines, Crypt, Sunken Temple, Lava, Fortress или
+Palace. Камера и позиция героя берутся из layout новой темы. Caves и случайный
+декор остаются unsupported; выделение строки Load сохраняет текущий фон.
 [Список персонажей и настройки](research/menu-production-state.md) получают
 runtime visibility, выбранное имя, highlights, prompt удаления и актуальные
 audio levels. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
 и RGBA каждого угла. Подготовка игровых каталогов отложена до входа в игру;
 команды Falagard кешируются. FPS и время старта отдельно не измерены.
 Остаток: initial/dead preview, экипированная броня/питомец, pet/difficulty, resolution list/FSAA,
-темы сохранённого персонажа, эффекты сцены, `.SVB`/моды и полный CEGUI runtime.
+начальный выбор сохранённой темы, Caves/случайные группы, эффекты сцены,
+`.SVB`/моды и полный CEGUI runtime.
 Completion остаётся `partial`; контрактные проверки и сборка отделены от запуска UI.
 
 Предыдущий UI-проход: [mapToFunctions](research/ui-function-bindings.md) — общая

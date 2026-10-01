@@ -115,13 +115,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Save-dependent themes, initial/pet/dead/retired preview objects, skybox/particles/water/light/projector passes and full native level lifecycle. Alive actor refresh uses the separate documented OTC/visual slice."
+          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, Caves/random pools/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
         ]
       },
-      "evidence": "research/menu-scene.md; research/menu-player-return.md",
-      "implementation": "src/menu_scene.cpp; src/application.cpp; src/gles_scene_renderer.cpp; src/linux_desktop_main.cpp",
+      "evidence": "research/menu-scene.md; research/menu-player-return.md; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "src/menu_scene.cpp; src/application.cpp; src/gles_scene_renderer.cpp; src/linux_desktop_main.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp",
-      "comparison": "No-save resource route and world camera/projection numeric contracts; original not executed."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison."
     },
     "0x005613f0": {
       "symbol": "CGame::createCamera()",
@@ -3354,13 +3354,146 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Legacy flags describe committed Save & Menu -> OTC restore -> model refresh only. Whole original state/player/pet/save/level ownership, SVB, saved themes, dead/retired, cleanup/unwind and runtime-error recovery remain open; no new UI/frame/original-process comparison."
+          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, Caves/random pools/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
         ]
       },
-      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm",
-      "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp",
+      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp; src/menu_scene.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp; tests/save_checkpoint_test.cpp",
-      "comparison": "Addressed state0/unload/save-reload and placement ASM compared with real portable save-success/read/restore/model chain. CPU/resource visual consumer tests and adjacent save/equipment gate; not full-function equivalence."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison."
+    },
+    "0x009340a0": {
+      "symbol": "CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x009337f0": {
+      "symbol": "CDungeon::getStrataTemplate(unsigned int)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x008267e0": {
+      "symbol": "CCharacter::fillSaveState(CCharacterSaveState&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x009f26e0": {
+      "symbol": "CRandomGroup::CRandomGroup(CResourceManager*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x009f1a60": {
+      "symbol": "CRandomGroup::SetRandomType(unsigned int)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x0074b2c0": {
+      "symbol": "rollGroup(CRandomGroup*, TArrayList<CEditorBaseObject*>&, TArrayList<CRandomGroup*>&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x009f9c00": {
+      "symbol": "CRandomGroup::chooseChildrenByRandomChoice(TArrayList<CRandomGroup*>&, TArrayList<CEditorBaseObject*>&)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Source windows/default/branch evidence only. Complete original field map, dependent functions, RNG/predicates, native ownership/unwind and full-function transfer remain open."
+        ]
+      },
+      "evidence": "research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
     }
   }
 }
