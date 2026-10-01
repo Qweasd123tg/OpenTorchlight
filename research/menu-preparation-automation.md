@@ -27,6 +27,14 @@
 Команда и правила output: [codefirst-tooling.md](codefirst-tooling.md).
 Генерируемые пакеты и CALL index остаются в ignored build или `/tmp`.
 
+Дополнение того же дня: с `--build-dir` индекс автоматически экспортируется
+или переиспользуется после проверки input/generator/tool/content hashes.
+При cache hit full objdump/nm не выполняются, index/sidecar не переписываются.
+`summary.json` содержит краткие source-hit/missing и open-code counts, а также
+выбор проверок: не нужно загружать весь пакет в модель для выбора карточки.
+Эти механические шаги работают без LLM/API/сети; новое содержательное ревью
+по-прежнему не выводится из cache hit или счётчика.
+
 ## Исполненный пример
 
 Внешний read-only ELF SHA-256

@@ -215,6 +215,17 @@ class CodeFirstToolsTest(unittest.TestCase):
         self.assertEqual(result["status"], "FAILED")
         self.assertEqual(command.call_count, 1)
 
+    def test_compact_summary_preserves_unknown_library_and_open_work(self):
+        packet = {"address": "0x1000", "unresolved_work": [{"code": "indirect_calls_unresolved"}],
+                  "vendor_sources": {"symbols": [
+                      {"library": "CEGUI", "member": "Window::show", "hits": [{"path": "source.cpp"}]},
+                      {"library": "Ogre", "member": "Entity::getMesh", "hits": []}]}}
+        summary = family.navigation_summary({"functions": [packet]})
+        self.assertEqual(summary["open_codes"], {"indirect_calls_unresolved": 1})
+        sources = summary["local_source_candidates"][0]
+        self.assertEqual(sources["with_local_hits"], 1)
+        self.assertEqual(sources["no_local_hit"], ["Ogre::Entity::getMesh"])
+
     def test_header_declaration_is_not_counted_as_production_consumer(self):
         self.write("include/sample.hpp", "void only_declared();\n")
         self.write("tests/sample.cpp", "only_declared();\n")

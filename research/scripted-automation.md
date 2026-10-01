@@ -110,6 +110,13 @@ python3 tools/function_package.py --address 0xb4eb70 --address 0xb569e0 \
   --json-out build-verification/inventory-packet.json
 ```
 
+`export_callsites.py --reuse` проверяет идентичность ELF, экспортёра/ELF-helper,
+objdump и TSV/header перед reuse. При несовпадении строит индекс заново.
+`prepare_family_packet.py --build-dir ...` выполняет этот шаг автоматически,
+если `--callsites` не передан. Краткая navigation summary выдаёт открытые
+вопросы/source-hit hints и выбранные проверки; полные данные остаются в файлах.
+Этот повторяемый путь не содержит LLM или сетевых вызовов.
+
 TSV совместим с полями прежнего Ghidra-экспорта. Sidecar `.meta.json` хранит
 хеши ELF/TSV, версию binutils, косвенные и неатрибутированные вызовы, ограничения.
 Caller определяется границей sized ELF symbol, не восстановленным CFG. Сортировка

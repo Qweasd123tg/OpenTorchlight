@@ -8,6 +8,7 @@ semantic-equivalence claim. Generated packets belong in ignored build or /tmp.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from difflib import unified_diff
 import hashlib
 import json
@@ -101,6 +102,28 @@ def run_contract_checks(root: Path, plan: dict, out: Path, jobs: int) -> dict:
     return result
 
 
+def ensure_callsite_cache(root: Path, elf: Path, build: Path) -> Path:
+    path = build.resolve() / "research/original-callsites.tsv"
+    subprocess.run([sys.executable, str(root / "tools/export_callsites.py"),
+                    "--original", str(elf), "--out", str(path), "--reuse"], check=True)
+    return path
+
+
+def navigation_summary(document: dict) -> dict:
+    """Small navigation hints; detailed evidence stays in per-function files."""
+    open_codes = Counter()
+    source_hits = []
+    for packet in document["functions"]:
+        open_codes.update(item["code"] for item in packet["unresolved_work"])
+        symbols = packet.get("vendor_sources", {}).get("symbols", [])
+        source_hits.append({"address": packet["address"], "queries": len(symbols),
+                            "with_local_hits": sum(bool(item["hits"]) for item in symbols),
+                            "no_local_hit": [item["library"] + "::" + item["member"]
+                                             for item in symbols if not item["hits"]]})
+    return {"meaning": "Representative navigation only; counts do not close a contract or replace member delta review.",
+            "open_codes": dict(sorted(open_codes.items())), "local_source_candidates": source_hits}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("method")
@@ -111,7 +134,7 @@ def main() -> int:
     ap.add_argument("--near", type=float, default=None)
     ap.add_argument("--max-members", type=int, default=64)
     ap.add_argument("--max-representatives", type=int, default=64)
-    ap.add_argument("--callsites", type=Path)
+    ap.add_argument("--callsites", type=Path, help="explicit index; otherwise --build-dir creates/reuses a verified local cache")
     ap.add_argument("--build-dir", type=Path, help="optional existing CTest/Ninja build; emit a recorded-contract test plan without configuring or running it")
     ap.add_argument("--check", action="store_true", help="also build and execute the generated CPU/resource/reference contract plan")
     ap.add_argument("--jobs", type=int, default=2)
@@ -131,6 +154,8 @@ def main() -> int:
         if args.callsites and not args.callsites.is_file():
             raise ValueError(f"missing explicitly requested callsite index: {args.callsites}")
         out.mkdir(parents=True, exist_ok=True)
+        if args.build_dir and args.callsites is None:
+            args.callsites = ensure_callsite_cache(ROOT, args.elf, args.build_dir)
         command = [sys.executable, str(ROOT / "tools/asm_family_cluster.py"), args.method,
                    "--elf", str(args.elf), "--scope", args.scope, "--class-regex", args.class_regex,
                    "--max-members", str(args.max_members), "--out", str(out / "ASM_CLUSTERS.md"),
@@ -204,8 +229,10 @@ def main() -> int:
                    "work_reduction_hint": data["members"] - len(representatives),
                    "evidence_index_loads": 1, "decoded_member_bodies": data["members"],
                    "source_fingerprint": document["source_fingerprint"]["sha256"],
+                   "navigation": navigation_summary(document),
+                   "contract_test_selection": test_plan["selection"]["tests"] if args.build_dir else [],
                    "generator_inputs": {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in
-                                        ("tools/prepare_family_packet.py", "tools/asm_family_cluster.py", "tools/check_selection.py", "tools/check.py", "tools/automation_state.py",
+                                        ("tools/prepare_family_packet.py", "tools/asm_family_cluster.py", "tools/export_callsites.py", "tools/check_selection.py", "tools/check.py", "tools/automation_state.py",
                                          "tools/transfer_contract.py", "research/ui-contour.json")},
                    "meaning": "Batching hint; every member delta, field/call contract and sink still needs review."}
         write_json(out / "summary.json", summary)
@@ -225,7 +252,7 @@ def main() -> int:
                  "8. UI clicks, screenshots, frame and end-to-end scenarios are separate explicitly user-requested work.",
                  "9. Record remaining work in completion.open_items; four true stages describe the reviewed boundary.", "",
                  "Representative evidence: functions.json; EVERY member's boundary/callers: members.json.",
-                 "Input identities: summary.json.",
+                 "Input identities, source-hit counts and unresolved-work codes: summary.json. Start there; keep full evidence out of the model context until needed.",
                  "Missing callsites/decompilation/indirect targets remain explicit in representative cards.", "",
                  "## Representatives", ""]
         entry += [f"- [{r['address']} {r['symbol']}](representatives/{r['address']}.md)" for r in representatives]

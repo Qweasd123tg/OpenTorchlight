@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from automation_state import changed_paths, snapshot_changes, source_snapshot, validate_output
 from check_selection import close_fixtures, dependency_index, make_plan
-from export_callsites import parse_calls
+from export_callsites import FIELDS, digest, parse_calls, reusable_cache
 from original import Symbol
 from readiness import build_report, validate_manifest
 
@@ -233,6 +233,37 @@ class Automation(unittest.TestCase):
             self.assertIn("Unsupported original build", result.stderr)
             self.assertFalse(output.exists())
             self.assertEqual(binary.read_bytes(), b"not supported")
+
+    def test_callsite_cache_invalidates_changed_input_tool_generator_and_content(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "calls.tsv"
+            path.write_text("\t".join(FIELDS) + "\n100\tcaller\t101\t200\ttarget\tCALL\n")
+            identity = {"original_elf_sha256": "pinned", "tool": "objdump version",
+                        "generator_inputs": {"exporter": "generator-sha"}}
+            metadata = {"schema": 1, "kind": "direct-callsites", **identity,
+                        "direct_calls": 1, "indirect_calls": [], "tsv_sha256": digest(path)}
+            sidecar = Path(str(path) + ".meta.json")
+            sidecar.write_text(json.dumps(metadata))
+            before = (path.stat().st_mtime_ns, sidecar.stat().st_mtime_ns)
+            self.assertEqual(reusable_cache(path, identity), metadata)
+            self.assertEqual(before, (path.stat().st_mtime_ns, sidecar.stat().st_mtime_ns))
+            for key, value in (("original_elf_sha256", "different"), ("tool", "new version"),
+                               ("generator_inputs", {"exporter": "changed"})):
+                self.assertIsNone(reusable_cache(path, {**identity, key: value}))
+            path.write_text(path.read_text() + "tampered\n")
+            self.assertIsNone(reusable_cache(path, identity))
+            sidecar.write_text("not-json")
+            self.assertIsNone(reusable_cache(path, identity))
+            self.assertIsNone(reusable_cache(Path(d) / "missing", identity))
+
+    def test_callsite_cache_rejects_wrong_header_even_with_matching_hash(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "calls.tsv"
+            path.write_text("wrong-header\n")
+            Path(str(path) + ".meta.json").write_text(json.dumps({
+                "schema": 1, "kind": "direct-callsites", "direct_calls": 1,
+                "indirect_calls": [], "tsv_sha256": digest(path)}))
+            self.assertIsNone(reusable_cache(path, {}))
 
     def test_project_capability_manifest(self):
         validate_manifest(ROOT, json.loads((ROOT / "research/capabilities.json").read_text()))

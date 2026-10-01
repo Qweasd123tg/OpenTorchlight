@@ -37,7 +37,6 @@ Ghidra headless, GNU binutils и CTest/Ninja остаются используе
 python3 tools/prepare_family_packet.py createMenus \
   --elf /path/to/game/Torchlight.bin.x86_64 \
   --class-regex '^(CMainMenu|CDropdownMenu)$' \
-  --callsites build-cegui/research/original-callsites.tsv \
   --build-dir build-cegui --check --out /tmp/menu-create-packet
 ```
 
@@ -53,6 +52,20 @@ CMake cache. `test-plan.json` содержит команды сборки/CTest
 входов во время проверки делает результат FAILED. Пустой выбор — NOT RUN.
 Текущий CMake cache не перенастраивается; `--jobs` по умолчанию 2.
 Этот прогон не заменяет общую проверку изменений.
+Если `--callsites` не задан, существующий build-каталог получает автоматически
+создаваемый/проверяемый `research/original-callsites.tsv`. `--reuse` экспортёра
+принимает кеш только при совпадении ELF SHA-256, кода экспортёра/ELF-helper,
+версии objdump, TSV hash и ожидаемого header. Cache hit не вызывает nm/full
+objdump и не переписывает артефакты; отсутствие, старый формат или повреждение
+приводят к экспорту. Явно заданный отсутствующий индекс остаётся ошибкой.
+Оригинал проверяется по содержимому, не mtime. Если build-dir не задан,
+сохраняется прежний маршрут с явным missing-index warning.
+
+Для экономии контекста сначала читать `summary.json`: он теперь содержит
+счётчики открытых вопросов, local-source hit/missing hints представителей и
+выбранные contract tests. Затем открывать только нужные карточки и member
+deltas. Полные исходные данные остаются в пакете; механическая подготовка,
+кеширование, выбор проверок и их исполнение не вызывают модели/сеть.
 Проверенный пример и актуальная граница сортировки:
 [menu-preparation-automation.md](menu-preparation-automation.md).
 
