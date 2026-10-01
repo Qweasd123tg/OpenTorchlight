@@ -185,7 +185,18 @@ MenuScene build_saved_menu_scene(const PakArchive& archive, const LevelsetCatalo
     if (menu_rules.empty()) throw std::invalid_argument("Dungeon rules lack MAINMENURULES");
     result.level.rules = loader.load_rules(menu_rules);
     const auto& rules = result.level.rules;
-    if (rules.randomized || rules.chunks.size() != 1)
+    // original-code: the Caves generator starts its sole entrance at zero,
+    // adds zero middle chunks, requires no exit, and has one concrete room.
+    // Every generated/catalog choice therefore has the same scene output.
+    // This transfers that invariant only, not the original RNG/catalog state.
+    // Source branches and field widths: research/menu-caves.md.
+    const bool one_generated_room = rules.chunk_types.size() == 1 && rules.chunks.size() == 1 &&
+        rules.minimum_chunks == 0 && rules.maximum_chunks == 0 && !rules.requires_exit &&
+        rules.chunk_types.front().entrance && !rules.chunk_types.front().exit &&
+        !rules.chunk_types.front().must_place && rules.chunk_types.front().exits.empty() &&
+        rules.chunk_types.front().maximum_appearance == 1 &&
+        rules.chunk_types.front().name == rules.chunks.front().type;
+    if ((rules.randomized && !one_generated_room) || rules.chunks.size() != 1)
         throw std::invalid_argument("Menu scene requires one fixed chunk");
     const auto& chunk = rules.chunks.front();
     if (chunk.x != 0.0F || chunk.y != 0.0F || chunk.z != 0.0F)

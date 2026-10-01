@@ -115,13 +115,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, Caves/random pools/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
+          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, General random pools/catalog/RNG/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
         ]
       },
-      "evidence": "research/menu-scene.md; research/menu-player-return.md; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "evidence": "research/menu-scene.md; research/menu-player-return.md; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm",
       "implementation": "src/menu_scene.cpp; src/application.cpp; src/gles_scene_renderer.cpp; src/linux_desktop_main.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp",
-      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open."
     },
     "0x005613f0": {
       "symbol": "CGame::createCamera()",
@@ -3354,13 +3354,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, Caves/random pools/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
+          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, General random pools/catalog/RNG/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
         ]
       },
-      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm",
+      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm",
       "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp; src/menu_scene.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp; tests/save_checkpoint_test.cpp",
-      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open."
     },
     "0x009340a0": {
       "symbol": "CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",
@@ -3494,6 +3494,63 @@
       "implementation": "",
       "tests": "tests/menu_scene_test.cpp",
       "comparison": "Bounded static source review for OTC theme adapter and explicit random-choice omission. No complete native implementation or original execution."
+    },
+    "0x00973370": {
+      "symbol": "CLevelTemplateData::createRandomLayout(int)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the constant Caves scene-output invariant is reviewed/consumed. General generator/template loader/chooser, RNG draws/catalog/native field effects, allocations/ownership/unwind and full-function equivalence remain open."
+        ]
+      },
+      "evidence": "research/menu-caves.md; research/disassembly/menu-caves.asm",
+      "implementation": "src/menu_scene.cpp; src/application.cpp",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Static source/resource comparison of one-room result and production geometry/camera/actor path; no original process, RNG/catalog or frame comparison."
+    },
+    "0x009713c0": {
+      "symbol": "CLevelTemplateData::getRandomLayout()",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the constant Caves scene-output invariant is reviewed/consumed. General generator/template loader/chooser, RNG draws/catalog/native field effects, allocations/ownership/unwind and full-function equivalence remain open."
+        ]
+      },
+      "evidence": "research/menu-caves.md; research/disassembly/menu-caves.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Static source/resource comparison of one-room result and production geometry/camera/actor path; no original process, RNG/catalog or frame comparison."
+    },
+    "0x009762f0": {
+      "symbol": "CLevelTemplateData::load(wchar_t const*)",
+      "stages": {
+        "analyzed": false,
+        "ported": false,
+        "wired": false,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the constant Caves scene-output invariant is reviewed/consumed. General generator/template loader/chooser, RNG draws/catalog/native field effects, allocations/ownership/unwind and full-function equivalence remain open."
+        ]
+      },
+      "evidence": "research/menu-caves.md; research/disassembly/menu-caves.asm",
+      "implementation": "",
+      "tests": "tests/menu_scene_test.cpp",
+      "comparison": "Static source/resource comparison of one-room result and production geometry/camera/actor path; no original process, RNG/catalog or frame comparison."
     }
   }
 }

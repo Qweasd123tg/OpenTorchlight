@@ -1,5 +1,8 @@
 # Menu theme из committed OTC dungeon
 
+Продолжение: [menu-caves.md](menu-caves.md) снимает исходную Caves rejection
+по инварианту одного generated room; ниже сохранена граница предыдущего прохода.
+
 2026-10-02. Продолжение [menu-player-return.md](menu-player-return.md).
 Входы SHA-256 ELF/pak, пути и хеши manifest/rules/layout:
 [menu-theme-inputs.json](menu-theme-inputs.json). Неизменённые pinned OGRE1.6.5

@@ -104,6 +104,7 @@ void authored_contract() {
 void original_resources(const char* pak_path) {
     using namespace torchlight;
     const PakArchive archive(pak_path);
+    const LevelSceneLoader loader(archive);
     const LevelsetCatalog levelsets(archive);
     const auto menu = build_main_menu_scene(archive, levelsets);
     require(menu.level.dungeon.name == u"Town", "no-save scene is not Town");
@@ -139,6 +140,7 @@ void original_resources(const char* pak_path) {
         {1, 4, "MAINMENU_MINES.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
         {5, 8, "MAINMENU_CRYPT.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
         {9, 16, "MAINMENU_SUNKENTEMPLE.LAYOUT", {5.61003017F,3.5150001F,-7.15001011F}, {1.20000005F,0.829999983F,-0.00999784004F}, {1.80999994F,1.83000004F,-1.00999999F}},
+        {17, 20, "MAINMENU_CAVES.LAYOUT", {4.91000986F,3.5150001F,-7.15001011F}, {0.500001013F,0.829999983F,-0.00999784004F}, {1.11000001F,1.83000004F,-1.00999999F}},
         {21, 24, "MAINMENU_LAVA.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
         {25, 29, "MAINMENU_FORTRESS.LAYOUT", {5.66000986F,3.5150001F,-6.13999987F}, {1.25F,0.829999983F,1}, {1.86000001F,1.83000004F,0}},
         {30, 35, "MAINMENU_PALACE.LAYOUT", {-1.63998997F,3.5150001F,-0.490007997F}, {-6.05000019F,0.829999983F,6.64999008F}, {-5.44000006F,1.83000004F,5.64999008F}},
@@ -162,9 +164,16 @@ void original_resources(const char* pak_path) {
                       << saved_menu.omitted_random_room_pieces << " random props omitted\n";
         }
     }
-    for (const auto depth : {17, 20})
-        rejects([&] { static_cast<void>(build_saved_menu_scene(archive, levelsets, {u"Main", depth})); },
-                "random Caves menu silently substituted a fixed theme");
+    const auto caves = loader.load_rules(u"media/layouts/mainmenus/mainmenu_cavesrules.dat");
+    require(caves.randomized && caves.chunk_types.size() == 1 && caves.chunk_types.front().entrance &&
+            !caves.requires_exit && caves.minimum_chunks == 0 && caves.maximum_chunks == 0,
+            "Caves single generated entrance resource boundary changed");
+    for (const auto seed : {1U, 77U, 0x7FFFFFFFU, 0xFFFFFFFFU}) {
+        const auto generated = RandomLevelGenerator(loader).generate(caves, seed);
+        require(generated.chunks.size() == 1 && generated.chunks.front().position == Vector3{0,0,0} &&
+                generated.chunks.front().layout_path.find("MAINMENU_CAVES.LAYOUT") != std::string::npos,
+                "Caves generator output is not its one authored room");
+    }
     const auto saved_town = build_saved_menu_scene(archive, levelsets, {u"Town", 0});
     require(saved_town.camera.position == position && saved_town.camera.target == target &&
             saved_town.omitted_random_room_pieces == 0, "saved Town changed the existing no-save route");

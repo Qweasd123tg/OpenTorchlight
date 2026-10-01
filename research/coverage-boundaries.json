@@ -229,7 +229,7 @@
         "0x584b80"
       ],
       "status": "partial",
-      "boundary": "No-save Town and committed OTC Save & Menu fixed-theme MAINMENURULES route -> room geometry, source camera and actor placement are consumed by the desktop. OTC stratum adapter preserves gameplay depth; ordinary Load row keeps the current scene. Caves/random pools and conditional child-Group decorations are explicitly unsupported, not approximated. Initial selection, native save/depth/RNG ABI, pet/dead/retired, lights/projectors/skybox/water/particles and full lifecycle remain open.",
+      "boundary": "No-save Town and committed OTC Save & Menu fixed-theme MAINMENURULES route -> room geometry, source camera and actor placement are consumed by the desktop. OTC stratum adapter preserves gameplay depth; ordinary Load row keeps the current scene. General random pools and conditional child-Group decorations are explicitly unsupported, not approximated. Initial selection, native save/depth/RNG ABI, pet/dead/retired, lights/projectors/skybox/water/particles and full lifecycle remain open. Caves is now supported by its proven one-room output invariant; native 10-layout catalog/seed/RNG side effects remain open.",
       "evidence": [
         "research/decompiled-core/game_client.c",
         "research/menu-scene.md",
@@ -238,7 +238,9 @@
         "research/disassembly/menu-player-return.asm",
         "research/menu-themes.md",
         "research/menu-theme-inputs.json",
-        "research/disassembly/menu-themes.asm"
+        "research/disassembly/menu-themes.asm",
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm"
       ],
       "implementation": [
         "src/menu_scene.cpp",
@@ -256,7 +258,7 @@
         "tests/menu_scene_test.cpp",
         "tests/save_checkpoint_test.cpp"
       ],
-      "comparison": "Instruction-aligned loadMenuLevel/depth/template/Group source review, pinned library math and original resources; CPU first/last depths of all six Main fixed themes, camera/player/geometry/weapon consumers, Town and explicit Caves rejection. No original process, UI/frame or full-function parity."
+      "comparison": "Instruction-aligned loadMenuLevel/depth/template/Group source review, pinned library math and original resources; CPU first/last depths of all six Main fixed themes, camera/player/geometry/weapon consumers, Town and explicit Caves rejection. No original process, UI/frame or full-function parity. Caves source branch/field review and 14 Main first/last theme cases; four portable-generator seeds confirm constant room output only."
     },
     {
       "addresses": [
@@ -330,11 +332,13 @@
         "0x9622f0"
       ],
       "status": "partial",
-      "boundary": "Existing resource scene loading and ordinary property-node arrival fallback; full room lifecycle not closed. Menu entry3 marker TYPE default/direction consumers and editor-Group versus layout-root scene-parent correction are connected in research/menu-player-preview.md; full room/group lifecycle stays open.",
+      "boundary": "Existing resource scene loading and ordinary property-node arrival fallback; full room lifecycle not closed. Menu entry3 marker TYPE default/direction consumers and editor-Group versus layout-root scene-parent correction are connected in research/menu-player-preview.md; full room/group lifecycle stays open. Caves is now supported by its proven one-room output invariant; native 10-layout catalog/seed/RNG side effects remain open.",
       "evidence": [
         "research/level-entry-fallback.md",
         "research/decompiled-core/level.c",
-        "research/menu-player-preview.md"
+        "research/menu-player-preview.md",
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm"
       ],
       "implementation": [
         "src/level_scene.cpp",
@@ -355,7 +359,7 @@
         "tests/scenarios/menu-player.scenario",
         "tests/character_load_test.py"
       ],
-      "comparison": "Addressed marker/entry branches, Group GUID vs graphic parent field/callback and pinned OGRE math source/shipped instructions; authored/pak CPU contracts and production GL regression. No full room/Group/OS/frame equivalence."
+      "comparison": "Addressed marker/entry branches, Group GUID vs graphic parent field/callback and pinned OGRE math source/shipped instructions; authored/pak CPU contracts and production GL regression. No full room/Group/OS/frame equivalence. Caves source branch/field review and 14 Main first/last theme cases; four portable-generator seeds confirm constant room output only."
     },
     {
       "addresses": [
@@ -1544,13 +1548,15 @@
         "0x58fa90"
       ],
       "status": "partial",
-      "boundary": "Successful portable Save & Menu queues exact committed OTC identity through SaveStore read -> fixed menu-theme selection from checkpoint.current -> actor restore -> model/GLES new camera consumer. Ordinary Load selection retains current theme. Full original state machine, initial saved selection, native objects/SVB/depth/RNG, Caves/random pools/decor, pet/dead/retired, cleanup/unwind and runtime-error recovery remain open; code/CPU comparison only, no new UI/frame run.",
+      "boundary": "Successful portable Save & Menu queues exact committed OTC identity through SaveStore read -> fixed menu-theme selection from checkpoint.current -> actor restore -> model/GLES new camera consumer. Ordinary Load selection retains current theme. Full original state machine, initial saved selection, native objects/SVB/depth/RNG, General random pools/decor, pet/dead/retired, cleanup/unwind and runtime-error recovery remain open; code/CPU comparison only, no new UI/frame run. Caves is now supported by its proven one-room output invariant; native 10-layout catalog/seed/RNG side effects remain open.",
       "evidence": [
         "research/menu-player-return.md",
         "research/disassembly/menu-player-return.asm",
         "research/menu-themes.md",
         "research/menu-theme-inputs.json",
-        "research/disassembly/menu-themes.asm"
+        "research/disassembly/menu-themes.asm",
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm"
       ],
       "implementation": [
         "src/application.cpp",
@@ -1565,7 +1571,7 @@
         "tests/menu_scene_test.cpp",
         "tests/save_checkpoint_test.cpp"
       ],
-      "comparison": "Instruction-aligned original state-change/unload/save-reload/player placement branches compared with portable save-success guard and actual read/restore/model callers. Three resource classes exercise read-only/unequip/re-equip/restored alternate/dead visual consumers; nearby save/player/equipment contracts pass. Not full-function or UI/frame parity."
+      "comparison": "Instruction-aligned original state-change/unload/save-reload/player placement branches compared with portable save-success guard and actual read/restore/model callers. Three resource classes exercise read-only/unequip/re-equip/restored alternate/dead visual consumers; nearby save/player/equipment contracts pass. Not full-function or UI/frame parity. Caves source branch/field review and 14 Main first/last theme cases; four portable-generator seeds confirm constant room output only."
     },
     {
       "addresses": [
@@ -1597,6 +1603,60 @@
         "research/menu-themes.md",
         "research/menu-theme-inputs.json",
         "research/disassembly/menu-themes.asm"
+      ],
+      "implementation": [],
+      "tests": [
+        "tests/menu_scene_test.cpp"
+      ],
+      "comparison": ""
+    },
+    {
+      "addresses": [
+        "0x973370"
+      ],
+      "status": "partial",
+      "boundary": "Caves one-entrance, middle0..0, no-exit/no-must, one-layout scene-output invariant is consumed by saved menu geometry/camera/actor. Full generated catalogs, RNG sequence/seed/weights, general graph generation, allocations/ownership/unwind and whole-function transfer remain open.",
+      "evidence": [
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm",
+        "research/menu-theme-inputs.json"
+      ],
+      "implementation": [
+        "src/menu_scene.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/menu_scene_test.cpp"
+      ],
+      "comparison": "Addressed source ASM/resource and caller/consumer comparison for constant one-room output only; no RNG/catalog/frame equivalence."
+    },
+    {
+      "addresses": [
+        "0x9713c0"
+      ],
+      "status": "researched",
+      "boundary": "Source review of menu type/entrance/manual LAYOUT chooser and getRandomLayout; original native catalog/chooser implementation is not transferred by this extension.",
+      "evidence": [
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm",
+        "research/menu-theme-inputs.json"
+      ],
+      "implementation": [],
+      "tests": [
+        "tests/menu_scene_test.cpp"
+      ],
+      "comparison": ""
+    },
+    {
+      "addresses": [
+        "0x9762f0"
+      ],
+      "status": "researched",
+      "boundary": "Source review of menu type/entrance/manual LAYOUT chooser and getRandomLayout; original native catalog/chooser implementation is not transferred by this extension.",
+      "evidence": [
+        "research/menu-caves.md",
+        "research/disassembly/menu-caves.asm",
+        "research/menu-theme-inputs.json"
       ],
       "implementation": [],
       "tests": [

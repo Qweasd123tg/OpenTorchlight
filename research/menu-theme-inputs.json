@@ -51,5 +51,8 @@
     "media/layouts/palace/RULES.DAT.adm": "6ed1fc1ad149cc2da95bb69520728501a6efa338af52615fd79b8e8d036461be",
     "media/layouts/town/RULES.DAT.adm": "da57544eeecbc6dad414c4eadda9530ce69623bac19cbd889d369dddd0086a7d"
   },
-  "boundary": "Fixed single-room menu selection from committed OTC gameplay stratum. Source camera/player markers; static room geometry only. Caves RANDOMIZED and child-Group Weight/Random Chance effects remain unsupported. No native save/depth/RNG ABI, initial selection, full lifecycle or graphics parity."
+  "boundary": "Committed OTC gameplay stratum -> menu room/camera/player. Fixed themes and Caves single-room scene-output invariant; no original RNG/catalog/depth/save ABI. Weight/Random Chance decorations, initial selection, full lifecycle and graphics parity remain open.",
+  "extensions": [
+    "research/menu-caves.md"
+  ]
 }

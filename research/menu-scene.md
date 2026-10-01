@@ -77,7 +77,8 @@ using 10 meshes. New builder, test, and renderer compiled with
 
 The fixed-theme saved-return extension is documented in [menu-themes.md](menu-themes.md):
 committed Save & Menu selects the checkpoint's gameplay stratum MAINMENURULES;
-initial Main still defaults to Town, Caves/random decorations remain unsupported.
+initial Main still defaults to Town; [Caves](menu-caves.md) now uses its single-room
+output invariant, while random decorations/catalog state remain unsupported.
 
 Menu player Create/alive OTC IDLE is now connected in the bounded
 [preview slice](menu-player-preview.md). Open: initial saved theme selection, random themes/decorations, initial
