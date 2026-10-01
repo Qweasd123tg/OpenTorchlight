@@ -1517,13 +1517,15 @@
         "0x9df820"
       ],
       "status": "partial",
-      "boundary": "Create/alive OTC selected actor uses resource placement/toward, exact OGRE1.6.5 Quaternion subset, gameplay mesh/base wardrobe/steady IDLE and equipped-weapon hand tag through Application/GLES. Group editor GUID is distinguished from real layout-root scene parent. Original ABI/player/pet/pending flags/unwind, initial/dead/retired/menu themes,  equipped armor and initial animation blending/events remain open. No whole-function equivalence. Committed Save & Menu now refreshes the actor via the shared Load consumer; core/resource contract and code wiring only for this extension.",
+      "boundary": "Create/alive OTC selected actor uses resource placement/toward, exact OGRE1.6.5 Quaternion subset, gameplay mesh/base wardrobe/steady IDLE and equipped-weapon hand tag through Application/GLES. Group editor GUID is distinguished from real layout-root scene parent. Original ABI/player/pet/pending flags/unwind, initial/dead/retired/menu themes,  equipped armor and initial animation blending/events remain open. No whole-function equivalence. Committed Save & Menu now refreshes the actor via the shared Load consumer; core/resource contract and code wiring only for this extension. Separate creation-class cache now distinguishes Load-row filename/GUID assignment from committed loadCharacter clearing: same cached Create retains model/equipment/IDLE clock; Load/queued refresh still replace. Native string/pending/unwind and new UI/frame transition comparison remain open.",
       "evidence": [
         "research/menu-player-preview.md",
         "research/menu-player-inputs.json",
         "research/disassembly/menu-player-preview.asm",
         "research/disassembly/ogre165-menu-math.asm",
-        "research/menu-player-return.md"
+        "research/menu-player-return.md",
+        "research/menu-player-class-cache.md",
+        "research/disassembly/menu-class-cache.asm"
       ],
       "implementation": [
         "src/menu_scene.cpp",
@@ -1541,14 +1543,14 @@
         "tests/scenarios/menu-player.scenario",
         "tests/character_load_test.py"
       ],
-      "comparison": "Full small-body and bounded large-body ASM plus original resources and unchanged pinned OGRE source review; CPU three-class animation/placement, native selection consumer and 34-check common Application/GL replacement/retention/no-save-write regression. Original process/OS/frame comparison not performed."
+      "comparison": "Full small-body and bounded large-body ASM plus original resources and unchanged pinned OGRE source review; CPU three-class animation/placement, native selection consumer and 34-check common Application/GL replacement/retention/no-save-write regression. Original process/OS/frame comparison not performed. Source cached-class equal branch and loadCharacter empty-string writer compared with Application separate cache writers/retained renderer/model/time ownership; code review plus existing CPU contracts, no new UI/frame run."
     },
     {
       "addresses": [
         "0x58fa90"
       ],
       "status": "partial",
-      "boundary": "Successful portable Save & Menu queues exact committed OTC identity through SaveStore read -> fixed menu-theme selection from checkpoint.current -> actor restore -> model/GLES new camera consumer. Ordinary Load selection retains current theme. Full original state machine, initial saved selection, native objects/SVB/depth/RNG, General random pools/decor, pet/dead/retired, cleanup/unwind and runtime-error recovery remain open; code/CPU comparison only, no new UI/frame run. Caves is now supported by its proven one-room output invariant; native 10-layout catalog/seed/RNG side effects remain open.",
+      "boundary": "Successful portable Save & Menu queues exact committed OTC identity through SaveStore read -> fixed menu-theme selection from checkpoint.current -> actor restore -> model/GLES new camera consumer. Ordinary Load selection retains current theme. Full original state machine, initial saved selection, native objects/SVB/depth/RNG, General random pools/decor, pet/dead/retired, cleanup/unwind and runtime-error recovery remain open; code/CPU comparison only, no new UI/frame run. Caves is now supported by its proven one-room output invariant; native 10-layout catalog/seed/RNG side effects remain open. Separate creation-class cache now distinguishes Load-row filename/GUID assignment from committed loadCharacter clearing: same cached Create retains model/equipment/IDLE clock; Load/queued refresh still replace. Native string/pending/unwind and new UI/frame transition comparison remain open.",
       "evidence": [
         "research/menu-player-return.md",
         "research/disassembly/menu-player-return.asm",
@@ -1556,7 +1558,9 @@
         "research/menu-theme-inputs.json",
         "research/disassembly/menu-themes.asm",
         "research/menu-caves.md",
-        "research/disassembly/menu-caves.asm"
+        "research/disassembly/menu-caves.asm",
+        "research/menu-player-class-cache.md",
+        "research/disassembly/menu-class-cache.asm"
       ],
       "implementation": [
         "src/application.cpp",
@@ -1571,7 +1575,7 @@
         "tests/menu_scene_test.cpp",
         "tests/save_checkpoint_test.cpp"
       ],
-      "comparison": "Instruction-aligned original state-change/unload/save-reload/player placement branches compared with portable save-success guard and actual read/restore/model callers. Three resource classes exercise read-only/unequip/re-equip/restored alternate/dead visual consumers; nearby save/player/equipment contracts pass. Not full-function or UI/frame parity. Caves source branch/field review and 14 Main first/last theme cases; four portable-generator seeds confirm constant room output only."
+      "comparison": "Instruction-aligned original state-change/unload/save-reload/player placement branches compared with portable save-success guard and actual read/restore/model callers. Three resource classes exercise read-only/unequip/re-equip/restored alternate/dead visual consumers; nearby save/player/equipment contracts pass. Not full-function or UI/frame parity. Caves source branch/field review and 14 Main first/last theme cases; four portable-generator seeds confirm constant room output only. Source cached-class equal branch and loadCharacter empty-string writer compared with Application separate cache writers/retained renderer/model/time ownership; code review plus existing CPU contracts, no new UI/frame run."
     },
     {
       "addresses": [

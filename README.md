@@ -105,6 +105,8 @@ OGRE 1.6.5 подключена из исходников. Исправлен л
 редакторский Group pivot не является графическим parent.
 После [Save & Menu](research/menu-player-return.md) preview восстанавливается
 из записанного checkpoint, включая смену или снятие оружия.
+[Creation-class cache](research/menu-player-class-cache.md) сохраняет actor и IDLE
+при Create того же cached класса после Load; committed reload очищает cache.
 [Фиксированная тема](research/menu-themes.md) после Save & Menu выбирается по
 этажу этого checkpoint: Town, Mines, Crypt, Sunken Temple, Lava, Fortress,
 Palace и Caves. Камера и позиция героя берутся из layout новой темы.

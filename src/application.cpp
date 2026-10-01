@@ -492,6 +492,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::unique_ptr<torchlight::GlesSceneRenderer> menu_renderer;
         bool menu_scene_attempted = false;
         std::string menu_player_key;
+        // Source client+0x1a8 is independent of the rendered player's class:
+        // setCreationClass/applyCharacterState write it, loadCharacter clears
+        // it. Base-class GUID is the bounded portable filename adapter.
+        std::optional<std::int64_t> menu_creation_class;
         double menu_player_started = 0;
         std::optional<torchlight::SaveSlotInfo> menu_player_refresh;
         const auto create_menu_renderer = [&](const torchlight::FixedSceneGeometry& geometry,
@@ -528,39 +532,52 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         const auto chosen = std::find_if(players.begin(), players.end(),
                             [&](const auto& player) { return player.guid == guid; });
                         if (chosen == players.end()) throw DesktopError("menu preview class is unavailable");
-                        auto prototype = *chosen;
-                        if (save) {
-                            const auto checkpoint = saves.read(save->slot, resource_identity);
-                            if (checkpoint.class_guid != chosen->guid || checkpoint.revision != save->revision)
-                                throw DesktopError("menu preview save changed since list refresh");
-                            if (menu_player_refresh) {
-                                // setGameState @0x5907f3 loads the saved dungeon's
-                                // menu level. Continue selection only changes
-                                // the actor. Use the committed OTC floor adapter.
-                                auto scene = torchlight::build_saved_menu_scene(archive, levelsets,
-                                    checkpoint.current, options.settings.netbook_mode);
-                                menu_renderer.reset(); menu_player.reset();
-                                menu_scene = std::move(scene);
-                                window.notice("menu_theme_selected", menu_scene->level.rules.source_path);
-                                if (menu_scene->omitted_random_room_pieces)
-                                    window.notice("menu_random_props_unsupported",
-                                        std::to_string(menu_scene->omitted_random_room_pieces));
+                        if (!save && menu_player && menu_creation_class == guid) {
+                            // setCreationClass @0x582e28..0x582e35 goes straight
+                            // to pending-state write for the same cached class.
+                            // Retain equipment, renderer and the current IDLE
+                            // clock; a change of UI page is not a new character.
+                            window.notice("menu_player_retained", key);
+                        } else {
+                            auto prototype = *chosen;
+                            if (save) {
+                                const auto checkpoint = saves.read(save->slot, resource_identity);
+                                if (checkpoint.class_guid != chosen->guid || checkpoint.revision != save->revision)
+                                    throw DesktopError("menu preview save changed since list refresh");
+                                if (menu_player_refresh) {
+                                    // setGameState @0x5907f3 loads the saved dungeon's
+                                    // menu level. Continue selection only changes
+                                    // the actor. Use the committed OTC floor adapter.
+                                    auto scene = torchlight::build_saved_menu_scene(archive, levelsets,
+                                        checkpoint.current, options.settings.netbook_mode);
+                                    menu_renderer.reset(); menu_player.reset();
+                                    menu_scene = std::move(scene);
+                                    window.notice("menu_theme_selected", menu_scene->level.rules.source_path);
+                                    if (menu_scene->omitted_random_room_pieces)
+                                        window.notice("menu_random_props_unsupported",
+                                            std::to_string(menu_scene->omitted_random_room_pieces));
+                                }
+                                const auto restored = torchlight::CheckpointAccess::restore_player(*chosen,
+                                    checkpoint.player, checkpoint.seed, &unit_type_hierarchy);
+                                const auto visual = torchlight::menu_player_visual(*chosen, restored);
+                                if (!visual) throw DesktopError("saved player is not alive");
+                                prototype = *visual;
                             }
-                            const auto restored = torchlight::CheckpointAccess::restore_player(*chosen,
-                                checkpoint.player, checkpoint.seed, &unit_type_hierarchy);
-                            const auto visual = torchlight::menu_player_visual(*chosen, restored);
-                            if (!visual) throw DesktopError("saved player is not alive");
-                            prototype = *visual;
+                            // loadCharacter @0x581e05 clears source+0x1a8 on the
+                            // committed reload path. Load-row applyCharacterState
+                            // instead stores the selected resource class @0x5844c1.
+                            if (menu_player_refresh) menu_creation_class.reset();
+                            else menu_creation_class = guid;
+                            auto candidate = std::make_unique<torchlight::MenuPlayerPreview>(
+                                torchlight::build_menu_player_preview(archive, *menu_scene, prototype));
+                            auto renderer = create_menu_renderer(candidate->geometry, menu_scene->camera);
+                            // Renderer retains source-geometry pointers. Destroy it
+                            // before releasing its owning model, on every path.
+                            menu_renderer.reset(); menu_player = std::move(candidate);
+                            menu_renderer = std::move(renderer);
+                            menu_player_started = frontend_clock;
+                            window.notice("menu_player_selected", key);
                         }
-                        auto candidate = std::make_unique<torchlight::MenuPlayerPreview>(
-                            torchlight::build_menu_player_preview(archive, *menu_scene, prototype));
-                        auto renderer = create_menu_renderer(candidate->geometry, menu_scene->camera);
-                        // Renderer retains source-geometry pointers. Destroy it
-                        // before releasing its owning model, on every path.
-                        menu_renderer.reset(); menu_player = std::move(candidate);
-                        menu_renderer = std::move(renderer);
-                        menu_player_started = frontend_clock;
-                        window.notice("menu_player_selected", key);
                     } catch (const std::exception& error) {
                         menu_renderer.reset(); menu_player.reset();
                         window.notice("menu_player_unavailable", error.what());

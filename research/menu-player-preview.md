@@ -17,7 +17,9 @@ CLevel или оригинального save/runtime ABI. Входы и хеш�
 `+0x140` (`0x582de9`), применяет toward `+0x164` (`0x582dfd`) и возвращает
 GameUI player (`0x582e0d`). Pending int32 `+0x1038=3` пишется и при том же
 классе (`0x582e12`). Portable GUID selection не заменяет оригинальную строку
-класса/ResourceManager ABI; тот же класс сохраняет текущую preview модель.
+класса/ResourceManager ABI; тот же cached class сохраняет текущую preview модель.
+[menu-player-class-cache.md](menu-player-class-cache.md) исправляет отдельный
+cache: Load assignment отличается от committed reload clearing.
 
 `applyCharacterState @0x584460` требует save и существующего player, сохраняет
 filename в `+0x1a8`, заменяет player с createPlayer(filename,true), virtual

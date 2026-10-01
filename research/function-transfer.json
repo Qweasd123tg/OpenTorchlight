@@ -3243,10 +3243,10 @@
           "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md; research/menu-player-class-cache.md; research/disassembly/menu-class-cache.asm",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
-      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution. Separate creation-class writer/reset/same-cache model-and-clock retention source/consumer review; existing CPU contracts only, no new UI/frame transition."
     },
     "0x00584460": {
       "symbol": "CGameClient::applyCharacterState(CCharacterSaveState*, std::wstring&, CCharacterSaveState*)",
@@ -3262,10 +3262,10 @@
           "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md; research/menu-player-class-cache.md; research/disassembly/menu-class-cache.asm",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
-      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+      "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution. Separate creation-class writer/reset/same-cache model-and-clock retention source/consumer review; existing CPU contracts only, no new UI/frame transition."
     },
     "0x008126e0": {
       "symbol": "CCharacter::setToward(Ogre::Vector3 const&)",
@@ -3357,10 +3357,10 @@
           "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, General random pools/catalog/RNG/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
         ]
       },
-      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm",
+      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm; research/menu-player-class-cache.md; research/disassembly/menu-class-cache.asm",
       "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp; src/menu_scene.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp; tests/save_checkpoint_test.cpp",
-      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open. Separate creation-class writer/reset/same-cache model-and-clock retention source/consumer review; existing CPU contracts only, no new UI/frame transition."
     },
     "0x009340a0": {
       "symbol": "CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",
