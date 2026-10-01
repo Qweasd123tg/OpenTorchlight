@@ -103,6 +103,8 @@ Combobox имеют реальные consumers. Доступные разреш�
 игровую модель, idle, wardrobe layers и выбранное оружие. Неизменённая математика
 OGRE 1.6.5 подключена из исходников. Исправлен лишний сдвиг камеры/героя:
 редакторский Group pivot не является графическим parent.
+После [Save & Menu](research/menu-player-return.md) preview восстанавливается
+из записанного checkpoint, включая смену или снятие оружия.
 [Список персонажей и настройки](research/menu-production-state.md) получают
 runtime visibility, выбранное имя, highlights, prompt удаления и актуальные
 audio levels. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)

@@ -115,10 +115,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Save-dependent themes, preview objects, skybox/particles/water/light/projector passes and full level lifecycle."
+          "Save-dependent themes, initial/pet/dead/retired preview objects, skybox/particles/water/light/projector passes and full native level lifecycle. Alive actor refresh uses the separate documented OTC/visual slice."
         ]
       },
-      "evidence": "research/menu-scene.md",
+      "evidence": "research/menu-scene.md; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/application.cpp; src/gles_scene_renderer.cpp; src/linux_desktop_main.cpp",
       "tests": "tests/menu_scene_test.cpp",
       "comparison": "No-save resource route and world camera/projection numeric contracts; original not executed."
@@ -3240,10 +3240,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
@@ -3259,10 +3259,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
@@ -3278,10 +3278,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
@@ -3297,10 +3297,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
@@ -3316,10 +3316,10 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
@@ -3335,13 +3335,32 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending and gameplay-return refresh remain open."
+          "Only the documented menu placement/selection/steady-IDLE consumer slice is connected. Full original objects, field initialization and ABI, callbacks/pending/cleanup/unwind and all function branches remain outside this acceptance; SVB/pet/dead/armor/themes/blending remain open."
         ]
       },
-      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm",
+      "evidence": "research/menu-player-preview.md; research/disassembly/menu-player-preview.asm; research/disassembly/ogre165-menu-math.asm; research/menu-player-return.md",
       "implementation": "src/menu_scene.cpp; src/menu_player.cpp; include/torchlight/menu_player.hpp; src/frontend.cpp; include/torchlight/frontend.hpp; src/application.cpp; src/gles_scene_renderer.cpp",
       "tests": "tests/menu_scene_test.cpp; tests/cegui_creation_test.cpp; tests/application_scenario_probe.cpp; tests/scenarios/menu-player.scenario; tests/character_load_test.py",
       "comparison": "Addressed original-code/resource/pinned-library contract review and CPU/production GL regression of documented slice; not whole-function equivalence or original/OS/frame execution."
+    },
+    "0x0058fa90": {
+      "symbol": "CGameClient::setGameState(EGameState, EMenu)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": false
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Legacy flags describe committed Save & Menu -> OTC restore -> model refresh only. Whole original state/player/pet/save/level ownership, SVB, saved themes, dead/retired, cleanup/unwind and runtime-error recovery remain open; no new UI/frame/original-process comparison."
+        ]
+      },
+      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm",
+      "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp",
+      "tests": "tests/menu_scene_test.cpp; tests/save_checkpoint_test.cpp",
+      "comparison": "Addressed state0/unload/save-reload and placement ASM compared with real portable save-success/read/restore/model chain. CPU/resource visual consumer tests and adjacent save/equipment gate; not full-function equivalence."
     }
   }
 }

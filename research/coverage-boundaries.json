@@ -229,21 +229,28 @@
         "0x584b80"
       ],
       "status": "partial",
-      "boundary": "No-save Town MAINMENURULES route, fixed menu geometry and world camera markers are consumed by the desktop scene/UI overlay. Town is the current portable default even with .otc saves. Save-dependent themes, preview objects, lights/projectors/skybox/water/particles and full lifecycle remain open.",
+      "boundary": "No-save Town MAINMENURULES route, fixed menu geometry and world camera markers are consumed by the desktop scene/UI overlay. Town is the current portable default even with .otc saves. Save-dependent themes, initial/pet/dead preview objects, lights/projectors/skybox/water/particles and full lifecycle remain open. Create/alive OTC actor placement and committed Save & Menu refresh are connected; native player/level ABI and saved themes stay partial.",
       "evidence": [
         "research/decompiled-core/game_client.c",
         "research/menu-scene.md",
-        "research/frontend-save-evidence.md"
+        "research/frontend-save-evidence.md",
+        "research/menu-player-return.md",
+        "research/disassembly/menu-player-return.asm"
       ],
       "implementation": [
         "src/menu_scene.cpp",
         "src/application.cpp",
         "src/linux_desktop_main.cpp",
         "src/gles_scene_renderer.cpp",
-        "src/gles_ui_renderer.cpp"
+        "src/gles_ui_renderer.cpp",
+        "src/menu_player.cpp",
+        "src/player.cpp",
+        "include/torchlight/menu_player.hpp",
+        "include/torchlight/player.hpp"
       ],
       "tests": [
-        "tests/menu_scene_test.cpp"
+        "tests/menu_scene_test.cpp",
+        "tests/save_checkpoint_test.cpp"
       ],
       "comparison": "Static original branch/site review and external resource/camera contracts; no rendered parity claimed."
     },
@@ -1499,12 +1506,13 @@
         "0x9df820"
       ],
       "status": "partial",
-      "boundary": "Create/alive OTC selected actor uses resource placement/toward, exact OGRE1.6.5 Quaternion subset, gameplay mesh/base wardrobe/steady IDLE and equipped-weapon hand tag through Application/GLES. Group editor GUID is distinguished from real layout-root scene parent. Original ABI/player/pet/pending flags/unwind, initial/dead/retired/menu themes, gameplay-return preview refresh, equipped armor and initial animation blending/events remain open. No whole-function equivalence.",
+      "boundary": "Create/alive OTC selected actor uses resource placement/toward, exact OGRE1.6.5 Quaternion subset, gameplay mesh/base wardrobe/steady IDLE and equipped-weapon hand tag through Application/GLES. Group editor GUID is distinguished from real layout-root scene parent. Original ABI/player/pet/pending flags/unwind, initial/dead/retired/menu themes,  equipped armor and initial animation blending/events remain open. No whole-function equivalence. Committed Save & Menu now refreshes the actor via the shared Load consumer; core/resource contract and code wiring only for this extension.",
       "evidence": [
         "research/menu-player-preview.md",
         "research/menu-player-inputs.json",
         "research/disassembly/menu-player-preview.asm",
-        "research/disassembly/ogre165-menu-math.asm"
+        "research/disassembly/ogre165-menu-math.asm",
+        "research/menu-player-return.md"
       ],
       "implementation": [
         "src/menu_scene.cpp",
@@ -1523,6 +1531,43 @@
         "tests/character_load_test.py"
       ],
       "comparison": "Full small-body and bounded large-body ASM plus original resources and unchanged pinned OGRE source review; CPU three-class animation/placement, native selection consumer and 34-check common Application/GL replacement/retention/no-save-write regression. Original process/OS/frame comparison not performed."
+    },
+    {
+      "addresses": [
+        "0x58fa90"
+      ],
+      "status": "partial",
+      "boundary": "Successful portable Save & Menu queues exact committed OTC slot/class/revision/health through SaveStore read -> restore_player -> shared equipped-weapon visual -> menu model/GLES consumer. Whole original state machine, native objects, SVB, pet/dead/retired, saved themes, cleanup/unwind and runtime-error recovery remain open. This extension has code integration and CPU/resource comparison, no new UI/frame/original process run.",
+      "evidence": [
+        "research/menu-player-return.md",
+        "research/disassembly/menu-player-return.asm"
+      ],
+      "implementation": [
+        "src/application.cpp",
+        "src/menu_player.cpp",
+        "src/player.cpp",
+        "include/torchlight/menu_player.hpp",
+        "include/torchlight/player.hpp"
+      ],
+      "tests": [
+        "tests/menu_scene_test.cpp",
+        "tests/save_checkpoint_test.cpp"
+      ],
+      "comparison": "Instruction-aligned original state-change/unload/save-reload/player placement branches compared with portable save-success guard and actual read/restore/model callers. Three resource classes exercise read-only/unequip/re-equip/restored alternate/dead visual consumers; nearby save/player/equipment contracts pass. Not full-function or UI/frame parity."
+    },
+    {
+      "addresses": [
+        "0x579b10"
+      ],
+      "status": "researched",
+      "boundary": "Reviewed player/pet removal, bool-controlled deletion and unconditional pointer clearing used to distinguish state-transition reload from existing-player menu branch. Full native unload lifecycle is not ported in this packet.",
+      "evidence": [
+        "research/menu-player-return.md",
+        "research/disassembly/menu-player-return.asm"
+      ],
+      "implementation": [],
+      "tests": [],
+      "comparison": ""
     }
   ],
   "port_systems": [

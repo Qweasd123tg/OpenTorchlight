@@ -1,5 +1,6 @@
 #include "torchlight/menu_scene.hpp"
 #include "torchlight/menu_player.hpp"
+#include "torchlight/checkpoint.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -136,6 +137,50 @@ void original_resources(const char* pak_path) {
         const auto unarmed_preview = build_menu_player_preview(archive, menu, unarmed);
         require(!unarmed_preview.weapon_instance && !sample_menu_player_preview(unarmed_preview, 0).weapon,
                 "saved unequipped weapon was replaced by starting equipment");
+
+        PlayerSession session(prototype, 77);
+        const auto before = CheckpointAccess::capture(session);
+        const auto initial_visual = menu_player_visual(prototype, session);
+        const auto after = CheckpointAccess::capture(session);
+        require(initial_visual && initial_visual->starting_weapon &&
+                before.combat_random == after.combat_random && before.health == after.health &&
+                before.gold == after.gold && before.inventory.slots == after.inventory.slots,
+                "preview snapshot consumed live simulation state/RNG");
+        const auto weapon_id = session.weapon()->id;
+        require(session.unequip(weapon_id) == InventoryChange::changed, "fixture weapon did not unequip");
+        const auto current = menu_player_visual(prototype, session);
+        require(current && !current->starting_weapon && initial_visual->starting_weapon,
+                "current preview retained starting weapon or mutated earlier snapshot");
+        const auto returned = build_menu_player_preview(archive, menu, *current);
+        require(returned.geometry.instances.size() == menu.geometry.instances.size() + 1 &&
+                !returned.weapon_instance && !sample_menu_player_preview(returned, 0).weapon,
+                "return-to-menu current snapshot has a stale weapon consumer");
+        require(session.equip(weapon_id) == InventoryChange::changed, "fixture weapon did not re-equip");
+        const auto equipped = menu_player_visual(prototype, session);
+        require(equipped && equipped->starting_weapon &&
+                equipped->starting_weapon->guid == initial_visual->starting_weapon->guid,
+                "re-equipped live instance has no preview producer");
+
+        // Real rolled inventory from another supported resource class, restored
+        // through the same OTC DTO consumer as Load (no fabricated weapon mesh).
+        const auto donor_index = static_cast<std::size_t>(&prototype - players.data() + 1) % players.size();
+        PlayerSession donor(players[donor_index], 91);
+        auto state = CheckpointAccess::capture(session);
+        state.inventory = CheckpointAccess::capture(donor).inventory;
+        const auto restored = CheckpointAccess::restore_player(prototype, state, 77);
+        const auto changed = menu_player_visual(prototype, restored);
+        require(changed && changed->starting_weapon &&
+                changed->starting_weapon->guid == donor.weapon()->weapon->prototype.guid &&
+                changed->starting_weapon->guid != prototype.starting_weapon->guid,
+                "restored preview replaced equipped item with class starting equipment");
+        const auto changed_preview = build_menu_player_preview(archive, menu, *changed);
+        require(changed_preview.weapon_instance &&
+                changed_preview.geometry.meshes[changed_preview.geometry.instances[*changed_preview.weapon_instance].mesh_index].guid ==
+                    donor.weapon()->resource_guid && sample_menu_player_preview(changed_preview, 0).weapon,
+                "changed equipped instance did not reach actual mesh/hand consumer");
+        state.health = 0;
+        const auto dead = CheckpointAccess::restore_player(prototype, state, 77);
+        require(!menu_player_visual(prototype, dead), "dead current player was replaced by a living menu actor");
     }
     std::cout << "Town menu: " << menu.geometry.instances.size() << " instances, "
               << menu.geometry.meshes.size() << " meshes; camera=" << position[0] << ','
@@ -151,7 +196,7 @@ int main(int argc, char** argv) {
         }
         authored_contract();
         if (argc == 3) original_resources(argv[2]);
-        std::cout << "PASS: menu scene data/camera contract (no graphics or original execution)\n";
+        std::cout << "PASS: menu scene data/camera/actor contract (no graphics or original execution)\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "FAIL: " << error.what() << '\n';

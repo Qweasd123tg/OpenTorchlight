@@ -18,6 +18,8 @@
 
 namespace torchlight {
 
+class PlayerInventory;
+
 struct PlayerPrototype {
     std::shared_ptr<const ProgressionRules> progression_rules;
     std::int64_t guid = 0;
@@ -61,6 +63,11 @@ struct PlayerPrototype {
 [[nodiscard]] std::vector<PlayerPrototype> load_playable_players(
     const PakArchive& archive, const MasterResourceIndex& resources,
     UnitDefinitionLoader& definitions);
+
+// Existing gameplay visual boundary: base wardrobe layers plus the actual
+// equipped weapon instance. Never restore starting equipment for an empty slot.
+[[nodiscard]] PlayerPrototype player_visual_prototype(
+    const PlayerPrototype&, const PlayerInventory&);
 
 void append_player_geometry(const PakArchive& archive, const PlayerPrototype& player,
                             const std::array<float, 3>& position,

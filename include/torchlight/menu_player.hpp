@@ -6,6 +6,13 @@
 
 namespace torchlight {
 
+class PlayerSession;
+
+// Read-only current-player snapshot for alive Load/return-to-menu previews.
+// Dead models remain unsupported; no living replacement is supplied.
+[[nodiscard]] std::optional<PlayerPrototype> menu_player_visual(
+    const PlayerPrototype&, const PlayerSession&);
+
 // Connected menu actor slice. Shares the gameplay mesh, wardrobe-layer,
 // skeleton sampler and hand-tag consumers; not a second character simulation.
 struct MenuPlayerPreview {

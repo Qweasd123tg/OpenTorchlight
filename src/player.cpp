@@ -1,6 +1,7 @@
 #include "torchlight/player.hpp"
 
 #include "torchlight/ogre_mesh.hpp"
+#include "torchlight/inventory.hpp"
 #include "torchlight/stat_graph.hpp"
 
 #include <algorithm>
@@ -317,6 +318,14 @@ std::vector<PlayerPrototype> load_playable_players(const PakArchive& archive,
         }
         result.push_back(std::move(player));
     }
+    return result;
+}
+
+PlayerPrototype player_visual_prototype(const PlayerPrototype& player, const PlayerInventory& inventory) {
+    auto result = player;
+    result.starting_weapon.reset();
+    if (const auto* item = inventory.equipped(InventorySlot::weapon); item && item->weapon)
+        result.starting_weapon = item->weapon->prototype;
     return result;
 }
 

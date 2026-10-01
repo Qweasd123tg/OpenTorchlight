@@ -493,6 +493,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         bool menu_scene_attempted = false;
         std::string menu_player_key;
         double menu_player_started = 0;
+        std::optional<torchlight::SaveSlotInfo> menu_player_refresh;
         const auto create_menu_renderer = [&](const torchlight::FixedSceneGeometry& geometry) {
             auto renderer = std::make_unique<torchlight::GlesSceneRenderer>(geometry, archive, materials);
             const auto& camera = menu_scene->camera;
@@ -513,17 +514,17 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             }
             if (menu_scene) {
                 const auto class_guid = frontend.preview_class();
-                const auto* save = frontend.preview_save();
-                const auto key = class_guid ? "create:" + std::to_string(*class_guid)
+                const auto* save = menu_player_refresh ? &*menu_player_refresh : frontend.preview_save();
+                const auto key = !menu_player_refresh && class_guid ? "create:" + std::to_string(*class_guid)
                     : save ? "load:" + save->slot + ":" + std::to_string(save->revision) : std::string{};
                 // Original menu actors survive Back/Settings: those actions do
                 // not call removeCharacter. Recreate only on a new selection.
-                if (!key.empty() && key != menu_player_key) {
+                if (menu_player_refresh || (!key.empty() && key != menu_player_key)) {
                     menu_player_key = key; // Cache failures too; no I/O retry each frame.
                     try {
                         if (save && (!save->loadable() || save->health <= 0))
                             throw DesktopError("dead/unreadable saved preview is outside the alive actor slice");
-                        const auto guid = class_guid.value_or(save ? save->class_guid : 0);
+                        const auto guid = save ? save->class_guid : class_guid.value_or(0);
                         const auto chosen = std::find_if(players.begin(), players.end(),
                             [&](const auto& player) { return player.guid == guid; });
                         if (chosen == players.end()) throw DesktopError("menu preview class is unavailable");
@@ -534,9 +535,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 throw DesktopError("menu preview save changed since list refresh");
                             const auto restored = torchlight::CheckpointAccess::restore_player(*chosen,
                                 checkpoint.player, checkpoint.seed, &unit_type_hierarchy);
-                            prototype.starting_weapon.reset();
-                            if (const auto* item = restored.inventory().equipped(torchlight::InventorySlot::weapon);
-                                item && item->weapon) prototype.starting_weapon = item->weapon->prototype;
+                            const auto visual = torchlight::menu_player_visual(*chosen, restored);
+                            if (!visual) throw DesktopError("saved player is not alive");
+                            prototype = *visual;
                         }
                         auto candidate = std::make_unique<torchlight::MenuPlayerPreview>(
                             torchlight::build_menu_player_preview(archive, *menu_scene, prototype));
@@ -556,6 +557,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                 }
+                menu_player_refresh.reset();
                 if (menu_player && menu_renderer) {
                     const float time = static_cast<float>(std::fmod(frontend_clock - menu_player_started,
                                                                    menu_player->idle.duration));
@@ -655,11 +657,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::map<std::string, torchlight::MissileTemplate> missile_templates;
         if (direct_preview) frontend.entered_game();
         const auto visual_prototype = [&](const torchlight::PlayerInventory& inventory) {
-            auto prototype = selected_player;
-            prototype.starting_weapon.reset();
-            if (const auto* item = inventory.equipped(torchlight::InventorySlot::weapon);
-                item && item->weapon) prototype.starting_weapon = item->weapon->prototype;
-            return prototype;
+            return torchlight::player_visual_prototype(selected_player, inventory);
         };
         while (app_running) {
             if (!gameplay_active) {
@@ -1218,6 +1216,18 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                             try {
                                 checkpoint_now(); frontend.saved(request->command);
                                 saved_for_exit = request->command == torchlight::FrontendCommand::save_and_quit;
+                                if (request->command == torchlight::FrontendCommand::save_and_menu) {
+                                    // original-code: setGameState @0x58fa90 unloads the old
+                                    // player then reloads the chosen save (0x5907a7..0x5907b7).
+                                    // Queue the committed OTC identity through the same read/
+                                    // restore/model consumer as Load, after successful Save & Menu.
+                                    torchlight::SaveSlotInfo refresh;
+                                    refresh.slot = campaign.slot;
+                                    refresh.class_guid = campaign.class_guid;
+                                    refresh.revision = campaign.revision;
+                                    refresh.health = campaign.player.health;
+                                    menu_player_refresh = std::move(refresh);
+                                }
                             } catch (const std::exception &e) {
                                 frontend.error(std::string("SAVE FAILED: ") + e.what());
                             }

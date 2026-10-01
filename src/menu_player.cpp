@@ -1,10 +1,17 @@
 #include "torchlight/menu_player.hpp"
+#include "torchlight/player_session.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
 namespace torchlight {
+
+std::optional<PlayerPrototype> menu_player_visual(const PlayerPrototype& prototype,
+                                                 const PlayerSession& session) {
+    if (!session.health().alive()) return std::nullopt;
+    return player_visual_prototype(prototype, session.inventory());
+}
 
 MenuPlayerPreview build_menu_player_preview(const PakArchive& archive,
                                            const MenuScene& scene,

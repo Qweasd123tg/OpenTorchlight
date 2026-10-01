@@ -132,6 +132,10 @@ checksums повторно проверены: **17/17**, source edits отсу�
 
 Остаток: SVB/pet/mod/dead/retired, equipped armor appearance (сейчас те же base
 wardrobe layers, что в gameplay), saved themes и initial actor на Main до выбора,
-синхронизация menu actor с gameplay изменениями при возврате в Main, initial
+полный native state lifecycle и initial
 animation blending/events/global RNG, shader/light/particles/skybox и полные
 original ownership/pending flags/unwind. Все большие функции остаются partial.
+
+Продолжение 2026-10-01: [Save & Menu refresh](menu-player-return.md) подключает
+committed OTC slot/revision к тому же restored-player model consumer, что Load.
+Оружие после возврата обновляется; новые UI/frame checks в этом проходе не выполнялись.
