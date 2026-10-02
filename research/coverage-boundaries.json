@@ -144,8 +144,7 @@
         "0xb1b6f0",
         "0xb102a0",
         "0xb17380",
-        "0xc53b10",
-        "0xa828f0"
+        "0xc53b10"
       ],
       "status": "researched",
       "boundary": "Full bodies inspected for the main-menu dependency packet. Model flag, container creation, animation/tag positioning, deferred close, ownership and state request fields recorded; no full portable implementation claimed.",
@@ -1231,15 +1230,11 @@
         "0xb34250",
         "0xb34270",
         "0xb60ee0",
-        "0xb60f00",
         "0xb77590",
-        "0xb775b0",
         "0xba5190",
         "0xba51b0",
         "0xbcca80",
-        "0xbccaa0",
         "0xbee2c0",
-        "0xbee2e0",
         "0xc04210",
         "0xc04230",
         "0xc187f0",
@@ -1897,6 +1892,68 @@
         "tests/auto_gold_test.cpp"
       ],
       "comparison": "6006 unchanged whole autoPickupGold/alive body executions with explicit ISA/getPosition/getItem adapters vs production selector; real resource-backed owned gold collection. Original visibility provider and frame comparison are excluded."
+    },
+    {
+      "addresses": [
+        "0x00b60ed0",
+        "0x00b60f00",
+        "0x00b77580",
+        "0x00b775b0",
+        "0x00bcca70",
+        "0x00bccaa0",
+        "0x00bee2b0",
+        "0x00bee2e0"
+      ],
+      "status": "closed",
+      "boundary": "Complete8 owning panel isRight/openPartial query bodies in initialized bool0/1 domain; ordinary open()/HI, setters, class lifecycle remain separate partial functions.",
+      "evidence": [
+        "research/ui-panel-query-functions.md",
+        "research/ui-panel-query-functions.json"
+      ],
+      "implementation": [
+        "src/panel_open.cpp",
+        "src/inventory_menu.cpp",
+        "src/ui_pause.cpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/ui_pause_test.cpp",
+        "tests/ui_pause_probe.cpp",
+        "tests/compare_ui_pause.py"
+      ],
+      "comparison": "1536cases,14unchanged bodies including all8queries; source field/role/controller consumers reviewed; no GUI or original constructor runs."
+    },
+    {
+      "addresses": [
+        "0x00a828f0",
+        "0x00a82900",
+        "0x00a84d30",
+        "0x00c2b9c0",
+        "0x00c33490"
+      ],
+      "status": "closed",
+      "boundary": "Complete5 owning scalar UI writer/query functions generated from accepted raw pcode, including3-function approved tail closure; reviewed field/ABI/owner domains. Native client timing, SVB/object producers remain separate partial functions.",
+      "evidence": [
+        "research/automatic-function-transfer.md",
+        "research/main-menu-save-selection.md",
+        "research/disassembly/lifted-ui-owners.asm"
+      ],
+      "implementation": [
+        "tools/lift_pcode.py",
+        "include/torchlight/pcode_runtime.hpp",
+        "cmake/LiftedCode.cmake",
+        "src/ui_game_state.cpp",
+        "src/save_selection.cpp",
+        "src/frontend.cpp"
+      ],
+      "tests": [
+        "tests/pcode_lifter_test.py",
+        "tests/compare_ui_game_state.py",
+        "tests/compare_save_selection.py",
+        "tests/ui_game_state_test.cpp",
+        "tests/save_selection_test.cpp"
+      ],
+      "comparison": "2112full-buffer writer cases and2437query cases against5 unchanged complete original bodies;21compilerchecks; accepted instruction/full symbol hashes rechecked; no game/GUI/constructor runs."
     }
   ],
   "port_systems": [

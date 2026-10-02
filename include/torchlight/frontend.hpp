@@ -1,4 +1,5 @@
 #pragma once
+#include "torchlight/ui_game_state.hpp"
 #include "torchlight/save_store.hpp"
 #include "torchlight/settings.hpp"
 #include "torchlight/ui_layout.hpp"
@@ -89,6 +90,13 @@ struct FrontendPaintItem {
 [[nodiscard]] UiLayoutState continue_menu_layout_state(
     const UiLayout& layout, std::size_t count, std::size_t scroll,
     std::size_t selected, bool delete_confirmation);
+// Original CMenuManager page domain: Main=0, CharacterCreate=1, Continue=3.
+// Settings is an overlay; playing/pause are game states, not manager entries.
+// The Main-entry selection write is exposed separately from UI input so its
+// source-derived state contract can be checked without a frame or click.
+[[nodiscard]] std::size_t main_entry_save_selection(
+    FrontendPage previous_page, const std::vector<SaveSlotInfo>& saves,
+    std::size_t selected, std::size_t scroll) noexcept;
 class Frontend : private MainMenuActions {
   public:
     Frontend(UiResources &resources, std::vector<FrontendClass> classes);
@@ -96,7 +104,10 @@ class Frontend : private MainMenuActions {
     [[nodiscard]] FrontendPage page() const noexcept {
         return page_;
     }
-    void set_saves(std::vector<SaveSlotInfo> saves);
+    // A successful Save & Menu supplies its committed slot explicitly; list
+    // sort order must not replace that character with another entry.
+    void set_saves(std::vector<SaveSlotInfo> saves,
+                   std::optional<std::string> selected_slot = std::nullopt);
     void show_main();
     void pause();
     void entered_game();
@@ -125,14 +136,22 @@ class Frontend : private MainMenuActions {
     [[nodiscard]] const std::string &character_name() const noexcept {
         return name_;
     }
-    // Read-only selection consumed by the menu level actor. Back/Settings do
-    // not select another actor; the level retains the most recent selection.
+    // Read-only creation selection consumed by the menu level actor. Settings
+    // is an overlay; a genuine Main entry can change the saved selection.
     [[nodiscard]] std::optional<std::int64_t> preview_class() const noexcept {
         if (page_ == FrontendPage::create && class_index_ < classes_.size()) return classes_[class_index_].guid;
         return std::nullopt;
     }
     [[nodiscard]] const SaveSlotInfo* preview_save() const noexcept {
-        return page_ == FrontendPage::load && save_index_ < saves_.size() ? &saves_[save_index_] : nullptr;
+        return (page_ == FrontendPage::load ||
+                (page_ == FrontendPage::main && main_preview_selection_changed_)) &&
+                       save_index_ < saves_.size() ? &saves_[save_index_] : nullptr;
+    }
+    [[nodiscard]] const SaveSlotInfo* selected_save() const noexcept {
+        return save_index_ < saves_.size() ? &saves_[save_index_] : nullptr;
+    }
+    [[nodiscard]] const SaveSlotInfo* continue_save() const noexcept {
+        return selected_continue_save(saves_, save_index_);
     }
     [[nodiscard]] std::size_t frame_build_count() const noexcept { return frame_build_count_; }
 
@@ -147,6 +166,7 @@ class Frontend : private MainMenuActions {
     FrontendPage page_ = FrontendPage::main;
     std::string name_ = "Hero", status_;
     std::size_t class_index_ = 0, save_index_ = 0, scroll_ = 0, focus_ = 0;
+    bool main_preview_selection_changed_ = false;
     std::optional<std::size_t> pending_delete_;
     std::optional<std::size_t> remove_selection_;
     bool show_credits_ = false, show_credits_b_ = false;
@@ -201,6 +221,7 @@ class Frontend : private MainMenuActions {
     FrontendPage settings_return_ = FrontendPage::main;
     void leave_settings();
     std::optional<FrontendRequest> request_;
+    UiGameStateRequest game_state_request_;
     void activate(const std::string &id, std::optional<UiLayoutFunction> function = std::nullopt);
     bool main_can_load() const override;
     void main_request_state(int game_state, int menu) override;

@@ -99,10 +99,11 @@ room/camera/player Groups этих ограничений нет.
 
 Уже подключённая цепочка save_and_menu после успешного SaveStore::write ставит
 owned slot/class/committed revision/health. Следующий draw_frontend читает этот
-checkpoint, проверяет class/revision, затем **только для queued return** вызывает
-build_saved_menu_scene(checkpoint.current). Ordinary Load selection использует
-тот же actor restore, сохраняя текущий menu level. Initial Main продолжает
-Town: политика выбора стартового сохранения остаётся открытой.
+checkpoint, проверяет class/revision и вызывает
+build_saved_menu_scene(checkpoint.current). Эта же цепочка теперь используется
+для начального выбранного OTC сохранения: [main-menu-save-selection.md](main-menu-save-selection.md).
+Ordinary Load selection использует тот же actor restore, сохраняя текущий menu
+level. No-save initial Main выбирает Town; native SVB selection остаётся открытой.
 
 Consumers: selected rules -> expanded layout -> static room geometry; camera
 vectors -> GLES set_camera_pose; player spawn/toward -> model placement;
@@ -133,6 +134,6 @@ save checkpoint, original players/equipment проходят вместе с men
 UI-клики, покадровые/сквозные сценарии и оригинальный процесс в этом проходе
 **не запускались**. Статическое сравнение цепочки и CPU/resource проверки
 не являются frame parity. Открыты Caves/random pools, RNG-зависимый декор,
-initial saved selection, pet/dead/retired appearance, armor, skybox/particles/
+native initial saved lifecycle, pet/dead/retired appearance, armor, skybox/particles/
 water/lights/projectors, оригинальный save/state/resource ownership и unwind,
 full OGRE renderer и производительность. Whole original functions partial.

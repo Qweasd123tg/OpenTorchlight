@@ -1,10 +1,18 @@
 # Panel open queries: `open()` / `openPartial()` family (20 functions)
 
 ELF SHA-256 `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
-Status: analyzed (machine code) + ported; wired per member (only panels with
+Historical packet: analyzed (machine code) + ported; wired per member (only panels with
 a port instance); compared=false (equivalence is by construction, no
 independent differential). No code change in this packet: parity holds, proven
 below.
+
+Current acceptance: [ui-panel-query-functions.md](ui-panel-query-functions.md)
+records four complete `isRight` and four `openPartial` bodies, initialized LO
+fields and the production pause consumers. The 1536-case whole-body comparison
+supersedes the old `compared=false` claim for those eight getters only.
+Ordinary `open()` still needs HI and is not fully implemented by the port's
+LO-only `open()` accessor; the historical instant-settle argument below does
+not close that original function.
 
 ## 1. Machine semantics (all 20 verified by objdump, pattern-identical)
 
@@ -54,5 +62,6 @@ i.e. `return LO ? 1 : (HI ^ 1)`.
   (full-section objdump grep for `b60ee0/b60f00`: zero hits outside the
   definitions) — queries go through virtual slots, matching the toggle
   bodies that read menu state via `+0x20/+0x28` virtuals instead.
-- Constructor initial values of LO/HI unrecovered; the port resets via
-  explicit `set_open(false)` at level entry, so this is moot for the port.
+- LO=0 is now confirmed for Inventory/Merchant/Quest/Skill at constructor
+  stores `0xb607d5`, `0xb772ed`, `0xbcc717`, `0xbe3a17`; see the accepted
+  shared field map above. HI lifecycle and other family owners remain open.

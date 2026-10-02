@@ -1,0 +1,283 @@
+{
+  "kind": "ui-panel-query-owning-function-evidence",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "candidate_addresses": [
+    "0xb60ed0",
+    "0xb60f00",
+    "0xb77580",
+    "0xb775b0",
+    "0xbcca70",
+    "0xbccaa0",
+    "0xbee2b0",
+    "0xbee2e0"
+  ],
+  "members": [
+    {
+      "class": "CInventoryMenu",
+      "constant_right": true,
+      "field": {
+        "offset": "0x60",
+        "width_bytes": 1,
+        "semantic_type": "bool, valid initialized domain0/1",
+        "initial": 0,
+        "constructor": "0xb60770",
+        "initializer_store": "0xb607d5",
+        "setter_stores": [
+          "0xb4ec41",
+          "0xb4ec55",
+          "0xb4ee67"
+        ],
+        "name": "LO openPartial flag",
+        "reader": "0xb60f00",
+        "writer_values": {
+          "0xb4ec41": "0",
+          "0xb4ec55": "0",
+          "0xb4ee67": "bpl"
+        }
+      },
+      "functions": [
+        {
+          "address": "0xb60ed0",
+          "symbol": "CInventoryMenu::isRight()",
+          "size": 6,
+          "body_sha256": "2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67",
+          "body_hex": "b801000000c3",
+          "contract": "constant result only",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        },
+        {
+          "address": "0xb60f00",
+          "symbol": "CInventoryMenu::openPartial()",
+          "size": 5,
+          "body_sha256": "734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18",
+          "body_hex": "0fb64760c3",
+          "contract": "zero extend one initialized LO byte; no HI read",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        }
+      ],
+      "port_owner": "InventoryMenuState -> PanelOpenState::open_"
+    },
+    {
+      "class": "CMerchantMenu",
+      "constant_right": false,
+      "field": {
+        "offset": "0x60",
+        "width_bytes": 1,
+        "semantic_type": "bool, valid initialized domain0/1",
+        "initial": 0,
+        "constructor": "0xb772a0",
+        "initializer_store": "0xb772ed",
+        "setter_stores": [
+          "0xb6a24a",
+          "0xb6a265",
+          "0xb6a54d"
+        ],
+        "name": "LO openPartial flag",
+        "reader": "0xb775b0",
+        "writer_values": {
+          "0xb6a265": "0",
+          "0xb6a54d": "0",
+          "0xb6a24a": "bpl"
+        }
+      },
+      "functions": [
+        {
+          "address": "0xb77580",
+          "symbol": "CMerchantMenu::isRight()",
+          "size": 3,
+          "body_sha256": "251447ee91a9067dcd6ab96703133f617565974cd6c4819021760c4688c91abf",
+          "body_hex": "31c0c3",
+          "contract": "constant result only",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        },
+        {
+          "address": "0xb775b0",
+          "symbol": "CMerchantMenu::openPartial()",
+          "size": 5,
+          "body_sha256": "734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18",
+          "body_hex": "0fb64760c3",
+          "contract": "zero extend one initialized LO byte; no HI read",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        }
+      ],
+      "port_owner": "PanelOpenState::open_"
+    },
+    {
+      "class": "CQuestMenu",
+      "constant_right": true,
+      "field": {
+        "offset": "0x188",
+        "width_bytes": 1,
+        "semantic_type": "bool, valid initialized domain0/1",
+        "initial": 0,
+        "constructor": "0xbcc6d0",
+        "initializer_store": "0xbcc717",
+        "setter_stores": [
+          "0xbc257a"
+        ],
+        "name": "LO openPartial flag",
+        "reader": "0xbccaa0",
+        "writer_values": {
+          "0xbc257a": "bpl"
+        }
+      },
+      "functions": [
+        {
+          "address": "0xbcca70",
+          "symbol": "CQuestMenu::isRight()",
+          "size": 6,
+          "body_sha256": "2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67",
+          "body_hex": "b801000000c3",
+          "contract": "constant result only",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        },
+        {
+          "address": "0xbccaa0",
+          "symbol": "CQuestMenu::openPartial()",
+          "size": 8,
+          "body_sha256": "eb8b12ca13faf530e2e3cbad94a4a5e465d8dbad6b6958b6c873fc454cb3e4aa",
+          "body_hex": "0fb68788010000c3",
+          "contract": "zero extend one initialized LO byte; no HI read",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        }
+      ],
+      "port_owner": "PanelOpenState::open_"
+    },
+    {
+      "class": "CSkillMenu",
+      "constant_right": true,
+      "field": {
+        "offset": "0x38",
+        "width_bytes": 1,
+        "semantic_type": "bool, valid initialized domain0/1",
+        "initial": 0,
+        "constructor": "0xbe39e0",
+        "initializer_store": "0xbe3a17",
+        "setter_stores": [
+          "0xbe1157"
+        ],
+        "name": "LO openPartial flag",
+        "reader": "0xbee2e0",
+        "writer_values": {
+          "0xbe1157": "bpl"
+        }
+      },
+      "functions": [
+        {
+          "address": "0xbee2b0",
+          "symbol": "CSkillMenu::isRight()",
+          "size": 6,
+          "body_sha256": "2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67",
+          "body_hex": "b801000000c3",
+          "contract": "constant result only",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        },
+        {
+          "address": "0xbee2e0",
+          "symbol": "CSkillMenu::openPartial()",
+          "size": 5,
+          "body_sha256": "7240825eed947749516240e5672b828c35954c7121e25e01b439dc7c7831836b",
+          "body_hex": "0fb64738c3",
+          "contract": "zero extend one initialized LO byte; no HI read",
+          "branches": 0,
+          "calls": 0,
+          "writes": 0,
+          "cleanup": "none; no acquired resources",
+          "library_dependencies": []
+        }
+      ],
+      "port_owner": "PanelOpenState::open_"
+    }
+  ],
+  "schema": 1,
+  "original_elf_path": "/home/qweasd123tg/Games/Torchlight/game/Torchlight.bin.x86_64",
+  "provenance": "original-code",
+  "scope": {
+    "candidate_functions": 8,
+    "completion": "candidate; no automatic registry promotion",
+    "excluded": [
+      "ordinary open() reading HI",
+      "bothCoveredPartial owning function",
+      "whole constructor and setOpen contracts",
+      "animations",
+      "HI lifecycle",
+      "whole classes and game"
+    ]
+  },
+  "contract": {
+    "abi": "Linux x86_64 System V; this in RDI; result in EAX (bool observed through AL)",
+    "blocks_per_function": 1,
+    "openPartial": "movzbl byte at this+LO offset to EAX; ret; no normalization of arbitrary bytes",
+    "isRight": "constant 0 or 1 in EAX; ret; this is not dereferenced",
+    "initialized_bool_domain": [
+      0,
+      1
+    ],
+    "conditional_branches": 0,
+    "calls": 0,
+    "writes": 0,
+    "errors": "no internal error path; openPartial requires valid initialized readable object",
+    "resources": "none acquired or released",
+    "dependencies": [],
+    "adapter_boundary": "C++ bool state preserves initialized 0/1 domain; arbitrary byte payloads, invalid pointers, and original object layout are outside the adapter contract"
+  },
+  "integration": {
+    "provenance": "inferred from current production code, original-code role constants",
+    "sources": [
+      "include/torchlight/inventory_menu.hpp",
+      "include/torchlight/panel_open.hpp",
+      "src/application.cpp",
+      "include/torchlight/ui_pause.hpp",
+      "src/ui_pause.cpp"
+    ],
+    "chain": "controller open() (original openPartial LO) + isRight constant -> UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> menu_paused -> simulation_elapsed / update gates -> movement, combat and animation/render clocks",
+    "role_table": {
+      "inventory": true,
+      "merchant": false,
+      "quest": true,
+      "skill": true
+    },
+    "clock_boundary": "World rendering continues; simulation and combat animation clocks consume paused elapsed. No whole-frame parity assertion."
+  },
+  "comparison": {
+    "sources": [
+      "tests/compare_ui_pause.py",
+      "tests/ui_pause_test.cpp",
+      "tests/ui_pause_probe.cpp",
+      "tests/native_typed_reference.py",
+      "tools/original.py"
+    ],
+    "method": "Existing differential script executes 14 unchanged original bodies over 1536 explicit initialized-state inputs; controller test uses real InventoryMenuState and PanelOpenState instances.",
+    "adapter": "Only CEGUI Window::isVisible is an evaluated-query adapter; private property-key fixture index is explicitly initialized to zero. No constructors or game process executed by differential script.",
+    "fresh_run_by_document_author": false,
+    "final_source_fingerprints": "To be calculated by main agent after concurrent integration; intentionally absent here."
+  }
+}

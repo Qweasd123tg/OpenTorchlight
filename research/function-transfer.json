@@ -752,13 +752,43 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
-      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
-      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
-      "comparison": "By construction (open_ == LO store sites); no independent differential",
-      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00b60f00 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 5 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: 0fb64760c3.",
+          "state": "One initialized LO byte at 0x60, zero extended; constructor 0xb607d5 and every listed setter writer establish bool0/1. Complete shared field map in research/ui-panel-query-functions.json. No HI read.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CInventoryMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00b60f00 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
     },
     "0x00b77590": {
       "symbol": "CMerchantMenu::open()",
@@ -780,13 +810,43 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
-      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
-      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
-      "comparison": "By construction (open_ == LO store sites); no independent differential",
-      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00b775b0 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 5 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: 0fb64760c3.",
+          "state": "One initialized LO byte at 0x60, zero extended; constructor 0xb772ed and every listed setter writer establish bool0/1. Complete shared field map in research/ui-panel-query-functions.json. No HI read.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CMerchantMenu role=False; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00b775b0 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
     },
     "0x00ba5190": {
       "symbol": "CPetMenu::open()",
@@ -836,13 +896,43 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
-      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
-      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
-      "comparison": "By construction (open_ == LO store sites); no independent differential",
-      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00bccaa0 size8 SHAeb8b12ca13faf530e2e3cbad94a4a5e465d8dbad6b6958b6c873fc454cb3e4aa; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 8 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: 0fb68788010000c3.",
+          "state": "One initialized LO byte at 0x188, zero extended; constructor 0xbcc717 and every listed setter writer establish bool0/1. Complete shared field map in research/ui-panel-query-functions.json. No HI read.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CQuestMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00bccaa0 size8 SHAeb8b12ca13faf530e2e3cbad94a4a5e465d8dbad6b6958b6c873fc454cb3e4aa; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
     },
     "0x00bee2c0": {
       "symbol": "CSkillMenu::open()",
@@ -864,13 +954,43 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/open-queries.md; objdump pattern + setOpen/update stores",
-      "implementation": "PanelOpenState::open()/open_ bit (offsets never transfer)",
-      "tests": "tests/panel_open_test.cpp + town-new/paused-settings query paths",
-      "comparison": "By construction (open_ == LO store sites); no independent differential",
-      "notes": "HI settle bit unmodeled (vacuous without close-animation sink); see research/open-queries.md §2. Port instance behind single-writer setter."
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00bee2e0 size5 SHA7240825eed947749516240e5672b828c35954c7121e25e01b439dc7c7831836b; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 5 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: 0fb64738c3.",
+          "state": "One initialized LO byte at 0x38, zero extended; constructor 0xbe3a17 and every listed setter writer establish bool0/1. Complete shared field map in research/ui-panel-query-functions.json. No HI read.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CSkillMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00bee2e0 size5 SHA7240825eed947749516240e5672b828c35954c7121e25e01b439dc7c7831836b; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
     },
     "0x00c04210": {
       "symbol": "CStashMenu::open()",
@@ -3379,13 +3499,13 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Initial saved selection, original save/depth/RNG ABI and state/player/pet/resource lifecycle, General random pools/catalog/RNG/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and runtime-error recovery. Legacy ported/wired flags cover only the documented committed OTC fixed-theme/actor chain."
+          "Native initial selection/SVB/save/depth/RNG ABI and full state/player/pet/resource lifecycle, random pools/catalog/RNG/conditional decorations, dead/retired/armor/skybox/particles/water/light/projector effects, complete cleanup/unwind and native runtime-error recovery. Connected legacy slice now includes initial selected OTC fixed-theme/actor and committed return; no full native state controller."
         ]
       },
-      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm; research/menu-player-class-cache.md; research/disassembly/menu-class-cache.asm",
+      "evidence": "research/menu-player-return.md; research/disassembly/menu-player-return.asm; research/menu-themes.md; research/menu-theme-inputs.json; research/disassembly/menu-themes.asm; research/menu-caves.md; research/disassembly/menu-caves.asm; research/menu-player-class-cache.md; research/disassembly/menu-class-cache.asm; research/main-menu-save-selection.md",
       "implementation": "src/application.cpp; src/menu_player.cpp; src/player.cpp; include/torchlight/menu_player.hpp; include/torchlight/player.hpp; src/menu_scene.cpp; include/torchlight/menu_scene.hpp",
       "tests": "tests/menu_scene_test.cpp; tests/save_checkpoint_test.cpp",
-      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open. Separate creation-class writer/reset/same-cache model-and-clock retention source/consumer review; existing CPU contracts only, no new UI/frame transition."
+      "comparison": "Addressed source branch/field/template/Group and pinned-library review against committed OTC fixed-theme -> scene/camera/actor consumers. CPU original-resource first/last depths of six Main themes, Town, explicit Caves rejection and nearby checkpoint/player/equipment gates. No new UI/frame/original-process or full-function comparison. Caves one-room output is source-reviewed and connected; native catalog/RNG effects remain open. Separate creation-class writer/reset/same-cache model-and-clock retention source/consumer review; existing CPU contracts only, no new UI/frame transition. Cold-start selected OTC slot, Main-entry current-scroll source rule and exact committed identity reviewed by ASM/production owner chain. No UI/frame run."
     },
     "0x009340a0": {
       "symbol": "CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",
@@ -3976,6 +4096,462 @@
       "tests": "tests/compare_auto_gold.py; tests/gold_pickup_probe.cpp; tests/auto_gold_test.cpp",
       "comparison": "6006 unchanged whole original autoPickupGold/alive body executions with explicit dependency adapters vs production selector; actual resource-backed owned wallet/world collection tests.",
       "notes": "Actual cached onscreen membership is required input and never fabricated from all world items. Native visibility/frames/full function closure remain partial."
+    },
+    "0x00b60ed0": {
+      "symbol": "CInventoryMenu::isRight()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00b60ed0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 6 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: b801000000c3.",
+          "state": "No object state read; the constant right-side result is complete.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CInventoryMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00b60ed0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00b77580": {
+      "symbol": "CMerchantMenu::isRight()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00b77580 size3 SHA251447ee91a9067dcd6ab96703133f617565974cd6c4819021760c4688c91abf; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 3 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: 31c0c3.",
+          "state": "No object state read; the constant right-side result is complete.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CMerchantMenu role=False; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00b77580 size3 SHA251447ee91a9067dcd6ab96703133f617565974cd6c4819021760c4688c91abf; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00bcca70": {
+      "symbol": "CQuestMenu::isRight()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00bcca70 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 6 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: b801000000c3.",
+          "state": "No object state read; the constant right-side result is complete.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CQuestMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00bcca70 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00bee2b0": {
+      "symbol": "CSkillMenu::isRight()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ui-panel-query-functions.md; research/ui-panel-query-functions.json; research/open-queries.md",
+      "implementation": "src/panel_open.cpp; src/inventory_menu.cpp; src/ui_pause.cpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "Exact whole symbol 0x00bee2b0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All 6 symbol bytes reviewed; one basic block, unconditional return. No conditional/alternative exits: b801000000c3.",
+          "state": "No object state read; the constant right-side result is complete.",
+          "calls_and_effects": "No calls, writes, errors, acquired resources or cleanup in the owning body. Valid readable object is the openPartial caller precondition.",
+          "library_contracts": "No library calls or resources in the owning query; its pure result is consumed through the documented controller/pause chain.",
+          "family_deltas": "Eight member bodies differ only in isRight constant or LO offset/byte encoding. CSkillMenu role=True; ordinary open()/HI and full setters/constructors are separate functions, not claimed complete.",
+          "integration": "Real InventoryMenuState/PanelOpenState LO and source role constants feed Application UiPausePanel -> ui_both_covered_partial -> ui_game_is_paused -> simulation_elapsed and world/AI/vitals/combat/animation clocks. Exact code consumers and owner map in research/ui-panel-query-functions.md.",
+          "original_comparison": "Exact whole symbol 0x00bee2b0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
+          "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
+          "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
+          "research/open-queries.md": "ab67be243a5af44f8fdd3682946aec913006e3888027d00c72cc0135e5bb1903",
+          "research/ui-panel-query-functions.json": "29130f44d61403c2ccc55ede32f8920c9ec83e7c5e16953db560540281ec7a16",
+          "research/ui-panel-query-functions.md": "b54104d7f0b5c0d4233941ab50dfb6b4d701d089725e013dd79b2c18f76b9ea1",
+          "src/application.cpp": "322a89f924290686b53a3cf1d610f7761440a3127c59a317c844c72a4fd8bbc5",
+          "src/inventory_menu.cpp": "71d2b37f133a60e02032b6c682ed2a1cb6a460fa127418ef7e019eb246d1aec3",
+          "src/panel_open.cpp": "5ef87af3c43ae2bcff5c0d466e27a97543e2070fe9830dd9d9d0f7159678e569",
+          "src/ui_pause.cpp": "f8dd574e899073ba32a1065beb868803b243332693e40c05d05d5cb33486f05e",
+          "tests/compare_ui_pause.py": "08e39df9390e96733f93d38b62e914382cd826d292de275b3ee8b45deabb9fae",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
+          "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00a828f0": {
+      "symbol": "CGameUI::requestSetGameState(EGameState, EMenu)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/automatic-function-transfer.md; research/main-menu-save-selection.md; research/lifted-ui/00a828f0.json",
+      "implementation": "tools/lift_pcode.py; cmake/LiftedCode.cmake; src/ui_game_state.cpp; src/save_selection.cpp; src/frontend.cpp",
+      "tests": "tests/pcode_lifter_test.py; tests/ui_game_state_test.cpp; tests/compare_ui_game_state.py; tests/save_selection_test.cpp; tests/compare_save_selection.py",
+      "comparison": "Whole symbol 0x00a828f0 size13 SHAbe37b7a255cac6751f20a28aa7fbd744f574946c4e855e05c68d7d41adbca211. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "One unconditional two-store block and RET; no alternative or error exits.",
+          "state": "Exact field widths, initializers, readers/writers and semantic owner mappings in research/automatic-function-transfer.md. Generated memory effects access actual UiGameStateRequest pair or the same live Frontend save-list/index/HP selection; stack return slot is explicit ABI scaffolding.",
+          "calls_and_effects": "State u32 then menu u32 stores; literal6/6 on clear. No calls, error branch, allocation or cleanup.",
+          "library_contracts": "No external library ABI in this owning body/closure. Pinned Ghidra12.1.3 raw x86:LE:64 operation translation preserves widths/flags and rejects unknown operations, spaces or dependencies. Compiler/runtime/source evidence pinned in inputs.",
+          "family_deltas": "Request uses ESI/EDX u32; clear uses two literal6 stores. Query wrappers use pointer64 offsets588/de8 and AL1 return; terminal predicate reads vector bounds/index/HP. Whole symbol sizes13/21/12/12/67 and all instruction/body hashes pinned separately; full differences are explicit.",
+          "integration": "Generated stores write the owned pair consumed by Frontend::main_request_state to change page or produce load request; generated clear resets after consumption. Native client update timing remains a separate partial function.",
+          "original_comparison": "Whole symbol 0x00a828f0 size13 SHAbe37b7a255cac6751f20a28aa7fbd744f574946c4e855e05c68d7d41adbca211. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "cmake/LiftedCode.cmake": "bd213157d15747d98c3d0fc3d79dbce0f6d3b3dbacb85ce5f095a3aee42881bd",
+          "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
+          "include/torchlight/pcode_runtime.hpp": "19c2ba96fa815fad6db2092e029c0565dbde6d548d5396a2a9978248b78bea22",
+          "include/torchlight/save_store.hpp": "8ea04b49ca53b61b03f93706c2dcffffa2da8529ea60f4cede9476c7789b39ca",
+          "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
+          "research/automatic-function-transfer.md": "8b05a1fdc6fb8b89996a10522daca14f34effaa36df6384c89be4f2133417c28",
+          "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
+          "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
+          "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
+          "research/lifted-ui/00a84d30.json": "4a74153e2df70348457cba4153ff3e6a9e738e351e9a042d4600252be922a34a",
+          "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
+          "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
+          "research/lifted-ui/abi.json": "74a7a9aa4502f663e6dc5130b62b2ba3826e8b71b721cc9ba699ae0c85441bf1",
+          "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
+          "src/frontend.cpp": "8ca8e8669f4453948a9c64d36751eca23094ad4c8efa8cc673a4577cc7ced6ee",
+          "src/save_selection.cpp": "43784b9ee2acc4cbe1e54e83d007fb702951d713c4c41e87cdce537ef574b825",
+          "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
+          "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
+          "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "ffbd2e0d46574db5fe04e5770f83712798a25d68458b91207235abd309ed55af",
+          "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
+          "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
+          "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
+          "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
+          "tools/lift_pcode.py": "f6a0d790f30681b0ec9677794531788406dfd966371eaaf9986fec29341909a4",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00a82900": {
+      "symbol": "CGameUI::clearGameStateRequest()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/automatic-function-transfer.md; research/main-menu-save-selection.md; research/lifted-ui/00a82900.json",
+      "implementation": "tools/lift_pcode.py; cmake/LiftedCode.cmake; src/ui_game_state.cpp; src/save_selection.cpp; src/frontend.cpp",
+      "tests": "tests/pcode_lifter_test.py; tests/ui_game_state_test.cpp; tests/compare_ui_game_state.py; tests/save_selection_test.cpp; tests/compare_save_selection.py",
+      "comparison": "Whole symbol 0x00a82900 size21 SHAb69ad1a5e6816e5ac570939b328fc0a4e699233f5c3681d927cbd7a87eeafede. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "One unconditional two-store block and RET; no alternative or error exits.",
+          "state": "Exact field widths, initializers, readers/writers and semantic owner mappings in research/automatic-function-transfer.md. Generated memory effects access actual UiGameStateRequest pair or the same live Frontend save-list/index/HP selection; stack return slot is explicit ABI scaffolding.",
+          "calls_and_effects": "State u32 then menu u32 stores; literal6/6 on clear. No calls, error branch, allocation or cleanup.",
+          "library_contracts": "No external library ABI in this owning body/closure. Pinned Ghidra12.1.3 raw x86:LE:64 operation translation preserves widths/flags and rejects unknown operations, spaces or dependencies. Compiler/runtime/source evidence pinned in inputs.",
+          "family_deltas": "Request uses ESI/EDX u32; clear uses two literal6 stores. Query wrappers use pointer64 offsets588/de8 and AL1 return; terminal predicate reads vector bounds/index/HP. Whole symbol sizes13/21/12/12/67 and all instruction/body hashes pinned separately; full differences are explicit.",
+          "integration": "Generated stores write the owned pair consumed by Frontend::main_request_state to change page or produce load request; generated clear resets after consumption. Native client update timing remains a separate partial function.",
+          "original_comparison": "Whole symbol 0x00a82900 size21 SHAb69ad1a5e6816e5ac570939b328fc0a4e699233f5c3681d927cbd7a87eeafede. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "cmake/LiftedCode.cmake": "bd213157d15747d98c3d0fc3d79dbce0f6d3b3dbacb85ce5f095a3aee42881bd",
+          "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
+          "include/torchlight/pcode_runtime.hpp": "19c2ba96fa815fad6db2092e029c0565dbde6d548d5396a2a9978248b78bea22",
+          "include/torchlight/save_store.hpp": "8ea04b49ca53b61b03f93706c2dcffffa2da8529ea60f4cede9476c7789b39ca",
+          "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
+          "research/automatic-function-transfer.md": "8b05a1fdc6fb8b89996a10522daca14f34effaa36df6384c89be4f2133417c28",
+          "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
+          "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
+          "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
+          "research/lifted-ui/00a84d30.json": "4a74153e2df70348457cba4153ff3e6a9e738e351e9a042d4600252be922a34a",
+          "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
+          "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
+          "research/lifted-ui/abi.json": "74a7a9aa4502f663e6dc5130b62b2ba3826e8b71b721cc9ba699ae0c85441bf1",
+          "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
+          "src/frontend.cpp": "8ca8e8669f4453948a9c64d36751eca23094ad4c8efa8cc673a4577cc7ced6ee",
+          "src/save_selection.cpp": "43784b9ee2acc4cbe1e54e83d007fb702951d713c4c41e87cdce537ef574b825",
+          "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
+          "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
+          "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "ffbd2e0d46574db5fe04e5770f83712798a25d68458b91207235abd309ed55af",
+          "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
+          "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
+          "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
+          "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
+          "tools/lift_pcode.py": "f6a0d790f30681b0ec9677794531788406dfd966371eaaf9986fec29341909a4",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00a84d30": {
+      "symbol": "CGameUI::canContinue()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/automatic-function-transfer.md; research/main-menu-save-selection.md; research/lifted-ui/00a84d30.json",
+      "implementation": "tools/lift_pcode.py; cmake/LiftedCode.cmake; src/ui_game_state.cpp; src/save_selection.cpp; src/frontend.cpp",
+      "tests": "tests/pcode_lifter_test.py; tests/ui_game_state_test.cpp; tests/compare_ui_game_state.py; tests/save_selection_test.cpp; tests/compare_save_selection.py",
+      "comparison": "Whole symbol 0x00a84d30 size12 SHA9273341dc586d6ea8fae966a835655d1a7d5b651163a5e62cbd3fb8c471f1d97. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "One pointer read and approved tail jump; exactly one callee, no null guard; initialized pointer lifetime is caller precondition.",
+          "state": "Exact field widths, initializers, readers/writers and semantic owner mappings in research/automatic-function-transfer.md. Generated memory effects access actual UiGameStateRequest pair or the same live Frontend save-list/index/HP selection; stack return slot is explicit ABI scaffolding.",
+          "calls_and_effects": "Queries have no object-memory writes, allocation, cleanup or external calls. Approved UI->manager->Continue tail closure shares machine/memory and exactly one raw RET. Readable initialized pointer chain is required.",
+          "library_contracts": "No external library ABI in this owning body/closure. Pinned Ghidra12.1.3 raw x86:LE:64 operation translation preserves widths/flags and rejects unknown operations, spaces or dependencies. Compiler/runtime/source evidence pinned in inputs.",
+          "family_deltas": "Request uses ESI/EDX u32; clear uses two literal6 stores. Query wrappers use pointer64 offsets588/de8 and AL1 return; terminal predicate reads vector bounds/index/HP. Whole symbol sizes13/21/12/12/67 and all instruction/body hashes pinned separately; full differences are explicit.",
+          "integration": "selected_continue_save executes generated UI and manager wrappers plus terminal predicate over checked actual owner bindings; exact selected row feeds Main/Load visibility, requests and Main-entry selection. OTC unreadable/signed32-domain guards are documented portable input adapters.",
+          "original_comparison": "Whole symbol 0x00a84d30 size12 SHA9273341dc586d6ea8fae966a835655d1a7d5b651163a5e62cbd3fb8c471f1d97. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "cmake/LiftedCode.cmake": "bd213157d15747d98c3d0fc3d79dbce0f6d3b3dbacb85ce5f095a3aee42881bd",
+          "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
+          "include/torchlight/pcode_runtime.hpp": "19c2ba96fa815fad6db2092e029c0565dbde6d548d5396a2a9978248b78bea22",
+          "include/torchlight/save_store.hpp": "8ea04b49ca53b61b03f93706c2dcffffa2da8529ea60f4cede9476c7789b39ca",
+          "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
+          "research/automatic-function-transfer.md": "8b05a1fdc6fb8b89996a10522daca14f34effaa36df6384c89be4f2133417c28",
+          "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
+          "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
+          "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
+          "research/lifted-ui/00a84d30.json": "4a74153e2df70348457cba4153ff3e6a9e738e351e9a042d4600252be922a34a",
+          "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
+          "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
+          "research/lifted-ui/abi.json": "74a7a9aa4502f663e6dc5130b62b2ba3826e8b71b721cc9ba699ae0c85441bf1",
+          "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
+          "src/frontend.cpp": "8ca8e8669f4453948a9c64d36751eca23094ad4c8efa8cc673a4577cc7ced6ee",
+          "src/save_selection.cpp": "43784b9ee2acc4cbe1e54e83d007fb702951d713c4c41e87cdce537ef574b825",
+          "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
+          "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
+          "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "ffbd2e0d46574db5fe04e5770f83712798a25d68458b91207235abd309ed55af",
+          "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
+          "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
+          "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
+          "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
+          "tools/lift_pcode.py": "f6a0d790f30681b0ec9677794531788406dfd966371eaaf9986fec29341909a4",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00c2b9c0": {
+      "symbol": "CMenuManager::canContinue()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/automatic-function-transfer.md; research/main-menu-save-selection.md; research/lifted-ui/00c2b9c0.json",
+      "implementation": "tools/lift_pcode.py; cmake/LiftedCode.cmake; src/ui_game_state.cpp; src/save_selection.cpp; src/frontend.cpp",
+      "tests": "tests/pcode_lifter_test.py; tests/ui_game_state_test.cpp; tests/compare_ui_game_state.py; tests/save_selection_test.cpp; tests/compare_save_selection.py",
+      "comparison": "Whole symbol 0x00c2b9c0 size12 SHA041ceff61e8a308e08e33d068cc21d5a22311c4b109ae862b16cea57a4ffee7d. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "One pointer read and approved tail jump; exactly one callee, no null guard; initialized pointer lifetime is caller precondition.",
+          "state": "Exact field widths, initializers, readers/writers and semantic owner mappings in research/automatic-function-transfer.md. Generated memory effects access actual UiGameStateRequest pair or the same live Frontend save-list/index/HP selection; stack return slot is explicit ABI scaffolding.",
+          "calls_and_effects": "Queries have no object-memory writes, allocation, cleanup or external calls. Approved UI->manager->Continue tail closure shares machine/memory and exactly one raw RET. Readable initialized pointer chain is required.",
+          "library_contracts": "No external library ABI in this owning body/closure. Pinned Ghidra12.1.3 raw x86:LE:64 operation translation preserves widths/flags and rejects unknown operations, spaces or dependencies. Compiler/runtime/source evidence pinned in inputs.",
+          "family_deltas": "Request uses ESI/EDX u32; clear uses two literal6 stores. Query wrappers use pointer64 offsets588/de8 and AL1 return; terminal predicate reads vector bounds/index/HP. Whole symbol sizes13/21/12/12/67 and all instruction/body hashes pinned separately; full differences are explicit.",
+          "integration": "selected_continue_save executes generated UI and manager wrappers plus terminal predicate over checked actual owner bindings; exact selected row feeds Main/Load visibility, requests and Main-entry selection. OTC unreadable/signed32-domain guards are documented portable input adapters.",
+          "original_comparison": "Whole symbol 0x00c2b9c0 size12 SHA041ceff61e8a308e08e33d068cc21d5a22311c4b109ae862b16cea57a4ffee7d. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "cmake/LiftedCode.cmake": "bd213157d15747d98c3d0fc3d79dbce0f6d3b3dbacb85ce5f095a3aee42881bd",
+          "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
+          "include/torchlight/pcode_runtime.hpp": "19c2ba96fa815fad6db2092e029c0565dbde6d548d5396a2a9978248b78bea22",
+          "include/torchlight/save_store.hpp": "8ea04b49ca53b61b03f93706c2dcffffa2da8529ea60f4cede9476c7789b39ca",
+          "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
+          "research/automatic-function-transfer.md": "8b05a1fdc6fb8b89996a10522daca14f34effaa36df6384c89be4f2133417c28",
+          "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
+          "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
+          "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
+          "research/lifted-ui/00a84d30.json": "4a74153e2df70348457cba4153ff3e6a9e738e351e9a042d4600252be922a34a",
+          "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
+          "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
+          "research/lifted-ui/abi.json": "74a7a9aa4502f663e6dc5130b62b2ba3826e8b71b721cc9ba699ae0c85441bf1",
+          "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
+          "src/frontend.cpp": "8ca8e8669f4453948a9c64d36751eca23094ad4c8efa8cc673a4577cc7ced6ee",
+          "src/save_selection.cpp": "43784b9ee2acc4cbe1e54e83d007fb702951d713c4c41e87cdce537ef574b825",
+          "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
+          "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
+          "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "ffbd2e0d46574db5fe04e5770f83712798a25d68458b91207235abd309ed55af",
+          "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
+          "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
+          "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
+          "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
+          "tools/lift_pcode.py": "f6a0d790f30681b0ec9677794531788406dfd966371eaaf9986fec29341909a4",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
+    },
+    "0x00c33490": {
+      "symbol": "CContinueGameMenu::canContinue()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/automatic-function-transfer.md; research/main-menu-save-selection.md; research/lifted-ui/00c33490.json",
+      "implementation": "tools/lift_pcode.py; cmake/LiftedCode.cmake; src/ui_game_state.cpp; src/save_selection.cpp; src/frontend.cpp",
+      "tests": "tests/pcode_lifter_test.py; tests/ui_game_state_test.cpp; tests/compare_ui_game_state.py; tests/save_selection_test.cpp; tests/compare_save_selection.py",
+      "comparison": "Whole symbol 0x00c33490 size67 SHAf423fd8d5663afaf0c969e62701f6b0ea76506db809a0aa851a4f2f31032525e. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "Complete empty/range false exits and selected HPf32 ordered>0 result reviewed from67symbolbytes. Two unreachable padding bytes outside65-byte Ghidra reachable body identified; negative out-of-vector indexing excluded from valid object domain.",
+          "state": "Exact field widths, initializers, readers/writers and semantic owner mappings in research/automatic-function-transfer.md. Generated memory effects access actual UiGameStateRequest pair or the same live Frontend save-list/index/HP selection; stack return slot is explicit ABI scaffolding.",
+          "calls_and_effects": "Queries have no object-memory writes, allocation, cleanup or external calls. Approved UI->manager->Continue tail closure shares machine/memory and exactly one raw RET. Readable initialized pointer chain is required.",
+          "library_contracts": "No external library ABI in this owning body/closure. Pinned Ghidra12.1.3 raw x86:LE:64 operation translation preserves widths/flags and rejects unknown operations, spaces or dependencies. Compiler/runtime/source evidence pinned in inputs.",
+          "family_deltas": "Request uses ESI/EDX u32; clear uses two literal6 stores. Query wrappers use pointer64 offsets588/de8 and AL1 return; terminal predicate reads vector bounds/index/HP. Whole symbol sizes13/21/12/12/67 and all instruction/body hashes pinned separately; full differences are explicit.",
+          "integration": "selected_continue_save executes generated UI and manager wrappers plus terminal predicate over checked actual owner bindings; exact selected row feeds Main/Load visibility, requests and Main-entry selection. OTC unreadable/signed32-domain guards are documented portable input adapters.",
+          "original_comparison": "Whole symbol 0x00c33490 size67 SHAf423fd8d5663afaf0c969e62701f6b0ea76506db809a0aa851a4f2f31032525e. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;21 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
+        },
+        "inputs": {
+          "CMakeLists.txt": "34707fb5e8d88480af0ac5adc4e1d101fde832eaf1f981df1a191371e2e55658",
+          "cmake/LiftedCode.cmake": "bd213157d15747d98c3d0fc3d79dbce0f6d3b3dbacb85ce5f095a3aee42881bd",
+          "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
+          "include/torchlight/pcode_runtime.hpp": "19c2ba96fa815fad6db2092e029c0565dbde6d548d5396a2a9978248b78bea22",
+          "include/torchlight/save_store.hpp": "8ea04b49ca53b61b03f93706c2dcffffa2da8529ea60f4cede9476c7789b39ca",
+          "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
+          "research/automatic-function-transfer.md": "8b05a1fdc6fb8b89996a10522daca14f34effaa36df6384c89be4f2133417c28",
+          "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
+          "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
+          "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
+          "research/lifted-ui/00a84d30.json": "4a74153e2df70348457cba4153ff3e6a9e738e351e9a042d4600252be922a34a",
+          "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
+          "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
+          "research/lifted-ui/abi.json": "74a7a9aa4502f663e6dc5130b62b2ba3826e8b71b721cc9ba699ae0c85441bf1",
+          "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
+          "src/frontend.cpp": "8ca8e8669f4453948a9c64d36751eca23094ad4c8efa8cc673a4577cc7ced6ee",
+          "src/save_selection.cpp": "43784b9ee2acc4cbe1e54e83d007fb702951d713c4c41e87cdce537ef574b825",
+          "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
+          "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
+          "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "ffbd2e0d46574db5fe04e5770f83712798a25d68458b91207235abd309ed55af",
+          "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
+          "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
+          "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
+          "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
+          "tools/lift_pcode.py": "f6a0d790f30681b0ec9677794531788406dfd966371eaaf9986fec29341909a4",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+        }
+      }
     }
   }
 }

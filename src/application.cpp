@@ -491,8 +491,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         frontend.sync_settings(applied_settings);
         torchlight::SaveStore saves(options.save_directory ? *options.save_directory : torchlight::SaveStore::default_directory());
         const auto resource_identity = torchlight::checkpoint_resource_identity(archive);
-        const auto refresh_saves = [&] {
-            try { frontend.set_saves(saves.list(resource_identity)); }
+        const auto refresh_saves = [&](std::optional<std::string> selected_slot = std::nullopt) {
+            try { frontend.set_saves(saves.list(resource_identity), std::move(selected_slot)); }
             catch (const std::exception& e) { frontend.set_saves({}); frontend.error(e.what()); }
         };
         refresh_saves();
@@ -507,6 +507,13 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::optional<std::int64_t> menu_creation_class;
         double menu_player_started = 0;
         std::optional<torchlight::SaveSlotInfo> menu_player_refresh;
+        const bool direct_preview = options.main_stratum.has_value() || options.frame_limit != 0;
+        // original-code: initial menu state loads the selected save before
+        // loadMenuLevel/addCharacter/setToward @0x5907a7..0x590833. Reuse the
+        // committed-return consumer, with the current explicit OTC selection.
+        if (!direct_preview)
+            if (const auto* selected = frontend.selected_save(); selected && selected->loadable())
+                menu_player_refresh = *selected;
         const auto create_menu_renderer = [&](const torchlight::FixedSceneGeometry& geometry,
                                                const torchlight::MenuSceneCamera& camera) {
             auto renderer = std::make_unique<torchlight::GlesSceneRenderer>(geometry, archive, materials);
@@ -517,7 +524,9 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         const auto draw_frontend = [&](const torchlight::FrontendFrame& frame) {
             if (!menu_scene_attempted) {
                 menu_scene_attempted = true;
-                try {
+                // Saved entry builds its own theme below; no transient Town
+                // geometry/renderer is created and no second read is needed.
+                if (!menu_player_refresh) try {
                     menu_scene.emplace(torchlight::build_main_menu_scene(archive, levelsets,
                                                                         options.settings.netbook_mode));
                     menu_renderer = create_menu_renderer(menu_scene->geometry, menu_scene->camera);
@@ -525,7 +534,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     window.notice("menu_scene_unavailable", error.what());
                 }
             }
-            if (menu_scene || menu_player_refresh) {
+            {
                 const auto class_guid = frontend.preview_class();
                 const auto* save = menu_player_refresh ? &*menu_player_refresh : frontend.preview_save();
                 const auto key = !menu_player_refresh && class_guid ? "create:" + std::to_string(*class_guid)
@@ -534,9 +543,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // not call removeCharacter. Recreate only on a new selection.
                 if (menu_player_refresh || (!key.empty() && key != menu_player_key)) {
                     menu_player_key = key; // Cache failures too; no I/O retry each frame.
+                    bool selected_theme_built = false;
                     try {
-                        if (save && (!save->loadable() || save->health <= 0))
-                            throw DesktopError("dead/unreadable saved preview is outside the alive actor slice");
+                        if (save && !save->loadable())
+                            throw DesktopError("saved preview is unreadable");
                         const auto guid = save ? save->class_guid : class_guid.value_or(0);
                         const auto chosen = std::find_if(players.begin(), players.end(),
                             [&](const auto& player) { return player.guid == guid; });
@@ -553,7 +563,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 const auto checkpoint = saves.read(save->slot, resource_identity);
                                 if (checkpoint.class_guid != chosen->guid || checkpoint.revision != save->revision)
                                     throw DesktopError("menu preview save changed since list refresh");
-                                if (menu_player_refresh) {
+                                if (menu_player_refresh || !menu_scene) {
                                     // setGameState @0x5907f3 loads the saved dungeon's
                                     // menu level. Continue selection only changes
                                     // the actor. Use the committed OTC floor adapter.
@@ -561,6 +571,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                         checkpoint.current, options.settings.netbook_mode);
                                     menu_renderer.reset(); menu_player.reset();
                                     menu_scene = std::move(scene);
+                                    selected_theme_built = true;
                                     window.notice("menu_theme_selected", menu_scene->level.rules.source_path);
                                     if (menu_scene->omitted_random_room_pieces)
                                         window.notice("menu_random_props_unsupported",
@@ -571,6 +582,16 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 const auto visual = torchlight::menu_player_visual(*chosen, restored);
                                 if (!visual) throw DesktopError("saved player is not alive");
                                 prototype = *visual;
+                            } else if (!menu_scene) {
+                                // Portable error recovery: a new creation
+                                // selection can rebuild Town after a failed
+                                // saved theme. The failed save key remains
+                                // cached, so there is no per-frame retry.
+                                auto scene = torchlight::build_main_menu_scene(archive, levelsets,
+                                    options.settings.netbook_mode);
+                                menu_renderer.reset(); menu_player.reset();
+                                menu_scene = std::move(scene);
+                                selected_theme_built = true;
                             }
                             // loadCharacter @0x581e05 clears source+0x1a8 on the
                             // committed reload path. Load-row applyCharacterState
@@ -592,7 +613,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         window.notice("menu_player_unavailable", error.what());
                         // An unsupported committed theme must not leave the old
                         // Town/previous dungeon presented as the selected theme.
-                        if (menu_player_refresh) menu_scene.reset();
+                        if (menu_player_refresh && !selected_theme_built) menu_scene.reset();
                         try {
                             if (menu_scene)
                                 menu_renderer = create_menu_renderer(menu_scene->geometry, menu_scene->camera);
@@ -669,7 +690,6 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::uint64_t total_frames = 0;
         std::size_t completed_transitions = 0;
         bool app_running = true;
-        const bool direct_preview = options.main_stratum.has_value() || options.frame_limit != 0;
         bool gameplay_active = direct_preview;
         bool resume_saved_position = false;
         std::uint32_t campaign_seed = options.seed;
@@ -2469,7 +2489,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                       << '\n';
 
             if (return_to_menu) {
-                gameplay_active = false; refresh_saves(); continue;
+                gameplay_active = false; refresh_saves(campaign.slot); continue;
             }
             if (!app_running) {
                 if (!direct_preview && !pending_warp && !saved_for_exit) {

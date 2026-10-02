@@ -100,6 +100,23 @@ std::string main_menu_credits() {
 }
 } // namespace
 std::string main_menu_credit_text() { return main_menu_credits(); }
+std::size_t main_entry_save_selection(FrontendPage previous_page,
+                                     const std::vector<SaveSlotInfo>& saves,
+                                     std::size_t selected, std::size_t scroll) noexcept {
+    // original-code: setActiveMenu @c2b9db..c2b9e1 returns on the same page;
+    // Main entry @c2bb68..c2bb76 calls selectCharacter(0,true) only after
+    // canContinue. selectCharacter @c3f8d1 adds scroll(+c4), and @c3f8f3
+    // writes the absolute selection(+c8) before its count check @c3f900.
+    // Main=0, CharacterCreate=1, Continue=3 are the manager-page domain.
+    // Settings closes an overlay, while Save & Menu has its own producer.
+    if ((previous_page == FrontendPage::create || previous_page == FrontendPage::load) &&
+        selected_continue_save(saves, selected)) {
+        // Portable safety boundary: an out-of-range scroll stays unselected;
+        // bounded consumers never dereference it or substitute another save.
+        return scroll;
+    }
+    return selected;
+}
 UiLayoutState continue_menu_layout_state(const UiLayout& layout, std::size_t count,
                                         std::size_t scroll, std::size_t selected,
                                         bool delete_confirmation) {
@@ -254,16 +271,28 @@ Frontend::Frontend(UiResources &r, std::vector<FrontendClass> c)
         windows_, sheet_, "__opentorchlight/main", false, true);
     main_set_open(true);
 }
-void Frontend::set_saves(std::vector<SaveSlotInfo> saves) {
+void Frontend::set_saves(std::vector<SaveSlotInfo> saves, std::optional<std::string> selected_slot) {
     cached_frame_.reset();
     buttons_.clear();
     saves_ = std::move(saves);
-    save_index_ = std::min(save_index_, saves_.empty() ? 0 : saves_.size() - 1);
+    main_preview_selection_changed_ = false;
+    if (selected_slot) {
+        const auto found = std::find_if(saves_.begin(), saves_.end(),
+            [&](const auto& save) { return save.slot == *selected_slot; });
+        // Missing committed identity remains unselected, rather than showing
+        // another hero as the Continue target. A later Load opening can select.
+        save_index_ = static_cast<std::size_t>(found - saves_.begin());
+    } else save_index_ = std::min(save_index_, saves_.empty() ? 0 : saves_.size() - 1);
     pending_delete_.reset();
     scroll_ = 0;
     sync_cegui_menu();
 }
 void Frontend::show_main() {
+    const auto previous_selection = save_index_;
+    save_index_ = main_entry_save_selection(page_, saves_, save_index_, scroll_);
+    // selectCharacter's changed-index path applies actor state; its same-index
+    // forced path only copies the filename. Preserve that distinction on Main.
+    main_preview_selection_changed_ = save_index_ != previous_selection;
     pending_options_exit_ = false;
     cached_frame_.reset();
     buttons_.clear();
@@ -673,15 +702,8 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
                                    name_.substr(first, last - first + 1),
                                    {}};
     } else if (id == "continue" || id == "load") {
-        std::size_t index = save_index_;
-        if (id == "continue") {
-            const auto it = std::find_if(saves_.begin(), saves_.end(),
-                                         [](const auto &s) { return s.loadable(); });
-            index = static_cast<std::size_t>(it - saves_.begin());
-        }
-        if (index < saves_.size() && saves_[index].loadable())
-            request_ = FrontendRequest{
-                FrontendCommand::load, saves_[index].class_guid, {}, saves_[index].slot};
+        if (const auto* save = continue_save())
+            request_ = FrontendRequest{FrontendCommand::load, save->class_guid, {}, save->slot};
     } else if (id == "scroll-up") {
         if (scroll_ > 0)
             --scroll_;
@@ -804,8 +826,7 @@ void Frontend::native_action(CeguiPage source, const std::string& name, UiLayout
         else if (function == UiLayoutFunction::continue_game) {
             // c3feda..c3fee9: ordered health > 0; failed OTC decode is an
             // additional portable boundary, not a fabricated original branch.
-            if (save_index_ < saves_.size() && saves_[save_index_].loadable() && saves_[save_index_].health > 0)
-                activate("load");
+            activate("load");
         } else if (function == UiLayoutFunction::scroll_up) activate("scroll-up");
         else if (function == UiLayoutFunction::scroll_down) activate("scroll-down");
         else if (function == UiLayoutFunction::delete1) activate("delete");
@@ -849,7 +870,7 @@ void Frontend::native_action(CeguiPage source, const std::string& name, UiLayout
 }
 void Frontend::sync_cegui_menu() {
     if (!cegui_menu_) return;
-    const bool can_continue = std::any_of(saves_.begin(), saves_.end(), [](const auto& save) { return save.loadable(); });
+    const bool can_continue = continue_save() != nullptr;
     cegui_menu_->state(main_open_, can_continue, show_credits_, show_credits_b_);
     cegui_menu_->settings_state(page_ == FrontendPage::settings, settings_draft_, resolutions_);
     const auto& selected = classes_.at(class_index_);
@@ -865,8 +886,13 @@ void Frontend::sync_cegui_menu() {
     cegui_menu_->options_state(attached, position);
 }
 void Frontend::main_request_state(int state, int menu) {
-    // CGameUI::requestSetGameState @0xa828f0 stores this pair. Consume it in
-    // the existing application policy; native CGameStateController is open.
+    // Generated stores @0xa828f0 feed the owned pair. The existing menu policy
+    // consumes it, then generated clear @0xa82900 restores the sentinel.
+    // Native CGameClient::update timing/coverage gates remain outside this bridge.
+    ui_request_game_state(game_state_request_, static_cast<std::uint32_t>(state),
+                          static_cast<std::uint32_t>(menu));
+    state = static_cast<int>(game_state_request_.state);
+    menu = static_cast<int>(game_state_request_.menu);
     if (state == 0 && (menu == 1 || menu == 3)) {
         page_ = menu == 1 ? FrontendPage::create : FrontendPage::load;
         if (page_ == FrontendPage::load) {
@@ -879,10 +905,10 @@ void Frontend::main_request_state(int state, int menu) {
         focus_ = 0;
         status_.clear();
     } else if (state == 2 && menu == 0) {
-        const auto it = std::find_if(saves_.begin(), saves_.end(), [](const auto& s) { return s.loadable(); });
-        if (it != saves_.end())
-            request_ = FrontendRequest{FrontendCommand::load, it->class_guid, {}, it->slot};
+        if (const auto* save = continue_save())
+            request_ = FrontendRequest{FrontendCommand::load, save->class_guid, {}, save->slot};
     } else throw std::logic_error("unsupported main-menu state pair");
+    ui_clear_game_state_request(game_state_request_);
 }
 void Frontend::main_set_open(bool value) {
     main_open_ = value;
@@ -1279,8 +1305,7 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
             // Continue overrides @0xc334e0: only enums 14..17 and alive saves.
             if (!request_ && page_ == FrontendPage::load && widget.layout_function &&
                 static_cast<int>(*widget.layout_function) >= 14 &&
-                static_cast<int>(*widget.layout_function) <= 17 && save_index_ < saves_.size() &&
-                saves_[save_index_].loadable() && saves_[save_index_].health > 0.0F)
+                static_cast<int>(*widget.layout_function) <= 17 && continue_save())
                 activate("load");
             return;
         }
@@ -1475,8 +1500,7 @@ FrontendFrame Frontend::build_frame(FrontendPage render_page, int width, int hei
                     pending_delete_ && *pending_delete_ < saves_.size());
             state.offset_ratio = screen_scale;
             if (render_page == FrontendPage::main) {
-                const bool can_continue = std::any_of(saves_.begin(), saves_.end(),
-                                                     [](const auto &s) { return s.loadable(); });
+                const bool can_continue = continue_save() != nullptr;
                 for (const auto &w : layout->widgets()) {
                     const auto name = leaf(w.name);
                     // original-code: createMenus writes these properties after
@@ -1738,8 +1762,7 @@ FrontendFrame Frontend::build_frame(FrontendPage render_page, int width, int hei
         add("new", "NEW CHARACTER");
         // c4af32..c4aff0: an empty list selects the new-character menu.
         add("loads", "LOAD CHARACTER");
-        add("continue", "CONTINUE LAST", std::any_of(saves_.begin(), saves_.end(),
-                                               [](const auto &s) { return s.loadable(); }));
+        add("continue", "CONTINUE LAST", continue_save() != nullptr);
         add("exit", "EXIT");
         add("settings", "SETTINGS");
         // The main menu's presentation comes from the layout/controller.
@@ -1756,7 +1779,7 @@ FrontendFrame Frontend::build_frame(FrontendPage render_page, int width, int hei
                                saves_[i].name.empty() ? saves_[i].slot : saves_[i].name;
             add("slot-" + number(i), label, true, i == save_index_);
         }
-        add("load", "LOAD SELECTED", save_index_ < saves_.size() && saves_[save_index_].loadable());
+        add("load", "LOAD SELECTED", continue_save() != nullptr);
         add("scroll-up", "PREVIOUS", scroll_ > 0);
         add("scroll-down", "NEXT", scroll_ + 5 < saves_.size());
         add("delete", "DELETE", !saves_.empty());

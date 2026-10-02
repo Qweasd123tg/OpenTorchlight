@@ -77,7 +77,9 @@ add_library(torchlight_core STATIC
     src/inventory_create.cpp
     src/panel_open.cpp
     src/ui_pause.cpp
+    src/ui_game_state.cpp
     src/gold_pickup.cpp
+    src/save_selection.cpp
     src/ui_font.cpp
     src/ui_text.cpp
     src/menu_scene.cpp
@@ -129,6 +131,7 @@ add_library(torchlight_core STATIC
     src/music.cpp)
 target_include_directories(torchlight_core PUBLIC include)
 include(cmake/RecoveredCode.cmake)
+include(cmake/LiftedCode.cmake)
 target_compile_features(torchlight_core PUBLIC cxx_std_17)
 target_link_libraries(torchlight_core PUBLIC ZLIB::ZLIB PNG::PNG CEGUI062::Falagard)
 target_link_libraries(torchlight_core PRIVATE OGRE165::Math)
@@ -346,6 +349,43 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
     set(TORCHLIGHT_REFERENCE_PYTHON "${Python3_EXECUTABLE}" CACHE FILEPATH
         "PIE Python interpreter for original fixed-address comparison (optional)")
+
+    add_executable(save_selection_test tests/save_selection_test.cpp)
+    target_link_libraries(save_selection_test PRIVATE torchlight_core)
+    add_executable(save_selection_probe tests/save_selection_probe.cpp)
+    target_link_libraries(save_selection_probe PRIVATE torchlight_core)
+    add_executable(ui_game_state_test tests/ui_game_state_test.cpp)
+    target_link_libraries(ui_game_state_test PRIVATE torchlight_core)
+    add_executable(ui_game_state_probe tests/ui_game_state_probe.cpp)
+    target_link_libraries(ui_game_state_probe PRIVATE torchlight_core)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(save_selection_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        target_compile_options(save_selection_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    endif()
+    # Controller/query contract checks only: no frame, click or game process.
+    # The existing execution-group classifier assigns core/assets/reference.
+    add_test(NAME save_selection COMMAND save_selection_test)
+    add_test(NAME ui_game_state_request COMMAND ui_game_state_test)
+    add_test(NAME pcode_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/pcode_lifter_test.py)
+    set_tests_properties(pcode_lifter PROPERTIES TIMEOUT 90)
+    set_tests_properties(save_selection PROPERTIES TIMEOUT 30)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_save_selection_frontend
+            COMMAND save_selection_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_save_selection_frontend PROPERTIES TIMEOUT 60)
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_ui_game_state_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_game_state.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:ui_game_state_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/ui-game-state-native.json)
+        set_tests_properties(original_ui_game_state_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
+        add_test(NAME original_save_selection_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_save_selection.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:save_selection_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/save-selection-original.json)
+        set_tests_properties(original_save_selection_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
 
     set(AI_COOLDOWN_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/ai-cooldown.pak.zip)
     add_custom_command(

@@ -26,6 +26,11 @@ struct SaveSlotInfo {
         return error.empty();
     }
 };
+// original-code: CContinueGameMenu::canContinue @0xc33490 (67 bytes),
+// selected-index/count guard then saved float HP > 0. OTC error rows are an
+// explicit adapter and cannot supply an original save-state object.
+[[nodiscard]] const SaveSlotInfo* selected_continue_save(
+    const std::vector<SaveSlotInfo>& saves, std::size_t selected) noexcept;
 // OpenTorchlight-owned files only; never imports or modifies original saves.
 class SaveStore {
   public:

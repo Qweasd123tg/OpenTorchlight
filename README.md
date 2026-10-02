@@ -77,6 +77,14 @@ COUNT/anchor/homing и полный lifecycle остаются открытым�
 Применение к Main/Dropdown и границы: [автоматизация подготовки](research/menu-preparation-automation.md).
 
 Автоматизация включает и рабочий перенос принятых контрактов:
+из [исходного p-code](research/automatic-function-transfer.md) CMake генерирует
+компилируемые тела запросов состояния UI и всю трёхфункционную цепочку Continue.
+Генератор сохраняет ширины, ветви, register aliases, порядок операций и
+проверенные прямые вызовы/tail jumps; неизвестные зависимости отклоняются.
+Production bindings связывают память с настоящими владельцами состояния.
+Это пять подключённых функций; 679 кандидатов без индексированных CALL ещё
+не считаются перенесёнными. Mapping владельцев и внешние/виртуальные ABI
+остаются отдельной работой.
 `tools/check.py --recover /path/to/game` повторно извлекает source data,
 генерирует используемые приложением UI binding/RNG и проверенные gameplay
 формулы, собирает consumers и запускает все зарегистрированные
@@ -154,6 +162,10 @@ OGRE 1.6.5 подключена из исходников. Исправлен л
 редакторский Group pivot не является графическим parent.
 После [Save & Menu](research/menu-player-return.md) preview восстанавливается
 из записанного checkpoint, включая смену или снятие оружия.
+[Начальный Main и Continue](research/main-menu-save-selection.md) используют
+один выбранный slot: живой actor и фон его этажа восстанавливаются также при
+холодном старте. Ошибка actor сохраняет построенную тему; новая selection
+может восстановить scene после ошибки.
 [Creation-class cache](research/menu-player-class-cache.md) сохраняет actor и IDLE
 при Create того же cached класса после Load; committed reload очищает cache.
 [Фиксированная тема](research/menu-themes.md) после Save & Menu выбирается по
@@ -167,8 +179,8 @@ audio levels. Исправлена [52-битная fraction mask volatile RNG](
 UI variation проверена с original ASM, прежний узкий диапазон устранён. Renderer сохраняет [цветовые теги Serif](research/ui-inline-text.md)
 и RGBA каждого угла. Подготовка игровых каталогов отложена до входа в игру;
 команды Falagard кешируются. FPS и время старта отдельно не измерены.
-Остаток: initial/dead preview, экипированная броня/питомец, pet/difficulty, resolution list/FSAA,
-начальный выбор сохранённой темы, случайные группы/каталоги, эффекты сцены,
+Остаток: dead/retired preview и native initial lifecycle, экипированная броня/питомец, pet/difficulty, resolution list/FSAA,
+случайные группы/каталоги, эффекты сцены,
 `.SVB`/моды и полный CEGUI runtime.
 Completion остаётся `partial`; контрактные проверки и сборка отделены от запуска UI.
 

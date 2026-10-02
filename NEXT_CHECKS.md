@@ -12,6 +12,11 @@
 удаление, ползунки/применение звука, физические Hover/Pushed, кеш Falagard и
 отложенная загрузка игровых каталогов. [Town scene](research/menu-scene.md)
 и [inline text](research/ui-inline-text.md) подключены к desktop.
+Raw p-code -> compiled production functions подключён в
+[automatic-function-transfer.md](research/automatic-function-transfer.md): пять
+тел UI state/Continue, approved direct-call/tail closure и checked owner bindings.
+Сборка генерирует код сама; новые cohorts принимаются после ревью владельцев и
+зависимостей, без автоматического повышения completion.
 Следующие исходные цепочки: preview персонажа/питомца, pet/difficulty producer,
 темы из сохранения и scene FX, resolution/FSAA, native saves и общий CEGUI runtime.
 
