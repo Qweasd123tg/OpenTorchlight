@@ -102,6 +102,30 @@ class FunctionPackageTest(unittest.TestCase):
         with self.assertRaisesRegex(function_package.AddressError, "unknown function"):
             builder.resolve_address("0x3000")
 
+    def test_collected_ghidra_evidence_is_fingerprinted_and_drift_is_rejected(self):
+        ghidra=self.root/'cache/ghidra'
+        common=dict(address='0x1000',original_elf_sha256=function_package.ELF_SHA)
+        raw={**common,'instructions':[],'body_ranges':[],'entry_references':[]}
+        evidence={**common,'memory_accesses':[],'locations':[],'control_flow':[],
+                  'unresolved':[dict(code='external_effects_not_modeled')],'scope':'local only'}
+        row=dict(address='0x1000',raw_packet='raw/00001000.json',evidence='00001000-analysis.json')
+        for field,value in (('raw_packet',raw),('evidence',evidence)):
+            self.write('cache/ghidra/'+row[field],json.dumps(value))
+            row[field+'_sha256']=hashlib.sha256((ghidra/row[field]).read_bytes()).hexdigest()
+        summary=dict(kind='ghidra-behavior-research',status='COLLECTED',
+                     original_elf_sha256=function_package.ELF_SHA,ghidra_version='12.1.3',functions=[row])
+        self.write('cache/ghidra/summary.json',json.dumps(summary))
+        builder=function_package.FunctionPackageBuilder(self.root,ghidra_dir=ghidra)
+        result=builder.document(['0x1000'])
+        collected=result['functions'][0]['ghidra_evidence']
+        self.assertEqual(collected['unresolved'],evidence['unresolved'])
+        self.assertEqual(collected['original_status_promotions'],0)
+        self.assertTrue(any(x['path'].startswith('ghidra:') for x in result['source_fingerprint']['inputs']))
+        self.write('cache/ghidra/'+row['evidence'],'{}')
+        with self.assertRaisesRegex(ValueError,'changed after collection'):builder.document(['0x1000'])
+        summary['status']='FAILED';self.write('cache/ghidra/summary.json',json.dumps(summary))
+        with self.assertRaisesRegex(ValueError,'failed/stale'):function_package.FunctionPackageBuilder(self.root,ghidra_dir=ghidra)
+
     def test_batch_limit_is_checked_before_packet_work(self) -> None:
         builder = function_package.FunctionPackageBuilder(self.root)
         with self.assertRaisesRegex(function_package.AddressError, "1..64"):

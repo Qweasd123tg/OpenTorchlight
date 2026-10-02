@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-source_dir="${1:-/tmp/opentorchlight-ghidra/output}"
+source_dir="${1:-${TORCHLIGHT_GHIDRA_ROOT:-$root_dir/build-ghidra}/output}"
 target_dir="$root_dir/research/decompiled"
 targets_file="$root_dir/research/decompile-targets.txt"
 

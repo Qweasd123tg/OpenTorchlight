@@ -14,8 +14,9 @@
   `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
 
 `tools/ghidra/analyze_original.sh` отказывается анализировать другой ELF. База
-и логи находятся в `/tmp/opentorchlight-ghidra`. Полная база и оригинальный
-бинарник не копируются в проект. Небольшие целевые экспорты адресов из
+и логи находятся в ignored `build-ghidra/`; tool cache — в
+`build-source-cache/ghidra/`. Полная база и оригинальный бинарник не попадают
+в git. Внешний ELF остаётся входом только для чтения. Небольшие целевые экспорты адресов из
 `research/decompile-targets.txt` синхронизируются в `research/decompiled/`,
 чтобы по ним можно было искать связи локально и во внешнем анализаторе.
 
@@ -24,10 +25,14 @@
 Проверен headless-анализ Ghidra 12.1.3 из официального архива
 `ghidra_12.1.3_PUBLIC_20260817.zip`, SHA-256
 `93a5d11a9ad510622acaaf908c556a7b9b764d338e78a7567f3689bf5081fd54`.
-По умолчанию скрипт ожидает распакованный каталог
-`/tmp/ghidra_12.1.3_PUBLIC`; другой путь можно передать через `GHIDRA_HOME`.
+По умолчанию используется распакованный каталог
+`build-source-cache/ghidra/ghidra_12.1.3_PUBLIC`. Другой закреплённый tool cache
+можно передать через `GHIDRA_HOME`; базу — через `TORCHLIGHT_GHIDRA_ROOT`.
+Установка проверяет SHA архива, пути ZIP и critical tool inputs; последующие
+пробы также проверяют сохранённые хеши инструкции/эмулятора x86.
 
 ```sh
+python3 tools/setup_ghidra.py --download
 tools/ghidra/analyze_original.sh /home/qweasd123tg/Games/Torchlight/game
 ```
 
@@ -40,7 +45,7 @@ tools/ghidra/analyze_original.sh /home/qweasd123tg/Games/Torchlight/game
 ```
 
 Результат появится в
-`/tmp/opentorchlight-ghidra/output/generic_model_update_animation.c` вместе с
+`build-ghidra/output/generic_model_update_animation.c` вместе с
 фактическим адресом и именем найденной функции.
 
 После экспорта обнови читаемую копию в репозитории:
@@ -118,8 +123,29 @@ entry refs. Сохранять и mnemonic/bytes, и тип ссылки ана�
 `tools/ghidra/LibraryMatchPilot.java` и `tools/library_match_report.py`.
 Он строит кандидатов по признакам и хешам, сохраняя равные результаты и
 неполные сигнатуры. Имена используются для оценки после scoring.
-`function_package.py` пока потребляет CALL-index; подключение Ghidra JSON
-с entry refs остаётся отдельной задачей.
+`function_package.py --ghidra-dir build-ghidra/probes/PACKET` потребляет также
+проверенный structured JSON, entry refs, ширины памяти и локальные выражения;
+изменённые после сбора raw/evidence файлы отклоняются по SHA.
+
+## Ограниченное исследование поведения
+
+`tools/ghidra_probe.py` использует сохранённую базу без повторного полного
+анализа и без изменения программы. Экспорт schema 2 содержит raw p-code
+операции с varnode space/offset/width/register. `tools/analyze_pcode.py`
+собирает чтения, записи и условия внутри базового блока. После вызова,
+частичной записи регистра и внутренних micro-ветвей неопределённость
+сохраняется; имена полей, ABI, владельцы и состояния объектов не выводятся.
+
+При `--profile explicit.json` дополнительно используется закреплённый
+`PcodeEmulator`. Все регистры и области задаются явно. Незаданный регистр,
+чужой вызов, unmapped memory и исчерпанный бюджет дают `UNKNOWN`; результат
+не превращается в выдуманный stub. Пример и прямое сравнение с native bytes:
+[p-code automation](pcode-automation.md).
+
+API-источники: [raw p-code](https://ghidra.re/ghidra_docs/languages/html/pcoderef.html),
+[PcodeEmulator](https://ghidra.re/ghidra_docs/api/ghidra/pcode/emu/PcodeEmulator.html).
+Декомпиляция, raw p-code и bounded execution дополняют просмотр ASM. Ни один
+инструмент не повышает стадии переноса или `completion` автоматически.
 
 ## Как использовать результат
 

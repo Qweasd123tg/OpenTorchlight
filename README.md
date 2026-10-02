@@ -84,6 +84,13 @@ CPU/resource/reference gates с отчётом по системам игры. �
 [gameplay recipes](research/recovery-gameplay.md),
 [recovery automation](research/recovery-automation.md).
 
+Сбор неизвестного поведения расширен structured raw p-code и ограниченным
+исполнением на явно заданном состоянии. Ghidra и сохранённая база находятся
+в постоянном ignored cache; короткие пробы не повторяют полный анализ.
+Калибровка с оригинальными native bytes: 561 совпадение, один сохранённый
+`UNKNOWN` на внешнем вызове. Команды и точная граница:
+[p-code automation](research/pcode-automation.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).

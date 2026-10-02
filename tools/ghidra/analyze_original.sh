@@ -3,8 +3,7 @@ set -euo pipefail
 
 project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 game_dir="${1:-/home/qweasd123tg/Games/Torchlight/game}"
-ghidra_home="${GHIDRA_HOME:-/tmp/ghidra_12.1.3_PUBLIC}"
-analysis_root="${TORCHLIGHT_GHIDRA_ROOT:-/tmp/opentorchlight-ghidra}"
+source "$project_root/tools/ghidra/environment.sh"
 binary="$game_dir/Torchlight.bin.x86_64"
 expected_sha="91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
 

@@ -67,7 +67,8 @@ class SearchFile:
 class FunctionPackageBuilder:
     """Single-load index shared by all addresses in a batch."""
 
-    def __init__(self, root: Path = ROOT, callsites_path: Path | None = None):
+    def __init__(self, root: Path = ROOT, callsites_path: Path | None = None,
+                 ghidra_dir: Path | None = None):
         self.root = root.resolve()
         self._fingerprints: dict[str, dict[str, object]] = {}
         self.input_paths: list[Path] = []
@@ -76,6 +77,15 @@ class FunctionPackageBuilder:
         self.callsites_path = (callsites_path.resolve() if callsites_path else
                                self.root / "research/original-callsites.tsv")
         self.callsites_metadata: dict | None = None
+        self.ghidra_dir = ghidra_dir.resolve() if ghidra_dir else None
+        self.ghidra_summary = None
+        if self.ghidra_dir:
+            self.ghidra_summary = json.loads(self._read_external(
+                self.ghidra_dir / 'summary.json', 'ghidra:summary.json'))
+            if (self.ghidra_summary.get('kind') != 'ghidra-behavior-research'
+                    or self.ghidra_summary.get('status') != 'COLLECTED'
+                    or self.ghidra_summary.get('original_elf_sha256') != ELF_SHA):
+                raise ValueError('Need collected pinned Ghidra evidence, not failed/stale output')
         self.indirect_calls: dict[str, list[dict]] = {}
         self._read_bytes("tools/function_package.py")
         self._optional_text("tools/transfer_contract.py")
@@ -105,6 +115,33 @@ class FunctionPackageBuilder:
 
     def _read_text(self, relative: str) -> str:
         return self._read_bytes(relative).decode("utf-8", errors="replace")
+
+    def _ghidra_evidence(self, address: str) -> dict | None:
+        if self.ghidra_summary is None:
+            return None
+        row = next((item for item in self.ghidra_summary['functions']
+                    if normalize(item['address']) == address), None)
+        if row is None:
+            return {'available': False, 'boundary': 'Function not included in supplied bounded export'}
+        values = {}
+        for field in ('raw_packet', 'evidence'):
+            path = (self.ghidra_dir / row[field]).resolve()
+            if not path.is_relative_to(self.ghidra_dir):
+                raise ValueError('Ghidra evidence path escapes supplied directory')
+            raw = self._read_external(path, 'ghidra:' + row[field])
+            if hashlib.sha256(raw).hexdigest() != row[field + '_sha256']:
+                raise ValueError('Ghidra evidence changed after collection: ' + field)
+            value = json.loads(raw)
+            if value['original_elf_sha256'] != ELF_SHA or normalize(value['address']) != address:
+                raise ValueError('Ghidra evidence has a different function/source identity')
+            values[field] = value
+        raw, evidence = values['raw_packet'], values['evidence']
+        return {'available': True, 'version': self.ghidra_summary['ghidra_version'],
+                'instruction_count': len(raw['instructions']), 'body_ranges': raw['body_ranges'],
+                'entry_references': raw.get('incoming_entry_references_including_data', []),
+                'memory_accesses': evidence['memory_accesses'], 'locations': evidence['locations'],
+                'control_flow': evidence['control_flow'], 'unresolved': evidence['unresolved'],
+                'original_status_promotions': 0, 'boundary': evidence['scope']}
 
     def _optional_text(self, relative: str) -> str | None:
         return self._read_text(relative) if (self.root / relative).is_file() else None
@@ -404,6 +441,7 @@ class FunctionPackageBuilder:
                           "outgoing": list(self.callsite_out.get(address, []))},
             "known_references": self._known_references(registry, transfer),
             "vendor_sources": vendor_sources,
+            "ghidra_evidence": self._ghidra_evidence(address),
             "evidence_hits": evidence, "unresolved_work": unresolved,
         }
 
@@ -502,6 +540,15 @@ def render_markdown(document: dict) -> str:
         else:
             lines += ["## Call sites", "WARNING: " + sites["warning"] +
                       ". Order, branches and repeat counts are NOT recoverable from the set-only callgraph."]
+        ghidra = packet.get('ghidra_evidence')
+        if ghidra:
+            lines += ['', '## Structured Ghidra evidence', '', ghidra['boundary']]
+            if ghidra['available']:
+                lines += [f"- Ghidra {ghidra['version']}; {ghidra['instruction_count']} instructions; "
+                          f"{len(ghidra['memory_accesses'])} accesses; {len(ghidra['control_flow'])} flows; "
+                          f"{len(ghidra['unresolved'])} unresolved effects."]
+                for access in ghidra['locations'][:60]:
+                    lines.append(f"- {access['site']} {access['kind']} {access['bytes']} bytes: {json.dumps(access['location'],sort_keys=True)}")
         lines += ["", "## Decompilation hits (navigation only, verify against ASM)", ""]
         lines += _hit_lines(packet["evidence_hits"]["decompilation"])
         lines += ["", "## Disassembly hits", ""] + _hit_lines(packet["evidence_hits"]["disassembly"])
@@ -533,9 +580,11 @@ def main() -> int:
                         help="also write structured JSON while keeping markdown output")
     parser.add_argument("--callsites", type=Path,
                         help="read-only external/ignored direct-callsites TSV override")
+    parser.add_argument('--ghidra-dir', type=Path,
+                        help='read-only collected ghidra_probe.py directory; preserves unknown effects')
     args = parser.parse_args()
     try:
-        builder = FunctionPackageBuilder(callsites_path=args.callsites)
+        builder = FunctionPackageBuilder(callsites_path=args.callsites, ghidra_dir=args.ghidra_dir)
         if args.address and len(args.address) > MAX_BATCH:
             raise AddressError(f"batch must contain 1..{MAX_BATCH} explicit addresses")
         addresses = ([builder.resolve_address(address) for address in args.address]

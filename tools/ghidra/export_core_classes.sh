@@ -2,8 +2,7 @@
 set -euo pipefail
 
 project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
-ghidra_home="${GHIDRA_HOME:-/tmp/ghidra_12.1.3_PUBLIC}"
-analysis_root="${TORCHLIGHT_GHIDRA_ROOT:-/tmp/opentorchlight-ghidra}"
+source "$project_root/tools/ghidra/environment.sh"
 project_file="$analysis_root/project/OpenTorchlight.gpr"
 output_dir="$project_root/research/decompiled-core"
 

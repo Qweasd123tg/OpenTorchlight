@@ -5,6 +5,20 @@ add_test(NAME recovery_generated_current COMMAND ${Python3_EXECUTABLE}
     --out-dir "${TORCHLIGHT_RECOVERED_DIR}" --check
     --report "${CMAKE_CURRENT_BINARY_DIR}/recovery-current.json")
 set_tests_properties(recovery_codegen recovery_generated_current PROPERTIES LABELS "core" TIMEOUT 30)
+add_test(NAME pcode_analysis COMMAND ${Python3_EXECUTABLE}
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/pcode_analysis_test.py")
+set_tests_properties(pcode_analysis PROPERTIES LABELS "core" TIMEOUT 30)
+if(TORCHLIGHT_ENABLE_GHIDRA_PROBES)
+    if(NOT TORCHLIGHT_ORIGINAL)
+        message(FATAL_ERROR "Ghidra probes require TORCHLIGHT_ORIGINAL and a prepared pinned tool/project")
+    endif()
+    add_test(NAME original_ghidra_pcode_calibration COMMAND ${Python3_EXECUTABLE}
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/ghidra_probe_process.py"
+        --original "${TORCHLIGHT_ORIGINAL}"
+        --reference-python "${TORCHLIGHT_REFERENCE_PYTHON}"
+        --output-dir "${CMAKE_CURRENT_BINARY_DIR}/pcode-calibration")
+    set_tests_properties(original_ghidra_pcode_calibration PROPERTIES LABELS "reference" TIMEOUT 900)
+endif()
 if(TORCHLIGHT_ORIGINAL)
     add_test(NAME original_recovery_contracts COMMAND ${Python3_EXECUTABLE}
         "${CMAKE_CURRENT_SOURCE_DIR}/tools/generate_recovered.py"

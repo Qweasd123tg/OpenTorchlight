@@ -26,6 +26,7 @@ if(TORCHLIGHT_ORIGINAL AND NOT TORCHLIGHT_GAME_DIR)
 endif()
 option(TORCHLIGHT_ENABLE_RENDER "Build available offscreen rendering targets" ON)
 option(TORCHLIGHT_ENABLE_DESKTOP "Build the Wayland adapter when its SDK is available" ON)
+option(TORCHLIGHT_ENABLE_GHIDRA_PROBES "Run prepared pinned Ghidra project calibration (no download or analysis bootstrap)" OFF)
 include(cmake/CEGUI062.cmake)
 include(cmake/OGRE165Math.cmake)
 # Same test inputs/assertions; instrumentation may need a larger wall-clock budget.

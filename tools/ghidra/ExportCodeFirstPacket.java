@@ -1,6 +1,6 @@
 // Bounded, read-only export. Arguments: targets.txt output-dir expected-ELF-SHA256
 // No function creation, type commits, byte patching, auto-analysis or game execution.
-// Ghidra API references and validation limits: research/codefirst/SOURCES.md.
+// Ghidra API references and validation limits: research/decompiler-workflow.md.
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -13,6 +13,8 @@ import ghidra.program.model.address.*;
 import ghidra.program.model.block.*;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.pcode.PcodeOp;
+import ghidra.program.model.pcode.Varnode;
+import ghidra.program.model.lang.Register;
 import ghidra.program.model.symbol.*;
 
 public class ExportCodeFirstPacket extends GhidraScript {
@@ -49,7 +51,7 @@ public class ExportCodeFirstPacket extends GhidraScript {
                 // No getFunctionContaining fallback: an interior address must not
                 // silently turn into a successful export of another entry.
                 String a = addr(target);
-                Map<String,Object> data = object("schema",1,"address",a,"original_elf_sha256",module);
+                Map<String,Object> data = object("schema",2,"address",a,"original_elf_sha256",module);
                 String status = "missing_function";
                 if (fn != null) {
                     data = exportFunction(fn, decompiler, decompilerReady);
@@ -59,7 +61,7 @@ public class ExportCodeFirstPacket extends GhidraScript {
                 Files.writeString(temp.resolve(filename), json(data) + "\n", StandardCharsets.UTF_8);
                 entries.add(object("address",a,"json",filename,"status",status));
             }
-            Map<String,Object> manifest = object("schema",1,"original_elf_sha256",module,
+            Map<String,Object> manifest = object("schema",2,"original_elf_sha256",module,
                 "ghidra_version",Application.getApplicationVersion(),"program",currentProgram.getName(),
                 "language",currentProgram.getLanguageID().toString(),"image_base",addr(currentProgram.getImageBase()),
                 "functions",entries,"game_executed",false,"program_modified_by_script",false,
@@ -76,7 +78,7 @@ public class ExportCodeFirstPacket extends GhidraScript {
 
     private Map<String,Object> exportFunction(Function fn, DecompInterface dc, boolean ready) throws Exception {
         String a = addr(fn.getEntryPoint());
-        Map<String,Object> result = object("schema",1,"address",a,"original_elf_sha256",module,
+        Map<String,Object> result = object("schema",2,"address",a,"original_elf_sha256",module,
             "symbol",fn.getName(true),"signature",fn.getSignature().toString(),"is_thunk",fn.isThunk(),
             "body_ranges",ranges(fn.getBody()),"body_size",fn.getBody().getNumAddresses());
         List<Object> instructions = new ArrayList<>(), calls = new ArrayList<>(), incoming = new ArrayList<>();
@@ -87,7 +89,7 @@ public class ExportCodeFirstPacket extends GhidraScript {
             Instruction ins = iter.next();
             byte[] bytes = ins.getBytes();
             hash.update(addr(ins.getAddress()).getBytes(StandardCharsets.UTF_8)); hash.update(bytes);
-            List<Object> refs = new ArrayList<>(), pc = new ArrayList<>(), flows = new ArrayList<>(), operands = new ArrayList<>();
+            List<Object> refs = new ArrayList<>(), pc = new ArrayList<>(), semantic = new ArrayList<>(), flows = new ArrayList<>(), operands = new ArrayList<>();
             for (int i=0; i<ins.getNumOperands(); i++) operands.add(ins.getDefaultOperandRepresentation(i));
             Address[] flowAddresses = ins.getFlows();
             if (flowAddresses != null) for (Address f : flowAddresses) flows.add(addr(f));
@@ -98,13 +100,20 @@ public class ExportCodeFirstPacket extends GhidraScript {
                 if (data != null && data.getValue() instanceof String) r.put("string_value",data.getValue());
                 refs.add(r);
             }
-            for (PcodeOp op : ins.getPcode()) pc.add(op.toString());
+            int sequence = 0;
+            for (PcodeOp op : ins.getPcode()) {
+                pc.add(op.toString());
+                List<Object> inputs = new ArrayList<>();
+                for (Varnode input : op.getInputs()) inputs.add(varnode(input));
+                semantic.add(object("index",sequence++,"opcode",op.getOpcode(),"operation",op.getMnemonic(),
+                    "output",varnode(op.getOutput()),"inputs",inputs));
+            }
             Map<String,Object> row = object("address",addr(ins.getAddress()),"bytes",hex(bytes),"text",ins.toString(),
                 "mnemonic",ins.getMnemonicString(),"operands",operands,"flow_type",ins.getFlowType().toString(),
                 "is_call",ins.getFlowType().isCall(),"is_jump",ins.getFlowType().isJump(),
                 "is_computed",ins.getFlowType().isComputed(),"is_conditional",ins.getFlowType().isConditional(),
                 "is_terminal",ins.getFlowType().isTerminal(),"fallthrough",addr(ins.getFallThrough()),
-                "flows",flows,"references",refs,"pcode_navigation_only",pc);
+                "flows",flows,"references",refs,"pcode_navigation_only",pc,"pcode",semantic);
             instructions.add(row);
             if (ins.getFlowType().isCall()) {
                 List<Object> targets = new ArrayList<>();
@@ -163,6 +172,14 @@ public class ExportCodeFirstPacket extends GhidraScript {
         AddressRangeIterator it = set.getAddressRanges();
         while (it.hasNext()) { AddressRange r=it.next(); out.add(object("start",addr(r.getMinAddress()),"end_inclusive",addr(r.getMaxAddress()))); }
         return out;
+    }
+    private Map<String,Object> varnode(Varnode node) {
+        if (node == null) return null;
+        Address address = node.getAddress();
+        Register register = currentProgram.getLanguage().getRegister(address,node.getSize());
+        return object("space",address.getAddressSpace().getName(),"space_id",address.getAddressSpace().getSpaceID(),
+            "offset","0x"+Long.toUnsignedString(address.getOffset(),16),"size",node.getSize(),
+            "constant",node.isConstant(),"register",register == null ? null : register.getName());
     }
     private static String addr(Address a) {
         if (a == null || a.equals(Address.NO_ADDRESS)) return null;
