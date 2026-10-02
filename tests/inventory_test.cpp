@@ -78,6 +78,26 @@ try {
     require(!inventory.equipped_slot(0),"zero id never equipped");
     auto copied=inventory;
     require(copied.find(first)->weapon->maximum_damage==21,"copy retains roll");
+    const auto potion = [](std::uint32_t count) {
+        InventoryItem item; item.resource_guid=99;
+        ConsumableItem consumable; consumable.count=count; consumable.maximum_stack=20;
+        consumable.unavailable_reason="stack ownership fixture"; item.consumable=consumable;
+        return item;
+    };
+    PlayerInventory stacks;
+    const auto a=stacks.store(potion(18)), b=stacks.store(potion(18));
+    const auto c=stacks.store(potion(4));
+    require(stacks.items().size()==3 && stacks.find(a)->consumable->count==18 &&
+            stacks.find(b)->consumable->count==18 && stacks.find(c)->consumable->count==4,
+            "whole pickup must not spread across two partially full stacks");
+    PlayerInventory ordered;
+    const auto x=ordered.store(potion(20)), y=ordered.store(potion(20)), z=ordered.store(potion(20));
+    for(unsigned n=0;n<14;++n) require(ordered.consume_one(x),"decrease first stack");
+    for(unsigned n=0;n<11;++n) require(ordered.consume_one(y),"decrease second stack");
+    for(unsigned n=0;n<13;++n) require(ordered.consume_one(z),"decrease third stack");
+    require(ordered.store(potion(5))==z && ordered.find(x)->consumable->count==6 &&
+            ordered.find(y)->consumable->count==9 && ordered.find(z)->consumable->count==12,
+            "original selection compares later candidates against incoming count");
     const auto newer=copied.store(sword(100));
     require(newer>malformed_id,"copy retains identity allocator");
     require(!inventory.find(newer),"copy independent");

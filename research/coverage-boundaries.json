@@ -1794,6 +1794,28 @@
         "tests/reward_cycle_test.cpp"
       ],
       "comparison": "Pinned full owning-body identity plus explicit scalar span comparison; original_monster_experience_comparison checks unchanged div/mul/trunc instructions, not whole setLevel."
+    },
+    {
+      "addresses": [
+        "0x91ba50"
+      ],
+      "status": "partial",
+      "boundary": "Whole-stack candidate selection in stack-enabled dense portable bag: exact incoming-pointer replacement order and full-fit gate. Real world pickup and merchant purchase consume the selector. Native pane routing, sparse refs, capacity/failure and callbacks remain open.",
+      "evidence": [
+        "research/inventory-stack-pickup.md"
+      ],
+      "implementation": [
+        "src/inventory.cpp",
+        "include/torchlight/inventory.hpp",
+        "src/player_session.cpp"
+      ],
+      "tests": [
+        "tests/inventory_test.cpp",
+        "tests/consumable_test.cpp",
+        "tests/compare_inventory_stacks.py",
+        "tests/inventory_stack_probe.cpp"
+      ],
+      "comparison": "6005 unchanged whole findFreeSlot body comparisons with two explicit constant-zero pane adapters; dense occupied potion pane plus one empty slot only."
     }
   ],
   "port_systems": [

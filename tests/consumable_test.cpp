@@ -87,11 +87,11 @@ void cycle(const char* path) {
     require(legacy.inventory().find(hp)->consumable.has_value(),"legacy bottle stayed view-only");
     const auto hydrated=encode_checkpoint(checkpoint(legacy));legacy.hydrate_consumables(f.definitions,f.resources);
     require(hydrated==encode_checkpoint(checkpoint(legacy)),"hydration re-evaluated saved descriptor");
-    // Shared bag operation: partial stack transfer, uses, infinite sentinel, mismatch.
+    // Shared automatic pickup: whole-stack fit, uses, infinite sentinel, mismatch.
     PlayerInventory bag;InventoryItem i;i.resource_guid=9;i.consumable=ConsumableItem{};
     i.consumable->maximum_stack=3;i.consumable->count=2;i.consumable->effects={{u"HP",124,2,100}};
     auto a=bag.store(i);auto b=bag.store(i);
-    require(a==b && bag.items().size()==2 && bag.find(a)->consumable->count==3 && bag.items()[1].consumable->count==1,"partial stack merge lost remainder");
+    require(a!=b && bag.items().size()==2 && bag.find(a)->consumable->count==2 && bag.find(b)->consumable->count==2,"automatic pickup split a whole stack");
     i.consumable->effects[0].value=101;require(bag.store(i)!=a,"different effect instances merged");
     i.consumable->count=1;i.consumable->uses=-9999;auto infinite=bag.store(i);
     require(bag.consume_one(infinite)&&bag.find(infinite),"infinite item exhausted");

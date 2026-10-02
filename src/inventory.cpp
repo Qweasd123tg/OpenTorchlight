@@ -8,37 +8,45 @@ namespace torchlight {
 static_assert(static_cast<std::size_t>(InventorySlot::count) ==
               static_cast<std::size_t>(ArmorSlot::count) + 1U,
               "Portable inventory/armor slot mapping must stay aligned");
+std::optional<std::size_t> inventory_pickup_stack(
+    const std::vector<InventoryItem>& items, const InventoryItem& incoming) noexcept {
+    if (!incoming.consumable || incoming.consumable->maximum_stack <= 1) return std::nullopt;
+    std::optional<std::size_t> selected;
+    for (std::size_t index = 0; index < items.size(); ++index) {
+        const auto& other = items[index];
+        if (!other.consumable || other.weapon || other.armor ||
+            other.resource_guid != incoming.resource_guid || other.name != incoming.name ||
+            other.display_name != incoming.display_name || other.unit_type != incoming.unit_type ||
+            other.mesh_path != incoming.mesh_path || !same_consumable(*other.consumable, *incoming.consumable)) continue;
+        const auto sum = static_cast<std::uint64_t>(incoming.consumable->count) + other.consumable->count;
+        if (sum > other.consumable->maximum_stack) continue;
+        // Preserve the original incoming-pointer comparison, including its
+        // surprising replacement order; do not turn it into best-fit packing.
+        if (!selected || other.consumable->count > incoming.consumable->count) selected = index;
+    }
+    return selected;
+}
 InventoryId PlayerInventory::store(InventoryItem item) {
     if (item.consumable) {
         validate_consumable(*item.consumable);
         if (item.weapon || item.armor) throw std::invalid_argument("consumable equipment conflict");
-        // Stage all stack changes: allocation failure cannot lose part of a pickup.
+        // Stage ownership changes: allocation failure cannot consume the pickup.
         auto staged = items_;
-        auto remaining = item.consumable->count;
-        InventoryId first = 0;
-        for (auto& other : staged) {
-            if (!other.consumable || other.weapon || other.armor ||
-                other.resource_guid != item.resource_guid || other.name != item.name ||
-                other.display_name != item.display_name || other.unit_type != item.unit_type ||
-                other.mesh_path != item.mesh_path || !same_consumable(*other.consumable, *item.consumable)) continue;
-            const auto take = std::min(remaining, other.consumable->maximum_stack - other.consumable->count);
-            if (take == 0) continue;
-            other.consumable->count += take;
-            remaining -= take;
-            if (!first) first = other.id;
-            if (!remaining) break;
-        }
-        if (remaining) {
+        InventoryId result = 0;
+        const auto target = inventory_pickup_stack(staged, item);
+        if (target) {
+            staged[*target].consumable->count += item.consumable->count;
+            result = staged[*target].id;
+        } else {
             if (next_id_ == 0 || next_id_ == std::numeric_limits<InventoryId>::max())
                 throw std::overflow_error("Inventory instance ID exhausted");
             item.id = next_id_;
-            item.consumable->count = remaining;
             staged.push_back(std::move(item));
-            if (!first) first = next_id_;
+            result = next_id_;
         }
         items_.swap(staged);
-        if (remaining) ++next_id_;
-        return first;
+        if (!target) ++next_id_;
+        return result;
     }
     if (next_id_ == 0) throw std::overflow_error("Inventory instance ID exhausted");
     const auto id = next_id_;

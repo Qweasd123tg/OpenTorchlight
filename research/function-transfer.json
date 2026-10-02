@@ -3857,6 +3857,26 @@
           "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open."
         ]
       }
+    },
+    "0x0091ba50": {
+      "symbol": "CInventory::findFreeSlot(CEquipment*)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Native pane/type routing, sparse refs/capacity fallback, original bag limits, pickup/remove ownership and callbacks remain outside the dense valid potion projection."
+        ]
+      },
+      "evidence": "research/inventory-stack-pickup.md",
+      "implementation": "src/inventory.cpp; include/torchlight/inventory.hpp; src/player_session.cpp",
+      "tests": "tests/inventory_test.cpp; tests/consumable_test.cpp; tests/compare_inventory_stacks.py; tests/inventory_stack_probe.cpp",
+      "comparison": "6005 unchanged native full-body comparisons with two explicit pane-selection ABI adapters; whole fit, GUID routing and incoming-count replacement order.",
+      "notes": "One original owning function remains partial; production scalar candidate selection consumes already evaluated owned descriptors."
     }
   }
 }

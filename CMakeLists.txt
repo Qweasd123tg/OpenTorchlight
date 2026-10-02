@@ -380,6 +380,15 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(inventory_test tests/inventory_test.cpp)
     target_link_libraries(inventory_test PRIVATE torchlight_core)
     add_test(NAME inventory_instances COMMAND inventory_test)
+    add_executable(inventory_stack_probe tests/inventory_stack_probe.cpp)
+    target_link_libraries(inventory_stack_probe PRIVATE torchlight_core)
+    target_compile_options(inventory_stack_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_inventory_stack_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_inventory_stacks.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:inventory_stack_probe>)
+        set_tests_properties(original_inventory_stack_comparison PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
     set(ITEM_CYCLE_FIXTURE ${CMAKE_CURRENT_BINARY_DIR}/fixtures/item-cycle.pak.zip)
     add_custom_command(OUTPUT ${ITEM_CYCLE_FIXTURE}
         COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/make_item_cycle_fixture.py

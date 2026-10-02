@@ -25,13 +25,21 @@ struct InventoryItem {
     bool two_handed = false;
     std::optional<ConsumableItem> consumable;
 };
+// original-code: CInventory::findFreeSlot @0x91ba50, stack-enabled dense
+// portable bag projection. Whole incoming count must fit. At 0x91bbc3 R14
+// becomes the INCOMING item, so later candidates compare against its count,
+// not against the previous candidate's count. Descriptor equality is the
+// port's explicit evaluated-instance boundary; original compares resource GUID.
+[[nodiscard]] std::optional<std::size_t> inventory_pickup_stack(
+    const std::vector<InventoryItem>& items, const InventoryItem& incoming) noexcept;
 enum class InventoryChange { changed, unchanged, not_found, unsupported, busy, dead };
 
 class PlayerInventory {
 public:
     // Owns the already rolled instance, never re-rolls from a resource GUID.
     // Bag pane numbering/capacity remain portable. Identical consumables stack
-    // up to resource MAXSTACKSIZE; evaluated effect data must also match.
+    // up to resource MAXSTACKSIZE when the WHOLE incoming stack fits;
+    // evaluated effect data must also match. No partial multi-stack spreading.
     [[nodiscard]] InventoryId store(InventoryItem item);
     [[nodiscard]] bool erase(InventoryId id) noexcept;
     [[nodiscard]] bool consume_one(InventoryId id) noexcept;

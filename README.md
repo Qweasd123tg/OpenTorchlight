@@ -91,6 +91,11 @@ CPU/resource/reference gates с отчётом по системам игры. �
 `UNKNOWN` на внешнем вызове. Команды и точная граница:
 [p-code automation](research/pcode-automation.md).
 
+Автоматический подбор стопок исправлен по оригиналу: incoming stack переносится
+целиком; выбор кандидата сохраняет исходное сравнение с incoming count.
+6005 сравнений с неизменённым телом `findFreeSlot` и production regressions:
+[inventory stack pickup](research/inventory-stack-pickup.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).
