@@ -77,6 +77,7 @@ add_library(torchlight_core STATIC
     src/inventory_create.cpp
     src/panel_open.cpp
     src/ui_pause.cpp
+    src/gold_pickup.cpp
     src/ui_font.cpp
     src/ui_text.cpp
     src/menu_scene.cpp
@@ -386,6 +387,21 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME ui_game_pause COMMAND ui_pause_test)
     add_executable(ui_pause_probe tests/ui_pause_probe.cpp)
     target_link_libraries(ui_pause_probe PRIVATE torchlight_core)
+    add_executable(gold_pickup_probe tests/gold_pickup_probe.cpp)
+    target_link_libraries(gold_pickup_probe PRIVATE torchlight_core)
+    add_executable(auto_gold_test tests/auto_gold_test.cpp)
+    target_link_libraries(auto_gold_test PRIVATE torchlight_core)
+    add_test(NAME auto_gold_pickup COMMAND auto_gold_test)
+    if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_auto_gold_collection COMMAND auto_gold_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
+    endif()
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_auto_gold_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_auto_gold.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:gold_pickup_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/auto-gold-original.json)
+        set_tests_properties(original_auto_gold_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
     if(TORCHLIGHT_ORIGINAL)
         add_test(NAME original_ui_pause_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_pause.py

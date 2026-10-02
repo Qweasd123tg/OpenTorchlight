@@ -3937,6 +3937,26 @@
       "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
       "comparison": "1536 unchanged whole original query/real getters/modal/console/GetInt body comparisons with one evaluated visibility adapter.",
       "notes": "Actual panel controller flags own inputs; every live gameplay clock/HIT gate consumes the predicate. Full original-function completion stays partial."
+    },
+    "0x0056e3a0": {
+      "symbol": "CGameClient::autoPickupGold()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Original findItemsOnscreen/camera/eligibility/list ownership, full getItem callbacks/resource effects and original character state/path lifecycle remain outside the connected normal gold projection; frame camera admission is explicitly prototype."
+        ]
+      },
+      "evidence": "research/auto-gold-pickup.md",
+      "implementation": "src/gold_pickup.cpp; src/player_session.cpp; src/application.cpp; src/gles_scene_renderer.cpp; include/torchlight/gold_pickup.hpp",
+      "tests": "tests/compare_auto_gold.py; tests/gold_pickup_probe.cpp; tests/auto_gold_test.cpp",
+      "comparison": "6006 unchanged whole original autoPickupGold/alive body executions with explicit dependency adapters vs production selector; actual resource-backed owned wallet/world collection tests.",
+      "notes": "Actual cached onscreen membership is required input and never fabricated from all world items. Native visibility/frames/full function closure remain partial."
     }
   }
 }

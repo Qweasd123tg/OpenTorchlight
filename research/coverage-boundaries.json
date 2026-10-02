@@ -1863,6 +1863,29 @@
         "tests/compare_ui_pause.py"
       ],
       "comparison": "1536 unchanged original query/real getter/modal/console/GetInt body comparisons; one explicit evaluated visibility adapter, raw property index fixture, immutable valid bool flags only."
+    },
+    {
+      "addresses": [
+        "0x56e3a0"
+      ],
+      "status": "partial",
+      "boundary": "Whole alive/pathing/ISA(0x22)/f32 XZ strict radius<3.0/cached-next selection translated. Actual previous-frame on-screen input feeds player wallet/world/logic/render consumers. Native visibility-list producer, full getItem callbacks, original lifetimes/state/pathing and save format remain open; actual-render-camera admission is a declared prototype adapter.",
+      "evidence": [
+        "research/auto-gold-pickup.md"
+      ],
+      "implementation": [
+        "src/gold_pickup.cpp",
+        "src/player_session.cpp",
+        "src/application.cpp",
+        "src/gles_scene_renderer.cpp",
+        "include/torchlight/gold_pickup.hpp"
+      ],
+      "tests": [
+        "tests/compare_auto_gold.py",
+        "tests/gold_pickup_probe.cpp",
+        "tests/auto_gold_test.cpp"
+      ],
+      "comparison": "6006 unchanged whole autoPickupGold/alive body executions with explicit ISA/getPosition/getItem adapters vs production selector; real resource-backed owned gold collection. Original visibility provider and frame comparison are excluded."
     }
   ],
   "port_systems": [

@@ -895,6 +895,15 @@ public:
                 (1 - ndc[1]) * 0.5F * last_height_ - 0.5F};
     }
     bool instance_visible(std::size_t index) const { return instances_.at(index).visible; }
+    bool world_point_on_screen(const Vector3& world) const {
+        if(!last_perspective_ready_||last_width_<=0||last_height_<=0)return false;
+        try {
+            const auto ndc=last_camera_.project_ndc(world);
+            // original-code: findItemsOnscreen @0x95013a..0x950190 XY gates;
+            // lower X is open, the other three boundaries are inclusive.
+            return ndc[0]>-1.0F&&ndc[0]<=1.0F&&ndc[1]>=-1.0F&&ndc[1]<=1.0F;
+        }catch(const std::invalid_argument&){return false;}
+    }
 
     void write_diagnostics(std::ostream& out) const {
         using namespace diagnostic;
@@ -1298,6 +1307,9 @@ const GlesSceneRenderStats& GlesSceneRenderer::stats() const noexcept {
 
 std::array<float, 2> GlesSceneRenderer::pixel_position_of_world(const Vector3& world) const {
     return implementation_->pixel_position_of_world(world);
+}
+bool GlesSceneRenderer::world_point_on_screen(const Vector3& world) const {
+    return implementation_->world_point_on_screen(world);
 }
 void GlesSceneRenderer::write_diagnostics(std::ostream& out) const {
     implementation_->write_diagnostics(out);

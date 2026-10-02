@@ -4,6 +4,7 @@
 #include "torchlight/enemy_ai.hpp"
 #include "torchlight/inventory.hpp"
 #include "torchlight/merchant.hpp"
+#include "torchlight/gold_pickup.hpp"
 #include "torchlight/skill_event_runtime.hpp"
 #include <map>
 
@@ -33,6 +34,9 @@ public:
     [[nodiscard]] PurchaseResult buy_potion(const PotionMerchantCatalog&, std::int64_t merchant_guid, std::int64_t item_guid);
     [[nodiscard]] SaleResult sell_potion(const PotionMerchantCatalog&, RuntimeEntity& merchant, InventoryId item);
     [[nodiscard]] PurchaseResult buy_back_potion(const PotionMerchantCatalog&, RuntimeEntity& merchant, InventoryId item);
+    [[nodiscard]] GoldCollection auto_pick_up_gold(RuntimeEntityWorld&, LogicRuntime&,
+        const std::array<float,3>& position,bool moving,
+        const std::vector<std::uint64_t>& onscreen_items);
     [[nodiscard]] float barter_percent() const;
     [[nodiscard]] ConsumableUse use_consumable(InventoryId id);
     [[nodiscard]] ConsumableUse use_recovery(bool health);

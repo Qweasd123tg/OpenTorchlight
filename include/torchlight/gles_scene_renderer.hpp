@@ -58,6 +58,10 @@ public:
     [[nodiscard]] const GlesSceneRenderStats& stats() const noexcept;
     // Last rendered camera. Screen coordinates returned with TOP-left origin.
     [[nodiscard]] std::array<float, 2> pixel_position_of_world(const Vector3& world) const;
+    // Point gate on the actual last-rendered perspective camera. Original XY
+    // boundary is CLevel::findItemsOnscreen; full native item flags/visibility
+    // callbacks and original view/projection ownership remain a separate slice.
+    [[nodiscard]] bool world_point_on_screen(const Vector3& world) const;
     void write_diagnostics(std::ostream& out) const;
 
 private:

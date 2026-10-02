@@ -117,6 +117,31 @@ void PlayerSession::give_gold(std::int32_t amount) noexcept {
     gold_ = static_cast<std::int32_t>(std::clamp<std::int64_t>(
         total, 0, std::numeric_limits<std::int32_t>::max()));
 }
+GoldCollection PlayerSession::auto_pick_up_gold(RuntimeEntityWorld& world,LogicRuntime& logic,
+    const std::array<float,3>& position,bool moving,const std::vector<std::uint64_t>& onscreen_items) {
+    if(!health_.alive()||!moving)return {};
+    std::vector<GoldPickupPoint> points;
+    for(const auto id:onscreen_items) {
+        const auto* entity=world.find(id);
+        if(!entity||entity->kind!=MasterResourceKind::item||!entity->alive||!entity->enabled||!entity->visible||
+           !entity->gold_amount||entity->inventory_eligible)continue;
+        points.push_back({entity->id,entity->position,world.is_unit_type(*entity,0x22)});
+    }
+    GoldCollection result;
+    result.entities=auto_gold_targets(position,true,moving,points);
+    // Allocate the bounded candidate collection before changing ownership.
+    // pick_up emits queued logic; the caller drains it after the scan, so no
+    // world vector pointer/iterator survives synchronous world growth.
+    std::size_t accepted=0;
+    for(const auto id:result.entities) {
+        const auto amount=pick_up_gold(world,id,logic);
+        if(!amount)continue;
+        result.entities[accepted++]=id;
+        result.amount+=*amount;
+    }
+    result.entities.resize(accepted);
+    return result;
+}
 RecoveryResult PlayerSession::recover_at_entry(EnemyController& enemies, ActorMotion& motion,
     const std::array<float, 3>& anchor) {
     if (health_.alive()) return {RecoveryStatus::alive, 0};

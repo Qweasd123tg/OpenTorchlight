@@ -107,6 +107,11 @@ v1–v6. Доказательства, проверки и оставшиеся 
 приостанавливают её. AI и логика продолжают работу во время cast.
 1536 сравнений с оригиналом и границы: [game pause](research/ui-game-pause.md).
 
+Автоподбор золота подключён к движению, списку экранных предметов, кошельку,
+LogicRuntime и consumed world state. Проверены исходный строгий XZ-радиус 3.0
+и запрет stationary/dead pickup; 6006 native сравнений. Camera/list adapter
+остаётся ограниченным: [auto gold pickup](research/auto-gold-pickup.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).

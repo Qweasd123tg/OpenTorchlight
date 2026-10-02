@@ -138,6 +138,9 @@ public:
     [[nodiscard]] const RuntimeEntity* find(std::uint64_t entity_id) const noexcept;
     [[nodiscard]] const RuntimeEntity* find_layout_entity(
         std::int64_t layout_object_id) const noexcept;
+    [[nodiscard]] bool is_unit_type(const RuntimeEntity& entity,std::int32_t original_type) const noexcept {
+        return unit_types_->is_a_id(entity.unit_type,original_type);
+    }
     [[nodiscard]] const RuntimeEntity* nearest_alive_monster(
         const std::array<float, 3>& position, float maximum_distance) const noexcept;
     [[nodiscard]] const RuntimeEntity* nearest_alive_item(

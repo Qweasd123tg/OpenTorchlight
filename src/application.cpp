@@ -1203,6 +1203,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 } else ++equipped_armor_count;
             };
             bool rendered_once = false;
+            std::vector<std::uint64_t> onscreen_gold;
             bool saved_for_exit = false;
             auto previous_frame = window.clock_seconds();
             const auto observe = [&](const char* phase, const OgreMeshPose* pose = nullptr) {
@@ -1790,6 +1791,24 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     logic_runtime.update_player_position(player_motion.position());
                     drain_logic();
                 }
+                // original-code: updateIngame @0x58e8fa calls autoPickupGold
+                // after the unpaused level update. +0x264 is the pathing flag,
+                // whose writer/clearer are the path builder/stopPathing.
+                if(!pending_warp&&!menu_paused&&player_combat.alive()) {
+                    const auto collected=session.auto_pick_up_gold(entity_world,logic_runtime,
+                        player_motion.position(),player_motion.moving(),onscreen_gold);
+                    for(const auto id:collected.entities) {
+                        if(const auto instance=runtime_instance_indices.find(id);instance!=runtime_instance_indices.end()) {
+                            level.geometry.instances[instance->second].visible=false;
+                            renderer->set_instance_visible(instance->second,false);
+                        }
+                        if(active_pickup==id)active_pickup=0;
+                    }
+                    if(!collected.entities.empty()) {
+                        std::cout<<"auto_gold_collected="<<collected.entities.size()<<" amount="<<collected.amount<<" wallet="<<session.gold()<<'\n';
+                        drain_logic();
+                    }
+                }
                 const float animation_elapsed = simulation_elapsed;
                 if (!player_combat.alive()) { combat.clear_target(); combat.interrupt_attack(); }
                 combat.advance_animation(animation_elapsed);
@@ -2344,6 +2363,19 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 }
                 window.draw_scene_frame(*renderer, ui_renderer, overlay,
                                         (inventory_view.open && !inventory_preview_visible) || !player_combat.alive(), hud);
+                // Original +0xc0 is findItemsOnscreen's cached list, not all
+                // level items. Rebuild after drawing; next update consumes it.
+                // This adapter uses the actual rendered camera/instances;
+                // full native CItem flag callbacks and camera lifecycle stay open.
+                if(!menu_paused) {
+                    onscreen_gold.clear();
+                    for(const auto& entity:entity_world.entities()) {
+                        if(!entity.alive||!entity.enabled||!entity.visible||!entity.gold_amount)continue;
+                        const auto instance=runtime_instance_indices.find(entity.id);
+                        if(instance!=runtime_instance_indices.end()&&renderer->instance_visible(instance->second)&&
+                           renderer->world_point_on_screen(entity.position))onscreen_gold.push_back(entity.id);
+                    }
+                }
                 observe("after_draw", &player_pose);
                 rendered_once = true;
                 ++level_frames;
