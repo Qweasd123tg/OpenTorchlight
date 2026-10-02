@@ -9,7 +9,8 @@
 
 После принятия контракта доступен полный локальный путь `check.py --recover`:
 source extraction/check → production C++ generation → real consumer build →
-original/resource/regression/registry gates. Принятые UI/RNG рецепты уже входят
+original/resource/regression/registry gates по всей зарегистрированной CPU
+цепочке. Принятые UI/RNG и [gameplay рецепты](recovery-gameplay.md) уже входят
 в обычную CMake сборку; [точный контракт и команда](recovery-automation.md).
 Неизвестные типы/вызовы не получают шаблон по сходству. Completion остаётся
 отдельным whole-function review; generated outputs его не повышают.

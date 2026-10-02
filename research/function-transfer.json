@@ -3577,6 +3577,286 @@
           "Raw-state numeric contract and live consumers are transferred; original process-global RNG seed/clock/shared-stream ownership and complete call ordering remain outside the port-owned adapter."
         ]
       }
+    },
+    "0x00815a20": {
+      "symbol": "CCharacter::walkingSpeed()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/character_stats.cpp; src/typed_damage.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_character_stats.py; tests/character_stats_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open."
+        ]
+      }
+    },
+    "0x00815ad0": {
+      "symbol": "CCharacter::runningSpeed()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/character_stats.cpp; src/typed_damage.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_character_stats.py; tests/character_stats_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open."
+        ]
+      }
+    },
+    "0x00814530": {
+      "symbol": "CCharacter::defense()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/character_stats.cpp; src/typed_damage.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_character_stats.py; tests/character_stats_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open."
+        ]
+      }
+    },
+    "0x008145c0": {
+      "symbol": "CCharacter::armorBonus()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/character_stats.cpp; src/typed_damage.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_character_stats.py; tests/character_stats_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open."
+        ]
+      }
+    },
+    "0x00814670": {
+      "symbol": "CCharacter::AC()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/character_stats.cpp; src/typed_damage.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_character_stats.py; tests/character_stats_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open."
+        ]
+      }
+    },
+    "0x00971530": {
+      "symbol": "CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/population-evidence.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/population.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_gameplay_numeric.py; tests/population_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "10,055 counts and post-call RNG states matched original bounded function",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Monster-count integer/density calculation with real original RNG, finite supported bounds; not whole population."
+        ]
+      }
+    },
+    "0x007eb5f0": {
+      "symbol": "CEffectManager::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/finite-recovery-evidence.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/consumable.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_gameplay_numeric.py; tests/consumable_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "10,040 evaluated binary32 values; synthetic original manager, not full scheduler",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Finite recovery scale for effect types 6/7/123/124 matches bounded original instructions; full manager/cache/lifetime is NOT implemented."
+        ]
+      }
+    },
+    "0x0082b550": {
+      "symbol": "CCharacter::attack()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/ordinary-attack-action.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/attack_action.cpp; src/attack_action.cpp; src/combat.cpp; src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/attack_action_test.cpp; tests/ordinary_combat_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "Original finite attack-speed scalar branches at 0x82b976..0x82b9c5 and 0x82bcea..0x82bd46 plus flag-one multiply 0x82b9e1..0x82b9e9 statically compared to generated production helper. tests/compare_attack_speed.py executes unchanged slices with explicit effect getter and controlled flag input; not whole attack.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Ordinary melee selection, clip timing and multi-HIT ledger implemented; special attacks and full effect/animation lifecycle remain."
+        ]
+      }
+    },
+    "0x008dfd80": {
+      "symbol": "CMonster::attackAI(float, CLevel&)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/monster-ai-cooldown.md; research/ordinary-attack-action.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/enemy_ai_cooldown_test.cpp; tests/compare_ai_cooldown.py; tests/recovery_codegen_test.py",
+      "comparison": "Original rearm scalar 0x8e00e6..0x8e013d statically compared to generated cooldown_arm: optional equipment then separate unit clamp/add. tests/compare_ai_cooldown.py executes unchanged scalar bytes; other attackAI branches remain open.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Independent signed AI cooldown and ordinary melee action. Full think scheduling/factions/AI flag lifecycle not ported."
+        ]
+      }
+    },
+    "0x008e3a40": {
+      "symbol": "CMonster::updateAI(float, bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/monster-ai-cooldown.md; research/ordinary-attack-action.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/enemy_ai.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/enemy_ai_cooldown_test.cpp; tests/compare_ai_cooldown.py; tests/recovery_codegen_test.py",
+      "comparison": "Original timer subtraction 0x8e3a5b..0x8e3a6f statically compared to generated cooldown_tick, preserving negative remainder before think gating. tests/compare_ai_cooldown.py executes unchanged scalar bytes; other updateAI branches remain open.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Independent signed AI cooldown and ordinary melee action. Full think scheduling/factions/AI flag lifecycle not ported."
+        ]
+      }
+    },
+    "0x008ca940": {
+      "symbol": "CItemGold::unitInit(CDataGroup*, bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/original-gameplay-inputs.json; research/disassembly/8ca940-gold-unit-init.asm; research/progression-and-world-rewards.md; research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/progression.cpp; src/entity_world.cpp; src/player_session.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_world_gold.py; tests/reward_cycle_test.cpp; tests/reward_save_process_test.py; tests/recovery_codegen_test.py",
+      "comparison": "tests/compare_world_gold.py (export scalar only; --original optional, not run in large-8)",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Gold float multiply/divide/ceil scalar compared against unchanged targeted-export instructions. Portable Normal world piles/pickup/save implemented. Original volatile RNG order, dungeon rank propagation and pickup attribution remain unverified; original function status retained."
+        ]
+      }
+    },
+    "0x0083ead0": {
+      "symbol": "CCharacter::setLevel(unsigned int, bool)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json; research/progression-and-world-rewards.md",
+      "implementation": "src/progression.cpp; src/entity_world.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_monster_experience.py; tests/reward_cycle_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "Pinned full owning-body identity plus explicit scalar span comparison; original_monster_experience_comparison checks unchanged div/mul/trunc instructions, not whole setLevel.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only the monster XP graph scalar at 0x83ecea..0x83ecfd is transferred to generated production arithmetic and entity rewards. Remaining setLevel/champion/party/fame lifecycle is open."
+        ]
+      }
+    },
+    "0x0086fc20": {
+      "symbol": "CEquipment::buyPrice()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/economy.cpp; src/player_session.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_economy.py; tests/merchant_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "Whole owning-body identity and arithmetic/order static comparison; original_economy_comparison executes unchanged buy/sell bodies with explicit getPlayer/getEffectValue stubs.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open."
+        ]
+      }
+    },
+    "0x0086fb40": {
+      "symbol": "CEquipment::sellPrice()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "implementation": "src/economy.cpp; src/player_session.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
+      "tests": "tests/compare_economy.py; tests/merchant_test.cpp; tests/recovery_codegen_test.py",
+      "comparison": "Whole owning-body identity and arithmetic/order static comparison; original_economy_comparison executes unchanged buy/sell bodies with explicit getPlayer/getEffectValue stubs.",
+      "notes": "Generated reviewed recipe and raw source operands feed existing production wrappers. All source bytes are pinned; full owner identity does not widen the explicitly recorded adapter or scalar boundary. Automatic execution never promotes original-function completion.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open."
+        ]
+      }
     }
   }
 }

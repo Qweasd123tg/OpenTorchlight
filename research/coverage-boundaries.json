@@ -426,12 +426,15 @@
       "evidence": [
         "research/original-gameplay-inputs.json",
         "research/disassembly/8ca940-gold-unit-init.asm",
-        "research/progression-and-world-rewards.md"
+        "research/progression-and-world-rewards.md",
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
         "src/progression.cpp",
         "src/entity_world.cpp",
-        "src/player_session.cpp"
+        "src/player_session.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
       ],
       "tests": [
         "tests/compare_world_gold.py",
@@ -449,13 +452,16 @@
       "status": "partial",
       "boundary": "Ordinary melee selection, clip timing and multi-HIT ledger implemented; special attacks and full effect/animation lifecycle remain.",
       "evidence": [
-        "research/ordinary-attack-action.md"
+        "research/ordinary-attack-action.md",
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
         "src/attack_action.cpp",
         "src/attack_action.cpp",
         "src/combat.cpp",
-        "src/enemy_ai.cpp"
+        "src/enemy_ai.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
       ],
       "tests": [
         "tests/attack_action_test.cpp",
@@ -505,10 +511,13 @@
       "boundary": "Independent signed AI cooldown and ordinary melee action. Full think scheduling/factions/AI flag lifecycle not ported.",
       "evidence": [
         "research/monster-ai-cooldown.md",
-        "research/ordinary-attack-action.md"
+        "research/ordinary-attack-action.md",
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
-        "src/enemy_ai.cpp"
+        "src/enemy_ai.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
       ],
       "tests": [
         "tests/enemy_ai_cooldown_test.cpp",
@@ -743,10 +752,13 @@
       "status": "partial",
       "boundary": "Finite recovery scale for effect types 6/7/123/124 matches bounded original instructions; full manager/cache/lifetime is NOT implemented.",
       "evidence": [
-        "research/finite-recovery-evidence.md"
+        "research/finite-recovery-evidence.md",
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
-        "src/consumable.cpp"
+        "src/consumable.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
       ],
       "tests": [
         "tests/compare_gameplay_numeric.py",
@@ -761,10 +773,13 @@
       "status": "verified",
       "boundary": "Monster-count integer/density calculation with real original RNG, finite supported bounds; not whole population.",
       "evidence": [
-        "research/population-evidence.md"
+        "research/population-evidence.md",
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
       ],
       "implementation": [
-        "src/population.cpp"
+        "src/population.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
       ],
       "tests": [
         "tests/compare_gameplay_numeric.py",
@@ -1709,6 +1724,76 @@
         "tests/recovery_codegen_test.py"
       ],
       "comparison": "Full source body and family operand differences read at original c92a70/c92b50. Generated helper matches existing private-original normal RNG/weighted/intersection bit/state gate (64004 comparisons); observer remains in the production wrapper. No global process initialization or full game parity claim."
+    },
+    {
+      "addresses": [
+        "0x815a20",
+        "0x815ad0",
+        "0x814530",
+        "0x8145c0",
+        "0x814670"
+      ],
+      "status": "partial",
+      "boundary": "Whole numeric getter bodies reviewed with evaluated finite effects and int32 intermediates. Generated production bonuses/movement feed player/enemy movement and typed physical defense. Full original effect/inventory/master initialization and lifetime remain open.",
+      "evidence": [
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
+      ],
+      "implementation": [
+        "src/character_stats.cpp",
+        "src/typed_damage.cpp",
+        "src/enemy_ai.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
+      ],
+      "tests": [
+        "tests/compare_character_stats.py",
+        "tests/character_stats_test.cpp"
+      ],
+      "comparison": "ASM/full-body identity comparison for five getters; original_character_stats_comparison exercises unchanged functions with controlled effect/inventory/master dependencies and host ceilf."
+    },
+    {
+      "addresses": [
+        "0x86fc20",
+        "0x86fb40"
+      ],
+      "status": "partial",
+      "boundary": "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open.",
+      "evidence": [
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json"
+      ],
+      "implementation": [
+        "src/economy.cpp",
+        "src/player_session.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
+      ],
+      "tests": [
+        "tests/compare_economy.py",
+        "tests/merchant_test.cpp"
+      ],
+      "comparison": "Whole owning-body identity and arithmetic/order static comparison; original_economy_comparison executes unchanged buy/sell bodies with explicit getPlayer/getEffectValue stubs."
+    },
+    {
+      "addresses": [
+        "0x83ead0"
+      ],
+      "status": "partial",
+      "boundary": "Only the monster XP graph scalar at 0x83ecea..0x83ecfd is transferred to generated production arithmetic and entity rewards. Remaining setLevel/champion/party/fame lifecycle is open.",
+      "evidence": [
+        "research/recovery-gameplay.md",
+        "research/recovery-contracts.json",
+        "research/progression-and-world-rewards.md"
+      ],
+      "implementation": [
+        "src/progression.cpp",
+        "src/entity_world.cpp",
+        "tools/recovery_templates/gameplay_numeric.hpp.in"
+      ],
+      "tests": [
+        "tests/compare_monster_experience.py",
+        "tests/reward_cycle_test.cpp"
+      ],
+      "comparison": "Pinned full owning-body identity plus explicit scalar span comparison; original_monster_experience_comparison checks unchanged div/mul/trunc instructions, not whole setLevel."
     }
   ],
   "port_systems": [

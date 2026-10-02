@@ -1,5 +1,6 @@
 #include "torchlight/scene_animation.hpp"
 #include "torchlight/attack_action.hpp"
+#include "torchlight/recovered/gameplay_numeric.hpp"
 #include "torchlight/ogre_mesh.hpp"
 #include "torchlight/original_combat_inputs.hpp"
 
@@ -251,17 +252,13 @@ AttackEffects total_attack_effects(const AttackLoadout& loadout,
     return effects;
 }
 float ordinary_attack_speed(float denominator, const AttackEffects& effects, bool ai_flag_one) {
-    using namespace original_combat_inputs;
     if (!std::isfinite(denominator) || denominator <= 0)
         throw std::invalid_argument("attack description SPEED must be positive and finite");
     auto speed = effects.get(0x16);
     const auto resistance = effects.get(0x8c);
     if (!std::isfinite(speed) || !std::isfinite(resistance))
         throw std::invalid_argument("non-finite attack speed contribution");
-    if (speed < 0) speed *= speed_one - std::clamp(resistance / percentage_divisor, 0.0F, speed_one);
-    auto result = std::max(minimum_attack_speed, (speed_one + speed / percentage_divisor) / denominator);
-    // Original 0x82b9e1: multiplier follows the minimum clamp, not precedes it.
-    if (ai_flag_one) result *= ai_flag_one_speed_multiplier;
+    const auto result = recovered::attack_speed(denominator, speed, resistance, ai_flag_one);
     if (!std::isfinite(result)) throw std::invalid_argument("attack speed effect overflow");
     return result;
 }

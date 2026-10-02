@@ -5,7 +5,8 @@ set(TORCHLIGHT_RECOVERED_INCLUDE "${CMAKE_CURRENT_BINARY_DIR}/generated/recovere
 set(TORCHLIGHT_RECOVERED_DIR "${TORCHLIGHT_RECOVERED_INCLUDE}/torchlight/recovered")
 set(TORCHLIGHT_RECOVERED_HEADERS
     "${TORCHLIGHT_RECOVERED_DIR}/ui_bindings.hpp"
-    "${TORCHLIGHT_RECOVERED_DIR}/mwc_float.hpp")
+    "${TORCHLIGHT_RECOVERED_DIR}/mwc_float.hpp"
+    "${TORCHLIGHT_RECOVERED_DIR}/gameplay_numeric.hpp")
 set(_recovery_original_args)
 set(_recovery_original_dependencies)
 if(TORCHLIGHT_ORIGINAL)
@@ -23,6 +24,7 @@ add_custom_command(OUTPUT ${TORCHLIGHT_RECOVERED_HEADERS}
         "${CMAKE_CURRENT_SOURCE_DIR}/tools/automation_state.py"
         "${CMAKE_CURRENT_SOURCE_DIR}/tools/recovery_templates/ui_bindings.hpp.in"
         "${CMAKE_CURRENT_SOURCE_DIR}/tools/recovery_templates/mwc_float.hpp.in"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tools/recovery_templates/gameplay_numeric.hpp.in"
         ${_recovery_original_dependencies}
     VERBATIM)
 add_custom_target(torchlight_recovered_code DEPENDS ${TORCHLIGHT_RECOVERED_HEADERS})

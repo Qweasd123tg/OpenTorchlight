@@ -78,8 +78,10 @@ COUNT/anchor/homing и полный lifecycle остаются открытым�
 
 Автоматизация включает и рабочий перенос принятых контрактов:
 `tools/check.py --recover /path/to/game` повторно извлекает source data,
-генерирует используемые приложением UI binding/RNG алгоритмы, собирает consumers
-и запускает original/resource/registry gates. Общая процедура и остаток:
+генерирует используемые приложением UI binding/RNG и проверенные gameplay
+формулы, собирает consumers и запускает все зарегистрированные
+CPU/resource/reference gates с отчётом по системам игры. Контракты и остаток:
+[gameplay recipes](research/recovery-gameplay.md),
 [recovery automation](research/recovery-automation.md).
 
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits

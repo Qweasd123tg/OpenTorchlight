@@ -1,5 +1,6 @@
 #include "torchlight/population.hpp"
 #include "torchlight/entity_world.hpp"
+#include "torchlight/recovered/gameplay_numeric.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -25,19 +26,7 @@ bool none(std::u16string_view name) {
 }
 std::uint32_t population_count(float cmin, float cmax, float dmin, float dmax,
                                std::uint32_t nodes, TorchlightRandom& rng) {
-    for (const float v : {cmin, cmax, dmin, dmax})
-        if (!std::isfinite(v) || v < 0 || v > 50000)
-            throw std::invalid_argument("population count outside portable resource bounds");
-    if (cmin > 0 || cmax > 0)
-        return static_cast<std::uint32_t>(rng.integer_between(
-            static_cast<std::int32_t>(std::min(cmin, cmax)),
-            static_cast<std::int32_t>(std::max(cmin, cmax))));
-    if (dmin <= 0 || dmax <= 0) return 0;
-    const float area = static_cast<float>(nodes) / 6.5F;
-    const float n = std::ceil(rng.between(area * std::min(dmin, dmax),
-                                        area * std::max(dmin, dmax)));
-    if (!std::isfinite(n) || n > 50000) throw std::length_error("population exceeds entity budget");
-    return static_cast<std::uint32_t>(n);
+    return recovered::population_count(cmin, cmax, dmin, dmax, nodes, rng);
 }
 PolarPick random_open_offset(float minimum_radius, float maximum_radius,
                              TorchlightRandom& rng) {

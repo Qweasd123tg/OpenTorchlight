@@ -1,4 +1,5 @@
 #include "torchlight/consumable.hpp"
+#include "torchlight/recovered/gameplay_numeric.hpp"
 #include "torchlight/original_combat_inputs.hpp"
 #include "torchlight/progression.hpp"
 #include <algorithm>
@@ -67,7 +68,7 @@ void validate_effect(const RecoveryEffect& e) {
 }
 bool is_health_recovery(std::uint16_t type) noexcept { return type == 7 || type == 124; }
 bool is_mana_recovery(std::uint16_t type) noexcept { return type == 6 || type == 123; }
-float finite_recovery_rate(float value) noexcept { return value * 0.016F; }
+float finite_recovery_rate(float value) noexcept { return recovered::finite_recovery_rate(value); }
 void validate_consumable(const ConsumableItem& c) {
     if (c.count == 0 || c.maximum_stack == 0 || c.maximum_stack > 100000 || c.count > c.maximum_stack ||
         (c.uses <= 0 && c.uses != -9999) || c.uses > 100000 || c.level_required < 0 ||

@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -22,6 +23,42 @@ from automation_state import changed_paths, snapshot_changes, source_snapshot, v
 from check_selection import close_fixtures, command_output, dependency_index, make_plan, properties
 
 GROUPS = ("core", "assets", "reference", "render", "desktop")
+
+# Reporting categories for existing checks, not a registry of recovered game
+# functions. Ordered rules keep every executed check visible exactly once.
+RECOVERY_DOMAINS = (
+    ("automation", r"recovery|registry|coverage|verification|automation|function_package|codefirst|triage|library_match|extractors|collect_game_inputs|effect_catalog_source|scenario_first_difference|combat_inputs_evidence"),
+    ("ui_audio_settings", r"ui_|cegui|menu_|panel_|inventory_menu|inventory_create|music|settings"),
+    ("inventory_loot_economy", r"inventory|item_|equipment|economy|merchant|consumable|spawn_class"),
+    ("progression_quests", r"reward|world_gold|monster_experience|progression|quest|death_finalization"),
+    ("character_vitals", r"character_stats|vitals|players"),
+    ("combat_skills", r"combat|attack|damage|cooldown|ranged|missile|skill|enemy_ai|animation_events"),
+    ("world_generation", r"population|random_level|level_|parent_dungeon|entity_world|logic_runtime|warp"),
+    ("input_navigation_camera", r"input|action|pathfinder|camera|actor_motion|collision|line_of_sight"),
+    ("save_migration", r"save|checkpoint|migration|process|gameplay_continuation"),
+    ("resource_formats", r"pak|adm|resource|asset|bootstrap|ogre|texture|mesh|material|skeleton|animation|scene_geometry|unit_"),
+)
+
+
+def recovery_domain_results(report: dict) -> dict:
+    """Missing/skipped checks stay NOT RUN; tests never promote completion."""
+    actual = {}
+    severity = {"PASSED": 0, "PLANNED": 1, "NOT RUN": 2, "FAILED": 3}
+    for group in report["groups"].values():
+        for test in group.get("tests", []):
+            previous = actual.get(test["name"])
+            if previous is None or severity[test["status"]] > severity[previous["status"]]:
+                actual[test["name"]] = test
+    result = {}
+    for name in report["recovery"]["required_tests"]:
+        domain = next((domain for domain, pattern in RECOVERY_DOMAINS if re.search(pattern, name)), "other_cpu_contracts")
+        result.setdefault(domain, []).append(actual.get(name, {"name": name,
+            "status": "PLANNED" if report["plan_only"] else "NOT RUN", "seconds": "0"}))
+    return {domain: {"status": "FAILED" if any(t["status"] == "FAILED" for t in tests) else
+                    "NOT RUN" if any(t["status"] == "NOT RUN" for t in tests) else
+                    "PLANNED" if report["plan_only"] else "PASSED",
+                    "tests": tests, "seconds": round(sum(float(t["seconds"]) for t in tests), 3)}
+            for domain, tests in sorted(result.items())}
 
 
 def requested_groups(args: argparse.Namespace) -> set[str]:
@@ -121,7 +158,7 @@ def parser() -> argparse.ArgumentParser:
     selection.add_argument("--test", action="append", metavar="NAME",
                            help="run exact named contract check (repeatable), plus required fixtures")
     selection.add_argument("--recover", action="store_true",
-                           help="generate reviewed production recipes, build their real consumers and run original/resource/registry gates")
+                           help="generate reviewed production recipes, build consumers and run all registered CPU/resource/reference gates")
     p.add_argument("--plan", action="store_true", help="configure/discover and report selection without building/running tests")
     p.add_argument("--jobs", type=int, default=int(os.environ.get("TORCHLIGHT_BUILD_JOBS", "2")))
     return p
@@ -278,11 +315,12 @@ def main(argv: list[str] | None = None) -> int:
                     recovery = None
                     if args.recover:
                         recovery = json.loads((build / "recovery-plan.json").read_text())
-                        if (recovery.get("schema") != 1 or recovery.get("kind") != "reviewed-recovery-chain"
+                        if (recovery.get("schema") != 2 or recovery.get("kind") != "reviewed-recovery-chain"
+                                or recovery.get("scope") != "registered-cpu-resource-reference"
                                 or recovery.get("build_target") != "torchlight_recovery_gates"
                                 or recovery.get("generated_dir") != "generated/recovered/torchlight/recovered"
                                 or not isinstance(recovery.get("required_tests"), list)
-                                or not 1 <= len(recovery["required_tests"]) <= 64
+                                or not 1 <= len(recovery["required_tests"]) <= 512
                                 or any(not isinstance(name, str) for name in recovery["required_tests"])
                                 or len(set(recovery["required_tests"])) != len(recovery["required_tests"])):
                             raise ValueError("Unsupported reviewed recovery plan")
@@ -369,6 +407,8 @@ def main(argv: list[str] | None = None) -> int:
     if not report["source_consistent"]:
         report["source_after_sha256"] = after["sha256"]
         print("Source changed during checks: results are not a current-source gate.")
+    if "recovery" in report:
+        report["recovery"]["domains"] = recovery_domain_results(report)
     write_report(report, output)
     accepted = {"PLANNED"} if args.plan else {"PASSED", "NOT AFFECTED"}
     return 0 if report["source_consistent"] and all(

@@ -64,6 +64,8 @@ void run(const char* path) {
     require(evaluated_movement_speed(6,50,100)==9,"slow resistance changed a positive bonus");
     bool invalid=false;try{(void)evaluated_movement_speed(6,std::numeric_limits<float>::infinity(),0);}catch(const std::invalid_argument&){invalid=true;}
     require(invalid,"nonfinite stat accepted");
+    invalid=false;try{(void)evaluated_movement_speed(std::numeric_limits<float>::max(),-2,0);}catch(const std::invalid_argument&){invalid=true;}
+    require(invalid,"negative intermediate overflow hidden by the zero clamp");
     ActorMotion motion({},1);motion.set_destination(100,0);motion.advance(1);motion.set_speed(1.5F);motion.advance(1);
     require(motion.position()[0]==2.5F&&motion.destination()[0]==100&&motion.moving(),"speed update reset movement");
     motion.set_speed(0);motion.advance(1);require(motion.position()[0]==2.5F&&motion.moving(),"zero speed lost destination");

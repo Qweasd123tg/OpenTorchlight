@@ -1,5 +1,6 @@
 #include "torchlight/economy.hpp"
 #include "torchlight/progression.hpp"
+#include "torchlight/recovered/gameplay_numeric.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -40,7 +41,7 @@ std::int32_t equipment_buy_price(const EquipmentPrices& p, std::int32_t count, b
     if (!std::isfinite(barter)) throw std::invalid_argument("non-finite barter");
     const auto price = checked(static_cast<std::int64_t>(identified ? p.buy : p.unidentified_buy) * std::max(1,count));
     if (!identified || price <= 0) return price;
-    const auto reduction = truncated(static_cast<float>(price) * (barter / 100.0F));
+    const auto reduction = truncated(recovered::barter_amount(price, barter));
     return checked(std::max<std::int64_t>(1,static_cast<std::int64_t>(price) - reduction));
 }
 std::int32_t equipment_sell_price(const EquipmentPrices& p, std::int32_t count, bool identified, float barter) {
@@ -48,7 +49,7 @@ std::int32_t equipment_sell_price(const EquipmentPrices& p, std::int32_t count, 
     if (!std::isfinite(barter)) throw std::invalid_argument("non-finite barter");
     const auto price = checked(static_cast<std::int64_t>(identified ? p.sell : p.unidentified_sell) * std::max(1,count));
     if (!identified) return price;
-    const auto bonus = truncated(static_cast<float>(price) * (barter / 100.0F));
+    const auto bonus = truncated(recovered::barter_amount(price, barter));
     return checked(static_cast<std::int64_t>(price) + bonus);
 }
 EquipmentPriceCatalog::EquipmentPriceCatalog(const PakArchive& p)

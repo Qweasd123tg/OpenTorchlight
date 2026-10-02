@@ -49,6 +49,20 @@ class Driver(unittest.TestCase):
         self.assertIsNone(args.changed)
         self.assertIsNone(args.since_report)
 
+    def test_recovery_domain_summary_keeps_failed_skipped_missing_and_unknown_checks(self):
+        report = {'plan_only': False, 'recovery': {'required_tests': [
+            'original_attack_speed_comparison', 'original_economy_comparison',
+            'original_population', 'new_uncategorized_check']}, 'groups': {
+                'reference': {'tests': [{'name': 'original_attack_speed_comparison', 'status': 'FAILED', 'seconds': '1'},
+                                       {'name': 'original_economy_comparison', 'status': 'NOT RUN', 'seconds': '0'}]},
+                'other_group': {'tests': [{'name': 'original_attack_speed_comparison', 'status': 'PASSED', 'seconds': '1'}]}}}
+        result = check.recovery_domain_results(report)
+        self.assertEqual(result['combat_skills']['status'], 'FAILED')
+        self.assertEqual(result['inventory_loot_economy']['status'], 'NOT RUN')
+        self.assertEqual(result['world_generation']['status'], 'NOT RUN')
+        self.assertEqual(result['other_cpu_contracts']['status'], 'NOT RUN')
+        self.assertEqual(sum(len(v['tests']) for v in result.values()), 4)
+
     def test_evidence_roles_are_independent_of_name_and_green_status(self):
         for labels, expected in [(['core'], 'unit-regression'),
                                  (['assets'], 'resource-contract'),

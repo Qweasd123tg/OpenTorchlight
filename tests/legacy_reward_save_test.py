@@ -14,6 +14,9 @@ source=Path(__file__).resolve().parent/'fixtures/checkpoint-v1.hex'
 raw=bytes.fromhex(source.read_text())
 EXPECTED='d9b7a52e09b53be9c9233c1f6f46923d309bce2258eb0d2344fa34ae915abade'
 if hashlib.sha256(raw).hexdigest()!=EXPECTED:raise ValueError('frozen v1 fixture hash mismatch')
+RESOURCE_SHA256='673112e806095cf1a9672647a97102a9b721418ae58bdc64c2bc3dd672097a9e'
+if hashlib.sha256(a.fixture.read_bytes()).hexdigest()!=RESOURCE_SHA256:
+    raise ValueError('v1 save must use its unchanged authored companion resources')
 with tempfile.TemporaryDirectory(prefix='ot-legacy-rewards-') as directory:
     save=Path(directory)/'hero-test.otc';save.write_bytes(raw)
     subprocess.run([str(a.probe.resolve()),str(a.fixture.resolve()),directory,'read'],check=True,timeout=30)

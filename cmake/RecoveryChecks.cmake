@@ -12,16 +12,32 @@ if(TORCHLIGHT_ORIGINAL)
         --report "${CMAKE_CURRENT_BINARY_DIR}/recovery-original.json")
     set_tests_properties(original_recovery_contracts PROPERTIES LABELS "reference" TIMEOUT 60)
 endif()
-# Explicit build closure for these reviewed recipes and their production probes.
-# Python/original-memory comparison tests have no hidden executable dependency.
-add_custom_target(torchlight_recovery_gates DEPENDS
-    torchlight_recovered_code ui_function_bindings_test randomizer_comparison
-    ui_sound_test missile_motion_test mainmenu_presentation_test)
-set(_recovery_checks recovery_codegen recovery_generated_current registry_sync
-    ui_function_bindings original_ui_function_bindings original_ui_binding_comparison
-    original_recovery_contracts original_randomizer_comparison
-    ui_sound_contract original_ui_sound_contract missile_motion
-    cegui_error_boundary original_cegui_mainmenu_contract)
+# Use CMake's existing test registration, not a second hand-maintained game
+# checklist. Labels carry execution/evidence boundaries, never function closure.
+get_property(_recovery_registered DIRECTORY PROPERTY TESTS)
+set(_recovery_checks)
+foreach(_test IN LISTS _recovery_registered)
+    get_test_property(${_test} LABELS _labels)
+    if(("core" IN_LIST _labels OR "assets" IN_LIST _labels OR "reference" IN_LIST _labels)
+            AND NOT "render" IN_LIST _labels AND NOT "desktop" IN_LIST _labels
+            AND NOT "ui-integration" IN_LIST _labels)
+        list(APPEND _recovery_checks ${_test})
+    endif()
+endforeach()
+list(SORT _recovery_checks)
+# All configured CPU executables/shared probes are included: Python tests can
+# hide helper dependencies. In --recover, render/desktop are configured OFF.
+# Their Ninja dependencies also materialize authored fixture archives. No game
+# process, GUI click, frame scenario or performance run is part of this target.
+get_property(_recovery_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+set(_recovery_consumers torchlight_recovered_code torchlight_core)
+foreach(_target IN LISTS _recovery_targets)
+    get_target_property(_type ${_target} TYPE)
+    if(_type STREQUAL "EXECUTABLE" OR _type STREQUAL "SHARED_LIBRARY" OR _type STREQUAL "MODULE_LIBRARY")
+        list(APPEND _recovery_consumers ${_target})
+    endif()
+endforeach()
+add_custom_target(torchlight_recovery_gates DEPENDS ${_recovery_consumers})
 string(REPLACE ";" "\", \"" _recovery_checks_json "${_recovery_checks}")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/recovery-plan.json" CONTENT
-    "{\"schema\":1,\"kind\":\"reviewed-recovery-chain\",\"build_target\":\"torchlight_recovery_gates\",\"generated_dir\":\"generated/recovered/torchlight/recovered\",\"required_tests\":[\"${_recovery_checks_json}\"]}\n")
+    "{\"schema\":2,\"kind\":\"reviewed-recovery-chain\",\"scope\":\"registered-cpu-resource-reference\",\"build_target\":\"torchlight_recovery_gates\",\"generated_dir\":\"generated/recovered/torchlight/recovered\",\"required_tests\":[\"${_recovery_checks_json}\"]}\n")

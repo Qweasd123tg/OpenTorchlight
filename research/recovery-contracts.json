@@ -1,9 +1,10 @@
 {
-  "schema": 1,
+  "schema": 2,
   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
   "recipes": [
     "ui_binding_adapter_v1",
-    "mwc_float_adapter_v1"
+    "mwc_float_adapter_v1",
+    "gameplay_numeric_adapter_v1"
   ],
   "source_functions": [
     {
@@ -23,6 +24,90 @@
       "address": "0xc92b50",
       "size": 151,
       "body_sha256": "a3aabbf2806b39bc69df1d47004b7bbe68ed593c70a11373e465cd2f2b57ec67"
+    },
+    {
+      "name": "CCharacter::walkingSpeed()",
+      "address": "0x815a20",
+      "size": 166,
+      "body_sha256": "fb9878d3a82a9f5a207624d95eeeb831978e7515e4c4aacd491b4cac79579f5f"
+    },
+    {
+      "name": "CCharacter::runningSpeed()",
+      "address": "0x815ad0",
+      "size": 166,
+      "body_sha256": "94ceb1acf5e12acd3d4d4f4b17d70c6ac311dc1d32f786e9608346286ace1859"
+    },
+    {
+      "name": "CCharacter::defense()",
+      "address": "0x814530",
+      "size": 133,
+      "body_sha256": "c5cbd79cfca267936ee0215e160146b364eb811cc55c577ecbf6ed4a0d8bcb65"
+    },
+    {
+      "name": "CCharacter::armorBonus()",
+      "address": "0x8145c0",
+      "size": 174,
+      "body_sha256": "340be4b2ebbdd6968a2fd72ff637f4a4588d656574fd2ba79a6bd2a1087077f5"
+    },
+    {
+      "name": "CCharacter::AC()",
+      "address": "0x814670",
+      "size": 97,
+      "body_sha256": "7e6f5b4f859194cec8b6e704e29ff8675ba0dd1282f1509f0de8955c61865eba"
+    },
+    {
+      "name": "CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",
+      "address": "0x971530",
+      "size": 175,
+      "body_sha256": "b19fc21490bbd79f68f175b61ff6a8100f53637b66476333550e07390dd11d15"
+    },
+    {
+      "name": "CEffectManager::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",
+      "address": "0x7eb5f0",
+      "size": 462,
+      "body_sha256": "46188dbdd4ffc56f77963c441438498d6739d08c10b442c585894e54b598c37c"
+    },
+    {
+      "name": "CCharacter::attack()",
+      "address": "0x82b550",
+      "size": 2094,
+      "body_sha256": "686bc58bb4461ea918e833885759e58c3589a6689d1c9749185e3b6cfa55f4f6"
+    },
+    {
+      "name": "CMonster::attackAI(float, CLevel&)",
+      "address": "0x8dfd80",
+      "size": 1320,
+      "body_sha256": "a6700ea416f0300d5d7cdf868c94f108fef2aa41a75fbaa520715692d9a21046"
+    },
+    {
+      "name": "CMonster::updateAI(float, bool)",
+      "address": "0x8e3a40",
+      "size": 1062,
+      "body_sha256": "db17c0e84ada03f40f8a0ef5c5e0a95c2de4939d405a8d1c20794c62ab65a46a"
+    },
+    {
+      "name": "CItemGold::unitInit(CDataGroup*, bool)",
+      "address": "0x8ca940",
+      "size": 1742,
+      "body_sha256": "13b5e749bf1b7ef7ed895091e0a21df3191c366586f7b8c7dd90dd640ca458a9"
+    },
+    {
+      "name": "CCharacter::setLevel(unsigned int, bool)",
+      "address": "0x83ead0",
+      "size": 6548,
+      "body_sha256": "960ca4700df525337ee6f184ba89250dc0e8ab274904e64da89bb540291fb56f"
+    },
+    {
+      "name": "CEquipment::buyPrice()",
+      "address": "0x86fc20",
+      "size": 233,
+      "body_sha256": "bc0bdd41ee15401601541b48fa8849a380c4f51edbe6e93e0ac3a528937b64ed"
+    },
+    {
+      "name": "CEquipment::sellPrice()",
+      "address": "0x86fb40",
+      "size": 217,
+      "body_sha256": "3c475f6abdafdb4cb05a5f35843ca60723e73aabdcf4fbd4e2d45d41842480fe"
     }
   ],
   "ui_commands": [
@@ -617,5 +702,93 @@
     "exponent_bits": "0x3ff0000000000000",
     "one_bits": "0x3ff0000000000000"
   },
-  "content_sha256": "8955c3dd36ef0bad2f278eb77c17095eac99639b662eaf3ecd54ddc9aa99a071"
+  "numeric_constants": {
+    "numeric_zero": {
+      "address": "0xfa47f8",
+      "bytes_le": "00000000"
+    },
+    "numeric_one": {
+      "address": "0xfa47fc",
+      "bytes_le": "0000803f"
+    },
+    "numeric_hundred": {
+      "address": "0xfa483c",
+      "bytes_le": "0000c842"
+    },
+    "numeric_recovery_scale": {
+      "address": "0xfa86dc",
+      "bytes_le": "6f12833c"
+    },
+    "numeric_min_attack_speed": {
+      "address": "0xfa86e8",
+      "bytes_le": "cdcc4c3e"
+    },
+    "numeric_ai_speed_multiplier": {
+      "address": "0xfce498",
+      "bytes_le": "0000c03f"
+    },
+    "numeric_nodes_per_area": {
+      "address": "0xfce4e0",
+      "bytes_le": "0000d040"
+    }
+  },
+  "scalar_spans": [
+    {
+      "owner": "0x7eb5f0",
+      "start": "0x7eb7a0",
+      "end": "0x7eb7a6",
+      "body_sha256": "4476f6c973410e8ada34d3da2c889afeffba30930d34fd1ade8ed1ee6d51bfda",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x82b550",
+      "start": "0x82b976",
+      "end": "0x82b9c5",
+      "body_sha256": "02299d125757691c84ba91e8606a95851c8b08e9bbe58ab80af11538fe34988f",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x82b550",
+      "start": "0x82bcea",
+      "end": "0x82bd46",
+      "body_sha256": "375647ab6819dd2d2e103a1570ff440bee72ba845b26afc0ab19330959f547c5",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x82b550",
+      "start": "0x82b9e1",
+      "end": "0x82b9e9",
+      "body_sha256": "8814f7e67c13b65fd8613d1701c13fabf82543ca07f72822e6c418539259720e",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x8dfd80",
+      "start": "0x8e00e6",
+      "end": "0x8e013d",
+      "body_sha256": "6624c2dd8aaa7d0e6d5924dece5d0bfb27330ad5a721ce8ceee630db82077717",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x8e3a40",
+      "start": "0x8e3a5b",
+      "end": "0x8e3a6f",
+      "body_sha256": "0ab42a682cf76ea1fb7c71e277af01786834f87498db043bedd948a58ba4509e",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x8ca940",
+      "start": "0x8cad46",
+      "end": "0x8cad5b",
+      "body_sha256": "0fb86d029081f0308759b77f54b993715cd42b05c10d675fb5c5a80ad8d8fc21",
+      "scope": "finite-scalar-only"
+    },
+    {
+      "owner": "0x83ead0",
+      "start": "0x83ecea",
+      "end": "0x83ecfd",
+      "body_sha256": "9aa637a7d502a86db7be6307a21f2cb588a72d00f70589f62c297e308f782c35",
+      "scope": "finite-scalar-only"
+    }
+  ],
+  "content_sha256": "c688328e9d34f9b6c5ee2b65cac1d2e91fcf04bec0ce82b757fc1f72de5add92"
 }

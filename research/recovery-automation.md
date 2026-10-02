@@ -16,8 +16,11 @@ python3 tools/check.py --recover /path/to/game \
 
 Driver проверяет входы, конфигурирует CMake, повторно извлекает принятые данные
 из оригинала, генерирует C++, собирает `torchlight_recovery_gates` и выполняет
-13 CPU/resource/reference/registry проверок. Полный build closure и имена
-проверок объявлены в cmake/RecoveryChecks.cmake. Generated recovery-plan.json
+все зарегистрированные CPU/resource/reference/registry проверки: план расширенного
+среза содержит 181 проверку. RecoveryChecks.cmake берёт существующую регистрацию
+CMake и excludes render/desktop/ui-integration. Новые CPU проверки подхватываются
+без второй ручной таблицы; именованные domain summaries показывают PASSED,
+FAILED и NOT RUN отдельно. Generated recovery-plan.json
 не является вторым реестром функций. UI/game process не запускается.
 
 Отсутствие входа не вызывает частичную сборку. Unknown recipe/body/width,
@@ -38,10 +41,13 @@ ELF использует явно обозначенный accepted-snapshot р�
 |---|---|---|
 | UI binding adapter / 97 команд | mapToFunctions 0xa980e0, size 0x374; KLayoutFunctionNames 0x14b7dc0 / initializer 0xa850bd..0xa85a5b | generated map_functions → ui_function_bindings → UiLayout/native CEGUI → frontend/HUD/application |
 | MWC float adapter | randomBetween 0xc92a70 и randomBetweenVolatile 0xc92b50, оба size 0x97 | generated mwc_between → обе RNG обёртки → weighted/generation и UI gain/mix |
+| Gameplay numeric adapters | 14 дополнительно закреплённых owning bodies; 8 scalar-only ASM boundaries; семь raw float32 констант | character_stats, attack_action, enemy_ai, consumable, population, progression, economy → прежние production callers; [поля и остаток](recovery-gameplay.md) |
 
 `torchlight_core` прямо зависит от generated headers через RecoveredCode.cmake;
 Desktop/application/probes используют тот же код. Старые ручные копии float
 алгоритма удалены. Observer нормального RNG остаётся в owning wrapper.
+Schema 2 snapshot фиксирует 17 полных body identities и отдельные scalar
+boundaries; это не означает 17 полностью закрытых исходных функций.
 
 Original-code: полные normal/volatile 151-byte тела одинаковы по операциям,
 константам и relative branch targets; различаются RIP references к uint64
@@ -73,7 +79,7 @@ completion остаётся **partial**: CEGUI userData/exception ABI и process
 RNG/seed/clock/общий порядок ещё не перенесены. Генератор не повышает стадии.
 UI-клики, кадры и performance остаются отдельными задачами.
 
-## Проверенный результат
+## Предыдущий проверенный UI/RNG результат
 
 Один `--recover` запуск: core 7/7, assets 3/3, reference 3/3; skip=0,
 source_consistent=true. Generated-код прошёл 28000 volatile float-bit/state,

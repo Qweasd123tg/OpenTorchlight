@@ -1,0 +1,88 @@
+// Generated reviewed numeric adapters; research/recovery-gameplay.md records
+// fields, callers and the distinction between full bodies and scalar branches.
+// Finite binary32 / in-range integer domain. Public wrappers own validation,
+// state, evaluated effect reads and wider original-function dependencies.
+#pragma once
+#include "torchlight/randomizer.hpp"
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+#include <optional>
+#include <stdexcept>
+
+namespace torchlight::recovered {
+inline constexpr float numeric_zero = @numeric_zero@;
+inline constexpr float numeric_one = @numeric_one@;
+inline constexpr float numeric_hundred = @numeric_hundred@;
+inline constexpr float numeric_recovery_scale = @numeric_recovery_scale@;
+inline constexpr float numeric_min_attack_speed = @numeric_min_attack_speed@;
+inline constexpr float numeric_ai_speed_multiplier = @numeric_ai_speed_multiplier@;
+inline constexpr float numeric_nodes_per_area = @numeric_nodes_per_area@;
+
+// walkingSpeed 0x815a20 / runningSpeed 0x815ad0: only the base offset differs.
+inline float slow_contribution(float percent, float resistance) noexcept {
+    if (percent < numeric_zero)
+        percent *= numeric_one - std::clamp(resistance / numeric_hundred, numeric_zero, numeric_one);
+    return percent;
+}
+inline float movement_speed(float base, float percent, float resistance) noexcept {
+    percent = slow_contribution(percent, resistance);
+    // Preserve mul -> div -> add, rather than algebraically reassociating.
+    return (base * percent) / numeric_hundred + base; // wrapper checks overflow before the zero clamp
+}
+// defense 0x814530: add both percentages before dividing and multiplying.
+inline float defense_bonus(std::int32_t base, float percent, float all_percent) noexcept {
+    return std::ceil(static_cast<float>(base) * ((all_percent + percent) / numeric_hundred));
+}
+// armorBonus 0x8145c0: divide actor and nullable-master percentages separately.
+inline float armor_percent_bonus(std::int32_t base, float percent, float owner_percent) noexcept {
+    return std::ceil(static_cast<float>(base) * (percent / numeric_hundred + owner_percent / numeric_hundred));
+}
+// AC 0x814670: evaluated armor is converted to float before the defense product.
+inline float armor_defense_bonus(std::int32_t armor, std::int32_t defense) noexcept {
+    return std::ceil(static_cast<float>(armor) * (static_cast<float>(defense) / numeric_hundred));
+}
+// CCharacter::attack scalar branches only, including flag-one AFTER min clamp.
+inline float attack_speed(float denominator, float speed, float resistance, bool ai_flag_one) noexcept {
+    speed = slow_contribution(speed, resistance);
+    auto result = std::max(numeric_min_attack_speed, (numeric_one + speed / numeric_hundred) / denominator);
+    if (ai_flag_one) result *= numeric_ai_speed_multiplier;
+    return result;
+}
+// CMonster::updateAI 0x8e3a5b..0x8e3a6f; signed elapsed remainder is retained.
+inline float cooldown_tick(float remaining, float seconds) noexcept { return remaining - seconds; }
+// CMonster::attackAI 0x8e00e6..0x8e013d, called only after attack succeeds.
+inline float cooldown_arm(float remaining, float unit, std::optional<float> equipment) noexcept {
+    if (equipment) remaining = std::max(numeric_zero, remaining) + *equipment;
+    return std::max(numeric_zero, remaining) + unit;
+}
+// CEffectManager finite-duration recovery branch 0x7eb7a0..0x7eb7a6.
+inline float finite_recovery_rate(float value) noexcept { return value * numeric_recovery_scale; }
+// CItemGold 0x8cad46..0x8cad5b. Wrapper supplies checked ceil/int32 conversion.
+inline float world_gold_amount(float value, float percent) noexcept {
+    return value * (percent / numeric_hundred);
+}
+// CCharacter::setLevel 0x83ecea..0x83ecfd. Wrapper supplies checked truncation.
+inline float monster_experience_amount(float graph) noexcept { return (graph / numeric_hundred) * graph; }
+// buyPrice / sellPrice: wrapper preserves identified/price gates and truncation.
+inline float barter_amount(std::int32_t price, float barter) noexcept {
+    return static_cast<float>(price) * (barter / numeric_hundred);
+}
+// getNumberOfUnitsToCreate 0x971530, all scalar branches with explicit adapter
+// parameters instead of original indexed template fields. Resource budget
+// rejection is portable policy, not a claimed original-game exception path.
+inline std::uint32_t population_count(float cmin, float cmax, float dmin, float dmax,
+                                     std::uint32_t nodes, TorchlightRandom& rng) {
+    for (const float value : {cmin, cmax, dmin, dmax})
+        if (!std::isfinite(value) || value < numeric_zero || value > 50000)
+            throw std::invalid_argument("population count outside portable resource bounds");
+    if (cmin > numeric_zero || cmax > numeric_zero)
+        return static_cast<std::uint32_t>(rng.integer_between(
+            static_cast<std::int32_t>(std::min(cmin, cmax)), static_cast<std::int32_t>(std::max(cmin, cmax))));
+    if (dmin <= numeric_zero || dmax <= numeric_zero) return 0;
+    const float area = static_cast<float>(nodes) / numeric_nodes_per_area;
+    const float count = std::ceil(rng.between(area * std::min(dmin, dmax), area * std::max(dmin, dmax)));
+    if (!std::isfinite(count) || count > 50000) throw std::length_error("population exceeds entity budget");
+    return static_cast<std::uint32_t>(count);
+}
+} // namespace torchlight::recovered

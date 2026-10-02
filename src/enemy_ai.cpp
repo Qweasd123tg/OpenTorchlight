@@ -1,4 +1,5 @@
 #include "torchlight/enemy_ai.hpp"
+#include "torchlight/recovered/gameplay_numeric.hpp"
 #include "torchlight/character_stats.hpp"
 #include "torchlight/scene_animation.hpp"
 #include <stdexcept>
@@ -214,16 +215,13 @@ OrdinaryDamageResult PlayerCombatState::apply_direct_attack(const AttackDescript
 void MonsterAiCooldown::update(float seconds) noexcept {
     // CMonster::updateAI @0x8e3a5b: subtraction happens before think gating;
     // negative elapsed remainder is retained until the next successful attack.
-    remaining -= seconds;
+    remaining = recovered::cooldown_tick(remaining, seconds);
 }
 
 void MonsterAiCooldown::attack_started(
     float unit_cooldown, std::optional<float> equipment_cooldown) noexcept {
     // CMonster::attackAI @0x8e00e6..0x8e013d, only after attack() succeeds.
-    if (equipment_cooldown) {
-        remaining = std::max(0.0F, remaining) + *equipment_cooldown;
-    }
-    remaining = std::max(0.0F, remaining) + unit_cooldown;
+    remaining = recovered::cooldown_arm(remaining, unit_cooldown, equipment_cooldown);
 }
 
 float EnemyController::distance_xz(const std::array<float, 3>& left,

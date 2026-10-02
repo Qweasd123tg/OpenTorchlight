@@ -367,7 +367,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     if(UNIX AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         add_test(NAME desktop_gameplay_syntax
             COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/check_desktop_gameplay_syntax.py
-                --root ${CMAKE_CURRENT_SOURCE_DIR} --compiler ${CMAKE_CXX_COMPILER})
+                --root ${CMAKE_CURRENT_SOURCE_DIR} --compiler ${CMAKE_CXX_COMPILER}
+                --include-dirs "$<TARGET_PROPERTY:torchlight_core,INCLUDE_DIRECTORIES>"
+                --system-include-dirs "$<TARGET_PROPERTY:torchlight_core,INTERFACE_SYSTEM_INCLUDE_DIRECTORIES>"
+                --definitions "$<TARGET_PROPERTY:torchlight_core,COMPILE_DEFINITIONS>")
         set_tests_properties(desktop_gameplay_syntax PROPERTIES TIMEOUT 60)
     endif()
     add_executable(inventory_view_test tests/inventory_view_test.cpp)
@@ -750,7 +753,7 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME legacy_reward_save_migration COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/legacy_reward_save_test.py
         --probe $<TARGET_FILE:save_checkpoint_test> --upgrade $<TARGET_FILE:checkpoint_upgrade_probe>
-        --fixture ${FRONTEND_FIXTURE})
+        --fixture ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/checkpoint-v1-resources.zip)
     add_test(NAME world_gold_export_comparison COMMAND ${Python3_EXECUTABLE}
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_world_gold.py --probe $<TARGET_FILE:world_gold_probe>)
     add_test(NAME monster_experience_export_comparison COMMAND ${Python3_EXECUTABLE}

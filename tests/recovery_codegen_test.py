@@ -20,13 +20,25 @@ class RecoveryCodegen(unittest.TestCase):
     def rehash(self, value):
         value["content_sha256"] = recovered.content_hash({k: v for k, v in value.items() if k != "content_sha256"})
 
-    def test_snapshot_has_complete_reviewed_functions_and_all_commands(self):
+    def test_snapshot_pins_bodies_scalar_boundaries_and_all_commands(self):
         generated = recovered.generate(self.manifest)
-        self.assertEqual(len(self.manifest["source_functions"]), 3)
+        self.assertEqual(len(self.manifest["source_functions"]), 17)
+        self.assertEqual(len(self.manifest["scalar_spans"]), 8)
         self.assertEqual(len(self.manifest["ui_commands"]), 97)
         self.assertIn('"GUIEXITGAME"', generated["ui_bindings.hpp"])
         self.assertIn('"NONE"', generated["ui_bindings.hpp"])
         self.assertIn("UINT64_C(0xfffffffffffff)", generated["mwc_float.hpp"])
+
+    def test_numeric_constants_and_scalar_scope_cannot_be_changed_by_rehashing(self):
+        for edit in (lambda x: x["numeric_constants"]["numeric_hundred"].update(bytes_le="00007a44"),
+                     lambda x: x["numeric_constants"]["numeric_hundred"].update(address="0x0"),
+                     lambda x: x["scalar_spans"][0].update(scope="whole-function"),
+                     lambda x: x["scalar_spans"][0].update(body_sha256="0" * 64)):
+            changed = copy.deepcopy(self.manifest)
+            edit(changed)
+            self.rehash(changed)
+            with self.assertRaises(ValueError):
+                recovered.generate(changed)
 
     def test_unknown_recipes_bodies_and_changed_widths_require_review(self):
         for field, value in (("recipes", ["guess_from_similar_shape"]),

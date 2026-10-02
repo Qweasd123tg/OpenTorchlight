@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Bounded speed arithmetic comparison, NOT execution of original CCharacter/ELF.
-Two unchanged slices from attack @82b550; mock getEffectValue returns one float.
+Three unchanged slices from attack @82b550; mock getEffectValue returns one float.
+Flag-one multiplication is independently executed after the base/minimum path;
+its boolean input is controlled, not a claim about original AI flag ownership.
 The synthetic ABI adapter and return are outside the preserved instruction spans.
 Without --original, 0/1/100/.2 constants are fixture inputs: ELF constants unverified.
 With --original, its pinned SHA and all referenced constants are checked first.
@@ -12,10 +14,10 @@ from pathlib import Path
 from compare_ai_cooldown import Executable, asm_bytes, bits, f32
 from verify_original_entry_dispatch import ELF_SHA256, virtual_bytes
 
-SLICES=[(0x82b976,0x82b9c5),(0x82bcea,0x82bd46)]
+SLICES=[(0x82b976,0x82b9c5),(0x82bcea,0x82bd46),(0x82b9e1,0x82b9e9)]
 # Pinned instruction digests populated from the supplied export, not live ELF claims.
-DIGESTS=['02299d125757691c84ba91e8606a95851c8b08e9bbe58ab80af11538fe34988f', '375647ab6819dd2d2e103a1570ff440bee72ba845b26afc0ab19330959f547c5']
-CONSTANTS={0xfa47fc:1.,0xfa483c:100.,0xfa86e8:.2}
+DIGESTS=['02299d125757691c84ba91e8606a95851c8b08e9bbe58ab80af11538fe34988f', '375647ab6819dd2d2e103a1570ff440bee72ba845b26afc0ab19330959f547c5', '8814f7e67c13b65fd8613d1701c13fabf82543ca07f72822e6c418539259720e']
+CONSTANTS={0xfa47fc:1.,0xfa483c:100.,0xfa86e8:.2,0xfce498:1.5}
 
 def compare(probe,code,resource_cases=()):
     mapped=None;wrapper=None
@@ -23,7 +25,7 @@ def compare(probe,code,resource_cases=()):
         # Relocate the entire sparse text/constant window by ONE common bias.
         # Relative calls, branches and RIP-relative loads remain byte-for-byte intact.
         low=0x810000
-        window=bytearray(0xfa9000-low)
+        window=bytearray(0xfcf000-low)
         def write(address,raw):
             offset=address-low
             if offset<0 or offset+len(raw)>len(window):raise ValueError('mapped window bounds')
@@ -31,12 +33,15 @@ def compare(probe,code,resource_cases=()):
         for (start,end),raw in zip(SLICES,code):write(start,raw)
         write(0x8137e0,bytes.fromhex('f3 0f 10 43 10 c3')) # synthetic getEffectValue
         write(0x82b9c5,bytes.fromhex('48 83 c4 40 5b c3')) # synthetic return
+        write(0x82b9de,bytes.fromhex('0f 28 c8')) # ABI: move argument xmm0 into original xmm1
+        write(0x82b9e9,bytes.fromhex('0f 28 c1 c3')) # ABI: return original xmm1 in xmm0
         for address,value in CONSTANTS.items():write(address,struct.pack('<f',value))
         mapped=Executable(bytes(window))
         # void* character, float haste, float resistance; RBX preserved, stack call-aligned.
         adapter=bytes.fromhex('53 48 89 fb 48 83 ec 40 0f 57 db f3 0f 11 5c 24 20 f3 0f 11 4b 10 48 b8')+struct.pack('<Q',mapped.address+0x82b976-low)+bytes.fromhex('ff e0')
         wrapper=Executable(adapter)
         call=ctypes.CFUNCTYPE(ctypes.c_float,ctypes.c_void_p,ctypes.c_float,ctypes.c_float)(wrapper.address)
+        flag_one=ctypes.CFUNCTYPE(ctypes.c_float,ctypes.c_float)(mapped.address+0x82b9de-low)
         character=ctypes.create_string_buffer(0x800);description=ctypes.create_string_buffer(0x80)
         ctypes.c_void_p.from_buffer(character,0x390).value=ctypes.addressof(description)
         denom=ctypes.c_float.from_buffer(description,0x70)
@@ -47,14 +52,15 @@ def compare(probe,code,resource_cases=()):
         expected=[];requests=[]
         for d,h,r in cases:
             denom.value=d
-            expected.append(bits(call(ctypes.addressof(character),h,r)))
+            base=call(ctypes.addressof(character),h,r)
+            expected.extend((bits(base),bits(flag_one(base))))
             requests.append(f'{bits(d)} {bits(h)} {bits(r)}\n')
         result=subprocess.run([str(probe.resolve())],input=''.join(requests),text=True,capture_output=True,check=True,timeout=30)
-        actual=[int(line) for line in result.stdout.splitlines()]
+        actual=[int(value) for value in result.stdout.split()]
         if len(actual)!=len(expected):raise ValueError('probe length mismatch')
         for i,(a,b) in enumerate(zip(expected,actual)):
-            if a!=b:raise ValueError(f'case {i}, {cases[i]}: slice={a:08x}, portable={b:08x}')
-        return len(cases)
+            if a!=b:raise ValueError(f'case {i//2}, flag_one={i%2}, {cases[i//2]}: slice={a:08x}, portable={b:08x}')
+        return len(expected)
     finally:
         if wrapper:wrapper.close()
         if mapped:mapped.close()

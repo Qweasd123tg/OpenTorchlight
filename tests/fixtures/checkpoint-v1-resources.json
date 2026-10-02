@@ -1,0 +1,12 @@
+{
+  "kind": "authored-frozen-port-save-resources",
+  "writer_revision": "63c0962bb160f4eed081d7cfa694846232695962",
+  "resource_archive_sha256": "673112e806095cf1a9672647a97102a9b721418ae58bdc64c2bc3dd672097a9e",
+  "source_sha256": {
+    "make_ai_cooldown_fixture.py": "ca86c81e5827877ccbdd95e2f4a88458392ec6a155867d3d08d0c1336a964498",
+    "make_attack_fixture.py": "5ac31302db9c02ba475b11268f7aa53283d997828ce690bcaf7123c37944f580",
+    "make_frontend_fixture.py": "15c8e21306338542c7974f7a4f2747509a92de8a42733785546c8792b99c1ee4",
+    "make_item_cycle_fixture.py": "7b5265470f9cf03aa04baaace933d0cff7a682d97c9cff057b3a75f5de783354"
+  },
+  "meaning": "Companion authored resources for unchanged checkpoint-v1.hex; original Torchlight resources and save formats are not included."
+}
