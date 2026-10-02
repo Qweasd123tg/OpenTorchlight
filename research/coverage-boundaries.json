@@ -903,7 +903,7 @@
         "0xb53430"
       ],
       "status": "partial",
-      "boundary": "Inventory open flag machine (4 setOpen paths, including fresh-open tab reset), toggleInventory virtual slot +0x40 choreography and provisional viewport math. Single-writer set_inventory_open drives all port paths. Flag consumed; viewport stored but renderless; animation/sound/tip/camera open. Opt-in static resource UI now consumes selected/visible tabs; mapper and onClick have a separate boundary. Complete CEGUI windows, viewport/camera/model, updateLayout icons/tooltips, createMenus and original scheduler/input parity remain open. mapToFunctions is separately transferred, not a remaining unknown algorithm.",
+      "boundary": "Inventory open flag machine (4 setOpen paths, including fresh-open tab reset), toggleInventory virtual slot +0x40 choreography and provisional viewport math. Single-writer set_inventory_open drives all port paths. Flag consumed; viewport stored but renderless; bank-resolved sound consumed; animation/tip/camera open. Opt-in static resource UI now consumes selected/visible tabs; mapper and onClick have a separate boundary. Complete CEGUI windows, viewport/camera/model, updateLayout icons/tooltips, createMenus and original scheduler/input parity remain open. mapToFunctions is separately transferred, not a remaining unknown algorithm.",
       "evidence": [
         "research/inventory-open.md",
         "research/disassembly/b4eb70-inventory-setopen.asm",
@@ -911,16 +911,21 @@
         "research/disassembly/b4f1b0-map-handlers.asm",
         "research/disassembly/a8ea20-toggle-inventory.asm",
         "research/disassembly/b53430-inventory-updatelayout.asm",
-        "research/update-layout.md"
+        "research/update-layout.md",
+        "research/panel-sound-consumers.md"
       ],
       "implementation": [
         "src/inventory_menu.cpp",
-        "src/application.cpp"
+        "src/application.cpp",
+        "src/ui_sound.cpp"
       ],
       "tests": [
-        "tests/inventory_menu_test.cpp"
+        "tests/inventory_menu_test.cpp",
+        "tests/ui_sound_test.cpp",
+        "tests/compare_panel_sound.py",
+        "tests/panel_sound_probe.cpp"
       ],
-      "comparison": "tools/emulate_inventory_viewport.py (numpy binary32 op-for-op emulation of sites 0xb4eef2-0xb4f004) vs tests/inventory_menu_test.cpp literals: 9 viewports bit-exact incl. 8K reload path; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
+      "comparison": "tools/emulate_inventory_viewport.py (numpy binary32 op-for-op emulation of sites 0xb4eef2-0xb4f004) vs tests/inventory_menu_test.cpp literals: 9 viewports bit-exact incl. 8K reload path; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed Eight native normal-close/same-closed comparisons across inventory/merchant/quest/skill cover sample66, flags and blend request; full opening/lifetime/cleanup parity stays open."
     },
     {
       "addresses": [
@@ -955,24 +960,30 @@
         "0xe3a680"
       ],
       "status": "partial",
-      "boundary": "Panel setOpen family ANALYSIS + PORTED skeleton: shared flag machine with per-menu profile table (tab triples/index, tip rules, viewport consts, detach, refresh rule, pet gate), inventory adapter delegating to the single implementation (its 53 assertions still pass through the wrapper). Pet viewport math compared bit-exact. NOT wired except inventory (no merchant/pet/quest/skill/journal UI exists in the port); engine sinks, key traces and createMenus branches remain open. Sounds parameterized per profile (open 22; close 66, merchant 12); no sample sink, id->file link open.",
+      "boundary": "Panel setOpen family: shared flag machine/profile tables for tab/tip/viewport/detach/refresh/pet-gate roles. Inventory/merchant/quest/skill controller flags and bank-resolved sound effects have actual application consumers. Pet/journal have no live caller. Merchant close corrected to 66 from exact ASM; constructor-bank bindings and real WAVs consumed by UiSoundPlayer. Native models/cameras/tree/createMenus/tip/lifetimes, opening virtual effects, FMOD/RNG/device owners and full cleanup remain open. Sample-rate conversion/ALSA remain declared portable adapters.",
       "evidence": [
         "research/panel-open.md",
         "research/disassembly/b6a220-merchant-setopen.asm",
         "research/disassembly/b92aa0-pet-setopen.asm",
         "research/disassembly/bc2550-quest-setopen.asm",
         "research/disassembly/be1130-skill-setopen.asm",
-        "research/disassembly/e3a680-journal-setopen.asm"
+        "research/disassembly/e3a680-journal-setopen.asm",
+        "research/panel-sound-consumers.md"
       ],
       "implementation": [
         "src/panel_open.cpp",
-        "src/inventory_menu.cpp"
+        "src/inventory_menu.cpp",
+        "src/ui_sound.cpp",
+        "src/application.cpp"
       ],
       "tests": [
         "tests/panel_open_test.cpp",
-        "tests/inventory_menu_test.cpp"
+        "tests/inventory_menu_test.cpp",
+        "tests/ui_sound_test.cpp",
+        "tests/compare_panel_sound.py",
+        "tests/panel_sound_probe.cpp"
       ],
-      "comparison": "Pet (+inventory) viewport literals vs numpy emulation bit-exact; state paths asserted against recorded ASM behavior; full-CEGUI/Ogre parity NOT claimed"
+      "comparison": "Existing viewport/state checks plus eight unchanged normal-close/same-closed setOpen body comparisons across four live menus, with explicit sound/string/blend adapters and null optional child pointers. Real controller-to-cue and six WAV resource/mixed-rate checks; full CEGUI/OGRE/FMOD and frame parity not claimed."
     },
     {
       "addresses": [

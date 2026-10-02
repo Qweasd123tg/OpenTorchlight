@@ -75,14 +75,18 @@ std::int16_t clamp_pcm(float value) {
     return static_cast<std::int16_t>(scaled);
 }
 
-std::size_t request_index(DropdownSoundRequest request) {
-    return request == DropdownSoundRequest::open ? 0U : 1U;
+UiSoundRequest dropdown_request(DropdownSoundRequest request) {
+    switch (request) {
+    case DropdownSoundRequest::open: return UiSoundRequest::center_open;
+    case DropdownSoundRequest::close: return UiSoundRequest::center_close;
+    }
+    throw std::invalid_argument("unknown dropdown sound request");
 }
 
 } // namespace
 
 struct UiSoundPlayer::Impl {
-    std::array<UiPcmSound, 2> sounds;
+    std::array<UiPcmSound, 6> sounds;
     std::mutex mutex;
     std::condition_variable wake;
     std::vector<UiSoundVoice> voices;
@@ -96,9 +100,14 @@ struct UiSoundPlayer::Impl {
 
     explicit Impl(const PakArchive& archive) {
         const auto document = parse_adm(archive.read_normalized("media/sounds/UI.DAT.adm"));
-        const std::array<std::u16string, 2> names{u"CENTEROPEN", u"CENTERCLOSE"};
-        const std::array<std::int64_t, 2> guids{
-            INT64_C(2190439802373280222), INT64_C(2190439810963214814)};
+        // original-code menu constructor bindings and resource-derived GUIDs:
+        // research/panel-sound-consumers.md, dropdown-animation-lifecycle.md.
+        const std::array<std::u16string, 6> names{u"CENTEROPEN", u"CENTERCLOSE",
+            u"INVENTORYOPEN", u"INVENTORYCLOSE", u"STATSOPEN", u"STATSCLOSE"};
+        const std::array<std::int64_t, 6> guids{
+            INT64_C(2190439802373280222), INT64_C(2190439810963214814),
+            INT64_C(4315958940208140766), INT64_C(4315958944503108062),
+            INT64_C(1579749139973280222), INT64_C(1579749148563214814)};
         for (std::size_t index = 0; index < names.size(); ++index) {
             const auto* definition = sound_group(document.root, names[index]);
             if (definition == nullptr) throw std::runtime_error("UI sound definition is absent");
@@ -106,23 +115,21 @@ struct UiSoundPlayer::Impl {
                 resource_fields::flag(*definition, u"LOOPS", true) ||
                 resource_fields::number(*definition, u"FREQUENCYVARIATION", -1.0) != 0.0 ||
                 resource_fields::guid(*definition, u"GUID") != guids[index]) {
-                throw std::runtime_error("dropdown UI sound contract changed");
+                throw std::runtime_error("UI sound contract changed");
             }
             const auto file = descendant_text(*definition, u"FILE");
-            if (file.empty()) throw std::runtime_error("dropdown UI sound has no FILE");
+            if (file.empty()) throw std::runtime_error("UI sound has no FILE");
             auto decoded = UiSoundPlayer::decode_pcm16_wav(
                 archive.read_normalized(resource_fields::ascii(file)));
             decoded.volume = static_cast<float>(
                 resource_fields::number(*definition, u"VOLUME", -1.0));
             decoded.volume_variation = static_cast<float>(
                 resource_fields::number(*definition, u"VOLUMEVARIATION", -1.0));
-            if (decoded.volume < 0.0F || decoded.volume_variation < 0.0F) {
-                throw std::runtime_error("dropdown UI sound has invalid gain data");
+            if (!std::isfinite(decoded.volume) || !std::isfinite(decoded.volume_variation) ||
+                decoded.volume < 0.0F || decoded.volume_variation < 0.0F) {
+                throw std::runtime_error("UI sound has invalid gain data");
             }
             sounds[index] = std::move(decoded);
-        }
-        if (sounds[0].sample_rate != sounds[1].sample_rate) {
-            throw std::runtime_error("dropdown UI sounds use different sample rates");
         }
     }
 
@@ -150,7 +157,7 @@ struct UiSoundPlayer::Impl {
                 wake.wait(lock, [&] { return stopping.load() || !voices.empty(); });
                 if (stopping.load()) break;
                 output = UiSoundPlayer::mix(
-                    voices, 512U, group_volume.load(), muted.load());
+                    voices, 512U, group_volume.load(), muted.load(), sounds[0].sample_rate);
             }
 #if defined(TORCHLIGHT_HAVE_MUSIC) && defined(__linux__)
             if (pcm != nullptr && !output.empty()) {
@@ -186,6 +193,23 @@ struct UiSoundPlayer::Impl {
 #endif
     }
 };
+
+std::optional<UiSoundRequest> ui_panel_sound_request(UiPanelSoundBank bank, int sample) noexcept {
+    switch (bank) {
+    case UiPanelSoundBank::inventory:
+    case UiPanelSoundBank::quest:
+    case UiPanelSoundBank::skill:
+        if (sample == 22) return UiSoundRequest::inventory_open;
+        if (sample == 66) return UiSoundRequest::inventory_close;
+        break;
+    case UiPanelSoundBank::merchant:
+        if (sample == 22) return UiSoundRequest::stats_open;
+        if (sample == 66) return UiSoundRequest::stats_close;
+        // Unregistered IDs stay silent, rather than sharing another bank's cue.
+        break;
+    }
+    return std::nullopt;
+}
 
 UiPcmSound UiSoundPlayer::decode_pcm16_wav(const std::vector<std::uint8_t>& bytes) {
     if (bytes.size() < 12U || !fourcc(bytes, 0U, "RIFF") || !fourcc(bytes, 8U, "WAVE")) {
@@ -235,7 +259,8 @@ float UiSoundPlayer::channel_gain(float volume, float variation,
 
 std::vector<std::int16_t> UiSoundPlayer::mix(
     std::vector<UiSoundVoice>& voices, std::size_t frames,
-    float group_volume, bool muted) {
+    float group_volume, bool muted, std::uint32_t output_rate) {
+    if (output_rate == 0) throw std::invalid_argument("zero UI mixer sample rate");
     const float group_gain = muted || !(group_volume >= 0.0F)
                                  ? 0.0F : std::min(group_volume, 1.0F);
     std::vector<std::int16_t> output(frames * 2U);
@@ -248,10 +273,21 @@ std::vector<std::int16_t> UiSoundPlayer::mix(
             const auto total_frames = sound.samples.size() / sound.channels;
             if (voice.frame >= total_frames) continue;
             const auto sample = voice.frame * sound.channels;
-            left += static_cast<float>(sound.samples[sample]) / 32768.0F * voice.gain;
-            right += static_cast<float>(sound.samples[
-                sample + (sound.channels == 2U ? 1U : 0U)]) / 32768.0F * voice.gain;
-            ++voice.frame;
+            const auto next = std::min(voice.frame + 1U, total_frames - 1U) * sound.channels;
+            const auto interpolated = [&](std::size_t channel) {
+                const float first = static_cast<float>(sound.samples[sample + channel]);
+                const float second = static_cast<float>(sound.samples[next + channel]);
+                const float fraction = static_cast<float>(voice.rate_remainder) / output_rate;
+                return (first + (second - first) * fraction) / 32768.0F;
+            };
+            left += interpolated(0) * voice.gain;
+            right += interpolated(sound.channels == 2U ? 1U : 0U) * voice.gain;
+            // ALSA adapter: source PCM keeps its original rate. Advance each
+            // voice at that rate so the 48000 Hz InventoryClose does not play
+            // slower/lower through the persistent 44100 Hz output stream.
+            const auto advance = voice.rate_remainder + sound.sample_rate;
+            voice.frame += static_cast<std::size_t>(advance / output_rate);
+            voice.rate_remainder = advance % output_rate;
         }
         output[frame * 2U] = clamp_pcm(left * group_gain);
         output[frame * 2U + 1U] = clamp_pcm(right * group_gain);
@@ -268,6 +304,11 @@ UiSoundPlayer::UiSoundPlayer(const PakArchive& archive)
 UiSoundPlayer::~UiSoundPlayer() { stop(); }
 
 void UiSoundPlayer::play(DropdownSoundRequest request) {
+    play(dropdown_request(request));
+}
+
+void UiSoundPlayer::play(UiSoundRequest request) {
+    const auto& sound = impl_->sounds.at(static_cast<std::size_t>(request));
     std::lock_guard<std::mutex> lock(impl_->mutex);
     if (impl_->stopping.load()) return;
     if (!impl_->worker_started) {
@@ -277,7 +318,6 @@ void UiSoundPlayer::play(DropdownSoundRequest request) {
     // Each UI sound's group sets FMOD max-audible=6. The port's oldest-voice
     // eviction is an output-backend policy; FMOD behavior enum 1 remains open.
     constexpr std::size_t kMaximumVoices = 6U;
-    const auto& sound = impl_->sounds[request_index(request)];
     const auto same_sound = static_cast<std::size_t>(std::count_if(
         impl_->voices.begin(), impl_->voices.end(), [&](const auto& voice) {
             return voice.sound == &sound;
@@ -308,7 +348,11 @@ void UiSoundPlayer::stop() {
 }
 
 const UiPcmSound& UiSoundPlayer::sound(DropdownSoundRequest request) const {
-    return impl_->sounds[request_index(request)];
+    return sound(dropdown_request(request));
+}
+
+const UiPcmSound& UiSoundPlayer::sound(UiSoundRequest request) const {
+    return impl_->sounds.at(static_cast<std::size_t>(request));
 }
 
 } // namespace torchlight

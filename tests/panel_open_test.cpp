@@ -69,7 +69,7 @@ void check_skeleton(const PanelProfile &profile) {
                 "reopen reports nothing but layout");
         require(fx.update_layout == profile.refresh_on_reopen, "reopen refresh rule");
     }
-    // Open + close: profile close sample (66; merchant 12), CLOSE blend,
+    // Open + close: profile close sample (66), CLOSE blend,
     // flags cleared, no layout.
     {
         PanelOpenState menu(profile);

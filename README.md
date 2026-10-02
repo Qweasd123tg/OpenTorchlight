@@ -112,6 +112,11 @@ LogicRuntime и consumed world state. Проверены исходный стр
 и запрет stationary/dead pickup; 6006 native сравнений. Camera/list adapter
 остаётся ограниченным: [auto gold pickup](research/auto-gold-pickup.md).
 
+Inventory/merchant/quest/skill теперь передают свои звуковые эффекты в общий
+проигрыватель через проверенные локальные банки оригинала. Исправлен merchant
+close ID66; PCM 48/44.1 kHz сохраняет длительность. Границы:
+[panel sounds](research/panel-sound-consumers.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).

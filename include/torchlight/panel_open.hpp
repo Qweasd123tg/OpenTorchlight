@@ -10,9 +10,11 @@ namespace torchlight {
 // One shared flag machine with a per-menu parameter table. Field OFFSETS are
 // never transferred (each class has its own layout); only roles, order,
 // constants and branch conditions are. Boundary per member is in its profile:
-// CEGUI windows, Ogre viewport/camera creation, model animation, sound
-// samples, tips and updateLayout contents are reported as effects, not
-// executed. Viewport math is exact (see inventory_menu_viewport precedent);
+// CEGUI windows, Ogre viewport/camera creation, model animation, tips and
+// updateLayout contents are reported as effects. Application resolves sounds
+// for inventory/merchant/quest/skill through their original local banks
+// (research/panel-sound-consumers.md); pet/journal have no caller yet.
+// Viewport math is exact (see inventory_menu_viewport precedent);
 // the rect stays provisional (per-frame positioning lives in update()).
 struct PanelViewportConsts {
     float a = 0.0F; // first scaledY const
@@ -50,7 +52,7 @@ struct PanelProfile {
     bool refresh_on_reopen = true; // updateLayout on already-open+open
     bool state_gate = false; // pet: companion state can veto opening (open)
     int open_sound = -1; // playSample id on open path, -1 none (verified 22)
-    int close_sound = -1; // playSample id on close path, -1 none (66/12/21)
+    int close_sound = -1; // playSample id on close path, -1 none (verified 66)
 };
 
 [[nodiscard]] const PanelProfile &panel_profile_inventory();
@@ -62,7 +64,7 @@ struct PanelProfile {
 
 struct PanelOpenEffects {
     bool update_layout = false; // virtual slot +0x48
-    int sound_sample = -1; // profile open/close id, -1 none (open: no sink)
+    int sound_sample = -1; // bank-local profile id, consumed for four live panels
     bool blend_open = false; // OPEN blend when CLOSE is playing (open)
     bool play_open = false; // OPEN play otherwise (open)
     bool queue_idle = false; // IDLE queued (open)

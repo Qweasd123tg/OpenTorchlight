@@ -1,8 +1,10 @@
 # Семейство setOpen панелей: merchant/pet/quest/skill/journal
 
-Статус: все пять — **разобраны** (представитель целиком, остальные —
-проверенные дельты; что именно прочитано — ниже). Не перенесены, не
-подключены, не сравнены. База inventory-пакета: `research/inventory-open.md`.
+Статус: пять функций разобраны в границе skeleton/deltas и перенесены в
+общий helper. Inventory/merchant/quest/skill flags и sounds имеют live
+consumers; pet/journal остаются без caller. Normal close/same-closed четырёх
+живых панелей сравнены нативно; полный контракт остаётся partial.
+База: `research/inventory-open.md`; уточнение звуков: [panel sound consumers](panel-sound-consumers.md).
 
 ## Входы
 
@@ -39,7 +41,7 @@ blend-OPEN/иначе play-OPEN, всегда `queueBlendAnimation("IDLE",true,0
 | viewport (scaledY×4) | да 124/132/166/192 | НЕТ | да 97/166/135/169 | НЕТ | НЕТ | НЕТ |
 | закрытие: removeChild | условное (+0x91a0) | нет | да | нет | да (+0x750) | нет |
 | queueTip | (0) | 0x0c/0x05 по ISA | 0x0f (одна ветвь) | нет | нет | нет |
-| playSample open/close | 22/66 | 22/12 | 22/66 | 22/66 | 22/66 | 22/66 |
+| playSample open/close | 22/66 | 22/66 | 22/66 | 22/66 | 22/66 | 22/66 |
 | уже-открыто+open | store+updateLayout | store+updateLayout | store+updateLayout | только store | только store | только store |
 
 Детали представителя merchant (прочитан целиком): вторая тройка
@@ -65,16 +67,19 @@ shared-эпилог `mov param→flag` (тот же нетто-эффект). Б
 ## Звуки (проверено по путям, не по порядку адресов)
 
 `CSoundBank::playSample(id, null, 0, 0, false)`: open — всегда 22, где звук
-есть; close — 66, кроме merchant (12) и stash (21, профиля пока нет).
+есть; close — 66 у всех профилей. Прежний merchant=12 был ошибкой:
+`0xb6a4e4` загружает 0x42, а 0x0c относится к queueTip `0xb6a4cb`.
+Stash не включён в эту проверенную границу.
 Назначение open/close доказано разбором ветвей флага (inventory/merchant/
 stash/pet/quest/skill; journal — через тождество с quest + тот же порядок).
 Закрытие без открытия молча store'ит флаг (звука нет), анимация закрытия —
 `blendAnimation("CLOSE")` (литерал `0xfe6008`, проверен в inventory/merchant/
 quest/skill). Файлы — `resource-derived` (`media/sounds/UI.DAT.adm`:
 `InventoryOpen→sheet_openright.wav`, `InventoryClose→sheet_close.wav` + …),
-но id — рантайм-хэндлы банка (`addSample` зовут десятки инициализаторов
-юнитов, порядок заполнения = порядок загрузки): связка id→файл требует
-трейса заполнения банка — открыто. Стока семплов в порту нет (open).
+но ID локален банку. Constructor binds проверены для inventory/merchant/
+quest/skill; эти четыре звуковые цепочки подключены к UiSoundPlayer.
+Pet/journal и полный SoundBank/FMOD lifetime остаются открытыми;
+см. `research/panel-sound-consumers.md`.
 В Batch-проверке ещё 6 звучащих `setOpen` без профилей
 (combine/dropdown/enchant/options/stats + stash): id сняты, назначений
 open/close для них НЕ делалось (их скелеты не разбирались).
@@ -92,8 +97,8 @@ open/close для них НЕ делалось (их скелеты не раз�
   нет перенесённого `onClick` — кликов нет.
 - `detach_child` репортится без потребителя (условность оригинала зависит от
   дерева CEGUI — отмечено, не смоделировано).
-- Pet-gate вход — сырой `companion_mode`, проводки нет ( wired=false у всех,
-  кроме inventory).
+- Pet-gate вход — сырой `companion_mode`, pet caller пока нет; остальные живые setters передают эффекты
+  в приложение в объявленной границе.
 - По пути тест поймал баг переноса: trailing `updateLayout` стоит на пути
   открытия у всех (флаг профиля — только для повторного открытия). Исправлено
   до коммита стадий.

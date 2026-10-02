@@ -335,7 +335,7 @@
         "status": "partial",
         "open_items": [
           "Computed viewport has no renderer consumer; the prototype InventoryView is not the original CEGUI window graph.",
-          "OPEN/CLOSE animations, queueTip, sound samples and camera selection still lack their original effect consumers.",
+          "OPEN/CLOSE animations, queueTip and camera selection still lack their original effect consumers.",
           "Shared field ownership, complete createMenus/event wiring and original scenario comparison remain incomplete; opt-in static preview is not animated CEGUI parity."
         ]
       },
@@ -345,10 +345,11 @@
         "wired": true,
         "compared": true
       },
-      "evidence": "research/inventory-open.md; research/disassembly/b4eb70-inventory-setopen.asm; research/disassembly/b4f1b0-map-handlers.asm; research/disassembly/b4f570-onclick.asm; research/disassembly/a8ea20-toggle-inventory.asm; research/decompiled-core/inventory_menu.c:2403-2573",
-      "implementation": "src/inventory_menu.cpp (flag/tab machine + viewport math); src/application.cpp (set_inventory_open single writer: I/K/J/F/ESC/merchant/death/recovery/level-init paths; viewport latched on recompute)",
-      "comparison": "tools/emulate_inventory_viewport.py vs tests/inventory_menu_test.cpp: 9 viewports bit-exact (viewport math only); 4 state paths + tabs asserted against recorded ASM behavior",
-      "notes": "Effect->sink table: open flag -> mirror consumed by all readers (single writer, Esc desync fixed); viewport_recompute -> ensure_viewport computed+stored, viewport() exposed, NO renderer sink yet (open); update_layout -> covered by per-frame session refresh (port-side); OPEN/CLOSE animation (CLOSE literal verified), queueTip, camera selection -> reported, NO port sink (open). Sound ids parameterized per profile (open 22, close 66; merchant 12): reported, NO sample sink (open); id->file link needs bank-fill trace (addSample callers are runtime unit inits). Compared boundary: viewport math + state paths only. Open: RenderWindow+0x48 target, [model+0x58], aspect virtual, queueTip(0), +0x61 writer, KSETTINGS runtime, key trace into toggleInventory, mapToFunctions, createMenus branches. Scenario gap: prototype InventoryView still renders instead of CEGUI windows; animation/tip/camera unwired."
+      "evidence": "research/inventory-open.md; research/disassembly/b4eb70-inventory-setopen.asm; research/disassembly/b4f1b0-map-handlers.asm; research/disassembly/b4f570-onclick.asm; research/disassembly/a8ea20-toggle-inventory.asm; research/decompiled-core/inventory_menu.c:2403-2573; research/panel-sound-consumers.md",
+      "implementation": "src/inventory_menu.cpp (flag/tab machine + viewport math); src/application.cpp (set_inventory_open single writer: I/K/J/F/ESC/merchant/death/recovery/level-init paths; viewport latched on recompute); src/ui_sound.cpp (resolved original local bank -> PCM voice/mixer/ALSA)",
+      "comparison": "tools/emulate_inventory_viewport.py vs tests/inventory_menu_test.cpp: 9 viewports bit-exact (viewport math only); 4 state paths + tabs asserted against recorded ASM behavior; native normal-close/same-closed paths compared (two inventory cases within eight family cases)",
+      "notes": "Effect->sink table: open flag -> mirror consumed by all readers (single writer, Esc desync fixed); viewport_recompute -> ensure_viewport computed+stored, viewport() exposed, NO renderer sink yet (open); update_layout -> covered by per-frame session refresh (port-side); OPEN/CLOSE animation (CLOSE literal verified), queueTip, camera selection -> reported, NO port sink (open). Sound22/66 resolves through its original constructor bank to InventoryOpen/Close and actual UiSoundPlayer consumers; full SoundBank/FMOD owners remain open. Compared boundary: viewport math + state paths only. Open: RenderWindow+0x48 target, [model+0x58], aspect virtual, queueTip(0), +0x61 writer, KSETTINGS runtime, key trace into toggleInventory, mapToFunctions, createMenus branches. Scenario gap: prototype InventoryView still renders instead of CEGUI windows; animation/tip/camera unwired. Bank sample22/66 effects are now resolved and consumed in the actual single-writer setter; original closing sound66 verified by unchanged native body. Output interpolation remains a portable adapter.",
+      "tests": "; tests/compare_panel_sound.py; tests/panel_sound_probe.cpp; tests/ui_sound_test.cpp"
     },
     "0x00b569e0": {
       "symbol": "CInventoryMenu::createMenus()",
@@ -378,13 +379,19 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/panel-open.md; research/disassembly/b6a220-merchant-setopen.asm; research/decompiled-core/merchant_menu.c",
-      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
-      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport); no independent numeric differential so compared stays false. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
-      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
+      "evidence": "research/panel-open.md; research/disassembly/b6a220-merchant-setopen.asm; research/decompiled-core/merchant_menu.c; research/panel-sound-consumers.md",
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter); src/ui_sound.cpp (resolved original local bank -> PCM voice/mixer/ALSA)",
+      "comparison": "Native normal-close/same-closed paths compared (two cases per function within eight family cases); actual bank-resolved sound/resource consumers. Full opening/lifetimes/cleanup/frames not compared; historical scenarios not rerun here.",
+      "notes": "Family representative, fully read: inventory skeleton + second radio/visible triple selected by getDefaultMerchantTab([0x50]) with index +0x3454 (0/1/2); no viewport; queueTip 0x0c/0x05 by ISA(0x7f); no removeChildWindow on close. Flags 0x60/0x61. Port: shared skeleton via merchant profile (2 triples, tab index, ISA tip, no viewport). Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller). Bank sample22/66 effects are now resolved and consumed in the actual single-writer setter; original closing sound66 verified by unchanged native body. Output interpolation remains a portable adapter.",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs); tests/compare_panel_sound.py; tests/panel_sound_probe.cpp; tests/ui_sound_test.cpp",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Normal close/same-closed sound/flags/blend slice compared. Full opening virtual/tree/model/tab/tip effects, native constructors/owners/cleanup/lifetimes and source frame parity remain open; full SoundBank/FMOD/ALSA/global RNG lifecycle is not closed."
+        ]
+      }
     },
     "0x00b92aa0": {
       "symbol": "CPetMenu::setOpen(bool)",
@@ -406,13 +413,19 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/panel-open.md; research/disassembly/bc2550-quest-setopen.asm; research/decompiled-core/quest_menu.c",
-      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
-      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: shared skeleton via quest profile (minimal, no refresh on reopen); no independent numeric differential so compared stays false. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
-      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
+      "evidence": "research/panel-open.md; research/disassembly/bc2550-quest-setopen.asm; research/decompiled-core/quest_menu.c; research/panel-sound-consumers.md",
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter); src/ui_sound.cpp (resolved original local bank -> PCM voice/mixer/ALSA)",
+      "comparison": "Native normal-close/same-closed paths compared (two cases per function within eight family cases); actual bank-resolved sound/resource consumers. Full opening/lifetimes/cleanup/frames not compared; historical scenarios not rerun here.",
+      "notes": "Skeleton-proven identical to journal (198/198 insns, offsets only); close/open-tail/branches read. Minimal profile: no triples, no viewport, no queueTip, no removeChildWindow; addChildWindow([0x10]+[0x18]); close via shared store epilogue; already-open+open stores without updateLayout. Flags 0x188/0x189; settings +0x198, model +0x1b0, sound +0x1d8. Port: shared skeleton via quest profile (minimal, no refresh on reopen). Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller). Bank sample22/66 effects are now resolved and consumed in the actual single-writer setter; original closing sound66 verified by unchanged native body. Output interpolation remains a portable adapter.",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs); tests/compare_panel_sound.py; tests/panel_sound_probe.cpp; tests/ui_sound_test.cpp",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Normal close/same-closed sound/flags/blend slice compared. Full opening virtual/tree/model/tab/tip effects, native constructors/owners/cleanup/lifetimes and source frame parity remain open; full SoundBank/FMOD/ALSA/global RNG lifecycle is not closed."
+        ]
+      }
     },
     "0x00be1130": {
       "symbol": "CSkillMenu::setOpen(bool)",
@@ -420,13 +433,19 @@
         "analyzed": true,
         "ported": true,
         "wired": true,
-        "compared": false
+        "compared": true
       },
-      "evidence": "research/panel-open.md; research/disassembly/be1130-skill-setopen.asm",
-      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter)",
-      "comparison": "No independent differential anchor (no viewport literals); scenario PASSED on real pak/EGL.",
-      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: shared skeleton via skill profile (3 triples, preserved index, detach); comparison remains open. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller).",
-      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs)"
+      "evidence": "research/panel-open.md; research/disassembly/be1130-skill-setopen.asm; research/panel-sound-consumers.md",
+      "implementation": "src/panel_open.cpp (profile) + src/application.cpp (single-writer setter); src/ui_sound.cpp (resolved original local bank -> PCM voice/mixer/ALSA)",
+      "comparison": "Native normal-close/same-closed paths compared (two cases per function within eight family cases); actual bank-resolved sound/resource consumers. Full opening/lifetimes/cleanup/frames not compared; historical scenarios not rerun here.",
+      "notes": "Three radio/visible triples (+0x90-0xc0) selected by tab index +0xe0 (0/1/2/other-keeps); removeChildWindow chain via +0x750; addChildWindow([0x10]+[0x18]); no viewport, no queueTip; already-open+open stores without updateLayout. Flags 0x38/0x39; settings +0x48, model +0x60, sound +0xe8. No decompilation available (ASM only). Port: shared skeleton via skill profile (3 triples, preserved index, detach); Full opening comparison remains open. Current bounded wiring: PanelOpenState with the family profile behind one setter; mirrors only read by dispatch. Pet/journal stay unwired (no port caller). Bank sample22/66 effects are now resolved and consumed in the actual single-writer setter; original closing sound66 verified by unchanged native body. Output interpolation remains a portable adapter.",
+      "tests": "tests/panel_open_test.cpp (profile skeleton+deltas) + tests/scenarios/town-new.scenario (K/J open, ESC close verbs); tests/compare_panel_sound.py; tests/panel_sound_probe.cpp; tests/ui_sound_test.cpp",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Normal close/same-closed sound/flags/blend slice compared. Full opening virtual/tree/model/tab/tip effects, native constructors/owners/cleanup/lifetimes and source frame parity remain open; full SoundBank/FMOD/ALSA/global RNG lifecycle is not closed."
+        ]
+      }
     },
     "0x00e3a680": {
       "symbol": "CJournalMenu::setOpen(bool)",

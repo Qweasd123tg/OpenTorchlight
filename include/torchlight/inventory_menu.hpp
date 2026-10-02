@@ -16,7 +16,8 @@ namespace torchlight {
 // 0x0e/0x0f/0x10 come from the analyzed inventory onClick only.
 // Boundary: see panel_open.hpp and research/inventory-ui-preview.md. Tab
 // imagery/visibility has an opt-in static-resource consumer. Full CEGUI,
-// Ogre/model/sound/tip sinks and original animated positioning remain open.
+// Sound has a bank-resolved UiSoundPlayer sink; full Ogre/model/tip effects
+// and original animated positioning remain open.
 enum class InventoryMenuTab : int {
     backpack = 0x0e, // TabBackpack strings precede the +0x9120 writer
     spells = 0x0f, // TabSpell strings precede the +0x9128 writer
@@ -41,7 +42,7 @@ struct InventoryMenuViewport {
 
 struct InventoryMenuEffects {
     bool update_layout = false;
-    int sound_sample = -1; // 0x16 open, 0x42 close, -1 none (open: no sink)
+    int sound_sample = -1; // 0x16 open, 0x42 close, -1 none; Inventory bank cue
     bool blend_open = false;
     bool play_open = false;
     bool queue_idle = false;

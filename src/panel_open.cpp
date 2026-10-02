@@ -5,12 +5,12 @@ namespace {
 // menu, viewport?, consts, triples, indexed, default-on-open, tip, isa-tip,
 // detach, refresh, gate, open-sound, close-sound. Const sources:
 // research/panel-open.md. Sounds verified per member from playSample sites:
-// open is 22 everywhere present; close is 66 except merchant (12) and
-// stash (21, no panel profile yet).
+// open is 22 and close is 66 for the registered profiles. Merchant's
+// close site @0xb6a4e4 loads 0x42; 0x0c belongs to the tip branch.
 const PanelProfile kInventory{"inventory", true, {124.0F, 132.0F, 166.0F, 192.0F, 5000.0F}, 1,
                               false, false, 0, false, true, true, false, 22, 66};
 const PanelProfile kMerchant{"merchant", false, {}, 2, true, true, -1, true, false, true,
-                             false, 22, 12};
+                             false, 22, 66};
 const PanelProfile kPet{"pet", true, {97.0F, 166.0F, 135.0F, 169.0F, -5000.0F}, 1, false,
                         false, 15, false, true, true, true, 22, 66};
 const PanelProfile kQuest{"quest", false, {}, 0, false, false, -1, false, false, false, false,

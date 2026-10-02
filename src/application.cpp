@@ -417,6 +417,14 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
         std::unique_ptr<torchlight::UiSoundPlayer> ui_sound;
         if (archive.find_normalized("media/sounds/UI.DAT.adm"))
             ui_sound = std::make_unique<torchlight::UiSoundPlayer>(archive);
+        const auto dispatch_panel_sound = [&](torchlight::UiPanelSoundBank bank, int sample) {
+            const auto request = torchlight::ui_panel_sound_request(bank, sample);
+            if (ui_sound && request) {
+                const auto& settings = frontend.audio_settings();
+                ui_sound->set_levels(settings.sound_volume, settings.sound_mute);
+                ui_sound->play(*request);
+            }
+        };
         const auto dispatch_frontend_sounds = [&] {
             const auto& settings = frontend.audio_settings();
             if (ui_sound) ui_sound->set_levels(settings.sound_volume, settings.sound_mute);
@@ -1336,6 +1344,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 // the fresh-open branch.
                 auto set_inventory_open = [&](bool requested) {
                     const auto menu_effects = inventory_menu.set_open(requested, false);
+                    dispatch_panel_sound(torchlight::UiPanelSoundBank::inventory, menu_effects.sound_sample);
                     if (menu_effects.viewport_recompute)
                         inventory_menu.ensure_viewport(
                             window.width(), window.height(),
@@ -1344,17 +1353,19 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     inventory_view.open = inventory_menu.open();
                 };
                 // Single writers for the merchant/skill/quest panel states.
-                // Sounds/tips from the profiles have no port sink (reported,
-                // see panel_open.hpp boundary); the three profiles carry no
+                // Sounds use each original bank's constructor binding; tips
+                // remain without a sink. The three profiles carry no
                 // viewport, so there is no ensure_viewport here. The plain
                 // bools/merchant_entity stay as derived mirrors read by the
                 // pre-existing dispatch below; only these lambdas write them.
                 auto set_skill_open = [&](bool requested) {
-                    static_cast<void>(skill_menu.set_open(requested, false));
+                    const auto effects = skill_menu.set_open(requested, false);
+                    dispatch_panel_sound(torchlight::UiPanelSoundBank::skill, effects.sound_sample);
                     skill_panel = skill_menu.open();
                 };
                 auto set_quest_open = [&](bool requested) {
-                    static_cast<void>(quest_menu.set_open(requested, false));
+                    const auto effects = quest_menu.set_open(requested, false);
+                    dispatch_panel_sound(torchlight::UiPanelSoundBank::quest, effects.sound_sample);
                     quest_panel = quest_menu.open();
                 };
                 auto set_merchant_open = [&](std::uint64_t entity) {
@@ -1363,7 +1374,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     // isa_merchant/default_tab are original inputs with no
                     // port source (open): entities are not RTTI; the tip ids
                     // they select have no sink either.
-                    static_cast<void>(merchant_menu.set_open(entity != 0, false));
+                    const auto effects = merchant_menu.set_open(entity != 0, false);
+                    dispatch_panel_sound(torchlight::UiPanelSoundBank::merchant, effects.sound_sample);
                 };
                 if (inventory_ui && inventory_menu.open() && !skill_panel && !quest_panel && !merchant_entity && player_combat.alive() && world_click) {
                     const auto frame = inventory_ui->frame(window.width(), window.height(), inventory_menu);
@@ -1416,8 +1428,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         // original-code: CInventoryMenu::setOpen @0xb4eb70 flag machine;
                         // the panel interplay above is the port-side caller (cf. the
                         // original toggleInventory @0xa8ea20). close_playing=false: the
-                        // port has no wardrobe model to query (open). Reported sound,
-                        // animation, tip and camera effects have no port sink yet (see
+                        // port has no wardrobe model to query (open). Sound has a
+                        // bank-resolved sink; animation, tip and camera effects remain open (see
                         // inventory_menu.hpp boundary); the frame already refreshes
                         // inventory lines from the session, which covers update_layout.
                         // The computed paperdoll viewport is stored in the controller
@@ -2046,8 +2058,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                                 ++player_death_count; player_motion.stop(); active_path.clear(); next_path_node = 0;
                                 combat.clear_target(); combat.interrupt_attack(); player_attack_animation_active = false;
                                 active_interaction.reset(); interactions.cancel(); active_pickup = 0;
-                                inventory_menu.set_open(false, false); // single-writer invariant
-                                inventory_view.open = inventory_menu.open();
+                                set_inventory_open(false); // includes the bank-local close cue
                                 session.cancel_skill();
                                 missile_runtime = {}; missile_shots.clear();
                                 std::cout << "player_killed=1\n";
