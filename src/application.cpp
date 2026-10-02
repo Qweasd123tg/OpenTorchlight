@@ -1,4 +1,5 @@
 #include "torchlight/application.hpp"
+#include "torchlight/ui_pause.hpp"
 #include "torchlight/menu_scene.hpp"
 #include "torchlight/menu_player.hpp"
 #include "torchlight/application_keys.hpp"
@@ -1533,10 +1534,19 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 }
                 if (!app_running) break;
                 if (frontend.page() == torchlight::FrontendPage::pause) { static_cast<void>(window.take_left_click()); continue; }
-                // prototype: pause while inspecting the bag; do not replay HITs
-                // or run zero-period logic timers while this overlay is open.
+                // original-code: getIsPaused @0x56e570 -> bothCoveredPartial
+                // @0xa82ae0. Inventory/quest/skill isRight getters return 1;
+                // merchant returns 0. A single right-side panel keeps time live.
+                const std::array<torchlight::UiPausePanel,4> pause_panels{{
+                    {true,inventory_menu.open()},{false,merchant_menu.open()},
+                    {true,quest_menu.open()},{true,skill_menu.open()}}};
+                torchlight::UiPauseInputs pause_inputs;
+                pause_inputs.explicit_pause = frontend.page() == torchlight::FrontendPage::pause;
+                // No console, forced pause or modal-dialog runtime exists in
+                // this gameplay adapter; these inputs stay absent, not inferred.
+                const bool menu_paused = torchlight::ui_game_is_paused(pause_inputs,pause_panels.data(),pause_panels.size());
                 // prototype UI policy: pause simulation while dead; death pose still advances.
-                const float simulation_elapsed = inventory_view.open || !player_combat.alive() ? 0.0F : std::min(elapsed, 0.1F);
+                const float simulation_elapsed = menu_paused || !player_combat.alive() ? 0.0F : std::min(elapsed, 0.1F);
                 // Shared desktop/scenario simulation phase, not wall-clock catch-up.
                 if (!session.update_vitals(simulation_elapsed))
                     throw std::runtime_error("Invalid player recovery arithmetic");
@@ -1592,7 +1602,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 const auto previous_player_position = player_motion.position();
                 player_motion.set_speed(player_combat.movement_speed(selected_player.running_speed));
                 player_motion.advance(simulation_elapsed);
-                while (player_combat.alive() && !inventory_view.open && !player_motion.moving() && next_path_node < active_path.size()) {
+                while (player_combat.alive() && !menu_paused && !player_motion.moving() && next_path_node < active_path.size()) {
                     ++next_path_node;
                     if (next_path_node < active_path.size()) {
                         auto waypoint = active_path[next_path_node];
@@ -1621,7 +1631,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 renderer->set_camera_target(
                     player_motion.position(), kCameraDistance);
 
-                if (!inventory_view.open && active_interaction) {
+                if (!menu_paused && active_interaction) {
                     const auto result = interactions.dispatch(*active_interaction, player_motion.position(), player_combat.alive(), 2.25F);
                     if (result != torchlight::InteractionResult::approaching) {
                         player_motion.stop(); active_path.clear(); next_path_node = 0;
@@ -1639,7 +1649,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         active_interaction.reset(); drain_logic();
                     }
                 }
-                if (player_combat.alive() && !inventory_view.open && active_pickup) {
+                if (player_combat.alive() && !menu_paused && active_pickup) {
                     const auto* item = entity_world.find(active_pickup);
                     if (item == nullptr || !item->alive ||
                         item->kind != torchlight::MasterResourceKind::item) {
@@ -1672,12 +1682,12 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                         }
                     }
                 }
-                if (!pending_warp && !inventory_view.open && player_combat.alive() && !session.skill_cast().active()) {
+                if (!pending_warp && !menu_paused && player_combat.alive()) {
                     std::optional<std::array<float, 3>> combat_target_position;
                     if (const auto* target = combat.target(entity_world)) {
                         combat_target_position = target->position;
                     }
-                    const auto update = player_combat.alive() ? combat.update(
+                    const auto update = !session.skill_cast().active() ? combat.update(
                         simulation_elapsed, player_motion.position(), entity_world) : torchlight::CombatUpdate{};
                     if (update.state == torchlight::CombatState::unavailable)
                         inventory_view.status = "ATTACK UNAVAILABLE: " + combat.last_attack_issue();
@@ -1895,10 +1905,10 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     player_animation_time = 0.0F;
                     player_animation_state = next_animation_state;
                 }
-                if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
+                if (!menu_paused && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
                     player_animation_time = combat.action().playback().time_seconds();
-                } else if (!inventory_view.open && player_animation_state == PlayerAnimationState::skill && session.skill_cast().active()) {
+                } else if (!menu_paused && player_animation_state == PlayerAnimationState::skill && session.skill_cast().active()) {
                     player_animation_time = session.skill_cast().playback().time_seconds();
                 } else {
                     player_animation_time += player_animation_state == PlayerAnimationState::death ?
@@ -1998,7 +2008,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                 player_previous_attack_speed = session.skill_cast().active() ? session.skill_cast().playback().playback_speed() : combat.action().playback().playback_speed();
                 // The global enemy-before-player order is retained explicitly;
                 // per-character order is advance -> pose -> HIT -> finish.
-                if (!inventory_view.open) {
+                if (!menu_paused) {
                     for (const auto& entity : entity_world.entities()) {
                         const auto* action = enemies.action(entity.id);
                         if (!action || !action->active()) continue;
@@ -2028,7 +2038,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     }
                     enemies.finish_animation_frame();
                 }
-                if (!inventory_view.open && session.skill_cast().active() && player_combat.alive()) {
+                if (!menu_paused && session.skill_cast().active() && player_combat.alive()) {
                     // Same sampled immutable cast clip supplies the visible pose and HIT.
                     const auto events = session.skill_cast().playback().frame_events();
                     for (const auto& event : events) if (event.key.name == "HIT" && session.perform_skill_event(event)) {
@@ -2070,7 +2080,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                               << " remaining_health=" << hit.remaining_health
                               << " source=" << source << '\n';
                 };
-                if (!inventory_view.open && player_animation_state == PlayerAnimationState::attack &&
+                if (!menu_paused && player_animation_state == PlayerAnimationState::attack &&
                     player_attack_animation_active) {
                     for (const auto& event : combat.action().playback().frame_events()) {
                         if (event.key.name != "HIT") {

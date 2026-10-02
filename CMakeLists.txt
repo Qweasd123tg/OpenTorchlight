@@ -76,6 +76,7 @@ add_library(torchlight_core STATIC
     src/inventory_menu.cpp
     src/inventory_create.cpp
     src/panel_open.cpp
+    src/ui_pause.cpp
     src/ui_font.cpp
     src/ui_text.cpp
     src/menu_scene.cpp
@@ -380,6 +381,18 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(inventory_test tests/inventory_test.cpp)
     target_link_libraries(inventory_test PRIVATE torchlight_core)
     add_test(NAME inventory_instances COMMAND inventory_test)
+    add_executable(ui_pause_test tests/ui_pause_test.cpp)
+    target_link_libraries(ui_pause_test PRIVATE torchlight_core)
+    add_test(NAME ui_game_pause COMMAND ui_pause_test)
+    add_executable(ui_pause_probe tests/ui_pause_probe.cpp)
+    target_link_libraries(ui_pause_probe PRIVATE torchlight_core)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_ui_pause_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_pause.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:ui_pause_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/ui-pause-original.json)
+        set_tests_properties(original_ui_pause_comparison PROPERTIES TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
     add_executable(inventory_stack_probe tests/inventory_stack_probe.cpp)
     target_link_libraries(inventory_stack_probe PRIVATE torchlight_core)
     target_compile_options(inventory_stack_probe PRIVATE -Wall -Wextra -Wpedantic -Werror)

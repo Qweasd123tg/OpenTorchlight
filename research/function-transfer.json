@@ -3897,6 +3897,46 @@
       "tests": "tests/merchant_test.cpp; tests/trace_merchant_transfer.py; tests/typed_migration_process.py",
       "comparison": "21 unchanged native menuItemClick plus price/gold/stat body traces on explicit raw state/dependency adapters; real pak NPC and production sale/rebuy/OTC ownership tests; static effect-to-consumer review.",
       "notes": "Whole original function analysis remains false; legacy flags refer only to the documented connected potion transfer boundary. OTC v7 and keyboard presentation are portable adapters."
+    },
+    "0x0056e570": {
+      "symbol": "CGameClient::getIsPaused()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Immutable evaluated valid-bool query only. Dynamic owner/list replacement, reentrant virtual queries, console/modal runtime and complete original timing/paused animations remain outside this production projection."
+        ]
+      },
+      "evidence": "research/ui-game-pause.md",
+      "implementation": "src/ui_pause.cpp; include/torchlight/ui_pause.hpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "1536 unchanged whole original query/real getters/modal/console/GetInt body comparisons with one evaluated visibility adapter.",
+      "notes": "Actual panel controller flags own inputs; every live gameplay clock/HIT gate consumes the predicate. Full original-function completion stays partial."
+    },
+    "0x00a82ae0": {
+      "symbol": "CGameUI::bothCoveredPartial()",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Immutable evaluated valid-bool query only. Dynamic owner/list replacement, reentrant virtual queries, console/modal runtime and complete original timing/paused animations remain outside this production projection."
+        ]
+      },
+      "evidence": "research/ui-game-pause.md",
+      "implementation": "src/ui_pause.cpp; include/torchlight/ui_pause.hpp; src/application.cpp",
+      "tests": "tests/ui_pause_test.cpp; tests/ui_pause_probe.cpp; tests/compare_ui_pause.py",
+      "comparison": "1536 unchanged whole original query/real getters/modal/console/GetInt body comparisons with one evaluated visibility adapter.",
+      "notes": "Actual panel controller flags own inputs; every live gameplay clock/HIT gate consumes the predicate. Full original-function completion stays partial."
     }
   }
 }

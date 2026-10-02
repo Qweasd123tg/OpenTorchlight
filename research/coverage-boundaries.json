@@ -1841,6 +1841,28 @@
         "tests/typed_migration_process.py"
       ],
       "comparison": "21 unchanged native whole caller/price/gold/stat execution paths with explicit external dependency adapters; addressed ASM and real resource-backed production ownership/codec tests."
+    },
+    {
+      "addresses": [
+        "0x56e570",
+        "0xa82ae0"
+      ],
+      "status": "partial",
+      "boundary": "Full initialized-bool immutable pause query translated: forced/UI/both-covered/console/modal/explicit ordering; actual four panel getter roles feed all live gameplay clocks and HIT gates. Dynamic owner/list mutation, original console/modal runtime, native object lifetimes and complete paused animations/updateIngame remain open.",
+      "evidence": [
+        "research/ui-game-pause.md"
+      ],
+      "implementation": [
+        "src/ui_pause.cpp",
+        "include/torchlight/ui_pause.hpp",
+        "src/application.cpp"
+      ],
+      "tests": [
+        "tests/ui_pause_test.cpp",
+        "tests/ui_pause_probe.cpp",
+        "tests/compare_ui_pause.py"
+      ],
+      "comparison": "1536 unchanged original query/real getter/modal/console/GetInt body comparisons; one explicit evaluated visibility adapter, raw property index fixture, immutable valid bool flags only."
     }
   ],
   "port_systems": [

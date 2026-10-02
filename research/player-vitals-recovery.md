@@ -43,7 +43,8 @@ Finite, constant, passive effects accepted by the existing strict effect loader
 are combined from the class and equipped items. Missing globals/rates stay
 optional/unknown: no invented recharge defaults. Zero explicitly means zero.
 The same `application.cpp` loop advances recovery for desktop and scenario
-hosts. Inventory/death/pause continue to use the existing prototype pause policy.
+hosts. Inventory clocks now use the addressed original side-coverage predicate
+in [ui-game-pause.md](ui-game-pause.md); death overlay timing remains a prototype.
 Dead players do not regenerate or revive; recovery-at-entry remains explicit.
 The pure numeric step supports signed rates and clamps each source separately.
 Periodic player damage does not add the original attacker XP/fame credit system.

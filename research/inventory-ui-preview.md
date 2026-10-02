@@ -54,7 +54,9 @@ The preview uses original images, XML geometry and YRATIO. It is enabled only
 by `--inventory-ui-preview 1`, has an explicit on-screen warning, and leaves
 the old working inventory available with the default value 0. UI targets are
 clipped and ordered by paint order; only visible/enabled targets dispatch. The
-existing port's modal pause policy is unchanged, not declared original.
+historical preview gate retained the old portable modal pause policy. The
+current production clock follows the reviewed side-coverage query in
+[ui-game-pause.md](ui-game-pause.md): a single right panel continues the world.
 
 Original `update @0xb4f9d0` overwrites XML geometry after updateAnimation and
 Entity::_updateAnimation. With actual model and animated tag positions:
