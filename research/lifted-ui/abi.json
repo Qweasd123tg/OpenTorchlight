@@ -163,6 +163,40 @@
           "size": 4
         }
       ]
+    },
+    "0x00c6e440": {
+      "return": "uint64",
+      "return_register": {
+        "offset": "0x0",
+        "size": 4
+      },
+      "input_registers": [
+        {
+          "offset": "0x38",
+          "size": 8
+        },
+        {
+          "offset": "0x20",
+          "size": 8
+        },
+        {
+          "offset": "0x30",
+          "size": 4
+        }
+      ]
+    },
+    "0x00b05e80": {
+      "return": "uint64",
+      "return_register": {
+        "offset": "0x0",
+        "size": 1
+      },
+      "input_registers": [
+        {
+          "offset": "0x20",
+          "size": 8
+        }
+      ]
     }
   }
 }

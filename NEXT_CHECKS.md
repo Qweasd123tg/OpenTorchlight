@@ -13,16 +13,19 @@
 отложенная загрузка игровых каталогов. [Town scene](research/menu-scene.md)
 и [inline text](research/ui-inline-text.md) подключены к desktop.
 Raw p-code -> compiled production functions подключён в
-[automatic-function-transfer.md](research/automatic-function-transfer.md): девять
-тел UI state/Continue/canLoad/scaledY/GetFloat, approved direct-call/tail closure
-и checked owner bindings. Восемь имеют full review; scaledY остаётся partial
+[automatic-function-transfer.md](research/automatic-function-transfer.md): одиннадцать
+тел UI state/Continue/canLoad/scaledY/GetFloat/GetInt/default double-click,
+approved direct-call/tail closure и checked owner bindings. Десять имеют full review; scaledY остаётся partial
 из-за MXCSR/fenv. [Массовый raw-code screen](research/function-lift-screening.md)
 проверил все 3162 residual manual тела: 1541 local/475 closure candidates,
 без автоматической приёмки ABI/owners.
 Сборка генерирует код сама; новые cohorts принимаются после ревью владельцев и
 зависимостей, без автоматического повышения completion.
-Следующие исходные цепочки: preview персонажа/питомца, pet/difficulty producer,
-темы из сохранения и scene FX, resolution/FSAA, native saves и общий CEGUI runtime.
+Текущий приоритет пользователя — [массовый перенос всей игры](research/mass-transfer-engine.md)
+через shared-machine backend. Следующие задачи выбираются по общим блокерам:
+indirect dispatch, неподдержанные операции, library/image ABI, исключения и lifetime.
+Исторические preview/pet/difficulty, scene FX, resolution/FSAA и native saves
+сохраняют свой остаток; они не образуют новую поштучную очередь ручных переводов.
 
 1. Продолжи исходную цепочку CDropdownMenu, используемую CMainMenu:
    библиотечное значение Window+0x3e2, ownership трёх DefaultWindow,

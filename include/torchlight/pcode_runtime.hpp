@@ -15,10 +15,23 @@
 #endif
 
 namespace torchlight::pcode {
+template<std::size_t N> class ByteState;
+using RegisterFile = ByteState<8192>;
+struct ImportCall {
+    std::uint64_t caller, instruction;
+    std::size_t pcode_index;
+    std::uint64_t target;
+};
+struct RegisterRange { std::size_t offset, size; };
 struct Memory {
     virtual ~Memory() = default;
     virtual std::uint64_t read(std::uint64_t address, std::size_t width) = 0;
     virtual void write(std::uint64_t address, std::size_t width, std::uint64_t value) = 0;
+    // Only an explicitly reviewed callsite may reach this boundary. Neither
+    // bank aliases the caller's registers; unspecified imports never become stubs.
+    virtual void invoke_import(const ImportCall&, const RegisterFile&, RegisterFile&) {
+        throw std::runtime_error("p-code imported call has no production implementation");
+    }
 };
 
 inline std::uint64_t mask(std::size_t width) {
@@ -28,12 +41,25 @@ inline std::uint64_t mask(std::size_t width) {
 template<std::size_t N> class ByteState {
     std::array<std::uint8_t, N> bytes_{};
     std::array<bool, N> initialized_{};
+    std::array<bool, N> invalidated_{};
     void bounds(std::size_t offset, std::size_t width) const {
         if (!width || width > 8 || offset > N || width > N-offset)
             throw std::runtime_error("p-code byte-state bounds");
     }
 public:
-    void reset() noexcept { initialized_.fill(false); }
+    void reset() noexcept { initialized_.fill(false); invalidated_.fill(false); }
+    void invalidate(std::size_t offset, std::size_t width) {
+        bounds(offset,width);
+        for (std::size_t i=0; i<width; ++i) {
+            initialized_[offset+i]=false;
+            invalidated_[offset+i]=true;
+        }
+    }
+    std::size_t initialized_count() const noexcept {
+        std::size_t count=0;
+        for (bool byte : initialized_) count += byte;
+        return count;
+    }
     bool initialized(std::size_t offset, std::size_t width) const {
         bounds(offset,width);
         for (std::size_t i=0; i<width; ++i) if (!initialized_[offset+i]) return false;
@@ -50,16 +76,22 @@ public:
         for (std::size_t i=0; i<width; ++i) {
             bytes_[offset+i]=static_cast<std::uint8_t>(value >> (i*8));
             initialized_[offset+i]=true;
+            invalidated_[offset+i]=false;
         }
     }
     void merge_initialized(const ByteState& source) noexcept {
-        for (std::size_t i=0; i<N; ++i) if (source.initialized_[i]) {
-            bytes_[i]=source.bytes_[i];
-            initialized_[i]=true;
+        for (std::size_t i=0; i<N; ++i) {
+            if (source.invalidated_[i]) {
+                initialized_[i]=false;
+                invalidated_[i]=true;
+            } else if (source.initialized_[i]) {
+                bytes_[i]=source.bytes_[i];
+                initialized_[i]=true;
+                invalidated_[i]=false;
+            }
         }
     }
 };
-using RegisterFile = ByteState<8192>;
 
 inline std::uint64_t sign_extend(std::uint64_t value, std::size_t width) {
     value &= mask(width);
@@ -157,5 +189,38 @@ inline std::uint64_t float_multiply(std::uint64_t left, std::uint64_t right,
 }
 inline void check_return(std::uint64_t target, std::uint64_t sentinel) {
     if (target != sentinel) throw std::runtime_error("p-code RETURN target differs from explicit sentinel");
+}
+template<std::size_t I, std::size_t O, std::size_t C>
+inline void invoke_import(Memory& memory, RegisterFile& machine, const ImportCall& call,
+                          std::uint64_t return_address,
+                          const std::array<RegisterRange,I>& inputs,
+                          const std::array<RegisterRange,O>& outputs,
+                          const std::array<RegisterRange,C>& clobbers) {
+    const auto stack=machine.read(0x20,8,"p-code import has uninitialized RSP");
+    check_return(memory.read(stack,8),return_address);
+    if (stack>UINT64_MAX-8) throw std::runtime_error("p-code imported RET overflows RSP");
+    RegisterFile arguments, result;
+    for (const auto& range : inputs)
+        arguments.write(range.offset,range.size,
+            machine.read(range.offset,range.size,"p-code import has uninitialized declared input"));
+    memory.invoke_import(call,arguments,result);
+    check_return(memory.read(stack,8),return_address);
+    std::size_t output_bytes=0;
+    for (const auto& range : outputs) {
+        output_bytes += range.size;
+        if (!result.initialized(range.offset,range.size))
+            throw std::runtime_error("p-code import omitted a declared output");
+    }
+    if (result.initialized_count()!=output_bytes)
+        throw std::runtime_error("p-code import initialized undeclared output bytes");
+    // Publish only the declared effects after validation, never merge a callback
+    // bank wholesale. Explicit invalidations propagate through generated callees.
+    for (const auto& range : clobbers) machine.invalidate(range.offset,range.size);
+    for (const auto& range : outputs)
+        machine.write(range.offset,range.size,result.read(range.offset,range.size));
+    // Raw CALL already pushed this slot. Reproduce the normal original RET's
+    // RIP load and pop, rather than manufacturing a second call/return stack.
+    machine.write(0x288,8,return_address);
+    machine.write(0x20,8,stack+8);
 }
 } // namespace torchlight::pcode

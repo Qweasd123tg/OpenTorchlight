@@ -87,6 +87,12 @@ tail, indirect и userop зависимости из raw operations. Стары�
 
 ## От генерации к рабочему переносу
 
+Автоматический [план следующего dependency-пакета](lift-dependency-automation.md)
+пишется в `dependency-plan.json` и `dependency-targets-*.txt`; короткий вход —
+`SUMMARY.md`. `--targets-file` экспортирует также библиотечные/принятые helpers
+вне residual manual selection. Затем объедини новые raw с исходными roots
+повторным `--raw-dir`, чтобы обнаружить следующий слой без повторного анализа.
+
 Следующий пакет выбирается по текущей производственной цепочке из closure
 candidates, после разбора всех полей/ветвей/вызовов и reviewed bindings.
 `--abi` принимает только настоящий явный descriptor и дополнительно проверяет

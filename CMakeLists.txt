@@ -73,6 +73,7 @@ add_library(torchlight_core STATIC
     src/ui_inventory.cpp
     src/ui_skin.cpp
     src/ui_screen_scale.cpp
+    src/ui_int_property.cpp
     src/inventory_menu.cpp
     src/inventory_create.cpp
     src/panel_open.cpp
@@ -358,6 +359,17 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(save_list_probe PRIVATE torchlight_core)
     add_executable(ui_scale_lift_probe tests/ui_scale_lift_probe.cpp)
     target_link_libraries(ui_scale_lift_probe PRIVATE torchlight_core)
+    add_executable(settings_queries_probe tests/settings_queries_probe.cpp)
+    target_link_libraries(settings_queries_probe PRIVATE torchlight_core)
+    add_executable(settings_queries_controls_test tests/settings_queries_controls_test.cpp)
+    target_link_libraries(settings_queries_controls_test PRIVATE torchlight_core CEGUI062::Base)
+    add_executable(shared_machine_queries_probe tests/shared_machine_queries_probe.cpp)
+    add_dependencies(shared_machine_queries_probe torchlight_machine_code)
+    target_sources(shared_machine_queries_probe PRIVATE "${TORCHLIGHT_MACHINE_HEADER}")
+    target_include_directories(shared_machine_queries_probe PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/include" "${TORCHLIGHT_LIFTED_INCLUDE}")
+    add_executable(lifted_address_space_test tests/lifted_address_space_test.cpp)
+    target_include_directories(lifted_address_space_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
     add_executable(ui_game_state_test tests/ui_game_state_test.cpp)
     target_link_libraries(ui_game_state_test PRIVATE torchlight_core)
     add_executable(ui_game_state_probe tests/ui_game_state_probe.cpp)
@@ -371,16 +383,38 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME save_selection COMMAND save_selection_test)
     add_test(NAME ui_game_state_request COMMAND ui_game_state_test)
     add_test(NAME pcode_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/pcode_lifter_test.py)
+    add_test(NAME shared_machine_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/shared_machine_lifter_test.py)
+    add_test(NAME lifted_address_space COMMAND lifted_address_space_test)
+    set_tests_properties(shared_machine_lifter PROPERTIES TIMEOUT 90)
     add_test(NAME function_lift_screening COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/function_lift_screening_test.py)
+    add_test(NAME lift_dependency_plan COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_dependency_plan_test.py)
+    add_test(NAME lift_dependency_export COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_dependency_export_test.py)
+    add_test(NAME lift_pipeline COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_pipeline_test.py)
+    add_test(NAME lift_project_preparation COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_project_preparation_test.py)
     set_tests_properties(function_lift_screening PROPERTIES TIMEOUT 60)
-    set_tests_properties(pcode_lifter PROPERTIES TIMEOUT 90)
+    set_tests_properties(lift_dependency_plan lift_dependency_export PROPERTIES TIMEOUT 60)
+    set_tests_properties(lift_pipeline lift_project_preparation PROPERTIES TIMEOUT 60)
+    set_tests_properties(pcode_lifter PROPERTIES TIMEOUT 240)
     set_tests_properties(save_selection PROPERTIES TIMEOUT 30)
     if(TORCHLIGHT_GAME_DIR)
+        add_test(NAME original_settings_query_controls COMMAND settings_queries_controls_test
+            "${TORCHLIGHT_GAME_DIR}/pak.zip")
+        set_tests_properties(original_settings_query_controls PROPERTIES TIMEOUT 60)
         add_test(NAME original_save_selection_frontend
             COMMAND save_selection_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
         set_tests_properties(original_save_selection_frontend PROPERTIES TIMEOUT 60)
     endif()
     if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_shared_machine_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_settings_queries.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:shared_machine_queries_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/shared-machine-native.json)
+        set_tests_properties(original_shared_machine_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
+        add_test(NAME original_settings_queries_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_settings_queries.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:settings_queries_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/settings-queries-native.json)
+        set_tests_properties(original_settings_queries_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
         add_test(NAME original_save_list_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_save_list.py
             --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:save_list_probe>

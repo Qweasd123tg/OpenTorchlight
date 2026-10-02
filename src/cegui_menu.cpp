@@ -1,5 +1,7 @@
 #include "torchlight/cegui_menu.hpp"
 #include "torchlight/ui_screen_scale.hpp"
+#include "torchlight/ui_int_property.hpp"
+#include "torchlight/ui_dropdown.hpp"
 #include "torchlight/dds_texture.hpp"
 #include "torchlight/png_texture.hpp"
 #include <CEGUI.h>
@@ -364,6 +366,9 @@ struct CeguiMenu::Impl {
                 static_cast<int>(binding->second) >= 14 && static_cast<int>(binding->second) <= 17)
                 pending.emplace_back(CeguiPage::load, leaf(string(event.window->getName())), UiLayoutFunction::continue_game);
         }
+        const auto main = views.find(CeguiPage::main);
+        if (main != views.end() && main->second.bindings.functions.count(event.window))
+            return dropdown_default_double_click(); // Main vtable ff3138 -> b05e80.
         return true;
     }
     bool submit_name(const CEGUI::EventArgs&) {
@@ -450,12 +455,22 @@ struct CeguiMenu::Impl {
     }
     void set_settings(const DisplaySettings& value, const std::vector<UiResolution>& modes) {
         auto& v = views.at(CeguiPage::settings);
-        checkbox(v, "Fullscreen")->setSelected(value.fullscreen);
-        checkbox(v, "Antialiasing")->setSelected(value.fsaa != 0); // bd5692..bd56a1
+        // Evaluated named settings from the live draft; these port slots are
+        // not numeric IDs from the original global registration. GetInt's
+        // original +0x40/+0x48 reader borrows this table for each call.
+        enum IntSetting : std::uint32_t { fullscreen, fsaa, vsync, shadow_detail, width, height };
+        static_assert(sizeof(int) == sizeof(std::int32_t));
+        const std::array<std::int32_t, 6> integers{{value.fullscreen ? 1 : 0, value.fsaa,
+            value.vsync ? 1 : 0, value.shadows_detail, value.res_width, value.res_height}};
+        const auto integer = [&](IntSetting key) {
+            return ui_int_property(integers.data(), integers.size(), key);
+        };
+        checkbox(v, "Fullscreen")->setSelected(integer(fullscreen) != 0); // bd5660 -> bd5674
+        checkbox(v, "Antialiasing")->setSelected(integer(fsaa) != 0); // bd568d -> bd56a1
         checkbox(v, "RenderBehind")->setSelected(value.render_behind);
         checkbox(v, "Rimlights")->setSelected(value.rimlights);
         checkbox(v, "HardwareSkinning")->setSelected(value.hardware_skinning);
-        checkbox(v, "VSync")->setSelected(value.vsync);
+        checkbox(v, "VSync")->setSelected(integer(vsync) != 0); // bd5741 -> bd5755
         checkbox(v, "SoundMute")->setSelected(value.sound_mute);
         checkbox(v, "MusicMute")->setSelected(value.music_mute);
         checkbox(v, "ShowTips")->setSelected(value.show_tips);
@@ -476,7 +491,8 @@ struct CeguiMenu::Impl {
             select(resolution, 0); // bd692e: default row before matching current dimensions
             for (std::size_t n = 0; n < resolution->getItemCount(); ++n) {
                 const auto id = resolution->getListboxItemFromIndex(n)->getID();
-                if (modes.at(id) == UiResolution{value.res_width, value.res_height}) select(resolution, n);
+                const auto& mode = modes.at(id);
+                if (mode.width == integer(width) && mode.height == integer(height)) select(resolution, n);
             }
         }
         auto* shadow = combo(v, "ShadowDropdown");
@@ -486,8 +502,9 @@ struct CeguiMenu::Impl {
             fill(particle, UiSettingsComboboxes::particle_options());
         }
         select(shadow, 0);
-        if (value.shadows_detail >= 0 && value.shadows_detail < 6)
-            select(shadow, static_cast<std::size_t>(value.shadows_detail));
+        const auto detail = integer(shadow_detail); // bd61f7 -> native item selection
+        if (detail >= 0 && detail < 6)
+            select(shadow, static_cast<std::size_t>(detail));
         select(particle, 0);
         for (std::size_t n = 0; n < 3; ++n) {
             if (UiSettingsComboboxes::particle_options()[n].particle_fps >= value.particle_fps) {

@@ -76,7 +76,7 @@ class PcodeLifterTest(unittest.TestCase):
             p=self.path/f'raw{i}.json';p.write_text(json.dumps(function));paths.append(p)
         return lift.generate(paths,descriptor or closure_abi(*(abi(d) for d in functions)))
 
-    def execute(self,data,body,descriptor=None):
+    def execute(self,data,body,descriptor=None,import_method=''):
         compiler=shutil.which('g++') or shutil.which('clang++')
         if not compiler:self.skipTest('C++17 compiler unavailable')
         header,_=self.generate(data,descriptor)
@@ -93,6 +93,7 @@ struct Memory : torchlight::pcode::Memory {
  void write(std::uint64_t a,std::size_t w,std::uint64_t v) override {
   for(std::size_t i=0;i<w;++i)bytes[a+i]=static_cast<std::uint8_t>(v>>(i*8));
  }
+'''+import_method+'''
 };
 int main(){Memory memory; memory.write(0x1000,8,0xf00d);
  torchlight::pcode::RegisterFile registers; registers.write(0x20,8,0x1000);
@@ -207,6 +208,31 @@ assert(registers.read(0,8)==0x100000);''',descriptor)
             instruction(0x150,[op('COPY',node('register',0,8),node('const',999,8))],0x200),
             instruction(0x200,ret())])
         self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==4);')
+
+    def test_static_ram_internal_branches_require_eight_byte_targets(self):
+        for name in ('BRANCH','CBRANCH'):
+            for width in (1,2,4):
+                inputs=[node('ram',0x200,width)]
+                if name=='CBRANCH':inputs.append(node('const',1,1))
+                data=function([instruction(0x100,[op(name,None,*inputs)],
+                                           0x200 if name=='CBRANCH' else None),
+                               instruction(0x200,ret())])
+                with self.subTest(operation=name,width=width),self.assertRaisesRegex(
+                        lift.LiftError,'static RAM branch target width must be 8'):
+                    self.generate(data)
+
+    def test_eight_byte_internal_branches_keep_taken_and_fallthrough_paths(self):
+        for name,condition,expected in (('BRANCH',None,9),('CBRANCH',0,4),('CBRANCH',1,9)):
+            inputs=[node('ram',0x200,8)]
+            if name=='CBRANCH':inputs.append(node('const',condition,1))
+            data=function([instruction(0x100,[op(name,None,*inputs)],
+                                       0x150 if name=='CBRANCH' else None),
+                           instruction(0x150,[op('COPY',node('register',0,8),node('const',4,8)),
+                                              op('BRANCH',None,node('ram',0x300,8))]),
+                           instruction(0x200,[op('COPY',node('register',0,8),node('const',9,8))],0x300),
+                           instruction(0x300,ret())])
+            with self.subTest(operation=name,condition=condition):
+                self.execute(data,f'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)=={expected});')
 
     def test_temporaries_reset_at_instruction_boundary(self):
         data=function([instruction(0x100,[op('COPY',node('unique',0x100,8),node('const',99,8))],0x101),
@@ -422,6 +448,178 @@ assert(registers.read(0x30,8)==0x9876);assert(memory.read(0xff8,8)==0x105);''')
 try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
 catch(const std::runtime_error& e){failed=std::string(e.what()).find("sentinel")!=std::string::npos;}assert(failed);''',
                      closure_abi(abi(caller,returns='void'),abi(callee,returns='void')))
+
+    def imported_caller(self,address=0x100,push=True):
+        rows=[op('COPY',node('register',0x38,8),node('const',0x5000,8)),
+              op('COPY',node('register',0x30,4),node('const',7,4)),
+              op('COPY',node('register',0x18,8),node('const',40,8)),
+              op('COPY',node('register',0x10,8),node('const',123,8))]
+        if push:
+            rows += [op('INT_SUB',node('register',0x20,8),node('register',0x20,8),node('const',8,8)),
+                     op('STORE',None,node('const',433,8),node('register',0x20,8),node('const',address+5,8))]
+        rows += [op('CALL',None,node('ram',0x900,8)),
+                 op('INT_ADD',node('register',0,8),node('register',0,8),node('register',0x18,8))]
+        return function([instruction(address,rows,address+5),instruction(address+5,ret())])
+
+    def imported_abi(self,caller,method,inputs=((0x38,8),(0x30,4)),outputs=((0,8),),clobbers=((0x10,8),)):
+        implementation=self.path/'import-method.hpp'
+        implementation.write_text(method)
+        descriptor=abi(caller)
+        site=next((row['address'],op['index']) for row in caller['instructions']
+                  for op in row['pcode'] if op['operation']=='CALL')
+        descriptor['imports']={'0x900':{
+            'input_registers':[dict(offset=hex(offset),size=size) for offset,size in inputs],
+            'output_registers':[dict(offset=hex(offset),size=size) for offset,size in outputs],
+            'clobber_registers':[dict(offset=hex(offset),size=size) for offset,size in clobbers],
+            'callsites':[dict(caller=caller['address'],instruction=site[0],pcode_index=site[1],kind='direct_call')],
+            'implementation_inputs':{str(implementation):hashlib.sha256(implementation.read_bytes()).hexdigest()}}}
+        return descriptor
+
+    def test_reviewed_direct_import_exact_banks_effects_ret_and_clobber_propagation(self):
+        caller=self.imported_caller()
+        method='''std::size_t calls=0;
+void invoke_import(const torchlight::pcode::ImportCall& call,
+ const torchlight::pcode::RegisterFile& in,torchlight::pcode::RegisterFile& out) override {
+ ++calls;assert(call.caller==0x100&&call.instruction==0x100&&call.pcode_index==6&&call.target==0x900);
+ assert(in.initialized_count()==12);assert(in.read(0x38,8)==0x5000);assert(in.read(0x30,4)==7);
+ bool denied=false;try{(void)in.read(0x18,8);}catch(const std::runtime_error&){denied=true;}assert(denied);
+ write(0x5000,4,in.read(0x30,4));out.write(0,8,2);
+}'''
+        descriptor=self.imported_abi(caller,method)
+        self.execute(caller,'''for(std::uint64_t i=0;i<16;++i)memory.write(0x5000+i,1,0xaa);
+registers.write(0x10,8,999);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==42);
+assert(memory.calls==1);assert(memory.read(0x5000,4)==7);assert(memory.read(0x5004,4)==0xaaaaaaaa);
+assert(registers.read(0x18,8)==40);assert(registers.read(0x20,8)==0x1008);
+assert(registers.read(0x288,8)==0xf00d);assert(memory.read(0xff8,8)==0x105);
+assert(!registers.initialized(0x10,8));''',descriptor,'#include "import-method.hpp"')
+        _,report=self.generate(caller,descriptor)
+        self.assertEqual(report['functions'][0]['approved_dependencies'][0]['kind'],'imported_direct_call')
+        self.assertIn('0x00000900',report['imported_boundaries'])
+        self.assertEqual(report['closure']['maximum_selected_depth'],1)
+
+    def test_direct_import_rejects_missing_or_mutated_actual_return_slot(self):
+        for pushed in (False,True):
+            caller=self.imported_caller(push=pushed)
+            method='''std::size_t calls=0;
+void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile&,torchlight::pcode::RegisterFile& out) override {
+ ++calls;write(0xff8,8,0xbaad);out.write(0,8,999);
+}'''
+            descriptor=self.imported_abi(caller,method)
+            self.execute(caller,'''registers.write(0,8,1234);bool failed=false;
+try{(void)torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("sentinel")!=std::string::npos;}
+assert(failed);assert(registers.read(0,8)==1234);assert(registers.read(0x20,8)==0x1000);
+assert(memory.calls=='''+str(int(pushed))+');',descriptor,'#include "import-method.hpp"')
+
+    def test_direct_import_fails_closed_for_missing_extra_or_partial_outputs(self):
+        for writes in ('', 'out.write(0,4,2);', 'out.write(0,8,2);out.write(0x10,1,3);'):
+            method='''void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile&,torchlight::pcode::RegisterFile& out) override {
+ (void)out;'''+writes+'\n}'
+            caller=self.imported_caller()
+            descriptor=self.imported_abi(caller,method)
+            self.execute(caller,'''registers.write(0,8,1234);registers.write(0x10,8,555);bool failed=false;
+try{(void)torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("output")!=std::string::npos;}
+assert(failed);assert(registers.read(0,8)==1234);assert(registers.read(0x10,8)==555);
+assert(registers.read(0x20,8)==0x1000);''',descriptor,'#include "import-method.hpp"')
+
+    def test_direct_import_does_not_stub_absent_callback_or_expose_undeclared_inputs(self):
+        caller=self.imported_caller()
+        for method,include,error in (
+            ('// deliberately absent implementation\n','', 'no production implementation'),
+            ('''void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile& in,torchlight::pcode::RegisterFile&) override {
+ (void)in.read(0x18,8);
+}''','#include "import-method.hpp"','p-code')):
+            descriptor=self.imported_abi(caller,method)
+            self.execute(caller,'''bool failed=false;
+try{(void)torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("'''+error+'''")!=std::string::npos;}
+assert(failed);assert(registers.read(0x20,8)==0x1000);''',descriptor,include)
+
+    def test_direct_import_missing_input_is_rejected_before_callback_effects(self):
+        caller=self.imported_caller()
+        rows=copy.deepcopy(caller['instructions'])
+        rows[0]['pcode'].pop(0) # RDI is neither supplied by the ABI nor defined.
+        for index,operation in enumerate(rows[0]['pcode']):operation['index']=index
+        caller=function(rows)
+        method='''std::size_t calls=0;
+void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile&,torchlight::pcode::RegisterFile& out) override {
+ ++calls;write(0x5000,4,7);out.write(0,8,2);
+}'''
+        descriptor=self.imported_abi(caller,method)
+        self.execute(caller,'''memory.write(0x5000,4,999);bool failed=false;
+try{(void)torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("uninitialized declared input")!=std::string::npos;}
+assert(failed);assert(memory.calls==0);assert(memory.read(0x5000,4)==999);
+assert(registers.read(0x20,8)==0x1000);''',descriptor,'#include "import-method.hpp"')
+
+    def test_import_clobber_tombstones_cross_generated_callee_boundary(self):
+        inner=self.imported_caller(address=0x200)
+        outer=function([instruction(0x100,[op('BRANCH',None,node('ram',0x200,8))])])
+        method='''void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile&,torchlight::pcode::RegisterFile& out) override {out.write(0,8,2);}'''
+        descriptor=self.imported_abi(inner,method)
+        descriptor['functions'].update(abi(outer,inputs=((0x10,8),))['functions'])
+        self.execute([outer,inner],'''registers.write(0x10,8,555);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==42);
+assert(!registers.initialized(0x10,8));''',descriptor,'#include "import-method.hpp"')
+
+    def test_direct_import_exception_keeps_prior_owner_effects_without_postcall_publish(self):
+        caller=self.imported_caller()
+        method='''void invoke_import(const torchlight::pcode::ImportCall&,
+ const torchlight::pcode::RegisterFile&,torchlight::pcode::RegisterFile& out) override {
+ write(0x5000,4,7);out.write(0,8,999);throw std::logic_error("effect failure");
+}'''
+        descriptor=self.imported_abi(caller,method)
+        self.execute(caller,'''registers.write(0,8,1234);bool failed=false;
+try{(void)torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::logic_error&){failed=true;}
+assert(failed);assert(memory.read(0x5000,4)==7);assert(registers.read(0,8)==1234);
+assert(registers.read(0x20,8)==0x1000);''',descriptor,'#include "import-method.hpp"')
+
+    def test_import_contract_rejects_implicit_aliasing_control_registers_and_unused_sites(self):
+        caller=self.imported_caller()
+        descriptor=self.imported_abi(caller,'// reviewed fixture\n')
+        changes=[('output_registers',[dict(offset='0x20',size=8)]),
+                 ('input_registers',[dict(offset='0x288',size=8)]),
+                 ('clobber_registers',[dict(offset='0x18',size=8)]),
+                 ('output_registers',[dict(offset='0x0',size=8),dict(offset='0x4',size=4)]),
+                 ('clobber_registers',[dict(offset='0x4',size=4)]),
+                 ('output_registers',[dict(offset='0x0',size=16)])]
+        for key,value in changes:
+            changed=copy.deepcopy(descriptor);changed['imports']['0x900'][key]=value
+            with self.subTest(key=key,value=value),self.assertRaises(lift.LiftError):self.generate(caller,changed)
+        for role in ('input_registers','output_registers','clobber_registers','callsites','implementation_inputs'):
+            changed=copy.deepcopy(descriptor);del changed['imports']['0x900'][role]
+            with self.subTest(missing=role),self.assertRaises(lift.LiftError):self.generate(caller,changed)
+        changed=copy.deepcopy(descriptor)
+        changed['imports']['0x900']['callsites'][0]['pcode_index']=5
+        with self.assertRaisesRegex(lift.LiftError,'callsite differs'):self.generate(caller,changed)
+        changed=copy.deepcopy(descriptor)
+        changed['imports']['0x900']['callsites'].append(dict(caller='0x100',instruction='0x105',pcode_index=0,kind='direct_call'))
+        with self.assertRaisesRegex(lift.LiftError,'unused or mismatched'):self.generate(caller,changed)
+        changed=copy.deepcopy(descriptor);changed['imports']['0x900']['callsites'][0]['kind']='indirect_call'
+        with self.assertRaisesRegex(lift.LiftError,'only explicit direct_call'):self.generate(caller,changed)
+
+    def test_direct_import_stale_implementation_rejected_and_cli_cannot_overwrite_it(self):
+        caller=self.imported_caller()
+        descriptor=self.imported_abi(caller,'// reviewed implementation\n')
+        implementation=self.path/'import-method.hpp'
+        paths=self.path/'raw.json';paths.write_text(json.dumps(caller))
+        ap=self.path/'abi.json';ap.write_text(json.dumps(descriptor))
+        before=implementation.read_bytes()
+        for output,report in ((implementation,self.path/'report.json'),(self.path/'header.hpp',implementation)):
+            result=subprocess.run(['python3',str(ROOT/'tools/lift_pcode.py'),str(paths),'--abi',str(ap),
+                '--out',str(output),'--report',str(report)],capture_output=True,text=True)
+            self.assertEqual(result.returncode,2)
+            self.assertEqual(implementation.read_bytes(),before)
+        implementation.write_text('// modified implementation\n')
+        with self.assertRaisesRegex(lift.LiftError,'stale or missing implementation'):self.generate(caller,descriptor)
 
     def test_two_level_tail_jump_returns_reviewed_al_without_second_ret(self):
         outer=function([instruction(0x100,[op('BRANCH',None,node('ram',0x200,8))])])

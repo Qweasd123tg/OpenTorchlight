@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Bounded C++17 lowering of ORIGINAL schema-2 raw Ghidra p-code.
 
-No decompiler text/analysis graph is consumed. A reviewed ABI file must pin the
-ELF, RAM space id, return type and exact initialized register bytes. Unsupported
-contracts fail preflight before publishing any generated header.
+No decompiler text/analysis graph is consumed. Scalar mode uses a reviewed ABI
+with exact initialized register bytes. Shared-machine mode borrows the caller's
+initialized guest bank without inferring an ABI. Both pin ELF/RAM identity and
+reject unsupported contracts before publishing any generated header.
 """
 from __future__ import annotations
 
@@ -39,6 +40,7 @@ PREDICATES = {n for n in OPCODES if n.startswith('BOOL_')} | {
     'INT_EQUAL', 'INT_NOTEQUAL', 'INT_SLESS', 'INT_SLESSEQUAL', 'INT_LESS',
     'INT_LESSEQUAL', 'INT_CARRY', 'INT_SCARRY', 'INT_SBORROW',
     'FLOAT_EQUAL', 'FLOAT_NOTEQUAL', 'FLOAT_LESS', 'FLOAT_LESSEQUAL', 'FLOAT_NAN'}
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def integer(value):
@@ -90,30 +92,120 @@ def validate_node(node, context, ram_id, output=False, abi=False):
         failure(context, 'RAM varnode space id differs from reviewed ABI')
 
 
-def compile_function(data, abi, ram_id, input_sha, approved_entries):
+def implementation_paths(abi):
+    """Also protect recognizable inputs in a malformed descriptor from CLI writes."""
+    result = set()
+    imports = abi.get('imports', {}) if isinstance(abi, dict) else {}
+    for descriptor in imports.values() if isinstance(imports, dict) else ():
+        inputs = descriptor.get('implementation_inputs', {}) if isinstance(descriptor, dict) else {}
+        for name in inputs if isinstance(inputs, dict) else ():
+            if isinstance(name, str) and name:
+                path = Path(name)
+                result.add((path if path.is_absolute() else ROOT / path).resolve())
+    return result
+
+
+def validate_imports(abi):
+    """No target, callsite, register contract or implementation identity is inferred."""
+    descriptors = abi.get('imports', {})
+    if not isinstance(descriptors, dict):
+        raise LiftError('reviewed imports must be an explicit mapping')
+    imports, sites = {}, set()
+    for target, descriptor in descriptors.items():
+        target = address(target)
+        if target in imports or not isinstance(descriptor, dict):
+            raise LiftError('duplicate normalized or invalid import target: ' + target)
+        expected = {'input_registers', 'output_registers', 'clobber_registers',
+                    'callsites', 'implementation_inputs'}
+        if set(descriptor) != expected:
+            raise LiftError(target + ': import requires exact inputs/outputs/clobbers/callsites/implementation_inputs')
+        normalized = {}
+        covered = {}
+        for role in ('input_registers', 'output_registers', 'clobber_registers'):
+            rows = descriptor[role]
+            if not isinstance(rows, list):
+                raise LiftError(target + ': ' + role + ' must be explicit list')
+            normalized[role], covered[role] = [], set()
+            for row in rows:
+                if not isinstance(row, dict) or set(row) != {'offset', 'size'}:
+                    raise LiftError(target + ': imported register range requires exact offset/size')
+                node = dict(row, space='register', constant=False)
+                validate_node(node, target + ' ' + role, 433, abi=True)
+                offset, size = integer(row['offset']), integer(row['size'])
+                span = set(range(offset, offset + size))
+                if span & covered[role]:
+                    raise LiftError(target + ': overlapping ' + role)
+                if span & (set(range(0x20, 0x28)) | set(range(0x288, 0x290))):
+                    raise LiftError(target + ': import cannot expose or modify RSP/RIP')
+                if role != 'input_registers' and span & (
+                        set(range(0x18, 0x20)) | set(range(0x28, 0x30)) | set(range(0xa0, 0xc0))):
+                    raise LiftError(target + ': import cannot modify System V callee-saved registers')
+                covered[role].update(span)
+                normalized[role].append(dict(offset=hex(offset), size=size))
+        if covered['output_registers'] & covered['clobber_registers']:
+            raise LiftError(target + ': output/clobber register ranges overlap')
+        callsites = descriptor['callsites']
+        if not isinstance(callsites, list) or not callsites:
+            raise LiftError(target + ': imported callsites must be a nonempty explicit list')
+        normalized['callsites'] = []
+        for row in callsites:
+            if not isinstance(row, dict) or set(row) != {'caller', 'instruction', 'pcode_index', 'kind'}:
+                raise LiftError(target + ': imported callsite requires exact caller/instruction/pcode_index/kind')
+            index = integer(row['pcode_index'])
+            if index < 0 or row['kind'] != 'direct_call':
+                raise LiftError(target + ': only explicit direct_call imports are supported')
+            caller, instruction = address(row['caller']), address(row['instruction'])
+            site = (caller, instruction, index)
+            if site in sites:
+                raise LiftError(target + ': duplicate or ambiguous imported callsite')
+            sites.add(site)
+            normalized['callsites'].append(dict(caller=caller, instruction=instruction,
+                                               pcode_index=index, kind='direct_call'))
+        inputs = descriptor['implementation_inputs']
+        if not isinstance(inputs, dict) or not inputs:
+            raise LiftError(target + ': implementation_inputs must pin reviewed implementation files')
+        normalized['implementation_inputs'] = {}
+        for name, expected_sha in inputs.items():
+            if (not isinstance(name, str) or not name or not isinstance(expected_sha, str)
+                    or not re.fullmatch('[0-9a-f]{64}', expected_sha)):
+                raise LiftError(target + ': invalid implementation input path/SHA-256')
+            path = Path(name)
+            path = path if path.is_absolute() else ROOT / path
+            if not path.is_file() or path.is_symlink() or hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha:
+                raise LiftError(target + ': stale or missing implementation input: ' + name)
+            normalized['implementation_inputs'][name] = expected_sha
+        imports[target] = normalized
+    return imports
+
+
+def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=None, shared_machine=False):
+    imports = imports or {}
     entry = address(data['address'])
-    ret = abi.get('return')
-    if ret not in {'void', 'uint64'}:
-        failure(entry, 'ABI return must explicitly be void or uint64')
-    return_node=dict(abi.get('return_register',dict(offset='0x0',size=8)),
-                     space='register',constant=False)
-    validate_node(return_node,entry+' ABI return register',ram_id,abi=True)
-    initial = abi.get('input_registers')
-    if not isinstance(initial, list):
-        failure(entry, 'ABI input_registers must be explicit list')
-    initial_nodes=[]
-    seen=set()
-    for r in initial:
-        n=dict(r, space='register', constant=False)
-        validate_node(n, entry+' ABI', ram_id,abi=True)
-        offset,size=integer(n['offset']),integer(n['size'])
-        covered=set(range(offset,offset+size))
-        if seen & covered:
-            failure(entry, 'overlapping ABI input register declarations')
-        seen |= covered
-        initial_nodes.append((offset,size))
-    if not set(range(0x20,0x28)) <= seen:
-        failure(entry, 'ABI must explicitly initialize RSP bytes 0x20..0x27 for real RET')
+    if shared_machine:
+        ret, return_node, initial_nodes = 'void', None, []
+    else:
+        ret = abi.get('return')
+        if ret not in {'void', 'uint64'}:
+            failure(entry, 'ABI return must explicitly be void or uint64')
+        return_node=dict(abi.get('return_register',dict(offset='0x0',size=8)),
+                         space='register',constant=False)
+        validate_node(return_node,entry+' ABI return register',ram_id,abi=True)
+        initial = abi.get('input_registers')
+        if not isinstance(initial, list):
+            failure(entry, 'ABI input_registers must be explicit list')
+        initial_nodes=[]
+        seen=set()
+        for r in initial:
+            n=dict(r, space='register', constant=False)
+            validate_node(n, entry+' ABI', ram_id,abi=True)
+            offset,size=integer(n['offset']),integer(n['size'])
+            covered=set(range(offset,offset+size))
+            if seen & covered:
+                failure(entry, 'overlapping ABI input register declarations')
+            seen |= covered
+            initial_nodes.append((offset,size))
+        if not set(range(0x20,0x28)) <= seen:
+            failure(entry, 'ABI must explicitly initialize RSP bytes 0x20..0x27 for real RET')
     instructions=data.get('instructions')
     if not isinstance(instructions,list) or not instructions:
         failure(entry, 'missing original raw instructions')
@@ -127,6 +219,7 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
     successors={}
     dependencies=[]
     external_edges={}
+    imported_edges={}
     byte_hash=hashlib.sha256()
     for ins in instructions:
         a=address(ins['address'])
@@ -179,11 +272,12 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
             elif name in {'BRANCH','CBRANCH'}:
                 target=nodes[0]
                 if target['space']=='ram':
+                    if sizes[0]!=8:
+                        failure(context,'static RAM branch target width must be 8')
                     ta=address(target['offset'])
                     if ta not in rows:
                         if name!='BRANCH' or ta not in approved_entries:
                             failure(context,f'branch leaves approved function: unresolved dependency {ta}')
-                        if sizes[0]!=8: failure(context,'tail branch target width must be 8')
                         external_edges[(a,idx)]=ta
                         dependencies.append(dict(kind='tail_jump',instruction=a,pcode_index=idx,target=ta))
                     else:
@@ -203,13 +297,20 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
                 if nodes[0]['space']!='ram' or sizes[0]!=8:
                     failure(context,'CALL requires static RAM entry target: unresolved dependency')
                 ta=address(nodes[0]['offset'])
-                if ta not in approved_entries:
+                if ta in imports:
+                    site = dict(caller=entry, instruction=a, pcode_index=idx, kind='direct_call')
+                    if site not in imports[ta]['callsites']:
+                        failure(context, 'CALL target/callsite differs from explicit imported boundary')
+                    imported_edges[(a,idx)] = ta
+                elif ta not in approved_entries:
                     failure(context,f'CALL target outside approved raw/ABI closure: unresolved dependency {ta}')
                 fall=ins.get('fallthrough')
                 if fall is None or address(fall) not in rows:
                     failure(context,'CALL lacks exact original return fallthrough inside caller')
-                external_edges[(a,idx)]=ta
-                dependencies.append(dict(kind='direct_call',instruction=a,pcode_index=idx,target=ta,return_address=address(fall)))
+                if (a,idx) not in imported_edges:
+                    external_edges[(a,idx)]=ta
+                dependencies.append(dict(kind='imported_direct_call' if (a,idx) in imported_edges else 'direct_call',
+                                         instruction=a,pcode_index=idx,target=ta,return_address=address(fall)))
             elif name=='RETURN':
                 if sizes[0]!=8: failure(context,'RETURN target width must be 8')
             elif name in {'INT_ZEXT','INT_SEXT'}:
@@ -298,8 +399,12 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
     name='fn_'+entry[2:]
     lines=[f'// Original ELF {data["original_elf_sha256"]}; raw JSON SHA-256 {input_sha}',
            f'inline {"void" if ret=="void" else "std::uint64_t"} {name}(pcode::Memory& memory, pcode::RegisterFile& registers, std::uint64_t return_sentinel) {{',
-           '    pcode::RegisterFile machine;',f'    pcode::ByteState<{size}> unique;',
+           '    auto& machine = registers;' if shared_machine else '    pcode::RegisterFile machine;',
+           f'    pcode::ByteState<{size}> unique;',
            '    [[maybe_unused]] std::uint64_t v0, v1, v2;']
+    if shared_machine:
+        symbol = json.dumps(str(data.get('symbol', '<not supplied>')), ensure_ascii=True)
+        lines.insert(1, '// Source symbol (navigation only): ' + symbol)
     for off,width in initial_nodes:
         lines.append(f'    machine.write({off}, {width}, registers.read({off}, {width}, "{entry}: missing reviewed ABI input"));')
     lines.append(f'    goto {label(entry,entry=True)};')
@@ -308,6 +413,8 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
     helper={'INT_CARRY':'carry','INT_SCARRY':'signed_carry','INT_SBORROW':'signed_borrow',
             'INT_LEFT':'shift_left','INT_RIGHT':'shift_right','INT_SRIGHT':'shift_signed_right'}
     def finish(a):
+        if shared_machine:
+            return ['    return;']
         ro,rw=integer(return_node['offset']),integer(return_node['size'])
         return ['    registers.merge_initialized(machine);',
                 '    return;' if ret=='void' else f'    return machine.read({ro}, {rw}, "{a}: ABI reads uninitialized return register");']
@@ -369,8 +476,18 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
                     dest,di,is_entry=successors[(a,idx)];target=label(dest,di,is_entry)
                     lines.append(f'    {"if ("+args[1]+" != 0) " if name_op=="CBRANCH" else ""}goto {target};')
             elif name_op=='CALL':
-                ta=external_edges[(a,idx)]
-                lines.append(f'    (void)fn_{ta[2:]}(memory, machine, {literal(integer(ins["fallthrough"]))});')
+                if (a,idx) in imported_edges:
+                    ta=imported_edges[(a,idx)]
+                    def ranges(role):
+                        rows=imports[ta][role]
+                        values=', '.join('{'+str(integer(row['offset']))+', '+str(integer(row['size']))+'}' for row in rows)
+                        return f'std::array<pcode::RegisterRange, {len(rows)}>'+'{{'+values+'}}'
+                    call=f'pcode::ImportCall{{{literal(integer(entry))}, {literal(integer(a))}, {idx}, {literal(integer(ta))}}}'
+                    lines.append(f'    pcode::invoke_import(memory, machine, {call}, {literal(integer(ins["fallthrough"]))}, '
+                                 +', '.join(ranges(role) for role in ('input_registers','output_registers','clobber_registers'))+');')
+                else:
+                    ta=external_edges[(a,idx)]
+                    lines.append(f'    (void)fn_{ta[2:]}(memory, machine, {literal(integer(ins["fallthrough"]))});')
             elif name_op=='RETURN':
                 lines.append(f'    pcode::check_return({args[0]}, return_sentinel);')
                 lines.extend(finish(a))
@@ -386,12 +503,17 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
     # are otherwise useful when a future export gains an internal relative edge.
     referenced={m.group(1) for line in lines for m in re.finditer(r'goto (\w+);',line)}
     lines=[line for line in lines if not re.match(r'^(?:i_|p_)\w+:;?$',line) or line.split(':')[0] in referenced]
-    return '\n'.join(lines),dict(address=entry,generated_symbol='torchlight::pcode_generated::'+name,
+    namespace = 'pcode_machine' if shared_machine else 'pcode_generated'
+    report = dict(address=entry,generated_symbol='torchlight::'+namespace+'::'+name,
         input_sha256=input_sha,address_and_instruction_bytes_sha256=recorded,
-        original_elf_sha256=data['original_elf_sha256'],abi=abi,
+        original_elf_sha256=data['original_elf_sha256'],abi=None if shared_machine else abi,
         effective_return_register=None if ret=='void' else dict(offset=hex(integer(return_node['offset'])),size=integer(return_node['size'])),
         instructions=len(instructions),pcode_operations=sum(inventory.values()),
         opcode_inventory=dict(sorted(inventory.items())),approved_dependencies=dependencies,unresolved_dependencies=[])
+    if shared_machine:
+        report['execution_mode'] = 'shared_machine'
+        report['register_input_policy'] = 'caller-initialized shared guest bank; undefined byte reads trap'
+    return '\n'.join(lines), report
 
 
 def generate(paths, abi):
@@ -403,10 +525,20 @@ def generate(paths, abi):
     ram_id=integer(abi.get('memory_space_id'))
     if ram_id!=433:
         raise LiftError('bounded emitter requires pinned x86-64 RAM space id 433 (0x1b1)')
-    descriptors=abi.get('functions')
-    if not isinstance(descriptors,dict): raise LiftError('missing explicit ABI functions')
-    normalized={address(k):v for k,v in descriptors.items()}
-    if len(normalized)!=len(descriptors): raise LiftError('duplicate normalized ABI address')
+    mode = abi.get('execution_mode', 'scalar')
+    if mode not in ('scalar', 'shared_machine'):
+        raise LiftError('unsupported execution_mode; choose scalar or shared_machine')
+    shared_machine = mode == 'shared_machine'
+    if shared_machine:
+        if 'functions' in abi:
+            raise LiftError('shared_machine forbids individual ABI functions descriptors')
+        normalized = {}
+    else:
+        descriptors=abi.get('functions')
+        if not isinstance(descriptors,dict): raise LiftError('missing explicit ABI functions')
+        normalized={address(k):v for k,v in descriptors.items()}
+        if len(normalized)!=len(descriptors): raise LiftError('duplicate normalized ABI address')
+    imports=validate_imports(abi)
     files=[]
     for path in paths:
         path=Path(path)
@@ -418,18 +550,28 @@ def generate(paths, abi):
             raise LiftError(f'{path}: original schema-2 ELF metadata differs from pinned ABI')
         entry=address(data['address'])
         if entry in sources: raise LiftError(f'{path}: duplicate input function {entry}')
-        if entry not in normalized: raise LiftError(f'{entry}: no explicit reviewed ABI')
+        if not shared_machine and entry not in normalized: raise LiftError(f'{entry}: no explicit reviewed ABI')
         sources[entry]=(data,hashlib.sha256(raw).hexdigest())
     if not sources: raise LiftError('no original raw functions selected')
-    if set(sources)!=set(normalized): raise LiftError('ABI function set differs from exact selected raw function set')
-    code=['#pragma once','#include "torchlight/pcode_runtime.hpp"','namespace torchlight::pcode_generated {']
+    if shared_machine:
+        normalized = {entry: {'return': 'void', 'input_registers': []} for entry in sources}
+    elif set(sources)!=set(normalized): raise LiftError('ABI function set differs from exact selected raw function set')
+    if set(sources) & set(imports): raise LiftError('import target conflicts with an original raw body')
+    namespace = 'pcode_machine' if shared_machine else 'pcode_generated'
+    code=['#pragma once','#include "torchlight/pcode_runtime.hpp"','namespace torchlight::'+namespace+' {']
     reports=[]
     declarations=[]
     for entry,(data,input_sha) in sorted(sources.items()):
-        body,report=compile_function(data,normalized[entry],ram_id,input_sha,set(sources))
+        body,report=compile_function(data,normalized[entry],ram_id,input_sha,set(sources),imports,shared_machine)
         declarations.append(f'inline {"void" if normalized[entry]["return"]=="void" else "std::uint64_t"} fn_{entry[2:]}(pcode::Memory&, pcode::RegisterFile&, std::uint64_t);')
         code.append(body);reports.append(report)
-    graph={r['address']:{d['target'] for d in r['approved_dependencies']} for r in reports}
+    used_sites={(r['address'], d['instruction'], d['pcode_index'], d['target'])
+                for r in reports for d in r['approved_dependencies'] if d['kind']=='imported_direct_call'}
+    declared_sites={(site['caller'],site['instruction'],site['pcode_index'],target)
+                    for target,descriptor in imports.items() for site in descriptor['callsites']}
+    if used_sites!=declared_sites:
+        raise LiftError('unused or mismatched imported callsite descriptors')
+    graph={r['address']:{d['target'] for d in r['approved_dependencies'] if d['kind']!='imported_direct_call'} for r in reports}
     visited=set();active=[];depths={}
     def depth(entry):
         if entry in active:
@@ -445,14 +587,24 @@ def generate(paths, abi):
         return value
     for entry in sorted(graph):depth(entry)
     code[3:3]=declarations
-    code.append('} // namespace torchlight::pcode_generated\n')
+    code.append('} // namespace torchlight::'+namespace+'\n')
     header='\n\n'.join(code)
     report=dict(schema=1,status='generated',original_elf_sha256=sha,
-        emitter='raw-schema2-scalar-cpp17-v3',abi_sha256=hashlib.sha256(json.dumps(abi,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+        emitter='raw-schema2-shared-machine-cpp17-v1' if shared_machine else 'raw-schema2-scalar-cpp17-v3',
+        abi_sha256=hashlib.sha256(json.dumps(abi,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         generated_header_sha256=hashlib.sha256(header.encode()).hexdigest(),functions=reports,
         closure=dict(recursion='rejected',maximum_allowed_depth=64,maximum_selected_depth=max(depths.values()),
                      dependencies={entry:sorted(targets) for entry,targets in sorted(graph.items())}),
         warning='Generated code is a bounded raw p-code translation; this report does not promote transfer/completion status.')
+    if imports:
+        if validate_imports(abi)!=imports:
+            raise LiftError('import implementation inputs changed during generation')
+        report['imported_boundaries']=imports
+    if shared_machine:
+        report['execution_mode'] = 'shared_machine'
+        report['guest_register_initialization'] = 'external caller only; no ABI inference or zero-fill'
+        report['guest_memory_owner'] = 'external caller-supplied Memory; no field bindings inferred'
+        report['original_status_promotions'] = 0
     return header,report
 
 
@@ -470,7 +622,13 @@ def main():
     parser.add_argument('--out',required=True,help='generated C++ header (ignored build or /tmp)')
     parser.add_argument('--report',required=True,help='generation report JSON')
     args=parser.parse_args()
+    try:
+        reviewed_abi=json.loads(Path(args.abi).read_text())
+    except (ValueError,OSError) as exc:
+        print('p-code lowering rejected: '+str(exc),file=sys.stderr)
+        return 2
     protected={Path(args.abi).resolve()}
+    protected.update(implementation_paths(reviewed_abi))
     for p in map(Path,args.inputs):
         if p.is_dir(): protected.update(q.resolve() for q in p.glob('*.json'))
         else: protected.add(p.resolve())
@@ -479,7 +637,7 @@ def main():
         print('p-code lowering rejected: output/report must be distinct and cannot overwrite source inputs or ABI',file=sys.stderr)
         return 2
     try:
-        header,report=generate(args.inputs,json.loads(Path(args.abi).read_text()))
+        header,report=generate(args.inputs,reviewed_abi)
     except (LiftError,ValueError,KeyError,TypeError,OSError) as exc:
         atomic_write(args.report,json.dumps(dict(schema=1,status='rejected',error=str(exc)),indent=2)+'\n')
         print(f'p-code lowering rejected: {exc}',file=sys.stderr)

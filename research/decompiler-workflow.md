@@ -129,6 +129,15 @@ entry refs. Сохранять и mnemonic/bytes, и тип ссылки ана�
 
 ## Ограниченное исследование поведения
 
+Для raw-пакетов без полного cache доступен отдельный
+[bounded pipeline](lift-pipeline-live.md): `prepare_lift_project.py` импортирует
+ELF с `-noanalysis` в `build-ghidra-lift`, проверяет точные STT_FUNC диапазоны
+и дизассемблирует только flow внутри выбранных spans. Декомпилятор и incremental
+analysis выключены. Он расширяет только свой помеченный проект; существующий
+полный/unowned проект не исправляет. Последующий `ExportLiftBatch` остаётся
+`-process -noanalysis -readOnly`. `run_lift_pipeline.py --prepare-project`
+связывает подготовку, экспорт и bounded обход зависимостей.
+
 `tools/ghidra_probe.py` использует сохранённую базу без повторного полного
 анализа и без изменения программы. Экспорт schema 2 содержит raw p-code
 операции с varnode space/offset/width/register. `tools/analyze_pcode.py`

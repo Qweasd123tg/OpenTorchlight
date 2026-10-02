@@ -17,14 +17,15 @@
 3. `tools/lift_pcode.py` генерирует тела по raw operations. CMake делает это
    автоматически через `cmake/LiftedCode.cmake`. Header/report находятся только
    в ignored build. Обычная сборка не требует Ghidra или оригинальной игры.
-4. `src/ui_game_state.cpp`, `src/save_selection.cpp` и `src/ui_screen_scale.cpp` связывают чтения/записи
+4. `src/ui_game_state.cpp`, `src/save_selection.cpp`, `src/ui_screen_scale.cpp`,
+   `src/ui_int_property.cpp` и `src/ui_dropdown.cpp` связывают чтения/записи
    с owned fields. Существующие Frontend/application consumers используют
    результаты. Чужая object layout не накладывается на C++ объект порта.
 5. Native comparison исполняет неизменённые полные ELF bodies и сравнивает
    generated production consumers. Реестр обновляется только после ревью;
    успех генерации не выставляет completion.
 
-Пример повторной генерации всех девяти тел:
+Пример повторной генерации всех одиннадцати тел:
 
 ```sh
 python3 tools/lift_pcode.py \
@@ -32,7 +33,8 @@ python3 tools/lift_pcode.py \
   research/lifted-ui/00a84d30.json research/lifted-ui/00c2b9c0.json \
   research/lifted-ui/00c33490.json research/lifted-ui/00a84d20.json \
   research/lifted-ui/00c2b700.json research/lifted-ui/00a83e70.json \
-  research/lifted-ui/00c6e410.json --abi research/lifted-ui/abi.json \
+  research/lifted-ui/00c6e410.json research/lifted-ui/00c6e440.json \
+  research/lifted-ui/00b05e80.json --abi research/lifted-ui/abi.json \
   --out build-cegui/generated/lifted/torchlight/generated/ui_state_queries.hpp \
   --report build-cegui/lifted-ui-code.json
 ```
@@ -50,6 +52,8 @@ python3 tools/lift_pcode.py \
 | `CMenuManager::canLoad @0xc2b700` | 31 | Continue filename-vector bounds `+0x218/+0x220`, signed low32 count>0 -> AL |
 | `CGameUI::scaledY @0xa83e70` | 36 | named ratio -> GetFloat direct CALL, original private stack, scalar SSE multiplication |
 | `CDynamicPropertyFile::GetFloat @0xc6e410` | 41 | unsigned index/range, binary32 element or -1 fallback, no object writes |
+| `CDynamicPropertyFile::GetInt @0xc6e440` | 32 | begin/end pointer64, zero-extended uint32 index, int32 element or -1, no writes |
+| `CDropdownMenu::onDoubleClick @0xb05e80` | 6 | MOV EAX=1, actual RET; ignored object/enum/name, bool AL=1 |
 
 `canContinue` Ghidra body занимает 65 bytes: отсутствующие `66 90 @0xc334ce..cf`
 — недостижимое padding после RET, до следующего branch target. Полный symbol
@@ -167,9 +171,18 @@ exporter, rejection details and repeatable commands are in
 uses sized symbols and current whole-function acceptance, and is not the same
 population as the earlier callsite-only scheduling audit.
 No whole-development speedup or percentage of automatically transferred game
-functions is measured. Nine generated owning bodies are connected; eight have
+functions is measured. Eleven generated owning bodies are connected; ten have
 full acceptance and scaledY remains partial. The separate eight panel-query
-closures bring the ledger's full-function total to sixteen.
+closures bring the ledger's full-function total to eighteen. This count covers
+accepted individual source functions, not the fraction of the game restored.
+
+The integer reader now supplies native Settings checkboxes and shadow/resolution
+selection from the live draft; Main's actual inherited default double-click
+supplies the CEGUI handled result. Complete contracts and remaining controller
+boundaries: [GetInt](generated-settings-int.md) and
+[Dropdown default](generated-dropdown-default.md). Their native comparison
+passed2470 cases (2251 integer,219 default); direct control/readback and real
+CEGUI Event result accumulation passed without input/frame/GL.
 
 Prior acceptance was re-reviewed after this additive cohort: the original
 five raw bodies/ABI entries, state-pair owner and selected-row/HP consumers are
@@ -178,3 +191,10 @@ semantics and register self-XOR preserve the previous integer/query behavior.
 The eight panel-query implementations and owned consumers are unchanged;
 CMake only adds generation inputs/probes/gates. Their relevant native and CPU
 checks are rerun with the final inputs before accepted hashes are refreshed.
+
+2026-10-02 additive integer/default cohort: all nine prior generated definitions
+and their ABI entries were compared and remain unchanged. Settings integer
+projection and Main default-result dispatch are isolated from prior state,
+Continue/canLoad, geometry and panel-query owners. Core and affected probes were
+rebuilt; the four prior native gates passed10540 cases again. Only these
+reviewed additive changes are used to refresh existing acceptance input hashes.

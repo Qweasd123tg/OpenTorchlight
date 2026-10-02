@@ -6,6 +6,11 @@
 #include <optional>
 
 namespace torchlight {
+// original-code: the complete CDropdownMenu::onDoubleClick @0xb05e80 body
+// returns true without reading this, the layout enum or the by-value name.
+// Argument construction and cleanup remain the caller's separate contract.
+[[nodiscard]] bool dropdown_default_double_click();
+
 // original-code: CDropdownMenu::mapEventHandlers @0xb179e0.
 // See research/dropdown-mainmenu.md for the full call/cleanup boundary.
 class DropdownEventTree {

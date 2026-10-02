@@ -1,10 +1,35 @@
 #include "torchlight/ui_dropdown.hpp"
+#include "torchlight/generated/ui_state_queries.hpp"
 #include <algorithm>
 #include <array>
 #include <set>
 #include <stdexcept>
 
 namespace torchlight {
+namespace {
+constexpr std::uint64_t double_click_stack = 0x10000;
+constexpr std::uint64_t double_click_return = 0x7ff00000;
+class DefaultDoubleClickMemory final : public pcode::Memory {
+public:
+    std::uint64_t read(std::uint64_t address, std::size_t width) override {
+        if (address == double_click_stack && width == 8) return double_click_return;
+        throw std::logic_error("dropdown default double-click read outside private RET slot");
+    }
+    void write(std::uint64_t, std::size_t, std::uint64_t) override {
+        throw std::logic_error("dropdown default double-click has no memory writes");
+    }
+};
+}
+
+bool dropdown_default_double_click() {
+    DefaultDoubleClickMemory memory;
+    pcode::RegisterFile registers;
+    // The original six-byte body never reads object or argument registers.
+    // Its actual RET consumes only this owned, initialized eight-byte slot.
+    registers.write(0x20, 8, double_click_stack);
+    return pcode_generated::fn_00b05e80(memory, registers, double_click_return) != 0;
+}
+
 void map_dropdown_events(DropdownEventTree& tree, DropdownEventTree::Node root) {
     const auto count = tree.child_count(root);
     for (std::size_t i = 0; i < count; ++i)

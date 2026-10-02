@@ -334,7 +334,15 @@
       "evidence": "research/decompiled-core/game_ui.c; research/ui-scale-p1/NOTES.md",
       "implementation": "src/ui_screen_scale.cpp",
       "comparison": "research/ui-scale-p1/original-ui-probes.rerun-2026-09-17.json constants 1/1024 @0xfa4808",
-      "notes": "Scalar W/1024 compared; no confirmed true-branch screen wired yet. Wired FACTORED (not as a convertToScreenScale(window) function, which cannot exist without CEGUI): ui_screen_ratio + ui_scale_area/vector_offsets are called on real resolve paths (UiLayout::resolve, HUD policy). No separate integration packet applies."
+      "notes": "2026-10-02 source/caller audit: sole direct caller is convertToScreenScale true/X branch; all30 external converter callsites pass false/Y. Historical W/1024 comparison concerns ratio production/factored ui_screen_ratio, not the scaledX GetFloat/multiply body. Legacy stages are historical slice labels; completion explicitly partial and no production X path is invented.",
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Complete scaledX source-body GetFloat call/register/stack/RET binding is not accepted or connected; legacy stages cover factored scalar geometry only.",
+          "All30 external convertToScreenScale callsites inspected pass false/Y; no original true/X production consumer established. X_RATIO is evaluated property state from CGame::createWindow, not width/1024 computation inside scaledX.",
+          "Floating MXCSR/fenv and whole-function native scaledX comparison remain open."
+        ]
+      }
     },
     "0x00b4eb70": {
       "symbol": "CInventoryMenu::setOpen(bool)",
@@ -778,7 +786,7 @@
           "original_comparison": "Exact whole symbol 0x00b60f00 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -793,9 +801,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00b77590": {
       "symbol": "CMerchantMenu::open()",
@@ -836,7 +846,7 @@
           "original_comparison": "Exact whole symbol 0x00b775b0 size5 SHA734e6cf4fb60dc6ef9e123183d71963543836b57f9c8c94ae76b9269896cdc18; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -851,9 +861,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00ba5190": {
       "symbol": "CPetMenu::open()",
@@ -922,7 +934,7 @@
           "original_comparison": "Exact whole symbol 0x00bccaa0 size8 SHAeb8b12ca13faf530e2e3cbad94a4a5e465d8dbad6b6958b6c873fc454cb3e4aa; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -937,9 +949,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00bee2c0": {
       "symbol": "CSkillMenu::open()",
@@ -980,7 +994,7 @@
           "original_comparison": "Exact whole symbol 0x00bee2e0 size5 SHA7240825eed947749516240e5672b828c35954c7121e25e01b439dc7c7831836b; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -995,9 +1009,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00c04210": {
       "symbol": "CStashMenu::open()",
@@ -4129,7 +4145,7 @@
           "original_comparison": "Exact whole symbol 0x00b60ed0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -4144,9 +4160,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00b77580": {
       "symbol": "CMerchantMenu::isRight()",
@@ -4173,7 +4191,7 @@
           "original_comparison": "Exact whole symbol 0x00b77580 size3 SHA251447ee91a9067dcd6ab96703133f617565974cd6c4819021760c4688c91abf; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -4188,9 +4206,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00bcca70": {
       "symbol": "CQuestMenu::isRight()",
@@ -4217,7 +4237,7 @@
           "original_comparison": "Exact whole symbol 0x00bcca70 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -4232,9 +4252,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00bee2b0": {
       "symbol": "CSkillMenu::isRight()",
@@ -4261,7 +4283,7 @@
           "original_comparison": "Exact whole symbol 0x00bee2b0 size6 SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67; compare_ui_pause.py executes all eight getters among14 unchanged original bodies over1536 initialized-state cases. Actual controller setters/query consumption in ui_pause_test; no game/constructor/GUI equivalence implied."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
           "include/torchlight/inventory_menu.hpp": "ec688f3cfff187044ba14f9044f20f2ec6691541498c40daf63bcb3b3df7ae31",
           "include/torchlight/panel_open.hpp": "8a5680ff65cce7945aeceb909525ede466d89d84ef93f35732d72090d6005f13",
           "include/torchlight/ui_pause.hpp": "2297a278d74ca9b2474a05c01dc794efc07eed1b8209cde4366fed8591dadc24",
@@ -4276,9 +4298,11 @@
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
           "tests/ui_pause_probe.cpp": "f2960361e55673411be04b3c069c320758887927e21482b0d524776e4dafc85a",
           "tests/ui_pause_test.cpp": "6f2218a5c20d1496a848ee3d73eb2b28f572af07106e0cebdce8263cfa09a2c5",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. Panel-query implementations and consumers are unchanged. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00a828f0": {
       "symbol": "CGameUI::requestSetGameState(EGameState, EMenu)",
@@ -4305,13 +4329,13 @@
           "original_comparison": "Whole symbol 0x00a828f0 size13 SHAbe37b7a255cac6751f20a28aa7fbd744f574946c4e855e05c68d7d41adbca211. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;30 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
           "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4322,23 +4346,26 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
           "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
           "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00a82900": {
       "symbol": "CGameUI::clearGameStateRequest()",
@@ -4365,13 +4392,13 @@
           "original_comparison": "Whole symbol 0x00a82900 size21 SHAb69ad1a5e6816e5ac570939b328fc0a4e699233f5c3681d927cbd7a87eeafede. 2112 full-buffer cases over two unchanged original writer bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;30 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
           "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4382,23 +4409,26 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
           "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
           "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00a84d30": {
       "symbol": "CGameUI::canContinue()",
@@ -4425,13 +4455,13 @@
           "original_comparison": "Whole symbol 0x00a84d30 size12 SHA9273341dc586d6ea8fae966a835655d1a7d5b651163a5e62cbd3fb8c471f1d97. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;30 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
           "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4442,23 +4472,26 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
           "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
           "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00c2b9c0": {
       "symbol": "CMenuManager::canContinue()",
@@ -4485,13 +4518,13 @@
           "original_comparison": "Whole symbol 0x00c2b9c0 size12 SHA041ceff61e8a308e08e33d068cc21d5a22311c4b109ae862b16cea57a4ffee7d. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;30 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
           "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4502,23 +4535,26 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
           "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
           "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00c33490": {
       "symbol": "CContinueGameMenu::canContinue()",
@@ -4545,13 +4581,13 @@
           "original_comparison": "Whole symbol 0x00c33490 size67 SHAf423fd8d5663afaf0c969e62701f6b0ea76506db809a0aa851a4f2f31032525e. 2437 cases over three unchanged original query bodies; accepted instruction and symbol hashes rechecked against unchanged pinned ELF. Generated production helper/probe compared, full writer observation buffers retained;30 compiler checks cover call/alias/branch/flag failure modes. No original constructors/game/GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
           "include/torchlight/ui_game_state.hpp": "0a3a66542343d4d04e0b0a5d317835e57055d33ab0420fb74b91e28e6d581884",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/disassembly/lifted-ui-owners.asm": "0287237a91e315f324b76d5e113de6618ef752adf7aebb3c3723670ae1a8fb70",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4562,23 +4598,26 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
           "src/ui_game_state.cpp": "2d6f36aaacdd891cae9d9c2d091cd571b3045dfbf18e13fa2c6440510e8179e9",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/compare_ui_game_state.py": "e008886a0cf618e3ab9fc49689ef77d9a5f11185c8fb1776a5c76b0980b2d0d5",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_selection_probe.cpp": "4b930030a99d107bba1a3fbb933fecc66baaf0995441c9f3dbc682f0cc948303",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_game_state_probe.cpp": "422e4d15ab14613de2bbfed4144c7dd66a11f1421747a8e09ee2db7beacbfa92",
           "tests/ui_game_state_test.cpp": "c8b1a6041f1693f7bea3dcae469c1b798736dd831150e6d4492708d217ad972b",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00a84d20": {
       "symbol": "CGameUI::canLoad()",
@@ -4605,12 +4644,12 @@
           "original_comparison": "Whole symbol 0x00a84d20 size12 SHAfe88d0aee7c5a3b1ed4e926cf98ff629a30b7e23e42c942c88cce7d1fbba4c23. 2634 unchanged-original cases /1317 filename counts; both UI/manager routes compared with generated production helper, all5592 fixture bytes unchanged. Filename bounds218/220 deliberately differ from save-state bounds1e8/1f0. Exact signed-low32/SAR64/count and AL-only return; every accepted instruction/full symbol hash checked. No original constructors, files, game or GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/generated-save-list.md": "62ca2181c03051dd8595a4ce03daf2376c7d60f4027576616a22af025c20c5ee",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4621,22 +4660,25 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
-          "src/ui_dropdown.cpp": "1c2faa7457069341052e366c362f707b466e6b11bc3d89c557f747e51dcaccd9",
+          "src/ui_dropdown.cpp": "dff88010caa8fcc570642e6db859cc05dc5b70fa18e8394f392b3f661250c51c",
           "tests/compare_save_list.py": "f6b4df1b1429911657ceadca72ffdcf913faebfaf716cfed2de8bda12f8daf04",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_list_probe.cpp": "f47ffc3429535445f3525e0663e8647d38d7f0e69115cab73ddd88eb61d840ef",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_dropdown_test.cpp": "1601014765d88da7fccf5f3a715c8abdbcaf8827034d066e6de2600d3cafc638",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00c2b700": {
       "symbol": "CMenuManager::canLoad()",
@@ -4663,12 +4705,12 @@
           "original_comparison": "Whole symbol 0x00c2b700 size31 SHAc616c081d6c241233f2369bb15e030f92bef141855eeb2aaf5a25acb3d7fb9c4. 2634 unchanged-original cases /1317 filename counts; both UI/manager routes compared with generated production helper, all5592 fixture bytes unchanged. Filename bounds218/220 deliberately differ from save-state bounds1e8/1f0. Exact signed-low32/SAR64/count and AL-only return; every accepted instruction/full symbol hash checked. No original constructors, files, game or GUI run."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
           "include/torchlight/frontend.hpp": "2078471c2fe103efd294abbad870ccacd975a4a60b64bb3e6e0fc1a17ab5ac2d",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/save_store.hpp": "47e4c85661706daf21c7df4050cf3a88f631c412e3cf210870c8489df7febbb6",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/generated-save-list.md": "62ca2181c03051dd8595a4ce03daf2376c7d60f4027576616a22af025c20c5ee",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4679,22 +4721,25 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
           "research/main-menu-save-selection.md": "7eefdc0a3e79e6a1ffba62a975e785cd9cc231cfe1b1fa2ce64c62b17f85dfe3",
-          "src/frontend.cpp": "15af1e167fde4c5c7334e2b1af819d24e9fbf71b548194ea4354a9efe1bd62c7",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
           "src/save_selection.cpp": "22831d12ee6acae16ff0b41f0c4bd1232b6275f7fd1b774ade6c4cb0fe480147",
-          "src/ui_dropdown.cpp": "1c2faa7457069341052e366c362f707b466e6b11bc3d89c557f747e51dcaccd9",
+          "src/ui_dropdown.cpp": "dff88010caa8fcc570642e6db859cc05dc5b70fa18e8394f392b3f661250c51c",
           "tests/compare_save_list.py": "f6b4df1b1429911657ceadca72ffdcf913faebfaf716cfed2de8bda12f8daf04",
           "tests/compare_save_selection.py": "231dc2be4d135100f6c4c46a2d1b3fdbd523bb9a1997df12e36c968d0bccf79d",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/save_list_probe.cpp": "f47ffc3429535445f3525e0663e8647d38d7f0e69115cab73ddd88eb61d840ef",
           "tests/save_selection_test.cpp": "c9ac72b1c3f93f999934417ad3793ba177b56520e1aec2849413f289486fde96",
           "tests/ui_dropdown_test.cpp": "1601014765d88da7fccf5f3a715c8abdbcaf8827034d066e6de2600d3cafc638",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     },
     "0x00c6e410": {
       "symbol": "CDynamicPropertyFile::GetFloat(unsigned int)",
@@ -4721,11 +4766,11 @@
           "original_comparison": "Whole41-byte symbol 0x00c6e410 SHA30db2a32eba48ef0dcbbf449cb9d95e283b90618733c713beb22e5a25882f7dc,37 executable bytes and4 unreachable padding bytes explicitly reviewed. 580 property cases and2777 scaledY->GetFloat caller cases (3357 total) against unchanged complete original bodies; exact binary32 bits including signaling NaNs, uint32/range edges and both exits. Every accepted instruction/full symbol hash checked; all UI/settings/vector+16-byte-guard buffers unchanged. No constructors/registration/game/GUI/fenv comparison."
         },
         "inputs": {
-          "CMakeLists.txt": "8ca749fce08cf9e6938e08e3c7efa2aed60cbd1b36f0e559a8f50f58f9ff8ed4",
-          "cmake/LiftedCode.cmake": "9b676e67734e33d5a1c3cd6cce679676758c94c5830532177e752f26eb6dd791",
-          "include/torchlight/pcode_runtime.hpp": "eb0256216a62b87fba192f70c049c084ada138ba2e5f511f600f387c2753ef3c",
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
           "include/torchlight/ui_screen_scale.hpp": "111f6742173e5f6fdd9c9983c3b7520ba7727f242be9259e4ff3977e97154b5a",
-          "research/automatic-function-transfer.md": "72a171cc8d9aaf6c6f43bffa15eb91de6dea7f76446cd09fa4c1c6fd104e2fa7",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
           "research/generated-ui-scale.md": "3ce1429b9a8a0f7786f31407338402a5cb2c28f4df5f4b109205d13f17af7b11",
           "research/lifted-ui/00a828f0.json": "86be032175621f217d1d6704916ad24541cf2a289e3c2b940c167ac07758f5e6",
           "research/lifted-ui/00a82900.json": "b1dcdedeeed75ebc26795259da238f84730208e97aaa57cd8fe0571b93ec5607",
@@ -4736,21 +4781,133 @@
           "research/lifted-ui/00c2b9c0.json": "e3f27397160ad24bde9d8299a0b09119d73b21620d585295a802d3209acfcc26",
           "research/lifted-ui/00c33490.json": "7ccb3c72ba6878364a09c92d6187200f46ef27a6788bbee39ac2042fc5ea2256",
           "research/lifted-ui/00c6e410.json": "51b4fef82c66c07e16c0b162537c0ba587803f112721a7a411b4de9883234a4f",
-          "research/lifted-ui/abi.json": "2ca841ce0d8e8309de403dc9b52aeab505d34e0819c7e536a93ac4eeb8222238",
-          "src/cegui_menu.cpp": "a35520bad8c7eefbcd639f34053ab7e1c621a768b1d8ba2748cf74755b535fa8",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
+          "src/cegui_menu.cpp": "a74c12f19899019ba0e300b0500574444d4d5b824b4dcd43cc51aad47e1131b3",
           "src/ui_hud.cpp": "26d7f818ba4470a1c66af533c5746c6e2b702f703bbf3ae4485b0e1392643778",
           "src/ui_inventory.cpp": "070cbad308b53244c63f9127d05efb3e6711ae15aa3e46879d09ed0226754889",
           "src/ui_layout.cpp": "85b33d28555ac8442bd4af80ec492d59df9b95c0c5aac639bfcdd35e3d0bead7",
           "src/ui_screen_scale.cpp": "656568ab02d94f48d291d2258c867641b5cd8b8d9e5444178a5ecaaf34d211a6",
           "tests/compare_ui_scale_lift.py": "b1356c67d68c44b065526de9a9051a033d8fe14e3abdc4cbdbf81731bebbb9d0",
           "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
-          "tests/pcode_lifter_test.py": "f96a91786ecd445fd35cf2e03ce455114a90a51fa0191f406f5cfa17eebf9a66",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
           "tests/ui_scale_lift_probe.cpp": "62877c95ef7a119d1c837bd8fd34e21a061ce66cc26900e7902188d4c71bc6ea",
           "tests/ui_screen_scale_test.cpp": "2d0d6b077ca4868d223f6f7ec8558563017251179eb20d67f9e52a4187e12f1a",
-          "tools/lift_pcode.py": "0975e9ea9a939c69e910ebca355063cf76ab71689a5d745ac50f263622235a13",
-          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94"
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
         }
-      }
+      },
+      "notes": " 2026-10-02: dependency-export tooling review preserves this contract; CMake adds Python checks only. The compiler now rejects malformed internal RAM branch widths; all nine accepted generated headers are byte-identical to the prior compiler and the production state test passed. Validation and headless/full-build limits: research/lift-dependency-automation.md. Bounded pipeline continuation: only CTest registration changed; core/query probes rebuilt, 10540 original comparisons passed and owner/ABI implementations are unchanged (research/lift-pipeline-live.md). 2026-10-02 additive integer/default cohort reviewed: prior9 generated definitions/ABI and state/Continue/canLoad/Y/panel owners unchanged; core/probes rebuilt,10540 native regressions passed. Separate Settings projection/Main default dispatch and additive CMake inputs documented in research/automatic-function-transfer.md. 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
+    },
+    "0x00c6e440": {
+      "symbol": "CDynamicPropertyFile::GetInt(unsigned int)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/generated-settings-int.md; research/lifted-ui/00c6e440.json",
+      "implementation": "src/ui_int_property.cpp; include/torchlight/ui_int_property.hpp; src/cegui_menu.cpp; src/frontend.cpp",
+      "tests": "tests/settings_queries_probe.cpp; tests/compare_settings_queries.py; tests/settings_queries_controls_test.cpp; tests/pcode_lifter_test.py",
+      "comparison": "Complete32-byte c6e440 symbol SHA026b709325aa1cd3cf3c1f896c41c587727a206c44e1466be8ce1d6e28eac12f and all10 instructions pinned.2251 unchanged original-vs-production cases:1084 in-range/1167 fallback, exact int32 bits and all initialized object/vector/guard bytes unchanged. Native control population/readback passed. No registration/constructors/callbacks/game/input/frame/GL comparison.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "All32 bytes: zeroextend ESI, initialize EAXffffffff; pointer64 end-minus-begin/SAR2; unsigned64 CMP/JAEc6e459; conditional four-byte indexed readc6e45b; shared actual REPZ RETc6e45e. No omitted padding, signed clamp or exit.",
+          "state": "Map in generated-settings-int.md: begin/end/cap40/48/50 pointer64 ctor zero atc6e897/8b4/8bc; GetIntPropertyIndex appends caller default, growth publishes bounds, SetInt writes/listeners, dtor frees. Live draft supplies values and local std::array owns synchronous borrowed snapshot; private initialized8-byte RET slot, no native numeric ID inference.",
+          "calls_and_effects": "No calls/allocations/callbacks/object writes/errors/cleanup. Pointer64 reads and conditional int32 read only; EAX clears upperRAX, RET pops8. Valid stable contiguous owner is source precondition; checked wrapper rejects null nonempty/overflow before execution and retains nothing.",
+          "library_contracts": "Original int32 vector ABI confirmed by ASM loads/index/SAR and ctor/registration/growth/SetInt/dtor addresses, not decompiler types. Pinned Ghidra12.1.3 operations/aliases; native CEGUI0.6.2 checkbox/Combo/readback contract in source-integration/settings-options. Memory adapter avoids original-object overlay.",
+          "family_deltas": "GetInt vector40/48/int32/EAX-1 versus accepted GetFloat vector58/60/binary32/MOVSS/literal-1. Shared borrowed range mechanism, separately reviewed widths/returns and complete RET. Registration defaults are caller-supplied, distinct from missing-index fallback.",
+          "integration": "Application settings -> Frontend sync_settings/draft/sync_cegui_state -> native set_settings -> generated GetInt -> actual Checkbox fullscreen/FSAA/vsync, resolution/shadow Combo. Source setOpen callsbd5660/568d/5741/5c90/5d8e/61f7 confirm consumers. Readback supplies existing Apply/persistence transaction; full controller separately partial.",
+          "original_comparison": "Complete32-byte c6e440 symbol SHA026b709325aa1cd3cf3c1f896c41c587727a206c44e1466be8ce1d6e28eac12f and all10 instructions pinned.2251 unchanged original-vs-production cases:1084 in-range/1167 fallback, exact int32 bits and all initialized object/vector/guard bytes unchanged. Native control population/readback passed. No registration/constructors/callbacks/game/input/frame/GL comparison."
+        },
+        "inputs": {
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
+          "include/torchlight/cegui_menu.hpp": "41c161ef3bddbe5a25ff8cd9cc39112da3433cabcd77fbf432f1263f2f70cd6e",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
+          "include/torchlight/settings.hpp": "bd17493796b7059090c459e3528b912315ac499232ffa4d5d05bd5fa42c339d0",
+          "include/torchlight/ui_int_property.hpp": "bba98b7032267f5a7dd15dda958b2b6b2251c42ebb4b31922af0d016d332d886",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
+          "research/cegui-settings-options.md": "93da5a9024417614ff133df2cd26d6254e0e531770c4a893143ea150d46b4f5c",
+          "research/cegui-source-integration.md": "52f49272bf02f539204dd7b4ef8dda07bf8d33084d30751dc5d30d4fb252ad86",
+          "research/generated-settings-int.md": "00c38c7a3b9c1da5da556d9aaaf77e6a3898677020cdbc0cf22db2dfa49d24c3",
+          "research/lifted-ui/00c6e440.json": "8655163406ffbecc8c241e1f19b7d700a651777cfda40641967b00404aae2fd1",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
+          "src/cegui_menu.cpp": "a74c12f19899019ba0e300b0500574444d4d5b824b4dcd43cc51aad47e1131b3",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
+          "src/ui_int_property.cpp": "d86eb777c0affccdf471f23c07df7d9aa6950afe554193bb0890269d9bb3ef3e",
+          "tests/compare_settings_queries.py": "234e397b39cb8d4b8d129024abfdd762910e011f412b8b5abdfdf61ddc61856d",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
+          "tests/settings_queries_controls_test.cpp": "0e391e881bb34bbaee513d733cf985cc5f602596c8c867ce7e79f51066326185",
+          "tests/settings_queries_probe.cpp": "f20c79a449d147b19a7ad959569601ec701ca57b06897655f62e5cfce3fd7d22",
+          "third_party/cegui-0.6.2/PATCHES.md": "7a7114f45ecbc0b41d297289edfd6b2c468bacebf05835929993c9d95895da7e",
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
+        }
+      },
+      "notes": " 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
+    },
+    "0x00b05e80": {
+      "symbol": "CDropdownMenu::onDoubleClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "stages": {
+        "analyzed": true,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "evidence": "research/generated-dropdown-default.md; research/lifted-ui/00b05e80.json",
+      "implementation": "src/ui_dropdown.cpp; include/torchlight/ui_dropdown.hpp; src/cegui_menu.cpp; src/frontend.cpp",
+      "tests": "tests/settings_queries_probe.cpp; tests/compare_settings_queries.py; tests/settings_queries_controls_test.cpp; tests/pcode_lifter_test.py",
+      "comparison": "Complete6-byte b05e80 symbol SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67 and both instructions pinned.219 unchanged original-vs-production cases, initialized opaque argument/guard bytes unchanged. Actual Main/base/Continue vtable targets and caller AL preservation statically checked; shipped/upstream CEGUI handled OR and direct library Event test agree. No input/game/frame or wstring constructor ABI claim.",
+      "completion": {
+        "status": "full",
+        "open_items": [],
+        "review": {
+          "branches": "Complete MOV EAX1b05e80/RETb05e85, no branches, padding or other exits. AL8=true, upperRAX cleared; RET reads/pops caller8-byte slot.",
+          "state": "No field/global/object/enum/name reads or writes, so no field map applies. Only initialized RSP64 and owned immutable return slot are needed. Caller owns valid arguments and cleanup; helper retains no object or state.",
+          "calls_and_effects": "No dependencies/calls/allocation/cleanup/errors/FP or flag writes. Only bool return and ABI RET. Caller b192e0 separately constructs/substrings/wstring, preserves AL around cleanupb1941f/28/52/5b; its owning effects are outside this complete callee.",
+          "library_contracts": "Pinned CEGUI0.6.2 tagv0-6-2 commit3ed5c719c3bb27b877b192e034ef2c0b05ea722c and PATCHES; shipped Base SHA57a888d741b1a0a284915c6d5066fef68c1bcc1ebfd0163f6be8720e3cdda2aa. Eventce539/53f/542 zeroextendsAL/ORs handled and visits all subscribers; System10c508/51e consumes handled for parent routing. Source/vendor comparison bounded in evidence.",
+          "family_deltas": "Dropdownfee490+48/Mainff30f0+48 targetb05e80; Main ctor publishesvptrc53b24. Continueff2ab0+48 targets distinctc334e0 with enum14..17/save activation preserved. Acceptance covers shared default once, no promotion of wrapper/override/menu bodies.",
+          "integration": "Real Main-bound native double_click subscriber returns generated default into CEGUI Event handled/System parent-route consumer; fallback Frontend consumes bool to terminate dispatch. Direct real CEGUI Event test confirms handled=true and following subscriber still runs. Load override separate.",
+          "original_comparison": "Complete6-byte b05e80 symbol SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67 and both instructions pinned.219 unchanged original-vs-production cases, initialized opaque argument/guard bytes unchanged. Actual Main/base/Continue vtable targets and caller AL preservation statically checked; shipped/upstream CEGUI handled OR and direct library Event test agree. No input/game/frame or wstring constructor ABI claim."
+        },
+        "inputs": {
+          "CMakeLists.txt": "89c226b240eb25f8f08f646885ba749e39d93071e152ac19906aac5270751525",
+          "cmake/LiftedCode.cmake": "bd587b27fcbc8952800aafb60a877243038a9323d936641c31426d3d39f825b8",
+          "include/torchlight/cegui_menu.hpp": "41c161ef3bddbe5a25ff8cd9cc39112da3433cabcd77fbf432f1263f2f70cd6e",
+          "include/torchlight/pcode_runtime.hpp": "58093d2986e09873e0e447d8f677ef4ac6d9ac0cb4c23e2002830df862f6063b",
+          "include/torchlight/ui_dropdown.hpp": "28efb1b4d9406c70479bcbd29b81c2b97bcfa833cad830f16fed6a5f0c3c08e1",
+          "research/automatic-function-transfer.md": "7d87da556021d792bb0199b91b04ffea5d352bd30fff719fcdfcbc12ddfffe6a",
+          "research/cegui-character-load.md": "5a46f694ac1dc232fd61a02375a41a3f531f3c49edc104b62b4ac88c1b1cc646",
+          "research/cegui-source-integration.md": "52f49272bf02f539204dd7b4ef8dda07bf8d33084d30751dc5d30d4fb252ad86",
+          "research/generated-dropdown-default.md": "c4dd0d3dfb91a94edc7109866b1b0a0c5294bb63c431b21537598eb44775b27f",
+          "research/lifted-ui/00b05e80.json": "2943f41a71ed84a592f69384293e0b2f2c23b8531435fe3b5e8036a788b97f5f",
+          "research/lifted-ui/abi.json": "ad3e04905987a1880a33bc0edb979de2c2b33ec5f449b6d6fbf604298bd408d3",
+          "src/cegui_menu.cpp": "a74c12f19899019ba0e300b0500574444d4d5b824b4dcd43cc51aad47e1131b3",
+          "src/frontend.cpp": "1fbdf16925b15c5cf992adcd7022bfc3ade4c63d4c8ea9ae4c53ad1841267337",
+          "src/ui_dropdown.cpp": "dff88010caa8fcc570642e6db859cc05dc5b70fa18e8394f392b3f661250c51c",
+          "tests/compare_settings_queries.py": "234e397b39cb8d4b8d129024abfdd762910e011f412b8b5abdfdf61ddc61856d",
+          "tests/native_typed_reference.py": "c42bf4b5110e76430763f076541fc2c62c8e8343ba75abb010a7df2d628d5af0",
+          "tests/pcode_lifter_test.py": "175f961e23773285be55b6e3e12b9a9fe3c18b49598dbe9520733c638e4d8c62",
+          "tests/settings_queries_controls_test.cpp": "0e391e881bb34bbaee513d733cf985cc5f602596c8c867ce7e79f51066326185",
+          "tests/settings_queries_probe.cpp": "f20c79a449d147b19a7ad959569601ec701ca57b06897655f62e5cfce3fd7d22",
+          "third_party/cegui-0.6.2/PATCHES.md": "7a7114f45ecbc0b41d297289edfd6b2c468bacebf05835929993c9d95895da7e",
+          "third_party/cegui-0.6.2/src/CEGUIEvent.cpp": "50f4bb245ab37efe2210665230f15e72bb5dcbefd5c8f4c940e206af55c2164c",
+          "third_party/cegui-0.6.2/src/CEGUISystem.cpp": "e25ba7947adbccaf9f2e1626d84ee17eac56ca38fb9bf3bd56815cfaf4174f1e",
+          "tools/lift_pcode.py": "ab48a155c4ad59f19b09c8413c28dfff67fbea05b0be6cba0702ed8c1881f068",
+          "tools/original.py": "d3455dfa4d73a6ab6d4f30da9b6bc56eba925a49144214411d5b55546ba88d94",
+          "research/mass-transfer-engine.md": "daa8aca1bfcbc417b1381e578f409e9f2837c3c247d816e01ecceedcaca87515",
+          "tests/shared_machine_lifter_test.py": "0cdfd14269e1b16fce914f3b1c0b590f1e29f73c95cb0fd1b007f5836903daba"
+        }
+      },
+      "notes": " 2026-10-02 mass-transfer engine review: optional shared_machine namespace has no effect on scalar output; all11 scalar headers/reports byte-identical. Import/ByteState invalidation extension is unused by these original bodies, normal initialized merge preserved; compiler41/shared7 checks, rebuilt core, prior10540+GetInt/default2470 native regressions and native control/readback passed. Inputs refreshed only for reviewed generic additions; scope/details research/mass-transfer-engine.md."
     }
   }
 }

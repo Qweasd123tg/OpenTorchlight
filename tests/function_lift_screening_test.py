@@ -422,6 +422,28 @@ class BatchUnionTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Conflicting duplicate'):
                 screening.merge_raw(destination, source)
 
+    def test_explicit_failed_retry_retains_verified_body_in_both_orders(self):
+        data = returns(0x1000)
+        good, _, _ = screening.load_raw(self.batch('good-retry', [data]), self.original())
+        failed, _, _ = screening.load_raw(self.batch('old-failed', [data],
+            {data['address']: 'missing_function'}), self.original())
+        for destination, source in ((copy.deepcopy(failed), good), (copy.deepcopy(good), failed)):
+            changes = screening.merge_raw(destination, source, retry_failed=True)
+            self.assertEqual(destination[data['address']], good[data['address']])
+            self.assertEqual(changes[0]['previous_raw_status'], 'missing_function')
+            self.assertEqual(changes[0]['verified_raw_sha256'], good[data['address']]['raw_sha256'])
+
+    def test_retry_flag_does_not_replace_conflicting_verified_contracts(self):
+        data = returns(0x1000)
+        good, _, _ = screening.load_raw(self.batch('good-conflict', [data]), self.original())
+        other = copy.deepcopy(good)
+        other[data['address']]['raw_sha256'] = '0' * 64
+        other['0x00002000'] = entry(returns(0x2000))
+        before = copy.deepcopy(good)
+        with self.assertRaisesRegex(ValueError, 'Conflicting duplicate'):
+            screening.merge_raw(good, other, retry_failed=True)
+        self.assertEqual(good, before)
+
 
 if __name__ == '__main__':
     unittest.main()

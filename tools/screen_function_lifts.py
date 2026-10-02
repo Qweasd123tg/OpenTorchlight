@@ -19,8 +19,10 @@ import sys
 
 import auto_triage
 from automation_state import validate_output, write_json
-from function_package import ELF_PATH, ELF_SHA, FunctionPackageBuilder, normalize
+from function_package import ELF_PATH, ELF_SHA, SYMBOL_RE, FunctionPackageBuilder, normalize
 import lift_pcode as lift
+from lift_dependency_plan import build_dependency_plan, dependency_plan_markdown
+from ghidra_runtime import headless_environment
 from original import Original
 from setup_ghidra import DIRECTORY, VERSION, verify_installation
 from transfer_contract import completion, in_scope
@@ -80,6 +82,72 @@ def select(root, scope, limit, offset=0, requested=()):
     return {'scope': scope, 'offset': offset, 'limit': limit,
             'residual_manual_total': len(candidates), 'selected': candidates[offset:offset + limit],
             'excluded': exclusions}, builder
+
+
+def select_explicit(root, targets_file, limit):
+    """Dependency exports use exact symbols, independently of transfer routes.
+
+    A library/accepted helper is still needed as an original raw body by the
+    closure compiler. This selection grants no implementation or acceptance.
+    """
+    if not 1 <= limit <= MAX_BATCH:
+        raise ValueError('limit 1..1024 required')
+    target_bytes = targets_file.read_bytes()
+    entries, seen = [], set()
+    for line in target_bytes.decode('utf-8').splitlines():
+        text = line.strip()
+        if not text or text.startswith('#'):
+            continue
+        entry = canonical(text)
+        if entry in seen:
+            raise ValueError('Duplicate normalized explicit target: ' + entry)
+        seen.add(entry)
+        entries.append(entry)
+    if not 1 <= len(entries) <= limit:
+        raise ValueError(f'Explicit targets must contain 1..{limit} entries; no truncation')
+    builder = FunctionPackageBuilder(root)
+    index = dependency_symbol_index(root, builder)
+    rows = []
+    for entry in sorted(entries, key=lambda a: int(a, 16)):
+        symbol = builder.symbols.get(normalize(entry))
+        if not symbol or not symbol['size']:
+            raise ValueError('Explicit target is not an exact sized function symbol: ' + entry)
+        if index[normalize(entry)]['ambiguous_sizes']:
+            raise ValueError('Ambiguous original symbol sizes at explicit target: ' + entry)
+        rows.append({'address': entry, 'symbol': sorted(symbol['aliases'])[0],
+                     'size': symbol['size'], 'selected_residual': False,
+                     'role': 'dependency_export'})
+    return {'scope': 'explicit_dependencies', 'offset': 0, 'limit': limit,
+            'residual_manual_total': 0, 'selected': rows, 'excluded': [],
+            'targets_file_sha256': hashlib.sha256(target_bytes).hexdigest()}, builder
+
+
+def dependency_symbol_index(root, builder):
+    """Keep conflicting alias sizes visible rather than relying on max(size)."""
+    sizes = {}
+    for line in (root / 'research/original-symbols.txt').read_text().splitlines():
+        match = SYMBOL_RE.match(line)
+        if match and match[2]:
+            size = int(match[2], 16)
+            if size:
+                sizes.setdefault(normalize(match[1]), set()).add(size)
+    return {entry: {**row, 'ambiguous_sizes': len(sizes.get(entry, set())) > 1}
+            for entry, row in builder.symbols.items()}
+
+
+def validate_export_targets(selection, builder, original):
+    """Reject a stale symbol index before launching the saved-project exporter."""
+    symbols = {}
+    for symbol in original.symbols:
+        if symbol.size and symbol.kind in 'TtWw':
+            symbols.setdefault(symbol.address, set()).add(symbol.size)
+    for row in selection['selected']:
+        entry = row['address']
+        sizes = symbols.get(int(entry, 16), set())
+        if len(sizes) != 1:
+            raise ValueError('Export target missing or ambiguous in external ELF symbols: ' + entry)
+        if next(iter(sizes)) != builder.symbols[normalize(entry)]['size']:
+            raise ValueError('Export target symbol index size differs from external ELF: ' + entry)
 
 
 def validate_raw(packet, original, symbol, expected_entry):
@@ -417,20 +485,36 @@ def load_raw(raw_dir, original):
     return entries, inputs, manifest
 
 
-def merge_raw(existing, members):
+def merge_raw(existing, members, retry_failed=False):
     """Join independently validated batches without dropping contradictory status.
 
     Exact duplicate packet bytes with the same export status are reusable. A
-    hash or status conflict rejects the union before any member is inserted;
-    otherwise input fingerprints/manifests retain both source provenances.
+    hash or status conflict rejects the union before any member is inserted.
+    Explicit retry_failed permits only missing_function -> verified recovery,
+    independent of batch order, and returns an audit record. Both input
+    fingerprints/manifests remain recorded; verified conflicts always reject.
     """
+    replacements = []
+    winners = {}
     for entry, source in members.items():
         previous = existing.get(entry)
         if previous is not None and (previous['raw_sha256'] != source['raw_sha256'] or
                                      previous['raw_status'] != source['raw_status']):
-            raise ValueError('Conflicting duplicate raw entry across batches: ' + entry)
+            states = {previous['raw_status'], source['raw_status']}
+            if not retry_failed or states != {'missing_function', 'verified'}:
+                raise ValueError('Conflicting duplicate raw entry across batches: ' + entry)
+            failed = previous if previous['raw_status'] == 'missing_function' else source
+            verified = source if source['raw_status'] == 'verified' else previous
+            winners[entry] = verified
+            replacements.append({'address': entry,
+                                 'previous_raw_sha256': failed['raw_sha256'],
+                                 'verified_raw_sha256': verified['raw_sha256'],
+                                 'previous_raw_status': 'missing_function',
+                                 'raw_status': 'verified'})
     for entry, source in members.items():
         existing.setdefault(entry, source)
+    existing.update(winners)
+    return replacements
 
 
 def make_report(selection, raw, abi=None):
@@ -449,7 +533,8 @@ def make_report(selection, raw, abi=None):
     for entry in sorted(selected.keys() | raw.keys()):
         source = raw.get(entry)
         row = {**selected.get(entry, {}), 'address': entry,
-               'selected_residual': entry in selected,
+               'selected_for_screen': entry in selected,
+               'selected_residual': selected.get(entry, {}).get('selected_residual', entry in selected),
                'raw_status': source['raw_status'] if source else 'missing_packet',
                'abi_status': 'missing_reviewed_abi', 'owner_status': 'missing_production_owner_review',
                'production_ready': False,
@@ -477,7 +562,7 @@ def make_report(selection, raw, abi=None):
     groups = closure_groups(functions)
     counts = Counter()
     for row in functions:
-        if row['selected_residual']:
+        if row['selected_for_screen']:
             counts['selected'] += 1
             counts['local_structural_candidate'] += row['local_structural_candidate']
             counts['structural_closure_candidate'] += row['structural_closure_candidate']
@@ -507,12 +592,38 @@ def make_report(selection, raw, abi=None):
             'selection': selection, 'counts': dict(sorted(counts.items())), 'functions': functions,
             'raw_packet_counts': raw_counts,
             'counts_meaning': {
-                'counts': 'Selected residual rows only; reason:* counts occurrences, not affected functions.',
+                'counts': 'Selected screen rows only (residual roots or explicit dependency export); reason:* counts occurrences, not affected functions.',
                 'raw_packet_counts': 'Unique supplied raw entries; structural, readiness and reason totals cover verified raw rows, including dependency-only rows outside the selection limit.',
                 'closure_reason_occurrences': 'Edges/blockers propagated through each caller closure; one original dependency may recur for many callers. Distinct affected functions are separate *_function_counts.',
                 'structural_closure_candidate': 'All required raw dependencies across supplied batches structurally supported, with no missing/indirect/cyclic/depth blocker. ABI and production owner review remain separate.'},
             'structural_closure_groups': groups, 'original_status_promotions': 0,
             'game_executed': False, 'original_modified': False}
+
+
+def write_screen_summary(output, report, plan):
+    """Small entry point for the next pass; full raw evidence stays in JSON."""
+    counts = report['counts']
+    raw = report['raw_packet_counts']
+    lines = ['# Raw lift screen', '',
+             f"Status: {report['status']}; selected: {counts.get('selected', 0)}; "
+             f"verified raw bodies: {raw['verified']}; "
+             f"structural closure candidates: {raw['structural_closure_candidate']}.", '',
+             f"External ELF verified this run: {report['original_elf']['verified_this_run']}.", '',
+             'Structural support requires separate ABI, state-owner and original-contract review.', '',
+             '## Blockers across verified raw bodies', '']
+    blockers = raw['structural_reason_function_counts']
+    lines.extend(f'- {kind}: {count} functions' for kind, count in
+                 sorted(blockers.items(), key=lambda item: (-item[1], item[0]))[:12])
+    if not blockers:
+        lines.append('- No local structural blockers in supplied verified bodies.')
+    lines += ['', dependency_plan_markdown(plan), '',
+              'Full evidence: `report.json`; next dependency batches: `dependency-plan.json`.',
+              'Original status promotions: 0.']
+    if report['selection']['scope'] == 'explicit_dependencies':
+        lines += ['', 'Rejoin this dependency export with the original root raw directories ',
+                  'using repeated `--raw-dir` and the original residual root selection ',
+                  'to discover the next layer. Dependency exports do not create new residual roots.']
+    (output / 'SUMMARY.md').write_text('\n'.join(lines) + '\n', encoding='utf-8')
 
 
 def main():
@@ -521,20 +632,29 @@ def main():
     parser.add_argument('--limit', type=int, required=True, help='explicit bounded batch size, 1..1024')
     parser.add_argument('--offset', type=int, default=0, help='deterministic residual-manual queue offset')
     parser.add_argument('--address', action='append', default=[])
+    parser.add_argument('--targets-file', type=Path,
+                        help='exact dependency entries, including library/accepted helpers; bypasses residual/scope filters')
     parser.add_argument('--output', type=Path, required=True, help='fresh directory under ignored build or /tmp')
     parser.add_argument('--original', type=Path, default=Path(ELF_PATH))
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--raw-dir', type=Path, action='append', help='analyze existing exported packets; repeat to join dependency batches')
     mode.add_argument('--export', action='store_true', help='export selected raw p-code from saved pinned project, read-only')
+    parser.add_argument('--retry-failed', action='store_true',
+                        help='when joining raw batches, explicitly replace missing_function entries with verified re-exports')
     parser.add_argument('--abi', type=Path, help='optional actual reviewed ABI; no defaults are invented')
     parser.add_argument('--home', type=Path, default=ROOT / 'build-source-cache/ghidra' / DIRECTORY)
     parser.add_argument('--analysis-root', type=Path, default=ROOT / 'build-ghidra')
     args = parser.parse_args()
     published = False
     try:
-        selection, builder = select(ROOT, args.scope, args.limit, args.offset, args.address)
+        if args.targets_file and (args.address or args.offset):
+            raise ValueError('--targets-file cannot be combined with --address or --offset')
+        if args.retry_failed and not args.raw_dir:
+            raise ValueError('--retry-failed requires --raw-dir joining')
+        selection, builder = (select_explicit(ROOT, args.targets_file, args.limit) if args.targets_file
+                              else select(ROOT, args.scope, args.limit, args.offset, args.address))
         protected = [args.original.resolve().parent, *builder.input_paths]
-        protected += (args.raw_dir or []) + [p for p in (args.abi, args.home, args.analysis_root) if p]
+        protected += (args.raw_dir or []) + [p for p in (args.abi, args.home, args.analysis_root, args.targets_file) if p]
         validate_output(ROOT, args.output, protected, directory=True)
         if args.output.exists():
             raise ValueError('Use a fresh output directory; existing evidence is preserved')
@@ -554,23 +674,30 @@ def main():
         tiny = ROOT / 'research/tiny-functions.json'
         if tiny.is_file():
             input_paths.append(tiny)
-        for name in ('screen_function_lifts.py', 'lift_pcode.py', 'auto_triage.py',
+        for name in ('screen_function_lifts.py', 'lift_pcode.py', 'lift_dependency_plan.py', 'auto_triage.py',
                      'original.py', 'automation_state.py', 'transfer_contract.py', 'setup_ghidra.py',
+                     'ghidra_runtime.py',
                      'ghidra/ExportLiftBatch.java'):
             input_paths.append(ROOT / 'tools' / name)
         if args.abi:
             input_paths.append(args.abi)
+        if args.targets_file:
+            input_paths.append(args.targets_file)
         before = {str(p.resolve()): digest(p) for p in input_paths}
+        if args.targets_file and before[str(args.targets_file.resolve())] != selection['targets_file_sha256']:
+            raise ValueError('Explicit target file changed during selection')
         original = Original(args.original) if args.export or args.raw_dir else None
+        if args.export:
+            validate_export_targets(selection, builder, original)
         args.output.mkdir(parents=True)
         published = True
         write_json(args.output / 'selection.json', selection)
         targets = args.output / 'targets.txt'
         targets.write_text(''.join(r['address'] + '\n' for r in selection['selected']))
-        raw_dirs, installation = args.raw_dir or [], None
+        raw_dirs, installation, java_runtime = args.raw_dir or [], None, None
         if args.export:
             if not selection['selected']:
-                raise ValueError('No residual manual entries selected; no Ghidra export launched')
+                raise ValueError('No source entries selected; no Ghidra export launched')
             home = args.home.resolve(); project = args.analysis_root.resolve()
             installation = verify_installation(home)
             if not (project / 'project/OpenTorchlight.gpr').is_file():
@@ -581,23 +708,23 @@ def main():
                        '-max-cpu', '2', '-process', original.path.name, '-noanalysis', '-readOnly',
                        '-scriptPath', str(ROOT / 'tools/ghidra'), '-postScript', 'ExportLiftBatch.java',
                        str(targets.resolve()), str(raw_dir.resolve()), original.sha256]
-            env = {**os.environ, 'XDG_CONFIG_HOME': str(project / 'config'),
-                   'XDG_CACHE_HOME': str(project / 'cache')}
+            env, java_runtime = headless_environment(project)
             with (args.output / 'headless.log').open('w') as log:
                 subprocess.run(command, env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=900)
-        raw, manifests = {}, []
+        raw, manifests, replacements = {}, [], []
         for raw_dir in raw_dirs:
             manifest_path = raw_dir.resolve() / 'manifest.json'
             before[str(manifest_path)] = digest(manifest_path)
             members, raw_inputs, manifest = load_raw(raw_dir, original)
             manifests.append(manifest)
-            merge_raw(raw, members)
+            replacements.extend(merge_raw(raw, members, retry_failed=args.retry_failed))
             input_paths.extend(raw_inputs)
             before.update({source['raw_path']: source['raw_sha256'] for source in members.values()})
             if args.export and set(raw) != {r['address'] for r in selection['selected']}:
                 raise ValueError('Export manifest differs from exact selected source entries')
         abi = json.loads(args.abi.read_text()) if args.abi else None
         report = make_report(selection, raw, abi)
+        plan = build_dependency_plan(report, dependency_symbol_index(ROOT, builder))
         after = {p: digest(Path(p)) for p in before}
         report['status'] = 'SCREENED' if before == after else 'STALE'
         report['source_consistent'] = before == after
@@ -606,13 +733,24 @@ def main():
                                   'verified_this_run': original is not None}
         report['ghidra_manifest'] = manifests[0] if len(manifests) == 1 else None
         report['ghidra_manifests'] = manifests
+        report['raw_replacements'] = replacements
         report['tool_installation'] = installation
+        report['java_runtime'] = java_runtime
         report['callsite_index'] = {'available': builder.have_callsites,
                                     'metadata_validated': builder.callsites_metadata is not None,
                                     'metadata': builder.callsites_metadata,
                                     'boundary': 'direct CALL scheduling context only; no-CALL does not imply leaf; raw tail and indirect edges retained'}
         write_json(args.output / 'report.json', report)
-        print(f"Screened {len(selection['selected'])}/{selection['residual_manual_total']} residual manual entries: {args.output / 'report.json'}")
+        plan['source_consistent'] = report['source_consistent']
+        plan['status'] = report['status']
+        plan['report_sha256'] = digest(args.output / 'report.json')
+        write_json(args.output / 'dependency-plan.json', plan)
+        for batch in plan['batches']:
+            (args.output / f"dependency-targets-{batch['index']:03d}.txt").write_text(
+                ''.join(a + '\n' for a in batch['targets']), encoding='utf-8')
+        write_screen_summary(args.output, report, plan)
+        print(f"Screened {len(selection['selected'])} {selection['scope']} entries; "
+              f"next dependency bodies: {len(plan['targets'])}; {args.output / 'SUMMARY.md'}")
         return 0 if report['source_consistent'] else 2
     except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as exc:
         if published:

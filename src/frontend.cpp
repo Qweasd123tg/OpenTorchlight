@@ -1307,6 +1307,11 @@ void Frontend::dispatch_pointer_down(UiWindowId target, const UiPointerEvent& ev
                 static_cast<int>(*widget.layout_function) >= 14 &&
                 static_cast<int>(*widget.layout_function) <= 17 && continue_save())
                 activate("load");
+            if (page_ == FrontendPage::main && main_dropdown_ &&
+                main_dropdown_->subscription(id).double_click) {
+                if (dropdown_default_double_click()) return;
+                continue;
+            }
             return;
         }
         if (event.button == 0 && comboboxes_ && comboboxes_->handles(id) &&

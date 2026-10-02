@@ -10,10 +10,12 @@ set(TORCHLIGHT_LIFTED_INPUTS
     "${TORCHLIGHT_LIFTED_UI_DIR}/00a82900.json"
     "${TORCHLIGHT_LIFTED_UI_DIR}/00a84d20.json"
     "${TORCHLIGHT_LIFTED_UI_DIR}/00a84d30.json"
+    "${TORCHLIGHT_LIFTED_UI_DIR}/00b05e80.json"
     "${TORCHLIGHT_LIFTED_UI_DIR}/00c2b9c0.json"
     "${TORCHLIGHT_LIFTED_UI_DIR}/00c2b700.json"
     "${TORCHLIGHT_LIFTED_UI_DIR}/00c33490.json"
-    "${TORCHLIGHT_LIFTED_UI_DIR}/00c6e410.json")
+    "${TORCHLIGHT_LIFTED_UI_DIR}/00c6e410.json"
+    "${TORCHLIGHT_LIFTED_UI_DIR}/00c6e440.json")
 add_custom_command(OUTPUT "${TORCHLIGHT_LIFTED_HEADER}"
     COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tools/lift_pcode.py"
         ${TORCHLIGHT_LIFTED_INPUTS}
@@ -28,3 +30,18 @@ add_custom_target(torchlight_lifted_code DEPENDS "${TORCHLIGHT_LIFTED_HEADER}")
 add_dependencies(torchlight_core torchlight_lifted_code)
 target_sources(torchlight_core PRIVATE "${TORCHLIGHT_LIFTED_HEADER}")
 target_include_directories(torchlight_core PRIVATE "${TORCHLIGHT_LIFTED_INCLUDE}")
+
+# Generic shared CPU/RAM backend. No per-function C++ ABI or field adapter is
+# inferred here. It is calibrated separately; Application keeps reviewed bindings.
+set(TORCHLIGHT_MACHINE_HEADER "${TORCHLIGHT_LIFTED_INCLUDE}/torchlight/generated/shared_machine.hpp")
+add_custom_command(OUTPUT "${TORCHLIGHT_MACHINE_HEADER}"
+    COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tools/lift_pcode.py"
+        ${TORCHLIGHT_LIFTED_INPUTS}
+        --abi "${TORCHLIGHT_LIFTED_UI_DIR}/shared-machine.json"
+        --out "${TORCHLIGHT_MACHINE_HEADER}"
+        --report "${CMAKE_CURRENT_BINARY_DIR}/shared-machine-code.json"
+    DEPENDS ${TORCHLIGHT_LIFTED_INPUTS} "${TORCHLIGHT_LIFTED_UI_DIR}/shared-machine.json"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tools/lift_pcode.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/torchlight/pcode_runtime.hpp"
+    VERBATIM)
+add_custom_target(torchlight_machine_code DEPENDS "${TORCHLIGHT_MACHINE_HEADER}")

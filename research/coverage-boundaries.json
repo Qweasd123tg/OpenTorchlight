@@ -2033,6 +2033,56 @@
         "tests/pcode_lifter_test.py"
       ],
       "comparison": "Whole36-byte body SHA0d3b9227d789dac1773c5bb1dda4d9b550c8afb1f6bc1ae4678d4065c41fb1d5 and GetFloat dependency instruction/symbol hashes checked. 2777 exact scalar result-bit cases (3357 including580 property reads) against unchanged original whole bodies; complete buffers unchanged. Evaluated borrowed YRATIO, exact raw CALL/stack/RET and SSE operand ordering. FP environment not compared."
+    },
+    {
+      "addresses": [
+        "0xc6e440"
+      ],
+      "status": "closed",
+      "boundary": "All32 bytes: zeroextend ESI, initialize EAXffffffff; pointer64 end-minus-begin/SAR2; unsigned64 CMP/JAEc6e459; conditional four-byte indexed readc6e45b; shared actual REPZ RETc6e45e. No omitted padding, signed clamp or exit. Application settings -> Frontend sync_settings/draft/sync_cegui_state -> native set_settings -> generated GetInt -> actual Checkbox fullscreen/FSAA/vsync, resolution/shadow Combo. Source setOpen callsbd5660/568d/5741/5c90/5d8e/61f7 confirm consumers. Readback supplies existing Apply/persistence transaction; full controller separately partial. Remaining caller/registration/controller functions are separate; valid borrowed-owner preconditions apply.",
+      "evidence": [
+        "research/generated-settings-int.md",
+        "research/lifted-ui/00c6e440.json",
+        "research/automatic-function-transfer.md"
+      ],
+      "implementation": [
+        "src/ui_int_property.cpp",
+        "include/torchlight/ui_int_property.hpp",
+        "src/cegui_menu.cpp",
+        "src/frontend.cpp"
+      ],
+      "tests": [
+        "tests/settings_queries_probe.cpp",
+        "tests/compare_settings_queries.py",
+        "tests/settings_queries_controls_test.cpp",
+        "tests/pcode_lifter_test.py"
+      ],
+      "comparison": "Complete32-byte c6e440 symbol SHA026b709325aa1cd3cf3c1f896c41c587727a206c44e1466be8ce1d6e28eac12f and all10 instructions pinned.2251 unchanged original-vs-production cases:1084 in-range/1167 fallback, exact int32 bits and all initialized object/vector/guard bytes unchanged. Native control population/readback passed. No registration/constructors/callbacks/game/input/frame/GL comparison."
+    },
+    {
+      "addresses": [
+        "0xb05e80"
+      ],
+      "status": "closed",
+      "boundary": "Complete MOV EAX1b05e80/RETb05e85, no branches, padding or other exits. AL8=true, upperRAX cleared; RET reads/pops caller8-byte slot. Real Main-bound native double_click subscriber returns generated default into CEGUI Event handled/System parent-route consumer; fallback Frontend consumes bool to terminate dispatch. Direct real CEGUI Event test confirms handled=true and following subscriber still runs. Load override separate. Remaining caller/registration/controller functions are separate; valid borrowed-owner preconditions apply.",
+      "evidence": [
+        "research/generated-dropdown-default.md",
+        "research/lifted-ui/00b05e80.json",
+        "research/automatic-function-transfer.md"
+      ],
+      "implementation": [
+        "src/ui_dropdown.cpp",
+        "include/torchlight/ui_dropdown.hpp",
+        "src/cegui_menu.cpp",
+        "src/frontend.cpp"
+      ],
+      "tests": [
+        "tests/settings_queries_probe.cpp",
+        "tests/compare_settings_queries.py",
+        "tests/settings_queries_controls_test.cpp",
+        "tests/pcode_lifter_test.py"
+      ],
+      "comparison": "Complete6-byte b05e80 symbol SHA2db31f4e09597946e56e859813bfdad7046d457c32332c3a882654d1e3ffdf67 and both instructions pinned.219 unchanged original-vs-production cases, initialized opaque argument/guard bytes unchanged. Actual Main/base/Continue vtable targets and caller AL preservation statically checked; shipped/upstream CEGUI handled OR and direct library Event test agree. No input/game/frame or wstring constructor ABI claim."
     }
   ],
   "port_systems": [
