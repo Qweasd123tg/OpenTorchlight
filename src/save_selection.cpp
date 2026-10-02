@@ -38,7 +38,31 @@ public:
         throw std::logic_error("Continue query attempted a memory write");
     }
 };
+class FilenameCountMemory final : public pcode::Memory {
+    std::size_t count_;
+public:
+    explicit FilenameCountMemory(std::size_t count) : count_(count) {}
+    std::uint64_t read(std::uint64_t address, std::size_t width) override {
+        if (address == stack && width == 8) return sentinel;
+        if (address == ui + 0x588 && width == 8) return manager;
+        if (address == manager + 0xde8 && width == 8) return object;
+        if (address == object + 0x218 && width == 8) return vector_base;
+        if (address == object + 0x220 && width == 8)
+            return vector_base + static_cast<std::uint64_t>(count_) * 8;
+        throw std::logic_error("canLoad p-code read outside filename-count binding");
+    }
+    void write(std::uint64_t, std::size_t, std::uint64_t) override {
+        throw std::logic_error("canLoad query attempted a memory write");
+    }
+};
 } // namespace
+bool save_list_can_load(std::size_t filename_count) noexcept {
+    FilenameCountMemory memory(filename_count);
+    pcode::RegisterFile registers;
+    registers.write(0x38, 8, ui);
+    registers.write(0x20, 8, stack);
+    return pcode_generated::fn_00a84d20(memory, registers, sentinel) != 0;
+}
 const SaveSlotInfo* selected_continue_save(const std::vector<SaveSlotInfo>& saves,
                                          std::size_t selected) noexcept {
     // Portable input boundary: reject indices outside the original signed32

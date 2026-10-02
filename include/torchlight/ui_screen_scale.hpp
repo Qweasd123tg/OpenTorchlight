@@ -1,5 +1,7 @@
 #pragma once
 #include <array>
+#include <cstddef>
+#include <cstdint>
 #include <optional>
 #include <string>
 
@@ -23,6 +25,15 @@ enum class UiScreenScaleRatio { y_ratio, x_ratio };
 // are KSETTINGS_YRATIO/KSETTINGS_XRATIO (game.c:530,593,5150) and the rodata
 // constants are 768.0f @0xfa4804 and 1/1024 @0xfa4808.
 [[nodiscard]] float ui_screen_ratio(int width, int height, UiScreenScaleRatio which);
+
+// original-code: GetFloat @0xc6e410 reads a borrowed binary32 property vector
+// or returns -1.0f. The caller owns the evaluated table and its lifetime.
+[[nodiscard]] float ui_float_property(const float* values, std::size_t count,
+                                     std::uint32_t index);
+// scaledY @0xa83e70 -> GetFloat: offsets consume an evaluated YRATIO property.
+// Numeric native key IDs belong to the original property-registration owner;
+// the checked port view binds that named property to its single populated slot.
+[[nodiscard]] float ui_scale_offset(float offset, float ratio);
 
 // UnifiedAreaRect {min_x_scale, min_x_offset, min_y_scale, min_y_offset,
 // max_x_scale, max_x_offset, max_y_scale, max_y_offset}: scale the offsets

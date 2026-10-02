@@ -13,8 +13,12 @@
 отложенная загрузка игровых каталогов. [Town scene](research/menu-scene.md)
 и [inline text](research/ui-inline-text.md) подключены к desktop.
 Raw p-code -> compiled production functions подключён в
-[automatic-function-transfer.md](research/automatic-function-transfer.md): пять
-тел UI state/Continue, approved direct-call/tail closure и checked owner bindings.
+[automatic-function-transfer.md](research/automatic-function-transfer.md): девять
+тел UI state/Continue/canLoad/scaledY/GetFloat, approved direct-call/tail closure
+и checked owner bindings. Восемь имеют full review; scaledY остаётся partial
+из-за MXCSR/fenv. [Массовый raw-code screen](research/function-lift-screening.md)
+проверил все 3162 residual manual тела: 1541 local/475 closure candidates,
+без автоматической приёмки ABI/owners.
 Сборка генерирует код сама; новые cohorts принимаются после ревью владельцев и
 зависимостей, без автоматического повышения completion.
 Следующие исходные цепочки: preview персонажа/питомца, pet/difficulty producer,

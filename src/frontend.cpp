@@ -788,7 +788,7 @@ void Frontend::activate(const std::string &id, std::optional<UiLayoutFunction> f
 bool Frontend::main_can_load() const {
     // CMenuManager::canLoad @0xc2b700 tests list count. The list producer is
     // still our .otc adapter, not the original .SVB reader.
-    return !saves_.empty();
+    return save_list_can_load(saves_.size());
 }
 bool Frontend::native_input() const noexcept {
     return cegui_menu_ && (page_ == FrontendPage::main || page_ == FrontendPage::create || page_ == FrontendPage::load || page_ == FrontendPage::settings || page_ == FrontendPage::pause);

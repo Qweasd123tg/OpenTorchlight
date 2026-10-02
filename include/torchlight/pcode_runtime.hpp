@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 #if defined(__FAST_MATH__)
-#error "raw p-code float predicates require IEEE NaN semantics (disable fast-math)"
+#error "raw p-code floating operations require IEEE NaN semantics (disable fast-math)"
 #endif
 
 namespace torchlight::pcode {
@@ -113,6 +113,46 @@ inline double floating(std::uint64_t bits, std::size_t width) {
     static_assert(std::numeric_limits<float>::is_iec559 && std::numeric_limits<double>::is_iec559);
     if (width==4) { const auto b=static_cast<std::uint32_t>(bits); float f; std::memcpy(&f,&b,4); return f; }
     if (width==8) { double d; std::memcpy(&d,&bits,8); return d; }
+    throw std::runtime_error("p-code float width outside binary32/binary64");
+}
+// Scalar SSE MULSS/MULSD result-bit contract only (not universal FLOAT_MULT/x87).
+// original-code: MULSS XMM0,[RSP+0xc] @0xa83e89/0xa83eb9 consumes
+// ratio as left/destination, offset as right; native comparison confirms first
+// NaN payload wins and invalid infinity*zero yields negative indefinite.
+// MULSD follows the same scalar SSE bit rule, independently calibrated against
+// the native instruction; no original production binary64 function is claimed.
+// Use the actual operand precision, then store that precision before extracting
+// its bits. In particular binary32 arithmetic never widens through floating().
+// Host rounding mode/exception flags and original MXCSR are outside this helper's
+// contract; no fast-math is allowed. Volatile forces the precision store even on
+// targets with excess intermediate precision.
+inline std::uint64_t float_multiply(std::uint64_t left, std::uint64_t right,
+                                    std::size_t width) {
+    static_assert(sizeof(float)==4 && sizeof(double)==8);
+    static_assert(std::numeric_limits<float>::is_iec559 && std::numeric_limits<double>::is_iec559);
+    if (width==4) {
+        const auto a=static_cast<std::uint32_t>(left), b=static_cast<std::uint32_t>(right);
+        const auto magnitude_a=a & UINT32_C(0x7fffffff), magnitude_b=b & UINT32_C(0x7fffffff);
+        if (magnitude_a>UINT32_C(0x7f800000)) return a | UINT32_C(0x00400000);
+        if (magnitude_b>UINT32_C(0x7f800000)) return b | UINT32_C(0x00400000);
+        if ((magnitude_a==UINT32_C(0x7f800000) && magnitude_b==0) ||
+            (magnitude_b==UINT32_C(0x7f800000) && magnitude_a==0)) return UINT32_C(0xffc00000);
+        float x,y; std::memcpy(&x,&a,4); std::memcpy(&y,&b,4);
+        volatile float stored=x*y;
+        const float result=stored; std::uint32_t bits; std::memcpy(&bits,&result,4);
+        return bits;
+    }
+    if (width==8) {
+        const auto magnitude_a=left & UINT64_C(0x7fffffffffffffff), magnitude_b=right & UINT64_C(0x7fffffffffffffff);
+        if (magnitude_a>UINT64_C(0x7ff0000000000000)) return left | UINT64_C(0x0008000000000000);
+        if (magnitude_b>UINT64_C(0x7ff0000000000000)) return right | UINT64_C(0x0008000000000000);
+        if ((magnitude_a==UINT64_C(0x7ff0000000000000) && magnitude_b==0) ||
+            (magnitude_b==UINT64_C(0x7ff0000000000000) && magnitude_a==0)) return UINT64_C(0xfff8000000000000);
+        double x,y; std::memcpy(&x,&left,8); std::memcpy(&y,&right,8);
+        volatile double stored=x*y;
+        const double result=stored; std::uint64_t bits; std::memcpy(&bits,&result,8);
+        return bits;
+    }
     throw std::runtime_error("p-code float width outside binary32/binary64");
 }
 inline void check_return(std::uint64_t target, std::uint64_t sentinel) {

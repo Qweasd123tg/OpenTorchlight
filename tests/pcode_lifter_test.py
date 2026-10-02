@@ -119,6 +119,46 @@ assert(registers.read(0x20,8)==0x1008);assert(registers.read(0x288,8)==0xf00d);a
               op('INT_ZEXT',node('register',0,8),node('register',0,4))]+ret())])
         self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0x23456789);')
 
+    def test_register_self_xor_defines_eax_before_source_zero_extension(self):
+        row=instruction(0x100,[op('INT_XOR',node('register',0,4),
+            node('register',0,4),node('register',0,4)),
+            op('INT_ZEXT',node('register',0,8),node('register',0,4))],0x102)
+        row['bytes']='31c0'  # x86 xor EAX,EAX; raw source also defines high RAX.
+        end=instruction(0x102,ret());end['bytes']='c3'
+        data=function([row,end])
+        self.execute(data,'''assert(!registers.initialized(0,8));
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0);
+assert(registers.initialized(0,8));assert(registers.read(0,8)==0);
+assert(registers.read(0x20,8)==0x1008);assert(memory.reads==1);''')
+
+    def test_register_xor_different_missing_inputs_still_rejected(self):
+        data=function([instruction(0x100,[op('INT_XOR',node('register',0,4),
+            node('register',0,4),node('register',8,4)),
+            op('INT_ZEXT',node('register',0,8),node('register',0,4))]+ret())])
+        self.execute(data,'''bool rejected=false;
+try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){rejected=std::string(e.what()).find("pcode[0] INT_XOR")!=std::string::npos;}
+assert(rejected);assert(!registers.initialized(0,8));''')
+
+    def test_register_self_other_operations_keep_missing_input_check(self):
+        for name in ('COPY','INT_SUB'):
+            inputs=[node('register',0,8)]*(1 if name=='COPY' else 2)
+            data=function([instruction(0x100,[op(name,node('register',0,8),*inputs)]+ret())])
+            with self.subTest(operation=name):
+                self.execute(data,'''bool rejected=false;
+try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error&){rejected=true;}assert(rejected);''')
+
+    def test_same_ram_and_unique_xor_are_not_register_zero_idioms(self):
+        data=function([instruction(0x100,[op('INT_XOR',node('register',0,8),
+            node('ram',0x2000,8),node('ram',0x2000,8))]+ret())])
+        self.execute(data,'''memory.write(0x2000,8,0x123456789abcdef0ULL);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0);
+assert(memory.reads==3);''')
+        data=function([instruction(0x100,[op('INT_XOR',node('register',0,8),
+            node('unique',0,8),node('unique',0,8))]+ret())])
+        with self.assertRaisesRegex(lift.LiftError,'use before definition'):self.generate(data)
+
     def test_reviewed_al_return_does_not_leak_pointer_high_bytes(self):
         data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',0x100000,8)),
               op('COPY',node('register',0,1),node('const',0,1))]+ret())])
@@ -209,6 +249,109 @@ catch(const std::runtime_error&){failed=true;}assert(failed);''',descriptor)
              op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x200,8))]+ret())])
         self.execute(data,'''memory.write(0x2000,4,0x7fc00000);
 assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==2);assert(memory.reads==4);''')
+
+    def test_float_multiply_rounding_edges_and_raw_operands(self):
+        # The generated opcode reads two initialized integer bit patterns, and
+        # returns precision-rounded float bits rather than converting the value.
+        for width,cases in ((4,[
+            (0x3f800001,0x3f800001,0x3f800002),
+            (0x7f7fffff,0x40000000,0x7f800000),
+            (0x00800000,0x3f000000,0x00400000),
+            (0x00000001,0x3f000000,0x00000000),
+            (0x00000001,0x3fc00000,0x00000002),
+            (0x80000000,0x40000000,0x80000000),
+            (0x7f800000,0xbf800000,0xff800000),
+            (0xbf000000,0x40400000,0xbfc00000),
+        ]),(8,[
+            (0x3ff0000000000001,0x3ff0000000000001,0x3ff0000000000002),
+            (0x7fefffffffffffff,0x4000000000000000,0x7ff0000000000000),
+            (0x0010000000000000,0x3fe0000000000000,0x0008000000000000),
+            (1,0x3fe0000000000000,0),
+            (1,0x3ff8000000000000,2),
+            (0x8000000000000000,0x4000000000000000,0x8000000000000000),
+            (0x7ff0000000000000,0xbff0000000000000,0xfff0000000000000),
+            (0xbfe0000000000000,0x4008000000000000,0xbff8000000000000),
+        ])):
+            row=instruction(0x100,[op('FLOAT_MULT',node('register',0,width),
+                node('register',0x30,width),node('register',0x38,width))]+ret())
+            row['bytes']='f30f59c1' if width==4 else 'f20f59c1'
+            data=function([row])
+            checks=''
+            for left,right,expected in cases:
+                checks+=f'''registers.write(0x20,8,0x1000);
+registers.write(0x30,{width},UINT64_C({left}));registers.write(0x38,{width},UINT64_C({right}));
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==UINT64_C({expected}));\n'''
+            nan,one,inf=(0x7fc12345,0x3f800000,0x7f800000) if width==4 else (0x7ff8123456789abc,0x3ff0000000000000,0x7ff0000000000000)
+            # Result classification remains useful beside exact payload tests.
+            for left,right in [(nan,one),(one,nan),(inf,0),(nan,nan+1)]:
+                checks+=f'''registers.write(0x20,8,0x1000);
+registers.write(0x30,{width},UINT64_C({left}));registers.write(0x38,{width},UINT64_C({right}));
+assert(std::isnan(torchlight::pcode::floating(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d),{width})));\n'''
+            descriptor=abi(data,[(0x30,width),(0x38,width)])
+            descriptor['functions'][data['address']]['return_register']=dict(offset='0x0',size=width)
+            with self.subTest(width=width):
+                self.execute(data,checks,descriptor)
+                _,report=self.generate(data,descriptor)
+                self.assertEqual(report['functions'][0]['opcode_inventory']['FLOAT_MULT'],1)
+
+    def test_scalar_sse_multiply_nan_payload_order_and_indefinite(self):
+        for width,one,inf,quiet_a,quiet_b,signaling_a,signaling_b,quiet_bit,indefinite in [
+            (4,0x3f800000,0x7f800000,0x7fc12345,0xffc23456,
+             0x7f800001,0xff800123,0x00400000,0xffc00000),
+            (8,0x3ff0000000000000,0x7ff0000000000000,
+             0x7ff8123456789abc,0xfff83456789abcde,
+             0x7ff0000000000001,0xfff0000000000123,
+             0x0008000000000000,0xfff8000000000000),
+        ]:
+            row=instruction(0x100,[op('FLOAT_MULT',node('register',0,width),
+                node('register',0x30,width),node('register',0x38,width))]+ret())
+            row['bytes']='f30f59c1' if width==4 else 'f20f59c1'
+            data=function([row])
+            descriptor=abi(data,[(0x30,width),(0x38,width)])
+            descriptor['functions'][data['address']]['return_register']=dict(offset='0x0',size=width)
+            nan_cases=[(left,right,left | quiet_bit)
+                for left in (quiet_a,quiet_b,signaling_a,signaling_b)
+                for right in (quiet_a,quiet_b,signaling_a,signaling_b)]
+            nan_cases += [(one,nan,nan | quiet_bit) for nan in (quiet_a,quiet_b,signaling_a,signaling_b)]
+            sign=1 << (width*8-1)
+            nan_cases += [(a,b,indefinite) for a,b in
+                [(inf,0),(inf,sign),(inf | sign,0),(inf | sign,sign),
+                 (0,inf),(sign,inf),(0,inf | sign),(sign,inf | sign)]]
+            checks=''
+            for left,right,expected in nan_cases:
+                checks+=f'''registers.write(0x20,8,0x1000);
+registers.write(0x30,{width},UINT64_C({left}));registers.write(0x38,{width},UINT64_C({right}));
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==UINT64_C({expected}));\n'''
+            with self.subTest(width=width):self.execute(data,checks,descriptor)
+
+    def test_float_multiply_rejects_non_scalar_sse_instruction(self):
+        for width,raw in [(4,'90'),(4,'d8c9'),(4,'0f59c1'),(4,'f20f59c1'),
+                          (8,'f30f59c1'),(8,'f20f')]:
+            row=instruction(0x100,[op('FLOAT_MULT',node('register',0,width),
+                node('const',0,width),node('const',0,width))]+ret())
+            row['bytes']=raw
+            with self.subTest(width=width,raw=raw),self.assertRaisesRegex(lift.LiftError,'scalar SSE'):
+                self.generate(function([row]))
+
+    def test_rejects_float_multiply_widths(self):
+        for left,right,out in [(1,1,1),(2,2,2),(3,3,3),(5,5,5),(6,6,6),(7,7,7),
+                               (4,8,4),(4,4,8),(8,8,4),(16,16,16)]:
+            data=function([instruction(0x100,[op('FLOAT_MULT',node('register',0,out),
+                node('const',0,left),node('const',0,right))]+ret())])
+            with self.subTest(widths=(left,right,out)),self.assertRaisesRegex(lift.LiftError,'width'):
+                self.generate(data)
+
+    def test_float_runtime_width_and_fast_math_fail_closed(self):
+        data=function([instruction(0x100,ret())])
+        self.execute(data,'''for (auto width : {1u,2u,3u,5u,6u,7u,9u}) {
+bool rejected=false;try{torchlight::pcode::float_multiply(0,0,width);}
+catch(const std::runtime_error&){rejected=true;}assert(rejected);}
+''')
+        compiler=shutil.which('g++') or shutil.which('clang++')
+        result=subprocess.run([compiler,'-std=c++17','-ffast-math','-I',str(ROOT/'include'),
+            '-x','c++','-fsyntax-only','-'],input='#include "torchlight/pcode_runtime.hpp"\n',text=True,capture_output=True)
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('disable fast-math',result.stderr)
 
     def test_rejects_unsupported_calls_external_targets_spaces_and_widths(self):
         base=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',1,8))]+ret())])

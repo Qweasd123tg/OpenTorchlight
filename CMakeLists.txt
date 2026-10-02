@@ -354,6 +354,10 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_link_libraries(save_selection_test PRIVATE torchlight_core)
     add_executable(save_selection_probe tests/save_selection_probe.cpp)
     target_link_libraries(save_selection_probe PRIVATE torchlight_core)
+    add_executable(save_list_probe tests/save_list_probe.cpp)
+    target_link_libraries(save_list_probe PRIVATE torchlight_core)
+    add_executable(ui_scale_lift_probe tests/ui_scale_lift_probe.cpp)
+    target_link_libraries(ui_scale_lift_probe PRIVATE torchlight_core)
     add_executable(ui_game_state_test tests/ui_game_state_test.cpp)
     target_link_libraries(ui_game_state_test PRIVATE torchlight_core)
     add_executable(ui_game_state_probe tests/ui_game_state_probe.cpp)
@@ -367,6 +371,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME save_selection COMMAND save_selection_test)
     add_test(NAME ui_game_state_request COMMAND ui_game_state_test)
     add_test(NAME pcode_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/pcode_lifter_test.py)
+    add_test(NAME function_lift_screening COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/function_lift_screening_test.py)
+    set_tests_properties(function_lift_screening PROPERTIES TIMEOUT 60)
     set_tests_properties(pcode_lifter PROPERTIES TIMEOUT 90)
     set_tests_properties(save_selection PROPERTIES TIMEOUT 30)
     if(TORCHLIGHT_GAME_DIR)
@@ -375,6 +381,16 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         set_tests_properties(original_save_selection_frontend PROPERTIES TIMEOUT 60)
     endif()
     if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_save_list_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_save_list.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:save_list_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/save-list-native.json)
+        set_tests_properties(original_save_list_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
+        add_test(NAME original_ui_scale_lift_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_scale_lift.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:ui_scale_lift_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/ui-scale-lift-native.json)
+        set_tests_properties(original_ui_scale_lift_comparison PROPERTIES TIMEOUT 90 SKIP_RETURN_CODE 77)
         add_test(NAME original_ui_game_state_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_ui_game_state.py
             --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:ui_game_state_probe>

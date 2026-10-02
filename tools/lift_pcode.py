@@ -31,6 +31,7 @@ OPCODES = dict(COPY=1, LOAD=2, STORE=3, BRANCH=4, CBRANCH=5, CALL=7, RETURN=10,
                INT_SRIGHT=31, INT_MULT=32, BOOL_NEGATE=37, BOOL_XOR=38,
                BOOL_AND=39, BOOL_OR=40, FLOAT_EQUAL=41, FLOAT_NOTEQUAL=42,
                FLOAT_LESS=43, FLOAT_LESSEQUAL=44, FLOAT_NAN=46,
+               FLOAT_MULT=49,
                PIECE=62, SUBPIECE=63, POPCOUNT=72)
 UNARY = {'COPY', 'INT_ZEXT', 'INT_SEXT', 'INT_2COMP', 'INT_NEGATE',
          'BOOL_NEGATE', 'FLOAT_NAN', 'POPCOUNT'}
@@ -220,6 +221,20 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
                 if width!=sum(sizes): failure(context,'PIECE output width differs from joined inputs')
             elif name=='POPCOUNT':
                 pass
+            elif name=='FLOAT_MULT':
+                if width not in {4,8} or any(s!=width for s in sizes):
+                    failure(context,'float arithmetic requires matching binary32/binary64 input/output widths')
+                # Payload ordering is scalar SSE destination-before-source;
+                # reject x87/vector/other multiplication rather than silently
+                # extending this source-specific rule to all FLOAT_MULT ops.
+                prefix=0xf3 if width==4 else 0xf2
+                opcode_start=1
+                if len(instruction_bytes)>1 and 0x40<=instruction_bytes[1]<=0x4f:
+                    opcode_start+=1
+                if (instruction_bytes[0]!=prefix or
+                        instruction_bytes[opcode_start:opcode_start+2]!=b'\x0f\x59' or
+                        len(instruction_bytes)<=opcode_start+2):
+                    failure(context,'FLOAT_MULT requires scalar SSE MULSS/MULSD instruction bytes matching operand width')
             elif name in PREDICATES:
                 if width!=1: failure(context,'predicate output width must be one byte')
                 if name.startswith('BOOL_') and any(s!=1 for s in sizes): failure(context,'boolean input width must be one byte')
@@ -303,7 +318,14 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
             # Every p-code label is a potential intra-instruction relative target.
             lines.append(f'{label(a,idx)}:;')
             context=contexts[(a,idx)];name_op=op['operation'];nodes=op['inputs'];out=op.get('output')
-            args=[expr(n,a,context) for n in nodes]
+            # A scalar register self-XOR defines zero independently of its old
+            # bytes (e.g. xor EAX,EAX). Fold only this exact varnode identity:
+            # RAM reads are effects and unique reads retain definition checks.
+            register_self_xor=(name_op=='INT_XOR' and
+                all(n['space']=='register' for n in nodes) and
+                integer(nodes[0]['offset'])==integer(nodes[1]['offset']) and
+                integer(nodes[0]['size'])==integer(nodes[1]['size']))
+            args=[] if register_self_xor else [expr(n,a,context) for n in nodes]
             # Evaluate data inputs once, in their raw order, before mutation.
             # RAM control targets and LOAD/STORE space ids are address metadata.
             for ni,arg in enumerate(args):
@@ -312,7 +334,8 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
                 lines.append(f'    v{ni} = {arg};')
                 args[ni]=f'v{ni}'
             w=integer(nodes[0]['size']); value=None
-            if name_op=='COPY' or name_op=='INT_ZEXT': value=args[0]
+            if register_self_xor: value='UINT64_C(0)'
+            elif name_op=='COPY' or name_op=='INT_ZEXT': value=args[0]
             elif name_op=='INT_SEXT': value=f'pcode::sign_extend({args[0]}, {w})'
             elif name_op in binary: value=f'({args[0]} {binary[name_op]} {args[1]})'
             elif name_op=='INT_NEGATE': value=f'~{args[0]}'
@@ -328,6 +351,7 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries):
             elif name_op=='SUBPIECE': value=f'pcode::subpiece({args[0]}, {args[1]})'
             elif name_op=='PIECE': value=f'(({args[0]} << {integer(nodes[1]["size"])*8}) | {args[1]})'
             elif name_op=='POPCOUNT': value=f'pcode::popcount({args[0]})'
+            elif name_op=='FLOAT_MULT': value=f'pcode::float_multiply({args[0]}, {args[1]}, {w})'
             elif name_op.startswith('FLOAT_'):
                 fargs=[f'pcode::floating({arg}, {integer(n["size"])})' for arg,n in zip(args,nodes)]
                 if name_op=='FLOAT_NAN': value=f'std::isnan({fargs[0]})'
@@ -424,7 +448,7 @@ def generate(paths, abi):
     code.append('} // namespace torchlight::pcode_generated\n')
     header='\n\n'.join(code)
     report=dict(schema=1,status='generated',original_elf_sha256=sha,
-        emitter='raw-schema2-scalar-cpp17-v2',abi_sha256=hashlib.sha256(json.dumps(abi,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+        emitter='raw-schema2-scalar-cpp17-v3',abi_sha256=hashlib.sha256(json.dumps(abi,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         generated_header_sha256=hashlib.sha256(header.encode()).hexdigest(),functions=reports,
         closure=dict(recursion='rejected',maximum_allowed_depth=64,maximum_selected_depth=max(depths.values()),
                      dependencies={entry:sorted(targets) for entry,targets in sorted(graph.items())}),

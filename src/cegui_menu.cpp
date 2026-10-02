@@ -1,4 +1,5 @@
 #include "torchlight/cegui_menu.hpp"
+#include "torchlight/ui_screen_scale.hpp"
 #include "torchlight/dds_texture.hpp"
 #include "torchlight/png_texture.hpp"
 #include <CEGUI.h>
@@ -547,8 +548,10 @@ struct CeguiMenu::Impl {
                     self(self, window->getChildAtIdx(n));
                 auto position = v.original_geometry.at(window).first;
                 auto size = v.original_geometry.at(window).second;
-                position.d_x.d_offset *= ratio; position.d_y.d_offset *= ratio;
-                size.d_x.d_offset *= ratio; size.d_y.d_offset *= ratio;
+                position.d_x.d_offset = ui_scale_offset(position.d_x.d_offset, ratio);
+                position.d_y.d_offset = ui_scale_offset(position.d_y.d_offset, ratio);
+                size.d_x.d_offset = ui_scale_offset(size.d_x.d_offset, ratio);
+                size.d_y.d_offset = ui_scale_offset(size.d_y.d_offset, ratio);
                 window->setPosition(position);
                 window->setSize(size);
             };

@@ -4,6 +4,9 @@
 #include <functional>
 
 namespace torchlight {
+// original-code: CGameUI::canLoad @0xa84d20 -> CMenuManager::canLoad
+// @0xc2b700 queries the separate filename-vector count, signed low32 >0.
+[[nodiscard]] bool save_list_can_load(std::size_t filename_count) noexcept;
 inline constexpr std::uint32_t kCheckpointFormatVersion = 7;
 inline constexpr std::size_t kMaximumCheckpointBytes = 32U * 1024U * 1024U;
 [[nodiscard]] std::vector<std::uint8_t> encode_checkpoint(const CampaignCheckpoint &);

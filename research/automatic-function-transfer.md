@@ -17,20 +17,22 @@
 3. `tools/lift_pcode.py` генерирует тела по raw operations. CMake делает это
    автоматически через `cmake/LiftedCode.cmake`. Header/report находятся только
    в ignored build. Обычная сборка не требует Ghidra или оригинальной игры.
-4. `src/ui_game_state.cpp` и `src/save_selection.cpp` связывают чтения/записи
+4. `src/ui_game_state.cpp`, `src/save_selection.cpp` и `src/ui_screen_scale.cpp` связывают чтения/записи
    с owned fields. Существующие Frontend/application consumers используют
    результаты. Чужая object layout не накладывается на C++ объект порта.
 5. Native comparison исполняет неизменённые полные ELF bodies и сравнивает
    generated production consumers. Реестр обновляется только после ревью;
    успех генерации не выставляет completion.
 
-Пример повторной генерации всех пяти тел:
+Пример повторной генерации всех девяти тел:
 
 ```sh
 python3 tools/lift_pcode.py \
   research/lifted-ui/00a828f0.json research/lifted-ui/00a82900.json \
   research/lifted-ui/00a84d30.json research/lifted-ui/00c2b9c0.json \
-  research/lifted-ui/00c33490.json --abi research/lifted-ui/abi.json \
+  research/lifted-ui/00c33490.json research/lifted-ui/00a84d20.json \
+  research/lifted-ui/00c2b700.json research/lifted-ui/00a83e70.json \
+  research/lifted-ui/00c6e410.json --abi research/lifted-ui/abi.json \
   --out build-cegui/generated/lifted/torchlight/generated/ui_state_queries.hpp \
   --report build-cegui/lifted-ui-code.json
 ```
@@ -44,6 +46,10 @@ python3 tools/lift_pcode.py \
 | `CGameUI::canContinue @0xa84d30` | 12 | pointer64 `+0x588` -> RDI, tail jump manager query |
 | `CMenuManager::canContinue @0xc2b9c0` | 12 | pointer64 `+0xde8` -> RDI, tail jump Continue query |
 | `CContinueGameMenu::canContinue @0xc33490` | 67 | empty/range exits; selected pointer; ordered HPf32 >0 -> AL; RET |
+| `CGameUI::canLoad @0xa84d20` | 12 | pointer64 `+0x588` -> RDI, tail jump manager query |
+| `CMenuManager::canLoad @0xc2b700` | 31 | Continue filename-vector bounds `+0x218/+0x220`, signed low32 count>0 -> AL |
+| `CGameUI::scaledY @0xa83e70` | 36 | named ratio -> GetFloat direct CALL, original private stack, scalar SSE multiplication |
+| `CDynamicPropertyFile::GetFloat @0xc6e410` | 41 | unsigned index/range, binary32 element or -1 fallback, no object writes |
 
 `canContinue` Ghidra body занимает 65 bytes: отсутствующие `66 90 @0xc334ce..cf`
 — недостижимое padding после RET, до следующего branch target. Полный symbol
@@ -86,6 +92,16 @@ would access outside the vector and is not a supported object precondition.
 SVB parsing, source sorting and model/level lifetimes are separate producers,
 not additional effects inside these five owning functions.
 
+The two `canLoad` bodies now consume the live frontend filename count and
+control Main New/Load routing. Their **separate** filename vector and signed
+low32 arithmetic are documented in [generated-save-list.md](generated-save-list.md).
+The scalar Y -> GetFloat direct-call closure supplies UiLayout/HUD/inventory
+offset geometry and native CEGUI resize setters. Borrowed property fields,
+stack slots, both getter exits and the floating-environment remainder are in
+[generated-ui-scale.md](generated-ui-scale.md). GetFloat and both canLoad
+queries are fully reviewed; scaledY remains partial for original MXCSR/fenv
+flags, traps and control modes.
+
 ## Compiler semantics and rejection
 
 Registers alias by byte offset, including EAX/RAX/AL. Only reviewed ABI inputs
@@ -93,7 +109,12 @@ start initialized. Unique bytes are local to each original instruction and
 alias within it. Operations evaluate inputs once in raw order before writes;
 truncation/extension/flags use unsigned arithmetic without signed C++ overflow.
 Scalar widths1..8, bool, shifts, POPCOUNT, binary32/64 comparisons/NaN, memory
-effects and static/internal branches are supported. Fast-math is rejected.
+effects and static/internal branches are supported. FLOAT_MULT is restricted
+to verified scalar-SSE MULSS/MULSD bytes with matching widths. Result bits
+preserve destination-first NaN payload and negative indefinite for infinity*zero;
+FP flags/traps/control modes remain outside this helper. Fast-math is rejected.
+Identical register varnodes in INT_XOR define zero without reading unknown
+incoming bytes; RAM/unique reads and all other missing-input checks stay strict.
 
 Approved direct CALL uses the **raw preceding stack operations** and exact
 original fallthrough return address. Callee RET reads/pops that slot and
@@ -103,17 +124,19 @@ Unknown targets, indirect calls/jumps, CALLOTHER, unimplemented float operations
 wide vector operations, wrong spaces/widths, recursion and closure depth>64 are
 rejected. Unmapped owner reads/writes and uninitialized executed operands fail
 explicitly; unsupported logic is never replaced with a dummy value.
-The real production cohort currently exercises tail calls; ordinary direct
-CALL stack transfer is tested by explicit compiler fixtures, not claimed as
-native game-call coverage.
+The production cohort exercises both tail calls and the original scaledY
+direct CALL to GetFloat, including its exact spill/push/return/pop operations.
+Both closure forms are compared against unchanged whole original bodies.
 
 ## Проверки и масштаб
 
-`tests/pcode_lifter_test.py`: 21 compiler/runtime checks, including strict C++17
+`tests/pcode_lifter_test.py`: 30 compiler/runtime checks, including strict C++17
 compilation, trapping UBSan, aliasing, widths, flags, AL return with nonzero high
 RAX, internal control flow, unknown dependencies, direct-call stack, preserved
 caller bytes, tail closure and recursive rejection. `tests/ui_game_state_test.cpp`
 exercises the real owned pair initializer and 25 request/clear combinations.
+Additional checks cover scalar-SSE binary32/64 result bits, NaN payload order,
+precision/underflow, fast-math rejection and register-only self-XOR initialization.
 
 `tests/compare_ui_game_state.py`: **2112** cases against unchanged two writer
 bodies, complete 0x1920-byte observation buffers after each operation, u32 bit
@@ -124,12 +147,34 @@ bodies and the production selector, including empty/range exits, nonselected
 live rows, signed zero, subnormal, infinity and NaN. Constructors/game/GUI are
 not executed in these native checks; nonfinite HP is raw calibration, not OTC
 checkpoint acceptance. Cold scene integration is established by code and build.
+`tests/compare_save_list.py`: **2634** cases against both complete canLoad
+bodies, observing all 5592 fixture bytes and deliberately different filename
+and save-state counts. `tests/compare_ui_scale_lift.py`: **3357** cases against
+whole scaledY/GetFloat bodies, including 2777 raw-bit scale results and 580
+property reads; full owner/vector/guard buffers remain unchanged.
 
 Initial scheduling audit: 3173 residual manual routes contain 679 with no
 indexed CALL, 1842 with only direct CALL and 652 with an indirect CALL. Inside
 the UI contour: 211 =35/117/59. These counts come from `auto_triage.build(root,4)`
 joined to the validated callsite index before this acceptance. The index omits
 tail jumps, so **679 is a candidate set, not generator eligibility or closure**.
+The subsequent raw-code batch screen covers **3162** residual manual bodies:
+**1541** local structural candidates and **475** with all supported transitive
+dependencies supplied across the four batches. These are generation candidates;
+none has a reviewed ABI or production owner from screening alone. The pinned
+exporter, rejection details and repeatable commands are in
+[function-lift-screening.md](function-lift-screening.md). This later selection
+uses sized symbols and current whole-function acceptance, and is not the same
+population as the earlier callsite-only scheduling audit.
 No whole-development speedup or percentage of automatically transferred game
-functions is measured. Five connected generated owning bodies are the current
-accepted scope; full function acceptance still requires owners and dependencies.
+functions is measured. Nine generated owning bodies are connected; eight have
+full acceptance and scaledY remains partial. The separate eight panel-query
+closures bring the ledger's full-function total to sixteen.
+
+Prior acceptance was re-reviewed after this additive cohort: the original
+five raw bodies/ABI entries, state-pair owner and selected-row/HP consumers are
+unchanged. canLoad replaces a separate frontend count predicate; new float
+semantics and register self-XOR preserve the previous integer/query behavior.
+The eight panel-query implementations and owned consumers are unchanged;
+CMake only adds generation inputs/probes/gates. Their relevant native and CPU
+checks are rerun with the final inputs before accepted hashes are refreshed.
