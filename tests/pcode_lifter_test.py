@@ -1,0 +1,332 @@
+#!/usr/bin/env python3
+"""Compiler/runtime semantics and fail-closed tests; synthetic raw fixtures only.
+
+Original-source differential comparison is a separate production test. These
+fixtures exercise aliasing, instruction-local temporaries, checked ABI and
+control transfers, without claiming an original function is fully closed.
+"""
+import copy
+import hashlib
+import importlib.util
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import unittest
+
+ROOT=Path(__file__).resolve().parents[1]
+spec=importlib.util.spec_from_file_location('lift_pcode',ROOT/'tools/lift_pcode.py')
+lift=importlib.util.module_from_spec(spec);spec.loader.exec_module(lift)
+SHA='1'*64
+
+
+def node(space,offset,size):
+    return dict(space=space,space_id={'const':48,'register':548,'unique':291,'ram':433}[space],
+                offset=hex(offset),size=size,constant=space=='const',register=None)
+
+
+def op(name,out,*inputs):
+    return dict(operation=name,opcode=lift.OPCODES.get(name,7),output=out,inputs=list(inputs))
+
+
+def instruction(addr,ops,fall=None):
+    return dict(address=f'0x{addr:08x}',bytes='90',fallthrough=None if fall is None else f'0x{fall:08x}',
+                pcode=[dict(o,index=i) for i,o in enumerate(ops)])
+
+
+def ret():
+    return [op('LOAD',node('register',0x288,8),node('const',433,8),node('register',0x20,8)),
+            op('INT_ADD',node('register',0x20,8),node('register',0x20,8),node('const',8,8)),
+            op('RETURN',None,node('register',0x288,8))]
+
+
+def function(rows):
+    sha=hashlib.sha256()
+    for i in rows: sha.update(i['address'].encode());sha.update(bytes.fromhex(i['bytes']))
+    return dict(schema=2,address=rows[0]['address'],original_elf_sha256=SHA,
+                address_and_instruction_bytes_sha256=sha.hexdigest(),instructions=rows)
+
+
+def abi(data,inputs=(),returns='uint64'):
+    return {
+                    'schema':1,'original_elf_sha256':SHA,'memory_space_id':433,
+                    'functions':{data['address']:{'return':returns,'input_registers':
+                       [dict(offset='0x20',size=8)]+[dict(offset=hex(o),size=s) for o,s in inputs]}}}
+
+
+def closure_abi(*descriptors):
+    result=dict(descriptors[0],functions={})
+    for descriptor in descriptors:result['functions'].update(descriptor['functions'])
+    return result
+
+
+class PcodeLifterTest(unittest.TestCase):
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory(prefix='pcode-lifter-',dir='/tmp')
+        self.path=Path(self.temp.name)
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def generate(self,data,descriptor=None):
+        functions=data if isinstance(data,list) else [data]
+        paths=[]
+        for i,function in enumerate(functions):
+            p=self.path/f'raw{i}.json';p.write_text(json.dumps(function));paths.append(p)
+        return lift.generate(paths,descriptor or closure_abi(*(abi(d) for d in functions)))
+
+    def execute(self,data,body,descriptor=None):
+        compiler=shutil.which('g++') or shutil.which('clang++')
+        if not compiler:self.skipTest('C++17 compiler unavailable')
+        header,_=self.generate(data,descriptor)
+        (self.path/'generated.hpp').write_text(header)
+        source='''#include "generated.hpp"
+#include <cassert>
+#include <map>
+struct Memory : torchlight::pcode::Memory {
+ std::map<std::uint64_t,std::uint8_t> bytes;
+ std::size_t reads=0;
+ std::uint64_t read(std::uint64_t a,std::size_t w) override {
+  ++reads; std::uint64_t v=0;for(std::size_t i=0;i<w;++i)v|=std::uint64_t{bytes.at(a+i)}<<(i*8);return v;
+ }
+ void write(std::uint64_t a,std::size_t w,std::uint64_t v) override {
+  for(std::size_t i=0;i<w;++i)bytes[a+i]=static_cast<std::uint8_t>(v>>(i*8));
+ }
+};
+int main(){Memory memory; memory.write(0x1000,8,0xf00d);
+ torchlight::pcode::RegisterFile registers; registers.write(0x20,8,0x1000);
+'''+body+'\n}\n'
+        (self.path/'test.cpp').write_text(source)
+        result=subprocess.run([compiler,'-std=c++17','-O2','-Wall','-Wextra','-Werror','-pedantic',
+             '-fsanitize=undefined','-fsanitize-undefined-trap-on-error','-I',str(ROOT/'include'),
+             str(self.path/'test.cpp'),'-o',str(self.path/'run')],text=True,capture_output=True)
+        self.assertEqual(result.returncode,0,result.stderr)
+        result=subprocess.run([str(self.path/'run')],text=True,capture_output=True)
+        self.assertEqual(result.returncode,0,result.stderr)
+
+    def test_register_byte_aliases_and_real_ret(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',0x1122334455667788,8)),
+             op('COPY',node('register',0,1),node('const',0xaa,1)),
+             op('COPY',node('register',1,1),node('const',0xbb,1))]+ret())])
+        self.execute(data,'''auto value=torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);
+assert(value==0x112233445566bbaaULL);assert(registers.read(0,4)==0x5566bbaa);
+assert(registers.read(0x20,8)==0x1008);assert(registers.read(0x288,8)==0xf00d);assert(memory.reads==1);''')
+
+    def test_alias_zext_and_masked_constant(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',0xffffffffffffffff,8)),
+              op('COPY',node('register',0,4),node('const',0x123456789,4)),
+              op('INT_ZEXT',node('register',0,8),node('register',0,4))]+ret())])
+        self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0x23456789);')
+
+    def test_reviewed_al_return_does_not_leak_pointer_high_bytes(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',0x100000,8)),
+              op('COPY',node('register',0,1),node('const',0,1))]+ret())])
+        descriptor=abi(data)
+        descriptor['functions'][data['address']]['return_register']=dict(offset='0x0',size=1)
+        self.execute(data,'''assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0);
+assert(registers.read(0,8)==0x100000);''',descriptor)
+
+    def test_unique_alias_piece_subpiece_and_signed_extension(self):
+        data=function([instruction(0x100,[
+             op('COPY',node('unique',0x100,8),node('const',0x1122334455667788,8)),
+             op('COPY',node('unique',0x101,1),node('const',0xaa,1)),
+             op('SUBPIECE',node('unique',0x200,2),node('unique',0x100,8),node('const',0,4)),
+             op('PIECE',node('unique',0x300,4),node('const',0x1234,2),node('unique',0x200,2)),
+             op('INT_SEXT',node('register',0,8),node('const',0x80,1)),
+             op('INT_ZEXT',node('unique',0x400,8),node('unique',0x300,4)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x400,8))]+ret())])
+        self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0x1234aa08);')
+
+    def test_scalar_overflow_signed_boundaries_and_large_shifts(self):
+        data=function([instruction(0x100,[
+             op('INT_ADD',node('register',0,1),node('const',255,1),node('const',1,1)),
+             op('INT_ZEXT',node('register',0,8),node('register',0,1)),
+             op('INT_LEFT',node('unique',0x100,8),node('const',1,8),node('const',64,8)),
+             op('INT_RIGHT',node('unique',0x200,8),node('const',1,8),node('const',255,8)),
+             op('INT_SRIGHT',node('unique',0x300,8),node('const',1<<63,8),node('const',255,8)),
+             op('INT_SCARRY',node('unique',0x400,1),node('const',127,1),node('const',1,1)),
+             op('INT_SBORROW',node('unique',0x500,1),node('const',128,1),node('const',1,1)),
+             op('INT_CARRY',node('unique',0x600,1),node('const',255,1),node('const',1,1)),
+             op('INT_SLESS',node('unique',0x700,1),node('const',128,1),node('const',127,1)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x100,8)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x200,8)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x300,8)),
+             *[op('INT_ZEXT',node('unique',o+8,8),node('unique',o,1)) for o in [0x400,0x500,0x600,0x700]],
+             *[op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',o+8,8)) for o in [0x400,0x500,0x600,0x700]],
+             ]+ret())])
+        self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==3);')
+
+    def test_internal_relative_target_and_address_branch(self):
+        data=function([instruction(0x100,[
+            op('COPY',node('register',0,8),node('const',1,8)),
+            op('CBRANCH',None,node('const',2,4),node('const',1,1)),
+            op('COPY',node('register',0,8),node('const',99,8)),
+            op('INT_ADD',node('register',0,8),node('register',0,8),node('const',3,8)),
+            op('BRANCH',None,node('ram',0x200,8))]),
+            instruction(0x150,[op('COPY',node('register',0,8),node('const',999,8))],0x200),
+            instruction(0x200,ret())])
+        self.execute(data,'assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==4);')
+
+    def test_temporaries_reset_at_instruction_boundary(self):
+        data=function([instruction(0x100,[op('COPY',node('unique',0x100,8),node('const',99,8))],0x101),
+                       instruction(0x101,[op('COPY',node('register',0,8),node('unique',0x100,8))]+ret())])
+        with self.assertRaisesRegex(lift.LiftError,'0x00000101 pcode\\[0\\].*use before definition'):
+            self.generate(data)
+
+    def test_path_dependent_unique_is_checked_on_executed_read(self):
+        data=function([instruction(0x100,[
+             op('CBRANCH',None,node('const',2,4),node('const',1,1)),
+             op('COPY',node('unique',0x100,8),node('const',99,8)),
+             op('COPY',node('register',0,8),node('unique',0x100,8))]+ret())])
+        self.execute(data,'''bool failed=false;try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("0x00000100 pcode[2]")!=std::string::npos;}assert(failed);''')
+
+    def test_unreviewed_register_is_not_silently_initialized(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('register',0x38,8))]+ret())])
+        self.execute(data,'''registers.write(0x38,8,42);bool failed=false;
+try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}catch(const std::runtime_error&){failed=true;}assert(failed);''')
+        self.execute(data,'''registers.write(0x38,8,42);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==42);''',abi(data,[(0x38,8)]))
+
+    def test_missing_required_input_and_invalid_return_sentinel(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',1,8))]+ret())])
+        self.execute(data,'''bool failed=false;try{torchlight::pcode_generated::fn_00000100(memory,registers,0xbad);}
+catch(const std::runtime_error&){failed=true;}assert(failed);''')
+        descriptor=abi(data,[(0x38,8)])
+        self.execute(data,'''bool failed=false;try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error&){failed=true;}assert(failed);''',descriptor)
+
+    def test_float_nan_comparison_and_memory_read_order(self):
+        data=function([instruction(0x100,[
+             op('FLOAT_NAN',node('unique',0,1),node('ram',0x2000,4)),
+             op('FLOAT_EQUAL',node('unique',1,1),node('ram',0x2000,4),node('const',0,4)),
+             op('FLOAT_NOTEQUAL',node('unique',2,1),node('ram',0x2000,4),node('const',0,4)),
+             op('INT_ZEXT',node('register',0,8),node('unique',0,1)),
+             op('INT_ZEXT',node('unique',0x100,8),node('unique',1,1)),
+             op('INT_ZEXT',node('unique',0x200,8),node('unique',2,1)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x100,8)),
+             op('INT_ADD',node('register',0,8),node('register',0,8),node('unique',0x200,8))]+ret())])
+        self.execute(data,'''memory.write(0x2000,4,0x7fc00000);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==2);assert(memory.reads==4);''')
+
+    def test_rejects_unsupported_calls_external_targets_spaces_and_widths(self):
+        base=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',1,8))]+ret())])
+        cases=[]
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][0]=dict(op('CALL',None,node('ram',0x900,8)),index=0);cases.append((d,'unresolved dependency'))
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][0]=dict(op('BRANCH',None,node('ram',0x900,8)),index=0);cases.append((d,'branch leaves approved function'))
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][0]['inputs'][0]['size']=16;cases.append((d,'unsupported varnode width'))
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][0]['inputs'][0]['space']='bogus';cases.append((d,'unsupported varnode space'))
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][1]['inputs'][0]['offset']='0xdead';cases.append((d,'not reviewed RAM id'))
+        d=copy.deepcopy(base);d['instructions'][0]['pcode'][0]['opcode']=999;cases.append((d,'opcode/index disagrees'))
+        d=copy.deepcopy(base);d['address_and_instruction_bytes_sha256']='0'*64;cases.append((d,'instruction byte SHA differs'))
+        for data,error in cases:
+            with self.subTest(error=error),self.assertRaisesRegex(lift.LiftError,error):self.generate(data)
+
+    def test_rejected_cli_never_publishes_partial_header(self):
+        data=function([instruction(0x100,[op('CALL',None,node('ram',0x900,8))]+ret())])
+        p=self.path/'raw.json';p.write_text(json.dumps(data))
+        ap=self.path/'abi.json';ap.write_text(json.dumps(abi(data)))
+        out=self.path/'generated.hpp';out.write_text('previous valid output\n')
+        report=self.path/'report.json'
+        result=subprocess.run(['python3',str(ROOT/'tools/lift_pcode.py'),str(p),'--abi',str(ap),
+             '--out',str(out),'--report',str(report)],capture_output=True,text=True)
+        self.assertEqual(result.returncode,2)
+        self.assertEqual(out.read_text(),'previous valid output\n')
+        self.assertEqual(json.loads(report.read_text())['status'],'rejected')
+
+    def test_cli_cannot_overwrite_original_source_inputs(self):
+        data=function([instruction(0x100,ret())])
+        p=self.path/'raw.json';p.write_text(json.dumps(data));original=p.read_bytes()
+        ap=self.path/'abi.json';ap.write_text(json.dumps(abi(data,returns='void')))
+        for out,report in [(p,self.path/'report.json'),(self.path/'header.hpp',p)]:
+            result=subprocess.run(['python3',str(ROOT/'tools/lift_pcode.py'),str(p),'--abi',str(ap),
+                 '--out',str(out),'--report',str(report)],capture_output=True,text=True)
+            self.assertEqual(result.returncode,2)
+            self.assertEqual(p.read_bytes(),original)
+
+    def test_deterministic_output_and_precise_inventory(self):
+        data=function([instruction(0x100,[op('COPY',node('register',0,8),node('const',1,8))]+ret())])
+        first=self.generate(data);second=self.generate(data)
+        self.assertEqual(first,second)
+        self.assertEqual(first[1]['functions'][0]['opcode_inventory'],{'COPY':1,'INT_ADD':1,'LOAD':1,'RETURN':1})
+        self.assertEqual(first[1]['functions'][0]['unresolved_dependencies'],[])
+        self.assertIn('input_sha256',first[1]['functions'][0])
+
+    def test_direct_call_raw_stack_effects_and_preserved_caller_register(self):
+        caller=function([instruction(0x100,[
+            op('COPY',node('register',0x18,8),node('const',40,8)),
+            op('INT_SUB',node('register',0x20,8),node('register',0x20,8),node('const',8,8)),
+            op('STORE',None,node('const',433,8),node('register',0x20,8),node('const',0x105,8)),
+            op('CALL',None,node('ram',0x200,8)),
+            # This raw effect after CALL must still consume the real callee state.
+            op('INT_ADD',node('register',0,8),node('register',0,8),node('register',0x18,8))],0x105),
+            instruction(0x105,ret())])
+        callee=function([instruction(0x200,[op('COPY',node('register',0,8),node('const',2,8))]+ret())])
+        self.execute([caller,callee],'''registers.write(0x30,8,0x9876);
+assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==42);
+assert(registers.read(0x20,8)==0x1008);assert(registers.read(0x18,8)==40);
+assert(registers.read(0x30,8)==0x9876);assert(memory.read(0xff8,8)==0x105);''')
+        _,report=self.generate([caller,callee])
+        self.assertEqual(report['closure']['maximum_selected_depth'],2)
+        self.assertEqual(report['functions'][0]['approved_dependencies'],[
+            dict(kind='direct_call',instruction='0x00000100',pcode_index=3,target='0x00000200',return_address='0x00000105')])
+
+    def test_direct_call_does_not_invent_missing_raw_stack_push(self):
+        caller=function([instruction(0x100,[op('CALL',None,node('ram',0x200,8))],0x105),instruction(0x105,ret())])
+        callee=function([instruction(0x200,ret())])
+        self.execute([caller,callee],'''bool failed=false;
+try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("sentinel")!=std::string::npos;}assert(failed);''',
+                     closure_abi(abi(caller,returns='void'),abi(callee,returns='void')))
+
+    def test_two_level_tail_jump_returns_reviewed_al_without_second_ret(self):
+        outer=function([instruction(0x100,[op('BRANCH',None,node('ram',0x200,8))])])
+        inner=function([instruction(0x200,[op('BRANCH',None,node('ram',0x300,8))])])
+        leaf=function([instruction(0x300,[op('COPY',node('register',0,8),node('const',0x12345600,8)),
+                   op('COPY',node('register',0,1),node('const',0,1))]+ret())])
+        descriptors=[abi(d) for d in [outer,inner,leaf]]
+        for descriptor in descriptors:
+            next(iter(descriptor['functions'].values()))['return_register']=dict(offset='0x0',size=1)
+        self.execute([outer,inner,leaf],'''assert(torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d)==0);
+assert(registers.read(0,8)==0x12345600);assert(registers.read(0x20,8)==0x1008);assert(memory.reads==1);''',closure_abi(*descriptors))
+
+    def test_callee_entry_does_not_read_undeclared_caller_register(self):
+        caller=function([instruction(0x100,[op('COPY',node('register',0x18,8),node('const',40,8)),
+                                           op('BRANCH',None,node('ram',0x200,8))])])
+        callee=function([instruction(0x200,[op('COPY',node('register',0,8),node('register',0x18,8))]+ret())])
+        self.execute([caller,callee],'''bool failed=false;
+try{torchlight::pcode_generated::fn_00000100(memory,registers,0xf00d);}
+catch(const std::runtime_error& e){failed=std::string(e.what()).find("uninitialized register 0x18")!=std::string::npos;}assert(failed);''')
+
+    def test_recursive_closure_and_unknown_indirect_dependencies_are_rejected(self):
+        a=function([instruction(0x100,[op('BRANCH',None,node('ram',0x200,8))])])
+        b=function([instruction(0x200,[op('BRANCH',None,node('ram',0x100,8))])])
+        with self.assertRaisesRegex(lift.LiftError,'recursive direct-call/tail-jump closure'):
+            self.generate([a,b])
+        self_call=function([instruction(0x100,[op('CALL',None,node('ram',0x100,8))],0x105),instruction(0x105,ret())])
+        with self.assertRaisesRegex(lift.LiftError,'recursive direct-call/tail-jump closure'):
+            self.generate(self_call)
+        for operation in ['CALLIND','CALLOTHER','BRANCHIND']:
+            data=function([instruction(0x100,[op(operation,None,node('register',0,8))]+ret())])
+            with self.subTest(operation=operation),self.assertRaisesRegex(lift.LiftError,'unresolved dependency'):
+                self.generate(data)
+
+    def test_public_runtime_helpers_reject_invalid_width_before_shift(self):
+        data=function([instruction(0x100,ret())])
+        self.execute(data,'''using namespace torchlight::pcode;
+for(std::size_t width : {std::size_t{0},std::size_t{9},std::size_t{1000},std::size_t{SIZE_MAX}}){
+ unsigned failed=0;
+ try{(void)sign_extend(1,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)signed_less(1,2,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)carry(1,2,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)signed_carry(1,2,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)signed_borrow(1,2,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)shift_left(1,64,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)shift_right(1,64,width);}catch(const std::runtime_error&){++failed;}
+ try{(void)shift_signed_right(1,64,width);}catch(const std::runtime_error&){++failed;}
+ assert(failed==8);
+}''',abi(data,returns='void'))
+
+
+if __name__=='__main__':unittest.main()
