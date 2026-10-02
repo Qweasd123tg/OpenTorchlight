@@ -1757,10 +1757,11 @@
         "0x86fb40"
       ],
       "status": "partial",
-      "boundary": "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open.",
+      "boundary": "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy/sell are connected to player purchase, owned potion sale/rebuy and wallet. Nullable original manager/level/player, other items and full native merchant machinery remain open.",
       "evidence": [
         "research/recovery-gameplay.md",
-        "research/recovery-contracts.json"
+        "research/recovery-contracts.json",
+        "research/merchant-sale-buyback.md"
       ],
       "implementation": [
         "src/economy.cpp",
@@ -1816,6 +1817,30 @@
         "tests/inventory_stack_probe.cpp"
       ],
       "comparison": "6005 unchanged whole findFreeSlot body comparisons with two explicit constant-zero pane adapters; dense occupied potion pane plus one empty slot only."
+    },
+    {
+      "addresses": [
+        "0xa8f780"
+      ],
+      "status": "partial",
+      "boundary": "Normal identified potion sale/rebuy projection: whole owned stack, count-one MERCHANTINFINITE clone, evaluated barter price/wallet and per-NPC floor-persistent ownership. Connected keyboard shop buy/sell/buyback consumers. Native drag/split/pet/equip/stash, full capacity/deletion, GUI pointers, quest effects, sounds and resource-manager ownership remain open.",
+      "evidence": [
+        "research/merchant-sale-buyback.md"
+      ],
+      "implementation": [
+        "src/player_session.cpp",
+        "src/merchant.cpp",
+        "src/application.cpp",
+        "src/checkpoint.cpp",
+        "src/save_codec.cpp",
+        "include/torchlight/entity_world.hpp"
+      ],
+      "tests": [
+        "tests/merchant_test.cpp",
+        "tests/trace_merchant_transfer.py",
+        "tests/typed_migration_process.py"
+      ],
+      "comparison": "21 unchanged native whole caller/price/gold/stat execution paths with explicit external dependency adapters; addressed ASM and real resource-backed production ownership/codec tests."
     }
   ],
   "port_systems": [

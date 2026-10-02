@@ -4,7 +4,7 @@
 #include <functional>
 
 namespace torchlight {
-inline constexpr std::uint32_t kCheckpointFormatVersion = 6;
+inline constexpr std::uint32_t kCheckpointFormatVersion = 7;
 inline constexpr std::size_t kMaximumCheckpointBytes = 32U * 1024U * 1024U;
 [[nodiscard]] std::vector<std::uint8_t> encode_checkpoint(const CampaignCheckpoint &);
 [[nodiscard]] CampaignCheckpoint decode_checkpoint(const std::vector<std::uint8_t> &);

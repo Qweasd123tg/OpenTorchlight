@@ -66,6 +66,10 @@ public:
                                std::int32_t original_type_id) const noexcept {
         return hierarchy_->is_a_id(candidate, original_type_id);
     }
+    [[nodiscard]] bool is_a(std::u16string_view candidate,
+                            std::u16string_view requested) const noexcept {
+        return hierarchy_->is_a(candidate, requested);
+    }
     [[nodiscard]] std::size_t indexed_resource_count() const noexcept {
         return candidates_.size();
     }

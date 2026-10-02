@@ -31,6 +31,8 @@ public:
     [[nodiscard]] InventoryId pick_up(RuntimeEntityWorld& world, std::uint64_t entity_id,
                                       LogicRuntime& logic);
     [[nodiscard]] PurchaseResult buy_potion(const PotionMerchantCatalog&, std::int64_t merchant_guid, std::int64_t item_guid);
+    [[nodiscard]] SaleResult sell_potion(const PotionMerchantCatalog&, RuntimeEntity& merchant, InventoryId item);
+    [[nodiscard]] PurchaseResult buy_back_potion(const PotionMerchantCatalog&, RuntimeEntity& merchant, InventoryId item);
     [[nodiscard]] float barter_percent() const;
     [[nodiscard]] ConsumableUse use_consumable(InventoryId id);
     [[nodiscard]] ConsumableUse use_recovery(bool health);

@@ -24,6 +24,7 @@ template <class A> void versioned_fields(A& a, const PlayerCheckpoint& s) { play
 template <class A, class S> void entity_versioned_fields(A& a, S& s) {
     if (a.version >= 2) a(s.gold_amount, s.experience_reward, s.player_kill, s.reward_claimed);
     if (a.version >= 4) a(s.consumable);
+    if (a.version >= 7) a(s.merchant_buyback);
 }
 template <class A> void versioned_fields(A& a, RuntimeEntity& s) { entity_versioned_fields(a, s); }
 template <class A> void versioned_fields(A& a, const RuntimeEntity& s) { entity_versioned_fields(a, s); }

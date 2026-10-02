@@ -1117,6 +1117,12 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_executable(merchant_test tests/merchant_test.cpp)
     target_link_libraries(merchant_test PRIVATE torchlight_core)
     add_test(NAME merchant_prices COMMAND merchant_test)
+    if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_merchant_transfer_trace COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/trace_merchant_transfer.py
+            --original ${TORCHLIGHT_ORIGINAL} --output ${CMAKE_CURRENT_BINARY_DIR}/merchant-transfer-native.json)
+        set_tests_properties(original_merchant_transfer_trace PROPERTIES LABELS "reference" TIMEOUT 60 SKIP_RETURN_CODE 77)
+    endif()
     if(TORCHLIGHT_GAME_DIR)
         add_test(NAME original_merchant_purchases COMMAND merchant_test "${TORCHLIGHT_GAME_DIR}/pak.zip")
     endif()
@@ -1385,7 +1391,8 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     foreach(_ot_test IN LISTS _ot_tests)
         if(_ot_test IN_LIST _ot_ui_integration_tests)
             set_tests_properties(${_ot_test} PROPERTIES LABELS "render;ui-integration")
-        elseif(_ot_test MATCHES "^original_.*_comparison$" OR _ot_test STREQUAL "original_level_entry_dispatch")
+        elseif(_ot_test MATCHES "^original_.*_comparison$" OR _ot_test STREQUAL "original_level_entry_dispatch"
+                OR _ot_test STREQUAL "original_merchant_transfer_trace")
             set_tests_properties(${_ot_test} PROPERTIES LABELS "reference")
         elseif(_ot_test MATCHES "_render$" OR _ot_test STREQUAL "gles_render_smoke")
             set_tests_properties(${_ot_test} PROPERTIES LABELS "render")
@@ -1494,6 +1501,12 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
             --legacy ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/typed-v5-player.otc
             --output-dir ${CMAKE_CURRENT_BINARY_DIR}/typed-migration-evidence)
         set_tests_properties(original_typed_save_migration PROPERTIES LABELS "assets" TIMEOUT 300)
+        add_test(NAME original_v6_save_migration COMMAND ${Python3_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/typed_migration_process.py
+            --probe $<TARGET_FILE:typed_migration_test> --pak ${TORCHLIGHT_GAME_DIR}/pak.zip
+            --legacy ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/typed-v6-player.otc
+            --output-dir ${CMAKE_CURRENT_BINARY_DIR}/typed-migration-evidence)
+        set_tests_properties(original_v6_save_migration PROPERTIES LABELS "assets" TIMEOUT 300)
     endif()
     if(TARGET application_scenario_probe AND TORCHLIGHT_GAME_DIR)
         add_test(NAME application_typed_combat_render COMMAND ${Python3_EXECUTABLE}

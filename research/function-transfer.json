@@ -3826,7 +3826,7 @@
         "wired": true,
         "compared": true
       },
-      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json; research/merchant-sale-buyback.md",
       "implementation": "src/economy.cpp; src/player_session.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
       "tests": "tests/compare_economy.py; tests/merchant_test.cpp; tests/recovery_codegen_test.py",
       "comparison": "Whole owning-body identity and arithmetic/order static comparison; original_economy_comparison executes unchanged buy/sell bodies with explicit getPlayer/getEffectValue stubs.",
@@ -3834,7 +3834,7 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open."
+          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy/sell have real potion purchase/sale/rebuy/wallet/NPC stock consumers. Nullable original manager/level/player, other item types and full merchant machinery remain open."
         ]
       }
     },
@@ -3846,7 +3846,7 @@
         "wired": true,
         "compared": true
       },
-      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json",
+      "evidence": "research/recovery-gameplay.md; research/recovery-contracts.json; research/merchant-sale-buyback.md",
       "implementation": "src/economy.cpp; src/player_session.cpp; tools/recovery_templates/gameplay_numeric.hpp.in",
       "tests": "tests/compare_economy.py; tests/merchant_test.cpp; tests/recovery_codegen_test.py",
       "comparison": "Whole owning-body identity and arithmetic/order static comparison; original_economy_comparison executes unchanged buy/sell bodies with explicit getPlayer/getEffectValue stubs.",
@@ -3854,7 +3854,7 @@
       "completion": {
         "status": "partial",
         "open_items": [
-          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy is connected to player merchant purchase. Nullable original manager/level/player and full sale consumer remain open."
+          "Full buy/sell scalar branches reviewed for finite nonnegative in-range prices and evaluated barter. Generated contribution feeds buy/sell APIs; buy/sell have real potion purchase/sale/rebuy/wallet/NPC stock consumers. Nullable original manager/level/player, other item types and full merchant machinery remain open."
         ]
       }
     },
@@ -3877,6 +3877,26 @@
       "tests": "tests/inventory_test.cpp; tests/consumable_test.cpp; tests/compare_inventory_stacks.py; tests/inventory_stack_probe.cpp",
       "comparison": "6005 unchanged native full-body comparisons with two explicit pane-selection ABI adapters; whole fit, GUID routing and incoming-count replacement order.",
       "notes": "One original owning function remains partial; production scalar candidate selection consumes already evaluated owned descriptors."
+    },
+    "0x00a8f780": {
+      "symbol": "CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",
+      "stages": {
+        "analyzed": false,
+        "ported": true,
+        "wired": true,
+        "compared": true
+      },
+      "completion": {
+        "status": "partial",
+        "open_items": [
+          "Only normal identified known potion free-destination transfer is translated. Full original drag/split/pet/stash/equip, capacity failure/deletion, GUI safe pointers, quest/callback/sound and allocator/resource-manager ownership remain open."
+        ]
+      },
+      "evidence": "research/merchant-sale-buyback.md",
+      "implementation": "src/player_session.cpp; src/merchant.cpp; src/application.cpp; src/checkpoint.cpp; src/save_codec.cpp; include/torchlight/entity_world.hpp",
+      "tests": "tests/merchant_test.cpp; tests/trace_merchant_transfer.py; tests/typed_migration_process.py",
+      "comparison": "21 unchanged native menuItemClick plus price/gold/stat body traces on explicit raw state/dependency adapters; real pak NPC and production sale/rebuy/OTC ownership tests; static effect-to-consumer review.",
+      "notes": "Whole original function analysis remains false; legacy flags refer only to the documented connected potion transfer boundary. OTC v7 and keyboard presentation are portable adapters."
     }
   }
 }

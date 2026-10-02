@@ -5,6 +5,7 @@
 #include "torchlight/damage.hpp"
 #include "torchlight/progression.hpp"
 #include "torchlight/equipment.hpp"
+#include "torchlight/inventory.hpp"
 #include "torchlight/level_scene.hpp"
 #include "torchlight/logic_runtime.hpp"
 #include "torchlight/master_resource_index.hpp"
@@ -71,6 +72,10 @@ struct RuntimeEntity {
     // Already evaluated amounts; never recompute on save restoration.
     std::optional<std::int32_t> gold_amount, experience_reward;
     bool player_kill = false, reward_claimed = false;
+    // Owned sold potion instances; original merchant inventory disables stack
+    // merging at generateMerchantInventory @0x836d16. Per entity/floor, never
+    // a catalog/global GUID bucket. OTC v7 retains these evaluated instances.
+    std::vector<InventoryItem> merchant_buyback{};
 };
 
 struct DamageResult {

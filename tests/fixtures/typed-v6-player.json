@@ -1,0 +1,11 @@
+{
+  "checkpoint_sha256": "6a426dfc1f4157b3c2868cd2301ba4f7892246c772fe71b2c5371eef2f020599",
+  "format": 6,
+  "producer": "Unchanged OTC v6 writer at local commit 1b8878c; typed_migration_test rebuilt against its torchlight_core.",
+  "writer_executable_sha256": "2eb6dd7b6d64ee380d40c376472bb6cc3c90437319a911387817144f8a4ef9db",
+  "input_checkpoint": "tests/fixtures/typed-v5-player.otc",
+  "input_checkpoint_sha256": "d4ed214328527287ad063ea485c24d5eb58b3b7fff948436e8957c228cac1cc2",
+  "pak_sha256": "8650ad752a81e7289e94e7b1bd3c86404ff2b0c74d7abab34fb8fc4d515064d8",
+  "preparation": "Run rebuilt typed_migration_test with real pak, frozen v5 input, fresh output path and expected input version 5, before any v7 codec edits. No version bytes or payload fields patched.",
+  "scope": "Port-owned generated checkpoint. It contains neither original asset bytes nor original SVB data. v6 has no merchant ownership field; v7 migrates it to empty stock."
+}

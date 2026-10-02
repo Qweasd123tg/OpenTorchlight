@@ -1,5 +1,7 @@
 #include "torchlight/player_session.hpp"
 #include "torchlight/save_store.hpp"
+#include <algorithm>
+#include <limits>
 #include <iostream>
 using namespace torchlight;
 namespace {
@@ -33,6 +35,74 @@ void real(const char*path){PakArchive pak(path);MasterResourceIndex index(parse_
  const auto before_pickup=restored.inventory().items().size();
  require(restored.pick_up(world,world.entities().back().id,logic)!=0,"real potion pickup failed");
  require(restored.inventory().items().size()==before_pickup&&count(restored,low[0]->item.resource_guid)==23,"picked/bought real potion did not merge");
+ // Own sale stock on an actual resource-spawned NPC, not on the catalog GUID.
+ require(world.consume_spawn_requests({{42,npc->name,u"Monsters",1}},logic).entities_created==1,"merchant spawn failed");
+ const auto merchant_id=world.entities().back().id;
+ auto* owner=world.find(merchant_id);require(owner&&owner->resource_guid==m->guid,"wrong merchant owner");
+ const auto full=std::find_if(restored.inventory().items().begin(),restored.inventory().items().end(),
+     [&](const auto& item){return item.resource_guid==low[0]->item.resource_guid&&item.consumable->count==20;});
+ require(full!=restored.inventory().items().end(),"full purchased stack absent");
+ const auto full_id=full->id;
+ const auto sale_price=equipment_sell_price(low[0]->prices,20,true,restored.barter_percent());
+ const auto before_sale=restored.gold();
+ const auto sold=restored.sell_potion(catalog,*owner,full_id);
+ require(sold.status==SaleStatus::sold&&sold.price==sale_price&&restored.gold()==before_sale+sale_price,"whole stack sale wallet");
+ require(!restored.inventory().find(full_id)&&count(restored,low[0]->item.resource_guid)==3&&
+         owner->merchant_buyback.size()==1&&owner->merchant_buyback[0].id==full_id&&
+         owner->merchant_buyback[0].consumable->count==20,"sale did not transfer whole owned stack");
+ const auto resource_identity=checkpoint_resource_identity(pak);
+ EnemyController enemies(31);
+ const auto capture_trade=[&](const PlayerSession& player){
+     CampaignCheckpoint c;c.slot="merchant";c.revision=1;c.resource_identity=resource_identity;
+     c.seed=31;c.class_guid=proto.guid;c.character_name="merchant";c.player=CheckpointAccess::capture(player);
+     FloorCheckpoint floor;floor.address=c.current;floor.layout_identity=checkpoint_layout_identity(manifest);
+     floor.world=CheckpointAccess::capture(world);floor.logic=CheckpointAccess::capture(logic);
+     floor.enemies=CheckpointAccess::capture(enemies);c.floors.push_back(std::move(floor));return c;
+ };
+ restored.give_gold(-std::numeric_limits<std::int32_t>::max());
+ const auto denied_state=encode_checkpoint(capture_trade(restored));
+ require(restored.buy_back_potion(catalog,*owner,full_id).status==PurchaseStatus::insufficient_gold&&
+         denied_state==encode_checkpoint(capture_trade(restored)),"failed buyback changed money/ownership");
+ restored.give_gold(100000);
+ const auto rebuy_price=equipment_buy_price(low[0]->prices,20,true,restored.barter_percent());
+ const auto before_rebuy=restored.gold();const auto bought=restored.buy_back_potion(catalog,*owner,full_id);
+ require(bought.status==PurchaseStatus::purchased&&bought.paid==rebuy_price&&
+         restored.gold()==before_rebuy-rebuy_price&&count(restored,low[0]->item.resource_guid)==23&&
+         owner->merchant_buyback.empty(),"finite stack was cloned or bought one bottle at a time");
+ require(restored.inventory().find(bought.item)->consumable->count==20,"buyback split across the remaining 3-stack");
+ require(restored.buy_back_potion(catalog,*owner,full_id).status==PurchaseStatus::unavailable,"finite stock sold twice");
+ PlayerSession single(proto,88,&types);single.give_gold(10000);
+ const auto bottle=single.buy_potion(catalog,m->guid,low[0]->item.resource_guid);
+ require(single.inventory().find(bottle.item)->consumable->count==1,"single bottle fixture");
+ require(single.sell_potion(catalog,*owner,bottle.item).status==SaleStatus::sold,"single sale failed");
+ require(single.buy_back_potion(catalog,*owner,bottle.item).status==PurchaseStatus::purchased&&
+         single.buy_back_potion(catalog,*owner,bottle.item).status==PurchaseStatus::purchased&&
+         count(single,low[0]->item.resource_guid)==2&&owner->merchant_buyback.size()==1&&
+         owner->merchant_buyback[0].consumable->count==1,"original single MERCHANTINFINITE clone branch lost");
+ const auto trade=decode_checkpoint(encode_checkpoint(capture_trade(single)));
+ require(trade.floors[0].world.entities.back().merchant_buyback.size()==1&&
+         encode_checkpoint(trade)==encode_checkpoint(capture_trade(single)),"v7 buyback codec not canonical");
+ LogicRuntime restored_logic(manifest);RuntimeEntityWorld restored_world(manifest,index,loader,spawn,type_index,31,1);
+ EnemyController restored_enemies(31);
+ CheckpointAccess::restore_floor(trade.floors[0],restored_world,restored_logic,restored_enemies);
+ require(restored_world.find(merchant_id)->merchant_buyback[0].id==bottle.item,"floor restore lost merchant instance");
+ auto malformed=trade.floors[0];malformed.world.entities.back().merchant_buyback[0].consumable->effects[0].value+=1;
+ rejects([&]{CheckpointAccess::restore_floor(malformed,restored_world,restored_logic,restored_enemies);},"changed buyback effects restored");
+ require(restored_world.find(merchant_id)->merchant_buyback[0].consumable->effects[0].value==
+         owner->merchant_buyback[0].consumable->effects[0].value,"failed restore committed merchant data");
+ malformed=trade.floors[0];malformed.world.entities.back().merchant_buyback.push_back(malformed.world.entities.back().merchant_buyback.front());
+ rejects([&]{CheckpointAccess::validate(malformed);},"duplicate merchant owned ID accepted");
+ auto unsupported=owner->merchant_buyback.front();unsupported.consumable->effects[0].value+=1;
+ require(!catalog.trade_offer(m->guid,unsupported),"unknown rolled potion accepted for trade");
+ RuntimeEntity stranger=*owner;stranger.merchant_buyback.clear();
+ require(single.buy_back_potion(catalog,stranger,bottle.item).status==PurchaseStatus::unavailable,"buyback leaked to another same-GUID NPC");
+ stranger.alive=false;
+ require(single.sell_potion(catalog,stranger,single.inventory().items().back().id).status==SaleStatus::unavailable,"dead merchant accepted sale");
+ single.give_gold(std::numeric_limits<std::int32_t>::max());
+ const auto remaining=std::find_if(single.inventory().items().begin(),single.inventory().items().end(),
+     [&](const auto& item){return item.resource_guid==low[0]->item.resource_guid;});
+ require(single.sell_potion(catalog,*owner,remaining->id).status==SaleStatus::sold&&
+         single.gold()==std::numeric_limits<std::int32_t>::max(),"sale wallet did not use original saturation");
  std::cout<<"Tarn potions="<<m->potions.size()<<" unsupported="<<m->unsupported_entries.size()<<" first_price="<<price<<'\n';
 }
 }

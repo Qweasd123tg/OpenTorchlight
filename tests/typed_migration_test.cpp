@@ -69,7 +69,7 @@ int main(int argc,char**argv) {
         actual.player=CheckpointAccess::capture(session);
         require(encode_checkpoint(actual)==encode_checkpoint(canonical),"repeat hydration changed checkpoint");
         const auto encoded=encode_checkpoint(actual);
-        require(encoded[8]==kCheckpointFormatVersion && encode_checkpoint(decode_checkpoint(encoded))==encoded,"v6 codec is not canonical");
+        require(encoded[8]==kCheckpointFormatVersion && encode_checkpoint(decode_checkpoint(encoded))==encoded,"current codec is not canonical");
         require(!std::filesystem::exists(argv[3]),"refusing to overwrite output");
         std::ofstream out(argv[3],std::ios::binary);out.write(reinterpret_cast<const char*>(encoded.data()),static_cast<std::streamsize>(encoded.size()));
         out.close();require(bool(out),"checkpoint output failed");

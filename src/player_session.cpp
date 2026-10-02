@@ -206,6 +206,59 @@ PurchaseResult PlayerSession::buy_potion(const PotionMerchantCatalog& catalog,st
     gold_-=price;
     return {PurchaseStatus::purchased,id,price};
 }
+SaleResult PlayerSession::sell_potion(const PotionMerchantCatalog& catalog,RuntimeEntity& merchant,InventoryId id) {
+    if(!health_.alive())return {SaleStatus::dead,0,0};
+    if(combat_.attack_in_progress()||skill_cast_.active())return {SaleStatus::busy,0,0};
+    if(merchant.kind!=MasterResourceKind::monster||!merchant.alive||!merchant.enabled||!merchant.visible)
+        return {SaleStatus::unavailable,0,0};
+    const auto* item=inventory_.find(id);
+    if(!item)return {SaleStatus::unavailable,0,0};
+    const auto* offer=catalog.trade_offer(merchant.resource_guid,*item);
+    if(!offer||inventory_.equipped_slot(id)||merchant.merchant_buyback.size()>=8192)
+        return {SaleStatus::unsupported,0,0};
+    validate_consumable(*item->consumable);
+    const auto price=equipment_sell_price(offer->prices,static_cast<std::int32_t>(item->consumable->count),true,barter_percent());
+    auto stock=merchant.merchant_buyback;
+    stock.push_back(*item); // No merge: original merchant inventory+0x14 is zero.
+    auto bag=inventory_;
+    if(!bag.erase(id))return {SaleStatus::unavailable,0,0};
+    // All allocations finish before ownership/money commit. Original normal
+    // sale calls price/giveGold/soldItem, then remove/pickup at 0xa90737..0xa9080d.
+    // Linux soldItem -> incrementStat @0xece340 is REP RET (no statistic effect).
+    // Sounds, native capacity/deletion and UI pointers remain open.
+    using std::swap;
+    swap(inventory_,bag);
+    merchant.merchant_buyback.swap(stock);
+    give_gold(price);
+    return {SaleStatus::sold,id,price};
+}
+PurchaseResult PlayerSession::buy_back_potion(const PotionMerchantCatalog& catalog,RuntimeEntity& merchant,InventoryId id) {
+    if(!health_.alive())return {PurchaseStatus::dead,0,0};
+    if(combat_.attack_in_progress()||skill_cast_.active())return {PurchaseStatus::busy,0,0};
+    if(merchant.kind!=MasterResourceKind::monster||!merchant.alive||!merchant.enabled||!merchant.visible)
+        return {PurchaseStatus::unavailable,0,0};
+    const auto found=std::find_if(merchant.merchant_buyback.begin(),merchant.merchant_buyback.end(),
+                                [id](const auto& item){return item.id==id;});
+    if(found==merchant.merchant_buyback.end())return {PurchaseStatus::unavailable,0,0};
+    const auto* offer=catalog.trade_offer(merchant.resource_guid,*found);
+    if(!offer)return {PurchaseStatus::unsupported,0,0};
+    validate_consumable(*found->consumable);
+    const auto price=equipment_buy_price(offer->prices,static_cast<std::int32_t>(found->consumable->count),true,barter_percent());
+    if(gold_<price)return {PurchaseStatus::insufficient_gold,0,0};
+    auto bag=inventory_;
+    const auto result=bag.store(found->consumable->count==1?offer->item:*found);
+    auto stock=merchant.merchant_buyback;
+    // original-code @0xa901b8 / @0xa9086f: count==1 && MERCHANTINFINITE
+    // recreates from original data; all accepted resource definitions set the
+    // flag (unitInit @0x88967d). Thus even a sold single potion remains infinite.
+    // A larger stack transfers as a whole finite instance, never one bottle.
+    if(found->consumable->count>1)stock.erase(stock.begin()+(found-merchant.merchant_buyback.begin()));
+    using std::swap;
+    swap(inventory_,bag);
+    merchant.merchant_buyback.swap(stock);
+    gold_-=price;
+    return {PurchaseStatus::purchased,result,price};
+}
 ConsumableUse PlayerSession::use_consumable(InventoryId id) {
     if (!health_.alive()) return ConsumableUse::dead;
     const auto* item = inventory_.find(id);

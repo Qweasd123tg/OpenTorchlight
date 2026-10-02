@@ -773,6 +773,8 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
             if (skills_catalog) session.attach_skill_catalog(skills_catalog);
             bool skill_panel = false, quest_panel = false;
             std::size_t selected_skill = 0, selected_quest = 0, selected_offer = 0;
+            enum class MerchantPage { buy, sell, buyback };
+            MerchantPage merchant_page = MerchantPage::buy;
             // Runtime entity IDs start at 1; 0 is the established invalid ID.
             // Explicitly initialized ID avoids GCC optional payload false positives.
             std::uint64_t merchant_entity = 0;
@@ -1354,6 +1356,7 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     quest_panel = quest_menu.open();
                 };
                 auto set_merchant_open = [&](std::uint64_t entity) {
+                    if (entity != merchant_entity) { merchant_page = MerchantPage::buy; selected_offer = 0; }
                     merchant_entity = entity;
                     // isa_merchant/default_tab are original inputs with no
                     // port source (open): entities are not RTTI; the tip ids
@@ -1453,23 +1456,45 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     } else if (!inventory_view.open && (key == torchlight::physical_key::Q || key == torchlight::physical_key::E)) {
                         inventory_view.status = torchlight::consumable_use_message(session.use_recovery(key == torchlight::physical_key::Q));
                     } else if (inventory_view.open && merchant_entity) {
-                        const auto* npc = entity_world.find(merchant_entity);
+                        auto* npc = entity_world.find(merchant_entity);
                             if (!npc || !npc->alive || !npc->enabled || !npc->visible) {
                                 set_merchant_open(0); set_inventory_open(false);
                             inventory_view.status = "MERCHANT NO LONGER AVAILABLE";
                         } else {
                             const auto offers = merchant_catalog.offers(npc->resource_guid, session.progression().level);
-                            if (selected_offer >= offers.size()) selected_offer = 0;
-                            if (key == torchlight::physical_key::UP && selected_offer) --selected_offer;
-                            else if (key == torchlight::physical_key::DOWN && selected_offer + 1 < offers.size()) ++selected_offer;
-                            else if ((key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) && selected_offer < offers.size()) {
+                            std::vector<torchlight::InventoryId> owned;
+                            if (merchant_page == MerchantPage::sell) {
+                                for (const auto& item : session.inventory().items())
+                                    if (merchant_catalog.trade_offer(npc->resource_guid, item)) owned.push_back(item.id);
+                            } else if (merchant_page == MerchantPage::buyback) {
+                                for (const auto& item : npc->merchant_buyback)
+                                    if (merchant_catalog.trade_offer(npc->resource_guid, item)) owned.push_back(item.id);
+                            }
+                            const auto rows = merchant_page == MerchantPage::buy ? offers.size() : owned.size();
+                            if (selected_offer >= rows) selected_offer = 0;
+                            if (key == torchlight::physical_key::TAB) {
+                                merchant_page = merchant_page == MerchantPage::buy ? MerchantPage::sell :
+                                    merchant_page == MerchantPage::sell ? MerchantPage::buyback : MerchantPage::buy;
+                                selected_offer = 0;
+                            }
+                            else if (key == torchlight::physical_key::UP && selected_offer) --selected_offer;
+                            else if (key == torchlight::physical_key::DOWN && selected_offer + 1 < rows) ++selected_offer;
+                            else if ((key == torchlight::physical_key::ENTER || key == torchlight::physical_key::KPENTER) && selected_offer < rows) {
                                 const auto dx = npc->position[0] - player_motion.position()[0];
                                 const auto dz = npc->position[2] - player_motion.position()[2];
                                 // prototype: reuse the pre-existing interaction dispatch radius below;
                                 // native merchant distance/gates are not yet recovered (large-13 evidence).
                                 if (std::hypot(dx, dz) > 2.25F) inventory_view.status = "MERCHANT OUT OF REACH";
+                                else if (merchant_page == MerchantPage::sell) {
+                                    const auto result = session.sell_potion(merchant_catalog, *npc, owned[selected_offer]);
+                                    inventory_view.status = torchlight::sale_message(result.status);
+                                    if (result.status == torchlight::SaleStatus::sold)
+                                        std::cout << "merchant_sale=" << result.item << " price=" << result.price << " gold=" << session.gold() << '\n';
+                                }
                                 else {
-                                    const auto result = session.buy_potion(merchant_catalog, npc->resource_guid, offers[selected_offer]->item.resource_guid);
+                                    const auto result = merchant_page == MerchantPage::buy
+                                        ? session.buy_potion(merchant_catalog, npc->resource_guid, offers[selected_offer]->item.resource_guid)
+                                        : session.buy_back_potion(merchant_catalog, *npc, owned[selected_offer]);
                                     inventory_view.status = torchlight::purchase_message(result.status);
                                     if (result.status == torchlight::PurchaseStatus::purchased)
                                         std::cout << "merchant_purchase=" << result.item << " paid=" << result.paid << " gold=" << session.gold() << '\n';
@@ -2234,13 +2259,30 @@ int torchlight::run_application(const ApplicationOptions& options, ApplicationHo
                     const auto* npc = entity_world.find(merchant_entity);
                     const auto* merchant = npc ? merchant_catalog.find(npc->resource_guid) : nullptr;
                     overlay.push_back({merchant ? narrow_ascii(merchant->name) : "MERCHANT UNAVAILABLE", true});
-                    overlay.push_back({"PORT SHOP | UP/DOWN SELECT | ENTER BUY ONE | ESC CLOSE", false});
+                    const auto page_name = merchant_page == MerchantPage::buy ? "BUY POTIONS" :
+                        merchant_page == MerchantPage::sell ? "SELL POTIONS" : "BUYBACK";
+                    overlay.push_back({std::string(page_name) + " | TAB SWITCH | UP/DOWN SELECT | ENTER CONFIRM | ESC CLOSE", false});
                     if (merchant) {
-                        const auto offers = merchant_catalog.offers(merchant->guid, session.progression().level);
-                        for (std::size_t i = 0; i < offers.size(); ++i) {
-                            const auto* offer = offers[i];
-                            const auto price = torchlight::equipment_buy_price(offer->prices, 1, true, session.barter_percent());
-                            overlay.push_back({narrow_ascii(offer->item.display_name) + " | " + std::to_string(price) + " GOLD", i == selected_offer});
+                        if (merchant_page == MerchantPage::buy) {
+                            const auto offers = merchant_catalog.offers(merchant->guid, session.progression().level);
+                            for (std::size_t i = 0; i < offers.size(); ++i) {
+                                const auto* offer = offers[i];
+                                const auto price = torchlight::equipment_buy_price(offer->prices, 1, true, session.barter_percent());
+                                overlay.push_back({narrow_ascii(offer->item.display_name) + " | " + std::to_string(price) + " GOLD", i == selected_offer});
+                            }
+                        } else {
+                            const auto& owned = merchant_page == MerchantPage::sell ? session.inventory().items() : npc->merchant_buyback;
+                            std::size_t row = 0;
+                            for (const auto& item : owned) {
+                                const auto* offer = merchant_catalog.trade_offer(merchant->guid, item);
+                                if (!offer) continue;
+                                const auto count = static_cast<std::int32_t>(item.consumable->count);
+                                const auto price = merchant_page == MerchantPage::sell
+                                    ? torchlight::equipment_sell_price(offer->prices, count, true, session.barter_percent())
+                                    : torchlight::equipment_buy_price(offer->prices, count, true, session.barter_percent());
+                                overlay.push_back({narrow_ascii(item.display_name) + " x" + std::to_string(count) +
+                                    " | " + std::to_string(price) + " GOLD", row++ == selected_offer});
+                            }
                         }
                     }
                     overlay.push_back({inventory_view.status, false});

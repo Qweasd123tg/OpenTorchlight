@@ -112,6 +112,16 @@ void item(const InventoryItem &i) {
 void entity(const RuntimeEntity &e) {
     require(static_cast<unsigned>(e.kind) <= static_cast<unsigned>(MasterResourceKind::prop),
             "invalid entity kind");
+    require(e.merchant_buyback.size()<=8192,"oversized merchant checkpoint");
+    if(!e.merchant_buyback.empty())require(e.kind==MasterResourceKind::monster,"merchant stock on non-character");
+    std::unordered_set<InventoryId> stock_ids;
+    for(const auto& owned:e.merchant_buyback) {
+        require(owned.id!=0&&stock_ids.insert(owned.id).second,"invalid duplicate merchant item ID");
+        item(owned);
+        require(owned.consumable&&!owned.weapon&&!owned.armor&&!owned.two_handed&&
+                owned.consumable->unavailable_reason.empty()&&owned.consumable->uses==1,
+                "unsupported merchant checkpoint item");
+    }
     if (e.consumable) {
         try { validate_consumable(*e.consumable); } catch (const std::exception& ex) { throw CheckpointError(ex.what()); }
         require(e.kind == MasterResourceKind::item && e.inventory_eligible && !e.weapon_item && !e.armor_item && !e.gold_amount,
@@ -417,6 +427,23 @@ void CheckpointAccess::restore_floor(const FloorCheckpoint &s, RuntimeEntityWorl
     for (const auto &e : s.world.entities) {
         const auto *r = world.resources_->find(e.resource_guid);
         require(r && r->kind == e.kind, "saved entity resource absent or changed kind");
+        if(!e.merchant_buyback.empty()) {
+            require(world.unit_types_->is_a(r->unit_type,u"MERCHANT"),"saved buyback owner is not a merchant");
+            for(const auto& owned:e.merchant_buyback) {
+                const auto* record=world.resources_->find(owned.resource_guid);
+                require(record&&record->kind==MasterResourceKind::item&&
+                        world.unit_types_->is_a(record->unit_type,u"POTION"),"saved buyback is not a potion resource");
+                const auto definition=world.definitions_->load(*record);
+                const auto consumable=load_consumable(world.definitions_->archive(),*definition,
+                    world.attack_effect_catalog_?&*world.attack_effect_catalog_:nullptr);
+                auto mesh=unit_model_path(*definition);
+                if(const auto* entry=world.definitions_->archive().find_normalized(mesh))mesh=entry->name;
+                require(consumable&&consumable->unavailable_reason.empty()&&
+                        same_consumable(*consumable,*owned.consumable)&&owned.name==record->name&&
+                        owned.display_name==record->display_name&&owned.unit_type==record->unit_type&&
+                        owned.mesh_path==mesh,"saved buyback descriptor differs from potion resources");
+            }
+        }
     }
     require(logic.states_.size() == s.logic.entries.size(),
             "saved logic object set differs from layout");

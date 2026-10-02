@@ -96,6 +96,12 @@ CPU/resource/reference gates с отчётом по системам игры. �
 6005 сравнений с неизменённым телом `findFreeSlot` и production regressions:
 [inventory stack pickup](research/inventory-stack-pickup.md).
 
+В магазине TAB переключает покупку, продажу и выкуп проверенных зелий.
+Целые проданные стопки принадлежат конкретному NPC; выкуп сохраняет исходную
+ветку MERCHANTINFINITE. **OTC v7** сохраняет этот запас вместе с этажом и читает
+v1–v6. Доказательства, проверки и оставшиеся границы:
+[merchant sale and buyback](research/merchant-sale-buyback.md).
+
 Ниже описан предшествующий перенос через собственный runtime; путь Main/credits
 заменён библиотечным выше. Общие механизмы пока используются другими страницами.
 Текущий пакет — [входное меню и painter](research/mainmenu-controller-painter.md).

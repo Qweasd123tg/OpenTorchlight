@@ -55,5 +55,17 @@ std::vector<const PotionOffer*> PotionMerchantCatalog::offers(std::int64_t id,st
     return result;
 }
 const PotionOffer* PotionMerchantCatalog::offer(std::int64_t id,std::int64_t item,std::int32_t level)const {for(const auto*o:offers(id,level))if(o->item.resource_guid==item)return o;return nullptr;}
+const PotionOffer* PotionMerchantCatalog::trade_offer(std::int64_t id,const InventoryItem& item)const noexcept {
+    const auto* merchant=find(id);
+    if(!merchant||!item.consumable||item.weapon||item.armor||item.two_handed)return nullptr;
+    for(const auto& offer:merchant->potions) {
+        const auto& known=offer.item;
+        if(item.resource_guid==known.resource_guid&&item.name==known.name&&
+           item.display_name==known.display_name&&item.unit_type==known.unit_type&&
+           item.mesh_path==known.mesh_path&&same_consumable(*item.consumable,*known.consumable))return &offer;
+    }
+    return nullptr;
+}
 const char* purchase_message(PurchaseStatus s)noexcept{switch(s){case PurchaseStatus::purchased:return "POTION PURCHASED";case PurchaseStatus::unsupported:return "MERCHANT SERVICE NOT IMPLEMENTED";case PurchaseStatus::unavailable:return "ITEM NOT AVAILABLE";case PurchaseStatus::insufficient_gold:return "NOT ENOUGH GOLD";case PurchaseStatus::busy:return "FINISH CURRENT ACTION FIRST";case PurchaseStatus::dead:return "PLAYER IS DEAD";}return "PURCHASE FAILED";}
+const char* sale_message(SaleStatus s)noexcept{switch(s){case SaleStatus::sold:return "POTION SOLD";case SaleStatus::unsupported:return "ITEM CANNOT BE SOLD";case SaleStatus::unavailable:return "ITEM OR MERCHANT UNAVAILABLE";case SaleStatus::busy:return "FINISH CURRENT ACTION FIRST";case SaleStatus::dead:return "PLAYER IS DEAD";}return "SALE FAILED";}
 } // namespace torchlight
