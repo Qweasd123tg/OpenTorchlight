@@ -149,7 +149,8 @@ def merge(slug):
 
 
 def drop(slug):
-    git("worktree", "remove", "--force", str(BASE / slug))
+    git("worktree", "remove", "--force", str(BASE / slug), check=False)
+    git("worktree", "prune")
     git("branch", "-D", f"decomp/{slug}", check=False)
     data = claims()
     if data.pop(slug, None) is not None:
