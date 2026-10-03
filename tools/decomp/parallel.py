@@ -132,6 +132,9 @@ def new(slug, tus):
         if (src_build / "trial" / tu).exists():
             (path / "build-decomp" / "trial").mkdir(parents=True, exist_ok=True)
             shutil.copy(src_build / "trial" / tu, path / "build-decomp" / "trial" / tu)
+    if (src_build / "trial" / "summary.json").exists():
+        (path / "build-decomp" / "trial").mkdir(parents=True, exist_ok=True)
+        shutil.copy(src_build / "trial" / "summary.json", path / "build-decomp" / "trial" / "summary.json")
     (path / "build-decomp" / "WORKER.json").write_text(json.dumps({"slug": slug, "tus": tus}, indent=1))
     for tu in tus:
         subprocess.run([sys.executable, str(path / "tools" / "decomp" / "scaffold.py"), tu], cwd=path, check=True,
