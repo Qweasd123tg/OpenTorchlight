@@ -23,17 +23,23 @@ public:
     const std::wstring& GetGroupName();
     void SetGroupName(const std::wstring& name);
     CDataGroup* AddDataGroup(const std::wstring& name);
-    bool LoadFile(const std::wstring& file, CTimerStatics* timers);
-    bool LoadFile(const std::wstring& file, iDataFileSaveAndLoad* style, CTimerStatics* timers);
+    // No caller reads a result: both overloads end without setting rax.
+    void LoadFile(const std::wstring& file, CTimerStatics* timers);
+    void LoadFile(const std::wstring& file, iDataFileSaveAndLoad* style, CTimerStatics* timers);
     void SaveToFile(const std::wstring& file);
+    const std::wstring& GetDataValue(const std::wstring& name, const std::wstring& defaultValue);
+
+    unsigned int GetNumberOfDataGroups() { return m_DataGroups.size(); }
+    CDataGroup* GetDataGroup(unsigned int index) { return m_DataGroups[index]; }
+    TRepository<std::wstring>* getRepository() { return m_pRepository; }
 
     int m_iNameID;
     TRepository<std::wstring>* m_pRepository;
     TArrayList<CDataValue*> m_DataValues;
     TArrayList<CDataGroup*> m_DataGroups;
     CDataGroup* m_pParent;
-    bool m_b58;
-    bool m_b59;
+    bool m_b58; // dirty (setDirty)
+    bool m_b59; // taken from the CFileSystem cache; values are shared
 };
 
 #endif
