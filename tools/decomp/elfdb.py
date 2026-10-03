@@ -525,6 +525,10 @@ def build(elf_path):
                 return weight
             if class_key(cls) and class_key(cls) == name_key(files[tu]["name"]):
                 return weight
+            # Free-function namespaces live in a TU named after them with a prefix
+            # (MATH:: in UtilitiesMath.cpp); upper-case scope = namespace, not a class.
+            if cls.isupper() and len(cls) >= 4 and name_key(files[tu]["name"]).endswith(cls.lower()):
+                return weight * 0.5
             return 0.0
 
         bounds = [-1] + anchored + [len(order)]
