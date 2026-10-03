@@ -109,6 +109,9 @@ class Normalizer:
 
     def branch(self, insn_index, target, start, end, offsets):
         if start <= target < end:
+            labels = getattr(self, "labels", None)
+            if labels and target in labels:
+                return f"L{labels[target]}"
             pos = bisect.bisect_left(offsets, target)
             return f"L{pos}" if pos < len(offsets) and offsets[pos] == target else f"L?{target - start:#x}"
         return None
@@ -134,13 +137,24 @@ class Normalizer:
             labels.append(self.branch(k, target, start, end, offsets))
         return f"jmp *[table:{','.join(labels)}](,{register},8)"
 
+    @staticmethod
+    def padding(mnemonic, operands):
+        return (mnemonic in ("nop", "nopw", "nopl", "xchg") and (mnemonic != "xchg" or operands == "%ax,%ax")
+                or mnemonic.startswith(("data16", "cs")))
+
     def normalize(self, insns, start, end):
         offsets = [i[0] for i in insns]
+        # Branch labels count kept instructions only: alignment padding differs
+        # between the original and our object and must not shift the indices.
+        self.labels = {}
+        kept = 0
+        for address, mnemonic, operands in insns:
+            self.labels[address] = kept
+            if not self.padding(mnemonic, operands):
+                kept += 1
         result = []
         for k, (address, mnemonic, operands) in enumerate(insns):
-            if mnemonic in ("nop", "nopw", "nopl", "xchg") and (mnemonic != "xchg" or operands == "%ax,%ax"):
-                continue
-            if mnemonic.startswith(("data16", "cs")):
+            if self.padding(mnemonic, operands):
                 continue
             nxt = offsets[k + 1] if k + 1 < len(offsets) else end
             operands = operands.split("#", 1)[0].strip() if "#" in operands and "(%rip)" in operands else operands

@@ -16,6 +16,10 @@ public:
     // Counts the remaining time down; false once it has run out.
     bool update(float elapsed);
 
+    float getTimeRemaining() { return m_fTimeRemaining; }
+    void setTimeRemaining(float time) { m_fTimeRemaining = time; }
+    std::wstring getName() { return m_sName; }
+
 private:
     float m_fTimeRemaining;
     std::wstring m_sName;

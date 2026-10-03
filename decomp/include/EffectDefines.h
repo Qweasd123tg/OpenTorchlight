@@ -1,0 +1,50 @@
+#ifndef EFFECTDEFINES_H
+#define EFFECTDEFINES_H
+
+#include <string>
+
+// Effect activation and stat modifier names. Internal linkage: every including
+// TU constructs its own copy. Enumerator names are ours; values follow the
+// table order.
+
+enum EEFFECT_ACTIVATION
+{
+    EFFECT_ACTIVATION_PASSIVE,
+    EFFECT_ACTIVATION_DYNAMIC,
+    EFFECT_ACTIVATION_TRANSFER,
+    EFFECT_ACTIVATION_COUNT
+};
+
+// Partial: the effect type values are not recovered yet.
+enum EEFFECT_TYPE
+{
+};
+
+static const std::wstring gEffect_Activation_Names[] =
+{
+    L"PASSIVE",
+    L"DYNAMIC",
+    L"TRANSFER",
+};
+
+static const std::wstring gEFFECT_STAT_MODIFIER_NAMES[] =
+{
+    L"MELEE",
+    L"RANGED",
+    L"DEFENSE",
+    L"MAGIC",
+    L"LEVEL",
+    L"OWNERLEVEL",
+};
+
+static const std::string gEFFECT_STAT_MODIFIER_ICON_NAMES[] =
+{
+    "iconmelee",
+    "iconranged",
+    "icondefense",
+    "iconmagic",
+    "iconmagic",
+    "iconmagic",
+};
+
+#endif
