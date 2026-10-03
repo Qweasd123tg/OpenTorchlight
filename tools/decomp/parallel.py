@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Parallel decomp work: one git worktree and branch per worker.
 
+    python3 tools/decomp/parallel.py queue [--limit 30]  # next TUs, dependency-ready first
+    python3 tools/decomp/parallel.py claim w7 [--budget 25000]  # worktree with the next batch
     python3 tools/decomp/parallel.py new ai AIFlagManager.cpp AISkillManager.cpp
     python3 tools/decomp/parallel.py list
     python3 tools/decomp/parallel.py merge ai      # merge decomp/ai into the current branch
@@ -16,6 +18,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -25,6 +28,78 @@ import elfdb  # noqa: E402
 
 ROOT = elfdb.ROOT
 BASE = Path(os.environ.get("OTL_DECOMP_WORKTREES", "/tmp/opencode/decomp-wt"))
+
+
+CLAIMS = ROOT / "build-decomp" / "claims.json"
+WRITTEN = ("function", "ctor", "dtor", "static")
+# Reserved for generators or special handling instead of the worker queue.
+RESERVED_SUFFIX = ("Descriptor.cpp", "binreloc.c")
+LARGE_TU = 60000
+
+
+def claims():
+    return json.loads(CLAIMS.read_text()) if CLAIMS.exists() else {}
+
+
+def save_claims(data):
+    CLAIMS.parent.mkdir(parents=True, exist_ok=True)
+    CLAIMS.write_text(json.dumps(data, indent=1))
+
+
+def candidates(db):
+    """Open game TUs: (missing base headers, bytes, name, functions), readiest and smallest first."""
+    claimed = {tu for tus in claims().values() for tu in tus}
+    headers = {p.stem for p in (ROOT / "decomp" / "include").glob("*.h")}
+    by_tu = {}
+    for f in db["functions"].values():
+        if f["kind"] in WRITTEN:
+            by_tu.setdefault(f["tu"], []).append(f)
+    rows = []
+    for t in db["tus"]:
+        name = t["name"]
+        funcs = by_tu.get(t["id"], [])
+        if (t["kind"] != "game" or not funcs or (ROOT / "decomp" / "src" / name).exists() or name in claimed
+                or name.endswith(RESERVED_SUFFIX)):
+            continue
+        size = sum(f["size"] for f in funcs)
+        if size > LARGE_TU:
+            continue
+        missing = set()
+        for cls in {f["scope"] for f in funcs if f.get("scope")}:
+            for b in db["classes"].get(cls, {}).get("bases", []):
+                base = b["class"]
+                if "::" not in base and base.lstrip("C") not in headers and base[1:] not in headers:
+                    missing.add(base)
+        rows.append((len(missing), size, name, len(funcs)))
+    return sorted(rows)
+
+
+def queue(limit):
+    db = elfdb.load_db()
+    for missing, size, name, count in candidates(db)[:limit]:
+        print(f"{name:40} {count:4} functions {size:7} bytes  missing base headers: {missing}")
+
+
+def claim(slug, budget):
+    db = elfdb.load_db()
+    rows = candidates(db)
+    if not rows:
+        raise SystemExit("queue is empty")
+    seed = rows[0]
+    stem = re.sub(r"(Descriptor|Manager|Menu|menu)?\.cpp$", "", seed[2]).lower()
+    batch, total = [seed[2]], seed[1]
+    # Same-family TUs first (shared headers), then the next ready ones.
+    family = [r for r in rows[1:] if r[2].lower().startswith(stem[:6])]
+    for r in family + [r for r in rows[1:] if r not in family]:
+        if total + r[1] > budget or len(batch) >= 10:
+            continue
+        batch.append(r[2])
+        total += r[1]
+    data = claims()
+    data[slug] = batch
+    save_claims(data)
+    new(slug, batch)
+    print(f"claimed {len(batch)} TUs, {total} bytes: {' '.join(batch)}")
 
 
 def git(*args, cwd=ROOT, check=True):
@@ -76,6 +151,9 @@ def merge(slug):
 def drop(slug):
     git("worktree", "remove", "--force", str(BASE / slug))
     git("branch", "-D", f"decomp/{slug}", check=False)
+    data = claims()
+    if data.pop(slug, None) is not None:
+        save_claims(data)
 
 
 def main():
@@ -87,8 +165,17 @@ def main():
     sub.add_parser("list")
     for name in ("merge", "drop"):
         sub.add_parser(name).add_argument("slug")
+    q = sub.add_parser("queue")
+    q.add_argument("--limit", type=int, default=30)
+    c = sub.add_parser("claim")
+    c.add_argument("slug")
+    c.add_argument("--budget", type=int, default=25000)
     args = parser.parse_args()
-    if args.command == "new":
+    if args.command == "queue":
+        queue(args.limit)
+    elif args.command == "claim":
+        claim(args.slug, args.budget)
+    elif args.command == "new":
         new(args.slug, args.tus)
     elif args.command == "list":
         listing()
