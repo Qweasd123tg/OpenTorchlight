@@ -1,4 +1,10 @@
 {
+ "0x5932e0": {
+  "name": "CAstarPathfinder::findNearestOpenDirected(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",
+  "killed": 8,
+  "tried": 10,
+  "source": "7f31425c14509ca2"
+ },
  "0x6f90e0": {
   "name": "CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*)",
   "killed": 5,
