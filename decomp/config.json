@@ -1,0 +1,7 @@
+{
+  "schema": 1,
+  "compiler": "GCC 4.4.7 20120313 (Red Hat 4.4.7-3), binutils 2.20.51.0.2-5.36.el6",
+  "cflags": ["-O2", "-fno-strict-aliasing"],
+  "include": ["decomp/include"],
+  "system_include": ["@OGRE@/OgreMain/include", "third_party/cegui-0.6.2/include"]
+}

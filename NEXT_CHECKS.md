@@ -1,6 +1,8 @@
-# Действующий пакет и история переноса
+# История переноса (заморожено)
 
-Текущий пакет — CMainMenu + CDropdownMenu и их исходная библиотечная цепочка внутри
+> **Заморожено 2026-10-03.** Действующий процесс — [decomp](decomp/README.md) и [AGENTS.md](AGENTS.md). Документ остаётся справочником по поведению; его процессные указания (контракты, стадии, пакеты, очереди) не действуют.
+
+Прежний пакет — CMainMenu + CDropdownMenu и их исходная библиотечная цепочка внутри
 `research/ui-contour.json`. Процесс —
 [research/code-first.md](research/code-first.md), схема и инструменты —
 [research/codefirst-tooling.md](research/codefirst-tooling.md).
@@ -21,7 +23,7 @@ approved direct-call/tail closure и checked owner bindings. Десять име
 без автоматической приёмки ABI/owners.
 Сборка генерирует код сама; новые cohorts принимаются после ревью владельцев и
 зависимостей, без автоматического повышения completion.
-Текущий приоритет пользователя — [массовый перенос всей игры](research/mass-transfer-engine.md)
+Прежний приоритет — [массовый перенос всей игры](research/mass-transfer-engine.md)
 через shared-machine backend. Следующие задачи выбираются по общим блокерам:
 indirect dispatch, неподдержанные операции, library/image ABI, исключения и lifetime.
 Исторические preview/pet/difficulty, scene FX, resolution/FSAA и native saves
