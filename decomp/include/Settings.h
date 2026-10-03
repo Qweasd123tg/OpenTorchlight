@@ -7,6 +7,7 @@
 // Property indices registered by CSettings.
 extern unsigned int KSETTINGS_S_ZIP_LOADING;
 extern unsigned int KSETTINGS_ZIP_COUNT;
+extern unsigned int KSETTINGS_DEBUG_LOGIC;
 
 // Partial: declarations from Settings.cpp used by recovered TUs; only the
 // leading field is recovered.
