@@ -36,7 +36,20 @@ OUT = ROOT / "build-decomp" / "trial"
 DRAFTS = ROOT / "build-decomp" / "drafts"
 WRITTEN = ("function", "ctor", "dtor", "static")
 # -fpermissive: Ghidra's int/enum/void* mixes are warnings, not errors (code is the same).
-EXTRA = ["-Dprivate=public", "-Dprotected=public", "-fpermissive", "-I", str(headers.OUT), "-w"]
+EXTRA = ["-Dprivate=public", "-Dprotected=public", "-fpermissive", "-w",
+         "-iquote", str(ROOT / "build-decomp" / "include-trial"), "-I", str(headers.OUT)]
+# Names Ghidra prints without their namespace: header and using-declaration.
+UNQUALIFIED = {"Vector3": ("OgreVector3.h", "Ogre::Vector3"), "Vector2": ("OgreVector2.h", "Ogre::Vector2"),
+               "Quaternion": ("OgreQuaternion.h", "Ogre::Quaternion"), "SceneManager": ("OgreSceneManager.h",
+               "Ogre::SceneManager"), "SceneNode": ("OgreSceneNode.h", "Ogre::SceneNode"),
+               "Window": ("CEGUIWindow.h", "CEGUI::Window"), "UVector2": ("CEGUIUDim.h", "CEGUI::UVector2"),
+               "UDim": ("CEGUIUDim.h", "CEGUI::UDim"), "String": ("CEGUIString.h", "CEGUI::String"),
+               "length_error": ("stdexcept", "std::length_error"),
+               "ColourValue": ("OgreColourValue.h", "Ogre::ColourValue"),
+               "SharedPtr": ("OgreSharedPtr.h", "Ogre::SharedPtr"),
+               "BoundSlot": ("CEGUIBoundSlot.h", "CEGUI::BoundSlot"), "Rect": ("CEGUIRect.h", "CEGUI::Rect"),
+               "Image": ("CEGUIImage.h", "CEGUI::Image"), "Tooltip": ("CEGUITooltip.h", "CEGUI::Tooltip"),
+               "locale": ("locale", "std::locale"), "_Rb_tree_node_base": ("map", "std::_Rb_tree_node_base")}
 MAX_ROUNDS = 8
 
 
@@ -73,9 +86,12 @@ class Trial:
             if f.get("scope"):
                 names.add(f["scope"].split("::")[0])
         files = sorted({self.header_of[n] for n in names if n in self.header_of})
-        return ["#include <string>", "#include <vector>", '#include "TArrayList.h"', '#include "GenTypes.h"',
-                '#include "GenGlobals.h"'] + \
-               [f'#include "{h}"' for h in files] + ["", "using std::wstring;", ""]
+        bare = sorted(n for n in names if n in UNQUALIFIED)
+        return ['#include "EmptyStrings.h"', "#include <string>", "#include <vector>", '#include "TArrayList.h"',
+                '#include "GenTypes.h"', '#include "GenGlobals.h"', '#include "GenNamespaces.h"'] + \
+               [f"#include <{UNQUALIFIED[n][0]}>" for n in bare] + \
+               [f'#include "{h}"' for h in files] + ["", "using std::wstring;", "using std::string;"] + \
+               [f"using {UNQUALIFIED[n][1]};" for n in bare] + [""]
 
     def run(self, tu):
         parts = self.drafts(tu)
@@ -107,7 +123,7 @@ class Trial:
                 if not bad:  # errors only in headers
                     header = re.search(r"([\w.]+\.h):\d+: error: (.*)", str(error))
                     why = f"header-error {header.group(1)}: {header.group(2)}" if header else "header-error"
-                    return tu["name"], {f["address"]: why for f, _ in parts}
+                    return tu["name"], dict(dropped, **{f["address"]: why for f, _ in parts})
                 for address, message in bad.items():
                     dropped[address] = f"compile-error {message}"
                 parts = [(f, code) for f, code in parts if f["address"] not in bad]

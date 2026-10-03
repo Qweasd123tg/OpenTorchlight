@@ -82,11 +82,14 @@ class Gen:
 
     def scan_hand_headers(self):
         classes, enums, others = {}, {}, {}
+        self.hand_templates = set()
         for h in sorted(INCLUDE.glob("*.h")):
             text = h.read_text(errors="replace")
-            for m in re.finditer(r"^\s*(?:template\s*<[^>]*>\s*)?(?:class|struct|union)\s+(\w+)\s*(?::[^{;]*)?\{",
+            for m in re.finditer(r"^\s*(template\s*<[^>]*>\s*)?(?:class|struct|union)\s+(\w+)\s*(?::[^{;]*)?\{",
                                  text, re.M):
-                classes.setdefault(m.group(1), h.name)
+                classes.setdefault(m.group(2), h.name)
+                if m.group(1):
+                    self.hand_templates.add(m.group(2))
             for m in re.finditer(r"\benum\s+(\w+)\s*\{", text):
                 enums.setdefault(m.group(1), h.name)
             for m in re.finditer(r"\btypedef\b[^;]*?\b(\w+)\s*;", text):
@@ -375,6 +378,25 @@ class Gen:
                  "uint8": "unsigned char", "int8": "signed char"}
         for t in sorted(self.typedefs - set(self.hand_types)):
             lines.append(f"typedef {sizes[t]} {t};")
+        lines += ["", "// Ghidra's opaque types in drafts: a byte for pointer arithmetic, a function type for",
+                  "// indirect calls (variadic, so floats would be promoted: tests catch that).",
+                  "typedef unsigned char allocator;", "typedef long code(...);", "",
+                  "// Ghidra's helper operators.",
+                  "#define CONCAT11(a, b) ((unsigned short)(((unsigned short)(unsigned char)(a) << 8) | (unsigned char)(b)))",
+                  "#define CONCAT22(a, b) ((unsigned int)(((unsigned int)(unsigned short)(a) << 16) | (unsigned short)(b)))",
+                  "#define CONCAT31(a, b) ((unsigned int)(((unsigned int)(a) << 8) | (unsigned char)(b)))",
+                  "#define CONCAT44(a, b) ((unsigned long long)(((unsigned long long)(unsigned int)(a) << 32) | "
+                  "(unsigned int)(b)))",
+                  "#define CONCAT71(a, b) ((unsigned long long)(((unsigned long long)(a) << 8) | (unsigned char)(b)))",
+                  "#define CONCAT17(a, b) ((unsigned long long)(((unsigned long long)(unsigned char)(a) << 56) | "
+                  "((unsigned long long)(b) & 0xffffffffffffffULL)))",
+                  "#define SUB41(x, c) ((unsigned char)((unsigned int)(x) >> ((c) * 8)))",
+                  "#define SUB42(x, c) ((unsigned short)((unsigned int)(x) >> ((c) * 8)))",
+                  "#define SUB81(x, c) ((unsigned char)((unsigned long long)(x) >> ((c) * 8)))",
+                  "#define SUB84(x, c) ((unsigned int)((unsigned long long)(x) >> ((c) * 8)))",
+                  "#define ZEXT48(x) ((unsigned long long)(unsigned int)(x))",
+                  "#define ZEXT18(x) ((unsigned long long)(unsigned char)(x))",
+                  "#define SEXT48(x) ((long long)(int)(x))"]
         return "\n".join(lines + ["", "#endif"]) + "\n"
 
     def globals_header(self):
@@ -415,6 +437,85 @@ class Gen:
             lines.append(f"{'static' if local else 'extern'} {decl};")
         return "\n".join(lines + ["", "#endif"]) + "\n"
 
+    def trial_include(self):
+        """build-decomp/include-trial: decomp/include with partial classes completed by
+        declarations of their missing non-virtual methods (trial builds only)."""
+        out = ROOT / "build-decomp" / "include-trial"
+        shutil.rmtree(out, ignore_errors=True)
+        shutil.copytree(INCLUDE, out)
+        added = 0
+        for path in sorted(out.glob("*.h")):
+            text = path.read_text(errors="replace")
+            for m in reversed(list(re.finditer(r"^(?:class|struct)\s+(\w+)\s*(?::[^{;]*)?\{", text, re.M))):
+                cls = m.group(1)
+                if cls not in self.db["classes"]:
+                    continue
+                end = text.find("\n};", m.end())
+                if end < 0:
+                    continue
+                body = text[m.end():end]
+                deps = {"sys": set(), "local": set(), "forward": set()}
+                extra, seen = [], set()
+                for a in self.db["classes"][cls].get("methods", []):
+                    f = self.funcs[a]
+                    name = f["method"]
+                    if (f.get("scope") != cls or f.get("vslots") or name in seen or name.startswith("~")
+                            or name == cls or re.search(rf"\b{re.escape(name)}\s*\(", body)):
+                        continue
+                    seen.add(name)
+                    trial = {"sys": set(), "local": set(), "forward": set()}
+                    decl = self.method_decl(f, cls, trial)
+                    # Only declarations whose types are already visible or can be forward-declared.
+                    names = set(re.findall(r"\b[A-Za-z_]\w*\b", decl or ""))
+                    classes = {n for n in names if (n in self.game_classes or n in self.hand)
+                               and n not in self.hand_templates}
+                    if (decl and not trial["sys"] - {"string"} and "GenTypes.h" not in trial["local"]
+                            and not any(n in self.hand_enums and n not in text for n in names)):
+                        extra.append("    " + decl)
+                        deps["forward"] |= classes
+                if extra:
+                    fwd = "".join(f"class {n};\n" for n in sorted(deps["forward"] - {cls}))
+                    text = (text[:m.start()] + fwd + text[m.start():end] + "\npublic: // added for trial builds\n" +
+                            "\n".join(extra) + text[end:])
+                    added += len(extra)
+            path.write_text(text)
+        return added
+
+    def namespaces_header(self):
+        """Free functions of game namespaces (STRINGS::, FILESYSTEM::, ...) no hand header declares."""
+        game = {t["id"] for t in self.db["tus"] if t["kind"] == "game"}
+        hand_text = "\n".join(h.read_text(errors="replace") for h in INCLUDE.glob("*.h"))
+        groups = {}
+        deps = {"sys": set(), "local": set(), "forward": set()}
+        for f in self.funcs.values():
+            scope = f.get("scope") or ""
+            if (f["tu"] not in game or not scope or "::" in scope or scope in self.game_classes
+                    or scope in self.hand or scope in ("Ogre", "std", "CEGUI") or re.match(r"C[A-Z]", scope)
+                    or not re.fullmatch(r"[A-Za-z_]\w*", scope) or f["kind"] not in ("function", "static")
+                    or re.search(rf"\b{re.escape(f['method'])}\s*\(", hand_text)):
+                continue
+            params = []
+            for p in ghidra_cpp.split_args(f.get("params") or ""):
+                if p == "void":
+                    continue
+                t = self.resolve(ghidra_cpp.cxx_type(p), deps)
+                if t is None:
+                    break
+                params.append(t)
+            else:
+                ret = self.ghidra_return(f) or "void"
+                rt = self.resolve(ret, deps) or ("void*" if ret.endswith("*") else "int")
+                decl = f"{rt} {f['method']}({', '.join(params)});"
+                groups.setdefault(scope, set()).add(decl)
+        lines = ["#ifndef GEN_NAMESPACES_H", "#define GEN_NAMESPACES_H", "",
+                 "// Free functions of game namespaces, from symbols; return types from Ghidra.", ""]
+        lines += [f"#include <{h}>" for h in sorted(deps["sys"])]
+        lines += [f'#include "{h}"' for h in sorted(deps["local"]) if not h.startswith("C")]
+        lines += [f"class {n};" for n in sorted(deps["forward"])]
+        for scope, decls in sorted(groups.items()):
+            lines += ["", f"namespace {scope}", "{"] + [f"    {d}" for d in sorted(decls)] + ["}"]
+        return "\n".join(lines + ["", "#endif"]) + "\n"
+
     def write(self):
         OUT.mkdir(parents=True, exist_ok=True)
         for old in OUT.glob("*.h"):
@@ -429,6 +530,8 @@ class Gen:
             made.append(cls)
         (OUT / "GenTypes.h").write_text(self.types_header())
         (OUT / "GenGlobals.h").write_text(self.globals_header())
+        self.trial_added = self.trial_include()
+        (OUT / "GenNamespaces.h").write_text(self.namespaces_header())
         return made, failed
 
     def check(self, made):
@@ -468,7 +571,8 @@ def main():
     args = parser.parse_args()
     gen = Gen()
     made, failed = gen.write()
-    print(f"{len(made)} headers in {OUT.relative_to(ROOT)}; {len(failed)} classes skipped")
+    print(f"{len(made)} headers in {OUT.relative_to(ROOT)}; {len(failed)} classes skipped; "
+          f"{gen.trial_added} method declarations added to partial classes in build-decomp/include-trial")
     for cls, why in sorted(failed.items()):
         print(f"  skip {cls}: {why}")
     if args.check:

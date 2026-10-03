@@ -31,8 +31,12 @@ TYPES = [
     (r"\bundefined8\b", "long long"), (r"\bundefined\b", "char"), (r"\bulonglong\b", "unsigned long long"),
     (r"\blonglong\b", "long long"), (r"\bulong\b", "unsigned long"), (r"\buint\b", "unsigned int"),
     (r"\bushort\b", "unsigned short"), (r"\bbyte\b", "unsigned char"), (r"\bsbyte\b", "signed char"),
+    (r"\buchar\b", "unsigned char"),
     (r"\bfloat10\b", "long double"), (r"\bwchar32\b", "wchar_t"), (r"\bwstring_conflict\b", "std::wstring"),
     (r"\bstd::wstring::wstring\b", "std::wstring::basic_string"),
+    # Ghidra spells multi-word template arguments with underscores.
+    (r"\bunsigned_(short|int|long|char)\b", r"unsigned \1"), (r"\b(std::w?string)_const\b", r"const \1"),
+    (r"\b(\w+)_const\b(?=\s*[,>*&])", r"const \1"),
 ]
 
 
@@ -99,6 +103,15 @@ def split_args(text):
 STATIC_METHODS = {"getSingleton", "getSingletonPtr"}
 
 
+def _cast_to(arg, cls):
+    """arg is `(cls *)expr` (possibly with namespace differences)."""
+    m = re.match(r"\(([\w:<>, ]+?)\s*\*\)", arg)
+    if not m:
+        return False
+    norm = lambda t: re.sub(r"\s+|std::", "", t).split("::")[-1]  # noqa: E731
+    return norm(m.group(1)) == norm(cls)
+
+
 def call_rewrite(text, methods):
     """C::m(obj, args) -> obj->m(args) / m(args) for this."""
     out, i = [], 0
@@ -119,7 +132,7 @@ def call_rewrite(text, methods):
         if (cls, meth) in methods and args and meth != cls:
             obj = re.sub(r"^\((\w[\w:<>, ]*?) \*\)", "", args[0])
             rest = ", ".join(args[1:])
-            if meth in STATIC_METHODS:
+            if meth in STATIC_METHODS and (cls, meth) in methods:
                 # Ghidra gives static methods a bogus `this` (they all got __thiscall).
                 out.append(f"{cls}::{meth}({rest})")
             elif obj == "this":
@@ -128,6 +141,9 @@ def call_rewrite(text, methods):
                 out.append(f"{obj[1:]}.{meth}({rest})" if obj.startswith("&") else f"{obj}->{meth}({rest})")
             else:
                 out.append(f"({obj})->{meth}({rest})")
+        elif args and meth != cls.split("<")[0] and _cast_to(args[0], cls):
+            # Library method with explicit `this`: X::m((X *)obj, args) -> ((X *)obj)->m(args).
+            out.append(f"({args[0]})->{meth}({', '.join(args[1:])})")
         else:
             out.append(text[m.start():j])
         i = j
@@ -261,8 +277,10 @@ def reindent(text):
 
 def convert(code, methods, f=None, signatures=None, enums=None):
     text = re.sub(r"/\*.*?\*/", "", code, flags=re.S)
-    # Ghidra wraps long calls between the name and the parenthesis.
+    # Ghidra wraps long calls between the name and the parenthesis, and long
+    # qualified names before `::`.
     text = re.sub(r"(\w)\s*\n\s*\(", r"\1(", text)
+    text = re.sub(r"([\w>])\s*\n\s*::", r"\1::", text)
     for pattern, repl in TYPES:
         text = re.sub(pattern, repl, text)
     # Signature (everything before the opening brace): drop __thiscall and `this`.
