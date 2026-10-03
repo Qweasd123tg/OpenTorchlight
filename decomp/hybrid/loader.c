@@ -101,8 +101,20 @@ static void load_blob(struct blob *b, const char *path)
         uintptr_t end = (ph[i].p_vaddr + ph[i].p_memsz + page - 1) & ~(page - 1);
         void *at = mmap((void *)start, end - start, PROT_READ | PROT_WRITE,
                         MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE, -1, 0);
-        if (at != (void *)start)
-            fail("cannot map blob segment at %#lx (%s)", (unsigned long)start, strerror(errno));
+        if (at != (void *)start) {
+            /* Show what occupies the range, then give up. */
+            int saved = errno;
+            FILE *maps = fopen("/proc/self/maps", "r");
+            char line[512];
+            while (maps && fgets(line, sizeof(line), maps)) {
+                unsigned long lo, hi;
+                if (sscanf(line, "%lx-%lx", &lo, &hi) == 2 && lo < end && hi > start)
+                    fprintf(stderr, "tlhybrid: occupied: %s", line);
+            }
+            if (maps)
+                fclose(maps);
+            fail("cannot map blob segment at %#lx (%s)", (unsigned long)start, strerror(saved));
+        }
         memcpy((void *)ph[i].p_vaddr, b->file + ph[i].p_offset, ph[i].p_filesz);
         int prot = ((ph[i].p_flags & PF_R) ? PROT_READ : 0) | ((ph[i].p_flags & PF_W) ? PROT_WRITE : 0) |
                    ((ph[i].p_flags & PF_X) ? PROT_EXEC : 0);

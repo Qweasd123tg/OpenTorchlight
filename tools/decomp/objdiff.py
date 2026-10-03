@@ -48,6 +48,20 @@ def const_size(mnemonic):
 
 
 def printable_string(raw):
+    """Literal token for narrow (ASCII) or wide (UTF-32LE wchar_t) strings."""
+    wide = []
+    for i in range(0, len(raw) - 3, 4):
+        code = int.from_bytes(raw[i:i + 4], "little")
+        if code == 0:
+            break
+        if not (32 <= code < 0x10000 or code in (9, 10, 13)):
+            wide = None
+            break
+        wide.append(chr(code))
+    else:
+        wide = None
+    if wide:
+        return 'L"' + "".join(wide)
     end = raw.find(b"\0")
     if end <= 0:
         return None
@@ -55,6 +69,17 @@ def printable_string(raw):
     if all(32 <= b < 127 or b in (9, 10, 13) for b in text):
         return text.decode("ascii")
     return None
+
+
+def literal_token(raw):
+    # Width is not part of the token: L"1" and "1" plus padding share bytes, and
+    # the consuming call (string vs wstring) already tells them apart.
+    text = printable_string(raw)
+    if text is None:
+        return None
+    if text.startswith('L"'):
+        text = text[2:]
+    return f'lit:"{text[:80]}"'
 
 
 def run_objdump(args):
@@ -143,9 +168,9 @@ class OriginalSide(Normalizer):
                 raw = self.image.read(address, 256)
             except ValueError:
                 raw = b""
-            text = printable_string(raw)
-            if text is not None:
-                return f'str:"{text[:80]}"'
+            token = literal_token(raw)
+            if token is not None:
+                return token
             n = const_size(mnemonic)
             return "const:" + raw[:n].hex()
         if section:
@@ -176,8 +201,10 @@ class OriginalSide(Normalizer):
 
 
 class ObjectSide(Normalizer):
-    def __init__(self, obj):
+    def __init__(self, obj, resolve=None, name_at=None):
         self.obj = obj
+        self.resolve = resolve or (lambda name: None)
+        self.name_at = name_at
         self.funcs_by_section = {}
         for s in obj.symbols:
             if s.type == elfimage.STT_FUNC and s.defined:
@@ -189,15 +216,21 @@ class ObjectSide(Normalizer):
 
     def target_name(self, symbol, offset, mnemonic):
         obj = self.obj
-        if symbol.type == elfimage.STT_SECTION or not symbol.name:
+        if symbol.name and not symbol.name.startswith(".L") and symbol.type != elfimage.STT_SECTION:
+            # Same token as the original side: symbol + addend mapped to the original address.
+            address = self.resolve(symbol.name)
+            if address is not None and self.name_at:
+                return self.name_at(address + offset, mnemonic)
+        if symbol.defined and symbol.shndx < len(obj.sections) and (
+                symbol.type == elfimage.STT_SECTION or not symbol.name or symbol.name.startswith(".L")):
+            offset += symbol.value if symbol.type != elfimage.STT_SECTION else 0
             section = obj.sections[symbol.shndx]
             name = section.name
             if name.startswith(".rodata"):
                 raw = obj.section_bytes(symbol.shndx)[offset:offset + 256]
-                if ".str" in name:
-                    text = printable_string(raw)
-                    if text is not None:
-                        return f'str:"{text[:80]}"'
+                token = literal_token(raw)
+                if token is not None:
+                    return token
                 return "const:" + raw[:const_size(mnemonic)].hex()
             named = self.locals_by_section.get(symbol.shndx, {}).get(offset)
             if named:
@@ -243,7 +276,7 @@ class ObjectSide(Normalizer):
         return f"{mnemonic} {operands}".strip()
 
 
-def object_functions(obj_path):
+def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
     obj = elfimage.load_object(obj_path)
     text = run_objdump([str(obj_path)])
     sections = {}
@@ -257,7 +290,7 @@ def object_functions(obj_path):
         if current is not None:
             sections[current].append(line)
     by_name = {s.name: s.index for s in obj.sections}
-    side = ObjectSide(obj)
+    side = ObjectSide(obj, resolve, name_at)
     result = {}
     for sym in obj.symbols:
         if sym.type != elfimage.STT_FUNC or not sym.defined:
@@ -266,7 +299,8 @@ def object_functions(obj_path):
         insns = [i for i in parse_insns("\n".join(sections.get(section.name, [])))
                  if sym.value <= i[0] < sym.value + sym.size]
         side.prepare(by_name[section.name])
-        result[sym.name] = {"size": sym.size, "bind": sym.bind,
+        bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind
+        result[sym.name] = {"size": sym.size, "bind": bind,
                             "norm": side.normalize(insns, sym.value, sym.value + sym.size)}
     return result
 
@@ -280,6 +314,32 @@ class Original:
         for address, f in self.db["functions"].items():
             for name in f["names"]:
                 self.by_name.setdefault(name, []).append(f)
+
+    def resolver(self, tu):
+        data = {}
+        for g in self.db["globals"]:
+            if g["bind"] != "local":
+                data.setdefault(g["name"], int(g["address"], 16))
+        if tu:
+            for g in self.db["globals"]:
+                if g["bind"] == "local" and g["file"] == tu["name"]:
+                    data[g["name"]] = int(g["address"], 16)
+        imports = {n.split("@")[0]: a for a, n in self.image.plt.items()}
+        for s in self.image.dynsyms:
+            if s.defined and s.value and s.name:
+                imports.setdefault(s.name.split("@")[0], s.value)
+
+        def resolve(name):
+            if name in data:
+                return data[name]
+            f = self.function(name, False, tu)
+            if f and any(b != "local" for n, b in zip(f["names"], f["bind"]) if n == name):
+                return int(f["address"], 16)
+            f = self.function(name, True, tu)
+            if f:
+                return int(f["address"], 16)
+            return imports.get(name)
+        return resolve
 
     def function(self, name, local=False, tu=None):
         found = self.by_name.get(name) or []
@@ -302,13 +362,40 @@ def tu_for_source(db, source):
     return matches[0] if len(matches) == 1 else None
 
 
+def globalize_locals(text):
+    """Make file-local symbols global so relocations keep symbol+addend (codegen unchanged)."""
+    names = set()
+    out = []
+    declared = set(re.findall(r"^\s*\.(?:globl|weak)\s+(\S+)", text, re.M))
+    for line in text.splitlines():
+        m = re.match(r"^\s*\.local\s+(\S+)\s*$", line)
+        if m:
+            names.add(m.group(1))
+            out.append(f"\t.globl\t{m.group(1)}")
+            continue
+        m = re.match(r"^([A-Za-z_][\w.$]*):\s*$", line)
+        if m and m.group(1) not in declared:
+            names.add(m.group(1))
+            out.append(f"\t.globl\t{m.group(1)}")
+        out.append(line)
+    return "\n".join(out) + "\n", names
+
+
+def compile_for_diff(source, tmp, extra=()):
+    asm = toolchain.compile_source(source, Path(tmp) / "unit.s", extra, assembly=True)
+    text, globalized = globalize_locals(Path(asm).read_text())
+    patched = Path(tmp) / "unit.global.s"
+    patched.write_text(text)
+    return toolchain.assemble(patched, Path(tmp) / "unit.o"), globalized
+
+
 def compare_source(source, original, show=None, extra=()):
+    tu = tu_for_source(original.db, source)
     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
-        obj = toolchain.compile_source(source, Path(tmp) / "unit.o", extra)
-        ours = object_functions(obj)
+        obj, globalized = compile_for_diff(source, tmp, extra)
+        ours = object_functions(obj, original.resolver(tu), original.side.name_at, globalized)
     rows = []
     seen = set()
-    tu = tu_for_source(original.db, source)
     for name, mine in sorted(ours.items()):
         f = original.function(name, mine["bind"] == elfimage.STB_LOCAL, tu)
         if not f:

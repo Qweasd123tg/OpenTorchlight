@@ -53,8 +53,20 @@ public:
     // Unordered removal: the last element takes the freed slot.
     void removeAt(unsigned int index)
     {
-        m_nCount--;
-        m_pData[index] = m_pData[m_nCount];
+        if (index < m_nCount)
+        {
+            m_nCount--;
+            m_pData[index] = m_pData[m_nCount];
+        }
+    }
+
+    void clear()
+    {
+        m_nCount = 0;
+        m_nCapacity = 0;
+        if (m_pData)
+            delete[] m_pData;
+        m_pData = NULL;
     }
 
     T& operator[](unsigned int index)

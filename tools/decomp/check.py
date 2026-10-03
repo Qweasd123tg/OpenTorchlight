@@ -15,6 +15,7 @@ import argparse
 from collections import Counter
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -39,6 +40,14 @@ def ensure_db():
     if db["link_order_inversions"]:
         raise SystemExit(f"TU partition inconsistent: {db['link_order_inversions']} link-order inversions")
     return db
+
+
+def shadow_covered(db):
+    """Original addresses named by TL_ORIGINAL in the self-tests (what they compare)."""
+    names = set()
+    for test in (ROOT / "decomp" / "hybrid" / "tests").glob("*.cpp"):
+        names.update(re.findall(r'TL_ORIGINAL\([^;]*?"(_Z\w+)"\)', test.read_text(), re.S))
+    return {address for address, f in db["functions"].items() if names & set(f["names"])}
 
 
 def main():
@@ -69,15 +78,26 @@ def main():
           f"({sum(matched.values())} of {total_bytes} bytes); by status {dict(status)}")
 
     selftest = None
+    accepted = dict(matched)
     if not args.no_game:
         selftest = subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "hybrid.py"), "selftest"]).returncode
         print(f"hybrid self-test: {'PASS' if selftest == 0 else 'FAIL'}")
+        if selftest == 0:
+            covered = shadow_covered(db)
+            for unit in units:
+                for row in unit["functions"]:
+                    if row["status"] == "DIFF" and row["address"] in covered:
+                        accepted[row["address"]] = row["original_size"]
+            shadow = sorted(set(accepted) - set(matched))
+            print(f"accepted: {len(accepted)} of {len(total)} game functions "
+                  f"({sum(accepted.values())} bytes); {len(shadow)} of them by self-test")
 
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps({
         "schema": 1, "original_elf_sha256": db["original_elf_sha256"],
         "game_functions": len(total), "game_bytes": total_bytes,
         "matched_functions": len(matched), "matched_bytes": sum(matched.values()),
+        "accepted_functions": len(accepted), "accepted_bytes": sum(accepted.values()),
         "status": dict(status), "hybrid_selftest": selftest, "units": units,
     }, indent=1))
     return 1 if selftest not in (None, 0) else 0

@@ -11,8 +11,7 @@ CRunicCore::CRunicCore()
 
 void CRunicCore::removeSafePointer(TSafePointer<void*>* pointer, unsigned int index)
 {
-    TArrayList<TSafePointer<void*>*>* pointers = m_pSafePointers;
-    if (index == 0xFFFFFFFF || pointers == NULL || index >= pointers->size())
+    if (index == 0xFFFFFFFF || m_pSafePointers == NULL)
         return;
 
     m_pSafePointers->removeAt(index);

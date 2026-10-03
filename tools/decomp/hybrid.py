@@ -35,7 +35,9 @@ SRC = ROOT / "decomp" / "src"
 HYBRID = ROOT / "decomp" / "hybrid"
 TESTS = HYBRID / "tests"
 OUT = ROOT / "build-decomp" / "hybrid"
-BLOB_BASE = 0x40000000  # within rel32 of the executable (0x400000..0x1600000)
+# Within rel32 and imm32 reach of the executable (0x400000..0x1600000), and above
+# the brk heap: on x86-64 the kernel places it up to 1 GiB past the end of .bss.
+BLOB_BASE = 0x60000000
 
 LINKER_SCRIPT = """\
 SECTIONS
@@ -361,7 +363,8 @@ def main():
         game, env = game_env(blob, loader, {"TLHYBRID_SELFTEST": "1"}, headless=True)
         result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game, env=env,
                                 capture_output=True, text=True, timeout=120)
-        report = [line for line in result.stderr.splitlines() if line.startswith("tlhybrid:")]
+        # Loader lines plus the indented details tests log under a failure.
+        report = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
         print("\n".join(report) or result.stderr[-2000:])
         if not any("tests," in line for line in report):
             print("selftest: loader report missing; the hybrid runtime was not injected")

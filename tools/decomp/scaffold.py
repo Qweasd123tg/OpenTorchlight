@@ -24,6 +24,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
+import elfimage  # noqa: E402
+import objdiff  # noqa: E402
 
 ROOT = elfdb.ROOT
 OUT = ROOT / "build-decomp" / "scaffold"
@@ -62,6 +64,30 @@ def disassemble(elf, f):
                           capture_output=True, text=True, check=True, env={"LC_ALL": "C", "PATH": "/usr/bin:/bin"}).stdout
 
 
+def annotate(asm, image):
+    """Append literal contents for immediates and RIP targets pointing into .rodata."""
+    out = []
+    for line in asm.splitlines():
+        targets = [int(m, 16) for m in re.findall(r"#\s*([0-9a-f]+)\b", line)]
+        targets += [int(m, 16) for m in re.findall(r"\$0x([0-9a-f]+)", line)]
+        notes = []
+        for address in targets:
+            section = image.section_at(address)
+            if not section or not section.name.startswith(".rodata"):
+                continue
+            try:
+                raw = image.read(address, 512)
+            except ValueError:
+                continue
+            text = objdiff.printable_string(raw)
+            if text is not None:
+                notes.append(text + '"' if text.startswith('L"') else f'"{text}"')
+            else:
+                notes.append("bytes " + raw[:8].hex())
+        out.append(line + ("    ; " + " ".join(notes) if notes else ""))
+    return "\n".join(out) + "\n"
+
+
 def safe_name(text):
     return re.sub(r"[^A-Za-z0-9_]+", "_", text).strip("_")[:120]
 
@@ -71,6 +97,7 @@ def packet(db, tu, elf):
                    key=lambda f: int(f["address"], 16))
     out = OUT / tu["name"]
     (out / "asm").mkdir(parents=True, exist_ok=True)
+    image = elfimage.load(elf)
     classes = sorted({f["scope"] for f in funcs if f["scope"] and f["kind"] in WRITTEN})
     data = [g for g in db["globals"] if g.get("file") == tu["name"]]
     lines = [f"# {tu['name']} (TU {tu['id']})", "",
@@ -91,7 +118,7 @@ def packet(db, tu, elf):
         lines.append(f"| {f['address']} | {f['size']} | {f['kind']} | {f['tu_confidence']} | {hint} | "
                      f"`{f['demangled']}`{extra} |")
         name = f"{f['address']}_{safe_name(f['demangled'])}"
-        (out / "asm" / f"{name}.s").write_text(disassemble(elf, f))
+        (out / "asm" / f"{name}.s").write_text(annotate(disassemble(elf, f), image))
         if f["kind"] != "compiler":
             targets.append(f"{f['address']} {safe_name(f['mangled']).lower()[:100]}")
         if f["kind"] in WRITTEN:
