@@ -17,6 +17,7 @@ original ones through 5-byte jumps installed by decomp/hybrid/loader.c.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -318,7 +319,8 @@ def build(out=OUT, verbose=True):
 
 def stage_runtime(blob, loader):
     """ld.so splits LD_PRELOAD on spaces and colons; the repository path has a space."""
-    runtime = toolchain.cache_dir() / "hybrid"
+    # One directory per checkout, so parallel worktrees do not overwrite each other.
+    runtime = toolchain.cache_dir() / "hybrid" / hashlib.sha1(str(ROOT).encode()).hexdigest()[:12]
     runtime.mkdir(parents=True, exist_ok=True)
     staged = []
     for path in (blob, loader):
