@@ -16,6 +16,8 @@ counts when objdiff and the hybrid self-tests say so.
 from __future__ import annotations
 
 import argparse
+import json
+import shutil
 from collections import defaultdict
 from pathlib import Path
 import re
@@ -88,6 +90,34 @@ def annotate(asm, image):
                 notes.append("bytes " + raw[:8].hex())
         out.append(line + ("    ; " + " ".join(notes) if notes else ""))
     return "\n".join(out) + "\n"
+
+
+def trial_build(tu, funcs, out):
+    """trial.cpp and generated headers: what tools/decomp/draft_trial.py got to compile."""
+    lines = []
+    gen = ROOT / "build-decomp" / "include-gen"
+    classes = sorted({(f.get("scope") or "").split("::")[0] for f in funcs} - {""})
+    have = [c for c in classes if (gen / f"{c}.h").exists()]
+    if have:
+        lines += ["## Generated headers", "",
+                  "`build-decomp/include-gen/` has a header for every class without a hand-written one: bases,",
+                  "virtuals in vtable order, fields at the original offsets (sizes and offsets checked by the",
+                  "compiler), return types from Ghidra. Start the class header from it: move it to",
+                  "`decomp/include/<Class>.h`, name the fields, drop the gaps you understand.", ""]
+        lines += [f"- `build-decomp/include-gen/{c}.h`" for c in have] + [""]
+    trial = ROOT / "build-decomp" / "trial" / tu["name"]
+    summary = ROOT / "build-decomp" / "trial" / "summary.json"
+    if trial.exists():
+        shutil.copy(trial, out / "trial.cpp")
+        statuses = json.loads(summary.read_text()).get(tu["name"], {}) if summary.exists() else {}
+        lines += ["## Trial build", "",
+                  "`trial.cpp`: the Ghidra drafts that compile against the generated headers (with",
+                  "-fpermissive). Status per function from objdiff; compile errors name the first problem.", ""]
+        for f in funcs:
+            if f["address"] in statuses:
+                lines.append(f"- `{f['address']}` {f['demangled'][:70]}: {statuses[f['address']][:110]}")
+        lines.append("")
+    return lines
 
 
 def ghidra_drafts(db, tu, funcs, out):
@@ -245,6 +275,7 @@ def packet(db, tu, elf):
                     lines.append(f"  - [{si}] {label}")
         lines.append("")
     lines += ghidra_drafts(db, tu, funcs, out)
+    lines += trial_build(tu, funcs, out)
     lines += static_init_order(funcs, data, elf)
     lines += ["## TU-local data", "", "| address | size | section | symbol |", "|---|---:|---|---|"]
     lines += [f"| {g['address']} | {g['size']} | {g['section']} | `{g['demangled']}` |" for g in data]

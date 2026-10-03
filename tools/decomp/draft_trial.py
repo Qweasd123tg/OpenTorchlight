@@ -97,18 +97,24 @@ class Trial:
                 result = objdiff.compare_source(source, self.original, extra=EXTRA, quiet=True)
                 break
             except SystemExit as error:
-                bad_lines = {int(m.group(1)) for m in
-                             re.finditer(re.escape(source.name) + r":(\d+): error", str(error))}
-                bad = {f["address"] for a, b, f in spans if any(a <= n <= b for n in bad_lines)}
+                found = [(int(m.group(1)), m.group(2).strip()) for m in
+                         re.finditer(re.escape(source.name) + r":(\d+): error: (.*)", str(error))]
+                bad = {}
+                for a, b, f in spans:
+                    for n, message in found:
+                        if a <= n <= b:
+                            bad.setdefault(f["address"], message)
                 if not bad:  # errors only in headers
-                    return tu["name"], {f["address"]: "header-error" for f, _ in parts}
-                for address in bad:
-                    dropped[address] = "compile-error"
+                    header = re.search(r"([\w.]+\.h):\d+: error: (.*)", str(error))
+                    why = f"header-error {header.group(1)}: {header.group(2)}" if header else "header-error"
+                    return tu["name"], {f["address"]: why for f, _ in parts}
+                for address, message in bad.items():
+                    dropped[address] = f"compile-error {message}"
                 parts = [(f, code) for f, code in parts if f["address"] not in bad]
                 if not parts:
                     return tu["name"], dropped
         else:
-            return tu["name"], dict(dropped, **{f["address"]: "compile-error" for f, _ in parts})
+            return tu["name"], dict(dropped, **{f["address"]: "compile-error (rounds exhausted)" for f, _ in parts})
         statuses = dict(dropped)
         drafted = {f["address"] for f, _ in parts}
         for row in result["functions"]:
