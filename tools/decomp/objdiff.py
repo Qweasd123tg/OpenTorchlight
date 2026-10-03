@@ -105,11 +105,34 @@ def parse_insns(text):
 class Normalizer:
     """Shared operand normalization; subclasses resolve addresses to tokens."""
 
+    JUMP_TABLE = re.compile(r"^\*(0x[0-9a-f]+)\(,(%\w+),8\)$")
+
     def branch(self, insn_index, target, start, end, offsets):
         if start <= target < end:
             pos = bisect.bisect_left(offsets, target)
             return f"L{pos}" if pos < len(offsets) and offsets[pos] == target else f"L?{target - start:#x}"
         return None
+
+    @staticmethod
+    def table_size(k, insns):
+        """Entries of a switch table from the bound check (`cmp $N` before the jump)."""
+        for _, mnemonic, operands in reversed(insns[max(0, k - 6):k]):
+            m = re.match(r"^\$0x([0-9a-f]+),", operands)
+            if mnemonic.startswith("cmp") and m:
+                return int(m.group(1), 16) + 1
+        return None
+
+    def jump_table(self, k, entries, register, start, end, offsets, insns):
+        """Token for `jmp *table(,%reg,8)`: the table's targets as instruction labels."""
+        count = self.table_size(k, insns)
+        labels = []
+        for target in entries:
+            if count is not None and len(labels) == count:
+                break
+            if target is None or not start <= target < end:
+                break
+            labels.append(self.branch(k, target, start, end, offsets))
+        return f"jmp *[table:{','.join(labels)}](,{register},8)"
 
     def normalize(self, insns, start, end):
         offsets = [i[0] for i in insns]
@@ -185,6 +208,17 @@ class OriginalSide(Normalizer):
             if label:
                 return f"{mnemonic} {label}"
             return f"{mnemonic} {self.name_at(target, mnemonic)}"
+        table = self.JUMP_TABLE.match(operands) if mnemonic == "jmp" else None
+        if table:
+            base = int(table.group(1), 16)
+
+            def entries():
+                for i in range(4096):
+                    try:
+                        yield int.from_bytes(self.image.read(base + 8 * i, 8), "little")
+                    except ValueError:
+                        return
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
 
         def rip(mm):
             target = nxt + int(mm.group(1), 16) * (-1 if mm.group(0).startswith("-") else 1)
@@ -250,6 +284,19 @@ class ObjectSide(Normalizer):
         lo = bisect.bisect_left(self.reloc_offsets, address)
         hi = bisect.bisect_left(self.reloc_offsets, nxt)
         relocs = self.relocs[lo:hi]
+        table = self.JUMP_TABLE.match(operands) if mnemonic == "jmp" and len(relocs) == 1 else None
+        if table and relocs[0].symbol.shndx < len(self.obj.sections):
+            symbol = relocs[0].symbol
+            base = relocs[0].addend + (symbol.value if symbol.type != elfimage.STT_SECTION else 0)
+            rows = {r.offset: r for r in self.obj.relocs.get(symbol.shndx, [])}
+
+            def entries():
+                for i in range(4096):
+                    r = rows.get(base + 8 * i)
+                    if r is None or r.symbol.shndx != self.section_index:
+                        return
+                    yield r.addend + (r.symbol.value if r.symbol.type != elfimage.STT_SECTION else 0)
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
         if m and mnemonic.startswith(("j", "call", "loop")):
             if relocs:
