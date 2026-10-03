@@ -194,6 +194,9 @@ class OriginalSide(Normalizer):
             token = literal_token(raw)
             if token is not None:
                 return token
+            if mnemonic == "mov" and raw[:1] == b"\0":
+                # An empty string literal: its neighbours are arbitrary.
+                return 'lit:""'
             n = const_size(mnemonic)
             return "const:" + raw[:n].hex()
         if section:
@@ -265,6 +268,8 @@ class ObjectSide(Normalizer):
                 token = literal_token(raw)
                 if token is not None:
                     return token
+                if name.startswith(".rodata.str") and raw[:1] == b"\0":
+                    return 'lit:""'
                 return "const:" + raw[:const_size(mnemonic)].hex()
             named = self.locals_by_section.get(symbol.shndx, {}).get(offset)
             if named:

@@ -69,6 +69,28 @@ public:
         m_pData = NULL;
     }
 
+    // Deletes the pointed-to elements, then clears the list.
+    void deleteAll()
+    {
+        for (unsigned int i = 0; i < m_nCount; i++)
+        {
+            if (m_pData[i])
+            {
+                delete m_pData[i];
+                m_pData[i] = NULL;
+            }
+            m_pData[i] = NULL;
+        }
+        clear();
+    }
+
+    void setGrowBy(unsigned int growBy)
+    {
+        if (growBy == 0)
+            growBy = 1;
+        m_nGrowBy = growBy;
+    }
+
     T& operator[](unsigned int index)
     {
         if (index >= m_nCapacity)
