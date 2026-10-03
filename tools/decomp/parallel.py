@@ -37,8 +37,13 @@ def new(slug, tus):
         raise SystemExit(f"{path} exists")
     BASE.mkdir(parents=True, exist_ok=True)
     git("worktree", "add", "-b", f"decomp/{slug}", str(path), "HEAD")
-    # Copy after checkout so the database is newer than the tool sources.
-    shutil.copytree(ROOT / "build-decomp" / "db", path / "build-decomp" / "db")
+    # Copy after checkout with fresh mtimes, database first, so neither the
+    # database nor the instruction cache looks stale against the checkout.
+    db_dir = path / "build-decomp" / "db"
+    shutil.copytree(ROOT / "build-decomp" / "db", db_dir, copy_function=shutil.copy)
+    for name in ("elfdb.json", "insns.pickle"):
+        if (db_dir / name).exists():
+            os.utime(db_dir / name)
     (path / "build-decomp" / "WORKER.json").write_text(json.dumps({"slug": slug, "tus": tus}, indent=1))
     for tu in tus:
         subprocess.run([sys.executable, str(path / "tools" / "decomp" / "scaffold.py"), tu], cwd=path, check=True,
