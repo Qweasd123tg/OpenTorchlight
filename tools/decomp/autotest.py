@@ -299,7 +299,8 @@ class Generator:
         orig_args = ", ".join((["c.self"] if not static else []) + orig_list)
         prelude = []
         if kind == "ctor":
-            ours = f"(new (c.self) {cls}({args}), autotest::Void())"
+            # Our constructor through its symbol, like the original: works for abstract classes too.
+            ours = f"(((void (*)({orig_params}))ours_{tag})({orig_args}), autotest::Void())"
             original = f"(((void (*)({orig_params}))orig_{tag})({orig_args}), autotest::Void())"
         elif kind == "dtor":
             ours = f"(((({cls}*)c.self)->{cls}::~{cls}()), autotest::Void())"
@@ -315,6 +316,7 @@ class Generator:
         name = f"auto_{tag}"
         code = [f"// {f['address']} {f['demangled']}",
                 f'extern "C" char orig_{tag}[] __asm__("__tlorig_{mangled}");',
+                f'extern "C" char ours_{tag}[] __asm__("{mangled}");',
                 f"namespace t{tag} {{",
                 "struct Context", "{", "    char* self;", *[f"    {m}" for m in members], "};",
                 "void build(autotest::Rng& r, Context& c)", "{", "    c.self = 0;", *[f"    {l}" for l in build], "}",
