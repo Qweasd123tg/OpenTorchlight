@@ -27,6 +27,7 @@ from pathlib import Path
 import random
 import re
 import shutil
+import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -250,11 +251,40 @@ def stats(report):
     return out
 
 
+def verdicts(report):
+    """Test name -> passed, from the loader's PASS/FAIL lines."""
+    out = {}
+    for line in report:
+        m = re.match(r"tlhybrid: (\S+)\s+(PASS|FAIL) \(", line)
+        if m:
+            out[m.group(1)] = m.group(2) == "PASS"
+    return out
+
+
 def build_and_test(src, tests, names, out):
     os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(names))
     blob, loader = hybrid.build(out=out, verbose=False, src=src, tests=tests)
-    code, report = hybrid.selftest(blob, loader, only=",".join(names))
+    try:
+        code, report = hybrid.selftest(blob, loader, only=",".join(sorted(set(names))))
+    except subprocess.TimeoutExpired:
+        return {}, ["timeout"]  # a hang outside a forked child: the tests noticed something
     return stats(report), report
+
+
+def hand_coverage(db):
+    """Function address -> names of the hand-written tests whose file declares it with TL_ORIGINAL."""
+    out = {}
+    by_name = {}
+    for a, f in db["functions"].items():
+        for n in f["names"]:
+            by_name[n] = a
+    for test in sorted(hybrid.TESTS.glob("*.cpp")):
+        text = test.read_text(errors="replace")
+        names = re.findall(r"^TL_TEST\((\w+)\)", text, re.M)
+        for mangled in re.findall(r'TL_ORIGINAL\([^;]*?"(_Z\w+)"\)', text, re.S):
+            if mangled in by_name:
+                out.setdefault(by_name[mangled], set()).update(names)
+    return out
 
 
 def main():
@@ -263,6 +293,9 @@ def main():
     parser.add_argument("--max", type=int, default=MAX_MUTANTS, help="mutants per function")
     parser.add_argument("--accept", action="store_true",
                         help=f"record strong tests in {ACCEPTED.relative_to(ROOT)} (check.py accepts them)")
+    parser.add_argument("--hand", action="store_true",
+                        help="check the hand-written tests in decomp/hybrid/tests (TL_ORIGINAL) instead of "
+                             "generated ones; addresses default to every DIFF function they cover")
     parser.add_argument("--record", action="store_true",
                         help=f"only record the last run ({RESULT.relative_to(ROOT)}) in {ACCEPTED.relative_to(ROOT)}")
     args = parser.parse_args()
@@ -274,19 +307,33 @@ def main():
     WORK.mkdir(parents=True)
     toolchain.CC_CACHE = WORK / "cc-cache"  # mutated sources would only litter the shared cache
 
-    gen = autotest.Generator()
-    db = gen.db
-    functions = ([db["functions"][hex(int(a, 16))] for a in args.addresses] if args.addresses
-                 else autotest.diff_functions(db))
-    functions = list({f["address"]: f for f in functions}.values())
-    made, _ = gen.write(functions)
-    tests = sorted(autotest.OUT.glob("*.cpp"))
-    tag = lambda f: f"auto_{f['address'][2:]}"  # noqa: E731
-
-    print(f"baseline: {len(made)} autotests")
-    base, report = build_and_test(SRC, tests, [tag(f) for f in made], WORK / "base")
-    targets = [f for f in made if tag(f) in base and base[tag(f)][2] == 0 and base[tag(f)][0] >= autotest.MIN_COMPLETED]
-    print(f"  {len(targets)} pass with at least {autotest.MIN_COMPLETED} completed cases")
+    if args.hand:
+        db = elfdb.load_db()
+        coverage = hand_coverage(db)
+        functions = ([db["functions"][hex(int(a, 16))] for a in args.addresses] if args.addresses
+                     else [f for f in autotest.diff_functions(db) if f["address"] in coverage])
+        functions = [f for f in {f["address"]: f for f in functions}.values() if f["address"] in coverage]
+        tests = sorted(hybrid.TESTS.glob("*.cpp"))
+        covering = lambda f: sorted(coverage[f["address"]])  # noqa: E731
+        print(f"baseline: {len(functions)} functions under hand-written tests")
+        _, report = build_and_test(SRC, tests, [n for f in functions for n in covering(f)], WORK / "base")
+        passed = verdicts(report)
+        targets = [f for f in functions if all(passed.get(n) for n in covering(f))]
+        print(f"  {len(targets)} with passing tests")
+    else:
+        gen = autotest.Generator()
+        db = gen.db
+        functions = ([db["functions"][hex(int(a, 16))] for a in args.addresses] if args.addresses
+                     else autotest.diff_functions(db))
+        functions = list({f["address"]: f for f in functions}.values())
+        made, _ = gen.write(functions)
+        tests = sorted(autotest.OUT.glob("*.cpp"))
+        covering = lambda f: [f"auto_{f['address'][2:]}"]  # noqa: E731
+        print(f"baseline: {len(made)} autotests")
+        base, report = build_and_test(SRC, tests, [n for f in made for n in covering(f)], WORK / "base")
+        targets = [f for f in made if covering(f)[0] in base and base[covering(f)[0]][2] == 0
+                   and base[covering(f)[0]][0] >= autotest.MIN_COMPLETED]
+        print(f"  {len(targets)} pass with at least {autotest.MIN_COMPLETED} completed cases")
 
     # Our functions, their code and what they reach.
     tu_names = {t["id"]: t["name"] for t in db["tus"]}
@@ -344,12 +391,15 @@ def main():
         round_no += 1
         chosen = []
         for address, q in queues.items():
-            if not q:
+            if not q or (chosen and getattr(q[0], "alone", False)):
                 continue
             m = q[0]
+            # One mutant per test: a failure must point at a single mutant.
             if all(not (reaches[address] & c.affected) and not (reaches[c.target["address"]] & m.affected)
-                   for c in chosen):
+                   and not set(covering(m.target)) & set(covering(c.target)) for c in chosen):
                 chosen.append(q.pop(0))
+                if getattr(m, "alone", False):
+                    break
         src = WORK / "src"
         shutil.rmtree(src, ignore_errors=True)
         shutil.copytree(SRC, src)
@@ -363,17 +413,31 @@ def main():
                 text = text[:a] + new + text[b:]
             (src / rel).write_text(text)
         try:
-            got, _ = build_and_test(src, tests, [tag(m.target) for m in chosen], WORK / "round")
+            got, report = build_and_test(src, tests, [n for m in chosen for n in covering(m.target)], WORK / "round")
         except SystemExit as error:
-            got = {}
+            got, report = {}, []
             print(f"  round {round_no}: build failed: {error}")
+        passed = verdicts(report)
         for m in chosen:
-            s = got.get(tag(m.target))
-            outcome = "error" if s is None else "killed" if s[2] else "survived"
+            names = covering(m.target)
+            if args.hand:
+                s = None
+                if any(n not in passed for n in names):
+                    # The run died (a crash outside a forked child): retry the mutant alone.
+                    if len(chosen) > 1 and not getattr(m, "alone", False):
+                        m.alone = True
+                        queues[m.target["address"]].insert(0, m)
+                        continue
+                    outcome = "killed" if report else "error"
+                else:
+                    outcome = "survived" if all(passed[n] for n in names) else "killed"
+            else:
+                s = got.get(names[0])
+                outcome = "error" if s is None else "killed" if s[2] else "survived"
             done[m.target["address"]].append({"mutant": m.what, "outcome": outcome, "stats": s})
         print(f"round {round_no}: {len(chosen)} mutants, ", end="")
         print(
-              f"{sum(1 for m in chosen if (got.get(tag(m.target)) or (0, 0, 0))[2])} killed", flush=True)
+              f"{sum(1 for m in chosen if done[m.target['address']] and done[m.target['address']][-1]['mutant'] == m.what and done[m.target['address']][-1]['outcome'] == 'killed')} killed", flush=True)
 
     for f in targets:
         rows = done.get(f["address"], [])
@@ -384,7 +448,7 @@ def main():
             score=round(killed / len(tried), 2) if tried else None,
             strong=bool(tried) and killed / len(tried) >= STRONG, mutants=rows)
     RESULT.write_text(json.dumps(results, indent=1, ensure_ascii=False))
-    if args.accept:
+    if args.accept and not args.hand:
         record(db, functions, results)
     strong = [a for a, r in results.items() if r.get("strong")]
     print(f"\n{len(strong)} of {len(targets)} tests are strong (kill >= {STRONG:.0%} of mutants)")
