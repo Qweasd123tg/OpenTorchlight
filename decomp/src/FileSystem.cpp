@@ -603,16 +603,16 @@ void CFileSystem::buildMassiveDataGroup()
     {
         std::wstring path = STRINGS::StringUpper(files[i]);
         size_t mediaPos = path.find(L"MEDIA/");
-        if (path.find(L"UNITS/") != std::wstring::npos)
-            continue;
-        if (path.substr(mediaPos + 6, path.length() - 6 - mediaPos).find(L"/") == std::wstring::npos)
-            continue;
-
-        path = FILESYSTEM::CleanPath(path.substr(mediaPos, path.length() - mediaPos));
-        CDataGroup* group = m_pMassiveDataGroup->AddDataGroup(path);
-        group->LoadFile(path, NULL);
-        group->SetGroupName(path);
-        m_DataGroups[path] = group;
+        // Only data files in subfolders of media, units are loaded on demand.
+        if (path.find(L"UNITS/") == std::wstring::npos &&
+            path.substr(mediaPos + 6, path.length() - 6 - mediaPos).find(L"/") != std::wstring::npos)
+        {
+            path = FILESYSTEM::CleanPath(path.substr(mediaPos, path.length() - mediaPos));
+            CDataGroup* group = m_pMassiveDataGroup->AddDataGroup(path);
+            group->LoadFile(path, NULL);
+            group->SetGroupName(path);
+            m_DataGroups[path] = group;
+        }
     }
 
     if ((m_pModFileFilter == NULL || m_pModFileFilter->getNumberOfActiveMods() == 0) && !m_bPakExists)
@@ -693,8 +693,10 @@ CFileSystem::CFileSystem(bool bForceRebuild)
     reload();
 
     for (unsigned int i = 0; i < zipArchives.size(); i++)
-        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(zipArchives[i], "Zip",
-                                                                       "ZIP" + STRINGS::GetValueAsString(i), true);
+    {
+        std::string group = "ZIP" + STRINGS::GetValueAsString(i);
+        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(zipArchives[i], "Zip", group, true);
+    }
     if (zipFile != EMPTY_STRING)
         Ogre::ResourceGroupManager::getSingleton().addResourceLocation(zipFile, "Zip", "ZIP", true);
     for (unsigned int i = 0; i < fileSystemArchives.size(); i++)
@@ -729,10 +731,13 @@ CFileSystem::CFileSystem(bool bForceRebuild)
     }
 
     CFileInfo massFile;
-    if (getNumberOfMods() == 0)
+    if (getNumberOfMods() != 0)
+    {
+        if (!FILESYSTEM::FileExists(FILESYSTEM::GetAppDataPath() + L"massfile.dat"))
+            bForceRebuild = true;
+    }
+    else
         getFileInfo(L"media/massfile.dat", massFile, false, true, false);
-    else if (!FILESYSTEM::FileExists(FILESYSTEM::GetAppDataPath() + L"massfile.dat"))
-        bForceRebuild = true;
 
     if (!massFile.m_bExists || bForceRebuild ||
         (m_pModFileFilter && m_pModFileFilter->m_bNeedsToRecompressEverything) || bRecompress)

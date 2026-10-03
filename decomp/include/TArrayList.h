@@ -86,9 +86,9 @@ public:
 
     void setGrowBy(unsigned int growBy)
     {
+        if (growBy == 0)
+            growBy = 1;
         m_nGrowBy = growBy;
-        if (m_nGrowBy == 0)
-            m_nGrowBy = 1;
     }
 
     T& operator[](unsigned int index)
