@@ -208,7 +208,8 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("analyze")
     d = sub.add_parser("drafts")
-    d.add_argument("tus", nargs="+")
+    d.add_argument("tus", nargs="*")
+    d.add_argument("--all", action="store_true", help="every game TU")
     m = sub.add_parser("measure")
     m.add_argument("tus", nargs="+")
     args = parser.parse_args()
@@ -216,7 +217,7 @@ def main():
         return analyze()
     if args.command == "measure":
         return measure(args.tus)
-    drafts(args.tus)
+    drafts(["--all"] if getattr(args, "all", False) else args.tus)
 
 
 if __name__ == "__main__":

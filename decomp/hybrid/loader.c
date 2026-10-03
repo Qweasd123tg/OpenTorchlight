@@ -11,6 +11,7 @@
  * Environment:
  *   TLHYBRID_BLOB      path of the blob ELF (required)
  *   TLHYBRID_SELFTEST  1: run tests, print a report and exit before main
+ *   TLHYBRID_FILTER    run only tests whose names start with this prefix
  *   TLHYBRID_NOHOOK    1: map the blob but leave original code untouched
  *   TLHYBRID_VERBOSE   1: log every hook
  */
@@ -171,8 +172,11 @@ static int run_tests(const struct blob *b)
     }
     const tlhybrid_test *test = (const tlhybrid_test *)s->sh_addr;
     size_t count = s->sh_size / sizeof(*test);
+    const char *only = getenv("TLHYBRID_FILTER");
     int failed = 0;
     for (size_t i = 0; i < count; i++) {
+        if (only && strncmp(test[i].name, only, strlen(only)) != 0)
+            continue;
         int failures = test[i].run(&g_host);
         fprintf(stderr, "tlhybrid: %-48s %s (%d)\n", test[i].name, failures ? "FAIL" : "PASS", failures);
         failed += failures != 0;

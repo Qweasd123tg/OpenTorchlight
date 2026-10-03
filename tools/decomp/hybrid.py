@@ -242,11 +242,19 @@ def imports_assembly(names):
     return "\n".join(out + data + table + strings) + "\n"
 
 
-def build(out=OUT, verbose=True):
+def build(out=OUT, verbose=True, src=SRC, tests=None):
+    """src: decompiled sources (a mutated copy for tools/decomp/mutate.py);
+    tests: test sources, by default decomp/hybrid/tests plus generated
+    autotests when OTL_AUTOTEST=1."""
     ctx = Context()
     out.mkdir(parents=True, exist_ok=True)
     objects, hooks, notes = [], [], []
-    units = [(p, False) for p in sorted(SRC.rglob("*.cpp"))] + [(p, True) for p in sorted(TESTS.glob("*.cpp"))]
+    if tests is None:
+        tests = sorted(TESTS.glob("*.cpp"))
+        if os.environ.get("OTL_AUTOTEST"):
+            # Generated differential tests (tools/decomp/autotest.py).
+            tests += sorted((ROOT / "build-decomp" / "hybrid" / "autotests").glob("*.cpp"))
+    units = [(p, False) for p in sorted(Path(src).rglob("*.cpp"))] + [(p, True) for p in tests]
     for source, is_test in units:
         tu = None if is_test else objdiff.tu_for_source(ctx.db, source)
         if not is_test and tu is None:
@@ -350,6 +358,22 @@ def game_env(blob, loader, extra=None, headless=False):
     return game, env
 
 
+def selftest(blob, loader, only=None):
+    """Runs the blob's tests before main; only: test name prefix. Returns (code, report lines)."""
+    extra = {"TLHYBRID_SELFTEST": "1"}
+    if only:
+        extra["TLHYBRID_FILTER"] = only
+    game, env = game_env(blob, loader, extra, headless=True)
+    result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game, env=env,
+                            capture_output=True, text=True,
+                            timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+    # Loader lines plus the indented details tests log under a failure.
+    report = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
+    if not any("tests," in line for line in report):
+        return 2, report + [result.stderr[-2000:], "selftest: loader report missing; the hybrid runtime was not injected"]
+    return result.returncode, report
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -362,16 +386,9 @@ def main():
     if args.command == "build":
         return 0
     if args.command == "selftest":
-        game, env = game_env(blob, loader, {"TLHYBRID_SELFTEST": "1"}, headless=True)
-        result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game, env=env,
-                                capture_output=True, text=True, timeout=120)
-        # Loader lines plus the indented details tests log under a failure.
-        report = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
-        print("\n".join(report) or result.stderr[-2000:])
-        if not any("tests," in line for line in report):
-            print("selftest: loader report missing; the hybrid runtime was not injected")
-            return 2
-        return result.returncode
+        code, report = selftest(blob, loader)
+        print("\n".join(report))
+        return code
     game, env = game_env(blob, loader)
     return subprocess.run([str(game / "Torchlight.bin.x86_64")] + args.args, cwd=game, env=env).returncode
 
