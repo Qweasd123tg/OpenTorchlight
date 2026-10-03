@@ -102,6 +102,12 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    bool alive();
+    int HP();
+    int maxHP();
+    int mana();
+    int maxMana();
+    void setAIPlayAnimation(const std::string& animation, bool loop, float blendTime, float speed);
     void interrupt(bool force);
     void setTarget(CCharacter* target);
     void setAlignment(EAlignment alignment);

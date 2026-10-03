@@ -5,6 +5,7 @@
 #include "RunicCore.h"
 #include "TArrayList.h"
 
+class CGameClient;
 class CHierarchy;
 class CLevel;
 
@@ -26,12 +27,13 @@ public:
     CLevel* getLevel() { return m_pLevel; }
     // Read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).
     bool getLogicMessagesEnabled() { return m_bFlag1; }
+    CGameClient* getGameClient() { return m_GameClients.size() != 0 ? m_GameClients[0] : NULL; }
 
 private:
     Ogre::SceneManager* m_pSceneManager;
     CLevel* m_pLevel;
     CHierarchy* m_pHierarchy;
-    TArrayList<void*> m_ResourceList;
+    TArrayList<CGameClient*> m_GameClients;
     bool m_bFlag0;
     bool m_bFlag1;
     bool m_bFlag2;

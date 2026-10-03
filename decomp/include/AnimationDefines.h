@@ -1,0 +1,42 @@
+#ifndef ANIMATIONDEFINES_H
+#define ANIMATIONDEFINES_H
+
+#include <string>
+
+// Animation keyframe event names. Internal linkage: every including TU
+// constructs its own copy.
+
+static const std::wstring gKEYFRAME_TYPES[] =
+{
+    L"HIT",
+    L"BLENDIN",
+    L"BLENDOUT",
+    L"PLAYSOUND",
+    L"SPAWNPARTICLE",
+    L"SPAWNPARTICLE_STOP_ON_DEATH",
+    L"FOOTSTEP",
+    L"SHOWWEAPONTRAIL",
+    L"HIDEWEAPONTRAIL",
+    L"ATTACKSOUND",
+    L"ENABLECOLLISION",
+    L"DISABLECOLLISION",
+    L"REMOVEPARTICLES",
+    L"REMOVEANIMATIONPARTICLES",
+    L"CAMERASHAKE",
+    L"ATTACKEND",
+    L"UNTARGETABLE",
+    L"TARGETABLE",
+    L"DAMPVELOCITY",
+    L"UNDAMPVELOCITY",
+    L"SHOWWEAPONS",
+    L"HIDEWEAPONS",
+    L"HIDEMESH",
+    L"SHOWMESH",
+    L"FADEOUTMESH",
+    L"FADEINMESH",
+    L"CAMERASHAKE_NO_FALLOFF",
+    L"PLAYSOUND_NO_FALLOFF",
+    L"HITTWO",
+};
+
+#endif

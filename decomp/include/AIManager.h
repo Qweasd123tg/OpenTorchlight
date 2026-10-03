@@ -29,6 +29,7 @@ public:
 
     CResourceManager* getResourceManager();
     CLevel* getLevel();
+    CCharacter* getCharacter() { return m_pCharacter; }
 
     void addFormationUnit(CBaseUnit* unit);
     TArrayList<long long>& getFormationUnits() { return m_FormationUnits; }
