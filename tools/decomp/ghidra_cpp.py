@@ -78,10 +78,10 @@ def split_args(text):
             quote = ch
             cur += ch
             continue
-        prev, after = text[k - 1] if k else "", text[k + 1:k + 3]
+        prev, after = text[k - 1] if k else "", text[k + 1:k + 8]
         operator = ch in "<>" and (
             (ch == ">" and prev == "-") or after[:1] in ("=", ch) or prev in ("<", ">") or
-            (prev == " " and re.match(r" [\w(*&!-]", after)))
+            (prev == " " and (k < 2 or text[k - 2] not in "<>") and re.match(r" (?!const\b)[\w(*&!-]", after)))
         if ch in "([" or (ch == "<" and not operator):
             depth += 1
         elif ch in ")]" or (ch == ">" and not operator):
@@ -94,6 +94,9 @@ def split_args(text):
     if cur.strip():
         out.append(cur.strip())
     return out
+
+
+STATIC_METHODS = {"getSingleton", "getSingletonPtr"}
 
 
 def call_rewrite(text, methods):
@@ -116,7 +119,10 @@ def call_rewrite(text, methods):
         if (cls, meth) in methods and args and meth != cls:
             obj = re.sub(r"^\((\w[\w:<>, ]*?) \*\)", "", args[0])
             rest = ", ".join(args[1:])
-            if obj == "this":
+            if meth in STATIC_METHODS:
+                # Ghidra gives static methods a bogus `this` (they all got __thiscall).
+                out.append(f"{cls}::{meth}({rest})")
+            elif obj == "this":
                 out.append(f"{meth}({rest})")
             elif re.fullmatch(r"&?[\w.\->\[\]]+", obj):
                 out.append(f"{obj[1:]}.{meth}({rest})" if obj.startswith("&") else f"{obj}->{meth}({rest})")
@@ -300,8 +306,8 @@ def convert(code, methods, f=None, signatures=None, enums=None):
     text = re.sub(r"\bthis->(?=\w)", "", text)
     # Base and member destructor calls on this are implicit in a destructor.
     text = re.sub(r"\n[ \t]*~\w+\(\);", "", text)
-    text = re.sub(r"\b(\w+)\(this\)", r"\1()", text)
-    text = re.sub(r"\b(\w+)\(this,\s*", r"\1(", text)
+    text = re.sub(r"(?<![>.\w])(\w+)\(this\)", r"\1()", text)
+    text = re.sub(r"(?<![>.\w])(\w+)\(this,\s*", r"\1(", text)
     text = tidy_expressions(text)
     text = drop_unused_locals(text)
     text = reindent(text)

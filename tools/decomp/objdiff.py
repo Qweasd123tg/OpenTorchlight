@@ -489,18 +489,19 @@ def globalize_locals(text):
     return "\n".join(out) + "\n", names
 
 
-def compile_for_diff(source, tmp, extra=()):
-    asm = toolchain.compile_source(source, Path(tmp) / "unit.s", extra, assembly=True)
+def compile_for_diff(source, tmp, extra=(), quiet=False):
+    asm = toolchain.compile_source(source, Path(tmp) / "unit.s", extra, assembly=True, quiet=quiet)
     text, globalized = globalize_locals(Path(asm).read_text())
     patched = Path(tmp) / "unit.global.s"
     patched.write_text(text)
     return toolchain.assemble(patched, Path(tmp) / "unit.o"), globalized
 
 
-def compare_source(source, original, show=None, extra=()):
+def compare_source(source, original, show=None, extra=(), quiet=False):
+    """quiet: compiler errors go into the SystemExit message instead of stderr."""
     tu = tu_for_source(original.db, source)
     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
-        obj, globalized = compile_for_diff(source, tmp, extra)
+        obj, globalized = compile_for_diff(source, tmp, extra, quiet)
         ours = object_functions(obj, original.resolver(tu), original.side.name_at, globalized)
     rows = []
     seen = set()
