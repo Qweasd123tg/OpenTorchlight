@@ -357,9 +357,7 @@ CDescriptor::~CDescriptor()
     m_Objects.clear();
     m_Properties.clear();
     m_OutputLogicWrappers.deleteAll();
-    m_OutputLogicWrappers.clear();
     m_InputLogicWrappers.deleteAll();
-    m_InputLogicWrappers.clear();
 }
 
 unsigned int CDescriptor::AddOutputLogic(EOUTPUT_EVENTS event)
