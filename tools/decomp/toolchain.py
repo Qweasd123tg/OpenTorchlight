@@ -172,7 +172,7 @@ def _cache_lookup(cmd, source):
     return index, None
 
 
-def compile_source(source, output, extra=(), assembly=False, probe=False):
+def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False):
     """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
 
     Results are cached in build-decomp/cc-cache by source, dependency and flag
@@ -202,9 +202,11 @@ def compile_source(source, output, extra=(), assembly=False, probe=False):
         cmd_full = cmd + [str(source), "-o", str(out)] + (["-MD", "-MF", str(depfile)] if use_cache else [])
         result = subprocess.run(cmd_full, env=driver_env(root), capture_output=True, text=True)
         if result.returncode:
+            if quiet:
+                raise SystemExit(f"compile failed: {source}\n{result.stderr}")
             sys.stderr.write(result.stderr)
             raise SystemExit(f"compile failed: {source}")
-        if result.stderr.strip():
+        if result.stderr.strip() and not quiet:
             sys.stderr.write(result.stderr)
         if probe:
             comment = subprocess.run(["readelf", "-p", ".comment", str(out)], capture_output=True,

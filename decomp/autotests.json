@@ -1,0 +1,80 @@
+{
+ "0x6f90e0": {
+  "name": "CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*)",
+  "killed": 5,
+  "tried": 5,
+  "source": "8b4cc9950ae110f9"
+ },
+ "0x6f9190": {
+  "name": "CDescriptor::GetOutputLogicFuncIndexByWrapper(CLogicWrapper*)",
+  "killed": 5,
+  "tried": 5,
+  "source": "ac3db0666d47efb4"
+ },
+ "0x6f92c0": {
+  "name": "CDescriptor::LinkProperty(unsigned int, unsigned int)",
+  "killed": 4,
+  "tried": 4,
+  "source": "094dd9a427ecca53"
+ },
+ "0x6f9960": {
+  "name": "CDescriptor::saveObjects(CDataGroup*, CDescriptorSaveConfiguration*)",
+  "killed": 8,
+  "tried": 10,
+  "source": "7c8243415b33ccb2"
+ },
+ "0x6f9c10": {
+  "name": "CDescriptor::AddInputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",
+  "killed": 3,
+  "tried": 3,
+  "source": "ed1cb6bb83b49635"
+ },
+ "0x6f9d70": {
+  "name": "CDescriptor::getUniqueNumericValueRepresentation()",
+  "killed": 8,
+  "tried": 10,
+  "source": "7c621cc86cc22687"
+ },
+ "0x6fd280": {
+  "name": "CDescriptor::calculateDefaultValues(CEditorBaseObject*)",
+  "killed": 10,
+  "tried": 10,
+  "source": "2ac479f38c1be1da"
+ },
+ "0xa01f30": {
+  "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
+  "killed": 3,
+  "tried": 3,
+  "source": "7ca89ff63d6e1ef3"
+ },
+ "0xc8a2c0": {
+  "name": "CRandomizer::removeChoice(unsigned int)",
+  "killed": 9,
+  "tried": 9,
+  "source": "f41f3d44ec032ea7"
+ },
+ "0xc8a8f0": {
+  "name": "CRandomizer::getRandom(int&)",
+  "killed": 9,
+  "tried": 10,
+  "source": "cc7006f7eac35778"
+ },
+ "0xc8aa10": {
+  "name": "CRandomizer::getRandom()",
+  "killed": 10,
+  "tried": 10,
+  "source": "9ee1e438b35413dc"
+ },
+ "0xd79920": {
+  "name": "CRunicCore::~CRunicCore()",
+  "killed": 5,
+  "tried": 6,
+  "source": "ff94309a109c9ba9"
+ },
+ "0xe4d650": {
+  "name": "CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",
+  "killed": 8,
+  "tried": 10,
+  "source": "8c5cc5463244be56"
+ }
+}

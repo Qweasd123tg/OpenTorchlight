@@ -54,7 +54,7 @@ def balanced_block_end(text, start):
 def drop_refcount_blocks(text):
     # if (... != &..._S_empty_rep_storage) { LOCK(); ... _M_destroy(...); }
     while True:
-        m = re.search(r"\n[ \t]*if \([^\n]*_S_empty_rep_storage[^\n]*\n?[^\n{]*\{", text)
+        m = re.search(r"\n[ \t]*if \([^{};]*?_S_empty_rep_storage[^{};]*\{", text)
         if not m:
             return text
         end = balanced_block_end(text, m.start())
@@ -62,8 +62,9 @@ def drop_refcount_blocks(text):
 
 
 def split_args(text):
+    """Splits on top-level commas; <> count as brackets in types, not as ->, <=, << or a < b."""
     out, depth, cur, quote, escape = [], 0, "", None, False
-    for ch in text:
+    for k, ch in enumerate(text):
         if quote:
             cur += ch
             if escape:
@@ -77,9 +78,13 @@ def split_args(text):
             quote = ch
             cur += ch
             continue
-        if ch in "([<":
+        prev, after = text[k - 1] if k else "", text[k + 1:k + 3]
+        operator = ch in "<>" and (
+            (ch == ">" and prev == "-") or after[:1] in ("=", ch) or prev in ("<", ">") or
+            (prev == " " and re.match(r" [\w(*&!-]", after)))
+        if ch in "([" or (ch == "<" and not operator):
             depth += 1
-        elif ch in ")]>":
+        elif ch in ")]" or (ch == ">" and not operator):
             depth -= 1
         if ch == "," and depth == 0:
             out.append(cur.strip())
@@ -151,10 +156,11 @@ def inline_temp_strings(text):
     def capture(m):
         temps[m.group(1)] = m.group(2)
         return ""
-    text = re.sub(r"\n[ \t]*std::w?string::(?:w?string|basic_string)\s*\(\s*\([\w:]+ \*\)(local_\w+)\s*,\s*"
+    text = re.sub(r"\n[ \t]*std::w?string::(?:w?string|basic_string)\s*\(\s*\([\w:]+ \*\)&?(local_\w+)\s*,\s*"
                   r"(L?\"(?:[^\"\\]|\\.)*\")\s*,\s*&?local_\w+\s*\);", capture, text)
     for local, literal in temps.items():
-        text = re.sub(rf"\([\w:]+ \*\){local}\b", literal, text)
+        text = re.sub(rf"\n[ \t]*[\w:<>]+[ \t]*\**[ \t]*{local}[ \t]*(?:\[\d*\])?;", "", text)
+        text = re.sub(rf"\([\w:]+ \*\)&?{local}\b", literal, text)
         text = re.sub(rf"&{local}\b|\b{local}\b(?!\s*\[)", literal, text)
     return text
 

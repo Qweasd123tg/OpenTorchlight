@@ -11,7 +11,8 @@
  * Environment:
  *   TLHYBRID_BLOB      path of the blob ELF (required)
  *   TLHYBRID_SELFTEST  1: run tests, print a report and exit before main
- *   TLHYBRID_FILTER    run only tests whose names start with this prefix
+ *   TLHYBRID_FILTER    run only tests whose names start with one of these
+ *                      comma-separated prefixes
  *   TLHYBRID_NOHOOK    1: map the blob but leave original code untouched
  *   TLHYBRID_VERBOSE   1: log every hook
  */
@@ -163,6 +164,17 @@ static void run_constructors(const struct blob *b)
         ctor[i]();
 }
 
+static int name_selected(const char *name, const char *prefixes)
+{
+    for (const char *p = prefixes; *p;) {
+        size_t n = strcspn(p, ",");
+        if (n && strncmp(name, p, n) == 0)
+            return 1;
+        p += n + (p[n] == ',');
+    }
+    return 0;
+}
+
 static int run_tests(const struct blob *b)
 {
     const Elf64_Shdr *s = find_section(b, ".tlhybrid.tests");
@@ -175,7 +187,7 @@ static int run_tests(const struct blob *b)
     const char *only = getenv("TLHYBRID_FILTER");
     int failed = 0;
     for (size_t i = 0; i < count; i++) {
-        if (only && strncmp(test[i].name, only, strlen(only)) != 0)
+        if (only && !name_selected(test[i].name, only))
             continue;
         int failures = test[i].run(&g_host);
         fprintf(stderr, "tlhybrid: %-48s %s (%d)\n", test[i].name, failures ? "FAIL" : "PASS", failures);

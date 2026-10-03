@@ -33,7 +33,7 @@ import toolchain  # noqa: E402
 ROOT = elfdb.ROOT
 OUT = ROOT / "build-decomp" / "hybrid" / "autotests"
 TYPES = ROOT / "build-decomp" / "types.json"
-CASES = 100
+CASES = 200
 BUDGET_SECONDS = 8
 MIN_COMPLETED = 20
 
@@ -47,6 +47,10 @@ OGRE_VALUES = {"Ogre::Vector3": 3, "Ogre::Vector2": 2, "Ogre::Quaternion": 4, "O
 
 class Unsupported(Exception):
     pass
+
+
+def is_list(t):
+    return t.startswith("TArrayList<") and t.endswith(">")
 
 
 class Generator:
@@ -93,19 +97,41 @@ class Generator:
         return bool(re.search(rf"\bstatic\b[^;{{}}]*\b{re.escape(method)}\s*\(", text))
 
     # -- value builders (emit C++ statements) --------------------------------
+    def kind_of(self, cls):
+        """Pool id of a class: pointers of one class may be reused as arguments and list elements."""
+        return self.kinds.setdefault(cls, len(self.kinds) + 1)
+
+    def object_size(self, cls):
+        if self.size_of(cls):
+            return str(self.size_of(cls))
+        base = re.match(r"\w+", cls).group(0)
+        if base in self.headers:
+            self.used.add(base)
+            return f"sizeof({cls})"
+        return "64"  # unknown class: a zeroed block
+
     def fake(self, cls, depth, emit):
-        """Expression for a pointer to a fake object of cls (may be NULL)."""
-        self.used.add(cls)
-        size = self.size_of(cls)
-        if not size or depth > 1:
+        """Variable with a pointer to a fake object of cls (may be NULL)."""
+        if depth > 1:
             return "0"
+        if cls in self.classes or re.match(r"\w+", cls).group(0) in self.headers:
+            self.used.add(re.match(r"\w+", cls).group(0))
         self.counter += 1
         var = f"fake{self.counter}"
-        emit(f"char* {var} = (r.next() % 5 == 0) ? 0 : (char*)autotest::allocate({size});")
+        emit(f"char* {var} = (r.next() % 5 == 0) ? 0 : (char*)autotest::allocate({self.object_size(cls)});")
         emit(f"if ({var}) {{")
-        self.fill(cls, var, depth, emit, indent="    ")
+        emit(f"    autotest::remember({var}, {self.kind_of(cls)});")
+        if cls in self.classes:
+            self.fill(cls, var, depth, emit, indent="    ")
         emit("}")
         return var
+
+    def pointer_to(self, cls, depth, emit):
+        """Pointer expression: a new fake or, sometimes, one made earlier."""
+        var = self.fake(cls, depth, emit)
+        if var == "0":
+            return "0"
+        return f"autotest::pick(r, {self.kind_of(cls)}, {var})"
 
     def fill(self, cls, var, depth, emit, indent=""):
         if cls in self.vtables:
@@ -125,12 +151,14 @@ class Generator:
                 emit(f"{indent}*(double*){at} = autotest::randomFloat(r);")
             elif t == "std::wstring":
                 emit(f"{indent}new ({at}) std::wstring(autotest::randomText(r));")
+            elif is_list(t):
+                self.fill_list(t[len("TArrayList<"):-1].strip(), at, depth, emit, indent)
+            elif t.endswith("*") and is_list(t[:-1].strip()):
+                self.fill_list(t[:-1].strip()[len("TArrayList<"):-1].strip(), at, depth, emit, indent, heap=True)
             elif t.endswith("*") and t[:-1].strip() in self.classes:
                 inner = self.fake(t[:-1].strip(), depth + 1, lambda s: emit(indent + s))
                 emit(f"{indent}*(char**){at} = {inner};")
-            elif t.startswith("TArrayList<") and t.endswith(">"):
-                self.fill_list(t[len("TArrayList<"):-1].strip(), at, depth, emit, indent)
-            # other types (pointers to lists, STL containers, Ogre objects) stay zero
+            # other types (STL containers, Ogre objects) stay zero
 
     def element(self, t, depth, emit):
         t = t.replace("const ", "").strip()
@@ -140,26 +168,35 @@ class Generator:
             return "(r.next() & 1) != 0"
         if t in FLOATS:
             return f"({t})autotest::randomFloat(r)"
-        if t.endswith("*") and t[:-1].strip() in self.classes:
-            self.used.add(t[:-1].strip())
-            return f"({t}){self.fake(t[:-1].strip(), depth + 1, emit)}"
+        if t.endswith("*") and re.fullmatch(r"[\w:<>*, ]+", t[:-1]) and t[:-1].strip() not in INTS | FLOATS:
+            return f"({t}){self.pointer_to(t[:-1].strip(), depth + 1, emit)}"
         raise Unsupported(t)
 
-    def fill_list(self, t, at, depth, emit, indent):
+    def fill_list(self, t, at, depth, emit, indent, heap=False):
+        """A TArrayList<t> at `at`, or (heap) a new one whose pointer is stored at `at`."""
         buffer = []
         for name in re.findall(r"[A-Za-z_]\w*", t):
-            if name in self.classes:
+            if name in self.classes or name in self.headers:
                 self.used.add(name)
         try:
             self.counter += 1
             n = f"n{self.counter}"
+            values = [self.element(t, depth, lambda s: buffer.append(indent + s)) for _ in range(4)]
             buffer.append(f"{indent}{{ unsigned int {n} = r.next() % 5;")
-            buffer.append(f"{indent}  TArrayList<{t} >* list = new ({at}) TArrayList<{t} >(1 + r.next() % 4);")
-            values = [self.element(t, depth, lambda s: buffer.append(indent + "  " + s)) for _ in range(4)]
+            if heap:
+                buffer.append(f"{indent}  TArrayList<{t} >* list = (r.next() % 5 == 0) ? 0 : new TArrayList<{t} >(1 + r.next() % 4);")
+                buffer.append(f"{indent}  *(void**){at} = list;")
+            else:
+                buffer.append(f"{indent}  TArrayList<{t} >* list = new ({at}) TArrayList<{t} >(1 + r.next() % 4);")
             buffer.append(f"{indent}  {t} values[4] = {{{', '.join(values)}}};")
-            buffer.append(f"{indent}  for (unsigned int i = 0; i < {n}; i++) list->add(values[i % 4]); }}")
+            if t.endswith("*"):
+                # Listed pointers weigh more in the pool: arguments then often name a listed object.
+                buffer.append(f"{indent}  for (unsigned int i = 0; list && i < {n}; i++) {{ list->add(values[i % 4]); "
+                              f"autotest::remember(values[i % 4], {self.kind_of(t[:-1].strip())}); }} }}")
+            else:
+                buffer.append(f"{indent}  for (unsigned int i = 0; list && i < {n}; i++) list->add(values[i % 4]); }}")
         except Unsupported:
-            buffer = [f"{indent}new ({at}) TArrayList<{t} >();"]
+            buffer = [] if heap else [f"{indent}new ({at}) TArrayList<{t} >();"]
         for line in buffer:
             emit(line)
 
@@ -197,13 +234,13 @@ class Generator:
         elif core.endswith("*") and core[:-1].strip() in self.classes and core[:-1].strip() in self.headers:
             cls = core[:-1].strip()
             members.append(f"{cls}* {name};")
-            emit(f"c.{name} = ({cls}*){self.fake(cls, 1, emit)};")
+            emit(f"c.{name} = ({cls}*){self.pointer_to(cls, 1, emit)};")
         elif core.endswith("&") and core[:-1].strip() in self.classes and core[:-1].strip() in self.headers:
             cls = core[:-1].strip()
             members.append(f"{cls}* {name};")
             var = self.fake(cls, 1, emit)
-            emit(f"if (!{var}) {var} = (char*)autotest::allocate({self.size_of(cls)});")
-            emit(f"c.{name} = ({cls}*){var};")
+            emit(f"if (!{var}) {var} = (char*)autotest::allocate({self.object_size(cls)});")
+            emit(f"c.{name} = ({cls}*)autotest::pick(r, {self.kind_of(cls)}, {var});")
             return f"*c.{name}", f"c.{name}"
         else:
             raise Unsupported(ptype)
@@ -214,12 +251,15 @@ class Generator:
             t, at = f["type"].replace("const ", "").strip(), f"({var} + {f['offset']:#x})"
             if t == "std::wstring":
                 emit(f"out.addText(*(std::wstring*){at});")
-            elif t.startswith("TArrayList<") and t.endswith(">"):
-                elem = t[len("TArrayList<"):-1].strip()
-                emit(f"{{ TArrayList<{elem} >* list = (TArrayList<{elem} >*){at}; unsigned int n = list->size();")
+            elif is_list(t) or (t.endswith("*") and is_list(t[:-1].strip())):
+                elem = t.rstrip("*").strip()[len("TArrayList<"):-1].strip()
+                list_at = f"*(TArrayList<{elem} >**){at}" if t.endswith("*") else f"(TArrayList<{elem} >*){at}"
+                emit(f"{{ TArrayList<{elem} >* list = {list_at}; unsigned int n = list ? list->size() : 0;")
                 emit("  out.add(&n, sizeof(n));")
                 if elem.endswith("*"):
                     emit("  for (unsigned int i = 0; i < n; i++) out.addPointer((*list)[i]); }")
+                elif elem in ("std::wstring", WSTRING):
+                    emit("  for (unsigned int i = 0; i < n; i++) out.addText((*list)[i]); }")
                 else:
                     emit(f"  for (unsigned int i = 0; i < n; i++) {{ {elem} v = (*list)[i]; out.add(&v, sizeof(v)); }} }}")
 
@@ -237,6 +277,7 @@ class Generator:
             raise Unsupported("deleting destructor")
         self.counter = 0
         self.used = set()
+        self.kinds = {}
         tag = f["address"][2:]
         build, members, call_args = [], [], []
         emit = build.append
@@ -278,7 +319,7 @@ class Generator:
                 "struct Context", "{", "    char* self;", *[f"    {m}" for m in members], "};",
                 "void build(autotest::Rng& r, Context& c)", "{", "    c.self = 0;", *[f"    {l}" for l in build], "}",
                 "void report(Context& c, autotest::Capture& out)", "{",
-                "    out.add(autotest::g_arena, autotest::g_arenaUsed);" if kind != "dtor" else "    (void)c;",
+                "    (void)c;", "    out.addHeapInUse();", "    out.add(autotest::g_arena, autotest::g_arenaUsed);",
                 *[f"    {l}" for l in dumps], "}",
                 "void original(void* p, autotest::Capture& out)", "{", "    Context& c = *(Context*)p;",
                 *[f"    {l}" for l in prelude],
@@ -292,6 +333,7 @@ class Generator:
                 f"    for (int i = 0; i < {CASES} && stats.different == 0 && autotest::seconds() - started < {BUDGET_SECONDS}; i++)",
                 "    {",
                 "        autotest::g_arenaUsed = 0;",
+                "        autotest::g_pool.count = 0;",
                 f"        autotest::Rng r({int(f['address'], 16)}ULL + i);",
                 f"        t{tag}::Context c;", f"        t{tag}::build(r, c);",
                 f'        autotest::compareCase(t{tag}::original, t{tag}::ours, &c, stats, host, "{name}", i);',
@@ -306,7 +348,7 @@ class Generator:
                 includes.add(self.headers[core])
         forward = []
         for name in sorted(self.used):
-            if name in self.headers:
+            if name in self.headers:  # noqa: SIM114
                 includes.add(self.headers[name])
             elif re.fullmatch(r"\w+", name):
                 forward.append(f"class {name};")
@@ -318,7 +360,8 @@ class Generator:
             old.unlink()
         (OUT / "AutoTestRuntime.cpp").write_text(
             '#include "AutoTest.h"\n\nnamespace autotest\n{\n'
-            "char g_arena[kArenaSize] __attribute__((aligned(16)));\nsize_t g_arenaUsed;\nOutcome g_outcomes[2];\n}\n")
+            "char g_arena[kArenaSize] __attribute__((aligned(16)));\nsize_t g_arenaUsed;\nPool g_pool;\n"
+            "Outcome g_outcomes[2];\n}\n")
         made, skipped = [], {}
         for f in functions:
             try:

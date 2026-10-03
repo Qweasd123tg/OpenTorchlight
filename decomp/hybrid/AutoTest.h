@@ -8,6 +8,7 @@
 #define AUTOTEST_H
 
 #include <cstring>
+#include <malloc.h>
 #include <new>
 #include <string>
 #include <signal.h>
@@ -80,6 +81,41 @@ inline bool inArena(const void* p)
     return (const char*)p >= g_arena && (const char*)p < g_arena + kArenaSize;
 }
 
+// Fake objects made for a case, by class; arguments and list elements
+// sometimes reuse them, so lookups and removals find what they look for.
+struct Pool
+{
+    enum { kSize = 256 };
+    void* pointer[kSize];
+    int kind[kSize];
+    int count;
+};
+extern Pool g_pool;
+
+inline void remember(void* p, int kind)
+{
+    if (g_pool.count < Pool::kSize)
+    {
+        g_pool.pointer[g_pool.count] = p;
+        g_pool.kind[g_pool.count] = kind;
+        g_pool.count++;
+    }
+}
+
+inline void* pick(Rng& r, int kind, void* fresh)
+{
+    int n = 0;
+    for (int i = 0; i < g_pool.count; i++)
+        n += g_pool.kind[i] == kind && g_pool.pointer[i] != fresh;
+    if (n == 0 || r.next() % 3 == 0)
+        return fresh;
+    int k = r.next() % n;
+    for (int i = 0; i < g_pool.count; i++)
+        if (g_pool.kind[i] == kind && g_pool.pointer[i] != fresh && k-- == 0)
+            return g_pool.pointer[i];
+    return fresh;
+}
+
 struct Capture
 {
     enum { kSize = 256 * 1024 };
@@ -98,6 +134,14 @@ struct Capture
         // Heap addresses may legitimately differ; keep nullness and arena offsets.
         long long token = p == 0 ? 0 : inArena(p) ? 1 + ((const char*)p - g_arena) : -1;
         add(&token, sizeof(token));
+    }
+    // Bytes in use on the malloc heap: both children start from the same heap,
+    // so a missing delete or an extra allocation shows here.
+    void addHeapInUse()
+    {
+        struct mallinfo info = mallinfo();
+        long long used = info.uordblks;
+        add(&used, sizeof(used));
     }
     void addText(const std::wstring& s)
     {
