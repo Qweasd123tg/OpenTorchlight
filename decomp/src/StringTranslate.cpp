@@ -1,6 +1,7 @@
 #include "EmptyStrings.h"
 #include "StringTranslate.h"
 #include "DataGroup.h"
+#include "TRepository.h"
 
 CStringTranslate* m_gStringTranslate = NULL;
 
@@ -55,6 +56,7 @@ void CStringTranslate::reload()
         m_Translations[dataGroup.GetDataGroup(i)->GetDataValue(L"ORIGINAL", EMPTY_WSTRING)] =
             dataGroup.GetDataGroup(i)->GetDataValue(L"TRANSLATION", EMPTY_WSTRING);
     }
+    // The repository is emptied here but never freed.
     dataGroup.getRepository()->clear();
     m_bLoaded = true;
 }
