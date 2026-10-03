@@ -81,7 +81,7 @@ class Tracer:
     @staticmethod
     def show(value):
         kind, v = value
-        if kind == "imm":
+        if kind == "imm" and isinstance(v, int):
             return str(v - (1 << 32)) if (1 << 31) <= v < (1 << 32) else (str(v) if v < 0x10000 else hex(v))
         if kind == "this":
             return "this" if not v else f"&this->+{v:#x}"
