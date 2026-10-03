@@ -90,6 +90,30 @@ def annotate(asm, image):
     return "\n".join(out) + "\n"
 
 
+def ghidra_drafts(db, tu, funcs, out):
+    """ghidra.cpp: converted Ghidra drafts of the TU, when tools/decomp/ghidra_draft.py has run."""
+    raw_dir = ROOT / "build-decomp" / "drafts" / tu["name"] / "raw"
+    if not raw_dir.exists():
+        return []
+    import ghidra_cpp
+    methods, signatures, enums = ghidra_cpp.known_methods(db), ghidra_cpp.signatures_of(db), ghidra_cpp.parse_enums()
+    parts = []
+    for f in funcs:
+        raw = raw_dir / f"{f['address']}.c"
+        if f["kind"] in WRITTEN and raw.exists() and not any(n.endswith("D0Ev") for n in f["names"]):
+            try:
+                parts.append(f"// {f['address']} {f['demangled']}\n" +
+                             ghidra_cpp.convert(raw.read_text(), methods, f, signatures, enums))
+            except Exception as error:  # a draft is optional
+                parts.append(f"// {f['address']}: conversion failed: {error}\n")
+    (out / "ghidra.cpp").write_text("// Ghidra drafts with recovered types, converted by tools/decomp/ghidra_cpp.py.\n"
+                                   "// Not compiled. Inlined TArrayList/std::string code may still be expanded.\n\n"
+                                   + "\n".join(parts))
+    return ["## Ghidra drafts", "",
+            f"`ghidra.cpp`: {len(parts)} functions decompiled with the recovered types and converted to C++.",
+            "Start from them instead of the ASM; verify with objdiff and self-tests.", ""]
+
+
 def static_init_order(funcs, data, elf):
     """TU-local objects in the order the static initializer constructs them, with known headers."""
     inits = [f for f in funcs if f["kind"] == "compiler" and ("__static_initialization" in f["demangled"]
@@ -220,6 +244,7 @@ def packet(db, tu, elf):
                         label = str(slot)
                     lines.append(f"  - [{si}] {label}")
         lines.append("")
+    lines += ghidra_drafts(db, tu, funcs, out)
     lines += static_init_order(funcs, data, elf)
     lines += ["## TU-local data", "", "| address | size | section | symbol |", "|---|---:|---|---|"]
     lines += [f"| {g['address']} | {g['size']} | {g['section']} | `{g['demangled']}` |" for g in data]

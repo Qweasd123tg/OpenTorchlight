@@ -3,6 +3,7 @@
 
     python3 tools/decomp/ghidra_draft.py analyze            # once: import + auto-analysis (long)
     python3 tools/decomp/ghidra_draft.py drafts AIFlag.cpp  # types + decompile + C++ cleanup
+    python3 tools/decomp/ghidra_draft.py drafts --all       # every game TU (long; run in background)
 
 `drafts` exports class layouts from tools/decomp/layout.py and the recovered
 headers as Ghidra structures, applies them as `this` types, decompiles every
@@ -83,6 +84,8 @@ def drafts(tus):
     shutil.copy(ROOT / "tools" / "decomp" / "ghidra" / "DecompDrafts.java", io / "scripts")
     shutil.copy(ROOT / "build-decomp" / "types.json", io / "types.json")
     names = {t["id"]: t["name"] for t in db["tus"]}
+    if tus == ["--all"]:
+        tus = [t["name"] for t in db["tus"] if t["kind"] == "game"]
     wanted = {t["id"] for t in db["tus"] if t["name"] in tus}
     if len(wanted) != len(set(tus)):
         raise SystemExit(f"unknown TU among {tus}")
