@@ -64,6 +64,7 @@ def main():
     sources = sorted((ROOT / "decomp" / "src").rglob("*.cpp"))
     original = objdiff.Original(db=db)
     units = [objdiff.compare_source(s, original) for s in sources]
+    objdiff.save_norm_cache(original)
     status = Counter()
     matched = {}
     for unit in units:

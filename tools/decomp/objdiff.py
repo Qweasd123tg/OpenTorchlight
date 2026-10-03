@@ -419,11 +419,49 @@ class Original:
         return found[0] if found else None
 
     def normalized(self, f):
-        start = int(f["address"], 16)
-        end = start + f["size"]
-        insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
-                                         str(self.image.path)]))
-        return self.side.normalize(insns, start, end)
+        """Normalized original function; cached on disk (the original never changes)."""
+        cache = self.__dict__.get("_norm_cache")
+        if cache is None:
+            cache = self.__dict__["_norm_cache"] = _load_norm_cache()
+        key = f["address"]
+        if key not in cache:
+            start = int(f["address"], 16)
+            end = start + f["size"]
+            insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
+                                             str(self.image.path)]))
+            cache[key] = self.side.normalize(insns, start, end)
+            _NORM_DIRTY.add(key)
+        return cache[key]
+
+
+NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
+_NORM_DIRTY = set()
+
+
+def _norm_key():
+    # Normalization depends on this file, the database and the ELF image reader.
+    here = Path(__file__).resolve().parent
+    return [p.stat().st_mtime for p in (here / "objdiff.py", here / "elfimage.py",
+                                        NORM_CACHE.parent / "elfdb.json") if p.exists()]
+
+
+def _load_norm_cache():
+    import pickle
+    try:
+        data = pickle.loads(NORM_CACHE.read_bytes())
+        if data.get("key") == _norm_key():
+            return data["functions"]
+    except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError):
+        pass
+    return {}
+
+
+def save_norm_cache(original):
+    import pickle
+    cache = original.__dict__.get("_norm_cache")
+    if cache and _NORM_DIRTY:
+        NORM_CACHE.write_bytes(pickle.dumps({"key": _norm_key(), "functions": cache}))
+        _NORM_DIRTY.clear()
 
 
 def tu_for_source(db, source):
@@ -524,6 +562,7 @@ def main():
         parser.error("no sources")
     original = Original(elf=args.elf)
     results = [compare_source(s, original, args.show) for s in sources]
+    save_norm_cache(original)
     for r in results:
         report(r)
     if args.json:

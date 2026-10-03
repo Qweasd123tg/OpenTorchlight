@@ -147,8 +147,36 @@ def driver_env(root):
     return env
 
 
+CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
+
+
+def _digest(cmd, source, deps):
+    h = hashlib.sha256("\0".join(cmd).encode())
+    for path in [source, *deps]:
+        try:
+            h.update(Path(path).read_bytes())
+        except OSError:
+            return None
+    return h.hexdigest()
+
+
+def _cache_lookup(cmd, source):
+    """Cached output for this command, keyed by the source and the headers it used last time."""
+    index = CC_CACHE / (hashlib.sha256(("\0".join(cmd) + str(source)).encode()).hexdigest() + ".json")
+    if not index.exists():
+        return index, None
+    entry = json.loads(index.read_text())
+    digest = _digest(cmd, source, entry["deps"])
+    if digest and digest == entry["digest"] and (CC_CACHE / entry["output"]).exists():
+        return index, CC_CACHE / entry["output"]
+    return index, None
+
+
 def compile_source(source, output, extra=(), assembly=False, probe=False):
-    """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path."""
+    """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
+
+    Results are cached in build-decomp/cc-cache by source, dependency and flag
+    digests; set OTL_NO_CC_CACHE=1 to bypass."""
     root = cache_dir() / "gcc447"
     if not (root / ".complete.json").exists():
         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
@@ -161,8 +189,18 @@ def compile_source(source, output, extra=(), assembly=False, probe=False):
             source.write_text("int probe(int x) { return x * 3; }\n")
         out = Path(tmp) / ("out.s" if assembly else "out.o")
         cmd = base + include_args(root, cfg) + list(cfg["cflags"]) + list(extra)
-        cmd += ["-S" if assembly else "-c", str(source), "-o", str(out)]
-        result = subprocess.run(cmd, env=driver_env(root), capture_output=True, text=True)
+        cmd += ["-S" if assembly else "-c"]
+        use_cache = not probe and not os.environ.get("OTL_NO_CC_CACHE")
+        if use_cache:
+            index, hit = _cache_lookup(cmd, source)
+            if hit:
+                output = Path(output)
+                output.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(hit, output)
+                return output
+        depfile = Path(tmp) / "out.d"
+        cmd_full = cmd + [str(source), "-o", str(out)] + (["-MD", "-MF", str(depfile)] if use_cache else [])
+        result = subprocess.run(cmd_full, env=driver_env(root), capture_output=True, text=True)
         if result.returncode:
             sys.stderr.write(result.stderr)
             raise SystemExit(f"compile failed: {source}")
@@ -177,6 +215,16 @@ def compile_source(source, output, extra=(), assembly=False, probe=False):
         output = Path(output)
         output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(out, output)
+        if use_cache and depfile.exists():
+            # Make-style dependency list: "\\ " escapes spaces in paths, "\\\n" continues lines.
+            body = depfile.read_text().replace("\\\n", " ").split(": ", 1)[1].replace("\\ ", "\0")
+            deps = [d.replace("\0", " ") for d in body.split() if d.replace("\0", " ") != str(source)]
+            digest = _digest(cmd, source, deps)
+            if digest:
+                CC_CACHE.mkdir(parents=True, exist_ok=True)
+                name = digest + (".s" if assembly else ".o")
+                shutil.copyfile(out, CC_CACHE / name)
+                index.write_text(json.dumps({"deps": deps, "digest": digest, "output": name}))
     return output
 
 
