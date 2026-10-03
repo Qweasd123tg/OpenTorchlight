@@ -9,9 +9,16 @@ class CDescriptor;
 class CEditorScene;
 class CPositionableObject;
 
-// Base of every object placed by the editor (logic objects, units, props).
-// Members of EditorBaseObject.cpp other than the vtable and the layout are
-// declared as that TU is recovered.
+// Flags of AddBaseObjectFlag/HasBaseObjectFlag (both are empty in the shipped
+// build). Enumerator names are ours, from Descriptor.cpp's use.
+enum EEDITOROBJECT_FLAG
+{
+    EDITOROBJECT_FLAG_DONT_SAVE = 1,
+    EDITOROBJECT_FLAG_SAVED = 4
+};
+
+// Base of every object placed by the editor (logic objects, units, props):
+// identity (guid, parent guid), owning scene and the descriptor that created it.
 class CEditorBaseObject : public CRunicCore
 {
 public:
@@ -24,6 +31,22 @@ public:
     virtual void SetSceneOwner(CEditorScene* scene) { m_pSceneOwner = scene; }
     virtual void BroadcastEvent(unsigned int event);
     virtual void removedFromSceneAndAddedToCache() {}
+
+    void AddBaseObjectFlag(EEDITOROBJECT_FLAG flag);
+    void RemoveBaseObjectFlag(EEDITOROBJECT_FLAG flag);
+    bool HasBaseObjectFlag(EEDITOROBJECT_FLAG flag);
+    bool isChildOfObject(long long guid);
+    void setGuid(long long guid);
+    void calculateParentHierarchyHashCode();
+
+    long long getGuid() const { return m_iGuid; }
+    long long getParentGuid() const { return m_iParentGuid; }
+    long long getOriginalGuid() const { return m_iOriginalGuid; }
+    void setOriginalGuid(long long guid) { m_iOriginalGuid = guid; }
+    CDescriptor* getDescriptor() const { return m_pDescriptor; }
+    const std::wstring& getName() const { return m_sName; }
+    CEditorScene* getSceneOwner() const { return m_pSceneOwner; }
+    CPositionableObject* getParentPositionableObject() const { return m_pParentPositionableObject; }
 
 private:
     long long m_iGuid;
