@@ -100,6 +100,30 @@ public:
 
     unsigned int size() const { return m_nCount; }
 
+    // Index of the first element equal to item, -1 if there is none.
+    int find(T item)
+    {
+        for (unsigned int i = 0; i < m_nCount; i++)
+        {
+            if (m_pData[i] == item)
+                return i;
+        }
+        return -1;
+    }
+
+    // Unordered removal of the first element equal to item.
+    void remove(T item)
+    {
+        for (unsigned int i = 0; i < m_nCount; i++)
+        {
+            if (m_pData[i] == item)
+            {
+                removeAt(i);
+                return;
+            }
+        }
+    }
+
 private:
     T* m_pData;
     unsigned int m_nCount;
