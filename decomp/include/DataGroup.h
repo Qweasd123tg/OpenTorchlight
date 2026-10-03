@@ -40,8 +40,6 @@ public:
     CDataGroup* GetDataGroup(unsigned int index) { return m_DataGroups[index]; }
     TRepository<std::wstring>* getRepository() { return m_pRepository; }
 
-    // Used by Descriptor.cpp.
-    CDataGroup* GetDataGroupByName(const std::wstring& name, bool recursive);
     void AddDataValue(const std::wstring& name, const std::wstring& value, bool translate);
     void AddDataValue(const std::wstring& name, bool value);
     void AddDataValue(const std::wstring& name, unsigned int value);
