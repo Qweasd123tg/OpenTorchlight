@@ -18,9 +18,10 @@
 #include <fstream>
 
 CDescriptor::CDescriptor(int flags)
-    : m_sName(L"Not Set"), m_sDescription(L"Not Set"), m_sIcon(EMPTY_WSTRING), m_iFlags(flags | DESCRIPTOR_FLAGS_DEFAULT),
-      m_iID(0), m_Properties(10), m_DefaultProperties(10), m_Objects(25), m_ParentFilters(10)
+    : m_sName(L"Not Set"), m_sDescription(L"Not Set"), m_sIcon(EMPTY_WSTRING), m_iID(0), m_Properties(10),
+      m_DefaultProperties(10), m_Objects(25), m_ParentFilters(10)
 {
+    m_iFlags = flags | DESCRIPTOR_FLAGS_DEFAULT;
 }
 
 CLogicWrapper* CDescriptor::GetInputLogicWrapper(unsigned int index)
@@ -451,9 +452,9 @@ bool CDescriptor::saveObjectInBinaryFile(std::ofstream& file, CEditorBaseObject*
 }
 
 unsigned int CDescriptor::AddProperty(std::wstring category, std::wstring name, std::wstring description,
-                                      void* getFunction, void* setFunction, EVARIABLE_TYPES type, int flags)
+                                      void* setFunction, void* getFunction, EVARIABLE_TYPES type, int flags)
 {
-    if (setFunction == NULL || getFunction == NULL)
+    if (getFunction == NULL || setFunction == NULL)
         return 0xFFFFFFFF;
 
     while (m_PropertyIDs.find(name) != m_PropertyIDs.end())
@@ -462,7 +463,7 @@ unsigned int CDescriptor::AddProperty(std::wstring category, std::wstring name, 
     CDescriptorProp* property = CDescriptorController::getDescriptorPropertyByName(this, name, false);
     if (property == NULL)
     {
-        property = new CDescriptorProp(category, name, description, getFunction, setFunction, type, flags);
+        property = new CDescriptorProp(category, name, description, setFunction, getFunction, type, flags);
         CDescriptorController::addDescriptorProperty(this, property, false);
     }
 
@@ -473,13 +474,13 @@ unsigned int CDescriptor::AddProperty(std::wstring category, std::wstring name, 
 }
 
 unsigned int CDescriptor::AddPropertyWithInterpreterFunctions(std::wstring category, std::wstring name,
-                                                              std::wstring description, void* getFunction,
-                                                              void* setFunction,
+                                                              std::wstring description, void* setFunction,
+                                                              void* getFunction,
                                                               PropertyStringToIndexFunction stringToIndex,
                                                               PropertyIndexToStringFunction indexToString,
                                                               void* userData, EVARIABLE_TYPES type, int flags)
 {
-    unsigned int id = AddProperty(category, name, description, getFunction, setFunction, type, flags);
+    unsigned int id = AddProperty(category, name, description, setFunction, getFunction, type, flags);
     if (id == 0xFFFFFFFF)
         return id;
 
