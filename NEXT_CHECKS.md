@@ -25,7 +25,13 @@ approved direct-call/tail closure и checked owner bindings. Десять име
 зависимостей, без автоматического повышения completion.
 Прежний приоритет — [массовый перенос всей игры](research/mass-transfer-engine.md)
 через shared-machine backend. Следующие задачи выбираются по общим блокерам:
-indirect dispatch, неподдержанные операции, library/image ABI, исключения и lifetime.
+неподдержанные операции, library/image ABI, исключения и lifetime.
+[CALLIND dispatcher](research/shared-machine-indirect.md) уже использует исходные
+адреса и настоящее shared state;3157 native cases PASS. Следующий общий шаг —
+перенос библиотечных границ и неподдержанных операций.
+[Shared package assembler](research/shared-machine-package.md) уже добирает
+static dependencies и exact entries по observed-target protocol;
+автоматическое возобновление после missing target пока не реализовано.
 Исторические preview/pet/difficulty, scene FX, resolution/FSAA и native saves
 сохраняют свой остаток; они не образуют новую поштучную очередь ручных переводов.
 

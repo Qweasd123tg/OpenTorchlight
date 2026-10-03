@@ -23,6 +23,14 @@ struct ImportCall {
     std::uint64_t target;
 };
 struct RegisterRange { std::size_t offset, size; };
+// The caller can collect this observed address for exact source export. A
+// missing translated body is a tooling gap, never a guessed guest result.
+class UntranslatedCallTarget final : public std::runtime_error {
+public:
+    const std::uint64_t target;
+    explicit UntranslatedCallTarget(std::uint64_t value)
+        : std::runtime_error("p-code CALLIND target outside exact compiled raw entries"), target(value) {}
+};
 struct Memory {
     virtual ~Memory() = default;
     virtual std::uint64_t read(std::uint64_t address, std::size_t width) = 0;
@@ -32,6 +40,35 @@ struct Memory {
     virtual void invoke_import(const ImportCall&, const RegisterFile&, RegisterFile&) {
         throw std::runtime_error("p-code imported call has no production implementation");
     }
+};
+
+// An explicit adapter budget for the host's C++ call stack. This is not an
+// original guest effect; every generated shared-machine entry uses one owner.
+class CallDepth {
+    std::size_t limit_, current_ = 0;
+    friend class CallDepthGuard;
+public:
+    static constexpr std::size_t maximum_limit = 64;
+    explicit CallDepth(std::size_t limit = maximum_limit) : limit_(limit) {
+        if (!limit || limit > maximum_limit)
+            throw std::runtime_error("p-code shared call-depth limit outside 1..64");
+    }
+    CallDepth(const CallDepth&) = delete;
+    CallDepth& operator=(const CallDepth&) = delete;
+    std::size_t limit() const noexcept { return limit_; }
+    std::size_t current() const noexcept { return current_; }
+};
+class CallDepthGuard {
+    CallDepth& depth_;
+public:
+    explicit CallDepthGuard(CallDepth& depth) : depth_(depth) {
+        if (depth_.current_ >= depth_.limit_)
+            throw std::runtime_error("p-code shared call-depth adapter budget exceeded");
+        ++depth_.current_;
+    }
+    ~CallDepthGuard() { --depth_.current_; }
+    CallDepthGuard(const CallDepthGuard&) = delete;
+    CallDepthGuard& operator=(const CallDepthGuard&) = delete;
 };
 
 inline std::uint64_t mask(std::size_t width) {

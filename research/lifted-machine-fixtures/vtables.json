@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "boundary": "Read-only actual source table bytes for isolated engine fixtures; no constructor/game execution.",
+  "tables": [
+    {
+      "name": "Combine",
+      "address": "0xfe6270",
+      "size": 48,
+      "sha256": "176f3f29b31e841cdc79904fbe495b6e2d2c1719e9159db1ea561401d4dddd91",
+      "bytes": "b047ad0000000000d048ad00000000004016ae0000000000f015ae00000000000016ae00000000002016ae0000000000",
+      "consumed_slots": {
+        "0x18": "0xae15f0",
+        "0x28": "0xae1620"
+      }
+    },
+    {
+      "name": "Quest",
+      "address": "0xff0e30",
+      "size": 48,
+      "sha256": "f784ffa9d2e9e7622beaaeb80b304311fb7e27d4d18758ec9448ad6e336fcefe",
+      "bytes": "a00ebc0000000000500fbc0000000000c0cabc000000000070cabc000000000080cabc0000000000a0cabc0000000000",
+      "consumed_slots": {
+        "0x18": "0xbcca70",
+        "0x28": "0xbccaa0"
+      }
+    },
+    {
+      "name": "CollisionShape",
+      "address": "0xfd8e50",
+      "size": 80,
+      "sha256": "8946a2a76c0b953a1d953397224a645657f1a5fe4c75826df211c2055568e7d0",
+      "bytes": "c0929b000000000000939b0000000000301fa0000000000070f059000000000030fb590000000000e01ea00000000000b0e771000000000080f059000000000080929b0000000000d06c5a0000000000",
+      "consumed_slots": {
+        "0x48": "0x5a6cd0"
+      }
+    }
+  ]
+}

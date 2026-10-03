@@ -74,6 +74,24 @@ python3 tools/lift_pcode.py research/lifted-ui/0*.json \
 список одиннадцати сохранённых тел здесь является калибровочным входом.
 Этот backend не объявлен production replacement всего приложения.
 
+С 2026-10-03 поддержан `CALLIND`: pointer64 берётся из исходного register/unique
+varnode и выбирает только exact entry включённого raw-тела. Общие регистры,
+память, исходный push/RET и continuation сохраняются. Реальные vtable bytes
+могут использоваться прямо; специального переписывания виртуальных методов нет.
+Неизвестная цель вызывает `UntranslatedCallTarget` с числовым адресом для
+последующего точного экспорта. [Автосборщик](shared-machine-package.md) добирает
+static dependencies и exact entries из observed-target protocol;
+автоматическое возобновление не подключено. Interior/zero/import targets этим
+dispatcher не принимаются.
+
+Caller-owned `CallDepth` ограничивает host C++ stack: профиль принимает
+`max_call_depth` от1 до64, default64. Считаются все generated entries, включая
+direct и tail lowering. Это бюджет адаптера, а не исходная глубина гостевого
+стека: превышение останавливает исполнение явно, без придуманного guest result.
+Динамическая рекурсия ограничена этим бюджетом; статические direct/tail циклы
+пока отклоняются. Прежний scalar backend продолжает отклонять CALLIND, как и
+его отдельная structural screening очередь.
+
 ## Общая память и imports
 
 `pcode::AddressSpace` владеет снимками и явно выделенными областями гостевой
@@ -94,7 +112,7 @@ RSP/RIP и callee-saved register mutation через callback запрещены
 
 ## Остаток общего перевода
 
-Пока отклоняются CALLIND, BRANCHIND, CALLOTHER, рекурсивные closures, неподдержанные
+Пока отклоняются BRANCHIND, CALLOTHER, статически рекурсивные direct/tail closures, неподдержанные
 floating/SIMD/x87 operations и varnodes шире8 байт. Не восстановлены общая
 exception/unwinding модель, загрузка/relocation всех библиотек, host ABI мосты,
 heap/TLS, исходный FP environment и общий boot/run path оригинала. Эти препятствия
@@ -105,7 +123,7 @@ heap/TLS, исходный FP environment и общий boot/run path ориги
 проверку. Отсутствие известного structural blocker не доказывает, что неизвестных
 нет. Для функций со сложным unwind это остаётся конкретным препятствием.
 
-## Проверено в текущем шаге
+## Проверено 2026-10-02
 
 Один профиль без `functions` сгенерировал все11 сохранённых bodies, включая
 двухуровневые direct/tail зависимости (maximum depth3). Header и общий RAM owner
@@ -122,6 +140,27 @@ CTest gates (shared, память, screen, planner/export/pipeline/preparation) 
 изменения core и затронутые probes перестроены: старые native gates10540 и
 scalar GetInt/default2470 прошли повторно. Прямые native controls/readback и
 CEGUI handled-result consumer также PASS без input/frame/GL.
+
+## Проверено 2026-10-03
+
+[CALLIND calibration](shared-machine-indirect.md): семь неизменённых исходных
+тел, пять косвенных callsites, три настоящие таблицы методов.3157 сравнений
+результатов и initialized RAM/guards прошли без расхождений; guest probe также
+проверяет исходный RET/RSP и callee-saved registers. Новые10 engine checks,
+прежние shared7 и screening25 прошли; выбранные CTest gates6/6 PASS. Core и
+probes перестроены. Scalar11 header/report побайтно совпадают с прошлым
+результатом; rebuilt scalar и shared GetInt/default probes прошли по2470
+native regressions. Новые source bodies не объявлены production переносом
+и не увеличивают число full функций.
+
+Сборка пакета теперь тоже использует shared emitter без per-function ABI:
+missing direct/tail тела добираются через bounded exporter, наблюдаемые
+CALLIND targets проверяются по exact ELF entries. Живой цикл сам экспортировал
+scaledX/GetFloat, затем последовательно добавил пять наблюдаемых виртуальных
+целей из verified cache.9-body C++ program скомпилирован; семь исходных тел
+CALLIND chains снова прошли3157 native comparisons. Сборщик11 checks PASS;
+игра и automatic replay не исполнялись. Подробная граница:
+[shared-machine-package](shared-machine-package.md).
 
 Это подтверждает новый механизм в указанной области, а не ускорение разработки
 в несколько раз, процент восстановленной игры или полный запуск Torchlight.

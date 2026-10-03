@@ -368,6 +368,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     target_sources(shared_machine_queries_probe PRIVATE "${TORCHLIGHT_MACHINE_HEADER}")
     target_include_directories(shared_machine_queries_probe PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/include" "${TORCHLIGHT_LIFTED_INCLUDE}")
+    add_executable(shared_machine_indirect_probe tests/shared_machine_indirect_probe.cpp)
+    add_dependencies(shared_machine_indirect_probe torchlight_indirect_machine_code)
+    target_sources(shared_machine_indirect_probe PRIVATE "${TORCHLIGHT_INDIRECT_HEADER}")
+    target_include_directories(shared_machine_indirect_probe PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/include" "${TORCHLIGHT_LIFTED_INCLUDE}")
     add_executable(lifted_address_space_test tests/lifted_address_space_test.cpp)
     target_include_directories(lifted_address_space_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
     add_executable(ui_game_state_test tests/ui_game_state_test.cpp)
@@ -384,8 +389,12 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
     add_test(NAME ui_game_state_request COMMAND ui_game_state_test)
     add_test(NAME pcode_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/pcode_lifter_test.py)
     add_test(NAME shared_machine_lifter COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/shared_machine_lifter_test.py)
+    add_test(NAME shared_machine_indirect COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/shared_machine_indirect_test.py)
+    add_test(NAME machine_package COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/machine_package_test.py)
     add_test(NAME lifted_address_space COMMAND lifted_address_space_test)
     set_tests_properties(shared_machine_lifter PROPERTIES TIMEOUT 90)
+    set_tests_properties(shared_machine_indirect PROPERTIES TIMEOUT 90)
+    set_tests_properties(machine_package PROPERTIES TIMEOUT 90)
     add_test(NAME function_lift_screening COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/function_lift_screening_test.py)
     add_test(NAME lift_dependency_plan COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_dependency_plan_test.py)
     add_test(NAME lift_dependency_export COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/lift_dependency_export_test.py)
@@ -405,6 +414,11 @@ if(BUILD_TESTING AND NOT CMAKE_CROSSCOMPILING)
         set_tests_properties(original_save_selection_frontend PROPERTIES TIMEOUT 60)
     endif()
     if(TORCHLIGHT_ORIGINAL)
+        add_test(NAME original_shared_machine_indirect_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_shared_machine_indirect.py
+            --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:shared_machine_indirect_probe>
+            --output ${CMAKE_CURRENT_BINARY_DIR}/shared-machine-indirect-native.json)
+        set_tests_properties(original_shared_machine_indirect_comparison PROPERTIES TIMEOUT 120 SKIP_RETURN_CODE 77)
         add_test(NAME original_shared_machine_comparison COMMAND ${TORCHLIGHT_REFERENCE_PYTHON}
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/compare_settings_queries.py
             --original ${TORCHLIGHT_ORIGINAL} --probe $<TARGET_FILE:shared_machine_queries_probe>

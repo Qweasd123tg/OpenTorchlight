@@ -23,7 +23,7 @@ class LiftError(ValueError):
 
 
 # Ghidra PcodeOp numeric identifiers are checked as well as mnemonics.
-OPCODES = dict(COPY=1, LOAD=2, STORE=3, BRANCH=4, CBRANCH=5, CALL=7, RETURN=10,
+OPCODES = dict(COPY=1, LOAD=2, STORE=3, BRANCH=4, CBRANCH=5, CALL=7, CALLIND=8, RETURN=10,
                INT_EQUAL=11, INT_NOTEQUAL=12, INT_SLESS=13, INT_SLESSEQUAL=14,
                INT_LESS=15, INT_LESSEQUAL=16, INT_ZEXT=17, INT_SEXT=18,
                INT_ADD=19, INT_SUB=20, INT_CARRY=21, INT_SCARRY=22,
@@ -239,7 +239,7 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
             context=f'{a} pcode[{idx}] {op.get("operation")}'
             contexts[(a,idx)]=context
             name=op.get('operation')
-            if name not in OPCODES:
+            if name not in OPCODES or (name == 'CALLIND' and not shared_machine):
                 dependency='; unresolved dependency '+json.dumps(op.get('inputs',[]),sort_keys=True) if name in {'CALL','CALLIND','CALLOTHER','BRANCHIND'} else ''
                 failure(context,'unsupported opcode'+dependency)
             if integer(op.get('opcode')) != OPCODES[name] or integer(op.get('index')) != idx:
@@ -248,13 +248,13 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
             nodes=op.get('inputs')
             if not isinstance(nodes,list):
                 failure(context,'inputs must be a list')
-            arity=3 if name=='STORE' else 2 if name in {'LOAD','CBRANCH'} else 1 if name in UNARY|{'BRANCH','CALL','RETURN'} else 2
+            arity=3 if name=='STORE' else 2 if name in {'LOAD','CBRANCH'} else 1 if name in UNARY|{'BRANCH','CALL','CALLIND','RETURN'} else 2
             if len(nodes)!=arity:
                 failure(context,f'expected {arity} inputs')
             for n in nodes:
                 validate_node(n,context,ram_id)
             out=op.get('output')
-            effect=name in {'STORE','BRANCH','CBRANCH','CALL','RETURN'}
+            effect=name in {'STORE','BRANCH','CBRANCH','CALL','CALLIND','RETURN'}
             if effect and out is not None:
                 failure(context,'effect opcode has output')
             if not effect:
@@ -311,6 +311,14 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
                     external_edges[(a,idx)]=ta
                 dependencies.append(dict(kind='imported_direct_call' if (a,idx) in imported_edges else 'direct_call',
                                          instruction=a,pcode_index=idx,target=ta,return_address=address(fall)))
+            elif name=='CALLIND':
+                if nodes[0]['space'] not in {'register','unique'} or sizes[0]!=8:
+                    failure(context,'CALLIND requires register/unique pointer64 target')
+                fall=ins.get('fallthrough')
+                if fall is None or address(fall) not in rows:
+                    failure(context,'CALLIND lacks exact original return fallthrough inside caller')
+                dependencies.append(dict(kind='indirect_call',instruction=a,pcode_index=idx,
+                                         target=None,return_address=address(fall),target_varnode=dict(nodes[0])))
             elif name=='RETURN':
                 if sizes[0]!=8: failure(context,'RETURN target width must be 8')
             elif name in {'INT_ZEXT','INT_SEXT'}:
@@ -398,13 +406,14 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
     size=max(1,max(map(len,temps.values())))
     name='fn_'+entry[2:]
     lines=[f'// Original ELF {data["original_elf_sha256"]}; raw JSON SHA-256 {input_sha}',
-           f'inline {"void" if ret=="void" else "std::uint64_t"} {name}(pcode::Memory& memory, pcode::RegisterFile& registers, std::uint64_t return_sentinel) {{',
+           f'inline {"void" if ret=="void" else "std::uint64_t"} {name}(pcode::Memory& memory, pcode::RegisterFile& registers, std::uint64_t return_sentinel'+(', pcode::CallDepth& call_depth' if shared_machine else '')+') {',
            '    auto& machine = registers;' if shared_machine else '    pcode::RegisterFile machine;',
            f'    pcode::ByteState<{size}> unique;',
            '    [[maybe_unused]] std::uint64_t v0, v1, v2;']
     if shared_machine:
         symbol = json.dumps(str(data.get('symbol', '<not supplied>')), ensure_ascii=True)
         lines.insert(1, '// Source symbol (navigation only): ' + symbol)
+        lines.insert(3, '    pcode::CallDepthGuard call_guard(call_depth);')
     for off,width in initial_nodes:
         lines.append(f'    machine.write({off}, {width}, registers.read({off}, {width}, "{entry}: missing reviewed ABI input"));')
     lines.append(f'    goto {label(entry,entry=True)};')
@@ -470,7 +479,7 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
             elif name_op in {'BRANCH','CBRANCH'}:
                 if (a,idx) in external_edges:
                     ta=external_edges[(a,idx)]
-                    lines.append(f'    (void)fn_{ta[2:]}(memory, machine, return_sentinel);')
+                    lines.append(f'    (void)fn_{ta[2:]}(memory, machine, return_sentinel'+(', call_depth' if shared_machine else '')+');')
                     lines.extend(finish(a))
                 else:
                     dest,di,is_entry=successors[(a,idx)];target=label(dest,di,is_entry)
@@ -487,7 +496,9 @@ def compile_function(data, abi, ram_id, input_sha, approved_entries, imports=Non
                                  +', '.join(ranges(role) for role in ('input_registers','output_registers','clobber_registers'))+');')
                 else:
                     ta=external_edges[(a,idx)]
-                    lines.append(f'    (void)fn_{ta[2:]}(memory, machine, {literal(integer(ins["fallthrough"]))});')
+                    lines.append(f'    (void)fn_{ta[2:]}(memory, machine, {literal(integer(ins["fallthrough"]))}'+(', call_depth' if shared_machine else '')+');')
+            elif name_op=='CALLIND':
+                lines.append(f'    dispatch_call({args[0]}, memory, machine, {literal(integer(ins["fallthrough"]))}, call_depth);')
             elif name_op=='RETURN':
                 lines.append(f'    pcode::check_return({args[0]}, return_sentinel);')
                 lines.extend(finish(a))
@@ -532,8 +543,13 @@ def generate(paths, abi):
     if shared_machine:
         if 'functions' in abi:
             raise LiftError('shared_machine forbids individual ABI functions descriptors')
+        max_call_depth = abi.get('max_call_depth', 64)
+        if type(max_call_depth) is not int or not 1 <= max_call_depth <= 64:
+            raise LiftError('shared_machine max_call_depth must be an integer in 1..64')
         normalized = {}
     else:
+        if 'max_call_depth' in abi:
+            raise LiftError('max_call_depth is supported only in shared_machine mode')
         descriptors=abi.get('functions')
         if not isinstance(descriptors,dict): raise LiftError('missing explicit ABI functions')
         normalized={address(k):v for k,v in descriptors.items()}
@@ -549,6 +565,8 @@ def generate(paths, abi):
         if data.get('schema')!=2 or data.get('original_elf_sha256')!=sha:
             raise LiftError(f'{path}: original schema-2 ELF metadata differs from pinned ABI')
         entry=address(data['address'])
+        if shared_machine and integer(entry)==0:
+            raise LiftError(f'{path}: zero cannot be a shared-machine callable entry')
         if entry in sources: raise LiftError(f'{path}: duplicate input function {entry}')
         if not shared_machine and entry not in normalized: raise LiftError(f'{entry}: no explicit reviewed ABI')
         sources[entry]=(data,hashlib.sha256(raw).hexdigest())
@@ -563,7 +581,7 @@ def generate(paths, abi):
     declarations=[]
     for entry,(data,input_sha) in sorted(sources.items()):
         body,report=compile_function(data,normalized[entry],ram_id,input_sha,set(sources),imports,shared_machine)
-        declarations.append(f'inline {"void" if normalized[entry]["return"]=="void" else "std::uint64_t"} fn_{entry[2:]}(pcode::Memory&, pcode::RegisterFile&, std::uint64_t);')
+        declarations.append(f'inline {"void" if normalized[entry]["return"]=="void" else "std::uint64_t"} fn_{entry[2:]}(pcode::Memory&, pcode::RegisterFile&, std::uint64_t'+(', pcode::CallDepth&' if shared_machine else '')+');')
         code.append(body);reports.append(report)
     used_sites={(r['address'], d['instruction'], d['pcode_index'], d['target'])
                 for r in reports for d in r['approved_dependencies'] if d['kind']=='imported_direct_call'}
@@ -571,7 +589,7 @@ def generate(paths, abi):
                     for target,descriptor in imports.items() for site in descriptor['callsites']}
     if used_sites!=declared_sites:
         raise LiftError('unused or mismatched imported callsite descriptors')
-    graph={r['address']:{d['target'] for d in r['approved_dependencies'] if d['kind']!='imported_direct_call'} for r in reports}
+    graph={r['address']:{d['target'] for d in r['approved_dependencies'] if d['kind'] in {'direct_call','tail_jump'}} for r in reports}
     visited=set();active=[];depths={}
     def depth(entry):
         if entry in active:
@@ -586,11 +604,23 @@ def generate(paths, abi):
         if value>64:raise LiftError(f'{entry}: approved closure depth {value} exceeds bounded maximum 64')
         return value
     for entry in sorted(graph):depth(entry)
+    if shared_machine:
+        declarations.append('inline void dispatch_call(std::uint64_t, pcode::Memory&, pcode::RegisterFile&, std::uint64_t, pcode::CallDepth&);')
+        dispatcher=['inline void dispatch_call(std::uint64_t target, pcode::Memory& memory, pcode::RegisterFile& registers, std::uint64_t return_sentinel, pcode::CallDepth& call_depth) {',
+                    '    switch (target) {']
+        for entry in sorted(sources):
+            dispatcher.append(f'    case {literal(integer(entry))}: fn_{entry[2:]}(memory, registers, return_sentinel, call_depth); return;')
+        dispatcher += ['    default: throw pcode::UntranslatedCallTarget(target);', '    }', '}']
+        code.append('\n'.join(dispatcher))
+        for entry in sorted(sources):
+            code.append(f'inline void fn_{entry[2:]}(pcode::Memory& memory, pcode::RegisterFile& registers, std::uint64_t return_sentinel) {{\n'
+                        f'    pcode::CallDepth call_depth({max_call_depth});\n'
+                        f'    fn_{entry[2:]}(memory, registers, return_sentinel, call_depth);\n'+'}')
     code[3:3]=declarations
     code.append('} // namespace torchlight::'+namespace+'\n')
     header='\n\n'.join(code)
     report=dict(schema=1,status='generated',original_elf_sha256=sha,
-        emitter='raw-schema2-shared-machine-cpp17-v1' if shared_machine else 'raw-schema2-scalar-cpp17-v3',
+        emitter='raw-schema2-shared-machine-cpp17-v2' if shared_machine else 'raw-schema2-scalar-cpp17-v3',
         abi_sha256=hashlib.sha256(json.dumps(abi,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
         generated_header_sha256=hashlib.sha256(header.encode()).hexdigest(),functions=reports,
         closure=dict(recursion='rejected',maximum_allowed_depth=64,maximum_selected_depth=max(depths.values()),
@@ -602,8 +632,17 @@ def generate(paths, abi):
         report['imported_boundaries']=imports
     if shared_machine:
         report['execution_mode'] = 'shared_machine'
+        report['closure']['recursion'] = 'direct-call/tail-jump rejected; indirect calls use explicit host depth budget'
         report['guest_register_initialization'] = 'external caller only; no ABI inference or zero-fill'
         report['guest_memory_owner'] = 'external caller-supplied Memory; no field bindings inferred'
+        report['indirect_dispatch'] = dict(operation='CALLIND', target_space=['register','unique'],
+                                          target_width=8, compiled_entries=sorted(sources),
+                                          unknown_target='trap before callee execution; prior guest effects retained',
+                                          imported_targets='excluded')
+        report['host_call_depth_budget'] = dict(default_limit=max_call_depth, maximum_allowed_limit=64,
+                                               owner='caller-owned CallDepth; three-argument entries create a fresh owner',
+                                               failure='explicit adapter budget error; not original guest semantics',
+                                               counts='every shared entry including direct calls and tail jumps')
         report['original_status_promotions'] = 0
     return header,report
 

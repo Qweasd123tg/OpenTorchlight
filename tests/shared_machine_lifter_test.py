@@ -115,7 +115,7 @@ assert(trapped);assert(registers.read(0x20,8)==0x1008);assert(registers.read(0x2
                               instruction(0x105, ret())])
         with self.assertRaisesRegex(lift.LiftError, 'recursive'):
             self.generate(recursive)
-        for operation in ('CALLIND', 'CALLOTHER', 'BRANCHIND'):
+        for operation in ('CALLOTHER', 'BRANCHIND'):
             data = function([instruction(0x100, [op(operation, None, node('register', 0x38, 8))])])
             with self.subTest(operation=operation), self.assertRaisesRegex(lift.LiftError, 'unsupported opcode'):
                 self.generate(data)

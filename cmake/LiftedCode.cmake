@@ -45,3 +45,23 @@ add_custom_command(OUTPUT "${TORCHLIGHT_MACHINE_HEADER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/include/torchlight/pcode_runtime.hpp"
     VERBATIM)
 add_custom_target(torchlight_machine_code DEPENDS "${TORCHLIGHT_MACHINE_HEADER}")
+
+# Actual source virtual-call chains for generic backend calibration. These
+# fixtures are not new Application bindings or whole-game acceptance claims.
+set(TORCHLIGHT_INDIRECT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/research/lifted-machine-fixtures")
+set(TORCHLIGHT_INDIRECT_INPUTS)
+foreach(entry 005a6cd0 005bb4a0 00a82ae0 00ae15f0 00ae1620 00bcca70 00bccaa0)
+    list(APPEND TORCHLIGHT_INDIRECT_INPUTS "${TORCHLIGHT_INDIRECT_DIR}/${entry}.json")
+endforeach()
+set(TORCHLIGHT_INDIRECT_HEADER "${TORCHLIGHT_LIFTED_INCLUDE}/torchlight/generated/indirect_machine.hpp")
+add_custom_command(OUTPUT "${TORCHLIGHT_INDIRECT_HEADER}"
+    COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/tools/lift_pcode.py"
+        ${TORCHLIGHT_INDIRECT_INPUTS}
+        --abi "${TORCHLIGHT_LIFTED_UI_DIR}/shared-machine.json"
+        --out "${TORCHLIGHT_INDIRECT_HEADER}"
+        --report "${CMAKE_CURRENT_BINARY_DIR}/indirect-machine-code.json"
+    DEPENDS ${TORCHLIGHT_INDIRECT_INPUTS} "${TORCHLIGHT_LIFTED_UI_DIR}/shared-machine.json"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tools/lift_pcode.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/torchlight/pcode_runtime.hpp"
+    VERBATIM)
+add_custom_target(torchlight_indirect_machine_code DEPENDS "${TORCHLIGHT_INDIRECT_HEADER}")

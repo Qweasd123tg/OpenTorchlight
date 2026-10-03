@@ -246,7 +246,10 @@ def screen_packet(data):
                         reason('raw_operation_invalid', context, str(exc))
                 elif name == 'CALL' or target.get('space') != 'const':
                     reason('indirect_dependency', context, 'non-static control target')
-            if name not in lift.OPCODES:
+            # This legacy structural queue measures scalar closure. CALLIND
+            # is shared-machine-only and still needs runtime target coverage;
+            # its numeric opcode being known must not imply scalar support.
+            if name not in lift.OPCODES or name == 'CALLIND':
                 reason('unsupported_opcode', context, str(name))
                 for n in nodes + ([out] if out is not None else []):
                     try:
