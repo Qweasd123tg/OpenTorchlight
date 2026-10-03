@@ -47,6 +47,12 @@ public:
     const std::wstring& getName() const { return m_sName; }
     CEditorScene* getSceneOwner() const { return m_pSceneOwner; }
     CPositionableObject* getParentPositionableObject() const { return m_pParentPositionableObject; }
+    long long getParentHierarchyHashCode()
+    {
+        if (m_iParentHierarchyHashCode == 0)
+            calculateParentHierarchyHashCode();
+        return m_iParentHierarchyHashCode;
+    }
 
 private:
     long long m_iGuid;

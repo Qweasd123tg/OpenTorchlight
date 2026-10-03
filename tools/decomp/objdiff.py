@@ -302,6 +302,9 @@ class ObjectSide(Normalizer):
             if relocs:
                 r = relocs[0]
                 offset = r.addend + (nxt - r.offset) if r.type in PC_RELATIVE else r.addend
+                if r.symbol.name and r.symbol.name == getattr(self, "current", None) and offset == 0:
+                    # Direct recursion: the original side sees a branch to its own entry.
+                    return f"{mnemonic} {self.branch(k, start, start, end, offsets)}"
                 return f"{mnemonic} {self.target_name(r.symbol, offset, mnemonic)}"
             target = int(m.group(1), 16)
             label = self.branch(k, target, start, end, offsets)
@@ -346,6 +349,7 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
         insns = [i for i in parse_insns("\n".join(sections.get(section.name, [])))
                  if sym.value <= i[0] < sym.value + sym.size]
         side.prepare(by_name[section.name])
+        side.current = sym.name
         bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind
         result[sym.name] = {"size": sym.size, "bind": bind,
                             "norm": side.normalize(insns, sym.value, sym.value + sym.size)}

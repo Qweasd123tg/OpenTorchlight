@@ -24,6 +24,8 @@ public:
     bool getEditorIsRunning();
     Ogre::SceneManager* getSceneManager() { return m_pSceneManager; }
     CLevel* getLevel() { return m_pLevel; }
+    // Read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).
+    bool getLogicMessagesEnabled() { return m_bFlag1; }
 
 private:
     Ogre::SceneManager* m_pSceneManager;

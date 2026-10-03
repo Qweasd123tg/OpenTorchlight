@@ -11,6 +11,7 @@
 class CDataGroup;
 class CDescriptor;
 class CDescriptorManager;
+class CDynamicPropertyFile;
 class CTimerStatics;
 
 // Partial: layout from CEditorScene::CEditorScene(const wchar_t*); members of
@@ -48,6 +49,8 @@ public:
     void EditorBaseObjectChangedID(CEditorBaseObject* object, long long oldGuid, long long newGuid);
 
     CDescriptorManager* getDescriptorManager() { return m_pDescriptorManager; }
+    // Settings file read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).
+    CDynamicPropertyFile* getSettings() { return static_cast<CDynamicPropertyFile*>(m_pUnknown170); }
 
 private:
     CDescriptorManager* m_pDescriptorManager;
