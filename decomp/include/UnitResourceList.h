@@ -5,7 +5,7 @@
 #include <string>
 
 #include "DataGroup.h"
-#include "GenTypes.h"
+#include "GameEnums.h"
 #include "Hierarchy.h"
 #include "ResourceSettings.h"
 #include "RunicCore.h"

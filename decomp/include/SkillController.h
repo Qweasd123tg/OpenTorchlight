@@ -8,6 +8,8 @@
 #include "ResourceManager.h"
 #include "RunicCore.h"
 
+class CDataGroup;
+
 class CSkillController : public CPositionableObject
 {
 public:
@@ -26,7 +28,7 @@ public:
     float update(float deltaTime);
 
     CResourceManager* m_pResourceManager;             // 0x100
-    long long m_iUnitInteractDataGroup;                // 0x108
+    CDataGroup* m_pUnitInteractDataGroup;              // 0x108
     CRunicCore* m_pRunicCore;                          // 0x110
     int m_iRunicCoreSafePointerId;                     // 0x118
     unsigned char m_gap11C[4];                         // 0x11C

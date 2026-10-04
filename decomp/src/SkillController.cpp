@@ -24,7 +24,7 @@ CPlayer* CSkillController::getSkillTarget()
 
 CSkillController::CSkillController(CResourceManager* resourceManager)
     : CPositionableObject(resourceManager, NULL),
-      m_pResourceManager(resourceManager), m_iUnitInteractDataGroup(0),
+      m_pResourceManager(resourceManager), m_pUnitInteractDataGroup(NULL),
       m_pRunicCore(NULL), m_iRunicCoreSafePointerId(-1),
       m_sCategory(*reinterpret_cast<const std::wstring *>(
           gRESOURCE_GROUP_NAMES + 8)),
@@ -42,7 +42,7 @@ void CSkillController::setUnitInteractWith(std::wstring unitInteractWith)
 {
     if (m_pResourceManager != NULL) {
         m_sUnitInteractWith = unitInteractWith;
-        m_iUnitInteractDataGroup =
+        m_pUnitInteractDataGroup =
             CUnitResourceList::getSingleton()->getDataGroupByObjectName(unitInteractWith);
 
         if (m_pRunicCore != NULL) {

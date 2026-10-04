@@ -11,6 +11,8 @@
 #include "RunicCore.h"
 #include "iMenuListener.h"
 
+class CDataGroup;
+
 class CInteract : public CEditorBaseObject, public iMenuListener
 {
 public:
@@ -28,7 +30,7 @@ public:
     CResourceManager* m_pResourceManager;
     void* m_pUnknown70;
     std::wstring m_sUnknown78;
-    long long m_iUnknown80;
+    CDataGroup* m_pUnitDataGroup;
     CRunicCore* m_pRunicCore;
     int m_iUnknown90;
     unsigned char m_gap94[0x4] __attribute__((aligned(4)));

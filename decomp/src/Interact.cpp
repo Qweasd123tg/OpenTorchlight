@@ -34,7 +34,7 @@ void CInteract::setUnitInteractWithByIndex(unsigned int unitIndex, std::wstring 
 {
     if (unitIndex == 0 && m_pResourceManager != NULL) {
         m_sUnknown78 = unitName;
-        m_iUnknown80 =
+        m_pUnitDataGroup =
             CUnitResourceList::getSingleton()->getDataGroupByObjectName(unitName);
 
         if (m_pRunicCore != NULL) {
@@ -81,7 +81,7 @@ CInteract::CInteract(CResourceManager* resourceManager)
         1);
 
     m_iUnknown120 = 0;
-    m_iUnknown80 = 0;
+    m_pUnitDataGroup = NULL;
 
     if (m_pRunicCore != NULL)
         m_pRunicCore->removeSafePointer(

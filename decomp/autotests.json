@@ -316,5 +316,11 @@
   "killed": 8,
   "tried": 10,
   "code": "075a7a08513fee5f"
+ },
+ "0x7026d0": {
+  "name": "CDescriptorManager::postProcessDescriptorObjects(CDataGroup*, CDescriptorLoadConfiguration*)",
+  "killed": 5,
+  "tried": 6,
+  "code": "00bd1ff717a5e5b5"
  }
 }
