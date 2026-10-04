@@ -86,6 +86,9 @@ public:
     void deactivateUnitInLevel();
     void broadcastAlerted();
     void broadcastKilled();
+    void broadcastHPThreshholdEvents(float maximum,float current,float threshold,float change);
+    std::wstring getUnitDataName();
+    int selectRandomSkill();
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     void broadcastUnitState(EUNIT_STATES state);
 
@@ -110,12 +113,15 @@ protected:
     int m_iQuestState;
     int m_iRoomIndex;
     long long m_iSpawnerGuid;
-    char m_BaseUnitData188[0x18d - 0x188];
+    EBASEUNIT_TYPE m_eBaseUnitType;
+    bool m_bBaseUnitFlag18C;
     bool m_bBlocksPath;
-    char m_BaseUnitData18E[0x190 - 0x18e];
+    bool m_bBaseUnitFlag18E;
+    bool m_bBaseUnitFlag18F;
     bool m_bBaseUnitFlag190;
     bool m_bSaveFlag191;
-    char m_BaseUnitData192[0x198 - 0x192];
+    char m_BaseUnitData192[2];
+    float m_fBaseUnitValue194;
     bool m_bRangeEnabled;
     bool m_bInActiveRange;
     bool m_bInFadeRange;

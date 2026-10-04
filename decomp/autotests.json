@@ -47,6 +47,12 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7fea30": {
+  "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
+  "killed": 4,
+  "tried": 5,
+  "code": "14cb202fcbb9b7f6"
+ },
  "0x7ffb70": {
   "name": "CBaseUnit::removeUnitTheme(CUnitTheme*)",
   "killed": 5,
@@ -58,6 +64,18 @@
   "killed": 5,
   "tried": 5,
   "code": "77ccb54a1adcb326"
+ },
+ "0x800e80": {
+  "name": "CBaseUnit::selectRandomSkill()",
+  "killed": 9,
+  "tried": 10,
+  "code": "c7dcaa18350789ae"
+ },
+ "0x8029d0": {
+  "name": "CBaseUnit::getUnitDataName()",
+  "killed": 1,
+  "tried": 1,
+  "code": "35fc3a1a9cfe33c2"
  },
  "0xa01f30": {
   "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",

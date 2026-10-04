@@ -22,6 +22,7 @@ class CLevel : public CRunicCore
 {
 public:
     virtual ~CLevel();
+    void removeUnit(CBaseUnit* unit,bool flag);
     void unitBroadcastMessage(CBaseUnit* unit, EUNIT_STATES state);
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     int getRoomIndexThatPositionIsIn(const Ogre::Vector3& position);

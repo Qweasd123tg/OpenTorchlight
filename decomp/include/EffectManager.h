@@ -22,7 +22,7 @@ public:
     float getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE type, EDAMAGE_TYPES damage);
     float getEffectValue(EEFFECT_TYPE type, const std::wstring& name);
     void updateAffixes(float elapsed);
-    TArrayList<CUnitTheme*>& getUnitThemes() { return m_UnitThemes; }
+    TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
 private:
     unsigned char m_EffectData10[0x2c8-0x10];
     TArrayList<CUnitTheme*> m_UnitThemes;

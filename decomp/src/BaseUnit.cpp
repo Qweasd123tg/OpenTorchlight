@@ -6,6 +6,9 @@
 #include "OutputEvents.h"
 #include "EffectManager.h"
 #include "UnitThemes.h"
+#include "SkillManager.h"
+#include "DataGroup.h"
+#include "Randomizer.h"
 
 void CBaseUnit::setSpawnerGuid(long long guid)
 {
@@ -209,5 +212,142 @@ void CBaseUnit::setEditorThemeID(unsigned int id)
             else
                 removeUnitTheme(themes->getThemes()[i-1]);
         }
+    }
+}
+
+
+void CBaseUnit::update(Ogre::Camera* camera,const Ogre::Vector3& cameraPosition,float elapsed)
+{
+    if (m_pSkillManager != NULL)
+        m_pSkillManager->update(elapsed);
+    for (unsigned int i = 0; i < m_ThemesToRemove.size(); ++i)
+        unitThemeUpdated(m_ThemesToRemove[i], true);
+    m_ThemesToRemove.clear();
+    for (unsigned int i = 0; i < m_ThemesToAdd.size(); ++i)
+        unitThemeUpdated(m_ThemesToAdd[i], false);
+    m_ThemesToAdd.clear();
+    if (m_pEffectManager != NULL)
+    {
+        m_pEffectManager->updateAffixes(elapsed);
+        TArrayList<CUnitTheme*>* themes = m_pEffectManager->getUnitThemes();
+        if (themes != NULL)
+        {
+            for (unsigned int i = 0; i < themes->size(); ++i)
+            {
+                if (m_AffixThemes.find((*themes)[i]) == -1)
+                {
+                    unitThemeUpdated((*themes)[i], false);
+                    m_AffixThemes.add((*themes)[i]);
+                }
+            }
+            for (unsigned int i = 0; i < m_AffixThemes.size(); ++i)
+            {
+                if (themes->find(m_AffixThemes[i]) == -1)
+                {
+                    unitThemeUpdated(m_AffixThemes[i], true);
+                    m_AffixThemes.removeAt(i);
+                    --i;
+                }
+            }
+        }
+    }
+}
+
+
+CBaseUnit::CBaseUnit(CResourceManager* resourceManager,EBASEUNIT_TYPE type)
+    : CPositionableObject(resourceManager,NULL),m_iUnitLevel(1),
+      m_ThemesToAdd(1),m_ThemesToRemove(1),m_UnitThemes(1),m_AffixThemes(1),
+      m_iQuestGuid(-1),m_iQuestState(-1),m_iRoomIndex(-1),m_iSpawnerGuid(-1),
+      m_eBaseUnitType(type),m_bBaseUnitFlag18C(true),m_bBlocksPath(true),
+      m_bBaseUnitFlag18E(false),m_bBaseUnitFlag18F(true),m_bBaseUnitFlag190(false),
+      m_bSaveFlag191(false),m_fBaseUnitValue194(0.3f),m_bRangeEnabled(false),
+      m_bInActiveRange(false),m_bInFadeRange(false),m_bBaseUnitFlag19B(false),
+      m_bPathingFlag19C(false),m_iUnitValue1A0(-1),m_bHighlighted(false),
+      m_bCastsShadows(true),m_eUnitType(static_cast<UNITTYPES::EUNITTYPES>(0)),
+      m_pDataGroup(NULL),m_pEffectManager(NULL),m_pCullingBounds(NULL),
+      m_pSkillManager(NULL),m_bBaseUnitFlag0(false),m_bBaseUnitFlag1(false)
+{
+    m_bEnabled = true;
+    CSceneNodeObject::setVisible(false);
+    m_pCullingBounds = new CCullingBounds;
+}
+
+CBaseUnit::~CBaseUnit()
+{
+    if (m_bSaveFlag191 && m_pResourceManager != NULL && m_pResourceManager->getLevel() != NULL)
+        m_pResourceManager->getLevel()->removeUnit(this,false);
+    broadcastUnitState(static_cast<EUNIT_STATES>(0));
+    m_iUnitValue1A0 = -1;
+    m_pDataGroup = NULL;
+    if (m_pCullingBounds != NULL)
+    {
+        delete m_pCullingBounds;
+        m_pCullingBounds = NULL;
+    }
+    if (m_pEffectManager != NULL)
+    {
+        delete m_pEffectManager;
+        m_pEffectManager = NULL;
+    }
+    if (m_pSkillManager != NULL)
+    {
+        delete m_pSkillManager;
+        m_pSkillManager = NULL;
+    }
+}
+
+void CBaseUnit::levelResetting()
+{
+    if (m_pSkillManager != NULL)
+        m_pSkillManager->stopAllSkills(true,false,false);
+}
+
+
+std::wstring CBaseUnit::getUnitDataName()
+{
+    return m_pDataGroup != NULL ? m_pDataGroup->GetDataValue(L"NAME",EMPTY_WSTRING) : EMPTY_WSTRING;
+}
+
+int CBaseUnit::selectRandomSkill()
+{
+    if (m_pSkillManager != NULL)
+    {
+        int count = m_pSkillManager->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0));
+        if (count > 0)
+        {
+            CRandomizer random(RANDOMIZER_NORMAL);
+            for (int i = 0; i < count; ++i)
+                random.addChoice(i,1);
+            return random.getRandom();
+        }
+    }
+    return -1;
+}
+
+void CBaseUnit::broadcastHPThreshholdEvents(float maximum,float current,float threshold,float change)
+{
+    static const float eventsByPct[] = {0.9f,0.8f,0.7f,0.6f,0.5f,0.4f,0.3f,0.2f,0.1f};
+    static const unsigned int eventsBroadCast[] = {
+        OUTPUT_EVENT_HP_90_PCT,OUTPUT_EVENT_HP_80_PCT,OUTPUT_EVENT_HP_70_PCT,
+        OUTPUT_EVENT_HP_60_PCT,OUTPUT_EVENT_HP_50_PCT,OUTPUT_EVENT_HP_40_PCT,
+        OUTPUT_EVENT_HP_30_PCT,OUTPUT_EVENT_HP_20_PCT,OUTPUT_EVENT_HP_10_PCT};
+    if (!m_bBaseUnitFlag0 || ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) || change >= 0 || current + change >= threshold)
+        return;
+    float oldRatio = current / maximum;
+    float newRatio = (current + change) / maximum;
+    if (m_bBaseUnitFlag1)
+    {
+        for (int i = 0; i < 9; ++i)
+            if (oldRatio > eventsByPct[i] && newRatio <= eventsByPct[i])
+                BroadcastEvent(eventsBroadCast[i]);
+    }
+    else
+    {
+        for (int i = 8; i >= 0; --i)
+            if (oldRatio > eventsByPct[i] && newRatio <= eventsByPct[i])
+            {
+                BroadcastEvent(eventsBroadCast[i]);
+                return;
+            }
     }
 }

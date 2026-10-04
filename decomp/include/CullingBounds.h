@@ -6,13 +6,23 @@
 class CCullingBounds : public CRunicCore
 {
 public:
+    CCullingBounds()
+    {
+        m_vMinimum = Ogre::Vector3(-0.75f,0,-0.75f);
+        m_vMaximum = Ogre::Vector3(0.75f,2,0.75f);
+        m_vLocalMinimum = Ogre::Vector3(-0.75f,0,-0.75f);
+        m_vLocalMaximum = Ogre::Vector3(0.75f,2,0.75f);
+        m_vWorldMinimum = Ogre::Vector3(-0.75f,0,-0.75f);
+        m_vWorldMaximum = Ogre::Vector3(0.75f,2,0.75f);
+    }
     virtual ~CCullingBounds();
     const Ogre::Vector3& getLocalMinimum() const { return m_vLocalMinimum; }
     const Ogre::Vector3& getLocalMaximum() const { return m_vLocalMaximum; }
     const Ogre::Vector3& getWorldMinimum() const { return m_vWorldMinimum; }
     const Ogre::Vector3& getWorldMaximum() const { return m_vWorldMaximum; }
 private:
-    unsigned char m_BoundsData10[0x28-0x10];
+    Ogre::Vector3 m_vMinimum;
+    Ogre::Vector3 m_vMaximum;
     Ogre::Vector3 m_vLocalMinimum;
     Ogre::Vector3 m_vLocalMaximum;
     Ogre::Vector3 m_vWorldMinimum;

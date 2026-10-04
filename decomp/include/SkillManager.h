@@ -1,17 +1,29 @@
 #ifndef SKILLMANAGER_H
 #define SKILLMANAGER_H
-
+#include <map>
 #include <string>
-
 #include "RunicCore.h"
-
+#include "SafePointer.h"
+#include "SkillDefines.h"
 class CSkill;
-
-// Partial: members are declared as SkillManager.cpp is recovered.
+class CBaseUnit;
+class CResourceManager;
+// Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
 public:
+    CSkillManager(CResourceManager* resources,CBaseUnit* owner);
+    virtual ~CSkillManager();
     CSkill* getSkill(const std::wstring& name);
+    void update(float elapsed);
+    int knownSkills(ESKILL_ACTIVATION_TYPE activation);
+    void stopAllSkills(bool flag1,bool flag2,bool flag3);
+private:
+    CResourceManager* m_pResourceManager;
+    std::map<std::wstring,TArrayList<CSkill*>*> m_SkillsByName;
+    TArrayList<CSkill*> m_UpdatingSkills;
+    TArrayList<CSkill*> m_OtherSkills;
+    unsigned char m_SkillData78[0x10];
+    TSafePointer<CBaseUnit> m_Owner;
 };
-
 #endif
