@@ -143,6 +143,12 @@
   "tried": 10,
   "code": "f85e6be43c6b319f"
  },
+ "0xce9fd0": {
+  "name": "CCameraControl::setCinematicMode(bool)",
+  "killed": 8,
+  "tried": 10,
+  "code": "3b201e03fc45a361"
+ },
  "0xd79920": {
   "name": "CRunicCore::~CRunicCore()",
   "killed": 5,

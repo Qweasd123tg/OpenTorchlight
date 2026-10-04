@@ -6,6 +6,9 @@
 
 #include <string>
 
+extern int KSETTINGS_KEYMAP_ZOOMIN;
+extern int KSETTINGS_KEYMAP_ZOOMOUT;
+static void* g_pCameraControl;
 static void* g_pCinematics;
 static void* g_pGameSpeed;
 
