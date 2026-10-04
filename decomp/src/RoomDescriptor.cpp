@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "RoomDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "Room.h"
 
 CRoomDescriptor::CRoomDescriptor()
     : CBaseObjectDescriptor(L"Room", L"A definition of the room", L"house")
@@ -13,4 +18,9 @@ CRoomDescriptor::CRoomDescriptor()
 
 CRoomDescriptor::~CRoomDescriptor()
 {
+}
+
+CEditorBaseObject* CRoomDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CRoom(scene->getResourceManager());
 }
