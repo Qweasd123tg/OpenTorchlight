@@ -83,6 +83,24 @@
   "tried": 3,
   "code": "d732f962e5a49e24"
  },
+ "0x91a980": {
+  "name": "CKeyManager::capture()",
+  "killed": 10,
+  "tried": 10,
+  "code": "0c9e82df0dc73a48"
+ },
+ "0x91aaa0": {
+  "name": "CKeyManager::flushAll()",
+  "killed": 9,
+  "tried": 9,
+  "code": "b441a5502e77fff4"
+ },
+ "0x91ab30": {
+  "name": "CKeyManager::flush()",
+  "killed": 8,
+  "tried": 10,
+  "code": "ced9806e4c9ec869"
+ },
  "0xa01f30": {
   "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
   "killed": 3,
