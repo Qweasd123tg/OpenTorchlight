@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "PathControllerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "PathController.h"
 
 CPathControllerDescriptor::CPathControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
@@ -24,4 +29,67 @@ CPathControllerDescriptor::CPathControllerDescriptor(const wchar_t* name, const 
 
 CPathControllerDescriptor::~CPathControllerDescriptor()
 {
+}
+
+unsigned int CPathControllerDescriptor::GetResourceIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return 0;
+}
+
+std::wstring CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    const std::wstring *names = reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES);
+
+    if (index == 0)
+        return names[1];
+    if (index == 2)
+        return L"PLAYER";
+    return names[0];
+}
+
+void CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    if (object != 0)
+    {
+        CPathController* controller = dynamic_cast<CPathController*>(object);
+        if (controller != 0)
+        {
+            if (event == 2)
+            {
+                controller->setVisible(true);
+                return;
+            }
+            if (event == 3)
+            {
+                controller->setVisible(false);
+                return;
+            }
+        }
+    }
+}
+
+void CPathControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CPathController* controller =
+            dynamic_cast<CPathController*>(m_Objects[i]);
+
+        if (controller && !scene->getResourceManager()->getEditorIsRunning()) {
+            controller->initPathController();
+        }
+    }
+}
+
+void CPathControllerDescriptor::DescriptorObjectCreatedInEditor(CEditorBaseObject* object)
+{
+    CPathController* pathController = dynamic_cast<CPathController*>(object);
+    if (pathController != NULL)
+    {
+        pathController->initObjectInEditor();
+    }
+}
+
+CEditorBaseObject* CPathControllerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CPathController(scene->getResourceManager());
 }
