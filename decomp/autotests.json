@@ -101,6 +101,12 @@
   "tried": 3,
   "code": "cd25ea618ae2655d"
  },
+ "0xa65930": {
+  "name": "CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*)",
+  "killed": 2,
+  "tried": 2,
+  "code": "f6ce3c203e2c764a"
+ },
  "0xc78310": {
   "name": "CGraph::getValue(float, unsigned int) const",
   "killed": 10,
