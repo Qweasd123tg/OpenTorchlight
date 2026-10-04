@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "JetAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "JetWrapper.h"
 
 CJetAffectorDescriptor::CJetAffectorDescriptor()
     : CAffectorDescriptor(L"Jet", L"This is a basic accelerator for your particles", L"gear")
@@ -9,4 +14,9 @@ CJetAffectorDescriptor::CJetAffectorDescriptor()
 
 CJetAffectorDescriptor::~CJetAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CJetAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CJetWrapper(scene->getResourceManager());
 }
