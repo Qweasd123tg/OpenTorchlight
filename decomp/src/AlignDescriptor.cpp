@@ -1,5 +1,8 @@
 #include "EmptyStrings.h"
 #include "AlignDescriptor.h"
+#include "AlignWrapper.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CAlignDescriptor::CAlignDescriptor()
     : CAffectorDescriptor(L"Align", L"This will align particles with the last particle released", L"gear")
@@ -10,4 +13,9 @@ CAlignDescriptor::CAlignDescriptor()
 
 CAlignDescriptor::~CAlignDescriptor()
 {
+}
+
+CEditorBaseObject* CAlignDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CAlignWrapper(scene->getResourceManager());
 }
