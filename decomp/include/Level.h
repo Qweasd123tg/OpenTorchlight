@@ -5,6 +5,7 @@
 #include <OgreVector3.h>
 #include <OgreAxisAlignedBox.h>
 #include <OgreMatrix4.h>
+#include <string>
 
 #include "RunicCore.h"
 #include "Constants.h"

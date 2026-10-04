@@ -4,6 +4,8 @@
 #include <string>
 #include <OgreRenderTargetListener.h>
 #include <OgreRenderQueue.h>
+#include <string>
+
 #include "RunicCore.h"
 
 class CPlayer;

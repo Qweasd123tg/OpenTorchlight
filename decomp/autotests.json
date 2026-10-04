@@ -292,5 +292,23 @@
   "killed": 8,
   "tried": 10,
   "code": "3b201e03fc45a361"
+ },
+ "0x5a6860": {
+  "name": "CPathNode::setVisible(bool)",
+  "killed": 5,
+  "tried": 5,
+  "code": "7ea259b0c7b9bd56"
+ },
+ "0x795cb0": {
+  "name": "CLogicGroup::AddLogicObject(long long)",
+  "killed": 8,
+  "tried": 8,
+  "code": "f10a32e62f8de925"
+ },
+ "0x9f26e0": {
+  "name": "CRandomGroup::CRandomGroup(CResourceManager*)",
+  "killed": 2,
+  "tried": 2,
+  "code": "c994f282e1a11047"
  }
 }
