@@ -7,6 +7,7 @@
 
 enum EContextTip { EContextTip_GEN_LAST = 0x7fffffff };
 enum ECursorState { ECursorState_GEN_LAST = 0x7fffffff };
+enum EGAMESPEED_TYPE { EGAMESPEED_TYPE_GEN_LAST = 0x7fffffff };
 enum EGameState { EGameState_GEN_LAST = 0x7fffffff };
 enum ELayoutFunction { ELayoutFunction_GEN_LAST = 0x7fffffff };
 enum EMENU_TYPE { EMENU_TYPE_GEN_LAST = 0x7fffffff };
