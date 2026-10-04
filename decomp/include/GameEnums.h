@@ -6,5 +6,6 @@
 // proper header when that is known.
 
 enum EMISSILE_PARTICLES { EMISSILE_PARTICLES_GEN_LAST = 0x7fffffff };
+enum SOUND_TYPE { SOUND_TYPE_GEN_LAST = 0x7fffffff };
 
 #endif
