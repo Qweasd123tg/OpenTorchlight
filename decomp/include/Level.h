@@ -3,6 +3,7 @@
 
 #include <OgreVector3.h>
 #include <OgreAxisAlignedBox.h>
+#include <OgreMatrix4.h>
 
 #include "RunicCore.h"
 #include "Constants.h"
@@ -14,6 +15,7 @@
 
 class CCharacter;
 class CBaseUnit;
+class CSkill;
 class CEditorScene;
 class CLevelTemplateData;
 
@@ -37,6 +39,8 @@ public:
     bool rayCollision(const Ogre::Vector3& start, const Ogre::Vector3& end, Ogre::Vector3& hit,
                       Ogre::Vector3& normal, unsigned int& type, Ogre::Vector3& extra, bool flag);
     CCharacter* getCharacterByGuid(long long guid);
+    CCharacter* findCharacterWithinView(const Ogre::Matrix4& view, EAlignment alignment, float minimumAngle,
+                                        float angle, float range, bool flag, CCharacter* exclude, CSkill* skill);
     void getActiveCharactersAtPosition(const Ogre::Vector3& position, UNITTYPES::EUNITTYPES unitType,
                                        EAlignment alignment, float radius, bool includeLiving, bool includeDead,
                                        TArrayList<CCharacter*>& characters);

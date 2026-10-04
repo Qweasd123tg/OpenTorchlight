@@ -1,6 +1,8 @@
 #ifndef SKILLMANAGER_H
 #define SKILLMANAGER_H
 #include <map>
+#include <OgreVector3.h>
+#include <OgreQuaternion.h>
 #include <string>
 #include "RunicCore.h"
 #include "SafePointer.h"
@@ -22,6 +24,11 @@ public:
     unsigned int getSkillLevel(CSkill* skill);
     int knownSkills(ESKILL_ACTIVATION_TYPE activation);
     void stopAllSkills(bool flag1,bool flag2,bool flag3);
+    bool getSkillCanBeExecuted(CSkill* skill, CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+                               const Ogre::Vector3& targetPosition, CBaseUnit* target, bool flag);
+    CSkill* executeSkill(CSkill* skill, CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+                         const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
+                         const Ogre::Vector3& targetPosition, CBaseUnit* target);
 private:
     CResourceManager* m_pResourceManager;
     std::map<std::wstring,TArrayList<CSkill*>*> m_SkillsByName;
