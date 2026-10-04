@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "SkillControllerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "SkillController.h"
 
 CSkillControllerDescriptor::CSkillControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
@@ -26,4 +31,62 @@ CSkillControllerDescriptor::CSkillControllerDescriptor(const wchar_t* name, cons
 
 CSkillControllerDescriptor::~CSkillControllerDescriptor()
 {
+}
+
+unsigned int CSkillControllerDescriptor::GetResourceIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return 0;
+}
+
+void CSkillControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param)
+{
+    CSkillController* skill = dynamic_cast<CSkillController*>(object);
+    if (skill)
+    {
+        switch (event)
+        {
+        case 0x39:
+            skill->startSkill();
+            break;
+        case 0x3a:
+            skill->stopSkill();
+            break;
+        case 0x3b:
+            skill->learnSkill();
+            break;
+        case 0x3c:
+            skill->unlearnSkill();
+            break;
+        }
+    }
+}
+
+void CSkillControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CSkillController* controller =
+            dynamic_cast<CSkillController*>(m_Objects[i]);
+
+        if (controller != 0 &&
+            !scene->getResourceManager()->getEditorIsRunning())
+        {
+            controller->initSkillController();
+        }
+    }
+}
+
+void CSkillControllerDescriptor::update(float param_1)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CSkillController *object = (CSkillController *)m_Objects[i];
+
+        if (object != NULL && !object->m_pResourceManager->getEditorIsRunning())
+            object->update(param_1);
+    }
+}
+
+CEditorBaseObject* CSkillControllerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CSkillController(scene->getResourceManager());
 }
