@@ -26,7 +26,7 @@ void side(Case& c,bool ours,autotest::Capture& out) {
         L"FF6688AA",L"FF7799BB",L"FF88AACC",L"FF99BBDD",L"FFAACC11",L"FFBBDD22"};
     for(int i=0;i<11;++i)globals.colors[i]=colors[i];
     CGameGlobals* saved=textGameGlobals;textGameGlobals=reinterpret_cast<CGameGlobals*>(&globals);
-    long long itemStorage[0x220/8],managerStorage[0x48/8],hierarchyStorage[0x100/8];
+    long long itemStorage[0x230/8],managerStorage[0x48/8],hierarchyStorage[0x100/8];
     std::memset(itemStorage,0,sizeof(itemStorage));std::memset(managerStorage,0,sizeof(managerStorage));
     std::memset(hierarchyStorage,0,sizeof(hierarchyStorage));char* self=reinterpret_cast<char*>(itemStorage);
     void* table[89];std::memcpy(table,textItemTable+2,sizeof(table));

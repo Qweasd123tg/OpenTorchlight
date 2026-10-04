@@ -19,7 +19,7 @@ void* modelForItem(void*) { ++modelLookups;return modelPointer; }
 void putPointer(void* object,size_t offset,void* value) {std::memcpy(static_cast<char*>(object)+offset,&value,sizeof(value));}
 void putFloat(void* object,size_t offset,float value) {std::memcpy(static_cast<char*>(object)+offset,&value,sizeof(value));}
 void side(Case& c,bool ours,autotest::Capture& out) {
-    long long itemStorage[0x220/8],modelStorage[0x250/8],masterStorage[0x190/8],settingsStorage[0x140/8];
+    long long itemStorage[0x230/8],modelStorage[0x250/8],masterStorage[0x190/8],settingsStorage[0x140/8];
     std::memset(itemStorage,0,sizeof(itemStorage));std::memset(modelStorage,0,sizeof(modelStorage));
     std::memset(masterStorage,0,sizeof(masterStorage));std::memset(settingsStorage,0,sizeof(settingsStorage));
     char* self=reinterpret_cast<char*>(itemStorage);

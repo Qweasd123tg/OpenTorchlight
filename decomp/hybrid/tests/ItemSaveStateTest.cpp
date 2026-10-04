@@ -26,7 +26,7 @@ struct DescriptorManagerView {
     DescriptorManagerView():vptr(NULL),safe(NULL),owner(NULL) {}
 };
 void side(Case& c,bool ours,autotest::Capture& out) {
-    long long item[0x220/8],manager[0x48/8],level[0x2f0/8],scenes[2][0x190/8],descriptors[2][sizeof(CDescriptor)/8],spawners[2][0x240/8],other[0x58/8];
+    long long item[0x230/8],manager[0x48/8],level[0x2f0/8],scenes[2][0x190/8],descriptors[2][sizeof(CDescriptor)/8],spawners[2][0x240/8],other[0x58/8];
     std::memset(item,0,sizeof(item));std::memset(manager,0,sizeof(manager));std::memset(level,0,sizeof(level));
     std::memset(scenes,0,sizeof(scenes));std::memset(descriptors,0,sizeof(descriptors));std::memset(spawners,0,sizeof(spawners));std::memset(other,0,sizeof(other));
     char* self=reinterpret_cast<char*>(item);pointerAt(item,0,saveItemTable+2);pointerAt(other,0,saveEditorObjectTable+2);

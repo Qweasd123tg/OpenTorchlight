@@ -8,6 +8,7 @@ namespace UNITTYPES
     enum EUNITTYPES
     {
         CONSUMABLE = 1,
+        WEAPON = 8,
         MONSTER = 27,
         PLAYER = 28,
         BREAKABLE = 29,

@@ -18,7 +18,7 @@ void* modelForRange(void*) {++modelLookups;return modelPointer;}
 void putPointer(void* p,size_t offset,void* value) {std::memcpy(static_cast<char*>(p)+offset,&value,sizeof(value));}
 void putFloat(void* p,size_t offset,float value) {std::memcpy(static_cast<char*>(p)+offset,&value,sizeof(value));}
 void side(Case& c,bool ours,autotest::Capture& out) {
-    long long item[0x220/8],model[0x250/8],manager[0x48/8],level[0x2f0/8],data[0x778/8],globals[0x2d0/8],hierarchy[0x100/8];
+    long long item[0x230/8],model[0x250/8],manager[0x48/8],level[0x2f0/8],data[0x778/8],globals[0x2d0/8],hierarchy[0x100/8];
     std::memset(item,0,sizeof(item));std::memset(model,0,sizeof(model));std::memset(manager,0,sizeof(manager));
     std::memset(level,0,sizeof(level));std::memset(data,0,sizeof(data));std::memset(globals,0,sizeof(globals));std::memset(hierarchy,0,sizeof(hierarchy));
     char* self=reinterpret_cast<char*>(item);

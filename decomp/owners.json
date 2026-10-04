@@ -65,6 +65,7 @@
   "EffectGroupManager.cpp": "opencode",
   "EffectManager.cpp": "opencode",
   "EffectsHeader.cpp": "opencode",
+  "Equipment.cpp": "dot",
   "ExecuteSkillProps.cpp": "opencode",
   "FileUtilities.cpp": "opencode",
   "ForceAffectorDescriptor.cpp": "opencode",

@@ -6,6 +6,9 @@
 // Partial: declarations from StringUtilities.cpp used by recovered TUs.
 namespace STRINGS
 {
+    std::wstring GetValueAsWString(int value);
+    std::wstring GetValueAsWString(unsigned int value);
+    std::wstring replaceWString(std::wstring text, const std::wstring& find, const std::wstring& replacement);
     std::string StringConvertToUTF8(const std::wstring& text);
     std::wstring StringConvertToWide(const std::string& text);
     std::wstring StringConvertToWide(const char* text, unsigned int maxLength);

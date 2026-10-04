@@ -9,6 +9,7 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <string>
+#include <vector>
 #include "BaseUnit.h"
 #include "Character.h"
 #include "Constants.h"
@@ -23,6 +24,7 @@
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 #include "iMissile.h"
+class CAttackDescription;
 class CInventory;
 class CMissile;
 class CParticle;
@@ -93,7 +95,7 @@ public:
     long DPS();
     void executeProcs(CCharacter*, EEFFECT_TYPE, CBaseUnit*);
     void destroyIcon();
-    CEquipment* getAttackSpeedString(EWeaponSpeed);
+    std::wstring getAttackSpeedString(EWeaponSpeed);
     int sellPrice();
     int buyPrice();
     CEquipment(CResourceManager*);
@@ -101,7 +103,7 @@ public:
     void addDamageBonus(EDAMAGE_TYPES, int);
     void updateDrop(float);
     CEquipment* getFlavorDescription();
-    CEquipment* getSet();
+    std::wstring getSet();
     void convertEquipment(std::wstring);
     void createNewEquipment(std::wstring);
     void setGraphDamage(unsigned int);
@@ -130,7 +132,7 @@ public:
     CEquipment* getEquipmentEffects();
     CEquipment* getEquipmentType(bool);
     CEquipment* getEquipmentDescription(bool, bool);
-    CEquipment* getEquipmentStats();
+    std::wstring getEquipmentStats();
 
     // fields
     int m_iUnknown238;
@@ -159,8 +161,8 @@ public:
     CCharacter* m_pEquippedTo;
     int m_iUnknown298;
     unsigned char m_gap29C[0x4] __attribute__((aligned(4)));
-    void* m_pUnknown2A0;
-    void* m_pUnknown2A8;
+    CAttackDescription* m_pAttackDescription;
+    CAttackDescription* m_pAttackDescriptionOverride;
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pUnitModelSecondary;
     long long m_iUnitCollisionModel;
@@ -185,15 +187,9 @@ public:
     int m_iUnknown344;
     bool m_bUnknown348;
     unsigned char m_gap349[0x7];
-    void* m_pUnknown350;
-    long long m_iUnknown358;
-    void* m_pUnknown360;
-    void* m_pUnknown368;
-    long long m_iUnknown370;
-    void* m_pUnknown378;
-    void* m_pUnknown380;
-    long long m_iUnknown388;
-    void* m_pUnknown390;
+    std::vector<int> m_ElementalDamageTypes;
+    std::vector<int> m_ElementalDamageMinimums;
+    std::vector<int> m_ElementalDamageMaximums;
     long long m_iUnknown398;
     long long m_iUnknown3A0;
     long long m_iUnknown3A8;
@@ -203,9 +199,9 @@ public:
     CParticle* m_pParticle;
     CParticle* m_pParticle_3D0;
     std::wstring m_sUnknown3D8;
-    int m_iUnknown3E0;
+    unsigned int m_iSocketCount;
     unsigned char m_gap3E4[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown3E8[0x18] __attribute__((aligned(8)));
+    TArrayList<CEquipment*> m_SocketedEquipment;
     std::wstring m_sUnknown400;
     float m_fUnknown408;
     unsigned char m_gap40C[0x4] __attribute__((aligned(4)));

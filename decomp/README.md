@@ -1061,3 +1061,48 @@ NaN/inf/extreme vectors, смена уровня в callback, рост followers
 
 Проверка дальнейшей автоматизации и воспроизводимые диагностические пробы:
 [отчёт](../research/decomp-automation-audit-2026-10-04/README.md).
+
+## Equipment stats and Item footprint (2026-10-04)
+
+First large Equipment function recovered: `getEquipmentStats` at 0x893660,
+24 219 original bytes. Returns std::wstring by value, not CEquipment*. It
+formats physical/elemental damage, weapon speed, socket counts and set bonuses.
+String conversion follows original Ogre::UTFString operations; active set
+bonuses precede inactive bonuses in original list order. The peculiar equal
+physical-damage case (ceil(maximum*0.5) through minimum) is preserved.
+
+`EquipmentStatsTest.cpp` compares 294 cases, twice per child (cold and warm
+local-string caches), including empty/nonempty strings, physical damage
+boundaries, elemental values, override/base attack speeds, NaN/infinity,
+sockets, missing sets/inventory, negative/zero/positive set counts, multiline
+and Unicode bonus text, and collaborator mutations. Game services are spies
+on both sides; strings, numerical formatting and UTF conversions are real.
+This checks formatting and the call protocol, not actual equipping or combat.
+The generated test completed 0/200 cases and was not accepted. Target-isolated
+mutation testing killed 23/23 viable candidates; the other sampled candidate
+was discarded by the mutation tool. Reproduce with
+`python3 research/equipment-stats-check/run_mutations.py`, or use the normal
+full-checkout `mutate.py --hand --max 24 0x893660`. Results are in that folder.
+
+A previous layout assumption is corrected: CItem 0x220 was an incomplete
+footprint, not its full base extent. Equipment's original secondary iMissile
+base is at 0x230 (RTTI and constructor), and ItemGold/Breakable first observed
+derived members are at 0x22c. CItem now keeps its unknown trailing state
+opaque through 0x22b: sizeof 0x230, base data size 0x22c. No existing named
+field moved. Earlier notes claiming full Item size 0x220 are superseded.
+CEquipment is now 0x438, its two vtable groups match original entries/thunks;
+CAttackDescription is 0x80, CSet 0x30 and its unnamed bonus record 0x18.
+Compile-time offset checks are retained in EquipmentStatsTest.cpp. Existing
+Item fixtures allocate the full footprint. The meanings/types of the opaque
+Item tail are still unknown and have not been invented.
+
+The supplied ff3a9e2 integration baseline independently passed 103 tests and
+accepted 1241 functions / 314239 bytes here, rather than the sender's reported
+1248 / 315359 and 106 tests. Four saved mutation checks were stale: KeyManager
+capture/flushAll/flush and Timeline RemovePointFromProperty. Those other-owned
+TUs and their acceptance records were not changed as part of Equipment work.
+
+Final integrated check for this Equipment change: 104 tests, 0 failed;
+1242 accepted game functions / 338458 original bytes. The new contribution
+is one 24219-byte function, not a complete Equipment TU. Full standalone
+relinking, campaign play and all possible inputs remain outside this check.
