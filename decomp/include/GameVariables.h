@@ -8,5 +8,7 @@
 
 extern int KSETTINGS_RES_HEIGHT;
 extern int KSETTINGS_RES_WIDTH;
+static unsigned char g_strStatDefines[744];
+extern long m_gStatsObject;
 
 #endif
