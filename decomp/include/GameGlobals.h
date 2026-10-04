@@ -8,12 +8,23 @@ class CGameGlobals : public CRunicCore
 public:
     virtual ~CGameGlobals();
     static CGameGlobals* getSingleton();
+    float getUnitShadowRange() const { return m_fUnitShadowRange; }
+    float getUnitNearRange() const { return m_fUnitNearRange; }
+    float getTriggerNearRange() const { return m_fTriggerNearRange; }
+    float getIndoorUnitActiveRange() const { return m_fIndoorUnitActiveRange; }
+    float getOutdoorUnitActiveRange() const { return m_fOutdoorUnitActiveRange; }
     const std::wstring& getRandomEnchantColor(bool selected) const { return selected ? m_sRandomEnchantColor : m_sRandomEnchantColorUnselected; }
     const std::wstring& getRareColor(bool selected) const { return selected ? m_sRareColor : m_sRareColorUnselected; }
     const std::wstring& getUniqueColor(bool selected) const { return selected ? m_sUniqueColor : m_sUniqueColorUnselected; }
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:
-    unsigned char m_GlobalsData10[0x268-0x10];
+    unsigned char m_GlobalsData10[0xa8-0x10];
+    float m_fUnitShadowRange;
+    float m_fUnitNearRange;
+    float m_fTriggerNearRange;
+    float m_fIndoorUnitActiveRange;
+    float m_fOutdoorUnitActiveRange;
+    unsigned char m_GlobalsDataBC[0x268-0xbc];
     std::wstring m_sRandomEnchantColor;
     std::wstring m_sRareColor;
     std::wstring m_sUniqueColor;

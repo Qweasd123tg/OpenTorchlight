@@ -752,3 +752,15 @@ hit-test, без подписки, которую сама проверяема�
 Работа подписчиков CEGUI и пиксельный рендер здесь не заявлены проверенными.
 Полный check.py: 59 тестов PASS, 377/5247 функций, 91 119 байт. Item: 15/20;
 остаются fillSaveState, applySaveState, calculateActiveRange, snapToGround, update.
+
+Item calculateActiveRange (598 байт): 544 сценария сравнения, мутации 10/10.
+Покрыты active/near/shadow пороги, interactable и потомок, отсутствие
+manager/level/template, UNIT_LIGHT_FADE, абсолютная позиция OGRE, ±4 по Y,
+NaN/inf и реальные изменения флагов материалов через оригинальный
+CGenericModel::setCastsShadows. Рендер теней не проверяется. Автотест 1/10
+не принят. Имена порогов взяты из GameGlobals::reload, UNIT_LIGHT_FADE из
+LevelTemplateData::load. Проверенные размеры/vtable: Level 0x2f0 (allocBytes
+в loadMenuLevel по 0x584bf6), LevelTemplateData 0x778, GameGlobals 0x2d0.
+Level.h расширен с прежней неполной области 0xa0, existing characters +0x98
+сохранён. Полный check.py: 60 тестов PASS, 378/5247, 91 717 байт.
+Item: 16/20, остаются fillSaveState, applySaveState, snapToGround, update.

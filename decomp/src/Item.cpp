@@ -5,6 +5,9 @@
 #include "GenericModel.h"
 #include "Keyframe.h"
 #include "GameGlobals.h"
+#include "Level.h"
+#include "LevelTemplateData.h"
+#include <cmath>
 #include "StringUtilities.h"
 #include <CEGUIPropertyHelper.h>
 #include "OutputEvents.h"
@@ -212,4 +215,44 @@ void CItem::setItemTextHighlighted(bool highlighted)
     }
     if (highlighted)
         m_pItemText->moveToFront();
+}
+
+void CItem::calculateActiveRange(const Ogre::Vector3& viewer)
+{
+    if (m_fForcedActiveTime > 0.0f)
+    {
+        m_bInActiveRange = true;
+        m_bInFadeRange = true;
+        return;
+    }
+    if (!m_bRangeEnabled)
+    {
+        m_bInActiveRange = false;
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    float x = viewer.x - position.x;
+    float z = viewer.z - position.z;
+    float distance = std::sqrt(x*x + 0.0f + z*z);
+    float activeRange;
+    if (getLevel() == NULL || getLevel()->getLevelTemplateData() == NULL || getLevel()->getLevelTemplateData()->getUnitLightFade())
+        activeRange = ISA(UNITTYPES::INTERACTABLE) ? CGameGlobals::getSingleton()->getTriggerNearRange() : CGameGlobals::getSingleton()->getIndoorUnitActiveRange();
+    else
+        activeRange = CGameGlobals::getSingleton()->getOutdoorUnitActiveRange();
+    if (distance > activeRange)
+    {
+        m_bInActiveRange = false;
+        float nearRange = ISA(UNITTYPES::INTERACTABLE) ? CGameGlobals::getSingleton()->getTriggerNearRange() : CGameGlobals::getSingleton()->getUnitNearRange();
+        m_bInFadeRange = distance <= nearRange;
+    }
+    else
+    {
+        m_bInActiveRange = true;
+        m_bInFadeRange = true;
+    }
+    if (getCastsShadows() && getUnitModel() != NULL)
+    {
+        bool shadows = !(distance > CGameGlobals::getSingleton()->getUnitShadowRange() || std::fabs(viewer.y-position.y) > 4.0f);
+        static_cast<CGenericModel*>(getUnitModel())->setCastsShadows(shadows);
+    }
 }

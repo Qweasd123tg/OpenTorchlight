@@ -63,6 +63,7 @@ public:
     bool ISA(UNITTYPES::EUNITTYPES type);
     void updateCullingBounds();
     bool getIsQuestUnit();
+    bool getCastsShadows();
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     void broadcastUnitState(EUNIT_STATES state);
 
