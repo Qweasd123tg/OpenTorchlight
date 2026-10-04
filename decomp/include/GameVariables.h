@@ -18,6 +18,7 @@ extern bool g_bWasRestarted;
 extern unsigned char g_hRestartingFile[4];
 static void* g_pCameraControl;
 static void* g_pCinematics;
+static void* g_pDungeonManager;
 static void* g_pGameSpeed;
 extern void* g_pQuestManager;
 static void* g_pRecipes;
@@ -25,6 +26,7 @@ static void* g_pSets;
 static void* g_pUnitThemes;
 static unsigned char g_strStatDefines[744];
 static int m_gQuestUnitDataID;
+extern long m_gRoomPieceInformation;
 extern long m_gStatsObject;
 extern long m_pMasterResourceManager;
 
