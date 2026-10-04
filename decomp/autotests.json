@@ -179,6 +179,18 @@
   "tried": 10,
   "code": "f85e6be43c6b319f"
  },
+ "0xd264d0": {
+  "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+  "killed": 2,
+  "tried": 2,
+  "code": "8f367a3b826eb663"
+ },
+ "0xd2dca0": {
+  "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "killed": 2,
+  "tried": 2,
+  "code": "9a649aedd7940ca0"
+ },
  "0xd79920": {
   "name": "CRunicCore::~CRunicCore()",
   "killed": 5,
