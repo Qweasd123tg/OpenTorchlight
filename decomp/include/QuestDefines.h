@@ -3,6 +3,8 @@
 
 #include <string>
 
+enum EQUEST_EVENTS { };
+
 // Quest type names. Internal linkage: every including TU constructs its own
 // copy.
 

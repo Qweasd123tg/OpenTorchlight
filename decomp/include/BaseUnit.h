@@ -10,6 +10,7 @@
 #include "EffectDefines.h"
 #include "TArrayList.h"
 #include "UnitTypes.h"
+#include "iUnitObserver.h"
 
 class CCharacter;
 class CDataGroup;
@@ -60,6 +61,8 @@ public:
     virtual void setLevel(unsigned int level);
 
     bool ISA(UNITTYPES::EUNITTYPES type);
+    void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
+    void broadcastUnitState(EUNIT_STATES state);
 
     // Level the unit is in, through its resource manager.
     CLevel* getLevel()
@@ -71,7 +74,11 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
-    char m_BaseUnitData[0x1ac - 0x100];
+    char m_BaseUnitData[0x198 - 0x100];
+    bool m_bRangeEnabled;
+    bool m_bInActiveRange;
+    bool m_bInFadeRange;
+    char m_BaseUnitData19B[0x1ac - 0x19b];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
     char m_BaseUnitData2[0x10];
