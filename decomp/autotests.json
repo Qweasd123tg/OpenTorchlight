@@ -232,5 +232,47 @@
   "killed": 5,
   "tried": 5,
   "code": "2dc0ba9175b74467"
+ },
+ "0x7885d0": {
+  "name": "CPOV::ExtractOrientationVectors()",
+  "killed": 10,
+  "tried": 10,
+  "code": "16321ca6b8ee3d4c"
+ },
+ "0x788690": {
+  "name": "CPOV::DampContactVelocity(float)",
+  "killed": 10,
+  "tried": 10,
+  "code": "ec6aaf2dfeeef26b"
+ },
+ "0x7887d0": {
+  "name": "CPOV::AccelerateUpDown(float)",
+  "killed": 6,
+  "tried": 6,
+  "code": "89a828b3ce8adc72"
+ },
+ "0x788830": {
+  "name": "CPOV::Accelerate(float)",
+  "killed": 6,
+  "tried": 6,
+  "code": "d3d042ab1cea3ee5"
+ },
+ "0x788890": {
+  "name": "CPOV::AccelerateX(float)",
+  "killed": 6,
+  "tried": 6,
+  "code": "b021538275c5241d"
+ },
+ "0x7889e0": {
+  "name": "CPOV::UpdateFlyingTo(float)",
+  "killed": 8,
+  "tried": 10,
+  "code": "ec1304240c75e280"
+ },
+ "0xce9fd0": {
+  "name": "CCameraControl::setCinematicMode(bool)",
+  "killed": 8,
+  "tried": 10,
+  "code": "3b201e03fc45a361"
  }
 }

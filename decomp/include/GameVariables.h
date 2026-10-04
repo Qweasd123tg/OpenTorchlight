@@ -6,12 +6,17 @@
 
 #include <string>
 
+extern int KSETTINGS_KEYMAP_ZOOMIN;
+extern int KSETTINGS_KEYMAP_ZOOMOUT;
 static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
 static unsigned char gQUEST_REQUIREMENTS[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 static long g_SkillParser;
 extern bool g_bWasRestarted;
 extern unsigned char g_hRestartingFile[4];
+static void* g_pCameraControl;
+static void* g_pCinematics;
+static void* g_pGameSpeed;
 extern void* g_pQuestManager;
 static void* g_pRecipes;
 static void* g_pSets;

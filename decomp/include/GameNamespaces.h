@@ -24,6 +24,7 @@ namespace FILESYSTEM
 
 namespace LinuxUtils
 {
+    void GetDesktopResolution(int&, int&);
     void Init();
 }
 

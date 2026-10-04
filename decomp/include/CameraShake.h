@@ -1,42 +1,42 @@
 #ifndef CAMERASHAKE_H
 #define CAMERASHAKE_H
 
-// Partial: generated from symbols, RTTI and recovered layouts (tools/decomp/promote.py).
-// Bases, virtual order and field offsets are the original ones; names, field types
-// and return types are placeholders until the class's own TU is recovered.
-
-#include <OgreVector3.h>
 #include <string>
+
 #include "EditorBaseObject.h"
-#include "RunicCore.h"
+
+class CRunicCore;
 
 class CCameraShake : public CEditorBaseObject
 {
 public:
     virtual ~CCameraShake();
-    bool update(float, Ogre::Vector3&, Ogre::Vector3&, bool);
-    CCameraShake();
-    void setCameraShakeName(const std::wstring&);
-    void clone(CCameraShake*);
-    CCameraShake(const std::wstring&, Ogre::Vector3, float);
-    void startCameraShake(const Ogre::Vector3&, bool);
 
-    // fields
+    bool update(float fDeltaTime, Ogre::Vector3& cameraPosition,
+                Ogre::Vector3& shakeOffset, bool applyShake);
+    CCameraShake();
+    void setCameraShakeName(const std::wstring& cameraShakeName);
+    void clone(CCameraShake* pCameraShake);
+    CCameraShake(const std::wstring& cameraShakeName,
+                 Ogre::Vector3 direction, float duration);
+    void startCameraShake(const Ogre::Vector3& cameraPosition,
+                          bool updateCamera);
+
     float m_fDuration;
-    float m_fUnknown5C;
-    float m_fMagnitudeMult;
-    int m_iDirection;
-    float m_fDirection;
-    float m_fDirection_6C;
+    float m_fElapsedTime;
+    float m_fMagnitudeMultiplier;
+    float m_fDirectionX;
+    float m_fDirectionY;
+    float m_fDirectionZ;
     CRunicCore* m_pRunicCore;
-    int m_iUnknown78;
-    unsigned char m_gap7C[0x4] __attribute__((aligned(4)));
-    void* m_pCameraShakeName;
-    int m_iDirectionOrientation;
-    int m_iUnknown8C;
-    int m_iUnknown90;
-    int m_iUnknown94;
-    bool m_bUnknown98;
+    int m_nRunicCoreSafePointerIndex;
+    unsigned char m_gap7C[4] __attribute__((aligned(4)));
+    std::wstring m_strCameraShakeName;
+    int m_nDirectionOrientation;
+    float m_fCameraPositionX;
+    float m_fCameraPositionY;
+    float m_fCameraPositionZ;
+    bool m_bCameraShakeActive;
     bool m_bCameraFallsOffWithDistance;
 };
 
