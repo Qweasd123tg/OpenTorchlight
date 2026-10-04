@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "ScaleAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "ScaleWrapper.h"
 
 CScaleAffectorDescriptor::CScaleAffectorDescriptor()
     : CAffectorDescriptor(L"Scale", L"Scales particles", L"gear")
@@ -12,4 +17,9 @@ CScaleAffectorDescriptor::CScaleAffectorDescriptor()
 
 CScaleAffectorDescriptor::~CScaleAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CScaleAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CScaleWrapper(scene->getResourceManager());
 }
