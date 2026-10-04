@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "VortexAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "VortexWrapper.h"
 
 CVortexAffectorDescriptor::CVortexAffectorDescriptor()
     : CAffectorDescriptor(L"Vortext", L"This will effect your particles as if they were in a vortex", L"gear")
@@ -10,4 +15,9 @@ CVortexAffectorDescriptor::CVortexAffectorDescriptor()
 
 CVortexAffectorDescriptor::~CVortexAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CVortexAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CVortexWrapper(scene->getResourceManager());
 }
