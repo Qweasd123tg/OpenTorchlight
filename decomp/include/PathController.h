@@ -11,6 +11,8 @@
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 
+class CDataGroup;
+
 class CPathController : public CPositionableObject
 {
 public:
@@ -34,7 +36,7 @@ public:
     void initObjectInEditor();
 
     // fields
-    long long m_iUnknown100;
+    CDataGroup* m_pUnitInteractDataGroup;
     unsigned char m_Unknown108[0x18] __attribute__((aligned(8)));
     void* m_pCategory;
     std::wstring m_sUnitInteractWith;

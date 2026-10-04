@@ -328,5 +328,11 @@
   "killed": 2,
   "tried": 2,
   "code": "f6ce3c203e2c764a"
+ },
+ "0x9de390": {
+  "name": "CLayout::addLayoutForCloningAndControlling(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+  "killed": 4,
+  "tried": 5,
+  "code": "77ec46de56616e26"
  }
 }

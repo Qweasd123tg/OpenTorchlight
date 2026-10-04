@@ -31,11 +31,11 @@ CLevelState::CLevelState(int iLevelId)
 
 void CLevelState::restoreAutomap(CAutomap *pAutomap)
 {
-    if (m_iAutomapWidth == pAutomap->m_iUnknown90 &&
-        m_iAutomapHeight == pAutomap->m_iUnknown94) {
-        memcpy(pAutomap->m_pUnknown98, m_pAutomapData,
+    if (m_iAutomapWidth == pAutomap->m_iMapGridWidth &&
+        m_iAutomapHeight == pAutomap->m_iMapGridHeight) {
+        memcpy(pAutomap->m_pRevealedTiles, m_pAutomapData,
                (long)(m_iAutomapWidth * m_iAutomapHeight) << 2);
-        pAutomap->m_bUnknownA0 = true;
+        pAutomap->m_bTilesChanged = true;
     }
 }
 
