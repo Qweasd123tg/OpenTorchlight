@@ -15,6 +15,11 @@
 #include <string>
 #include <vector>
 
+namespace LinuxUtils
+{
+    void Init();
+}
+
 namespace ShellUtils
 {
     void LaunchBrowser(const std::string&);

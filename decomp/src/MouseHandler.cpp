@@ -1,7 +1,7 @@
 #include "EmptyStrings.h"
 #include "MouseHandler.h"
-
 #include <SDL.h>
+#include "GameNamespaces.h"
 
 CMouseHandler::CMouseHandler(void* window)
     : m_pWindow(window)
