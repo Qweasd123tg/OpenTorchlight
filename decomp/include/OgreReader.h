@@ -3,7 +3,11 @@
 
 #include <string>
 
-// Partial: OgreReader.cpp. Sequential reader over a file loaded into memory.
+#include <OgreDataStream.h>
+
+class CFileInfo;
+
+// Sequential reader over a file loaded into memory.
 class COgreReader
 {
 public:
@@ -12,6 +16,10 @@ public:
 
     void read(void* buffer, unsigned int size);
     void seek(unsigned int position);
+
+    bool ReadFile(Ogre::DataStreamPtr stream);
+    bool ReadFile(CFileInfo& info);
+    bool ReadFile(const std::wstring& path);
 
 private:
     std::wstring m_sFileName;
