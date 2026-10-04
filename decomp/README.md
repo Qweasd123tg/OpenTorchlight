@@ -1265,3 +1265,31 @@ Final integrated check: 108 tests, 0 failed; 1246 accepted game functions /
 The five Equipment functions recovered in this series total 65265 original
 bytes. A separate, unmodified cross-owner Path constructor discrepancy is
 recorded in `research/path-constructor-signature.md`.
+
+## Equipment drop (2026-10-04)
+
+`CEquipment::drop()` (0x87aaa0, 6775 original bytes) reaches **MATCH 100%**
+in normalized instructions with the original compiler. The first direct
+reconstruction was 96.2%; an explicit temporary zero origin for CPath gave
+98.2%, and the original form of the midpoint/height temporaries gave 100%.
+Only those two natural source-form refinements were made. This is normalized
+machine-code equality, not a claim that whole executable files are identical.
+
+The function covers level availability, item-type-specific rotation, random
+yaw, cached drop orientation at +0x2f0, direct placement or a three-point drop
+arc, sound/position/opacity/visibility updates and render ordering. The cache
+is now an `Ogre::Matrix4`; subsequent field offsets are unchanged. The initial
+generated test also completed 200/200 cases, but acceptance is based on MATCH,
+not on an unproven claim that those generated cases cover all active branches.
+
+The correct narrow-string CPath constructor declaration was added so the
+function calls the original constructor signature. Its implementation still
+comes from the original ELF. The foreign wide-string draft in path.cpp was
+not changed and is not counted as reconstructed; see the separate signature
+finding. Other class changes are declarations for original Level/SoundBank
+collaborators, not implementations of those services.
+
+Final integrated check: 108 tests, 0 failed; 1247 accepted game functions /
+386279 original bytes. Matching game functions increased to 1123 / 248615
+original bytes. The six Equipment functions in this series total 72040 bytes.
+The Drop increment over 3e1fe53 is accepted by MATCH, not by a new hand test.

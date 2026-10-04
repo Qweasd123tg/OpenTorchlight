@@ -10,6 +10,7 @@ public:
     CSoundBank(CSoundManager&,bool);
     virtual ~CSoundBank();
     void addSample(int sound,long long guid);
+    void playSample(int sound,Ogre::SceneNode*,float,float,bool);
     void update(float elapsed, Ogre::SceneNode* node);
     void stop(int sound);
 private:

@@ -172,14 +172,7 @@ public:
     std::wstring m_sDisplayName;
     std::wstring m_sPrefix;
     std::wstring m_sSuffix;
-    unsigned char m_fUnknown2F0[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown2F8[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown300[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown308[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown310[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown318[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown320[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown328[0x8] __attribute__((aligned(8)));
+    Ogre::Matrix4 m_mDropOrientation;
     int m_iMinimumDamage;
     int m_iMaximumDamage;
     int m_iUnknown338;

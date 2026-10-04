@@ -27,6 +27,8 @@ class CLevel : public CRunicCore
 {
 public:
     CCharacter* getPlayer();
+    Ogre::Vector3 randomOpenItemPosition(const Ogre::Vector3&,float,bool);
+    float floorHeight(Ogre::Vector3);
     void updateNPCIcons();
     virtual ~CLevel();
     void removeUnit(CBaseUnit* unit,bool flag);

@@ -4,6 +4,9 @@
 #include "Effect.h"
 #include "DataGroup.h"
 #include "Utilities.h"
+#include "UtilitiesMath.h"
+#include "Path.h"
+#include "GenericModel.h"
 #include "FileUtilities.h"
 #include "GameClient.h"
 #include "GameUI.h"
@@ -639,4 +642,74 @@ void CEquipment::unitInit(CDataGroup* data,bool skipEffects)
     }
     std::wstring layout=data->GetDataValue(L"ATTACHEDLAYOUT",L"");
     if (!layout.empty()) m_bUnknown430=true;
+}
+
+void CEquipment::drop()
+{
+    if (!getLevel()) return;
+    float angle=UTILITIES::randomBetweenVolatile(0.0f,360.0f);
+    m_mOrientation=Ogre::Matrix4::IDENTITY;
+    Ogre::Matrix4 rotation;
+    if (ISA(UNITTYPES::CROSSBOW))
+    {
+        MATH::matrixRotationX(rotation,-1.2217305f);
+        m_mOrientation=m_mOrientation*rotation;
+    }
+    else if (ISA(UNITTYPES::WEAPON))
+    {
+        MATH::matrixRotationZ(rotation,1.5707964f);
+        m_mOrientation=m_mOrientation*rotation;
+    }
+    else if (ISA(UNITTYPES::SHIELD))
+    {
+        MATH::matrixRotationZ(rotation,-1.5707964f);
+        m_mOrientation=m_mOrientation*rotation;
+    }
+    else if ((ISA(UNITTYPES::SHOULDER_ARMOR) || ISA(UNITTYPES::HELMET)) && m_pUnitModel)
+    {
+        m_pUnitModel->setPosition(0.0f,0.0f,0.0f);
+        m_pUnitModel->setOrientation(Ogre::Matrix4::IDENTITY,false);
+    }
+    MATH::matrixRotationY(rotation,angle*0.017453292f);
+    m_mOrientation=rotation*m_mOrientation;
+    m_mDropOrientation=m_mOrientation;
+    setOrientation(m_mOrientation,false);
+    if (!m_bUnknown25E)
+    {
+        Ogre::Vector3 destination=getLevel()->randomOpenItemPosition(m_vPosition,1.0f,false);
+        destination.y=getLevel()->floorHeight(destination)+0.01f;
+        if (ISA(UNITTYPES::WEAPON)) destination.y+=0.05f;
+        m_pSoundBank->playSample(16,m_pSceneNode,0.0f,0.0f,false);
+        setPosition(destination);
+    }
+    else
+    {
+        m_pSoundBank->playSample(16,m_pSceneNode,0.0f,0.0f,false);
+        Ogre::Vector3 destination=getLevel()->randomOpenItemPosition(m_vPosition,1.5f,false);
+        destination.y=getLevel()->floorHeight(destination)+0.01f;
+        if (ISA(UNITTYPES::WEAPON)) destination.y+=0.05f;
+        if (!m_pPath) m_pPath=new CPath("DROP",false,Ogre::Vector3(0.0f,0.0f,0.0f));
+        m_pPath->Clear();
+        setEnabled(false);
+        m_bUnknown25C=true;
+        m_fUnknown258=0.0f;
+        Ogre::Vector3 middle((destination.x+m_vPosition.x)*0.5f,
+                             (destination.y+m_vPosition.y)*0.5f,
+                             (destination.z+m_vPosition.z)*0.5f);
+        float middleHeight=middle.y;
+        middle.y=UTILITIES::randomBetweenVolatile(3.5f,4.5f);
+        middle.y+=middleHeight;
+        m_pPath->AddPoint(m_vPosition,-60.0f,60.0f);
+        m_pPath->AddPoint(middle,-60.0f,60.0f);
+        m_pPath->AddPoint(destination,-60.0f,60.0f);
+    }
+    if (getUnitModel())
+    {
+        m_fOpacity=1.0f;
+        updateOpacity(0.0f,true);
+        static_cast<CGenericModel*>(getUnitModel())->setOpacity(1.0f);
+        m_bItemFlag218=false;
+        setVisible(true,true);
+    }
+    setRenderBehind(true);
 }

@@ -39,6 +39,9 @@ public:
                   float radiusRight);
     void Reverse();
 
+    // Original narrow overload; its implementation still comes from the ELF.
+    // The wide draft belongs to path.cpp and is tracked separately.
+    CPath(std::string name, bool closed, const Ogre::Vector3& origin);
     CPath(std::wstring name, bool closed, const Ogre::Vector3& origin);
     void Resize(unsigned int pointCount);
     CPath(CPath& path);
