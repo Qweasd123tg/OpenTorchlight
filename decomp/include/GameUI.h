@@ -19,6 +19,7 @@ public:
     void closeMenus();
     void closeAll();
     void setInteractiveMenuVisible(bool visible);
+    int getUIIsInCinematic();
 private:
     unsigned char m_GameUIData[0x1a08 - 0x10];
 };

@@ -122,6 +122,26 @@ def write_namespaces(spaces, incl, forward):
     return "\n".join(lines + ["#endif"]) + "\n"
 
 
+def defined_elsewhere(names):
+    """Enums and typedefs of `names` that a hand-written header defines: the bucket must not repeat them."""
+    text = "\n".join(h.read_text(errors="replace") for h in INCLUDE.glob("*.h") if h.name not in SHARED.values())
+    return [n for n in list(names) if re.search(rf"\benum\s+{n}\s*\{{|\btypedef\b[^;]*\b{n}\s*;", text)]
+
+
+def prune_buckets():
+    """Drops from GameEnums.h what hand-written headers now define (after merges or new headers)."""
+    path = INCLUDE / "GameEnums.h"
+    if not path.exists():
+        return []
+    enums = enum_entries(path.read_text())
+    gone = defined_elsewhere(enums)
+    if gone:
+        for name in gone:
+            del enums[name]
+        path.write_text(write_enums(enums))
+    return gone
+
+
 # -- promotion -------------------------------------------------------------------
 def plan(source):
     """(class header renames, promoted texts, reached decomp/include headers)."""
@@ -181,6 +201,8 @@ def promote(source, regenerate=True):
     old = (INCLUDE / "GameEnums.h").read_text() if (INCLUDE / "GameEnums.h").exists() else ""
     enums = enum_entries(old)
     enums.update({k: v for k, v in enum_entries((GEN / "GenTypes.h").read_text()).items() if k in idents})
+    for name in defined_elsewhere(enums):
+        del enums[name]
     shared("GenTypes.h", "GameEnums.h", enums, enums != enum_entries(old), lambda: write_enums(enums))
 
     old = (INCLUDE / "GameVariables.h").read_text() if (INCLUDE / "GameVariables.h").exists() else ""
@@ -220,8 +242,12 @@ def promote(source, regenerate=True):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("sources", nargs="+", type=Path)
+    parser.add_argument("sources", nargs="*", type=Path)
+    parser.add_argument("--prune", action="store_true", help="drop bucket entries hand-written headers define")
     args = parser.parse_args()
+    if args.prune:
+        print("pruned from GameEnums.h:", ", ".join(prune_buckets()) or "nothing")
+        return
     for source in args.sources:
         written = promote(source.resolve(), regenerate=False)
         print(f"{source}: {', '.join(written) or 'nothing to promote'}")
