@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "SineForceAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "SineForceWrapper.h"
 
 CSineForceAffectorDescriptor::CSineForceAffectorDescriptor()
     : CForceAffectorDescriptor(L"Sine Force", L"This will create sine wave force on all the particles released", L"gear")
@@ -10,4 +15,9 @@ CSineForceAffectorDescriptor::CSineForceAffectorDescriptor()
 
 CSineForceAffectorDescriptor::~CSineForceAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CSineForceAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CSineForceWrapper(scene->getResourceManager());
 }
