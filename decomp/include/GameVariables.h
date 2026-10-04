@@ -14,6 +14,7 @@ static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
 static unsigned char gQUEST_REQUIREMENTS[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 static unsigned char g_MeshFilesByIndex[48];
+static long g_MissilePreloader;
 static long g_SkillParser;
 extern bool g_bWasRestarted;
 extern unsigned char g_hRestartingFile[4];

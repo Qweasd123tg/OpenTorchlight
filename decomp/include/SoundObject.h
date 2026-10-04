@@ -1,10 +1,7 @@
 #ifndef SOUNDOBJECT_H
 #define SOUNDOBJECT_H
 
-// Partial: layout and virtual order of SoundObject.cpp; only the methods used so far.
-
 #include <OgreVector3.h>
-
 #include "PositionableObject.h"
 #include "iSelected.h"
 
@@ -14,8 +11,8 @@ class CSoundBank;
 class CSoundObject : public CPositionableObject, public iSelected
 {
 public:
-    CSoundObject(CResourceManager* resourceManager);
     virtual ~CSoundObject();
+
     virtual void setEnabled(bool enabled);
     virtual void setVisible(bool visible);
     virtual void positionUpdated(const Ogre::Vector3& position);
@@ -27,18 +24,19 @@ public:
     void pause();
     void play();
     void reset();
-    void updateSounds(float elapsed);
-    void setSoundBankGuid(long long guid);
-    void setSoundBankNameIndex(unsigned int index);
+    void updateSounds(float elapsedTime);
+    void setSoundBankGuid(long long soundBankGuid);
+    void setSoundBankNameIndex(unsigned int soundBankNameIndex);
 
-protected:
+    CSoundObject(CResourceManager* resourceManager);
+
     long long m_iSoundBankGuid;
     int m_iSoundBankCategory;
     unsigned int m_iSoundBankNameIndex;
     CSoundBank* m_pSoundBank;
-    bool m_bStartsOnActivated;
-    bool m_bPlaying;
-    bool m_bPaused;
+    bool m_bSoundStartsOnActivated;
+    bool m_bSoundPlaying;
+    bool m_bSoundPaused;
     bool m_bEnvironmental;
 };
 
