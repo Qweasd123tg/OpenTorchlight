@@ -1,0 +1,217 @@
+#ifndef EQUIPMENT_H
+#define EQUIPMENT_H
+
+// Partial: generated from symbols, RTTI and recovered layouts (tools/decomp/promote.py).
+// Bases, virtual order and field offsets are the original ones; names, field types
+// and return types are placeholders until the class's own TU is recovered.
+
+#include <OgreCamera.h>
+#include <OgreSceneNode.h>
+#include <OgreVector3.h>
+#include <string>
+#include "BaseUnit.h"
+#include "Character.h"
+#include "Constants.h"
+#include "DataGroup.h"
+#include "Effect.h"
+#include "EffectDefines.h"
+#include "GameUI.h"
+#include "GameEnums.h"
+#include "GenericModel.h"
+#include "Item.h"
+#include "ItemSaveState.h"
+#include "PositionableObject.h"
+#include "ResourceManager.h"
+#include "iMissile.h"
+class CInventory;
+class CMissile;
+class CParticle;
+class CPath;
+
+class CEquipment : public CItem, public iMissile
+{
+public:
+    virtual ~CEquipment();
+    virtual void setActiveInLevel(bool);
+    virtual void* getUnitModel();
+    virtual void* getUnitCollisionModel();
+    virtual void unitInit(CDataGroup*, bool);
+    virtual void update(Ogre::Camera*, const Ogre::Vector3&, float);
+    virtual void setHighlighted(bool);
+    virtual bool isEffectValidForUnit(CCharacter*, CBaseUnit*, CEffect*);
+    virtual void applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*);
+    virtual void fillSaveState(CItemSaveState&, int, bool);
+    virtual void applySaveState(CItemSaveState&);
+    virtual const std::wstring& getItemName();
+    virtual void setItemTextHighlighted(bool);
+    virtual bool isMagical();
+    virtual void setRimlight(std::wstring);
+    virtual void missileBeingFired(CMissile*);
+    virtual void missileDieing(CMissile*);
+    virtual void missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
+    virtual bool getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*);
+    virtual bool missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&);
+    virtual void getUnitModelSecondary();
+    virtual bool canEquip(CCharacter*, bool);
+    virtual long long canPickup(CCharacter*);
+    virtual long long canDrop(CCharacter*);
+    virtual void addedToInventory(CInventory*, CCharacter*);
+    virtual void removedFromInventory(CInventory*, CCharacter*);
+    virtual void equipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS);
+    virtual void unequipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS);
+    virtual void useEquipment(CCharacter*, CCharacter*);
+    virtual void incrementStackBy(int);
+    virtual void getEquippedTo();
+    virtual void equip();
+    virtual void unequip();
+    virtual void useEquipment();
+    virtual void drop();
+    virtual void activateDropParticles();
+    long long hasEffects();
+    void unloadModel();
+    int minimumDamage();
+    int maximumDamage();
+    void getDamageBonus(EDAMAGE_TYPES);
+    void removeDamageBonus(EDAMAGE_TYPES, int);
+    void resetVisualLayout();
+    void updateVisualLayout(float);
+    int getDefenseRequirement(CCharacter*);
+    int getMagicRequirement(CCharacter*);
+    int getDexterityRequirement(CCharacter*);
+    int getStrengthRequirement(CCharacter*);
+    int getLevelRequirement(CCharacter*);
+    long long canEnchant();
+    // unresolved: CEquipment::removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES)
+    void addContainerItem(CEquipment*);
+    bool canUseOnTarget(CCharacter*, CBaseUnit*);
+    void useOnTarget(CCharacter*, CBaseUnit*);
+    void playDropSound(Ogre::SceneNode*);
+    void playTakeSound(Ogre::SceneNode*);
+    void setRenderBehind(bool);
+    void setElementalParticlesEnabled(bool);
+    void detachFromLocation();
+    long DPS();
+    void executeProcs(CCharacter*, EEFFECT_TYPE, CBaseUnit*);
+    void destroyIcon();
+    CEquipment* getAttackSpeedString(EWeaponSpeed);
+    int sellPrice();
+    int buyPrice();
+    CEquipment(CResourceManager*);
+    void addInherentDamage(EDAMAGE_TYPES, int);
+    void addDamageBonus(EDAMAGE_TYPES, int);
+    void updateDrop(float);
+    CEquipment* getFlavorDescription();
+    CEquipment* getSet();
+    void convertEquipment(std::wstring);
+    void createNewEquipment(std::wstring);
+    void setGraphDamage(unsigned int);
+    void setGraphAC(unsigned int);
+    int enchantPrice();
+    CEquipment* skillDescription();
+    long long fireMissiles(CCharacter*, CCharacter*);
+    unsigned long getMaxSockets();
+    void addSockets();
+    long long isWardrobed(std::wstring);
+    void setRequirements();
+    void calculateCombatStats(bool);
+    void improveHeirloom();
+    void createIcon(CGameUI&, bool);
+    void recalculatePrice();
+    void enchant(bool);
+    CEquipment* getFullItemName(bool);
+    void createParticles();
+    void createElementalDamages();
+    void clearDamageBonuses();
+    void addEnchant(int, int, int);
+    void attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS);
+    void loadModel(std::wstring, std::wstring);
+    void reskinByClass(std::wstring);
+    CEquipment* effectsDescription(EEFFECT_ACTIVATION, bool, bool);
+    CEquipment* getEquipmentEffects();
+    CEquipment* getEquipmentType(bool);
+    CEquipment* getEquipmentDescription(bool, bool);
+    CEquipment* getEquipmentStats();
+
+    // fields
+    int m_iUnknown238;
+    int m_iUnknown23C;
+    CInventory* m_pInventory;
+    int m_iUnknown248;
+    unsigned char m_gap24C[0x4] __attribute__((aligned(4)));
+    CPath* m_pPath;
+    float m_fUnknown258;
+    bool m_bUnknown25C;
+    bool m_bUnknown25D;
+    bool m_bUnknown25E;
+    bool m_bUnknown25F;
+    int m_iUnknown260;
+    int m_iUnknown264;
+    int m_iUnknown268;
+    int m_iUnknown26C;
+    int m_iUnknown270;
+    int m_iUnknown274;
+    int m_iUnknown278;
+    int m_iUnknown27C;
+    int m_iUnknown280;
+    int m_iUnknown284;
+    int m_iUnknown288;
+    int m_iUnknown28C;
+    CCharacter* m_pEquippedTo;
+    int m_iUnknown298;
+    unsigned char m_gap29C[0x4] __attribute__((aligned(4)));
+    void* m_pUnknown2A0;
+    void* m_pUnknown2A8;
+    CGenericModel* m_pUnitModel;
+    CGenericModel* m_pUnitModelSecondary;
+    long long m_iUnitCollisionModel;
+    void* m_pUnknown2C8;
+    void* m_pUnknown2D0;
+    void* m_pUnknown2D8;
+    void* m_pUnknown2E0;
+    void* m_pUnknown2E8;
+    unsigned char m_fUnknown2F0[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown2F8[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown300[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown308[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown310[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown318[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown320[0x8] __attribute__((aligned(8)));
+    unsigned char m_fUnknown328[0x8] __attribute__((aligned(8)));
+    int m_iMinimumDamage;
+    int m_iMaximumDamage;
+    int m_iUnknown338;
+    int m_iUnknown33C;
+    int m_iUnknown340;
+    int m_iUnknown344;
+    bool m_bUnknown348;
+    unsigned char m_gap349[0x7];
+    void* m_pUnknown350;
+    long long m_iUnknown358;
+    void* m_pUnknown360;
+    void* m_pUnknown368;
+    long long m_iUnknown370;
+    void* m_pUnknown378;
+    void* m_pUnknown380;
+    long long m_iUnknown388;
+    void* m_pUnknown390;
+    long long m_iUnknown398;
+    long long m_iUnknown3A0;
+    long long m_iUnknown3A8;
+    long long m_iUnknown3B0;
+    long long m_iUnknown3B8;
+    long long m_iUnknown3C0;
+    CParticle* m_pParticle;
+    CParticle* m_pParticle_3D0;
+    std::wstring m_sUnknown3D8;
+    int m_iUnknown3E0;
+    unsigned char m_gap3E4[0x4] __attribute__((aligned(4)));
+    unsigned char m_Unknown3E8[0x18] __attribute__((aligned(8)));
+    std::wstring m_sUnknown400;
+    float m_fUnknown408;
+    unsigned char m_gap40C[0x4] __attribute__((aligned(4)));
+    unsigned char m_Unknown410[0x18] __attribute__((aligned(8)));
+    CPositionableObject* m_pPositionableObject;
+    bool m_bUnknown430;
+};
+
+#endif
