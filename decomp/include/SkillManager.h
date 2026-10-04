@@ -14,6 +14,8 @@ class CSkillManager : public CRunicCore
 public:
     CSkillManager(CResourceManager* resources,CBaseUnit* owner);
     virtual ~CSkillManager();
+    CSkill* addSkill(const std::wstring& name,bool flag);
+    CSkill* addSkill(CSkill* skill,bool flag1,bool flag2);
     CSkill* getSkill(const std::wstring& name);
     void update(float elapsed);
     int knownSkills(ESKILL_ACTIVATION_TYPE activation);

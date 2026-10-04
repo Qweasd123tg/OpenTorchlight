@@ -13,6 +13,8 @@
 #include "iUnitObserver.h"
 
 class CCharacter;
+class CAffix;
+class CSkill;
 class CCullingBounds;
 class CDataGroup;
 class CEffect;
@@ -71,6 +73,14 @@ public:
     bool hasUnitTheme(CUnitTheme* theme);
     bool hasUnitTheme(long long guid);
     bool hasUnitTheme(const std::wstring& name);
+    CAffix* addAffix(CAffix* affix,unsigned int level,CBaseUnit* source,float scale);
+    CAffix* addAffix(const std::wstring& name,unsigned int level,CBaseUnit* source,float scale);
+    CEffect* addNewEffect(CEffect* effect);
+    CEffect* copyEffect(CBaseUnit* source,CEffect* effect);
+    void copyEffects(CBaseUnit* source,const TArrayList<CEffect*>* effects);
+    CSkill* addSkillByName(const std::wstring& name,bool flag);
+    CSkill* cloneSkill(CSkill* skill);
+    bool dontUseOnFull();
     bool removeEffect(const std::wstring& name);
     bool removeAffix(const std::wstring& name);
     bool hasEffect(EEFFECT_TYPE type);

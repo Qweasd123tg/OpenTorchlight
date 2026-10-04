@@ -77,6 +77,12 @@
   "tried": 1,
   "code": "35fc3a1a9cfe33c2"
  },
+ "0x804f50": {
+  "name": "CBaseUnit::dontUseOnFull()",
+  "killed": 3,
+  "tried": 3,
+  "code": "d732f962e5a49e24"
+ },
  "0xa01f30": {
   "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
   "killed": 3,

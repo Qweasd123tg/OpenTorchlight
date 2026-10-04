@@ -27,6 +27,7 @@ private:
     Ogre::Vector3 m_vLocalMaximum;
     Ogre::Vector3 m_vWorldMinimum;
     Ogre::Vector3 m_vWorldMaximum;
-    unsigned char m_BoundsData58[0xb8-0x58];
+    Ogre::Vector3 m_WorldCorners[8];
+    friend class CBaseUnit;
 };
 #endif

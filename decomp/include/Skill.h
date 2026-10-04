@@ -15,6 +15,7 @@ class CSkill : public CRunicCore, public iUnitObserver
 public:
     CSkill(CResourceManager* resourceManager, CDataGroup* dataGroup);
     virtual ~CSkill();
+    void assignSkillAnimations(CBaseUnit* unit);
 
     virtual void unitStateChange(CBaseUnit* unit, EUNIT_STATES state);
 

@@ -9,6 +9,8 @@
 #include "SkillManager.h"
 #include "DataGroup.h"
 #include "Randomizer.h"
+#include "UtilitiesMath.h"
+#include "Skill.h"
 
 void CBaseUnit::setSpawnerGuid(long long guid)
 {
@@ -350,4 +352,101 @@ void CBaseUnit::broadcastHPThreshholdEvents(float maximum,float current,float th
                 return;
             }
     }
+}
+
+void CBaseUnit::updateCullingBounds()
+{
+    if (m_pCullingBounds == NULL)
+        return;
+    Ogre::Vector3 position = getPosition(true);
+    if (getUnitModel() != NULL)
+        position += getUnitModel() != NULL ? static_cast<CPositionableObject*>(getUnitModel())->getPosition(false) : Ogre::Vector3::ZERO;
+    Ogre::Matrix4 transform = m_mOrientation;
+    transform.setTrans(position);
+    CCullingBounds& bounds = *m_pCullingBounds;
+    const Ogre::Vector3& low = bounds.m_vMinimum;
+    const Ogre::Vector3& high = bounds.m_vMaximum;
+    bounds.m_vWorldMinimum = transform * low;
+    bounds.m_vWorldMaximum = bounds.m_vWorldMinimum;
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * low);
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * high);
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(low.x,low.y,high.z));
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(low.x,high.y,high.z));
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(low.x,high.y,low.z));
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(high.x,low.y,low.z));
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(high.x,high.y,low.z));
+    MATH::expandBounds(bounds.m_vWorldMinimum,bounds.m_vWorldMaximum,transform * Ogre::Vector3(high.x,low.y,high.z));
+    for(unsigned int i=0;i<8;++i)
+        bounds.m_WorldCorners[i] = Ogre::Vector3(i&1?bounds.m_vWorldMaximum.x:bounds.m_vWorldMinimum.x,
+                                               i&2?bounds.m_vWorldMaximum.y:bounds.m_vWorldMinimum.y,
+                                               i&4?bounds.m_vWorldMaximum.z:bounds.m_vWorldMinimum.z);
+}
+
+
+CAffix* CBaseUnit::addAffix(CAffix* affix,unsigned int level,CBaseUnit* source,float scale)
+{
+    if (m_pEffectManager == NULL)
+        m_pEffectManager = new CEffectManager(this);
+    return m_pEffectManager->addAffix(affix,level,source,scale);
+}
+
+CAffix* CBaseUnit::addAffix(const std::wstring& name,unsigned int level,CBaseUnit* source,float scale)
+{
+    if (m_pEffectManager == NULL)
+        m_pEffectManager = new CEffectManager(this);
+    return m_pEffectManager->addAffix(name,level,source,m_pResourceManager,scale);
+}
+
+CEffect* CBaseUnit::addNewEffect(CEffect* effect)
+{
+    if (effect == NULL)
+        return NULL;
+    if (m_pEffectManager == NULL)
+        m_pEffectManager = new CEffectManager(this);
+    return m_pEffectManager->addNewEffect(effect);
+}
+
+CEffect* CBaseUnit::copyEffect(CBaseUnit* source,CEffect* effect)
+{
+    if (effect == NULL)
+        return NULL;
+    if (m_pEffectManager == NULL)
+        m_pEffectManager = new CEffectManager(this);
+    return m_pEffectManager->cloneEffect(source,effect);
+}
+
+void CBaseUnit::copyEffects(CBaseUnit* source,const TArrayList<CEffect*>* effects)
+{
+    if (effects != NULL)
+        for (unsigned int i = 0; i < effects->size(); ++i)
+            copyEffect(source,(*effects)[i]);
+}
+
+CSkill* CBaseUnit::addSkillByName(const std::wstring& name,bool flag)
+{
+    if (m_pSkillManager == NULL)
+        m_pSkillManager = new CSkillManager(m_pResourceManager,this);
+    // Original ignores the public flag and always enables this argument.
+    CSkill* skill = m_pSkillManager->addSkill(name,true);
+    if (skill != NULL)
+        skill->assignSkillAnimations(this);
+    return skill;
+}
+
+CSkill* CBaseUnit::cloneSkill(CSkill* source)
+{
+    CSkill* skill = NULL;
+    if (source != NULL)
+    {
+        if (m_pSkillManager == NULL)
+            m_pSkillManager = new CSkillManager(m_pResourceManager,this);
+        skill = m_pSkillManager->addSkill(source,true,false);
+        skill->assignSkillAnimations(this);
+    }
+    return skill;
+}
+
+bool CBaseUnit::dontUseOnFull()
+{
+    return m_pDataGroup != NULL ? m_pDataGroup->GetDataValue(L"DONT_USE_ON_FULL",false) : false;
 }

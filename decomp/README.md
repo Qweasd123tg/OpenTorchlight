@@ -853,3 +853,22 @@ BroadcastEvent на 192 сценариях: оба режима порогов, 
 Ручные мутации 10/10. Данные событий/процентов сверены с rodata оригинала.
 Полный check.py: 67 тестов PASS, 423/5247 функций, 100 508 байт.
 BaseUnit/SkillManager/CullingBounds/Item/Player размеры и vtable проверены.
+
+BaseUnit culling/lazy managers: 50/59 функций. updateCullingBounds (2845 байт)
+восстановлен через исходную Matrix4 и восемь углов, без замены на affine-only
+преобразование; сохраняются projective denominator и повторные getUnitModel.
+Автотест 1/10 слабый. Ручные 360 сценариев сравнивают все bounds/corners,
+неизменённые local bounds/матрицу и число model callbacks: отрицательные
+масштабы, поворот, shear, projective/нулевой знаменатель, NaN/inf, signed zero,
+инвертированный min/max, реальный Ogre::SceneNode для absolute position.
+9/10 мутаций: удаление первого expand(low) эквивалентно, поскольку обе
+границы уже равны transform*low. Реальный рендер не используется.
+
+Семь функций lazy-init EffectManager/SkillManager MATCH: оба addAffix,
+addNewEffect/copyEffect/copyEffects, addSkillByName/cloneSkill. Возврат
+addAffix проверен по character::applyDamageEffect: это CAffix*, несмотря на
+void в черновике Ghidra. addSkillByName игнорирует внешний bool и передаёт
+true; cloneSkill сохраняет безусловное assignSkillAnimations после addSkill.
+dontUseOnFull принят автотестом: 67 завершённых случаев, 3/3 мутации.
+Полный check.py: 69 тестов PASS, 432/5247 функций, 104 778 байт.
+Остаются avoidance, ray/sphere collision, reapply/init и activateEffect.

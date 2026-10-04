@@ -6,6 +6,9 @@
 #include "TArrayList.h"
 #include <string>
 class CBaseUnit;
+class CAffix;
+class CEffect;
+class CResourceManager;
 class CUnitTheme;
 // Partial: complete size/vtable; declarations and active theme list needed by BaseUnit.
 class CEffectManager : public CRunicCore
@@ -13,6 +16,10 @@ class CEffectManager : public CRunicCore
 public:
     CEffectManager(CBaseUnit* owner);
     virtual ~CEffectManager();
+    CAffix* addAffix(CAffix* affix,unsigned int level,CBaseUnit* source,float scale);
+    CAffix* addAffix(const std::wstring& name,unsigned int level,CBaseUnit* source,CResourceManager* resources,float scale);
+    CEffect* addNewEffect(CEffect* effect);
+    CEffect* cloneEffect(CBaseUnit* source,CEffect* effect);
     bool removeEffect(const std::wstring& name, bool flag);
     bool deleteAffix(const std::wstring& name);
     bool hasEffect(EEFFECT_TYPE type);
