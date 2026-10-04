@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "GravityAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "GravityWrapper.h"
 
 CGravityAffectorDescriptor::CGravityAffectorDescriptor()
     : CAffectorDescriptor(L"Gravity Well", L"This will effect your particles as if they were in a vortex", L"gear")
@@ -9,4 +14,9 @@ CGravityAffectorDescriptor::CGravityAffectorDescriptor()
 
 CGravityAffectorDescriptor::~CGravityAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CGravityAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CGravityWrapper(scene->getResourceManager());
 }
