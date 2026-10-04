@@ -35,6 +35,13 @@ union UNIONDATA8BIT
     unsigned char m_ucValue;
 };
 
+// String property values travel as 16-bit units.
+union UNIONDATA16BIT
+{
+    short m_sValue;
+    unsigned short m_usValue;
+};
+
 // One element of a property value; new[] zero-fills every element.
 union UNIONDATA32BIT
 {
