@@ -57,7 +57,7 @@ def headless(args, log_name, background=False):
     if jdks:
         env["JAVA_HOME"] = str(jdks[-1].parent.parent)
         env["PATH"] = f"{jdks[-1].parent}:{env['PATH']}"
-    env.setdefault("GHIDRA_HEADLESS_MAXMEM", "3G")
+    env.setdefault("GHIDRA_HEADLESS_MAXMEM", "5G")
     cmd = [str(GHIDRA_HOME / "support" / "analyzeHeadless"), str(base / "project"), "Torchlight", *args,
            "-log", str(base / f"{log_name}.log"), "-scriptlog", str(base / f"{log_name}.script.log")]
     return subprocess.run(cmd, env=env, check=False)
@@ -100,6 +100,11 @@ def used_classes(types, texts, scopes):
     return (words | set(scopes)) & set(types)
 
 
+def prototype_digest(prototypes, addresses):
+    """Digest of the header prototypes of the given functions (types_export.py)."""
+    return _digest(json.dumps({a: prototypes[a] for a in sorted(addresses) if a in prototypes}, sort_keys=True))
+
+
 def draft_state(tu, db=None, types=None):
     """("fresh" | "stale" | "unknown", reasons) for build-decomp/drafts/<TU>."""
     import json
@@ -114,6 +119,11 @@ def draft_state(tu, db=None, types=None):
         reasons.append("another ELF")
     if data.get("tools") != tools_digest():
         reasons.append("decompiler scripts changed")
+    if "prototypes" in data:
+        tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
+        own = [a for a, f in db["functions"].items() if f["tu"] == tu_id]
+        if data["prototypes"] != prototype_digest(_prototypes(), own):
+            reasons.append("method prototypes changed")
     now = class_digests(types, data.get("classes", {}))
     changed = sorted(n for n, d in data.get("classes", {}).items() if now.get(n) != d)
     if changed:
@@ -127,6 +137,11 @@ def _types():
     if not path.exists():
         subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
     return json.loads(path.read_text())["classes"]
+
+
+def _prototypes():
+    path = ROOT / "build-decomp" / "types.json"
+    return json.loads(path.read_text()).get("prototypes", {}) if path.exists() else {}
 
 
 def stale(all_tus=False):
@@ -151,6 +166,10 @@ def drafts(tus):
     (io / "scripts").mkdir(parents=True)
     shutil.copy(ROOT / "tools" / "decomp" / "ghidra" / "DecompDrafts.java", io / "scripts")
     shutil.copy(ROOT / "build-decomp" / "types.json", io / "types.json")
+    if os.environ.get("OTL_DRAFT_PROTOTYPES") == "0":  # for measuring their effect only
+        data = json.loads((io / "types.json").read_text())
+        data.pop("prototypes", None)
+        (io / "types.json").write_text(json.dumps(data))
     names = {t["id"]: t["name"] for t in db["tus"]}
     if tus == ["--all"]:
         tus = [t["name"] for t in db["tus"] if t["kind"] == "game"]
@@ -165,8 +184,8 @@ def drafts(tus):
                        str(io / "out")], "drafts")
     if result.returncode:
         raise SystemExit("Ghidra failed; see " + str(base / "drafts.log"))
-    import json
-    types = json.loads((io / "types.json").read_text())["classes"]
+    data = json.loads((io / "types.json").read_text())
+    types, prototypes = data["classes"], data.get("prototypes", {})
     by_tu = {}
     for f in funcs:
         raw = io / "out" / f"{f['address']}.c"
@@ -177,9 +196,11 @@ def drafts(tus):
             by_tu.setdefault(names[f["tu"]], []).append((raw.read_text(errors="replace"), f.get("scope") or ""))
     for tu, items in by_tu.items():
         classes = used_classes(types, [t for t, _ in items], [s.split("::")[0] for _, s in items])
+        tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
+        own = [a for a, f in db["functions"].items() if f["tu"] == tu_id]
         (OUT / tu / "inputs.json").write_text(json.dumps({
             "elf": db["original_elf_sha256"], "tools": tools_digest(),
-            "classes": class_digests(types, classes)}, indent=1))
+            "classes": class_digests(types, classes), "prototypes": prototype_digest(prototypes, own)}, indent=1))
     print(f"{len(funcs)} functions -> {OUT.relative_to(ROOT)}/<TU>/raw/ (fingerprints in <TU>/inputs.json)")
 
 

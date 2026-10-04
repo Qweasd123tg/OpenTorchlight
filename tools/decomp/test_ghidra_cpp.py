@@ -41,5 +41,39 @@ class NanTest(unittest.TestCase):
             self.assertEqual(self.tidy(text), text)
 
 
+class HiddenReturnTest(unittest.TestCase):
+    draft = (
+        "\nwstring * __thiscall\nCUnit::getStats(wstring *__return_storage_ptr__,CUnit *this,CSkill *param_3,int param_4)\n"
+        "\n{\n  allocator local_29 [9];\n  \n  if (param_3 == (CSkill *)0x0) {\n"
+        "    std::wstring::wstring((wstring *)__return_storage_ptr__,L\"\",local_29);\n  }\n  else {\n"
+        "    CSkill::getLevelStats(__return_storage_ptr__,param_3,param_4);\n  }\n"
+        "  return __return_storage_ptr__;\n}\n")
+
+    def test_function_returning_through_the_hidden_pointer(self):
+        f = {"demangled": "CUnit::getStats(CSkill*, int)", "params": "CSkill*, int", "kind": "function"}
+        out = ghidra_cpp.convert(self.draft, {("CSkill", "getLevelStats")}, f)
+        self.assertIn("std::wstring CUnit::getStats(CSkill* param_1, int param_2)", out)
+        self.assertIn('return L"";', out)
+        self.assertIn("return param_1->getLevelStats(param_2);", out)
+        self.assertNotIn("__return_storage_ptr__", out)
+        self.assertNotIn("local_29", out)
+
+    def test_call_of_such_a_function_assigns_its_result(self):
+        old = ghidra_cpp._SRET
+        ghidra_cpp._SRET = {"CUnit::getName"}
+        try:
+            out = ghidra_cpp.hidden_return_calls("\n  CUnit::getName(&local_40,pUnit);\n  CUnit::other(&local_48,pUnit);")
+        finally:
+            ghidra_cpp._SRET = old
+        self.assertIn("local_40 = CUnit::getName(pUnit);", out)
+        self.assertIn("CUnit::other(&local_48,pUnit);", out)
+
+    def test_reference_parameters_take_the_object(self):
+        signatures = {"addSkill": [["std::wstring const&", "bool"]], "use": [["Foo*"], ["Foo&"]]}
+        self.assertEqual(ghidra_cpp.reference_arguments("addSkill(&m_sName, false)", signatures),
+                         "addSkill(m_sName, false)")
+        self.assertEqual(ghidra_cpp.reference_arguments("use(&x)", signatures), "use(&x)")
+
+
 if __name__ == "__main__":
     unittest.main()

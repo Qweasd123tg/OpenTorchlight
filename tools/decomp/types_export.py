@@ -71,9 +71,9 @@ def parse_dies(obj):
                 current["attrs"][name] = int(n.group(1)) if n else (int(value, 0) if re.fullmatch(r"0x[0-9a-f]+|\d+", value) else None)
             elif name in ("DW_AT_byte_size", "DW_AT_upper_bound"):
                 current["attrs"][name] = int(value, 0) if re.fullmatch(r"0x[0-9a-f]+|\d+", value) else None
-            elif name == "DW_AT_name":
-                current["attrs"][name] = value.split(": ")[-1].strip()
-            elif name == "DW_AT_declaration":
+            elif name in ("DW_AT_name", "DW_AT_MIPS_linkage_name", "DW_AT_linkage_name"):
+                current["attrs"]["DW_AT_linkage_name" if "linkage" in name else name] = value.split(": ")[-1].strip()
+            elif name in ("DW_AT_declaration", "DW_AT_artificial"):
                 current["attrs"][name] = True
     return dies
 
@@ -126,9 +126,12 @@ def type_size(dies, ref, depth=0):
     return type_size(dies, d["attrs"].get("DW_AT_type"), depth + 1)
 
 
-def header_classes():
+def header_dies():
     with tempfile.TemporaryDirectory(prefix="otl-types-") as tmp:
-        dies = parse_dies(compile_headers(tmp))
+        return parse_dies(compile_headers(tmp))
+
+
+def header_classes(dies):
     classes = {}
     for d in dies.values():
         if d["tag"] not in ("DW_TAG_class_type", "DW_TAG_structure_type") or d["attrs"].get("DW_AT_declaration"):
@@ -153,6 +156,107 @@ def header_classes():
 
 PRIMITIVE = {"bool", "char", "short", "int", "unsigned int", "long long", "float", "double", "std::wstring",
              "std::string"}
+
+
+def strip(dies, ref, depth=0):
+    """The DIE behind typedefs, const and volatile."""
+    d = dies.get(ref)
+    while d and d["tag"] in ("DW_TAG_typedef", "DW_TAG_const_type", "DW_TAG_volatile_type") and depth < 20:
+        ref = d["attrs"].get("DW_AT_type")
+        d = dies.get(ref)
+        depth += 1
+    return d
+
+
+def by_hidden_pointer(dies, ref, depth=0):
+    """Itanium C++ ABI: a class with a user-declared copy constructor or destructor, or a base or
+    member with one, comes back through a hidden pointer whatever its size; so does any object
+    over 16 bytes."""
+    d = strip(dies, ref)
+    if not d or depth > 12 or d["tag"] not in ("DW_TAG_class_type", "DW_TAG_structure_type", "DW_TAG_union_type"):
+        return False
+    # GCC completes a class declared elsewhere in a separate DIE that points back to the declaration.
+    spec = dies.get(d["attrs"].get("DW_AT_specification")) or {"attrs": {}, "children": []}
+    attrs = {**spec["attrs"], **d["attrs"]}
+    children = d["children"] + spec["children"]
+    name = (attrs.get("DW_AT_name") or "").split("<")[0]
+    if name in ("basic_string", "vector", "map", "set", "list", "deque", "multimap", "TArrayList"):
+        return True
+    if (attrs.get("DW_AT_byte_size") or 0) > 16:
+        return True
+    for c in children:
+        child = dies[c]
+        if child["tag"] == "DW_TAG_subprogram" and not child["attrs"].get("DW_AT_artificial"):
+            n = child["attrs"].get("DW_AT_name", "")
+            params = [dies[p] for p in child["children"] if dies[p]["tag"] == "DW_TAG_formal_parameter"
+                      and not dies[p]["attrs"].get("DW_AT_artificial")]
+            if n == "~" + name or (n == name and len(params) == 1
+                                    and type_name(dies, params[0]["attrs"].get("DW_AT_type")).endswith("&")
+                                    and strip(dies, (strip(dies, params[0]["attrs"].get("DW_AT_type")) or {})
+                                              .get("attrs", {}).get("DW_AT_type")) is d):
+                return True
+        elif child["tag"] in ("DW_TAG_inheritance", "DW_TAG_member") and child["attrs"].get(
+                "DW_AT_data_member_location") is not None:
+            if by_hidden_pointer(dies, child["attrs"].get("DW_AT_type"), depth + 1):
+                return True
+    return False
+
+
+def ghidra_type(dies, ref):
+    """(type, size) spelled for DecompDrafts.java: references become pointers, enums int."""
+    d = strip(dies, ref)
+    if d is None:
+        return "void", 0
+    if d["tag"] == "DW_TAG_enumeration_type":
+        return "int", d["attrs"].get("DW_AT_byte_size") or 4
+    name = type_name(dies, ref)
+    if name.endswith("&"):
+        name = name[:-1] + "*"
+    return name, type_size(dies, ref) or (8 if name.endswith("*") else 0)
+
+
+def prototypes(dies, db, promoted, accepted):
+    """Method prototypes the headers declare, keyed by the address of the original function
+    with the same mangled name (so the parameter list is the symbol's). The return type is
+    trusted where the header was written for the class (not a promoted placeholder) or the
+    function is accepted; elsewhere Ghidra's guess stays."""
+    address_of = {}
+    for a, f in db["functions"].items():
+        for n in f["names"]:
+            address_of.setdefault(n, a)
+    out = {}
+    for d in dies.values():
+        link = d["attrs"].get("DW_AT_linkage_name")
+        if d["tag"] != "DW_TAG_subprogram" or not link or link not in address_of:
+            continue
+        address = address_of[link]
+        if address in out:
+            continue
+        params = [dies[c] for c in d["children"] if dies[c]["tag"] == "DW_TAG_formal_parameter"]
+        method = bool(params) and bool(params[0]["attrs"].get("DW_AT_artificial"))
+        ret_ref = d["attrs"].get("DW_AT_type")
+        ret, ret_size = ghidra_type(dies, ret_ref)
+        cls = db["functions"][address].get("scope") or ""
+        out[address] = {
+            "name": db["functions"][address]["demangled"],
+            "static": not method and bool(cls) and cls in db["classes"],
+            "ret": ret, "ret_size": ret_size,
+            "sret": ret_ref is not None and by_hidden_pointer(dies, ret_ref),
+            "trusted": cls not in promoted or address in accepted,
+            "params": [dict(zip(("type", "size"), ghidra_type(dies, p["attrs"].get("DW_AT_type"))))
+                       for p in params[1 if method else 0:]],
+        }
+    return out
+
+
+def promoted_classes():
+    """Classes whose header is a promoted placeholder (tools/decomp/promote.py)."""
+    out = set()
+    for h in (ROOT / "decomp" / "include").glob("*.h"):
+        text = h.read_text(errors="replace")
+        if "Partial: generated from symbols, RTTI and recovered layouts" in text:
+            out.update(re.findall(r"^(?:class|struct)\s+(\w+)\s*(?::[^{;]*)?\{", text, re.M))
+    return out
 
 
 def is_class(db, name):
@@ -216,12 +320,20 @@ def vtables(db):
 
 def main():
     db = elfdb.load_db()
-    classes = header_classes()
+    dies = header_dies()
+    classes = header_classes(dies)
     drafts = draft_classes(db, classes)
     merged = {**drafts, **classes}
+    progress = ROOT / "build-decomp" / "progress.json"
+    accepted = set(json.loads(progress.read_text()).get("accepted", [])) if progress.exists() else set()
+    protos = prototypes(dies, db, promoted_classes(), accepted)
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"schema": 1, "classes": merged, "vtables": vtables(db)}, indent=1))
-    print(f"{OUT.relative_to(ROOT)}: {len(classes)} classes from headers, {len(drafts)} from layout drafts")
+    OUT.write_text(json.dumps({"schema": 1, "classes": merged, "vtables": vtables(db), "prototypes": protos},
+                              indent=1))
+    print(f"{OUT.relative_to(ROOT)}: {len(classes)} classes from headers, {len(drafts)} from layout drafts, "
+          f"{len(protos)} method prototypes ({sum(1 for p in protos.values() if p['sret'])} by hidden pointer, "
+          f"{sum(1 for p in protos.values() if p['static'])} static, "
+          f"{sum(1 for p in protos.values() if p['trusted'])} with a trusted return type)")
 
 
 if __name__ == "__main__":

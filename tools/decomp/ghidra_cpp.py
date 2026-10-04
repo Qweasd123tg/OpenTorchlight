@@ -17,6 +17,7 @@ The output is a draft for a human or agent; it is not expected to compile as is.
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 import re
 import sys
@@ -32,7 +33,7 @@ TYPES = [
     (r"\blonglong\b", "long long"), (r"\bulong\b", "unsigned long"), (r"\buint\b", "unsigned int"),
     (r"\bushort\b", "unsigned short"), (r"\bbyte\b", "unsigned char"), (r"\bsbyte\b", "signed char"),
     (r"\buchar\b", "unsigned char"),
-    (r"\bfloat10\b", "long double"), (r"\bwchar32\b", "wchar_t"), (r"\bwstring_conflict\b", "std::wstring"),
+    (r"\bfloat10\b", "long double"), (r"\bwchar32\b", "wchar_t"), (r"\bwstring_conflict\b", "std::wstring"), (r"(?<!::)\bwstring\b", "std::wstring"),
     (r"\bstd::wstring::wstring\b", "std::wstring::basic_string"),
     # Ghidra spells multi-word template arguments with underscores.
     (r"\bunsigned_(short|int|long|char)\b", r"unsigned \1"), (r"\b(std::w?string)_const\b", r"const \1"),
@@ -258,6 +259,98 @@ def closing_paren(text):
     return len(text)
 
 
+RETURN_STORAGE = "__return_storage_ptr__"
+_SRET = None
+
+
+def returned_by_pointer():
+    """Qualified names of the functions that return an object through a hidden pointer, from
+    the header prototypes types_export.py writes (Ghidra gets them as custom storage)."""
+    global _SRET
+    if _SRET is None:
+        path = ROOT / "build-decomp" / "types.json"
+        protos = json.loads(path.read_text()).get("prototypes", {}) if path.exists() else {}
+        _SRET = {p["name"].split("(")[0] for p in protos.values() if p.get("sret")}
+    return _SRET
+
+
+def hidden_return_signature(head):
+    """`wstring * C::f(wstring *__return_storage_ptr__, C *this, T param_3)` -> `wstring C::f(T param_3)`
+    and how many hidden parameters preceded the real ones (Ghidra numbers params by position)."""
+    m = re.search(rf"\(\s*([\w:<>, ]+?)\s*\*\s*{RETURN_STORAGE}\s*,?\s*", head)
+    if not m:
+        return head, 0
+    hidden = 1
+    head = head[:m.start()] + "(" + head[m.end():]
+    this = re.match(r"\(\s*[\w:<>, ]+? \*this\s*,?\s*", head[m.start():])
+    if this:
+        head = head[:m.start()] + "(" + head[m.start() + this.end():]
+        hidden += 1
+    head = re.sub(rf"^(\s*){re.escape(m.group(1))}\s*\*\s*", lambda _m: _m.group(1) + m.group(1) + " ", head, count=1)
+    return head, hidden
+
+
+def renumber_params(text, hidden):
+    return re.sub(r"\bparam_(\d+)\b", lambda m: f"param_{int(m.group(1)) - hidden}"
+                  if int(m.group(1)) > hidden else m.group(0), text)
+
+
+def hidden_return_body(text):
+    """Inside a function returning through the hidden pointer: constructing the result or
+    passing the pointer on to another such call is a return statement."""
+    storage = rf"(?:\([\w:<>, ]+ \*\))?{RETURN_STORAGE}"
+
+    def construct(m):
+        args = split_args(m.group(2))
+        if args and re.fullmatch(r"&?local_\w+|\(\w+ \*\)&?local_\w+|&local_\w+", args[-1]) and len(args) > 1:
+            args = args[:-1]  # the allocator temporary
+        if len(args) == 1 and re.fullmatch(r'L?"(?:[^"\\]|\\.)*"', args[0]):
+            return f"{m.group(1)}return {args[0]};"
+        if len(args) == 1:
+            copy = re.fullmatch(r"(?:\([\w:<>, ]+ \*\))?(&?)([\w.\->\[\]]+)", args[0])
+            if copy:
+                return f"{m.group(1)}return {copy.group(2) if copy.group(1) else '*' + copy.group(2)};"
+        return f"{m.group(1)}return std::wstring({', '.join(args)});"
+    text = re.sub(rf"(\n[ \t]*)std::w?string::(?:w?string|basic_string)\s*\(\s*{storage}\s*,\s*([^;]*)\);",
+                  construct, text)
+    text = re.sub(rf"(\n[ \t]*)((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*([^;]*)\);",
+                  lambda m: f"{m.group(1)}return {m.group(2)}({m.group(3)});", text)
+    if len(re.findall(RETURN_STORAGE, text)) == len(re.findall(rf"\breturn {RETURN_STORAGE};", text)):
+        text = re.sub(rf"\n[ \t]*return {RETURN_STORAGE};", "", text)
+    return text
+
+
+def hidden_return_calls(text):
+    """`C::getName(&local_40, obj, args)` of a function returning through a hidden pointer ->
+    `local_40 = C::getName(obj, args)`, which call_rewrite then turns into a method call."""
+    sret = returned_by_pointer()
+
+    def fix(m):
+        if m.group(2) not in sret:
+            return m.group(0)
+        return f"{m.group(1)}{m.group(3)} = {m.group(2)}({m.group(4)});"
+    return re.sub(r"(\n[ \t]*)((?:[A-Za-z_]\w*::)+[A-Za-z_]\w*)\(\s*(?:\([\w:<>, ]+ \*\))?&(local_\w+)\s*,?\s*([^;]*)\);",
+                  fix, text)
+
+
+def reference_arguments(text, signatures):
+    """`&x` passed where every overload of that arity takes a reference -> `x`."""
+    def fix(m):
+        name, args = m.group(1), split_args(m.group(2))
+        overloads = [p for p in signatures.get(name, []) if len(p) == len(args)]
+        if not overloads:
+            return m.group(0)
+        changed = False
+        for i, arg in enumerate(args):
+            if all(p[i].strip().endswith("&") for p in overloads):
+                plain = re.fullmatch(r"(?:\([\w:<>, ]+ \*\))?&([\w.\->\[\]]+)", arg)
+                if plain:
+                    args[i] = plain.group(1)
+                    changed = True
+        return f"{name}({', '.join(args)})" if changed else m.group(0)
+    return re.sub(r"\b(\w+)\(((?:[^()]|\([^()]*\))*)\)", fix, text)
+
+
 NAN_GUARD = r"(?:!NAN\(([^()]*)\)|\(!NAN\(([^()]*)\)\))"
 NAN_GROUP = rf"(?:{NAN_GUARD}|\({NAN_GUARD}(?:\s*&&\s*{NAN_GUARD})+\))"
 # An ordered comparison without parentheses or logical operators in its operands.
@@ -356,6 +449,10 @@ def convert(code, methods, f=None, signatures=None, enums=None):
     head, text = (text[:brace.start()], text[brace.start():]) if brace else ("", text)
     head = re.sub(r"/\*[^*]*\*/\n?", "", head)
     head = re.sub(r"__thiscall\s+", "", head)
+    head, hidden = hidden_return_signature(head)
+    if hidden:
+        head = renumber_params(head, hidden)
+        text = hidden_return_body(renumber_params(text, hidden))
     head = re.sub(r"\(([\w:<>, ]+) \*this,?\s*", "(", head, count=1)
     head = re.sub(r"\(void\)", "()", head, count=1)
     head = re.sub(r"\s+", " ", head).strip()
@@ -383,7 +480,10 @@ def convert(code, methods, f=None, signatures=None, enums=None):
     # Virtual calls through typed vtables.
     text = re.sub(r"\(\*\(?this\)?->_vptr->(\w+)\)\(this,?\s*", r"\1(", text)
     text = re.sub(r"\(\*\(?([\w\[\]]+)\)?->_vptr->(\w+)\)\(\1,?\s*", r"\1->\2(", text)
+    text = hidden_return_calls(text)
     text = call_rewrite(text, methods)
+    if signatures:
+        text = reference_arguments(text, signatures)
     if signatures and enums:
         text = enum_arguments(text, signatures, enums)
     # AddProperty takes the accessors as void*.

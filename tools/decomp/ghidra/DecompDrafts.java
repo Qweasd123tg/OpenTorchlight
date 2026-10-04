@@ -8,9 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -20,15 +23,25 @@ import com.google.gson.JsonParser;
 import ghidra.app.decompiler.DecompInterface;
 import ghidra.app.decompiler.DecompileOptions;
 import ghidra.app.decompiler.DecompileResults;
+import ghidra.app.decompiler.parallel.DecompileConfigurer;
+import ghidra.app.decompiler.parallel.DecompilerCallback;
+import ghidra.app.decompiler.parallel.ParallelDecompiler;
 import ghidra.app.script.GhidraScript;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.data.*;
+import ghidra.program.model.lang.Register;
 import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.GhidraClass;
+import ghidra.program.model.listing.ParameterImpl;
+import ghidra.program.model.listing.ReturnParameterImpl;
+import ghidra.program.model.listing.Variable;
+import ghidra.program.model.listing.VariableStorage;
 import ghidra.program.model.listing.VariableUtilities;
 import ghidra.program.model.symbol.Namespace;
+import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.symbol.SymbolTable;
 import ghidra.app.util.NamespaceUtils;
+import ghidra.util.task.TaskMonitor;
 
 public class DecompDrafts extends GhidraScript {
     private DataTypeManager dtm;
@@ -165,6 +178,94 @@ public class DecompDrafts extends GhidraScript {
         target.replaceWith(body);
     }
 
+    // Integer argument registers of the System V AMD64 ABI by operand size.
+    private static final String[][] INT_REGS = {
+        {"DIL", "SIL", "DL", "CL", "R8B", "R9B"}, {"DI", "SI", "DX", "CX", "R8W", "R9W"},
+        {"EDI", "ESI", "EDX", "ECX", "R8D", "R9D"}, {"RDI", "RSI", "RDX", "RCX", "R8", "R9"}};
+
+    private VariableStorage intRegister(int index, int size) throws Exception {
+        int row = size <= 1 ? 0 : size <= 2 ? 1 : size <= 4 ? 2 : 3;
+        Register r = currentProgram.getRegister(INT_REGS[row][index]);
+        if (r == null) {
+            r = currentProgram.getRegister(INT_REGS[3][index]);
+        }
+        return new VariableStorage(currentProgram, r);
+    }
+
+    private DataType protoType(String type, int size) throws Exception {
+        DataType dt = "?".equals(type) ? null : basic(type, size);
+        if (dt == null || dt.getLength() <= 0) {
+            dt = size > 0 && size <= 8 ? Undefined.getUndefinedDataType(size) : null;
+        }
+        return dt;
+    }
+
+    // Applies a prototype from the recovered headers (types_export.py): the parameter types of the
+    // symbol, the declared return type where it is trusted, no `this` for static members, and an
+    // object returned through a hidden pointer as the first argument (RDI, then `this` in RSI),
+    // which Ghidra does not infer for non-trivial classes of 8 bytes such as std::wstring.
+    private boolean applyPrototype(Function fn, JsonObject p) throws Exception {
+        boolean isStatic = p.get("static").getAsBoolean();
+        List<DataType> types = new ArrayList<>();
+        for (JsonElement e : p.getAsJsonArray("params")) {
+            JsonObject po = e.getAsJsonObject();
+            DataType dt = protoType(po.get("type").getAsString(), po.get("size").getAsInt());
+            if (dt == null) {
+                return false;  // an object passed by value: Ghidra's own signature stays
+            }
+            types.add(dt);
+        }
+        int retSize = p.get("ret_size").getAsInt();
+        DataType ret = p.get("trusted").getAsBoolean() ? protoType(p.get("ret").getAsString(), retSize) : null;
+        Namespace parent = fn.getParentNamespace();
+        if (p.get("sret").getAsBoolean()) {
+            DataType object = ret != null && ret.getLength() > 0 && !(ret instanceof Undefined) ? ret
+                : classes.has(p.get("ret").getAsString()) ? structFor(p.get("ret").getAsString())
+                : new ArrayDataType(ByteDataType.dataType, Math.max(1, retSize), 1, dtm);
+            DataType pointer = new PointerDataType(object, 8, dtm);
+            List<Variable> params = new ArrayList<>();
+            int ints = 0;
+            int floats = 0;
+            params.add(new ParameterImpl("__return_storage_ptr__", pointer, intRegister(ints++, 8), currentProgram));
+            if (!isStatic) {
+                DataType self = parent != null && classes.has(parent.getName()) ? structFor(parent.getName())
+                    : VoidDataType.dataType;
+                params.add(new ParameterImpl("this", new PointerDataType(self, 8, dtm), intRegister(ints++, 8),
+                    currentProgram));
+            }
+            for (int i = 0; i < types.size(); i++) {
+                DataType dt = types.get(i);
+                VariableStorage at;
+                if (dt instanceof FloatDataType || dt instanceof DoubleDataType) {
+                    if (floats >= 8) {
+                        return false;
+                    }
+                    at = new VariableStorage(currentProgram,
+                        currentProgram.getRegister("XMM" + floats++ + (dt.getLength() == 4 ? "_Da" : "_Qa")));
+                } else {
+                    if (dt.getLength() > 8 || ints >= 6) {
+                        return false;  // stack arguments: not worth custom storage here
+                    }
+                    at = intRegister(ints++, dt.getLength());
+                }
+                params.add(new ParameterImpl("param_" + (i + 1), dt, at, currentProgram));
+            }
+            Variable result = new ReturnParameterImpl(pointer,
+                new VariableStorage(currentProgram, currentProgram.getRegister("RAX")), currentProgram);
+            fn.updateFunction(isStatic ? "__stdcall" : "__thiscall", result, params,
+                Function.FunctionUpdateType.CUSTOM_STORAGE, true, SourceType.USER_DEFINED);
+            return true;
+        }
+        List<Variable> params = new ArrayList<>();
+        for (int i = 0; i < types.size(); i++) {
+            params.add(new ParameterImpl("param_" + (i + 1), types.get(i), currentProgram));
+        }
+        Variable result = new ReturnParameterImpl(ret != null ? ret : fn.getReturnType(), currentProgram);
+        fn.updateFunction(isStatic ? "__stdcall" : "__thiscall", result, params,
+            Function.FunctionUpdateType.DYNAMIC_STORAGE_FORMAL_PARAMS, true, SourceType.USER_DEFINED);
+        return true;
+    }
+
     @Override
     protected void run() throws Exception {
         String[] args = getScriptArgs();
@@ -190,6 +291,25 @@ public class DecompDrafts extends GhidraScript {
         }
         println("applied " + filled + " class layouts");
 
+        Set<Function> prototyped = new HashSet<>();
+        JsonObject prototypes = root.has("prototypes") ? root.getAsJsonObject("prototypes") : new JsonObject();
+        int failed = 0;
+        for (String address : prototypes.keySet()) {
+            Function fn = getFunctionAt(toAddr(address));
+            if (fn == null) {
+                continue;
+            }
+            try {
+                if (applyPrototype(fn, prototypes.getAsJsonObject(address))) {
+                    prototyped.add(fn);
+                }
+            } catch (Exception e) {
+                failed++;
+                printerr("prototype " + address + ": " + e);
+            }
+        }
+        println("applied " + prototyped.size() + " method prototypes from the headers (" + failed + " failed)");
+
         // Methods whose `this` Ghidra dropped (unused in the body) still take it at call sites.
         int fixed = 0;
         for (Function fn : currentProgram.getFunctionManager().getFunctions(true)) {
@@ -198,7 +318,7 @@ public class DecompDrafts extends GhidraScript {
             // Only real classes: Ghidra also turns plain namespaces (UTILITIES, MATH) into classes.
             boolean real = parent != null && (classes.has(parent.getName()) || vtables.has(parent.getName()));
             if (!(parent instanceof GhidraClass) || !real || fname.startsWith("Get_") || fname.startsWith("Set_")
-                    || "__thiscall".equals(fn.getCallingConventionName())) {
+                    || prototyped.contains(fn) || "__thiscall".equals(fn.getCallingConventionName())) {
                 continue;
             }
             try {
@@ -210,13 +330,7 @@ public class DecompDrafts extends GhidraScript {
         }
         println("set __thiscall on " + fixed + " methods");
 
-        DecompInterface decompiler = new DecompInterface();
-        DecompileOptions options = new DecompileOptions();
-        decompiler.setOptions(options);
-        decompiler.toggleCCode(true);
-        if (!decompiler.openProgram(currentProgram)) {
-            throw new IllegalStateException(decompiler.getLastMessage());
-        }
+        List<Function> functions = new ArrayList<>();
         for (String line : targets) {
             line = line.trim();
             if (line.isEmpty()) {
@@ -227,15 +341,33 @@ public class DecompDrafts extends GhidraScript {
             if (f == null) {
                 f = createFunction(address, null);
             }
-            Path file = out.resolve(line + ".c");
             if (f == null) {
-                Files.writeString(file, "// no function\n");
+                Files.writeString(out.resolve(line + ".c"), "// no function\n");
                 continue;
             }
-            DecompileResults r = decompiler.decompileFunction(f, 120, monitor);
-            String code = r.decompileCompleted() ? r.getDecompiledFunction().getC() : "// failed: " + r.getErrorMessage() + "\n";
-            Files.writeString(file, code, StandardCharsets.UTF_8);
+            functions.add(f);
         }
-        decompiler.dispose();
+        DecompileConfigurer configurer = decompiler -> {
+            decompiler.setOptions(new DecompileOptions());
+            decompiler.toggleCCode(true);
+        };
+        DecompilerCallback<String> callback = new DecompilerCallback<>(currentProgram, configurer) {
+            @Override
+            public String process(DecompileResults r, TaskMonitor m) throws Exception {
+                Function f = r.getFunction();
+                String code = r.decompileCompleted() ? r.getDecompiledFunction().getC()
+                    : "// failed: " + r.getErrorMessage() + "\n";
+                Files.writeString(out.resolve("0x" + Long.toHexString(f.getEntryPoint().getOffset()) + ".c"), code,
+                    StandardCharsets.UTF_8);
+                return null;
+            }
+        };
+        callback.setTimeout(120);
+        try {
+            ParallelDecompiler.decompileFunctions(callback, functions, monitor);
+        } finally {
+            callback.dispose();
+        }
+        println("decompiled " + functions.size() + " functions");
     }
 }
