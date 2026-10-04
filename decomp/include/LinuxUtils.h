@@ -3,13 +3,6 @@
 
 #include <string>
 
-struct POINT
-{
-    long x;
-    long y;
-};
-int GetCursorPos(POINT* point);
-
 // Partial: declarations from LinuxUtils.cpp used by recovered TUs.
 struct POINT
 {
