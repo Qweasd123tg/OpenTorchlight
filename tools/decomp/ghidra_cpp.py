@@ -259,6 +259,54 @@ def closing_paren(text):
     return len(text)
 
 
+# An object expression Ghidra prints for a TArrayList: (this->m_List), (p->m_List), local_x.m_List, local_x
+_OBJ = r"(?:\([\w\->.\[\]]+\)|[\w]+(?:\.\w+)*(?:\[0\])?)"
+_ELEMENT_CAST = r"(?:\([\w:<>, ]+ \*+\))?"
+
+
+def _bare(obj):
+    """(this->m_List) -> this->m_List."""
+    return obj[1:-1] if obj.startswith("(") and obj.endswith(")") else obj
+
+
+def _element(m):
+    """`X.m_pData + i` or `(T *)((ulong)i * 8 + (long)X.m_pData)`: element i of X."""
+    x, i = re.escape(m.group("x")), re.escape(m.group("i"))
+    forms = [rf"{_ELEMENT_CAST}{x}\.m_pData \+ (?:\(\w+\))?{i}",
+             rf"{_ELEMENT_CAST}\(\(ulong\){i} \* (?:0x[0-9a-f]+|\d+) \+ \(long\){x}\.m_pData\)"]
+    return any(re.fullmatch(f, m.group("data")) for f in forms)
+
+
+def tarraylist_access(text):
+    """The inlined TArrayList::operator[] -> `p = &X[i];` (its capacity check and fallback to
+    element 0 are the operator's). Ghidra prints it either as
+    `if (i < X.m_nCapacity) p = X.m_pData + i; else p = X.m_pData;` or with the fallback first:
+    `p = X.m_pData; if (i < X.m_nCapacity) p = X.m_pData + i;`."""
+    check = rf"if \((?P<i>\w+) < (?P<x>{_OBJ})\.m_nCapacity\) \{{\s*(?P<p>\w+) = (?P<data>[^;\n]+);\s*\}}"
+    with_else = re.compile(rf"(?P<indent>\n[ \t]*){check}\s*else \{{\s*(?P=p) = {_ELEMENT_CAST}(?P=x)\.m_pData;\s*\}}")
+    fallback_first = re.compile(rf"(?P<indent>\n[ \t]*)(?P<p0>\w+) = {_ELEMENT_CAST}(?P<x0>{_OBJ})\.m_pData;\s*{check}")
+
+    def fix(m):
+        if not _element(m) or ("p0" in m.groupdict() and (m.group("p0"), m.group("x0")) != (m.group("p"), m.group("x"))):
+            return m.group(0)
+        return f"{m.group('indent')}{m.group('p')} = &{_bare(m.group('x'))}[{m.group('i')}];"
+    text = fallback_first.sub(fix, with_else.sub(fix, text))
+
+    # The element itself rather than its address.
+    head = rf"(?P<indent>\n[ \t]*)if \((?P<i>\w+) < (?P<x>{_OBJ})\.m_nCapacity\) \{{\s*"
+    value = rf"{_ELEMENT_CAST}(?P=x)\.m_pData\[(?P=i)\]"
+    first = rf"\*{_ELEMENT_CAST}(?P=x)\.m_pData"
+    text = re.sub(rf"{head}(?P<v>\w+) = {value};\s*\}}\s*else \{{\s*(?P=v) = {first};\s*\}}",
+                  lambda m: f"{m.group('indent')}{m.group('v')} = {_bare(m.group('x'))}[{m.group('i')}];", text)
+    return re.sub(rf"{head}return {value};\s*\}}\s*return {first};",
+                  lambda m: f"{m.group('indent')}return {_bare(m.group('x'))}[{m.group('i')}];", text)
+
+
+def tarraylist_count(text):
+    """Reading X.m_nCount (not writing it: that is an inlined add/removeAt/clear) -> X.size()."""
+    return re.sub(rf"(?<![&\w>.+-])({_OBJ})\.m_nCount\b(?!\s*(?:=[^=]|\+\+|--|\+=|-=))",
+                  lambda m: f"{_bare(m.group(1))}.size()", text)
+
 RETURN_STORAGE = "__return_storage_ptr__"
 _SRET = None
 
@@ -466,6 +514,7 @@ def convert(code, methods, f=None, signatures=None, enums=None):
             head = f"{prefix}{f['demangled'].split('(')[0]}({params})"
     text = drop_refcount_blocks(text)
     text = inline_temp_strings(text)
+    text = tarraylist_count(tarraylist_access(text))
     # Constructors: base-constructor calls and vptr stores are implicit in C++.
     init = re.search(r"\n[ \t]*(\w+)::\1\s*\(\s*\(\w+ \*\)this\s*,?\s*([^;]*)\);", text)
     if init and f is not None and f["kind"] == "ctor":

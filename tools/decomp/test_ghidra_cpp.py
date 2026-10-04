@@ -75,5 +75,48 @@ class HiddenReturnTest(unittest.TestCase):
         self.assertEqual(ghidra_cpp.reference_arguments("use(&x)", signatures), "use(&x)")
 
 
+class TArrayListTest(unittest.TestCase):
+    def test_element_address_with_the_capacity_check(self):
+        for draft in [
+                "\n    if (uVar2 < (this->m_Objects).m_nCapacity) {\n      ppCVar1 = (this->m_Objects).m_pData + uVar2;\n"
+                "    }\n    else {\n      ppCVar1 = (this->m_Objects).m_pData;\n    }",
+                "\n    if (uVar5 < (this->m_Groups).m_nCapacity) {\n"
+                "      ppCVar1 = (string *)((ulong)uVar5 * 8 + (long)(this->m_Groups).m_pData);\n    }\n    else {\n"
+                "      ppCVar1 = (this->m_Groups).m_pData;\n    }".replace("m_Groups", "m_Objects").replace("uVar5", "uVar2"),
+                "\n    ppCVar1 = (this->m_Objects).m_pData;\n    \n    if (uVar2 < (this->m_Objects).m_nCapacity) {\n"
+                "      ppCVar1 = (this->m_Objects).m_pData + uVar2;\n    }"]:
+            self.assertEqual(ghidra_cpp.tarraylist_access(draft), "\n    ppCVar1 = &this->m_Objects[uVar2];")
+
+    def test_element_value_and_return(self):
+        self.assertEqual(ghidra_cpp.tarraylist_access(
+            "\n  if (param_3 < (this->m_Flags).m_nCapacity) {\n    return (this->m_Flags).m_pData[param_3];\n  }\n"
+            "  return *(this->m_Flags).m_pData;"), "\n  return this->m_Flags[param_3];")
+        self.assertEqual(ghidra_cpp.tarraylist_access(
+            "\n  if (i < local_f8.m_List.m_nCapacity) {\n    v = local_f8.m_List.m_pData[i];\n  }\n  else {\n"
+            "    v = *local_f8.m_List.m_pData;\n  }"), "\n  v = local_f8.m_List[i];")
+
+    def test_other_shapes_stay(self):
+        for draft in [
+                # a different index in the element than in the check
+                "\n  if (i < (this->m_A).m_nCapacity) {\n    p = (this->m_A).m_pData + j;\n  }\n  else {\n"
+                "    p = (this->m_A).m_pData;\n  }",
+                # a different list in the fallback
+                "\n  if (i < (this->m_A).m_nCapacity) {\n    p = (this->m_A).m_pData + i;\n  }\n  else {\n"
+                "    p = (this->m_B).m_pData;\n  }",
+                # a precomputed offset: not checked against the index
+                "\n  p = (this->m_A).m_pData;\n  if (i < (this->m_A).m_nCapacity) {\n"
+                "    p = (C **)(lVar9 + (long)(this->m_A).m_pData);\n  }"]:
+            self.assertEqual(ghidra_cpp.tarraylist_access(draft), draft)
+
+    def test_count_reads_become_size(self):
+        self.assertEqual(ghidra_cpp.tarraylist_count("while (uVar2 < (this->m_Objects).m_nCount) {"),
+                         "while (uVar2 < this->m_Objects.size()) {")
+        self.assertEqual(ghidra_cpp.tarraylist_count("if (local_f8.m_List.m_nCount != 0) {"),
+                         "if (local_f8.m_List.size() != 0) {")
+        for write in ["(this->m_A).m_nCount = 0;", "(this->m_A).m_nCount = uVar1 - 1;", "p = &(this->m_A).m_nCount;",
+                      "(this->m_A).m_nCount++;", "--(this->m_A).m_nCount;"]:
+            self.assertEqual(ghidra_cpp.tarraylist_count(write), write)
+
+
 if __name__ == "__main__":
     unittest.main()
