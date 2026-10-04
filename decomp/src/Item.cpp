@@ -4,6 +4,9 @@
 #include "DataGroup.h"
 #include "GenericModel.h"
 #include "Keyframe.h"
+#include "GameGlobals.h"
+#include "StringUtilities.h"
+#include <CEGUIPropertyHelper.h>
 #include "OutputEvents.h"
 #include <algorithm>
 #include <CEGUIWindow.h>
@@ -181,4 +184,32 @@ void CItem::updateAnimation(float elapsed)
             }
         }
     }
+}
+
+void CItem::setItemTextHighlighted(bool highlighted)
+{
+    if (getHighlighted() == highlighted || m_pItemText == NULL)
+        return;
+    if (getIsQuestUnit())
+    {
+        m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getQuestColor(highlighted)));
+    }
+    else if (ISA(UNITTYPES::UNIQUE))
+    {
+        m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getUniqueColor(highlighted)));
+    }
+    else if (isMagical() || ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE))
+    {
+        if (ISA(UNITTYPES::MAGIC))
+            m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRareColor(highlighted)));
+        else
+            m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRandomEnchantColor(highlighted)));
+    }
+    else
+    {
+        CEGUI::colour color = highlighted ? CEGUI::colour(1.0f,1.0f,1.0f,1.0f) : CEGUI::colour(0.8f,0.8f,0.8f,1.0f);
+        m_pItemText->setProperty("TextColour", CEGUI::PropertyHelper::colourToString(color));
+    }
+    if (highlighted)
+        m_pItemText->moveToFront();
 }

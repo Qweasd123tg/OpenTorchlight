@@ -7,7 +7,12 @@ namespace UNITTYPES
 {
     enum EUNITTYPES
     {
-        MONSTER = 27
+        MONSTER = 27,
+        INTERACTABLE = 32,
+        UNIQUE = 54,
+        MAGIC = 55,
+        QUESTITEM = 103,
+        RANDOMMAGIC_SOCKETABLE = 160
     };
 }
 
