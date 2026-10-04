@@ -17,6 +17,7 @@ public:
     float getValue(float x, unsigned int line) const;
     void processPoints();
     int getControlPoints();
+    std::wstring getName() { return m_sName; }
     void clear(unsigned int line);
     void addGraphLine(EGRAPH_TYPES type);
     void addValue(float x, float y, unsigned int line);
