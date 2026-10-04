@@ -6,6 +6,7 @@
 
 #include <string>
 
+static void* g_pCinematics;
 static void* g_pGameSpeed;
 
 #endif
