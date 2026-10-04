@@ -16,7 +16,7 @@ public:
                              UNIONDATA32BIT oldValue,
                              UNIONDATA32BIT newValue);
 
-    ESTATS getStatType() const;
+    ESTATS getStatType();
     void checkForAchieved();
     void setValue(float value);
     void setValue(int value);
@@ -31,7 +31,7 @@ public:
     CAchievement(std::string name, ESTATS statType,
                  int currentValue, int requiredValue);
 
-    std::wstring getStatCompleteString() const;
+    std::wstring getStatCompleteString();
 
     std::string m_strName;
     bool m_bAchieved;

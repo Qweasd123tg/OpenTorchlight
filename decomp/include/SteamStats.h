@@ -32,10 +32,10 @@ public:
 	void incrementStat(ESTATS stat, int amount);
 	void setStatFloat(ESTATS stat, float value);
 
-	int getStatInt(ESTATS stat) const;
-	float getStatFloat(ESTATS stat) const;
-	int getPlayerStatInt(ESTATS stat) const;
-	float getPlayerStatFloat(ESTATS stat) const;
+	int getStatInt(ESTATS stat);
+	float getStatFloat(ESTATS stat);
+	int getPlayerStatInt(ESTATS stat);
+	float getPlayerStatFloat(ESTATS stat);
 
 	static CSteamStats* getSingleton();
 

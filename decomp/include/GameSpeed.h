@@ -17,7 +17,7 @@ public:
 
     static CGameSpeed* getSingleton();
 
-    float getGameSpeed() const;
+    float getGameSpeed();
     void calculateGameSpeed(float fDeltaTime);
     void addSpeedModifier(EGAMESPEED_TYPE eType, float fSpeed, float fWeight);
     void clear();

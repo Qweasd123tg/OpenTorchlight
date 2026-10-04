@@ -10,11 +10,11 @@ class CKeyManager : public CRunicCore
 public:
     virtual ~CKeyManager();
 
-    bool keyPressed(unsigned int key) const;
-    bool keyHeld(unsigned int key) const;
-    bool keyReleased(unsigned int key) const;
+    bool keyPressed(unsigned int key);
+    bool keyHeld(unsigned int key);
+    bool keyReleased(unsigned int key);
 
-    int shiftCharacter(int character, bool shifted) const;
+    int shiftCharacter(int character, bool shifted);
 
     void capture();
     void flushAll();

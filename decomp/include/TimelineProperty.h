@@ -26,21 +26,21 @@ public:
 
     virtual ~CTimelineProperty();
 
-    int GetFreeIDForPoint() const;
-    int GetTimelinePointIDByIndex(int index) const;
-    CTimelinePoint *GetTimelinePoint(int pointID) const;
-    float GetTimePercentAtPoint(int pointID) const;
+    int GetFreeIDForPoint();
+    int GetTimelinePointIDByIndex(int index);
+    CTimelinePoint *GetTimelinePoint(int pointID);
+    float GetTimePercentAtPoint(int pointID);
     void SetTimePercentAtPoint(int pointID, float timePercent);
     void DoQuaternion(CTimeline *timeline, float timePercent);
     void triggerEvent(CTimeline *timeline);
-    const std::wstring &GetBaseTypeValueAsString(int pointID) const;
+    const std::wstring &GetBaseTypeValueAsString(int pointID);
     double getValueOfLinearPropertyByPercent(
         unsigned int interpolationType,
         double timePercent,
         CTimelinePoint *fromPoint,
         CTimelinePoint *toPoint,
-        unsigned int componentIndex) const;
-    void *GetValueAtPoint(int pointID, unsigned int &dataSize) const;
+        unsigned int componentIndex);
+    void *GetValueAtPoint(int pointID, unsigned int &dataSize);
     void fillSplineWithData();
     void SetInterpolationType(ETIMELINE_INTERP_TYPES interpolationType);
     void SetValueAtPoint(int pointID, void *value, unsigned int dataSize);
@@ -53,7 +53,7 @@ public:
         CTimelinePoint *toPoint);
     void DoSplineInterpolation(CTimeline *timeline, float timePercent);
     void Update(float timePercent, bool forward);
-    std::wstring GetValueAtPointAsString(int pointID) const;
+    std::wstring GetValueAtPointAsString(int pointID);
     bool RemovePoint(int pointID);
 
     CTimelineProperty(
@@ -73,7 +73,7 @@ public:
         CDescriptorProp *descriptorProperty,
         long long objectID);
 
-    void SetValueAtPointByString(int pointID, const std::wstring &value);
+    void SetValueAtPointByString(int pointID, std::wstring &value);
 
     long long m_objectID;                             // 0x10
     int m_propertyID;                                // 0x18

@@ -31,7 +31,7 @@ bool CSteamStats::StoreStats()
     return false;
 }
 
-float CSteamStats::getPlayerStatFloat(ESTATS stat) const
+float CSteamStats::getPlayerStatFloat(ESTATS stat)
 {
     return -1.0f;
 }

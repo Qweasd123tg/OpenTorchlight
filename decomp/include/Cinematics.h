@@ -11,9 +11,9 @@ class CCinematics : public CRunicCore
 public:
     virtual ~CCinematics();
 
-    CCinematic* getCinematic(unsigned int) const;
+    CCinematic* getCinematic(unsigned int);
     static CCinematics* getSingleton();
-    CCinematic* getCinematic(const wchar_t*) const;
+    CCinematic* getCinematic(const wchar_t*);
     void reload();
     CCinematics(const wchar_t*);
 
