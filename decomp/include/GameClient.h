@@ -3,6 +3,8 @@
 
 #include <OgreRenderTargetListener.h>
 #include <OgreRenderQueue.h>
+#include <string>
+
 #include "RunicCore.h"
 
 class CPlayer;
@@ -20,6 +22,9 @@ public:
                                   Ogre::Technique**, Ogre::RenderQueue*);
 
     CPlayer* getPlayer() { return m_pPlayer; }
+
+    void warpLevels(std::wstring dungeon, int levelDelta, int levelDepth, bool waypoint,
+                    std::wstring warpName, bool flag);
 
 private:
     unsigned char m_ClientData20[0x58 - 0x20];

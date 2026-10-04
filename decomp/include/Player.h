@@ -35,6 +35,7 @@ public:
 
     void clearDungeonHistory(std::wstring dungeon);
     void updateStoredLevels(CLevel& level);
+    bool addWaypoint(std::wstring dungeon, int depth);
 
 private:
     unsigned char m_PlayerData[0xa70 - 0x720];

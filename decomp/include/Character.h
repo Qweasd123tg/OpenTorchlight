@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include <string>
+#include <vector>
 
 #include "BaseUnit.h"
 #include "EquipmentDefines.h"
@@ -117,10 +118,19 @@ public:
 
     CAIManager* getAIManager() { return m_pAIManager; }
 
+    void stopPathing();
+    void dropToGround(CLevel& level, float height, bool force);
+    void teleportToMaster(float distance);
+
+    unsigned int getPetCount() { return m_vPets.size(); }
+    CCharacter* getPet(unsigned int index) { return m_vPets.size() != 0 ? m_vPets[index] : NULL; }
+
 private:
     char m_CharacterData[0x444 - 0x1e8];
     int m_iGold;
-    char m_CharacterData448[0x718 - 0x448];
+    char m_CharacterData448[0x648 - 0x448];
+    std::vector<CCharacter*> m_vPets;
+    char m_CharacterData660[0x718 - 0x660];
     CAIManager* m_pAIManager;
 };
 
