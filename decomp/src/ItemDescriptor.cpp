@@ -1,5 +1,8 @@
 #include "EmptyStrings.h"
 #include "ItemDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
 
 CItemDescriptor::CItemDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
@@ -10,5 +13,13 @@ CItemDescriptor::CItemDescriptor(const wchar_t* name, const wchar_t* group, cons
 }
 
 CItemDescriptor::~CItemDescriptor()
+{
+}
+
+void CItemDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)
+{
+}
+
+void CItemDescriptor::deleteNotification()
 {
 }
