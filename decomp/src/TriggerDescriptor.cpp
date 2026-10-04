@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "TriggerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CTriggerDescriptor::CTriggerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
@@ -19,4 +23,9 @@ CTriggerDescriptor::CTriggerDescriptor(const wchar_t* name, const wchar_t* group
 
 CTriggerDescriptor::~CTriggerDescriptor()
 {
+}
+
+CEditorBaseObject* CTriggerDescriptor::CreateObject(CEditorScene*)
+{
+    return 0;
 }
