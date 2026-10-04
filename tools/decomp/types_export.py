@@ -215,11 +215,16 @@ def ghidra_type(dies, ref):
     return name, type_size(dies, ref) or (8 if name.endswith("*") else 0)
 
 
-def prototypes(dies, db, promoted, accepted):
+# What generated headers write for a return value they could not type: never trusted unchecked.
+PLACEHOLDER_RETURNS = {"long long int", "long long", "long int", "long", "void*", "long long int*"}
+
+
+def prototypes(dies, db, promoted, matched):
     """Method prototypes the headers declare, keyed by the address of the original function
     with the same mangled name (so the parameter list is the symbol's). The return type is
-    trusted where the header was written for the class (not a promoted placeholder) or the
-    function is accepted; elsewhere Ghidra's guess stays."""
+    trusted where the function matches byte for byte, or the header was written for the class
+    (not a promoted placeholder) and the type is not a generated placeholder; elsewhere
+    Ghidra's guess stays. A function accepted by a self-test can still return the wrong width."""
     address_of = {}
     for a, f in db["functions"].items():
         for n in f["names"]:
@@ -242,7 +247,7 @@ def prototypes(dies, db, promoted, accepted):
             "static": not method and bool(cls) and cls in db["classes"],
             "ret": ret, "ret_size": ret_size,
             "sret": ret_ref is not None and by_hidden_pointer(dies, ret_ref),
-            "trusted": cls not in promoted or address in accepted,
+            "trusted": address in matched or (cls not in promoted and ret not in PLACEHOLDER_RETURNS),
             "params": [dict(zip(("type", "size"), ghidra_type(dies, p["attrs"].get("DW_AT_type"))))
                        for p in params[1 if method else 0:]],
         }
@@ -325,8 +330,9 @@ def main():
     drafts = draft_classes(db, classes)
     merged = {**drafts, **classes}
     progress = ROOT / "build-decomp" / "progress.json"
-    accepted = set(json.loads(progress.read_text()).get("accepted", [])) if progress.exists() else set()
-    protos = prototypes(dies, db, promoted_classes(), accepted)
+    matched = {r["address"] for u in json.loads(progress.read_text())["units"] for r in u["functions"]
+               if r["status"] == "MATCH"} if progress.exists() else set()
+    protos = prototypes(dies, db, promoted_classes(), matched)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({"schema": 1, "classes": merged, "vtables": vtables(db), "prototypes": protos},
                               indent=1))
