@@ -46,7 +46,7 @@ public:
     virtual void levelResetting();
     virtual void update(Ogre::Camera* camera, const Ogre::Vector3& cameraPosition, float elapsed);
     virtual void setHighlighted(bool highlighted);
-    virtual bool getHighlighted();
+    virtual bool getHighlighted() { return m_bHighlighted; }
     virtual const Ogre::Vector3& getMinBounds();
     virtual const Ogre::Vector3& getMaxBounds();
     virtual const Ogre::Vector3& getLocalMinBounds();
@@ -65,6 +65,12 @@ public:
     void updateCullingBounds();
     bool getIsQuestUnit();
     bool getCastsShadows();
+    void setCastsShadows(bool shadows);
+    void setSpawnerGuid(long long guid);
+    void activateUnitInLevel();
+    void deactivateUnitInLevel();
+    void broadcastAlerted();
+    void broadcastKilled();
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     void broadcastUnitState(EUNIT_STATES state);
 
@@ -96,7 +102,9 @@ protected:
     bool m_bPathingFlag19C;
     char m_BaseUnitData19D[0x1a0 - 0x19d];
     long long m_iUnitValue1A0;
-    char m_BaseUnitData1A8[0x1ac - 0x1a8];
+    bool m_bHighlighted;
+    bool m_bCastsShadows;
+    char m_BaseUnitData1AA[2];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
     char m_BaseUnitData2[0x8];

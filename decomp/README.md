@@ -804,3 +804,11 @@ getItemName/isMagical/isUseable восстановлены; isUseable отдел
 Пять отдельных tooling regression-тестов также PASS. Следующий базовый TU:
 BaseUnit.cpp (59 функций, 25 046 байт); перенос Item не означает готовую
 самостоятельную пересборку всей игры.
+
+### BaseUnit: начало базового TU
+
+Первая группа 16 функций (588 байт) MATCH: границы, highlighted/shadows,
+activate/deactivate, ISA/quest, alerted/killed и переадресация событий уровню.
+getHighlighted восстановлен inline; размеры BaseUnit/Item/Player/CullingBounds
+и vtable перепроверены. Полный check.py сохранил 62 PASS, приняты
+398/5247 функций, 94 741 байт. BaseUnit.cpp ещё не закрыт: 16/59.

@@ -3,6 +3,7 @@
 
 #include "ParticleUniverseConstants.h"
 #include "RunicCore.h"
+#include "UnitTypes.h"
 #include "TArrayList.h"
 
 class CGameClient;
@@ -23,6 +24,7 @@ public:
     virtual ~CResourceManager();
 
     bool getEditorIsRunning();
+    bool ISA(UNITTYPES::EUNITTYPES type, UNITTYPES::EUNITTYPES parent);
     Ogre::SceneManager* getSceneManager() { return m_pSceneManager; }
     CLevel* getLevel() { return m_pLevel; }
     // Read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).

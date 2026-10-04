@@ -9,6 +9,7 @@ namespace UNITTYPES
     {
         CONSUMABLE = 1,
         MONSTER = 27,
+        PLAYER = 28,
         BREAKABLE = 29,
         INTERACTABLE = 32,
         UNIQUE = 54,
