@@ -1,5 +1,7 @@
 #include "EmptyStrings.h"
 #include "MissileDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
 
 CMissileDescriptor::CMissileDescriptor()
     : CPositionableObjectDescriptor(L"Missile", L"MISSILE", L"missile", true, false, false, false, false)
@@ -42,5 +44,9 @@ CMissileDescriptor::CMissileDescriptor()
 }
 
 CMissileDescriptor::~CMissileDescriptor()
+{
+}
+
+void CMissileDescriptor::update(float)
 {
 }
