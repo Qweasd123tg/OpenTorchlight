@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "GeometryRotateDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "GeometryRotateWrapper.h"
 
 CGeometryRotateDescriptor::CGeometryRotateDescriptor()
     : CAffectorDescriptor(L"Geometry Rotator", L"Rotates geometry", L"gear")
@@ -11,4 +16,9 @@ CGeometryRotateDescriptor::CGeometryRotateDescriptor()
 
 CGeometryRotateDescriptor::~CGeometryRotateDescriptor()
 {
+}
+
+CEditorBaseObject *CGeometryRotateDescriptor::CreateObject(CEditorScene *scene)
+{
+    return new CGeometryRotateWrapper(scene->getResourceManager());
 }
