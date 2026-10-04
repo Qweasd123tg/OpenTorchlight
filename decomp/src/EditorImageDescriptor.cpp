@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "EditorImageDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorImage.h"
 
 CEditorImageDescriptor::CEditorImageDescriptor()
     : CBaseObjectDescriptor(L"IMAGE", L"A Bitmap", L"image")
@@ -27,4 +31,21 @@ CEditorImageDescriptor::CEditorImageDescriptor()
 
 CEditorImageDescriptor::~CEditorImageDescriptor()
 {
+}
+
+void CEditorImageDescriptor::InputLogicEvent(CEditorBaseObject* param_1, unsigned int param_2, CEditorBaseObject* param_3)
+{
+    if (param_1 != NULL) {
+        CEditorImage* image = dynamic_cast<CEditorImage*>(param_1);
+        if (image != NULL) {
+            if (param_2 == 0) {
+                image->setVisible(true);
+                return;
+            }
+            if (param_2 == 1) {
+                image->setVisible(false);
+                return;
+            }
+        }
+    }
 }
