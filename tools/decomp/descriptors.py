@@ -24,6 +24,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import calls  # noqa: E402
 import elfdb  # noqa: E402
+import ghidra_cpp  # noqa: E402
 import headers  # noqa: E402
 import objdiff  # noqa: E402
 
@@ -33,6 +34,9 @@ SRC = ROOT / "decomp" / "src"
 GEN = headers.OUT
 WSTRING = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
 CTOR_PARAMS = ("name", "group", "description")
+CALLS = ("AddProperty", "AddPropertyWithInterpreterFunctions", "AddInputLogic", "AddOutputLogic", "LinkProperty")
+# Ghidra temporaries: a draft line with one of these is not taken over.
+JUNK = re.compile(r"\b(?:[a-z]Var\d+|in_stack\w*|local_\w+|param_\d+|CONCAT\d+|SUB\d+|extraout\w*)\b|\*\(")
 
 
 def header_name(cls):
@@ -79,6 +83,20 @@ def enum_names(path, name):
     return names
 
 
+def flags_expr(value, flags):
+    """m_iFlags constant as an OR of the DESCRIPTOR_FLAG_ names when it is exactly one."""
+    names = [n for v, n in sorted(flags.items()) if value & v]
+    if names and sum(v for v, n in flags.items() if n in names) == value:
+        return " | ".join(names) if len(names) == 1 else "(" + " | ".join(names) + ")"
+    return hex(value)
+
+
+def property_variable(args):
+    words = re.findall(r"[A-Za-z0-9]+", args[1] if len(args) > 1 else "") if args and args[1].startswith('L"') else []
+    words = [w.lower() for w in words[1:]] if words and words[0] == "L" else [w.lower() for w in words]
+    return (words[0] + "".join(w.capitalize() for w in words[1:]) + "Property") if words else "property"
+
+
 class Generator:
     def __init__(self):
         self.db = elfdb.load_db()
@@ -88,6 +106,11 @@ class Generator:
         self.outputs = enum_names("OutputEvents.h", "EOUTPUT_EVENTS")
         self.tus = {t["id"]: t["name"] for t in self.db["tus"]
                     if t["kind"] == "game" and t["name"].endswith("Descriptor.cpp")}
+        text = (INCLUDE / "Descriptor.h").read_text()
+        self.flags = {int(v, 16): n for n, v in re.findall(r"(DESCRIPTOR_FLAG_\w+) = (0x[0-9a-f]+)", text)}
+        self.methods = ghidra_cpp.known_methods(self.db)
+        self.signatures = ghidra_cpp.signatures_of(self.db)
+        self.enums = ghidra_cpp.parse_enums()
         self.by_name = {}
         for f in self.db["functions"].values():
             for n in f["names"]:
@@ -107,6 +130,37 @@ class Generator:
                 continue
             lines.append((m.group(2), split_args(m.group(3))) if m else ("?", []))
         return lines
+
+    def draft(self, tu, f):
+        """Statements of the Ghidra draft: ("call", method, variable, args) and ("store", text)."""
+        raw = ROOT / "build-decomp" / "drafts" / tu / "raw" / f"{f['address']}.c"
+        if not raw.exists():
+            return []
+        text = ghidra_cpp.convert(raw.read_text(errors="replace"), self.methods, f, self.signatures, self.enums)
+        out = []
+        for line in text.split("{", 1)[-1].splitlines():
+            line = line.strip()
+            m = re.match(r"(?:(\w+) = )?(\w+)\((.*)\);$", line)
+            if m and m.group(2) in CALLS:
+                out.append(("call", m.group(2), m.group(1), split_args(m.group(3))))
+            elif re.match(r"m_\w+(?:\.\w+)* (?:[|&+-]?=) .*;$", line) and not JUNK.search(line):
+                m = re.match(r"(m_iFlags) = m_iFlags & (0x[0-9a-f]+) \| (0x[0-9a-f]+);$", line)
+                if m:
+                    # The original sets before it clears; Ghidra folds both into one expression.
+                    clear = ~int(m.group(2), 16) & 0xffffffff
+                    out.append(("store", f"m_iFlags |= {flags_expr(int(m.group(3), 16), self.flags)};"))
+                    out.append(("store", f"m_iFlags &= ~{flags_expr(clear, self.flags)};"))
+                    continue
+                m = re.match(r"(m_iFlags) = m_iFlags (\||&) (0x[0-9a-f]+);$", line)
+                if m:
+                    value = int(m.group(3), 16)
+                    if m.group(2) == "&":
+                        out.append(("store", f"m_iFlags &= ~{flags_expr(~value & 0xffffffff, self.flags)};"))
+                    else:
+                        out.append(("store", f"m_iFlags |= {flags_expr(value, self.flags)};"))
+                    continue
+                out.append(("store", line))
+        return out
 
     def static_decl(self, cls, name):
         f = self.by_name.get(f"{cls}::{name}")
@@ -157,10 +211,42 @@ class Generator:
         complete = True
         statics, stmts = [], []
         traced = self.trace(ctor)
+        # Align the draft's calls with the traced ones: the draft knows saved results and field stores.
+        draft = self.draft(tu, ctor)
+        draft_calls = [d for d in draft if d[0] == "call"]
+        before = {}  # traced call index -> stores that precede it
+        variables = {}  # Ghidra variable -> our name
+        assigned = {}  # traced call index -> our variable
+        link_args = {}  # traced call index -> resolved LinkProperty arguments
+        k = 0
+        pending_stores = []
+        traced_methods = [c.rpartition("::")[2] for c, _ in traced]
+        positions = []
+        for d in draft:
+            if d[0] == "store":
+                pending_stores.append(d[1])
+                continue
+            while k < len(traced_methods) and traced_methods[k] != d[1]:
+                k += 1
+            if k >= len(traced_methods):
+                break
+            before.setdefault(k, []).extend(pending_stores)
+            pending_stores = []
+            if d[2]:
+                name = property_variable(traced[k][1])
+                while name in variables.values():
+                    name += "2"
+                variables[d[2]] = name
+                assigned[k] = name
+            if d[1] == "LinkProperty":
+                link_args[k] = [variables.get(a) for a in d[3]]
+            k += 1
+        trailing = pending_stores
         params = split_args(ctor["demangled"].split("(", 1)[1].rsplit(")", 1)[0])
         params = [] if params == ["void"] else params
         init = ""
-        for callee, args in traced:
+        for index, (callee, args) in enumerate(traced):
+            stmts.extend(f"    {s}" for s in before.get(index, []))
             if callee == f"{base}::{base}":
                 base_ctor = self.by_name.get(f"{base}::{base}")
                 kinds = [cpp_type(p) for p in split_args(base_ctor["demangled"].split("(", 1)[1].rsplit(")", 1)[0])] \
@@ -171,6 +257,9 @@ class Generator:
                 init = f"    : {base}({', '.join(v or '/*?*/' for v in vals)})\n"
                 continue
             method = callee.rpartition("::")[2]
+            if method == "LinkProperty" and index in link_args and None not in link_args[index]:
+                stmts.append(f"    LinkProperty({', '.join(link_args[index])});")
+                continue
             if method == "AddProperty":
                 kinds = ["", "", "", "void*", "void*", "type", ""]
             elif method == "AddPropertyWithInterpreterFunctions":
@@ -190,7 +279,9 @@ class Generator:
                     decl = self.static_decl(cls, a.rpartition("::")[2])
                     if decl and decl not in statics:
                         statics.append(decl)
-            stmts.append(f"    {method}({', '.join(vals)});")
+            prefix = f"unsigned int {assigned[index]} = " if index in assigned else ""
+            stmts.append(f"    {prefix}{method}({', '.join(vals)});")
+        stmts.extend(f"    {s}" for s in trailing)
         # Class declaration: generated body, parameter names, the static functions.
         named = [f"{cpp_type(p)} {CTOR_PARAMS[i] if i < len(CTOR_PARAMS) else f'option{i - len(CTOR_PARAMS) + 1}'}"
                  for i, p in enumerate(params)]
