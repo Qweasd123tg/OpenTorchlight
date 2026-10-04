@@ -16,7 +16,9 @@ namespace UNITTYPES
         UNIQUE = 54,
         MAGIC = 55,
         QUESTITEM = 103,
-        RANDOMMAGIC_SOCKETABLE = 160
+        SOCKETABLE = 120,
+        RANDOMMAGIC_SOCKETABLE = 160,
+        SHAREDSTASH = 170
     };
 }
 

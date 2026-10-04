@@ -26,11 +26,22 @@ public:
 private:
     char m_SkillData[0x6d - 0x18];
     bool m_bEnabled;
-    char m_SkillData2[0x10c - 0x6e];
-    int m_iSkillField10C;
-    char m_SkillData110[0x124 - 0x110];
-    int m_iSkillField124;
-    char m_SkillData128[0x160 - 0x128];
+    char m_SkillData2[0xd0 - 0x6e];
+    std::wstring m_sRequiredSkill;
+    unsigned int m_iRequiredLevel;
+    char m_SkillDataDC[0x10c - 0xdc];
+    int m_iColumn;
+    int m_iRow;
+    int m_iPane;
+    int m_iChance;
+    int m_iCancelChance;
+    char m_SkillData120[4];
+    int m_iCharges;
+    std::wstring m_sAnimationOverride;
+    std::wstring m_sAnimationOverrideDW;
+    std::wstring m_sLoopAnimationOverride;
+    std::wstring m_sLoopAnimationOverrideDW;
+    char m_SkillData148[0x160 - 0x148];
     friend class CBaseUnit;
 };
 

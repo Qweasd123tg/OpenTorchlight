@@ -19,6 +19,7 @@ public:
     virtual bool renderableQueued(Ogre::Renderable*, unsigned char, unsigned short,
                                   Ogre::Technique**, Ogre::RenderQueue*);
 
+    bool getPlayerIsCheat();
     CPlayer* getPlayer() { return m_pPlayer; }
 
 private:

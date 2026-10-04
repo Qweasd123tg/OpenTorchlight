@@ -7,6 +7,7 @@
 #include "TArrayList.h"
 
 class CGameClient;
+class CDataGroup;
 class CHierarchy;
 class CLevel;
 
@@ -24,6 +25,8 @@ public:
     virtual ~CResourceManager();
 
     bool getEditorIsRunning();
+    long long getUnitGuidByDataGroup(CDataGroup* data,const std::wstring& name);
+    UNITTYPES::EUNITTYPES getUnitTypeByName(const std::wstring& name);
     bool ISA(UNITTYPES::EUNITTYPES type, UNITTYPES::EUNITTYPES parent);
     Ogre::SceneManager* getSceneManager() { return m_pSceneManager; }
     CLevel* getLevel() { return m_pLevel; }

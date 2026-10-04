@@ -16,6 +16,8 @@
 #include "Effect.h"
 #include "CollisionModel.h"
 #include "CollisionList.h"
+#include "GameClient.h"
+#include "Utilities.h"
 #include <OgreLogManager.h>
 
 void CBaseUnit::setSpawnerGuid(long long guid)
@@ -580,8 +582,8 @@ void CBaseUnit::activateEffect(CEffect* effect)
             CSkill* skill = addSkillByName(name,true);
             if (skill != NULL)
             {
-                skill->m_iSkillField10C = -1;
-                skill->m_iSkillField124 = value;
+                skill->m_iColumn = -1;
+                skill->m_iCharges = value;
                 m_pSkillManager->setSkillLevel(skill,level);
                 unsigned int actualLevel = m_pSkillManager->getSkillLevel(skill);
                 if (actualLevel == 0xffffffff)
@@ -668,4 +670,78 @@ bool CBaseUnit::sphereCollision(const Ogre::Vector3& start,const Ogre::Vector3& 
         }
     }
     return false;
+}
+
+void CBaseUnit::unitInit(CDataGroup* data,bool flag)
+{
+    if (data == NULL)
+        return;
+    m_pDataGroup = data;
+    m_iUnitValue1A0 = m_pResourceManager->getUnitGuidByDataGroup(data,L"UNIT_GUID");
+    std::wstring unitType = data->GetDataValue(L"UNITTYPE",EMPTY_WSTRING);
+    if (unitType != EMPTY_WSTRING)
+        m_eUnitType = m_pResourceManager->getUnitTypeByName(unitType);
+    std::wstring unitName = data->GetDataValue(L"NAME",EMPTY_WSTRING);
+    float scale = data->GetDataValue(L"SCALE",1.0f);
+    float variation = data->GetDataValue(L"SCALE_VARIATION",0.0f);
+    setScale(scale + UTILITIES::randomBetweenVolatile(0.0f,variation));
+    setCastsShadows(data->GetDataValue(L"SHADOWS",true));
+    m_bBaseUnitFlag18E = data->GetDataValue(L"BLOCK",false);
+    m_bBaseUnitFlag18F = data->GetDataValue(L"OCCUPIESNODES",true);
+    m_bBlocksPath = data->GetDataValue(L"COLLIDEABLE",true);
+    if (!m_bBlocksPath)
+        m_bPathingFlag19C = false;
+    if (!flag)
+        reapplyEffects(false);
+    {
+        std::vector<CDataGroup*> skillGroups;
+        unsigned int count = data->GetDataGroupsMatchingName(L"SKILL",&skillGroups);
+        for (unsigned int i=0;i<count;++i)
+        {
+            CDataGroup* group=skillGroups[i];
+            std::wstring name=EMPTY_WSTRING;
+            name=group->GetDataValue(L"NAME",name);
+            unsigned int level=group->GetDataValue(L"LEVEL",data->GetDataValue(L"LEVEL",static_cast<int>(m_iUnitLevel)));
+            unsigned int requiredLevel=group->GetDataValue(L"LEVEL_REQUIRED",1);
+            std::wstring requiredSkill=group->GetDataValue(L"SKILL_REQUIRED",EMPTY_WSTRING);
+            int column=group->GetDataValue(L"COLUMN",-1);
+            int row=group->GetDataValue(L"ROW",-1);
+            int pane=group->GetDataValue(L"PANE",0);
+            int charges=group->GetDataValue(L"CHARGES",data->GetDataValue(L"CHARGES",-1));
+            bool enabled=group->GetDataValue(L"ENABLED",data->GetDataValue(L"ENABLED",true));
+            std::wstring animation=group->GetDataValue(L"ANIMATION_OVERRIDE",L"");
+            std::wstring animationDW=group->GetDataValue(L"ANIMATION_OVERRIDEDW",L"");
+            std::wstring loopAnimation=group->GetDataValue(L"ANIMATION_OVERRIDELOOP",L"");
+            std::wstring loopAnimationDW=group->GetDataValue(L"ANIMATION_OVERRIDELOOPDW",L"");
+            CSkill* skill=addSkillByName(name,false);
+            if (skill == NULL)
+                Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"Skill not found : "+name).c_str()),Ogre::LML_NORMAL,false);
+            else
+            {
+                int chance=group->GetDataValue(L"CHANCE",40);
+                int cancelChance=group->GetDataValue(L"CANCEL_CHANCE",0);
+                skill->m_iChance=chance;
+                skill->m_iCancelChance=cancelChance;
+                skill->m_sAnimationOverride=animation;
+                skill->m_sLoopAnimationOverride=loopAnimation;
+                skill->m_sAnimationOverrideDW=animationDW;
+                skill->m_sLoopAnimationOverrideDW=loopAnimationDW;
+                skill->m_iRequiredLevel=requiredLevel;
+                skill->m_sRequiredSkill=requiredSkill;
+                skill->m_iColumn=column;
+                skill->m_iRow=row;
+                skill->m_iPane=pane;
+                skill->m_iCharges=charges;
+                skill->setEnabled(enabled);
+                m_pSkillManager->setSkillLevel(skill,level);
+            }
+        }
+    }
+    if (!flag || ISA(UNITTYPES::SOCKETABLE))
+        reapplyAffixes(false);
+    if (m_pEffectManager != NULL)
+        m_pEffectManager->calculateEffectValues();
+    if (ISA(UNITTYPES::SHAREDSTASH))
+        if (m_pResourceManager->getGameClient()->getPlayerIsCheat())
+            m_bBaseUnitFlag190=true;
 }
