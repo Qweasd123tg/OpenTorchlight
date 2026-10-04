@@ -1,54 +1,65 @@
 #ifndef QUESTDIALOG_H
 #define QUESTDIALOG_H
 
-// Partial: generated from symbols, RTTI and recovered layouts (tools/decomp/promote.py).
-// Bases, virtual order and field offsets are the original ones; names, field types
-// and return types are placeholders until the class's own TU is recovered.
-
 #include <stdio.h>
 #include <string>
+
 #include "BaseUnit.h"
 #include "DataGroup.h"
 #include "RunicCore.h"
+#include "TArrayList.h"
+
 class CQuest;
+class CQuestDialogItem;
+class CSoundBank;
 
 class CQuestDialog : public CRunicCore
 {
 public:
     virtual ~CQuestDialog();
-    long long dialogIsForNPC(CBaseUnit*);
+
+    bool dialogIsForNPC(CBaseUnit* pUnit);
     void reinitialize();
-    void load(_IO_FILE*);
-    void save(_IO_FILE*);
-    CQuestDialog* getDialog(bool);
-    void giveOrRemoveItems(CBaseUnit*);
+    void load(_IO_FILE* pFile);
+    void save(_IO_FILE* pFile);
+    CQuestDialog* getDialog(bool bRandom);
+    void giveOrRemoveItems(CBaseUnit* pUnit);
     void cleanUp();
     void stopDialogSound();
     void populate();
     void playDialogSound();
-    CQuestDialog(CQuest*);
-    long long parseDialogTag(const std::wstring&, CDataGroup*);
+    CQuestDialog(CQuest* pQuest);
+    bool parseDialogTag(const std::wstring& sTag, CDataGroup* pDataGroup);
 
-    // fields
     CQuest* m_pQuest;
-    unsigned char m_Unknown18[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown30[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown48[0x18] __attribute__((aligned(8)));
-    std::wstring m_sUnknown60;
-    long long m_iUnknown68;
-    int m_iUnknown70;
-    bool m_bUnknown74;
-    bool m_bUnknown75;
-    bool m_bUnknown76;
-    bool m_bUnknown77;
-    bool m_bUnknown78;
-    bool m_bUnknown79;
-    bool m_bUnknown7A;
-    bool m_bUnknown7B;
-    unsigned char m_gap7C[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown80[0x18] __attribute__((aligned(8)));
-    void* m_pUnknown98;
-    std::wstring m_sUnknownA0;
+
+    TArrayList<std::wstring> m_dialogText;
+    TArrayList<CQuestDialogItem*> m_dialogItemsToGive;
+    TArrayList<CQuestDialogItem*> m_dialogItemsToRemove;
+
+    std::wstring m_sNPCName;
+    CDataGroup* m_pNPCDataGroup;
+    int m_iDialogType;
+
+    bool m_bIconAboveHead;
+    bool m_bFloatyText;
+    bool m_bDialogInitialized;
+    bool m_bItemsGiven;
+    bool m_bMakePetOnAccept;
+    bool m_bRemoveAsPetOnComplete;
+    bool m_bDestroyPet;
+    bool m_bLookAtPlayer;
+
+    unsigned char m_reserved7C[4];
+
+    union
+    {
+        CSoundBank* m_pSoundBank;
+        unsigned char m_reservedSoundStorage[0x18];
+    };
+
+    std::wstring m_sThemeOverride;
+    std::wstring m_sSoundName;
 };
 
 #endif
