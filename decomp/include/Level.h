@@ -22,6 +22,7 @@ class CLevelTemplateData;
 class CLevel : public CRunicCore
 {
 public:
+    void updateNPCIcons();
     virtual ~CLevel();
     void removeUnit(CBaseUnit* unit,bool flag);
     void incrementMapPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);

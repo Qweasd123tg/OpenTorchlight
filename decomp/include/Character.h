@@ -106,6 +106,10 @@ public:
     int getGold() const { return m_iGold; }
 
     bool alive();
+    void setInvulnerable(bool value) { m_bInvulnerable = value; }
+    void stopPathing();
+    void setMeshVisible(bool visible, bool recursive);
+    void modifyHP(float change);
     int HP();
     int maxHP();
     int mana();
@@ -120,7 +124,9 @@ public:
 private:
     char m_CharacterData[0x444 - 0x1e8];
     int m_iGold;
-    char m_CharacterData448[0x718 - 0x448];
+    char m_CharacterData448[0x52e - 0x448];
+    bool m_bInvulnerable;
+    char m_CharacterData52F[0x718 - 0x52f];
     CAIManager* m_pAIManager;
 };
 

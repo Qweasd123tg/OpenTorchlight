@@ -19,13 +19,16 @@ public:
     virtual bool renderableQueued(Ogre::Renderable*, unsigned char, unsigned short,
                                   Ogre::Technique**, Ogre::RenderQueue*);
 
+    void setStateControlFlag(bool value) { m_bStateControl10BC = value; }
     bool getPlayerIsCheat();
     CPlayer* getPlayer() { return m_pPlayer; }
 
 private:
     unsigned char m_ClientData20[0x58 - 0x20];
     CPlayer* m_pPlayer;
-    unsigned char m_ClientData60[0x3910 - 0x60];
+    unsigned char m_ClientData60[0x10bc - 0x60];
+    bool m_bStateControl10BC;
+    unsigned char m_ClientData10BD[0x3910 - 0x10bd];
 };
 
 #endif

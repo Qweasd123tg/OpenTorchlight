@@ -9,6 +9,7 @@
 class CPlayer : public CCharacter
 {
 public:
+    void attemptToStopPlayerSkill(bool force);
     virtual ~CPlayer();
     virtual void unitInit(CDataGroup*, bool);
     virtual void levelResetting();

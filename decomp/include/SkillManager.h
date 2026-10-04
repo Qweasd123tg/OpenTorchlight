@@ -12,6 +12,7 @@ class CResourceManager;
 class CSkillManager : public CRunicCore
 {
 public:
+    static void globallyDisableSkills(bool disabled);
     CSkillManager(CResourceManager* resources,CBaseUnit* owner);
     virtual ~CSkillManager();
     CSkill* addSkill(const std::wstring& name,bool flag);

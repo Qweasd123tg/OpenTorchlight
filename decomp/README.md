@@ -978,3 +978,34 @@ double-click и wheel delta, но сохраняет held. virtualMousePosition 
 POINT* на внутренний буфер, с исходными float вычислениями и усечением в int
 перед расширением в long. Полный check.py: 76 tests PASS,
 461/5247 игровых функций, 119876 байт.
+
+GameStateController.cpp закрыт: 10/10 игровых функций, 7 MATCH и 3 приняты
+сравнением поведения. Черновики получены через согласованный OpenCode /
+Space Bunny Free, затем проверены здесь. Две правки по ASM были необходимы:
+HP guard должен отвергать NaN maximum через !(maximum > 0), а ветка state=2
+вызывает virtual setEnabled(!enabled), не setMeshVisible. Ответ модели сам
+по себе приёмкой не считается.
+
+HP events: 236 сценариев, все 9 границ с тремя maximum, равенства, нули,
+отрицательные числа, NaN/inf; сравниваются порядок событий и floating-point
+exception flags. 10/10 мутаций. Автотест давал 200 совпадений, но 0/10
+мутаций: отсутствовало наблюдение BroadcastEvent, поэтому он не принят.
+
+State switch: 288 сценариев со всеми состояниями, invalid state, обоими
+значениями enabled, отсутствующими manager/client/player/UI и сменой
+resource/client/player во время обратных вызовов. Update: 336 сценариев,
+editor mode, отсутствие player, signed/unsigned границы HP, старые NaN/inf,
+смена player после HP и previousHP после maxHP. Внешние UI/camera/character
+вызовы в этих двух тестах подменены одинаковыми spy для оригинала и нашего
+кода; сравниваются аргументы, адресаты, порядок, число обращений и поля.
+Это проверка протокола взаимодействия, не работа настоящего UI кампании.
+Мутации соответственно 10/10 и 5/5. Автотест switch был слабым (2/10),
+update имел 0 завершённых и 200 обоюдных ошибок, не принят.
+
+Новые partial GameUI (0x1a08, allocation 0x5790e2) и CameraControl (0xa0,
+allocation 0x56173f) сохраняют размеры/vtables. Проверены также
+GameStateController 0x78, Character 0x720, Player 0xa70, GameClient 0x3910.
+Character invulnerable byte 0x52e и GameClient state-control byte 0x10bc
+выделены из opaque regions без сдвига последующих полей. Неиспользуемый
+возврат GameUI::onClick пока не проверен и отмечен в заголовке.
+Полный check.py: 79 tests PASS, 471/5247 игровых функций, 121320 байт.
