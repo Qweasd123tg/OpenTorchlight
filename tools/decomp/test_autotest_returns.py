@@ -60,5 +60,33 @@ int main() {
             subprocess.run([str(binary)], check=True)
 
 
+    def test_standalone_fork_capture(self):
+        text = r"""
+#include "AutoTest.h"
+void produce(void* p, autotest::Capture& out) { out.add(p, sizeof(int)); }
+void fail(void*, autotest::Capture&) { _exit(7); }
+int main() {
+    int value=23;
+    autotest::Outcome outcome;
+    autotest::runChild(produce, &value, outcome);
+    if (!WIFEXITED(outcome.status) || WEXITSTATUS(outcome.status)!=0 ||
+        outcome.capture.length!=sizeof(value) ||
+        std::memcmp(outcome.capture.data,&value,sizeof(value))!=0) return 1;
+    autotest::runChild(fail, 0, outcome);
+    return WIFEXITED(outcome.status) && WEXITSTATUS(outcome.status)==7 &&
+           outcome.capture.length==0 ? 0 : 2;
+}
+"""
+        with tempfile.TemporaryDirectory(prefix="otl-fork-test-") as folder:
+            source = Path(folder)/"fork.cpp"
+            obj = Path(folder)/"fork.o"
+            binary = Path(folder)/"fork"
+            source.write_text(text)
+            toolchain.compile_source(source, obj,
+                                     ["-std=gnu++98", "-I", str(toolchain.ROOT/"decomp/hybrid")])
+            subprocess.run(["c++", "-no-pie", str(obj), "-o", str(binary)], check=True)
+            subprocess.run([str(binary)], check=True)
+
+
 if __name__ == "__main__":
     unittest.main()

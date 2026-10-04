@@ -225,7 +225,9 @@ inline void runChild(Body body, void* context, Outcome& outcome)
         std::memset(&limit, 0, sizeof(limit));
         limit.it_value.tv_usec = 300000;  // a hang (e.g. an endless loop in the original) is a SIGALRM
         setitimer(ITIMER_REAL, &limit, 0);
-        Capture& capture = g_outcomes[0].capture;
+        // A child-local buffer also lets hand-written tests call runChild
+        // without linking the generated runtime's global outcome storage.
+        Capture capture;
         capture.length = 0;
         body(context, capture);
         size_t done = 0;
