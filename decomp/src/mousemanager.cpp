@@ -1,7 +1,7 @@
 #include "EmptyStrings.h"
 #include "MouseManager.h"
-
 #include <string.h>
+#include "GameNamespaces.h"
 
 CMouseManager::CMouseManager()
 {
@@ -119,4 +119,3 @@ void CMouseManager::update(void* window)
 CMouseManager::~CMouseManager()
 {
 }
-
