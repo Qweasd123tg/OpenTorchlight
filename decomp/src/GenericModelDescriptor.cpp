@@ -1,5 +1,11 @@
 #include "EmptyStrings.h"
 #include "GenericModelDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "GenericModel.h"
+#include "StringUtilities.h"
 
 CGenericModelDescriptor::CGenericModelDescriptor()
     : CPositionableObjectDescriptor(L"Generic Model", L"A simple generic model", L"model", true, true, true, true, true)
@@ -18,4 +24,41 @@ CGenericModelDescriptor::CGenericModelDescriptor()
 
 CGenericModelDescriptor::~CGenericModelDescriptor()
 {
+}
+
+void CGenericModelDescriptor::update(float param_1)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        if (m_Objects[i] != NULL) {
+            CGenericModel *pModel = dynamic_cast<CGenericModel *>(m_Objects[i]);
+            if (pModel != NULL) {
+                pModel->updateAnimation(param_1, false);
+            }
+        }
+    }
+}
+
+unsigned int CGenericModelDescriptor::GetAnimationIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    std::string converted = STRINGS::StringConvertToNarrow(value.c_str());
+
+    CGenericModel* model = dynamic_cast<CGenericModel*>(object);
+    if (model == NULL)
+        return 0;
+
+    void* data = *reinterpret_cast<void**>(
+        reinterpret_cast<unsigned char*>(model) + 0x1e0);
+    if (data == NULL)
+        return 0;
+
+    std::vector<std::string>* animations =
+        reinterpret_cast<std::vector<std::string>*>(
+            reinterpret_cast<unsigned char*>(data) + 0x28);
+
+    for (unsigned int i = 0; i < animations->size(); ++i) {
+        if ((*animations)[i] == converted)
+            return i;
+    }
+
+    return 0;
 }
