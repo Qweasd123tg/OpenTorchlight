@@ -182,8 +182,9 @@ def inline_temp_strings(text):
                   r"(L?\"(?:[^\"\\]|\\.)*\")\s*,\s*&?local_\w+\s*\);", capture, text)
     for local, literal in temps.items():
         text = re.sub(rf"\n[ \t]*[\w:<>]+[ \t]*\**[ \t]*{local}[ \t]*(?:\[\d*\])?;", "", text)
-        text = re.sub(rf"\([\w:]+ \*\)&?{local}\b", literal, text)
-        text = re.sub(rf"&{local}\b|\b{local}\b(?!\s*\[)", literal, text)
+        # A callable: a replacement string would reinterpret the literal's backslashes.
+        text = re.sub(rf"\([\w:]+ \*\)&?{local}\b", lambda _m, lit=literal: lit, text)
+        text = re.sub(rf"&{local}\b|\b{local}\b(?!\s*\[)", lambda _m, lit=literal: lit, text)
     return text
 
 
@@ -257,6 +258,37 @@ def closing_paren(text):
     return len(text)
 
 
+NAN_GUARD = r"(?:!NAN\(([^()]*)\)|\(!NAN\(([^()]*)\)\))"
+NAN_GROUP = rf"(?:{NAN_GUARD}|\({NAN_GUARD}(?:\s*&&\s*{NAN_GUARD})+\))"
+# An ordered comparison without parentheses or logical operators in its operands.
+ORDERED = r"[\w.\->\[\]*+/ ]+?\s(?:==|<=?|>=?)\s-?[\w.\->\[\]*+/ ]+?"
+CLAUSE_END = r"(?=\s*(?:\)|&&|\|\||;|$))"
+
+
+def drop_nan_guards(text):
+    """`!NAN(x) && x < y` -> `x < y`. An ordered comparison (==, <, <=, >, >=) is already false
+    when an operand is NaN, so a guard on one of its operands is redundant. Every other NAN() stays:
+    `!NAN(x) && !(x < y)` or `!NAN(x) && x != y` differ from the unguarded expression for NaN."""
+    def guarded(group, comparison):
+        names = [n.strip() for n in re.findall(r"NAN\(([^()]*)\)", group)]
+        return names and all(re.search(rf"(?<![\w.]){re.escape(n)}(?![\w])", comparison) for n in names)
+
+    def before(m):
+        return m.group("cmp") if guarded(m.group("nan"), m.group("cmp")) else m.group(0)
+
+    def after(m):
+        return m.group("cmp") if guarded(m.group("nan"), m.group("cmp")) else m.group(0)
+
+    for _ in range(8):
+        new = re.sub(rf"(?P<nan>{NAN_GROUP})\s*&&\s*(?P<cmp>(?<![!\w]){ORDERED}){CLAUSE_END}", before, text)
+        new = re.sub(rf"(?<=[(&|]\s)(?P<cmp>{ORDERED})\s*&&\s*(?P<nan>{NAN_GROUP}){CLAUSE_END}", after, new)
+        new = re.sub(rf"(?<=\()(?P<cmp>{ORDERED})\s*&&\s*(?P<nan>{NAN_GROUP}){CLAUSE_END}", after, new)
+        if new == text:
+            break
+        text = new
+    return text
+
+
 def tidy_expressions(text):
     text = re.sub(r"\boperator_new__\(", "operator new[](", text)
     text = re.sub(r"\boperator_delete__\(", "operator delete[](", text)
@@ -265,8 +297,7 @@ def tidy_expressions(text):
     text = re.sub(r"\b([\w.\->\[\]]+) != (?:false|'\\0')", r"\1", text)
     text = re.sub(r"\b([\w.\->\[\]]+) == (?:false|'\\0')", r"!\1", text)
     text = re.sub(r"\(\(([^()]*)\)\)", r"(\1)", text)
-    text = re.sub(r"\s*&&\s*\(?!NAN\([^()]*\)\)?", "", text)
-    text = re.sub(r"\(?!NAN\([^()]*\)\)?\s*&&\s*", "", text)
+    text = drop_nan_guards(text)
     text = re.sub(r"\([\w:<> ]+ \*\)0x0\b", "NULL", text)
     text = re.sub(r"\+ -(\d)", r"- \1", text)
     return text
