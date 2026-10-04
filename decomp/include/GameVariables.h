@@ -7,5 +7,6 @@
 #include <string>
 
 static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
+static unsigned char gCAMERA_TYPE_NAMES[16];
 
 #endif
