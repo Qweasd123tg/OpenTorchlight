@@ -9,6 +9,7 @@ namespace STRINGS
     std::string StringConvertToUTF8(const std::wstring& text);
     std::wstring StringConvertToWide(const std::string& text);
     std::wstring StringConvertToWide(const char* text, unsigned int maxLength);
+    std::string StringConvertToNarrow(const wchar_t* text);
     std::string StringUpper(const std::string& text);
     std::wstring StringUpper(const std::wstring& text);
     std::string GetValueAsString(int value);
