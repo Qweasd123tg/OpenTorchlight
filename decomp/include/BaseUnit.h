@@ -16,6 +16,7 @@ class CCharacter;
 class CCullingBounds;
 class CDataGroup;
 class CEffect;
+class CEffectManager;
 class CLevel;
 class CSkillManager;
 class CUnitTheme;
@@ -61,6 +62,20 @@ public:
     virtual void addToAvoidanceMap(CLevel& level);
     virtual void setLevel(unsigned int level);
 
+    void addUnitTheme(CUnitTheme* theme);
+    void addUnitTheme(const std::wstring& name);
+    void removeUnitTheme(CUnitTheme* theme);
+    void removeUnitTheme(const std::wstring& name);
+    void removeUnitTheme(long long guid);
+    void setEditorThemeID(unsigned int id);
+    bool hasUnitTheme(CUnitTheme* theme);
+    bool hasUnitTheme(long long guid);
+    bool hasUnitTheme(const std::wstring& name);
+    bool removeEffect(const std::wstring& name);
+    bool removeAffix(const std::wstring& name);
+    bool hasEffect(EEFFECT_TYPE type);
+    bool hasEffect(EEFFECT_TYPE type, const std::wstring& name);
+    bool hasEffect(const std::wstring& name);
     bool ISA(UNITTYPES::EUNITTYPES type);
     void updateCullingBounds();
     bool getIsQuestUnit();
@@ -84,7 +99,13 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
-    char m_BaseUnitData[0x170 - 0x100];
+    unsigned int m_iUnitLevel;
+    TArrayList<CUnitTheme*> m_ThemesToAdd;
+    TArrayList<CUnitTheme*> m_ThemesToRemove;
+    TArrayList<CUnitTheme*> m_UnitThemes;
+    TArrayList<CUnitTheme*> m_AffixThemes;
+    unsigned int m_iEditorThemeID;
+    unsigned char m_BaseUnitData16C[4];
     long long m_iQuestGuid;
     int m_iQuestState;
     int m_iRoomIndex;
@@ -107,7 +128,7 @@ protected:
     char m_BaseUnitData1AA[2];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
-    char m_BaseUnitData2[0x8];
+    CEffectManager* m_pEffectManager;
     CCullingBounds* m_pCullingBounds;
     CSkillManager* m_pSkillManager;
     bool m_bBaseUnitFlag0;

@@ -4,6 +4,8 @@
 #include "GenericModel.h"
 #include "Level.h"
 #include "OutputEvents.h"
+#include "EffectManager.h"
+#include "UnitThemes.h"
 
 void CBaseUnit::setSpawnerGuid(long long guid)
 {
@@ -96,4 +98,116 @@ void CBaseUnit::questEventFire(EQUEST_EVENTS event, CCharacter* character, CBase
 {
     if (getLevel() != NULL)
         getLevel()->questEventFire(event, character, target);
+}
+
+bool CBaseUnit::hasUnitTheme(CUnitTheme* theme)
+{
+    return m_AffixThemes.find(theme) != -1 || m_UnitThemes.find(theme) != -1;
+}
+
+bool CBaseUnit::hasUnitTheme(long long guid)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    return themes != NULL ? hasUnitTheme(themes->getTheme(guid)) : false;
+}
+
+bool CBaseUnit::hasUnitTheme(const std::wstring& name)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    return themes != NULL ? hasUnitTheme(themes->getTheme(name)) : false;
+}
+
+bool CBaseUnit::removeEffect(const std::wstring& name)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->removeEffect(name, true) : false;
+}
+
+bool CBaseUnit::removeAffix(const std::wstring& name)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->deleteAffix(name) : false;
+}
+
+bool CBaseUnit::hasEffect(EEFFECT_TYPE type)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->hasEffect(type) : false;
+}
+
+bool CBaseUnit::hasEffect(EEFFECT_TYPE type, const std::wstring& name)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->hasEffect(type, name) : false;
+}
+
+bool CBaseUnit::hasEffect(const std::wstring& name)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->hasEffect(name) : false;
+}
+
+float CBaseUnit::getEffectValue(EEFFECT_TYPE type, float fallback, EDAMAGE_TYPES damage)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->getEffectValue(type, damage) : fallback;
+}
+
+float CBaseUnit::getEffectValue(EEFFECT_TYPE type, float fallback, const std::wstring& name)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->getEffectValue(type, name) : fallback;
+}
+
+float CBaseUnit::getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE type, float fallback, EDAMAGE_TYPES damage)
+{
+    return m_pEffectManager != NULL ? m_pEffectManager->getEffectValue(activation, type, damage) : fallback;
+}
+
+void CBaseUnit::addUnitTheme(CUnitTheme* theme)
+{
+    if (m_UnitThemes.find(theme) != -1)
+        return;
+    m_ThemesToRemove.remove(theme);
+    m_ThemesToAdd.add(theme);
+    m_UnitThemes.add(theme);
+}
+
+void CBaseUnit::removeUnitTheme(CUnitTheme* theme)
+{
+    if (m_UnitThemes.find(theme) == -1)
+        return;
+    m_ThemesToRemove.add(theme);
+    m_ThemesToAdd.remove(theme);
+    m_UnitThemes.remove(theme);
+}
+
+void CBaseUnit::addUnitTheme(const std::wstring& name)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    if (themes != NULL)
+        addUnitTheme(themes->getTheme(name));
+}
+
+void CBaseUnit::removeUnitTheme(const std::wstring& name)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    if (themes != NULL)
+        removeUnitTheme(themes->getTheme(name));
+}
+
+void CBaseUnit::removeUnitTheme(long long guid)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    if (themes != NULL)
+        removeUnitTheme(themes->getTheme(guid));
+}
+
+void CBaseUnit::setEditorThemeID(unsigned int id)
+{
+    if (m_pResourceManager->getEditorIsRunning())
+    {
+        m_iEditorThemeID = id;
+        CUnitThemes* themes = CUnitThemes::getSingleton();
+        for (unsigned int i = 1; i <= themes->getThemes().size(); ++i)
+        {
+            if (i == id)
+                addUnitTheme(themes->getThemes()[i-1]);
+            else
+                removeUnitTheme(themes->getThemes()[i-1]);
+        }
+    }
 }

@@ -47,6 +47,18 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7ffb70": {
+  "name": "CBaseUnit::removeUnitTheme(CUnitTheme*)",
+  "killed": 5,
+  "tried": 5,
+  "code": "b1786d1137d979b9"
+ },
+ "0x800a20": {
+  "name": "CBaseUnit::addUnitTheme(CUnitTheme*)",
+  "killed": 5,
+  "tried": 5,
+  "code": "77ccb54a1adcb326"
+ },
  "0xa01f30": {
   "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
   "killed": 3,
