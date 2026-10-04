@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "TriggerSphereDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "TriggerSphere.h"
 
 CTriggerSphereDescriptor::CTriggerSphereDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CTriggerDescriptor(name, group, description)
@@ -9,4 +14,10 @@ CTriggerSphereDescriptor::CTriggerSphereDescriptor(const wchar_t* name, const wc
 
 CTriggerSphereDescriptor::~CTriggerSphereDescriptor()
 {
+}
+
+CEditorBaseObject* CTriggerSphereDescriptor::CreateObject(CEditorScene* scene)
+{
+    CTriggerSphere* object = new CTriggerSphere(scene->getResourceManager());
+    return object;
 }
