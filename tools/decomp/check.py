@@ -109,6 +109,13 @@ def main():
           f"({sum(matched.values())} of {total_bytes} bytes); by status {dict(status)}")
     print(f"also matching: {len(generated_by_compiler)} compiler-generated static initializers and "
           f"destructors ({sum(generated_by_compiler.values())} bytes, outside the totals)")
+    unknown = [(unit["source"], ref) for unit in units for ref in unit.get("unknown", [])]
+    for source, ref in unknown:
+        print(f"unknown reference in {source}: {ref['name']}; the original has: "
+              f"{'; '.join(ref['known']) or 'no such member'}")
+    if unknown:
+        print("FAIL: fix the declarations above (constness, references, parameter types) before the self-test")
+        return 1
 
     selftest = None
     accepted = dict(matched)

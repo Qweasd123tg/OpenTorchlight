@@ -376,6 +376,37 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
     return result
 
 
+def image_symbol_names(image):
+    """Every symbol name of the original executable, its PLT included."""
+    names = {s.name.split("@")[0] for s in list(image.symbols) + list(image.dynsyms) if s.name}
+    return names | {n.split("@")[0] for n in image.plt.values()}
+
+
+def unknown_members(db, original_names, symbols):
+    """Symbols naming a member of a game class the original does not have: a wrong
+    signature (constness, reference, parameter type) or an invented method."""
+    out = []
+    for name in symbols:
+        if name in original_names:
+            continue
+        m = re.match(r"_ZNK?(\d+)", name)
+        scope = m and name[m.end():m.end() + int(m.group(1))]
+        if scope and scope in db["classes"] and scope not in ("Ogre", "CEGUI", "std", "ParticleUniverse"):
+            out.append(name)
+    return sorted(set(out))
+
+
+def known_overloads(db, mangled):
+    """Demangled signatures the original has for the class member `mangled` names."""
+    m = re.match(r"_ZNK?(\d+)", mangled)
+    scope = mangled[m.end():m.end() + int(m.group(1))]
+    rest = mangled[m.end() + int(m.group(1)):]
+    n = re.match(r"(\d+)", rest)
+    method = rest[n.end():n.end() + int(n.group(1))] if n else None
+    return sorted(f["demangled"] for f in db["functions"].values()
+                  if f.get("scope") == scope and f.get("method") == method)
+
+
 class Original:
     def __init__(self, db=None, elf=None):
         self.db = db or elfdb.load_db()
@@ -385,6 +416,18 @@ class Original:
         for address, f in self.db["functions"].items():
             for name in f["names"]:
                 self.by_name.setdefault(name, []).append(f)
+
+    def symbol_names(self):
+        if not hasattr(self, "_names"):
+            self._names = image_symbol_names(self.image)
+        return self._names
+
+    def unknown_references(self, obj):
+        return unknown_members(self.db, self.symbol_names(),
+                               (s.name for s in elfimage.load_object(obj).symbols if not s.defined and s.name))
+
+    def known_overloads(self, mangled):
+        return known_overloads(self.db, mangled)
 
     def resolver(self, tu):
         data = {}
@@ -510,6 +553,7 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
         obj, globalized = compile_for_diff(source, tmp, extra, quiet)
         ours = object_functions(obj, original.resolver(tu), original.side.name_at, globalized)
+        unknown = original.unknown_references(obj)
     rows = []
     seen = set()
     for name, mine in sorted(ours.items()):
@@ -539,7 +583,8 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
                 rows.append({"name": f["mangled"], "demangled": f["demangled"], "address": address,
                              "status": "MISSING", "original_size": f["size"]})
     return {"source": str(Path(source).resolve().relative_to(ROOT)) if Path(source).resolve().is_relative_to(ROOT) else str(source),
-            "tu": tu["name"] if tu else None, "functions": rows}
+            "tu": tu["name"] if tu else None, "functions": rows,
+            "unknown": [{"name": n, "known": original.known_overloads(n)} for n in unknown]}
 
 
 def report(result):
@@ -552,6 +597,8 @@ def report(result):
     counts = {}
     for row in result["functions"]:
         counts[row["status"]] = counts.get(row["status"], 0) + 1
+    for ref in result.get("unknown", []):
+        print(f"  UNKNOWN {ref['name']}: not in the original; it has: {'; '.join(ref['known']) or 'no such member'}")
     print("  " + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
 
 

@@ -302,6 +302,11 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
         defined |= defined_symbols(obj)
         undefined |= undefined_symbols(obj)
     missing = sorted(n for n in undefined - defined - provided if not n.startswith(".L"))
+    absent = objdiff.unknown_members(ctx.db, objdiff.image_symbol_names(ctx.image), missing)
+    if absent:
+        raise SystemExit("the decompiled code calls members the original does not have:\n" + "\n".join(
+            f"  {n}; the original has: {'; '.join(objdiff.known_overloads(ctx.db, n)) or 'no such member'}"
+            for n in absent))
     imports_s = out / "imports.s"
     imports_s.write_text(imports_assembly(missing))
     toolchain.assemble(imports_s, out / "imports.o")

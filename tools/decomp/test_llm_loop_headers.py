@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+import tempfile
+import unittest
+from pathlib import Path
+
+import llm_loop
+import objdiff
+
+
+class FakeGen:
+    def __init__(self, decls):
+        self.decls = decls
+
+    def ghidra_return(self, f):
+        return "int"
+
+    def method_decl(self, f, cls, deps, ret=None):
+        decl, forward = self.decls[f["method"]]
+        deps["forward"] |= forward
+        return decl
+
+
+def func(cls, method, kind="function", vslots=None):
+    return {"scope": cls, "method": method, "kind": kind, "vslots": vslots}
+
+
+class CompleteHandHeader(unittest.TestCase):
+    def complete(self, header, funcs, decls):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "decomp" / "include").mkdir(parents=True)
+            (root / "decomp" / "include" / "Unit.h").write_text(header)
+            old_root, old_code = llm_loop.ROOT, llm_loop.return_from_code
+            llm_loop.ROOT, llm_loop.return_from_code = root, lambda f: None
+            try:
+                loop = llm_loop.Loop.__new__(llm_loop.Loop)
+                loop.funcs, loop._decls = funcs, FakeGen(decls)
+                added = loop.complete_hand_header("CUnit", "Unit.h")
+            finally:
+                llm_loop.ROOT, llm_loop.return_from_code = old_root, old_code
+            return added, (root / "decomp" / "include" / "Unit.h").read_text()
+
+    header = ("#ifndef UNIT_H\n#define UNIT_H\nclass CUnit\n{\npublic:\n    virtual ~CUnit();\n"
+              "    int getA();\nprivate:\n    int m_iA;\n};\n#endif\n")
+
+    def test_missing_methods_go_to_the_end_of_the_public_section(self):
+        added, text = self.complete(self.header, [func("CUnit", "getA"), func("CUnit", "setTarget")],
+                                    {"setTarget": ("void setTarget(CTarget*);", {"CTarget"})})
+        self.assertEqual(added, ["void setTarget(CTarget*);"])
+        self.assertIn("    int getA();\n    void setTarget(CTarget*);\nprivate:", text)
+        self.assertIn("class CTarget;\nclass CUnit\n", text)
+
+    def test_virtual_and_other_class_methods_are_left_alone(self):
+        added, text = self.complete(self.header, [func("CUnit", "update", vslots=[3]), func("COther", "run")],
+                                    {"update": ("void update();", set()), "run": ("void run();", set())})
+        self.assertEqual(added, [])
+        self.assertEqual(text, self.header)
+
+    def test_class_without_public_section_gets_one(self):
+        header = "class CUnit\n{\n    int m_iA;\n};\n"
+        added, text = self.complete(header, [func("CUnit", "getA")], {"getA": ("int getA();", set())})
+        self.assertEqual(text, "class CUnit\n{\n    int m_iA;\npublic:\n    int getA();\n};\n")
+        header = "struct CUnit\n{\n    int m_iA;\n};\n"
+        added, text = self.complete(header, [func("CUnit", "getA")], {"getA": ("int getA();", set())})
+        self.assertEqual(text, "struct CUnit\n{\n    int m_iA;\n    int getA();\n};\n")
+        header = "class CUnit\n{\nprivate:\n    int m_iA;\n};\n"
+        added, text = self.complete(header, [func("CUnit", "getA")], {"getA": ("int getA();", set())})
+        self.assertIn("    int m_iA;\npublic:\n    int getA();\n};", text)
+
+
+class AsmLabels(unittest.TestCase):
+    def test_labels_bound_to_mangled_names_are_refused(self):
+        self.assertTrue(llm_loop.ASM_LABEL.search('extern "C" void f(C*) __asm__("_ZN1C1fEv");'))
+        self.assertTrue(llm_loop.ASM_LABEL.search('void f() asm ("_ZN1C1fEv");'))
+        self.assertFalse(llm_loop.ASM_LABEL.search('__asm__ volatile ("pause");'))
+
+
+class UnknownMembers(unittest.TestCase):
+    db = {"classes": {"CUnit": {}, "Ogre": {}},
+          "functions": {"0x1": {"scope": "CUnit", "method": "get", "demangled": "CUnit::get(int)"}}}
+
+    def test_members_of_game_classes_absent_from_the_original(self):
+        names = {"_ZN5CUnit3getEi"}
+        found = objdiff.unknown_members(self.db, names, ["_ZN5CUnit3getEi", "_ZNK5CUnit3getEi",
+                                                         "_ZN4Ogre4Math4SqrtEf", "memcpy"])
+        self.assertEqual(found, ["_ZNK5CUnit3getEi"])
+        self.assertEqual(objdiff.known_overloads(self.db, "_ZNK5CUnit3getEi"), ["CUnit::get(int)"])
+
+
+if __name__ == "__main__":
+    unittest.main()

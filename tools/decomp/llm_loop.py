@@ -57,6 +57,7 @@ IDIOMS = Path(__file__).resolve().parent / "prompts" / "idioms.md"
 # Free model first; the cheap paid one takes over what it does not get accepted.
 MODELS = ("opencode-go/space-bunny-free#high", "opencode-go/deepseek-v4.1-flash#high")
 WRITTEN = ("function", "ctor", "dtor", "static")
+ASM_LABEL = re.compile(r"\b(?:__asm__|asm)\s*(?:volatile\s*)?\(\s*\"_Z")
 AGENT = """---
 description: Answers with code only, no tools
 mode: primary
@@ -128,6 +129,45 @@ def asm_of(tu, f):
     return "(no ASM in the packet; run tools/decomp/scaffold.py)"
 
 
+def return_from_code(f):
+    """float, double or bool when the original sets xmm0 or al that way before every ret it
+    reaches straight-line; None when the code does not show it (Ghidra's guess stays)."""
+    start = int(f["address"], 16)
+    out = subprocess.run(["objdump", "-d", "--no-show-raw-insn", "-w", f"--start-address={start:#x}",
+                          f"--stop-address={start + f['size']:#x}", str(elfdb.default_elf())],
+                         capture_output=True, text=True, env={"LC_ALL": "C", "PATH": "/usr/bin:/bin"}).stdout
+    insns = [(m.group(1), m.group(2).strip()) for m in re.finditer(r"^\s+[0-9a-f]+:\t(\S+)[ \t]*([^#<\n]*)", out, re.M)]
+    insns = [("ret", "") if mnemonic in ("rep", "repz") and ops.startswith("ret") else (mnemonic, ops)
+             for mnemonic, ops in insns]
+    kinds = set()
+    for i, (mnemonic, _) in enumerate(insns):
+        if not mnemonic.startswith("ret"):
+            continue
+        kind = None
+        for prev, ops in reversed(insns[max(0, i - 12):i]):
+            if prev.startswith(("ret", "jmp", "call")):
+                break
+            dest = ops.split(",")[-1].strip()
+            if dest == "%xmm0":
+                kind = "float" if prev.endswith("ss") else "double" if prev.endswith("sd") else "xmm"
+                break
+            if dest in ("%eax", "%rax", "%ax", "%al"):
+                if dest == "%al" or prev.startswith("movzb"):
+                    kind = "bool"
+                elif ops in ("%eax,%eax", "$0x0,%eax", "$0x1,%eax") and prev in ("xor", "mov"):
+                    kind = "flag"
+                else:
+                    kind = "int"
+                break
+        kinds.add(kind)
+    for scalar in ("float", "double"):
+        if scalar in kinds and not kinds - {scalar, "xmm", None}:
+            return scalar
+    if "bool" in kinds and not kinds - {"bool", "flag", None}:
+        return "bool"
+    return None
+
+
 class Loop:
     def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False):
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
@@ -183,7 +223,10 @@ class Loop:
         for cls in self.classes:
             gen = ROOT / "build-decomp" / "include-gen" / f"{cls}.h"
             if cls in hand:
-                out[cls] = hand[cls][0]  # an existing header is used as it is
+                out[cls] = hand[cls][0]  # an existing header is used as it is, completed with this TU's methods
+                added = self.complete_hand_header(cls, out[cls])
+                if added:
+                    print(f"  header {out[cls]}: declared {len(added)} methods of this TU it lacked", flush=True)
                 continue
             if not gen.exists():
                 continue
@@ -227,6 +270,67 @@ class Loop:
                 other.write_text(other.read_text().replace(f'#include "{cls}.h"', f'#include "{name}"'))
             gen.unlink()
         self.headers = out
+
+    def complete_hand_header(self, cls, name):
+        """Declares in a hand-written header the non-virtual methods of this TU it lacks (partial
+        headers declare only what other code used), so candidates can be written as members.
+        Return types come from the Ghidra prototypes; declarations whose types the header
+        cannot name are left out. Returns the declarations added."""
+        path = ROOT / "decomp" / "include" / name
+        text = path.read_text(errors="replace")
+        m = re.search(rf"^(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?{re.escape(cls)}\s*(?::[^{{;]*)?\{{",
+                      text, re.M)
+        end = text.find("\n};", m.end()) if m else -1
+        if end < 0:
+            return []
+        body = text[m.end():end]
+        if not hasattr(self, "_decls"):
+            self._decls = headers.Gen()
+        gen = self._decls
+        extra, forward, system, seen = [], set(), set(), set()
+        for f in self.funcs:
+            method = f.get("method") or ""
+            if (f.get("scope") != cls or f.get("vslots") or f["kind"] not in ("function", "ctor")
+                    or method in seen or re.search(rf"(?<![\w~]){re.escape(method)}\s*\(", body)):
+                continue
+            seen.add(method)
+            deps = {"sys": set(), "local": set(), "forward": set()}
+            ghidra = gen.ghidra_return(f)
+            # The code decides only where Ghidra guessed an integer: its void/bool/float are reliable.
+            code = return_from_code(f) if f["kind"] == "function" and ghidra not in ("void", "bool", "float",
+                                                                                     "double") else None
+            decl = gen.method_decl(f, cls, deps, ret=code)
+            if not decl or "GenTypes.h" in deps["local"] or deps["sys"] - {"string"}:
+                continue
+            if any(f'"{h}"' not in text and h != name for h in deps["local"]):
+                continue
+            extra.append(decl)
+            forward |= deps["forward"] - {cls}
+            system |= deps["sys"]
+        if not extra:
+            return []
+        indent = next((re.match(r"[ \t]*", l).group(0) for l in body.splitlines()
+                       if l.strip() and not l.strip().endswith(":")), "    ") or "    "
+        labels = list(re.finditer(r"^[ \t]*(public|private|protected)[ \t]*:", body, re.M))
+        first_public = next((i for i, l in enumerate(labels) if l.group(1) == "public"), None)
+        block = "".join(f"{indent}{d}\n" for d in extra)
+        private_default = m.group(0).lstrip().startswith("class")
+        if first_public is None and (labels or private_default):
+            body = body.rstrip("\n") + "\npublic:\n" + block.rstrip("\n")
+        elif first_public is not None and first_public + 1 < len(labels):
+            at = labels[first_public + 1].start()
+            body = body[:at] + block + body[at:]
+        else:
+            body = body.rstrip("\n") + "\n" + block.rstrip("\n")
+        head = text[:m.start()]
+        fwd = "".join(f"class {n};\n" for n in sorted(forward)
+                      if not re.search(rf"\b(?:class|struct)\s+{n}\b", text))
+        if "string" in system and "#include <string>" not in text:
+            guard = re.search(r"#define \w+\n", head)
+            head = head[:guard.end()] + "#include <string>\n" + head[guard.end():] if guard else \
+                "#include <string>\n" + head
+        path.write_text(head + fwd + text[m.start():m.end()] + body + text[end:])
+        return extra
 
     def check_header(self, name, cls, size):
         """None when the header compiles with the original size, field offsets and vtable slots."""
@@ -287,6 +391,10 @@ class Loop:
 
     def compile(self, f, code):
         """(status, detail): compile-error / MATCH / DIFF with the instruction diff."""
+        if ASM_LABEL.search(code):
+            return "compile-error", ("Symbols bound with asm labels are not source code. Define the function as "
+                                     "the member the header declares, and call other functions through their "
+                                     "classes (object->method(...)).")
         trial = self.work / "trial" / f["address"] / self.tu["name"]
         trial.parent.mkdir(parents=True, exist_ok=True)
         trial.write_text(self.unit([code]))
@@ -295,6 +403,10 @@ class Loop:
         except SystemExit as error:
             lines = [l.split(": error: ", 1)[-1] for l in str(error).splitlines() if "error" in l][:12]
             return "compile-error", "\n".join(lines) + self.name_hints(lines)
+        if result.get("unknown"):
+            return "compile-error", "Calls functions the game does not have:\n" + "\n".join(
+                f"- {r['name']}; the game has: {'; '.join(r['known']) or 'no such member'}"
+                for r in result["unknown"]) + "\nCall the existing overload (mind constness and references)."
         row = next((r for r in result["functions"] if r.get("address") == f["address"]), None)
         if not row:
             return "compile-error", "the definition did not produce the function (wrong signature?)"
@@ -487,10 +599,13 @@ class Loop:
         verdicts = {}
         if made:
             os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(made))
-            blob, loader = hybrid.build(verbose=False, tests=tests)
             try:
+                blob, loader = hybrid.build(verbose=False, tests=tests)
                 _, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
             except subprocess.TimeoutExpired:
+                report = []
+            except SystemExit as error:  # the game build itself is broken: no verdicts this round
+                print(f"  hybrid build failed: {str(error)[:300]}", flush=True)
                 report = []
             for line in report:
                 m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed (\d+) different (\d+)", line)
