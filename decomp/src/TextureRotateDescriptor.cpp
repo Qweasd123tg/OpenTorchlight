@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "TextureRotateDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "TextureRotateWrapper.h"
 
 CTextureRotateDescriptor::CTextureRotateDescriptor()
     : CAffectorDescriptor(L"Texture Rotate", L"This is a basic accelerator for your particles", L"gear")
@@ -11,4 +16,9 @@ CTextureRotateDescriptor::CTextureRotateDescriptor()
 
 CTextureRotateDescriptor::~CTextureRotateDescriptor()
 {
+}
+
+CEditorBaseObject* CTextureRotateDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CTextureRotateWrapper(scene->getResourceManager());
 }
