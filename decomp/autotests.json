@@ -137,6 +137,18 @@
   "tried": 10,
   "code": "e26687ea5d4e8d82"
  },
+ "0xc816a0": {
+  "name": "CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "killed": 1,
+  "tried": 1,
+  "code": "cb3fe387a9a68c6a"
+ },
+ "0xc817a0": {
+  "name": "CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "killed": 1,
+  "tried": 1,
+  "code": "cb3fe387a9a68c6a"
+ },
  "0xc8a2c0": {
   "name": "CRandomizer::removeChoice(unsigned int)",
   "killed": 9,
