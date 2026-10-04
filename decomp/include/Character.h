@@ -102,6 +102,9 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    void giveGold(int amount);
+    int getGold() const { return m_iGold; }
+
     bool alive();
     int HP();
     int maxHP();
@@ -115,7 +118,9 @@ public:
     CAIManager* getAIManager() { return m_pAIManager; }
 
 private:
-    char m_CharacterData[0x718 - 0x1e8];
+    char m_CharacterData[0x444 - 0x1e8];
+    int m_iGold;
+    char m_CharacterData448[0x718 - 0x448];
     CAIManager* m_pAIManager;
 };
 
