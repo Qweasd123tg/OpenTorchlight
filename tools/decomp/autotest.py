@@ -53,6 +53,22 @@ def is_list(t):
     return t.startswith("TArrayList<") and t.endswith(">")
 
 
+def return_type_lookup(cls, method, params, static=False, const=False):
+    """Preserve reference returns: GNU typeof(call) removes references.
+
+    Deduction from the exact function/member-pointer signature retains R& and
+    const R&, while selecting the intended overload by its parameter types.
+    Declarations are unevaluated; no extra runtime helper is linked.
+    """
+    arguments = ", ".join(ghidra_cpp.cxx_type(p) for p in params)
+    pointer = f"R (*)({arguments})" if static else f"R ({cls}::*)({arguments})" + (" const" if const else "")
+    declarations = ["template <class R> struct ReturnType { typedef R type; };",
+                    f"template <class R> ReturnType<R> returnType({pointer});"]
+    prelude = [f"typedef __typeof__(returnType(&{cls}::{method})) ReturnInfo;",
+               "typedef ReturnInfo::type Result;"]
+    return declarations, prelude
+
+
 class Generator:
     def __init__(self):
         self.db = elfdb.load_db()
@@ -298,6 +314,7 @@ class Generator:
         orig_params = ", ".join((["void*"] if not static else []) + [f"__typeof__({a})" for a in orig_list])
         orig_args = ", ".join((["c.self"] if not static else []) + orig_list)
         prelude = []
+        return_declarations = []
         if kind == "ctor":
             # Our constructor through its symbol, like the original: works for abstract classes too.
             ours = f"(((void (*)({orig_params}))ours_{tag})({orig_args}), autotest::Void())"
@@ -309,7 +326,9 @@ class Generator:
             call = f"{cls}::{method}({args})" if static else f"(({cls}*)c.self)->{cls}::{method}({args})"
             ours = f"({call}, autotest::Void())"
             original = f"(((Fn)orig_{tag})({orig_args}), autotest::Void())"
-            prelude = [f"typedef __typeof__({call}) Result;", f"typedef Result (*Fn)({orig_params});"]
+            return_declarations, prelude = return_type_lookup(
+                cls, method, params, static, f["demangled"].endswith(" const"))
+            prelude.append(f"typedef Result (*Fn)({orig_params});")
         dumps = []
         if not static and kind != "dtor":
             self.dump(cls, "c.self", dumps.append)
@@ -319,6 +338,7 @@ class Generator:
                 f'extern "C" char ours_{tag}[] __asm__("{mangled}");',
                 f"namespace t{tag} {{",
                 "struct Context", "{", "    char* self;", *[f"    {m}" for m in members], "};",
+                *return_declarations,
                 "void build(autotest::Rng& r, Context& c)", "{", "    c.self = 0;", *[f"    {l}" for l in build], "}",
                 "void report(Context& c, autotest::Capture& out)", "{",
                 "    (void)c;", "    out.addHeapInUse();", "    out.add(autotest::g_arena, autotest::g_arenaUsed);",
