@@ -4,6 +4,15 @@
 #include "Effect.h"
 #include "DataGroup.h"
 #include "Utilities.h"
+#include "FileUtilities.h"
+#include "GameClient.h"
+#include "GameUI.h"
+#include "Character.h"
+#include "MasterResourceManager.h"
+#include "SoundBank.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+#include <OgreLogManager.h>
 #include "Level.h"
 #include "AttackDescription.h"
 #include "Set.h"
@@ -550,4 +559,84 @@ void CEquipment::calculateCombatStats(bool skipArmorEffects)
             m_pAttackDescriptionOverride=new CAttackDescription("LSLASH",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
         }
     }
+}
+
+void CEquipment::unitInit(CDataGroup* data,bool skipEffects)
+{
+    if (!data) return;
+    CItem::unitInit(data,skipEffects);
+    m_sUnidentifiedName=m_pDataGroup->GetDataValue(L"UNIDENTIFIED_NAME",EMPTY_WSTRING);
+    int start=static_cast<int>(m_sUnidentifiedName.find(L"{"));
+    int end=static_cast<int>(m_sUnidentifiedName.find(L"}",start));
+    if (end!=-1 && start!=-1 && start+1<end) m_sUnidentifiedName.replace(start,end-start+1,L"");
+    m_sDisplayName=m_pDataGroup->GetDataValue(L"NAME",EMPTY_WSTRING);
+    m_sDisplayName=m_pDataGroup->GetDataValue(L"DISPLAYNAME",m_sDisplayName);
+    start=static_cast<int>(m_sDisplayName.find(L"{"));
+    end=static_cast<int>(m_sDisplayName.find(L"}",start));
+    if (end!=-1 && start!=-1 && start+1<end) m_sDisplayName.replace(start,end-start+1,L"");
+    std::wstring mesh=data->GetDataValue(L"MESHFILE",EMPTY_WSTRING);
+    if (mesh==EMPTY_WSTRING)
+        Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"No model created for equipment "+getName()).c_str()),Ogre::LML_NORMAL);
+    else
+    {
+        std::wstring path=data->GetDataValue(L"RESOURCEDIRECTORY",EMPTY_WSTRING);
+        path=FILESYSTEM::CleanPath(path+L"/"+mesh+L".mesh");
+        CGameClient* client=m_pResourceManager->getGameClient();
+        if (client && client->getGameUI() && client->getGameUI()->getCharacter())
+        {
+            std::wstring playerClass=STRINGS::StringUpper(client->getGameUI()->getCharacter()->getName());
+            std::vector<CDataGroup*> wardrobes;
+            unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"WARDROBE",&wardrobes);
+            for (unsigned int i=0;i<count;++i)
+            {
+                std::wstring wardrobeClass=STRINGS::StringUpper(wardrobes[i]->GetDataValue(L"CLASS",L""));
+                if (playerClass.compare(L"")==0 || wardrobeClass==playerClass)
+                    if (wardrobes[i]->GetDataValue(L"ITEM_MESH",EMPTY_WSTRING)!=EMPTY_WSTRING)
+                        path=wardrobes[i]->GetDataValue(L"ITEM_MESH",EMPTY_WSTRING);
+            }
+        }
+        loadModel(path,EMPTY_WSTRING);
+    }
+    std::wstring uses=STRINGS::StringUpper(data->GetDataValue(L"USES",L"0"));
+    m_iUnknown248=uses.compare(L"UNLIMITED")==0 ? -9999 : STRINGS::GetInt(uses);
+    std::wstring target=STRINGS::StringUpper(data->GetDataValue(L"TARGET_TYPE",L"USER"));
+    for (unsigned int i=0;i<2;++i)
+        if (target==STRINGS::StringUpper(gTARGET_TYPES[i])) {m_iUnknown260=i;break;}
+    m_bUnknown25F=data->GetDataValue(L"MERCHANTINFINITE",m_bUnknown25F);
+    m_iUnknown23C=data->GetDataValue(L"MAXSTACKSIZE",1);
+    m_sUnknown3D8=STRINGS::StringUpper(data->GetDataValue(L"DROPPARTICLE",EMPTY_WSTRING));
+    m_sUnknown3D8=FILESYSTEM::CleanPath(m_sUnknown3D8);
+    m_iUnknown274=data->GetDataValue(L"LEVEL",1);
+    int sockets=data->GetDataValue(L"SOCKETS",0);
+    m_iSocketCount=sockets<2 ? sockets : 2;
+    int blockChance=data->GetDataValue(L"BLOCK_CHANCE",0);
+    if (!skipEffects && static_cast<float>(blockChance)!=0.0f)
+        addNewEffect(new CEffect(static_cast<EEFFECT_TYPE>(62),static_cast<float>(blockChance)>0.0f,EFFECT_ACTIVATION_PASSIVE,-1000.0f,static_cast<float>(blockChance),1.0f,false));
+    calculateCombatStats(skipEffects);
+    setRequirements();
+    if (!skipEffects)
+    {
+        if (ISA(UNITTYPES::UNIQUE)) m_bUnknown348=false;
+        enchant(false);
+        if (ISA(UNITTYPES::SOCKETABLE) || (!m_bUnknown348 && m_pDataGroup->GetDataValue(L"ALWAYS_IDENTIFIED",false))) m_bUnknown348=true;
+    }
+    if (m_pEffectManager) m_pEffectManager->calculateEffectValues();
+    createElementalDamages();
+    recalculatePrice();
+    if (!m_pSoundBank)
+    {
+        CSoundManager* manager=m_pResourceManager ? CMasterResourceManager::getSingleton()->m_pSoundManager : NULL;
+        m_pSoundBank=new CSoundBank(*manager,false);
+    }
+    CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+    static const wchar_t* const keys[]={L"FALL_SOUND",L"LAND_SOUND",L"TAKE_SOUND",L"ATTACK_SOUND",L"STRIKE_SOUND",L"USE_SOUND"};
+    static const int slots[]={16,17,18,10,1,20};
+    for (unsigned int i=0;i<6;++i)
+    {
+        std::wstring name=m_pDataGroup->GetDataValue(keys[i],EMPTY_WSTRING);
+        CSoundData* sound=sounds->getSoundDataObject(STRINGS::StringUpper(name));
+        if (sound) m_pSoundBank->addSample(slots[i],sound->m_iGuid);
+    }
+    std::wstring layout=data->GetDataValue(L"ATTACHEDLAYOUT",L"");
+    if (!layout.empty()) m_bUnknown430=true;
 }

@@ -15,7 +15,8 @@ public:
     // fields
     void* m_pUnknown10;
     void* m_pUnknown18;
-    unsigned char m_gap20[0x20] __attribute__((aligned(8)));
+    long long m_iGuid;
+    unsigned char m_gap28[0x18] __attribute__((aligned(8)));
     void* m_pUnknown40;
     unsigned char m_gap48[0x10] __attribute__((aligned(8)));
     long long m_iUnknown58;

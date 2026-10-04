@@ -1220,3 +1220,48 @@ Final integrated check: 107 tests, 0 failed; 1245 accepted game functions /
 The four Equipment functions recovered in this series total 56962 original
 bytes. Standalone linking, game-world effects and complete gameplay validation
 remain separate work.
+
+## Equipment child initialization (2026-10-04)
+
+`CEquipment::unitInit(CDataGroup*,bool)` (0x889110, 8303 original bytes)
+reconstructs the child initializer after CItem initialization: display names
+and brace removal, model/wardrobe selection, use counts, target and stack
+settings, particle paths, sockets, block effects, combat/requirements/enchant
+ordering, identification, sound-bank setup and attached-layout flagging.
+The input data group and the effective group left by the parent are distinct
+sources in the original; this distinction and callback-driven changes are
+preserved. An empty player-class string matches any wardrobe class, and the
+last matching nonempty wardrobe mesh wins. That override is not passed through
+CleanPath a second time. Sockets are clamped above at 2, with no lower clamp.
+An empty attached-layout value does not clear an already true flag.
+
+The initial generated test returned 92 matching completed cases and 108
+both-failed cases, yet killed none of 8 sampled mutations. It was rejected:
+the successful null-input path did not establish the main initialization flow.
+The hand fixture uses real DataGroups, string/path conversion, logging and
+effect/sound-bank construction, with controlled parent/rendering/game/audio
+services. It compares 1140 scenarios twice per side, including null input,
+sparse data/defaults, several client/UI/character absence levels, distinct
+input/effective data, class-matched and wildcard wardrobes, negative values,
+both initialization flags, sound lookup failures and state-changing callbacks.
+Both-crash cases and overflowing captures are rejected. This is not a render,
+audio playback or complete parent/child initialization integration test.
+
+The final hand mutation pass killed 21/22 viable sampled candidates (24
+probed); the survivor is the already documented CEffect boolean reset by its
+original initializer. An earlier default-value survivor prompted sparse-data
+cases. All 12 targeted branch mutations were killed. Scripts and results are
+under `research/equipment-init-check/`, including the rejected generated run.
+
+Shared headers expose verified fields without moving existing named fields:
+Equipment names +0x2d0/+0x2d8, GameClient UI +0x78, GameUI character +0x38,
+MasterResourceManager audio pointers +0x98/+0x100, and SoundData GUID +0x20.
+Equipment/GameClient/GameUI sizes remain 0x438/0x3910/0x1a08 and are asserted.
+MasterResourceManager remains a partial declaration. Those other TUs' source
+implementations and the PC worker's pipeline files were not changed.
+
+Final integrated check: 108 tests, 0 failed; 1246 accepted game functions /
+379504 original bytes. The increment over ad9a3b1 is one 8303-byte function.
+The five Equipment functions recovered in this series total 65265 original
+bytes. A separate, unmodified cross-owner Path constructor discrepancy is
+recorded in `research/path-constructor-signature.md`.

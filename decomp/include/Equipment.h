@@ -168,8 +168,8 @@ public:
     CGenericModel* m_pUnitModelSecondary;
     long long m_iUnitCollisionModel;
     void* m_pUnknown2C8;
-    void* m_pUnknown2D0;
-    void* m_pUnknown2D8;
+    std::wstring m_sUnidentifiedName;
+    std::wstring m_sDisplayName;
     std::wstring m_sPrefix;
     std::wstring m_sSuffix;
     unsigned char m_fUnknown2F0[0x8] __attribute__((aligned(8)));

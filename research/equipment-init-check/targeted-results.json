@@ -1,0 +1,67 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "remove_empty_name_braces",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_empty_player_class_wildcard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_matching_wardrobe",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "normalize_wardrobe_path",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unlimited_sentinel",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "clamp_negative_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_block_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "unique_identified_before_enchant",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_identified_from_input",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "sounds_from_input",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_sound_slots",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "clear_attached_layout_flag",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -5,9 +5,11 @@
 
 class CHierarchy;
 class CSettings;
+class CSoundManager;
+class CSoundBankDataInformation;
 
 // Partial: declarations from MasterResourceManager.cpp used by recovered TUs;
-// only the unit type hierarchy and the settings pointer are placed (the object is 400 bytes).
+// hierarchy, settings and audio pointers are placed (the original object is 400 bytes).
 class CMasterResourceManager : public CRunicCore
 {
 public:
@@ -26,6 +28,11 @@ private:
 
 public:
     CSettings* m_pSettings;
+    CSoundManager* m_pSoundManager;
+private:
+    unsigned char m_UnrecoveredA0[0x100-0xa0];
+public:
+    CSoundBankDataInformation* m_pSoundBankDataInformation;
 };
 
 #endif
