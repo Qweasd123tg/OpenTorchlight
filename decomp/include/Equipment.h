@@ -130,7 +130,7 @@ public:
     void reskinByClass(std::wstring);
     CEquipment* effectsDescription(EEFFECT_ACTIVATION, bool, bool);
     std::wstring getEquipmentEffects();
-    CEquipment* getEquipmentType(bool);
+    std::wstring getEquipmentType(bool);
     std::wstring getEquipmentDescription(bool, bool);
     std::wstring getEquipmentStats();
 

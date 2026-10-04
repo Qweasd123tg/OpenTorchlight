@@ -1145,3 +1145,32 @@ not a proof over every possible input or allocation failure.
 The final integrated check passed 105 tests with 0 failed: 1243 accepted game
 functions / 355413 original bytes. The increment over f614e5d is one
 16955-byte function. Equipment remains a partially recovered TU.
+
+## Equipment type label (2026-10-04)
+
+`CEquipment::getEquipmentType(bool)` (0x88d040, 9173 original bytes) now
+returns `std::wstring`. It selects the translated equipment subtype and
+optional quality prefix, handles the quest marker, then removes the first
+nonempty `{...}` segment. An empty `{}` or unmatched brace remains; later
+pairs are not removed. Socketable/Potion/Scroll labels replace the accumulated
+quest text, while equipment labels append. Several armor subtypes perform a
+second translation call even after initializing their static label cache;
+that call sequence is preserved. Type IDs were checked against the original
+`media/unittypes.hie`, not inferred from modern Torchlight versions.
+
+`EquipmentTypeTest.cpp` compares 1536 scenarios twice per side. It covers the
+24 selected leaf/fallback categories, identified/quality/quest/show-quality
+combinations, empty and Unicode translations, brace edge cases, and a callback
+that changes identification during ISA queries. The generated test completed
+0/200 cases (all both-failed), so it was not used for acceptance. The hand test
+killed 24/24 sampled viable mutations and all 10 additional targeted mutations
+of quest handling, quality gating, translation and brace removal. Scripts and
+results are under `research/equipment-type-check/`. As for the other text
+functions, game services are identical spies on both sides; this is not a
+full resource/localization or in-game UI test.
+
+Final integrated check: 106 tests, 0 failed; 1244 accepted game functions /
+364586 original bytes. The increment over e00a6b0 is one 9173-byte function.
+The three recovered Equipment text functions total 50347 original bytes;
+Equipment's remaining functions and full-game behavior are not covered by
+that count.

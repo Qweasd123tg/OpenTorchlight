@@ -1,0 +1,131 @@
+{
+ "0x88d040": {
+  "name": "CEquipment::getEquipmentType(bool)",
+  "tried": 24,
+  "killed": 24,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 351: 'if (g_Rifle.empty()) g_Rifle=CStringTranslate::getSinglton()->getTranslateString(L\"Rifle\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 421: 'result=result+g_Armor;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 322: 'result=result+g_Axe;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 333: 'if (g_Polearm.empty()) g_Polearm=CStringTranslate::getSinglton()->getTranslateString(L\"Polearm\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 281: 'if (g_Rare.empty()) g_Rare=CStringTranslate::getSinglton()->getTranslateString(L\"Rare\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 289: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 450: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 384: 'if (g_Gloves.empty()) g_Gloves=CStringTranslate::getSinglton()->getTranslateString(L\"Gloves\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 434: 'result=result+g_Trinket;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 294: '4' -> '5'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 301: 'else if (isMagical()) result=result+g_Enchanted+L\" \";' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 451: 'result.replace(start,end-start+1,L\"\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 397: 'result=result+CStringTranslate::getSinglton()->getTranslateString(L\"Belt\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 293: 'else if (ISA(UNITTYPES::SCROLL)) category=6;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 408: 'if (g_ShoulderArmor.empty()) g_ShoulderArmor=CStringTranslate::getSinglton()->getTranslateString(L\"Shoulder Armor\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 279: 'if (g_Unique.empty()) g_Unique=CStringTranslate::getSinglton()->getTranslateString(L\"Unique\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 292: '5' -> '6'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 428: 'result=g_Socketable;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 296: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 396: 'if (g_Belt.empty()) g_Belt=CStringTranslate::getSinglton()->getTranslateString(L\"Belt\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 304: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 288: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 327: 'if (g_Mace.empty()) g_Mace=CStringTranslate::getSinglton()->getTranslateString(L\"Mace\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 340: 'result=result+g_Staff;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

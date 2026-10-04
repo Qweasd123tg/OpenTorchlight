@@ -269,3 +269,185 @@ std::wstring CEquipment::getEquipmentDescription(bool showBuyPrice, bool showSel
         while (result[result.size()-1]==L'\n') result=result.substr(0,result.size()-1);
     return result;
 }
+
+std::wstring CEquipment::getEquipmentType(bool showQuality)
+{
+    std::wstring result;
+    static std::wstring g_Unidentified;
+    if (g_Unidentified.empty()) g_Unidentified=CStringTranslate::getSinglton()->getTranslateString(L"Unidentified");
+    static std::wstring g_Unique;
+    if (g_Unique.empty()) g_Unique=CStringTranslate::getSinglton()->getTranslateString(L"Unique");
+    static std::wstring g_Rare;
+    if (g_Rare.empty()) g_Rare=CStringTranslate::getSinglton()->getTranslateString(L"Rare");
+    static std::wstring g_Enchanted;
+    if (g_Enchanted.empty()) g_Enchanted=CStringTranslate::getSinglton()->getTranslateString(L"Enchanted");
+    static std::wstring g_QuestItem;
+    if (g_QuestItem.empty()) g_QuestItem=CStringTranslate::getSinglton()->getTranslateString(L"(Quest Item)");
+    if (getIsQuestUnit()) result=g_QuestItem;
+    int category=0;
+    if (ISA(UNITTYPES::WEAPON)) category=1;
+    else if (ISA(UNITTYPES::ARMOR)) category=2;
+    else if (ISA(UNITTYPES::SOCKETABLE)) category=3;
+    else if (ISA(UNITTYPES::TRINKET)) category=4;
+    else if (ISA(UNITTYPES::POTION)) category=5;
+    else if (ISA(UNITTYPES::SCROLL)) category=6;
+    if (category==1 || category==2 || category==4)
+    {
+        if (!m_bUnknown348) result=result+g_Unidentified+L" ";
+        else if (showQuality)
+        {
+            if (ISA(UNITTYPES::UNIQUE)) result=result+g_Unique+L" ";
+            else if (ISA(UNITTYPES::MAGIC)) result=result+g_Rare+L" ";
+            else if (isMagical()) result=result+g_Enchanted+L" ";
+        }
+    }
+    if (category==1)
+    {
+        if (ISA(UNITTYPES::SWORD))
+        {
+            static std::wstring g_Sword;
+            if (g_Sword.empty()) g_Sword=CStringTranslate::getSinglton()->getTranslateString(L"Sword");
+            result=result+g_Sword;
+        }
+        else if (ISA(UNITTYPES::BOW))
+        {
+            static std::wstring g_Bow;
+            if (g_Bow.empty()) g_Bow=CStringTranslate::getSinglton()->getTranslateString(L"Bow");
+            result=result+g_Bow;
+        }
+        else if (ISA(UNITTYPES::AXE))
+        {
+            static std::wstring g_Axe;
+            if (g_Axe.empty()) g_Axe=CStringTranslate::getSinglton()->getTranslateString(L"Axe");
+            result=result+g_Axe;
+        }
+        else if (ISA(UNITTYPES::MACE))
+        {
+            static std::wstring g_Mace;
+            if (g_Mace.empty()) g_Mace=CStringTranslate::getSinglton()->getTranslateString(L"Mace");
+            result=result+g_Mace;
+        }
+        else if (ISA(UNITTYPES::POLEARM))
+        {
+            static std::wstring g_Polearm;
+            if (g_Polearm.empty()) g_Polearm=CStringTranslate::getSinglton()->getTranslateString(L"Polearm");
+            result=result+g_Polearm;
+        }
+        else if (ISA(UNITTYPES::STAFF))
+        {
+            static std::wstring g_Staff;
+            if (g_Staff.empty()) g_Staff=CStringTranslate::getSinglton()->getTranslateString(L"Staff");
+            result=result+g_Staff;
+        }
+        else if (ISA(UNITTYPES::PISTOL))
+        {
+            static std::wstring g_Pistol;
+            if (g_Pistol.empty()) g_Pistol=CStringTranslate::getSinglton()->getTranslateString(L"Pistol");
+            result=result+g_Pistol;
+        }
+        else if (ISA(UNITTYPES::RIFLE))
+        {
+            static std::wstring g_Rifle;
+            if (g_Rifle.empty()) g_Rifle=CStringTranslate::getSinglton()->getTranslateString(L"Rifle");
+            result=result+g_Rifle;
+        }
+        else if (ISA(UNITTYPES::CROSSBOW))
+        {
+            static std::wstring g_Crossbow;
+            if (g_Crossbow.empty()) g_Crossbow=CStringTranslate::getSinglton()->getTranslateString(L"Crossbow");
+            result=result+g_Crossbow;
+        }
+        else if (ISA(UNITTYPES::WAND))
+        {
+            static std::wstring g_Wand;
+            if (g_Wand.empty()) g_Wand=CStringTranslate::getSinglton()->getTranslateString(L"Wand");
+            result=result+g_Wand;
+        }
+        else
+        {
+            static std::wstring g_Weapon;
+            if (g_Weapon.empty()) g_Weapon=CStringTranslate::getSinglton()->getTranslateString(L"Weapon");
+            result=result+g_Weapon;
+        }
+    }
+    else if (category==2)
+    {
+        if (ISA(UNITTYPES::HELMET))
+        {
+            static std::wstring g_Helmet;
+            if (g_Helmet.empty()) g_Helmet=CStringTranslate::getSinglton()->getTranslateString(L"Helmet");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Helmet");
+        }
+        else if (ISA(UNITTYPES::GLOVES))
+        {
+            static std::wstring g_Gloves;
+            if (g_Gloves.empty()) g_Gloves=CStringTranslate::getSinglton()->getTranslateString(L"Gloves");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Gloves");
+        }
+        else if (ISA(UNITTYPES::BOOTS))
+        {
+            static std::wstring g_Boots;
+            if (g_Boots.empty()) g_Boots=CStringTranslate::getSinglton()->getTranslateString(L"Boots");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Boots");
+        }
+        else if (ISA(UNITTYPES::BELT))
+        {
+            static std::wstring g_Belt;
+            if (g_Belt.empty()) g_Belt=CStringTranslate::getSinglton()->getTranslateString(L"Belt");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Belt");
+        }
+        else if (ISA(UNITTYPES::CHEST_ARMOR))
+        {
+            static std::wstring g_ChestArmor;
+            if (g_ChestArmor.empty()) g_ChestArmor=CStringTranslate::getSinglton()->getTranslateString(L"Chest Armor");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Chest Armor");
+        }
+        else if (ISA(UNITTYPES::SHOULDER_ARMOR))
+        {
+            static std::wstring g_ShoulderArmor;
+            if (g_ShoulderArmor.empty()) g_ShoulderArmor=CStringTranslate::getSinglton()->getTranslateString(L"Shoulder Armor");
+            result=result+g_ShoulderArmor;
+        }
+        else if (ISA(UNITTYPES::SHIELD))
+        {
+            static std::wstring g_Shield;
+            if (g_Shield.empty()) g_Shield=CStringTranslate::getSinglton()->getTranslateString(L"Shield");
+            result=result+CStringTranslate::getSinglton()->getTranslateString(L"Shield");
+        }
+        else
+        {
+            static std::wstring g_Armor;
+            if (g_Armor.empty()) g_Armor=CStringTranslate::getSinglton()->getTranslateString(L"Armor");
+            result=result+g_Armor;
+        }
+    }
+    else if (category==3)
+    {
+        static std::wstring g_Socketable;
+        if (g_Socketable.empty()) g_Socketable=CStringTranslate::getSinglton()->getTranslateString(L"Socketable");
+        result=g_Socketable;
+    }
+    else if (category==4)
+    {
+        static std::wstring g_Trinket;
+        if (g_Trinket.empty()) g_Trinket=CStringTranslate::getSinglton()->getTranslateString(L"Trinket");
+        result=result+g_Trinket;
+    }
+    else if (category==5)
+    {
+        static std::wstring g_Potion;
+        if (g_Potion.empty()) g_Potion=CStringTranslate::getSinglton()->getTranslateString(L"Potion");
+        result=g_Potion;
+    }
+    else if (category==6)
+    {
+        static std::wstring g_Scroll;
+        if (g_Scroll.empty()) g_Scroll=CStringTranslate::getSinglton()->getTranslateString(L"Scroll");
+        result=g_Scroll;
+    }
+    int start=static_cast<int>(result.find(L"{"));
+    int end=static_cast<int>(result.find(L"}",start));
+    if (end!=-1 && start!=-1 && start+1<end)
+        result.replace(start,end-start+1,L"");
+    return result;
+}
