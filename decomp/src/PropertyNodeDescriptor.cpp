@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "PropertyNodeDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "PropertyNode.h"
 
 CPropertyNodeDescriptor::CPropertyNodeDescriptor()
     : CPositionableObjectDescriptor(L"Property Node", L"Property node for spawns and logic", L"gear", true, true, true, true, true)
@@ -17,4 +22,42 @@ CPropertyNodeDescriptor::CPropertyNodeDescriptor()
 
 CPropertyNodeDescriptor::~CPropertyNodeDescriptor()
 {
+}
+
+unsigned int CPropertyNodeDescriptor::getPropertyNodeTypeByString(
+    CEditorScene* scene,
+    CEditorBaseObject* object,
+    const std::wstring& value,
+    void* userData)
+{
+    const std::wstring* names =
+        reinterpret_cast<const std::wstring*>(&gPROPERTY_NODE_TYPE_NAMES);
+
+    for (unsigned int i = 0; i < 16; ++i)
+    {
+        if (value == names[i])
+            return i;
+    }
+
+    return 0;
+}
+
+CEditorBaseObject* CPropertyNodeDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CPropertyNode(scene->getResourceManager());
+}
+
+void CPropertyNodeDescriptor::descriptorSceneActivated(CEditorScene*)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        if (m_Objects[i] != NULL)
+        {
+            CPropertyNode *propertyNode =
+                dynamic_cast<CPropertyNode *>(m_Objects[i]);
+
+            if (propertyNode != NULL)
+                propertyNode->activate();
+        }
+    }
 }
