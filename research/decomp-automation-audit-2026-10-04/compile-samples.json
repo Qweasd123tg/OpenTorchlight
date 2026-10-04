@@ -1,0 +1,114 @@
+[
+  {
+    "address": "0x803100",
+    "name": "CBaseUnit::unitInit(CDataGroup*, bool)",
+    "bytes": 7229,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:677: error: 'code' was not declared in this scope",
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:677: error: 'pcVar4' was not declared in this scope",
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:720: error: 'm_BaseUnitData' was not declared in this scope",
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:724: error: expected unqualified-id before '(' token",
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:725: error: no match for 'operator-' in 'EMPTY_WSTRING - 6'",
+      "build-decomp/automation-audit/0x803100/BaseUnit.cpp:725: error: cannot convert 'const std::wstring' to 'const wchar_t*' for argument '2' to 'int wmemcmp(const wchar_t*, const wchar_t*, size_t)'"
+    ]
+  },
+  {
+    "address": "0xd5e7c0",
+    "name": "CAIStatWatcher::CAIStatWatcher(CDataGroup*, CAIManager*)",
+    "bytes": 4437,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:23: error: 'string' was not declared in this scope",
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:23: error: 'psVar4' was not declared in this scope",
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:55: error: invalid conversion from 'int' to 'EAISTAT_TYPE'",
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:56: error: invalid conversion from 'int' to 'EAISTAT_LOGIC'",
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:73: error: invalid conversion from 'int' to 'EAISTAT_TARGET'",
+      "build-decomp/automation-audit/0xd5e7c0/AIStatWatcher.cpp:74: error: invalid conversion from 'int' to 'UNITTYPES::EUNITTYPES'"
+    ]
+  },
+  {
+    "address": "0x6ff300",
+    "name": "CDescriptor::SerializeDescriptor(CDataGroup*, unsigned int)",
+    "bytes": 3587,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:552: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [5], std::wstring*, bool)'",
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:554: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [12], std::wstring*, bool)'",
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:557: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [5], std::wstring*, bool)'",
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:559: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [13], std::wstring*, bool)'",
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:591: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [5], std::wstring*, bool)'",
+      "build-decomp/automation-audit/0x6ff300/Descriptor.cpp:612: error: no matching function for call to 'CDataGroup::AddDataValue(const wchar_t [5], std::wstring*, bool)'"
+    ]
+  },
+  {
+    "address": "0xe4e3a0",
+    "name": "CFileSystem::getFileInfo(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool, bool, bool)",
+    "bytes": 3394,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:379: error: 'string' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:379: error: 'psVar1' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:380: error: 'wstring' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:380: error: 'pwVar2' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:381: error: 'psVar3' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4e3a0/FileSystem.cpp:382: error: 'allocator' was not declared in this scope"
+    ]
+  },
+  {
+    "address": "0xa60190",
+    "name": "CResourceSettings::CResourceSettings()",
+    "bytes": 3324,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:32: error: stray 'L' in program",
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:34: error: stray 'L' in program",
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:36: error: stray 'L' in program",
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:38: error: stray 'L' in program",
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:40: error: stray 'L' in program",
+      "build-decomp/automation-audit/0xa60190/ResourceSettings.cpp:42: error: stray 'L' in program"
+    ]
+  },
+  {
+    "address": "0xe4f0f0",
+    "name": "CFileSystem::getFilesInDirectory(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool, bool, bool, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+    "bytes": 3087,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:528: error: 'string' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:528: error: 'psVar7' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:532: error: 'psVar11' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:565: error: 'PTR__SharedPtr_00fff510' was not declared in this scope",
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:570: error: expected primary-expression before ')' token",
+      "build-decomp/automation-audit/0xe4f0f0/FileSystem.cpp:572: error: 'string' is not a member of 'std::string'"
+    ]
+  },
+  {
+    "address": "0xc78930",
+    "name": "CGraph::loadGraphLine(CDataGroup*)",
+    "bytes": 1130,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:110: error: 'm_iUnknown20' was not declared in this scope",
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:113: error: call of overloaded 'GetDataValue(const wchar_t [2], double)' is ambiguous",
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:115: error: call of overloaded 'GetDataValue(const wchar_t [5], double)' is ambiguous",
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:117: error: call of overloaded 'GetDataValue(const wchar_t [5], double)' is ambiguous",
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:122: error: 'm_iUnknown40' was not declared in this scope",
+      "build-decomp/automation-audit/0xc78930/Graph.cpp:123: error: 'm_fUnknown44' was not declared in this scope"
+    ]
+  },
+  {
+    "address": "0xc731f0",
+    "name": "CFileReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+    "bytes": 1615,
+    "status": "compile-error",
+    "first_errors": [
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:129: error: 'wstring' was not declared in this scope",
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:129: error: expected ';' before 'wVar3'",
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:141: error: 'string' was not declared in this scope",
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:141: error: expected ';' before 'local_d0'",
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:142: error: expected ';' before 'local_c8'",
+      "build-decomp/automation-audit/0xc731f0/FileReader.cpp:143: error: expected ';' before 'local_b8'"
+    ]
+  }
+]

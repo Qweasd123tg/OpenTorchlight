@@ -1,0 +1,37 @@
+[
+  {
+    "literal": "L\"media\\\\resources.dat\"",
+    "before": "consume(L\"media\\resources.dat\");",
+    "after": "consume(L\"media\\\\resources.dat\");",
+    "preserved_before": false,
+    "preserved_after": true
+  },
+  {
+    "literal": "L\"media\\\\levelsets\\\\\"",
+    "before": "consume(L\"media\\levelsets\\\");",
+    "after": "consume(L\"media\\\\levelsets\\\\\");",
+    "preserved_before": false,
+    "preserved_after": true
+  },
+  {
+    "literal": "L\"line\\nnext\"",
+    "before": "consume(L\"line\nnext\");",
+    "after": "consume(L\"line\\nnext\");",
+    "preserved_before": false,
+    "preserved_after": true
+  },
+  {
+    "literal": "L\"quote\\\"here\"",
+    "before": "consume(L\"quote\\\"here\");",
+    "after": "consume(L\"quote\\\"here\");",
+    "preserved_before": true,
+    "preserved_after": true
+  },
+  {
+    "literal": "L\"simple\"",
+    "before": "consume(L\"simple\");",
+    "after": "consume(L\"simple\");",
+    "preserved_before": true,
+    "preserved_after": true
+  }
+]

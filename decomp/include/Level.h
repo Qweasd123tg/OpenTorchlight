@@ -1,6 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include <string>
 #include <OgreVector3.h>
 #include <OgreAxisAlignedBox.h>
 
@@ -42,6 +43,8 @@ public:
                                        EAlignment alignment, float radius, bool includeLiving, bool includeDead,
                                        TArrayList<CCharacter*>& characters);
 
+    const std::wstring& getDungeonName() { return m_sDungeonName; }
+    int getLevelDepth() { return m_iLevelDepth; }
     CLevelTemplateData* getLevelTemplateData() { return m_pLevelTemplateData; }
     TArrayList<CEditorScene*>& getRoomScenes() { return m_RoomScenes; }
     TLinkedList<CCharacter*>* getCharacters() { return m_pCharacters; }
@@ -50,9 +53,13 @@ private:
     TArrayList<CEditorScene*> m_RoomScenes;
     char m_LevelData28[0x98 - 0x28];
     TLinkedList<CCharacter*>* m_pCharacters;
-    char m_LevelDataA0[0x1d8 - 0xa0];
+    char m_LevelDataA0[0x1a4 - 0xa0];
+    int m_iLevelDepth;
+    char m_LevelData1A8[0x1d8 - 0x1a8];
     CLevelTemplateData* m_pLevelTemplateData;
-    char m_LevelData1E0[0x2f0 - 0x1e0];
+    char m_LevelData1E0[0x280 - 0x1e0];
+    std::wstring m_sDungeonName;
+    char m_LevelData288[0x2f0 - 0x288];
 };
 
 #endif

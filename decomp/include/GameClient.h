@@ -1,6 +1,7 @@
 #ifndef GAMECLIENT_H
 #define GAMECLIENT_H
 
+#include <string>
 #include <OgreRenderTargetListener.h>
 #include <OgreRenderQueue.h>
 #include "RunicCore.h"
@@ -13,6 +14,7 @@ class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
 {
 public:
+    void warpLevels(std::wstring dungeon, int delta, int depth, bool waypoint, std::wstring warpName, bool flag);
     virtual ~CGameClient();
     virtual void preRenderTargetUpdate(const Ogre::RenderTargetEvent&);
     virtual void postRenderTargetUpdate(const Ogre::RenderTargetEvent&);
