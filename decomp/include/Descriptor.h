@@ -117,6 +117,9 @@ public:
     CEditorBaseObject* postProcessObject(CDataGroup* group, CDescriptorLoadConfiguration* configuration);
     void postProcessObjects(CDataGroup* group, CDescriptorLoadConfiguration* configuration);
 
+    unsigned int getObjectCount() const { return m_Objects.size(); }
+    CEditorBaseObject* getObject(unsigned int index) { return m_Objects[index]; }
+
 protected:
     std::wstring m_sName;
     std::wstring m_sDescription;
