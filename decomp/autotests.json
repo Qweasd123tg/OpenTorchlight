@@ -5,6 +5,12 @@
   "tried": 10,
   "code": "18f5462894a5128e"
  },
+ "0x5a6860": {
+  "name": "CPathNode::setVisible(bool)",
+  "killed": 5,
+  "tried": 5,
+  "code": "7ea259b0c7b9bd56"
+ },
  "0x6f90e0": {
   "name": "CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*)",
   "killed": 5,
