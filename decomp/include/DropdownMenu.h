@@ -11,6 +11,7 @@
 #include <string>
 #include "DynamicPropertyFile.h"
 #include "GameEnums.h"
+#include "GameUI.h"
 #include "GenericModel.h"
 #include "ResourceManager.h"
 #include "RunicCore.h"

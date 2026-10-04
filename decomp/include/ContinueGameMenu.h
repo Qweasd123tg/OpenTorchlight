@@ -11,6 +11,7 @@
 #include <string>
 #include "DropdownMenu.h"
 #include "GameEnums.h"
+#include "GameUI.h"
 #include "ResourceManager.h"
 #include "Settings.h"
 class CGameUI;
