@@ -162,6 +162,7 @@ public:
     int m_iUnknown298;
     unsigned char m_gap29C[0x4] __attribute__((aligned(4)));
     CAttackDescription* m_pAttackDescription;
+    // Second attack slot: also holds LSLASH/LPISTOL/LWAND or the sole BOW attack.
     CAttackDescription* m_pAttackDescriptionOverride;
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pUnitModelSecondary;
@@ -187,7 +188,7 @@ public:
     int m_iUnknown344;
     bool m_bUnknown348;
     unsigned char m_gap349[0x7];
-    std::vector<int> m_ElementalDamageTypes;
+    std::vector<EDAMAGE_TYPES> m_ElementalDamageTypes;
     std::vector<int> m_ElementalDamageMinimums;
     std::vector<int> m_ElementalDamageMaximums;
     long long m_iUnknown398;

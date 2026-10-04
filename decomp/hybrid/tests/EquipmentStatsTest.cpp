@@ -101,12 +101,12 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     object->m_iMinimumDamage=damage[(c.seed/2)%7];
     object->m_iMaximumDamage=c.seed%3 ? object->m_iMinimumDamage : damage[(c.seed+3)%7];
     object->m_bUnknown348=(c.seed&2)!=0;
-    typedef std::vector<int> Ints;
-    new (&object->m_ElementalDamageTypes) Ints();
+    typedef std::vector<int> Ints; typedef std::vector<EDAMAGE_TYPES> DamageTypes;
+    new (&object->m_ElementalDamageTypes) DamageTypes();
     new (&object->m_ElementalDamageMinimums) Ints();
     new (&object->m_ElementalDamageMaximums) Ints();
     for (unsigned i=0;i<c.seed%4;++i) {
-        object->m_ElementalDamageTypes.push_back((c.seed+i)%7);
+        object->m_ElementalDamageTypes.push_back(static_cast<EDAMAGE_TYPES>((c.seed+i)%7));
         object->m_ElementalDamageMinimums.push_back(99);
         object->m_ElementalDamageMaximums.push_back(damage[(c.seed+i)%7]);
     }
@@ -134,7 +134,7 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     number(affixCalls);number(globalsCalls);number(set.m_Affixes.size());
     patches.restore();
     typedef std::wstring Text;active->~Text();inactive->~Text();
-    object->m_ElementalDamageTypes.~Ints();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();
+    object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();
     object->m_SocketedEquipment.~TArrayList<CEquipment*>();
 }
 void original(void* p,autotest::Capture& c) {side(*static_cast<Case*>(p),false,c);}

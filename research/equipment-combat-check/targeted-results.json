@@ -1,0 +1,67 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "armor_effect_flag_inverted",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "unclamped_armor_rng_upper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_damage_rng",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "zero_grade_forces_maximum",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "negative_armor_physical_ignored",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "zero_weapon_physical_ignored",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "armor_not_cached_across_effects",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reset_minimum_not_maximum_vector",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "bow_in_primary_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "staff_not_polearm",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_armor_element_types",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "attack_speed_scale",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -1174,3 +1174,49 @@ Final integrated check: 106 tests, 0 failed; 1244 accepted game functions /
 The three recovered Equipment text functions total 50347 original bytes;
 Equipment's remaining functions and full-game behavior are not covered by
 that count.
+
+## Equipment combat-stat initialization (2026-10-04)
+
+`CEquipment::calculateCombatStats(bool)` (0x880950, 6615 original bytes)
+reconstructs data-driven damage/armor setup, graph scaling, elemental armor
+effect creation, inherent weapon damage, missile-name normalization and
+attack-description replacement. The flag suppresses the creation of elemental
+armor effects, not the rest of the calculation. The original random draw is
+kept even when +0x28c subsequently causes its result to be replaced by maximum
+damage. Armor-range upper bounds, negative physical-armor handling, zero
+physical-weapon percentages, cached armor values and operation order are
+preserved.
+
+Bow creates only the +0x2a8 attack slot. Crossbow/Rifle/Polearm/Staff use one
+primary attack; Pistols/Wands/default melee build their original paired
+animation names. The historical `m_pAttackDescriptionOverride` name now has
+an explicit comment: this is also the second attack slot, not universally an
+independent override. The 0x80 AttackDescription constructor layout is described
+and asserted, including its strings, damage arrays, ranges, speed and to-hit.
+Elemental type storage is corrected to `std::vector<EDAMAGE_TYPES>` following
+the original addInherentDamage template instantiation; its layout is unchanged.
+
+`EquipmentCombatStatsTest.cpp` compares 1122 scenarios twice per side. Original
+graph setters, inherent-damage insertion, effect/attack constructors and
+cleanup, string handling and allocation execute on both sides. Data/graph
+providers, random draws, text destruction and effect ownership are controlled
+spies. The test compares collaborator calls, initialized effect/attack fields,
+object counters, scalar results and all three elemental vectors. It includes
+both flags, weapon subtypes, no/one/two old attacks, reversed armor ranges,
+percentage boundaries, repeated calculation, and callbacks changing state.
+It does not simulate a hit against a monster or prove the full combat engine.
+The generated test completed 0/200 cases and was not accepted.
+
+Sampled mutation results: 20/21 viable candidates killed (24 probed). The
+survivor changes the final CEffect constructor boolean from false to true:
+the original stores this at +0x37, then initValues unconditionally clears it
+at 0x7dc83a before normal constructor completion. The original false argument
+is retained; the survivor is reported rather than silently removed from the
+score. All 12 additional targeted branch mutations were killed. Reproduction
+scripts/results are under `research/equipment-combat-check/`.
+
+Final integrated check: 107 tests, 0 failed; 1245 accepted game functions /
+371201 original bytes. The increment over 8d42505 is one 6615-byte function.
+The four Equipment functions recovered in this series total 56962 original
+bytes. Standalone linking, game-world effects and complete gameplay validation
+remain separate work.

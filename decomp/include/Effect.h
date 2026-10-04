@@ -9,6 +9,7 @@ class CEffect : public CRunicCore
 {
 public:
     enum ECALCULATETYPES {};
+    CEffect(EEFFECT_TYPE,bool,EEFFECT_ACTIVATION,float,float,float,bool);
     virtual ~CEffect();
     float value(EEFFECT_VALUES value);
     void calculateBaseValue(ECALCULATETYPES type);

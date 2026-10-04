@@ -112,8 +112,8 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     static const int damage[]={0,1,3,-2,7,2147483647};
     object->m_iMinimumDamage=damage[(c.seed/9)%6];object->m_iMaximumDamage=c.seed%3 ? object->m_iMinimumDamage : damage[(c.seed/9+2)%6];
     object->m_iUnknown338=static_cast<int>(c.seed%29)-7;
-    typedef std::vector<int> Ints;new(&object->m_ElementalDamageTypes) Ints();new(&object->m_ElementalDamageMinimums) Ints();new(&object->m_ElementalDamageMaximums) Ints();
-    for(unsigned i=0;i<c.seed%4;++i) {object->m_ElementalDamageTypes.push_back((c.seed+i)%7);object->m_ElementalDamageMinimums.push_back(88);object->m_ElementalDamageMaximums.push_back(damage[(c.seed+i)%5]);}
+    typedef std::vector<int> Ints; typedef std::vector<EDAMAGE_TYPES> DamageTypes;new(&object->m_ElementalDamageTypes) DamageTypes();new(&object->m_ElementalDamageMinimums) Ints();new(&object->m_ElementalDamageMaximums) Ints();
+    for(unsigned i=0;i<c.seed%4;++i) {object->m_ElementalDamageTypes.push_back(static_cast<EDAMAGE_TYPES>((c.seed+i)%7));object->m_ElementalDamageMinimums.push_back(88);object->m_ElementalDamageMaximums.push_back(damage[(c.seed+i)%5]);}
     new(&object->m_SocketedEquipment) TArrayList<CEquipment*>(1);object->m_iSocketCount=c.seed%4;
     for(unsigned i=0;i<(c.seed/4)%5;++i)object->m_SocketedEquipment.add(object);
     unsigned long long resources[(sizeof(CResourceManager)+7)/8];std::memset(resources,0,sizeof(resources));
@@ -127,7 +127,7 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     }
     patches.restore();typedef std::wstring Text;object->m_sPrefix.~Text();object->m_sSuffix.~Text();
     for(int i=0;i<5;++i){CAffix* a=reinterpret_cast<CAffix*>(affixStorage[i]);a->m_sPrefix.~Text();a->m_sSuffix.~Text();}
-    list->~TArrayList<CAffix*>();object->m_ElementalDamageTypes.~Ints();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();object->m_SocketedEquipment.~TArrayList<CEquipment*>();
+    list->~TArrayList<CAffix*>();object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();object->m_SocketedEquipment.~TArrayList<CEquipment*>();
 }
 void original(void* p,autotest::Capture& c) {side(*static_cast<Case*>(p),false,c);}
 void recovered(void* p,autotest::Capture& c) {side(*static_cast<Case*>(p),true,c);}

@@ -1,6 +1,9 @@
 #include "EmptyStrings.h"
 #include "Equipment.h"
 #include "EffectManager.h"
+#include "Effect.h"
+#include "DataGroup.h"
+#include "Utilities.h"
 #include "Level.h"
 #include "AttackDescription.h"
 #include "Set.h"
@@ -450,4 +453,101 @@ std::wstring CEquipment::getEquipmentType(bool showQuality)
     if (end!=-1 && start!=-1 && start+1<end)
         result.replace(start,end-start+1,L"");
     return result;
+}
+
+void CEquipment::calculateCombatStats(bool skipArmorEffects)
+{
+    m_iMinimumDamage=m_pDataGroup->GetDataValue(L"MINDAMAGE",0);
+    m_iMaximumDamage=m_pDataGroup->GetDataValue(L"MAXDAMAGE",0);
+    float range=m_pDataGroup->GetDataValue(L"RANGE",0.45f);
+    float strikeRange=m_pDataGroup->GetDataValue(L"STRIKERANGE",0.6f);
+    int toHit=m_pDataGroup->GetDataValue(L"TOHIT",0);
+    m_sUnknown400=STRINGS::StringUpper(m_pDataGroup->GetDataValue(L"MISSILE",EMPTY_WSTRING));
+    m_fUnknown408=m_pDataGroup->GetDataValue(L"AI_ATTACKCOOLDOWN",0.0f);
+    int speed=m_pDataGroup->GetDataValue(L"SPEED",100);
+    int armorRarity=m_pDataGroup->GetDataValue(L"RARITY_AMR_MOD",100);
+    int armorSpecial=m_pDataGroup->GetDataValue(L"SPECIAL_AMR_MOD",100);
+    m_iUnknown338=m_pDataGroup->GetDataValue(L"ARMOR",0);
+    int armorMinimum=m_pDataGroup->GetDataValue(L"ARMORMIN",0);
+    int armorMaximum=m_pDataGroup->GetDataValue(L"ARMORMAX",0);
+    if (m_iUnknown338!=0)
+        setGraphAC(static_cast<int>(m_iUnknown338*(armorRarity/100.0f)*(armorSpecial/100.0f)));
+    else if (armorMaximum!=0 && armorMinimum!=0)
+    {
+        int armor=UTILITIES::randomIntegerBetweenVolatile(armorMinimum,armorMinimum>armorMaximum?armorMinimum:armorMaximum);
+        setGraphAC(static_cast<int>(armor*(armorRarity/100.0f)*(armorSpecial/100.0f)));
+    }
+    int damageRarity=m_pDataGroup->GetDataValue(L"RARITY_DMG_MOD",100);
+    int damageSpeed=m_pDataGroup->GetDataValue(L"SPEED_DMG_MOD",100);
+    if (m_iMaximumDamage!=0)
+    {
+        int damage=UTILITIES::randomIntegerBetweenVolatile(m_iMinimumDamage,m_iMaximumDamage);
+        if (m_iUnknown28C>0) damage=m_iMaximumDamage;
+        setGraphDamage(static_cast<int>(damage*(damageRarity/100.0f)*(damageSpeed/100.0f)));
+    }
+    if (ISA(UNITTYPES::ARMOR))
+    {
+        float armor=m_iUnknown338;
+        if (!skipArmorEffects)
+        {
+            static const wchar_t* const keys[]={L"ARMOR_ELECTRIC",L"ARMOR_FIRE",L"ARMOR_ICE",L"ARMOR_POISON"};
+            static const int types[]={39,37,38,40};
+            for (unsigned int i=0;i<4;++i)
+            {
+                int percent=m_pDataGroup->GetDataValue(keys[i],0);
+                if (percent>0)
+                    addNewEffect(new CEffect(static_cast<EEFFECT_TYPE>(types[i]),true,EFFECT_ACTIVATION_PASSIVE,-1000.0f,(percent/100.0f)*armor,1.0f,false));
+            }
+        }
+        int physical=m_pDataGroup->GetDataValue(L"ARMOR_PHYSICAL",-1);
+        if (physical!=-1)
+        {
+            m_iUnknown338=static_cast<int>((physical/100.0f)*armor);
+            if (m_iUnknown338<1) m_iUnknown338=1;
+            m_iUnknown33C=m_iUnknown338;
+        }
+    }
+    for (unsigned int i=0;i<m_ElementalDamageTypes.size();++i) m_ElementalDamageMaximums[i]=0;
+    destroyItemText();
+    if (ISA(UNITTYPES::WEAPON))
+    {
+        float damage=m_iMaximumDamage/100.0f;
+        static const wchar_t* const keys[]={L"DAMAGE_ELECTRIC",L"DAMAGE_FIRE",L"DAMAGE_ICE",L"DAMAGE_POISON"};
+        static const EDAMAGE_TYPES types[]={DAMAGE_ELECTRIC,DAMAGE_FIRE,DAMAGE_ICE,DAMAGE_POISON};
+        for (unsigned int i=0;i<4;++i)
+        {
+            int percent=m_pDataGroup->GetDataValue(keys[i],0);
+            if (percent>0) addInherentDamage(types[i],static_cast<int>(percent*damage));
+        }
+        int physical=m_pDataGroup->GetDataValue(L"DAMAGE_PHYSICAL",-1);
+        if (physical>=0) m_iMaximumDamage=static_cast<int>(physical*damage);
+        m_iMinimumDamage=m_iMaximumDamage;
+        m_iUnknown340=m_iMaximumDamage;
+        if (m_pAttackDescriptionOverride) {delete m_pAttackDescriptionOverride;m_pAttackDescriptionOverride=NULL;}
+        if (m_pAttackDescription) {delete m_pAttackDescription;m_pAttackDescription=NULL;}
+        float attackSpeed=speed/100.0f;
+        if (ISA(UNITTYPES::BOW))
+            m_pAttackDescriptionOverride=new CAttackDescription("BOW",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        else if (ISA(UNITTYPES::CROSSBOW))
+            m_pAttackDescription=new CAttackDescription("CROSSBOW",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        else if (ISA(UNITTYPES::RIFLE))
+            m_pAttackDescription=new CAttackDescription("RIFLE",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        else if (ISA(UNITTYPES::PISTOL))
+        {
+            m_pAttackDescription=new CAttackDescription("RPISTOL",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+            m_pAttackDescriptionOverride=new CAttackDescription("LPISTOL",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        }
+        else if (ISA(UNITTYPES::WAND))
+        {
+            m_pAttackDescription=new CAttackDescription("RWAND",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+            m_pAttackDescriptionOverride=new CAttackDescription("LWAND",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        }
+        else if (ISA(UNITTYPES::POLEARM) || ISA(UNITTYPES::STAFF))
+            m_pAttackDescription=new CAttackDescription("POLEARM",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        else
+        {
+            m_pAttackDescription=new CAttackDescription("RSLASH",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+            m_pAttackDescriptionOverride=new CAttackDescription("LSLASH",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);
+        }
+    }
 }
