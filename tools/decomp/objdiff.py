@@ -335,14 +335,14 @@ class ObjectSide(Normalizer):
         for r in relocs:
             if r.type in PC_RELATIVE:
                 name = self.target_name(r.symbol, r.addend + (nxt - r.offset), mnemonic)
-                operands = re.sub(r"-?0x[0-9a-f]+\(%rip\)", f"[{name}](%rip)", operands, count=1)
+                operands = re.sub(r"-?0x[0-9a-f]+\(%rip\)", lambda _: f"[{name}](%rip)", operands, count=1)
             elif r.type in ABSOLUTE:
                 name = self.target_name(r.symbol, r.addend, mnemonic)
                 imm_last = r.offset == nxt - 4 and "$" in operands
                 if imm_last:
-                    operands = re.sub(r"\$0x[0-9a-f]+", f"$[{name}]", operands, count=1)
+                    operands = re.sub(r"\$0x[0-9a-f]+", lambda _: f"$[{name}]", operands, count=1)
                 else:
-                    operands = re.sub(r"(?<![\w%$])0x[0-9a-f]+(?=\()", f"[{name}]", operands, count=1)
+                    operands = re.sub(r"(?<![\w%$])0x[0-9a-f]+(?=\()", lambda _: f"[{name}]", operands, count=1)
         return f"{mnemonic} {operands}".strip()
 
 
