@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "DamageShapeDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "DamageShape.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CDamageShapeDescriptor::CDamageShapeDescriptor()
     : CShapeDescriptor(L"Damage Shape", L"Causes damage to units", L"damageshape", true, true, false)
@@ -24,4 +29,65 @@ CDamageShapeDescriptor::CDamageShapeDescriptor()
 
 CDamageShapeDescriptor::~CDamageShapeDescriptor()
 {
+}
+
+std::wstring CDamageShapeDescriptor::GetDamageTypeStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
+{
+    if (index >= 7)
+        return gDAMAGE_TYPES[0];
+
+    return gDAMAGE_TYPES[index];
+}
+
+unsigned int CDamageShapeDescriptor::getAlignmentIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int i = 0; i < 7; ++i)
+        if (::KALIGNMENT_STRINGS[i] == value)
+            return i;
+
+    return 0;
+}
+
+unsigned int CDamageShapeDescriptor::GetDamageTypeIDByString(
+    CEditorScene*,
+    CEditorBaseObject*,
+    const std::wstring& value,
+    void*)
+{
+    for (unsigned int i = 0; i < 7; ++i) {
+        if (gDAMAGE_TYPES[i] == value)
+            return i;
+    }
+    return 0;
+}
+
+void CDamageShapeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    if (object != NULL) {
+        CDamageShape* damageShape = dynamic_cast<CDamageShape*>(object);
+        if (damageShape != NULL) {
+            typedef void (*InputLogicMethod)(CDamageShape*, bool);
+            InputLogicMethod method = reinterpret_cast<InputLogicMethod>(
+                *reinterpret_cast<void**>(damageShape) + 0x40 / sizeof(void*));
+
+            if (event == 2) {
+                method(damageShape, true);
+                return;
+            }
+            if (event == 3) {
+                method(damageShape, false);
+                return;
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CDamageShapeDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CDamageShape(scene->getResourceManager());
+}
+
+CDamageShapeDescriptor* getSingleton()
+{
+    return reinterpret_cast<CDamageShapeDescriptor*>(g_DescriptorController);
 }
