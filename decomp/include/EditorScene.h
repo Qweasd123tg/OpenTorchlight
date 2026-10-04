@@ -47,6 +47,7 @@ public:
 
     CEditorBaseObject* GetObjectInScene(long long guid);
     void AddDescriptor(const wchar_t* name);
+    void GetObjectsCreatedByADescriptor(const std::wstring& name, TArrayList<CEditorBaseObject*>* objects);
     void EditorBaseObjectChangedID(CEditorBaseObject* object, long long oldGuid, long long newGuid);
 
     CDescriptorManager* getDescriptorManager() { return m_pDescriptorManager; }

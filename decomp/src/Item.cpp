@@ -1,5 +1,8 @@
 #include "EmptyStrings.h"
 #include "Item.h"
+#include "ItemSaveState.h"
+#include "UnitSpawner.h"
+#include "EditorScene.h"
 #include "SoundBank.h"
 #include "DataGroup.h"
 #include "GenericModel.h"
@@ -255,4 +258,58 @@ void CItem::calculateActiveRange(const Ogre::Vector3& viewer)
         bool shadows = !(distance > CGameGlobals::getSingleton()->getUnitShadowRange() || std::fabs(viewer.y-position.y) > 4.0f);
         static_cast<CGenericModel*>(getUnitModel())->setCastsShadows(shadows);
     }
+}
+
+void CItem::fillSaveState(CItemSaveState& state, int index, bool flag)
+{
+    state.m_vLocalPosition = getPosition(false);
+    if (m_iRoomIndex == -1)
+        m_iRoomIndex = getLevel()->getRoomIndexThatPositionIsIn(getPosition(true));
+    state.m_iRoomIndex = m_iRoomIndex;
+    state.m_iUnitValue60 = m_iUnitValue1A0;
+    state.m_iQuestGuid = m_iQuestGuid;
+    state.m_iQuestState = m_iQuestState;
+    state.m_iOriginalGuid = getOriginalGuid();
+    state.m_iParentHierarchyHash = getParentHierarchyHashCode();
+    state.m_bSaveFlag48 = m_bSaveFlag191;
+    state.m_vWorldPosition = getPosition(true);
+    state.m_mOrientation = getOrientation();
+    state.m_iSpawnerGuid = m_iSpawnerGuid;
+    state.m_iIndex = index;
+    state.m_bSaveFlag5C = flag;
+    state.m_sItemName = m_sItemName;
+    state.m_bEnabled = getEnabled();
+    state.m_bItemFlag17C = m_bItemFlag1F2;
+    state.m_bBlocksPath = m_bBlocksPath;
+}
+
+void CItem::applySaveState(CItemSaveState& state)
+{
+    setPosition(state.m_vLocalPosition);
+    setOrientation(state.m_mOrientation, false);
+    m_sItemName = state.m_sItemName;
+    setEnabled(state.m_bEnabled);
+    m_bItemFlag1F2 = state.m_bItemFlag17C;
+    m_iQuestGuid = state.m_iQuestGuid;
+    m_iQuestState = state.m_iQuestState;
+    m_iRoomIndex = state.m_iRoomIndex;
+    if (state.m_iSpawnerGuid != 0xffffffffLL && getLevel() != NULL)
+    {
+        CLevel* level = getLevel();
+        int rooms = static_cast<int>(level->getRoomScenes().size());
+        for (int i = 0; i < rooms; ++i)
+        {
+            CEditorScene* scene = level->getRoomScenes()[i];
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Unit Spawner", &objects);
+            int count = static_cast<int>(objects.size());
+            for (int j = 0; j < count; ++j)
+            {
+                CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(objects[j]);
+                if (spawner != NULL && spawner->getOriginalGuid() == state.m_iSpawnerGuid)
+                    spawner->addSpawnedUnit(this);
+            }
+        }
+    }
+    m_bBlocksPath = state.m_bBlocksPath;
 }

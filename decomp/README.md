@@ -764,3 +764,17 @@ LevelTemplateData::load. Проверенные размеры/vtable: Level 0x2
 Level.h расширен с прежней неполной области 0xa0, existing characters +0x98
 сохранён. Полный check.py: 60 тестов PASS, 378/5247, 91 717 байт.
 Item: 16/20, остаются fillSaveState, applySaveState, snapToGround, update.
+
+Item save state: fillSaveState MATCH (548 байт), applySaveState принят ручным
+сравнением (677 байт). 96 сценариев включают данные/позицию/матрицу, несколько
+сцен, поиск descriptor, настоящий dynamic_cast, совпадающие/несовпадающие/
+повторные spawner и регистрацию safe-pointer/observer оригинальными методами.
+Сравниваются данные Item, привязанный GUID, счётчики/индексы safe pointer,
+карта listeners. Sentinel сохранён как 0xffffffffLL, не -1LL.
+Автотест 2/10 не принят. Ручные мутации сначала 9/10: всегда NULL первым
+элементом скрывал ошибку начала цикла с 1; добавлен spawner на нулевую позицию,
+повторно 10/10. Это caller-тест на синтетическом мире, не загрузка кампании.
+ItemSaveState 0x180, Shape 0x168, UnitSpawner 0x240 и vtable проверены;
+сохранены Item 0x220/Player 0xa70 и смещения остальных базовых полей.
+Полный check.py: 61 тест PASS, 380/5247, 92 942 байта. Item: 18/20;
+остались snapToGround и основной update.

@@ -77,15 +77,24 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
-    char m_BaseUnitData[0x18d - 0x100];
+    char m_BaseUnitData[0x170 - 0x100];
+    long long m_iQuestGuid;
+    int m_iQuestState;
+    int m_iRoomIndex;
+    long long m_iSpawnerGuid;
+    char m_BaseUnitData188[0x18d - 0x188];
     bool m_bBlocksPath;
-    char m_BaseUnitData18E[0x198 - 0x18e];
+    char m_BaseUnitData18E[0x191 - 0x18e];
+    bool m_bSaveFlag191;
+    char m_BaseUnitData192[0x198 - 0x192];
     bool m_bRangeEnabled;
     bool m_bInActiveRange;
     bool m_bInFadeRange;
     bool m_bBaseUnitFlag19B;
     bool m_bPathingFlag19C;
-    char m_BaseUnitData19D[0x1ac - 0x19d];
+    char m_BaseUnitData19D[0x1a0 - 0x19d];
+    long long m_iUnitValue1A0;
+    char m_BaseUnitData1A8[0x1ac - 0x1a8];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
     char m_BaseUnitData2[0x10];
