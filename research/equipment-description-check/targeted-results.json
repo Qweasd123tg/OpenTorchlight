@@ -1,0 +1,57 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "suffix_requires_best_rank",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "prefix_equal_rank_replaces",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "suffix_does_not_update_rank",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "physical_damage_requires_positive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "elemental_negative_included",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strict_speed_threshold",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "armor_percent_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "armor_flat_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_trinket_retranslation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strip_one_newline_only",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

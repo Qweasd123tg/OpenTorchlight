@@ -26,6 +26,7 @@ class CLevelTemplateData;
 class CLevel : public CRunicCore
 {
 public:
+    CCharacter* getPlayer();
     void updateNPCIcons();
     virtual ~CLevel();
     void removeUnit(CBaseUnit* unit,bool flag);

@@ -129,9 +129,9 @@ public:
     void loadModel(std::wstring, std::wstring);
     void reskinByClass(std::wstring);
     CEquipment* effectsDescription(EEFFECT_ACTIVATION, bool, bool);
-    CEquipment* getEquipmentEffects();
+    std::wstring getEquipmentEffects();
     CEquipment* getEquipmentType(bool);
-    CEquipment* getEquipmentDescription(bool, bool);
+    std::wstring getEquipmentDescription(bool, bool);
     std::wstring getEquipmentStats();
 
     // fields
@@ -169,8 +169,8 @@ public:
     void* m_pUnknown2C8;
     void* m_pUnknown2D0;
     void* m_pUnknown2D8;
-    void* m_pUnknown2E0;
-    void* m_pUnknown2E8;
+    std::wstring m_sPrefix;
+    std::wstring m_sSuffix;
     unsigned char m_fUnknown2F0[0x8] __attribute__((aligned(8)));
     unsigned char m_fUnknown2F8[0x8] __attribute__((aligned(8)));
     unsigned char m_fUnknown300[0x8] __attribute__((aligned(8)));

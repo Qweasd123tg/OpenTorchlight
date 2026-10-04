@@ -1106,3 +1106,42 @@ Final integrated check for this Equipment change: 104 tests, 0 failed;
 1242 accepted game functions / 338458 original bytes. The new contribution
 is one 24219-byte function, not a complete Equipment TU. Full standalone
 relinking, campaign play and all possible inputs remain outside this check.
+
+## Equipment description (2026-10-04)
+
+`CEquipment::getEquipmentDescription(bool,bool)` (0x88f420, 16955 original
+bytes) reconstructs item-name/affix decoration, sockets, buy/sell prices,
+quality and type labels, weapon damage/speed, modified armor, level
+requirements and effect text. Its return type and the called
+`getEquipmentEffects()` are `std::wstring` (hidden return storage); the latter
+still executes in the original ELF. Prefix/suffix strings are at 0x2e0/0x2e8.
+The effect-manager affix list at +0x10 is exposed without moving other fields.
+
+Preserved original details include the suffix's nonnegative-rank test and
+shared prefix/suffix rank, cached affix names, string assignment through
+`c_str()`, the extra Trinket translation, no space after the Potion/Scroll
+colon, nonzero physical damage versus positive elemental damage, two separate
+ceilings in armor calculation, and repeated trimming of trailing newlines.
+These are reproduction details, not intentional game-design changes.
+
+`EquipmentDescriptionTest.cpp` compares 1224 scenarios twice on each side,
+including cold/warm translation caches, all description categories and price
+flags, qualities, empty/Unicode text, equal and nonmonotonic affix ranks,
+embedded-NUL affix strings, thresholds, and callbacks that mutate identification,
+elemental damage and armor state. Both-crash cases and truncated captures are
+rejected. Collaborators are controlled spies: this validates formatting,
+selected state changes and call protocol, not the actual market/combat/level
+systems. The generated test completed 0/200 cases (all both-failed), so its
+reported PASS was not accepted as evidence.
+
+The hand test killed 22/22 viable sampled mutations out of 24 candidates
+(the tool discarded two). One initial survivor exposed the missing
+single-character effect-string case; that fixture was added and the pass
+repeated. Ten additional targeted mutations of important branches were all
+killed. Reproduction scripts and results are under
+`research/equipment-description-check/`. These are sampled regression checks,
+not a proof over every possible input or allocation failure.
+
+The final integrated check passed 105 tests with 0 failed: 1243 accepted game
+functions / 355413 original bytes. The increment over f614e5d is one
+16955-byte function. Equipment remains a partially recovered TU.

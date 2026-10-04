@@ -1,0 +1,121 @@
+{
+ "0x88f420": {
+  "name": "CEquipment::getEquipmentDescription(bool, bool)",
+  "tried": 22,
+  "killed": 22,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 164: 'result=result+L\"\\n\"+g_Sockets+L\": \"+STRINGS::GetValueAsWString(m_SocketedEquipment.size())+L\"/\"+STRINGS::GetValueAsWString(m_iSocketCount);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 171: '4' -> '5'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 173: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 228: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 139: 'else result=getItemName();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 115: 'if (g_Unidentified.empty()) g_Unidentified=CStringTranslate::getSinglton()->getTranslateString(L\"Unidentified\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 121: 'if (g_Type.empty()) g_Type=CStringTranslate::getSinglton()->getTranslateString(L\"Type\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 172: '5' -> '6'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 217: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 167: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 144: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 266: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 195: 'if (g_Bow.empty()) g_Bow=CStringTranslate::getSinglton()->getTranslateString(L\"Bow\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 172: 'else if (ISA(UNITTYPES::SCROLL)) category=5;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 189: 'if (g_Sword.empty()) g_Sword=CStringTranslate::getSinglton()->getTranslateString(L\"Sword\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 156: 'suffix=affix->m_sSuffix.c_str();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 242: 'result=result+g_Trinket;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 214: 'else result=result+L\"\\n\"+g_Damage+L\": \"+STRINGS::GetValueAsWString(m_iMinimumDamage)+L\"-\"+STRINGS::GetValueAsWString(m_iMaximumDamage);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 169: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 217: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 233: '8' -> '9'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 173: '3' -> '4'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

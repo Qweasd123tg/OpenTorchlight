@@ -34,6 +34,8 @@ public:
     unsigned int createEffects(CDataGroup* data,bool flag);
     CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
+    // Partial layout: the affix list occupies the beginning of the opaque region.
+    TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
 private:
     unsigned char m_EffectData10[0x2c8-0x10];
     TArrayList<CUnitTheme*> m_UnitThemes;
