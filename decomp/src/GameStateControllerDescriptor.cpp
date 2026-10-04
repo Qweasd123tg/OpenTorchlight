@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "GameStateControllerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "GameStateController.h"
 
 CGameStateControllerDescriptor::CGameStateControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -28,4 +33,53 @@ CGameStateControllerDescriptor::CGameStateControllerDescriptor(const wchar_t* na
 
 CGameStateControllerDescriptor::~CGameStateControllerDescriptor()
 {
+}
+
+unsigned int CGameStateControllerDescriptor::getGameStateIDByString(
+    CEditorScene *scene,
+    CEditorBaseObject *object,
+    const std::wstring &value,
+    void *userData)
+{
+    const std::wstring *names =
+        reinterpret_cast<const std::wstring *>(gGAMESTATE_NAMES);
+
+    for (unsigned int i = 0; i < 7; ++i)
+    {
+        if (names[i] == value)
+            return i;
+    }
+
+    return 0;
+}
+
+void CGameStateControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CGameStateController* controller =
+            dynamic_cast<CGameStateController*>(m_Objects[i]);
+
+        if (controller != 0 &&
+            !scene->getResourceManager()->getEditorIsRunning()) {
+            controller->setInitialized();
+        }
+    }
+}
+
+void CGameStateControllerDescriptor::update(float timeDelta)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CGameStateController *controller =
+            dynamic_cast<CGameStateController *>(m_Objects[i]);
+        if (controller != NULL)
+        {
+            controller->update(timeDelta);
+        }
+    }
+}
+
+CEditorBaseObject* CGameStateControllerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CGameStateController(scene->getResourceManager());
 }

@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "LogicTimerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "LogicTimer.h"
 
 CLogicTimerDescriptor::CLogicTimerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -19,4 +24,46 @@ CLogicTimerDescriptor::CLogicTimerDescriptor(const wchar_t* name, const wchar_t*
 
 CLogicTimerDescriptor::~CLogicTimerDescriptor()
 {
+}
+
+void CLogicTimerDescriptor::update(float delta)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CEditorBaseObject* object = m_Objects[i];
+        if (object != NULL)
+        {
+            CLogicTimer* timer = dynamic_cast<CLogicTimer*>(object);
+            if (timer != NULL)
+            {
+                timer->update(delta);
+            }
+        }
+    }
+}
+
+void CLogicTimerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CLogicTimer* timer = dynamic_cast<CLogicTimer*>(object);
+    if (timer != NULL)
+    {
+        switch (event)
+        {
+        case 3:
+            timer->setEnabled(false);
+            break;
+        case 6:
+            timer->resetTimer();
+            timer->setEnabled(true);
+            break;
+        case 2:
+            timer->setEnabled(true);
+            break;
+        }
+    }
+}
+
+CEditorBaseObject* CLogicTimerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CLogicTimer(scene->getResourceManager());
 }

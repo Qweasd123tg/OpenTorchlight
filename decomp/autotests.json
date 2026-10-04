@@ -221,6 +221,12 @@
   "tried": 6,
   "code": "67b55f20870da485"
  },
+ "0xdac620": {
+  "name": "CSkipCutsceneDescriptor::update(float)",
+  "killed": 5,
+  "tried": 5,
+  "code": "37cc980ed782eed8"
+ },
  "0xe4d650": {
   "name": "CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",
   "killed": 8,

@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "LightDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "Light.h"
 
 CLightDescriptor::CLightDescriptor()
     : CPositionableObjectDescriptor(L"Light", L"A light for the level", L"LIGHT", true, false, false, false, true)
@@ -13,4 +18,24 @@ CLightDescriptor::CLightDescriptor()
 
 CLightDescriptor::~CLightDescriptor()
 {
+}
+
+unsigned int CLightDescriptor::GetFileIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return 0;
+}
+
+void CLightDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CLight* light = dynamic_cast<CLight*>(m_Objects[i]);
+        if (light != NULL) {
+            light->updateLightDensity(true);
+        }
+    }
+}
+
+CEditorBaseObject* CLightDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CLight(scene->getResourceManager());
 }

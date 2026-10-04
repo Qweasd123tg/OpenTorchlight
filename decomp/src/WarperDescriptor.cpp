@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "WarperDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "Warper.h"
 
 CWarperDescriptor::CWarperDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, true)
@@ -17,4 +22,30 @@ CWarperDescriptor::CWarperDescriptor(const wchar_t* name, const wchar_t* group, 
 
 CWarperDescriptor::~CWarperDescriptor()
 {
+}
+
+void CWarperDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* source)
+{
+    if (object != 0) {
+        CWarper* warper = dynamic_cast<CWarper*>(object);
+        if (warper != 0) {
+            if (eventType == 3) {
+                warper->setEnabled(false);
+                return;
+            }
+            if (eventType == 0x25) {
+                warper->activate();
+                return;
+            }
+            if (eventType == 2) {
+                warper->setEnabled(true);
+                return;
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CWarperDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CWarper(scene->getResourceManager());
 }

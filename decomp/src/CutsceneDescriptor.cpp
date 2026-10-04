@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "SkipCutsceneDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "SkipCutscene.h"
 
 CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -15,4 +20,35 @@ CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(const wchar_t* name, const wcha
 
 CSkipCutsceneDescriptor::~CSkipCutsceneDescriptor()
 {
+}
+
+void CSkipCutsceneDescriptor::update(float param_1)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        if (m_Objects[i] != NULL) {
+            static_cast<CSkipCutscene *>(m_Objects[i])->update(param_1);
+        }
+    }
+}
+
+void CSkipCutsceneDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject*)
+{
+    CSkipCutscene* skipCutscene = dynamic_cast<CSkipCutscene*>(object);
+
+    if (skipCutscene != NULL) {
+        if (eventType == 2) {
+            skipCutscene->setEnabled(true);
+            return;
+        }
+
+        if (eventType == 3) {
+            skipCutscene->setEnabled(false);
+            return;
+        }
+    }
+}
+
+CEditorBaseObject* CSkipCutsceneDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CSkipCutscene(scene->getResourceManager());
 }

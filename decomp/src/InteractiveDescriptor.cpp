@@ -1,5 +1,11 @@
 #include "EmptyStrings.h"
 #include "InteractiveDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "Interact.h"
+#include "StringUtilities.h"
 
 CInteractiveDescriptor::CInteractiveDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -18,4 +24,48 @@ CInteractiveDescriptor::CInteractiveDescriptor(const wchar_t* name, const wchar_
 
 CInteractiveDescriptor::~CInteractiveDescriptor()
 {
+}
+
+void CInteractiveDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)
+{
+}
+
+unsigned int CInteractiveDescriptor::GetResourceIDByString(
+    CEditorScene* scene,
+    CEditorBaseObject* object,
+    const std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >& value,
+    void* userData)
+{
+    return 0;
+}
+
+std::wstring CInteractiveDescriptor::GetGroupStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
+{
+    if (index == 0)
+        return std::wstring(L"MONSTERS");
+
+    return std::wstring(L"ITEMS");
+}
+
+unsigned int CInteractiveDescriptor::getTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return STRINGS::getStringIndex(value, reinterpret_cast<const std::wstring*>(gINTERACTABLE_TYPE_NAMES), 4, 0, false);
+}
+
+void CInteractiveDescriptor::update(float deltaTime)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CEditorBaseObject *object = m_Objects[i];
+        if (object != NULL) {
+            CInteract *interact = dynamic_cast<CInteract *>(object);
+            if (interact != NULL) {
+                interact->update(deltaTime);
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CInteractiveDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CInteract(scene->getResourceManager());
 }

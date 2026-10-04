@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "CounterDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "Counter.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CCounterDescriptor::CCounterDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -21,4 +26,20 @@ CCounterDescriptor::CCounterDescriptor(const wchar_t* name, const wchar_t* group
 
 CCounterDescriptor::~CCounterDescriptor()
 {
+}
+
+unsigned int CCounterDescriptor::GetCounterTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (unsigned int index = 0; index < 6; ++index)
+    {
+        if (value == ::gCOUNTER_TYPE_NAMES[index])
+            return index;
+    }
+
+    return 0;
+}
+
+CEditorBaseObject* CCounterDescriptor::CreateObject(CEditorScene*)
+{
+    return new CCounter();
 }

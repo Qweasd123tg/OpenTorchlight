@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "OutputIncrementorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "OutputIncrementor.h"
 
 COutputIncrementorDescriptor::COutputIncrementorDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -24,4 +28,24 @@ COutputIncrementorDescriptor::COutputIncrementorDescriptor(const wchar_t* name, 
 
 COutputIncrementorDescriptor::~COutputIncrementorDescriptor()
 {
+}
+
+void COutputIncrementorDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject*)
+{
+    COutputIncrementor* incrementor = dynamic_cast<COutputIncrementor*>(object);
+    if (incrementor != NULL)
+    {
+        switch (eventType)
+        {
+        case 3:
+            incrementor->setEnabled(false);
+            break;
+        case 14:
+            incrementor->increment();
+            break;
+        case 2:
+            incrementor->setEnabled(true);
+            break;
+        }
+    }
 }

@@ -1,5 +1,12 @@
 #include "EmptyStrings.h"
 #include "RandomGroupDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "RandomGroup.h"
+#include "UnitResourceList.h"
+#include "TArrayList.h"
 
 CRandomGroupDescriptor::CRandomGroupDescriptor()
     : CPositionableObjectDescriptor(L"Group", L"Group for organizing random selections for levels", L"folder", true, false, false, false, false)
@@ -26,4 +33,100 @@ CRandomGroupDescriptor::CRandomGroupDescriptor()
 
 CRandomGroupDescriptor::~CRandomGroupDescriptor()
 {
+}
+
+unsigned int CRandomGroupDescriptor::getDungeonIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return 0;
+}
+
+std::wstring CRandomGroupDescriptor::setDifficultyStringByID(
+    CEditorScene* scene,
+    CEditorBaseObject* object,
+    unsigned int index,
+    void* userData)
+{
+    switch (index)
+    {
+    case 0:
+        return L"EASY";
+    case 1:
+        return L"NORMAL";
+    case 2:
+        return L"HARD";
+    case 3:
+        return L"VERY HARD";
+    default:
+        return EMPTY_WSTRING;
+    }
+}
+
+std::wstring CRandomGroupDescriptor::getPlayerClassStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index != 0) {
+        unsigned int position = index - 1;
+        TArrayList<std::wstring>* playerClassNames =
+            reinterpret_cast<TArrayList<std::wstring>*>(
+                CUnitResourceList::getSingleton()->getPlayerClassNames());
+
+        if (position >= playerClassNames->size())
+            return EMPTY_WSTRING;
+
+        return (*playerClassNames)[position];
+    }
+
+    return EMPTY_WSTRING;
+}
+
+void CRandomGroupDescriptor::InputLogicEvent(CEditorBaseObject* object,
+                                                unsigned int event,
+                                                CEditorBaseObject* param)
+{
+    CRandomGroup* randomGroup = dynamic_cast<CRandomGroup*>(object);
+    if (randomGroup != 0) {
+        if (event == 0) {
+            randomGroup->setVisible(true);
+        } else if (event == 1) {
+            randomGroup->setVisible(false);
+        }
+    }
+}
+
+void CRandomGroupDescriptor::descriptorSceneLoaded(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        if (m_Objects[i] != NULL) {
+            CRandomGroup* randomGroup =
+                dynamic_cast<CRandomGroup*>(m_Objects[i]);
+
+            if (randomGroup != NULL &&
+                !scene->getResourceManager()->getEditorIsRunning() &&
+                randomGroup->m_bIsDynamicGroup) {
+                randomGroup->calculateChildren();
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CRandomGroupDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CRandomGroup(scene->getResourceManager());
+}
+
+unsigned int CRandomGroupDescriptor::GetRandomGroupTypeIDByString(
+    CEditorScene*,
+    CEditorBaseObject*,
+    const std::wstring& value,
+    void*)
+{
+    const std::wstring* names =
+        reinterpret_cast<const std::wstring*>(gRANDOMGROUP_NAMES);
+
+    for (unsigned int i = 0; i < 3; ++i)
+    {
+        if (value == names[i])
+            return i;
+    }
+
+    return 0;
 }

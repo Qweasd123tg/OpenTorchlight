@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "PlaneColliderDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "PlaneColliderWrapper.h"
 
 CPlaneColliderDescriptor::CPlaneColliderDescriptor()
     : CColliderDescriptor(L"Plane Collision")
@@ -10,4 +15,9 @@ CPlaneColliderDescriptor::CPlaneColliderDescriptor()
 
 CPlaneColliderDescriptor::~CPlaneColliderDescriptor()
 {
+}
+
+CEditorBaseObject* CPlaneColliderDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CPlaneColliderWrapper(scene->getResourceManager());
 }

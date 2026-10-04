@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "ColorAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "ColorWrapper.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CColorAffectorDescriptor::CColorAffectorDescriptor()
     : CAffectorDescriptor(L"Color", L"This will effect the color of your partcles", L"gear")
@@ -9,4 +14,9 @@ CColorAffectorDescriptor::CColorAffectorDescriptor()
 
 CColorAffectorDescriptor::~CColorAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CColorAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CColorWrapper(scene->getResourceManager());
 }

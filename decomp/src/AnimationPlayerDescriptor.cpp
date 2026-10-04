@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "AnimationPlayerDescriptor.h"
+#include "GameVariables.h"
+#include "AnimationPlayer.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, false, false, false, false, false)
@@ -23,4 +27,63 @@ CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(const wchar_t* name, cons
 
 CAnimationPlayerDescriptor::~CAnimationPlayerDescriptor()
 {
+}
+
+unsigned int CAnimationPlayerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*)
+{
+    return 0;
+}
+
+std::wstring CAnimationPlayerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index <= 3)
+        return reinterpret_cast<const std::wstring*>(gANIMATIONPLAYER_TYPE_NAMES)[index];
+
+    return reinterpret_cast<const std::wstring*>(gANIMATIONPLAYER_TYPE_NAMES)[0];
+}
+
+void CAnimationPlayerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* sender)
+{
+    CAnimationPlayer* player;
+
+    if (object == NULL ||
+        (player = dynamic_cast<CAnimationPlayer*>(object)) == NULL) {
+        return;
+    }
+
+    if (eventType == 0x43) {
+        player->playAnimation(true);
+    } else if (eventType > 0x43) {
+        if (eventType == 0x44) {
+            player->stopAnimation(false);
+        } else if (eventType == 0x45) {
+            player->stopAnimation(true);
+        } else {
+            return;
+        }
+        return;
+    } else if (eventType == 0x42) {
+        player->playAnimation(false);
+    } else {
+        return;
+    }
+
+    player->BroadcastEvent(OUTPUT_EVENT_ANIMATION_PLAYING);
+}
+
+void CAnimationPlayerDescriptor::update(float timeSlice)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CAnimationPlayer* player =
+            dynamic_cast<CAnimationPlayer*>(m_Objects[i]);
+
+        if (player != 0) {
+            player->update(timeSlice);
+        }
+    }
+}
+
+CEditorBaseObject* CAnimationPlayerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CAnimationPlayer(scene->getResourceManager());
 }

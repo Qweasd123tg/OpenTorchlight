@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "BoxColliderDescriptor.h"
+#include "GameVariables.h"
+#include "BoxColliderWrapper.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CBoxColliderDescriptor::CBoxColliderDescriptor()
     : CColliderDescriptor(L"Box Collision")
@@ -12,4 +16,9 @@ CBoxColliderDescriptor::CBoxColliderDescriptor()
 
 CBoxColliderDescriptor::~CBoxColliderDescriptor()
 {
+}
+
+CEditorBaseObject* CBoxColliderDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CBoxColliderWrapper(scene->getResourceManager());
 }

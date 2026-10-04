@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "ParticleWrapperDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "ParticleWrapper.h"
 
 CParticleWrapperDescriptor::CParticleWrapperDescriptor()
     : CPositionableObjectDescriptor(L"Particle", L"A PARTICLE", L"particle", true, true, true, true, true)
@@ -14,4 +19,9 @@ CParticleWrapperDescriptor::CParticleWrapperDescriptor()
 
 CParticleWrapperDescriptor::~CParticleWrapperDescriptor()
 {
+}
+
+CEditorBaseObject* CParticleWrapperDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CParticleWrapper(scene->getResourceManager());
 }

@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "ColliderDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CColliderDescriptor::CColliderDescriptor(const wchar_t* name)
     : CAffectorDescriptor(name, L"Collision for particles", L"gear")
@@ -12,4 +16,38 @@ CColliderDescriptor::CColliderDescriptor(const wchar_t* name)
 
 CColliderDescriptor::~CColliderDescriptor()
 {
+}
+
+CEditorBaseObject* CColliderDescriptor::CreateObject(CEditorScene* scene)
+{
+    return 0;
+}
+
+std::wstring CColliderDescriptor::GetParticleIntersectionTypeStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
+{
+    const std::wstring* types =
+        reinterpret_cast<const std::wstring*>(gPARTICLE_INTERSECTION_TYPE);
+
+    if (1 < index)
+        return types[0];
+    else
+        return types[index];
+}
+
+unsigned int CColliderDescriptor::GetParticleCollisionTypeIDByString(
+    CEditorScene* scene,
+    CEditorBaseObject* object,
+    const std::wstring& value,
+    void* userData)
+{
+    const std::wstring* collisionTypes =
+        reinterpret_cast<const std::wstring*>(gPARTICLE_COLLISION_TYPE);
+
+    for (unsigned int i = 0; i < 3; ++i) {
+        if (value == collisionTypes[i]) {
+            return i;
+        }
+    }
+
+    return 0;
 }

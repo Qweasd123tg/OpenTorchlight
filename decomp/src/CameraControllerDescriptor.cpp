@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "CameraControllerDescriptor.h"
+#include "GameVariables.h"
+#include "CameraController.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "StringUtilities.h"
 
 CCameraControllerDescriptor::CCameraControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
@@ -24,4 +29,64 @@ CCameraControllerDescriptor::CCameraControllerDescriptor(const wchar_t* name, co
 
 CCameraControllerDescriptor::~CCameraControllerDescriptor()
 {
+}
+
+unsigned int CCameraControllerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*)
+{
+    return 0;
+}
+
+std::wstring CCameraControllerDescriptor::GetGroupStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
+{
+    if (index == 0)
+        return L"MONSTERS";
+
+    return L"ITEMS";
+}
+
+unsigned int CCameraControllerDescriptor::getTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    return STRINGS::getStringIndex(value, reinterpret_cast<const std::wstring*>(&gCAMERA_TYPE_NAMES), 2, 0, false);
+}
+
+unsigned int CCameraControllerDescriptor::GetGroupIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >& value, void* userData)
+{
+    return value == L"ITEMS";
+}
+
+void CCameraControllerDescriptor::update(float param_1)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CCameraController* controller =
+            dynamic_cast<CCameraController*>(m_Objects[i]);
+
+        if (controller != 0)
+            controller->update(param_1);
+    }
+}
+
+void CCameraControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* source)
+{
+    if (object != NULL) {
+        CCameraController* controller = dynamic_cast<CCameraController*>(object);
+
+        if (controller != NULL) {
+            if (eventType == 0x33) {
+                controller->startCamera();
+                controller->update(0.0f);
+                return;
+            }
+
+            if (eventType == 0x34) {
+                controller->stopCamera();
+                return;
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CCameraControllerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CCameraController(scene->getResourceManager());
 }

@@ -1,5 +1,9 @@
 #include "EmptyStrings.h"
 #include "ForceAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CForceAffectorDescriptor::CForceAffectorDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CAffectorDescriptor(name, group, description)
@@ -10,4 +14,12 @@ CForceAffectorDescriptor::CForceAffectorDescriptor(const wchar_t* name, const wc
 
 CForceAffectorDescriptor::~CForceAffectorDescriptor()
 {
+}
+
+std::wstring CForceAffectorDescriptor::GetForceApplicationStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index > 1)
+        return *reinterpret_cast<const std::wstring*>(gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES);
+
+    return reinterpret_cast<const std::wstring*>(gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES)[index];
 }

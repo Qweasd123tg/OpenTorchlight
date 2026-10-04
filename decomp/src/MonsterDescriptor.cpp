@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "MonsterDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "UnitThemes.h"
 
 CMonsterDescriptor::CMonsterDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
@@ -76,4 +81,44 @@ CMonsterDescriptor::CMonsterDescriptor(const wchar_t* name, const wchar_t* group
 
 CMonsterDescriptor::~CMonsterDescriptor()
 {
+}
+
+std::wstring CMonsterDescriptor::getThemeStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    if (index == 0 || themes->getThemes().size() < index) {
+        return EMPTY_WSTRING;
+    }
+    return themes->getThemes()[index - 1]->getName();
+}
+
+unsigned int CMonsterDescriptor::getThemeIDByString(
+    CEditorScene* scene,
+    CEditorBaseObject* object,
+    const std::wstring& value,
+    void* userData)
+{
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    const unsigned char* list =
+        reinterpret_cast<const unsigned char*>(themes) + 0x18;
+    const unsigned char* data =
+        *reinterpret_cast<const unsigned char* const*>(list);
+    const unsigned int count =
+        *reinterpret_cast<const unsigned int*>(list + 8);
+    const unsigned int capacity =
+        *reinterpret_cast<const unsigned int*>(list + 12);
+
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        const unsigned char* item = data;
+        if (i < capacity)
+            item = data + i * 8;
+
+        const std::wstring* name =
+            reinterpret_cast<const std::wstring*>(item + 0x28);
+        if (*name == value)
+            return i + 1;
+    }
+
+    return 0;
 }

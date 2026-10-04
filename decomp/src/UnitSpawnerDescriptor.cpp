@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "UnitSpawnerDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "UnitSpawner.h"
 
 CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()
     : CShapeDescriptor(L"Unit Spawner", L"Spawns units in differnt formations", L"spawn", true, true, true)
@@ -40,4 +45,39 @@ CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()
 
 CUnitSpawnerDescriptor::~CUnitSpawnerDescriptor()
 {
+}
+
+void CUnitSpawnerDescriptor::descriptorSceneLoaded(CEditorScene* scene)
+{
+}
+
+void CUnitSpawnerDescriptor::update(float param_1)
+{
+    (void)param_1;
+
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CUnitSpawner* unitSpawner = dynamic_cast<CUnitSpawner*>(m_Objects[i]);
+        if (unitSpawner != NULL)
+        {
+            (void)unitSpawner;
+        }
+    }
+}
+
+void CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    if (dynamic_cast<CUnitSpawner*>(object) != NULL) {
+        switch (event) {
+        case 10:
+        case 0x20:
+        case 0x21:
+        case 0x22:
+        case 0x23:
+        case 0x24:
+            break;
+        default:
+            break;
+        }
+    }
 }
