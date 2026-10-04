@@ -81,6 +81,9 @@ public:
     CSkill* addSkillByName(const std::wstring& name,bool flag);
     CSkill* cloneSkill(CSkill* skill);
     bool dontUseOnFull();
+    void reapplyEffects(bool flag);
+    void reapplyAffixes(bool flag);
+    void unitInitThemes();
     bool removeEffect(const std::wstring& name);
     bool removeAffix(const std::wstring& name);
     bool hasEffect(EEFFECT_TYPE type);

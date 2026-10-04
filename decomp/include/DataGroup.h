@@ -27,15 +27,18 @@ public:
     // No caller reads a result: both overloads end without setting rax.
     void LoadFile(const std::wstring& file, CTimerStatics* timers);
     void LoadFile(const std::wstring& file, iDataFileSaveAndLoad* style, CTimerStatics* timers);
-    CDataGroup* GetDataGroupByName(const std::wstring& name, bool recursive);
+    CDataGroup* GetDataGroupByName(const std::wstring& name, bool createIfMissing);
     void GetDataGroupsMatchingName(const std::wstring& name, std::vector<CDataGroup*>* groups);
     void GetDataValuesMatchingName(const std::wstring& name, std::vector<CDataValue*>* values);
     const std::wstring& GetDataValue(const std::wstring& name, const wchar_t* defaultValue);
+    int GetDataValue(const std::wstring& name,int defaultValue);
     float GetDataValue(const std::wstring& name, float defaultValue);
     bool GetDataValue(const std::wstring& name, bool defaultValue);
     void SaveToFile(const std::wstring& file);
     const std::wstring& GetDataValue(const std::wstring& name, const std::wstring& defaultValue);
 
+    unsigned int GetNumberOfDataValues() { return m_DataValues.size(); }
+    CDataValue* GetDataValue(unsigned int index) { return m_DataValues[index]; }
     unsigned int GetNumberOfDataGroups() { return m_DataGroups.size(); }
     CDataGroup* GetDataGroup(unsigned int index) { return m_DataGroups[index]; }
     TRepository<std::wstring>* getRepository() { return m_pRepository; }

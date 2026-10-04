@@ -11,6 +11,7 @@ namespace UNITTYPES
         MONSTER = 27,
         PLAYER = 28,
         BREAKABLE = 29,
+        TAKEABLE = 31,
         INTERACTABLE = 32,
         UNIQUE = 54,
         MAGIC = 55,

@@ -9,6 +9,7 @@ class CBaseUnit;
 class CAffix;
 class CEffect;
 class CResourceManager;
+class CDataGroup;
 class CUnitTheme;
 // Partial: complete size/vtable; declarations and active theme list needed by BaseUnit.
 class CEffectManager : public CRunicCore
@@ -29,6 +30,8 @@ public:
     float getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE type, EDAMAGE_TYPES damage);
     float getEffectValue(EEFFECT_TYPE type, const std::wstring& name);
     void updateAffixes(float elapsed);
+    unsigned int createEffects(CDataGroup* data,bool flag);
+    CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
 private:
     unsigned char m_EffectData10[0x2c8-0x10];

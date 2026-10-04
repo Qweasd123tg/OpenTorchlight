@@ -872,3 +872,34 @@ true; cloneSkill сохраняет безусловное assignSkillAnimations
 dontUseOnFull принят автотестом: 67 завершённых случаев, 3/3 мутации.
 Полный check.py: 69 тестов PASS, 432/5247 функций, 104 778 байт.
 Остаются avoidance, ray/sphere collision, reapply/init и activateEffect.
+
+BaseUnit reapply/themes/avoidance: 55/59 функций. Три функции применения
+данных приняты ручными тестами, по 10/10 мутаций. unitInitThemes — 192 случая
+с настоящим CDataGroup, типами STRING/TRANSLATE и картой переводов; effects
+и affixes — по 96 случаев × 2 применения, настоящие создание CEffect,
+клонирование CAffix, EffectManager и safe pointers. Покрыты ленивое создание
+manager, пропуск существующего по имени, дубли, translated names, LEVEL,
+приоритет EFFECTS над корневым EFFECT и отсутствие данных. Общие каталоги
+в тестах ограниченные, прохождение кампании не заявляется.
+
+Параметр bool в GetDataGroupByName назван createIfMissing: оригинал c61d30
+создаёт группу при отсутствии, а не выполняет рекурсивный поиск. Тест теперь
+сравнивает число дочерних групп; это поймало ранее ненаблюдаемую мутацию.
+GetValueString возвращает const wstring&, CDataValue имеет полный размер
+0x38 и vtable CRunicCore. createEffects возвращает число созданных запросов.
+
+Avoidance проверен 560 сценариями add/remove/add на настоящих CLevel сетках
+16×16: map/object counters, subtype hierarchy, flags, radius, origin offset,
+absolute SceneNode position и отдельный guard-level от переданного level.
+Для interactable collision model отсутствует, callback считает обращения:
+попадания по реальной геометрии здесь не проверены. TAKEABLE=31 сверено с
+unittypes.hie. Первый набор мутаций 7/10 на каждой функции: все выжившие
+меняли только Y, который CLevel grid methods не читают. Вычисление одинаковых
+minimum/maximum вынесено из двух ветвей без изменения значений/порядка ISA;
+расширенный прогон всех доступных кандидатов дал 17/19 и 14/16. Оставшиеся
+четыре мутации снова только Y и эквивалентны для этих исходных grid methods.
+
+После роста TU изменился digest addUnitTheme(pointer); повторно проверен
+5/5, старый результат не переиспользовался. Полный check.py: 74 теста PASS,
+437/5247 функций, 107 737 байт. Остаются rayCollision, sphereCollision,
+activateEffect и большой unitInit (7229 байт).

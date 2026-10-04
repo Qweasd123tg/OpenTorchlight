@@ -2,6 +2,7 @@
 #define LEVEL_H
 
 #include <OgreVector3.h>
+#include <OgreAxisAlignedBox.h>
 
 #include "RunicCore.h"
 #include "Constants.h"
@@ -23,6 +24,12 @@ class CLevel : public CRunicCore
 public:
     virtual ~CLevel();
     void removeUnit(CBaseUnit* unit,bool flag);
+    void incrementMapPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
+    void decrementMapPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
+    void incrementObjectPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
+    void decrementObjectPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
+    void incrementMapPassabilityCollision(const Ogre::AxisAlignedBox& bounds,CBaseUnit* unit);
+    void decrementMapPassabilityCollision(const Ogre::AxisAlignedBox& bounds,CBaseUnit* unit);
     void unitBroadcastMessage(CBaseUnit* unit, EUNIT_STATES state);
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     int getRoomIndexThatPositionIsIn(const Ogre::Vector3& position);

@@ -8,6 +8,8 @@
 #include "UnitThemes.h"
 #include "SkillManager.h"
 #include "DataGroup.h"
+#include "DataValue.h"
+#include "StringUtilities.h"
 #include "Randomizer.h"
 #include "UtilitiesMath.h"
 #include "Skill.h"
@@ -449,4 +451,112 @@ CSkill* CBaseUnit::cloneSkill(CSkill* source)
 bool CBaseUnit::dontUseOnFull()
 {
     return m_pDataGroup != NULL ? m_pDataGroup->GetDataValue(L"DONT_USE_ON_FULL",false) : false;
+}
+
+
+void CBaseUnit::reapplyEffects(bool flag)
+{
+    if (m_pDataGroup != NULL)
+    {
+        CDataGroup* effects = m_pDataGroup->GetDataGroupByName(L"EFFECTS",false);
+        CDataGroup* effect = m_pDataGroup->GetDataGroupByName(L"EFFECT",false);
+        if (effect != NULL || effects != NULL)
+        {
+            if (m_pEffectManager == NULL)
+            {
+                m_pEffectManager = new CEffectManager(this);
+                flag = false;
+            }
+            if (effects == NULL)
+                m_pEffectManager->createEffects(m_pDataGroup,flag);
+            else
+                m_pEffectManager->createEffects(effects,flag);
+        }
+    }
+}
+
+void CBaseUnit::unitInitThemes()
+{
+    if (m_pDataGroup != NULL)
+    {
+        CDataGroup* themes = m_pDataGroup->GetDataGroupByName(L"THEMES",false);
+        if (themes != NULL)
+            for (unsigned int i = 0; i < themes->GetNumberOfDataValues(); ++i)
+            {
+                CDataValue::EDATAVALUETYPES type = themes->GetDataValue(i)->GetValueType();
+                if (type == CDataValue::DATAVALUE_TRANSLATE || type == CDataValue::DATAVALUE_STRING)
+                    addUnitTheme(STRINGS::StringUpper(themes->GetDataValue(i)->GetValueString(true)));
+            }
+    }
+}
+
+void CBaseUnit::reapplyAffixes(bool flag)
+{
+    if (m_pDataGroup != NULL)
+    {
+        CDataGroup* affixes = m_pDataGroup->GetDataGroupByName(L"AFFIXES",false);
+        if (affixes != NULL)
+        {
+            if (m_pEffectManager == NULL)
+            {
+                m_pEffectManager = new CEffectManager(this);
+                flag = false;
+            }
+            unsigned int level = m_pDataGroup->GetDataValue(L"LEVEL",static_cast<int>(m_iUnitLevel));
+            for (unsigned int i = 0; i < affixes->GetNumberOfDataValues(); ++i)
+            {
+                if (flag)
+                    if (m_pEffectManager->getAffix(STRINGS::StringUpper(affixes->GetDataValue(i)->GetValueString(true))) != NULL)
+                        continue;
+                addAffix(affixes->GetDataValue(i)->GetValueString(true),level,this,-1.0f);
+            }
+        }
+    }
+}
+
+void CBaseUnit::addToAvoidanceMap(CLevel& level)
+{
+    if (m_pResourceManager != NULL && m_pResourceManager->getLevel() != NULL &&
+        m_bBaseUnitFlag18F && !m_bBaseUnitFlag19B && !ISA(UNITTYPES::TAKEABLE) &&
+        m_bBlocksPath && m_bPathingFlag19C)
+    {
+        if (ISA(UNITTYPES::INTERACTABLE))
+            level.incrementMapPassabilityCollision(Ogre::AxisAlignedBox(m_pCullingBounds->getWorldMinimum(),m_pCullingBounds->getWorldMaximum()),this);
+        else
+        {
+            Ogre::Vector3 position = getPosition(true);
+            float radius = m_fBaseUnitValue194 + 0.4f;
+            bool breakable = ISA(UNITTYPES::BREAKABLE);
+            Ogre::Vector3 minimum = position + Ogre::Vector3(-radius,0,-radius);
+            Ogre::Vector3 maximum = position + Ogre::Vector3(radius,0,radius);
+            if (breakable)
+                level.incrementMapPassability(minimum,maximum,radius);
+            else
+                level.incrementObjectPassability(minimum,maximum,radius);
+        }
+        m_bBaseUnitFlag19B = true;
+    }
+}
+
+void CBaseUnit::removeFromAvoidanceMap(CLevel& level)
+{
+    if (m_pResourceManager != NULL && m_pResourceManager->getLevel() != NULL &&
+        m_bBaseUnitFlag19B && !ISA(UNITTYPES::TAKEABLE))
+    {
+        if (ISA(UNITTYPES::INTERACTABLE))
+            level.decrementMapPassabilityCollision(Ogre::AxisAlignedBox(m_pCullingBounds->getWorldMinimum(),m_pCullingBounds->getWorldMaximum()),this);
+        else
+        {
+            Ogre::Vector3 position = getPosition(true);
+            float radius = m_fBaseUnitValue194 + 0.4f;
+            bool breakable = ISA(UNITTYPES::BREAKABLE);
+            Ogre::Vector3 minimum = position + Ogre::Vector3(-radius,0,-radius);
+            Ogre::Vector3 maximum = position + Ogre::Vector3(radius,0,radius);
+            if (breakable)
+                level.decrementMapPassability(minimum,maximum,radius);
+            else
+                level.decrementObjectPassability(minimum,maximum,radius);
+        }
+        m_bBaseUnitFlag19B = false;
+    }
 }

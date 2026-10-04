@@ -63,7 +63,7 @@
   "name": "CBaseUnit::addUnitTheme(CUnitTheme*)",
   "killed": 5,
   "tried": 5,
-  "code": "77ccb54a1adcb326"
+  "code": "581b71d83887c808"
  },
  "0x800e80": {
   "name": "CBaseUnit::selectRandomSkill()",
