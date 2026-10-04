@@ -6,6 +6,7 @@
 // proper header when that is known.
 
 enum ELAYOUT_TYPES { ELAYOUT_TYPES_GEN_LAST = 0x7fffffff };
+enum ERESOURCE_GROUPS { ERESOURCE_GROUPS_GEN_LAST = 0x7fffffff };
 enum ETIMELINE_INTERP_TYPES { ETIMELINE_INTERP_TYPES_GEN_LAST = 0x7fffffff };
 
 #endif
