@@ -5,6 +5,18 @@
   "tried": 10,
   "code": "18f5462894a5128e"
  },
+ "0x5a95d0": {
+  "name": "CCollisionList::addNormal(Ogre::Vector3 const&, int)",
+  "killed": 5,
+  "tried": 5,
+  "code": "9318a8325df85358"
+ },
+ "0x5a9690": {
+  "name": "CCollisionList::addVertex(Ogre::Vector3 const&, int)",
+  "killed": 5,
+  "tried": 5,
+  "code": "1b1aab3ae8da0317"
+ },
  "0x6f90e0": {
   "name": "CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*)",
   "killed": 5,

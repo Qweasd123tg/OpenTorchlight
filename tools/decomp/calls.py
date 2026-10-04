@@ -55,9 +55,14 @@ class Tracer:
         return max(hits, key=lambda f: f["size"])
 
     def literal(self, address):
-        try:
-            raw = self.image.read(address, 512)
-        except ValueError:
+        raw = None
+        for size in (8192, 512, 64):  # long wide literals need more than 512 bytes
+            try:
+                raw = self.image.read(address, size)
+                break
+            except ValueError:
+                continue
+        if raw is None:
             return None
         section = self.image.section_at(address)
         if not section or not section.name.startswith(".rodata"):

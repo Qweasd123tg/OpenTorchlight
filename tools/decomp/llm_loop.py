@@ -129,12 +129,12 @@ def asm_of(tu, f):
 
 
 class Loop:
-    def __init__(self, tu_name, models, rounds, switch_after=2):
+    def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False):
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
         os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
         self.tu = next(t for t in self.db["tus"] if t["name"] == tu_name)
-        self.rounds, self.switch_after = rounds, switch_after
+        self.rounds, self.switch_after, self.jobs = rounds, switch_after, jobs
         self.work = ROOT / "build-decomp" / "llm-loop" / tu_name
         shutil.rmtree(self.work, ignore_errors=True)
         self.work.mkdir(parents=True)
@@ -160,6 +160,8 @@ class Loop:
         self.source = ROOT / "decomp" / "src" / tu_name
         self.accepted = {}  # address -> code
         self.status = {}
+        self.resume = resume
+        self.existing = ""  # --resume: the TU as found; its functions are kept as they are
 
     def draft(self, f):
         raw = ROOT / "build-decomp" / "drafts" / self.tu["name"] / "raw" / f"{f['address']}.c"
@@ -173,8 +175,12 @@ class Loop:
     # -- header -------------------------------------------------------------
     def header(self):
         out = {}
+        hand = headers_by_class()
         for cls in self.classes:
             gen = ROOT / "build-decomp" / "include-gen" / f"{cls}.h"
+            if cls in hand:
+                out[cls] = hand[cls][0]  # an existing header is used as it is
+                continue
             if not gen.exists():
                 continue
             name = (cls[1:] if re.match(r"C[A-Z]", cls) else cls) + ".h"
@@ -252,8 +258,9 @@ class Loop:
 
     # -- functions ----------------------------------------------------------
     def unit(self, extra=()):
-        parts = ['#include "EmptyStrings.h"', '#include "GenTypes.h"', '#include "GenGlobals.h"',
-                 '#include "GenNamespaces.h"'] + [f'#include "{h}"' for h in self.headers.values()]
+        parts = ['#include "EmptyStrings.h"'] + [f'#include "{g}"' for g in ("GenTypes.h", "GenGlobals.h", "GenNamespaces.h")
+                                                 if (headers.OUT / g).exists()]
+        parts += [f'#include "{h}"' for h in self.headers.values()]
         names = set()
         for code in list(self.accepted.values()) + list(extra):
             names.update(re.findall(r"\b[A-Za-z_]\w*\b", code))
@@ -265,6 +272,13 @@ class Loop:
             elif (ROOT / "build-decomp" / "include-gen" / f"{n}.h").exists() and f"{n}.h" not in incl:
                 parts.append(f'#include "{n}.h"')
         body = [self.accepted[a] for a in sorted(self.accepted)] + list(extra)
+        if self.existing:
+            lines = self.existing.splitlines()
+            n = 0
+            while n < len(lines) and (lines[n].startswith("#include") or not lines[n].strip()):
+                n += 1
+            parts = [l for l in lines[:n] if l.strip()] + parts
+            body = ["\n".join(lines[n:]).strip("\n")] + body
         return "\n".join(dict.fromkeys(parts)) + "\n\n" + "\n\n".join(body) + "\n"
 
     def compile(self, f, code):
@@ -352,21 +366,26 @@ class Loop:
         return f["address"], code, sid
 
     def run(self):
-        print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}")
+        print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}", flush=True)
         self.header()
-        print(f"  header: {', '.join(self.headers.values())}")
+        print(f"  header: {', '.join(self.headers.values())}", flush=True)
+        if self.resume and self.source.exists():
+            self.keep_existing()
         pending = {f["address"]: {"f": f, "session": None, "feedback": None, "model": 0, "tries": 0}
-                   for f in self.funcs}
+                   for f in self.funcs if f["address"] not in self.status}
         for round_no in range(1, self.rounds + 1):
             if not pending:
                 break
-            with ThreadPoolExecutor(4) as pool:
+            with ThreadPoolExecutor(self.jobs) as pool:
                 answers = list(pool.map(lambda item: self.ask(item, round_no), pending.values()))
             diffs = {}
             for address, code, sid in answers:
                 item = pending[address]
                 item["session"], item["code"] = sid, code
                 self.by_model[address] = self.models[item["model"]].model
+                if not code:
+                    item["feedback"] = None
+                    continue
                 status, detail = self.compile(item["f"], code)
                 if status == "MATCH":
                     self.accepted[address] = code
@@ -382,7 +401,8 @@ class Loop:
             done = sum(1 for s in self.status.values())
             print(f"  round {round_no}: accepted {done} of {len(self.funcs)} "
                   f"({sum(1 for s in self.status.values() if s == 'MATCH')} MATCH); pending {len(pending)}", flush=True)
-        self.source.write_text(self.unit())
+        if self.accepted or not self.existing:
+            self.source.write_text(self.unit())
         for address, item in pending.items():
             self.status[address] = "not accepted"
         self.finish()
@@ -398,11 +418,31 @@ class Loop:
                   f"  python3 tools/decomp/mutate.py --accept {' '.join(tested)}")
         return self.status
 
+    def keep_existing(self):
+        """--resume: functions the TU already defines stay; only the missing ones are asked for."""
+        try:
+            rows = self.compare()["functions"]
+        except SystemExit:
+            kept = self.work / "abandoned.cpp"
+            shutil.copy(self.source, kept)
+            print(f"  the existing TU does not compile; kept as {kept}, starting fresh", flush=True)
+            return
+        present = {r["address"] for r in rows if r.get("address") and r["status"] != "MISSING"}
+        self.existing = self.source.read_text()
+        for f in self.funcs:
+            if f["address"] in present:
+                self.status[f["address"]] = "existing"
+        print(f"  resumed: {len(self.status)} of {len(self.funcs)} functions already written", flush=True)
+
     def finish(self):
         """Moves the declarations the TU (and the class headers written for it) use from the
         generated headers into decomp/include and checks that it builds without them, with
         the same results. A TU without accepted functions is removed, its headers stay."""
-        before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        try:
+            before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        except SystemExit as error:
+            print(f"  the TU does not compile:\n{str(error)[:1500]}")
+            return
         written = promote.promote(self.source)
         saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
         try:
@@ -414,7 +454,7 @@ class Loop:
         finally:
             if saved is not None:
                 os.environ["OTL_EXTRA_INCLUDE"] = saved
-            if not self.accepted:
+            if not self.accepted and not self.existing:
                 self.source.unlink(missing_ok=True)
         changed = sorted(a for a in before if after.get(a) != before[a])
         print(f"  promoted into decomp/include: {', '.join(written) or 'nothing'}"
@@ -498,9 +538,13 @@ def main():
                         help="comma-separated chain; a function moves on after --switch-after rounds")
     parser.add_argument("--rounds", type=int, default=5)
     parser.add_argument("--switch-after", type=int, default=2)
+    parser.add_argument("--jobs", type=int, default=4, help="model calls in parallel")
+    parser.add_argument("--resume", action="store_true",
+                        help="keep the functions an existing decomp/src/<TU> defines, ask only for the rest")
     args = parser.parse_args()
     started = time.time()
-    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after).run()
+    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs,
+                  args.resume).run()
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
 
