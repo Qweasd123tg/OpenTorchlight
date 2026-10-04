@@ -59,6 +59,12 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7cd810": {
+  "name": "CAffix::setLevel(unsigned int)",
+  "killed": 8,
+  "tried": 10,
+  "code": "075a7a08513fee5f"
+ },
  "0x7fea30": {
   "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
   "killed": 4,
