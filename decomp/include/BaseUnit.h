@@ -92,6 +92,8 @@ public:
     bool hasEffect(const std::wstring& name);
     bool ISA(UNITTYPES::EUNITTYPES type);
     void updateCullingBounds();
+    bool rayCollision(const Ogre::Vector3& start,const Ogre::Vector3& end,Ogre::Vector3& hit,Ogre::Vector3& normal,bool force);
+    bool sphereCollision(const Ogre::Vector3& start,const Ogre::Vector3& end,float radius,Ogre::Vector3& position,Ogre::Vector3& hit,Ogre::Vector3& normal);
     bool getIsQuestUnit();
     bool getCastsShadows();
     void setCastsShadows(bool shadows);

@@ -14,6 +14,8 @@
 #include "UtilitiesMath.h"
 #include "Skill.h"
 #include "Effect.h"
+#include "CollisionModel.h"
+#include "CollisionList.h"
 #include <OgreLogManager.h>
 
 void CBaseUnit::setSpawnerGuid(long long guid)
@@ -597,4 +599,73 @@ void CBaseUnit::activateEffect(CEffect* effect)
     default:
         break;
     }
+}
+
+
+bool CBaseUnit::rayCollision(const Ogre::Vector3& start,const Ogre::Vector3& end,Ogre::Vector3& hit,Ogre::Vector3& normal,bool force)
+{
+    if (getUnitCollisionModel() != NULL && ((m_bBlocksPath && m_bPathingFlag19C) || force))
+    {
+        Ogre::Vector3 minimum = start,maximum = start;
+        float distance = 99999.0f;
+        MATH::expandBounds(minimum,maximum,end);
+        if (MATH::boundsIntersect(getMinBounds(),getMaxBounds(),minimum,maximum))
+        {
+            Ogre::Matrix3 rotation;
+            m_pSceneNode->_getDerivedOrientation().ToRotationMatrix(rotation);
+            Ogre::Matrix4 transform(rotation);
+            Ogre::Matrix4 inverse = transform.inverse();
+            Ogre::Vector3 offset = Ogre::Vector3::ZERO;
+            if (getUnitModel() != NULL)
+                offset = static_cast<CPositionableObject*>(getUnitModel())->getPosition(false);
+            offset += getPosition(true);
+            Ogre::Vector3 localStart = inverse * (start-offset);
+            Ogre::Vector3 localEnd = inverse * (end-offset);
+            CCollisionModel* model = static_cast<CCollisionModel*>(getUnitCollisionModel());
+            if (model->getCollisionList()->rayCollision(localStart,localEnd,hit,normal,distance))
+            {
+                hit = transform * hit;
+                normal = transform * normal;
+                hit += offset;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool CBaseUnit::sphereCollision(const Ogre::Vector3& start,const Ogre::Vector3& end,float radius,Ogre::Vector3& position,Ogre::Vector3& hit,Ogre::Vector3& normal)
+{
+    if (getUnitCollisionModel() != NULL && m_bBlocksPath && m_bPathingFlag19C)
+    {
+        Ogre::Vector3 minimum = start,maximum = start;
+        float distance = 99999.0f;
+        MATH::expandBounds(minimum,maximum,end);
+        minimum += Ogre::Vector3(radius * -2.0f);
+        maximum += Ogre::Vector3(radius + radius);
+        if (MATH::boundsIntersect(getMinBounds(),getMaxBounds(),minimum,maximum))
+        {
+            Ogre::Matrix3 rotation;
+            m_pSceneNode->_getDerivedOrientation().ToRotationMatrix(rotation);
+            Ogre::Matrix4 transform(rotation);
+            Ogre::Matrix4 inverse = transform.inverse();
+            Ogre::Vector3 offset = Ogre::Vector3::ZERO;
+            if (getUnitModel() != NULL)
+                offset = static_cast<CPositionableObject*>(getUnitModel())->getPosition(false);
+            offset += getPosition(true);
+            Ogre::Vector3 localStart = inverse * (start-offset);
+            Ogre::Vector3 localEnd = inverse * (end-offset);
+            CCollisionModel* model = static_cast<CCollisionModel*>(getUnitCollisionModel());
+            if (model->getCollisionList()->sphereCollision(localStart,localEnd,radius,position,hit,normal,distance))
+            {
+                hit = transform * hit;
+                normal = transform * normal;
+                position = transform * position;
+                hit += offset;
+                position += offset;
+                return true;
+            }
+        }
+    }
+    return false;
 }
