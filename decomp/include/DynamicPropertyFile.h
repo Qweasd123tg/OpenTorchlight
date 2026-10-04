@@ -11,6 +11,8 @@
 class CDynamicPropertyFile : public CRunicCore
 {
 public:
+    CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section);
+    unsigned int GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool flag);
     virtual ~CDynamicPropertyFile();
     virtual void SaveSettings(const std::wstring& file);
     virtual void LoadSettings(const std::wstring& file);
