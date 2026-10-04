@@ -19,7 +19,6 @@ result goes to build-decomp/mutation.json.
 from __future__ import annotations
 
 import argparse
-import hashlib
 from concurrent.futures import ThreadPoolExecutor
 import json
 import os
@@ -35,6 +34,7 @@ import autotest  # noqa: E402
 import elfdb  # noqa: E402
 import ghidra_cpp  # noqa: E402
 import hybrid  # noqa: E402
+import objdiff  # noqa: E402
 import toolchain  # noqa: E402
 
 ROOT = elfdb.ROOT
@@ -139,17 +139,17 @@ def mutation_points(text, masked, start, end):
     return points
 
 
-def body_digest(db, f):
-    """Digest of f's definition in decomp/src, or None when it cannot be located."""
-    tu = next((t["name"] for t in db["tus"] if t["id"] == f["tu"]), None)
-    source = next(iter(SRC.rglob(tu)), None) if tu else None
-    if not source:
-        return None
-    text = source.read_text()
-    span = definition(text, mask(text), f)
-    if not span:
-        return None
-    return hashlib.sha256(text[span[0]:span[1] + 1].encode()).hexdigest()[:16]
+def code_digests(db, functions):
+    """Address -> objdiff.code_digest of our compiled function, for the TUs of `functions`."""
+    original = objdiff.Original(db=db)
+    names = {t["id"]: t["name"] for t in db["tus"]}
+    sources = {p.name: p for p in SRC.rglob("*.cpp")}
+    out = {}
+    for tu in sorted({names[f["tu"]] for f in functions if names.get(f["tu"]) in sources}):
+        for row in objdiff.compare_source(sources[tu], original, quiet=True)["functions"]:
+            if row.get("code") and not row.get("weak"):
+                out[row["address"]] = row["code"]
+    return out
 
 
 def load_accepted():
@@ -159,11 +159,12 @@ def load_accepted():
 def record(db, functions, results):
     """Strong tests into decomp/autotests.json; weak or failed ones out of it."""
     accepted = load_accepted()
+    codes = code_digests(db, functions)
     for f in functions:
         r = results.get(f["address"], {})
-        if r.get("strong"):
+        if r.get("strong") and codes.get(f["address"]):
             accepted[f["address"]] = {"name": f["demangled"], "killed": r["killed"], "tried": r["tried"],
-                                      "source": body_digest(db, f)}
+                                      "code": codes[f["address"]]}
         else:
             accepted.pop(f["address"], None)
     ACCEPTED.write_text(json.dumps(dict(sorted(accepted.items())), indent=1, ensure_ascii=False) + "\n")

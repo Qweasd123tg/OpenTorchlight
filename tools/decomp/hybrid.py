@@ -341,6 +341,27 @@ def stage_runtime(blob, loader):
     return staged
 
 
+def steam_runtime_fallback(game, env):
+    """Directory with links to the libraries the system lacks (libGLU on a bare
+    Fedora), taken from the game's own Steam runtime; None when nothing is missing.
+    Only the missing ones are linked so the system copies of the rest still win."""
+    result = subprocess.run(["ldd", str(game / "Torchlight.bin.x86_64")], env=env, capture_output=True, text=True)
+    missing = re.findall(r"^\s*(\S+) => not found", result.stdout, re.M)
+    if not missing:
+        return None
+    target = toolchain.cache_dir() / "hybrid" / "missing-libs"
+    target.mkdir(parents=True, exist_ok=True)
+    for name in missing:
+        found = [p for d in ("usr/lib/x86_64-linux-gnu", "lib/x86_64-linux-gnu")
+                 for p in [game / "steam-runtime" / d / name] if p.exists()]
+        if not found:
+            raise SystemExit(f"the game needs {name}: install it or put it into {target}")
+        link = target / name
+        if not link.exists():
+            link.symlink_to(found[0].resolve())
+    return target
+
+
 def game_env(blob, loader, extra=None, headless=False):
     blob, loader = stage_runtime(blob, loader)
     game = Path(os.environ.get("TORCHLIGHT_GAME_DIR", Path.home() / "Games/Torchlight/game"))
@@ -352,6 +373,9 @@ def game_env(blob, loader, extra=None, headless=False):
         env["SDL_VIDEODRIVER"] = "offscreen"
         env["SDL_AUDIODRIVER"] = "dummy"
     env["LD_LIBRARY_PATH"] = f"{game / 'lib64'}:{game}" + (":" + env["LD_LIBRARY_PATH"] if env.get("LD_LIBRARY_PATH") else "")
+    fallback = steam_runtime_fallback(game, env)
+    if fallback:
+        env["LD_LIBRARY_PATH"] += f":{fallback}"
     env["LD_PRELOAD"] = str(loader)
     env["TLHYBRID_BLOB"] = str(blob)
     env.update(extra or {})

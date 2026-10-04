@@ -46,7 +46,9 @@ PRIMITIVE = {"void", "bool", "char", "signed char", "unsigned char", "short", "u
              "long double", "wchar_t"}
 STD_HEADERS = {"basic_string": "string", "wstring": "string", "string": "string", "vector": "vector",
                "map": "map", "multimap": "map", "set": "set", "list": "list", "deque": "deque",
-               "pair": "utility", "char_traits": "string", "allocator": "memory", "less": "functional"}
+               "pair": "utility", "char_traits": "string", "allocator": "memory", "less": "functional",
+               "basic_ofstream": "fstream", "basic_ifstream": "fstream", "basic_fstream": "fstream",
+               "basic_ostream": "ostream", "basic_istream": "istream"}
 GHIDRA_SCALARS = {"undefined": "bool", "undefined1": "bool", "byte": "bool", "char": "char", "uchar": "unsigned char",
                   "bool": "bool", "undefined2": "short", "short": "short", "ushort": "unsigned short",
                   "undefined4": "int", "int": "int", "uint": "unsigned int", "undefined8": "long",
@@ -60,6 +62,92 @@ def ogre_dir():
     return toolchain.cache_dir() / "gcc447" / "ogre-1.6.5" / "ogre" / "OgreMain" / "include"
 
 
+def class_dump(source, extra=()):
+    """Compiles `source` and returns GCC's -fdump-class-hierarchy text."""
+    import tempfile
+    with tempfile.TemporaryDirectory(prefix="otl-classes-") as tmp:
+        toolchain.compile_source(source, Path(tmp) / "out.o",
+                                 [*extra, "-fdump-class-hierarchy", "-dumpbase", str(Path(tmp) / "classes")],
+                                 quiet=True, cache=False)
+        dumps = list(Path(tmp).glob("classes*.class"))
+        return dumps[0].read_text(errors="replace") if dumps else ""
+
+
+def dumped_vtable(dump, cls):
+    """Groups of slot names of `cls` in a class dump (None without a vtable).
+    A slot is 'Scope::method', a thunk's mangled name or __cxa_pure_virtual."""
+    m = re.search(rf"^Vtable for {re.escape(cls)}\n[^\n]*\n((?:\d+ +[^\n]*\n)*)", dump, re.M)
+    if not m:
+        return None
+    groups, current = [], None
+    for line in m.group(1).splitlines():
+        entry = line.split(None, 1)[1].strip()
+        if entry.startswith("(int (*)(...))"):
+            current = [] if "_ZTI" in entry else None
+            if current is not None:
+                groups.append(current)
+            continue
+        if current is None:
+            continue
+        last = entry.rsplit("::", 1)[-1]
+        current.append(last if last.startswith("_ZT") else entry.replace(" ", ""))
+    return groups
+
+
+def original_vtable(db, cls, demangled=None):
+    """Groups of slots of the original vtable of `cls`, named like dumped_vtable (None without one).
+    Thunk slots are given as the set of their mangled names."""
+    vt = db["vtables"].get(cls)
+    if not vt:
+        return None
+    imports = [s for g in vt["groups"] for s in g["slots"]
+               if isinstance(s, str) and s not in db["functions"] and s.startswith("_Z")]
+    if imports and demangled is None:
+        import subprocess
+        out = subprocess.run(["c++filt"], input="\n".join(imports), capture_output=True, text=True).stdout
+        demangled = dict(zip(imports, out.splitlines()))
+    groups = []
+    for g in vt["groups"]:
+        slots = []
+        for s in g["slots"]:
+            f = db["functions"].get(s) if isinstance(s, str) else None
+            if f and any(n.startswith(("_ZTh", "_ZTv", "_ZTc")) for n in f["names"]):
+                slots.append(set(f["names"]))
+            elif f:
+                slots.append(f"{f['scope']}::{f['method']}".replace(" ", ""))
+            elif isinstance(s, str) and s.startswith("_Z"):
+                slots.append(ghidra_cpp.split_args(demangled.get(s, s))[0].split("(")[0].replace(" ", ""))
+            else:
+                slots.append(str(s))
+        groups.append(slots)
+    return groups
+
+
+def vtable_mismatch(db, cls, dump):
+    """None when the compiled vtable of `cls` has the original slots in the original
+    order, otherwise what differs first (for a person or a model)."""
+    want, got = original_vtable(db, cls), dumped_vtable(dump, cls)
+    if not want and not got:
+        return None
+    if not got:
+        return f"{cls} has no virtual methods, but the original has a vtable"
+    if not want:
+        return f"{cls} must not have virtual methods: the original has no vtable"
+    if len(got) != len(want):
+        return f"{cls}: {len(got)} vtable groups (one per polymorphic base), the original has {len(want)}"
+    for k, (g, w) in enumerate(zip(got, want)):
+        for i in range(max(len(g), len(w))):
+            a = g[i] if i < len(g) else "(nothing)"
+            b = w[i] if i < len(w) else "(nothing)"
+            if a == b or (isinstance(b, set) and a in b):
+                continue
+            where = f"slot {i}" + (f" of vtable group {k}" if k else "")
+            b = sorted(b)[0] if isinstance(b, set) else b
+            return (f"{cls}: virtual {where} is {a} in your header, {b} in the original; "
+                    f"original order: {', '.join(sorted(s)[0] if isinstance(s, set) else s for s in w)}")
+    return None
+
+
 class Gen:
     def __init__(self):
         self.db = elfdb.load_db()
@@ -69,7 +157,7 @@ class Gen:
         game = {t["id"] for t in self.db["tus"] if t["kind"] == "game"}
         # Real classes only: namespaces of free functions (Ogre, std, MATH) also show up as scopes.
         self.game_classes = {name for name, c in self.db["classes"].items()
-                             if "<" not in name and "::" not in name
+                             if "<" not in name and "::" not in name and not name.startswith("Fl_")
                              and name not in ("Ogre", "std", "CEGUI", "ParticleUniverse", "__gnu_cxx")
                              and (c.get("typeinfo") or c.get("vtable") or name in self.types)
                              and (any(int(t) in game for t in c.get("tus", {})) or name in self.types)}
@@ -219,10 +307,10 @@ class Gen:
             r = self.root_return(b["class"], sig)
             if r:
                 return r
-        for a in self.own_slots(cls):
-            f = self.funcs.get(a)
+        for i, a in enumerate(self.own_slots(cls)):
+            f = self.funcs.get(a) if a != "__cxa_pure_virtual" else self.pure_overriders().get((cls, i))
             if f and f["kind"] not in ("ctor", "dtor") and self.virtual_signature(f) == sig:
-                return self.return_types.setdefault(a, self.ghidra_return(f) or "void")
+                return self.return_types.setdefault(f["address"], self.ghidra_return(f) or "void")
         return None
 
     def own_slots(self, cls):
@@ -230,6 +318,36 @@ class Gen:
         if not vt:
             return []
         return [s for s in vt["groups"][0]["slots"]]
+
+    def base_offsets(self, cls, at=0, out=None):
+        """Every base of cls, direct or not -> its offset in cls."""
+        out = {} if out is None else out
+        for b in self.db["classes"].get(cls, {}).get("bases", []):
+            out.setdefault(b["class"], at + b["offset"])
+            self.base_offsets(b["class"], at + b["offset"], out)
+        return out
+
+    def pure_overriders(self):
+        """(class, slot) -> a function overriding that pure virtual slot in some derived class.
+        Pure virtuals have no symbol; an override names the slot and gives its signature."""
+        if hasattr(self, "_pure"):
+            return self._pure
+        by_name = {f["demangled"]: f for f in self.funcs.values() if not f["demangled"].startswith(("non-virtual", "virtual"))}
+        self._pure = {}
+        for derived, vt in sorted(self.db["vtables"].items()):
+            for base, offset in self.base_offsets(derived).items():
+                pure = [i for i, s in enumerate(self.own_slots(base)) if s == "__cxa_pure_virtual"]
+                group = next((g for g in vt["groups"] if g.get("offset_to_top") == -offset), None)
+                if not pure or not group:
+                    continue
+                for i in pure:
+                    slot = group["slots"][i] if i < len(group["slots"]) else None
+                    f = self.funcs.get(slot) if isinstance(slot, str) else None
+                    if not f or (base, i) in self._pure or f["method"].startswith("~"):
+                        continue
+                    target = re.sub(r"^(?:non-virtual|virtual) thunk to ", "", f["demangled"])
+                    self._pure[(base, i)] = by_name.get(target, f)
+        return self._pure
 
     def primary_base_slots(self, cls):
         bases = sorted(self.db["classes"].get(cls, {}).get("bases", []), key=lambda b: b["offset"])
@@ -257,7 +375,11 @@ class Gen:
             f = self.funcs.get(slot) if isinstance(slot, str) else None
             if slot == "__cxa_pure_virtual":
                 if base_slots is not None and i >= base_slots:
-                    lines.append(f"    virtual void pureVirtualSlot{i}() = 0;")
+                    over = self.pure_overriders().get((cls, i))
+                    decl = over and self.method_decl(
+                        over, cls, deps, virtual=True,
+                        ret=self.return_types.setdefault(over["address"], self.ghidra_return(over) or "void"))
+                    lines.append(f"    {decl[:-1]} = 0;" if decl else f"    virtual void pureVirtualSlot{i}() = 0;")
                 continue
             if not f or f.get("scope") != cls or f["address"] in declared:
                 continue
@@ -556,12 +678,14 @@ class Gen:
             src = probe / f"{cls}.cpp"
             src.write_text(f'#include "{cls}.h"\n' + "\n".join(asserts) + "\n")
             try:
-                toolchain.compile_source(src, src.with_suffix(".o"), ["-I", str(OUT), "-w"], quiet=True)
-                ok.append(cls)
+                vtable = vtable_mismatch(self.db, cls, class_dump(src, ["-I", str(OUT), "-w"]))
+                if vtable:
+                    bad[cls] = vtable
+                else:
+                    ok.append(cls)
             except SystemExit as error:
                 lines = [l for l in str(error).splitlines() if "error" in l]
                 bad[cls] = lines[0].split("error:", 1)[-1].strip() if lines else "?"
-            src.with_suffix(".o").unlink(missing_ok=True)
         return ok, bad
 
 

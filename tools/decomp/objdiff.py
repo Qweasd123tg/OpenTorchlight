@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import bisect
 import difflib
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -497,6 +498,12 @@ def compile_for_diff(source, tmp, extra=(), quiet=False):
     return toolchain.assemble(patched, Path(tmp) / "unit.o"), globalized
 
 
+def code_digest(norm):
+    """Identity of a compiled function: its normalized instructions. A test result
+    stays valid while this holds, whatever happens to the source text or headers."""
+    return hashlib.sha256("\n".join(norm).encode()).hexdigest()[:16]
+
+
 def compare_source(source, original, show=None, extra=(), quiet=False):
     """quiet: compiler errors go into the SystemExit message instead of stderr."""
     tu = tu_for_source(original.db, source)
@@ -519,7 +526,7 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
             status = "DIFF"
         row = {"name": name, "demangled": f["demangled"], "address": f["address"], "status": status,
                "score": round(score, 4), "size": mine["size"], "original_size": f["size"],
-               "weak": mine["bind"] == elfimage.STB_WEAK}
+               "weak": mine["bind"] == elfimage.STB_WEAK, "code": code_digest(mine["norm"])}
         rows.append(row)
         if show and (show == "all" or show in (name, f["demangled"])):
             print(f"--- ours {name}\n+++ original {f['address']} {f['demangled']}")

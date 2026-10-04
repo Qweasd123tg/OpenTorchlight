@@ -133,6 +133,9 @@ def include_args(root, cfg):
         args += ["-isystem", str(path)]
     for item in cfg.get("include", []):
         args += ["-I", str(ROOT / item)]
+    # Generated headers for work in progress (llm_loop.py); committed sources must not need them.
+    for item in filter(None, os.environ.get("OTL_EXTRA_INCLUDE", "").split(":")):
+        args += ["-I", item]
     for item in cfg.get("system_include", []):
         path = item.replace("@OGRE@", str(root / "ogre-1.6.5" / "ogre"))
         path = path if os.path.isabs(path) else str(ROOT / path)
@@ -172,11 +175,12 @@ def _cache_lookup(cmd, source):
     return index, None
 
 
-def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False):
+def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False, cache=True):
     """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
 
     Results are cached in build-decomp/cc-cache by source, dependency and flag
-    digests; set OTL_NO_CC_CACHE=1 to bypass."""
+    digests; set OTL_NO_CC_CACHE=1 or cache=False to bypass (side outputs such
+    as dumps are not cached)."""
     root = cache_dir() / "gcc447"
     if not (root / ".complete.json").exists():
         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
@@ -190,7 +194,7 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
         out = Path(tmp) / ("out.s" if assembly else "out.o")
         cmd = base + include_args(root, cfg) + list(cfg["cflags"]) + list(extra)
         cmd += ["-S" if assembly else "-c"]
-        use_cache = not probe and not os.environ.get("OTL_NO_CC_CACHE")
+        use_cache = cache and not probe and not os.environ.get("OTL_NO_CC_CACHE")
         if use_cache:
             index, hit = _cache_lookup(cmd, source)
             if hit:

@@ -59,14 +59,14 @@ def shadow_covered(db):
 
 def generated_tests(db, diff):
     """Generates the autotests of DIFF functions recorded by mutate.py --accept whose
-    source has not changed since; returns their addresses."""
+    compiled code has not changed since; returns their addresses."""
     wanted = []
     for address, entry in mutate.load_accepted().items():
         f = db["functions"].get(address)
         if address not in diff or not f:
             continue
-        if mutate.body_digest(db, f) != entry.get("source"):
-            print(f"stale mutation check: {address} {entry['name']} changed; "
+        if diff[address].get("code") != entry.get("code"):
+            print(f"stale mutation check: {address} {entry['name']} compiles differently now; "
                   f"run tools/decomp/mutate.py --accept {address}")
             continue
         wanted.append(f)
@@ -145,6 +145,7 @@ def main():
         "matched_static_init": len(generated_by_compiler),
         "matched_static_init_bytes": sum(generated_by_compiler.values()),
         "accepted_functions": len(accepted), "accepted_bytes": sum(accepted.values()),
+        "accepted": sorted(accepted),
         "status": dict(status), "hybrid_selftest": selftest, "units": units,
     }, indent=1))
     return 1 if selftest not in (None, 0) else 0
