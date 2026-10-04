@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "TextureAnimateDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "TextureAnimateWrapper.h"
 
 CTextureAnimateDescriptor::CTextureAnimateDescriptor()
     : CAffectorDescriptor(L"Texture Animation", L"This animates flipbook particle textures", L"gear")
@@ -11,4 +16,9 @@ CTextureAnimateDescriptor::CTextureAnimateDescriptor()
 
 CTextureAnimateDescriptor::~CTextureAnimateDescriptor()
 {
+}
+
+CEditorBaseObject* CTextureAnimateDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CTextureAnimateWrapper(scene->getResourceManager());
 }
