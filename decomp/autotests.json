@@ -47,6 +47,12 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7e9f90": {
+  "name": "CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "killed": 1,
+  "tried": 1,
+  "code": "2b37112009f1b24c"
+ },
  "0x7fea30": {
   "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
   "killed": 4,
