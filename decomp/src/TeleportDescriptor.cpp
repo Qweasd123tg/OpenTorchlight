@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "TeleportDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "Teleport.h"
 
 CTeleportDescriptor::CTeleportDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
@@ -13,4 +18,9 @@ CTeleportDescriptor::CTeleportDescriptor(const wchar_t* name, const wchar_t* gro
 
 CTeleportDescriptor::~CTeleportDescriptor()
 {
+}
+
+CEditorBaseObject* CTeleportDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CTeleport(scene->getResourceManager());
 }
