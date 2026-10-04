@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "MusicObjectDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "MusicObject.h"
 
 CMusicObjectDescriptor::CMusicObjectDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -16,4 +21,44 @@ CMusicObjectDescriptor::CMusicObjectDescriptor(const wchar_t* name, const wchar_
 
 CMusicObjectDescriptor::~CMusicObjectDescriptor()
 {
+}
+
+void CMusicObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    if (object != NULL)
+    {
+        CMusicObject* musicObject = dynamic_cast<CMusicObject*>(object);
+        if (musicObject != NULL)
+        {
+            if (event == 10)
+            {
+                musicObject->stop();
+                return;
+            }
+
+            if (event == 13)
+            {
+                musicObject->playNormalLevelMusic();
+                return;
+            }
+
+            if (event == 9)
+                musicObject->play();
+        }
+    }
+}
+
+void CMusicObjectDescriptor::update(float fTime)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CMusicObject* musicObject = static_cast<CMusicObject*>(m_Objects[i]);
+        if (musicObject != NULL) {
+            musicObject->updateMusic(fTime);
+        }
+    }
+}
+
+CEditorBaseObject *CMusicObjectDescriptor::CreateObject(CEditorScene *scene)
+{
+    return new CMusicObject(scene->getResourceManager());
 }
