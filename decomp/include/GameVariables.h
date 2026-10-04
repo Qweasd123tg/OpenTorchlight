@@ -9,6 +9,7 @@
 static unsigned char gQUEST_REQUIREMENTS[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 static long g_SkillParser;
+static void* g_pRecipes;
 static void* g_pUnitThemes;
 
 #endif
