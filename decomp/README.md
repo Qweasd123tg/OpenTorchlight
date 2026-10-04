@@ -961,3 +961,10 @@ unitInit вызывает оригинальный getPlayerIsCheat. Не пре
 119199 байт. BaseUnit/Skill/GameClient размеры и vtable проверены. Полная
 самостоятельная сборка игры и прохождение кампании пока не готовы.
 Параллельный участок пользователя записан в COLLISION_HANDOFF.md.
+
+MouseHandler.cpp закрыт: все 8 игровых функций MATCH, включая возврат POINT
+по значению (два 64-битных long), состояние кнопок через старший бит
+GetAsyncKeyState и SDL mouse-focus flag 0x200. POINT подтверждён двумя
+64-битными записями GetCursorPos по +0/+8; SDL API объявлен с uint window ID.
+Совпадает и статический initializer. Полный check.py: 76 tests PASS,
+449/5247 игровых функций, 119410 байт. Окно игры не запускалось.
