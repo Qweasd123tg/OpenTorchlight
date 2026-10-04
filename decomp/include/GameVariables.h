@@ -6,6 +6,7 @@
 
 #include <string>
 
+static unsigned char gRESOURCE_GROUP_NAMES[32];
 static unsigned char g_strStatDefines[744];
 
 #endif
