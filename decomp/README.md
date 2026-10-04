@@ -1009,3 +1009,14 @@ Character invulnerable byte 0x52e и GameClient state-control byte 0x10bc
 выделены из opaque regions без сдвига последующих полей. Неиспользуемый
 возврат GameUI::onClick пока не проверен и отмечен в заголовке.
 Полный check.py: 79 tests PASS, 471/5247 игровых функций, 121320 байт.
+
+ShellUtils: обе функции namespace LaunchProgram/LaunchBrowser MATCH.
+Space Bunny записала их по отдельности в изолированную папку результатов;
+для LaunchProgram форма цикла приведена к двум исходным int-счётчикам.
+Сохранены все execlp аргументы (в том числе два вхождения xdg-open) и
+исходный размер malloc: args.size()*sizeof(char*) + 2 байта. Последнее
+выглядит как дефект оригинала, но исправлять механику при faithful transfer
+нельзя. lodepng_read32bitInt из границы того же TU не переносился: это
+зарезервированная библиотечная реализация. Процессы/браузер этими функциями
+при проверке не запускались. Полный headless check.py: 79 tests PASS,
+473/5247 игровых функций, 121541 байт.
