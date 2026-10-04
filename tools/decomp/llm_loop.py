@@ -262,7 +262,9 @@ class Loop:
                 if not error:
                     break
             else:
-                shutil.copy(gen, path)  # fall back to the generated one
+                # Fall back to the generated one, written like a promoted header.
+                text = gen.read_text().replace(promote.GENERATED_NOTE, promote.PARTIAL_NOTE)
+                path.write_text(re.sub(r"\bGEN_\w+_H\b", promote.guard(name), text))
                 print(f"  header {cls}: models failed, using the generated header")
             out[cls] = name
             # Generated headers that pulled in the draft now get the real one.
