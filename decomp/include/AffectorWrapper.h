@@ -1,36 +1,41 @@
 #ifndef AFFECTORWRAPPER_H
 #define AFFECTORWRAPPER_H
 
-// Partial: generated from symbols, RTTI and recovered layouts (tools/decomp/promote.py).
-// Bases, virtual order and field offsets are the original ones; names, field types
-// and return types are placeholders until the class's own TU is recovered.
-
 #include <OgreVector3.h>
 #include <string>
+
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 #include "iSelected.h"
+
 class CParticleTechWrapper;
+class ParticleAffector;
+
+#pragma pack(push, 1)
 
 class CAffectorWrapper : public CPositionableObject, public iSelected
 {
 public:
     virtual ~CAffectorWrapper();
-    virtual void setParentGuid(long long);
-    virtual void setEnabled(bool);
-    virtual bool getEnabled();
-    virtual void positionUpdated(const Ogre::Vector3&);
-    virtual void editorSelectionChanged(bool);
-    void enablePositioning(bool);
-    void setParentTechniqueWrapper(CParticleTechWrapper*);
-    void destroyAffector();
-    CAffectorWrapper(CResourceManager*, std::string);
 
-    // fields
+    virtual void setParentGuid(long long parentGuid);
+    virtual void setEnabled(bool enabled);
+    virtual bool getEnabled();
+    virtual void positionUpdated(const Ogre::Vector3& position);
+    virtual void editorSelectionChanged(bool selected);
+
+    void enablePositioning(bool enabled);
+    void setParentTechniqueWrapper(CParticleTechWrapper* parent);
+    void destroyAffector();
+
+    CAffectorWrapper(CResourceManager* resourceManager, std::string name);
+
     CParticleTechWrapper* m_pParticleTechWrapper;
-    void* m_pUnknown110;
-    bool m_bUnknown118;
+    ParticleAffector* m_pAffector;
+    bool m_bPositioningEnabled;
     bool m_bEnabled;
 };
+
+#pragma pack(pop)
 
 #endif

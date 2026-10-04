@@ -107,6 +107,12 @@
   "tried": 3,
   "code": "cd25ea618ae2655d"
  },
+ "0xa32a20": {
+  "name": "CParticleEmitterWrapper::setMinLineIncrement(float)",
+  "killed": 7,
+  "tried": 7,
+  "code": "c7347d516fdde13a"
+ },
  "0xc78310": {
   "name": "CGraph::getValue(float, unsigned int) const",
   "killed": 10,
