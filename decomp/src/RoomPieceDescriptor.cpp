@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "RoomPieceDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "RoomPiece.h"
 
 CRoomPieceDescriptor::CRoomPieceDescriptor()
     : CPositionableObjectDescriptor(L"Room Piece", L"Room piece for building rooms", L"piece", true, true, true, true, true)
@@ -19,4 +24,14 @@ CRoomPieceDescriptor::CRoomPieceDescriptor()
 
 CRoomPieceDescriptor::~CRoomPieceDescriptor()
 {
+}
+
+bool CRoomPieceDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
+{
+    return true;
+}
+
+CEditorBaseObject* CRoomPieceDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CRoomPiece(scene->getResourceManager());
 }

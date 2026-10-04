@@ -17,5 +17,6 @@ static unsigned char gPROPERTY_NODE_TYPE_NAMES[128];
 static unsigned char gRANDOMGROUP_NAMES[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 static unsigned char g_DescriptorController[96];
+extern long m_pMasterResourceManager;
 
 #endif
