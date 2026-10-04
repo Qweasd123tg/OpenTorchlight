@@ -53,6 +53,42 @@
   "tried": 3,
   "code": "cd25ea618ae2655d"
  },
+ "0xc78310": {
+  "name": "CGraph::getValue(float, unsigned int) const",
+  "killed": 10,
+  "tried": 10,
+  "code": "364e5b4a4ee90809"
+ },
+ "0xc78480": {
+  "name": "CGraph::processPoints()",
+  "killed": 6,
+  "tried": 6,
+  "code": "385639c938cfe3be"
+ },
+ "0xc784e0": {
+  "name": "CGraph::getControlPoints()",
+  "killed": 5,
+  "tried": 5,
+  "code": "48b836ab07c52d76"
+ },
+ "0xc78540": {
+  "name": "CGraph::clear(unsigned int)",
+  "killed": 4,
+  "tried": 4,
+  "code": "575c638211caefb0"
+ },
+ "0xc785a0": {
+  "name": "CGraph::~CGraph()",
+  "killed": 5,
+  "tried": 5,
+  "code": "13682087210f872b"
+ },
+ "0xc78880": {
+  "name": "CGraph::addValue(float, float, unsigned int)",
+  "killed": 8,
+  "tried": 10,
+  "code": "e26687ea5d4e8d82"
+ },
  "0xc8a2c0": {
   "name": "CRandomizer::removeChoice(unsigned int)",
   "killed": 9,

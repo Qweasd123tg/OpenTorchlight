@@ -98,6 +98,13 @@ public:
         return m_pData[index];
     }
 
+    const T& operator[](unsigned int index) const
+    {
+        if (index >= m_nCapacity)
+            return m_pData[0];
+        return m_pData[index];
+    }
+
     unsigned int size() const { return m_nCount; }
 
     // Index of the first element equal to item, -1 if there is none.
