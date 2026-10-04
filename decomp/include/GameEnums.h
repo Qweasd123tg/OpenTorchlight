@@ -11,5 +11,6 @@ enum EGameState { EGameState_GEN_LAST = 0x7fffffff };
 enum ELayoutFunction { ELayoutFunction_GEN_LAST = 0x7fffffff };
 enum EMENU_TYPE { EMENU_TYPE_GEN_LAST = 0x7fffffff };
 enum EMenu { EMenu_GEN_LAST = 0x7fffffff };
+enum SOUND_TYPE { SOUND_TYPE_GEN_LAST = 0x7fffffff };
 
 #endif
