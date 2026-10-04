@@ -310,5 +310,11 @@
   "killed": 2,
   "tried": 2,
   "code": "c994f282e1a11047"
+ },
+ "0x7cd810": {
+  "name": "CAffix::setLevel(unsigned int)",
+  "killed": 8,
+  "tried": 10,
+  "code": "075a7a08513fee5f"
  }
 }

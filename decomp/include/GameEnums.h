@@ -13,6 +13,7 @@ enum EEQUIP_LOCATIONS { EEQUIP_LOCATIONS_GEN_LAST = 0x7fffffff };
 enum EGAMESPEED_TYPE { EGAMESPEED_TYPE_GEN_LAST = 0x7fffffff };
 enum EGameState { EGameState_GEN_LAST = 0x7fffffff };
 enum EINTERACTABLE_UNITS { EINTERACTABLE_UNITS_GEN_LAST = 0x7fffffff };
+enum EINVENTORY_PANES { EINVENTORY_PANES_GEN_LAST = 0x7fffffff };
 enum EMENU_EVENT { EMENU_EVENT_GEN_LAST = 0x7fffffff };
 enum EMENU_TYPE { EMENU_TYPE_GEN_LAST = 0x7fffffff };
 enum EMenu { EMenu_GEN_LAST = 0x7fffffff };
