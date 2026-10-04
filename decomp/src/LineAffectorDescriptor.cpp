@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "LineAffectorDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "LineWrapper.h"
 
 CLineAffectorDescriptor::CLineAffectorDescriptor()
     : CAffectorDescriptor(L"Line", L"This is a basic accelerator for your particles", L"gear")
@@ -12,4 +17,9 @@ CLineAffectorDescriptor::CLineAffectorDescriptor()
 
 CLineAffectorDescriptor::~CLineAffectorDescriptor()
 {
+}
+
+CEditorBaseObject* CLineAffectorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CLineWrapper(scene->getResourceManager());
 }
