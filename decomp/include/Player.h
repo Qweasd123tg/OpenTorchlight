@@ -33,6 +33,9 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    void clearDungeonHistory(std::wstring dungeon);
+    void updateStoredLevels(CLevel& level);
+
 private:
     unsigned char m_PlayerData[0xa70 - 0x720];
 };

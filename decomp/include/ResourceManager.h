@@ -27,6 +27,8 @@ public:
     CLevel* getLevel() { return m_pLevel; }
     // Read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).
     bool getLogicMessagesEnabled() { return m_bFlag1; }
+    unsigned int getGameClientCount() { return m_GameClients.size(); }
+    CGameClient* getGameClient(unsigned int index) { return m_GameClients[index]; }
     CGameClient* getGameClient() { return m_GameClients.size() != 0 ? m_GameClients[0] : NULL; }
 
 private:
