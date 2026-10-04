@@ -268,10 +268,19 @@ CLAUSE_END = r"(?=\s*(?:\)|&&|\|\||;|$))"
 def drop_nan_guards(text):
     """`!NAN(x) && x < y` -> `x < y`. An ordered comparison (==, <, <=, >, >=) is already false
     when an operand is NaN, so a guard on one of its operands is redundant. Every other NAN() stays:
-    `!NAN(x) && !(x < y)` or `!NAN(x) && x != y` differ from the unguarded expression for NaN."""
+    `!NAN(x) && !(x < y)` or `!NAN(x) && x != y` differ from the unguarded expression for NaN, and
+    so does `!NAN(x) && p->x < y`: the guarded expression must be a whole operand, not a name in it."""
+    def bare(expr):
+        return re.sub(r"\s+", "", expr)
+
     def guarded(group, comparison):
-        names = [n.strip() for n in re.findall(r"NAN\(([^()]*)\)", group)]
-        return names and all(re.search(rf"(?<![\w.]){re.escape(n)}(?![\w])", comparison) for n in names)
+        names = [bare(n) for n in re.findall(r"NAN\(([^()]*)\)", group)]
+        operands = re.split(r"\s(?:==|<=?|>=?)\s", comparison.strip(), maxsplit=1)
+        if len(operands) != 2:
+            return False
+        # A negated operand is NaN exactly when the operand is.
+        whole = {bare(o)[1:] if bare(o).startswith("-") else bare(o) for o in operands}
+        return bool(names) and all(n in whole for n in names)
 
     def before(m):
         return m.group("cmp") if guarded(m.group("nan"), m.group("cmp")) else m.group(0)

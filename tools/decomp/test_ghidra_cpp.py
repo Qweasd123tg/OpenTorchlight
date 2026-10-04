@@ -26,10 +26,18 @@ class NanTest(unittest.TestCase):
         self.assertEqual(self.tidy("if ((!NAN(a) && !NAN(b)) && a < b) {"), "if (a < b) {")
         self.assertEqual(self.tidy("if (a <= b && !NAN(a)) {"), "if (a <= b) {")
         self.assertEqual(self.tidy("x = !NAN(f) && f >= 0.5;"), "x = f >= 0.5;")
+        self.assertEqual(self.tidy("if (!NAN(p->x) && p->x < y) {"), "if (p->x < y) {")
+        self.assertEqual(self.tidy("if (!NAN(b) && a < -b) {"), "if (a < -b) {")
 
     def test_guards_that_change_meaning_stay(self):
         for text in ["if (!NAN(x) && enabled) {", "if (!NAN(a) && !(a < b)) {", "if (!NAN(a) && a != b) {",
                      "if (!NAN(c) && a < b) {", "if (NAN(a) || a < b) {"]:
+            self.assertEqual(self.tidy(text), text)
+
+    def test_guard_on_a_name_inside_an_operand_stays(self):
+        # x and p->x are different values: NaN in x with a number in p->x changes the result.
+        for text in ["if (!NAN(x) && p->x < y) {", "if (!NAN(x) && y < p->x) {", "if (p->x < y && !NAN(x)) {",
+                     "if (!NAN(x) && a[x] < y) {", "if (!NAN(x) && x * 2 < y) {", "if (!NAN(x) && s.x < y) {"]:
             self.assertEqual(self.tidy(text), text)
 
 
