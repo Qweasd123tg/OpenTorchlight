@@ -1,5 +1,11 @@
 #include "EmptyStrings.h"
 #include "EditorButtonDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorButton.h"
+#include "EditorImage.h"
+#include "EditorScene.h"
 
 CEditorButtonDescriptor::CEditorButtonDescriptor()
     : CBaseObjectDescriptor(L"Button", L"An bitmap", L"button")
@@ -36,4 +42,31 @@ CEditorButtonDescriptor::CEditorButtonDescriptor()
 
 CEditorButtonDescriptor::~CEditorButtonDescriptor()
 {
+}
+
+void CEditorButtonDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param)
+{
+    CEditorImage* image = dynamic_cast<CEditorImage*>(object);
+
+    if (image != NULL) {
+        switch (event) {
+        case 1:
+            image->setVisible(false);
+            break;
+        case 0:
+            image->setVisible(true);
+            break;
+        case 2:
+            image->setEnabled(true);
+            break;
+        case 3:
+            image->setEnabled(false);
+            break;
+        }
+    }
+}
+
+CEditorBaseObject* CEditorButtonDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CEditorButton(scene->getResourceManager());
 }
