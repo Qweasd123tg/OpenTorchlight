@@ -59,6 +59,12 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7026d0": {
+  "name": "CDescriptorManager::postProcessDescriptorObjects(CDataGroup*, CDescriptorLoadConfiguration*)",
+  "killed": 5,
+  "tried": 6,
+  "code": "00bd1ff717a5e5b5"
+ },
  "0x7fea30": {
   "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
   "killed": 4,
