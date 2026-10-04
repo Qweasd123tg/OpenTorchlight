@@ -139,7 +139,12 @@ def ghidra_drafts(db, tu, funcs, out):
     (out / "ghidra.cpp").write_text("// Ghidra drafts with recovered types, converted by tools/decomp/ghidra_cpp.py.\n"
                                    "// Not compiled. Inlined TArrayList/std::string code may still be expanded.\n\n"
                                    + "\n".join(parts))
-    return ["## Ghidra drafts", "",
+    import ghidra_draft
+    state, reasons = ghidra_draft.draft_state(tu["name"], db)
+    warning = ([f"**Stale drafts** ({'; '.join(reasons)}): field names and types in them may be outdated; "
+                "trust the headers, or remake them with `ghidra_draft.py drafts --stale`.", ""]
+               if state == "stale" else [])
+    return ["## Ghidra drafts", ""] + warning + [
             f"`ghidra.cpp`: {len(parts)} functions decompiled with the recovered types and converted to C++.",
             "Start from them instead of the ASM; verify with objdiff and self-tests.", ""]
 

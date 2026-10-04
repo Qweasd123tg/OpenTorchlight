@@ -4,6 +4,8 @@
     python3 tools/decomp/ghidra_draft.py analyze            # once: import + auto-analysis (long)
     python3 tools/decomp/ghidra_draft.py drafts AIFlag.cpp  # types + decompile + C++ cleanup
     python3 tools/decomp/ghidra_draft.py drafts --all       # every game TU (long; run in background)
+    python3 tools/decomp/ghidra_draft.py stale              # drafts made with other types/scripts/ELF
+    python3 tools/decomp/ghidra_draft.py drafts --stale     # remake only those
 
 `drafts` exports class layouts from tools/decomp/layout.py and the recovered
 headers as Ghidra structures, applies them as `this` types, decompiles every
@@ -71,6 +73,72 @@ def analyze():
 
 
 WRITTEN = ("function", "ctor", "dtor", "static")
+# Everything a draft depends on besides the types: a change makes every draft stale.
+DRAFT_TOOLS = (ROOT / "tools" / "decomp" / "ghidra" / "DecompDrafts.java", Path(__file__),
+               ROOT / "tools" / "decomp" / "types_export.py", ROOT / "tools" / "decomp" / "layout.py")
+
+
+def _digest(data):
+    import hashlib
+    return hashlib.sha256(data if isinstance(data, bytes) else data.encode()).hexdigest()[:16]
+
+
+def tools_digest():
+    return _digest(b"".join(p.read_bytes() for p in DRAFT_TOOLS if p.exists()))
+
+
+def class_digests(types, names):
+    import json
+    return {n: _digest(json.dumps(types[n], sort_keys=True)) for n in sorted(names) if n in types}
+
+
+def used_classes(types, texts, scopes):
+    """Classes whose layout a TU's drafts were decompiled with: the TU's own and every one they name."""
+    words = set()
+    for text in texts:
+        words.update(re.findall(r"\b[A-Za-z_]\w*\b", text))
+    return (words | set(scopes)) & set(types)
+
+
+def draft_state(tu, db=None, types=None):
+    """("fresh" | "stale" | "unknown", reasons) for build-decomp/drafts/<TU>."""
+    import json
+    meta = OUT / tu / "inputs.json"
+    if not meta.exists():
+        return "unknown", ["no inputs.json: made before drafts were fingerprinted"]
+    data = json.loads(meta.read_text())
+    db = db or elfdb.load_db()
+    types = types if types is not None else _types()
+    reasons = []
+    if data.get("elf") != db["original_elf_sha256"]:
+        reasons.append("another ELF")
+    if data.get("tools") != tools_digest():
+        reasons.append("decompiler scripts changed")
+    now = class_digests(types, data.get("classes", {}))
+    changed = sorted(n for n, d in data.get("classes", {}).items() if now.get(n) != d)
+    if changed:
+        reasons.append("types changed: " + ", ".join(changed[:8]) + (" ..." if len(changed) > 8 else ""))
+    return ("stale" if reasons else "fresh"), reasons
+
+
+def _types():
+    import json
+    path = ROOT / "build-decomp" / "types.json"
+    if not path.exists():
+        subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
+    return json.loads(path.read_text())["classes"]
+
+
+def stale(all_tus=False):
+    db = elfdb.load_db()
+    types = _types()
+    out = []
+    for d in sorted(p for p in OUT.iterdir() if (p / "raw").is_dir()):
+        state, reasons = draft_state(d.name, db, types)
+        if state == "stale" or (all_tus and state == "unknown"):
+            out.append(d.name)
+            print(f"{d.name:40} {state}: {'; '.join(reasons)}")
+    return out
 
 
 def drafts(tus):
@@ -97,13 +165,22 @@ def drafts(tus):
                        str(io / "out")], "drafts")
     if result.returncode:
         raise SystemExit("Ghidra failed; see " + str(base / "drafts.log"))
+    import json
+    types = json.loads((io / "types.json").read_text())["classes"]
+    by_tu = {}
     for f in funcs:
         raw = io / "out" / f"{f['address']}.c"
         tu_dir = OUT / names[f["tu"]] / "raw"
         tu_dir.mkdir(parents=True, exist_ok=True)
         if raw.exists():
             shutil.copy(raw, tu_dir / f"{f['address']}.c")
-    print(f"{len(funcs)} functions -> {OUT.relative_to(ROOT)}/<TU>/raw/")
+            by_tu.setdefault(names[f["tu"]], []).append((raw.read_text(errors="replace"), f.get("scope") or ""))
+    for tu, items in by_tu.items():
+        classes = used_classes(types, [t for t, _ in items], [s.split("::")[0] for _, s in items])
+        (OUT / tu / "inputs.json").write_text(json.dumps({
+            "elf": db["original_elf_sha256"], "tools": tools_digest(),
+            "classes": class_digests(types, classes)}, indent=1))
+    print(f"{len(funcs)} functions -> {OUT.relative_to(ROOT)}/<TU>/raw/ (fingerprints in <TU>/inputs.json)")
 
 
 def find_definition(text, f):
@@ -111,6 +188,8 @@ def find_definition(text, f):
     import ghidra_cpp
     qualified = f["demangled"].split("(")[0]
     want = len([p for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"])
+    want_types = [_param_type(p) for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"]
+    fallback = None
     for m in re.finditer(rf"(?m)^[^\n;{{}}#/]*\b{re.escape(qualified)}\s*\(", text):
         start = m.start()
         depth, i = 1, m.end()
@@ -125,8 +204,25 @@ def find_definition(text, f):
         while j < len(text) and depth:
             depth += {"{": 1, "}": -1}.get(text[j], 0)
             j += 1
-        return start, j
-    return None
+        # Overloads with the same arity: the parameter types decide (ReadFile(FILE*) vs ReadFile(wstring)).
+        if [_param_type(p, named=True) for p in params] == want_types:
+            return start, j
+        fallback = fallback or (start, j)
+    return fallback
+
+
+def _param_type(param, named=False):
+    """Comparable spelling of a parameter type: `const std::wstring& name` == `std::basic_string<...> const&`."""
+    p = re.sub(r"\s*=.*$", "", param.strip())
+    if named:
+        p = re.sub(r"(?<=[\w*&>\s])\s*\b[A-Za-z_]\w*\s*(\[\d*\])?$", lambda m: m.group(1) or "", p)
+    p = re.sub(r"std::basic_string<wchar_t,\s*std::char_traits<wchar_t>,\s*std::allocator<wchar_t>\s*>", "std::wstring", p)
+    p = re.sub(r"\b_IO_FILE\b", "FILE", p)
+    p = re.sub(r"std::basic_string<char,\s*std::char_traits<char>,\s*std::allocator<char>\s*>", "std::string", p)
+    const = bool(re.search(r"\bconst\b", p.split("*")[0]))
+    p = re.sub(r"\bconst\b", "", p.split("*")[0]) + ("*" * p.count("*")) + ("&" if p.endswith("&") else "")
+    p = re.sub(r"\s+|&(?=\*)", "", p.replace("&", "")) + ("&" if param.strip().rstrip().endswith("&") or "&" in param.split(")")[-1] else "")
+    return ("const " if const else "") + p
 
 
 _STDERR = []
@@ -210,6 +306,9 @@ def main():
     d = sub.add_parser("drafts")
     d.add_argument("tus", nargs="*")
     d.add_argument("--all", action="store_true", help="every game TU")
+    s = sub.add_parser("stale", help="TUs whose drafts were made with other types, scripts or ELF")
+    s.add_argument("--unknown", action="store_true", help="also those made before fingerprinting")
+    d.add_argument("--stale", action="store_true", help="every TU `stale` lists")
     m = sub.add_parser("measure")
     m.add_argument("tus", nargs="+")
     args = parser.parse_args()
@@ -217,6 +316,15 @@ def main():
         return analyze()
     if args.command == "measure":
         return measure(args.tus)
+    if args.command == "stale":
+        stale(args.unknown)
+        return 0
+    if args.stale:
+        tus = stale()
+        if not tus:
+            print("no stale drafts")
+            return 0
+        return drafts(tus)
     drafts(["--all"] if getattr(args, "all", False) else args.tus)
 
 

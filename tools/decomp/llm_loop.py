@@ -158,6 +158,10 @@ class Loop:
         self.signatures = ghidra_cpp.signatures_of(self.db)
         self.enums = ghidra_cpp.parse_enums()
         self.source = ROOT / "decomp" / "src" / tu_name
+        import ghidra_draft
+        state, reasons = ghidra_draft.draft_state(tu_name, self.db)
+        self.stale_note = (f"; STALE, made before these changes: {'; '.join(reasons)}. Where it disagrees with "
+                           "the header, the header is right" if state == "stale" else "")
         self.accepted = {}  # address -> code
         self.status = {}
         self.resume = resume
@@ -338,7 +342,8 @@ class Loop:
                    f"{examples.render(chosen)}\n\n" if chosen else "")
                 + f"Write the C++98 definition of `{f['demangled']}` exactly as declared in the header.\n\n"
                 f"Original machine code (objdump):\n```\n{asm_of(self.tu['name'], f)}\n```\n\n"
-                f"Ghidra decompilation (a draft; types and temporaries may be wrong):\n```cpp\n{draft}\n```\n\n"
+                f"Ghidra decompilation (a draft; types and temporaries may be wrong{self.stale_note}):\n"
+                f"```cpp\n{draft}\n```\n\n"
                 "Rules: C++98; use the header's names; call other functions normally (std::wstring, "
                 "TArrayList methods instead of inlined internals); globals are declared in GenGlobals.h, other "
                 "classes in their headers (already included); no includes; return only this definition.")
