@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include <string>
+#include <vector>
 
 #include "BaseUnit.h"
 #include "EquipmentDefines.h"
@@ -108,6 +109,10 @@ public:
     bool alive();
     void setInvulnerable(bool value) { m_bInvulnerable = value; }
     void stopPathing();
+    void dropToGround(CLevel& level, float height, bool force);
+    void teleportToMaster(float distance);
+    unsigned int getFollowerCount() { return m_Followers.size(); }
+    CCharacter* getFollower(unsigned int index) { return m_Followers.empty() ? NULL : m_Followers[index]; }
     void setMeshVisible(bool visible, bool recursive);
     void modifyHP(float change);
     int HP();
@@ -126,7 +131,9 @@ private:
     int m_iGold;
     char m_CharacterData448[0x52e - 0x448];
     bool m_bInvulnerable;
-    char m_CharacterData52F[0x718 - 0x52f];
+    char m_CharacterData52F[0x648 - 0x52f];
+    std::vector<CCharacter*> m_Followers;
+    char m_CharacterData660[0x718 - 0x660];
     CAIManager* m_pAIManager;
 };
 
