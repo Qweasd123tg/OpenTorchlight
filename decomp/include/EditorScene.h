@@ -46,6 +46,7 @@ public:
     virtual void editorObjectLoaded(CEditorBaseObject* object);
 
     CEditorBaseObject* GetObjectInScene(long long guid);
+    void AddDescriptor(const wchar_t* name);
     void EditorBaseObjectChangedID(CEditorBaseObject* object, long long oldGuid, long long newGuid);
 
     CDescriptorManager* getDescriptorManager() { return m_pDescriptorManager; }
