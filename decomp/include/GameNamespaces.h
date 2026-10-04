@@ -48,4 +48,10 @@ namespace STRINGS
     long long firstXCharactersMatch(const wchar_t*, unsigned int, const wchar_t*, unsigned int);
 }
 
+namespace ShellUtils
+{
+    void LaunchBrowser(const std::string&);
+    void LaunchProgram(const std::string&, const std::vector<std::string, std::allocator<std::string > >&);
+}
+
 #endif

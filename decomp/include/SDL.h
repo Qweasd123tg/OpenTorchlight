@@ -1,0 +1,23 @@
+#ifndef SDL_H
+#define SDL_H
+
+// Partial: the SDL 1.3 declarations the game uses. SDL is a library, it is
+// linked, not recovered.
+
+typedef unsigned char Uint8;
+typedef unsigned int Uint32;
+
+struct SDL_Window;
+
+enum SDL_WindowFlags
+{
+    SDL_WINDOW_INPUT_FOCUS = 0x00000200
+};
+
+extern "C"
+{
+    SDL_Window* SDL_GetWindowFromID(Uint32 id);
+    Uint32 SDL_GetWindowFlags(SDL_Window* window);
+}
+
+#endif

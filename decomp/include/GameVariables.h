@@ -8,6 +8,8 @@
 
 extern int KSETTINGS_KEYMAP_ZOOMIN;
 extern int KSETTINGS_KEYMAP_ZOOMOUT;
+extern int KSETTINGS_RES_HEIGHT;
+extern int KSETTINGS_RES_WIDTH;
 static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
 static unsigned char gQUEST_REQUIREMENTS[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
@@ -23,6 +25,7 @@ static void* g_pSets;
 static void* g_pUnitThemes;
 static unsigned char g_strStatDefines[744];
 static int m_gQuestUnitDataID;
+extern long m_gStatsObject;
 extern long m_pMasterResourceManager;
 
 #endif
