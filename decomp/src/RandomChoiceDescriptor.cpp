@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "RandomChoiceDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "RandomChoice.h"
 
 CRandomChoiceDescriptor::CRandomChoiceDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -22,4 +27,23 @@ CRandomChoiceDescriptor::CRandomChoiceDescriptor(const wchar_t* name, const wcha
 
 CRandomChoiceDescriptor::~CRandomChoiceDescriptor()
 {
+}
+
+void CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject* object,
+                                               unsigned int eventType,
+                                               CEditorBaseObject* param_3)
+{
+    if (object != NULL) {
+        CRandomChoice* choice = dynamic_cast<CRandomChoice*>(object);
+
+        if (choice != NULL && eventType == 0x27) {
+            choice->roll();
+            return;
+        }
+    }
+}
+
+CEditorBaseObject* CRandomChoiceDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CRandomChoice;
 }
