@@ -6,6 +6,7 @@
 
 #include <string>
 
+static void* g_pRandomNames;
 static void* g_pSharedStash;
 
 #endif
