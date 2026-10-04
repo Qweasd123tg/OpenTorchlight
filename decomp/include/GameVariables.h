@@ -7,5 +7,6 @@
 #include <string>
 
 static void* g_pDungeonManager;
+extern long m_gRoomPieceInformation;
 
 #endif
