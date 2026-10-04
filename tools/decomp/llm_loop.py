@@ -129,12 +129,12 @@ def asm_of(tu, f):
 
 
 class Loop:
-    def __init__(self, tu_name, models, rounds, switch_after=2):
+    def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4):
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
         os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
         self.tu = next(t for t in self.db["tus"] if t["name"] == tu_name)
-        self.rounds, self.switch_after = rounds, switch_after
+        self.rounds, self.switch_after, self.jobs = rounds, switch_after, jobs
         self.work = ROOT / "build-decomp" / "llm-loop" / tu_name
         shutil.rmtree(self.work, ignore_errors=True)
         self.work.mkdir(parents=True)
@@ -173,8 +173,12 @@ class Loop:
     # -- header -------------------------------------------------------------
     def header(self):
         out = {}
+        hand = headers_by_class()
         for cls in self.classes:
             gen = ROOT / "build-decomp" / "include-gen" / f"{cls}.h"
+            if cls in hand:
+                out[cls] = hand[cls][0]  # an existing header is used as it is
+                continue
             if not gen.exists():
                 continue
             name = (cls[1:] if re.match(r"C[A-Z]", cls) else cls) + ".h"
@@ -352,15 +356,15 @@ class Loop:
         return f["address"], code, sid
 
     def run(self):
-        print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}")
+        print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}", flush=True)
         self.header()
-        print(f"  header: {', '.join(self.headers.values())}")
+        print(f"  header: {', '.join(self.headers.values())}", flush=True)
         pending = {f["address"]: {"f": f, "session": None, "feedback": None, "model": 0, "tries": 0}
                    for f in self.funcs}
         for round_no in range(1, self.rounds + 1):
             if not pending:
                 break
-            with ThreadPoolExecutor(4) as pool:
+            with ThreadPoolExecutor(self.jobs) as pool:
                 answers = list(pool.map(lambda item: self.ask(item, round_no), pending.values()))
             diffs = {}
             for address, code, sid in answers:
@@ -498,9 +502,10 @@ def main():
                         help="comma-separated chain; a function moves on after --switch-after rounds")
     parser.add_argument("--rounds", type=int, default=5)
     parser.add_argument("--switch-after", type=int, default=2)
+    parser.add_argument("--jobs", type=int, default=4, help="model calls in parallel")
     args = parser.parse_args()
     started = time.time()
-    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after).run()
+    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs).run()
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
 
