@@ -258,8 +258,9 @@ class Loop:
 
     # -- functions ----------------------------------------------------------
     def unit(self, extra=()):
-        parts = ['#include "EmptyStrings.h"', '#include "GenTypes.h"', '#include "GenGlobals.h"',
-                 '#include "GenNamespaces.h"'] + [f'#include "{h}"' for h in self.headers.values()]
+        parts = ['#include "EmptyStrings.h"'] + [f'#include "{g}"' for g in ("GenTypes.h", "GenGlobals.h", "GenNamespaces.h")
+                                                 if (headers.OUT / g).exists()]
+        parts += [f'#include "{h}"' for h in self.headers.values()]
         names = set()
         for code in list(self.accepted.values()) + list(extra):
             names.update(re.findall(r"\b[A-Za-z_]\w*\b", code))
@@ -400,7 +401,8 @@ class Loop:
             done = sum(1 for s in self.status.values())
             print(f"  round {round_no}: accepted {done} of {len(self.funcs)} "
                   f"({sum(1 for s in self.status.values() if s == 'MATCH')} MATCH); pending {len(pending)}", flush=True)
-        self.source.write_text(self.unit())
+        if self.accepted or not self.existing:
+            self.source.write_text(self.unit())
         for address, item in pending.items():
             self.status[address] = "not accepted"
         self.finish()
@@ -436,7 +438,11 @@ class Loop:
         """Moves the declarations the TU (and the class headers written for it) use from the
         generated headers into decomp/include and checks that it builds without them, with
         the same results. A TU without accepted functions is removed, its headers stay."""
-        before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        try:
+            before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        except SystemExit as error:
+            print(f"  the TU does not compile:\n{str(error)[:1500]}")
+            return
         written = promote.promote(self.source)
         saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
         try:
