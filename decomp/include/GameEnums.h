@@ -8,9 +8,11 @@
 enum EContextTip { EContextTip_GEN_LAST = 0x7fffffff };
 enum ECursorState { ECursorState_GEN_LAST = 0x7fffffff };
 enum EGameState { EGameState_GEN_LAST = 0x7fffffff };
+enum EINTERACTABLE_UNITS { EINTERACTABLE_UNITS_GEN_LAST = 0x7fffffff };
 enum ELayoutFunction { ELayoutFunction_GEN_LAST = 0x7fffffff };
 enum EMENU_EVENT { EMENU_EVENT_GEN_LAST = 0x7fffffff };
 enum EMENU_TYPE { EMENU_TYPE_GEN_LAST = 0x7fffffff };
 enum EMenu { EMenu_GEN_LAST = 0x7fffffff };
+enum ERESOURCE_GROUPS { ERESOURCE_GROUPS_GEN_LAST = 0x7fffffff };
 
 #endif
