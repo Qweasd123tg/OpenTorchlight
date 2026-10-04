@@ -90,8 +90,8 @@ CEffect* addEffect(CBaseUnit* p,CEffect* e){
     ownedEffects->push_back(e);if(input->mode==1)object->m_iUnknown338+=17;return e;
 }
 void destroyText(CItem* p){
-    number(11);number(p==object);number(object->m_ElementalDamageMaximums.size());
-    for(unsigned i=0;i<object->m_ElementalDamageMaximums.size();++i)number(object->m_ElementalDamageMaximums[i]);
+    number(11);number(p==object);number(object->m_InherentElementalDamage.size());
+    for(unsigned i=0;i<object->m_InherentElementalDamage.size();++i)number(object->m_InherentElementalDamage[i]);
     if(input->mode==3)object->m_iMaximumDamage=77;
 }
 void deleteOld(CAttackDescription* p){number(12);number(p==oldAttack[0]?0:p==oldAttack[1]?1:-1);}
@@ -111,21 +111,21 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     object->m_pDataGroup=reinterpret_cast<CDataGroup*>(&service[0]);object->m_iUnknown274=profile()%12;
     object->m_iUnknown28C=static_cast<int>(profile()%8)-1;object->m_iUnknown33C=901;object->m_iUnknown340=902;
     new(&object->m_sUnknown400) std::wstring(L"old");missile=profile()%3?L"missiles/Fire_\x416":L"";
-    typedef std::vector<int> Ints; typedef std::vector<EDAMAGE_TYPES> DamageTypes;new(&object->m_ElementalDamageTypes) DamageTypes();new(&object->m_ElementalDamageMinimums) Ints();new(&object->m_ElementalDamageMaximums) Ints();
-    for(unsigned i=0;i<profile()%5;++i){object->m_ElementalDamageTypes.push_back(static_cast<EDAMAGE_TYPES>((i*2)%7));object->m_ElementalDamageMinimums.push_back(70+i);object->m_ElementalDamageMaximums.push_back(80+i);}
+    typedef std::vector<int> Ints; typedef std::vector<EDAMAGE_TYPES> DamageTypes;new(&object->m_ElementalDamageTypes) DamageTypes();new(&object->m_ElementalDamageBonuses) Ints();new(&object->m_InherentElementalDamage) Ints();
+    for(unsigned i=0;i<profile()%5;++i){object->m_ElementalDamageTypes.push_back(static_cast<EDAMAGE_TYPES>((i*2)%7));object->m_ElementalDamageBonuses.push_back(70+i);object->m_InherentElementalDamage.push_back(80+i);}
     std::vector<CEffect*> effects;ownedEffects=&effects;int beforeCount=g_iTotalCountOfObjects;
     detour::Set patches;TL_REDIRECT(patches,ecIsa,&isa);TL_REDIRECT(patches,ecInt,&dataInt);TL_REDIRECT(patches,ecFloat,&dataFloat);TL_REDIRECT(patches,ecText,&dataText);TL_REDIRECT(patches,ecRandomInt,&randomInt);TL_REDIRECT(patches,ecRandomFloat,&randomFloat);TL_REDIRECT(patches,ecGraphManager,&graphManager);TL_REDIRECT(patches,ecGraph,&graph);TL_REDIRECT(patches,ecGraphValue,&graphValue);TL_REDIRECT(patches,ecAddEffect,&addEffect);TL_REDIRECT(patches,ecDestroyText,&destroyText);
     if(patches.failed())_exit(42);
     for(int repeat=0;repeat<2;++repeat){
         bool skip=(c.seed/22)%2!=0;if(ours)object->calculateCombatStats(skip);else originalEquipmentCombatStats(object,skip);
         number(100+repeat);number(object->m_iMinimumDamage);number(object->m_iMaximumDamage);number(object->m_iUnknown338);number(object->m_iUnknown33C);number(object->m_iUnknown340);number(object->m_iUnknown28C);text(object->m_sUnknown400);real(object->m_fUnknown408);
-        number(object->m_ElementalDamageTypes.size());for(unsigned i=0;i<object->m_ElementalDamageTypes.size();++i){number(object->m_ElementalDamageTypes[i]);number(object->m_ElementalDamageMinimums[i]);number(object->m_ElementalDamageMaximums[i]);}
+        number(object->m_ElementalDamageTypes.size());for(unsigned i=0;i<object->m_ElementalDamageTypes.size();++i){number(object->m_ElementalDamageTypes[i]);number(object->m_ElementalDamageBonuses[i]);number(object->m_InherentElementalDamage[i]);}
         attackState(object->m_pAttackDescription);attackState(object->m_pAttackDescriptionOverride);number(effects.size());number(g_iTotalCountOfObjects-beforeCount);
     }
     for(unsigned i=0;i<effects.size();++i)delete effects[i];
     if(object->m_pAttackDescription && object->m_pAttackDescription!=oldAttack[0] && object->m_pAttackDescription!=oldAttack[1])delete object->m_pAttackDescription;
     if(object->m_pAttackDescriptionOverride && object->m_pAttackDescriptionOverride!=oldAttack[0] && object->m_pAttackDescriptionOverride!=oldAttack[1])delete object->m_pAttackDescriptionOverride;
-    number(g_iTotalCountOfObjects-beforeCount);patches.restore();typedef std::wstring Text;object->m_sUnknown400.~Text();object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();
+    number(g_iTotalCountOfObjects-beforeCount);patches.restore();typedef std::wstring Text;object->m_sUnknown400.~Text();object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageBonuses.~Ints();object->m_InherentElementalDamage.~Ints();
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}
 void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}

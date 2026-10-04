@@ -16,6 +16,7 @@ public:
     const std::wstring& getRandomEnchantColor(bool selected) const { return selected ? m_sRandomEnchantColor : m_sRandomEnchantColorUnselected; }
     const std::wstring& getRareColor(bool selected) const { return selected ? m_sRareColor : m_sRareColorUnselected; }
     const std::wstring& getUniqueColor(bool selected) const { return selected ? m_sUniqueColor : m_sUniqueColorUnselected; }
+    const std::wstring& getSocketedEffectColor() const { return m_sGlobalsString2B8; }
     const std::wstring& getSetColor(bool selected) const { return selected ? m_sSetColor : m_sSetColorUnselected; }
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:

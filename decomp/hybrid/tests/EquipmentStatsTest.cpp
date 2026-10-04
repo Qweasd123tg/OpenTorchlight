@@ -34,8 +34,8 @@ struct ItemTailProbe : CItem { int firstDerivedField; };
 ES_AT(ItemTailProbe,firstDerivedField,0x22c);
 ES_AT(CEquipment,m_pInventory,0x240);ES_AT(CEquipment,m_pAttackDescription,0x2a0);
 ES_AT(CEquipment,m_pAttackDescriptionOverride,0x2a8);
-ES_AT(CEquipment,m_ElementalDamageTypes,0x350);ES_AT(CEquipment,m_ElementalDamageMinimums,0x368);
-ES_AT(CEquipment,m_ElementalDamageMaximums,0x380);ES_AT(CEquipment,m_iSocketCount,0x3e0);
+ES_AT(CEquipment,m_ElementalDamageTypes,0x350);ES_AT(CEquipment,m_ElementalDamageBonuses,0x368);
+ES_AT(CEquipment,m_InherentElementalDamage,0x380);ES_AT(CEquipment,m_iSocketCount,0x3e0);
 ES_AT(CEquipment,m_SocketedEquipment,0x3e8);ES_AT(CAttackDescription,m_fAttackSpeed,0x70);
 ES_AT(CSet,m_Affixes,8);ES_AT(CSet,m_sDisplayName,0x28);
 ES_AT(CSetAffix,m_iLevel,0x10);ES_AT(CSetAffix,m_iRequiredCount,0x14);
@@ -103,12 +103,12 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     object->m_bUnknown348=(c.seed&2)!=0;
     typedef std::vector<int> Ints; typedef std::vector<EDAMAGE_TYPES> DamageTypes;
     new (&object->m_ElementalDamageTypes) DamageTypes();
-    new (&object->m_ElementalDamageMinimums) Ints();
-    new (&object->m_ElementalDamageMaximums) Ints();
+    new (&object->m_ElementalDamageBonuses) Ints();
+    new (&object->m_InherentElementalDamage) Ints();
     for (unsigned i=0;i<c.seed%4;++i) {
         object->m_ElementalDamageTypes.push_back(static_cast<EDAMAGE_TYPES>((c.seed+i)%7));
-        object->m_ElementalDamageMinimums.push_back(99);
-        object->m_ElementalDamageMaximums.push_back(damage[(c.seed+i)%7]);
+        object->m_ElementalDamageBonuses.push_back(99);
+        object->m_InherentElementalDamage.push_back(damage[(c.seed+i)%7]);
     }
     new (&object->m_SocketedEquipment) TArrayList<CEquipment*>(1);
     object->m_iSocketCount=c.seed%4;
@@ -134,7 +134,7 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     number(affixCalls);number(globalsCalls);number(set.m_Affixes.size());
     patches.restore();
     typedef std::wstring Text;active->~Text();inactive->~Text();
-    object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageMinimums.~Ints();object->m_ElementalDamageMaximums.~Ints();
+    object->m_ElementalDamageTypes.~DamageTypes();object->m_ElementalDamageBonuses.~Ints();object->m_InherentElementalDamage.~Ints();
     object->m_SocketedEquipment.~TArrayList<CEquipment*>();
 }
 void original(void* p,autotest::Capture& c) {side(*static_cast<Case*>(p),false,c);}

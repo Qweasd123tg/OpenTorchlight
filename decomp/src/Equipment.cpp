@@ -59,7 +59,7 @@ std::wstring CEquipment::getEquipmentStats()
         {
             for (int i=0;i<static_cast<int>(m_ElementalDamageTypes.size());++i)
             {
-                int damage=m_ElementalDamageMaximums[i];
+                int damage=m_InherentElementalDamage[i];
                 if (damage!=0)
                 {
                     float minimum=ceilf(damage*0.5f);
@@ -234,10 +234,10 @@ std::wstring CEquipment::getEquipmentDescription(bool showBuyPrice, bool showSel
                 { result=result+L"\n"+getAttackSpeedString(static_cast<EWeaponSpeed>(i));break; }
             if (m_bUnknown348)
                 for (int i=0;i<static_cast<int>(m_ElementalDamageTypes.size());++i)
-                    if (m_ElementalDamageMaximums[i]>0)
+                    if (m_InherentElementalDamage[i]>0)
                     {
                         std::wstring damageType=CStringTranslate::getSinglton()->getTranslateString(gDAMAGE_TYPES[m_ElementalDamageTypes[i]].c_str());
-                        result=result+L"\n+"+STRINGS::GetValueAsWString(m_ElementalDamageMaximums[i])+L" "+damageType+L" "+g_Damage;
+                        result=result+L"\n+"+STRINGS::GetValueAsWString(m_InherentElementalDamage[i])+L" "+damageType+L" "+g_Damage;
                     }
         }
         else if (category==2)
@@ -519,7 +519,7 @@ void CEquipment::calculateCombatStats(bool skipArmorEffects)
             m_iUnknown33C=m_iUnknown338;
         }
     }
-    for (unsigned int i=0;i<m_ElementalDamageTypes.size();++i) m_ElementalDamageMaximums[i]=0;
+    for (unsigned int i=0;i<m_ElementalDamageTypes.size();++i) m_InherentElementalDamage[i]=0;
     destroyItemText();
     if (ISA(UNITTYPES::WEAPON))
     {
@@ -712,4 +712,78 @@ void CEquipment::drop()
         setVisible(true,true);
     }
     setRenderBehind(true);
+}
+
+std::wstring CEquipment::effectsDescription(EEFFECT_ACTIVATION activation,bool embedded,bool socketedOnly)
+{
+    static std::wstring g_Damage;
+    if (g_Damage.empty()) g_Damage=CStringTranslate::getSinglton()->getTranslateString(L"Damage");
+    std::wstring result(L"");
+    if (!socketedOnly)
+    {
+        if (activation==EFFECT_ACTIVATION_PASSIVE)
+            for (unsigned int i=0;i<m_ElementalDamageTypes.size();++i)
+                if (m_ElementalDamageBonuses[i]>0)
+                {
+                    std::wstring type=CStringTranslate::getSinglton()->getTranslateString(gDAMAGE_TYPES[m_ElementalDamageTypes[i]].c_str());
+                    result=result+L"+"+STRINGS::GetValueAsWString(m_ElementalDamageBonuses[i])+L" "+type+L" "+g_Damage;
+                    if (i!=m_ElementalDamageTypes.size()-1) result=result+L"\n";
+                }
+        if (m_pEffectManager)
+        {
+            bool socketableFilter=false;
+            if (!embedded) socketableFilter=ISA(UNITTYPES::SOCKETABLE) && !ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE);
+            const std::wstring& description=m_pEffectManager->getVisualDescription(activation,static_cast<unsigned int>(-1),true,socketableFilter);
+            if (description!=EMPTY_WSTRING)
+            {
+                if (result==EMPTY_WSTRING) result=description;
+                else result=result+L"\n"+description;
+            }
+        }
+    }
+    else
+    {
+        int count=m_SocketedEquipment.size();
+        std::wstring sockets=EMPTY_WSTRING;
+        for (unsigned int i=0;static_cast<int>(i)<count;++i)
+        {
+            std::wstring description=m_SocketedEquipment[i]->effectsDescription(activation,true,false);
+            if (description!=EMPTY_WSTRING)
+            {
+                if (!sockets.empty() && sockets[sockets.size()-1]!=L'\n') sockets=sockets+L"\n";
+                sockets=sockets+description;
+            }
+            if (!sockets.empty() && sockets[sockets.size()-1]==L'\n') sockets=sockets.substr(0,sockets.size()-1);
+        }
+        if (!sockets.empty())
+        {
+            if (result.empty() || result[result.size()-1]!=L'\n') result=result+L"\n";
+            result=result+L"|c"+CGameGlobals::getSingleton()->getSocketedEffectColor()+sockets+L"|u";
+        }
+    }
+    if (!result.empty() && result[result.size()-1]!=L'\n') result.append(L"\n");
+    return result;
+}
+
+std::wstring CEquipment::getEquipmentEffects()
+{
+    std::wstring result;
+    if (!m_bUnknown348) return result;
+    result=result+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_DYNAMIC,false,false));
+    // These returned copies are discarded in the original as well.
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_PASSIVE,false,false));
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_TRANSFER,false,false));
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_DYNAMIC,false,true));
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_PASSIVE,false,true));
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_TRANSFER,false,true));
+    removeWhiteSpace(result);
+    result=result+L"\n"+removeWhiteSpace(skillDescription());
+    removeWhiteSpace(result);
+    if (!result.empty()) result=result+L"\n";
+    return result;
 }

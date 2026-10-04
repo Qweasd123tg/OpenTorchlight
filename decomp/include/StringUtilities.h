@@ -24,4 +24,13 @@ namespace STRINGS
                                 unsigned int defaultIndex, bool caseSensitive);
 }
 
+// Despite its name, this original inline helper trims only line feeds.
+inline std::wstring removeWhiteSpace(const std::wstring& text)
+{
+    std::wstring result=text;
+    while (!result.empty() && result[result.size()-1]==L'\n') result=result.substr(0,result.size()-1);
+    while (!result.empty() && result[0]==L'\n') result=result.substr(1,result.size()-1);
+    return result;
+}
+
 #endif

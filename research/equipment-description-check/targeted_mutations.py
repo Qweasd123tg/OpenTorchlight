@@ -22,7 +22,7 @@ mutations = [
     ('prefix_equal_rank_replaces', 'affix->m_iRank>rank', 'affix->m_iRank>=rank'),
     ('suffix_does_not_update_rank', 'suffix=affix->m_sSuffix.c_str();\n                rank=affix->m_iRank;', 'suffix=affix->m_sSuffix.c_str();'),
     ('physical_damage_requires_positive', 'm_iMinimumDamage!=0 && m_iMaximumDamage!=0', 'm_iMinimumDamage>0 && m_iMaximumDamage>0'),
-    ('elemental_negative_included', 'm_ElementalDamageMaximums[i]>0', 'm_ElementalDamageMaximums[i]!=0'),
+    ('elemental_negative_included', 'm_InherentElementalDamage[i]>0', 'm_InherentElementalDamage[i]!=0'),
     ('strict_speed_threshold', 'KWeaponSpeedValues[i]<=attack->m_fAttackSpeed*100.0f', 'KWeaponSpeedValues[i]<attack->m_fAttackSpeed*100.0f'),
     ('armor_percent_floor', 'float percent=ceilf(', 'float percent=floorf('),
     ('armor_flat_floor', 'float flat=ceilf(', 'float flat=floorf('),

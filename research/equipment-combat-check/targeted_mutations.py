@@ -25,7 +25,7 @@ mutations = [
     ('negative_armor_physical_ignored', 'if (physical!=-1)', 'if (physical>=0)'),
     ('zero_weapon_physical_ignored', 'if (physical>=0)', 'if (physical>0)'),
     ('armor_not_cached_across_effects', '(percent/100.0f)*armor', '(percent/100.0f)*m_iUnknown338'),
-    ('reset_minimum_not_maximum_vector', 'm_ElementalDamageMaximums[i]=0', 'm_ElementalDamageMinimums[i]=0'),
+    ('reset_minimum_not_maximum_vector', 'm_InherentElementalDamage[i]=0', 'm_ElementalDamageBonuses[i]=0'),
     ('bow_in_primary_slot', 'm_pAttackDescriptionOverride=new CAttackDescription("BOW"', 'm_pAttackDescription=new CAttackDescription("BOW"'),
     ('staff_not_polearm', 'ISA(UNITTYPES::POLEARM) || ISA(UNITTYPES::STAFF)', 'ISA(UNITTYPES::POLEARM)'),
     ('wrong_armor_element_types', 'types[]={39,37,38,40}', 'types[]={37,39,38,40}'),

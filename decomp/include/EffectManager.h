@@ -31,6 +31,7 @@ public:
     float getEffectValue(EEFFECT_TYPE type, const std::wstring& name);
     void updateAffixes(float elapsed);
     void calculateEffectValues();
+    const std::wstring& getVisualDescription(EEFFECT_ACTIVATION,unsigned int,bool,bool);
     unsigned int createEffects(CDataGroup* data,bool flag);
     CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }

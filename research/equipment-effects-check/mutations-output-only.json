@@ -1,0 +1,131 @@
+{
+ "0x88c150": {
+  "name": "CEquipment::getEquipmentEffects()",
+  "tried": 24,
+  "killed": 17,
+  "score": 0.71,
+  "strong": false,
+  "mutants": [
+   {
+    "mutant": "line 779: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 780: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 781: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 772: 'result=result+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_DYNAMIC,false,false));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 784: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 783: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 781: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 776: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 772: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 783: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 771: 'if (!m_bUnknown348) return result;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 782: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 786: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 779: 'result=result+L\"\\n\"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_DYNAMIC,false,true));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 787: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 785: 'result=result+L\"\\n\"+removeWhiteSpace(skillDescription());' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 775: 'result=result+L\"\\n\"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_PASSIVE,false,false));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 778: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 777: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 777: 'result=result+L\"\\n\"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_TRANSFER,false,false));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 779: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 781: 'result=result+L\"\\n\"+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_PASSIVE,false,true));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 774: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 775: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

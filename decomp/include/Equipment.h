@@ -109,7 +109,7 @@ public:
     void setGraphDamage(unsigned int);
     void setGraphAC(unsigned int);
     int enchantPrice();
-    CEquipment* skillDescription();
+    std::wstring skillDescription();
     long long fireMissiles(CCharacter*, CCharacter*);
     unsigned long getMaxSockets();
     void addSockets();
@@ -128,7 +128,7 @@ public:
     void attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS);
     void loadModel(std::wstring, std::wstring);
     void reskinByClass(std::wstring);
-    CEquipment* effectsDescription(EEFFECT_ACTIVATION, bool, bool);
+    std::wstring effectsDescription(EEFFECT_ACTIVATION, bool, bool);
     std::wstring getEquipmentEffects();
     std::wstring getEquipmentType(bool);
     std::wstring getEquipmentDescription(bool, bool);
@@ -182,8 +182,8 @@ public:
     bool m_bUnknown348;
     unsigned char m_gap349[0x7];
     std::vector<EDAMAGE_TYPES> m_ElementalDamageTypes;
-    std::vector<int> m_ElementalDamageMinimums;
-    std::vector<int> m_ElementalDamageMaximums;
+    std::vector<int> m_ElementalDamageBonuses;
+    std::vector<int> m_InherentElementalDamage;
     long long m_iUnknown398;
     long long m_iUnknown3A0;
     long long m_iUnknown3A8;

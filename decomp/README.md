@@ -1293,3 +1293,59 @@ Final integrated check: 108 tests, 0 failed; 1247 accepted game functions /
 386279 original bytes. Matching game functions increased to 1123 / 248615
 original bytes. The six Equipment functions in this series total 72040 bytes.
 The Drop increment over 3e1fe53 is accepted by MATCH, not by a new hand test.
+
+## Equipment effect descriptions (2026-10-04)
+
+`effectsDescription(EEFFECT_ACTIVATION, bool, bool)` (0x88b180, 4048
+original bytes) reconstructs elemental bonus lines, the effect-manager visual
+text, and recursive socket descriptions. The hidden string return and the
+manager's const-reference return were verified against the original ABI.
+It preserves the lazy translated Damage cache, manager replacement during ISA
+callbacks, the initially captured socket count, and the original one-newline
+removal after every socket iteration. Socket text uses GameGlobals color
++0x2b8. The hand fixture compares 1680 scenarios twice per side, including
+state-changing callbacks and original-versus-reconstructed recursive calls.
+The initial generated run had no completed comparisons (200 both-failed)
+and was rejected. All 24 viable sampled mutations and 11 targeted mutations
+were killed; evidence and reproduction scripts are in
+`research/equipment-effects-description-check/`.
+
+`getEquipmentEffects()` (0x88c150, 3813 original bytes) preserves the
+identification gate and the six ordinary/socket activation groups followed
+by skill text. Its seven discarded `removeWhiteSpace(result)` return values
+are intentional: the original creates trimmed copies and destroys them
+without assigning them. Consequently even all-empty identified sections
+produce separator newlines. The helper trims only leading/trailing LF, not
+spaces, tabs or CR. It is an inline/template-category helper, not an additional
+accepted game function. The direct helper test covers 14 edge cases, all
+19531 strings of length 0..6 over a five-character alphabet including NUL,
+and one long boundary case. It also checks that shared inputs stay unchanged.
+
+The wrapper hand test compares 384 cases twice per side, including Unicode,
+embedded NUL, empty sections and identification changes during callbacks.
+The generated run (101 completed matches, 99 both-failed) killed 0/8 mutations
+and was rejected. Output/call-protocol checks alone killed 17/24 sampled
+mutations: deleting the seven discarded trim calls leaves that output
+unchanged. This weaker result is preserved in `mutations-output-only.json`.
+The dedicated mutation runner additionally compares actual per-thread malloc
+call counts during each invocation. With that observable included, the
+baseline still matches and all 24/24 mutations are killed. The opt-in glibc
+interposer never fails allocations and is preloaded only into the headless
+scratch test processes. The normal integrated suite does not preload it;
+its log explicitly says the counter is not loaded. This is call-count parity
+on controlled cases, not a proof of identical peak memory, allocation sizes,
+allocation-failure behavior or whole-game integration. Sources and all evidence
+are under `research/equipment-effects-check/`.
+
+Verified original addDamageBonus/addInherentDamage writes also correct two
+field names: vector +0x368 stores elemental bonuses and +0x380 inherent
+elemental damage, rather than the previously assumed minimum/maximum names.
+Only names and corresponding fixtures/scripts changed; offsets and Equipment's
+0x438-byte size are unchanged. Manager/skill signatures and the socket color
+getter are declarations for collaborators, not additional implementations.
+
+All 12 additional targeted wrapper mutations were killed.
+
+Final integrated check: 111 tests, 0 failed; 1249 accepted game functions /
+394140 original bytes. The increment over e5ef0cf is two functions / 7861
+original bytes. These eight Equipment functions total 79901 original bytes.

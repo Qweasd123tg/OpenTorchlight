@@ -1,0 +1,83 @@
+{
+ "0x88c150": {
+  "name": "CEquipment::getEquipmentEffects()",
+  "tried": 8,
+  "killed": 0,
+  "score": 0.0,
+  "strong": false,
+  "mutants": [
+   {
+    "mutant": "line 779: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 780: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 781: 'true' -> 'false'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 772: 'result=result+removeWhiteSpace(effectsDescription(EFFECT_ACTIVATION_DYNAMIC,false,false));' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 784: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 783: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 781: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   },
+   {
+    "mutant": "line 776: 'removeWhiteSpace(result);' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     101,
+     99,
+     0
+    ]
+   }
+  ]
+ }
+}
