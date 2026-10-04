@@ -6,6 +6,7 @@
 
 #include <string>
 
+static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
 extern bool g_bWasRestarted;
 extern unsigned char g_hRestartingFile[4];
 
