@@ -968,3 +968,13 @@ GetAsyncKeyState и SDL mouse-focus flag 0x200. POINT подтверждён д�
 64-битными записями GetCursorPos по +0/+8; SDL API объявлен с uint window ID.
 Совпадает и статический initializer. Полный check.py: 76 tests PASS,
 449/5247 игровых функций, 119410 байт. Окно игры не запускалось.
+
+mousemanager.cpp закрыт: все 12 игровых функций MATCH, также совпадает
+статический initializer. Три кнопки представлены массивами байтов:
+состояния pressed/held/double-click и отдельные накопленные события.
+buttonHeld возвращает held==1 || pressed==1; оборванный Ghidra draft этого
+не показывал. capture копирует накопленные состояния, сбрасывает edge/
+double-click и wheel delta, но сохраняет held. virtualMousePosition возвращает
+POINT* на внутренний буфер, с исходными float вычислениями и усечением в int
+перед расширением в long. Полный check.py: 76 tests PASS,
+461/5247 игровых функций, 119876 байт.
