@@ -61,6 +61,7 @@ public:
     virtual void setLevel(unsigned int level);
 
     bool ISA(UNITTYPES::EUNITTYPES type);
+    void updateCullingBounds();
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     void broadcastUnitState(EUNIT_STATES state);
 
@@ -74,11 +75,15 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
-    char m_BaseUnitData[0x198 - 0x100];
+    char m_BaseUnitData[0x18d - 0x100];
+    bool m_bBlocksPath;
+    char m_BaseUnitData18E[0x198 - 0x18e];
     bool m_bRangeEnabled;
     bool m_bInActiveRange;
     bool m_bInFadeRange;
-    char m_BaseUnitData19B[0x1ac - 0x19b];
+    bool m_bBaseUnitFlag19B;
+    bool m_bPathingFlag19C;
+    char m_BaseUnitData19D[0x1ac - 0x19d];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
     char m_BaseUnitData2[0x10];

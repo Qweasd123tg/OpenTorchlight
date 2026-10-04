@@ -3,6 +3,7 @@
 #include "SoundBank.h"
 #include "DataGroup.h"
 #include "GenericModel.h"
+#include "Keyframe.h"
 #include "OutputEvents.h"
 #include <algorithm>
 #include <CEGUIWindow.h>
@@ -154,4 +155,30 @@ void CItem::updateOpacity(float elapsed, bool force)
     }
     if (getUnitModel() != NULL)
         static_cast<CGenericModel*>(getUnitModel())->setOpacity(m_fOpacity);
+}
+
+void CItem::updateAnimation(float elapsed)
+{
+    if (!m_bInActiveRange)
+        setVisible(false);
+    else
+        updateCullingBounds();
+    if ((m_bVisible || !(m_fForcedActiveTime <= 0.0f)) && getUnitModel() != NULL)
+    {
+        static_cast<CGenericModel*>(getUnitModel())->updateAnimation(elapsed, false);
+        for (unsigned int i = 0; i < static_cast<unsigned int>(static_cast<CGenericModel*>(getUnitModel())->getAnimationEvents().size()); ++i)
+        {
+            if (static_cast<CGenericModel*>(getUnitModel())->getAnimationEvents()[i]->getEventCode() == 10)
+            {
+                m_bBlocksPath = true;
+                m_bPathingFlag19C = true;
+                addToAvoidanceMap(*getLevel());
+            }
+            if (static_cast<CGenericModel*>(getUnitModel())->getAnimationEvents()[i]->getEventCode() == 11)
+            {
+                m_bBlocksPath = false;
+                removeFromAvoidanceMap(*getLevel());
+            }
+        }
+    }
 }
