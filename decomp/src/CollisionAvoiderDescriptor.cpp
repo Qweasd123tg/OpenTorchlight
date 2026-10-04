@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "CollisionAvoiderDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "CollisionAvoiderWrapper.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor()
     : CColliderDescriptor(L"Avoid Sphere")
@@ -10,4 +15,9 @@ CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor()
 
 CCollisionAvoiderDescriptor::~CCollisionAvoiderDescriptor()
 {
+}
+
+CEditorBaseObject* CCollisionAvoiderDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CCollisionAvoiderWrapper(scene->getResourceManager());
 }
