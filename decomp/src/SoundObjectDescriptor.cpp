@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "SoundObjectDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "SoundObject.h"
 
 CSoundObjectDescriptor::CSoundObjectDescriptor()
     : CPositionableObjectDescriptor(L"Sound", L"A sound for in the game", L"SOUND", true, false, false, false, false)
@@ -25,4 +30,83 @@ CSoundObjectDescriptor::CSoundObjectDescriptor()
 
 CSoundObjectDescriptor::~CSoundObjectDescriptor()
 {
+}
+
+void CSoundObjectDescriptor::descriptorSceneDeactivated(CEditorScene*)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+    {
+        CSoundObject* sound = dynamic_cast<CSoundObject*>(m_Objects[i]);
+        if (sound != NULL)
+        {
+            void** vtable = *reinterpret_cast<void***>(sound);
+            reinterpret_cast<void (*)(CSoundObject*, bool)>(vtable[8])(sound, false);
+        }
+    }
+}
+
+void CSoundObjectDescriptor::update(float value)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CEditorBaseObject* object = m_Objects[i];
+        if (object != 0) {
+            CSoundObject* soundObject = dynamic_cast<CSoundObject*>(object);
+            if (soundObject != 0) {
+                soundObject->updateSounds(value);
+            }
+        }
+    }
+}
+
+CEditorBaseObject* CSoundObjectDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CSoundObject(scene->getResourceManager());
+}
+
+void CSoundObjectDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CSoundObject* soundObject =
+            dynamic_cast<CSoundObject*>(m_Objects[i]);
+
+        if (soundObject != NULL && soundObject->m_bSoundStartsOnActivated) {
+            soundObject->setVisible(true);
+            soundObject->setEnabled(true);
+            soundObject->play();
+        }
+    }
+}
+
+void CSoundObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* eventObject)
+{
+    if (object != NULL) {
+        CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
+        if (sound != NULL) {
+            if (eventType == 9) {
+                sound->setVisible(true);
+                sound->setEnabled(true);
+                sound->play();
+                return;
+            }
+
+            if (eventType > 8) {
+                if (eventType == 10) {
+                    sound->stop();
+                    return;
+                }
+
+                if (eventType == 11) {
+                    sound->pause();
+                    return;
+                }
+
+                if (eventType == 12) {
+                    sound->setVisible(true);
+                    sound->setEnabled(true);
+                    sound->resume();
+                    return;
+                }
+            }
+        }
+    }
 }
