@@ -29,13 +29,10 @@ void CQuestDialog::save(_IO_FILE* pFile)
     fwrite(&value, 1, 1, pFile);
 }
 
-extern "C" void CSoundBank_stop(CSoundBank*, int)
-    __asm__("_ZN10CSoundBank4stopEi");
-
 void CQuestDialog::stopDialogSound()
 {
     if (m_pSoundBank != NULL)
-        CSoundBank_stop(m_pSoundBank, 0x25);
+        m_pSoundBank->stop(0x25);
 }
 
 void CQuestDialog::populate()

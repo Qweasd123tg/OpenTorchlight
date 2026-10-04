@@ -32,10 +32,6 @@ int CLogicGroup::AddLogicObject(long long objectID)
     return m_logicObjects.size() - 1;
 }
 
-extern "C" bool CLogicObject_RemoveLinkByIndex(
-    CLogicObject* pLogicObject, unsigned int linkIndex)
-    __asm__("_ZN12CLogicObject17RemoveLinkByIndexEj");
-
 bool CLogicGroup::RemoveLogicObjectsLink(unsigned int logicObjectIndex,
                                           unsigned int linkIndex)
 {
@@ -44,7 +40,7 @@ bool CLogicGroup::RemoveLogicObjectsLink(unsigned int logicObjectIndex,
         logicObjectIndex < m_logicObjects.size()) {
         CLogicObject* pLogicObject = m_logicObjects[logicObjectIndex];
         if (pLogicObject != NULL)
-            return CLogicObject_RemoveLinkByIndex(pLogicObject, linkIndex);
+            return pLogicObject->RemoveLinkByIndex(linkIndex);
     }
 
     return false;

@@ -8,6 +8,7 @@ class CSoundBank : public CRunicCore
 public:
     virtual ~CSoundBank();
     void update(float elapsed, Ogre::SceneNode* node);
+    void stop(int sound);
 private:
     unsigned char m_SoundBankData[0xd0-0x10];
 };

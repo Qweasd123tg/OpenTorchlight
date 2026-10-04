@@ -16,6 +16,7 @@ public:
     virtual ~CLogicObject();
 
     void Invoke(unsigned int event);
+    bool RemoveLinkByIndex(unsigned int linkIndex);
 
 private:
     unsigned int m_iID;

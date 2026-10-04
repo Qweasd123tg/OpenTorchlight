@@ -24,14 +24,14 @@ public:
     virtual void setOpen(bool);
     virtual void onClick(ELayoutFunction, std::wstring);
     virtual void onDoubleClick(ELayoutFunction, std::wstring);
-    long long canContinue();
+    bool canContinue();
     long long handle_ExitButton(const CEGUI::EventArgs&);
     long long handle_CloseButton(const CEGUI::EventArgs&);
     void updateCharacterList();
     void scrollUp();
     void scrollDown();
     void reloadFiles(bool);
-    long long selectCharacter(int, bool);
+    bool selectCharacter(int, bool);
     void deleteCharacter();
     void createMenus();
     CContinueGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);

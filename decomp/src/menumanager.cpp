@@ -69,23 +69,15 @@ void CMenuManager::keyEvent(unsigned int param_1, unsigned int param_2, long par
         ->keyEvent(param_1, param_2);
 }
 
-extern void CContinueGameMenu_canContinue(CContinueGameMenu*)
-    __asm__("_ZN17CContinueGameMenu11canContinueEv");
-
 void CMenuManager::canContinue()
 {
-    CContinueGameMenu_canContinue(m_pContinueGameMenu);
+    m_pContinueGameMenu->canContinue();
 }
-
-extern "C" void reloadFiles(CContinueGameMenu*, bool)
-    asm("_ZN17CContinueGameMenu11reloadFilesEb");
-extern "C" void selectCharacter(CContinueGameMenu*, int, bool)
-    asm("_ZN17CContinueGameMenu15selectCharacterEib");
 
 void CMenuManager::reloadMenuCharacters()
 {
-    reloadFiles(m_pContinueGameMenu, true);
-    selectCharacter(m_pContinueGameMenu, 0, true);
+    m_pContinueGameMenu->reloadFiles(true);
+    m_pContinueGameMenu->selectCharacter(0, true);
 }
 
 long long CMenuManager::create()
