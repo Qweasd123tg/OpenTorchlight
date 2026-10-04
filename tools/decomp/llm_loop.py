@@ -541,7 +541,17 @@ def main():
     parser.add_argument("--jobs", type=int, default=4, help="model calls in parallel")
     parser.add_argument("--resume", action="store_true",
                         help="keep the functions an existing decomp/src/<TU> defines, ask only for the rest")
+    parser.add_argument("--overwrite", action="store_true",
+                        help="replace an existing decomp/src/<TU> with what this run accepts (default: refuse)")
+    parser.add_argument("--ignore-owner", action="store_true", help="work on a TU decomp/owners.json gives to "
+                        "someone else than $OTL_OWNER")
     args = parser.parse_args()
+    import parallel
+    owner = parallel.owned_by_others(args.tu)
+    if owner and not args.ignore_owner:
+        raise SystemExit(f"{args.tu} belongs to {owner} (decomp/owners.json); set OTL_OWNER or --ignore-owner")
+    if (ROOT / "decomp" / "src" / args.tu).exists() and not (args.resume or args.overwrite):
+        raise SystemExit(f"decomp/src/{args.tu} exists: --resume keeps its functions, --overwrite replaces it")
     started = time.time()
     status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs,
                   args.resume).run()

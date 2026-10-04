@@ -5,12 +5,15 @@
     python3 tools/decomp/parallel.py claim w7 [--budget 25000]  # worktree with the next batch
     python3 tools/decomp/parallel.py new ai AIFlagManager.cpp AISkillManager.cpp
     python3 tools/decomp/parallel.py list
+    python3 tools/decomp/parallel.py own dot Character.cpp player.cpp   # decomp/owners.json
     python3 tools/decomp/parallel.py merge ai      # merge decomp/ai into the current branch
     python3 tools/decomp/parallel.py drop ai       # remove the worktree and branch
 
 Worktrees live under /tmp/opencode/decomp-wt/<slug> (no spaces, so tools and
 LD_PRELOAD work directly). Each gets a copy of build-decomp/db and its own
 hybrid runtime directory; the GCC toolchain cache is shared read-only.
+decomp/owners.json (tracked) splits TUs between workers on different machines:
+the queue skips TUs owned by anyone but $OTL_OWNER.
 """
 from __future__ import annotations
 
@@ -31,10 +34,35 @@ BASE = Path(os.environ.get("OTL_DECOMP_WORKTREES", "/tmp/opencode/decomp-wt"))
 
 
 CLAIMS = ROOT / "build-decomp" / "claims.json"
+OWNERS = ROOT / "decomp" / "owners.json"
 WRITTEN = ("function", "ctor", "dtor", "static")
 # Reserved for generators or special handling instead of the worker queue.
-RESERVED_SUFFIX = ("Descriptor.cpp", "binreloc.c")
+RESERVED_SUFFIX = ("binreloc.c",)
 LARGE_TU = 60000
+
+
+def owners():
+    """TU -> owner from the tracked decomp/owners.json."""
+    return json.loads(OWNERS.read_text())["tus"] if OWNERS.exists() else {}
+
+
+def owned_by_others(tu, me=None):
+    """Owner of `tu` when it is someone else than `me` (default $OTL_OWNER), else None."""
+    me = me if me is not None else os.environ.get("OTL_OWNER", "")
+    owner = owners().get(tu)
+    return owner if owner and owner != me else None
+
+
+def own(owner, tus):
+    data = json.loads(OWNERS.read_text())
+    taken = {tu: data["tus"][tu] for tu in tus if data["tus"].get(tu) not in (None, owner)}
+    if taken:
+        raise SystemExit("owned by others: " + ", ".join(f"{tu} ({o})" for tu, o in taken.items()))
+    data["owners"].setdefault(owner, "")
+    data["tus"].update({tu: owner for tu in tus})
+    data["tus"] = dict(sorted(data["tus"].items(), key=lambda x: x[0].lower()))
+    OWNERS.write_text(json.dumps(data, indent=1, ensure_ascii=False) + "\n")
+    print(f"{owner} owns {len(tus)} more TUs; commit decomp/owners.json so the others see it")
 
 
 def claims():
@@ -49,6 +77,7 @@ def save_claims(data):
 def candidates(db):
     """Open game TUs: (missing base headers, bytes, name, functions), readiest and smallest first."""
     claimed = {tu for tus in claims().values() for tu in tus}
+    claimed |= {tu for tu in owners() if owned_by_others(tu)}
     headers = {p.stem for p in (ROOT / "decomp" / "include").glob("*.h")}
     by_tu = {}
     for f in db["functions"].values():
@@ -178,6 +207,9 @@ def main():
     p = sub.add_parser("new")
     p.add_argument("slug")
     p.add_argument("tus", nargs="+")
+    o = sub.add_parser("own", help="record TUs in decomp/owners.json")
+    o.add_argument("owner")
+    o.add_argument("tus", nargs="+")
     sub.add_parser("list")
     for name in ("merge", "drop"):
         sub.add_parser(name).add_argument("slug")
@@ -193,6 +225,8 @@ def main():
         claim(args.slug, args.budget)
     elif args.command == "new":
         new(args.slug, args.tus)
+    elif args.command == "own":
+        own(args.owner, args.tus)
     elif args.command == "list":
         listing()
     elif args.command == "merge":
