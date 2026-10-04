@@ -187,12 +187,40 @@ def inline_temp_strings(text):
     return text
 
 
+TEMP = r"(?:local_\w+|[a-z]{1,4}Var\d+|extraout_\w+|in_\w+)"
+
+
+def side_effects(expr):
+    """A call (named or through a pointer), assignment or increment inside expr."""
+    return bool(re.search(r"\w\s*\(|\)\)\s*\(|\+\+|--|(?<![=!<>])=(?!=)", expr))
+
+
+def drop_dead_stores(text):
+    """Stores into Ghidra temporaries nothing reads (left over when an inlined idiom
+    is removed, e.g. the string pointer of a dropped refcount block)."""
+    while True:
+        changed = False
+        for name in sorted(set(re.findall(rf"\b({TEMP})\b", text))):
+            stores = list(re.finditer(rf"\n[ \t]*{name} = (?!=)([^;]*);", text))
+            if not stores:
+                continue
+            uses = len(re.findall(rf"\b{name}\b", text))
+            decls = len(re.findall(rf"\n[ \t]*[\w:<>*& ]+?[ *&]{name}(?: ?\[\d+\])?;", text))
+            if uses != len(stores) + decls or any(side_effects(m.group(1)) for m in stores):
+                continue
+            for m in reversed(stores):
+                text = text[:m.start()] + text[m.end():]
+            changed = True
+        if not changed:
+            return text
+
+
 def drop_unused_locals(text):
     lines = text.split("\n")
     out = []
     for i, line in enumerate(lines):
-        m = re.match(r"^\s+[\w:<>*& ]+?[ *&](\w+)(?: \[\d+\])?;$", line)
-        if m and m.group(1).startswith(("local_", "piVar", "iVar", "uVar", "lVar", "cVar", "pcVar", "puVar")):
+        m = re.match(r"^\s+[\w:<>*& ]+?[ *&](\w+)(?: ?\[\d+\])?;$", line)
+        if m and re.fullmatch(TEMP, m.group(1)):
             rest = "\n".join(lines[:i] + lines[i + 1:])
             if not re.search(rf"\b{m.group(1)}\b", rest):
                 continue
@@ -327,6 +355,7 @@ def convert(code, methods, f=None, signatures=None, enums=None):
     text = re.sub(r"(?<![>.\w])(\w+)\(this\)", r"\1()", text)
     text = re.sub(r"(?<![>.\w])(\w+)\(this,\s*", r"\1(", text)
     text = tidy_expressions(text)
+    text = drop_dead_stores(text)
     text = drop_unused_locals(text)
     text = reindent(text)
     text = re.sub(r"\n[ \t]*return;\n\}\s*$", "\n}", text)

@@ -120,15 +120,14 @@ def new(slug, tus):
         if (db_dir / name).exists():
             os.utime(db_dir / name)
     # Shared generated inputs: recovered types, generated headers, Ghidra drafts and trial builds.
+    # All drafts, not only the batch's: regenerated headers take return types from them.
     src_build = ROOT / "build-decomp"
-    for name in ("types.json", "include-gen"):
+    for name in ("types.json", "include-gen", "drafts", "examples.json"):
         if (src_build / name).is_dir():
             shutil.copytree(src_build / name, path / "build-decomp" / name, copy_function=shutil.copy)
         elif (src_build / name).exists():
             shutil.copy(src_build / name, path / "build-decomp" / name)
     for tu in tus:
-        if (src_build / "drafts" / tu).exists():
-            shutil.copytree(src_build / "drafts" / tu, path / "build-decomp" / "drafts" / tu)
         if (src_build / "trial" / tu).exists():
             (path / "build-decomp" / "trial").mkdir(parents=True, exist_ok=True)
             shutil.copy(src_build / "trial" / tu, path / "build-decomp" / "trial" / tu)

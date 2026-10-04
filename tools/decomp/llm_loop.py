@@ -1,24 +1,31 @@
 #!/usr/bin/env python3
-"""Function-by-function decompilation with a cheap model in a feedback loop.
+"""Function-by-function decompilation with cheap models in a feedback loop.
 
-    python3 tools/decomp/llm_loop.py Graph.cpp [--model opencode-go/deepseek-v4.1-flash#high] [--rounds 4]
+    python3 tools/decomp/llm_loop.py Graph.cpp [--models a,b] [--rounds 5] [--switch-after 2]
 
 Run inside a worktree (tools/decomp/parallel.py new ...). The model never
 sees the repository: every call is `opencode run` with the `plain` agent (all
-tools denied) and gets exactly what it needs.
+tools denied) and gets exactly what it needs. Models form a chain (default:
+the free Space Bunny, then DeepSeek V4.1 Flash): a function moves on to the
+next model after --switch-after rounds without acceptance or when a model
+does not answer.
 
 1. Header: the generated header (build-decomp/include-gen), the exact symbol
    signatures and the Ghidra drafts go in; decomp/include/<Class>.h comes
-   out. It must compile and keep sizeof.
-2. Functions, in rounds, all pending functions in parallel: the ASM and the
-   Ghidra draft go in, one definition comes out. Each candidate is compiled
-   with the accepted ones (objdiff): MATCH is accepted; DIFF candidates get
-   generated differential tests (autotest.py) in one game run. A passing test
-   accepts the function; compile errors, failing tests and the instruction
-   diff go back to the same model session for the next round.
+   out. It must compile with the original sizeof, field offsets and vtable.
+2. Functions, in rounds, all pending functions in parallel. The prompt is
+   tools/decomp/prompts/idioms.md (the same for every call, so it is cached),
+   the class header, accepted examples with similar drafts (examples.py), then
+   the ASM and the Ghidra draft; one definition comes out. Each candidate is
+   compiled with the accepted ones (objdiff): MATCH is accepted; DIFF
+   candidates get generated differential tests (autotest.py) in one game run.
+   A passing test accepts the function; compile errors, failing tests and the
+   instruction diff go back to the same model session for the next round.
+3. promote.py moves what the TU uses from the generated headers into
+   decomp/include; the TU must then build without them.
 
-Accepted functions land in decomp/src/<TU>; check.py and mutate.py take it
-from there. Log: build-decomp/llm-loop/<TU>/.
+Accepted functions land in decomp/src/<TU>; check.py and mutate.py --accept
+take it from there. Log: build-decomp/llm-loop/<TU>/.
 """
 from __future__ import annotations
 
@@ -37,13 +44,18 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import autotest  # noqa: E402
 import elfdb  # noqa: E402
+import examples  # noqa: E402
 import ghidra_cpp  # noqa: E402
+import headers  # noqa: E402
 import hybrid  # noqa: E402
 import objdiff  # noqa: E402
-import toolchain  # noqa: E402
+import promote  # noqa: E402
 
 ROOT = elfdb.ROOT
 AGENT_DIR = Path("/tmp/opencode/llm-loop")
+IDIOMS = Path(__file__).resolve().parent / "prompts" / "idioms.md"
+# Free model first; the cheap paid one takes over what it does not get accepted.
+MODELS = ("opencode-go/space-bunny-free#high", "opencode-go/deepseek-v4.1-flash#high")
 WRITTEN = ("function", "ctor", "dtor", "static")
 AGENT = """---
 description: Answers with code only, no tools
@@ -103,7 +115,8 @@ class Model:
             f.write(f"===== {tag} session={sid}\n--- prompt ({len(prompt)} chars)\n{prompt}\n--- answer\n{text}\n"
                     + (f"--- errors\n{chr(10).join(errors)}\n" if errors else ""))
         blocks = re.findall(r"```(?:cpp|c\+\+|c)?\s*\n(.*?)```", text, re.S)
-        return (blocks[-1] if blocks else text).strip(), sid
+        # No code block (a refusal, or a model imitating tool calls): no answer.
+        return (blocks[-1].strip() if blocks else ""), sid
 
 
 def asm_of(tu, f):
@@ -116,14 +129,18 @@ def asm_of(tu, f):
 
 
 class Loop:
-    def __init__(self, tu_name, model, rounds):
+    def __init__(self, tu_name, models, rounds, switch_after=2):
+        # Work in progress compiles against the generated headers; finish() promotes what it uses.
+        os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
         self.tu = next(t for t in self.db["tus"] if t["name"] == tu_name)
-        self.rounds = rounds
+        self.rounds, self.switch_after = rounds, switch_after
         self.work = ROOT / "build-decomp" / "llm-loop" / tu_name
         shutil.rmtree(self.work, ignore_errors=True)
         self.work.mkdir(parents=True)
-        self.model = Model(model, self.work)
+        self.models = [Model(m, self.work) for m in models]
+        self.examples = examples.load()
+        self.by_model = {}
         self.funcs = sorted((f for f in self.db["functions"].values() if f["tu"] == self.tu["id"]
                              and f["kind"] in WRITTEN and not any(n.endswith("D0Ev") for n in f["names"])),
                             key=lambda f: f["address"])
@@ -179,18 +196,21 @@ class Loop:
                       "fields meaningful m_-prefixed names;\n"
                       f"- include only what you need from: {hand}, GenTypes.h (enums), GenGlobals.h;\n"
                       f"- guard macro {name.upper().replace('.', '_')}; C++98.")
-            code, sid = self.model.ask(prompt, tag=f"header {cls}")
             path = ROOT / "decomp" / "include" / name
-            for attempt in range(3):
-                path.write_text(code.rstrip() + "\n")
-                error = self.check_header(name, cls, size)
+            for model in self.models:
+                code, sid = model.ask(prompt, tag=f"header {cls} {model.model}")
+                for attempt in range(4):
+                    path.write_text(code.rstrip() + "\n")
+                    error = self.check_header(name, cls, size) if code else "no answer"
+                    if not error or not code or attempt == 3:
+                        break
+                    code, sid = model.ask(f"The header does not compile or changes the layout:\n{error}\n"
+                                          "Return the corrected full header.", sid, tag=f"header {cls} fix")
                 if not error:
                     break
-                code, sid = self.model.ask(f"The header does not compile or changes the layout:\n{error}\n"
-                                           "Return the corrected full header.", sid, tag=f"header {cls} fix")
             else:
                 shutil.copy(gen, path)  # fall back to the generated one
-                print(f"  header {cls}: model failed, using the generated header")
+                print(f"  header {cls}: models failed, using the generated header")
             out[cls] = name
             # Generated headers that pulled in the draft now get the real one.
             for other in (ROOT / "build-decomp" / "include-gen").glob("*.h"):
@@ -199,22 +219,10 @@ class Loop:
         self.headers = out
 
     def check_header(self, name, cls, size):
-        """None when the header compiles with the original size, field offsets and virtuals."""
+        """None when the header compiles with the original size, field offsets and vtable slots."""
         text = (ROOT / "decomp" / "include" / name).read_text()
         body = text[text.find(f"class {cls}"):]
         body = body[:body.find("\n};")]
-        # Virtual methods must be the ones in the original vtable (new virtuals shift the slots).
-        slots = set()
-        vt = self.db["vtables"].get(cls)
-        for group in (vt or {}).get("groups", []):
-            for slot in group["slots"]:
-                f = self.db["functions"].get(slot) if isinstance(slot, str) else None
-                if f:
-                    slots.add(f["method"])
-        extra = [m for m in re.findall(r"\bvirtual\b[^;(]*?(~?\b\w+)\s*\(", body) if m not in slots]
-        if extra:
-            return (f"{', '.join(extra)} must not be virtual: the original vtable of {cls} only has "
-                    f"{', '.join(sorted(slots)) or 'no virtual methods'}.")
         layout = json.loads((ROOT / "build-decomp" / "types.json").read_text())["classes"].get(cls) or {}
         allowed = {fd["offset"] for fd in layout.get("fields", [])}
         allowed |= {int(m, 16) for m in re.findall(r"m_gap([0-9A-F]+)\b", (ROOT / "build-decomp" / "include-gen" /
@@ -231,8 +239,7 @@ class Loop:
                 checks.append(f"typedef char offset_of_{field}[({cond}) ? 1 : -1];")
         probe.write_text(f'#include "{name}"\n' + "\n".join(checks) + "\n")
         try:
-            toolchain.compile_source(probe, probe.with_suffix(".o"), ["-w"], quiet=True)
-            return None
+            dump = headers.class_dump(probe, ["-w", "-I", str(headers.OUT)])
         except SystemExit as error:
             lines = [l for l in str(error).splitlines() if "error" in l]
             moved = [m for m in (re.search(r"'offset_of_(\w+)'", l) for l in lines) if m]
@@ -241,6 +248,7 @@ class Loop:
                         f"{', '.join(sorted({m.group(1) for m in moved}))}. Keep every field at its original offset "
                         f"(offsets: {', '.join(hex(o) for o in sorted(allowed))}).")
             return "\n".join(lines)[:2500]
+        return headers.vtable_mismatch(self.db, cls, dump)
 
     # -- functions ----------------------------------------------------------
     def unit(self, extra=()):
@@ -306,35 +314,59 @@ class Loop:
         return "\n".join(diff[:80])
 
     def prompt_for(self, f):
-        return (f"Class header:\n```cpp\n" + "\n\n".join((ROOT / "decomp" / "include" / h).read_text()
-                                                       for h in self.headers.values()) + "```\n\n"
-                f"Write the C++98 definition of `{f['demangled']}` exactly as declared in the header.\n\n"
+        draft = self.draft(f)
+        chosen = examples.choose(self.examples, draft, exclude={f["address"]})
+        header = "\n\n".join((ROOT / "decomp" / "include" / h).read_text() for h in self.headers.values())
+        # Same text first for every call (the provider caches the prefix), then this TU, then this function.
+        return (IDIOMS.read_text() + "\n"
+                + (f"Class header:\n```cpp\n{header}```\n\n" if header else "")
+                + (f"Accepted functions of the game next to their drafts, for the style and the idioms:\n\n"
+                   f"{examples.render(chosen)}\n\n" if chosen else "")
+                + f"Write the C++98 definition of `{f['demangled']}` exactly as declared in the header.\n\n"
                 f"Original machine code (objdump):\n```\n{asm_of(self.tu['name'], f)}\n```\n\n"
-                f"Ghidra decompilation (a draft; types and temporaries may be wrong):\n```cpp\n{self.draft(f)}\n```\n\n"
+                f"Ghidra decompilation (a draft; types and temporaries may be wrong):\n```cpp\n{draft}\n```\n\n"
                 "Rules: C++98; use the header's names; call other functions normally (std::wstring, "
                 "TArrayList methods instead of inlined internals); globals are declared in GenGlobals.h, other "
                 "classes in their headers (already included); no includes; return only this definition.")
+
+    def ask(self, item, round_no):
+        """Next candidate for a pending function. A function moves on to the next model of
+        the chain after `switch_after` rounds without acceptance, or when a model does not answer."""
+        f = item["f"]
+        if item["tries"] >= self.switch_after and item["model"] + 1 < len(self.models):
+            item.update(model=item["model"] + 1, tries=0, session=None)
+        while True:
+            if item["session"] and item["feedback"]:
+                prompt = item["feedback"]
+            else:
+                prompt = self.prompt_for(f)
+                if item.get("code") and item["feedback"]:
+                    prompt += (f"\n\nAn earlier attempt was not accepted:\n```cpp\n{item['code']}\n```\n"
+                               f"{item['feedback']}")
+            model = self.models[item["model"]]
+            code, sid = model.ask(prompt, item["session"], tag=f"{f['address']} round {round_no} {model.model}")
+            if code or item["model"] + 1 >= len(self.models):
+                break
+            item.update(model=item["model"] + 1, tries=0, session=None)
+        item["tries"] += 1
+        return f["address"], code, sid
 
     def run(self):
         print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}")
         self.header()
         print(f"  header: {', '.join(self.headers.values())}")
-        pending = {f["address"]: {"f": f, "session": None, "feedback": None} for f in self.funcs}
+        pending = {f["address"]: {"f": f, "session": None, "feedback": None, "model": 0, "tries": 0}
+                   for f in self.funcs}
         for round_no in range(1, self.rounds + 1):
             if not pending:
                 break
-
-            def ask(item):
-                f = item["f"]
-                prompt = item["feedback"] or self.prompt_for(f)
-                code, sid = self.model.ask(prompt, item["session"], tag=f"{f['address']} round {round_no}")
-                return f["address"], code, sid
             with ThreadPoolExecutor(4) as pool:
-                answers = list(pool.map(ask, pending.values()))
+                answers = list(pool.map(lambda item: self.ask(item, round_no), pending.values()))
             diffs = {}
             for address, code, sid in answers:
                 item = pending[address]
                 item["session"], item["code"] = sid, code
+                self.by_model[address] = self.models[item["model"]].model
                 status, detail = self.compile(item["f"], code)
                 if status == "MATCH":
                     self.accepted[address] = code
@@ -353,10 +385,43 @@ class Loop:
         self.source.write_text(self.unit())
         for address, item in pending.items():
             self.status[address] = "not accepted"
+        self.finish()
+        traffic = {m.model: {"sent": m.sent, "received": m.received} for m in self.models}
         (self.work / "result.json").write_text(json.dumps({
-            "status": self.status, "chars_sent": self.model.sent, "chars_received": self.model.received}, indent=1))
-        print(f"  model traffic: {self.model.sent // 1000}K chars sent, {self.model.received // 1000}K received")
+            "status": self.status, "by_model": {a: self.by_model.get(a) for a in self.status},
+            "traffic": traffic}, indent=1))
+        for model, t in traffic.items():
+            print(f"  {model}: {t['sent'] // 1000}K chars sent, {t['received'] // 1000}K received")
+        tested = sorted(a for a, s in self.status.items() if s == "tested")
+        if tested:
+            print(f"  generated tests passed for {len(tested)}; check their strength and record them with\n"
+                  f"  python3 tools/decomp/mutate.py --accept {' '.join(tested)}")
         return self.status
+
+    def finish(self):
+        """Moves the declarations the TU (and the class headers written for it) use from the
+        generated headers into decomp/include and checks that it builds without them, with
+        the same results. A TU without accepted functions is removed, its headers stay."""
+        before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        written = promote.promote(self.source)
+        saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
+        try:
+            after = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+        except SystemExit as error:
+            print(f"  promoted {', '.join(written)}, but the TU no longer compiles without the generated "
+                  f"headers:\n{str(error)[:1500]}")
+            return
+        finally:
+            if saved is not None:
+                os.environ["OTL_EXTRA_INCLUDE"] = saved
+            if not self.accepted:
+                self.source.unlink(missing_ok=True)
+        changed = sorted(a for a in before if after.get(a) != before[a])
+        print(f"  promoted into decomp/include: {', '.join(written) or 'nothing'}"
+              + (f"; status changed for {', '.join(changed)}" if changed else ""))
+
+    def compare(self):
+        return objdiff.compare_source(self.source, self.original, quiet=True)
 
     def test(self, pending, diffs, round_no):
         """Generated differential tests for every DIFF candidate in one game run."""
@@ -429,11 +494,13 @@ def headers_by_class():
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("tu")
-    parser.add_argument("--model", default="opencode-go/deepseek-v4.1-flash#high")
-    parser.add_argument("--rounds", type=int, default=4)
+    parser.add_argument("--models", default=",".join(MODELS),
+                        help="comma-separated chain; a function moves on after --switch-after rounds")
+    parser.add_argument("--rounds", type=int, default=5)
+    parser.add_argument("--switch-after", type=int, default=2)
     args = parser.parse_args()
     started = time.time()
-    status = Loop(args.tu, args.model, args.rounds).run()
+    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after).run()
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
 
