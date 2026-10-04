@@ -13,6 +13,8 @@
 #include "Randomizer.h"
 #include "UtilitiesMath.h"
 #include "Skill.h"
+#include "Effect.h"
+#include <OgreLogManager.h>
 
 void CBaseUnit::setSpawnerGuid(long long guid)
 {
@@ -558,5 +560,41 @@ void CBaseUnit::removeFromAvoidanceMap(CLevel& level)
                 level.decrementObjectPassability(minimum,maximum,radius);
         }
         m_bBaseUnitFlag19B = false;
+    }
+}
+
+void CBaseUnit::activateEffect(CEffect* effect)
+{
+    switch (static_cast<int>(effect->m_eType))
+    {
+    case 74: case 75: case 76: case 81: case 105:
+        {
+            std::wstring name = EMPTY_WSTRING;
+            name = effect->m_sName;
+            unsigned int level = effect->m_iLevel;
+            int value = static_cast<int>(effect->value(static_cast<EEFFECT_VALUES>(1)));
+            if (value == 0)
+                value = -1;
+            CSkill* skill = addSkillByName(name,true);
+            if (skill != NULL)
+            {
+                skill->m_iSkillField10C = -1;
+                skill->m_iSkillField124 = value;
+                m_pSkillManager->setSkillLevel(skill,level);
+                unsigned int actualLevel = m_pSkillManager->getSkillLevel(skill);
+                if (actualLevel == 0xffffffff)
+                    effect->m_iLevel = 0;
+                else
+                    effect->m_iLevel = actualLevel;
+                if (effect->m_iLevel > 1000)
+                    effect->m_iLevel = 0;
+                effect->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+            }
+            else
+                Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"Skill not found : "+name).c_str()),Ogre::LML_NORMAL,false);
+        }
+        break;
+    default:
+        break;
     }
 }

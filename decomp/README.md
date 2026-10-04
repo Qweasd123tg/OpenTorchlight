@@ -903,3 +903,21 @@ minimum/maximum вынесено из двух ветвей без измене�
 5/5, старый результат не переиспользовался. Полный check.py: 74 теста PASS,
 437/5247 функций, 107 737 байт. Остаются rayCollision, sphereCollision,
 activateEffect и большой unitInit (7229 байт).
+
+BaseUnit activateEffect принят: 314 сценариев с настоящими SkillParser,
+CSkill/SkillProperty/SkillManager, каталогом из CDataGroup и Ogre LogManager.
+Проверены пять принимаемых типов и соседние, отсутствующий skill/parser,
+значения 0/дробные/отрицательные/NaN/inf, уровни и параметры созданного skill,
+сообщения журнала. Два расширенных случая содержат 1001 уровень skill:
+это проверяет границу effect level 1000/1001, которая была скрыта обычным
+каталогом из двух уровней. Автотест 1/10 не принят. Ручной тест сначала 7/10,
+после добавления границы 8/10. Две эквивалентные мутации: bool для
+addSkillByName игнорируется исходной функцией; column свежего skill уже -1.
+
+При сборке fixture устранены две ошибки самого теста: копия vtable теперь
+содержит также два RTTI-prefix элемента для настоящего dynamic_cast;
+ResourceManager существует и передаётся в skill (его исходный деструктор
+безусловно читает resourceManager->level). Ни один обоюдный crash не принят.
+Временные signal/backtrace/stage probes удалены. Effect 0x138 и Skill 0x160,
+их vtable проверены. Полный check.py: 75 тестов PASS, 438/5247 функций,
+108 256 байт. BaseUnit: 56/59; остаются ray/sphere collision и unitInit.

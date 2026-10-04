@@ -26,7 +26,12 @@ public:
 private:
     char m_SkillData[0x6d - 0x18];
     bool m_bEnabled;
-    char m_SkillData2[0x160 - 0x6e];
+    char m_SkillData2[0x10c - 0x6e];
+    int m_iSkillField10C;
+    char m_SkillData110[0x124 - 0x110];
+    int m_iSkillField124;
+    char m_SkillData128[0x160 - 0x128];
+    friend class CBaseUnit;
 };
 
 #endif

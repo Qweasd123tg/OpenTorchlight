@@ -81,6 +81,7 @@ public:
     CSkill* addSkillByName(const std::wstring& name,bool flag);
     CSkill* cloneSkill(CSkill* skill);
     bool dontUseOnFull();
+    void activateEffect(CEffect* effect);
     void reapplyEffects(bool flag);
     void reapplyAffixes(bool flag);
     void unitInitThemes();

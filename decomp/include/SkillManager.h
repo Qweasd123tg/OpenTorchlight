@@ -18,6 +18,8 @@ public:
     CSkill* addSkill(CSkill* skill,bool flag1,bool flag2);
     CSkill* getSkill(const std::wstring& name);
     void update(float elapsed);
+    void setSkillLevel(CSkill* skill,unsigned int level);
+    unsigned int getSkillLevel(CSkill* skill);
     int knownSkills(ESKILL_ACTIVATION_TYPE activation);
     void stopAllSkills(bool flag1,bool flag2,bool flag3);
 private:
