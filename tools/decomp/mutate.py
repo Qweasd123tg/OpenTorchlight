@@ -100,11 +100,30 @@ def matching(text, at, open_, close):
     return -1
 
 
+def canonical_parameter(parameter, named=False):
+    """Conservative spelling normalization for ordinary C++ parameter types.
+
+    Used only to disambiguate same-arity overloads. Complex declarators or
+    unresolved aliases remain unmatched rather than selecting another body.
+    """
+    p = parameter.strip()
+    p = p.replace(autotest.WSTRING, "std::wstring")
+    if named:
+        p = re.sub(r"\s*=.*$", "", p)
+        # Strip a name only after a pointer/reference or a separated type.
+        m = re.search(r"([*&]\s*|\s+)([A-Za-z_]\w*)$", p)
+        if m and m.group(2) not in {"int", "long", "short", "char", "double", "float", "const", "volatile", "unsigned", "signed"}:
+            p = p[:m.start(2)].strip()
+    p = re.sub(r"^(.+?)\s+const\s*([*&].*)$", r"const \1\2", p)
+    return re.sub(r"\s+", "", p)
+
+
 def definition(text, masked, f):
     """(body start, body end) of f's definition in a TU source, or None."""
     qual = f["demangled"].split("(")[0]
     want = len([p for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"])
     found = []
+    wanted_types = [canonical_parameter(p) for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"]
     for m in re.finditer(r"(?m)^[\w:<>,*&\s]*?" + re.escape(qual) + r"\s*\(", masked):
         close = matching(masked, m.end() - 1, "(", ")")
         brace, semi = masked.find("{", close), masked.find(";", close)
@@ -112,8 +131,11 @@ def definition(text, masked, f):
             continue
         params = masked[m.end():close].strip()
         count = 0 if params in ("", "void") else len(ghidra_cpp.split_args(params))
-        found.append((count, brace, matching(masked, brace, "{", "}")))
+        types = [canonical_parameter(p, named=True) for p in ghidra_cpp.split_args(params) if p and p != "void"]
+        found.append((count, brace, matching(masked, brace, "{", "}"), types))
     exact = [x for x in found if x[0] == want]
+    if len(exact) != 1:
+        exact = [x for x in exact if x[3] == wanted_types]
     if len(exact) != 1:
         return None
     return exact[0][1], exact[0][2]
