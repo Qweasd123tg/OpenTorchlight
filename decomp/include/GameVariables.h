@@ -8,6 +8,7 @@
 
 static unsigned char gANIMATIONPLAYER_TYPE_NAMES[32];
 static unsigned char gCAMERA_TYPE_NAMES[16];
+static unsigned char gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES[16];
 static unsigned char gPARTICLE_COLLISION_TYPE[24];
 static unsigned char gPARTICLE_INTERSECTION_TYPE[24];
 static unsigned char g_DescriptorController[96];
