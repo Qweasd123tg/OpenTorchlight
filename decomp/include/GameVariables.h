@@ -6,6 +6,7 @@
 
 #include <string>
 
+static unsigned char gQUEST_REQUIREMENTS[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 
 #endif
