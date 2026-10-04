@@ -29,6 +29,7 @@ public:
     void showItemText();
     void updateOpacity(float elapsed, bool force);
     void destroyItemText();
+    bool isUseable() { return ISA(UNITTYPES::CONSUMABLE) || ISA(UNITTYPES::INTERACTABLE); }
 
 protected:
     CSoundBank* m_pSoundBank;

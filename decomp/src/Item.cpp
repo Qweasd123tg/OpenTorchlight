@@ -1,6 +1,10 @@
 #include "EmptyStrings.h"
 #include "Item.h"
 #include "ItemSaveState.h"
+#include "CullingBounds.h"
+#include "Editor.h"
+#include <OgreCamera.h>
+#include <OgreAxisAlignedBox.h>
 #include "UnitSpawner.h"
 #include "EditorScene.h"
 #include "SoundBank.h"
@@ -312,4 +316,77 @@ void CItem::applySaveState(CItemSaveState& state)
         }
     }
     m_bBlocksPath = state.m_bBlocksPath;
+}
+
+void CItem::snapToGround()
+{
+    if (getLevel() == NULL)
+        return;
+    removeFromAvoidanceMap(*getLevel());
+    Ogre::Vector3 top = getPosition(true);
+    Ogre::Vector3 bottom = top;
+    float originalY = top.y;
+    top.y = 100.0f;
+    bottom.y = -100.0f;
+    Ogre::Vector3 hit, normal, extra;
+    unsigned int type;
+    int attempts = 0;
+    for (; attempts < 30; ++attempts)
+    {
+        if (getLevel()->rayCollision(top, bottom, hit, normal, type, extra, false) && type != 100)
+        {
+            top = hit;
+            break;
+        }
+        Ogre::Vector3 next = getLevel()->randomOpenPosition(top, 4.0f, false);
+        top.x = next.x;
+        top.z = next.z;
+        bottom.x = next.x;
+        bottom.z = next.z;
+        top.y = 100.0f;
+        bottom.y = -100.0f;
+    }
+    if (attempts >= 30)
+        top.y = originalY;
+    setPosition(top);
+    extractOrientationVectors();
+    addToAvoidanceMap(*getLevel());
+    setVisible(m_bVisible);
+}
+
+void CItem::update(Ogre::Camera* camera, const Ogre::Vector3& viewer, float elapsed)
+{
+    CBaseUnit::update(camera, viewer, elapsed);
+    if (m_fForcedActiveTime >= 0.0f)
+        m_fForcedActiveTime -= elapsed;
+    if (m_pSoundBank != NULL)
+        m_pSoundBank->update(elapsed, m_pSceneNode);
+    calculateActiveRange(viewer);
+    updateOpacity(elapsed, false);
+    if (!m_bInActiveRange && elapsed != 1000.0f)
+    {
+        if (ISA(UNITTYPES::BREAKABLE) && m_bItemFlag218)
+            m_bBaseUnitFlag190 = true;
+        setVisible(false);
+        return;
+    }
+    Ogre::AxisAlignedBox bounds(m_pCullingBounds->getWorldMinimum(), m_pCullingBounds->getWorldMaximum());
+    if (elapsed == 1000.0f || camera->isVisible(bounds))
+    {
+        if (!m_bItemFlag218)
+        {
+            setVisible(true);
+            if (getUnitModel() != NULL && (CEditor::getSingleton()->getFlags() & 2) != 0 && !m_bLevelLighting)
+            {
+                Ogre::Vector3 position = getPosition(true);
+                float x = position.x - viewer.x;
+                float z = position.z - viewer.z;
+                float distance = std::sqrt(x*x + 0.0f + z*z) - 1.25f;
+                float light = (10.5f - std::min(10.5f, distance)) / 10.5f;
+                static_cast<CGenericModel*>(getUnitModel())->setLightOverride(light);
+            }
+        }
+    }
+    else
+        setVisible(false, true);
 }

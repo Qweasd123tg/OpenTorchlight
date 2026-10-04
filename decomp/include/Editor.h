@@ -23,6 +23,7 @@ class CEditor : public CRunicCore
 {
 public:
     CEditor();
+    static CEditor* getSingleton();
     virtual ~CEditor();
 
     // Guard of the editor API: the editor is initialized and not disabled.

@@ -7,7 +7,9 @@ namespace UNITTYPES
 {
     enum EUNITTYPES
     {
+        CONSUMABLE = 1,
         MONSTER = 27,
+        BREAKABLE = 29,
         INTERACTABLE = 32,
         UNIQUE = 54,
         MAGIC = 55,

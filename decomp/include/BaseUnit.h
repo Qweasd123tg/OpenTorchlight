@@ -13,6 +13,7 @@
 #include "iUnitObserver.h"
 
 class CCharacter;
+class CCullingBounds;
 class CDataGroup;
 class CEffect;
 class CLevel;
@@ -84,7 +85,8 @@ protected:
     long long m_iSpawnerGuid;
     char m_BaseUnitData188[0x18d - 0x188];
     bool m_bBlocksPath;
-    char m_BaseUnitData18E[0x191 - 0x18e];
+    char m_BaseUnitData18E[0x190 - 0x18e];
+    bool m_bBaseUnitFlag190;
     bool m_bSaveFlag191;
     char m_BaseUnitData192[0x198 - 0x192];
     bool m_bRangeEnabled;
@@ -97,7 +99,8 @@ protected:
     char m_BaseUnitData1A8[0x1ac - 0x1a8];
     UNITTYPES::EUNITTYPES m_eUnitType;
     CDataGroup* m_pDataGroup;
-    char m_BaseUnitData2[0x10];
+    char m_BaseUnitData2[0x8];
+    CCullingBounds* m_pCullingBounds;
     CSkillManager* m_pSkillManager;
     bool m_bBaseUnitFlag0;
     bool m_bBaseUnitFlag1;
