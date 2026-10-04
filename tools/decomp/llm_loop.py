@@ -382,6 +382,9 @@ class Loop:
                 item = pending[address]
                 item["session"], item["code"] = sid, code
                 self.by_model[address] = self.models[item["model"]].model
+                if not code:
+                    item["feedback"] = None
+                    continue
                 status, detail = self.compile(item["f"], code)
                 if status == "MATCH":
                     self.accepted[address] = code
