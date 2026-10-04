@@ -4,7 +4,14 @@
 #include <string>
 
 // Partial: declarations from LinuxUtils.cpp used by recovered TUs.
+struct POINT
+{
+    long x;
+    long y;
+};
+
 unsigned int GetTickCount();
+int GetCursorPos(POINT* point);
 short GetAsyncKeyState(unsigned int key);
 
 namespace LinuxUtils
