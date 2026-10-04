@@ -59,6 +59,30 @@
   "tried": 10,
   "code": "dce0f577be828cd7"
  },
+ "0x7b67f0": {
+  "name": "CTimeline::GetPropertyPointTimePercent(long long, int, int, bool)",
+  "killed": 1,
+  "tried": 1,
+  "code": "3c6aace83759cdb1"
+ },
+ "0x7b6930": {
+  "name": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+  "killed": 2,
+  "tried": 2,
+  "code": "cd56253d05700705"
+ },
+ "0x7b6960": {
+  "name": "CTimeline::AddPointToProperty(long long, int, bool)",
+  "killed": 1,
+  "tried": 1,
+  "code": "f4c4fc740c7f682d"
+ },
+ "0x7bb1b0": {
+  "name": "CTimeline::Stop()",
+  "killed": 5,
+  "tried": 5,
+  "code": "2dc0ba9175b74467"
+ },
  "0x7fea30": {
   "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
   "killed": 4,

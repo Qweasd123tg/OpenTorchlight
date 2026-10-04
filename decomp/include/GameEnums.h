@@ -14,5 +14,6 @@ enum EMENU_EVENT { EMENU_EVENT_GEN_LAST = 0x7fffffff };
 enum EMENU_TYPE { EMENU_TYPE_GEN_LAST = 0x7fffffff };
 enum EMenu { EMenu_GEN_LAST = 0x7fffffff };
 enum ERESOURCE_GROUPS { ERESOURCE_GROUPS_GEN_LAST = 0x7fffffff };
+enum ETIMELINE_INTERP_TYPES { ETIMELINE_INTERP_TYPES_GEN_LAST = 0x7fffffff };
 
 #endif
