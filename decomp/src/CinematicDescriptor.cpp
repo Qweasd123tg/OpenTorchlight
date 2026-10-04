@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "CinematicDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "CinematicObject.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
 
 CCinematicDescriptor::CCinematicDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -11,4 +16,19 @@ CCinematicDescriptor::CCinematicDescriptor(const wchar_t* name, const wchar_t* g
 
 CCinematicDescriptor::~CCinematicDescriptor()
 {
+}
+
+void CCinematicDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param_3)
+{
+    if (object != NULL) {
+        CCinematicObject* cinematic = dynamic_cast<CCinematicObject*>(object);
+        if (cinematic != NULL && event == 9) {
+            cinematic->play();
+        }
+    }
+}
+
+CEditorBaseObject* CCinematicDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CCinematicObject(scene->getResourceManager());
 }
