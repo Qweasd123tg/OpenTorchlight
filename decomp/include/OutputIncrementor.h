@@ -24,6 +24,14 @@ private:
     bool m_bEnabled;
     bool m_bRepeatForever;
     CResourceManager* m_pResourceManager;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setLoopForever(bool value) { m_bRepeatForever = value; }
+    bool getLoopForever() const { return m_bRepeatForever; }
+    int getLoopCount() const { return m_iRepeatCount; }
+    unsigned int getMaxIncrement() const { return m_iTarget; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

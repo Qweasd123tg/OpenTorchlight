@@ -26,6 +26,15 @@ public:
     std::wstring m_sDungeon;
     std::wstring m_sWarpName;
     CResourceManager* m_pResourceManager;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setLevelDelta(int value) { m_iLevelDelta = value; }
+    void setLevelDepth(int value) { m_iLevelDepth = value; }
+    void setWaypoint(bool value) { m_bWaypoint = value; }
+    bool getWaypoint() const { return m_bWaypoint; }
+    int getLevelDepth() const { return m_iLevelDepth; }
+    int getLevelDelta() const { return m_iLevelDelta; }
 };
 
 #endif

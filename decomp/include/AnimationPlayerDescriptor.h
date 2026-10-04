@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "DescriptorProp.h"
+#include "AnimationPlayer.h"
 
 class CAnimationPlayerDescriptor : public CPositionableObjectDescriptor
 {
@@ -17,16 +18,71 @@ public:
     CAnimationPlayerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description);
 
 
-    static void Set_setStartOnLoad(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getStartOnLoad(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setBlendTime(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getBlendTime(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setBlendOutTime(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getBlendOutTime(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setForceDuration(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getForceDuration(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setPlayIdle(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getPlayIdle(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setStartOnLoad(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setStartOnLoad(data->m_bValue);
+    }
+    static UNIONDATA8BIT* Get_getStartOnLoad(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(bool);
+        gUnionOf32BitData[0].m_bValue = static_cast<CAnimationPlayer*>(object)->getStartOnLoad();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
+    static void Set_setBlendTime(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setBlendTime(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
+    static UNIONDATA8BIT* Get_getBlendTime(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(float);
+        gUnionOf32BitData[0].m_fValue = static_cast<CAnimationPlayer*>(object)->getBlendTime();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
+    static void Set_setBlendOutTime(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setBlendOutTime(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
+    static UNIONDATA8BIT* Get_getBlendOutTime(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(float);
+        gUnionOf32BitData[0].m_fValue = static_cast<CAnimationPlayer*>(object)->getBlendOutTime();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
+    static void Set_setForceDuration(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setForceDuration(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
+    static UNIONDATA8BIT* Get_getForceDuration(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(float);
+        gUnionOf32BitData[0].m_fValue = static_cast<CAnimationPlayer*>(object)->getForceDuration();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
+    static void Set_setPlayIdle(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setPlayIdle(data->m_bValue);
+    }
+    static UNIONDATA8BIT* Get_getPlayIdle(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(bool);
+        gUnionOf32BitData[0].m_bValue = static_cast<CAnimationPlayer*>(object)->getPlayIdle();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
     static void Set_setAnimationName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getAnimationName(CEditorBaseObject* object, unsigned int& count);
     static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);

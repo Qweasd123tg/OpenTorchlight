@@ -37,6 +37,19 @@ public:
     float m_fBlendTime;
     float m_fBlendOutTime;
     float m_fForceDuration;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setStartOnLoad(bool value) { m_bStartOnLoad = value; }
+    void setBlendTime(float value) { m_fBlendTime = value; }
+    void setBlendOutTime(float value) { m_fBlendOutTime = value; }
+    void setForceDuration(float value) { m_fForceDuration = value; }
+    void setPlayIdle(bool value) { m_bPlayIdle = value; }
+    bool getPlayIdle() const { return m_bPlayIdle; }
+    float getForceDuration() const { return m_fForceDuration; }
+    float getBlendOutTime() const { return m_fBlendOutTime; }
+    float getBlendTime() const { return m_fBlendTime; }
+    bool getStartOnLoad() const { return m_bStartOnLoad; }
 };
 
 #endif

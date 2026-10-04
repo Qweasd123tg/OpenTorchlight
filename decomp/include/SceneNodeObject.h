@@ -51,6 +51,10 @@ protected:
     bool m_bKeepParent;
     bool m_bVisible;
     bool m_bEnabled;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    bool getVisible() const { return m_bVisible; }
 };
 
 #endif

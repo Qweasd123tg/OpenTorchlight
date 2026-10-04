@@ -18,6 +18,12 @@ public:
     bool m_bSkillsDisabled;
     unsigned char m_abPadding[5];
     CResourceManager* m_pResourceManager;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setSkillsDisabled(bool value) { m_bSkillsDisabled = value; }
+    bool getSkillsDisabled() const { return m_bSkillsDisabled; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

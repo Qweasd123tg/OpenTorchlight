@@ -40,6 +40,12 @@ public:
     unsigned char m_gap8A[0x2];
     int m_iUnknown8C;
     CResourceManager* m_pResourceManager;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setEnabled(bool value) { m_bEnabled = value; }
+    int getActiveInputs() const { return m_iActiveInputs; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

@@ -33,6 +33,10 @@ public:
     int m_iUnknown128;
     unsigned char m_gap12C[0x4] __attribute__((aligned(4)));
     CGenericModel* m_pGenericModel;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    int getLightDensity() const { return m_iLightDensity; }
 };
 
 #endif

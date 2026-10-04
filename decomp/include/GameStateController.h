@@ -29,6 +29,16 @@ public:
     unsigned char m_gap69[0x3];
     float m_fPreviousHP;
     int m_iHelpTip;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setPlayerInvulnerable(bool value) { m_bPlayerInvulnerable = value; }
+    void setGameState(int value) { m_iGameState = value; }
+    void setHelpTip(int value) { m_iHelpTip = value; }
+    int getHelpTip() const { return m_iHelpTip; }
+    int getGameState() const { return m_iGameState; }
+    bool getPlayerInvulnerable() const { return m_bPlayerInvulnerable; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

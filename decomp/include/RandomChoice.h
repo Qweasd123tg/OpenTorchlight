@@ -38,6 +38,12 @@ private:
     int m_iRandomValues[OUTPUT_COUNT];
     bool m_bEnabled;
     unsigned int m_iCount;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setEnabled(bool value) { m_bEnabled = value; }
+    unsigned int getCount() const { return m_iCount; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

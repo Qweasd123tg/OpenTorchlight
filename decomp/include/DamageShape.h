@@ -59,6 +59,29 @@ public:
     unsigned char m_Unknown1E0[0x18] __attribute__((aligned(8)));
     int m_iTotalNumberOfTargets;
     unsigned char m_gap1FC[0x4] __attribute__((aligned(4)));
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setDamageType(int value) { m_iDamageType = value; }
+    void setDamageOverTime(bool value) { m_bDamageOverTime = value; }
+    void setLoopsForEver(bool value) { m_bLoopsForEver = value; }
+    void setTargetOnlyDead(bool value) { m_bTargetOnlyDead = value; }
+    void setTotalNumberOfTargets(int value) { m_iTotalNumberOfTargets = value; }
+    void setMinDamage(float value) { m_fMinDamage = value; }
+    void setMaxDamage(float value) { m_fMaxDamage = value; }
+    void setAlignmentTypAllowedToDamage(int value) { m_iAlignmentTypAllowedToDamage = value; }
+    int getDelayTimer() const { return m_iDelayTimer; }
+    float getTimer() const { return m_fTimer; }
+    int getNumLoops() const { return m_iNumLoops; }
+    bool getLoopsForEver() const { return m_bLoopsForEver; }
+    float getMaxDamage() const { return m_fMaxDamage; }
+    float getMinDamage() const { return m_fMinDamage; }
+    int getTotalNumberOfTargets() const { return m_iTotalNumberOfTargets; }
+    bool getTargetOnlyDead() const { return m_bTargetOnlyDead; }
+    bool getDamageOverTime() const { return m_bDamageOverTime; }
+    bool getUpdateInEditor() const { return m_bUpdateInEditor; }
+    int getAlignmentTypAllowedToDamage() const { return m_iAlignmentTypAllowedToDamage; }
+    int getDamageType() const { return m_iDamageType; }
 };
 
 #endif

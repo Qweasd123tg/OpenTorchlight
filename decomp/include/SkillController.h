@@ -51,6 +51,21 @@ public:
     unsigned char m_gap14F[1];                         // 0x14F
 
     int m_iSkillLevel;                                 // 0x150
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setSkillLearnOnStart(bool value) { m_bLearnSkillOnStart = value; }
+    void setSkillUnlearnOnStop(bool value) { m_bUnlearnSkillOnStop = value; }
+    void setForceStop(bool value) { m_bForceStop = value; }
+    void setUseUnitTarget(bool value) { m_bUseUnitTarget = value; }
+    void setPlayerAsTarget(bool value) { m_bUsePlayerAsTarget = value; }
+    void setLevelOfSkill(int value) { m_iSkillLevel = value; }
+    int getLevelOfSkill() const { return m_iSkillLevel; }
+    bool getUseUnitTarget() const { return m_bUseUnitTarget; }
+    bool getPlayerAsTarget() const { return m_bUsePlayerAsTarget; }
+    bool getForceStop() const { return m_bForceStop; }
+    bool getSkillUnlearnOnStop() const { return m_bUnlearnSkillOnStop; }
+    bool getSkillLearnOnStart() const { return m_bLearnSkillOnStart; }
 };
 
 #endif

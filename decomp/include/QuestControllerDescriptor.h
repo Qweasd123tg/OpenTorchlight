@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "DescriptorProp.h"
+#include "QuestController.h"
 
 class CQuestControllerDescriptor : public CBaseObjectDescriptor
 {
@@ -16,10 +17,32 @@ public:
     CQuestControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description);
 
 
-    static void Set_setPlayerGetsDisabled(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getPlayerGetsDisabled(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setBroadcastEventsOnLoad(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getBroadcastEventsOnLoad(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setPlayerGetsDisabled(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CQuestController*>(object)->setPlayerGetsDisabled(data->m_bValue);
+    }
+    static UNIONDATA8BIT* Get_getPlayerGetsDisabled(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(bool);
+        gUnionOf32BitData[0].m_bValue = static_cast<CQuestController*>(object)->getPlayerGetsDisabled();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
+    static void Set_setBroadcastEventsOnLoad(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CQuestController*>(object)->setBroadcastEventsOnLoad(data->m_bValue);
+    }
+    static UNIONDATA8BIT* Get_getBroadcastEventsOnLoad(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(bool);
+        gUnionOf32BitData[0].m_bValue = static_cast<CQuestController*>(object)->getBroadcastEventsOnLoad();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
     static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getCategory(CEditorBaseObject* object, unsigned int& count);
     static unsigned int GetGroupIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);

@@ -62,6 +62,13 @@ public:
     bool m_bPlayerEnabled;
     bool m_bPlayerGetsDisabled;
     EMENU_EVENT m_eMenuEvent;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setPlayerGetsDisabled(bool value) { m_bPlayerGetsDisabled = value; }
+    void setBroadcastEventsOnLoad(bool value) { m_bBroadcastEventsOnLoad = value; }
+    bool getBroadcastEventsOnLoad() const { return m_bBroadcastEventsOnLoad; }
+    bool getPlayerGetsDisabled() const { return m_bPlayerGetsDisabled; }
 };
 
 #endif

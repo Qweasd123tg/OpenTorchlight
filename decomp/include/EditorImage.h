@@ -59,6 +59,27 @@ public:
     unsigned char m_gapBA[0x6];
     CEditorImage* m_pParentImage;
     bool m_bWindowVisible;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setPosXPCT(float value) { m_fPosXPct = value; }
+    void setPosYPCT(float value) { m_fPosYPct = value; }
+    void setPosX(float value) { m_fPosX = value; }
+    void setPosY(float value) { m_fPosY = value; }
+    void setOffsetX(float value) { m_fOffsetX = value; }
+    void setOffsetY(float value) { m_fOffsetY = value; }
+    void setOffsetXPct(float value) { m_fOffsetXPct = value; }
+    void setOffsetYPct(float value) { m_fOffsetYPct = value; }
+    float getOffsetYPct() const { return m_fOffsetYPct; }
+    float getOffsetXPct() const { return m_fOffsetXPct; }
+    float getOffsetY() const { return m_fOffsetY; }
+    float getOffsetX() const { return m_fOffsetX; }
+    float getPosY() const { return m_fPosY; }
+    float getPosX() const { return m_fPosX; }
+    float getPosYPCT() const { return m_fPosYPct; }
+    float getPosXPCT() const { return m_fPosXPct; }
+    bool getEnabled() const { return m_bEnabled; }
+    bool getVisible() const { return m_bVisible; }
 };
 
 #endif

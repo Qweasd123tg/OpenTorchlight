@@ -46,6 +46,14 @@ private:
     int m_iValue;
     ECOUNTER_TYPES m_eType;
     bool m_bEnabled;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setEnabled(bool value) { m_bEnabled = value; }
+    void setCount(int value) { m_iTarget = value; }
+    int getStartingValue() const { return m_iStartValue; }
+    int getCount() const { return m_iTarget; }
+    bool getEnabled() const { return m_bEnabled; }
 };
 
 #endif

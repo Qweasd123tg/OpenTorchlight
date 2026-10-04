@@ -50,6 +50,21 @@ public:
     long long m_Unknown168;
     unsigned char m_gap170[0x50] __attribute__((aligned(8)));
     int m_iCameraType;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setCameraPanTime(float value) { m_fCameraPanTime = value; }
+    void setCameraType(int value) { m_iCameraType = value; }
+    void setCameraPauseTimer(float value) { m_fCameraPauseTimer = value; }
+    void setRestoreCameraStateAfterMoving(bool value) { m_bRestoreCameraStateAfterMoving = value; }
+    void setFollowUnit(bool value) { m_bFollowUnit = value; }
+    int getCameraType() const { return m_iCameraType; }
+    bool getFollowUnit() const { return m_bFollowUnit; }
+    bool getRestoreCameraStateAfterMoving() const { return m_bRestoreCameraStateAfterMoving; }
+    float getCameraPauseTimer() const { return m_fCameraPauseTimer; }
+    float getCameraEaseInPCT() const { return m_fCameraEaseInPCT; }
+    float getCameraEaseInDistancePCT() const { return m_fCameraEaseInDistancePCT; }
+    float getCameraPanTime() const { return m_fCameraPanTime; }
 };
 
 #endif

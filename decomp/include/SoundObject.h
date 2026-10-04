@@ -38,6 +38,14 @@ public:
     bool m_bSoundPlaying;
     bool m_bSoundPaused;
     bool m_bEnvironmental;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setSoundBankCategory(int value) { m_iSoundBankCategory = value; }
+    unsigned int getSoundBankNameIndex() const { return m_iSoundBankNameIndex; }
+    int getSoundBankCategory() const { return m_iSoundBankCategory; }
+    bool getEnvironmental() const { return m_bEnvironmental; }
+    bool getSoundStartsOnActivated() const { return m_bSoundStartsOnActivated; }
 };
 
 #endif

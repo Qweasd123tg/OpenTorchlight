@@ -38,6 +38,11 @@ public:
     unsigned char m_gap79[3];
     float m_fPlaybackCheckTimer;
     CResourceManager* m_pResourceManager;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setLoops(bool value) { m_bLoops = value; }
+    bool getLoops() const { return m_bLoops; }
 };
 
 #endif

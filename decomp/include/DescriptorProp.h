@@ -50,6 +50,7 @@ union UNIONDATA32BIT
     int m_iValue;
     unsigned int m_uValue;
     float m_fValue;
+    bool m_bValue;
 };
 
 // Scratch buffer the generated property getters return.

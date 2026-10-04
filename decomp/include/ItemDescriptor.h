@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "DescriptorProp.h"
+#include "Item.h"
 
 class CItemDescriptor : public CPositionableObjectDescriptor
 {
@@ -18,8 +19,19 @@ public:
     CItemDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description);
 
 
-    static void Set_setEnabled(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getEnabled(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setEnabled(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CItem*>(object)->setEnabled(data->m_bValue);
+    }
+    static UNIONDATA8BIT* Get_getEnabled(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        count = sizeof(bool);
+        gUnionOf32BitData[0].m_bValue = static_cast<CItem*>(object)->getEnabled();
+        return (UNIONDATA8BIT*)gUnionOf32BitData;
+    }
     static void Set_createNewEquipment(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getUnitDataName(CEditorBaseObject* object, unsigned int& count);
     static unsigned int getItemIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);

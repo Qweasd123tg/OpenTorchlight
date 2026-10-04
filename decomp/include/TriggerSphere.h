@@ -13,6 +13,10 @@ public:
 
 private:
     float m_fRadius;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    float getRadius() const { return m_fRadius; }
 };
 
 #endif

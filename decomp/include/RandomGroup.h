@@ -70,6 +70,16 @@ public:
     std::wstring m_sPlayerClassName;
     std::wstring m_sDungeonForGroup;
     int m_iDifficulty;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setIsDynamicGroup(bool value) { m_bIsDynamicGroup = value; }
+    void SetNumberOfPicks(int value) { m_iNumberOfPicks = value; }
+    void setDifficulty(int value) { m_iDifficulty = value; }
+    int getDifficulty() const { return m_iDifficulty; }
+    unsigned int GetRandomType() const { return m_iRandomType; }
+    int GetNumberOfPicks() const { return m_iNumberOfPicks; }
+    bool getIsDynamicGroup() const { return m_bIsDynamicGroup; }
 };
 
 #endif

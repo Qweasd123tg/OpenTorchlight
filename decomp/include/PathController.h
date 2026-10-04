@@ -56,6 +56,16 @@ public:
     void* m_pPathName;
     int m_iNumberOfPathPoints;
     bool m_bEnableUnitOnStart;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setEnableUnitOnStart(bool value) { m_bEnableUnitOnStart = value; }
+    void setUnitRunsOnPath(bool value) { m_bUnitRunsOnPath = value; }
+    void setWalkToPlayer(bool value) { m_bWalkToPlayer = value; }
+    bool getWalkToPlayer() const { return m_bWalkToPlayer; }
+    bool getUnitRunsOnPath() const { return m_bUnitRunsOnPath; }
+    bool getEnableUnitOnStart() const { return m_bEnableUnitOnStart; }
+    int getNumberOfPathPoints() const { return m_iNumberOfPathPoints; }
 };
 
 #endif

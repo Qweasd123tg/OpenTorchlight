@@ -53,6 +53,10 @@ public:
     long long m_iUnknown140;
     void* m_pUnknown148;
     bool m_bUnknown150;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    unsigned int getPropertyNodeType() const { return m_iPropertyNodeType; }
 };
 
 #endif

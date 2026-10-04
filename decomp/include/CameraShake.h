@@ -38,6 +38,15 @@ public:
     float m_fCameraPositionZ;
     bool m_bCameraShakeActive;
     bool m_bCameraFallsOffWithDistance;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setDuration(float value) { m_fDuration = value; }
+    void setMagnitudeMult(float value) { m_fMagnitudeMultiplier = value; }
+    void setCameraFallsOffWithDistance(bool value) { m_bCameraFallsOffWithDistance = value; }
+    bool getCameraFallsOffWithDistance() const { return m_bCameraFallsOffWithDistance; }
+    float getMagnitudeMult() const { return m_fMagnitudeMultiplier; }
+    float getDuration() const { return m_fDuration; }
 };
 
 #endif

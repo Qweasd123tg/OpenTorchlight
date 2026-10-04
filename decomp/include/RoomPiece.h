@@ -58,6 +58,14 @@ public:
     int m_iUnknown158;
     bool m_bUnknown15C;
     bool m_bUnknown15D;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    void setCollisionEnabled(bool value) { m_bCollisionEnabled = value; }
+    void setVisibleOnMap(bool value) { m_bVisibleOnMap = value; }
+    int getVisualIndex() const { return m_iVisualIndex; }
+    bool getVisibleOnMap() const { return m_bVisibleOnMap; }
+    bool getCollisionEnabled() const { return m_bCollisionEnabled; }
 };
 
 #endif

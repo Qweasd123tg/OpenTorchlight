@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "DescriptorProp.h"
+#include "Missile.h"
 
 class CMissileDescriptor : public CPositionableObjectDescriptor
 {
@@ -57,9 +58,17 @@ public:
     static UNIONDATA8BIT* Get_getNumberOfRicochets(CEditorBaseObject* object, unsigned int& count);
     static void Set_setDistanceAllowedToTraveled(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getDistanceAllowedToTraveled(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setRadiusOfMissile(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static void Set_setRadiusOfMissile(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMissile*>(object)->setRadiusOfMissile(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
     static UNIONDATA8BIT* Get_getRadiusOfMissile(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setAOERadius(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static void Set_setAOERadius(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMissile*>(object)->setAOERadius(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
     static UNIONDATA8BIT* Get_getAOERadius(CEditorBaseObject* object, unsigned int& count);
     static void Set_setMaxVelocity(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getMaxVelocity(CEditorBaseObject* object, unsigned int& count);
@@ -75,11 +84,23 @@ public:
     static UNIONDATA8BIT* Get_getTargetHomingValue(CEditorBaseObject* object, unsigned int& count);
     static void Set_setTargetingAngle(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getTargetingAngle(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setRateOFire(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static void Set_setRateOFire(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMissile*>(object)->setRateOFire(((const UNIONDATA32BIT*)data)->m_fValue);
+    }
     static UNIONDATA8BIT* Get_getRateOFire(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setCollisionSphereVisible(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static void Set_setCollisionSphereVisible(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMissile*>(object)->setCollisionSphereVisible(data->m_bValue);
+    }
     static UNIONDATA8BIT* Get_getCollisionSphereVisible(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setAOESphereVisible(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static void Set_setAOESphereVisible(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMissile*>(object)->setAOESphereVisible(data->m_bValue);
+    }
     static UNIONDATA8BIT* Get_getAOESphereVisible(CEditorBaseObject* object, unsigned int& count);
     static void Set_setTrackGround(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getTrackGround(CEditorBaseObject* object, unsigned int& count);
