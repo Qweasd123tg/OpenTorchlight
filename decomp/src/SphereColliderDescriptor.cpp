@@ -1,5 +1,10 @@
 #include "EmptyStrings.h"
 #include "SphereColliderDescriptor.h"
+#include "GameEnums.h"
+#include "GameVariables.h"
+#include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "SphereColliderWrapper.h"
 
 CSphereColliderDescriptor::CSphereColliderDescriptor()
     : CColliderDescriptor(L"Sphere Collision")
@@ -10,4 +15,9 @@ CSphereColliderDescriptor::CSphereColliderDescriptor()
 
 CSphereColliderDescriptor::~CSphereColliderDescriptor()
 {
+}
+
+CEditorBaseObject* CSphereColliderDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CSphereColliderWrapper(scene->getResourceManager());
 }
