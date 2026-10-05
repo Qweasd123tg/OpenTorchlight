@@ -31,6 +31,8 @@ public:
     CResourceManager* getResourceManager() { return m_pResourceManager; }
     Ogre::SceneNode* getSceneNode() { return m_pSceneNode; }
 
+    bool getVisible() const { return m_bVisible; }
+
     void sceneNodeCreate();
     void sceneNodeDestroy();
     void sceneNodeAttachEntity(Ogre::Entity* entity);

@@ -1,3 +1,5 @@
+#include "Layout.h"
+#include "Player.h"
 #include "SteamStats.h"
 #include "ItemSaveState.h"
 #include "ParticlePreloader.h"
@@ -1925,4 +1927,124 @@ void CEquipment::detachFromLocation()
         }
     }
     m_pEquippedTo = NULL;
+}
+
+void CEquipment::improveHeirloom()
+{
+    calculateCombatStats(true);
+    if (m_iUnknown28C < 10 && m_pEffectManager) {
+        for (unsigned int activation = 0; activation < 3; ++activation) {
+            TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(
+                m_pEffectManager->m_EffectData10 + 0x18 + activation * 0x18);
+            for (unsigned int i = 0; i < effects.size(); ++i) {
+                float saved = effects[i]->m_fValueC0;
+                float value = effects[i]->value(static_cast<EEFFECT_VALUES>(0));
+                effects[i]->m_fValueC4 = value * 1.1f;
+                effects[i]->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+                value = effects[i]->value(static_cast<EEFFECT_VALUES>(1));
+                effects[i]->m_fValueC8 = value * 1.1f;
+                effects[i]->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+                effects[i]->m_fValueC0 = saved * 1.1f;
+            }
+        }
+        m_pEffectManager->clearOutDescriptions();
+    }
+    setRequirements();
+}
+
+void CEquipment::updateVisualLayout(float elapsed)
+{
+    if (m_bUnknown430 && m_pUnitModel) {
+        if (!m_pPositionableObject) {
+            m_pPositionableObject = new CLayout(m_pResourceManager, static_cast<ELAYOUT_TYPES>(2));
+            static_cast<CLayout*>(m_pPositionableObject)->loadLayoutFile(
+                m_pDataGroup->GetDataValue(L"ATTACHEDLAYOUT", L""), false, NULL, false, false, 0);
+            static_cast<CLayout*>(m_pPositionableObject)->start();
+        }
+        if (!m_pPositionableObject->getVisible())
+            m_pPositionableObject->setVisible(true);
+        static_cast<CLayout*>(m_pPositionableObject)->update(elapsed);
+        m_pPositionableObject->setPosition(m_pUnitModel->m_pSceneNode->_getDerivedPosition());
+        m_pPositionableObject->setOrientation(m_pUnitModel->m_pSceneNode->_getDerivedOrientation());
+    }
+}
+
+void CEquipment::addedToInventory(CInventory* inventory, CCharacter* character)
+{
+    if (m_pInventory && inventory != m_pInventory) {
+        if (m_pResourceManager->getGameClient()->getPlayer())
+            questEventFire(static_cast<EQUEST_EVENTS>(5), m_pResourceManager->getGameClient()->getPlayer(), this);
+    }
+    if (m_bGamblerIcon && m_pResourceManager->getGameClient()->getGameUI()) {
+        m_pInventory = inventory;
+        createIcon(*m_pResourceManager->getGameClient()->getGameUI(), true);
+        recalculatePrice();
+    } else {
+        m_pInventory = inventory;
+    }
+    setParentGuid(character->getGuid());
+    broadcastUnitState(static_cast<EUNIT_STATES>(3));
+    if (character->ISA(UNITTYPES::PLAYER)
+        || (character->m_pMaster && character->m_pMaster->ISA(UNITTYPES::PLAYER)))
+        questEventFire(static_cast<EQUEST_EVENTS>(0), m_pResourceManager->getGameClient()->getPlayer(), this);
+    BroadcastEvent(27);
+    m_bItemFlag1F2 = true;
+    if (getSceneOwner()) getSceneOwner()->RemoveObjectInScene(this);
+    if (m_pParticle_3D0) m_pParticle_3D0->Stop(false);
+    resetVisualLayout();
+}
+
+namespace {
+inline int equipmentRequirementReduction(CEquipment* item, CCharacter* character)
+{
+    int reduction = character ? static_cast<int>(character->getEffectValue(
+        static_cast<EEFFECT_TYPE>(93), static_cast<EDAMAGE_TYPES>(7))) : 0;
+    if (item->ISA(UNITTYPES::ITEMCATEGORYMARTIAL))
+        reduction += character ? character->getEffectValue(static_cast<EEFFECT_TYPE>(98), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    else if (item->ISA(UNITTYPES::ITEMCATEGORYRANGED))
+        reduction += character ? character->getEffectValue(static_cast<EEFFECT_TYPE>(100), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    else if (item->ISA(UNITTYPES::ITEMCATEGORYMAGIC))
+        reduction += character ? character->getEffectValue(static_cast<EEFFECT_TYPE>(101), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    else if (item->ISA(UNITTYPES::ARMOR))
+        reduction += character ? character->getEffectValue(static_cast<EEFFECT_TYPE>(94), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    else if (item->ISA(UNITTYPES::SPELL))
+        reduction += character ? character->getEffectValue(static_cast<EEFFECT_TYPE>(95), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    return reduction;
+}
+}
+
+int CEquipment::getStrengthRequirement(CCharacter* character)
+{
+    int reduction = equipmentRequirementReduction(this, character);
+    int requirement = m_iUnknown27C - reduction;
+    return requirement < 0 ? 0 : requirement;
+}
+
+int CEquipment::getDexterityRequirement(CCharacter* character)
+{
+    int reduction = equipmentRequirementReduction(this, character);
+    int requirement = m_iUnknown280 - reduction;
+    return requirement < 0 ? 0 : requirement;
+}
+
+int CEquipment::getMagicRequirement(CCharacter* character)
+{
+    int reduction = equipmentRequirementReduction(this, character);
+    int requirement = m_iUnknown284 - reduction;
+    return requirement < 0 ? 0 : requirement;
+}
+
+int CEquipment::getDefenseRequirement(CCharacter* character)
+{
+    int reduction = equipmentRequirementReduction(this, character);
+    int requirement = m_iUnknown288 - reduction;
+    return requirement < 0 ? 0 : requirement;
+}
+
+int CEquipment::getLevelRequirement(CCharacter* character)
+{
+    if (!character) return m_iUnknown278;
+    int reduction = equipmentRequirementReduction(this, character);
+    int requirement = m_iUnknown278 - reduction;
+    return requirement < 0 ? 0 : requirement;
 }

@@ -111,6 +111,7 @@ public:
 
     void incrementJournalStatistic(EJournalStatistic statistic,int amount);
     void performUnknownSkill(CSkill* skill);
+    float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
     int strength();
     int dexterity();
     int magic();

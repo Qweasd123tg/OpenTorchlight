@@ -20,6 +20,7 @@ class CTimerStatics;
 class CEditorScene : public CPositionableObject
 {
 public:
+    void RemoveObjectInScene(CEditorBaseObject* object);
     CEditorScene(const wchar_t* name);
     virtual ~CEditorScene();
 

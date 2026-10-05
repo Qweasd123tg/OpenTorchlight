@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_combat",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "combat_not_forced",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "rank_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "rank_unsigned",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_manager_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "two_activations",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_value_first",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_value_second",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_first_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_second_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_first_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_second_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_saved_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reread_saved",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_first_entry",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_second_entry",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_saved_entry",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_clear",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_requirements",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "single_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cache_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "double_first_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "double_second_scale",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

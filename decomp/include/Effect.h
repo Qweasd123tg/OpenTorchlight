@@ -29,7 +29,9 @@ private:
     std::wstring m_sName;
     unsigned char m_EffectData88[0xc0-0x88];
     float m_fValueC0;
-    unsigned char m_EffectDataC4[0x138-0xc4];
+    float m_fValueC4;
+    float m_fValueC8;
+    unsigned char m_EffectDataCC[0x138-0xcc];
     friend class CBaseUnit;
     friend class CEquipment;
 };

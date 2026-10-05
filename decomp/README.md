@@ -1753,3 +1753,25 @@ Integrated check: 135 tests, 0 failed; 1,283 / 5,247 accepted game functions,
 regressions also pass. A separate zero-hook integer-RTTI importer diagnostic
 reproduces a pipeline bug; it is intentionally outside the normal test suite
 and is not an accepted game function. The generic pipeline was not modified.
+
+### Equipment heirlooms, inventory entry and requirement readers (2026-10-05)
+
+Eight entries / 2,922 original bytes: improveHeirloom 0x882330 (446),
+updateVisualLayout 0x86d670 (394), addedToInventory 0x884a20 (383), four stat
+requirement getters 0x86dc50/0x86dae0/0x86d970/0x86d800 (354 each), and
+getLevelRequirement 0x86ddc0 (283). Visual layout and the level getter are
+normalized MATCH (100%). Differential fixtures pass 4,608 heirloom cases,
+4,096 inventory-entry cases and 15,360 cases across all five requirement
+readers, twice per side. All 28 / 20 / 28 targeted faults are killed.
+
+Heirlooms preserve float scaling and post-callback entry/manager reads.
+Requirement reduction truncates the general float modifier before adding the
+category modifier; null-Character level queries return the stored value without
+clamping. Inventory entry preserves quest/UI/state/event/scene/particle order.
+See the three new research reports for collaborator boundaries and limitations.
+Shared declarations and verified field carvings preserve class sizes and vtables;
+no foreign source TU or generic pipeline was changed.
+
+Integrated check: 138 tests, 0 failed; 1,291 / 5,247 accepted game functions,
+441,323 original bytes. Watched-free, effects allocation/trim and filtering
+heap regressions all pass on this final source.
