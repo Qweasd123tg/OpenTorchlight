@@ -1437,3 +1437,54 @@ This adds one 4075-byte function over 5a8907f. The series now covers the ten
 largest CEquipment functions by original size, totaling 87761 bytes. Of these
 ten, Drop is MATCH; the other nine are accepted by original-versus-recovered
 hand tests, not a claim of full machine-code equality or complete game parity.
+
+## Equipment model loading and lifetime helpers (2026-10-05)
+
+`loadModel(std::wstring, std::wstring)` (0x887b30, 3558 original bytes)
+restores primary/secondary model creation, parent-node detachment, level
+rim-light selection, shadow flags, primary attachment/visibility, zero local
+positions, render queue 50, texture override and named texture replacements.
+An explicit secondary path is used verbatim; the data-driven secondary name
+is combined with RESOURCEDIRECTORY and `.mesh`, then passed through CleanPath.
+The secondary node is detached but not attached to the Equipment node here.
+A missing primary entity logs an error and skips the secondary/texture work.
+The original successful secondary-model path assumes its entity is present.
+
+The 960-case hand fixture runs twice per side using real headless Ogre
+SceneNodes and DataGroups/string/path operations. It compares actual node
+parentage, local positions and child counts, plus model/resource/render call
+arguments and order, rim-light values, visibility, shadows, queue groups and
+texture assignments. Model factories/renderable entities and expensive model
+services are controlled collaborators; this does not prove GPU rendering or
+full asset loading. Cases include missing resource/level/template links,
+primary entity absence, explicit/data-driven/empty paths, Unicode and NUL,
+existing node parents, texture groups and callbacks changing managers, data
+or entities. Texture-group iteration retains its captured snapshot/count.
+Every both-crash case is rejected.
+
+All 21 viable sampled mutations (24 probed) and 16 targeted semantic mutations
+were killed. Evidence and rerunnable scripts are in
+`research/equipment-loadmodel-check/`. Its targeted runner bounds replacements
+to the selected function body, so later functions in this TU do not become
+accidental mutation targets.
+
+Two related lifetime helpers also reach MATCH: `unloadModel()` (0x86d3e0,
+64 bytes) and `resetVisualLayout()` (0x86d640, 34 bytes). Three 8-byte model/
+collision pointer getters reach MATCH but belong to the inline/template
+category and are excluded from accepted-game-function totals. The secondary
+getter's former void-return placeholder was corrected to pointer return.
+
+CLevelTemplateData's RIMLIGHT string is exposed at +0x6d8, confirmed by its
+constructor/load method and the caller ASM; its size remains 0x778. Other
+header changes declare original model collaborators and allow Equipment to
+access the already verified inherited entity field without moving it. No
+other owner's source TU or pipeline was changed.
+
+Final integrated check: 114 tests, 0 failed; 1254 accepted game functions /
+405656 original bytes. The increment over 8a971bf is three game functions /
+3656 bytes; the three inline pointer getters are not added to those totals.
+The Equipment effects allocation-count regression also passed on this final
+source (384 cases plus the direct trim helper). Its standalone runner is now
+`research/equipment-effects-check/check_allocations.py` for reproducible checks
+without rerunning the full mutation sweep. This is a progress checkpoint;
+remaining Equipment functions and the long-run queue are still open.

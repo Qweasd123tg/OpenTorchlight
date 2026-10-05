@@ -1,3 +1,5 @@
+#include <OgreEntity.h>
+#include "LevelTemplateData.h"
 #include <CEGUI.h>
 #include "Settings.h"
 #include "EmptyStrings.h"
@@ -911,3 +913,69 @@ void CEquipment::createIcon(CGameUI& ui,bool force)
     imageWindow->setMutedState(true);
     if (!existing) m_pIconWindow->addChildWindow(imageWindow);
 }
+
+void CEquipment::loadModel(std::wstring mesh,std::wstring secondaryMesh)
+{
+    if (!m_pResourceManager) return;
+    unloadModel();
+    m_pUnitModel=m_pResourceManager->createGenericModel(NULL,mesh.c_str(),NULL,false,false,true);
+    if (m_pUnitModel->getSceneNode() && m_pUnitModel->getSceneNode()->getParent())
+        m_pUnitModel->getSceneNode()->getParent()->removeChild(m_pUnitModel->getSceneNode());
+    m_pUnitModel->setRimLighting(m_pResourceManager && m_pResourceManager->getLevel() && m_pResourceManager->getLevel()->getLevelTemplateData()
+        ? m_pResourceManager->getLevel()->getLevelTemplateData()->m_sRimlightTexture
+        : std::wstring(L"media/sharedtextures/rimlight.dds"));
+    m_pUnitModel->setCastsShadows(false);
+    m_pSceneNode->addChild(m_pUnitModel->getSceneNode());
+    setVisible(false,true);
+    m_pUnitModel->setPosition(0.0f,0.0f,0.0f);
+    if (!m_pUnitModel->m_pEntity)
+        Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"Error loading model : "+mesh).c_str()),Ogre::LML_NORMAL);
+    else
+    {
+        m_pUnitModel->m_pEntity->setRenderQueueGroup(50);
+        std::wstring second=secondaryMesh==EMPTY_WSTRING?m_pDataGroup->GetDataValue(L"MESHFILE_SECONDARY",EMPTY_WSTRING):secondaryMesh;
+        if (!second.empty())
+        {
+            std::wstring path=second;
+            if (secondaryMesh.empty())
+            {
+                path=m_pDataGroup->GetDataValue(L"RESOURCEDIRECTORY",EMPTY_WSTRING);
+                path=FILESYSTEM::CleanPath(path+L"/"+second+L".mesh");
+            }
+            m_pUnitModelSecondary=m_pResourceManager->createGenericModel(NULL,path.c_str(),NULL,false,false,true);
+            if (m_pUnitModelSecondary->getSceneNode() && m_pUnitModelSecondary->getSceneNode()->getParent())
+                m_pUnitModelSecondary->getSceneNode()->getParent()->removeChild(m_pUnitModelSecondary->getSceneNode());
+            m_pUnitModelSecondary->setRimLighting(m_pResourceManager && m_pResourceManager->getLevel() && m_pResourceManager->getLevel()->getLevelTemplateData()
+                ? m_pResourceManager->getLevel()->getLevelTemplateData()->m_sRimlightTexture
+                : std::wstring(L"media/sharedtextures/rimlight.dds"));
+            m_pUnitModelSecondary->setCastsShadows(false);
+            m_pUnitModelSecondary->setPosition(0.0f,0.0f,0.0f);
+            m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(50);
+        }
+        std::wstring texture=m_pDataGroup->GetDataValue(L"TEXTURE_OVERRIDE",EMPTY_WSTRING);
+        if (!texture.empty()) m_pUnitModel->setTextureOverride(texture);
+        std::vector<CDataGroup*> replacements;
+        unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"TEXTURE_REPLACE",&replacements);
+        for (unsigned int i=0;i<count;++i)
+        {
+            std::wstring name=replacements[i]->GetDataValue(L"NAME",L"");
+            std::wstring replacement=replacements[i]->GetDataValue(L"TEXTURE",L"");
+            m_pUnitModel->setTextureOverrideSingle(STRINGS::StringConvertToNarrow(name.c_str()),replacement);
+        }
+    }
+}
+
+void CEquipment::unloadModel()
+{
+    if (m_pUnitModel) { delete m_pUnitModel; m_pUnitModel=NULL; }
+    if (m_pUnitModelSecondary) { delete m_pUnitModelSecondary; m_pUnitModelSecondary=NULL; }
+}
+
+void CEquipment::resetVisualLayout()
+{
+    if (m_pPositionableObject) m_pPositionableObject->setVisible(false);
+}
+
+void* CEquipment::getUnitModel() { return m_pUnitModel; }
+void* CEquipment::getUnitModelSecondary() { return m_pUnitModelSecondary; }
+void* CEquipment::getUnitCollisionModel() { return reinterpret_cast<void*>(m_iUnitCollisionModel); }

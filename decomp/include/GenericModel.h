@@ -9,6 +9,7 @@ class CKeyframe;
 // Partial: size and all vtable groups preserved; expose only Item collaborators.
 class CGenericModel : public CPositionableObject, public iRandomWeight, public iHighlight
 {
+friend class CEquipment;
 public:
     virtual ~CGenericModel();
     virtual unsigned int GetRandomWeight();
@@ -19,6 +20,7 @@ public:
     void setLightOverride(float value);
     void setRimLighting(std::wstring texture);
     void setTextureOverride(const std::wstring& texture);
+    void setTextureOverrideSingle(const std::string& name,const std::wstring& texture);
     void updateAnimation(float elapsed, bool force);
     const std::vector<CKeyframe*>& getAnimationEvents() const { return m_AnimationEvents; }
 private:

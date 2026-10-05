@@ -53,7 +53,7 @@ public:
     virtual void missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*);
     virtual bool missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&);
-    virtual void getUnitModelSecondary();
+    virtual void* getUnitModelSecondary();
     virtual bool canEquip(CCharacter*, bool);
     virtual long long canPickup(CCharacter*);
     virtual long long canDrop(CCharacter*);

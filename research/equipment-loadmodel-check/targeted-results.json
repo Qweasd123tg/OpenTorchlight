@@ -1,0 +1,87 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_unload",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_factory_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_scene_attachment",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_visibility",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_queue",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_secondary_override",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_data_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "normalize_explicit_secondary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_casts_shadows",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_queue",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_whole_texture_override",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "drop_last_replacement",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "replace_texture_with_name",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

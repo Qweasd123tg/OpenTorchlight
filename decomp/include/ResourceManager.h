@@ -7,6 +7,7 @@
 #include "TArrayList.h"
 
 class CGameClient;
+class CGenericModel;
 class CDataGroup;
 class CHierarchy;
 class CLevel;
@@ -25,6 +26,7 @@ public:
     virtual ~CResourceManager();
 
     bool getEditorIsRunning();
+    CGenericModel* createGenericModel(Ogre::SceneManager*,const wchar_t*,const wchar_t*,bool,bool,bool);
     long long getUnitGuidByDataGroup(CDataGroup* data,const std::wstring& name);
     UNITTYPES::EUNITTYPES getUnitTypeByName(const std::wstring& name);
     bool ISA(UNITTYPES::EUNITTYPES type, UNITTYPES::EUNITTYPES parent);
