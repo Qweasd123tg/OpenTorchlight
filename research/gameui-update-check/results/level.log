@@ -1,0 +1,7 @@
+  build-decomp/gameui-level-characterization/tests/GameUIEntryProbe.cpp: 6 data symbols redirected, 0 hooks
+blob build-decomp/gameui-level-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 8 runtime imports
+    gameui level/messages: 8640 cases, two frames per side
+tlhybrid: gameui_messages_prefix_characterization          PASS (0)
+    gameui menu updates: 270 cases, two frames per side
+tlhybrid: gameui_menu_updates_characterization             PASS (0)
+tlhybrid: 2 tests, 0 failed

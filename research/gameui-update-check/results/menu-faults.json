@@ -1,0 +1,87 @@
+[
+  {
+    "name": "skip_close",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_inventory",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "swap_owner_player",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "stale_target",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_item_owner",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_enchant_state",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_final_state",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "stale_state_actor",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_sound",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "show_fishing",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "negative_limit_blocked",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "signed_level",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reject_equal_level",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_level_actor",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_modal_choice",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "denial_state",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "retirement_mode",
+    "exit": 1,
+    "killed": true
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "ignore_modal",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "key_after_global",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_key_seen",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_key_mark",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "ignore_seen",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "show_empty",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "keep_empty",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "keep_seen",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_mark",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_dequeue",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_shift",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_one_extra",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_menu",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_actor",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_queue",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reverse_show_order",
+    "exit": 1,
+    "killed": true
+  }
+]

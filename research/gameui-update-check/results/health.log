@@ -1,0 +1,5 @@
+  build-decomp/gameui-health-characterization/tests/GameUIEntryProbe.cpp: 0 data symbols redirected, 0 hooks
+blob build-decomp/gameui-health-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui HP prefix: 810 cases; stops before tooltip strings
+tlhybrid: gameui_health_prefix_characterization            PASS (0)
+tlhybrid: 1 tests, 0 failed

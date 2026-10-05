@@ -1,0 +1,32 @@
+[
+  {
+    "name": "width_without_rounding",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "height_without_rounding",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_margin",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "clamp_x_zero",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "subtract_y",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "clamp_to_screen_height",
+    "exit": 0,
+    "killed": false
+  }
+]

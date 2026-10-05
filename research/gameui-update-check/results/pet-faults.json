@@ -1,0 +1,107 @@
+[
+  {
+    "name": "reread_pet_after_show",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "stale_pet_before_cover",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_left_cover",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "eager_left_cover",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_mode_cache",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cache_mode_after_callback",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "swap_mode_buttons",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "unknown_mode_select",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "upper_pet_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "integer_pet_mana",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "fractional_pet_width",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "always_name_set",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "always_status_set",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_pet_ai",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "timer_precedence",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "timer_strict_minute",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "no_hour_wrap",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "seconds_prefix_ten",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "missing_flee_suffix",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_status_visibility",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_pet_tooltip",
+    "exit": 1,
+    "killed": true
+  }
+]

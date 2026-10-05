@@ -1,0 +1,92 @@
+[
+  {
+    "name": "reverse_span",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_width",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_setting",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_inverse",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reverse_matrix",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_up",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "inactive_events",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "old_level",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_items",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_actors",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_item_next",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_actor_next",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_item_modal",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_actor_modal",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_console",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_final_time",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_camera",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_manager",
+    "exit": 1,
+    "killed": true
+  }
+]

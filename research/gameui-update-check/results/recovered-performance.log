@@ -1,0 +1,13 @@
+  build-decomp/gameui-recovered-phases/tests/ActiveFrame.cpp: 12 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/ContextTips.cpp: 12 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Entry.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/MenuLifecycle.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Menus.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/NoCharacter.cpp: 9 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Performance.cpp: 12 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Tooltip.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/VisibleLabels.cpp: 12 data symbols redirected, 0 hooks
+blob build-decomp/gameui-recovered-phases/hybrid/tlhybrid-blob.elf: 0 hooks, 9 runtime imports
+    recovered performance overlay: 240 cases, two frames
+tlhybrid: gameui_recovered_performance_overlay             PASS (0)
+tlhybrid: 10 tests, 0 failed

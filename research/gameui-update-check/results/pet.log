@@ -1,0 +1,5 @@
+  build-decomp/gameui-pet-characterization/tests/GameUIEntryProbe.cpp: 6 data symbols redirected, 0 hooks
+blob build-decomp/gameui-pet-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui pets: 4320 cases, two frames per side
+tlhybrid: gameui_pet_prefix_characterization               PASS (0)
+tlhybrid: 1 tests, 0 failed

@@ -1,0 +1,5 @@
+  build-decomp/gameui-active-frame-characterization/tests/GameUIEntryProbe.cpp: 6 data symbols redirected, 0 hooks
+blob build-decomp/gameui-active-frame-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 6 runtime imports
+    gameui active frames: 7128 cases, two complete controlled frames per side
+tlhybrid: gameui_active_frame_characterization             PASS (0)
+tlhybrid: 1 tests, 0 failed

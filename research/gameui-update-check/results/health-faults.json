@@ -1,0 +1,47 @@
+[
+  {
+    "name": "upper_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "remove_lower_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "nan_to_zero",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "integer_division",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_height",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_anchor",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "mask_sign",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "mask_unscaled",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "size_no_pixel_rounding",
+    "exit": 1,
+    "killed": true
+  }
+]

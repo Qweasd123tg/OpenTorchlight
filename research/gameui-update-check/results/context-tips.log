@@ -1,0 +1,5 @@
+  build-decomp/gameui-context-tips-characterization/tests/GameUIEntryProbe.cpp: 6 data symbols redirected, 0 hooks
+blob build-decomp/gameui-context-tips-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui queued tips: 720 cases, two complete controlled frames per side
+tlhybrid: gameui_context_tips_characterization             PASS (0)
+tlhybrid: 1 tests, 0 failed

@@ -1,0 +1,5 @@
+  build-decomp/gameui-bars-characterization/tests/GameUIEntryProbe.cpp: 3 data symbols redirected, 0 hooks
+blob build-decomp/gameui-bars-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui bars: 5832 cases; HP/mana geometry and UTF8 tooltips
+tlhybrid: gameui_bars_prefix_characterization              PASS (0)
+tlhybrid: 1 tests, 0 failed

@@ -1,0 +1,23 @@
+{
+  "elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "start": "0xab8100",
+  "end_exclusive": "0xacbb35",
+  "original_bytes": 80437,
+  "decoded_instructions": 15760,
+  "call_sites": 1877,
+  "indirect_call_sites": 320,
+  "direct_call_targets": 123,
+  "syntactic_block_leaders": 3829,
+  "unresolved_branches": [
+    [
+      11283944,
+      "jmp",
+      "*0xfe4618(,%rsi,8)"
+    ]
+  ],
+  "limitations": [
+    "Static call sites, not runtime invocation counts.",
+    "No exception landing-pad edges, no indirect-call resolution.",
+    "Syntactic block partition is not semantic recovery or coverage."
+  ]
+}

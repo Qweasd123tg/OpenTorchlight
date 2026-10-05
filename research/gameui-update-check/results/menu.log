@@ -1,0 +1,7 @@
+  build-decomp/gameui-menu-characterization/tests/GameUIEntryProbe.cpp: 0 data symbols redirected, 0 hooks
+blob build-decomp/gameui-menu-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui menu prefix: 140 cases; seven states, stops at updateSlots
+tlhybrid: gameui_menu_prefix_characterization              PASS (0)
+    gameui retirement prefix: 700 cases; initialized translation statics
+tlhybrid: gameui_retirement_prefix_characterization        PASS (0)
+tlhybrid: 2 tests, 0 failed

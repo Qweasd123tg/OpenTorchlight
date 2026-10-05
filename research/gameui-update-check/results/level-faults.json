@@ -1,0 +1,146 @@
+[
+  {
+    "name": "immediate_hide",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "overshoot_only",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_fade_rate",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "negative_duration",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "clamp_stored_alpha",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "ignore_nan_change",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_property_window",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "alpha_before_text",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "duration_before_text",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "fade_under_modal",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_modal_query",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "always_text",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "white_shadow",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "strict_expiry",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "zero_alpha_active",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "drop_shadow",
+    "test": "gameui_messages_prefix_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_vector_end",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_vector_base",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_dropdowns",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reverse_families",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "interactive_before_fishing",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "interactive_before_own_update",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_tick_time",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_pet_override",
+    "test": "gameui_menu_updates_characterization",
+    "exit": 1,
+    "killed": true
+  }
+]

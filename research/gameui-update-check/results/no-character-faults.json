@@ -1,0 +1,62 @@
+[
+  {
+    "name": "reverse_matrix_order",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_inverse",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_translation",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_up_axis",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cache_camera",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cache_console",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cache_menu_manager",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_events_flag",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_elapsed",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "window_guard_or",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "skip_modal_query",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "swap_client_window",
+    "exit": 1,
+    "killed": true
+  }
+]

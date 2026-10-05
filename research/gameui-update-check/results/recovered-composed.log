@@ -1,0 +1,28 @@
+  build-decomp/gameui-recovered-phases/tests/ActiveFrame.cpp: 12 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/ContextTips.cpp: 12 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Entry.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/MenuLifecycle.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Menus.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/NoCharacter.cpp: 9 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/Tooltip.cpp: 0 data symbols redirected, 0 hooks
+  build-decomp/gameui-recovered-phases/tests/VisibleLabels.cpp: 12 data symbols redirected, 0 hooks
+blob build-decomp/gameui-recovered-phases/hybrid/tlhybrid-blob.elf: 0 hooks, 9 runtime imports
+    gameui active frames: 7128 cases, two complete controlled frames per side
+tlhybrid: gameui_recovered_active_frame_characterization   PASS (0)
+    gameui queued tips: 720 cases, two complete controlled frames per side
+tlhybrid: gameui_recovered_context_tips_characterization   PASS (0)
+    gameui cinematic entry: 2592 cases; characterization only
+tlhybrid: gameui_recovered_cinematic_entry_characterization PASS (0)
+    recovered closing menus: 400 original-compared cases
+tlhybrid: gameui_recovered_closing_menus                   PASS (0)
+    gameui menu prefix: 140 cases; seven states, stops at updateSlots
+tlhybrid: gameui_recovered_menu_prefix_characterization    PASS (0)
+    gameui retirement prefix: 700 cases; initialized translation statics
+tlhybrid: gameui_recovered_retirement_prefix_characterization PASS (0)
+    gameui no-character frame: 576 cases; complete controlled path
+tlhybrid: gameui_recovered_no_character_frame_characterization PASS (0)
+    gameui tooltip positioning: 1512 cases; cinematic early return
+tlhybrid: gameui_recovered_tooltip_position_characterization PASS (0)
+    recovered visible labels: 1440 cases, existing windows, two frames
+tlhybrid: gameui_recovered_visible_labels                  PASS (0)
+tlhybrid: 9 tests, 0 failed

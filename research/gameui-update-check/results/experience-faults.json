@@ -1,0 +1,72 @@
+[
+  {
+    "name": "omit_upper_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "omit_lower_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "decompiler_nan_one",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "integer_numerator",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cached_xp_tooltip",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reuse_previous_gate",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reuse_tooltip_gate",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "level_after_singleton",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "xp_after_singleton",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "fractional_width",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "round_width",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_height",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "rebased_tooltip",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_current_level",
+    "exit": 1,
+    "killed": true
+  }
+]

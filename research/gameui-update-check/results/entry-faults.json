@@ -1,0 +1,47 @@
+[
+  {
+    "name": "cache_radio",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "first_nonzero",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "second_nonzero",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "drop_second_read",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "eager_mouse",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "swapped_mouse",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "cache_cinema",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_cinematic_gate",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_elapsed",
+    "exit": 1,
+    "killed": true
+  }
+]

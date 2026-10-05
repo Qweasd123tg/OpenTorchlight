@@ -1,0 +1,5 @@
+  build-decomp/gameui-experience-characterization/tests/GameUIEntryProbe.cpp: 3 data symbols redirected, 0 hooks
+blob build-decomp/gameui-experience-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 7 runtime imports
+    gameui experience: 7776 cases; sequential gates and UTF8 tooltip
+tlhybrid: gameui_experience_prefix_characterization        PASS (0)
+tlhybrid: 1 tests, 0 failed

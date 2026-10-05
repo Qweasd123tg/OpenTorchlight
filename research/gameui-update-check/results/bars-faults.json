@@ -1,0 +1,62 @@
+[
+  {
+    "name": "integer_mana_gauge",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "round_mana_label",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "ansi_instead_of_utf8",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "extra_label_space",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "stale_tooltip_actor",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "swap_hp_query_order",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_hp_tooltip_window",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_mana_label",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "upper_clamp",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "nan_to_zero",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "wrong_mana_geometry",
+    "exit": 1,
+    "killed": true
+  },
+  {
+    "name": "reverse_current_max_label",
+    "exit": 1,
+    "killed": true
+  }
+]

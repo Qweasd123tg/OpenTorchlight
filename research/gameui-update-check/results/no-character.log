@@ -1,0 +1,5 @@
+  build-decomp/gameui-no-character-characterization/tests/GameUIEntryProbe.cpp: 0 data symbols redirected, 0 hooks
+blob build-decomp/gameui-no-character-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 5 runtime imports
+    gameui no-character frame: 576 cases; complete controlled path
+tlhybrid: gameui_no_character_frame_characterization       PASS (0)
+tlhybrid: 1 tests, 0 failed

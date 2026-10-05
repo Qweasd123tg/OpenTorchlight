@@ -1,0 +1,5 @@
+  build-decomp/gameui-entry-characterization/tests/GameUIEntryProbe.cpp: 0 data symbols redirected, 0 hooks
+blob build-decomp/gameui-entry-characterization/hybrid/tlhybrid-blob.elf: 0 hooks, 5 runtime imports
+    gameui cinematic entry: 2592 cases; characterization only
+tlhybrid: gameui_cinematic_entry_characterization          PASS (0)
+tlhybrid: 1 tests, 0 failed
