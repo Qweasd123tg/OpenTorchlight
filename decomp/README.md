@@ -1349,3 +1349,47 @@ All 12 additional targeted wrapper mutations were killed.
 Final integrated check: 111 tests, 0 failed; 1249 accepted game functions /
 394140 original bytes. The increment over e5ef0cf is two functions / 7861
 original bytes. These eight Equipment functions total 79901 original bytes.
+
+## Equipment full item names (2026-10-05)
+
+`getFullItemName(bool)` (0x884ba0, 3785 original bytes) returns a wide
+string, not the pointer guessed by the raw decompiler. It preserves the
+unidentified-name shortcut, explicit force-identification argument, unique
+and set exclusions, affix ranking and the two cached affix strings. Affixes
+are templates: each `[ITEM]` occurrence is replaced, rather than simply
+concatenating the prefix/suffix with the base name. Embedded NUL in an affix
+chosen from the effect manager is truncated through the original `c_str()`
+assignment, while already cached strings retain their length.
+
+The first nonempty brace marker in the base name becomes the selector.
+Selected blocks compare their opening labels case-insensitively, but search
+for a closing label using the opening label's original case. Nonselected
+blocks are removed through the next closing brace; this is the original
+simple scanning algorithm, not a newly invented nested-markup parser.
+Malformed and incomplete labels preserve the original stopping behavior.
+
+A headless fixture compares 3424 cases, twice per side, using real string
+replacement/case conversion and controlled type/set services. In addition
+to identification, force, unique, set, manager, rank and callback combinations,
+it tests the complete cross-product of 28 base names and 20 affix templates
+separately as prefix and suffix. Outputs, service order, cached strings and
+state changes are compared; both-crash cases are rejected.
+
+The initial mutation result was 20/24. Expanding independent markup cases
+caught removal of the original end-of-string guard, yielding 21/24 viable
+sampled mutations killed. The three survivors remain reported, not excluded:
+one copies one extra character before taking an unchanged inner substring;
+one relaxes a loop gate but still exits via the later malformed-label guard;
+one changes a redundant `begin != -1` guard where the end-position guard
+already rejects the absent opening marker. They produce the same observed
+outputs/state in the fixture; allocation and exception parity for these
+alternatives is not established. Original source conditions were retained.
+Evidence and reproduction scripts are under `research/equipment-name-check/`.
+
+All 14 targeted semantic mutations were killed, including altered affix rank
+selection, treating templates as concatenation, losing cached affixes,
+case-sensitive opening labels and uppercasing the closing-label search.
+
+Final integrated check: 112 tests, 0 failed; 1250 accepted game functions /
+397925 original bytes. This adds one 3785-byte function over e55465b; the
+nine Equipment functions in this series total 83686 original bytes.

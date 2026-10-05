@@ -787,3 +787,73 @@ std::wstring CEquipment::getEquipmentEffects()
     if (!result.empty()) result=result+L"\n";
     return result;
 }
+
+std::wstring CEquipment::getFullItemName(bool forceIdentified)
+{
+    if (!forceIdentified && !m_bUnknown348 && !m_sUnidentifiedName.empty())
+        return m_sUnidentifiedName;
+    std::wstring name=m_sItemName;
+    int begin=name.find(L"{"), end=name.find(L"}",begin);
+    std::wstring tag=EMPTY_WSTRING;
+    if (end!=-1 && begin!=-1 && begin+1<end)
+    {
+        tag=STRINGS::StringUpper(name.substr(begin,end-begin+1));
+        name.replace(begin,end-begin+1,L"");
+        tag=tag.substr(1,end-begin-1);
+    }
+    if ((forceIdentified || m_bUnknown348) && !ISA(UNITTYPES::UNIQUE)
+        && getSet().empty() && m_pEffectManager)
+    {
+        std::wstring prefix=m_sPrefix, suffix=m_sSuffix;
+        int rank=-1;
+        for (unsigned int i=0;i<m_pEffectManager->getAffixes().size();++i)
+        {
+            CAffix* affix=m_pEffectManager->getAffixes()[i];
+            if (affix->m_iRank>rank && affix->m_sPrefix!=EMPTY_WSTRING)
+            {
+                prefix=affix->m_sPrefix.c_str();
+                rank=affix->m_iRank;
+            }
+            if (affix->m_iRank>=0 && affix->m_sSuffix!=EMPTY_WSTRING)
+            {
+                suffix=affix->m_sSuffix.c_str();
+                rank=affix->m_iRank;
+            }
+        }
+        if (prefix!=EMPTY_WSTRING)
+        {
+            name=STRINGS::replaceWString(prefix,L"[ITEM]",name);
+            m_sPrefix=prefix;
+        }
+        if (suffix!=EMPTY_WSTRING)
+        {
+            name=STRINGS::replaceWString(suffix,L"[ITEM]",name);
+            m_sSuffix=suffix;
+        }
+        if (tag!=EMPTY_WSTRING)
+        {
+            begin=name.find(L"{"); end=name.find(L"}",begin);
+            while (begin!=-1 && end!=-1)
+            {
+                std::wstring current=name.substr(begin+1,end-begin-1);
+                if (tag==STRINGS::StringUpper(current))
+                {
+                    int closing=name.find(L"{/"+current,end);
+                    int closingEnd=name.find(L"}",closing+1);
+                    if (closing==-1) break;
+                    name.replace(closing,closingEnd-closing+1,L"");
+                    name.replace(begin,end-begin+1,L"");
+                }
+                else
+                {
+                    if (static_cast<std::wstring::size_type>(end)>=name.size()-2) break;
+                    end=name.find(L"}",end+1);
+                    if (end==-1) break;
+                    name.replace(begin,end-begin+1,L"");
+                }
+                begin=name.find(L"{"); end=name.find(L"}",begin);
+            }
+        }
+    }
+    return name;
+}

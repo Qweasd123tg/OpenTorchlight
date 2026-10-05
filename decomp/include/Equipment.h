@@ -120,7 +120,7 @@ public:
     void createIcon(CGameUI&, bool);
     void recalculatePrice();
     void enchant(bool);
-    CEquipment* getFullItemName(bool);
+    std::wstring getFullItemName(bool);
     void createParticles();
     void createElementalDamages();
     void clearDamageBonuses();
