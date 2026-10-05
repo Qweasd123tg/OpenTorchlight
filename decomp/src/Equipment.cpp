@@ -1,3 +1,5 @@
+#include "Missile.h"
+#include "MissilePreloader.h"
 #include "GraphManager.h"
 #include <algorithm>
 #include "Skill.h"
@@ -1291,4 +1293,48 @@ void CEquipment::recalculatePrice()
         m_iUnknown26C=static_cast<int>(ceilf(buyValue*(static_cast<float>(value)/100.0f)));
         m_iUnknown270=static_cast<int>(ceilf(sellValue*(static_cast<float>(value)/100.0f)));
     }
+}
+
+CCharacter* CEquipment::getEquippedTo()
+{
+    return m_pEquippedTo;
+}
+
+bool CEquipment::fireMissiles(CCharacter* shooter,CCharacter* target)
+{
+    if (m_sUnknown400.empty() || shooter==NULL)
+        return false;
+    Ogre::Vector3 origin=(shooter->getWeaponInLeftHand()==this
+        ? shooter->m_pLeftHandNode : shooter->m_pRightHandNode)->_getDerivedPosition();
+    Ogre::Vector3 direction=shooter->getForwardAbsolute();
+    if (target)
+    {
+        direction=target->getPosition(true)-origin;
+        direction.normalise();
+    }
+    float scale=shooter->getDataGroup()->GetDataValue(L"WEAPON_SCALE",1.0f);
+    Ogre::Vector3 offset=direction;
+    if (getUnitModel())
+    {
+        CGenericModel* model=static_cast<CGenericModel*>(getUnitModel());
+        float height=model->m_pEntity->getBoundingBox().getSize().y;
+        offset=direction*height*(scale*0.8f);
+    }
+    Ogre::Vector3 launch=origin+offset;
+    CResourceManager* resources=m_pResourceManager;
+    CMissile* missile=resources->getMissilePreloader()->createNewMissileRef(resources,m_sUnknown400);
+    if (!missile)
+        return false;
+    iMissile* listener=static_cast<iMissile*>(this);
+    if (missile->m_Listeners.find(listener)==-1)
+        missile->m_Listeners.add(listener);
+    Ogre::Vector3 targetPosition=target?target->getPosition(true):Ogre::Vector3::ZERO;
+    Ogre::Vector3 right=Ogre::Vector3::UNIT_Y.crossProduct(direction);
+    Ogre::Quaternion orientation;
+    orientation.FromAxes(right,Ogre::Vector3::UNIT_Y,direction);
+    missile->fireMissile(getEquippedTo(),launch,orientation,target,targetPosition);
+    TSafePointer<CMissile>* reference=OGRE_NEW_T(TSafePointer<CMissile>,Ogre::MEMCATEGORY_GENERAL)();
+    reference->setObject(missile);
+    m_ActiveMissileRefs.add(reference);
+    return true;
 }

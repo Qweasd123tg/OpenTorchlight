@@ -63,7 +63,7 @@ public:
     virtual void unequipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS);
     virtual void useEquipment(CCharacter*, CCharacter*);
     virtual void incrementStackBy(int);
-    virtual void getEquippedTo();
+    virtual CCharacter* getEquippedTo();
     virtual void equip();
     virtual void unequip();
     virtual void useEquipment();
@@ -110,7 +110,7 @@ public:
     void setGraphAC(unsigned int);
     int enchantPrice();
     std::wstring skillDescription();
-    long long fireMissiles(CCharacter*, CCharacter*);
+    bool fireMissiles(CCharacter*, CCharacter*);
     unsigned long getMaxSockets();
     void addSockets();
     bool isWardrobed(std::wstring);
@@ -199,7 +199,7 @@ public:
     std::wstring m_sUnknown400;
     float m_fUnknown408;
     unsigned char m_gap40C[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown410[0x18] __attribute__((aligned(8)));
+    TArrayList<TSafePointer<CMissile>*> m_ActiveMissileRefs;
     CPositionableObject* m_pPositionableObject;
     bool m_bUnknown430;
 };

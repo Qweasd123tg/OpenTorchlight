@@ -1,0 +1,91 @@
+{
+ "0x87f120": {
+  "name": "CEquipment::fireMissiles(CCharacter*, CCharacter*)",
+  "tried": 16,
+  "killed": 16,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1330: 'missile->m_Listeners.add(listener);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1305: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1326: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1334: 'orientation.FromAxes(right,Ogre::Vector3::UNIT_Y,direction);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1335: 'missile->fireMissile(getEquippedTo(),launch,orientation,target,targetPosition);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1339: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1306: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1312: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1337: 'reference->setObject(missile);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1329: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1321: 'offset=direction*height*(scale*0.8f);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1331: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1338: 'm_ActiveMissileRefs.add(reference);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1312: 'direction=target->getPosition(true)-origin;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1327: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1313: 'direction.normalise();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

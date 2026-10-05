@@ -27,9 +27,11 @@ enum EAIState
 // Partial: members used by recovered TUs. The vtable is complete; return
 // types of virtual methods that recovered code does not call are not verified
 // yet. Unnamed regions are padding until character.cpp is recovered.
+class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
+    CEquipment* getWeaponInLeftHand();
     CCharacter(CResourceManager* resourceManager);
     virtual ~CCharacter();
 

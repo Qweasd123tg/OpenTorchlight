@@ -1602,3 +1602,25 @@ other offsets; its source implementation and other owners' TUs are untouched.
 Integrated check after all three functions:121 tests,0 failed;1261/5247 accepted
 game functions,421979 original bytes. Increment over c29c320:3 functions/6311
 bytes. The effects allocation-count and trim-helper regression also pass.
+
+### Equipment missile launch (2026-10-05)
+
+fireMissiles(CCharacter*,CCharacter*)0x87f120/1881 bytes restores hand-based
+spawn position, aim normalization, model-height/weapon-scale muzzle offset,
+missile factory, observer registration, owner/target launch arguments and
+retained weak references. Return bool is verified at the original caller.
+getEquippedTo()899550 matches its8 original bytes and is excluded from game
+function counts as compiler-inline code.
+
+The corrected4896-case fixture runs twice per side with real Ogre math/nodes,
+containers and weak-reference registrations. It kills16/16 viable sampled
+and21/21 targeted mutations. The initial14/16 fixture missed absolute-vs-local
+target positions because no parent had been assigned; it was rejected and
+replaced with translated real/logical parent setup. Both early aim and late
+post-factory target-position reads are now checked. Evidence and limits are
+under research/equipment-firemissiles-check. Projectile flight/damage is not
+claimed verified by this launch-function fixture.
+
+Integrated check: 122 tests, 0 failed; 1262/5247 accepted game functions,
+423860 original bytes. Increment over 1130512: one function / 1881 bytes.
+The effects allocation-count and trim-helper regression also pass.

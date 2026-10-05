@@ -19,9 +19,11 @@ namespace Ogre
 
 // Partial: members are declared as ResourceManager.cpp is recovered. The
 // layout follows the constructor.
+class CMissilePreloader;
 class CResourceManager : public CRunicCore
 {
 public:
+    CMissilePreloader* getMissilePreloader();
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();
 
