@@ -1,0 +1,126 @@
+{
+ "0x882e30": {
+  "name": "CEquipment::createIcon(CGameUI&, bool)",
+  "tried": 23,
+  "killed": 23,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 903: 'if (!image) return;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 883: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 912: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 871: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 903: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 871: 'm_bGamblerIcon=true;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 905: 'height=image->getHeight()/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(KSETTINGS_YRATIO);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 908: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 865: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 912: 'if (!existing) m_pIconWindow->addChildWindow(imageWindow);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 909: 'imageWindow->setProperty(\"Image\",CEGUI::PropertyHelper::imageToString(ui.getImageFromImageSet(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(std::wstring(icon.c_str())).c_str()))));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 867: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 872: 'icon=m_pDataGroup->GetDataValue(L\"GAMBLER_ICON\",icon);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 910: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 865: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 896: 'm_pIconWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,ui.scaledY(64.0f)),CEGUI::UDim(0,ui.scaledY(96.0f))));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 865: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 896: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 908: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 868: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 904: 'width=image->getWidth()/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(KSETTINGS_YRATIO);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 896: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 885: 'icon=wardrobes[i]->GetDataValue(L\"ICON\",EMPTY_WSTRING);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

@@ -10,6 +10,7 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
+namespace CEGUI { class Image; }
 class CTextEvent;
 class CCharacter;
 class iMenuListener;
@@ -22,6 +23,8 @@ public:
     static CGameUI* getSingleton();
     CCharacter* getCharacter() { return m_pCharacter; }
     void queueTip(EContextTip tip);
+    float scaledY(float value);
+    const CEGUI::Image* getImageFromImageSet(const unsigned char* name);
     void closeLeft();
     void closeRight();
     void closeMenus();

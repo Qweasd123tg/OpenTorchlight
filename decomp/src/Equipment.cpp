@@ -1,3 +1,5 @@
+#include <CEGUI.h>
+#include "Settings.h"
 #include "EmptyStrings.h"
 #include "Equipment.h"
 #include "EffectManager.h"
@@ -856,4 +858,56 @@ std::wstring CEquipment::getFullItemName(bool forceIdentified)
         }
     }
     return name;
+}
+
+void CEquipment::createIcon(CGameUI& ui,bool force)
+{
+    if (!m_pDataGroup || (m_pIconWindow && !force)) return;
+    std::wstring icon=m_pDataGroup->GetDataValue(L"ICON",EMPTY_WSTRING);
+    m_bGamblerIcon=false;
+    if (m_pInventory && m_pInventory->m_pPositionableObject
+        && static_cast<CBaseUnit*>(m_pInventory->m_pPositionableObject)->ISA(UNITTYPES::GAMBLER))
+    {
+        m_bGamblerIcon=true;
+        icon=m_pDataGroup->GetDataValue(L"GAMBLER_ICON",icon);
+    }
+    else if (ui.getCharacter())
+    {
+        std::wstring playerClass=STRINGS::StringUpper(ui.getCharacter()->getName());
+        std::vector<CDataGroup*> wardrobes;
+        unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"WARDROBE",&wardrobes);
+        std::wstring unused=EMPTY_WSTRING;
+        for (unsigned int i=0;i<count;++i)
+        {
+            std::wstring wardrobeClass=STRINGS::StringUpper(wardrobes[i]->GetDataValue(L"CLASS",L""));
+            if (playerClass.compare(L"")==0 || wardrobeClass==playerClass)
+                if (wardrobes[i]->GetDataValue(L"ICON",EMPTY_WSTRING)!=EMPTY_WSTRING)
+                    icon=wardrobes[i]->GetDataValue(L"ICON",EMPTY_WSTRING);
+        }
+    }
+    bool existing=m_pIconWindow!=0;
+    CEGUI::Window* imageWindow;
+    if (!existing)
+    {
+        m_pIconWindow=CEGUI::WindowManager::getSingleton().createWindow("GuiLook/StaticImage",STRINGS::uniqueName("icon_"));
+        imageWindow=CEGUI::WindowManager::getSingleton().createWindow("GuiLook/StaticImage",STRINGS::uniqueName("icon_"));
+    }
+    else imageWindow=m_pIconWindow->getChildAtIdx(0);
+    m_pIconWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,ui.scaledY(64.0f)),CEGUI::UDim(0,ui.scaledY(96.0f))));
+    float width=64.0f,height=96.0f;
+    if (icon.empty())
+        Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"No icon specified for equipment "+getName()).c_str()),Ogre::LML_NORMAL);
+    else
+    {
+        const CEGUI::Image* image=ui.getImageFromImageSet(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(std::wstring(icon.c_str())).c_str()));
+        if (!image) return;
+        width=image->getWidth()/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(KSETTINGS_YRATIO);
+        height=image->getHeight()/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(KSETTINGS_YRATIO);
+    }
+    imageWindow->setPosition(CEGUI::UVector2(CEGUI::UDim((64.0f-width)*0.5f/64.0f,0),CEGUI::UDim((96.0f-height)*0.5f/96.0f,0)));
+    imageWindow->setSize(CEGUI::UVector2(CEGUI::UDim(width/64.0f,0),CEGUI::UDim(height/96.0f,0)));
+    imageWindow->setProperty("Image",CEGUI::PropertyHelper::imageToString(ui.getImageFromImageSet(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(std::wstring(icon.c_str())).c_str()))));
+    imageWindow->setMousePassThroughEnabled(true);
+    imageWindow->setMutedState(true);
+    if (!existing) m_pIconWindow->addChildWindow(imageWindow);
 }

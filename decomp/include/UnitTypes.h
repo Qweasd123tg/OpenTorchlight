@@ -39,6 +39,7 @@ namespace UNITTYPES
         CROSSBOW = 110,
         RIFLE = 116,
         SOCKETABLE = 120,
+        GAMBLER = 127,
         RANDOMMAGIC_SOCKETABLE = 160,
         SHAREDSTASH = 170
     };

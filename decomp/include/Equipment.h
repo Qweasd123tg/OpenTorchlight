@@ -143,7 +143,7 @@ public:
     CPath* m_pPath;
     float m_fUnknown258;
     bool m_bUnknown25C;
-    bool m_bUnknown25D;
+    bool m_bGamblerIcon;
     bool m_bUnknown25E;
     bool m_bUnknown25F;
     int m_iUnknown260;
@@ -167,7 +167,7 @@ public:
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pUnitModelSecondary;
     long long m_iUnitCollisionModel;
-    void* m_pUnknown2C8;
+    CEGUI::Window* m_pIconWindow;
     std::wstring m_sUnidentifiedName;
     std::wstring m_sDisplayName;
     std::wstring m_sPrefix;

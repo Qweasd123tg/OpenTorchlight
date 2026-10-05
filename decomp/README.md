@@ -1393,3 +1393,47 @@ case-sensitive opening labels and uppercasing the closing-label search.
 Final integrated check: 112 tests, 0 failed; 1250 accepted game functions /
 397925 original bytes. This adds one 3785-byte function over e55465b; the
 nine Equipment functions in this series total 83686 original bytes.
+
+## Equipment icon creation (2026-10-05)
+
+`createIcon(CGameUI&, bool)` (0x882e30, 4075 original bytes) restores the
+data/refresh guards, Gambler icon choice, class-dependent wardrobe selection,
+parent/child window setup, scaling, image assignment and event/mouse flags.
+The Gambler type ID 127 is verified in the original `media/unittypes.hie`.
+An empty player class accepts any wardrobe class; the last matching nonempty
+icon wins. The parent is a scaled 64-by-96 slot, with the image centered inside
+it. Width and height each query the Y ratio, and the image is looked up again
+when setting the property; these call counts and ordering are preserved.
+
+A 1280-case hand fixture runs twice per side. Real DataGroups, Unicode/string
+conversion, CEGUI strings and logging are used; window creation/position/size,
+image lookup, settings and game services are controlled spies. It compares
+calls/arguments, geometry bits, selected property values, child attachment,
+mouse passthrough, event muting and Equipment state. Cases cover sparse data,
+existing icons, forced refresh, missing images, wardrobe/gambler choices,
+embedded NUL and changing callbacks. Ratios include zero, negative, NaN and
+infinity. Both-crash cases are rejected; this is not rendered UI integration.
+
+All 23 viable sampled mutations (24 probed) and 18 targeted semantic mutations
+were killed. Reproduction scripts and results are under
+`research/equipment-icon-check/`. The unrelated pipeline is unchanged.
+Verified SDK member offsets are asserted in the fixture; Equipment stays
+0x438 bytes. +0x2c8 is now a typed icon-window pointer, +0x25d is named for its
+Gambler-icon flag. Other header additions declare original collaborators.
+
+A separate characterization found that a failed nonempty image lookup can
+leave a newly created parent without its child; forcing the next refresh then
+accesses child zero unchecked. Both original and recovered code produce a
+captured SIGSEGV in the controlled reproduction. This crash is not counted as
+an acceptance comparison, and no robustness fix is mixed into faithful
+recovery. See `research/equipment-icon-check/missing-image-edge.md` for evidence,
+reproduction and the limits of the claim.
+
+Final integrated check: 113 tests, 0 failed; 1251 accepted game functions /
+402000 original bytes. The malloc-count differential regression for Equipment
+effects was also rerun against this final source with its counter enabled;
+all 384 cases and the direct trim-helper test passed.
+This adds one 4075-byte function over 5a8907f. The series now covers the ten
+largest CEquipment functions by original size, totaling 87761 bytes. Of these
+ten, Drop is MATCH; the other nine are accepted by original-versus-recovered
+hand tests, not a claim of full machine-code equality or complete game parity.
