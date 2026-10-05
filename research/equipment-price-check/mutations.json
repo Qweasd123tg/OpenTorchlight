@@ -1,0 +1,131 @@
+{
+ "0x883e20": {
+  "name": "CEquipment::recalculatePrice()",
+  "tried": 24,
+  "killed": 24,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1270: 'sell=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERSELL_MAGIC\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1281: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1292: 'm_iUnknown270=static_cast<int>(ceilf(sellValue*(static_cast<float>(value)/100.0f)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1264: 'buy=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERBUY_UNIQUE\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1269: 'buy=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERBUY_MAGIC\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1259: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1289: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1288: 'sell=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERSELL_NORMAL\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1277: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1290: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1290: 'sellValue=sell->getValue(static_cast<float>(level),0);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1274: 'buy=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERBUY_NORMAL\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1254: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1275: 'sell=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERSELL_NORMAL\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1255: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1255: 'm_iUnknown268=1;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1285: 'm_iUnknown264=static_cast<int>(ceilf(gamble->getValue(static_cast<float>(level),0)*(static_cast<float>(value)/100.0f)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1256: '100' -> '101'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1285: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1257: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1279: 'm_iUnknown264=static_cast<int>(ceilf(buyValue*(static_cast<float>(value)/100.0f)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1280: 'm_iUnknown268=static_cast<int>(ceilf(sellValue*(static_cast<float>(value)/100.0f)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1287: 'buy=CGraphManager::getSingleton()->getGraph(L\"PRICE_PLAYERBUY_NORMAL\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1278: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

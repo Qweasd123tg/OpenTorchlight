@@ -46,5 +46,8 @@ protected:
     bool m_bItemFlag20A;
     std::wstring m_sItemName;
     bool m_bItemFlag218;
+    // Opaque trailing state. Derived ItemGold/Breakable members start at 0x22c;
+    // Equipment has its secondary iMissile base at 0x230 (original RTTI).
+    unsigned char m_ItemData219[0x22c-0x219];
 };
 #endif

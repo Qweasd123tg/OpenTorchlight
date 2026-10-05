@@ -1061,3 +1061,765 @@ NaN/inf/extreme vectors, смена уровня в callback, рост followers
 
 Проверка дальнейшей автоматизации и воспроизводимые диагностические пробы:
 [отчёт](../research/decomp-automation-audit-2026-10-04/README.md).
+
+## Equipment stats and Item footprint (2026-10-04)
+
+First large Equipment function recovered: `getEquipmentStats` at 0x893660,
+24 219 original bytes. Returns std::wstring by value, not CEquipment*. It
+formats physical/elemental damage, weapon speed, socket counts and set bonuses.
+String conversion follows original Ogre::UTFString operations; active set
+bonuses precede inactive bonuses in original list order. The peculiar equal
+physical-damage case (ceil(maximum*0.5) through minimum) is preserved.
+
+`EquipmentStatsTest.cpp` compares 294 cases, twice per child (cold and warm
+local-string caches), including empty/nonempty strings, physical damage
+boundaries, elemental values, override/base attack speeds, NaN/infinity,
+sockets, missing sets/inventory, negative/zero/positive set counts, multiline
+and Unicode bonus text, and collaborator mutations. Game services are spies
+on both sides; strings, numerical formatting and UTF conversions are real.
+This checks formatting and the call protocol, not actual equipping or combat.
+The generated test completed 0/200 cases and was not accepted. Target-isolated
+mutation testing killed 23/23 viable candidates; the other sampled candidate
+was discarded by the mutation tool. Reproduce with
+`python3 research/equipment-stats-check/run_mutations.py`, or use the normal
+full-checkout `mutate.py --hand --max 24 0x893660`. Results are in that folder.
+
+A previous layout assumption is corrected: CItem 0x220 was an incomplete
+footprint, not its full base extent. Equipment's original secondary iMissile
+base is at 0x230 (RTTI and constructor), and ItemGold/Breakable first observed
+derived members are at 0x22c. CItem now keeps its unknown trailing state
+opaque through 0x22b: sizeof 0x230, base data size 0x22c. No existing named
+field moved. Earlier notes claiming full Item size 0x220 are superseded.
+CEquipment is now 0x438, its two vtable groups match original entries/thunks;
+CAttackDescription is 0x80, CSet 0x30 and its unnamed bonus record 0x18.
+Compile-time offset checks are retained in EquipmentStatsTest.cpp. Existing
+Item fixtures allocate the full footprint. The meanings/types of the opaque
+Item tail are still unknown and have not been invented.
+
+The supplied ff3a9e2 integration baseline independently passed 103 tests and
+accepted 1241 functions / 314239 bytes here, rather than the sender's reported
+1248 / 315359 and 106 tests. Four saved mutation checks were stale: KeyManager
+capture/flushAll/flush and Timeline RemovePointFromProperty. Those other-owned
+TUs and their acceptance records were not changed as part of Equipment work.
+
+Final integrated check for this Equipment change: 104 tests, 0 failed;
+1242 accepted game functions / 338458 original bytes. The new contribution
+is one 24219-byte function, not a complete Equipment TU. Full standalone
+relinking, campaign play and all possible inputs remain outside this check.
+
+## Equipment description (2026-10-04)
+
+`CEquipment::getEquipmentDescription(bool,bool)` (0x88f420, 16955 original
+bytes) reconstructs item-name/affix decoration, sockets, buy/sell prices,
+quality and type labels, weapon damage/speed, modified armor, level
+requirements and effect text. Its return type and the called
+`getEquipmentEffects()` are `std::wstring` (hidden return storage); the latter
+still executes in the original ELF. Prefix/suffix strings are at 0x2e0/0x2e8.
+The effect-manager affix list at +0x10 is exposed without moving other fields.
+
+Preserved original details include the suffix's nonnegative-rank test and
+shared prefix/suffix rank, cached affix names, string assignment through
+`c_str()`, the extra Trinket translation, no space after the Potion/Scroll
+colon, nonzero physical damage versus positive elemental damage, two separate
+ceilings in armor calculation, and repeated trimming of trailing newlines.
+These are reproduction details, not intentional game-design changes.
+
+`EquipmentDescriptionTest.cpp` compares 1224 scenarios twice on each side,
+including cold/warm translation caches, all description categories and price
+flags, qualities, empty/Unicode text, equal and nonmonotonic affix ranks,
+embedded-NUL affix strings, thresholds, and callbacks that mutate identification,
+elemental damage and armor state. Both-crash cases and truncated captures are
+rejected. Collaborators are controlled spies: this validates formatting,
+selected state changes and call protocol, not the actual market/combat/level
+systems. The generated test completed 0/200 cases (all both-failed), so its
+reported PASS was not accepted as evidence.
+
+The hand test killed 22/22 viable sampled mutations out of 24 candidates
+(the tool discarded two). One initial survivor exposed the missing
+single-character effect-string case; that fixture was added and the pass
+repeated. Ten additional targeted mutations of important branches were all
+killed. Reproduction scripts and results are under
+`research/equipment-description-check/`. These are sampled regression checks,
+not a proof over every possible input or allocation failure.
+
+The final integrated check passed 105 tests with 0 failed: 1243 accepted game
+functions / 355413 original bytes. The increment over f614e5d is one
+16955-byte function. Equipment remains a partially recovered TU.
+
+## Equipment type label (2026-10-04)
+
+`CEquipment::getEquipmentType(bool)` (0x88d040, 9173 original bytes) now
+returns `std::wstring`. It selects the translated equipment subtype and
+optional quality prefix, handles the quest marker, then removes the first
+nonempty `{...}` segment. An empty `{}` or unmatched brace remains; later
+pairs are not removed. Socketable/Potion/Scroll labels replace the accumulated
+quest text, while equipment labels append. Several armor subtypes perform a
+second translation call even after initializing their static label cache;
+that call sequence is preserved. Type IDs were checked against the original
+`media/unittypes.hie`, not inferred from modern Torchlight versions.
+
+`EquipmentTypeTest.cpp` compares 1536 scenarios twice per side. It covers the
+24 selected leaf/fallback categories, identified/quality/quest/show-quality
+combinations, empty and Unicode translations, brace edge cases, and a callback
+that changes identification during ISA queries. The generated test completed
+0/200 cases (all both-failed), so it was not used for acceptance. The hand test
+killed 24/24 sampled viable mutations and all 10 additional targeted mutations
+of quest handling, quality gating, translation and brace removal. Scripts and
+results are under `research/equipment-type-check/`. As for the other text
+functions, game services are identical spies on both sides; this is not a
+full resource/localization or in-game UI test.
+
+Final integrated check: 106 tests, 0 failed; 1244 accepted game functions /
+364586 original bytes. The increment over e00a6b0 is one 9173-byte function.
+The three recovered Equipment text functions total 50347 original bytes;
+Equipment's remaining functions and full-game behavior are not covered by
+that count.
+
+## Equipment combat-stat initialization (2026-10-04)
+
+`CEquipment::calculateCombatStats(bool)` (0x880950, 6615 original bytes)
+reconstructs data-driven damage/armor setup, graph scaling, elemental armor
+effect creation, inherent weapon damage, missile-name normalization and
+attack-description replacement. The flag suppresses the creation of elemental
+armor effects, not the rest of the calculation. The original random draw is
+kept even when +0x28c subsequently causes its result to be replaced by maximum
+damage. Armor-range upper bounds, negative physical-armor handling, zero
+physical-weapon percentages, cached armor values and operation order are
+preserved.
+
+Bow creates only the +0x2a8 attack slot. Crossbow/Rifle/Polearm/Staff use one
+primary attack; Pistols/Wands/default melee build their original paired
+animation names. The historical `m_pAttackDescriptionOverride` name now has
+an explicit comment: this is also the second attack slot, not universally an
+independent override. The 0x80 AttackDescription constructor layout is described
+and asserted, including its strings, damage arrays, ranges, speed and to-hit.
+Elemental type storage is corrected to `std::vector<EDAMAGE_TYPES>` following
+the original addInherentDamage template instantiation; its layout is unchanged.
+
+`EquipmentCombatStatsTest.cpp` compares 1122 scenarios twice per side. Original
+graph setters, inherent-damage insertion, effect/attack constructors and
+cleanup, string handling and allocation execute on both sides. Data/graph
+providers, random draws, text destruction and effect ownership are controlled
+spies. The test compares collaborator calls, initialized effect/attack fields,
+object counters, scalar results and all three elemental vectors. It includes
+both flags, weapon subtypes, no/one/two old attacks, reversed armor ranges,
+percentage boundaries, repeated calculation, and callbacks changing state.
+It does not simulate a hit against a monster or prove the full combat engine.
+The generated test completed 0/200 cases and was not accepted.
+
+Sampled mutation results: 20/21 viable candidates killed (24 probed). The
+survivor changes the final CEffect constructor boolean from false to true:
+the original stores this at +0x37, then initValues unconditionally clears it
+at 0x7dc83a before normal constructor completion. The original false argument
+is retained; the survivor is reported rather than silently removed from the
+score. All 12 additional targeted branch mutations were killed. Reproduction
+scripts/results are under `research/equipment-combat-check/`.
+
+Final integrated check: 107 tests, 0 failed; 1245 accepted game functions /
+371201 original bytes. The increment over 8d42505 is one 6615-byte function.
+The four Equipment functions recovered in this series total 56962 original
+bytes. Standalone linking, game-world effects and complete gameplay validation
+remain separate work.
+
+## Equipment child initialization (2026-10-04)
+
+`CEquipment::unitInit(CDataGroup*,bool)` (0x889110, 8303 original bytes)
+reconstructs the child initializer after CItem initialization: display names
+and brace removal, model/wardrobe selection, use counts, target and stack
+settings, particle paths, sockets, block effects, combat/requirements/enchant
+ordering, identification, sound-bank setup and attached-layout flagging.
+The input data group and the effective group left by the parent are distinct
+sources in the original; this distinction and callback-driven changes are
+preserved. An empty player-class string matches any wardrobe class, and the
+last matching nonempty wardrobe mesh wins. That override is not passed through
+CleanPath a second time. Sockets are clamped above at 2, with no lower clamp.
+An empty attached-layout value does not clear an already true flag.
+
+The initial generated test returned 92 matching completed cases and 108
+both-failed cases, yet killed none of 8 sampled mutations. It was rejected:
+the successful null-input path did not establish the main initialization flow.
+The hand fixture uses real DataGroups, string/path conversion, logging and
+effect/sound-bank construction, with controlled parent/rendering/game/audio
+services. It compares 1140 scenarios twice per side, including null input,
+sparse data/defaults, several client/UI/character absence levels, distinct
+input/effective data, class-matched and wildcard wardrobes, negative values,
+both initialization flags, sound lookup failures and state-changing callbacks.
+Both-crash cases and overflowing captures are rejected. This is not a render,
+audio playback or complete parent/child initialization integration test.
+
+The final hand mutation pass killed 21/22 viable sampled candidates (24
+probed); the survivor is the already documented CEffect boolean reset by its
+original initializer. An earlier default-value survivor prompted sparse-data
+cases. All 12 targeted branch mutations were killed. Scripts and results are
+under `research/equipment-init-check/`, including the rejected generated run.
+
+Shared headers expose verified fields without moving existing named fields:
+Equipment names +0x2d0/+0x2d8, GameClient UI +0x78, GameUI character +0x38,
+MasterResourceManager audio pointers +0x98/+0x100, and SoundData GUID +0x20.
+Equipment/GameClient/GameUI sizes remain 0x438/0x3910/0x1a08 and are asserted.
+MasterResourceManager remains a partial declaration. Those other TUs' source
+implementations and the PC worker's pipeline files were not changed.
+
+Final integrated check: 108 tests, 0 failed; 1246 accepted game functions /
+379504 original bytes. The increment over ad9a3b1 is one 8303-byte function.
+The five Equipment functions recovered in this series total 65265 original
+bytes. A separate, unmodified cross-owner Path constructor discrepancy is
+recorded in `research/path-constructor-signature.md`.
+
+## Equipment drop (2026-10-04)
+
+`CEquipment::drop()` (0x87aaa0, 6775 original bytes) reaches **MATCH 100%**
+in normalized instructions with the original compiler. The first direct
+reconstruction was 96.2%; an explicit temporary zero origin for CPath gave
+98.2%, and the original form of the midpoint/height temporaries gave 100%.
+Only those two natural source-form refinements were made. This is normalized
+machine-code equality, not a claim that whole executable files are identical.
+
+The function covers level availability, item-type-specific rotation, random
+yaw, cached drop orientation at +0x2f0, direct placement or a three-point drop
+arc, sound/position/opacity/visibility updates and render ordering. The cache
+is now an `Ogre::Matrix4`; subsequent field offsets are unchanged. The initial
+generated test also completed 200/200 cases, but acceptance is based on MATCH,
+not on an unproven claim that those generated cases cover all active branches.
+
+The correct narrow-string CPath constructor declaration was added so the
+function calls the original constructor signature. Its implementation still
+comes from the original ELF. The foreign wide-string draft in path.cpp was
+not changed and is not counted as reconstructed; see the separate signature
+finding. Other class changes are declarations for original Level/SoundBank
+collaborators, not implementations of those services.
+
+Final integrated check: 108 tests, 0 failed; 1247 accepted game functions /
+386279 original bytes. Matching game functions increased to 1123 / 248615
+original bytes. The six Equipment functions in this series total 72040 bytes.
+The Drop increment over 3e1fe53 is accepted by MATCH, not by a new hand test.
+
+## Equipment effect descriptions (2026-10-04)
+
+`effectsDescription(EEFFECT_ACTIVATION, bool, bool)` (0x88b180, 4048
+original bytes) reconstructs elemental bonus lines, the effect-manager visual
+text, and recursive socket descriptions. The hidden string return and the
+manager's const-reference return were verified against the original ABI.
+It preserves the lazy translated Damage cache, manager replacement during ISA
+callbacks, the initially captured socket count, and the original one-newline
+removal after every socket iteration. Socket text uses GameGlobals color
++0x2b8. The hand fixture compares 1680 scenarios twice per side, including
+state-changing callbacks and original-versus-reconstructed recursive calls.
+The initial generated run had no completed comparisons (200 both-failed)
+and was rejected. All 24 viable sampled mutations and 11 targeted mutations
+were killed; evidence and reproduction scripts are in
+`research/equipment-effects-description-check/`.
+
+`getEquipmentEffects()` (0x88c150, 3813 original bytes) preserves the
+identification gate and the six ordinary/socket activation groups followed
+by skill text. Its seven discarded `removeWhiteSpace(result)` return values
+are intentional: the original creates trimmed copies and destroys them
+without assigning them. Consequently even all-empty identified sections
+produce separator newlines. The helper trims only leading/trailing LF, not
+spaces, tabs or CR. It is an inline/template-category helper, not an additional
+accepted game function. The direct helper test covers 14 edge cases, all
+19531 strings of length 0..6 over a five-character alphabet including NUL,
+and one long boundary case. It also checks that shared inputs stay unchanged.
+
+The wrapper hand test compares 384 cases twice per side, including Unicode,
+embedded NUL, empty sections and identification changes during callbacks.
+The generated run (101 completed matches, 99 both-failed) killed 0/8 mutations
+and was rejected. Output/call-protocol checks alone killed 17/24 sampled
+mutations: deleting the seven discarded trim calls leaves that output
+unchanged. This weaker result is preserved in `mutations-output-only.json`.
+The dedicated mutation runner additionally compares actual per-thread malloc
+call counts during each invocation. With that observable included, the
+baseline still matches and all 24/24 mutations are killed. The opt-in glibc
+interposer never fails allocations and is preloaded only into the headless
+scratch test processes. The normal integrated suite does not preload it;
+its log explicitly says the counter is not loaded. This is call-count parity
+on controlled cases, not a proof of identical peak memory, allocation sizes,
+allocation-failure behavior or whole-game integration. Sources and all evidence
+are under `research/equipment-effects-check/`.
+
+Verified original addDamageBonus/addInherentDamage writes also correct two
+field names: vector +0x368 stores elemental bonuses and +0x380 inherent
+elemental damage, rather than the previously assumed minimum/maximum names.
+Only names and corresponding fixtures/scripts changed; offsets and Equipment's
+0x438-byte size are unchanged. Manager/skill signatures and the socket color
+getter are declarations for collaborators, not additional implementations.
+
+All 12 additional targeted wrapper mutations were killed.
+
+Final integrated check: 111 tests, 0 failed; 1249 accepted game functions /
+394140 original bytes. The increment over e5ef0cf is two functions / 7861
+original bytes. These eight Equipment functions total 79901 original bytes.
+
+## Equipment full item names (2026-10-05)
+
+`getFullItemName(bool)` (0x884ba0, 3785 original bytes) returns a wide
+string, not the pointer guessed by the raw decompiler. It preserves the
+unidentified-name shortcut, explicit force-identification argument, unique
+and set exclusions, affix ranking and the two cached affix strings. Affixes
+are templates: each `[ITEM]` occurrence is replaced, rather than simply
+concatenating the prefix/suffix with the base name. Embedded NUL in an affix
+chosen from the effect manager is truncated through the original `c_str()`
+assignment, while already cached strings retain their length.
+
+The first nonempty brace marker in the base name becomes the selector.
+Selected blocks compare their opening labels case-insensitively, but search
+for a closing label using the opening label's original case. Nonselected
+blocks are removed through the next closing brace; this is the original
+simple scanning algorithm, not a newly invented nested-markup parser.
+Malformed and incomplete labels preserve the original stopping behavior.
+
+A headless fixture compares 3424 cases, twice per side, using real string
+replacement/case conversion and controlled type/set services. In addition
+to identification, force, unique, set, manager, rank and callback combinations,
+it tests the complete cross-product of 28 base names and 20 affix templates
+separately as prefix and suffix. Outputs, service order, cached strings and
+state changes are compared; both-crash cases are rejected.
+
+The initial mutation result was 20/24. Expanding independent markup cases
+caught removal of the original end-of-string guard, yielding 21/24 viable
+sampled mutations killed. The three survivors remain reported, not excluded:
+one copies one extra character before taking an unchanged inner substring;
+one relaxes a loop gate but still exits via the later malformed-label guard;
+one changes a redundant `begin != -1` guard where the end-position guard
+already rejects the absent opening marker. They produce the same observed
+outputs/state in the fixture; allocation and exception parity for these
+alternatives is not established. Original source conditions were retained.
+Evidence and reproduction scripts are under `research/equipment-name-check/`.
+
+All 14 targeted semantic mutations were killed, including altered affix rank
+selection, treating templates as concatenation, losing cached affixes,
+case-sensitive opening labels and uppercasing the closing-label search.
+
+Final integrated check: 112 tests, 0 failed; 1250 accepted game functions /
+397925 original bytes. This adds one 3785-byte function over e55465b; the
+nine Equipment functions in this series total 83686 original bytes.
+
+## Equipment icon creation (2026-10-05)
+
+`createIcon(CGameUI&, bool)` (0x882e30, 4075 original bytes) restores the
+data/refresh guards, Gambler icon choice, class-dependent wardrobe selection,
+parent/child window setup, scaling, image assignment and event/mouse flags.
+The Gambler type ID 127 is verified in the original `media/unittypes.hie`.
+An empty player class accepts any wardrobe class; the last matching nonempty
+icon wins. The parent is a scaled 64-by-96 slot, with the image centered inside
+it. Width and height each query the Y ratio, and the image is looked up again
+when setting the property; these call counts and ordering are preserved.
+
+A 1280-case hand fixture runs twice per side. Real DataGroups, Unicode/string
+conversion, CEGUI strings and logging are used; window creation/position/size,
+image lookup, settings and game services are controlled spies. It compares
+calls/arguments, geometry bits, selected property values, child attachment,
+mouse passthrough, event muting and Equipment state. Cases cover sparse data,
+existing icons, forced refresh, missing images, wardrobe/gambler choices,
+embedded NUL and changing callbacks. Ratios include zero, negative, NaN and
+infinity. Both-crash cases are rejected; this is not rendered UI integration.
+
+All 23 viable sampled mutations (24 probed) and 18 targeted semantic mutations
+were killed. Reproduction scripts and results are under
+`research/equipment-icon-check/`. The unrelated pipeline is unchanged.
+Verified SDK member offsets are asserted in the fixture; Equipment stays
+0x438 bytes. +0x2c8 is now a typed icon-window pointer, +0x25d is named for its
+Gambler-icon flag. Other header additions declare original collaborators.
+
+A separate characterization found that a failed nonempty image lookup can
+leave a newly created parent without its child; forcing the next refresh then
+accesses child zero unchecked. Both original and recovered code produce a
+captured SIGSEGV in the controlled reproduction. This crash is not counted as
+an acceptance comparison, and no robustness fix is mixed into faithful
+recovery. See `research/equipment-icon-check/missing-image-edge.md` for evidence,
+reproduction and the limits of the claim.
+
+Final integrated check: 113 tests, 0 failed; 1251 accepted game functions /
+402000 original bytes. The malloc-count differential regression for Equipment
+effects was also rerun against this final source with its counter enabled;
+all 384 cases and the direct trim-helper test passed.
+This adds one 4075-byte function over 5a8907f. The series now covers the ten
+largest CEquipment functions by original size, totaling 87761 bytes. Of these
+ten, Drop is MATCH; the other nine are accepted by original-versus-recovered
+hand tests, not a claim of full machine-code equality or complete game parity.
+
+## Equipment model loading and lifetime helpers (2026-10-05)
+
+`loadModel(std::wstring, std::wstring)` (0x887b30, 3558 original bytes)
+restores primary/secondary model creation, parent-node detachment, level
+rim-light selection, shadow flags, primary attachment/visibility, zero local
+positions, render queue 50, texture override and named texture replacements.
+An explicit secondary path is used verbatim; the data-driven secondary name
+is combined with RESOURCEDIRECTORY and `.mesh`, then passed through CleanPath.
+The secondary node is detached but not attached to the Equipment node here.
+A missing primary entity logs an error and skips the secondary/texture work.
+The original successful secondary-model path assumes its entity is present.
+
+The 960-case hand fixture runs twice per side using real headless Ogre
+SceneNodes and DataGroups/string/path operations. It compares actual node
+parentage, local positions and child counts, plus model/resource/render call
+arguments and order, rim-light values, visibility, shadows, queue groups and
+texture assignments. Model factories/renderable entities and expensive model
+services are controlled collaborators; this does not prove GPU rendering or
+full asset loading. Cases include missing resource/level/template links,
+primary entity absence, explicit/data-driven/empty paths, Unicode and NUL,
+existing node parents, texture groups and callbacks changing managers, data
+or entities. Texture-group iteration retains its captured snapshot/count.
+Every both-crash case is rejected.
+
+All 21 viable sampled mutations (24 probed) and 16 targeted semantic mutations
+were killed. Evidence and rerunnable scripts are in
+`research/equipment-loadmodel-check/`. Its targeted runner bounds replacements
+to the selected function body, so later functions in this TU do not become
+accidental mutation targets.
+
+Two related lifetime helpers also reach MATCH: `unloadModel()` (0x86d3e0,
+64 bytes) and `resetVisualLayout()` (0x86d640, 34 bytes). Three 8-byte model/
+collision pointer getters reach MATCH but belong to the inline/template
+category and are excluded from accepted-game-function totals. The secondary
+getter's former void-return placeholder was corrected to pointer return.
+
+CLevelTemplateData's RIMLIGHT string is exposed at +0x6d8, confirmed by its
+constructor/load method and the caller ASM; its size remains 0x778. Other
+header changes declare original model collaborators and allow Equipment to
+access the already verified inherited entity field without moving it. No
+other owner's source TU or pipeline was changed.
+
+Final integrated check: 114 tests, 0 failed; 1254 accepted game functions /
+405656 original bytes. The increment over 8a971bf is three game functions /
+3656 bytes; the three inline pointer getters are not added to those totals.
+The Equipment effects allocation-count regression also passed on this final
+source (384 cases plus the direct trim helper). Its standalone runner is now
+`research/equipment-effects-check/check_allocations.py` for reproducible checks
+without rerunning the full mutation sweep. This is a progress checkpoint;
+remaining Equipment functions and the long-run queue are still open.
+
+## Equipment wardrobe predicate and attachment (2026-10-05)
+
+`isWardrobed(std::wstring)` (0x87fa70, 1471 original bytes) is a boolean
+predicate, correcting the old return-type placeholder. It uppercases the
+query and wardrobe class, treats an empty query as a wildcard, and returns
+true when a matching WARDROBE group has nonempty MESH or TEXTURE. ICON and
+ITEM_MESH do not satisfy this predicate. The original two unused local string
+copies are retained. Its real-DataGroup/string fixture compares 1540 cases
+twice per side, including missing/empty properties, late matches, Unicode,
+NUL and preservation of the caller's by-value argument. All 7 viable sampled
+mutations and 9 targeted mutations were killed. Evidence is under
+`research/equipment-wardrobe-check/`.
+
+`attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)` (0x886d40, 3402 original
+bytes) restores parent GUID resets, visual cleanup, detach/equipped-state
+updates, particle relocation, live-model node attachment and separate
+paperdoll entities cloned from the item meshes. Shields select the shield
+bone and anchor while the stored/callback slot remains the caller's slot.
+Weapon scaling takes precedence over shield scaling. Material copy is gated
+by the destination subentity's non-null material, as in the original. The
+secondary path also scales an existing dummy parent before material copying
+and bone attachment; this ordering is preserved.
+
+The 1728-case fixture runs each side twice. Real headless Ogre SceneNodes,
+TagPoints, MeshManager cloning, MaterialPtr/MeshPtr ownership and DataGroups
+are used. Renderable entities, paperdoll setters, model/type queries and
+particle services are controlled collaborators. It compares service traces,
+node parents/scales, tag scales, GUIDs, equipment state, cloned-mesh lookup,
+mesh reference counts and material assignments. No window or GPU rendering
+is started. This verifies the controlled attachment behavior, not rendered
+appearance or arbitrary factory/asset failures.
+
+The first fixture had a real coverage hole: correlated low bits meant slot 5
+never had a secondary model. It killed only 19/24 sampled mutations and was
+rejected. Presence flags now use an independent input dimension. The active
+matrix covers all 12 valid slots x 4 type responses x 16 independent secondary/
+paperdoll/particle-presence combinations (768 cases), plus early-return and
+additional missing-node/particle cases. This is an input matrix, not a claim
+of measured exhaustive machine-branch coverage. The corrected fixture kills
+24/24 viable sampled mutations and all 25 targeted semantic mutations,
+including independent primary and secondary cloning/material/scaling faults.
+The initial weak result is retained alongside the final evidence under
+`research/equipment-attach-check/`.
+
+Character pointers and slots obey the original preconditions: the original
+reads the character name before its later null check, and indexes fixed slot
+tables without range validation. The secondary path with an active particle
+requires its attachment node. Missing secondary-node cases are tested without
+that particle; invalid both-crash inputs are never accepted as comparisons.
+
+Verified Character model/paperdoll and attachment-node fields were carved from
+opaque bytes without changing size 0x720 or the existing +0x444 gold field.
+The Master's scene-manager pointer is at +0xd0; audio/settings offsets remain
+unchanged. DataGroup float and Character paperdoll methods are declarations
+of original collaborators. No other owner's source TU or PC pipeline changed.
+
+Final integrated check: 116 tests, 0 failed; 1256 accepted game functions /
+410529 original bytes. The increment over fdefeb1 is two functions / 4873
+bytes. The effects malloc-count baseline and direct trim-helper regression
+also pass on the final source. Work continues with the remaining functions;
+this checkpoint is not completion of Equipment or the entire game.
+
+### Equipment skill descriptions and item-label highlight (2026-10-05)
+
+`skillDescription()` (0x87e640, 2771 original bytes) restores data-driven granted
+skills and manager-owned skills with original translation caching, enabled /
+property filtering and index-based newline behavior. Its 3500-case fixture
+runs twice per side with real DataGroups and containers, including list changes
+and manager replacement during descriptor callbacks. Sampled mutations: 18/20
+viable killed; 17/17 targeted mutations killed. The two sampled survivors
+modify a redundant small-list index guard; no claim of invalid-pointer or
+corrupt-count safety is made. See `research/equipment-skilldescription-check/`.
+
+`setItemTextHighlighted(bool)` (0x8824f0, 2368 original bytes) restores priority
+quest > set > unique > magical/socketable > ordinary colors and move-to-front
+only when highlighting. Equal old/new highlight or a missing label returns
+without changing the GUI. It does not itself update the item's highlight flag.
+The 384-case fixture uses real headless CEGUI item labels, properties and sibling
+ordering, real type hierarchy lookup and quest-state handling; only the set
+lookup and virtual highlight/magic responses are controlled. The input matrix
+covers all 96 old/new/magical/quest/type combinations independently crossed
+with set and label presence. All 11 viable sampled mutations and 15 targeted
+mutations were killed. No display or rendered-game acceptance is implied.
+
+Integrated check on these sources: 118 tests, 0 failed; 1258/5247 accepted game
+functions, 415668 original bytes. The effects allocation-count regression and
+trim-helper checks also pass. This checkpoint adds two functions / 5139 bytes
+over 89bad57; requirements and remaining Equipment functions are still pending.
+
+### Equipment requirements, class reskin and price calculation (2026-10-05)
+
+Three more original functions have strong isolated differential fixtures:
+- setRequirements(), 0x880030 /2335 bytes:3360 cases twice per side,
+  24/24 sampled and23/23 targeted mutations killed. Preserves five requirement
+  fields, weapon/armor versus trinket branches, cached reductions, curve
+  evaluation order, floorf and the original <=1-to-zero threshold.
+- reskinByClass(), 0x888920 /2027 bytes:2520 cases twice per side,
+  5/5 sampled and14/14 targeted mutations killed. Preserves exact
+  case-insensitive class match (no empty wildcard), last matching mesh values,
+  explicit empty clears and primary-only reload decision.
+- recalculatePrice(), 0x883e20 /1949 bytes:4896 cases twice per side,
+  24/24 sampled and20/20 targeted mutations killed. Preserves zero-VALUE early
+  return, rarity precedence, late gambler override, cached input values and
+  float32 division-before-multiplication rounding.
+
+Evidence, reproduction scripts and limitations are in the corresponding
+research/equipment-{requirements,reskin,price}-check directories. GenericModel's
+original model-path string at+0x110 is exposed without changing size0x250 or
+other offsets; its source implementation and other owners' TUs are untouched.
+
+Integrated check after all three functions:121 tests,0 failed;1261/5247 accepted
+game functions,421979 original bytes. Increment over c29c320:3 functions/6311
+bytes. The effects allocation-count and trim-helper regression also pass.
+
+### Equipment missile launch (2026-10-05)
+
+fireMissiles(CCharacter*,CCharacter*)0x87f120/1881 bytes restores hand-based
+spawn position, aim normalization, model-height/weapon-scale muzzle offset,
+missile factory, observer registration, owner/target launch arguments and
+retained weak references. Return bool is verified at the original caller.
+getEquippedTo()899550 matches its8 original bytes and is excluded from game
+function counts as compiler-inline code.
+
+The corrected4896-case fixture runs twice per side with real Ogre math/nodes,
+containers and weak-reference registrations. It kills16/16 viable sampled
+and21/21 targeted mutations. The initial14/16 fixture missed absolute-vs-local
+target positions because no parent had been assigned; it was rejected and
+replaced with translated real/logical parent setup. Both early aim and late
+post-factory target-position reads are now checked. Evidence and limits are
+under research/equipment-firemissiles-check. Projectile flight/damage is not
+claimed verified by this launch-function fixture.
+
+Integrated check: 122 tests, 0 failed; 1262/5247 accepted game functions,
+423860 original bytes. Increment over 1130512: one function / 1881 bytes.
+The effects allocation-count and trim-helper regression also pass.
+
+### Equipment particle selection (2026-10-05)
+
+createParticles() 0x885a70 / 1679 bytes restores drop-particle priority, custom
+preloading/reuse and element/pistol effect selection with original strict tie
+ordering and distinct drop/active attachment conditions. The 2144-case fixture
+runs twice per side and kills 23/23 sampled plus 23/23 targeted mutations.
+The first 21/23 pass missed damage exactly1; it was rejected and replaced with
+unit-boundary cases. Particle loading/simulation/destruction remain controlled
+collaborators, not claims of a fully recovered particle subsystem.
+
+The verified Particle name at+0x110 is a borrowed view, leaving the other
+owner's partial Particle header/destructor unchanged. Evidence, literal source
+addresses, input matrices and declaration limits are documented under
+research/equipment-particles-check. No PC pipeline or foreign source TU changed.
+
+Integrated check: 123 tests, 0 failed; 1263/5247 accepted game functions,
+425539 original bytes. Increment over 3831cb1: one function / 1679 bytes.
+The effects allocation-count and trim-helper regression also pass.
+
+### Equipment destruction and drop updates (2026-10-05)
+
+The primary Equipment destructor0x87d770/1645 bytes is covered by4352 original
+vs recovered cases, including real base destruction, registered references,
+COW strings, callback changes and exception cleanup. A scoped free watcher
+checks exact single-release/order for seven member buffers. All19 sampled
+and27 targeted mutations are killed, including deliberate buffer leaks.
+The18-byte deleting destructor and both secondary thunks are MATCH; the primary
+body is97.2% normalized similarity. Details and the explicitly provisional POD
+vector element types are documented in research/equipment-destructor-check.
+
+updateDrop(float)0x87a400/1614 bytes is normalized MATCH100%. An additional
+3584-case fixture runs each side twice, with real matrix rotation/multiplication
+and controlled spline/audio/position collaborators. It covers inactive state,
+zero-length paths, negative/zero/positive time, landing, all type combinations,
+state changes during callbacks and position/orientation reference aliasing.
+The original MINSS preserves a NaN first argument in std::min(progress,1),
+including0/0 path progress; swapping the arguments would change that behavior.
+
+A second CPath declaration discrepancy was verified: the original spline
+method is mutable, while the supplied path.cpp draft is const-qualified.
+The original mutable declaration is now available to this caller. The foreign
+implementation is unchanged and remains a separate missing dependency; see
+research/path-constructor-signature.md. A dependency declaration is not counted
+as reconstructing that CPath method.
+
+Integrated check: 125 tests, 0 failed; 1268/5247 accepted game entries,
+428837 original bytes. Increment over db8bfaa: five entries / 3298 bytes
+(primary destructor, deleting destructor, two destructor thunks and updateDrop).
+These represent two C++ methods; the counter includes those destructor entry
+points separately. Both the mandatory watched-free regression and the effects
+allocation-count/trim-helper regression pass on the final source.
+
+### Equipment save capture, enchantment and construction (2026-10-05)
+
+fillSaveState0x8867c0/1394 bytes passes5120 original-vs-recovered cases,
+twice per side, with real save-state and effect-copy lifetime operations.
+All23 sampled and23 targeted mutations are killed. The fixture explicitly
+covers nested socket snapshots, append semantics, manager/type changes and
+post-copy source rereads; an initially missed extra activation pass was fixed.
+See research/equipment-save-check for the collaborator boundaries and limits.
+
+enchant0x8845c0/1120 bytes passes13120 cases, twice per side, and kills24
+sampled plus24 targeted faults. This covers independent classifications,
+item categories, existing lists, strict chance boundaries, NaN, callbacks,
+resource absence and original ALWAYS_IDENTIFIED reads. The fixture does not
+claim validation of the whole affix catalogue or random distribution.
+
+Constructor0x86fd10/786 bytes, speed labels0x86f790/935 bytes and rim lighting
+0x87e2c0/888 bytes are normalized MATCH100%. Original untouched/default member
+semantics, separately cached labels and per-model texture-override order are
+preserved. Shared declarations/layouts are documented in the new reports;
+other source TUs and PC pipeline points4–7 remain unchanged.
+
+Integrated check:127 tests,0 failed;1273/5247 accepted game functions,
+433960 original bytes. Increment over d791d36:five entries/5123 bytes.
+The watched-free destructor regression and effects allocation/trim regression
+also pass on this final source. The constructor aliases share one counted entry.
+
+### Equipment state application, use and proc execution (2026-10-05)
+
+applySaveState0x8863b0/814 bytes is normalized MATCH. Its additional8960-case
+fixture runs twice per side, with real save objects, RTTI and recursive calls;
+24 sampled and34 targeted faults are killed. It preserves signed GUID=-1,
+base-stat sentinels, effect ownership transfer, pre-callback values and late
+list/manager reads. See research/equipment-applysave-check for scope and limits.
+
+useOnTarget0x86e910/598 bytes passes14944 cases twice per side and kills23
+sampled plus27 targeted faults. The original caller tests the bool returned
+from virtual applyEffectOnUnit; the partial BaseUnit/Character/Equipment void
+declarations were corrected without moving slots or changing parameters.
+Equipment's isEffectValidForUnit0x86d600/27 bytes and applyEffectOnUnit0x86e690/
+118 bytes are both MATCH. Effect owner+48 and Character master+640 are typed
+at verified offsets. No foreign source TU was changed.
+
+executeProcs0x86f4a0/561 bytes passes9284 cases twice per side, killing12 sampled
+and22 targeted faults. Real Ogre transforms and original position calls expose
+local-vs-derived rotation differences. Original positions are absolute, but
+orientation is LOCAL and passed by reference across the caster-position read.
+The initial derived-orientation draft was rejected and fixed. ASM also rejects
+NaN chance values, despite Ghidra's misleading comparison. External skill
+mechanics and statistical RNG distribution remain outside this fixture's claim.
+
+Integrated check:130 tests,0 failed;1278/5247 accepted game functions,
+436078 original bytes. Increment over4169ec6:five entries/2118 bytes. Mandatory
+watched-free and effects allocation/trim regressions pass on the final source.
+
+### Equipment eligibility, detachment and socket filtering (2026-10-05)
+
+Five entries / 2,323 original bytes were restored after workspace replacement:
+canEquip 0x86f150 (513), canUseOnTarget 0x86e710 (506), detachFromLocation
+0x86ee20 (493), removeAffixesThatDontSupportUnitType 0x86e020 (431), and
+addContainerItem 0x86e1d0 (380). Detachment is normalized MATCH (100%).
+The five differential fixtures pass 6,939 / 8,192 / 3,584 / 5,120 / 5,760
+cases respectively, with two calls per side and no paired-crash acceptance.
+Targeted mutations kill 23 / 23 / 21 / 10 / 9 faults. The filtering fixture
+also has one explicitly equivalent survivor: removing its empty-list early
+return. Scoped malloc/free parity catches changed growth and leaked scratch
+storage. See the eligibility, detach and affixfilter reports for exact scope.
+
+Character flag +0x4a0 remains generically named. Paperdoll arrays +0x560/+0x5c0
+and the needed nonvirtual service declarations were verified against the ELF;
+class sizes and virtual slots are preserved. Other source TUs are unchanged.
+
+Integrated check: 135 tests, 0 failed; 1,283 / 5,247 accepted game functions,
+438,401 original bytes. Watched-free destructor and effects allocation/trim
+regressions also pass. A separate zero-hook integer-RTTI importer diagnostic
+reproduces a pipeline bug; it is intentionally outside the normal test suite
+and is not an accepted game function. The generic pipeline was not modified.
+
+### Equipment heirlooms, inventory entry and requirement readers (2026-10-05)
+
+Eight entries / 2,922 original bytes: improveHeirloom 0x882330 (446),
+updateVisualLayout 0x86d670 (394), addedToInventory 0x884a20 (383), four stat
+requirement getters 0x86dc50/0x86dae0/0x86d970/0x86d800 (354 each), and
+getLevelRequirement 0x86ddc0 (283). Visual layout and the level getter are
+normalized MATCH (100%). Differential fixtures pass 4,608 heirloom cases,
+4,096 inventory-entry cases and 15,360 cases across all five requirement
+readers, twice per side. All 28 / 20 / 28 targeted faults are killed.
+
+Heirlooms preserve float scaling and post-callback entry/manager reads.
+Requirement reduction truncates the general float modifier before adding the
+category modifier; null-Character level queries return the stored value without
+clamping. Inventory entry preserves quest/UI/state/event/scene/particle order.
+See the three new research reports for collaborator boundaries and limitations.
+Shared declarations and verified field carvings preserve class sizes and vtables;
+no foreign source TU or generic pipeline was changed.
+
+Integrated check: 138 tests, 0 failed; 1,291 / 5,247 accepted game functions,
+441,323 original bytes. Watched-free, effects allocation/trim and filtering
+heap regressions all pass on this final source.
+
+### Equipment damage, missile callbacks and activation (2026-10-05)
+
+Eight method bodies and two adjustment thunks add 2,588 original bytes:
+addInherentDamage 0x879e10, addDamageBonus 0x879f60, getDamageBonus 0x86d440,
+missileDieing 0x86e360, missileApplyingEffects 0x86e540, DPS 0x86f360,
+createElementalDamages 0x886240, setActiveInLevel 0x886100, and thunks at
+0x86e350/0x86e530. Both array-add methods and both thunks are normalized MATCH.
+Six fixtures pass 12,288 / 5,832 / 2,304 / 3,584 / 4,608 / 2,304 cases for
+array operations, missile cleanup, missile application, DPS, elemental transfer
+and activation respectively. All 78 final targeted faults are killed.
+
+The missile-death fixture was strengthened after an omitted slot-clear survived:
+initialized capacity slots are now compared as identities as well as live entries.
+Real registration/index updates and observed Ogre frees verify cleanup and
+callback/exception behavior. The initial result remains in the report directory.
+missileApplyingEffects is bool, not void, confirmed by its original caller's
+AL test; iMissile/Character/Equipment declarations were corrected together.
+Character rollAttack's bool result and original parameter order were verified.
+No foreign source TU or generic pipeline was edited.
+
+Integrated check: 144 tests, 0 failed; 1,301 / 5,247 accepted game functions,
+443,911 original bytes. Destructor watched-free, effects allocation/trim and
+filtering heap regressions all pass. See research/equipment-damage-missiles-check
+for the precise fixture scope, ABI evidence and limitations.
+
+### Equipment graphs, sockets, prices and string accessors (2026-10-05)
+
+Ten entries add 2,319 original bytes. setGraphDamage (0x87dfa0), setGraphAC
+(0x87e0c0), getMaxSockets (0x87f880), getFlavorDescription (0x87d5f0) and
+getSet (0x87d6b0) are normalized MATCH. addSockets (0x87f960), setRenderBehind
+(0x86ebd0), enchantPrice (0x87e1d0), buyPrice (0x86fc20) and sellPrice
+(0x86fb40) pass differential fixtures. Graph/price, sockets, render queue and
+trade fixtures exercise 9,072 / 12,544 / 224 / 8,192 cases, twice per side.
+All 58 final targeted faults are killed. The render fixture was strengthened
+with secondary-model replacement during its own callback after a cached-pointer
+mutation initially survived; both initial and final results are retained.
+
+getMaxSockets returns signed int. getFlavorDescription returns std::wstring by
+value, including its hidden return pointer. Graph rank/read ordering, signed
+socket counts, strict random boundaries, post-callback model reads, separate
+float truncations and buy/sell asymmetry follow original machine code.
+See research/equipment-graphs-sockets-check for evidence and fixture limits.
+No foreign source TU or generic pipeline was changed.
+
+Integrated check: 148 tests, 0 failed; 1,311 / 5,247 accepted game functions,
+446,230 original bytes. Destructor watched-free, effects allocation/trim and
+filtering heap regressions all pass on this final source.

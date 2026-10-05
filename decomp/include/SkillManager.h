@@ -13,6 +13,7 @@ class CResourceManager;
 // Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
+friend class CEquipment;
 public:
     static void globallyDisableSkills(bool disabled);
     CSkillManager(CResourceManager* resources,CBaseUnit* owner);
@@ -20,6 +21,7 @@ public:
     CSkill* addSkill(const std::wstring& name,bool flag);
     CSkill* addSkill(CSkill* skill,bool flag1,bool flag2);
     CSkill* getSkill(const std::wstring& name);
+    CSkill* getSkill(const std::wstring& name,int level);
     void update(float elapsed);
     void setSkillLevel(CSkill* skill,unsigned int level);
     unsigned int getSkillLevel(CSkill* skill);

@@ -45,6 +45,7 @@ public:
 
     void AddDataValue(const std::wstring& name, const std::wstring& value, bool translate);
     void AddDataValue(const std::wstring& name, bool value);
+    void AddDataValue(const std::wstring& name, float value);
     void AddDataValue(const std::wstring& name, unsigned int value);
     void AddDataValue(const std::wstring& name, long long value);
     long long GetDataValue(const std::wstring& name, long long defaultValue);

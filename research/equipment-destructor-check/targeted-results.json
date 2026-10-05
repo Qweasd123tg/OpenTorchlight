@@ -1,0 +1,142 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_visual_reset",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_listener_subobject",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_all_listeners",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_socket_deletes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_particle_delete_order",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_visibility",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_immediate_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_first_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_icon_cleanup",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_null_collision_release",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_model_unload",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_second_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_inventory",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_equipped_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pPositionableObject",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pParticle",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pParticle_3D0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pSoundBank",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pPath",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pAttackDescription",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_delete_m_pAttackDescriptionOverride",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_buffer_m_ElementalDamageTypes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_buffer_m_ElementalDamageBonuses",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_buffer_m_InherentElementalDamage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_buffer_m_UnknownPOD398",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_buffer_m_UnknownPOD3B0",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

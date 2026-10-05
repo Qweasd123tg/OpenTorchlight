@@ -1,0 +1,142 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_null_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "charge_zero_allowed",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unlimited_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_stack_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_effects",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_activation_list",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_validity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_application_result",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_potion_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_journal",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_journal_amount",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_master_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_pet_stat",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_pet_stat",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "never_applied",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "consume_on_failure",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_return_without_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_sound",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_sound_id",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_sound_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_stack_delta",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "decrement_unlimited",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "increment_charges",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "captured_count",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

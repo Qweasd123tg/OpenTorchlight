@@ -1,0 +1,116 @@
+{
+ "0x887b30": {
+  "name": "CEquipment::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+  "tried": 21,
+  "killed": 21,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 948: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 920: 'unloadModel();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 924: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 927: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 948: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 927: 'm_pUnitModel->setCastsShadows(false);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 930: 'm_pUnitModel->setPosition(0.0f,0.0f,0.0f);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 945: 'm_pUnitModelSecondary=m_pResourceManager->createGenericModel(NULL,path.c_str(),NULL,false,false,true);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 921: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 953: 'm_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(50);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 931: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 932: 'Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L\"Error loading model : \"+mesh).c_str()),Ogre::LML_NORMAL);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 959: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 946: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 947: 'm_pUnitModelSecondary->getSceneNode()->getParent()->removeChild(m_pUnitModelSecondary->getSceneNode());' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 921: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 921: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 922: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 929: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 945: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 943: 'path=FILESYSTEM::CleanPath(path+L\"/\"+second+L\".mesh\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

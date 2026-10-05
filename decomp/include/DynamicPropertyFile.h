@@ -18,6 +18,7 @@ public:
     virtual void LoadSettings(const std::wstring& file);
 
     int GetInt(unsigned int property);
+    float GetFloat(unsigned int property);
     const std::wstring& GetString(unsigned int property);
     void SetInt(unsigned int property, int value);
     void SetString(unsigned int property, const std::wstring& value);

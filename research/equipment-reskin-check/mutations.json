@@ -1,0 +1,36 @@
+{
+ "0x888920": {
+  "name": "CEquipment::reskinByClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+  "tried": 5,
+  "killed": 5,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1235: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1248: 'loadModel(primary,secondary);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1240: 'primary=wardrobes[i]->GetDataValue(L\"ITEM_MESH\",primary);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1235: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1241: 'secondary=wardrobes[i]->GetDataValue(L\"ITEM_MESH_SECONDARY\",secondary);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

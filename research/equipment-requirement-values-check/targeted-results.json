@@ -1,0 +1,176 @@
+[
+  {
+    "name": "baseline",
+    "scope": "helper",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "general_truncation",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_general_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "martial_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ranged_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "armor_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "spell_effect",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "martial_type",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ranged_type",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_armor",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_spell",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "double_category",
+    "scope": "helper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dc50_wrong_field",
+    "scope": "0x86dc50",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dc50_no_clamp",
+    "scope": "0x86dc50",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dc50_cache_field",
+    "scope": "0x86dc50",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dae0_wrong_field",
+    "scope": "0x86dae0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dae0_no_clamp",
+    "scope": "0x86dae0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86dae0_cache_field",
+    "scope": "0x86dae0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d970_wrong_field",
+    "scope": "0x86d970",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d970_no_clamp",
+    "scope": "0x86d970",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d970_cache_field",
+    "scope": "0x86d970",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d800_wrong_field",
+    "scope": "0x86d800",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d800_no_clamp",
+    "scope": "0x86d800",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86d800_cache_field",
+    "scope": "0x86d800",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86ddc0_wrong_field",
+    "scope": "0x86ddc0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86ddc0_no_clamp",
+    "scope": "0x86ddc0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "0x86ddc0_cache_field",
+    "scope": "0x86ddc0",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_null_clamp",
+    "scope": "0x86ddc0",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

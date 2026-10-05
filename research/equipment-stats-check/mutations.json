@@ -1,0 +1,126 @@
+{
+ "0x893660": {
+  "name": "CEquipment::getEquipmentStats()",
+  "tried": 23,
+  "killed": 23,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 97: 'description=STRINGS::replaceWString(description,L\"\\\\n\",continuation);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 56: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 34: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 56: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 60: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 82: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 43: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 88: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 49: 'if (!result.empty()) result=result+L\"\\n\";' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 61: 'result=result+getAttackSpeedString(static_cast<EWeaponSpeed>(i));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 66: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 69: 'result=result+g_Sockets+L\" \"+STRINGS::GetValueAsWString(m_SocketedEquipment.size())+L\"/\"+STRINGS::GetValueAsWString(m_iSocketCount);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 87: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 68: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 87: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 85: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 82: 'result=result+L\"\\n\\n|c\"+CGameGlobals::getSingleton()->getSetColor(true)+g_Set+L\" : \"+set->m_sDisplayName+L\"|u\";' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 85: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 94: 'description=STRINGS::replaceWString(description,L\"\\n\",L\"\\\\n\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 27: 'g_Sockets=CStringTranslate::getSinglton()->getTranslateString(L\"Sockets\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 85: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 39: 'result=g_PhysicalDamage+L\": \"+STRINGS::GetValueAsWString(m_iMinimumDamage)+L\"-\"+STRINGS::GetValueAsWString(m_iMaximumDamage);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 34: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

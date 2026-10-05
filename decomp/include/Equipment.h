@@ -9,6 +9,7 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <string>
+#include <vector>
 #include "BaseUnit.h"
 #include "Character.h"
 #include "Constants.h"
@@ -23,6 +24,7 @@
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 #include "iMissile.h"
+class CAttackDescription;
 class CInventory;
 class CMissile;
 class CParticle;
@@ -39,7 +41,7 @@ public:
     virtual void update(Ogre::Camera*, const Ogre::Vector3&, float);
     virtual void setHighlighted(bool);
     virtual bool isEffectValidForUnit(CCharacter*, CBaseUnit*, CEffect*);
-    virtual void applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*);
+    virtual bool applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*);
     virtual void fillSaveState(CItemSaveState&, int, bool);
     virtual void applySaveState(CItemSaveState&);
     virtual const std::wstring& getItemName();
@@ -48,10 +50,10 @@ public:
     virtual void setRimlight(std::wstring);
     virtual void missileBeingFired(CMissile*);
     virtual void missileDieing(CMissile*);
-    virtual void missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
+    virtual bool missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*);
     virtual bool missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&);
-    virtual void getUnitModelSecondary();
+    virtual void* getUnitModelSecondary();
     virtual bool canEquip(CCharacter*, bool);
     virtual long long canPickup(CCharacter*);
     virtual long long canDrop(CCharacter*);
@@ -61,7 +63,7 @@ public:
     virtual void unequipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS);
     virtual void useEquipment(CCharacter*, CCharacter*);
     virtual void incrementStackBy(int);
-    virtual void getEquippedTo();
+    virtual CCharacter* getEquippedTo();
     virtual void equip();
     virtual void unequip();
     virtual void useEquipment();
@@ -71,7 +73,7 @@ public:
     void unloadModel();
     int minimumDamage();
     int maximumDamage();
-    void getDamageBonus(EDAMAGE_TYPES);
+    int getDamageBonus(EDAMAGE_TYPES);
     void removeDamageBonus(EDAMAGE_TYPES, int);
     void resetVisualLayout();
     void updateVisualLayout(float);
@@ -81,7 +83,7 @@ public:
     int getStrengthRequirement(CCharacter*);
     int getLevelRequirement(CCharacter*);
     long long canEnchant();
-    // unresolved: CEquipment::removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES)
+    void removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES);
     void addContainerItem(CEquipment*);
     bool canUseOnTarget(CCharacter*, CBaseUnit*);
     void useOnTarget(CCharacter*, CBaseUnit*);
@@ -93,32 +95,32 @@ public:
     long DPS();
     void executeProcs(CCharacter*, EEFFECT_TYPE, CBaseUnit*);
     void destroyIcon();
-    CEquipment* getAttackSpeedString(EWeaponSpeed);
+    std::wstring getAttackSpeedString(EWeaponSpeed);
     int sellPrice();
     int buyPrice();
     CEquipment(CResourceManager*);
     void addInherentDamage(EDAMAGE_TYPES, int);
     void addDamageBonus(EDAMAGE_TYPES, int);
     void updateDrop(float);
-    CEquipment* getFlavorDescription();
-    CEquipment* getSet();
+    std::wstring getFlavorDescription();
+    std::wstring getSet();
     void convertEquipment(std::wstring);
     void createNewEquipment(std::wstring);
     void setGraphDamage(unsigned int);
     void setGraphAC(unsigned int);
     int enchantPrice();
-    CEquipment* skillDescription();
-    long long fireMissiles(CCharacter*, CCharacter*);
-    unsigned long getMaxSockets();
+    std::wstring skillDescription();
+    bool fireMissiles(CCharacter*, CCharacter*);
+    int getMaxSockets();
     void addSockets();
-    long long isWardrobed(std::wstring);
+    bool isWardrobed(std::wstring);
     void setRequirements();
     void calculateCombatStats(bool);
     void improveHeirloom();
     void createIcon(CGameUI&, bool);
     void recalculatePrice();
     void enchant(bool);
-    CEquipment* getFullItemName(bool);
+    std::wstring getFullItemName(bool);
     void createParticles();
     void createElementalDamages();
     void clearDamageBonuses();
@@ -126,11 +128,11 @@ public:
     void attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS);
     void loadModel(std::wstring, std::wstring);
     void reskinByClass(std::wstring);
-    CEquipment* effectsDescription(EEFFECT_ACTIVATION, bool, bool);
-    CEquipment* getEquipmentEffects();
-    CEquipment* getEquipmentType(bool);
-    CEquipment* getEquipmentDescription(bool, bool);
-    CEquipment* getEquipmentStats();
+    std::wstring effectsDescription(EEFFECT_ACTIVATION, bool, bool);
+    std::wstring getEquipmentEffects();
+    std::wstring getEquipmentType(bool);
+    std::wstring getEquipmentDescription(bool, bool);
+    std::wstring getEquipmentStats();
 
     // fields
     int m_iUnknown238;
@@ -141,7 +143,7 @@ public:
     CPath* m_pPath;
     float m_fUnknown258;
     bool m_bUnknown25C;
-    bool m_bUnknown25D;
+    bool m_bGamblerIcon;
     bool m_bUnknown25E;
     bool m_bUnknown25F;
     int m_iUnknown260;
@@ -159,24 +161,18 @@ public:
     CCharacter* m_pEquippedTo;
     int m_iUnknown298;
     unsigned char m_gap29C[0x4] __attribute__((aligned(4)));
-    void* m_pUnknown2A0;
-    void* m_pUnknown2A8;
+    CAttackDescription* m_pAttackDescription;
+    // Second attack slot: also holds LSLASH/LPISTOL/LWAND or the sole BOW attack.
+    CAttackDescription* m_pAttackDescriptionOverride;
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pUnitModelSecondary;
     long long m_iUnitCollisionModel;
-    void* m_pUnknown2C8;
-    void* m_pUnknown2D0;
-    void* m_pUnknown2D8;
-    void* m_pUnknown2E0;
-    void* m_pUnknown2E8;
-    unsigned char m_fUnknown2F0[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown2F8[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown300[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown308[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown310[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown318[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown320[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown328[0x8] __attribute__((aligned(8)));
+    CEGUI::Window* m_pIconWindow;
+    std::wstring m_sUnidentifiedName;
+    std::wstring m_sDisplayName;
+    std::wstring m_sPrefix;
+    std::wstring m_sSuffix;
+    Ogre::Matrix4 m_mDropOrientation;
     int m_iMinimumDamage;
     int m_iMaximumDamage;
     int m_iUnknown338;
@@ -185,31 +181,23 @@ public:
     int m_iUnknown344;
     bool m_bUnknown348;
     unsigned char m_gap349[0x7];
-    void* m_pUnknown350;
-    long long m_iUnknown358;
-    void* m_pUnknown360;
-    void* m_pUnknown368;
-    long long m_iUnknown370;
-    void* m_pUnknown378;
-    void* m_pUnknown380;
-    long long m_iUnknown388;
-    void* m_pUnknown390;
-    long long m_iUnknown398;
-    long long m_iUnknown3A0;
-    long long m_iUnknown3A8;
-    long long m_iUnknown3B0;
-    long long m_iUnknown3B8;
-    long long m_iUnknown3C0;
+    std::vector<EDAMAGE_TYPES> m_ElementalDamageTypes;
+    std::vector<int> m_ElementalDamageBonuses;
+    std::vector<int> m_InherentElementalDamage;
+    // Trivial vector buffers verified in ctor/dtor. Exact element types remain
+    // unknown; byte elements preserve those observed storage/lifetime operations.
+    std::vector<unsigned char> m_UnknownPOD398;
+    std::vector<unsigned char> m_UnknownPOD3B0;
     CParticle* m_pParticle;
     CParticle* m_pParticle_3D0;
     std::wstring m_sUnknown3D8;
-    int m_iUnknown3E0;
+    unsigned int m_iSocketCount;
     unsigned char m_gap3E4[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown3E8[0x18] __attribute__((aligned(8)));
+    TArrayList<CEquipment*> m_SocketedEquipment;
     std::wstring m_sUnknown400;
     float m_fUnknown408;
     unsigned char m_gap40C[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown410[0x18] __attribute__((aligned(8)));
+    TArrayList<TSafePointer<CMissile>*> m_ActiveMissileRefs;
     CPositionableObject* m_pPositionableObject;
     bool m_bUnknown430;
 };

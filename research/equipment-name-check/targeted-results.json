@@ -1,0 +1,77 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_force_identified",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "return_empty_unidentified",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_initial_tag_removal",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_unique_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_set_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "last_prefix_instead_of_highest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strict_suffix_rank",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "prefix_concatenation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_prefix_cache",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_suffix_cache",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "case_sensitive_selector",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "uppercase_closing_tag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_first_tag_only",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_nonmatching_block",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -9,8 +9,9 @@
 #include "RunicCore.h"
 
 class CPlayer;
+class CGameUI;
 
-// Partial: only the player field is named here. Preserve all three base
+// Partial: player and UI fields. Preserve all three base
 // subobjects and the original 0x3910-byte allocation from GameClient.cpp.
 class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
@@ -26,11 +27,14 @@ public:
     void setStateControlFlag(bool value) { m_bStateControl10BC = value; }
     bool getPlayerIsCheat();
     CPlayer* getPlayer() { return m_pPlayer; }
+    CGameUI* getGameUI() { return m_pGameUI; }
 
 private:
     unsigned char m_ClientData20[0x58 - 0x20];
     CPlayer* m_pPlayer;
-    unsigned char m_ClientData60[0x10bc - 0x60];
+    unsigned char m_ClientData60[0x78 - 0x60];
+    CGameUI* m_pGameUI;
+    unsigned char m_ClientData80[0x10bc - 0x80];
     bool m_bStateControl10BC;
     unsigned char m_ClientData10BD[0x3910 - 0x10bd];
 };

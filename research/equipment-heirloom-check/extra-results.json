@@ -1,0 +1,32 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "cached_manager_lists",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_manager_clear",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "double_saved_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_base_mode",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

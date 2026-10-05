@@ -1,0 +1,112 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_equipped_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_primary_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_primary_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_actor_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_reparent_primary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_add",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_stop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "non_immediate_stop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_particle_add",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_paper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_primary_actor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_primary_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_remove",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reparent_secondary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_paper",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_secondary_actor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_equipped",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

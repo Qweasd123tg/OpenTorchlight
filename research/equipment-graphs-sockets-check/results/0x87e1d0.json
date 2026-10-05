@@ -1,0 +1,52 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "wrong_graph",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_enchant_multiplier",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "signed_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ceil_extra",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ceil_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_minimum",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_minimum",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "capture_count_early",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

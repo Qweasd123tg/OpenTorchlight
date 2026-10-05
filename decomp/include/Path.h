@@ -21,6 +21,8 @@ public:
     void SetRadiusRight(unsigned int index, float radius);
     float GetTweenedRadiusRight(float distance) const;
     float GetTweenedRadiusLeft(float distance) const;
+    // Original mutable ABI; const draft belongs to path.cpp and remains separate.
+    Ogre::Vector3 GetSplinePositionAtDistance(float distance);
     Ogre::Vector3 GetSplinePositionAtDistance(float distance) const;
     float GetAngleOverDistance(float fromDistance, float toDistance) const;
     Ogre::Vector3 GetPathSegment(unsigned int index) const;
@@ -39,6 +41,9 @@ public:
                   float radiusRight);
     void Reverse();
 
+    // Original narrow overload; its implementation still comes from the ELF.
+    // The wide draft belongs to path.cpp and is tracked separately.
+    CPath(std::string name, bool closed, const Ogre::Vector3& origin);
     CPath(std::wstring name, bool closed, const Ogre::Vector3& origin);
     void Resize(unsigned int pointCount);
     CPath(CPath& path);

@@ -1,0 +1,107 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "quest_same_inventory",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_previous_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_previous_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_gambler",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_icon",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_icon_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_price",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_parent_guid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_parent_guid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_state",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_state",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_master",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "any_master",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_pickup_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_event",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_event",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_item_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_scene_remove",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_stop_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_reset",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

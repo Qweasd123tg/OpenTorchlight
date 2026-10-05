@@ -1,0 +1,57 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_quest_marker",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "append_socketable",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "append_potion",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "append_scroll",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "quality_ignores_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "unidentified_requires_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_empty_braces",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "choose_last_open_brace",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "close_brace_from_start",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cache_helmet_translation",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

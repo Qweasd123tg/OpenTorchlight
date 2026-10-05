@@ -56,7 +56,7 @@ void side(Case& c,bool ours,autotest::Capture& out) {
     dst->setAmbient(0.01f,0.02f,0.03f);dst->setDiffuse(0.1f,0.2f,0.3f,0.4f);dst->setSelfIllumination(0.1f,0.1f,0.1f);
     source.ready();target.ready();
     ProbeCamera camera(c.scene,(c.seed&1)!=0);
-    long long item[0x220/8],model[0x250/8],bounds[0xb8/8],manager[0x48/8],globals[0x2d0/8],editor[0x1f8/8],master[0x190/8],settings[0x140/8],hierarchy[0x100/8],bank[0xd0/8],sound[0x20/8];
+    long long item[0x230/8],model[0x250/8],bounds[0xb8/8],manager[0x48/8],globals[0x2d0/8],editor[0x1f8/8],master[0x190/8],settings[0x140/8],hierarchy[0x100/8],bank[0xd0/8],sound[0x20/8];
     std::memset(item,0,sizeof(item));std::memset(model,0,sizeof(model));std::memset(bounds,0,sizeof(bounds));std::memset(manager,0,sizeof(manager));
     std::memset(globals,0,sizeof(globals));std::memset(editor,0,sizeof(editor));std::memset(master,0,sizeof(master));std::memset(settings,0,sizeof(settings));
     std::memset(hierarchy,0,sizeof(hierarchy));std::memset(bank,0,sizeof(bank));std::memset(sound,0,sizeof(sound));

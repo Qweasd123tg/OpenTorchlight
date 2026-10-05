@@ -1,0 +1,327 @@
+[
+  {
+    "address": "0x87e1d0",
+    "fixture": "EquipmentGraphPriceTest.cpp",
+    "test": "equipment_graph_price_differential",
+    "mutations": [
+      [
+        "wrong_graph",
+        "L\"PRICE_ENCHANT\"",
+        "L\"BASE_WEAPON_DAMAGE\""
+      ],
+      [
+        "omit_enchant_multiplier",
+        "perEnchant * base * static_cast<float>(count)",
+        "base * static_cast<float>(count)"
+      ],
+      [
+        "signed_count",
+        "unsigned int count = static_cast<unsigned int>(m_iUnknown344);",
+        "int count = m_iUnknown344;"
+      ],
+      [
+        "omit_base",
+        " + static_cast<int>(base)",
+        ""
+      ],
+      [
+        "ceil_extra",
+        "static_cast<int>(perEnchant * base * static_cast<float>(count))",
+        "static_cast<int>(ceilf(perEnchant * base * static_cast<float>(count)))"
+      ],
+      [
+        "ceil_base",
+        "static_cast<int>(base)",
+        "static_cast<int>(ceilf(base))"
+      ],
+      [
+        "wrong_minimum",
+        "return price < 300 ? 300 : price;",
+        "return price < 301 ? 301 : price;"
+      ],
+      [
+        "no_minimum",
+        "return price < 300 ? 300 : price;",
+        "return price;"
+      ],
+      [
+        "capture_count_early",
+        "float base = graph->getValue(static_cast<float>(m_iUnknown274), 0);\n    float perEnchant = CGameGlobals::getSingleton()->m_fEnchanterPricePerEnchant;\n    unsigned int count = static_cast<unsigned int>(m_iUnknown344);",
+        "unsigned int count=static_cast<unsigned int>(m_iUnknown344);\n    float base = graph->getValue(static_cast<float>(m_iUnknown274), 0);\n    float perEnchant = CGameGlobals::getSingleton()->m_fEnchanterPricePerEnchant;"
+      ]
+    ]
+  },
+  {
+    "address": "0x87f960",
+    "fixture": "EquipmentSocketsTest.cpp",
+    "test": "equipment_sockets_differential",
+    "mutations": [
+      [
+        "unsigned_count",
+        "static_cast<int>(m_iSocketCount) < maximum",
+        "m_iSocketCount < static_cast<unsigned int>(maximum)"
+      ],
+      [
+        "inclusive_max",
+        "static_cast<int>(m_iSocketCount) < maximum",
+        "static_cast<int>(m_iSocketCount) <= maximum"
+      ],
+      [
+        "skip_resource_guard",
+        "&& m_pResourceManager &&",
+        "&& true &&"
+      ],
+      [
+        "skip_level_guard",
+        "&& m_pResourceManager->getLevel()",
+        "&& true"
+      ],
+      [
+        "ignore_categories",
+        "ISA(UNITTYPES::WEAPON)",
+        "true"
+      ],
+      [
+        "no_ring",
+        "ISA(UNITTYPES::RING)",
+        "false"
+      ],
+      [
+        "no_necklace",
+        "ISA(UNITTYPES::NECKLACE)",
+        "false"
+      ],
+      [
+        "roll_last_slot",
+        "count < maximum - 1",
+        "count <= maximum - 1"
+      ],
+      [
+        "always_one",
+        "? 2u : 1u",
+        "? 1u : 1u"
+      ],
+      [
+        "always_two",
+        "? 2u : 1u",
+        "? 2u : 2u"
+      ],
+      [
+        "inclusive_chance",
+        "roll < CGameGlobals",
+        "roll <= CGameGlobals"
+      ],
+      [
+        "wrong_chance_scale",
+        "m_fSecondSocketChance * 10.0f",
+        "m_fSecondSocketChance"
+      ],
+      [
+        "wrong_random_range",
+        "randomBetweenVolatile(0.0f, 1000.0f)",
+        "randomBetweenVolatile(0.0f, 100.0f)"
+      ],
+      [
+        "reread_count_after_roll",
+        "static_cast<unsigned int>(count) + added",
+        "m_iSocketCount + added"
+      ],
+      [
+        "omit_last_slot_increment",
+        "m_iSocketCount = static_cast<unsigned int>(count) + 1u;",
+        ";"
+      ]
+    ]
+  },
+  {
+    "address": "0x86ebd0",
+    "fixture": "EquipmentRenderBehindTest.cpp",
+    "test": "equipment_renderbehind_differential",
+    "mutations": [
+      [
+        "skip_primary_gate",
+        "if (m_pUnitModel)",
+        "if (true)"
+      ],
+      [
+        "omit_primary_call",
+        "m_pUnitModel->setRenderBehind(behind);",
+        ";"
+      ],
+      [
+        "invert_primary_flag",
+        "m_pUnitModel->setRenderBehind(behind);",
+        "m_pUnitModel->setRenderBehind(!behind);"
+      ],
+      [
+        "wrong_primary_queue",
+        "m_pUnitModel->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);",
+        "m_pUnitModel->m_pEntity->setRenderQueueGroup(behind ? 88 : 50);"
+      ],
+      [
+        "skip_secondary_gate",
+        "if (m_pUnitModelSecondary)",
+        "if (true)"
+      ],
+      [
+        "omit_secondary_call",
+        "m_pUnitModelSecondary->setRenderBehind(behind);",
+        ";"
+      ],
+      [
+        "invert_secondary_flag",
+        "m_pUnitModelSecondary->setRenderBehind(behind);",
+        "m_pUnitModelSecondary->setRenderBehind(!behind);"
+      ],
+      [
+        "wrong_secondary_entity",
+        "m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup",
+        "m_pUnitModel->m_pEntity->setRenderQueueGroup"
+      ],
+      [
+        "wrong_secondary_queue",
+        "m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);",
+        "m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(behind ? 88 : 50);"
+      ],
+      [
+        "cache_primary",
+        "m_pUnitModel->setRenderBehind(behind);\n        m_pUnitModel->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);",
+        "CGenericModel* model=m_pUnitModel; model->setRenderBehind(behind);\n        model->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);"
+      ],
+      [
+        "cache_secondary",
+        "m_pUnitModelSecondary->setRenderBehind(behind);\n            m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);",
+        "CGenericModel* model=m_pUnitModelSecondary; model->setRenderBehind(behind);\n            model->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);"
+      ]
+    ]
+  },
+  {
+    "address": "0x86fc20",
+    "fixture": "EquipmentTradePriceTest.cpp",
+    "test": "equipment_trade_price_differential",
+    "mutations": [
+      [
+        "raw_stack",
+        "m_iUnknown238 > 0 ? m_iUnknown238 : 1",
+        "m_iUnknown238"
+      ],
+      [
+        "invert_identified",
+        "if (!m_bUnknown348)",
+        "if (m_bUnknown348)"
+      ],
+      [
+        "wrong_unidentified_price",
+        "count * m_iUnknown26C",
+        "count * m_iUnknown264"
+      ],
+      [
+        "wrong_identified_price",
+        "int price = count * m_iUnknown264;",
+        "int price = count * m_iUnknown268;"
+      ],
+      [
+        "ignore_positive_gate",
+        "&& price > 0",
+        "&& true"
+      ],
+      [
+        "positive_gate_early",
+        "&& m_pResourceManager->getLevel()->getPlayer() && price > 0",
+        "&& price > 0 && m_pResourceManager->getLevel()->getPlayer()"
+      ],
+      [
+        "wrong_effect",
+        "static_cast<EEFFECT_TYPE>(83)",
+        "static_cast<EEFFECT_TYPE>(82)"
+      ],
+      [
+        "wrong_damage_discriminator",
+        "static_cast<EDAMAGE_TYPES>(7)",
+        "static_cast<EDAMAGE_TYPES>(6)"
+      ],
+      [
+        "wrong_percent",
+        "/ 100.0f",
+        "/ 10.0f"
+      ],
+      [
+        "increase_not_discount",
+        "price -= static_cast<int>",
+        "price += static_cast<int>"
+      ],
+      [
+        "floor_discount",
+        "static_cast<int>(static_cast<float>(price) * reduction)",
+        "static_cast<int>(floorf(static_cast<float>(price) * reduction))"
+      ],
+      [
+        "omit_minimum",
+        "if (price < 1) price = 1;",
+        ";"
+      ]
+    ]
+  },
+  {
+    "address": "0x86fb40",
+    "fixture": "EquipmentTradePriceTest.cpp",
+    "test": "equipment_trade_price_differential",
+    "mutations": [
+      [
+        "raw_stack",
+        "m_iUnknown238 > 0 ? m_iUnknown238 : 1",
+        "m_iUnknown238"
+      ],
+      [
+        "invert_identified",
+        "if (!m_bUnknown348)",
+        "if (m_bUnknown348)"
+      ],
+      [
+        "wrong_unidentified_price",
+        "count * m_iUnknown270",
+        "count * m_iUnknown268"
+      ],
+      [
+        "wrong_identified_price",
+        "int price = count * m_iUnknown268;",
+        "int price = count * m_iUnknown264;"
+      ],
+      [
+        "add_positive_gate",
+        "&& m_pResourceManager->getLevel()->getPlayer())",
+        "&& m_pResourceManager->getLevel()->getPlayer() && price > 0)"
+      ],
+      [
+        "wrong_effect",
+        "static_cast<EEFFECT_TYPE>(83)",
+        "static_cast<EEFFECT_TYPE>(82)"
+      ],
+      [
+        "wrong_damage_discriminator",
+        "static_cast<EDAMAGE_TYPES>(7)",
+        "static_cast<EDAMAGE_TYPES>(6)"
+      ],
+      [
+        "wrong_percent",
+        "/ 100.0f",
+        "/ 10.0f"
+      ],
+      [
+        "discount_not_increase",
+        "price += static_cast<int>",
+        "price -= static_cast<int>"
+      ],
+      [
+        "floor_increase",
+        "static_cast<int>(static_cast<float>(price) * increase)",
+        "static_cast<int>(floorf(static_cast<float>(price) * increase))"
+      ],
+      [
+        "invent_minimum",
+        "    return price;",
+        "    return price < 1 ? 1 : price;"
+      ]
+    ]
+  }
+]

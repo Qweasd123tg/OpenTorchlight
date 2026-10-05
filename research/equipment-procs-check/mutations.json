@@ -1,0 +1,71 @@
+{
+ "0x86f4a0": {
+  "name": "CEquipment::executeProcs(CCharacter*, EEFFECT_TYPE, CBaseUnit*)",
+  "tried": 12,
+  "killed": 12,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1769: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1769: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1772: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1778: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1766: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1765: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1781: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1772: '100' -> '101'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1766: '3' -> '4'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1782: 'm_pSkillManager->executeSkill(skill,character,SKILL_ACTIVATION_PROC,position,orientation,targetPosition,target);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1766: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1773: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

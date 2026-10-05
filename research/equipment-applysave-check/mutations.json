@@ -1,0 +1,131 @@
+{
+ "0x8863b0": {
+  "name": "CEquipment::applySaveState(CItemSaveState&)",
+  "tried": 24,
+  "killed": 24,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1697: 'if (m_pEffectManager) m_pEffectManager->calculateEffectValues();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1652: 'CItem::applySaveState(state);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1702: 'addDamageBonus(state.m_DamageTypes[i],state.m_DamageBonuses[i]);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1704: 'recalculatePrice();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1674: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1698: 'm_ElementalDamageBonuses.clear();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1678: 'addContainerItem(item);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1653: 'm_iUnknown28C=state.m_iStateValue28;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1654: 'm_iUnknown238=state.m_iStackSize;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1671: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1677: 'item->applySaveState(*state.m_SocketedItems[i]);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1701: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1676: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1660: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1659: 'm_iSocketCount=state.m_iSocketCount;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1681: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1695: 'effects.clear();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1705: 'setRequirements();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1666: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1681: '3' -> '4'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1663: 'm_iMinimumDamage=state.m_iBaseDamage;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1700: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1662: 'm_iMaximumDamage=state.m_iBaseDamage;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1684: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

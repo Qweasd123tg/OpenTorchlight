@@ -1,0 +1,72 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_bonus",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_inherent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_matching_only",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_socket",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_manager_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_52",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_10",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "truncate_each_bonus_first",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "only_first_effect",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

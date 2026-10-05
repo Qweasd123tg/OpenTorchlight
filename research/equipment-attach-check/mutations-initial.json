@@ -1,0 +1,131 @@
+{
+ "0x886d40": {
+  "name": "CEquipment::attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)",
+  "tried": 24,
+  "killed": 19,
+  "score": 0.79,
+  "strong": false,
+  "mutants": [
+   {
+    "mutant": "line 1079: '5' -> '6'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1017: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1057: 'mesh->clone(name);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1012: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1105: '&&' -> '||'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1020: 'OGRE_UTILITIES::removeChildFromParentNode(m_pParticle_3D0->getSceneNode());' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1070: 'character->setPaperdollItem(location,dummy);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1015: 'm_pEquippedTo=character;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1010: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1009: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1017: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1012: 'if (m_pUnitModelSecondary) m_pUnitModelSecondary->setParentGuid(-1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1035: 'case 3: node=character->m_pHeadNode;break;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1014: 'detachFromLocation();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1016: 'm_iUnknown298=location;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1034: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1011: 'm_pUnitModel->setParentGuid(-1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1101: 'else if (ISA(UNITTYPES::SHIELD)) scale=character->getDataGroup()->GetDataValue(L\"SHIELD_SCALE\",1.0f);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1060: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1061: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1072: 'if (tag) tag->setScale(scale,scale,scale);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1097: 'mesh->clone(name);' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1088: 'if (parent) parent->removeChild(m_pParticle->getSceneNode());' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1069: 'else if (ISA(UNITTYPES::SHIELD)) scale=character->getDataGroup()->GetDataValue(L\"SHIELD_SCALE\",1.0f);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

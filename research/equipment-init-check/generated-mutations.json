@@ -1,0 +1,83 @@
+{
+ "0x889110": {
+  "name": "CEquipment::unitInit(CDataGroup*, bool)",
+  "tried": 8,
+  "killed": 0,
+  "score": 0.0,
+  "strong": false,
+  "mutants": [
+   {
+    "mutant": "line 614: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 623: 'if (m_pEffectManager) m_pEffectManager->calculateEffectValues();' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 641: '!' -> ''",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 610: '0' -> '1'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 611: '2' -> '3'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 615: 'calculateCombatStats(skipEffects);' -> ';'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 617: '!' -> ''",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   },
+   {
+    "mutant": "line 576: '1' -> '2'",
+    "outcome": "survived",
+    "stats": [
+     92,
+     108,
+     0
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "identified_guard_inverted",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_activation_passive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "normal_transfer_passive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "normal_dynamic_uses_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "socket_dynamic_embedded",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "socket_passive_transfer",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leave_first_section_untrimmed",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_internal_linefeeds",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "assign_discarded_accumulator_trim",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "assign_discarded_final_trim",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_skill_section",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "recheck_identification_midway",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -5,14 +5,18 @@
 #include <vector>
 
 #include "BaseUnit.h"
+#include "GameEnums.h"
 #include "EquipmentDefines.h"
 #include "WardrobeDefines.h"
 #include "iInventoryListener.h"
 #include "iMissile.h"
 
 class CAIManager;
+class CGenericModel;
 class CCharacterSaveState;
 class CPathController;
+class CSkill;
+enum EJournalStatistic { EJournalStatistic_GEN_LAST = 0x7fffffff };
 
 // Partial: AI states of a character (character+0x330). Only the values used by
 // recovered code are named; the names are ours.
@@ -25,9 +29,11 @@ enum EAIState
 // Partial: members used by recovered TUs. The vtable is complete; return
 // types of virtual methods that recovered code does not call are not verified
 // yet. Unnamed regions are padding until character.cpp is recovered.
+class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
+    CEquipment* getWeaponInLeftHand();
     CCharacter(CResourceManager* resourceManager);
     virtual ~CCharacter();
 
@@ -42,7 +48,7 @@ public:
     virtual void update(Ogre::Camera* camera, const Ogre::Vector3& cameraPosition, float elapsed);
     virtual void setHighlighted(bool highlighted);
     virtual bool isEffectValidForUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
-    virtual void applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
+    virtual bool applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
     virtual float getEffectValue(EEFFECT_TYPE type, float value, const std::wstring& name);
     virtual void deactivateEffect(CEffect* effect);
     virtual void removeFromAvoidanceMap(CLevel& level);
@@ -55,7 +61,7 @@ public:
     virtual void applySaveState(CCharacterSaveState& saveState);
     virtual void missileBeingFired(CMissile* missile);
     virtual void missileDieing(CMissile* missile);
-    virtual void missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
+    virtual bool missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
                                         float damageScale, float effectScale);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter* target);
     virtual bool missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
@@ -103,7 +109,19 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    void incrementJournalStatistic(EJournalStatistic statistic,int amount);
+    void performUnknownSkill(CSkill* skill);
+    float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
+    bool isEnemy(CCharacter*);
+    bool rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES);
+    int strength();
+    int dexterity();
+    int magic();
+    int defense();
+    bool performingSkillLoose();
     void giveGold(int amount);
+    void setPaperdollItem(EEQUIP_LOCATIONS,Ogre::Entity*);
+    void setPaperdollItemSecondary(EEQUIP_LOCATIONS,Ogre::Entity*);
     int getGold() const { return m_iGold; }
 
     bool alive();
@@ -127,11 +145,35 @@ public:
     CAIManager* getAIManager() { return m_pAIManager; }
 
 private:
-    char m_CharacterData[0x444 - 0x1e8];
+    char m_CharacterData[0x200-0x1e8];
+public:
+    CGenericModel* m_pUnitModel;
+    CGenericModel* m_pPaperdollModel;
+private:
+    char m_CharacterData210[0x2e8-0x210];
+public:
+    Ogre::SceneNode* m_pRightHandNode;
+private:
+    char m_CharacterData2F0[0x8];
+public:
+    Ogre::SceneNode* m_pLeftHandNode;
+    Ogre::SceneNode* m_pShieldNode;
+    Ogre::SceneNode* m_pLeftShoulderNode;
+    Ogre::SceneNode* m_pRightShoulderNode;
+    Ogre::SceneNode* m_pHeadNode;
+private:
+    char m_CharacterData320[0x444-0x320];
     int m_iGold;
-    char m_CharacterData448[0x52e - 0x448];
+    char m_CharacterData448[0x4a0 - 0x448];
+    bool m_bCharacterFlag4A0;
+    char m_CharacterData4A1[0x52e - 0x4a1];
     bool m_bInvulnerable;
-    char m_CharacterData52F[0x648 - 0x52f];
+    friend class CEquipment;
+    char m_CharacterData52F[0x560 - 0x52f];
+    Ogre::Entity* m_PaperdollItems[12];
+    Ogre::Entity* m_PaperdollItemsSecondary[12];
+    char m_CharacterData620[0x640 - 0x620];
+    CCharacter* m_pMaster;
     std::vector<CCharacter*> m_Followers;
     char m_CharacterData660[0x718 - 0x660];
     CAIManager* m_pAIManager;

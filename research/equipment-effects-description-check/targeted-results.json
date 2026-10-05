@@ -1,0 +1,62 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "use_inherent_not_bonus_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "include_negative_bonus",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dynamic_bonus_instead_of_passive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_embedded_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "include_random_magic_socketable_filter",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_visual_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "child_not_embedded",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "visit_newly_appended_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "trim_all_socket_newlines",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_socket_leading_newline",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_final_newline",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

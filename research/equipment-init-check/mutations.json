@@ -1,0 +1,121 @@
+{
+ "0x889110": {
+  "name": "CEquipment::unitInit(CDataGroup*, bool)",
+  "tried": 22,
+  "killed": 21,
+  "score": 0.95,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 614: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 623: 'if (m_pEffectManager) m_pEffectManager->calculateEffectValues();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 641: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 610: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 611: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 615: 'calculateCombatStats(skipEffects);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 617: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 576: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 571: 'if (end!=-1 && start!=-1 && start+1<end) m_sUnidentifiedName.replace(start,end-start+1,L\"\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 625: 'recalculatePrice();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 574: 'start=static_cast<int>(m_sDisplayName.find(L\"{\"));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 593: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 611: 'm_iSocketCount=sockets<2 ? sockets : 2;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 613: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 601: 'm_iUnknown248=uses.compare(L\"UNLIMITED\")==0 ? -9999 : STRINGS::GetInt(uses);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 603: '2' -> '3'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 614: '62' -> '63'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 609: 'm_iUnknown274=data->GetDataValue(L\"LEVEL\",1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 603: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 638: 'if (sound) m_pSoundBank->addSample(slots[i],sound->m_iGuid);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 606: 'm_iUnknown23C=data->GetDataValue(L\"MAXSTACKSIZE\",1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 571: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

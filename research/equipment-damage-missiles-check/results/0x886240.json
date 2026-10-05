@@ -1,0 +1,82 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_weapon_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_manager_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_52",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_10",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_damage_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "round_instead_of_truncate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_add",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_death_mark",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_death_mark",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_effect_mark",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_cleanup",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "current_manager_cleanup",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_particles",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_particles",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_count",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

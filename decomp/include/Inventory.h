@@ -18,6 +18,7 @@
 #include "TArrayList.h"
 #include "iInventoryListener.h"
 class CEquipment;
+class CSet;
 
 class CInventory : public CRunicCore
 {
@@ -66,7 +67,7 @@ public:
     unsigned int getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&);
     unsigned int getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&);
     // unresolved: CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)
-    // unresolved: CInventory::getSetCount(CSet*)
+    int getSetCount(CSet*);
     void addSection(EINVENTORY_PANES, unsigned int);
     void calculateEffectValues();
     long long removeEquipment(CEquipment*);

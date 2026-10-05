@@ -1,0 +1,126 @@
+{
+ "0x885a70": {
+  "name": "CEquipment::createParticles()",
+  "tried": 23,
+  "killed": 21,
+  "score": 0.91,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1368: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1391: 'case DAMAGE_FIRE: particle=ISA(UNITTYPES::PISTOL)?L\"WEAPON_FIRE_PISTOL\":L\"WEAPON_FIRE\";break;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1383: 'damage=getDamageBonus(DAMAGE_ICE);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1365: 'delete m_pParticle_3D0;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1392: 'case DAMAGE_ICE: particle=ISA(UNITTYPES::PISTOL)?L\"WEAPON_ICE_PISTOL\":L\"WEAPON_ICE\";break;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1399: 'm_pParticle=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1366: 'm_pParticle_3D0=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1404: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1374: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1379: '0' -> '1'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1386: 'if (damage>largest) type=DAMAGE_POISON;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1385: 'damage=getDamageBonus(DAMAGE_POISON);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1405: 'm_pParticle->setPosition(Ogre::Vector3(0,0,0));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1371: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1363: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1380: '0' -> '1'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1374: 'm_pParticle_3D0->setPosition(Ogre::Vector3(0,0,0));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1401: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1369: 'm_pParticle_3D0=m_pResourceManager->createParticle(particle.c_str());' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1405: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1373: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1381: 'damage=getDamageBonus(DAMAGE_FIRE);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1371: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

@@ -1,0 +1,116 @@
+{
+ "0x880950": {
+  "name": "CEquipment::calculateCombatStats(bool)",
+  "tried": 21,
+  "killed": 20,
+  "score": 0.95,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 534: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 475: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 506: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 465: 'm_sUnknown400=STRINGS::StringUpper(m_pDataGroup->GetDataValue(L\"MISSILE\",EMPTY_WSTRING));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 550: 'm_pAttackDescriptionOverride=new CAttackDescription(\"LSLASH\",true,range,strikeRange,m_iMinimumDamage,m_iMaximumDamage,toHit,attackSpeed);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 517: '4' -> '5'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 486: 'setGraphDamage(static_cast<int>(damage*(damageRarity/100.0f)*(damageSpeed/100.0f)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 510: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 464: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 543: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 498: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 480: '100' -> '101'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 524: 'm_iMinimumDamage=m_iMaximumDamage;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 461: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 466: 'm_fUnknown408=m_pDataGroup->GetDataValue(L\"AI_ATTACKCOOLDOWN\",0.0f);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 519: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 472: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 537: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 499: 'false' -> 'true'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 507: 'm_iUnknown33C=m_iUnknown338;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 520: 'if (percent>0) addInherentDamage(types[i],static_cast<int>(percent*damage));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

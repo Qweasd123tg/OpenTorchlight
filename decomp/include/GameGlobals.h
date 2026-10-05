@@ -16,9 +16,24 @@ public:
     const std::wstring& getRandomEnchantColor(bool selected) const { return selected ? m_sRandomEnchantColor : m_sRandomEnchantColorUnselected; }
     const std::wstring& getRareColor(bool selected) const { return selected ? m_sRareColor : m_sRareColorUnselected; }
     const std::wstring& getUniqueColor(bool selected) const { return selected ? m_sUniqueColor : m_sUniqueColorUnselected; }
+    const std::wstring& getSocketedEffectColor() const { return m_sGlobalsString2B8; }
+    const std::wstring& getSetColor(bool selected) const { return selected ? m_sSetColor : m_sSetColorUnselected; }
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:
-    unsigned char m_GlobalsData10[0xa8-0x10];
+    friend class CEquipment;
+    unsigned char m_GlobalsData10[0x24-0x10];
+    float m_fRandomEnchantChance;
+    float m_fRandomSocketChance;
+    float m_fSecondSocketChance;
+    int m_iMinRandomEnchantSlots;
+    int m_iMaxRandomEnchantSlots;
+    int m_iMinMagicItemSlots;
+    int m_iMaxMagicItemSlots;
+    int m_iMinUniqueItemSlots;
+    int m_iMaxUniqueItemSlots;
+    unsigned char m_GlobalsData48[0x6c-0x48];
+    float m_fEnchanterPricePerEnchant; // ENCHANTER_PRICE_PER_ENCHANT
+    unsigned char m_GlobalsData70[0xa8-0x70];
     float m_fUnitShadowRange;
     float m_fUnitNearRange;
     float m_fTriggerNearRange;

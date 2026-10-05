@@ -1,0 +1,127 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "no_force_randommagic",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_generatable",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_force",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "randomize_forced",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "chance_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "chance_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_unique_affixes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "allow_socketable_socket",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_primary_affixes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_fallback_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_unique_fallback",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_passive_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reroll_existing_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_resource_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_level_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "socket_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "second_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "allow_unique_socket",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "zero_based_sockets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_socket_roll",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_always_identified",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_identified_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_price",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

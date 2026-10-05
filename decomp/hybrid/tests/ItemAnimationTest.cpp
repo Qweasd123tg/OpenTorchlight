@@ -21,7 +21,7 @@ void removeAvoidance(void*,CLevel* level) {calls.push_back(11);calls.push_back(l
 void putPointer(void* object,size_t offset,void* value) {std::memcpy(static_cast<char*>(object)+offset,&value,sizeof(value));}
 void putFloat(void* object,size_t offset,float value) {std::memcpy(static_cast<char*>(object)+offset,&value,sizeof(value));}
 void side(Case& c,bool ours,autotest::Capture& out) {
-    long long itemStorage[0x220/8],modelStorage[0x250/8],managerStorage[0x48/8],levelStorage[0x10/8];
+    long long itemStorage[0x230/8],modelStorage[0x250/8],managerStorage[0x48/8],levelStorage[0x10/8];
     long long keyStorage[5][0x60/8];
     std::memset(itemStorage,0,sizeof(itemStorage));std::memset(modelStorage,0,sizeof(modelStorage));
     std::memset(managerStorage,0,sizeof(managerStorage));std::memset(levelStorage,0,sizeof(levelStorage));

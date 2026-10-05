@@ -1,0 +1,112 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "swap_hand_nodes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_aim_absolute",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_target_absolute",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_aim_normalise",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_aim_origin",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_weapon_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_bbox_axis",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_model_offset",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_no_model_offset",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_listener_subobject",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "duplicate_listener",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_listener",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reverse_cross_product",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_axes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_firing_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_launch_origin",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "discard_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "discard_target_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_weak_registration",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_reference_retention",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "snapshot_target_too_early",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

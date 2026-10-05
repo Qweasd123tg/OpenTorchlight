@@ -1,0 +1,62 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_manager_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "empty_guard_equivalent",
+    "outcome": "survived",
+    "exit": 0
+  },
+  {
+    "name": "invert_predicate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "only_first",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_affix",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_delete",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_delete",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_manager",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "grow_two",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "leak_rejected",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

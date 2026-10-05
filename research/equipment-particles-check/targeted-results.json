@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_unique",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_magical",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_drop_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_drop_unique",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_drop_magic",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_create_custom",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_preload",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "drop_case_sensitive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "element_case_sensitive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "retain_wrong_drop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "retain_wrong_element",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_drop_visible",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_drop_equipped",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "gate_element_on_visible",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "gate_element_on_equipped",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_weapon_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "zero_electric_counts",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "poison_wins_ties",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "electricity_pistol_name",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "fire_pistol_name",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ice_pistol_name",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "poison_pistol_name",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

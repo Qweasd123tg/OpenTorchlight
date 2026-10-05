@@ -37,6 +37,7 @@ enum EBASEUNIT_TYPE
 // virtual methods that recovered code does not call are not verified yet.
 class CBaseUnit : public CPositionableObject
 {
+    friend class CEquipment;
 public:
     CBaseUnit(CResourceManager* resourceManager, EBASEUNIT_TYPE type);
     virtual ~CBaseUnit();
@@ -55,7 +56,7 @@ public:
     virtual const Ogre::Vector3& getLocalMinBounds();
     virtual const Ogre::Vector3& getLocalMaxBounds();
     virtual bool isEffectValidForUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
-    virtual void applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
+    virtual bool applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
     virtual float getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE type, float value, EDAMAGE_TYPES damageType);
     virtual float getEffectValue(EEFFECT_TYPE type, float value, EDAMAGE_TYPES damageType);
     virtual float getEffectValue(EEFFECT_TYPE type, float value, const std::wstring& name);

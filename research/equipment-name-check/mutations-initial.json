@@ -1,0 +1,131 @@
+{
+ "0x884ba0": {
+  "name": "CEquipment::getFullItemName(bool)",
+  "tried": 24,
+  "killed": 20,
+  "score": 0.83,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 820: 'rank=affix->m_iRank;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 850: 'end=name.find(L\"}\",end+1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 844: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 809: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 831: 'm_sSuffix=suffix;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 798: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 825: 'name=STRINGS::replaceWString(prefix,L\"[ITEM]\",name);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 793: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 800: '1' -> '2'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 793: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 808: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 805: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 793: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 836: '&&' -> '||'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 843: 'if (closing==-1) break;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 800: 'tag=STRINGS::StringUpper(name.substr(begin,end-begin+1));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 802: 'tag=tag.substr(1,end-begin-1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 849: 'if (static_cast<std::wstring::size_type>(end)>=name.size()-2) break;' -> ';'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 826: 'm_sPrefix=prefix;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 802: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 851: 'if (end==-1) break;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 804: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 836: '1' -> '2'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 835: 'begin=name.find(L\"{\"); end=name.find(L\"}\",begin);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

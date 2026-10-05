@@ -16,6 +16,7 @@
 #include "ResourceManager.h"
 #include "RunicCore.h"
 class CPath;
+class iMissile;
 
 class CMissile : public CPositionableObject
 {
@@ -98,11 +99,7 @@ public:
     float m_fUnknown1BC;
     float m_fUnknown1C0;
     int m_iUnknown1C4;
-    void* m_pUnknown1C8;
-    int m_iUnknown1D0;
-    int m_iUnknown1D4;
-    int m_iUnknown1D8;
-    unsigned char m_gap1DC[0x4] __attribute__((aligned(4)));
+    TArrayList<iMissile*> m_Listeners;
     int m_iUnknown1E0;
     float m_fUnknown1E4;
     int m_iUnknown1E8;

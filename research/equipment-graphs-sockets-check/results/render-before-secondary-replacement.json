@@ -1,0 +1,62 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_primary_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_call",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invert_primary_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_queue",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_secondary_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_call",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invert_secondary_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_queue",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cache_primary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cache_secondary",
+    "outcome": "survived",
+    "exit": 0
+  }
+]

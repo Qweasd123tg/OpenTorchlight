@@ -1,0 +1,72 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_enemy",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_enemy_receiver",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "force_owner_mode",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "force_equipped_mode",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "missing_owner_returns_false",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "owner_attack_scales",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "equipped_attack_scales",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "owner_wrong_damage_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "equipped_wrong_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_owner_attack",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_equipped_attack",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "propagate_owner_attack_result",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_equipped_returns_true",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -3,17 +3,23 @@
 
 #include "RunicCore.h"
 
+namespace Ogre { class SceneManager; }
 class CHierarchy;
+class CCollisionModel;
+class CParticlePreloader;
 class CSettings;
+class CSoundManager;
+class CSoundBankDataInformation;
 
 // Partial: declarations from MasterResourceManager.cpp used by recovered TUs;
-// only the unit type hierarchy and the settings pointer are placed (the object is 400 bytes).
+// hierarchy, settings, audio and paperdoll-scene pointers are placed (the original object is 400 bytes).
 class CMasterResourceManager : public CRunicCore
 {
 public:
     virtual ~CMasterResourceManager();
 
     static CMasterResourceManager* getSingleton();
+    void removeCollisionModel(CCollisionModel* model);
 
 private:
     unsigned char m_Unrecovered10[0x70];
@@ -26,6 +32,17 @@ private:
 
 public:
     CSettings* m_pSettings;
+    CSoundManager* m_pSoundManager;
+private:
+    unsigned char m_UnrecoveredA0[0xd0-0xa0];
+public:
+    Ogre::SceneManager* m_pSceneManager;
+private:
+    unsigned char m_UnrecoveredD8[0xf8-0xd8];
+public:
+    CParticlePreloader* m_pParticlePreloader;
+public:
+    CSoundBankDataInformation* m_pSoundBankDataInformation;
 };
 
 #endif

@@ -1,0 +1,21 @@
+{
+  "scope": "Input matrix, not measured machine-branch coverage",
+  "active_cases": 768,
+  "slots": 12,
+  "type_response_combinations": 4,
+  "independent_presence_combinations": 16,
+  "presence_bits": [
+    "secondary model",
+    "paperdoll model",
+    "active particle",
+    "drop particle"
+  ],
+  "total_fixture_cases": 1728,
+  "calls_per_side_per_case": 2,
+  "initial_mutation_score": {
+    "killed": 19,
+    "viable": 24,
+    "accepted": false
+  },
+  "correction": "Old low-bit slot/presence correlations excluded all secondary attachments; flags now come from an independent mixed-radix dimension."
+}

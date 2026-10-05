@@ -1,0 +1,97 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_force_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invert_force_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "clear_gambler_flag_wrong",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "gambler_flag_not_set",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "gambler_fallback_empty",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_empty_class_wildcard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_wardrobe_field",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "parent_as_child",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "fixed_container_size",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_missing_image",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "width_not_scaled",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "height_uses_width",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "left_position_wrong",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "top_position_wrong",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "image_property_wrong_case",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "mouse_passthrough_disabled",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "events_not_muted",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "missing_child_attachment",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

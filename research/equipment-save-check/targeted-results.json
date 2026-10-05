@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_index",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "drop_disabled",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_drop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_name_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_name",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_prefix",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_elements",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "child_index",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "child_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dynamic_socket_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_transfer",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_owner_recalc",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_value_restore",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_bucket",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_bonus",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_affix_clear",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_affix_restore",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_effect_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_effect_source",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -1,0 +1,177 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "skip_parent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_prefix",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_stack",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_identified",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "damage_sentinel_zero",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "armor_sentinel_zero",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_minimum_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_base_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_base_armor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_guid_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_spawn_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_spawn_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_spawn_last_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_child_apply",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_add_container",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_transfer_effects",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "extra_activation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_effect_activation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_effect_value_restore",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "read_value_after_add",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "retain_transferred_effects",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_effect_recalc",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "retain_damage_bonuses",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "damage_reset_nonzero",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_saved_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_elemental_refresh",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_price",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_requirements",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "captured_socket_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "captured_effect_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "captured_damage_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "post_callback_effect_value",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_child_state",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "delayed_effect_clear",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

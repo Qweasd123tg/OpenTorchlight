@@ -1,0 +1,77 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "case_sensitive_group",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "case_sensitive_query",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "empty_query_wildcard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_primary_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reset_primary_on_missing",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reset_secondary_on_missing",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "stop_first_match",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reload_empty_primary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "case_sensitive_current",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_reload",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_meshes",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "discard_secondary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "clean_path_here",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

@@ -31,6 +31,8 @@ public:
     CResourceManager* getResourceManager() { return m_pResourceManager; }
     Ogre::SceneNode* getSceneNode() { return m_pSceneNode; }
 
+    bool getVisible() const { return m_bVisible; }
+
     void sceneNodeCreate();
     void sceneNodeDestroy();
     void sceneNodeAttachEntity(Ogre::Entity* entity);
@@ -51,10 +53,6 @@ protected:
     bool m_bKeepParent;
     bool m_bVisible;
     bool m_bEnabled;
-
-public:
-    // Inline accessors behind the descriptors' property functions.
-    bool getVisible() const { return m_bVisible; }
 };
 
 #endif

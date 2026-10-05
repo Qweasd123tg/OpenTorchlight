@@ -6,7 +6,10 @@
 #include "UnitTypes.h"
 #include "TArrayList.h"
 
+class CBaseUnit;
 class CGameClient;
+class CParticle;
+class CGenericModel;
 class CDataGroup;
 class CHierarchy;
 class CLevel;
@@ -18,13 +21,19 @@ namespace Ogre
 
 // Partial: members are declared as ResourceManager.cpp is recovered. The
 // layout follows the constructor.
+class CMissilePreloader;
 class CResourceManager : public CRunicCore
 {
 public:
+    CMissilePreloader* getMissilePreloader();
+    CParticle* createParticle(const wchar_t* name);
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();
 
+    CBaseUnit* createUnit(long long guid,int level,bool flag1,bool flag2);
+    void createAffixesForUnit(CBaseUnit* unit,unsigned int level,unsigned int count);
     bool getEditorIsRunning();
+    CGenericModel* createGenericModel(Ogre::SceneManager*,const wchar_t*,const wchar_t*,bool,bool,bool);
     long long getUnitGuidByDataGroup(CDataGroup* data,const std::wstring& name);
     UNITTYPES::EUNITTYPES getUnitTypeByName(const std::wstring& name);
     bool ISA(UNITTYPES::EUNITTYPES type, UNITTYPES::EUNITTYPES parent);
