@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "charges_negative",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_charges",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "caster_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "unsigned_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reread_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "null_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "null_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "stop_on_valid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_invalid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "any_empty_invalid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "effect_first",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_effect_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_busy",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_skill_manager",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_last_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_nopets",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_petonly",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "nopets_invert_master",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "petonly_invert_master",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

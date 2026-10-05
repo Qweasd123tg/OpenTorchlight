@@ -1785,3 +1785,144 @@ void CEquipment::executeProcs(CCharacter* character,EEFFECT_TYPE type,CBaseUnit*
                 }
         }
 }
+
+bool CEquipment::canEquip(CCharacter* character, bool checkType)
+{
+    if (character->ISA(UNITTYPES::MERCHANT) || character->ISA(UNITTYPES::STASH))
+        return false;
+    if (character->m_pMaster && character->m_pMaster->ISA(UNITTYPES::PLAYER)
+        && !ISA(UNITTYPES::TRINKET))
+        return false;
+    if (character->m_bCharacterFlag4A0 && !m_bUnknown348)
+        return false;
+    if (checkType && !ISA(UNITTYPES::WEAPON) && !ISA(UNITTYPES::ARMOR)
+        && !ISA(UNITTYPES::SPELL) && !ISA(UNITTYPES::TRINKET))
+        return false;
+    int level = static_cast<int>(character->m_iUnitLevel);
+    if (character->m_bCharacterFlag4A0 && getLevelRequirement(character) != 0
+        && level < getLevelRequirement(character))
+        return false;
+    if (character->m_bCharacterFlag4A0) {
+        int value = character->strength();
+        if (value < getStrengthRequirement(character)) return false;
+    }
+    if (character->m_bCharacterFlag4A0) {
+        int value = character->dexterity();
+        if (value < getDexterityRequirement(character)) return false;
+    }
+    if (character->m_bCharacterFlag4A0) {
+        int value = character->magic();
+        if (value < getMagicRequirement(character)) return false;
+    }
+    if (character->m_bCharacterFlag4A0) {
+        int value = character->defense();
+        if (value < getDefenseRequirement(character)) return false;
+    }
+    return true;
+}
+
+bool CEquipment::canUseOnTarget(CCharacter* character, CBaseUnit* target)
+{
+    if (m_iUnknown248 == 0) return false;
+    CCharacter* levelCharacter = dynamic_cast<CCharacter*>(target);
+    if (!levelCharacter) levelCharacter = character;
+    int level = static_cast<int>(levelCharacter->m_iUnitLevel);
+    if (getLevelRequirement(character) > level) return false;
+    if (m_pEffectManager) {
+        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10 + 0x30);
+        if (effects.size() != 0) {
+            bool valid = false;
+            for (unsigned int i = 0; i < effects.size(); ++i) {
+                CEffect* effect = effects[i];
+                if (target->isEffectValidForUnit(character, effect->m_Owner.getObject(), effect))
+                    valid = true;
+            }
+            if (!valid) return false;
+        }
+    }
+    CCharacter* targetCharacter = dynamic_cast<CCharacter*>(target);
+    CSkillManager* skills = m_pSkillManager;
+    if (skills) {
+        if (targetCharacter) {
+            if (targetCharacter->performingSkillLoose()) return false;
+            skills = m_pSkillManager;
+        }
+        for (unsigned int i = 0; i < skills->m_OtherSkills.size(); ++i)
+            if (!skills->m_OtherSkills[i]->canAffixesAndEffectsBeAppliedToUnit(target, character))
+                return false;
+    }
+    if (!targetCharacter) return true;
+    if (ISA(UNITTYPES::NOPETS) && (!target || targetCharacter->m_pMaster))
+        return false;
+    if (ISA(UNITTYPES::PETONLY))
+        return target && targetCharacter->m_pMaster;
+    return true;
+}
+
+void CEquipment::removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES type)
+{
+    if (!m_pEffectManager) return;
+    TArrayList<CAffix*>& affixes = m_pEffectManager->getAffixes();
+    if (affixes.size() == 0) return;
+    TArrayList<CAffix*> rejected(1);
+    for (unsigned int i = 0; i < affixes.size(); ++i) {
+        CAffix* affix = affixes[i];
+        if (!affix->canBeAppliedToUnitType(type)) rejected.add(affix);
+    }
+    for (unsigned int i = 0; i < rejected.size(); ++i)
+        m_pEffectManager->deleteAffix(rejected[i]);
+}
+
+void CEquipment::addContainerItem(CEquipment* item)
+{
+    if (m_SocketedEquipment.size() < m_iSocketCount) {
+        m_SocketedEquipment.add(item);
+        if (item->ISA(UNITTYPES::SOCKETABLE) && !item->ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE)) {
+            item->removeAffixesThatDontSupportUnitType(m_eUnitType);
+            if (item->m_pEffectManager) item->m_pEffectManager->calculateEffectValues();
+        }
+    }
+}
+
+void CEquipment::detachFromLocation()
+{
+    if (!m_pEquippedTo || !m_pUnitModel || !m_pUnitModel->m_pEntity) return;
+    CGenericModel* actorModel = static_cast<CGenericModel*>(m_pEquippedTo->getUnitModel());
+    if (!actorModel->m_pEntity) return;
+    Ogre::SceneNode* parent = m_pUnitModel->m_pSceneNode->getParentSceneNode();
+    if (parent) {
+        parent->removeChild(m_pUnitModel->m_pSceneNode);
+        m_pSceneNode->addChild(m_pUnitModel->m_pSceneNode);
+    }
+    if (m_pParticle) {
+        m_pParticle->Stop(true);
+        parent = m_pParticle->getSceneNode()->getParentSceneNode();
+        if (parent) parent->removeChild(m_pParticle->getSceneNode());
+        m_pSceneNode->addChild(m_pParticle->getSceneNode());
+    }
+    CCharacter* actor = m_pEquippedTo;
+    if (actor->m_pPaperdollModel) {
+        EEQUIP_LOCATIONS slot = static_cast<EEQUIP_LOCATIONS>(m_iUnknown298);
+        Ogre::Entity* entity = actor->m_pPaperdollModel->m_pEntity;
+        if (actor->m_PaperdollItems[slot] && entity) {
+            try { entity->detachObjectFromBone(actor->m_PaperdollItems[slot]); }
+            catch (...) {}
+        }
+        m_pEquippedTo->setPaperdollItem(static_cast<EEQUIP_LOCATIONS>(m_iUnknown298), NULL);
+    }
+    if (m_pUnitModelSecondary) {
+        parent = m_pUnitModelSecondary->m_pSceneNode->getParentSceneNode();
+        parent->removeChild(m_pUnitModelSecondary->m_pSceneNode);
+        actor = m_pEquippedTo;
+        if (actor->m_pPaperdollModel) {
+            EEQUIP_LOCATIONS slot = static_cast<EEQUIP_LOCATIONS>(m_iUnknown298);
+            Ogre::Entity* entity = actor->m_pPaperdollModel->m_pEntity;
+            if (actor->m_PaperdollItemsSecondary[slot] && entity) {
+                try { entity->detachObjectFromBone(actor->m_PaperdollItemsSecondary[slot]); }
+                catch (...) {}
+            }
+            m_pEquippedTo->setPaperdollItemSecondary(static_cast<EEQUIP_LOCATIONS>(m_iUnknown298), NULL);
+        }
+    }
+    m_pEquippedTo = NULL;
+}

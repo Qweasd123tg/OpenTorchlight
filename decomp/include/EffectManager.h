@@ -23,6 +23,7 @@ public:
     CEffect* cloneEffect(CBaseUnit* source,CEffect* effect);
     bool removeEffect(const std::wstring& name, bool flag);
     bool deleteAffix(const std::wstring& name);
+    bool deleteAffix(CAffix*);
     bool hasEffect(EEFFECT_TYPE type);
     bool hasEffect(EEFFECT_TYPE type, const std::wstring& name);
     bool hasEffect(const std::wstring& name);

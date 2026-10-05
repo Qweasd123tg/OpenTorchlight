@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "allow_merchant",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "allow_stash",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_master",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "any_master",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "master_weapon",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_identification",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_identification",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_spell",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_armor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "zero_req_still_called",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_inclusive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_reread",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_unsigned",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_boundary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_boundary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_boundary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_boundary",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_unconditional",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_unconditional",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_unconditional",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_unconditional",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

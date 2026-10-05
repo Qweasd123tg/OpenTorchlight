@@ -7,6 +7,7 @@
 #include "iUnitObserver.h"
 
 class CDataGroup;
+class CCharacter;
 class CResourceManager;
 class CSkillManager;
 
@@ -19,6 +20,7 @@ public:
     virtual ~CSkill();
     void assignSkillAnimations(CBaseUnit* unit);
     void _setLevelOfSkillFromSkillManager(unsigned int level);
+    bool canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*);
     float getRange();
     float getFindTargetAngle();
     std::wstring getSkillLevelStats(CBaseUnit* unit, unsigned int level);

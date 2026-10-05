@@ -1,0 +1,52 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "inclusive_capacity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "signed_capacity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_append",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "append_parent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_socketable",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "allow_randommagic",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_filter",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_parent_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_calculate",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

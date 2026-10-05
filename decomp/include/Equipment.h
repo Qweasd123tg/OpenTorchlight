@@ -83,7 +83,7 @@ public:
     int getStrengthRequirement(CCharacter*);
     int getLevelRequirement(CCharacter*);
     long long canEnchant();
-    // unresolved: CEquipment::removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES)
+    void removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES);
     void addContainerItem(CEquipment*);
     bool canUseOnTarget(CCharacter*, CBaseUnit*);
     void useOnTarget(CCharacter*, CBaseUnit*);

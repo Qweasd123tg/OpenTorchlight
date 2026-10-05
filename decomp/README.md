@@ -1730,3 +1730,26 @@ mechanics and statistical RNG distribution remain outside this fixture's claim.
 Integrated check:130 tests,0 failed;1278/5247 accepted game functions,
 436078 original bytes. Increment over4169ec6:five entries/2118 bytes. Mandatory
 watched-free and effects allocation/trim regressions pass on the final source.
+
+### Equipment eligibility, detachment and socket filtering (2026-10-05)
+
+Five entries / 2,323 original bytes were restored after workspace replacement:
+canEquip 0x86f150 (513), canUseOnTarget 0x86e710 (506), detachFromLocation
+0x86ee20 (493), removeAffixesThatDontSupportUnitType 0x86e020 (431), and
+addContainerItem 0x86e1d0 (380). Detachment is normalized MATCH (100%).
+The five differential fixtures pass 6,939 / 8,192 / 3,584 / 5,120 / 5,760
+cases respectively, with two calls per side and no paired-crash acceptance.
+Targeted mutations kill 23 / 23 / 21 / 10 / 9 faults. The filtering fixture
+also has one explicitly equivalent survivor: removing its empty-list early
+return. Scoped malloc/free parity catches changed growth and leaked scratch
+storage. See the eligibility, detach and affixfilter reports for exact scope.
+
+Character flag +0x4a0 remains generically named. Paperdoll arrays +0x560/+0x5c0
+and the needed nonvirtual service declarations were verified against the ELF;
+class sizes and virtual slots are preserved. Other source TUs are unchanged.
+
+Integrated check: 135 tests, 0 failed; 1,283 / 5,247 accepted game functions,
+438,401 original bytes. Watched-free destructor and effects allocation/trim
+regressions also pass. A separate zero-hook integer-RTTI importer diagnostic
+reproduces a pipeline bug; it is intentionally outside the normal test suite
+and is not an accepted game function. The generic pipeline was not modified.
