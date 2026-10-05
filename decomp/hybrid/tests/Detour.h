@@ -8,6 +8,7 @@
 
 #include <cstdio>
 #include <cstring>
+#include <link.h>
 #include <stdint.h>
 #include <sys/mman.h>
 
@@ -15,6 +16,10 @@
 #define TL_FUNCTION(name, mangled)                                  \
     extern "C" char name##_original[] __asm__("__tlorig_" mangled); \
     extern "C" char name##_linked[] __asm__(mangled);
+
+// Bounds of the blob's code (tools/decomp/hybrid.py linker script).
+extern "C" char __tlhybrid_text_start[];
+extern "C" char __tlhybrid_text_end[];
 
 #define TL_REDIRECT(set, name, fake) (set).redirect(name##_original, name##_linked, (fake))
 
@@ -61,9 +66,39 @@ public:
 private:
     static const int kMaxPatches = 64;
 
-    // Current protection of the page holding `at`, from /proc/self/maps.
+    struct Segment
+    {
+        uintptr_t at;
+        int prot;
+    };
+
+    static int executableSegment(struct dl_phdr_info* info, size_t, void* data)
+    {
+        Segment* s = (Segment*)data;
+        for (int i = 0; i < info->dlpi_phnum; i++)
+        {
+            const ElfW(Phdr)& ph = info->dlpi_phdr[i];
+            uintptr_t lo = info->dlpi_addr + ph.p_vaddr;
+            if (ph.p_type == PT_LOAD && (ph.p_flags & PF_X) && lo <= s->at && s->at < lo + ph.p_memsz)
+            {
+                s->prot = ((ph.p_flags & PF_R) ? PROT_READ : 0) | ((ph.p_flags & PF_W) ? PROT_WRITE : 0) | PROT_EXEC;
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    // Current protection of the page holding `at`: the loaded segment's flags for code of the
+    // executable and libraries (the loader restores exactly those after installing its hooks),
+    // otherwise /proc/self/maps. Tests patch in thousands of forked children; reading maps
+    // each time cost more than the code under test.
     static int protection(const unsigned char* at)
     {
+        if (__tlhybrid_text_start <= (const char*)at && (const char*)at < __tlhybrid_text_end)
+            return PROT_READ | PROT_EXEC;  // the blob's code, loaded by decomp/hybrid/loader.c
+        Segment segment = {(uintptr_t)at, 0};
+        if (dl_iterate_phdr(executableSegment, &segment))
+            return segment.prot;
         FILE* maps = std::fopen("/proc/self/maps", "r");
         char line[512];
         int result = PROT_READ | PROT_EXEC;

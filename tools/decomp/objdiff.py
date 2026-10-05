@@ -25,6 +25,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import threading
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
@@ -412,15 +413,17 @@ class Original:
         self.db = db or elfdb.load_db()
         self.image = elfimage.load(elf or elfdb.default_elf())
         self.side = OriginalSide(self.image, self.db)
+        self._lock = threading.RLock()  # the normalizer keeps per-function state
         self.by_name = {}
         for address, f in self.db["functions"].items():
             for name in f["names"]:
                 self.by_name.setdefault(name, []).append(f)
 
     def symbol_names(self):
-        if not hasattr(self, "_names"):
-            self._names = image_symbol_names(self.image)
-        return self._names
+        with self._lock:
+            if not hasattr(self, "_names"):
+                self._names = image_symbol_names(self.image)
+            return self._names
 
     def unknown_references(self, obj):
         return unknown_members(self.db, self.symbol_names(),
@@ -464,18 +467,19 @@ class Original:
 
     def normalized(self, f):
         """Normalized original function; cached on disk (the original never changes)."""
-        cache = self.__dict__.get("_norm_cache")
-        if cache is None:
-            cache = self.__dict__["_norm_cache"] = _load_norm_cache()
-        key = f["address"]
-        if key not in cache:
-            start = int(f["address"], 16)
-            end = start + f["size"]
-            insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
-                                             str(self.image.path)]))
-            cache[key] = self.side.normalize(insns, start, end)
-            _NORM_DIRTY.add(key)
-        return cache[key]
+        with self._lock:
+            cache = self.__dict__.get("_norm_cache")
+            if cache is None:
+                cache = self.__dict__["_norm_cache"] = _load_norm_cache()
+            key = f["address"]
+            if key not in cache:
+                start = int(f["address"], 16)
+                end = start + f["size"]
+                insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
+                                                 str(self.image.path)]))
+                cache[key] = self.side.normalize(insns, start, end)
+                _NORM_DIRTY.add(key)
+            return cache[key]
 
 
 NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"

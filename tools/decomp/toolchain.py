@@ -20,6 +20,7 @@ driver composes sub-commands from specs).
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import hashlib
 import json
 import os
@@ -175,6 +176,24 @@ def _cache_lookup(cmd, source):
     return index, None
 
 
+def jobs():
+    """Parallel compiler processes: OTL_JOBS, by default all cores but one (at most 5)."""
+    if os.environ.get("OTL_JOBS"):
+        return max(1, int(os.environ["OTL_JOBS"]))
+    return max(1, min(5, (os.cpu_count() or 2) - 1))
+
+
+def parallel_map(fn, items):
+    """[fn(x) for x in items] on jobs() threads (the work is in compiler subprocesses), in order;
+    the first exception, SystemExit included, is raised after the others finish."""
+    items = list(items)
+    if jobs() == 1 or len(items) < 2:
+        return [fn(x) for x in items]
+    with ThreadPoolExecutor(max_workers=jobs()) as pool:
+        futures = [pool.submit(fn, x) for x in items]
+    return [f.result() for f in futures]
+
+
 def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False, cache=True):
     """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
 
@@ -230,7 +249,9 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
                 CC_CACHE.mkdir(parents=True, exist_ok=True)
                 name = digest + (".s" if assembly else ".o")
                 shutil.copyfile(out, CC_CACHE / name)
-                index.write_text(json.dumps({"deps": deps, "digest": digest, "output": name}))
+                partial = index.with_suffix(f".{os.getpid()}.{id(out)}.tmp")
+                partial.write_text(json.dumps({"deps": deps, "digest": digest, "output": name}))
+                os.replace(partial, index)
     return output
 
 

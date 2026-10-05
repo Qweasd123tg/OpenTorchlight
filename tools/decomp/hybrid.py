@@ -45,7 +45,9 @@ LINKER_SCRIPT = """\
 SECTIONS
 {{
   . = {base:#x};
+  __tlhybrid_text_start = .;
   .text : {{ *(.text .text.* .gnu.linkonce.t.*) }}
+  __tlhybrid_text_end = .;
   . = ALIGN(4096);
   .rodata : {{ *(.rodata .rodata.* .gnu.linkonce.r.*) }}
   .eh_frame : {{ KEEP(*(.eh_frame)) LONG(0) }}
@@ -62,6 +64,10 @@ SECTIONS
 }}
 INCLUDE originals.ld
 """
+
+
+# Symbols the linker script defines for the blob's own code.
+LINKER_DEFINED = {"__tlhybrid_text_start", "__tlhybrid_text_end"}
 
 
 class Context:
@@ -312,13 +318,18 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
             # Generated differential tests (tools/decomp/autotest.py).
             tests += sorted((ROOT / "build-decomp" / "hybrid" / "autotests").glob("*.cpp"))
     units = [(p, False) for p in sorted(Path(src).rglob("*.cpp"))] + [(p, True) for p in tests]
+
+    def compile_unit(unit):
+        source, is_test = unit
+        asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
+        toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
+    toolchain.parallel_map(compile_unit, units)
     for source, is_test in units:
         tu = None if is_test else objdiff.tu_for_source(ctx.db, source)
         if not is_test and tu is None:
             raise SystemExit(f"{source}: no unique original TU named {source.name}")
         stem = ("test_" if is_test else "") + source.stem
         asm = out / f"{stem}.s"
-        toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
         redirect = dict(ctx.global_data)
         if tu:
             redirect.update(ctx.local_data.get(tu["name"], {}))
@@ -358,7 +369,7 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
     for obj in objects + [out / "hooks.o"]:
         defined |= defined_symbols(obj)
         undefined |= undefined_symbols(obj)
-    missing = sorted(n for n in undefined - defined - provided if not n.startswith(".L"))
+    missing = sorted(n for n in undefined - defined - provided - LINKER_DEFINED if not n.startswith(".L"))
     absent = objdiff.unknown_members(ctx.db, objdiff.image_symbol_names(ctx.image), missing)
     if absent:
         raise SystemExit("the decompiled code calls members the original does not have:\n" + "\n".join(
@@ -451,20 +462,35 @@ def game_env(blob, loader, extra=None, headless=False):
     return game, env
 
 
-def selftest(blob, loader, only=None):
-    """Runs the blob's tests before main; only: test name prefix. Returns (code, report lines)."""
+def selftest(blob, loader, only=None, shards=None):
+    """Runs the blob's tests before main; only: test name prefix. Returns (code, report lines).
+    The tests are split over `shards` game processes running at once (OTL_SELFTEST_SHARDS,
+    by default up to 4); each process gets the whole timeout."""
+    shards = shards or int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs())
     extra = {"TLHYBRID_SELFTEST": "1"}
     if only:
         extra["TLHYBRID_FILTER"] = only
-    game, env = game_env(blob, loader, extra, headless=True)
-    result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game, env=env,
-                            capture_output=True, text=True,
-                            timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
-    # Loader lines plus the indented details tests log under a failure.
-    report = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
-    if not any("tests," in line for line in report):
-        return 2, report + [result.stderr[-2000:], "selftest: loader report missing; the hybrid runtime was not injected"]
-    return result.returncode, report
+
+    game, env = game_env(blob, loader, extra, headless=True)  # stages the runtime once for all
+
+    def run(index):
+        return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
+                              env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
+                              capture_output=True, text=True,
+                              timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+    code, report, ran, failed = 0, [], 0, 0
+    for result in toolchain.parallel_map(run, range(shards)):
+        # Loader lines plus the indented details tests log under a failure.
+        lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
+        summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
+        if not summary:
+            return 2, report + lines + [result.stderr[-2000:],
+                                        "selftest: loader report missing; the hybrid runtime was not injected"]
+        ran += int(summary.group(1))
+        failed += int(summary.group(2))
+        report += [l for l in lines if l is not summary.string]
+        code = max(code, result.returncode)
+    return code, report + [f"tlhybrid: {ran} tests, {failed} failed"]
 
 
 def main():

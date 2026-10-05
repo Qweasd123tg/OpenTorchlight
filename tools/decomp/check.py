@@ -30,6 +30,7 @@ import autotest  # noqa: E402
 import hybrid  # noqa: E402
 import mutate  # noqa: E402
 import objdiff  # noqa: E402
+import toolchain  # noqa: E402
 
 ROOT = elfdb.ROOT
 WRITTEN = ("function", "ctor", "dtor", "static")
@@ -90,7 +91,7 @@ def main():
 
     sources = sorted((ROOT / "decomp" / "src").rglob("*.cpp"))
     original = objdiff.Original(db=db)
-    units = [objdiff.compare_source(s, original) for s in sources]
+    units = toolchain.parallel_map(lambda s: objdiff.compare_source(s, original), sources)
     objdiff.save_norm_cache(original)
     status = Counter()
     matched = {}

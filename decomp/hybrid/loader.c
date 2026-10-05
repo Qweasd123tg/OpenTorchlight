@@ -205,15 +205,25 @@ static int run_tests(const struct blob *b)
     const tlhybrid_test *test = (const tlhybrid_test *)s->sh_addr;
     size_t count = s->sh_size / sizeof(*test);
     const char *only = getenv("TLHYBRID_FILTER");
+    /* TLHYBRID_SHARD=i/n: every n-th selected test from the i-th, for parallel processes. */
+    const char *shard = getenv("TLHYBRID_SHARD");
+    unsigned shard_index = 0, shard_count = 1;
+    if (shard && (sscanf(shard, "%u/%u", &shard_index, &shard_count) != 2 || shard_count == 0 ||
+                  shard_index >= shard_count))
+        fail("TLHYBRID_SHARD must be i/n with i < n: %s", shard);
     int failed = 0;
+    size_t selected = 0, ran = 0;
     for (size_t i = 0; i < count; i++) {
         if (only && !name_selected(test[i].name, only))
             continue;
+        if (selected++ % shard_count != shard_index)
+            continue;
+        ran++;
         int failures = test[i].run(&g_host);
         fprintf(stderr, "tlhybrid: %-48s %s (%d)\n", test[i].name, failures ? "FAIL" : "PASS", failures);
         failed += failures != 0;
     }
-    fprintf(stderr, "tlhybrid: %zu tests, %d failed\n", count, failed);
+    fprintf(stderr, "tlhybrid: %zu tests, %d failed\n", ran, failed);
     return failed ? 1 : 0;
 }
 
