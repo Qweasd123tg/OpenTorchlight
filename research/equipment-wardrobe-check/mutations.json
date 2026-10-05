@@ -1,0 +1,46 @@
+{
+ "0x87fa70": {
+  "name": "CEquipment::isWardrobed(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+  "tried": 7,
+  "killed": 7,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 989: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 992: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 997: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 995: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 985: 'characterClass=STRINGS::StringUpper(characterClass);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 992: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 989: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

@@ -5,12 +5,14 @@
 #include <vector>
 
 #include "BaseUnit.h"
+#include "GameEnums.h"
 #include "EquipmentDefines.h"
 #include "WardrobeDefines.h"
 #include "iInventoryListener.h"
 #include "iMissile.h"
 
 class CAIManager;
+class CGenericModel;
 class CCharacterSaveState;
 class CPathController;
 
@@ -104,6 +106,8 @@ public:
     virtual void calculateMaxHP();
 
     void giveGold(int amount);
+    void setPaperdollItem(EEQUIP_LOCATIONS,Ogre::Entity*);
+    void setPaperdollItemSecondary(EEQUIP_LOCATIONS,Ogre::Entity*);
     int getGold() const { return m_iGold; }
 
     bool alive();
@@ -127,7 +131,24 @@ public:
     CAIManager* getAIManager() { return m_pAIManager; }
 
 private:
-    char m_CharacterData[0x444 - 0x1e8];
+    char m_CharacterData[0x200-0x1e8];
+public:
+    CGenericModel* m_pUnitModel;
+    CGenericModel* m_pPaperdollModel;
+private:
+    char m_CharacterData210[0x2e8-0x210];
+public:
+    Ogre::SceneNode* m_pRightHandNode;
+private:
+    char m_CharacterData2F0[0x8];
+public:
+    Ogre::SceneNode* m_pLeftHandNode;
+    Ogre::SceneNode* m_pShieldNode;
+    Ogre::SceneNode* m_pLeftShoulderNode;
+    Ogre::SceneNode* m_pRightShoulderNode;
+    Ogre::SceneNode* m_pHeadNode;
+private:
+    char m_CharacterData320[0x444-0x320];
     int m_iGold;
     char m_CharacterData448[0x52e - 0x448];
     bool m_bInvulnerable;

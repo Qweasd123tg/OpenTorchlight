@@ -1,0 +1,132 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_wardrobe_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_parent_guid",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_third_model_query",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_stored_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "stop_drop_particle_immediately",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_drop_particle_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "shield_wrong_bone",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "shield_wrong_anchor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_node_attachment",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_node_attachment",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_guard_source_material",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_copy_target_to_itself",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_omit_mesh_clone",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_wrong_tag_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_guard_source_material",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_copy_target_to_itself",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_omit_mesh_clone",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_wrong_tag_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_weapon_uses_shield_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_shield_uses_weapon_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "primary_paperdoll_wrong_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_uses_primary_entity",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_existing_parent_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_secondary_bone_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "secondary_wrong_bone_name",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

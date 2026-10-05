@@ -1,3 +1,9 @@
+#include <OgreMesh.h>
+#include <OgreSubEntity.h>
+#include <OgreTagPoint.h>
+#include <OgreSceneManager.h>
+#include "Particle.h"
+#include "OgreUtilities.h"
 #include <OgreEntity.h>
 #include "LevelTemplateData.h"
 #include <CEGUI.h>
@@ -979,3 +985,132 @@ void CEquipment::resetVisualLayout()
 void* CEquipment::getUnitModel() { return m_pUnitModel; }
 void* CEquipment::getUnitModelSecondary() { return m_pUnitModelSecondary; }
 void* CEquipment::getUnitCollisionModel() { return reinterpret_cast<void*>(m_iUnitCollisionModel); }
+
+bool CEquipment::isWardrobed(std::wstring characterClass)
+{
+    characterClass=STRINGS::StringUpper(characterClass);
+    std::vector<CDataGroup*> wardrobes;
+    unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"WARDROBE",&wardrobes);
+    std::wstring mesh=EMPTY_WSTRING, texture=EMPTY_WSTRING;
+    for (unsigned int i=0;i<count;++i)
+    {
+        std::wstring wardrobeClass=STRINGS::StringUpper(wardrobes[i]->GetDataValue(L"CLASS",L""));
+        if (characterClass.compare(L"")==0 || wardrobeClass==characterClass)
+            if (wardrobes[i]->GetDataValue(L"MESH",EMPTY_WSTRING)!=EMPTY_WSTRING ||
+                wardrobes[i]->GetDataValue(L"TEXTURE",EMPTY_WSTRING)!=EMPTY_WSTRING)
+                return true;
+    }
+    return false;
+}
+
+void CEquipment::attachToGivenLocation(CCharacter* character,EEQUIP_LOCATIONS location)
+{
+    if (isWardrobed(character->getName())) return;
+    if (!character || !character->getUnitModel() || !static_cast<CGenericModel*>(character->getUnitModel())->m_pEntity) return;
+    if (!m_pUnitModel || !m_pUnitModel->m_pEntity) return;
+    m_pUnitModel->setParentGuid(-1);
+    if (m_pUnitModelSecondary) m_pUnitModelSecondary->setParentGuid(-1);
+    resetVisualLayout();
+    detachFromLocation();
+    m_pEquippedTo=character;
+    m_iUnknown298=location;
+    if (m_pParticle_3D0 && m_pUnitModel && m_pParticle_3D0->getSceneNode())
+    {
+        m_pParticle_3D0->Stop(false);
+        OGRE_UTILITIES::removeChildFromParentNode(m_pParticle_3D0->getSceneNode());
+    }
+    createParticles();
+    character->getUnitModel();
+    Ogre::Entity* entity=m_pUnitModel->m_pEntity;
+    if (KEQUIP_LOCATION_BONES[location]!=EMPTY_STRING)
+    {
+        std::string bone=KEQUIP_LOCATION_BONES[location];
+        int anchor=location;
+        if (ISA(UNITTYPES::SHIELD)) {bone=KEQUIP_LOCATION_BONES[11];anchor=11;}
+        Ogre::SceneNode* node=NULL;
+        switch(anchor)
+        {
+            case 0: node=character->m_pRightHandNode;break;
+            case 1: node=character->m_pLeftHandNode;break;
+            case 3: node=character->m_pHeadNode;break;
+            case 5: node=character->m_pLeftShoulderNode;break;
+            case 11: node=character->m_pShieldNode;break;
+        }
+        if (node)
+        {
+            Ogre::SceneNode* parent=m_pUnitModel->getSceneNode()->getParentSceneNode();
+            if (parent) parent->removeChild(m_pUnitModel->getSceneNode());
+            node->addChild(m_pUnitModel->getSceneNode());
+            if (m_pParticle)
+            {
+                parent=m_pParticle->getSceneNode()->getParentSceneNode();
+                if (parent) parent->removeChild(m_pParticle->getSceneNode());
+                node->addChild(m_pParticle->getSceneNode());
+                m_pParticle->Start();
+            }
+        }
+        if (character->m_pPaperdollModel)
+        {
+            Ogre::Entity* paperdoll=character->m_pPaperdollModel->m_pEntity;
+            std::string name=STRINGS::uniqueName("itemdummy_");
+            Ogre::MeshPtr mesh=entity->getMesh();
+            mesh->clone(name);
+            Ogre::Entity* dummy=CMasterResourceManager::getSingleton()->m_pSceneManager->createEntity(STRINGS::uniqueName("dummyentity_"),name);
+            unsigned int count=entity->getNumSubEntities();
+            if (count==dummy->getNumSubEntities() && count!=0)
+                for (unsigned int i=0;i<count;++i)
+                {
+                    Ogre::SubEntity* source=entity->getSubEntity(i);
+                    Ogre::SubEntity* target=dummy->getSubEntity(i);
+                    if (!target->getMaterial().isNull()) target->setMaterial(source->getMaterial());
+                }
+            float scale=1.0f;
+            if (ISA(UNITTYPES::WEAPON)) scale=character->getDataGroup()->GetDataValue(L"WEAPON_SCALE",1.0f);
+            else if (ISA(UNITTYPES::SHIELD)) scale=character->getDataGroup()->GetDataValue(L"SHIELD_SCALE",1.0f);
+            character->setPaperdollItem(location,dummy);
+            Ogre::TagPoint* tag=paperdoll->attachObjectToBone(bone,dummy,Ogre::Quaternion::IDENTITY,Ogre::Vector3::ZERO);
+            if (tag) tag->setScale(scale,scale,scale);
+        }
+    }
+    if (KEQUIP_LOCATION_BONES_SECONDARY[location]!=EMPTY_STRING && m_pUnitModelSecondary)
+    {
+        Ogre::SceneNode* node=NULL;
+        entity=m_pUnitModelSecondary->m_pEntity;
+        if (location==5 && (node=character->m_pRightShoulderNode)!=NULL)
+        {
+            Ogre::SceneNode* parent=m_pUnitModelSecondary->getSceneNode()->getParentSceneNode();
+            if (parent) parent->removeChild(m_pUnitModelSecondary->getSceneNode());
+            node->addChild(m_pUnitModelSecondary->getSceneNode());
+        }
+        if (m_pParticle)
+        {
+            Ogre::SceneNode* parent=m_pParticle->getSceneNode()->getParentSceneNode();
+            if (parent) parent->removeChild(m_pParticle->getSceneNode());
+            node->addChild(m_pParticle->getSceneNode());
+            m_pParticle->Start();
+        }
+        if (character->m_pPaperdollModel)
+        {
+            Ogre::Entity* paperdoll=character->m_pPaperdollModel->m_pEntity;
+            std::string name=STRINGS::uniqueName("itemdummy_");
+            Ogre::MeshPtr mesh=entity->getMesh();
+            mesh->clone(name);
+            Ogre::Entity* dummy=CMasterResourceManager::getSingleton()->m_pSceneManager->createEntity(STRINGS::uniqueName("dummyentity_"),name);
+            float scale=1.0f;
+            if (ISA(UNITTYPES::WEAPON)) scale=character->getDataGroup()->GetDataValue(L"WEAPON_SCALE",1.0f);
+            else if (ISA(UNITTYPES::SHIELD)) scale=character->getDataGroup()->GetDataValue(L"SHIELD_SCALE",1.0f);
+            character->setPaperdollItemSecondary(location,dummy);
+            if (dummy->getParentSceneNode()) dummy->getParentSceneNode()->setScale(scale,scale,scale);
+            unsigned int count=entity->getNumSubEntities();
+            if (count==dummy->getNumSubEntities() && count!=0)
+                for (unsigned int i=0;i<count;++i)
+                {
+                    Ogre::SubEntity* source=entity->getSubEntity(i);
+                    Ogre::SubEntity* target=dummy->getSubEntity(i);
+                    if (!target->getMaterial().isNull()) target->setMaterial(source->getMaterial());
+                }
+            Ogre::TagPoint* tag=paperdoll->attachObjectToBone(KEQUIP_LOCATION_BONES_SECONDARY[location],dummy,Ogre::Quaternion::IDENTITY,Ogre::Vector3::ZERO);
+            if (tag) tag->setScale(scale,scale,scale);
+        }
+    }
+}

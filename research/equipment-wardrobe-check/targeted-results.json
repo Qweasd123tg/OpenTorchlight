@@ -1,0 +1,52 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "query_case_sensitive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "group_case_sensitive",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_query_wildcard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_wildcard_side",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "item_mesh_wrong_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "icon_wrong_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "require_mesh_and_texture",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_last_group",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_first_group",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

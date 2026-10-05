@@ -113,7 +113,7 @@ public:
     long long fireMissiles(CCharacter*, CCharacter*);
     unsigned long getMaxSockets();
     void addSockets();
-    long long isWardrobed(std::wstring);
+    bool isWardrobed(std::wstring);
     void setRequirements();
     void calculateCombatStats(bool);
     void improveHeirloom();

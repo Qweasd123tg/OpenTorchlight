@@ -1488,3 +1488,65 @@ source (384 cases plus the direct trim helper). Its standalone runner is now
 `research/equipment-effects-check/check_allocations.py` for reproducible checks
 without rerunning the full mutation sweep. This is a progress checkpoint;
 remaining Equipment functions and the long-run queue are still open.
+
+## Equipment wardrobe predicate and attachment (2026-10-05)
+
+`isWardrobed(std::wstring)` (0x87fa70, 1471 original bytes) is a boolean
+predicate, correcting the old return-type placeholder. It uppercases the
+query and wardrobe class, treats an empty query as a wildcard, and returns
+true when a matching WARDROBE group has nonempty MESH or TEXTURE. ICON and
+ITEM_MESH do not satisfy this predicate. The original two unused local string
+copies are retained. Its real-DataGroup/string fixture compares 1540 cases
+twice per side, including missing/empty properties, late matches, Unicode,
+NUL and preservation of the caller's by-value argument. All 7 viable sampled
+mutations and 9 targeted mutations were killed. Evidence is under
+`research/equipment-wardrobe-check/`.
+
+`attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)` (0x886d40, 3402 original
+bytes) restores parent GUID resets, visual cleanup, detach/equipped-state
+updates, particle relocation, live-model node attachment and separate
+paperdoll entities cloned from the item meshes. Shields select the shield
+bone and anchor while the stored/callback slot remains the caller's slot.
+Weapon scaling takes precedence over shield scaling. Material copy is gated
+by the destination subentity's non-null material, as in the original. The
+secondary path also scales an existing dummy parent before material copying
+and bone attachment; this ordering is preserved.
+
+The 1728-case fixture runs each side twice. Real headless Ogre SceneNodes,
+TagPoints, MeshManager cloning, MaterialPtr/MeshPtr ownership and DataGroups
+are used. Renderable entities, paperdoll setters, model/type queries and
+particle services are controlled collaborators. It compares service traces,
+node parents/scales, tag scales, GUIDs, equipment state, cloned-mesh lookup,
+mesh reference counts and material assignments. No window or GPU rendering
+is started. This verifies the controlled attachment behavior, not rendered
+appearance or arbitrary factory/asset failures.
+
+The first fixture had a real coverage hole: correlated low bits meant slot 5
+never had a secondary model. It killed only 19/24 sampled mutations and was
+rejected. Presence flags now use an independent input dimension. The active
+matrix covers all 12 valid slots x 4 type responses x 16 independent secondary/
+paperdoll/particle-presence combinations (768 cases), plus early-return and
+additional missing-node/particle cases. This is an input matrix, not a claim
+of measured exhaustive machine-branch coverage. The corrected fixture kills
+24/24 viable sampled mutations and all 25 targeted semantic mutations,
+including independent primary and secondary cloning/material/scaling faults.
+The initial weak result is retained alongside the final evidence under
+`research/equipment-attach-check/`.
+
+Character pointers and slots obey the original preconditions: the original
+reads the character name before its later null check, and indexes fixed slot
+tables without range validation. The secondary path with an active particle
+requires its attachment node. Missing secondary-node cases are tested without
+that particle; invalid both-crash inputs are never accepted as comparisons.
+
+Verified Character model/paperdoll and attachment-node fields were carved from
+opaque bytes without changing size 0x720 or the existing +0x444 gold field.
+The Master's scene-manager pointer is at +0xd0; audio/settings offsets remain
+unchanged. DataGroup float and Character paperdoll methods are declarations
+of original collaborators. No other owner's source TU or PC pipeline changed.
+
+Final integrated check: 116 tests, 0 failed; 1256 accepted game functions /
+410529 original bytes. The increment over fdefeb1 is two functions / 4873
+bytes. The effects malloc-count baseline and direct trim-helper regression
+also pass on the final source. Work continues with the remaining functions;
+this checkpoint is not completion of Equipment or the entire game.
