@@ -15,6 +15,7 @@ public:
     virtual unsigned int GetRandomWeight();
     virtual void SetRandomWeight(unsigned int weight);
     virtual void setHighlighted(bool highlighted);
+    void setRenderBehind(bool behind);
     void setCastsShadows(bool shadows);
     void setOpacity(float opacity);
     void setLightOverride(float value);

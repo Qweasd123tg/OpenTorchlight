@@ -1,0 +1,62 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "raw_stack",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invert_identified",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unidentified_price",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_identified_price",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "add_positive_gate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_damage_discriminator",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_percent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "discount_not_increase",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "floor_increase",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invent_minimum",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

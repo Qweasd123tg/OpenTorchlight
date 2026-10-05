@@ -102,7 +102,7 @@ public:
     void addInherentDamage(EDAMAGE_TYPES, int);
     void addDamageBonus(EDAMAGE_TYPES, int);
     void updateDrop(float);
-    CEquipment* getFlavorDescription();
+    std::wstring getFlavorDescription();
     std::wstring getSet();
     void convertEquipment(std::wstring);
     void createNewEquipment(std::wstring);
@@ -111,7 +111,7 @@ public:
     int enchantPrice();
     std::wstring skillDescription();
     bool fireMissiles(CCharacter*, CCharacter*);
-    unsigned long getMaxSockets();
+    int getMaxSockets();
     void addSockets();
     bool isWardrobed(std::wstring);
     void setRequirements();

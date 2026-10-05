@@ -1800,3 +1800,26 @@ Integrated check: 144 tests, 0 failed; 1,301 / 5,247 accepted game functions,
 443,911 original bytes. Destructor watched-free, effects allocation/trim and
 filtering heap regressions all pass. See research/equipment-damage-missiles-check
 for the precise fixture scope, ABI evidence and limitations.
+
+### Equipment graphs, sockets, prices and string accessors (2026-10-05)
+
+Ten entries add 2,319 original bytes. setGraphDamage (0x87dfa0), setGraphAC
+(0x87e0c0), getMaxSockets (0x87f880), getFlavorDescription (0x87d5f0) and
+getSet (0x87d6b0) are normalized MATCH. addSockets (0x87f960), setRenderBehind
+(0x86ebd0), enchantPrice (0x87e1d0), buyPrice (0x86fc20) and sellPrice
+(0x86fb40) pass differential fixtures. Graph/price, sockets, render queue and
+trade fixtures exercise 9,072 / 12,544 / 224 / 8,192 cases, twice per side.
+All 58 final targeted faults are killed. The render fixture was strengthened
+with secondary-model replacement during its own callback after a cached-pointer
+mutation initially survived; both initial and final results are retained.
+
+getMaxSockets returns signed int. getFlavorDescription returns std::wstring by
+value, including its hidden return pointer. Graph rank/read ordering, signed
+socket counts, strict random boundaries, post-callback model reads, separate
+float truncations and buy/sell asymmetry follow original machine code.
+See research/equipment-graphs-sockets-check for evidence and fixture limits.
+No foreign source TU or generic pipeline was changed.
+
+Integrated check: 148 tests, 0 failed; 1,311 / 5,247 accepted game functions,
+446,230 original bytes. Destructor watched-free, effects allocation/trim and
+filtering heap regressions all pass on this final source.

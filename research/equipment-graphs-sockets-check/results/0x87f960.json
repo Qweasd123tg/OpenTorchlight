@@ -1,0 +1,82 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "unsigned_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "inclusive_max",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_resource_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_level_guard",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_categories",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_ring",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_necklace",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "roll_last_slot",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_one",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_two",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "inclusive_chance",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_chance_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_random_range",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reread_count_after_roll",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_last_slot_increment",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

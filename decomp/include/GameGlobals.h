@@ -31,7 +31,9 @@ private:
     int m_iMaxMagicItemSlots;
     int m_iMinUniqueItemSlots;
     int m_iMaxUniqueItemSlots;
-    unsigned char m_GlobalsData48[0xa8-0x48];
+    unsigned char m_GlobalsData48[0x6c-0x48];
+    float m_fEnchanterPricePerEnchant; // ENCHANTER_PRICE_PER_ENCHANT
+    unsigned char m_GlobalsData70[0xa8-0x70];
     float m_fUnitShadowRange;
     float m_fUnitNearRange;
     float m_fTriggerNearRange;

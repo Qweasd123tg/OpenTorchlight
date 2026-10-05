@@ -2199,3 +2199,112 @@ void CEquipment::setActiveInLevel(bool active)
         hideItemText();
     }
 }
+
+void CEquipment::setGraphDamage(unsigned int percentage)
+{
+    CGraph* graph = CGraphManager::getSingleton()->getGraph(L"BASE_WEAPON_DAMAGE");
+    float base = graph->getValue(static_cast<float>(m_iUnknown274), 0);
+    int rank = m_iUnknown28C < 5 ? m_iUnknown28C : 5;
+    unsigned int scale = percentage + static_cast<unsigned int>(rank) * 10u;
+    int damage = static_cast<int>(ceilf(base * (static_cast<float>(scale) / 100.0f)));
+    m_iMaximumDamage = damage;
+    m_iMinimumDamage = damage;
+    m_iUnknown340 = damage;
+}
+
+void CEquipment::setGraphAC(unsigned int percentage)
+{
+    CGraph* graph = CGraphManager::getSingleton()->getGraph(L"ARMOR_PLAYER_BYLEVEL_FORSET");
+    int rank = m_iUnknown28C < 5 ? m_iUnknown28C : 5;
+    float base = graph->getValue(static_cast<float>(m_iUnknown274), 0);
+    unsigned int scale = percentage + static_cast<unsigned int>(rank) * 10u;
+    int armor = static_cast<int>(ceilf(base * (static_cast<float>(scale) / 100.0f)));
+    m_iUnknown338 = armor;
+    if (m_iUnknown338 < 1) m_iUnknown338 = 1;
+    m_iUnknown33C = m_iUnknown338;
+}
+
+int CEquipment::getMaxSockets()
+{
+    return m_pDataGroup ? m_pDataGroup->GetDataValue(L"MAX_SOCKETS", 2) : 0;
+}
+
+void CEquipment::addSockets()
+{
+    int maximum = getMaxSockets();
+    if (static_cast<int>(m_iSocketCount) < maximum && m_pResourceManager && m_pResourceManager->getLevel()
+        && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR) || ISA(UNITTYPES::RING) || ISA(UNITTYPES::NECKLACE))) {
+        int count = static_cast<int>(m_iSocketCount);
+        if (count < maximum - 1) {
+            float roll = UTILITIES::randomBetweenVolatile(0.0f, 1000.0f);
+            unsigned int added = roll < CGameGlobals::getSingleton()->m_fSecondSocketChance * 10.0f ? 2u : 1u;
+            m_iSocketCount = static_cast<unsigned int>(count) + added;
+        } else {
+            m_iSocketCount = static_cast<unsigned int>(count) + 1u;
+        }
+    }
+}
+
+void CEquipment::setRenderBehind(bool behind)
+{
+    if (m_pUnitModel) {
+        m_pUnitModel->setRenderBehind(behind);
+        m_pUnitModel->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);
+        if (m_pUnitModelSecondary) {
+            m_pUnitModelSecondary->setRenderBehind(behind);
+            m_pUnitModelSecondary->m_pEntity->setRenderQueueGroup(behind ? 50 : 88);
+        }
+    }
+}
+
+int CEquipment::enchantPrice()
+{
+    CGraph* graph = CGraphManager::getSingleton()->getGraph(L"PRICE_ENCHANT");
+    float base = graph->getValue(static_cast<float>(m_iUnknown274), 0);
+    float perEnchant = CGameGlobals::getSingleton()->m_fEnchanterPricePerEnchant;
+    unsigned int count = static_cast<unsigned int>(m_iUnknown344);
+    int price = static_cast<int>(perEnchant * base * static_cast<float>(count)) + static_cast<int>(base);
+    return price < 300 ? 300 : price;
+}
+
+int CEquipment::buyPrice()
+{
+    int count = m_iUnknown238 > 0 ? m_iUnknown238 : 1;
+    if (!m_bUnknown348) return count * m_iUnknown26C;
+    int price = count * m_iUnknown264;
+    if (m_pResourceManager && m_pResourceManager->getLevel()
+        && m_pResourceManager->getLevel()->getPlayer() && price > 0) {
+        CLevel* level = m_pResourceManager ? m_pResourceManager->getLevel() : NULL;
+        float reduction = level->getPlayer()->getEffectValue(static_cast<EEFFECT_TYPE>(83), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        if (reduction != 0.0f) {
+            price -= static_cast<int>(static_cast<float>(price) * reduction);
+            if (price < 1) price = 1;
+        }
+    }
+    return price;
+}
+
+int CEquipment::sellPrice()
+{
+    int count = m_iUnknown238 > 0 ? m_iUnknown238 : 1;
+    if (!m_bUnknown348) return count * m_iUnknown270;
+    int price = count * m_iUnknown268;
+    if (m_pResourceManager && m_pResourceManager->getLevel()
+        && m_pResourceManager->getLevel()->getPlayer()) {
+        CLevel* level = m_pResourceManager ? m_pResourceManager->getLevel() : NULL;
+        float increase = level->getPlayer()->getEffectValue(static_cast<EEFFECT_TYPE>(83), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        if (increase != 0.0f)
+            price += static_cast<int>(static_cast<float>(price) * increase);
+    }
+    return price;
+}
+
+std::wstring CEquipment::getFlavorDescription()
+{
+    return m_pDataGroup->GetDataValue(L"DESCRIPTION", EMPTY_WSTRING);
+}
+
+std::wstring CEquipment::getSet()
+{
+    return m_pDataGroup->GetDataValue(L"SET", EMPTY_WSTRING);
+}
