@@ -41,7 +41,7 @@ public:
     virtual void update(Ogre::Camera*, const Ogre::Vector3&, float);
     virtual void setHighlighted(bool);
     virtual bool isEffectValidForUnit(CCharacter*, CBaseUnit*, CEffect*);
-    virtual void applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*);
+    virtual bool applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*);
     virtual void fillSaveState(CItemSaveState&, int, bool);
     virtual void applySaveState(CItemSaveState&);
     virtual const std::wstring& getItemName();

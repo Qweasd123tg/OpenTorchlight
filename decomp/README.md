@@ -1702,3 +1702,31 @@ Integrated check:127 tests,0 failed;1273/5247 accepted game functions,
 433960 original bytes. Increment over d791d36:five entries/5123 bytes.
 The watched-free destructor regression and effects allocation/trim regression
 also pass on this final source. The constructor aliases share one counted entry.
+
+### Equipment state application, use and proc execution (2026-10-05)
+
+applySaveState0x8863b0/814 bytes is normalized MATCH. Its additional8960-case
+fixture runs twice per side, with real save objects, RTTI and recursive calls;
+24 sampled and34 targeted faults are killed. It preserves signed GUID=-1,
+base-stat sentinels, effect ownership transfer, pre-callback values and late
+list/manager reads. See research/equipment-applysave-check for scope and limits.
+
+useOnTarget0x86e910/598 bytes passes14944 cases twice per side and kills23
+sampled plus27 targeted faults. The original caller tests the bool returned
+from virtual applyEffectOnUnit; the partial BaseUnit/Character/Equipment void
+declarations were corrected without moving slots or changing parameters.
+Equipment's isEffectValidForUnit0x86d600/27 bytes and applyEffectOnUnit0x86e690/
+118 bytes are both MATCH. Effect owner+48 and Character master+640 are typed
+at verified offsets. No foreign source TU was changed.
+
+executeProcs0x86f4a0/561 bytes passes9284 cases twice per side, killing12 sampled
+and22 targeted faults. Real Ogre transforms and original position calls expose
+local-vs-derived rotation differences. Original positions are absolute, but
+orientation is LOCAL and passed by reference across the caster-position read.
+The initial derived-orientation draft was rejected and fixed. ASM also rejects
+NaN chance values, despite Ghidra's misleading comparison. External skill
+mechanics and statistical RNG distribution remain outside this fixture's claim.
+
+Integrated check:130 tests,0 failed;1278/5247 accepted game functions,
+436078 original bytes. Increment over4169ec6:five entries/2118 bytes. Mandatory
+watched-free and effects allocation/trim regressions pass on the final source.

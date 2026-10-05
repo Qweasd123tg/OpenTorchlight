@@ -1,0 +1,126 @@
+{
+ "0x86e910": {
+  "name": "CEquipment::useOnTarget(CCharacter*, CBaseUnit*)",
+  "tried": 23,
+  "killed": 23,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1716: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1712: 'if (m_iUnknown238<2 && m_iUnknown248<1 && m_iUnknown248!=-9999) return;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1711: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1734: 'else if (!applied) return;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1712: '9999' -> '10000'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1739: '9999' -> '10000'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1724: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1733: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1728: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1736: 'm_pSoundBank->playSample(20,character->m_pSceneNode,0.0f,0.0f,false);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1738: 'incrementStackBy(-1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1736: '20' -> '21'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1732: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1726: 'CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(20),1);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1712: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1712: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1724: '12' -> '13'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1712: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1734: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1735: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1740: '--m_iUnknown248;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1736: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1717: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

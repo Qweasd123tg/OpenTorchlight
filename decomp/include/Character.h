@@ -15,6 +15,8 @@ class CAIManager;
 class CGenericModel;
 class CCharacterSaveState;
 class CPathController;
+class CSkill;
+enum EJournalStatistic { EJournalStatistic_GEN_LAST = 0x7fffffff };
 
 // Partial: AI states of a character (character+0x330). Only the values used by
 // recovered code are named; the names are ours.
@@ -46,7 +48,7 @@ public:
     virtual void update(Ogre::Camera* camera, const Ogre::Vector3& cameraPosition, float elapsed);
     virtual void setHighlighted(bool highlighted);
     virtual bool isEffectValidForUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
-    virtual void applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
+    virtual bool applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect);
     virtual float getEffectValue(EEFFECT_TYPE type, float value, const std::wstring& name);
     virtual void deactivateEffect(CEffect* effect);
     virtual void removeFromAvoidanceMap(CLevel& level);
@@ -107,6 +109,8 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    void incrementJournalStatistic(EJournalStatistic statistic,int amount);
+    void performUnknownSkill(CSkill* skill);
     void giveGold(int amount);
     void setPaperdollItem(EEQUIP_LOCATIONS,Ogre::Entity*);
     void setPaperdollItemSecondary(EEQUIP_LOCATIONS,Ogre::Entity*);
@@ -154,7 +158,9 @@ private:
     int m_iGold;
     char m_CharacterData448[0x52e - 0x448];
     bool m_bInvulnerable;
-    char m_CharacterData52F[0x648 - 0x52f];
+    friend class CEquipment;
+    char m_CharacterData52F[0x640 - 0x52f];
+    CCharacter* m_pMaster;
     std::vector<CCharacter*> m_Followers;
     char m_CharacterData660[0x718 - 0x660];
     CAIManager* m_pAIManager;

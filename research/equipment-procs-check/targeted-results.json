@@ -1,0 +1,117 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_has_effect",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_skill_manager",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_transfer_list",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "extra_activation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_effect_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_random_min",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_random_max",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strict_chance",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "allow_nan_chance",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_effect_value_field",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_missing_skill",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "always_target_caster",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "local_target_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "local_caster_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "derived_orientation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "copy_orientation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_activation",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "swap_positions",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "drop_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_execution",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "captured_count",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

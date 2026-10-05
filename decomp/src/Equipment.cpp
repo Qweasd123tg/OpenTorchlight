@@ -1,3 +1,4 @@
+#include "SteamStats.h"
 #include "ItemSaveState.h"
 #include "ParticlePreloader.h"
 #include "Missile.h"
@@ -1645,4 +1646,142 @@ CEquipment::CEquipment(CResourceManager* resources)
       m_fUnknown408(0.0f),m_ActiveMissileRefs(1),m_pPositionableObject(NULL)
 {
     m_fBaseUnitValue194=0.375f;
+}
+
+void CEquipment::applySaveState(CItemSaveState& state)
+{
+    CItem::applySaveState(state);
+    m_iUnknown28C=state.m_iStateValue28;
+    m_iUnknown238=state.m_iStackSize;
+    m_bUnknown348=state.m_bIdentified;
+    m_sSuffix=state.m_sStateString20;
+    m_sPrefix=state.m_sStateString18;
+    m_iUnknown344=state.m_iStateValue6C;
+    m_iSocketCount=state.m_iSocketCount;
+    if (state.m_iBaseDamage!=-1)
+    {
+        m_iMaximumDamage=state.m_iBaseDamage;
+        m_iMinimumDamage=state.m_iBaseDamage;
+        m_iUnknown340=state.m_iBaseDamage;
+    }
+    if (state.m_iBaseArmor!=-1)
+    {
+        m_iUnknown338=state.m_iBaseArmor;
+        m_iUnknown33C=state.m_iBaseArmor;
+    }
+    for (int i=0;i<static_cast<int>(state.m_SocketedItems.size());++i)
+    {
+        long long guid=state.m_SocketedItems[i]->m_iUnitValue60;
+        if (guid!=-1)
+        {
+            CEquipment* item=dynamic_cast<CEquipment*>(m_pResourceManager->createUnit(guid,1,true,false));
+            item->applySaveState(*state.m_SocketedItems[i]);
+            addContainerItem(item);
+        }
+    }
+    for (int activation=0;activation<3;++activation)
+    {
+        std::vector<CEffect*>& effects=state.m_Effects[activation];
+        for (unsigned int i=0;i<effects.size();++i)
+        {
+            CEffect* effect=effects[i];
+            float value=effect->m_fValueC0;
+            effect=addNewEffect(effect);
+            if (effect)
+            {
+                effect->m_fValueC0=value;
+                activateEffect(effect);
+            }
+        }
+        effects.clear();
+    }
+    if (m_pEffectManager) m_pEffectManager->calculateEffectValues();
+    m_ElementalDamageBonuses.clear();
+    while (m_ElementalDamageBonuses.size()<m_ElementalDamageTypes.size())
+        m_ElementalDamageBonuses.push_back(0);
+    for (unsigned int i=0;i<state.m_DamageTypes.size();++i)
+        addDamageBonus(state.m_DamageTypes[i],state.m_DamageBonuses[i]);
+    createElementalDamages();
+    recalculatePrice();
+    setRequirements();
+}
+
+void CEquipment::useOnTarget(CCharacter* character,CBaseUnit* target)
+{
+    if (!target) return;
+    if (m_iUnknown238<2 && m_iUnknown248<1 && m_iUnknown248!=-9999) return;
+    bool applied=false;
+    if (m_pEffectManager)
+    {
+        TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x30)[0];
+        for (unsigned int i=0;i<effects.size();++i)
+        {
+            if (target->isEffectValidForUnit(character,effects[i]->m_Owner.getObject(),effects[i]) &&
+                target->applyEffectOnUnit(character,effects[i]->m_Owner.getObject(),effects[i]))
+            {
+                if (ISA(UNITTYPES::POTION))
+                {
+                    character->incrementJournalStatistic(static_cast<EJournalStatistic>(12),1);
+                    if (dynamic_cast<CCharacter*>(target)->m_pMaster)
+                        CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(20),1);
+                }
+                applied=true;
+            }
+        }
+    }
+    if (m_pSkillManager && m_pSkillManager->m_OtherSkills.size()!=0)
+        character->performUnknownSkill(m_pSkillManager->m_OtherSkills[0]);
+    else if (!applied) return;
+    if (character && m_pSoundBank)
+        m_pSoundBank->playSample(20,character->m_pSceneNode,0.0f,0.0f,false);
+    if (m_iUnknown238>=2)
+        incrementStackBy(-1);
+    else if (m_iUnknown248!=-9999)
+        --m_iUnknown248;
+}
+
+bool CEquipment::isEffectValidForUnit(CCharacter*,CBaseUnit*,CEffect* effect)
+{
+    if (effect->m_eType!=static_cast<EEFFECT_TYPE>(46)) return true;
+    return !m_bUnknown348;
+}
+
+bool CEquipment::applyEffectOnUnit(CCharacter* character,CBaseUnit* target,CEffect* effect)
+{
+    if (isEffectValidForUnit(character,target,effect))
+    {
+        if (effect->m_eType==static_cast<EEFFECT_TYPE>(46))
+        {
+            m_bUnknown348=true;
+            destroyItemText();
+            return true;
+        }
+        copyEffect(target,effect);
+    }
+    return false;
+}
+void CEquipment::executeProcs(CCharacter* character,EEFFECT_TYPE type,CBaseUnit* target)
+{
+    if (hasEffect(type) && m_pSkillManager)
+        for (int activation=0;activation<3;++activation)
+        {
+            TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)[activation];
+            for (unsigned int i=0;i<effects.size();++i)
+                if (effects[i]->m_eType==type)
+                {
+                    int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+                    if (effects[i]->value(static_cast<EEFFECT_VALUES>(0))>=static_cast<float>(roll))
+                    {
+                        CSkill* skill=m_pSkillManager->getSkill(effects[i]->m_sName,effects[i]->m_iLevel);
+                        if (skill)
+                        {
+                            Ogre::Vector3 targetPosition=(target?target:character)->getPosition(true);
+                            // The original evaluates the orientation before the caster position.
+                            const Ogre::Quaternion& orientation=character->m_pSceneNode->getOrientation();
+                            Ogre::Vector3 position=character->getPosition(true);
+                            m_pSkillManager->executeSkill(skill,character,SKILL_ACTIVATION_PROC,position,orientation,targetPosition,target);
+                        }
+                    }
+                }
+        }
 }

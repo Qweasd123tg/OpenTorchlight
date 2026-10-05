@@ -2,6 +2,7 @@
 #define EFFECT_H
 #include <string>
 #include "RunicCore.h"
+#include "SafePointer.h"
 #include "EffectDefines.h"
 class CBaseUnit;
 class CSkill;
@@ -22,7 +23,9 @@ private:
     unsigned int m_iLevel;
     unsigned char m_EffectData14[8];
     EEFFECT_TYPE m_eType;
-    unsigned char m_EffectData20[0x80-0x20];
+    unsigned char m_EffectData20[0x48-0x20];
+    TSafePointer<CBaseUnit> m_Owner;
+    unsigned char m_EffectData58[0x80-0x58];
     std::wstring m_sName;
     unsigned char m_EffectData88[0xc0-0x88];
     float m_fValueC0;
