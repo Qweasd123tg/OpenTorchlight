@@ -22,6 +22,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import sys
 
@@ -52,6 +53,7 @@ SECTIONS
   .tlhybrid.hooks : {{ KEEP(*(.tlhybrid.hooks)) }}
   .tlhybrid.tests : {{ KEEP(*(.tlhybrid.tests)) }}
   .tlhybrid.imports : {{ KEEP(*(.tlhybrid.imports)) }}
+  .tlhybrid.copies : {{ KEEP(*(.tlhybrid.copies)) }}
   . = ALIGN(4096);
   .data : {{ *(.data .data.* .gnu.linkonce.d.* .data.rel.ro .data.rel.ro.*) }}
   .tlhybrid.ctors : {{ KEEP(*(.ctors)) }}
@@ -228,18 +230,73 @@ def hooks_assembly(hooks):
     return "\n".join(out + names) + "\n"
 
 
-def imports_assembly(names):
+C_LOCALE = {**os.environ, "LC_ALL": "C"}
+
+
+def needed_libraries(elf):
+    """Paths of the executable's DT_NEEDED libraries, searched as the run sets LD_LIBRARY_PATH
+    (the game's lib64, the game directory) and then as the system linker would."""
+    game = Path(elf).parent
+    dynamic = subprocess.run(["readelf", "-d", "-W", str(elf)], capture_output=True, text=True, check=True,
+                             env=C_LOCALE).stdout
+    system = {}
+    for line in subprocess.run([shutil.which("ldconfig") or "/sbin/ldconfig", "-p"], capture_output=True, text=True, env=C_LOCALE).stdout.splitlines():
+        m = re.match(r"\s+(\S+) \(([^)]*)\) => (\S+)", line)
+        if m and "x86-64" in m.group(2):
+            system.setdefault(m.group(1), m.group(3))
+    out = []
+    for name in re.findall(r"\(NEEDED\)\s+Shared library: \[([^\]]+)\]", dynamic):
+        for candidate in (game / "lib64" / name, game / name, Path(system.get(name, "/nonexistent"))):
+            if candidate.exists():
+                out.append(candidate)
+                break
+    return out
+
+
+def library_objects(elf, names):
+    """name -> size of the data objects among names, from the libraries' dynamic symbols."""
+    wanted, found = set(names), {}
+    for lib in needed_libraries(elf):
+        text = subprocess.run(["readelf", "--dyn-syms", "-W", str(lib)], capture_output=True, text=True,
+                              env=C_LOCALE).stdout
+        for line in text.splitlines():
+            parts = line.split()
+            if len(parts) < 8 or parts[3] not in ("OBJECT", "TLS") or parts[6] == "UND":
+                continue
+            name = parts[7].split("@")[0]
+            if name in wanted and name not in found:
+                found[name] = int(parts[2], 16) if parts[2].startswith("0x") else int(parts[2])
+    return found
+
+
+# Library data a copy may stand for: RTTI and vtables are never written, and type_info
+# equality falls back to the name (libstdc++ __GXX_MERGED_TYPEINFO_NAMES == 0).
+COPYABLE = ("_ZTI", "_ZTS", "_ZTV", "_ZTT")
+
+
+def imports_assembly(names, objects=None):
+    """Library symbols the original executable never imported. A function becomes a jump
+    through a slot the loader fills. Code addresses data with 32-bit absolute relocations,
+    so an object needs a place in the blob, which the loader fills with the library's bytes
+    (what a COPY relocation would do for the executable)."""
+    objects = objects or {}
     out = ["\t.text"]
     data = ["\t.data", "\t.align 8"]
     table = ["\t.section .tlhybrid.imports,\"a\",@progbits", "\t.align 8"]
     strings = ["\t.section .rodata.tlhybrid_imports,\"a\",@progbits"]
+    copies = ["\t.section .tlhybrid.copies,\"a\",@progbits", "\t.align 8"]
     for i, name in enumerate(sorted(names)):
+        strings.append(f".Ltlhybrid_import_{i}:\n\t.string \"{name}\"")
+        if name in objects:
+            data += ["\t.align 16", f"\t.globl {name}", f"\t.type {name}, @object", f"\t.size {name}, {objects[name]}",
+                     f"{name}:", f"\t.zero {objects[name]}"]
+            copies.append(f"\t.quad .Ltlhybrid_import_{i}, {name}, {objects[name]}")
+            continue
         out += [f"\t.globl {name}", f"\t.type {name}, @function", f"{name}:",
                 f"\tjmp *.Ltlhybrid_slot_{i}(%rip)"]
         data.append(f".Ltlhybrid_slot_{i}:\n\t.quad 0")
         table.append(f"\t.quad .Ltlhybrid_import_{i}, .Ltlhybrid_slot_{i}")
-        strings.append(f".Ltlhybrid_import_{i}:\n\t.string \"{name}\"")
-    return "\n".join(out + data + table + strings) + "\n"
+    return "\n".join(out + data + table + copies + strings) + "\n"
 
 
 def build(out=OUT, verbose=True, src=SRC, tests=None):
@@ -307,8 +364,13 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
         raise SystemExit("the decompiled code calls members the original does not have:\n" + "\n".join(
             f"  {n}; the original has: {'; '.join(objdiff.known_overloads(ctx.db, n)) or 'no such member'}"
             for n in absent))
+    copies = library_objects(ctx.image.path, missing)
+    shared = sorted(n for n in copies if not n.startswith(COPYABLE))
+    if shared:
+        raise SystemExit("the decompiled code uses library data the original never imported; a copy in the "
+                         "blob would be a different object:\n" + "\n".join(f"  {n}" for n in shared))
     imports_s = out / "imports.s"
-    imports_s.write_text(imports_assembly(missing))
+    imports_s.write_text(imports_assembly(missing, copies))
     toolchain.assemble(imports_s, out / "imports.o")
     (out / "hybrid.ld").write_text(LINKER_SCRIPT.format(base=BLOB_BASE))
     blob = out / "tlhybrid-blob.elf"
@@ -321,10 +383,12 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
     manifest = {"schema": 1, "original_elf_sha256": ctx.image.sha256, "blob_base": f"{BLOB_BASE:#x}",
                 "hooks": [{k: (f"{v:#x}" if k == "original" else v) for k, v in h.items() if k != "expected"}
                           for h in hooks],
-                "runtime_imports": missing, "notes": notes}
+                "runtime_imports": [n for n in missing if n not in copies],
+                "runtime_copies": sorted(copies), "notes": notes}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
     if verbose:
-        print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing)} runtime imports")
+        print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing) - len(copies)} runtime imports, "
+              f"{len(copies)} copied library objects")
         for note in notes:
             print("  note:", note)
     return blob, loader

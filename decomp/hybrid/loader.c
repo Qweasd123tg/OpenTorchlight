@@ -153,6 +153,26 @@ static void resolve_imports(const struct blob *b)
     }
 }
 
+static void copy_library_data(const struct blob *b)
+{
+    const Elf64_Shdr *s = find_section(b, ".tlhybrid.copies");
+    if (!s)
+        return;
+    const tlhybrid_copy *copy = (const tlhybrid_copy *)s->sh_addr;
+    size_t count = s->sh_size / sizeof(*copy);
+    for (size_t i = 0; i < count; i++) {
+        void *address = dlsym(RTLD_DEFAULT, copy[i].name);
+        if (!address)
+            fail("unresolved data import %s", copy[i].name);
+        Dl_info info;
+        const Elf64_Sym *sym = NULL;
+        if (dladdr1(address, &info, (void **)&sym, RTLD_DL_SYMENT) && sym && sym->st_size != copy[i].size)
+            fail("data import %s: %lu bytes in %s, %lu reserved in the blob", copy[i].name,
+                 (unsigned long)sym->st_size, info.dli_fname, (unsigned long)copy[i].size);
+        memcpy(copy[i].dest, address, copy[i].size);
+    }
+}
+
 static void run_constructors(const struct blob *b)
 {
     const Elf64_Shdr *s = find_section(b, ".tlhybrid.ctors");
@@ -237,6 +257,7 @@ static int hybrid_main(int argc, char **argv, char **envp)
     load_blob(&b, path);
     register_unwind(&b);
     resolve_imports(&b);
+    copy_library_data(&b);
     run_constructors(&b);
     if (getenv("TLHYBRID_SELFTEST") && atoi(getenv("TLHYBRID_SELFTEST")))
         exit(run_tests(&b));

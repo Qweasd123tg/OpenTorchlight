@@ -29,6 +29,14 @@ typedef struct tlhybrid_import {
     void **slot;
 } tlhybrid_import;
 
+/* .tlhybrid.copies: library data the original executable never imported (RTTI, vtables).
+ * The blob reserves size bytes at dest; the loader copies the library's object there. */
+typedef struct tlhybrid_copy {
+    const char *name;
+    void *dest;
+    uint64_t size;
+} tlhybrid_copy;
+
 /* .tlhybrid.tests: self-tests run against the untouched original code. */
 typedef struct tlhybrid_test {
     const char *name;
