@@ -14,10 +14,12 @@ namespace UNITTYPES
         ARMOR = 13,
         CHEST_ARMOR = 15,
         BOOTS = 16,
+        RING = 17,
         BELT = 18,
         SHOULDER_ARMOR = 20,
         SHIELD = 21,
         GLOVES = 23,
+        NECKLACE = 24,
         MONSTER = 27,
         PLAYER = 28,
         BREAKABLE = 29,
@@ -40,6 +42,7 @@ namespace UNITTYPES
         RIFLE = 116,
         SOCKETABLE = 120,
         GAMBLER = 127,
+        RANDOMMAGIC = 135,
         RANDOMMAGIC_SOCKETABLE = 160,
         SHAREDSTASH = 170
     };

@@ -1,3 +1,4 @@
+#include "ItemSaveState.h"
 #include "ParticlePreloader.h"
 #include "Missile.h"
 #include "MissilePreloader.h"
@@ -1460,4 +1461,188 @@ void CEquipment::updateDrop(float elapsed)
         m_mOrientation=m_mDropOrientation*rotation;
         setOrientation(m_mOrientation,false);
     }
+}
+
+void CEquipment::fillSaveState(CItemSaveState& state,int index,bool flag)
+{
+    if (m_pEffectManager && ISA(UNITTYPES::SOCKETABLE) && !ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE))
+        m_pEffectManager->clearOutAffixEffects();
+    CItem::fillSaveState(state,index,flag);
+    state.m_iStateValue28=m_iUnknown28C;
+    state.m_iStackSize=m_iUnknown238;
+    state.m_bIdentified=m_bUnknown348;
+    state.m_iSocketCount=m_iSocketCount;
+    state.m_iStateValue6C=m_iUnknown344;
+    if (m_bUnknown25C && !getEnabled()) state.m_bEnabled=true;
+    state.m_iBaseArmor=m_iUnknown33C;
+    state.m_iBaseDamage=m_iUnknown340;
+    getFullItemName(true);
+    state.m_sStateString20=m_sSuffix;
+    state.m_sStateString18=m_sPrefix;
+    createElementalDamages();
+    int sockets=static_cast<int>(m_SocketedEquipment.size());
+    for (int i=0;i<sockets;++i)
+    {
+        CItemSaveState* child=new CItemSaveState;
+        m_SocketedEquipment[i]->fillSaveState(*child,-1,false);
+        state.m_SocketedItems.push_back(child);
+    }
+    if (m_pEffectManager)
+        for (int activation=0;activation<3;++activation)
+        {
+            // EffectManager retains its opaque layout in its own TU. These
+            // three original TArrayLists start at manager+0x28, stride0x18.
+            TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)[activation];
+            for (unsigned int i=0;i<effects.size();++i)
+            {
+                CEffect* copy=new CEffect(effects[i]);
+                copy->setOwner(NULL,true);
+                copy->setSkillOwner(NULL);
+                copy->m_fValueC0=effects[i]->m_fValueC0;
+                state.m_Effects[activation].push_back(copy);
+            }
+        }
+    for (unsigned int i=0;i<m_ElementalDamageTypes.size();++i)
+    {
+        state.m_DamageTypes.push_back(m_ElementalDamageTypes[i]);
+        state.m_DamageBonuses.push_back(m_ElementalDamageBonuses[i]);
+    }
+    if (m_pEffectManager && ISA(UNITTYPES::SOCKETABLE) && !ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE))
+        m_pEffectManager->addAffixEffectsBackIn();
+}
+
+void CEquipment::enchant(bool force)
+{
+    if (ISA(UNITTYPES::RANDOMMAGIC)) force=true;
+    bool emptyUnique=false;
+    if (ISA(UNITTYPES::UNIQUE))
+        emptyUnique=!m_pEffectManager || m_pEffectManager->getAffixes().size()==0;
+    bool attempt=ISA(UNITTYPES::MAGIC);
+    if (!attempt && m_bItemFlag20A)
+    {
+        attempt=force;
+        if (!force)
+        {
+            float roll=UTILITIES::randomBetweenVolatile(0.0f,1000.0f);
+            attempt=roll<CGameGlobals::getSingleton()->m_fRandomEnchantChance*10.0f;
+        }
+    }
+    if (attempt && (!ISA(UNITTYPES::UNIQUE) || emptyUnique) &&
+        (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR) || ISA(UNITTYPES::RING) ||
+         ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE) || ISA(UNITTYPES::NECKLACE)))
+    {
+        unsigned int count;
+        if (ISA(UNITTYPES::UNIQUE))
+            count=UTILITIES::randomIntegerBetweenVolatile(CGameGlobals::getSingleton()->m_iMinUniqueItemSlots,CGameGlobals::getSingleton()->m_iMaxUniqueItemSlots);
+        else if (ISA(UNITTYPES::MAGIC))
+            count=UTILITIES::randomIntegerBetweenVolatile(CGameGlobals::getSingleton()->m_iMinMagicItemSlots,CGameGlobals::getSingleton()->m_iMaxMagicItemSlots);
+        else
+            count=UTILITIES::randomIntegerBetweenVolatile(CGameGlobals::getSingleton()->m_iMinRandomEnchantSlots,CGameGlobals::getSingleton()->m_iMaxRandomEnchantSlots);
+        m_pResourceManager->createAffixesForUnit(this,m_iUnknown274,count);
+        m_bUnknown348=false;
+    }
+    if (ISA(UNITTYPES::UNIQUE) && (!m_pEffectManager || reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)->size()==0))
+    {
+        unsigned int count=UTILITIES::randomIntegerBetweenVolatile(CGameGlobals::getSingleton()->m_iMinUniqueItemSlots,CGameGlobals::getSingleton()->m_iMaxUniqueItemSlots);
+        m_pResourceManager->createAffixesForUnit(this,m_iUnknown274+1,count);
+        m_bUnknown348=false;
+    }
+    if (m_iSocketCount==0 && m_pResourceManager && m_pResourceManager->getLevel() && m_bItemFlag20A)
+    {
+        float roll=UTILITIES::randomBetweenVolatile(0.0f,1000.0f);
+        if (roll<CGameGlobals::getSingleton()->m_fRandomSocketChance*10.0f && !ISA(UNITTYPES::UNIQUE) &&
+            (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR) || ISA(UNITTYPES::RING) || ISA(UNITTYPES::NECKLACE)))
+        {
+            roll=UTILITIES::randomBetweenVolatile(0.0f,1000.0f);
+            m_iSocketCount=1+(roll<CGameGlobals::getSingleton()->m_fSecondSocketChance*10.0f);
+        }
+    }
+    if (!m_bUnknown348 && m_pDataGroup->GetDataValue(L"ALWAYS_IDENTIFIED",false))
+        m_bUnknown348=true;
+    recalculatePrice();
+}
+
+std::wstring CEquipment::getAttackSpeedString(EWeaponSpeed speed)
+{
+    std::wstring result=EMPTY_WSTRING;
+    switch (speed)
+    {
+    case 0:
+    {
+        static std::wstring g_Slowest;
+        if (g_Slowest.empty())
+            g_Slowest=CStringTranslate::getSinglton()->getTranslateString(L"Slowest Attack Speed");
+        result=g_Slowest;
+        break;
+    }
+    case 1:
+    {
+        static std::wstring g_Slow;
+        if (g_Slow.empty())
+            g_Slow=CStringTranslate::getSinglton()->getTranslateString(L"Slow Attack Speed");
+        result=g_Slow;
+        break;
+    }
+    case 2:
+    {
+        static std::wstring g_Average;
+        if (g_Average.empty())
+            g_Average=CStringTranslate::getSinglton()->getTranslateString(L"Average Attack Speed");
+        result=g_Average;
+        break;
+    }
+    case 3:
+    {
+        static std::wstring g_Fast;
+        if (g_Fast.empty())
+            g_Fast=CStringTranslate::getSinglton()->getTranslateString(L"Fast Attack Speed");
+        result=g_Fast;
+        break;
+    }
+    case 4:
+    {
+        static std::wstring g_Fastest;
+        if (g_Fastest.empty())
+            g_Fastest=CStringTranslate::getSinglton()->getTranslateString(L"Fastest Attack Speed");
+        result=g_Fastest;
+        break;
+    }
+    }
+    return result;
+}
+
+void CEquipment::setRimlight(std::wstring texture)
+{
+    if (m_pDataGroup)
+    {
+        if (m_pUnitModel)
+        {
+            m_pUnitModel->setRimLighting(texture);
+            std::wstring overrideTexture=m_pDataGroup->GetDataValue(L"TEXTURE_OVERRIDE",EMPTY_WSTRING);
+            if (!overrideTexture.empty()) m_pUnitModel->setTextureOverride(overrideTexture);
+        }
+        if (m_pUnitModelSecondary)
+        {
+            m_pUnitModelSecondary->setRimLighting(texture);
+            std::wstring overrideTexture=m_pDataGroup->GetDataValue(L"TEXTURE_OVERRIDE",EMPTY_WSTRING);
+            if (!overrideTexture.empty()) m_pUnitModelSecondary->setTextureOverride(overrideTexture);
+        }
+    }
+}
+
+CEquipment::CEquipment(CResourceManager* resources)
+    : CItem(resources),
+      m_iUnknown238(1),m_iUnknown23C(1),m_pInventory(NULL),m_iUnknown248(0),
+      m_pPath(NULL),m_fUnknown258(0.0f),m_bUnknown25C(false),m_bGamblerIcon(false),
+      m_bUnknown25E(true),m_bUnknown25F(false),m_iUnknown260(0),m_iUnknown274(1),
+      m_iUnknown28C(0),m_pEquippedTo(NULL),m_pAttackDescription(NULL),
+      m_pAttackDescriptionOverride(NULL),m_pUnitModel(NULL),m_pUnitModelSecondary(NULL),
+      m_iUnitCollisionModel(0),m_pIconWindow(NULL),m_sUnidentifiedName(EMPTY_WSTRING),
+      m_sDisplayName(EMPTY_WSTRING),m_sPrefix(EMPTY_WSTRING),m_sSuffix(EMPTY_WSTRING),
+      m_iMinimumDamage(1),m_iMaximumDamage(1),m_iUnknown338(0),m_iUnknown33C(-1),
+      m_iUnknown340(-1),m_iUnknown344(0),m_bUnknown348(true),m_pParticle(NULL),
+      m_pParticle_3D0(NULL),m_iSocketCount(0),m_SocketedEquipment(1),
+      m_fUnknown408(0.0f),m_ActiveMissileRefs(1),m_pPositionableObject(NULL)
+{
+    m_fBaseUnitValue194=0.375f;
 }

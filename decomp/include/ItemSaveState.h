@@ -4,8 +4,11 @@
 #include <OgreVector3.h>
 #include <OgreMatrix4.h>
 #include <string>
+#include <vector>
+#include "Constants.h"
+class CEffect;
 
-// Partial: complete layout, fields used by Item are named; other save payload is opaque.
+// Partial: complete layout; Item and Equipment save payload fields are named.
 class CItemSaveState : public CRunicCore
 {
 public:
@@ -25,12 +28,23 @@ public:
     bool m_bEnabled;
     bool m_bBlocksPath;
     long long m_iUnitValue60;
-    unsigned char m_StateData68[0x80-0x68];
+    int m_iStackSize;
+    int m_iStateValue6C;
+    unsigned int m_iSocketCount;
+    unsigned char m_StateByte74;
+    bool m_bIdentified;
+    unsigned char m_StateData76[2];
+    int m_iBaseDamage;
+    int m_iBaseArmor;
     int m_iRoomIndex;
     Ogre::Vector3 m_vLocalPosition;
     Ogre::Vector3 m_vWorldPosition;
     Ogre::Matrix4 m_mOrientation;
-    unsigned char m_StateDataDC[0x170-0xdc];
+    unsigned char m_StateDataDC[4];
+    std::vector<CEffect*> m_Effects[3];
+    std::vector<CItemSaveState*> m_SocketedItems;
+    std::vector<EDAMAGE_TYPES> m_DamageTypes;
+    std::vector<int> m_DamageBonuses;
     long long m_iQuestGuid;
     int m_iQuestState;
     bool m_bItemFlag17C;

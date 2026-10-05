@@ -31,6 +31,8 @@ public:
     float getEffectValue(EEFFECT_TYPE type, const std::wstring& name);
     void updateAffixes(float elapsed);
     void calculateEffectValues();
+    void clearOutAffixEffects();
+    void addAffixEffectsBackIn();
     const std::wstring& getVisualDescription(EEFFECT_ACTIVATION,unsigned int,bool,bool);
     unsigned int createEffects(CDataGroup* data,bool flag);
     CAffix* getAffix(const std::wstring& name);
@@ -38,6 +40,7 @@ public:
     // Partial layout: the affix list occupies the beginning of the opaque region.
     TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
 private:
+    friend class CEquipment;
     unsigned char m_EffectData10[0x2c8-0x10];
     TArrayList<CUnitTheme*> m_UnitThemes;
     std::wstring m_EffectString2E0;

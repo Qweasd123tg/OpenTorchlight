@@ -1676,3 +1676,29 @@ Integrated check: 125 tests, 0 failed; 1268/5247 accepted game entries,
 These represent two C++ methods; the counter includes those destructor entry
 points separately. Both the mandatory watched-free regression and the effects
 allocation-count/trim-helper regression pass on the final source.
+
+### Equipment save capture, enchantment and construction (2026-10-05)
+
+fillSaveState0x8867c0/1394 bytes passes5120 original-vs-recovered cases,
+twice per side, with real save-state and effect-copy lifetime operations.
+All23 sampled and23 targeted mutations are killed. The fixture explicitly
+covers nested socket snapshots, append semantics, manager/type changes and
+post-copy source rereads; an initially missed extra activation pass was fixed.
+See research/equipment-save-check for the collaborator boundaries and limits.
+
+enchant0x8845c0/1120 bytes passes13120 cases, twice per side, and kills24
+sampled plus24 targeted faults. This covers independent classifications,
+item categories, existing lists, strict chance boundaries, NaN, callbacks,
+resource absence and original ALWAYS_IDENTIFIED reads. The fixture does not
+claim validation of the whole affix catalogue or random distribution.
+
+Constructor0x86fd10/786 bytes, speed labels0x86f790/935 bytes and rim lighting
+0x87e2c0/888 bytes are normalized MATCH100%. Original untouched/default member
+semantics, separately cached labels and per-model texture-override order are
+preserved. Shared declarations/layouts are documented in the new reports;
+other source TUs and PC pipeline points4–7 remain unchanged.
+
+Integrated check:127 tests,0 failed;1273/5247 accepted game functions,
+433960 original bytes. Increment over d791d36:five entries/5123 bytes.
+The watched-free destructor regression and effects allocation/trim regression
+also pass on this final source. The constructor aliases share one counted entry.

@@ -6,6 +6,7 @@
 #include "UnitTypes.h"
 #include "TArrayList.h"
 
+class CBaseUnit;
 class CGameClient;
 class CParticle;
 class CGenericModel;
@@ -29,6 +30,7 @@ public:
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();
 
+    void createAffixesForUnit(CBaseUnit* unit,unsigned int level,unsigned int count);
     bool getEditorIsRunning();
     CGenericModel* createGenericModel(Ogre::SceneManager*,const wchar_t*,const wchar_t*,bool,bool,bool);
     long long getUnitGuidByDataGroup(CDataGroup* data,const std::wstring& name);
