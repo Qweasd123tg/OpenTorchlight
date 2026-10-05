@@ -105,8 +105,36 @@ def prototype_digest(prototypes, addresses):
     return _digest(json.dumps({a: prototypes[a] for a in sorted(addresses) if a in prototypes}, sort_keys=True))
 
 
-def draft_state(tu, db=None, types=None):
-    """("fresh" | "stale" | "unknown", reasons) for build-decomp/drafts/<TU>."""
+def shaping_functions(db, tu_id, insns=None):
+    """The TU's functions and every function they call or tail-jump to directly: Ghidra decompiles
+    each call with the callee's prototype, so a callee in another TU changes the drafts too."""
+    import layout
+    insns = insns if insns is not None else layout.load_insns(db)
+    own = {a for a, f in db["functions"].items() if f["tu"] == tu_id}
+    out = set(own)
+    for a in own:
+        for _, mnemonic, ops, _ in insns.get(a, ()):
+            if mnemonic.startswith(("call", "jmp")) and re.fullmatch(r"[0-9a-f]+", ops):
+                target = f"{int(ops, 16):#x}"
+                if target in db["functions"]:
+                    out.add(target)
+    return out
+
+
+_exported = False
+
+
+def export_types():
+    """build-decomp/types.json from the current headers, once per process."""
+    global _exported
+    if not _exported:
+        subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
+        _exported = True
+
+
+def draft_state(tu, db=None, types=None, insns=None):
+    """("fresh" | "stale" | "unknown", reasons) for build-decomp/drafts/<TU>, against the
+    existing build-decomp/types.json (export_types() first to see header changes)."""
     import json
     meta = OUT / tu / "inputs.json"
     if not meta.exists():
@@ -121,9 +149,8 @@ def draft_state(tu, db=None, types=None):
         reasons.append("decompiler scripts changed")
     if "prototypes" in data:
         tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
-        own = [a for a, f in db["functions"].items() if f["tu"] == tu_id]
-        if data["prototypes"] != prototype_digest(_prototypes(), own):
-            reasons.append("method prototypes changed")
+        if data["prototypes"] != prototype_digest(_prototypes(), shaping_functions(db, tu_id, insns)):
+            reasons.append("prototypes of its functions or their callees changed")
     now = class_digests(types, data.get("classes", {}))
     changed = sorted(n for n, d in data.get("classes", {}).items() if now.get(n) != d)
     if changed:
@@ -145,11 +172,14 @@ def _prototypes():
 
 
 def stale(all_tus=False):
+    import layout
     db = elfdb.load_db()
+    export_types()
     types = _types()
+    insns = layout.load_insns(db)
     out = []
     for d in sorted(p for p in OUT.iterdir() if (p / "raw").is_dir()):
-        state, reasons = draft_state(d.name, db, types)
+        state, reasons = draft_state(d.name, db, types, insns)
         if state == "stale" or (all_tus and state == "unknown"):
             out.append(d.name)
             print(f"{d.name:40} {state}: {'; '.join(reasons)}")
@@ -158,8 +188,9 @@ def stale(all_tus=False):
 
 def drafts(tus):
     import shutil
+    import layout
     db = elfdb.load_db()
-    subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
+    export_types()
     base = workspace()
     io = base / "io"
     shutil.rmtree(io, ignore_errors=True)
@@ -194,13 +225,14 @@ def drafts(tus):
         if raw.exists():
             shutil.copy(raw, tu_dir / f"{f['address']}.c")
             by_tu.setdefault(names[f["tu"]], []).append((raw.read_text(errors="replace"), f.get("scope") or ""))
+    insns = layout.load_insns(db)
     for tu, items in by_tu.items():
         classes = used_classes(types, [t for t, _ in items], [s.split("::")[0] for _, s in items])
         tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
-        own = [a for a, f in db["functions"].items() if f["tu"] == tu_id]
+        shaping = shaping_functions(db, tu_id, insns)
         (OUT / tu / "inputs.json").write_text(json.dumps({
             "elf": db["original_elf_sha256"], "tools": tools_digest(),
-            "classes": class_digests(types, classes), "prototypes": prototype_digest(prototypes, own)}, indent=1))
+            "classes": class_digests(types, classes), "prototypes": prototype_digest(prototypes, shaping)}, indent=1))
     print(f"{len(funcs)} functions -> {OUT.relative_to(ROOT)}/<TU>/raw/ (fingerprints in <TU>/inputs.json)")
 
 
