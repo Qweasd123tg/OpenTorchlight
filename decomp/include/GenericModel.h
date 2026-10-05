@@ -24,7 +24,8 @@ public:
     void updateAnimation(float elapsed, bool force);
     const std::vector<CKeyframe*>& getAnimationEvents() const { return m_AnimationEvents; }
 private:
-    unsigned char m_ModelData110[0x1b0-0x110];
+    std::wstring m_sModelPath; // +0x110, copied by Equipment::reskinByClass
+    unsigned char m_ModelData118[0x1b0-0x118];
     std::vector<CKeyframe*> m_AnimationEvents;
     unsigned char m_ModelData1C8[0x250-0x1c8];
 };

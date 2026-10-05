@@ -1,0 +1,107 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "no_zero_value_exit",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_default_value",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "reset_normal_on_zero",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_level_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_unique",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_magic",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unique_buy_curve",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unique_sell_curve",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_magic_buy_curve",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_magic_sell_curve",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_gambler_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_gamble_curve",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "264_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "264_rounding_order",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "268_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "268_rounding_order",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "26C_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "26C_rounding_order",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "270_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "270_rounding_order",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

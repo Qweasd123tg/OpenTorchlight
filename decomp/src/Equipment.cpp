@@ -1,3 +1,5 @@
+#include "GraphManager.h"
+#include <algorithm>
 #include "Skill.h"
 #include "SkillManager.h"
 #include <OgreMesh.h>
@@ -1176,4 +1178,117 @@ void CEquipment::setItemTextHighlighted(bool highlighted)
     }
     if (highlighted)
         m_pItemText->moveToFront();
+}
+
+void CEquipment::setRequirements()
+{
+    m_iUnknown278=m_pDataGroup->GetDataValue(L"LEVEL_REQUIRED",0);
+    int reduction=std::min(m_iUnknown28C,5);
+    if (m_iUnknown278==0 && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR) || ISA(UNITTYPES::TRINKET)))
+    {
+        CGraph* graph=CGraphManager::getSingleton()->getGraph(L"ITEM_LEVEL_REQUIREMENTS");
+        int requirement=static_cast<int>(floorf(graph->getValue(static_cast<float>(m_iUnknown274),0)))-reduction;
+        m_iUnknown278=requirement>1?requirement:0;
+    }
+    reduction=std::min(m_iUnknown28C,10);
+    m_iUnknown27C=m_pDataGroup->GetDataValue(L"STRENGTH_REQUIRED",0);
+    if (m_iUnknown27C!=0 && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR)))
+    {
+        CGraph* graph=CGraphManager::getSingleton()->getGraph(L"ITEM_STRENGTH_REQUIREMENTS");
+        float value=graph->getValue(static_cast<float>(m_iUnknown274),0);
+        int requirement=static_cast<int>(floorf(value*static_cast<float>(m_iUnknown27C)/100.0f))-reduction;
+        m_iUnknown27C=requirement>1?requirement:0;
+    }
+    m_iUnknown280=m_pDataGroup->GetDataValue(L"DEXTERITY_REQUIRED",0);
+    if (m_iUnknown280!=0 && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR)))
+    {
+        CGraph* graph=CGraphManager::getSingleton()->getGraph(L"ITEM_DEXTERITY_REQUIREMENTS");
+        float value=graph->getValue(static_cast<float>(m_iUnknown274),0);
+        int requirement=static_cast<int>(floorf(value*static_cast<float>(m_iUnknown280)/100.0f))-reduction;
+        m_iUnknown280=requirement>1?requirement:0;
+    }
+    m_iUnknown284=m_pDataGroup->GetDataValue(L"MAGIC_REQUIRED",0);
+    if (m_iUnknown284!=0 && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR)))
+    {
+        CGraph* graph=CGraphManager::getSingleton()->getGraph(L"ITEM_MAGIC_REQUIREMENTS");
+        float value=graph->getValue(static_cast<float>(m_iUnknown274),0);
+        int requirement=static_cast<int>(floorf(value*static_cast<float>(m_iUnknown284)/100.0f))-reduction;
+        m_iUnknown284=requirement>1?requirement:0;
+    }
+    m_iUnknown288=m_pDataGroup->GetDataValue(L"DEFENSE_REQUIRED",0);
+    if (m_iUnknown288!=0 && (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::ARMOR)))
+    {
+        CGraph* graph=CGraphManager::getSingleton()->getGraph(L"ITEM_DEFENSE_REQUIREMENTS");
+        float value=graph->getValue(static_cast<float>(m_iUnknown274),0);
+        int requirement=static_cast<int>(floorf(value*static_cast<float>(m_iUnknown288)/100.0f))-reduction;
+        m_iUnknown288=requirement>1?requirement:0;
+    }
+}
+
+void CEquipment::reskinByClass(std::wstring characterClass)
+{
+    if (m_pUnitModel)
+    {
+        std::vector<CDataGroup*> wardrobes;
+        unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"WARDROBE",&wardrobes);
+        std::wstring primary=EMPTY_WSTRING, secondary=EMPTY_WSTRING;
+        for (unsigned int i=0;i<count;++i)
+        {
+            std::wstring wardrobeClass=STRINGS::StringUpper(wardrobes[i]->GetDataValue(L"CLASS",L""));
+            if (wardrobeClass==STRINGS::StringUpper(characterClass))
+            {
+                primary=wardrobes[i]->GetDataValue(L"ITEM_MESH",primary);
+                secondary=wardrobes[i]->GetDataValue(L"ITEM_MESH_SECONDARY",secondary);
+            }
+        }
+        if (primary!=EMPTY_WSTRING)
+        {
+            std::wstring current=m_pUnitModel->m_sModelPath;
+            if (STRINGS::StringUpper(primary)!=STRINGS::StringUpper(current))
+                loadModel(primary,secondary);
+        }
+    }
+}
+void CEquipment::recalculatePrice()
+{
+    m_iUnknown264=1;
+    m_iUnknown268=1;
+    int value=m_pDataGroup->GetDataValue(L"VALUE",100);
+    if (value!=0)
+    {
+        int level=std::max(m_iUnknown274,1);
+        CGraph* buy;
+        CGraph* sell;
+        if (ISA(UNITTYPES::UNIQUE))
+        {
+            buy=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERBUY_UNIQUE");
+            sell=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERSELL_UNIQUE");
+        }
+        else if (isMagical())
+        {
+            buy=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERBUY_MAGIC");
+            sell=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERSELL_MAGIC");
+        }
+        else
+        {
+            buy=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERBUY_NORMAL");
+            sell=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERSELL_NORMAL");
+        }
+        float buyValue=buy->getValue(static_cast<float>(level),0);
+        float sellValue=sell->getValue(static_cast<float>(level),0);
+        m_iUnknown264=static_cast<int>(ceilf(buyValue*(static_cast<float>(value)/100.0f)));
+        m_iUnknown268=static_cast<int>(ceilf(sellValue*(static_cast<float>(value)/100.0f)));
+        if (m_pInventory && m_pInventory->m_pPositionableObject &&
+            static_cast<CBaseUnit*>(m_pInventory->m_pPositionableObject)->ISA(UNITTYPES::GAMBLER))
+        {
+            CGraph* gamble=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERGAMBLE_MAGIC");
+            m_iUnknown264=static_cast<int>(ceilf(gamble->getValue(static_cast<float>(level),0)*(static_cast<float>(value)/100.0f)));
+        }
+        buy=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERBUY_NORMAL");
+        sell=CGraphManager::getSingleton()->getGraph(L"PRICE_PLAYERSELL_NORMAL");
+        buyValue=buy->getValue(static_cast<float>(level),0);
+        sellValue=sell->getValue(static_cast<float>(level),0);
+        m_iUnknown26C=static_cast<int>(ceilf(buyValue*(static_cast<float>(value)/100.0f)));
+        m_iUnknown270=static_cast<int>(ceilf(sellValue*(static_cast<float>(value)/100.0f)));
+    }
 }

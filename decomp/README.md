@@ -1577,3 +1577,28 @@ Integrated check on these sources: 118 tests, 0 failed; 1258/5247 accepted game
 functions, 415668 original bytes. The effects allocation-count regression and
 trim-helper checks also pass. This checkpoint adds two functions / 5139 bytes
 over 89bad57; requirements and remaining Equipment functions are still pending.
+
+### Equipment requirements, class reskin and price calculation (2026-10-05)
+
+Three more original functions have strong isolated differential fixtures:
+- setRequirements(), 0x880030 /2335 bytes:3360 cases twice per side,
+  24/24 sampled and23/23 targeted mutations killed. Preserves five requirement
+  fields, weapon/armor versus trinket branches, cached reductions, curve
+  evaluation order, floorf and the original <=1-to-zero threshold.
+- reskinByClass(), 0x888920 /2027 bytes:2520 cases twice per side,
+  5/5 sampled and14/14 targeted mutations killed. Preserves exact
+  case-insensitive class match (no empty wildcard), last matching mesh values,
+  explicit empty clears and primary-only reload decision.
+- recalculatePrice(), 0x883e20 /1949 bytes:4896 cases twice per side,
+  24/24 sampled and20/20 targeted mutations killed. Preserves zero-VALUE early
+  return, rarity precedence, late gambler override, cached input values and
+  float32 division-before-multiplication rounding.
+
+Evidence, reproduction scripts and limitations are in the corresponding
+research/equipment-{requirements,reskin,price}-check directories. GenericModel's
+original model-path string at+0x110 is exposed without changing size0x250 or
+other offsets; its source implementation and other owners' TUs are untouched.
+
+Integrated check after all three functions:121 tests,0 failed;1261/5247 accepted
+game functions,421979 original bytes. Increment over c29c320:3 functions/6311
+bytes. The effects allocation-count and trim-helper regression also pass.

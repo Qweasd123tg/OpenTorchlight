@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "level_reduction_cap",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "stat_reduction_cap",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "remove_trinket",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "overwrite_explicit_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_graph_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_clamp_threshold",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "level_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_graph_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "strength_threshold",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_graph_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "dexterity_threshold",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_graph_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "magic_threshold",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_graph_key",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_floor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_scale",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "defense_threshold",
+    "outcome": "killed",
+    "exit": 1
+  }
+]
