@@ -5,6 +5,7 @@
 
 namespace Ogre { class SceneManager; }
 class CHierarchy;
+class CCollisionModel;
 class CParticlePreloader;
 class CSettings;
 class CSoundManager;
@@ -18,6 +19,7 @@ public:
     virtual ~CMasterResourceManager();
 
     static CMasterResourceManager* getSingleton();
+    void removeCollisionModel(CCollisionModel* model);
 
 private:
     unsigned char m_Unrecovered10[0x70];

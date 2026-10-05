@@ -21,6 +21,8 @@ public:
     void SetRadiusRight(unsigned int index, float radius);
     float GetTweenedRadiusRight(float distance) const;
     float GetTweenedRadiusLeft(float distance) const;
+    // Original mutable ABI; const draft belongs to path.cpp and remains separate.
+    Ogre::Vector3 GetSplinePositionAtDistance(float distance);
     Ogre::Vector3 GetSplinePositionAtDistance(float distance) const;
     float GetAngleOverDistance(float fromDistance, float toDistance) const;
     Ogre::Vector3 GetPathSegment(unsigned int index) const;

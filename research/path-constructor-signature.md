@@ -26,3 +26,19 @@ constructor would conceal the discrepancy rather than recover the original
 interface. Equipment work may declare the correct narrow constructor and use
 the original implementation as a dependency in the meantime; that does not
 count as reconstructing the constructor itself.
+
+## Additional mutable spline signature (2026-10-05)
+
+While recovering Equipment::updateDrop, another signature discrepancy was
+verified. Original0xc879e0 is the mutable method
+`CPath::GetSplinePositionAtDistance(float)`, mangled
+`_ZN5CPath27GetSplinePositionAtDistanceEf`. Its Vector3 return is confirmed at
+the caller's SSE return registers.
+
+The supplied header and path.cpp define a const-qualified draft instead,
+whose mangled name contains `_ZNK5CPath...`. It is a different symbol. A verified
+mutable declaration was added alongside the draft, so the Equipment caller
+uses the original ELF dependency. The const draft implementation was not
+changed or claimed recovered. The owning worker should reconcile it against
+the original mutable signature; passing a caller test is not proof that this
+missing CPath implementation has been reconstructed.

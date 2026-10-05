@@ -184,12 +184,10 @@ public:
     std::vector<EDAMAGE_TYPES> m_ElementalDamageTypes;
     std::vector<int> m_ElementalDamageBonuses;
     std::vector<int> m_InherentElementalDamage;
-    long long m_iUnknown398;
-    long long m_iUnknown3A0;
-    long long m_iUnknown3A8;
-    long long m_iUnknown3B0;
-    long long m_iUnknown3B8;
-    long long m_iUnknown3C0;
+    // Trivial vector buffers verified in ctor/dtor. Exact element types remain
+    // unknown; byte elements preserve those observed storage/lifetime operations.
+    std::vector<unsigned char> m_UnknownPOD398;
+    std::vector<unsigned char> m_UnknownPOD3B0;
     CParticle* m_pParticle;
     CParticle* m_pParticle_3D0;
     std::wstring m_sUnknown3D8;

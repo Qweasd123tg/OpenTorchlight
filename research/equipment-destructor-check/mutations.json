@@ -1,0 +1,106 @@
+{
+ "0x87d770": {
+  "name": "CEquipment::~CEquipment()",
+  "tried": 19,
+  "killed": 19,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1422: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1424: 'm_SocketedEquipment.deleteAll();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1433: 'CMasterResourceManager::getSingleton()->removeCollisionModel(reinterpret_cast<CCollisionModel*>(m_iUnitCollisionModel));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1427: 'CItem::setVisible(false,true);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1421: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1421: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1439: 'm_pEquippedTo=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1428: 'detachFromLocation();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1427: 'false' -> 'true'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1430: 'destroyIcon();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1436: 'unloadModel();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1423: 'm_ActiveMissileRefs[i]->getObject()->m_Listeners.remove(static_cast<iMissile*>(this));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1429: 'm_pEntity=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1417: 'delete m_pPositionableObject;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1438: 'm_pInventory=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1418: 'm_pPositionableObject=NULL;' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1427: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1414: 'resetVisualLayout();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1437: 'detachFromLocation();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

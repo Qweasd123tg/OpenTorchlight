@@ -1406,3 +1406,58 @@ void CEquipment::createParticles()
         m_pParticle->Start();
     }
 }
+
+CEquipment::~CEquipment()
+{
+    if (m_pPositionableObject)
+    {
+        resetVisualLayout();
+        if (m_pPositionableObject)
+        {
+            delete m_pPositionableObject;
+            m_pPositionableObject=NULL;
+        }
+    }
+    for (unsigned int i=0;i<m_ActiveMissileRefs.size();++i)
+        if (m_ActiveMissileRefs[i] && m_ActiveMissileRefs[i]->getObject())
+            m_ActiveMissileRefs[i]->getObject()->m_Listeners.remove(static_cast<iMissile*>(this));
+    m_SocketedEquipment.deleteAll();
+    if (m_pParticle) {delete m_pParticle;m_pParticle=NULL;}
+    if (m_pParticle_3D0) {delete m_pParticle_3D0;m_pParticle_3D0=NULL;}
+    CItem::setVisible(false,true);
+    detachFromLocation();
+    m_pEntity=NULL;
+    destroyIcon();
+    if (m_pSoundBank) {delete m_pSoundBank;m_pSoundBank=NULL;}
+    if (m_pPath) {delete m_pPath;m_pPath=NULL;}
+    CMasterResourceManager::getSingleton()->removeCollisionModel(reinterpret_cast<CCollisionModel*>(m_iUnitCollisionModel));
+    if (m_pAttackDescription) {delete m_pAttackDescription;m_pAttackDescription=NULL;}
+    if (m_pAttackDescriptionOverride) {delete m_pAttackDescriptionOverride;m_pAttackDescriptionOverride=NULL;}
+    unloadModel();
+    detachFromLocation();
+    m_pInventory=NULL;
+    m_pEquippedTo=NULL;
+}
+
+void CEquipment::updateDrop(float elapsed)
+{
+    if (!m_bUnknown25C) return;
+    m_fUnknown258+=elapsed*20.0f;
+    if (m_pPath->m_fPathLength<=m_fUnknown258)
+    {
+        m_fUnknown258=m_pPath->m_fPathLength;
+        setEnabled(true);
+        m_bUnknown25C=false;
+        m_pSoundBank->playSample(17,m_pSceneNode,0.0f,0.0f,false);
+    }
+    m_vPosition=m_pPath->GetSplinePositionAtDistance(m_fUnknown258);
+    CPositionableObject::setPosition(m_vPosition);
+    if (ISA(UNITTYPES::WEAPON) || ISA(UNITTYPES::SHIELD) || ISA(UNITTYPES::POTION) || ISA(UNITTYPES::SCROLL))
+    {
+        float progress=std::min(m_fUnknown258/m_pPath->m_fPathLength,1.0f);
+        Ogre::Matrix4 rotation;
+        MATH::matrixRotationZ(rotation,progress*6.2831855f);
+        m_mOrientation=m_mDropOrientation*rotation;
+        setOrientation(m_mOrientation,false);
+    }
+}

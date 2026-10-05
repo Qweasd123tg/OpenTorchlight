@@ -1643,3 +1643,36 @@ research/equipment-particles-check. No PC pipeline or foreign source TU changed.
 Integrated check: 123 tests, 0 failed; 1263/5247 accepted game functions,
 425539 original bytes. Increment over 3831cb1: one function / 1679 bytes.
 The effects allocation-count and trim-helper regression also pass.
+
+### Equipment destruction and drop updates (2026-10-05)
+
+The primary Equipment destructor0x87d770/1645 bytes is covered by4352 original
+vs recovered cases, including real base destruction, registered references,
+COW strings, callback changes and exception cleanup. A scoped free watcher
+checks exact single-release/order for seven member buffers. All19 sampled
+and27 targeted mutations are killed, including deliberate buffer leaks.
+The18-byte deleting destructor and both secondary thunks are MATCH; the primary
+body is97.2% normalized similarity. Details and the explicitly provisional POD
+vector element types are documented in research/equipment-destructor-check.
+
+updateDrop(float)0x87a400/1614 bytes is normalized MATCH100%. An additional
+3584-case fixture runs each side twice, with real matrix rotation/multiplication
+and controlled spline/audio/position collaborators. It covers inactive state,
+zero-length paths, negative/zero/positive time, landing, all type combinations,
+state changes during callbacks and position/orientation reference aliasing.
+The original MINSS preserves a NaN first argument in std::min(progress,1),
+including0/0 path progress; swapping the arguments would change that behavior.
+
+A second CPath declaration discrepancy was verified: the original spline
+method is mutable, while the supplied path.cpp draft is const-qualified.
+The original mutable declaration is now available to this caller. The foreign
+implementation is unchanged and remains a separate missing dependency; see
+research/path-constructor-signature.md. A dependency declaration is not counted
+as reconstructing that CPath method.
+
+Integrated check: 125 tests, 0 failed; 1268/5247 accepted game entries,
+428837 original bytes. Increment over db8bfaa: five entries / 3298 bytes
+(primary destructor, deleting destructor, two destructor thunks and updateDrop).
+These represent two C++ methods; the counter includes those destructor entry
+points separately. Both the mandatory watched-free regression and the effects
+allocation-count/trim-helper regression pass on the final source.
