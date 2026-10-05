@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Layout.h"
 #include "Player.h"
 #include "SteamStats.h"
@@ -2047,4 +2048,154 @@ int CEquipment::getLevelRequirement(CCharacter* character)
     int reduction = equipmentRequirementReduction(this, character);
     int requirement = m_iUnknown278 - reduction;
     return requirement < 0 ? 0 : requirement;
+}
+
+void CEquipment::addInherentDamage(EDAMAGE_TYPES type, int amount)
+{
+    for (unsigned int i = 0; i < m_ElementalDamageTypes.size(); ++i) {
+        if (m_ElementalDamageTypes[i] == type) {
+            m_InherentElementalDamage[i] += amount;
+            return;
+        }
+    }
+    m_ElementalDamageTypes.push_back(type);
+    m_ElementalDamageBonuses.push_back(0);
+    m_InherentElementalDamage.push_back(amount);
+}
+
+void CEquipment::addDamageBonus(EDAMAGE_TYPES type, int amount)
+{
+    for (unsigned int i = 0; i < m_ElementalDamageTypes.size(); ++i) {
+        if (m_ElementalDamageTypes[i] == type) {
+            m_ElementalDamageBonuses[i] += amount;
+            return;
+        }
+    }
+    m_ElementalDamageTypes.push_back(type);
+    m_ElementalDamageBonuses.push_back(amount);
+    m_InherentElementalDamage.push_back(0);
+}
+
+int CEquipment::getDamageBonus(EDAMAGE_TYPES type)
+{
+    int result = 0;
+    for (unsigned int i = 0; i < m_ElementalDamageTypes.size(); ++i) {
+        if (m_ElementalDamageTypes[i] == type) {
+            result += m_ElementalDamageBonuses[i];
+            result += m_InherentElementalDamage[i];
+        }
+    }
+    for (int socket = 0; socket < static_cast<int>(m_SocketedEquipment.size()); ++socket) {
+        CEffectManager* manager = m_SocketedEquipment[socket]->m_pEffectManager;
+        if (!manager) continue;
+        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(manager->m_EffectData10 + 0x18);
+        for (int i = 0; i < static_cast<int>(effects.size()); ++i) {
+            CEffect* effect = effects[i];
+            if ((effect->m_eType == static_cast<EEFFECT_TYPE>(52) || effect->m_eType == static_cast<EEFFECT_TYPE>(10))
+                && effect->m_eDamageType == type)
+                result += effect->m_fValueC0;
+        }
+    }
+    return result;
+}
+
+bool CEquipment::missileApplyingEffects(CMissile* missile, CCharacter* target,
+                                       const Ogre::Vector3*, float damageScale, float effectScale)
+{
+    CCharacter* owner = dynamic_cast<CCharacter*>(static_cast<CBaseUnit*>(missile->m_pRunicCore));
+    if (owner && target && !target->isEnemy(owner)) return false;
+    if (missile->m_bUnknown294) {
+        if (owner) {
+            CLevel* level = m_pResourceManager ? m_pResourceManager->getLevel() : NULL;
+            owner->rollAttack(*level, target, this, 0, damageScale, effectScale, static_cast<EDAMAGE_TYPES>(7));
+        }
+        return true;
+    }
+    if (getEquippedTo()) {
+        CLevel* level = m_pResourceManager ? m_pResourceManager->getLevel() : NULL;
+        getEquippedTo()->rollAttack(*level, target, this, 0, damageScale, effectScale, static_cast<EDAMAGE_TYPES>(7));
+        return true;
+    }
+    return false;
+}
+
+void CEquipment::missileDieing(CMissile* missile)
+{
+    unsigned int i = 0;
+    while (i < m_ActiveMissileRefs.size()) {
+        if (!m_ActiveMissileRefs[i]->getObject() || m_ActiveMissileRefs[i]->getObject() == missile) {
+            if (m_ActiveMissileRefs[i]) {
+                TSafePointer<CMissile>* reference = m_ActiveMissileRefs[i];
+                OGRE_DELETE_T(reference, TSafePointer<CMissile>, Ogre::MEMCATEGORY_GENERAL);
+                m_ActiveMissileRefs[i] = NULL;
+            }
+            m_ActiveMissileRefs.removeAt(i);
+        } else {
+            ++i;
+        }
+    }
+}
+
+long CEquipment::DPS()
+{
+    CAttackDescription* attack = m_pAttackDescriptionOverride ? m_pAttackDescriptionOverride : m_pAttackDescription;
+    float speed = attack->m_fAttackSpeed;
+    float total = static_cast<float>(m_iMaximumDamage);
+    for (int type = 0; type < 7; ++type)
+        total += static_cast<float>(getDamageBonus(static_cast<EDAMAGE_TYPES>(type)));
+    for (unsigned int i = 0; i < m_iSocketCount; ++i) {
+        if (i < m_SocketedEquipment.size()) {
+            CEquipment* item = m_SocketedEquipment[i];
+            if (item) {
+                total += static_cast<float>(item->m_iMaximumDamage);
+                for (int type = 1; type < 7; ++type)
+                    total += static_cast<float>(item->getDamageBonus(static_cast<EDAMAGE_TYPES>(type)));
+            }
+        }
+    }
+    return static_cast<long>(ceilf(total / (speed * 0.73333335f)));
+}
+
+void CEquipment::createElementalDamages()
+{
+    if (!ISA(UNITTYPES::WEAPON)) return;
+    CEffectManager* manager = m_pEffectManager;
+    if (manager) {
+        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(manager->m_EffectData10 + 0x18);
+        for (int i = 0; i < static_cast<int>(effects.size()); ++i) {
+            CEffect* effect = effects[i];
+            if (effect->m_eType == static_cast<EEFFECT_TYPE>(52) || effect->m_eType == static_cast<EEFFECT_TYPE>(10)) {
+                addDamageBonus(effect->m_eDamageType, static_cast<int>(effect->m_fValueC0));
+                effects[i]->m_fValue24 = -900.0f;
+            }
+        }
+        manager->deleteDeadEffects();
+    }
+    if (m_pEquippedTo) createParticles();
+}
+
+void CEquipment::setActiveInLevel(bool active)
+{
+    detachFromLocation();
+    setVisible(active, true);
+    updateCullingBounds();
+    if (active) {
+        createParticles();
+        if (m_pUnitModel) snapToGround();
+        if (m_pParticle && m_pUnitModel && m_pParticle->getSceneNode()) {
+            OGRE_UTILITIES::removeChildFromParentNode(m_pParticle->getSceneNode());
+            m_pUnitModel->m_pSceneNode->addChild(m_pParticle->getSceneNode());
+        }
+        if (m_pParticle_3D0 && m_pUnitModel && m_pParticle_3D0->getSceneNode()) {
+            m_pParticle_3D0->sceneNodeSetParent(m_pUnitModel->m_pSceneNode, false);
+            m_pParticle_3D0->setPosition(Ogre::Vector3::ZERO);
+            m_pParticle_3D0->Start();
+        }
+    } else {
+        if (m_pParticle_3D0 && m_pUnitModel && m_pParticle_3D0->getSceneNode()) {
+            m_pParticle_3D0->Stop(false);
+            OGRE_UTILITIES::removeChildFromParentNode(m_pParticle_3D0->getSceneNode());
+        }
+        hideItemText();
+    }
 }

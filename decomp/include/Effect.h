@@ -4,6 +4,7 @@
 #include "RunicCore.h"
 #include "SafePointer.h"
 #include "EffectDefines.h"
+#include "Constants.h"
 class CBaseUnit;
 class CSkill;
 enum EEFFECT_VALUES {};
@@ -21,9 +22,12 @@ public:
     void calculateBaseValue(ECALCULATETYPES type);
 private:
     unsigned int m_iLevel;
-    unsigned char m_EffectData14[8];
+    EDAMAGE_TYPES m_eDamageType;
+    unsigned char m_EffectData18[4];
     EEFFECT_TYPE m_eType;
-    unsigned char m_EffectData20[0x48-0x20];
+    unsigned char m_EffectData20[4];
+    float m_fValue24;
+    unsigned char m_EffectData28[0x48-0x28];
     TSafePointer<CBaseUnit> m_Owner;
     unsigned char m_EffectData58[0x80-0x58];
     std::wstring m_sName;

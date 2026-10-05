@@ -1,0 +1,72 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_override",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_base_damage",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_parent_physical",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_last_parent_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_slots",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "use_list_count_for_slots",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "first_child",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_child_base",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "include_child_physical",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_last_child_type",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "no_speed_factor",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "floor_instead_of_ceil",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "late_attack_speed",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

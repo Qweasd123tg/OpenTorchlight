@@ -61,7 +61,7 @@ public:
     virtual void applySaveState(CCharacterSaveState& saveState);
     virtual void missileBeingFired(CMissile* missile);
     virtual void missileDieing(CMissile* missile);
-    virtual void missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
+    virtual bool missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
                                         float damageScale, float effectScale);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter* target);
     virtual bool missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
@@ -112,6 +112,8 @@ public:
     void incrementJournalStatistic(EJournalStatistic statistic,int amount);
     void performUnknownSkill(CSkill* skill);
     float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
+    bool isEnemy(CCharacter*);
+    bool rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES);
     int strength();
     int dexterity();
     int magic();

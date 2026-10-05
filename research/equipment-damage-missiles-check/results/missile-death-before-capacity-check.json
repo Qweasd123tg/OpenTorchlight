@@ -1,0 +1,52 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "ignore_dead_refs",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_target",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_free",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_unregister",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_allocator",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_slot_clear",
+    "outcome": "survived",
+    "exit": 0
+  },
+  {
+    "name": "omit_remove",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_swapped_entry",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_removal_slot",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

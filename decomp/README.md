@@ -1775,3 +1775,28 @@ no foreign source TU or generic pipeline was changed.
 Integrated check: 138 tests, 0 failed; 1,291 / 5,247 accepted game functions,
 441,323 original bytes. Watched-free, effects allocation/trim and filtering
 heap regressions all pass on this final source.
+
+### Equipment damage, missile callbacks and activation (2026-10-05)
+
+Eight method bodies and two adjustment thunks add 2,588 original bytes:
+addInherentDamage 0x879e10, addDamageBonus 0x879f60, getDamageBonus 0x86d440,
+missileDieing 0x86e360, missileApplyingEffects 0x86e540, DPS 0x86f360,
+createElementalDamages 0x886240, setActiveInLevel 0x886100, and thunks at
+0x86e350/0x86e530. Both array-add methods and both thunks are normalized MATCH.
+Six fixtures pass 12,288 / 5,832 / 2,304 / 3,584 / 4,608 / 2,304 cases for
+array operations, missile cleanup, missile application, DPS, elemental transfer
+and activation respectively. All 78 final targeted faults are killed.
+
+The missile-death fixture was strengthened after an omitted slot-clear survived:
+initialized capacity slots are now compared as identities as well as live entries.
+Real registration/index updates and observed Ogre frees verify cleanup and
+callback/exception behavior. The initial result remains in the report directory.
+missileApplyingEffects is bool, not void, confirmed by its original caller's
+AL test; iMissile/Character/Equipment declarations were corrected together.
+Character rollAttack's bool result and original parameter order were verified.
+No foreign source TU or generic pipeline was edited.
+
+Integrated check: 144 tests, 0 failed; 1,301 / 5,247 accepted game functions,
+443,911 original bytes. Destructor watched-free, effects allocation/trim and
+filtering heap regressions all pass. See research/equipment-damage-missiles-check
+for the precise fixture scope, ABI evidence and limitations.

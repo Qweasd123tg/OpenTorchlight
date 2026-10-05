@@ -50,7 +50,7 @@ public:
     virtual void setRimlight(std::wstring);
     virtual void missileBeingFired(CMissile*);
     virtual void missileDieing(CMissile*);
-    virtual void missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
+    virtual bool missileApplyingEffects(CMissile*, CCharacter*, const Ogre::Vector3*, float, float);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*);
     virtual bool missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&);
     virtual void* getUnitModelSecondary();

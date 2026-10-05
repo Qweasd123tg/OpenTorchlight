@@ -1,0 +1,82 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "omit_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "invert_visibility",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "not_immediate",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_bounds",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_particles",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_snap",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_primary_reparent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "keep_secondary_parent",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_secondary_position",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_start",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "immediate_stop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_stop",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_secondary_detach",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "omit_hide",
+    "outcome": "killed",
+    "exit": 1
+  }
+]
