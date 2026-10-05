@@ -50,6 +50,10 @@ public:
     float getBlendOutTime() const { return m_fBlendOutTime; }
     float getBlendTime() const { return m_fBlendTime; }
     bool getStartOnLoad() const { return m_bStartOnLoad; }
+    const std::wstring& getCategory() const { return m_sCategory; }
+    void setUnitString(const std::wstring& value) { m_sUnitType = value; }
+    void setCategory(const std::wstring& value) { m_sCategory = value; }
+    void setAnimationName(const std::wstring& value) { m_sAnimationName = value; }
 };
 
 #endif

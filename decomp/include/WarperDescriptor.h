@@ -55,10 +55,52 @@ public:
         gUnionOf32BitData[0].m_iValue = static_cast<CWarper*>(object)->getLevelDepth();
         return (UNIONDATA8BIT*)gUnionOf32BitData;
     }
-    static void Set_setDungeon(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getDungeon(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setWarpName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getWarpName(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setDungeon(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CWarper*>(object)->setDungeon((const wchar_t*)data);
+    }
+    static UNIONDATA8BIT* Get_getDungeon(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        {
+            const std::wstring& value = static_cast<CWarper*>(object)->getDungeon();
+            unsigned int length = value.length();
+            unsigned int size = 0;
+            if (length < 1000000)
+            {
+                size = length * sizeof(wchar_t);
+                memcpy(sEditorTmpMemory, value.c_str(), size);
+                *(wchar_t*)&sEditorTmpMemory[size] = 0;
+            }
+            count = size;
+        }
+        return (UNIONDATA8BIT*)sEditorTmpMemory;
+    }
+    static void Set_setWarpName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CWarper*>(object)->setWarpName((const wchar_t*)data);
+    }
+    static UNIONDATA8BIT* Get_getWarpName(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        {
+            const std::wstring& value = static_cast<CWarper*>(object)->getWarpName();
+            unsigned int length = value.length();
+            unsigned int size = 0;
+            if (length < 1000000)
+            {
+                size = length * sizeof(wchar_t);
+                memcpy(sEditorTmpMemory, value.c_str(), size);
+                *(wchar_t*)&sEditorTmpMemory[size] = 0;
+            }
+            count = size;
+        }
+        return (UNIONDATA8BIT*)sEditorTmpMemory;
+    }
     static void Set_setWaypoint(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
     {
         if (object)

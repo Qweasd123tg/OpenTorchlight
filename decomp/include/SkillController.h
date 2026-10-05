@@ -66,6 +66,8 @@ public:
     bool getForceStop() const { return m_bForceStop; }
     bool getSkillUnlearnOnStop() const { return m_bUnlearnSkillOnStop; }
     bool getSkillLearnOnStart() const { return m_bLearnSkillOnStart; }
+    void setSkillName(const std::wstring& value) { m_sSkillName = value; }
+    void setCategory(const std::wstring& value) { m_sCategory = value; }
 };
 
 #endif

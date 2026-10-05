@@ -21,6 +21,11 @@ public:
 private:
     std::wstring m_sSceneOverrideFile;
     std::wstring m_sMeshFileCreatedDynamically;
+
+public:
+    // Inline accessors behind the descriptors' property functions.
+    const std::wstring& getMeshFileCreatedDynamically() const { return m_sMeshFileCreatedDynamically; }
+    const std::wstring& getSceneOverrideFile() const { return m_sSceneOverrideFile; }
 };
 
 #endif

@@ -105,25 +105,87 @@ public:
     }
     static unsigned int getDifficultyIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring setDifficultyStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setDungeonForGroup(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getDungeonForGroup(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setDungeonForGroup(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setDungeonForGroup((const wchar_t*)data);
+    }
+    static UNIONDATA8BIT* Get_getDungeonForGroup(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        {
+            const std::wstring& value = static_cast<CRandomGroup*>(object)->getDungeonForGroup();
+            unsigned int length = value.length();
+            unsigned int size = 0;
+            if (length < 1000000)
+            {
+                size = length * sizeof(wchar_t);
+                memcpy(sEditorTmpMemory, value.c_str(), size);
+                *(wchar_t*)&sEditorTmpMemory[size] = 0;
+            }
+            count = size;
+        }
+        return (UNIONDATA8BIT*)sEditorTmpMemory;
+    }
     static unsigned int getDungeonIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getDungeonStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setPlayerClassName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getPlayerClassName(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setPlayerClassName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setPlayerClassName((const wchar_t*)data);
+    }
+    static UNIONDATA8BIT* Get_getPlayerClassName(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        {
+            const std::wstring& value = static_cast<CRandomGroup*>(object)->getPlayerClassName();
+            unsigned int length = value.length();
+            unsigned int size = 0;
+            if (length < 1000000)
+            {
+                size = length * sizeof(wchar_t);
+                memcpy(sEditorTmpMemory, value.c_str(), size);
+                *(wchar_t*)&sEditorTmpMemory[size] = 0;
+            }
+            count = size;
+        }
+        return (UNIONDATA8BIT*)sEditorTmpMemory;
+    }
     static unsigned int getPlayerClassIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getPlayerClassStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setQuestHasToBeActiveOrComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuestHasToBeActiveOrComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setQuestHasToBeActiveOrComplete((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuestHasToBeActiveOrComplete(CEditorBaseObject* object, unsigned int& count);
     static unsigned int getQuestIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getQuestStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setQuestHasToBeComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuestHasToBeComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setQuestHasToBeComplete((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuestHasToBeComplete(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setQuestNotComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuestNotComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setQuestNotComplete((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuestNotComplete(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setQuestHasToBeActive(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuestHasToBeActive(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setQuestHasToBeActive((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuestHasToBeActive(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setQuestCannotBeActiveOrComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuestCannotBeActiveOrComplete(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CRandomGroup*>(object)->setQuestCannotBeActiveOrComplete((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuestCannotBeActiveOrComplete(CEditorBaseObject* object, unsigned int& count);
 };
 

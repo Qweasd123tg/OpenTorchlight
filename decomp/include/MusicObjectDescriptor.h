@@ -17,7 +17,11 @@ public:
     CMusicObjectDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description);
 
 
-    static void Set_setMusicFile(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setMusicFile(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CMusicObject*>(object)->setMusicFile((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getMusicFile(CEditorBaseObject* object, unsigned int& count);
     static void Set_setLoops(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
     {

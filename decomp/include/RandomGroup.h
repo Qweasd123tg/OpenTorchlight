@@ -80,6 +80,15 @@ public:
     unsigned int GetRandomType() const { return m_iRandomType; }
     int GetNumberOfPicks() const { return m_iNumberOfPicks; }
     bool getIsDynamicGroup() const { return m_bIsDynamicGroup; }
+    const std::wstring& getPlayerClassName() const { return m_sPlayerClassName; }
+    const std::wstring& getDungeonForGroup() const { return m_sDungeonForGroup; }
+    void setQuestHasToBeActive(const std::wstring& value) { m_sQuestHasToBeActive = value; }
+    void setQuestNotComplete(const std::wstring& value) { m_sQuestNotComplete = value; }
+    void setQuestHasToBeComplete(const std::wstring& value) { m_sQuestHasToBeComplete = value; }
+    void setQuestHasToBeActiveOrComplete(const std::wstring& value) { m_sQuestHasToBeActiveOrComplete = value; }
+    void setQuestCannotBeActiveOrComplete(const std::wstring& value) { m_sQuestCannotBeActiveOrComplete = value; }
+    void setPlayerClassName(const std::wstring& value) { m_sPlayerClassName = value; }
+    void setDungeonForGroup(const std::wstring& value) { m_sDungeonForGroup = value; }
 };
 
 #endif

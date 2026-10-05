@@ -1,6 +1,7 @@
 #ifndef DESCRIPTORPROP_H
 #define DESCRIPTORPROP_H
 
+#include <cstring>
 #include <string>
 
 #include "RunicCore.h"
@@ -55,6 +56,9 @@ union UNIONDATA32BIT
 
 // Scratch buffer the generated property getters return.
 static UNIONDATA32BIT gUnionOf32BitData[3];
+
+// String property values travel through this buffer (EditorDLL.cpp).
+extern char sEditorTmpMemory[4000];
 
 static const std::wstring KEditorObjectPropertyTypeNames[] =
 {

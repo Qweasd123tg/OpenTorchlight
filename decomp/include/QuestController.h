@@ -69,6 +69,8 @@ public:
     void setBroadcastEventsOnLoad(bool value) { m_bBroadcastEventsOnLoad = value; }
     bool getBroadcastEventsOnLoad() const { return m_bBroadcastEventsOnLoad; }
     bool getPlayerGetsDisabled() const { return m_bPlayerGetsDisabled; }
+    void setQuest(const std::wstring& value) { m_sQuestName = value; }
+    void setCategory(const std::wstring& value) { m_sCategory = value; }
 };
 
 #endif

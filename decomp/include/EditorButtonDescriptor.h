@@ -156,13 +156,29 @@ public:
         gUnionOf32BitData[0].m_fValue = static_cast<CEditorButton*>(object)->getOffsetYPct();
         return (UNIONDATA8BIT*)gUnionOf32BitData;
     }
-    static void Set_setNormalImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setNormalImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CEditorButton*>(object)->setNormalImage((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getNormalImage(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setRolloverImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setRolloverImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CEditorButton*>(object)->setRolloverImage((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getRolloverImage(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setClickedImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setClickedImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CEditorButton*>(object)->setClickedImage((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getClickedImage(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setDisabledImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setDisabledImage(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CEditorButton*>(object)->setDisabledImage((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getDisabledImage(CEditorBaseObject* object, unsigned int& count);
 };
 

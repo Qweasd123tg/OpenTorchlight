@@ -43,7 +43,11 @@ public:
         gUnionOf32BitData[0].m_bValue = static_cast<CQuestController*>(object)->getBroadcastEventsOnLoad();
         return (UNIONDATA8BIT*)gUnionOf32BitData;
     }
-    static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CQuestController*>(object)->setCategory((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getCategory(CEditorBaseObject* object, unsigned int& count);
     static unsigned int GetGroupIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring GetGroupStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
@@ -51,7 +55,11 @@ public:
     static UNIONDATA8BIT* Get_getUnitInteractWith(CEditorBaseObject* object, unsigned int& count);
     static unsigned int GetResourceIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring GetResourceStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setQuest(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setQuest(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CQuestController*>(object)->setQuest((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getQuest(CEditorBaseObject* object, unsigned int& count);
     static unsigned int getQuestIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getQuestStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);

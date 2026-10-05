@@ -48,7 +48,11 @@ public:
     static UNIONDATA8BIT* Get_getDirectionOrientation(CEditorBaseObject* object, unsigned int& count);
     static unsigned int getCameraShakeOrientationByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getCameraShakeOrientationStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setCameraShakeName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setCameraShakeName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CCameraShake*>(object)->setCameraShakeName((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getCameraShakeName(CEditorBaseObject* object, unsigned int& count);
     static unsigned int getCameraShakeNameByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring getCameraShakeNameStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);

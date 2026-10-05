@@ -143,7 +143,11 @@ public:
         gUnionOf32BitData[0].m_fValue = static_cast<CEditorImage*>(object)->getOffsetYPct();
         return (UNIONDATA8BIT*)gUnionOf32BitData;
     }
-    static void Set_setImageFileName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setImageFileName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CEditorImage*>(object)->setImageFileName((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getImageFileName(CEditorBaseObject* object, unsigned int& count);
 };
 

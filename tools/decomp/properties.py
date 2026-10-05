@@ -56,17 +56,21 @@ def disassemble(elf, start, end):
             continue
         text, _, comment = m.group(2).partition("#")
         sym = re.search(r"<([^>+]+)", comment)
+        callee = re.match(r"(?:call|jmp)\s+[0-9a-f]+ <([^>+@]+)(?:@plt)?>$", text.strip())
         text = re.sub(r"\s*<[^>]*>", "", text).strip()
         text = re.sub(r"\s+", " ", text)
-        insns[int(m.group(1), 16)] = (text, sym.group(1) if sym else None)
+        insns[int(m.group(1), 16)] = (text, sym.group(1) if sym else None, callee.group(1) if callee else None)
     return insns
 
 
-def body(insns, f):
+def body(insns, f, named=False):
+    """The instructions of f joined by "; " (calls by symbol when named)."""
     start = int(f["address"], 16)
     lines = []
     for a in sorted(x for x in insns if start <= x < start + f["size"]):
-        text, sym = insns[a]
+        text, sym, callee = insns[a]
+        if callee and named:
+            text = f"{text.split()[0]} {callee}"
         if sym and sym.endswith("gUnionOf32BitData"):
             text = re.sub(r"\[rip\+0x[0-9a-f]+\]", "[gUnionOf32BitData]", text)
         if re.match(r"nop|xchg ax,ax|data16", text):
@@ -81,6 +85,10 @@ SET_CALL = re.compile(r"test rdi,rdi; je \w+; (?P<load>[^;]+); jmp (?P<target>[0
 SET_VIRTUAL = re.compile(r"test rdi,rdi; je \w+; (?:mov rax,QWORD PTR \[rdi\]; (?P<load>[^;]+)|(?P<load2>[^;]+); "
                          r"mov rax,QWORD PTR \[rdi\]); mov rax,QWORD PTR \[rax\+(?P<slot>0x[0-9a-f]+)\]; jmp rax; "
                          r"repz ret$")
+WSTRING = "_ZNSbIwSt11char_traitsIwESaIwEE"
+STRING_FROM_CHARS = WSTRING + "C1EPKwRKS1_"
+STRING_COPY = WSTRING + "C1ERKS2_"
+STRING_ASSIGN = WSTRING + "6assignERKS2_"
 GET_STORE = r"(?:mov|movss) (?P<w>DWORD|BYTE) PTR \[gUnionOf32BitData\],(?P<reg>eax|al|xmm0)"
 GET_FIELD = re.compile(r"xor eax,eax; test rdi,rdi; je \w+; mov DWORD PTR \[rsi\],(?P<size>0x[0-9a-f]+); "
                        r"(?:mov eax,DWORD|movzx eax,BYTE|movss xmm0,DWORD) PTR \[rdi\+(?P<off>0x[0-9a-f]+)\]; "
@@ -103,9 +111,7 @@ class Generator:
         for h in INCLUDE.glob("*.h"):
             for name in re.findall(r"^(?:class|struct) (\w+)\b[^;{]*\{", h.read_text(errors="replace"), re.M):
                 self.headers.setdefault(name, h)
-        self.by_qualified = {}
-        for f in self.db["functions"].values():
-            self.by_qualified.setdefault(f["qualified"], f)
+        self.by_mangled = {f["mangled"]: f for f in self.db["functions"].values() if f.get("mangled")}
         self.original = objdiff.Original(db=self.db)
 
     # --- classes -------------------------------------------------------------------------
@@ -154,6 +160,65 @@ class Generator:
         return (m.start(), end, text[m.start():end]) if end >= 0 else None
 
     # --- one property function -------------------------------------------------------------
+    def string_plan(self, f, code, target):
+        """Strings travel as wchar_t text: Set_ builds a std::wstring from it, Get_ copies the value
+        into sEditorTmpMemory (at most 999999 characters, count in bytes)."""
+        is_set = f["method"].startswith("Set_")
+        accessor = f["method"][4:]
+        cast = f"static_cast<{target}*>(object)"
+        add = None
+        if is_set:
+            if f"call {STRING_FROM_CHARS}" not in code:
+                return None, None, "shape"
+            field = re.search(rf"lea rdi,\[rbx\+(0x[0-9a-f]+)\]; mov rsi,rsp; call {STRING_ASSIGN}", code)
+            call = re.search(r"mov rsi,rsp; mov rdi,rbx; call (\w+)", code)
+        else:
+            if "sEditorTmpMemory" not in code and "0x145e620" not in code:
+                return None, None, "shape"
+            field = (re.search(rf"lea rsi,\[rdi\+(0x[0-9a-f]+)\]; mov rdi,rsp; xor ebx,ebx; call {STRING_COPY}", code)
+                     or re.search(r"mov rsi,QWORD PTR \[rdi\+(0x[0-9a-f]+)\]; xor ebx,ebx", code))
+            call = re.search(r"mov rsi,rdi; mov rdi,rsp; xor ebx,ebx; call (\w+)", code)
+        by_ref = not is_set and field is not None and "QWORD PTR" in field.group(0)
+        if field:
+            owner, fl = self.field_at(target, int(field.group(1), 16), 8)
+            if not fl or fl["type"] not in ("std::wstring", "std::basic_string<wchar_t>"):
+                return None, None, "field"
+            found = self.declaration(target, accessor)
+            if found and not found[2]:
+                return None, None, "declared, not inline"
+            if not found:
+                if not self.owned(owner) or owner not in self.headers:
+                    return None, None, f"accessor in {owner}"
+                add = (owner, f"    void {accessor}(const std::wstring& value) {{ {fl['name']} = value; }}" if is_set
+                       else f"    {'const std::wstring&' if by_ref else 'std::wstring'} {accessor}() const "
+                            f"{{ return {fl['name']}; }}")
+            name = accessor
+        elif call:
+            callee = self.by_mangled.get(call.group(1))
+            if not callee or callee.get("scope") not in dict(self.hierarchy(target)):
+                return None, None, "callee"
+            name = callee["method"]
+            if not self.declaration(target, name):
+                return None, None, "callee not declared"
+        else:
+            return None, None, "shape"
+        if is_set:
+            return ["if (object)", f"    {cast}->{name}((const wchar_t*)data);"], add, "ok"
+        value = "const std::wstring& value" if by_ref else "std::wstring value"
+        return ["if (!object)", "    return NULL;", "{",
+                f"    {value} = {cast}->{name}();",
+                "    unsigned int length = value.length();",
+                "    unsigned int size = 0;",
+                "    if (length < 1000000)",
+                "    {",
+                "        size = length * sizeof(wchar_t);",
+                "        memcpy(sEditorTmpMemory, value.c_str(), size);",
+                "        *(wchar_t*)&sEditorTmpMemory[size] = 0;",
+                "    }",
+                "    count = size;",
+                "}",
+                "return (UNIONDATA8BIT*)sEditorTmpMemory;"], add, "ok"
+
     def plan(self, f, code, target, prop_type):
         """(C++ body lines, accessor to add or None, reason) for one Set_/Get_ function."""
         name = f["method"]
@@ -205,6 +270,8 @@ class Generator:
                     return None, None, "slot"
                 call = slots[slot]
                 vtype = prop_type
+            if not self.declaration(target, call):
+                return None, None, "callee not declared"
         if vtype not in SCALARS:
             return None, None, f"type {vtype}"
         # A float field is copied through eax when nothing computes on it.
@@ -259,6 +326,8 @@ class Generator:
         plans = {}
         for f in funcs:
             lines, add, reason = self.plan(f, body(insns, f), target, types.get(f["method"]))
+            if reason == "shape":
+                lines, add, reason = self.string_plan(f, body(insns, f, named=True), target)
             stats[reason] += 1
             if lines:
                 plans[f["method"]] = (lines, add)

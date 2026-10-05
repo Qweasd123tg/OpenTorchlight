@@ -18,7 +18,11 @@ public:
     CLightDescriptor();
 
 
-    static void Set_setBitmapFile(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setBitmapFile(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CLight*>(object)->setBitmapFile((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getBitmapFile(CEditorBaseObject* object, unsigned int& count);
     static unsigned int GetFileIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring GetFileStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);

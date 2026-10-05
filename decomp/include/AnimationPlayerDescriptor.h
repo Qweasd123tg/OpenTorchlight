@@ -83,13 +83,42 @@ public:
         gUnionOf32BitData[0].m_bValue = static_cast<CAnimationPlayer*>(object)->getPlayIdle();
         return (UNIONDATA8BIT*)gUnionOf32BitData;
     }
-    static void Set_setAnimationName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setAnimationName(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setAnimationName((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getAnimationName(CEditorBaseObject* object, unsigned int& count);
-    static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
-    static UNIONDATA8BIT* Get_getCategory(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setCategory(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setCategory((const wchar_t*)data);
+    }
+    static UNIONDATA8BIT* Get_getCategory(CEditorBaseObject* object, unsigned int& count)
+    {
+        if (!object)
+            return NULL;
+        {
+            const std::wstring& value = static_cast<CAnimationPlayer*>(object)->getCategory();
+            unsigned int length = value.length();
+            unsigned int size = 0;
+            if (length < 1000000)
+            {
+                size = length * sizeof(wchar_t);
+                memcpy(sEditorTmpMemory, value.c_str(), size);
+                *(wchar_t*)&sEditorTmpMemory[size] = 0;
+            }
+            count = size;
+        }
+        return (UNIONDATA8BIT*)sEditorTmpMemory;
+    }
     static unsigned int GetGroupIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring GetGroupStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);
-    static void Set_setUnitString(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
+    static void Set_setUnitString(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count)
+    {
+        if (object)
+            static_cast<CAnimationPlayer*>(object)->setUnitString((const wchar_t*)data);
+    }
     static UNIONDATA8BIT* Get_getUnitString(CEditorBaseObject* object, unsigned int& count);
     static unsigned int GetResourceIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData);
     static std::wstring GetResourceStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData);

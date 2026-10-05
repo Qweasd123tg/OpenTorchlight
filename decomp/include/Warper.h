@@ -35,6 +35,10 @@ public:
     bool getWaypoint() const { return m_bWaypoint; }
     int getLevelDepth() const { return m_iLevelDepth; }
     int getLevelDelta() const { return m_iLevelDelta; }
+    const std::wstring& getWarpName() const { return m_sWarpName; }
+    const std::wstring& getDungeon() const { return m_sDungeon; }
+    void setWarpName(const std::wstring& value) { m_sWarpName = value; }
+    void setDungeon(const std::wstring& value) { m_sDungeon = value; }
 };
 
 #endif
