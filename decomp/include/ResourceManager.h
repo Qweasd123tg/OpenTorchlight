@@ -7,6 +7,7 @@
 #include "TArrayList.h"
 
 class CGameClient;
+class CParticle;
 class CGenericModel;
 class CDataGroup;
 class CHierarchy;
@@ -24,6 +25,7 @@ class CResourceManager : public CRunicCore
 {
 public:
     CMissilePreloader* getMissilePreloader();
+    CParticle* createParticle(const wchar_t* name);
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();
 

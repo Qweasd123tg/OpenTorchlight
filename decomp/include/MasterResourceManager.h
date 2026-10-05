@@ -5,6 +5,7 @@
 
 namespace Ogre { class SceneManager; }
 class CHierarchy;
+class CParticlePreloader;
 class CSettings;
 class CSoundManager;
 class CSoundBankDataInformation;
@@ -35,7 +36,9 @@ private:
 public:
     Ogre::SceneManager* m_pSceneManager;
 private:
-    unsigned char m_UnrecoveredD8[0x100-0xd8];
+    unsigned char m_UnrecoveredD8[0xf8-0xd8];
+public:
+    CParticlePreloader* m_pParticlePreloader;
 public:
     CSoundBankDataInformation* m_pSoundBankDataInformation;
 };

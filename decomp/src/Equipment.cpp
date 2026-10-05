@@ -1,3 +1,4 @@
+#include "ParticlePreloader.h"
 #include "Missile.h"
 #include "MissilePreloader.h"
 #include "GraphManager.h"
@@ -1337,4 +1338,71 @@ bool CEquipment::fireMissiles(CCharacter* shooter,CCharacter* target)
     reference->setObject(missile);
     m_ActiveMissileRefs.add(reference);
     return true;
+}
+
+void CEquipment::createParticles()
+{
+    if (m_sUnknown3D8!=EMPTY_WSTRING)
+    {
+        if (!m_pParticle_3D0)
+        {
+            CMasterResourceManager::getSingleton()->m_pParticlePreloader->LoadParticle(m_sUnknown3D8);
+            m_pParticle_3D0=m_pResourceManager->createParticle(m_sUnknown3D8.c_str());
+        }
+    }
+    else
+    {
+        std::wstring particle=EMPTY_WSTRING;
+        if (getIsQuestUnit()) particle=L"QUEST_ITEM";
+        else if (ISA(UNITTYPES::UNIQUE)) particle=L"UNIQUE_WEAPON";
+        else if (isMagical()) particle=L"MAGIC_WEAPON";
+        else particle=L"GENERIC_WEAPON";
+        // +0x110 is the original live wstring. Keep Particle's scaffold field
+        // unchanged here: changing its owning type would also alter that TU's
+        // unrecovered destructor. No Particle implementation is changed.
+        if (m_pParticle_3D0 && STRINGS::StringUpper(*reinterpret_cast<const std::wstring*>(&m_pParticle_3D0->m_pUnknown110))!=particle)
+        {
+            delete m_pParticle_3D0;
+            m_pParticle_3D0=NULL;
+        }
+        if (!m_pParticle_3D0)
+            m_pParticle_3D0=m_pResourceManager->createParticle(particle.c_str());
+    }
+    if (m_pParticle_3D0 && m_bVisible && !m_pEquippedTo && m_pUnitModel)
+    {
+        m_pParticle_3D0->sceneNodeSetParent(m_pUnitModel->getSceneNode(),false);
+        m_pParticle_3D0->setPosition(Ogre::Vector3(0,0,0));
+        m_pParticle_3D0->Start();
+    }
+    if (!ISA(UNITTYPES::WEAPON)) return;
+    int damage=getDamageBonus(DAMAGE_ELECTRIC);
+    int largest=std::max(damage,0);
+    EDAMAGE_TYPES type=damage>0?DAMAGE_ELECTRIC:DAMAGE_PHYSICAL;
+    damage=getDamageBonus(DAMAGE_FIRE);
+    if (damage>largest) {largest=damage;type=DAMAGE_FIRE;}
+    damage=getDamageBonus(DAMAGE_ICE);
+    if (damage>largest) {largest=damage;type=DAMAGE_ICE;}
+    damage=getDamageBonus(DAMAGE_POISON);
+    if (damage>largest) type=DAMAGE_POISON;
+    std::wstring particle=EMPTY_WSTRING;
+    switch (type)
+    {
+    case DAMAGE_ELECTRIC: particle=ISA(UNITTYPES::PISTOL)?L"WEAPON_ELECTRICITY_PISTOL":L"WEAPON_ELECTRICITY";break;
+    case DAMAGE_FIRE: particle=ISA(UNITTYPES::PISTOL)?L"WEAPON_FIRE_PISTOL":L"WEAPON_FIRE";break;
+    case DAMAGE_ICE: particle=ISA(UNITTYPES::PISTOL)?L"WEAPON_ICE_PISTOL":L"WEAPON_ICE";break;
+    case DAMAGE_POISON: particle=ISA(UNITTYPES::PISTOL)?L"WEAPON_POISON_PISTOL":L"WEAPON_POISON";break;
+    default:break;
+    }
+    if (m_pParticle && STRINGS::StringUpper(*reinterpret_cast<const std::wstring*>(&m_pParticle->m_pUnknown110))!=particle)
+    {
+        delete m_pParticle;
+        m_pParticle=NULL;
+    }
+    if (!m_pParticle) m_pParticle=m_pResourceManager->createParticle(particle.c_str());
+    if (m_pParticle && m_pUnitModel)
+    {
+        m_pParticle->sceneNodeSetParent(m_pUnitModel->getSceneNode(),false);
+        m_pParticle->setPosition(Ogre::Vector3(0,0,0));
+        m_pParticle->Start();
+    }
 }

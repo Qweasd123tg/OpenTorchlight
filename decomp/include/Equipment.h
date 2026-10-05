@@ -73,7 +73,7 @@ public:
     void unloadModel();
     int minimumDamage();
     int maximumDamage();
-    void getDamageBonus(EDAMAGE_TYPES);
+    int getDamageBonus(EDAMAGE_TYPES);
     void removeDamageBonus(EDAMAGE_TYPES, int);
     void resetVisualLayout();
     void updateVisualLayout(float);

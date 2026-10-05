@@ -1624,3 +1624,22 @@ claimed verified by this launch-function fixture.
 Integrated check: 122 tests, 0 failed; 1262/5247 accepted game functions,
 423860 original bytes. Increment over 1130512: one function / 1881 bytes.
 The effects allocation-count and trim-helper regression also pass.
+
+### Equipment particle selection (2026-10-05)
+
+createParticles() 0x885a70 / 1679 bytes restores drop-particle priority, custom
+preloading/reuse and element/pistol effect selection with original strict tie
+ordering and distinct drop/active attachment conditions. The 2144-case fixture
+runs twice per side and kills 23/23 sampled plus 23/23 targeted mutations.
+The first 21/23 pass missed damage exactly1; it was rejected and replaced with
+unit-boundary cases. Particle loading/simulation/destruction remain controlled
+collaborators, not claims of a fully recovered particle subsystem.
+
+The verified Particle name at+0x110 is a borrowed view, leaving the other
+owner's partial Particle header/destructor unchanged. Evidence, literal source
+addresses, input matrices and declaration limits are documented under
+research/equipment-particles-check. No PC pipeline or foreign source TU changed.
+
+Integrated check: 123 tests, 0 failed; 1263/5247 accepted game functions,
+425539 original bytes. Increment over 3831cb1: one function / 1679 bytes.
+The effects allocation-count and trim-helper regression also pass.
