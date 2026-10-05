@@ -1,0 +1,92 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "wrong_group",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_name",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_displayname",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_root_default",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_root_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_child_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_level_separator",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "drop_space_before_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "include_disabled",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "include_property",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill_level",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill_flag",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_skill_owner",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skip_last_group",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "cached_count",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "skill_newline_by_result",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "group_newline_by_result",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

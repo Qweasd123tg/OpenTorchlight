@@ -1,0 +1,66 @@
+{
+ "0x8824f0": {
+  "name": "CEquipment::setItemTextHighlighted(bool)",
+  "tried": 11,
+  "killed": 11,
+  "score": 1.0,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1151: '==' -> '!='",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1170: 'm_pItemText->setProperty(\"TextColour\", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRandomEnchantColor(highlighted)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1175: 'm_pItemText->setProperty(\"TextColour\", CEGUI::PropertyHelper::colourToString(color));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1159: 'm_pItemText->setProperty(\"TextColour\", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getSetColor(highlighted)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1151: '==' -> '!='",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1163: 'm_pItemText->setProperty(\"TextColour\", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getUniqueColor(highlighted)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1155: 'm_pItemText->setProperty(\"TextColour\", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getQuestColor(highlighted)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1168: 'm_pItemText->setProperty(\"TextColour\", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRareColor(highlighted)));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1165: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1151: '||' -> '&&'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1178: 'm_pItemText->moveToFront();' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

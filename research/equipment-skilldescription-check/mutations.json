@@ -1,0 +1,111 @@
+{
+ "0x87e640": {
+  "name": "CEquipment::skillDescription()",
+  "tried": 20,
+  "killed": 18,
+  "score": 0.9,
+  "strong": true,
+  "mutants": [
+   {
+    "mutant": "line 1144: 'true' -> 'false'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1133: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1134: 'result=result+name+L\" \"+g_Level+L\": \"+STRINGS::GetValueAsWString(level);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1144: 'result.append(skill->getDescription(this,static_cast<unsigned int>(-1),true));' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1127: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1143: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1137: '0' -> '1'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1132: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1144: '1' -> '2'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1130: 'name=groups[i]->GetDataValue(L\"NAME\",name);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1139: '1' -> '2'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1127: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1139: '&&' -> '||'",
+    "outcome": "survived",
+    "stats": null
+   },
+   {
+    "mutant": "line 1141: '&&' -> '||'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1141: '!' -> ''",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1143: 'if (i!=0) result=result+L\"\\n\";' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1137: '++' -> '--'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1133: 'if (i!=0) result=result+L\"\\n\";' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1131: 'name=groups[i]->GetDataValue(L\"DISPLAYNAME\",name);' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   },
+   {
+    "mutant": "line 1123: 'if (g_Level.empty()) g_Level=CStringTranslate::getSinglton()->getTranslateString(L\"Level\");' -> ';'",
+    "outcome": "killed",
+    "stats": null
+   }
+  ]
+ }
+}

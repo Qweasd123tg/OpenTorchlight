@@ -1,0 +1,82 @@
+[
+  {
+    "name": "baseline",
+    "outcome": "pass",
+    "exit": 0
+  },
+  {
+    "name": "always_apply",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "never_front",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "front_when_unselected",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_quest",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_set",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_unique",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_magic",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "ignore_socketable",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_rare_branch",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_set_color",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_quest_color",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_unique_color",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_rare_color",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_random_color",
+    "outcome": "killed",
+    "exit": 1
+  },
+  {
+    "name": "wrong_plain_color",
+    "outcome": "killed",
+    "exit": 1
+  }
+]

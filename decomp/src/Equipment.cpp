@@ -1,3 +1,5 @@
+#include "Skill.h"
+#include "SkillManager.h"
 #include <OgreMesh.h>
 #include <OgreSubEntity.h>
 #include <OgreTagPoint.h>
@@ -1113,4 +1115,65 @@ void CEquipment::attachToGivenLocation(CCharacter* character,EEQUIP_LOCATIONS lo
             if (tag) tag->setScale(scale,scale,scale);
         }
     }
+}
+
+std::wstring CEquipment::skillDescription()
+{
+    static std::wstring g_Level;
+    if (g_Level.empty()) g_Level=CStringTranslate::getSinglton()->getTranslateString(L"Level");
+    std::wstring result=EMPTY_WSTRING;
+    std::vector<CDataGroup*> groups;
+    unsigned int count=m_pDataGroup->GetDataGroupsMatchingName(L"SKILL_TO_GIVE",&groups);
+    for (unsigned int i=0;i<count;++i)
+    {
+        std::wstring name=EMPTY_WSTRING;
+        name=groups[i]->GetDataValue(L"NAME",name);
+        name=groups[i]->GetDataValue(L"DISPLAYNAME",name);
+        int level=groups[i]->GetDataValue(L"LEVEL",m_pDataGroup->GetDataValue(L"LEVEL",1));
+        if (i!=0) result=result+L"\n";
+        result=result+name+L" "+g_Level+L": "+STRINGS::GetValueAsWString(level);
+    }
+    if (m_pSkillManager)
+        for (unsigned int i=0;i<static_cast<unsigned int>(m_pSkillManager->knownSkills(SKILL_ACTIVATION_ANY));++i)
+        {
+            CSkill* skill=static_cast<int>(i)<static_cast<int>(m_pSkillManager->m_OtherSkills.size()) && i!=static_cast<unsigned int>(-1)
+                ? m_pSkillManager->m_OtherSkills[i] : NULL;
+            if ((skill->m_bEnabled & !skill->m_bExecutedByProperty) && skill)
+            {
+                if (i!=0) result=result+L"\n";
+                result.append(skill->getDescription(this,static_cast<unsigned int>(-1),true));
+            }
+        }
+    return result;
+}
+void CEquipment::setItemTextHighlighted(bool highlighted)
+{
+    if (getHighlighted() == highlighted || m_pItemText == NULL)
+        return;
+    if (getIsQuestUnit())
+    {
+        m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getQuestColor(highlighted)));
+    }
+    else if (getSet()!=EMPTY_WSTRING)
+    {
+        m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getSetColor(highlighted)));
+    }
+    else if (ISA(UNITTYPES::UNIQUE))
+    {
+        m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getUniqueColor(highlighted)));
+    }
+    else if (isMagical() || ISA(UNITTYPES::RANDOMMAGIC_SOCKETABLE))
+    {
+        if (ISA(UNITTYPES::MAGIC))
+            m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRareColor(highlighted)));
+        else
+            m_pItemText->setProperty("TextColour", STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRandomEnchantColor(highlighted)));
+    }
+    else
+    {
+        CEGUI::colour color = highlighted ? CEGUI::colour(1.0f,1.0f,1.0f,1.0f) : CEGUI::colour(0.8f,0.8f,0.8f,1.0f);
+        m_pItemText->setProperty("TextColour", CEGUI::PropertyHelper::colourToString(color));
+    }
+    if (highlighted)
+        m_pItemText->moveToFront();
 }

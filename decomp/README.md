@@ -1550,3 +1550,30 @@ Final integrated check: 116 tests, 0 failed; 1256 accepted game functions /
 bytes. The effects malloc-count baseline and direct trim-helper regression
 also pass on the final source. Work continues with the remaining functions;
 this checkpoint is not completion of Equipment or the entire game.
+
+### Equipment skill descriptions and item-label highlight (2026-10-05)
+
+`skillDescription()` (0x87e640, 2771 original bytes) restores data-driven granted
+skills and manager-owned skills with original translation caching, enabled /
+property filtering and index-based newline behavior. Its 3500-case fixture
+runs twice per side with real DataGroups and containers, including list changes
+and manager replacement during descriptor callbacks. Sampled mutations: 18/20
+viable killed; 17/17 targeted mutations killed. The two sampled survivors
+modify a redundant small-list index guard; no claim of invalid-pointer or
+corrupt-count safety is made. See `research/equipment-skilldescription-check/`.
+
+`setItemTextHighlighted(bool)` (0x8824f0, 2368 original bytes) restores priority
+quest > set > unique > magical/socketable > ordinary colors and move-to-front
+only when highlighting. Equal old/new highlight or a missing label returns
+without changing the GUI. It does not itself update the item's highlight flag.
+The 384-case fixture uses real headless CEGUI item labels, properties and sibling
+ordering, real type hierarchy lookup and quest-state handling; only the set
+lookup and virtual highlight/magic responses are controlled. The input matrix
+covers all 96 old/new/magical/quest/type combinations independently crossed
+with set and label presence. All 11 viable sampled mutations and 15 targeted
+mutations were killed. No display or rendered-game acceptance is implied.
+
+Integrated check on these sources: 118 tests, 0 failed; 1258/5247 accepted game
+functions, 415668 original bytes. The effects allocation-count regression and
+trim-helper checks also pass. This checkpoint adds two functions / 5139 bytes
+over 89bad57; requirements and remaining Equipment functions are still pending.

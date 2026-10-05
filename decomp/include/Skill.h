@@ -57,6 +57,7 @@ private:
     std::wstring m_sLoopAnimationOverrideDW;
     char m_SkillData148[0x160 - 0x148];
     friend class CBaseUnit;
+    friend class CEquipment;
     friend class CExecuteSkillProps;
 };
 
