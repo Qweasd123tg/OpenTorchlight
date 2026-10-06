@@ -65,7 +65,7 @@ def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental
                           functions=final["functions"], unknown=final.get("unknown", []))
             definitions = [r for r in final["functions"] if r["status"] != "MISSING" and not r.get("weak")]
             prior = {}
-            if incremental and (root / "decomp/src" / tu).exists():
+            if (root / "decomp/src" / tu).exists():
                 # Compare the actual original context, with its actual hand headers.
                 saved_root, saved_extra = os.environ.pop("OTL_INCLUDE_ROOT", None), os.environ.pop("OTL_EXTRA_INCLUDE", None)
                 try:
@@ -78,8 +78,15 @@ def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental
                         os.environ["OTL_EXTRA_INCLUDE"] = saved_extra
             added = [r for r in definitions if r.get("address") not in prior]
             result["new_matched"] = [r["address"] for r in added if r.get("address") and r["status"] == "MATCH"]
-            preserved = preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db) if prior else True
-            if (not definitions or not added or any(r["status"] != "MATCH" for r in added)
+            remaining = {r["address"] for r in definitions if r.get("address")}
+            result["missing_previous"] = sorted(set(prior) - remaining)
+            # A full-TU replacement must not silently fall back to original code
+            # for previously recovered definitions. A green suite can miss them.
+            preserved = not result["missing_previous"]
+            if incremental and prior:
+                preserved = preserved and preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db)
+            required = added if incremental else definitions
+            if (not definitions or not required or any(r["status"] != "MATCH" for r in required)
                     or not preserved or final.get("unknown")):
                 result["status"] = "DIFF"
                 result["reason"] = "final TU requires behavioral evidence; instruction percentage cannot publish it"
