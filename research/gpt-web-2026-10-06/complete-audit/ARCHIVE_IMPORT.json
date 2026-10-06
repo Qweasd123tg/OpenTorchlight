@@ -1,0 +1,1109 @@
+{
+ "schema": 1,
+ "archive": "/home/qweasd123tg/Загрузки/OpenTorchlight_complete_audit.zip",
+ "sha256": "0e1dbd6eb380d30c9b2649c0f448b2f943bda1c55636161da80c510e870a4d94",
+ "entries": [
+  {
+   "path": "FULL_AUDIT_RU.md",
+   "sha256": "6ebee9f76fcbc46cd42b459424f3285376b45882d7d773d2e4d8e8c0b247baa1",
+   "bytes": 67247,
+   "source": "research/gpt-web-2026-10-06/complete-audit/FULL_AUDIT_RU.md"
+  },
+  {
+   "path": "IMPLEMENTATION_SPEC_RU.txt",
+   "sha256": "77513be01e01dfac88e8c7cdb82ea42c7ab704d9a429e25c89b18cebb2fbe6d8",
+   "bytes": 22033,
+   "source": "research/gpt-web-2026-10-06/complete-audit/IMPLEMENTATION_SPEC_RU.txt"
+  },
+  {
+   "path": "README_RU.md",
+   "sha256": "b8a6b1c895e5e1bc79d44df9dc0d3ae4ca6adb555388b2b5f1d0055462df6bc6",
+   "bytes": 5315,
+   "source": "research/gpt-web-2026-10-06/complete-audit/README_RU.md"
+  },
+  {
+   "path": "SHA256SUMS.txt",
+   "sha256": "b45b8f5462ee4aeb10008c8af887e5f9a0fa5472929aa51362030e6c72ee9a5b",
+   "bytes": 3367,
+   "source": "research/gpt-web-2026-10-06/complete-audit/SHA256SUMS.txt"
+  },
+  {
+   "path": "patches/01-objdiff-section-index.patch",
+   "sha256": "1f382e6c22f0c316d7a3f86881702690e97fea9e0f5d9bde201e6a4a91f4456c",
+   "bytes": 1708,
+   "source": "research/gpt-web-2026-10-06/complete-audit/patches/01-objdiff-section-index.patch"
+  },
+  {
+   "path": "patches/02-preserve-cv-qualifiers.patch",
+   "sha256": "bbd809918ab9c9e94e0baa60e35de0e608eb28e98c24a427eeefdd8c292b38a0",
+   "bytes": 1488,
+   "source": "research/gpt-web-2026-10-06/complete-audit/patches/02-preserve-cv-qualifiers.patch"
+  },
+  {
+   "path": "patches/03-draft-retry-isolation.patch",
+   "sha256": "0fe88a252c63b9063f510c8cc8d445a040296ba63e7ee9a0d1f202231bb123fe",
+   "bytes": 10667,
+   "source": "research/gpt-web-2026-10-06/complete-audit/patches/03-draft-retry-isolation.patch"
+  },
+  {
+   "path": "references/test_drafts.py",
+   "sha256": "76e76565ecb525929a3092ae1d4567c407272cdbcbca3b353ad8754625788306",
+   "bytes": 10250,
+   "source": "research/gpt-web-2026-10-06/complete-audit/references/test_drafts.py"
+  },
+  {
+   "path": "results/audit_tool_tests.log",
+   "sha256": "c860f8706b6cabfd36a9498d987f713f99626cf6e0bc1291ac677de9bb27757c",
+   "bytes": 1538,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/audit_tool_tests.log"
+  },
+  {
+   "path": "results/baseline_unittests.log",
+   "sha256": "82cbe809d97231913abd0d089b3b7c46211aee24964040331604488ba97b3d91",
+   "bytes": 4971,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/baseline_unittests.log"
+  },
+  {
+   "path": "results/draft_bundle_regressions.json",
+   "sha256": "db1f76c056bea60a152881da325f6190ecc5184aa6c5647814fa19fa709fe589",
+   "bytes": 2630,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/draft_bundle_regressions.json"
+  },
+  {
+   "path": "results/draft_bundle_regressions.log",
+   "sha256": "200e3d341e31bf3597984f3e1d33237f91a488e252280cb9b54d85d7301d69ae",
+   "bytes": 1439,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/draft_bundle_regressions.log"
+  },
+  {
+   "path": "results/header_dependencies.json",
+   "sha256": "ee9d9d8f57e1485d91a9a87ec4ddb8a5739e6b059f21e0ac90e6090b687e525a",
+   "bytes": 145354,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/header_dependencies.json"
+  },
+  {
+   "path": "results/helper_fanout.json",
+   "sha256": "af7240830cde5b6d0b4cca4d96954c1f800cf39957b028e0de4475eebf69a13a",
+   "bytes": 921566,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/helper_fanout.json"
+  },
+  {
+   "path": "results/large_functions.json",
+   "sha256": "5d6d82baebe0cafc35a064b0b2948ab1ebf8a582ddd347650b3ea561977fa1f8",
+   "bytes": 475829,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/large_functions.json"
+  },
+  {
+   "path": "results/patch_bundle_check.json",
+   "sha256": "c7f7daa225225888e882e26edcb13a0109fd0f6ca40a6285488aaeeb6fd0bae4",
+   "bytes": 1091,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/patch_bundle_check.json"
+  },
+  {
+   "path": "results/patch_bundle_stdout.log",
+   "sha256": "c7f7daa225225888e882e26edcb13a0109fd0f6ca40a6285488aaeeb6fd0bae4",
+   "bytes": 1091,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/patch_bundle_stdout.log"
+  },
+  {
+   "path": "results/patched_unittests.log",
+   "sha256": "db175562909f38bb2d298821a8810d6bf911a5fbe31f60a913411b4dda38aa6f",
+   "bytes": 4899,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/patched_unittests.log"
+  },
+  {
+   "path": "results/snapshot.json",
+   "sha256": "a641a813195384ad9095be805a118cebd9cdb2e672f53f90f9eb879ce0a2b9b3",
+   "bytes": 33150,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/snapshot.json"
+  },
+  {
+   "path": "results/source_integrity.json",
+   "sha256": "b75f8d7698ed8f5f0bc1df971d5d15f1f3ffd51ae3ebe61d5c29d3c7729db63a",
+   "bytes": 166,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/source_integrity.json"
+  },
+  {
+   "path": "results/source_manifest.json",
+   "sha256": "2909fa1f34d4cc7c088270aaca78bcf7d70e40240a687ac80a4d2aad7a0efc90",
+   "bytes": 371483,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/source_manifest.json"
+  },
+  {
+   "path": "results/tool_index.json",
+   "sha256": "b0f950234929b4f8cbc27bb19e776076a13934fb8d2f08cdb5da454cf123264c",
+   "bytes": 91819,
+   "source": "research/gpt-web-2026-10-06/complete-audit/results/tool_index.json"
+  },
+  {
+   "path": "tools/audit_snapshot.py",
+   "sha256": "2cd935609db22ae666c24ea58317f1aa685eba7261ce33127a2f68239f9a6a85",
+   "bytes": 9326,
+   "source": "research/gpt-web-2026-10-06/complete-audit/tools/audit_snapshot.py"
+  },
+  {
+   "path": "tools/test_audit_snapshot.py",
+   "sha256": "f3485602c257955968cf84ae9cdee832f510f44eef7eca0a05ac1e944b3bf9f8",
+   "bytes": 2362,
+   "source": "research/gpt-web-2026-10-06/complete-audit/tools/test_audit_snapshot.py"
+  },
+  {
+   "path": "tools/verify_patch_bundle.py",
+   "sha256": "e0907cb53451f2e1d962a465d42caf0d12158d9c18db01347c1879e0fc2f8120",
+   "bytes": 3347,
+   "source": "research/gpt-web-2026-10-06/complete-audit/tools/verify_patch_bundle.py"
+  }
+ ],
+ "references": [
+  {
+   "path": "references/previous-audits/OpenTorchlight_deeper_no_llm.zip",
+   "sha256": "4a47cb9b991885fcf14ffd49c7a05b8a4ac36c0f9264e576dbd6dec0f9814105",
+   "bytes": 13974,
+   "members": [
+    {
+     "path": "OpenTorchlight_deeper_no_llm/REPORT_RU.md",
+     "sha256": "e50260377d76ea0fbc9be851f698b9b3bc204883cf173a003499d371e6a957a5",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/prior_reports/types-and-comparison-REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_deeper_no_llm/probe-results.json",
+     "sha256": "68478a3bf83821b57d59c23a1622e9905b553c10e06206b795bc96ea3a151af3",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/types-normalizer.log"
+    },
+    {
+     "path": "OpenTorchlight_deeper_no_llm/probe_pipeline.py",
+     "sha256": "2f0520a793c0a78f68929ae2cdfa5cedf24455606feae64c05de36622e4994fc",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/types-and-comparison/probe_pipeline.py"
+    },
+    {
+     "path": "OpenTorchlight_deeper_no_llm/source-fingerprints.json",
+     "sha256": "d8f26783e1c09475f7358c48b175797bd58ea26c158b8bd3265a9e6ed4f789c4",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/types-and-comparison/source-fingerprints.json"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_no_LLM_audit.zip",
+   "sha256": "e902709302025c66b86a8b230542e42546479dc07170dde6f2c471fc4c2040c9",
+   "bytes": 10086,
+   "members": [
+    {
+     "path": "ot_no_llm_notes/README.md",
+     "sha256": "758923338002afb215801c6f5e46e32f0f7978939bac3bd3c7dfdd27dd08ec16",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/prior_reports/input-freshness-README.md"
+    },
+    {
+     "path": "ot_no_llm_notes/saved_snapshot_recount.json",
+     "sha256": "881ff4057c893a6a15fc93907aef5bde7b6de24fd6fe3b1dba1899505b55c396",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/input-freshness/saved_snapshot_recount.json"
+    },
+    {
+     "path": "ot_no_llm_notes/invalidation_result.json",
+     "sha256": "2d060f3e62d417fc13062c7026fc11be815933614e38c251981325adbb421bf6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/invalidation.log"
+    },
+    {
+     "path": "ot_no_llm_notes/utility_tests.log",
+     "sha256": "3f9c4a49b96549b016959ec02bd9bafa3f278abf792a8abbc45e9143e720f67c",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_no_LLM_audit/ot_no_llm_notes/utility_tests.log"
+    },
+    {
+     "path": "ot_no_llm_notes/probe_draft_invalidation.py",
+     "sha256": "997879b2f867083f07f0826c0896361a807c2accebee4b811f115b7c2c11dd9e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/input-freshness/probe_draft_invalidation.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass3.zip",
+   "sha256": "f09eb69f19e33fb27ffde681eab3e7f0b2952d91376f7144834805b164c12e7d",
+   "bytes": 81349,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass3/README_RU.md",
+     "sha256": "1ac0febd73bd5daad2b6135522125f06bf1fbfee0898a4d23d93e59841cb2e26",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/prior_reports/fast-comparison-README_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass3/REPORT_RU.md",
+     "sha256": "742bcc4248053354a70819282dce59f34bd028459d331d964b41c97d16cf221e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/prior_reports/fast-comparison-REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass3/objdiff-section-index.patch",
+     "sha256": "1f382e6c22f0c316d7a3f86881702690e97fea9e0f5d9bde201e6a4a91f4456c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/patches/objdiff-section-index.patch"
+    },
+    {
+     "path": "OpenTorchlight_pass3/objdiff_fast_probe.py",
+     "sha256": "5ba7e849f77dd731ab9aff945b959900a30e1f86908b2e195a0178f7bedc327e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/objdiff_fast_probe.py"
+    },
+    {
+     "path": "OpenTorchlight_pass3/verify_patch.py",
+     "sha256": "4f18cc682437648837a76d8786597c043084f409d7c75ae8cd3eee239e69d305",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/verify_patch.py"
+    },
+    {
+     "path": "OpenTorchlight_pass3/probe_pass3.py",
+     "sha256": "4a2c14d9bac831cd690d27f7785ebe9ec451276172adced7c9ee3cdc75f3e7c8",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/probe_pass3.py"
+    },
+    {
+     "path": "OpenTorchlight_pass3/probe_runtime.cpp",
+     "sha256": "d1bc03096f4482b84bdbde44d2b400c98b8f476766113d09c074aa196bc7709c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/probe_runtime.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass3/context_a.cpp",
+     "sha256": "f503ae2266277b31ee46aefe810d677777d15c0dc88da34f8ae6bb229920a9a6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/context_a.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass3/context_b.cpp",
+     "sha256": "543e64fb087763df7362b7d9e00d3ee9874f4686be55b4cb59c389d917c0b6fd",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/context_b.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass3/algebra.cpp",
+     "sha256": "07db22e8646a0890e46a3ec32646c547a272ce1cca63966959abbf431593fb8b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/algebra.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/candidate.smt2",
+     "sha256": "4f09e93c8182015e3dc2336dde043b4bd28fc1a9354c21cea189ccb27a6b16a5",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/capture-and-equivalence/candidate.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/inventory.json",
+     "sha256": "9f06770a2ce8ed35a0c49e75d525b1328dffc5bca08dca36e9c0f4e4758ecdb8",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass3/OpenTorchlight_pass3/results/inventory.json"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/parser-benchmark.json",
+     "sha256": "552fbee9f944cc02d9e323eecd604e77de4ac3d8e286d43a2a5b6513fb88c732",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass3/OpenTorchlight_pass3/results/parser-benchmark.json"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/patch-metadata.json",
+     "sha256": "0caad4a00823ad8761ae0d482fed247f841d03945011b6fbd4ce6e8ec5234ca7",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass3/OpenTorchlight_pass3/results/patch-metadata.json"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/patch-verification.json",
+     "sha256": "fe0c9d9cb10e6d838a7ac0bfadba1ff762d198081cab4c68992c32bcf6d3f4a9",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/normalizer-patch.json"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/probe-results.json",
+     "sha256": "af1aee911f5bd19ffdf4a6b89580443fd211e6b55392be6562d26361ceab49bf",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/capture-and-equivalence/probe-results.json"
+    },
+    {
+     "path": "OpenTorchlight_pass3/results/wrong_candidate.smt2",
+     "sha256": "d939802b50932f0e4f20c8a48902398f2dcaf65ccdd45d0910ff9ce8f721e3f8",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/capture-and-equivalence/wrong_candidate.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass3/SHA256.json",
+     "sha256": "767631f5ae9aefa03aacbf5eadadf8d18245cfe99ed4ed36a20326b0eb0436e0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/fast-comparison/SHA256.json"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass4.zip",
+   "sha256": "146afe509b120e66960a16b8015d181a971d6e3a452f20eee2372e34cbd69279",
+   "bytes": 35077,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass4/REPORT_RU.md",
+     "sha256": "084a0d23e10764f6ac2447acb3811cab371237f4860dd4eae3084f5d92db32aa",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/prior_reports/syntax-and-signatures-REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass4/preserve-cv-qualifiers.patch",
+     "sha256": "bbd809918ab9c9e94e0baa60e35de0e608eb28e98c24a427eeefdd8c292b38a0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/patches/preserve-cv-qualifiers.patch"
+    },
+    {
+     "path": "OpenTorchlight_pass4/probe_member_slots.py",
+     "sha256": "98c1ac165a22662e21a7b9cebb778a817828e41b55c78bbb54b014fc79efb2f0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/probe_member_slots.py"
+    },
+    {
+     "path": "OpenTorchlight_pass4/probe_pass4.py",
+     "sha256": "7137b6c142d4994eeb7baaf05380712f5b7f3cc3c381deb4211f520fcb2bc74d",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/probe_pass4.py"
+    },
+    {
+     "path": "OpenTorchlight_pass4/probe_reduce_failure.py",
+     "sha256": "b97a8d6d28883053739a1fe35eab5854708fb6c8766596702ce8b3d757e89825",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/probe_reduce_failure.py"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/cv-patch-verification.json",
+     "sha256": "20d1a629f8b11e3d8ebcf9eb6a08ab19f37b72ac78bfc3a2bedf89ceea8a1fbd",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/portable-run/cv-patch/cv-patch-verification.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/bool_expected.cpp",
+     "sha256": "bca39677231fbb2c9e4f2893300ddff58a2d5b8639dedca75aef9ecc458c7b72",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/bool_expected.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/bool_rewritten.cpp",
+     "sha256": "172d51911238da7d6af3ab09c7cb956f7ca9c6ad22bc5f10588d70dd7cb4c25a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/bool_rewritten.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/const_control.cpp",
+     "sha256": "f7d5f293018f2f958375f931b592a161ac1f9325a6ee869e4e230ced05d45b47",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/const_control.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/const_rewritten.cpp",
+     "sha256": "d5ae92b7f6ecdf1d9c85fe7688f16e624f9edb98f0afb946a87141039ecf6caa",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/const_rewritten.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/direct_expected.cpp",
+     "sha256": "65d412666aa8476497bd737a4e31e169133232a88c976c31e8cd461bf88e33e7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/direct_expected.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/direct_rewritten.cpp",
+     "sha256": "4115dedb19aafbd2cd70008f6a6c83a950370c0d82399ceb4a6b574743aa1f12",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/direct_rewritten.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/literal_expected.cpp",
+     "sha256": "0d8f06be145dca7f4498b51078d6afa7c7d5c7b0c7104f3eb933d00780b64c75",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/literal_expected.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/literal_rewritten.cpp",
+     "sha256": "c8e02819699a25772b17145a6a0dc307f414b6ba5bc3f78219c32f1306728078",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/literal_rewritten.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/member_slots_expected.cpp",
+     "sha256": "0117ab6c8049a2380b4d01787c155ef3d40466c6490267e2a0a63119e7f41a60",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/member_slots_expected.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/member_slots_swapped.cpp",
+     "sha256": "ac10cd37621f73093d894b08e70680678887bb7f34263642f00dc8332a49e427",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/member_slots_swapped.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/overload_control.cpp",
+     "sha256": "a9a4effbf8eb0b7335feac725ea8a57eb02ad500bf8f26cb3da76fddbe62720e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/overload_control.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/overload_missing.cpp",
+     "sha256": "9508aef9de3cd5eed2271ca90117c66393f043a9d259e30b24f01f5605b37af2",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/overload_missing.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/reducer_before.cpp",
+     "sha256": "58773e502db4fa57567f8c5c500950938b5f5d9b1fadb804027dfb45fed97bbe",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/reducer_before.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/reducer_fixed.cpp",
+     "sha256": "7a5fcaecd84adc30094bc3e64ee8a27777ce3e93bf8ea4bcea6f664d47d79726",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/reducer_fixed.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/reducer_minimal.cpp",
+     "sha256": "6b8349712669d30eb69d6b7fb4b0cc64258083414d336baf71fdf4cc7382ceb6",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/reducer_minimal.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_expected.cpp",
+     "sha256": "982a43c0a7a1ba9fa967bbb9458303e5011ae3b8c7892932243ae6109dc236f3",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/vtable_expected.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_expected.cpp.001l.class",
+     "sha256": "37572900dd6ef1a7a546202f681e482cfb73f9cf76bf78dbe806b11f58789380",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/vtable_expected.cpp.001l.class"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_expected.relocations.txt",
+     "sha256": "53ad39401ad8c2c0c4cf7c2255010a67291d8d0410e9bc18aff14a0405fcef8c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/vtable_expected.relocations.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_swapped.cpp",
+     "sha256": "6b87f48596d930e3fe23d0d775be176dcdcea75dc454c535f2d9ef2886681e92",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/vtable_swapped.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_swapped.cpp.001l.class",
+     "sha256": "88441c1d5caf4563fb03443e83569ea5a50ebb5721985e0474b4cb7a4eaac40d",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/fixtures/vtable_swapped.cpp.001l.class"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/fixtures/vtable_swapped.relocations.txt",
+     "sha256": "719666fa0ec5cd3693a5e37e5f3829af706c5170094738230099253ee6c2f71a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/vtable_swapped.relocations.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/literal-scan.json",
+     "sha256": "d6ca4f4a40b5be247ffb36c2dd4ce9100cc3081ec7c5e4af519223b33d9dc4ac",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/literal-scan.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/member-slot-results.json",
+     "sha256": "39961d5eef4f39f5f2d18e57840a08184f449a910c2ec446546eeffb1ba172d8",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/member-slot-results.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/probe-results.json",
+     "sha256": "35dae42e6e8642e332a9a326916685cff8e2231543daf321265776c635e1bd79",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/probe-results.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/reducer-results.json",
+     "sha256": "6330f0b66a13061af81100eaf2cc5d58f4e4907b41f9161e7175dbeb733380c9",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/reducer-results.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/results/source-integrity.json",
+     "sha256": "819f5ae9f9e1ecb9d33c53d6d0f0c0a45a25c7d903d52a0547d4e89f7b12126b",
+     "source": "research/gpt-web-2026-10-06/complete-audit/references/expanded/OpenTorchlight_pass4/OpenTorchlight_pass4/results/source-integrity.json"
+    },
+    {
+     "path": "OpenTorchlight_pass4/verify_cv_patch.py",
+     "sha256": "62e8534823231dd7f372f75a5a81f7ed94c968a7c9ea8bf681f2258a3a2db3a8",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/verify_cv_patch.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass5.zip",
+   "sha256": "461aa8331c5e84140fe4e029dfe382d135cc6569311174ccab6e45e327e7a87a",
+   "bytes": 285690,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass5/README.md",
+     "sha256": "afacf21920a55c999bac4d601ab42e58c5e205633322fd421a04262f2c235461",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/README.md"
+    },
+    {
+     "path": "OpenTorchlight_pass5/REPORT_RU.md",
+     "sha256": "d51defc1af26ecc2b44a0ac09e9fa9979a1147a91c35715d848665abffa146ae",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass5/examples/guarded-call-region.json",
+     "sha256": "1ec5e7f3989bbb1a0c86419822222846c9f419cce871cb33ca470097c50b85fc",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/control-flow/examples/guarded-call-region.json"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/archive-census.json",
+     "sha256": "cd463882b4bc3ae7aa9f4801df5b9c5506c4eb8242a2e2a957d7fded1de64fed",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/results/archive-census.json"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/effect-regions.json",
+     "sha256": "046d0ab8d91e2378f3dca246868bcd155beb93ee0d95da1ea6f7cd156efd6bde",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/results/effect-regions.json"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/integrity-and-environment.json",
+     "sha256": "9e50a894a3b9093f4d13dd3524bd6a87505b7c5403326607e5ec9ee225947b78",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/results/integrity-and-environment.json"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/pip-angr.log",
+     "sha256": "6a499279ff2a49c2f021751140deb8b7f2abeeda0f53dedac2c0f15d98dfe0e7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/results/pip-angr.log"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/summary.json",
+     "sha256": "d983a3633211e14b73706641a3f6d340586c7567ae3064f08e576511ec01d4b9",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass5/results/summary.json"
+    },
+    {
+     "path": "OpenTorchlight_pass5/results/unit-tests.log",
+     "sha256": "aa999bd3858d6ac2f877d30e1e507fed2f978e1ae79a1d22ced997534fa3b2dc",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/results/portable-run/control-flow/run.log"
+    },
+    {
+     "path": "OpenTorchlight_pass5/scripts/archive_census.py",
+     "sha256": "e918751e0f42956295a5fdb6c6bf7dbf3aad6ccda7d1bcd1b52b1ed821c0db70",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/control-flow/scripts/archive_census.py"
+    },
+    {
+     "path": "OpenTorchlight_pass5/scripts/effect_regions.py",
+     "sha256": "36b3558b2d25f2585647883dc4d989c5356e60a720e20865d846bf874efd7ec9",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/control-flow/scripts/effect_regions.py"
+    },
+    {
+     "path": "OpenTorchlight_pass5/scripts/test_stage_tools.py",
+     "sha256": "00ed7e491836b3e8eb6a2fe08bc0b081c5fff24add9f93b67d730e884adf735e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_unified_audit/reproductions/control-flow/scripts/test_stage_tools.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass6.zip",
+   "sha256": "61253ef85d2b331f60a4e0590efc27ee1d5f61632282769b83298d90884ac198",
+   "bytes": 109121,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass6/README.md",
+     "sha256": "5a959678a87472916f4305f7e962879b149645accf043464dc74e67b30e05b26",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/README.md"
+    },
+    {
+     "path": "OpenTorchlight_pass6/REPORT_RU.md",
+     "sha256": "d7be1eb24be9b2fa2eb898451e4aff67e43eb4dbf4b579ec6841aeb99eb1d65c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass6/SHA256SUMS.txt",
+     "sha256": "eae3a1a420c7881be67851e37c1d4fe22b0a15737937afa22e2031da23780d66",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/SHA256SUMS.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass6/examples/loop_scan.cpp",
+     "sha256": "fe0c6882455193e4cad337863f076ba9aef0e57f592a39696e06c989ab67daeb",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/examples/loop_scan.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/corpus-verification.json",
+     "sha256": "6989ff3dbfffb62f8e3f7f7ec76558adc345cf71ba8f8e891b5fb8600c819078",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/corpus-verification.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/family-deltas.json",
+     "sha256": "48b6ebd50c16acf27a82cb048caa04f45f9a9920f2afa91ba2408e38ebe873ac",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/family-deltas.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/family-miner-console.txt",
+     "sha256": "efff0fc901fcd47c40873c412f09bba092795e33566391d277d10849f77c9ac5",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/family-miner-console.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/integrity.json",
+     "sha256": "5e793fc1d28cab0580f1bf34869c561fd1b93c67d95ceda4466a53f7cdbcfd71",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/integrity.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loop-scan-tests.json",
+     "sha256": "c78b1c8db901b4643203afd136e65d42575b71ba07fd47bf7a856e5579fab725",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loop-scan-tests.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/base.smt2",
+     "sha256": "1d7111a4edcb0fb335c57339a90f078ba922f0e95a6242ce594f1bd01f581eb7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/base.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/capacity_branch_under_invariant.smt2",
+     "sha256": "a83b7a39e8e308bc1414b1ae9df8911c58b210ebddbbba35ea74be5041ae4c80",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/capacity_branch_under_invariant.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/capacity_branch_without_invariant.smt2",
+     "sha256": "5a2b66210cf455c58ad7fff7fb7ebacdd07f01862f4547daed04b5f5848c0bf1",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/capacity_branch_without_invariant.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/capacity_growth_wrap_counterexample.smt2",
+     "sha256": "a05c8f43b24b1f1082940eaaa19ab9d1e9694595b88caad9c6f6589378b43eb9",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/capacity_growth_wrap_counterexample.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/invariant_preserved_by_increment_in_capacity.smt2",
+     "sha256": "b5beb5288ff9098270147d552fc7b6740be3a48ca6a3ffcf082ebf8afa25c04b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/invariant_preserved_by_increment_in_capacity.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/invariant_preserved_by_remove.smt2",
+     "sha256": "1d6d80503c5dd03945e4fe3e9fb01caa25cd2735427f289e036a9505627eb560",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/invariant_preserved_by_remove.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/loop-results.json",
+     "sha256": "121195b8d5a5de27c5e2891329d4ef7b9de390dabd6e5e6034d470f828f3f634",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/loop-results.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/missing_bound.smt2",
+     "sha256": "58cfdbb0c56f67426751f5a4c6837e49eedef25fdc9be2b3afe6bbcfa1cc568a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/missing_bound.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/same_memory_read.smt2",
+     "sha256": "50d93ffde0536c71b8d1d56ca33fa588d1973e14302b93ecf61213c05d2c1e1c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/same_memory_read.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/step_with_uint_bound.smt2",
+     "sha256": "5cd5c5109a95785735d399c49b41bd5363e2cfb4eedad88fd694333d3f8bffcd",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/step_with_uint_bound.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/loops/wrong_stride.smt2",
+     "sha256": "27c7ac7193f794a459ef25e9835e7754e1cb1523d3311d5808fbb0cd4b2ce935",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/loops/wrong_stride.smt2"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/member-alignment-console.txt",
+     "sha256": "054b1ab135f80aaf27d128c15bfb59386ea9bad2c12e5d3ea096e9b4080af2f6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/member-alignment-console.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/member-alignment.json",
+     "sha256": "2113456cfbc1fc88703493dab35880a253ec1f139552ad612282d2d725ace827",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/member-alignment.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/summary.json",
+     "sha256": "9ac6808b23ecbcfe36caf9ee781217e2573ba5358ae6bf4122a449d05e668ebb",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/summary.json"
+    },
+    {
+     "path": "OpenTorchlight_pass6/results/unit-tests.txt",
+     "sha256": "379e0f9a073e1415c7eac693db7dd8c67e323f6e67375e5a7e86ead4e0d2972b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/results/unit-tests.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass6/scripts/family_deltas.py",
+     "sha256": "580e150640f00a964f3e28b2930f72d854687cc3706afee98f7bb8eb87c33d87",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/scripts/family_deltas.py"
+    },
+    {
+     "path": "OpenTorchlight_pass6/scripts/loop_obligations.py",
+     "sha256": "286f07ad5b56863591767694b12985d203e8f9d5259ffe24e41bf58f620590cb",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/scripts/loop_obligations.py"
+    },
+    {
+     "path": "OpenTorchlight_pass6/scripts/member_alignment.py",
+     "sha256": "0bd98f19c4bd9cd37aef11ff9e80eedfae329cf5ef40dbc052840ddb79c44195",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/scripts/member_alignment.py"
+    },
+    {
+     "path": "OpenTorchlight_pass6/scripts/test_stage_prototypes.py",
+     "sha256": "83dd1dc59aa9dce312314123bacfaf32cacb90eb7f82e34fea2ee620e765835f",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/scripts/test_stage_prototypes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass6/scripts/verify_corpus.py",
+     "sha256": "41a6fbfec55976043a1d321ad6f88f612a74ae3770dda4ec187007a694200e05",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass6/scripts/verify_corpus.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass7.zip",
+   "sha256": "f41700eb34e0a405de91b7c7fec0ef3d5dee41597f06efafaba07fe1441521cd",
+   "bytes": 57397,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass7/README.md",
+     "sha256": "69dc167afc7c7a70c9bd2550f4a3d06e0484f966ad8ca4ab27c9d21199f18b1a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/README.md"
+    },
+    {
+     "path": "OpenTorchlight_pass7/REPORT_RU.md",
+     "sha256": "758e2f2d0dd53135ece56c60022e60cee77744320ebdc8fe7ff7d72d19918c44",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass7/examples/resource_default_test.cpp",
+     "sha256": "3d8e5ea36692d19b1016d62bb7bfcf6a2f6d51a20cd567d53f79e6831148cfd6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/examples/resource_default_test.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/binding-recipes.json",
+     "sha256": "a3779169deb9680e6d4c2bee29f14a2d20ee6cbda25b507c75b82c542158a5c1",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/binding-recipes.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/cegui-compilation.json",
+     "sha256": "dd3726e8511ae956f76f4bda2516d91f1db0b26aca7e2d46afbf9528b2c9d1b8",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/cegui-compilation.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/effect-table-inventory.json",
+     "sha256": "d67e7e722945a3a6b347abfc4a9ab3c27683a773599751e28b738a4f5df8989b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/effect-table-inventory.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/generated-table-definitions.cpp",
+     "sha256": "2e5c3266622a1786f1d10c3929dd68aeb542d322dae195a8427bc6a8591ba099",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/generated-table-definitions.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/generated_cegui_fixture.cpp",
+     "sha256": "c330d9cbf71eeac6ebba508e9c887da614c9f5610f69b521712ef121c682bae7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/generated_cegui_fixture.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/integrity.json",
+     "sha256": "71c61ec18fa21a34f90d154b2f9db26e141722282d70685d170549b97f9e8a24",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/integrity.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/reproduction-integrity.json",
+     "sha256": "69d4a0f2deeef23d7d4d0b8a84a329cdb0373a50bfdfcfcb1d8f8ab103418830",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/reproduction-integrity.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/resource-default-test.json",
+     "sha256": "47e17a505042905d3a16a7ad99ec263f08e82f76c5f6dc36d1c4aec8fd59e6bb",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/resource-default-test.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/resource-recipes.json",
+     "sha256": "a0493eabc5c80ee857faeb2fe7b68d045b88145c44d48faab64e670996b57aa8",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/resource-recipes.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/snapshot-roundtrip.json",
+     "sha256": "a65a3460e3bc84ef6af052dc7bbd114a68280ef8febb2cab34c436d3e44e26a7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/snapshot-roundtrip.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/summary.json",
+     "sha256": "af6b68ae2c15ccb6b149c6d37163bb3b03d0ed145b97599311d12a6a1cce265f",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/summary.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/synthetic-original-tables.cpp",
+     "sha256": "c5566a8edea538bfc59e24879ac6cff1165c65f3ddddc0fa89b127899afae9d4",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/synthetic-original-tables.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/synthetic-original-tables.json",
+     "sha256": "e65944289916d1a593b6bcd2b01a643aa5d6e224c921d2b08d6028e1fd8ded74",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/synthetic-original-tables.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/synthetic-regenerated-tables.cpp",
+     "sha256": "9db28ed607db4e2fa7d85d91ca8efa50e639d73e5ee03cfc88caa2182a7b16b7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/synthetic-regenerated-tables.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/synthetic-regenerated-tables.json",
+     "sha256": "e65944289916d1a593b6bcd2b01a643aa5d6e224c921d2b08d6028e1fd8ded74",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/synthetic-original-tables.json"
+    },
+    {
+     "path": "OpenTorchlight_pass7/results/unit-tests.txt",
+     "sha256": "d31daf81716130640c97e52b8e56bc227ade9fbc86168593dcf981b2b85cc22a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/results/unit-tests.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tests/test_prototypes.py",
+     "sha256": "47ee52eb89ef975489cda477c2ecd5c05c3309266441c7649cbd15cdb7fe3184",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tests/test_prototypes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/archive.py",
+     "sha256": "cc7d63d741c43c06034596d3a73f6d2a28df1e58c1c0ab9fb42bfb87b50fb380",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/archive.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/binding_recipes.py",
+     "sha256": "844cc3d58d8f483c233e70a3c7148c78189bec339c7d47e19cfeb6e7dce8cde4",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/binding_recipes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/check_cegui_recipes.py",
+     "sha256": "30fd54ff0199a0b2b249b46fccfe40f9ea683910a771a1dd29ae18cb90304fea",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/check_cegui_recipes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/check_snapshot_roundtrip.py",
+     "sha256": "503266bdc97cfd376fa582ace55db7035564f62ff50269083ad143f87a73a90c",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/check_snapshot_roundtrip.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/effect_table_inventory.py",
+     "sha256": "a644797e221492b2cd4d6ab57b24914331699eb0a12b0d2ccbfd7b03dbcb8dc3",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/effect_table_inventory.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/resource_recipes.py",
+     "sha256": "82b3756764118798dd35fd78d24135a4a3a843923844e3f267a9b08fdc798bb9",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/resource_recipes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/run_checks.py",
+     "sha256": "79f5ed7c700a5a5e08ee299ce8a7ba988127724d21d051eb0aa2c3743b7bb2a0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/run_checks.py"
+    },
+    {
+     "path": "OpenTorchlight_pass7/tools/snapshot_to_cpp.py",
+     "sha256": "01f1f3231abb4cb9bdfb729efa459dab4014ce00bfb788a01609803210447b82",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass7/tools/snapshot_to_cpp.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass8.zip",
+   "sha256": "f89fa0ccc931256045863f5166edc99d6b583dcc7e1e050f62a37ea4c010cd13",
+   "bytes": 217590,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass8/README.md",
+     "sha256": "fbf3897f9ab5f5d37f9dc48876f5e07db46bdd92ed5fec40305df3d90e546b9e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/README.md"
+    },
+    {
+     "path": "OpenTorchlight_pass8/REPORT_RU.md",
+     "sha256": "101341fb8e2b5debf8d035e18747f478d7ff6b68be20aa9f6f1343127b7e6448",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass8/examples/abi_probe.cpp",
+     "sha256": "f2f913fdf8289679619978f0c9bf7bd532549002efda4abfc30b3595b6bf5c4f",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/examples/abi_probe.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass8/examples/capture_return.S",
+     "sha256": "d945143c456a9ba06f3ad05f056049d77f657fababc5d3319331e3d383a3fe56",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/examples/capture_return.S"
+    },
+    {
+     "path": "OpenTorchlight_pass8/examples/lifecycle_probe.cpp",
+     "sha256": "fc7c30f9e2c07e4c0233de3431e215137616d062ac68c024e306c2a051bf0f80",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/examples/lifecycle_probe.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass8/examples/math_probe.cpp",
+     "sha256": "33a16e0063c22a3add15ea44fdfd53cc52622fbb63d3db7d5cde698f7ac13832",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/examples/math_probe.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass8/examples/native_probe.cpp",
+     "sha256": "20d21ca320ad11b10c9657ade14ae7d966f024a2b81ec824ca4c4aabf1932af7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/examples/native_probe.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/abi-probe.json",
+     "sha256": "d4bd3ef1d02b913ad31e996e32ff921ae3adcaa12ece6aa03a5e2a341be537ed",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/abi-probe.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/abi-probe.s",
+     "sha256": "866771bc13eaf6086a8ef2f44ce43d1984bb42b411103082fde0cc13db3d41a2",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/abi-probe.s"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/census.json",
+     "sha256": "2cb5a3bd02bab2c0a51679861607c9f4b64b71aa5a49ce74dffefc4faf1ed9cf",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/census.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/commands.json",
+     "sha256": "b6be7c949459aaff5718d55875ef0fb0fb8faa143c7f0cfc4511e96c8d5d0de4",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/commands.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/environment.json",
+     "sha256": "473a8c026c7b0a9815942b4425ffd415cd89d907639bc830bfeb02e7e55ddf67",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/environment.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/lifecycle-probe.json",
+     "sha256": "73d179e433c1231b14b23aba9953017404049ca3af398f9a3079f1e2313044a6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/lifecycle-probe.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/math-probe.json",
+     "sha256": "c7b2f469d1e1620db81c36611804a413205809c442e298dc5c311d30119f1954",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/math-probe.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native/generated_capture.cpp",
+     "sha256": "a7ffd2432554fb955ebb4866a77de1171ee01f4147e72e4616e23fcc3575cb44",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native/generated_capture.cpp"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native/memory-recovery.json",
+     "sha256": "e19ce5870f86a3f4d759d6da06f0fca9d4c0dd7542750daba5e43048f9911d0a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native/memory-recovery.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native/native-capsules.json",
+     "sha256": "daaf5035a6b8afc55eef2cd6f170525d6bc0c9ec435fdbd4a72272fe78f52b1b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native/native-capsules.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native/native_reference.S",
+     "sha256": "4bd89fd75fc35536da0ab3e9f8943ef2fa6f01a3f9e01b87e4fdd0c4a61fc3b3",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native/native_reference.S"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native-disassembled.txt",
+     "sha256": "f9c5b62f794d42ca6070b382707e4095f32ca72e3f27f67c368e757af5867147",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native-disassembled.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native-probe.json",
+     "sha256": "c9ab51f926927f3b9976009f795e114dfb7240ecc1d1b0fe36e6386ff563e517",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native-probe.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/native-symbols.txt",
+     "sha256": "5fc775e008e8ab1fbfd00ebad1e0a6a830c3875e560db7405cc11c761914040f",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/native-symbols.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/source-integrity.json",
+     "sha256": "34387ff3631ba33583836ff431d7cfd961084d0bd8602c36b5b32b1f0f9a7fc0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/source-integrity.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/source-manifest.json",
+     "sha256": "2034726a60c2f0004c17d6a57b4e253c3060dfefd9f6188d37eab9da9f892395",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/source-manifest.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/static-guards.json",
+     "sha256": "3ff0b55c53cf63e84585eb34f657cf5be6d72f00a1356e33121f3bb9b5f9509f",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/static-guards.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/summary.json",
+     "sha256": "3dc23c8a8ce4a1691afb7a7edcd6b209bfccc09283540d5d458583e453936257",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/summary.json"
+    },
+    {
+     "path": "OpenTorchlight_pass8/results/unittests.txt",
+     "sha256": "cb9151702cc3f13b43e4d3275da2ad9b6997af8269724b64bfcd03d67653cb48",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/results/unittests.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass8/run_all.py",
+     "sha256": "4259bd5907acb02e3f8303f12f025ff873a24b569f797b20c0fa9ac6e992d139",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/run_all.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tests/test_prototypes.py",
+     "sha256": "bf0bf72fcf339a2ba823e90673e1341069ef43c668791a34fae14d392e3447ca",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tests/test_prototypes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/archive.py",
+     "sha256": "cc7d63d741c43c06034596d3a73f6d2a28df1e58c1c0ab9fb42bfb87b50fb380",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/archive.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/census.py",
+     "sha256": "2e0bda002f3c9cb93b77f6a175a543b5a9e67c264dc4df8c2c9734e081a7c40e",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/census.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/math_shapes.py",
+     "sha256": "3b00c4244c85ae35cf8c7193cc36694d389ef93ff22c91ddc66b2fcead0f2c06",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/math_shapes.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/memory_transfers.py",
+     "sha256": "2555d856cf1489ffbe2d013e0532d3fa5875f9bae577afccc16465be4250e72b",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/memory_transfers.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/native_capsule.py",
+     "sha256": "b2497964eb5eaaf46a70ca3ba8d82bfa6b9167e2c98b46f8a3c2d0e253502788",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/native_capsule.py"
+    },
+    {
+     "path": "OpenTorchlight_pass8/tools/static_guards.py",
+     "sha256": "65561d6efc14efcd2a7a51c13aba41482aebb68ad799e93eead67acc62cd5bed",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass8/tools/static_guards.py"
+    }
+   ]
+  },
+  {
+   "path": "references/previous-audits/OpenTorchlight_pass9.zip",
+   "sha256": "7fb0961ecaadcf77051536f94e61832fd7d7509dfb334574982740d18446ca6f",
+   "bytes": 44966,
+   "members": [
+    {
+     "path": "OpenTorchlight_pass9/README.md",
+     "sha256": "6b60c3a8610c64cf422b6d198460c2483bfdabc395313a990b3e5fc2b49a90ef",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/README.md"
+    },
+    {
+     "path": "OpenTorchlight_pass9/REPORT_RU.md",
+     "sha256": "e21b9a78b6ccbacabbefdd4ea3aad837d2a1bb83e090901a3c343ddddfa4cf52",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/REPORT_RU.md"
+    },
+    {
+     "path": "OpenTorchlight_pass9/patches/draft-retry-isolation.patch",
+     "sha256": "0fe88a252c63b9063f510c8cc8d445a040296ba63e7ee9a0d1f202231bb123fe",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/patches/draft-retry-isolation.patch"
+    },
+    {
+     "path": "OpenTorchlight_pass9/preview/tools/decomp/ghidra/DecompDrafts.java",
+     "sha256": "777e07fb522aabc19166bfb6f8300da0d7aeac636678e27d5b1bef1c3237f7f0",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/preview/tools/decomp/ghidra/DecompDrafts.java"
+    },
+    {
+     "path": "OpenTorchlight_pass9/preview/tools/decomp/ghidra_draft.py",
+     "sha256": "499bdaea0765394a8e0b4f39ce589f8d61513c4cde6da2386e0c849aaa6bb0e6",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/preview/tools/decomp/ghidra_draft.py"
+    },
+    {
+     "path": "OpenTorchlight_pass9/results/archive-evidence.json",
+     "sha256": "d85e4c770a6f41fe286bd65b01235859e259c0503c55a2211cd85340a6386b84",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/results/archive-evidence.json"
+    },
+    {
+     "path": "OpenTorchlight_pass9/results/draft-regressions.json",
+     "sha256": "746752e4dde6b3b4e2f7f4743f04c958b71392b779f6ce391496981a00f5ba24",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/results/draft-regressions.json"
+    },
+    {
+     "path": "OpenTorchlight_pass9/results/existing-unit-tests.txt",
+     "sha256": "506387472b939c6ac23436d79e196f7cbbef7d8293e44dbb633a4f129d3dcce7",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/results/existing-unit-tests.txt"
+    },
+    {
+     "path": "OpenTorchlight_pass9/results/patch-application.json",
+     "sha256": "23c7b73abbdc0ae46146aa68808d48d576484a3c4137e7047cc21f18edcc8053",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/results/patch-application.json"
+    },
+    {
+     "path": "OpenTorchlight_pass9/results/pch-benchmark.json",
+     "sha256": "d106335689988050932f6139d713f685ad611d008535b97705406b23901485bf",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/results/pch-benchmark.json"
+    },
+    {
+     "path": "OpenTorchlight_pass9/run_checks.py",
+     "sha256": "b48084e8d98e030e66cc770f3aea353e7a90ec7d4bfe607bad14ed59b49876fb",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/run_checks.py"
+    },
+    {
+     "path": "OpenTorchlight_pass9/scripts/benchmark_pch.py",
+     "sha256": "b8ad160822ad355627275a566d207b4f978df259f3a54d75047c8eb2704c1298",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/scripts/benchmark_pch.py"
+    },
+    {
+     "path": "OpenTorchlight_pass9/scripts/make_patch.py",
+     "sha256": "e620a666df535d79fcabae2d2291020e84f342466db41a3946c73425e0481d6a",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/scripts/make_patch.py"
+    },
+    {
+     "path": "OpenTorchlight_pass9/scripts/test_drafts.py",
+     "sha256": "76e76565ecb525929a3092ae1d4567c407272cdbcbca3b353ad8754625788306",
+     "source": "research/gpt-web-2026-10-06/user-supplied-opinions/OpenTorchlight_pass9/scripts/test_drafts.py"
+    }
+   ]
+  }
+ ],
+ "manifest_entries_verified": 33,
+ "note": "Nested research ZIPs are represented by verified hashes and readable members; byte-identical members reuse existing imported research. Source archive remains external."
+}

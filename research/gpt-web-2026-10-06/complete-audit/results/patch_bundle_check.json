@@ -1,0 +1,35 @@
+{
+  "scope": "Patch compatibility and Python regressions only; no original ELF or GCC 4.4.7 run.",
+  "patches": [
+    {
+      "name": "01-objdiff-section-index.patch",
+      "applies_after_previous": true,
+      "diagnostic": ""
+    },
+    {
+      "name": "02-preserve-cv-qualifiers.patch",
+      "applies_after_previous": true,
+      "diagnostic": ""
+    },
+    {
+      "name": "03-draft-retry-isolation.patch",
+      "applies_after_previous": true,
+      "diagnostic": ""
+    }
+  ],
+  "unit_test_process_returncode": 1,
+  "python_syntax_valid": true,
+  "unit_test_ok_lines": 24,
+  "unit_test_error_lines": [
+    "test_exact_types_and_reference_value (test_autotest_returns.ReturnTypes.test_exact_types_and_reference_value) ... ERROR",
+    "test_standalone_fork_capture (test_autotest_returns.ReturnTypes.test_standalone_fork_capture) ... ERROR"
+  ],
+  "draft_regression_returncode": 0,
+  "changed_paths": [
+    "tools/decomp/objdiff.py",
+    "tools/decomp/ghidra_cpp.py",
+    "tools/decomp/headers.py",
+    "tools/decomp/ghidra_draft.py",
+    "tools/decomp/ghidra/DecompDrafts.java"
+  ]
+}

@@ -1,0 +1,2843 @@
+{
+ "schema": 1,
+ "tu": "Equipment.cpp",
+ "provider": "deterministic",
+ "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/attempts/tu-0ns5ahuv",
+ "input_digest": "faf0f0cb76b33a20c013620c0f5561145f2257143cbfd31e150df6984d9d4381",
+ "candidate_sha256": "36f24de30b44e779a30d1a43605a3f651a7535db37fe8e3a022eb0beed79beaa",
+ "published": false,
+ "diagnostic_object": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+ "final_object": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+ "final_object_changed": false,
+ "functions": [
+  {
+   "name": "_GLOBAL__I__ZN10CEquipment17getEquipmentStatsEv",
+   "status": "EXTRA",
+   "size": 5,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_Z16removeWhiteSpaceRKSbIwSt11char_traitsIwESaIwEE",
+   "demangled": "removeWhiteSpace(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "address": "0x899c60",
+   "status": "DIFF",
+   "score": 0.9675,
+   "size": 456,
+   "original_size": 444,
+   "weak": true,
+   "code": "5caee1df3877c17b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+   "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+   "address": "0x870030",
+   "status": "DIFF",
+   "score": 0.1327,
+   "size": 35669,
+   "original_size": 40389,
+   "weak": false,
+   "code": "cb14912fc0e2008b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment10addSocketsEv",
+   "demangled": "CEquipment::addSockets()",
+   "address": "0x87f960",
+   "status": "DIFF",
+   "score": 0.595,
+   "size": 260,
+   "original_size": 260,
+   "weak": false,
+   "code": "7c3aa7a243ff491f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment10createIconER7CGameUIb",
+   "demangled": "CEquipment::createIcon(CGameUI&, bool)",
+   "address": "0x882e30",
+   "status": "DIFF",
+   "score": 0.4382,
+   "size": 5357,
+   "original_size": 4075,
+   "weak": false,
+   "code": "d345683ebcfa3780",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment10setGraphACEj",
+   "demangled": "CEquipment::setGraphAC(unsigned int)",
+   "address": "0x87e0c0",
+   "status": "DIFF",
+   "score": 0.9851,
+   "size": 268,
+   "original_size": 268,
+   "weak": false,
+   "code": "aed824b6068de19d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment10updateDropEf",
+   "demangled": "CEquipment::updateDrop(float)",
+   "address": "0x87a400",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 1614,
+   "original_size": 1614,
+   "weak": false,
+   "code": "0a854b1743274be8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment11isWardrobedESbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEquipment::isWardrobed(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x87fa70",
+   "status": "DIFF",
+   "score": 0.6968,
+   "size": 1487,
+   "original_size": 1471,
+   "weak": false,
+   "code": "cf6ce0db7b43f19c",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment11setRimlightESbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEquipment::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x87e2c0",
+   "status": "DIFF",
+   "score": 0.9901,
+   "size": 888,
+   "original_size": 888,
+   "weak": false,
+   "code": "0d5e9aefc3eec1e8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment11unloadModelEv",
+   "demangled": "CEquipment::unloadModel()",
+   "address": "0x86d3e0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 64,
+   "original_size": 64,
+   "weak": false,
+   "code": "1a8193a127e5e909",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment11useOnTargetEP10CCharacterP9CBaseUnit",
+   "demangled": "CEquipment::useOnTarget(CCharacter*, CBaseUnit*)",
+   "address": "0x86e910",
+   "status": "DIFF",
+   "score": 0.3593,
+   "size": 558,
+   "original_size": 598,
+   "weak": false,
+   "code": "7bbf0b51fc0ccd4f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment12enchantPriceEv",
+   "demangled": "CEquipment::enchantPrice()",
+   "address": "0x87e1d0",
+   "status": "DIFF",
+   "score": 0.9516,
+   "size": 236,
+   "original_size": 236,
+   "weak": false,
+   "code": "13f0321aceb494eb",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment12executeProcsEP10CCharacter12EEFFECT_TYPEP9CBaseUnit",
+   "demangled": "CEquipment::executeProcs(CCharacter*, EEFFECT_TYPE, CBaseUnit*)",
+   "address": "0x86f4a0",
+   "status": "DIFF",
+   "score": 0.417,
+   "size": 514,
+   "original_size": 561,
+   "weak": false,
+   "code": "77d7487d69338b1e",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment12fireMissilesEP10CCharacterS1_",
+   "demangled": "CEquipment::fireMissiles(CCharacter*, CCharacter*)",
+   "address": "0x87f120",
+   "status": "DIFF",
+   "score": 0.55,
+   "size": 1867,
+   "original_size": 1881,
+   "weak": false,
+   "code": "6825c1dd1633adf6",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment12getUnitModelEv",
+   "demangled": "CEquipment::getUnitModel()",
+   "address": "0x899520",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": false,
+   "code": "50a2cba9a8465465",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13fillSaveStateER14CItemSaveStateib",
+   "demangled": "CEquipment::fillSaveState(CItemSaveState&, int, bool)",
+   "address": "0x8867c0",
+   "status": "DIFF",
+   "score": 0.5853,
+   "size": 1377,
+   "original_size": 1394,
+   "weak": false,
+   "code": "df91581ef99504f9",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment13getEquippedToEv",
+   "demangled": "CEquipment::getEquippedTo()",
+   "address": "0x899550",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": false,
+   "code": "2742ea876bd54182",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13getMaxSocketsEv",
+   "demangled": "CEquipment::getMaxSockets()",
+   "address": "0x87f880",
+   "status": "DIFF",
+   "score": 0.9808,
+   "size": 209,
+   "original_size": 209,
+   "weak": false,
+   "code": "dcc1f7447ef143d1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment13missileDieingEP8CMissile",
+   "demangled": "CEquipment::missileDieing(CMissile*)",
+   "address": "0x86e360",
+   "status": "DIFF",
+   "score": 0.3778,
+   "size": 299,
+   "original_size": 323,
+   "weak": false,
+   "code": "39c55b59b0e266b1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment13reskinByClassESbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEquipment::reskinByClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x888920",
+   "status": "DIFF",
+   "score": 0.3126,
+   "size": 2050,
+   "original_size": 2027,
+   "weak": false,
+   "code": "bbe4e22fbf90e94b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment14addDamageBonusE13EDAMAGE_TYPESi",
+   "demangled": "CEquipment::addDamageBonus(EDAMAGE_TYPES, int)",
+   "address": "0x879f60",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 336,
+   "original_size": 336,
+   "weak": false,
+   "code": "813ab05ad0a3632f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment14applySaveStateER14CItemSaveState",
+   "demangled": "CEquipment::applySaveState(CItemSaveState&)",
+   "address": "0x8863b0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 814,
+   "original_size": 814,
+   "weak": false,
+   "code": "f6111a01e6184bc4",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment14canUseOnTargetEP10CCharacterP9CBaseUnit",
+   "demangled": "CEquipment::canUseOnTarget(CCharacter*, CBaseUnit*)",
+   "address": "0x86e710",
+   "status": "DIFF",
+   "score": 0.203,
+   "size": 570,
+   "original_size": 506,
+   "weak": false,
+   "code": "e2180136a89796aa",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment14getDamageBonusE13EDAMAGE_TYPES",
+   "demangled": "CEquipment::getDamageBonus(EDAMAGE_TYPES)",
+   "address": "0x86d440",
+   "status": "DIFF",
+   "score": 0.6517,
+   "size": 327,
+   "original_size": 327,
+   "weak": false,
+   "code": "b6767fa15edc10e3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment14setGraphDamageEj",
+   "demangled": "CEquipment::setGraphDamage(unsigned int)",
+   "address": "0x87dfa0",
+   "status": "DIFF",
+   "score": 0.9844,
+   "size": 276,
+   "original_size": 276,
+   "weak": false,
+   "code": "a903fdef9a44f185",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment15createParticlesEv",
+   "demangled": "CEquipment::createParticles()",
+   "address": "0x885a70",
+   "status": "DIFF",
+   "score": 0.5772,
+   "size": 1678,
+   "original_size": 1679,
+   "weak": false,
+   "code": "35a6e7c07ab227de",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment15getFullItemNameEb",
+   "demangled": "CEquipment::getFullItemName(bool)",
+   "address": "0x884ba0",
+   "status": "DIFF",
+   "score": 0.5258,
+   "size": 3414,
+   "original_size": 3785,
+   "weak": false,
+   "code": "80d8acb140eca08f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment15improveHeirloomEv",
+   "demangled": "CEquipment::improveHeirloom()",
+   "address": "0x882330",
+   "status": "DIFF",
+   "score": 0.3796,
+   "size": 492,
+   "original_size": 446,
+   "weak": false,
+   "code": "5ee105169fcd69fd",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment15setRenderBehindEb",
+   "demangled": "CEquipment::setRenderBehind(bool)",
+   "address": "0x86ebd0",
+   "status": "DIFF",
+   "score": 0.6122,
+   "size": 179,
+   "original_size": 252,
+   "weak": false,
+   "code": "3d196a5627f187c6",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment15setRequirementsEv",
+   "demangled": "CEquipment::setRequirements()",
+   "address": "0x880030",
+   "status": "DIFF",
+   "score": 0.739,
+   "size": 2351,
+   "original_size": 2335,
+   "weak": false,
+   "code": "5d6d8f1a8d0efa89",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment16addContainerItemEPS_",
+   "demangled": "CEquipment::addContainerItem(CEquipment*)",
+   "address": "0x86e1d0",
+   "status": "DIFF",
+   "score": 0.975,
+   "size": 380,
+   "original_size": 380,
+   "weak": false,
+   "code": "c898a23e305d5061",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment16addedToInventoryEP10CInventoryP10CCharacter",
+   "demangled": "CEquipment::addedToInventory(CInventory*, CCharacter*)",
+   "address": "0x884a20",
+   "status": "DIFF",
+   "score": 0.6816,
+   "size": 444,
+   "original_size": 383,
+   "weak": false,
+   "code": "3af0332e2c3d63ad",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment16getEquipmentTypeEb",
+   "demangled": "CEquipment::getEquipmentType(bool)",
+   "address": "0x88d040",
+   "status": "DIFF",
+   "score": 0.2894,
+   "size": 7749,
+   "original_size": 9173,
+   "weak": false,
+   "code": "0b7231f43f606001",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment16recalculatePriceEv",
+   "demangled": "CEquipment::recalculatePrice()",
+   "address": "0x883e20",
+   "status": "DIFF",
+   "score": 0.5101,
+   "size": 1901,
+   "original_size": 1949,
+   "weak": false,
+   "code": "8aebfa8ba6c1db60",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment16setActiveInLevelEb",
+   "demangled": "CEquipment::setActiveInLevel(bool)",
+   "address": "0x886100",
+   "status": "DIFF",
+   "score": 0.7712,
+   "size": 303,
+   "original_size": 316,
+   "weak": false,
+   "code": "d416b84d3bbdb54b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment16skillDescriptionEv",
+   "demangled": "CEquipment::skillDescription()",
+   "address": "0x87e640",
+   "status": "DIFF",
+   "score": 0.4773,
+   "size": 2760,
+   "original_size": 2771,
+   "weak": false,
+   "code": "cc3d9743328a728d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment17addInherentDamageE13EDAMAGE_TYPESi",
+   "demangled": "CEquipment::addInherentDamage(EDAMAGE_TYPES, int)",
+   "address": "0x879e10",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 336,
+   "original_size": 336,
+   "weak": false,
+   "code": "2ff2f6b2dad7ee0a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment17applyEffectOnUnitEP10CCharacterP9CBaseUnitP7CEffect",
+   "demangled": "CEquipment::applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*)",
+   "address": "0x86e690",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 118,
+   "original_size": 118,
+   "weak": false,
+   "code": "5c4b76716d6a84cc",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment17getEquipmentStatsEv",
+   "demangled": "CEquipment::getEquipmentStats()",
+   "address": "0x893660",
+   "status": "DIFF",
+   "score": 0.2962,
+   "size": 17765,
+   "original_size": 24219,
+   "weak": false,
+   "code": "339bb24633fe6e11",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment17resetVisualLayoutEv",
+   "demangled": "CEquipment::resetVisualLayout()",
+   "address": "0x86d640",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 34,
+   "original_size": 34,
+   "weak": false,
+   "code": "899473933ebe690d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment18detachFromLocationEv",
+   "demangled": "CEquipment::detachFromLocation()",
+   "address": "0x86ee20",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 493,
+   "original_size": 493,
+   "weak": false,
+   "code": "4ca5aa8c6d6a0753",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment18effectsDescriptionE18EEFFECT_ACTIVATIONbb",
+   "demangled": "CEquipment::effectsDescription(EEFFECT_ACTIVATION, bool, bool)",
+   "address": "0x88b180",
+   "status": "DIFF",
+   "score": 0.4564,
+   "size": 3979,
+   "original_size": 4048,
+   "weak": false,
+   "code": "c4bc6a9f67248e60",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment18updateVisualLayoutEf",
+   "demangled": "CEquipment::updateVisualLayout(float)",
+   "address": "0x86d670",
+   "status": "DIFF",
+   "score": 0.9767,
+   "size": 394,
+   "original_size": 394,
+   "weak": false,
+   "code": "69323247228140d8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment19getEquipmentEffectsEv",
+   "demangled": "CEquipment::getEquipmentEffects()",
+   "address": "0x88c150",
+   "status": "DIFF",
+   "score": 0.437,
+   "size": 3685,
+   "original_size": 3813,
+   "weak": false,
+   "code": "d6a4aeb289a5fc44",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment19getLevelRequirementEP10CCharacter",
+   "demangled": "CEquipment::getLevelRequirement(CCharacter*)",
+   "address": "0x86ddc0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 283,
+   "original_size": 283,
+   "weak": false,
+   "code": "1e2de365f93be618",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment19getMagicRequirementEP10CCharacter",
+   "demangled": "CEquipment::getMagicRequirement(CCharacter*)",
+   "address": "0x86d970",
+   "status": "DIFF",
+   "score": 0.8161,
+   "size": 366,
+   "original_size": 354,
+   "weak": false,
+   "code": "0abc134cd1bcd544",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment20calculateCombatStatsEb",
+   "demangled": "CEquipment::calculateCombatStats(bool)",
+   "address": "0x880950",
+   "status": "DIFF",
+   "score": 0.3155,
+   "size": 5445,
+   "original_size": 6615,
+   "weak": false,
+   "code": "fa68671d1405b498",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment20getAttackSpeedStringE12EWeaponSpeed",
+   "demangled": "CEquipment::getAttackSpeedString(EWeaponSpeed)",
+   "address": "0x86f790",
+   "status": "DIFF",
+   "score": 0.974,
+   "size": 935,
+   "original_size": 935,
+   "weak": false,
+   "code": "93a10fc801d3b7f4",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment20getFlavorDescriptionEv",
+   "demangled": "CEquipment::getFlavorDescription()",
+   "address": "0x87d5f0",
+   "status": "DIFF",
+   "score": 0.9792,
+   "size": 184,
+   "original_size": 184,
+   "weak": false,
+   "code": "5f156d5c691c30a1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment20isEffectValidForUnitEP10CCharacterP9CBaseUnitP7CEffect",
+   "demangled": "CEquipment::isEffectValidForUnit(CCharacter*, CBaseUnit*, CEffect*)",
+   "address": "0x86d600",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 27,
+   "original_size": 27,
+   "weak": false,
+   "code": "e74bb7b1930d6cc6",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment21attachToGivenLocationEP10CCharacter16EEQUIP_LOCATIONS",
+   "demangled": "CEquipment::attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)",
+   "address": "0x886d40",
+   "status": "DIFF",
+   "score": 0.4976,
+   "size": 3346,
+   "original_size": 3402,
+   "weak": false,
+   "code": "9bc9d1efc76cddab",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment21getDefenseRequirementEP10CCharacter",
+   "demangled": "CEquipment::getDefenseRequirement(CCharacter*)",
+   "address": "0x86d800",
+   "status": "DIFF",
+   "score": 0.8161,
+   "size": 366,
+   "original_size": 354,
+   "weak": false,
+   "code": "5dd6b15fa106eeae",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment21getUnitCollisionModelEv",
+   "demangled": "CEquipment::getUnitCollisionModel()",
+   "address": "0x899540",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": false,
+   "code": "979e6c32946a1955",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment21getUnitModelSecondaryEv",
+   "demangled": "CEquipment::getUnitModelSecondary()",
+   "address": "0x899530",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": false,
+   "code": "69cd5bc37a6bbb7a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment22createElementalDamagesEv",
+   "demangled": "CEquipment::createElementalDamages()",
+   "address": "0x886240",
+   "status": "DIFF",
+   "score": 0.4129,
+   "size": 257,
+   "original_size": 298,
+   "weak": false,
+   "code": "04323ad6918680ce",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment22getStrengthRequirementEP10CCharacter",
+   "demangled": "CEquipment::getStrengthRequirement(CCharacter*)",
+   "address": "0x86dc50",
+   "status": "DIFF",
+   "score": 0.8161,
+   "size": 366,
+   "original_size": 354,
+   "weak": false,
+   "code": "3c66f01850cc62ba",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment22missileApplyingEffectsEP8CMissileP10CCharacterPKN4Ogre7Vector3Eff",
+   "demangled": "CEquipment::missileApplyingEffects(CMissile*, CCharacter*, Ogre::Vector3 const*, float, float)",
+   "address": "0x86e540",
+   "status": "DIFF",
+   "score": 0.7296,
+   "size": 327,
+   "original_size": 323,
+   "weak": false,
+   "code": "220c058f98068899",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment22setItemTextHighlightedEb",
+   "demangled": "CEquipment::setItemTextHighlighted(bool)",
+   "address": "0x8824f0",
+   "status": "DIFF",
+   "score": 0.4085,
+   "size": 1809,
+   "original_size": 2368,
+   "weak": false,
+   "code": "04d797ee63d22b46",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment23getDexterityRequirementEP10CCharacter",
+   "demangled": "CEquipment::getDexterityRequirement(CCharacter*)",
+   "address": "0x86dae0",
+   "status": "DIFF",
+   "score": 0.8161,
+   "size": 366,
+   "original_size": 354,
+   "weak": false,
+   "code": "ff89ed69e5efc378",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment23getEquipmentDescriptionEbb",
+   "demangled": "CEquipment::getEquipmentDescription(bool, bool)",
+   "address": "0x88f420",
+   "status": "DIFF",
+   "score": 0.1447,
+   "size": 14857,
+   "original_size": 16955,
+   "weak": false,
+   "code": "a78dfd5cd77788b6",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment36removeAffixesThatDontSupportUnitTypeEN9UNITTYPES10EUNITTYPESE",
+   "demangled": "CEquipment::removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES)",
+   "address": "0x86e020",
+   "status": "DIFF",
+   "score": 0.5328,
+   "size": 414,
+   "original_size": 431,
+   "weak": false,
+   "code": "e90885c41818901e",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment3DPSEv",
+   "demangled": "CEquipment::DPS()",
+   "address": "0x86f360",
+   "status": "DIFF",
+   "score": 0.4336,
+   "size": 303,
+   "original_size": 311,
+   "weak": false,
+   "code": "fa6ae924333b0b83",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment4dropEv",
+   "demangled": "CEquipment::drop()",
+   "address": "0x87aaa0",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 6775,
+   "original_size": 6775,
+   "weak": false,
+   "code": "7585526c495dd09c",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment6getSetEv",
+   "demangled": "CEquipment::getSet()",
+   "address": "0x87d6b0",
+   "status": "DIFF",
+   "score": 0.9792,
+   "size": 184,
+   "original_size": 184,
+   "weak": false,
+   "code": "f1b36166c6d33db0",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment7enchantEb",
+   "demangled": "CEquipment::enchant(bool)",
+   "address": "0x8845c0",
+   "status": "DIFF",
+   "score": 0.5049,
+   "size": 1063,
+   "original_size": 1120,
+   "weak": false,
+   "code": "6509ccb3f97ef2bb",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment8buyPriceEv",
+   "demangled": "CEquipment::buyPrice()",
+   "address": "0x86fc20",
+   "status": "DIFF",
+   "score": 0.4737,
+   "size": 193,
+   "original_size": 233,
+   "weak": false,
+   "code": "1f56894705a3d3f3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment8canEquipEP10CCharacterb",
+   "demangled": "CEquipment::canEquip(CCharacter*, bool)",
+   "address": "0x86f150",
+   "status": "DIFF",
+   "score": 0.8211,
+   "size": 524,
+   "original_size": 513,
+   "weak": false,
+   "code": "0d972cbb228ed1c5",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment8unitInitEP10CDataGroupb",
+   "demangled": "CEquipment::unitInit(CDataGroup*, bool)",
+   "address": "0x889110",
+   "status": "DIFF",
+   "score": 0.3663,
+   "size": 6779,
+   "original_size": 8303,
+   "weak": false,
+   "code": "3772af8aa7eee10d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment9loadModelESbIwSt11char_traitsIwESaIwEES3_",
+   "demangled": "CEquipment::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x887b30",
+   "status": "DIFF",
+   "score": 0.3929,
+   "size": 3564,
+   "original_size": 3558,
+   "weak": false,
+   "code": "a96f03769c200e8d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified",
+    "ambiguous narrow/wide literal in linked rodata"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipment9sellPriceEv",
+   "demangled": "CEquipment::sellPrice()",
+   "address": "0x86fb40",
+   "status": "DIFF",
+   "score": 0.4854,
+   "size": 183,
+   "original_size": 217,
+   "weak": false,
+   "code": "f49bb22da3cf4a5c",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipmentC1EP16CResourceManager",
+   "demangled": "CEquipment::CEquipment(CResourceManager*)",
+   "address": "0x86fd10",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 786,
+   "original_size": 786,
+   "weak": false,
+   "code": "9a3c797bbd20f548",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipmentC2EP16CResourceManager",
+   "demangled": "CEquipment::CEquipment(CResourceManager*)",
+   "address": "0x86fd10",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 786,
+   "original_size": 786,
+   "weak": false,
+   "code": "9a3c797bbd20f548",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipmentD0Ev",
+   "demangled": "CEquipment::~CEquipment()",
+   "address": "0x87de00",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 18,
+   "original_size": 18,
+   "weak": false,
+   "code": "3dd7bcfbaba9fdee",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipmentD1Ev",
+   "demangled": "CEquipment::~CEquipment()",
+   "address": "0x87d770",
+   "status": "DIFF",
+   "score": 0.9722,
+   "size": 1645,
+   "original_size": 1645,
+   "weak": false,
+   "code": "5b293e161caf7251",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN10CEquipmentD2Ev",
+   "demangled": "CEquipment::~CEquipment()",
+   "address": "0x87d770",
+   "status": "DIFF",
+   "score": 0.9722,
+   "size": 1645,
+   "original_size": 1645,
+   "weak": false,
+   "code": "5b293e161caf7251",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN16CSceneNodeObject10getEnabledEv",
+   "demangled": "CSceneNodeObject::getEnabled()",
+   "address": "0x5a6cd0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "750e479d654ddd2e",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN16CSceneNodeObject10setEnabledEb",
+   "demangled": "CSceneNodeObject::setEnabled(bool)",
+   "address": "0x5a6cc0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "67d3353217b29a9f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN17CEditorBaseObject13setParentGuidEx",
+   "demangled": "CEditorBaseObject::setParentGuid(long long)",
+   "address": "0x59f070",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 5,
+   "original_size": 5,
+   "weak": true,
+   "code": "4b37848149eb1325",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN17CEditorBaseObject31removedFromSceneAndAddedToCacheEv",
+   "demangled": "CEditorBaseObject::removedFromSceneAndAddedToCache()",
+   "address": "0x59f080",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 2,
+   "original_size": 2,
+   "weak": true,
+   "code": "3aaf847cb36be772",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN17CEditorBaseObject7SetNameERKSbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEditorBaseObject::SetName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "address": "0x59fb30",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "9d9de67bf290ab56",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject10getForwardERN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::getForward(Ogre::Vector3&)",
+   "address": "0x59f4c0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 30,
+   "original_size": 30,
+   "weak": true,
+   "code": "1df97bf3f0d8b54a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject10getForwardEv",
+   "demangled": "CPositionableObject::getForward()",
+   "address": "0x59f4b0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "31a3f2245234fca7",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject10setForwardERKN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::setForward(Ogre::Vector3 const&)",
+   "address": "0x59f4e0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 26,
+   "original_size": 26,
+   "weak": true,
+   "code": "fd6f033437169acc",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject10setForwardEfff",
+   "demangled": "CPositionableObject::setForward(float, float, float)",
+   "address": "0x59f500",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 69,
+   "original_size": 69,
+   "weak": true,
+   "code": "f3e1fa735a451e40",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject11setPositionEfff",
+   "demangled": "CPositionableObject::setPosition(float, float, float)",
+   "address": "0x59fb00",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 34,
+   "original_size": 34,
+   "weak": true,
+   "code": "16505e7dca000566",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject12scaleUpdatedERKN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::scaleUpdated(Ogre::Vector3 const&)",
+   "address": "0x59f690",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 2,
+   "original_size": 2,
+   "weak": true,
+   "code": "3aaf847cb36be772",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject12setDirectionEN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::setDirection(Ogre::Vector3)",
+   "address": "0x59f450",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 86,
+   "original_size": 86,
+   "weak": true,
+   "code": "bc944b51fabc351d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject13getScaleFloatEv",
+   "demangled": "CPositionableObject::getScaleFloat()",
+   "address": "0x59f240",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "85e0c07f5af117bb",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject13getUpAbsoluteEv",
+   "demangled": "CPositionableObject::getUpAbsolute()",
+   "address": "0x59f720",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 104,
+   "original_size": 104,
+   "weak": true,
+   "code": "74bcacdcccd698d3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14getOrientationERN4Ogre7Matrix3E",
+   "demangled": "CPositionableObject::getOrientation(Ogre::Matrix3&)",
+   "address": "0x59f3b0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 81,
+   "original_size": 81,
+   "weak": true,
+   "code": "71d0ae701db364d0",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14getOrientationEv",
+   "demangled": "CPositionableObject::getOrientation()",
+   "address": "0x59f410",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "ab1c86e9ec320aa2",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14setOrientationERKN4Ogre10QuaternionE",
+   "demangled": "CPositionableObject::setOrientation(Ogre::Quaternion const&)",
+   "address": "0x59fb60",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 264,
+   "original_size": 264,
+   "weak": true,
+   "code": "922e62055321f74a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14setOrientationERKN4Ogre7Matrix3E",
+   "demangled": "CPositionableObject::setOrientation(Ogre::Matrix3 const&)",
+   "address": "0x59f980",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 55,
+   "original_size": 55,
+   "weak": true,
+   "code": "ac333e98375a3849",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14setOrientationERKN4Ogre7Matrix4Eb",
+   "demangled": "CPositionableObject::setOrientation(Ogre::Matrix4 const&, bool)",
+   "address": "0x59f870",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 262,
+   "original_size": 262,
+   "weak": true,
+   "code": "f2220b323e8e13fd",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject14setOrientationERN4Ogre7Vector3ES2_",
+   "demangled": "CPositionableObject::setOrientation(Ogre::Vector3&, Ogre::Vector3&)",
+   "address": "0x59fc70",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 544,
+   "original_size": 544,
+   "weak": true,
+   "code": "b6cf1e4b7d12815b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject15positionUpdatedERKN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::positionUpdated(Ogre::Vector3 const&)",
+   "address": "0x753c70",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 2,
+   "original_size": 2,
+   "weak": true,
+   "code": "3aaf847cb36be772",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject16getRightAbsoluteEv",
+   "demangled": "CPositionableObject::getRightAbsolute()",
+   "address": "0x59f790",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 104,
+   "original_size": 104,
+   "weak": true,
+   "code": "0b7b71b0696be31c",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject17getTransformationEv",
+   "demangled": "CPositionableObject::getTransformation()",
+   "address": "0x59f9c0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 251,
+   "original_size": 251,
+   "weak": true,
+   "code": "6fc2c8f25c4d2169",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject18getForwardAbsoluteEv",
+   "demangled": "CPositionableObject::getForwardAbsolute()",
+   "address": "0x59f800",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 104,
+   "original_size": 104,
+   "weak": true,
+   "code": "785bc58058eb61ea",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject18orientationUpdatedERKN4Ogre7Matrix4E",
+   "demangled": "CPositionableObject::orientationUpdated(Ogre::Matrix4 const&)",
+   "address": "0x59f680",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 2,
+   "original_size": 2,
+   "weak": true,
+   "code": "3aaf847cb36be772",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject24getOrientationQuaternionEv",
+   "demangled": "CPositionableObject::getOrientationQuaternion()",
+   "address": "0x59fac0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 52,
+   "original_size": 52,
+   "weak": true,
+   "code": "861f13e9972977f5",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject25extractOrientationVectorsEv",
+   "demangled": "CPositionableObject::extractOrientationVectors()",
+   "address": "0x59f6a0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 112,
+   "original_size": 112,
+   "weak": true,
+   "code": "3eb715995d02440f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject32getOrientationQuaternionAbsoluteEv",
+   "demangled": "CPositionableObject::getOrientationQuaternionAbsolute()",
+   "address": "0x59f420",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 46,
+   "original_size": 46,
+   "weak": true,
+   "code": "c7b93bdb057f337f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4getXEv",
+   "demangled": "CPositionableObject::getX()",
+   "address": "0x59f0f0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "b1c6647f04c4de59",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4getYEv",
+   "demangled": "CPositionableObject::getY()",
+   "address": "0x59f160",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "1a2769c91febef8b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4getZEv",
+   "demangled": "CPositionableObject::getZ()",
+   "address": "0x59f1c0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "ffa48a93551e5952",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4setXEf",
+   "demangled": "CPositionableObject::setX(float)",
+   "address": "0x59f090",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 86,
+   "original_size": 86,
+   "weak": true,
+   "code": "fee0716397a559b3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4setYEf",
+   "demangled": "CPositionableObject::setY(float)",
+   "address": "0x59f100",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 83,
+   "original_size": 83,
+   "weak": true,
+   "code": "01d8618f9440a3c4",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject4setZEf",
+   "demangled": "CPositionableObject::setZ(float)",
+   "address": "0x59f170",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 80,
+   "original_size": 80,
+   "weak": true,
+   "code": "8c9aa9bc99539148",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject5getUpERN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::getUp(Ogre::Vector3&)",
+   "address": "0x59f5f0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 30,
+   "original_size": 30,
+   "weak": true,
+   "code": "a0c41758aafead7a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject5getUpEv",
+   "demangled": "CPositionableObject::getUp()",
+   "address": "0x59f5e0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "54bce5055f96f556",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject5setUpERKN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::setUp(Ogre::Vector3 const&)",
+   "address": "0x59f610",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 26,
+   "original_size": 26,
+   "weak": true,
+   "code": "5105c5f45d8b6e58",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject5setUpEfff",
+   "demangled": "CPositionableObject::setUp(float, float, float)",
+   "address": "0x59f630",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 69,
+   "original_size": 69,
+   "weak": true,
+   "code": "ddb08b647c3c1314",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8getRightERN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::getRight(Ogre::Vector3&)",
+   "address": "0x59f560",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 4,
+   "original_size": 4,
+   "weak": true,
+   "code": "b74858312461658f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8getRightEv",
+   "demangled": "CPositionableObject::getRight()",
+   "address": "0x59f550",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "ba19624025d67837",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8getScaleEv",
+   "demangled": "CPositionableObject::getScale()",
+   "address": "0x59f250",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "85e0c07f5af117bb",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8setRightERKN4Ogre7Vector3E",
+   "demangled": "CPositionableObject::setRight(Ogre::Vector3 const&)",
+   "address": "0x59f570",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 26,
+   "original_size": 26,
+   "weak": true,
+   "code": "2e326514fc97a4f7",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8setRightEfff",
+   "demangled": "CPositionableObject::setRight(float, float, float)",
+   "address": "0x59f590",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 69,
+   "original_size": 69,
+   "weak": true,
+   "code": "b8c9af24581aca94",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8setScaleEf",
+   "demangled": "CPositionableObject::setScale(float)",
+   "address": "0x59f1d0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 18,
+   "original_size": 18,
+   "weak": true,
+   "code": "6c8d4347f9347f23",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject8setScaleEfff",
+   "demangled": "CPositionableObject::setScale(float, float, float)",
+   "address": "0x59f1f0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 69,
+   "original_size": 69,
+   "weak": true,
+   "code": "cd1a324f2d44d1b9",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9getScaleXEv",
+   "demangled": "CPositionableObject::getScaleX()",
+   "address": "0x59f260",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "3c4dcf3e21a05a03",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9getScaleYEv",
+   "demangled": "CPositionableObject::getScaleY()",
+   "address": "0x59f270",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "94f3aedddcf135f3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9getScaleZEv",
+   "demangled": "CPositionableObject::getScaleZ()",
+   "address": "0x59f280",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": true,
+   "code": "1992842d05e45cf2",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9setScaleXEf",
+   "demangled": "CPositionableObject::setScaleX(float)",
+   "address": "0x59f290",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 92,
+   "original_size": 92,
+   "weak": true,
+   "code": "8835971662f69352",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9setScaleYEf",
+   "demangled": "CPositionableObject::setScaleY(float)",
+   "address": "0x59f2f0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 89,
+   "original_size": 89,
+   "weak": true,
+   "code": "2822c423d8da531b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN19CPositionableObject9setScaleZEf",
+   "demangled": "CPositionableObject::setScaleZ(float)",
+   "address": "0x59f350",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 89,
+   "original_size": 89,
+   "weak": true,
+   "code": "5064a77ef85c9dc2",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre15AllocatedObjectINS_22CategorisedAllocPolicyILNS_14MemoryCategoryE0EEEEnwEm",
+   "demangled": "Ogre::AllocatedObject<Ogre::CategorisedAllocPolicy<(Ogre::MemoryCategory)0> >::operator new(unsigned long)",
+   "address": "0x85acc0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 11,
+   "original_size": 11,
+   "weak": true,
+   "code": "fdb116d19e9b581d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9SharedPtrINS_4MeshEE4swapERS2_",
+   "demangled": "Ogre::SharedPtr<Ogre::Mesh>::swap(Ogre::SharedPtr<Ogre::Mesh>&)",
+   "address": "0x86b130",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 45,
+   "original_size": 45,
+   "weak": true,
+   "code": "5a58c23bdec3878b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9SharedPtrINS_4MeshEE7destroyEv",
+   "demangled": "Ogre::SharedPtr<Ogre::Mesh>::destroy()",
+   "address": "0x86b160",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 105,
+   "original_size": 105,
+   "weak": true,
+   "code": "dad884e9a8862177",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9SharedPtrINS_4MeshEED0Ev",
+   "demangled": "Ogre::SharedPtr<Ogre::Mesh>::~SharedPtr()",
+   "address": "0x86b1d0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 46,
+   "original_size": 46,
+   "weak": true,
+   "code": "25f5a614973cb4dc",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9SharedPtrINS_4MeshEED1Ev",
+   "demangled": "Ogre::SharedPtr<Ogre::Mesh>::~SharedPtr()",
+   "address": "0x86b100",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 42,
+   "original_size": 42,
+   "weak": true,
+   "code": "0aa5335196d0aaca",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9SharedPtrINS_4MeshEED2Ev",
+   "demangled": "Ogre::SharedPtr<Ogre::Mesh>::~SharedPtr()",
+   "address": "0x86b100",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 42,
+   "original_size": 42,
+   "weak": true,
+   "code": "0aa5335196d0aaca",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9UTFString11_verifyUTF8ERKSs",
+   "demangled": "Ogre::UTFString::_verifyUTF8(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0x56bf40",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 1173,
+   "original_size": 1173,
+   "weak": true,
+   "code": "34deeb3955e7d6fb",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN4Ogre9UTFString12invalid_dataD0Ev",
+   "demangled": "Ogre::UTFString::invalid_data::~invalid_data()",
+   "address": "0x56b0f0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 25,
+   "original_size": 25,
+   "weak": true,
+   "code": "5dbdfb3a5eb58929",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9UTFString12invalid_dataD1Ev",
+   "demangled": "Ogre::UTFString::invalid_data::~invalid_data()",
+   "address": "0x56afc0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": true,
+   "code": "f43e48afbfee2c1a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9UTFString12invalid_dataD2Ev",
+   "demangled": "Ogre::UTFString::invalid_data::~invalid_data()",
+   "address": "0x56afc0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": true,
+   "code": "f43e48afbfee2c1a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9UTFStringC1ERKSs",
+   "demangled": "Ogre::UTFString::UTFString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0x754520",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 1160,
+   "original_size": 1160,
+   "weak": true,
+   "code": "e786340510960bde",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN4Ogre9UTFStringC2ERKSs",
+   "demangled": "Ogre::UTFString::UTFString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0x754520",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 1160,
+   "original_size": 1160,
+   "weak": true,
+   "code": "e786340510960bde",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZN4Ogre9UTFStringD1Ev",
+   "demangled": "Ogre::UTFString::~UTFString()",
+   "address": "0x56dad0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 394,
+   "original_size": 394,
+   "weak": true,
+   "code": "ce01db4ec25e905d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN4Ogre9UTFStringD2Ev",
+   "demangled": "Ogre::UTFString::~UTFString()",
+   "address": "0x56dad0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 394,
+   "original_size": 394,
+   "weak": true,
+   "code": "ce01db4ec25e905d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN5CEGUI6StringC1EPKc",
+   "demangled": "CEGUI::String::String(char const*)",
+   "address": "0x899620",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 183,
+   "original_size": 183,
+   "weak": true,
+   "code": "fe54cd87b5667a51",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN5CEGUI6StringC1ERKSs",
+   "demangled": "CEGUI::String::String(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0x899560",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 178,
+   "original_size": 178,
+   "weak": true,
+   "code": "cf43c56dee01e847",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN5CEGUI6StringC2EPKc",
+   "demangled": "CEGUI::String::String(char const*)",
+   "address": "0x899620",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 183,
+   "original_size": 183,
+   "weak": true,
+   "code": "fe54cd87b5667a51",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN5CEGUI6StringC2ERKSs",
+   "demangled": "CEGUI::String::String(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0x899560",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 178,
+   "original_size": 178,
+   "weak": true,
+   "code": "cf43c56dee01e847",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN8iMissileD0Ev",
+   "demangled": "iMissile::~iMissile()",
+   "address": "0x85acf0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": true,
+   "code": "f89c1af2555d3333",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN8iMissileD1Ev",
+   "demangled": "iMissile::~iMissile()",
+   "address": "0x85ab40",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "4a373a3ea6f79fa9",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN8iMissileD2Ev",
+   "demangled": "iMissile::~iMissile()",
+   "address": "0x85ab40",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "4a373a3ea6f79fa9",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN9CBaseUnit14getHighlightedEv",
+   "demangled": "CBaseUnit::getHighlighted()",
+   "address": "0x805110",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 8,
+   "original_size": 8,
+   "weak": true,
+   "code": "d145a84f1f622138",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEE4_Rep8_M_cloneERKS1_m",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::_Rep::_M_clone(std::allocator<unsigned short> const&, unsigned long)",
+   "address": "0x56b210",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 161,
+   "original_size": 161,
+   "weak": true,
+   "code": "94b7e6c843dc96fc",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEE4_Rep9_S_createEmmRKS1_",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::_Rep::_S_create(unsigned long, unsigned long, std::allocator<unsigned short> const&)",
+   "address": "0x56afd0",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 135,
+   "original_size": 135,
+   "weak": true,
+   "code": "a6de3e7800525533",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEE6appendEPKtm",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::append(unsigned short const*, unsigned long)",
+   "address": "0x56b360",
+   "status": "DIFF",
+   "score": 0.971,
+   "size": 284,
+   "original_size": 276,
+   "weak": true,
+   "code": "97644ef124f3d5c8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEE7reserveEm",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::reserve(unsigned long)",
+   "address": "0x56b2c0",
+   "status": "DIFF",
+   "score": 0.9535,
+   "size": 149,
+   "original_size": 147,
+   "weak": true,
+   "code": "a2ae7e9216856bfa",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEE9_M_mutateEmmm",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::_M_mutate(unsigned long, unsigned long, unsigned long)",
+   "address": "0x56b4b0",
+   "status": "DIFF",
+   "score": 0.9831,
+   "size": 500,
+   "original_size": 500,
+   "weak": true,
+   "code": "16b04d8f1b622e7f",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEED1Ev",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::~basic_string()",
+   "address": "0x56b1d0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 56,
+   "original_size": 56,
+   "weak": true,
+   "code": "8e135ab7b2ed8a17",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSbItSt11char_traitsItESaItEED2Ev",
+   "demangled": "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::~basic_string()",
+   "address": "0x56b1d0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 56,
+   "original_size": 56,
+   "weak": true,
+   "code": "8e135ab7b2ed8a17",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt12out_of_rangeD0Ev",
+   "demangled": "std::out_of_range::~out_of_range()",
+   "address": "0x5a6d20",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 25,
+   "original_size": 25,
+   "weak": true,
+   "code": "c3357a52663fd747",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt12out_of_rangeD1Ev",
+   "demangled": "std::out_of_range::~out_of_range()",
+   "address": "0x5a6cf0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": true,
+   "code": "c0b12596b6a1c398",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt12out_of_rangeD2Ev",
+   "demangled": "std::out_of_range::~out_of_range()",
+   "address": "0x5a6cf0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": true,
+   "code": "c0b12596b6a1c398",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt6vectorI13EDAMAGE_TYPESSaIS0_EE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPS0_S2_EERKS0_",
+   "demangled": "std::vector<EDAMAGE_TYPES, std::allocator<EDAMAGE_TYPES> >::_M_insert_aux(__gnu_cxx::__normal_iterator<EDAMAGE_TYPES*, std::vector<EDAMAGE_TYPES, std::allocator<EDAMAGE_TYPES> > >, EDAMAGE_TYPES const&)",
+   "address": "0x8997e0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 383,
+   "original_size": 383,
+   "weak": true,
+   "code": "33acf1c4f05b8c89",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt6vectorIP14CItemSaveStateSaIS1_EE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
+   "demangled": "std::vector<CItemSaveState*, std::allocator<CItemSaveState*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CItemSaveState**, std::vector<CItemSaveState*, std::allocator<CItemSaveState*> > >, CItemSaveState* const&)",
+   "address": "0x85b2e0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 385,
+   "original_size": 385,
+   "weak": true,
+   "code": "debbac2cf4c6ff62",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt6vectorIP7CEffectSaIS1_EE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
+   "demangled": "std::vector<CEffect*, std::allocator<CEffect*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CEffect**, std::vector<CEffect*, std::allocator<CEffect*> > >, CEffect* const&)",
+   "address": "0x85b470",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 385,
+   "original_size": 385,
+   "weak": true,
+   "code": "debbac2cf4c6ff62",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZNSt6vectorIiSaIiEE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPiS1_EERKi",
+   "demangled": "std::vector<int, std::allocator<int> >::_M_insert_aux(__gnu_cxx::__normal_iterator<int*, std::vector<int, std::allocator<int> > >, int const&)",
+   "address": "0x85b790",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 383,
+   "original_size": 383,
+   "weak": true,
+   "code": "33acf1c4f05b8c89",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZStplIwSt11char_traitsIwESaIwEESbIT_T0_T1_EPKS3_RKS6_",
+   "demangled": "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(wchar_t const*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "address": "0x56b060",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 142,
+   "original_size": 142,
+   "weak": true,
+   "code": "ccf03e9459f62af1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZStplIwSt11char_traitsIwESaIwEESbIT_T0_T1_ERKS6_PKS3_",
+   "demangled": "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",
+   "address": "0x7014b0",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 84,
+   "original_size": 84,
+   "weak": true,
+   "code": "51b6573abc94788d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZStplIwSt11char_traitsIwESaIwEESbIT_T0_T1_ERKS6_S8_",
+   "demangled": "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "address": "0x7017d0",
+   "status": "DIFF",
+   "score": 1.0,
+   "size": 73,
+   "original_size": 73,
+   "weak": true,
+   "code": "8453c83a8e9e82b7",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a",
+   "metadata_reasons": [
+    "EH LSDA equivalence unverified"
+   ]
+  },
+  {
+   "name": "_ZThn560_N10CEquipment13missileDieingEP8CMissile",
+   "demangled": "non-virtual thunk to CEquipment::missileDieing(CMissile*)",
+   "address": "0x86e350",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": false,
+   "code": "53fe738a22fd5139",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZThn560_N10CEquipment22missileApplyingEffectsEP8CMissileP10CCharacterPKN4Ogre7Vector3Eff",
+   "demangled": "non-virtual thunk to CEquipment::missileApplyingEffects(CMissile*, CCharacter*, Ogre::Vector3 const*, float, float)",
+   "address": "0x86e530",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": false,
+   "code": "130a8e38a37f04ca",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZThn560_N10CEquipmentD0Ev",
+   "demangled": "non-virtual thunk to CEquipment::~CEquipment()",
+   "address": "0x87ddf0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 9,
+   "original_size": 9,
+   "weak": false,
+   "code": "37a8f696415e13c1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZThn560_N10CEquipmentD1Ev",
+   "demangled": "non-virtual thunk to CEquipment::~CEquipment()",
+   "address": "0x87dde0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 12,
+   "original_size": 12,
+   "weak": false,
+   "code": "9557e63e83be2600",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_0",
+   "demangled": "__tcf_0",
+   "address": "0x87d3d0",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 136,
+   "weak": false,
+   "code": "bd308ad94f6d49ca",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_1",
+   "demangled": "__tcf_1",
+   "address": "0x87d340",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 136,
+   "weak": false,
+   "code": "eb2ccfd951b6ee6d",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_10",
+   "demangled": "__tcf_10",
+   "address": "0x87d560",
+   "status": "DIFF",
+   "score": 0.1351,
+   "size": 139,
+   "original_size": 139,
+   "weak": false,
+   "code": "1f39bd671aaef6d0",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_11",
+   "demangled": "__tcf_11",
+   "address": "0x87cf20",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "82acf947a06615bd",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_12",
+   "demangled": "__tcf_12",
+   "address": "0x87ceb0",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "f9f6b15c201d80c3",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_13",
+   "demangled": "__tcf_13",
+   "address": "0x87ce20",
+   "status": "DIFF",
+   "score": 0.1351,
+   "size": 139,
+   "original_size": 136,
+   "weak": false,
+   "code": "35466a5de3bcca68",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_14",
+   "demangled": "__tcf_14",
+   "address": "0x87cd90",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "5feb2795aa8d9a14",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_15",
+   "demangled": "__tcf_15",
+   "address": "0x87a290",
+   "status": "DIFF",
+   "score": 0.5714,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "9e3752541e29596e",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_16",
+   "demangled": "__tcf_16",
+   "address": "0x87a220",
+   "status": "DIFF",
+   "score": 0.5429,
+   "size": 136,
+   "original_size": 109,
+   "weak": false,
+   "code": "e4bec46b70560391",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_17",
+   "demangled": "__tcf_17",
+   "address": "0x87a1b0",
+   "status": "DIFF",
+   "score": 0.5429,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "bd02e8a451bcd7c1",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_18",
+   "demangled": "__tcf_18",
+   "address": "0x87a140",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "be2f186dc1a6f567",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_19",
+   "demangled": "__tcf_19",
+   "address": "0x87cd00",
+   "status": "DIFF",
+   "score": 0.5714,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "a2cbeceba7eb17e8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_2",
+   "demangled": "__tcf_2",
+   "address": "0x87d2d0",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 136,
+   "original_size": 109,
+   "weak": false,
+   "code": "790f3da0d4066973",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_20",
+   "demangled": "__tcf_20",
+   "address": "0x87cc70",
+   "status": "DIFF",
+   "score": 0.5714,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "f2d7f5716ecbc8c8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_21",
+   "demangled": "__tcf_21",
+   "address": "0x87cbe0",
+   "status": "DIFF",
+   "score": 0.5714,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "bdcf8b99fcb3a9b5",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_22",
+   "demangled": "__tcf_22",
+   "address": "0x87cb70",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "8081f912039d4eda",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_23",
+   "demangled": "__tcf_23",
+   "address": "0x87cb00",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "8d2d3710f4aa6d88",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_24",
+   "demangled": "__tcf_24",
+   "address": "0x87ca70",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 136,
+   "weak": false,
+   "code": "5a711d92d4e1cb41",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_25",
+   "demangled": "__tcf_25",
+   "address": "0x87ca00",
+   "status": "DIFF",
+   "score": 0.9429,
+   "size": 109,
+   "original_size": 109,
+   "weak": false,
+   "code": "40ce1d4123643890",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_26",
+   "demangled": "__tcf_26",
+   "address": "0x87c990",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "4a662db863b5bbea",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_27",
+   "demangled": "__tcf_27",
+   "address": "0x87c920",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "3abd118352c12173",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_28",
+   "demangled": "__tcf_28",
+   "address": "0x87c8a0",
+   "status": "DIFF",
+   "score": 0.4857,
+   "size": 139,
+   "original_size": 113,
+   "weak": false,
+   "code": "fd88d800223577ff",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_29",
+   "demangled": "__tcf_29",
+   "address": "0x87c820",
+   "status": "DIFF",
+   "score": 0.8286,
+   "size": 109,
+   "original_size": 113,
+   "weak": false,
+   "code": "12ed35f1329e275a",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_3",
+   "demangled": "__tcf_3",
+   "address": "0x87d240",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 136,
+   "weak": false,
+   "code": "5649f867a6cee543",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_30",
+   "demangled": "__tcf_30",
+   "address": "0x87c7b0",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 139,
+   "original_size": 109,
+   "weak": false,
+   "code": "f967204397bb99b8",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_4",
+   "demangled": "__tcf_4",
+   "address": "0x87d1b0",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "e25a73b967c54d45",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_5",
+   "demangled": "__tcf_5",
+   "address": "0x87a320",
+   "status": "DIFF",
+   "score": 0.8857,
+   "size": 109,
+   "original_size": 109,
+   "weak": false,
+   "code": "b68ea0593c8ce578",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_6",
+   "demangled": "__tcf_6",
+   "address": "0x87d140",
+   "status": "DIFF",
+   "score": 0.6,
+   "size": 136,
+   "original_size": 109,
+   "weak": false,
+   "code": "23d73e87b9ceb061",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_7",
+   "demangled": "__tcf_7",
+   "address": "0x87d0b0",
+   "status": "DIFF",
+   "score": 0.9429,
+   "size": 139,
+   "original_size": 139,
+   "weak": false,
+   "code": "8727628d82d4017b",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_8",
+   "demangled": "__tcf_8",
+   "address": "0x87d020",
+   "status": "DIFF",
+   "score": 0.5714,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "c2c2e719e2ca22f9",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "__tcf_9",
+   "demangled": "__tcf_9",
+   "address": "0x87cf90",
+   "status": "DIFF",
+   "score": 0.6286,
+   "size": 109,
+   "original_size": 139,
+   "weak": false,
+   "code": "bbcfcf20b1ab3485",
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment10hasEffectsEv",
+   "demangled": "CEquipment::hasEffects()",
+   "address": "0x86d340",
+   "status": "MISSING",
+   "original_size": 99,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment11getItemNameEv",
+   "demangled": "CEquipment::getItemName()",
+   "address": "0x86d3b0",
+   "status": "MISSING",
+   "original_size": 40,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13minimumDamageEv",
+   "demangled": "CEquipment::minimumDamage()",
+   "address": "0x86d420",
+   "status": "MISSING",
+   "original_size": 7,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13maximumDamageEv",
+   "demangled": "CEquipment::maximumDamage()",
+   "address": "0x86d430",
+   "status": "MISSING",
+   "original_size": 7,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment17removeDamageBonusE13EDAMAGE_TYPESi",
+   "demangled": "CEquipment::removeDamageBonus(EDAMAGE_TYPES, int)",
+   "address": "0x86d590",
+   "status": "MISSING",
+   "original_size": 2,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment9canPickupEP10CCharacter",
+   "demangled": "CEquipment::canPickup(CCharacter*)",
+   "address": "0x86d5a0",
+   "status": "MISSING",
+   "original_size": 6,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment7canDropEP10CCharacter",
+   "demangled": "CEquipment::canDrop(CCharacter*)",
+   "address": "0x86d5b0",
+   "status": "MISSING",
+   "original_size": 6,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment16incrementStackByEi",
+   "demangled": "CEquipment::incrementStackBy(int)",
+   "address": "0x86d5c0",
+   "status": "MISSING",
+   "original_size": 18,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment12useEquipmentEP10CCharacterS1_",
+   "demangled": "CEquipment::useEquipment(CCharacter*, CCharacter*)",
+   "address": "0x86d5e0",
+   "status": "MISSING",
+   "original_size": 17,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZThn560_N10CEquipment17missileBeingFiredEP8CMissile",
+   "demangled": "non-virtual thunk to CEquipment::missileBeingFired(CMissile*)",
+   "address": "0x86d620",
+   "status": "MISSING",
+   "original_size": 9,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment17missileBeingFiredEP8CMissile",
+   "demangled": "CEquipment::missileBeingFired(CMissile*)",
+   "address": "0x86d630",
+   "status": "MISSING",
+   "original_size": 2,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment10canEnchantEv",
+   "demangled": "CEquipment::canEnchant()",
+   "address": "0x86dee0",
+   "status": "MISSING",
+   "original_size": 97,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment9isMagicalEv",
+   "demangled": "CEquipment::isMagical()",
+   "address": "0x86df50",
+   "status": "MISSING",
+   "original_size": 204,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZThn560_N10CEquipment32getCharacterCanBeHarmedByMissileEP8CMissileP10CCharacter",
+   "demangled": "non-virtual thunk to CEquipment::getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*)",
+   "address": "0x86e4b0",
+   "status": "MISSING",
+   "original_size": 9,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment32getCharacterCanBeHarmedByMissileEP8CMissileP10CCharacter",
+   "demangled": "CEquipment::getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*)",
+   "address": "0x86e4c0",
+   "status": "MISSING",
+   "original_size": 112,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13playDropSoundEPN4Ogre9SceneNodeE",
+   "demangled": "CEquipment::playDropSound(Ogre::SceneNode*)",
+   "address": "0x86eb70",
+   "status": "MISSING",
+   "original_size": 46,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment13playTakeSoundEPN4Ogre9SceneNodeE",
+   "demangled": "CEquipment::playTakeSound(Ogre::SceneNode*)",
+   "address": "0x86eba0",
+   "status": "MISSING",
+   "original_size": 46,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment14setHighlightedEb",
+   "demangled": "CEquipment::setHighlighted(bool)",
+   "address": "0x86ecd0",
+   "status": "MISSING",
+   "original_size": 155,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment21activateDropParticlesEv",
+   "demangled": "CEquipment::activateDropParticles()",
+   "address": "0x86ed70",
+   "status": "MISSING",
+   "original_size": 99,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment28setElementalParticlesEnabledEb",
+   "demangled": "CEquipment::setElementalParticlesEnabled(bool)",
+   "address": "0x86ede0",
+   "status": "MISSING",
+   "original_size": 61,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment10unequippedEP10CInventoryP10CCharacter16EEQUIP_LOCATIONS",
+   "demangled": "CEquipment::unequipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS)",
+   "address": "0x86f010",
+   "status": "MISSING",
+   "original_size": 50,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment12useEquipmentEv",
+   "demangled": "CEquipment::useEquipment()",
+   "address": "0x86f050",
+   "status": "MISSING",
+   "original_size": 34,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment7unequipEv",
+   "demangled": "CEquipment::unequip()",
+   "address": "0x86f080",
+   "status": "MISSING",
+   "original_size": 26,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment5equipEv",
+   "demangled": "CEquipment::equip()",
+   "address": "0x86f0a0",
+   "status": "MISSING",
+   "original_size": 26,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment20removedFromInventoryEP10CInventoryP10CCharacter",
+   "demangled": "CEquipment::removedFromInventory(CInventory*, CCharacter*)",
+   "address": "0x86f0c0",
+   "status": "MISSING",
+   "original_size": 130,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment11destroyIconEv",
+   "demangled": "CEquipment::destroyIcon()",
+   "address": "0x86f6e0",
+   "status": "MISSING",
+   "original_size": 162,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment6updateEPN4Ogre6CameraERKNS0_7Vector3Ef",
+   "demangled": "CEquipment::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+   "address": "0x87aa50",
+   "status": "MISSING",
+   "original_size": 67,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment16convertEquipmentESbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEquipment::convertEquipment(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x87de20",
+   "status": "MISSING",
+   "original_size": 233,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment18createNewEquipmentESbIwSt11char_traitsIwESaIwEE",
+   "demangled": "CEquipment::createNewEquipment(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "address": "0x87df10",
+   "status": "MISSING",
+   "original_size": 132,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment18clearDamageBonusesEv",
+   "demangled": "CEquipment::clearDamageBonuses()",
+   "address": "0x886370",
+   "status": "MISSING",
+   "original_size": 60,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment10addEnchantEiii",
+   "demangled": "CEquipment::addEnchant(int, int, int)",
+   "address": "0x8866e0",
+   "status": "MISSING",
+   "original_size": 220,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  },
+  {
+   "name": "_ZN10CEquipment8equippedEP10CInventoryP10CCharacter16EEQUIP_LOCATIONS",
+   "demangled": "CEquipment::equipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS)",
+   "address": "0x887a90",
+   "status": "MISSING",
+   "original_size": 147,
+   "object_digest": "74ff11bf27c9753c05b4b8d3fcd75d4d3467d92847a6a03e102aadebb0da2b2a"
+  }
+ ],
+ "unknown": [],
+ "status": "DIFF",
+ "reason": "final TU requires behavioral evidence; instruction percentage cannot publish it"
+}

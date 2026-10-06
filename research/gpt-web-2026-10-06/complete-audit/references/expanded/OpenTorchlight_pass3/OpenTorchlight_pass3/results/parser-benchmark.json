@@ -1,0 +1,94 @@
+{
+  "scope": "Synthetic system-GCC objects; complete function dictionaries must remain equal. No Torchlight ELF or GCC 4.4.7 benchmark.",
+  "cases": [
+    {
+      "functions": 50,
+      "old": {
+        "median_seconds": 0.0168388719999939,
+        "samples_seconds": [
+          0.0168388719999939,
+          0.01719347599998855,
+          0.012109765999980482
+        ],
+        "parse_calls": 50,
+        "parsed_text_characters": 328650
+      },
+      "indexed": {
+        "median_seconds": 0.00272642499999165,
+        "samples_seconds": [
+          0.0029122249999886662,
+          0.00272642499999165,
+          0.0025668250000308035
+        ],
+        "parse_calls": 1,
+        "parsed_text_characters": 6573
+      },
+      "ratio": 6.1761728270704195,
+      "outputs_identical": true
+    },
+    {
+      "functions": 200,
+      "old": {
+        "median_seconds": 0.14081449200000407,
+        "samples_seconds": [
+          0.13998261099999354,
+          0.1434036880000349,
+          0.14081449200000407
+        ],
+        "parse_calls": 200,
+        "parsed_text_characters": 4842800
+      },
+      "indexed": {
+        "median_seconds": 0.005317194999975072,
+        "samples_seconds": [
+          0.005212738000011541,
+          0.005317194999975072,
+          0.005486321000034877
+        ],
+        "parse_calls": 1,
+        "parsed_text_characters": 24214
+      },
+      "ratio": 26.48285270723835,
+      "outputs_identical": true
+    },
+    {
+      "functions": 500,
+      "old": {
+        "median_seconds": 0.8175392470000133,
+        "samples_seconds": [
+          0.870937562999984,
+          0.8163647129999845,
+          0.8175392470000133
+        ],
+        "parse_calls": 500,
+        "parsed_text_characters": 33576000
+      },
+      "indexed": {
+        "median_seconds": 0.009321994999993422,
+        "samples_seconds": [
+          0.010061688000007507,
+          0.009013019999997596,
+          0.009321994999993422
+        ],
+        "parse_calls": 1,
+        "parsed_text_characters": 67152
+      },
+      "ratio": 87.70003062655475,
+      "outputs_identical": true
+    }
+  ],
+  "mixed_regression": {
+    "functions": 18,
+    "outputs_identical": true,
+    "features": [
+      "multiple text sections",
+      "virtual destructors",
+      "multiple inheritance thunks",
+      "literals",
+      "exception handler",
+      "data references",
+      "recursion",
+      "switch"
+    ]
+  }
+}

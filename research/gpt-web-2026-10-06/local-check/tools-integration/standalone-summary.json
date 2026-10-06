@@ -1,0 +1,13 @@
+{
+ "link_exit": 1,
+ "link_closed": false,
+ "standalone_game_verified": false,
+ "residual": {
+  "game_functions": 972,
+  "game_data": 0,
+  "rtti": 33,
+  "vtables": 34,
+  "library_imports": 222,
+  "unknown": 46
+ }
+}

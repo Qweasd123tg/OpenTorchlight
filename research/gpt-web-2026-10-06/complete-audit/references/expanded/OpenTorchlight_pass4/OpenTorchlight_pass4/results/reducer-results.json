@@ -1,0 +1,12 @@
+{
+  "scope": "Synthetic source containing the demonstrated missing-const failure plus independent declarations.",
+  "reducer": "Own line deletion pilot, NOT C-Reduce.",
+  "predicate": "Compilation fails specifically with no declaration matches CProbe::get(); no other error class accepted.",
+  "input_lines": 82,
+  "reduced_lines": 2,
+  "compiler_calls_for_predicate_including_checks": 34,
+  "one_line_deletion_minimal": true,
+  "minimal_source": "struct CProbe { int x; int get() const; };\nint CProbe::get() { return x; }\n",
+  "restoring_const_compiles": true,
+  "game_sources_modified": false
+}

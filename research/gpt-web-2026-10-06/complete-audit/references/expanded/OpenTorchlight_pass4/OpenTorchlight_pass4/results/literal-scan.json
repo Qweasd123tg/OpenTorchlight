@@ -1,0 +1,20 @@
+[
+ {
+  "file": "research/decompiled-core/generic_model.c",
+  "line": 10600,
+  "before": "\"bad UTF-8 continuation byte\"",
+  "after": "\"bad UTF-8 continuation unsigned char\""
+ },
+ {
+  "file": "research/decompiled-core/path_controller.c",
+  "line": 3150,
+  "before": "\"bad UTF-8 continuation byte\"",
+  "after": "\"bad UTF-8 continuation unsigned char\""
+ },
+ {
+  "file": "research/decompiled-core/trigger_unit.c",
+  "line": 4218,
+  "before": "\"bad UTF-8 continuation byte\"",
+  "after": "\"bad UTF-8 continuation unsigned char\""
+ }
+]

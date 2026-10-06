@@ -1,0 +1,16 @@
+{
+ "schema": 3,
+ "elf": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "tools": "14fc501f86c325e9",
+ "types_fingerprint": "93b6e26cb1313adc75451ac5edffc25e0a43f2ed5099e6efd0da311e53176ce1",
+ "exports": {
+  "0xb6ab50": {
+   "status": "COMPLETE",
+   "error": "",
+   "raw_sha256": "824caced206c25ab27dab5e157c069916cb5fd7b4199616e486ff533617fc1dd",
+   "attempt": 1,
+   "timeout_seconds": 30
+  }
+ },
+ "job": "/var/tmp/opentorchlight-ghidra/work/jobs/drafts-_n9gbs7b"
+}

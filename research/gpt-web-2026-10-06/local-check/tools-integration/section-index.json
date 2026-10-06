@@ -1,0 +1,35 @@
+{
+ "stage": "object_functions only",
+ "results": [
+  {
+   "tu": "Equipment.cpp",
+   "functions": 200,
+   "seconds": {
+    "previous": 5.020558776999678,
+    "indexed": 0.2801960849992611
+   },
+   "identical_full_records": true,
+   "speedup": 17.918019008056156
+  },
+  {
+   "tu": "FileSystem.cpp",
+   "functions": 126,
+   "seconds": {
+    "previous": 0.20057631800045783,
+    "indexed": 0.06737405199964996
+   },
+   "identical_full_records": true,
+   "speedup": 2.9770558849792783
+  },
+  {
+   "tu": "ParticleTechWrapper.cpp",
+   "functions": 88,
+   "seconds": {
+    "previous": 0.24929187599991565,
+    "indexed": 0.04256494699984614
+   },
+   "identical_full_records": true,
+   "speedup": 5.856741134925335
+  }
+ ]
+}

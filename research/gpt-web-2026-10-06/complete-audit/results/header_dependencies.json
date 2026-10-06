@@ -1,0 +1,5694 @@
+[
+  {
+    "header": "EmptyStrings.h",
+    "source_dependents": 200,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "AnimationSet.cpp",
+      "BaseUnit.cpp",
+      "BinaryStyle.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorLoadConfiguration.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DescriptorPropertyInterpreter.cpp",
+      "DescriptorSaveConfiguration.cpp",
+      "DungeonManager.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EditorObjectManager.cpp",
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "EffectsHeader.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "FileUtilities.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "LogicWrapper.cpp",
+      "MasterResourceManager.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Mod.cpp",
+      "ModFileFilter.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MouseHandler.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OgreReader.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "PairStyle.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "ResourceManager.cpp",
+      "ResourceSettings.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp",
+      "RunicCore.cpp",
+      "SPLASH.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "StringRepository.cpp",
+      "StringTranslate.cpp",
+      "StringUtilities.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "UtilitiesMath.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "astarpathfinder.cpp",
+      "dungeon.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "keymanager.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp",
+      "path.cpp",
+      "pov.cpp",
+      "randomizer.cpp",
+      "utilities.cpp"
+    ]
+  },
+  {
+    "header": "TArrayList.h",
+    "source_dependents": 195,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "AnimationSet.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorLoadConfiguration.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DescriptorPropertyInterpreter.cpp",
+      "DescriptorSaveConfiguration.cpp",
+      "DungeonManager.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EditorObjectManager.cpp",
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "FileUtilities.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "LogicWrapper.cpp",
+      "MasterResourceManager.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Mod.cpp",
+      "ModFileFilter.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MouseHandler.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OgreReader.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "PairStyle.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "ResourceManager.cpp",
+      "ResourceSettings.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp",
+      "RunicCore.cpp",
+      "SPLASH.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "StringTranslate.cpp",
+      "StringUtilities.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "astarpathfinder.cpp",
+      "dungeon.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "keymanager.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp",
+      "path.cpp",
+      "pov.cpp",
+      "randomizer.cpp"
+    ]
+  },
+  {
+    "header": "RunicCore.h",
+    "source_dependents": 192,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "AnimationSet.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorLoadConfiguration.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DescriptorPropertyInterpreter.cpp",
+      "DescriptorSaveConfiguration.cpp",
+      "DungeonManager.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EditorObjectManager.cpp",
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "LogicWrapper.cpp",
+      "MasterResourceManager.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Mod.cpp",
+      "ModFileFilter.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MouseHandler.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OgreReader.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "PairStyle.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "ResourceManager.cpp",
+      "ResourceSettings.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp",
+      "RunicCore.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "StringTranslate.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "astarpathfinder.cpp",
+      "dungeon.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "keymanager.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp",
+      "path.cpp",
+      "pov.cpp",
+      "randomizer.cpp"
+    ]
+  },
+  {
+    "header": "SafePointer.h",
+    "source_dependents": 192,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "AnimationSet.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorLoadConfiguration.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DescriptorPropertyInterpreter.cpp",
+      "DescriptorSaveConfiguration.cpp",
+      "DungeonManager.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EditorObjectManager.cpp",
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "LogicWrapper.cpp",
+      "MasterResourceManager.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Mod.cpp",
+      "ModFileFilter.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MouseHandler.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OgreReader.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "PairStyle.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "ResourceManager.cpp",
+      "ResourceSettings.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp",
+      "RunicCore.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "StringTranslate.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "astarpathfinder.cpp",
+      "dungeon.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "keymanager.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp",
+      "path.cpp",
+      "pov.cpp",
+      "randomizer.cpp"
+    ]
+  },
+  {
+    "header": "EditorBaseObject.h",
+    "source_dependents": 150,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkipCutscene.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "SceneNodeObject.h",
+    "source_dependents": 141,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "Room.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "PositionableObject.h",
+    "source_dependents": 140,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderDescriptor.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "ParticleUniverseConstants.h",
+    "source_dependents": 127,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileSystem.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "ResourceManager.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "ResourceManager.h",
+    "source_dependents": 126,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "ResourceManager.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "UnitTypes.h",
+    "source_dependents": 126,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceWrapper.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "LogicGroup.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTaker.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleScene.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "ResourceManager.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SceneNodeObject.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SkipCutscene.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "Warper.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "GameVariables.h",
+    "source_dependents": 108,
+    "sources": [
+      "Achievement.cpp",
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BinaryStyle.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControl.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EditorObjectManager.cpp",
+      "EffectManager.cpp",
+      "EffectsHeader.cpp",
+      "FileUtilities.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MasterResourceManager.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "ModFileFilter.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SteamStats.cpp",
+      "StringUtilities.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "Undo.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "dungeon.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "GameEnums.h",
+    "source_dependents": 98,
+    "sources": [
+      "Achievement.cpp",
+      "BinaryStyle.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "EffectManager.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "FormationNode.cpp",
+      "GameSpeed.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestDialog.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RandomNames.cpp",
+      "Recipes.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SteamStats.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp",
+      "affix.cpp",
+      "dungeon.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "DataGroup.h",
+    "source_dependents": 86,
+    "sources": [
+      "AIManager.cpp",
+      "AIStatWatcher.cpp",
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControllerDescriptor.cpp",
+      "Cinematics.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "ExecuteSkillProps.cpp",
+      "FileSystem.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "Graph.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "Interact.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "MissileDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "PairStyle.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRequirements.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "StringTranslate.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "UnitThemes.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorDefines.h",
+    "source_dependents": 75,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ExecuteSkillProps.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleScene.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SceneNodeObject.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "OutputEvents.h",
+    "source_dependents": 75,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "Counter.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp",
+      "LogicTrigger.cpp",
+      "MissileDescriptor.cpp",
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorScene.h",
+    "source_dependents": 74,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AllDescriptorsScene.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "ModelViewerScene.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleScene.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PositionableObject.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RefManagerInterpreterFunc.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SceneNodeObject.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorProp.h",
+    "source_dependents": 69,
+    "sources": [
+      "Achievement.cpp",
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SteamStats.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Descriptor.h",
+    "source_dependents": 66,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "InputEvents.h",
+    "source_dependents": 66,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorBaseObject.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "BaseObjectDescriptor.h",
+    "source_dependents": 59,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "CameraShakeDescriptor.cpp",
+      "CinematicDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "CounterDescriptor.cpp",
+      "CutsceneDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GameStateControllerDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "InteractiveDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicTimerDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MoneyTakerDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "MusicObjectDescriptor.cpp",
+      "OutputIncrementorDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestControllerDescriptor.cpp",
+      "RandomChoiceDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EffectDefines.h",
+    "source_dependents": 58,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "Sets.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "affix.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "iUnitObserver.h",
+    "source_dependents": 57,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SkillParser.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "Warper.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "Constants.h",
+    "source_dependents": 56,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "UtilitiesMath.cpp",
+      "Warper.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "QuestDefines.h",
+    "source_dependents": 56,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "UtilitiesMath.cpp",
+      "Warper.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "BaseUnit.h",
+    "source_dependents": 55,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DescriptorProp.cpp",
+      "DungeonObject.cpp",
+      "EffectManager.cpp",
+      "ExecuteSkillProps.cpp",
+      "FormationNode.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "OgreGpuCommandBufferFlush.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObject.cpp",
+      "SpawnClassData.cpp",
+      "SphereColliderWrapper.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorLoadConfiguration.h",
+    "source_dependents": 51,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DescriptorLoadConfiguration.cpp",
+      "DescriptorManager.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "MissileDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "OgreReader.h",
+    "source_dependents": 49,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Descriptor.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "Layout.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LogicGroup.cpp",
+      "MissileDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "OgreReader.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PositionableObjectDescriptor.h",
+    "source_dependents": 43,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AnimationPlayerDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "CameraControllerDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "CollisionShapeDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObjectDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GenericModelDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "ItemDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "LightDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "MissileDescriptor.cpp",
+      "MonsterDescriptor.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNodeDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TeleportDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp",
+      "WarperDescriptor.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "iSelected.h",
+    "source_dependents": 40,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "ForceWrapper.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "LayoutScene.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "VortexAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "AffectorWrapper.h",
+    "source_dependents": 34,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp",
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp",
+      "ForceWrapper.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp",
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp",
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp",
+      "VortexAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Character.h",
+    "source_dependents": 28,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObject.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "EquipmentDefines.h",
+    "source_dependents": 28,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObject.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "WardrobeDefines.h",
+    "source_dependents": 28,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObject.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "iInventoryListener.h",
+    "source_dependents": 28,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObject.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "iMissile.h",
+    "source_dependents": 28,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp",
+      "Achievement.cpp",
+      "DamageShapeDescriptor.cpp",
+      "DungeonObject.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "QuestUnitData.cpp",
+      "SharedStash.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SpawnClassData.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "OgreUtilities.h",
+    "source_dependents": 24,
+    "sources": [
+      "AIStatWatcher.cpp",
+      "AffectorWrapper.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DescriptorProp.cpp",
+      "FormationNode.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "PositionableObject.cpp",
+      "QuestController.cpp",
+      "QuestUnitData.cpp",
+      "SceneNodeObject.cpp",
+      "SoundObject.cpp",
+      "SphereColliderWrapper.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "SoundBank.h",
+    "source_dependents": 24,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DescriptorProp.cpp",
+      "FormationNode.cpp",
+      "Item.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp",
+      "SoundObject.cpp",
+      "SphereColliderWrapper.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "StringUtilities.h",
+    "source_dependents": 23,
+    "sources": [
+      "AIStatWatcher.cpp",
+      "BaseUnit.cpp",
+      "CameraControllerDescriptor.cpp",
+      "Descriptor.cpp",
+      "DungeonManager.cpp",
+      "EffectGroupManager.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "GenericModelDescriptor.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "InteractiveDescriptor.cpp",
+      "Item.cpp",
+      "MissilePreloader.cpp",
+      "MusicObject.cpp",
+      "QuestRequirements.cpp",
+      "QuestUnitData.cpp",
+      "RoomPieceDataInformation.cpp",
+      "SPLASH.cpp",
+      "SkillParser.cpp",
+      "StringUtilities.cpp",
+      "Timeline.cpp",
+      "utilities.cpp"
+    ]
+  },
+  {
+    "header": "UtilitiesMath.h",
+    "source_dependents": 23,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DescriptorProp.cpp",
+      "FormationNode.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "QuestController.cpp",
+      "QuestUnitData.cpp",
+      "SoundObject.cpp",
+      "SphereColliderWrapper.cpp",
+      "UtilitiesMath.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "CollisionModel.h",
+    "source_dependents": 22,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "CinematicObject.cpp",
+      "DescriptorProp.cpp",
+      "FormationNode.cpp",
+      "Particle.cpp",
+      "ParticleCache.cpp",
+      "ParticleTechWrapper.cpp",
+      "PathController.cpp",
+      "PathNode.cpp",
+      "PlaneColliderWrapper.cpp",
+      "QuestController.cpp",
+      "QuestUnitData.cpp",
+      "SoundObject.cpp",
+      "SphereColliderWrapper.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "path.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "iRandomWeight.h",
+    "source_dependents": 22,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BaseUnit.cpp",
+      "BoxColliderWrapper.cpp",
+      "GenericModelDescriptor.cpp",
+      "Item.cpp",
+      "JetWrapper.cpp",
+      "Layout.cpp",
+      "LightDescriptor.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "QuestRewards.cpp",
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp",
+      "RoomPieceDescriptor.cpp",
+      "ScaleWrapper.cpp",
+      "SphereColliderWrapper.cpp",
+      "TextureAnimateWrapper.cpp",
+      "UnitSpawnerDescriptor.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "AffectorDescriptor.h",
+    "source_dependents": 18,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "BoxColliderDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "ColorAffectorDescriptor.cpp",
+      "ForceAffectorDescriptor.cpp",
+      "GeometryRotateDescriptor.cpp",
+      "GravityAffectorDescriptor.cpp",
+      "JetAffectorDescriptor.cpp",
+      "LineAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "ScaleAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SphereColliderDescriptor.cpp",
+      "TextureAnimateDescriptor.cpp",
+      "TextureRotateDescriptor.cpp",
+      "VortexAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "DynamicPropertyFile.h",
+    "source_dependents": 18,
+    "sources": [
+      "CameraControl.cpp",
+      "Descriptor.cpp",
+      "FileSystem.cpp",
+      "GameStateController.cpp",
+      "Interact.cpp",
+      "MissilePreloader.cpp",
+      "MusicObject.cpp",
+      "PathController.cpp",
+      "RandomGroupDescriptor.cpp",
+      "ResourceSettings.cpp",
+      "RoomPieceDataInformation.cpp",
+      "SkillController.cpp",
+      "SkillParser.cpp",
+      "SoundBankDataInformation.cpp",
+      "SoundManager.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "GameNamespaces.h",
+    "source_dependents": 15,
+    "sources": [
+      "CameraControl.cpp",
+      "CameraShake.cpp",
+      "Cinematics.cpp",
+      "CmdLineParser.cpp",
+      "FileUtilities.cpp",
+      "GameSpeed.cpp",
+      "SPLASH.cpp",
+      "SkipCutscene.cpp",
+      "SteamStats.cpp",
+      "StringUtilities.cpp",
+      "interactiveMenu.cpp",
+      "keymanager.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "Player.h",
+    "source_dependents": 15,
+    "sources": [
+      "Achievement.cpp",
+      "DungeonObject.cpp",
+      "GameStateController.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp",
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp",
+      "SteamStats.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp"
+    ]
+  },
+  {
+    "header": "iLevelUpdate.h",
+    "source_dependents": 15,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "DamageShapeDescriptor.cpp",
+      "FormationNode.cpp",
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Particle.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "PuzzleRandomizerDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "GameClient.h",
+    "source_dependents": 11,
+    "sources": [
+      "BaseUnit.cpp",
+      "DungeonObject.cpp",
+      "GameStateController.cpp",
+      "Interact.cpp",
+      "MoneyTaker.cpp",
+      "PathController.cpp",
+      "Teleport.cpp",
+      "TriggerBox.cpp",
+      "TriggerSphere.cpp",
+      "Warper.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "Level.h",
+    "source_dependents": 11,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIStatWatcher.cpp",
+      "BaseUnit.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "ParticleDynamicAttribute.h",
+    "source_dependents": 11,
+    "sources": [
+      "CameraShake.cpp",
+      "GameSpeed.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "Interact.cpp",
+      "JetWrapper.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ScaleWrapper.cpp",
+      "SpawnClassData.cpp",
+      "TextureAnimateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "ParticleWrapper.h",
+    "source_dependents": 11,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BoxColliderWrapper.cpp",
+      "JetWrapper.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "ScaleWrapper.cpp",
+      "SphereColliderWrapper.cpp",
+      "TextureAnimateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "TLinkedList.h",
+    "source_dependents": 11,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIStatWatcher.cpp",
+      "BaseUnit.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "Item.cpp",
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp",
+      "Warper.cpp",
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "iResource.h",
+    "source_dependents": 11,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "BoxColliderWrapper.cpp",
+      "JetWrapper.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "ParticleWrapper.cpp",
+      "ParticleWrapperDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "ScaleWrapper.cpp",
+      "SphereColliderWrapper.cpp",
+      "TextureAnimateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "CmdLineParser.h",
+    "source_dependents": 10,
+    "sources": [
+      "CameraControl.cpp",
+      "CmdLineParser.cpp",
+      "Descriptor.cpp",
+      "FileSystem.cpp",
+      "GameStateController.cpp",
+      "MusicObject.cpp",
+      "SoundManager.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "ColliderWrapper.h",
+    "source_dependents": 9,
+    "sources": [
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp",
+      "ColliderWrapper.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "ParticleTechWrapper.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp"
+    ]
+  },
+  {
+    "header": "CollisionList.h",
+    "source_dependents": 9,
+    "sources": [
+      "BaseUnit.cpp",
+      "CinematicObject.cpp",
+      "DescriptorProp.cpp",
+      "FormationNode.cpp",
+      "Particle.cpp",
+      "PathController.cpp",
+      "QuestController.cpp",
+      "QuestUnitData.cpp",
+      "SoundObject.cpp"
+    ]
+  },
+  {
+    "header": "Item.h",
+    "source_dependents": 9,
+    "sources": [
+      "DamageShapeDescriptor.cpp",
+      "Item.cpp",
+      "ItemDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp",
+      "QuestRewards.cpp",
+      "editorimage.cpp",
+      "interactiveMenu.cpp",
+      "levelstate.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "ResourceSettings.h",
+    "source_dependents": 9,
+    "sources": [
+      "Interact.cpp",
+      "MissilePreloader.cpp",
+      "PathController.cpp",
+      "RandomGroupDescriptor.cpp",
+      "ResourceSettings.cpp",
+      "RoomPieceDataInformation.cpp",
+      "SkillController.cpp",
+      "SkillParser.cpp",
+      "SoundBankDataInformation.cpp"
+    ]
+  },
+  {
+    "header": "Settings.h",
+    "source_dependents": 9,
+    "sources": [
+      "CameraControl.cpp",
+      "Descriptor.cpp",
+      "FileSystem.cpp",
+      "GameStateController.cpp",
+      "MusicObject.cpp",
+      "SoundManager.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp",
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "LinuxUtils.h",
+    "source_dependents": 8,
+    "sources": [
+      "CameraControl.cpp",
+      "FileSystem.cpp",
+      "FileUtilities.cpp",
+      "MouseHandler.cpp",
+      "SPLASH.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp",
+      "utilities.cpp"
+    ]
+  },
+  {
+    "header": "iHighlight.h",
+    "source_dependents": 8,
+    "sources": [
+      "BaseUnit.cpp",
+      "GenericModelDescriptor.cpp",
+      "Item.cpp",
+      "Layout.cpp",
+      "LightDescriptor.cpp",
+      "QuestRewards.cpp",
+      "RoomPieceDescriptor.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "iMenuListener.h",
+    "source_dependents": 8,
+    "sources": [
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp",
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp",
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "FileUtilities.h",
+    "source_dependents": 7,
+    "sources": [
+      "DungeonManager.cpp",
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "FileUtilities.cpp",
+      "GraphManager.cpp",
+      "ResourceSettings.cpp",
+      "SPLASH.cpp"
+    ]
+  },
+  {
+    "header": "GameUI.h",
+    "source_dependents": 7,
+    "sources": [
+      "CinematicObject.cpp",
+      "GameStateController.cpp",
+      "PathNode.cpp",
+      "QuestManager.cpp",
+      "QuestRewards.cpp",
+      "interactiveMenu.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "GenericModel.h",
+    "source_dependents": 7,
+    "sources": [
+      "BaseUnit.cpp",
+      "GenericModelDescriptor.cpp",
+      "Item.cpp",
+      "LightDescriptor.cpp",
+      "QuestRewards.cpp",
+      "RoomPieceDescriptor.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "Utilities.h",
+    "source_dependents": 7,
+    "sources": [
+      "BaseUnit.cpp",
+      "EditorBaseObject.cpp",
+      "LogicTimer.cpp",
+      "RandomChoice.cpp",
+      "RoomPieceDataInformation.cpp",
+      "randomizer.cpp",
+      "utilities.cpp"
+    ]
+  },
+  {
+    "header": "AIDefines.h",
+    "source_dependents": 6,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp"
+    ]
+  },
+  {
+    "header": "Graph.h",
+    "source_dependents": 6,
+    "sources": [
+      "CameraShake.cpp",
+      "GameSpeed.cpp",
+      "Graph.cpp",
+      "GraphManager.cpp",
+      "Interact.cpp",
+      "SpawnClassData.cpp"
+    ]
+  },
+  {
+    "header": "MasterResourceManager.h",
+    "source_dependents": 6,
+    "sources": [
+      "AIStatWatcher.cpp",
+      "FileSystem.cpp",
+      "MasterResourceManager.cpp",
+      "MusicObject.cpp",
+      "RoomPieceDataInformation.cpp",
+      "RoomPieceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Randomizer.h",
+    "source_dependents": 6,
+    "sources": [
+      "BaseUnit.cpp",
+      "RandomChoice.cpp",
+      "RandomNames.cpp",
+      "SpawnClassData.cpp",
+      "dungeon.cpp",
+      "randomizer.cpp"
+    ]
+  },
+  {
+    "header": "ColliderDescriptor.h",
+    "source_dependents": 5,
+    "sources": [
+      "BoxColliderDescriptor.cpp",
+      "ColliderDescriptor.cpp",
+      "CollisionAvoiderDescriptor.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "SphereColliderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "FileSystem.h",
+    "source_dependents": 5,
+    "sources": [
+      "FileReader.cpp",
+      "FileSystem.cpp",
+      "GraphManager.cpp",
+      "OgreReader.cpp",
+      "SkillParser.cpp"
+    ]
+  },
+  {
+    "header": "ForceWrapper.h",
+    "source_dependents": 5,
+    "sources": [
+      "ForceWrapper.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp",
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp"
+    ]
+  },
+  {
+    "header": "Hierarchy.h",
+    "source_dependents": 5,
+    "sources": [
+      "AIStatWatcher.cpp",
+      "Interact.cpp",
+      "PathController.cpp",
+      "RandomGroupDescriptor.cpp",
+      "SkillController.cpp"
+    ]
+  },
+  {
+    "header": "LogicTrigger.h",
+    "source_dependents": 5,
+    "sources": [
+      "LogicTrigger.cpp",
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp",
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "QuestDialog.h",
+    "source_dependents": 5,
+    "sources": [
+      "QuestController.cpp",
+      "QuestDialog.cpp",
+      "QuestDialogItem.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "SkillDefines.h",
+    "source_dependents": 5,
+    "sources": [
+      "AISkillManager.cpp",
+      "BaseUnit.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp",
+      "SkillParser.cpp"
+    ]
+  },
+  {
+    "header": "SphereColliderWrapper.h",
+    "source_dependents": 5,
+    "sources": [
+      "BoxColliderWrapper.cpp",
+      "ParticleTechWrapper.cpp",
+      "PlaneColliderWrapper.cpp",
+      "SphereColliderDescriptor.cpp",
+      "SphereColliderWrapper.cpp"
+    ]
+  },
+  {
+    "header": "Affix.h",
+    "source_dependents": 4,
+    "sources": [
+      "EffectGroupManager.cpp",
+      "EffectManager.cpp",
+      "Sets.cpp",
+      "affix.cpp"
+    ]
+  },
+  {
+    "header": "Effect.h",
+    "source_dependents": 4,
+    "sources": [
+      "BaseUnit.cpp",
+      "EffectManager.cpp",
+      "QuestRewards.cpp",
+      "affix.cpp"
+    ]
+  },
+  {
+    "header": "QuestController.h",
+    "source_dependents": 4,
+    "sources": [
+      "QuestController.cpp",
+      "QuestControllerDescriptor.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "Shape.h",
+    "source_dependents": 4,
+    "sources": [
+      "CollisionShapeDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "Item.cpp",
+      "UnitSpawnerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Skill.h",
+    "source_dependents": 4,
+    "sources": [
+      "AISkillManager.cpp",
+      "BaseUnit.cpp",
+      "ExecuteSkillProps.cpp",
+      "SkillParser.cpp"
+    ]
+  },
+  {
+    "header": "SkillManager.h",
+    "source_dependents": 4,
+    "sources": [
+      "AISkillManager.cpp",
+      "BaseUnit.cpp",
+      "ExecuteSkillProps.cpp",
+      "GameStateController.cpp"
+    ]
+  },
+  {
+    "header": "UnitResourceList.h",
+    "source_dependents": 4,
+    "sources": [
+      "Interact.cpp",
+      "PathController.cpp",
+      "RandomGroupDescriptor.cpp",
+      "SkillController.cpp"
+    ]
+  },
+  {
+    "header": "AIManager.h",
+    "source_dependents": 3,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp",
+      "AIStatWatcher.cpp"
+    ]
+  },
+  {
+    "header": "AISkill.h",
+    "source_dependents": 3,
+    "sources": [
+      "AISkill.cpp",
+      "AISkillManager.cpp",
+      "AIStatWatcher.cpp"
+    ]
+  },
+  {
+    "header": "BinaryStyle.h",
+    "source_dependents": 3,
+    "sources": [
+      "BinaryStyle.cpp",
+      "FileSystem.cpp",
+      "PairStyle.cpp"
+    ]
+  },
+  {
+    "header": "CameraShake.h",
+    "source_dependents": 3,
+    "sources": [
+      "CameraShake.cpp",
+      "CameraShakeDescriptor.cpp",
+      "ParticleCache.cpp"
+    ]
+  },
+  {
+    "header": "DataValue.h",
+    "source_dependents": 3,
+    "sources": [
+      "AIStatWatcher.cpp",
+      "BaseUnit.cpp",
+      "QuestRequirements.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorSaveConfiguration.h",
+    "source_dependents": 3,
+    "sources": [
+      "DescriptorSaveConfiguration.cpp",
+      "LogicGroup.cpp",
+      "RoomDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorImage.h",
+    "source_dependents": 3,
+    "sources": [
+      "EditorButtonDescriptor.cpp",
+      "EditorImageDescriptor.cpp",
+      "editorimage.cpp"
+    ]
+  },
+  {
+    "header": "EffectManager.h",
+    "source_dependents": 3,
+    "sources": [
+      "BaseUnit.cpp",
+      "EffectManager.cpp",
+      "SharedStash.cpp"
+    ]
+  },
+  {
+    "header": "ForceAffectorDescriptor.h",
+    "source_dependents": 3,
+    "sources": [
+      "ForceAffectorDescriptor.cpp",
+      "LinearForceAffectorDescriptor.cpp",
+      "SineForceAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "KeyManager.h",
+    "source_dependents": 3,
+    "sources": [
+      "CameraControl.cpp",
+      "keymanager.cpp",
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "LayoutScene.h",
+    "source_dependents": 3,
+    "sources": [
+      "AllDescriptorsScene.cpp",
+      "Layout.cpp",
+      "LayoutScene.cpp"
+    ]
+  },
+  {
+    "header": "MouseManager.h",
+    "source_dependents": 3,
+    "sources": [
+      "CameraControl.cpp",
+      "menumanager.cpp",
+      "mousemanager.cpp"
+    ]
+  },
+  {
+    "header": "Particle.h",
+    "source_dependents": 3,
+    "sources": [
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp",
+      "Particle.cpp"
+    ]
+  },
+  {
+    "header": "ParticleTechWrapper.h",
+    "source_dependents": 3,
+    "sources": [
+      "AffectorWrapper.cpp",
+      "ParticleEmitterWrapper.cpp",
+      "ParticleTechWrapper.cpp"
+    ]
+  },
+  {
+    "header": "PathController.h",
+    "source_dependents": 3,
+    "sources": [
+      "PathController.cpp",
+      "PathControllerDescriptor.cpp",
+      "PathNode.cpp"
+    ]
+  },
+  {
+    "header": "PlaneColliderWrapper.h",
+    "source_dependents": 3,
+    "sources": [
+      "ParticleTechWrapper.cpp",
+      "PlaneColliderDescriptor.cpp",
+      "PlaneColliderWrapper.cpp"
+    ]
+  },
+  {
+    "header": "QuestManager.h",
+    "source_dependents": 3,
+    "sources": [
+      "QuestController.cpp",
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "ShapeDescriptor.h",
+    "source_dependents": 3,
+    "sources": [
+      "CollisionShapeDescriptor.cpp",
+      "DamageShapeDescriptor.cpp",
+      "UnitSpawnerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SoundObject.h",
+    "source_dependents": 3,
+    "sources": [
+      "LayoutScene.cpp",
+      "SoundObject.cpp",
+      "SoundObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Timeline.h",
+    "source_dependents": 3,
+    "sources": [
+      "Layout.cpp",
+      "Timeline.cpp",
+      "TimelineProperty.cpp"
+    ]
+  },
+  {
+    "header": "TriggerDescriptor.h",
+    "source_dependents": 3,
+    "sources": [
+      "TriggerBoxDescriptor.cpp",
+      "TriggerDescriptor.cpp",
+      "TriggerSphereDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "UnitTheme.h",
+    "source_dependents": 3,
+    "sources": [
+      "BaseUnit.cpp",
+      "MonsterDescriptor.cpp",
+      "UnitThemes.cpp"
+    ]
+  },
+  {
+    "header": "UnitThemes.h",
+    "source_dependents": 3,
+    "sources": [
+      "BaseUnit.cpp",
+      "MonsterDescriptor.cpp",
+      "UnitThemes.cpp"
+    ]
+  },
+  {
+    "header": "AIFlag.h",
+    "source_dependents": 2,
+    "sources": [
+      "AIFlag.cpp",
+      "AIFlagManager.cpp"
+    ]
+  },
+  {
+    "header": "AIFlagManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "AIFlagManager.cpp",
+      "AIManager.cpp"
+    ]
+  },
+  {
+    "header": "AISkillManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "AIManager.cpp",
+      "AISkillManager.cpp"
+    ]
+  },
+  {
+    "header": "AIStatWatcher.h",
+    "source_dependents": 2,
+    "sources": [
+      "AIManager.cpp",
+      "AIStatWatcher.cpp"
+    ]
+  },
+  {
+    "header": "AlignWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "AlignDescriptor.cpp",
+      "AlignWrapper.cpp"
+    ]
+  },
+  {
+    "header": "AllDescriptorsScene.h",
+    "source_dependents": 2,
+    "sources": [
+      "AllDescriptorsScene.cpp",
+      "Layout.cpp"
+    ]
+  },
+  {
+    "header": "AnimationPlayer.h",
+    "source_dependents": 2,
+    "sources": [
+      "AnimationPlayer.cpp",
+      "AnimationPlayerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "BoxColliderWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "BoxColliderDescriptor.cpp",
+      "BoxColliderWrapper.cpp"
+    ]
+  },
+  {
+    "header": "CameraControl.h",
+    "source_dependents": 2,
+    "sources": [
+      "CameraControl.cpp",
+      "GameStateController.cpp"
+    ]
+  },
+  {
+    "header": "CinematicObject.h",
+    "source_dependents": 2,
+    "sources": [
+      "CinematicDescriptor.cpp",
+      "CinematicObject.cpp"
+    ]
+  },
+  {
+    "header": "ColorWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "ColorAffectorDescriptor.cpp",
+      "ColorWrapper.cpp"
+    ]
+  },
+  {
+    "header": "Counter.h",
+    "source_dependents": 2,
+    "sources": [
+      "Counter.cpp",
+      "CounterDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CullingBounds.h",
+    "source_dependents": 2,
+    "sources": [
+      "BaseUnit.cpp",
+      "Item.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "DescriptorManager.cpp",
+      "LayoutScene.cpp"
+    ]
+  },
+  {
+    "header": "DungeonObject.h",
+    "source_dependents": 2,
+    "sources": [
+      "DungeonObject.cpp",
+      "DungeonObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Editor.h",
+    "source_dependents": 2,
+    "sources": [
+      "EditorBaseObject.cpp",
+      "Item.cpp"
+    ]
+  },
+  {
+    "header": "EditorObjectManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "EditorBaseObject.cpp",
+      "EditorObjectManager.cpp"
+    ]
+  },
+  {
+    "header": "EffectGroupManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "EffectGroupManager.cpp",
+      "Sets.cpp"
+    ]
+  },
+  {
+    "header": "FileReader.h",
+    "source_dependents": 2,
+    "sources": [
+      "FileReader.cpp",
+      "PairStyle.cpp"
+    ]
+  },
+  {
+    "header": "GameStateController.h",
+    "source_dependents": 2,
+    "sources": [
+      "GameStateController.cpp",
+      "GameStateControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "GeometryRotateWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "GeometryRotateDescriptor.cpp",
+      "GeometryRotateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "GraphManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "GraphManager.cpp",
+      "SpawnClassData.cpp"
+    ]
+  },
+  {
+    "header": "GravityWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "GravityAffectorDescriptor.cpp",
+      "GravityWrapper.cpp"
+    ]
+  },
+  {
+    "header": "Interact.h",
+    "source_dependents": 2,
+    "sources": [
+      "Interact.cpp",
+      "InteractiveDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ItemSaveState.h",
+    "source_dependents": 2,
+    "sources": [
+      "Item.cpp",
+      "QuestRewards.cpp"
+    ]
+  },
+  {
+    "header": "JetWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "JetAffectorDescriptor.cpp",
+      "JetWrapper.cpp"
+    ]
+  },
+  {
+    "header": "LevelTemplateData.h",
+    "source_dependents": 2,
+    "sources": [
+      "Item.cpp",
+      "dungeon.cpp"
+    ]
+  },
+  {
+    "header": "LineWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "LineAffectorDescriptor.cpp",
+      "LineWrapper.cpp"
+    ]
+  },
+  {
+    "header": "LinearForceWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "LinearForceAffectorDescriptor.cpp",
+      "LinearForceWrapper.cpp"
+    ]
+  },
+  {
+    "header": "LogicObject.h",
+    "source_dependents": 2,
+    "sources": [
+      "Descriptor.cpp",
+      "LogicGroup.cpp"
+    ]
+  },
+  {
+    "header": "LogicTimer.h",
+    "source_dependents": 2,
+    "sources": [
+      "LogicTimer.cpp",
+      "LogicTimerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LogicWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "Descriptor.cpp",
+      "LogicWrapper.cpp"
+    ]
+  },
+  {
+    "header": "Missile.h",
+    "source_dependents": 2,
+    "sources": [
+      "MissileDescriptor.cpp",
+      "MissilePreloader.cpp"
+    ]
+  },
+  {
+    "header": "ModFileFilter.h",
+    "source_dependents": 2,
+    "sources": [
+      "FileSystem.cpp",
+      "ModFileFilter.cpp"
+    ]
+  },
+  {
+    "header": "MoneyTaker.h",
+    "source_dependents": 2,
+    "sources": [
+      "MoneyTaker.cpp",
+      "MoneyTakerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "MusicObject.h",
+    "source_dependents": 2,
+    "sources": [
+      "MusicObject.cpp",
+      "MusicObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "OgreGpuCommandBufferFlush.h",
+    "source_dependents": 2,
+    "sources": [
+      "OgreGpuCommandBufferFlush.cpp",
+      "ParticleCache.cpp"
+    ]
+  },
+  {
+    "header": "OutputIncrementor.h",
+    "source_dependents": 2,
+    "sources": [
+      "OutputIncrementor.cpp",
+      "OutputIncrementorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PathNode.h",
+    "source_dependents": 2,
+    "sources": [
+      "PathNode.cpp",
+      "PathNodeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Quest.h",
+    "source_dependents": 2,
+    "sources": [
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "QuestUnitData.h",
+    "source_dependents": 2,
+    "sources": [
+      "QuestManager.cpp",
+      "QuestUnitData.cpp"
+    ]
+  },
+  {
+    "header": "RandomChoice.h",
+    "source_dependents": 2,
+    "sources": [
+      "RandomChoice.cpp",
+      "RandomChoiceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "RandomGroup.h",
+    "source_dependents": 2,
+    "sources": [
+      "RandomGroup.cpp",
+      "RandomGroupDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Room.h",
+    "source_dependents": 2,
+    "sources": [
+      "Room.cpp",
+      "RoomDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ScaleWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "ScaleAffectorDescriptor.cpp",
+      "ScaleWrapper.cpp"
+    ]
+  },
+  {
+    "header": "SineForceWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "SineForceAffectorDescriptor.cpp",
+      "SineForceWrapper.cpp"
+    ]
+  },
+  {
+    "header": "SkillController.h",
+    "source_dependents": 2,
+    "sources": [
+      "SkillController.cpp",
+      "SkillControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SkipCutscene.h",
+    "source_dependents": 2,
+    "sources": [
+      "CutsceneDescriptor.cpp",
+      "SkipCutscene.cpp"
+    ]
+  },
+  {
+    "header": "SoundManager.h",
+    "source_dependents": 2,
+    "sources": [
+      "MusicObject.cpp",
+      "SoundManager.cpp"
+    ]
+  },
+  {
+    "header": "SteamStats.h",
+    "source_dependents": 2,
+    "sources": [
+      "Achievement.cpp",
+      "SteamStats.cpp"
+    ]
+  },
+  {
+    "header": "Teleport.h",
+    "source_dependents": 2,
+    "sources": [
+      "Teleport.cpp",
+      "TeleportDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TextureAnimateWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "TextureAnimateDescriptor.cpp",
+      "TextureAnimateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "TextureRotateWrapper.h",
+    "source_dependents": 2,
+    "sources": [
+      "TextureRotateDescriptor.cpp",
+      "TextureRotateWrapper.cpp"
+    ]
+  },
+  {
+    "header": "TimelineProperty.h",
+    "source_dependents": 2,
+    "sources": [
+      "Timeline.cpp",
+      "TimelineProperty.cpp"
+    ]
+  },
+  {
+    "header": "TriggerBox.h",
+    "source_dependents": 2,
+    "sources": [
+      "TriggerBox.cpp",
+      "TriggerBoxDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TriggerSphere.h",
+    "source_dependents": 2,
+    "sources": [
+      "TriggerSphere.cpp",
+      "TriggerSphereDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "UTFConversion.h",
+    "source_dependents": 2,
+    "sources": [
+      "Descriptor.cpp",
+      "FileReader.cpp"
+    ]
+  },
+  {
+    "header": "UnitSpawner.h",
+    "source_dependents": 2,
+    "sources": [
+      "Item.cpp",
+      "UnitSpawnerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Warper.h",
+    "source_dependents": 2,
+    "sources": [
+      "Warper.cpp",
+      "WarperDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "WaypointActivator.h",
+    "source_dependents": 2,
+    "sources": [
+      "WaypointActivator.cpp",
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "iLevelUpdatedCharacter.h",
+    "source_dependents": 2,
+    "sources": [
+      "DamageShapeDescriptor.cpp",
+      "PropertyNodeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "iStatListener.h",
+    "source_dependents": 2,
+    "sources": [
+      "Achievement.cpp",
+      "SteamStats.cpp"
+    ]
+  },
+  {
+    "header": "Achievement.h",
+    "source_dependents": 1,
+    "sources": [
+      "Achievement.cpp"
+    ]
+  },
+  {
+    "header": "Achievements.h",
+    "source_dependents": 1,
+    "sources": [
+      "Achievement.cpp"
+    ]
+  },
+  {
+    "header": "AlignDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "AlignDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "AnimationDefines.h",
+    "source_dependents": 1,
+    "sources": [
+      "AIStatWatcher.cpp"
+    ]
+  },
+  {
+    "header": "AnimationPlayerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "AnimationPlayerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "AnimationSet.h",
+    "source_dependents": 1,
+    "sources": [
+      "AnimationSet.cpp"
+    ]
+  },
+  {
+    "header": "AstarPathfinder.h",
+    "source_dependents": 1,
+    "sources": [
+      "astarpathfinder.cpp"
+    ]
+  },
+  {
+    "header": "Automap.h",
+    "source_dependents": 1,
+    "sources": [
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "BatchModelRef.h",
+    "source_dependents": 1,
+    "sources": [
+      "MasterResourceManager.cpp"
+    ]
+  },
+  {
+    "header": "BoxColliderDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "BoxColliderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CameraController.h",
+    "source_dependents": 1,
+    "sources": [
+      "CameraControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CameraControllerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CameraControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CameraShakeDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CameraShakeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ChannelInstance.h",
+    "source_dependents": 1,
+    "sources": [
+      "SoundManager.cpp"
+    ]
+  },
+  {
+    "header": "CinematicDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CinematicDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Cinematics.h",
+    "source_dependents": 1,
+    "sources": [
+      "Cinematics.cpp"
+    ]
+  },
+  {
+    "header": "CollisionAvoiderDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CollisionAvoiderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CollisionAvoiderWrapper.h",
+    "source_dependents": 1,
+    "sources": [
+      "CollisionAvoiderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CollisionModelRef.h",
+    "source_dependents": 1,
+    "sources": [
+      "MasterResourceManager.cpp"
+    ]
+  },
+  {
+    "header": "CollisionShape.h",
+    "source_dependents": 1,
+    "sources": [
+      "CollisionShapeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "CollisionShapeDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CollisionShapeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ColorAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "ColorAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ContinueGameMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "CounterDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CounterDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "DamageShape.h",
+    "source_dependents": 1,
+    "sources": [
+      "DamageShapeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "DamageShapeDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "DamageShapeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorController.h",
+    "source_dependents": 1,
+    "sources": [
+      "Descriptor.cpp"
+    ]
+  },
+  {
+    "header": "DescriptorPropertyInterpreter.h",
+    "source_dependents": 1,
+    "sources": [
+      "DescriptorPropertyInterpreter.cpp"
+    ]
+  },
+  {
+    "header": "DifficultyMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "DropdownMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "Dungeon.h",
+    "source_dependents": 1,
+    "sources": [
+      "dungeon.cpp"
+    ]
+  },
+  {
+    "header": "DungeonManager.h",
+    "source_dependents": 1,
+    "sources": [
+      "DungeonManager.cpp"
+    ]
+  },
+  {
+    "header": "DungeonObjectDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "DungeonObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorButton.h",
+    "source_dependents": 1,
+    "sources": [
+      "EditorButtonDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorButtonDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "EditorButtonDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "EditorDLL.h",
+    "source_dependents": 1,
+    "sources": [
+      "EditorBaseObject.cpp"
+    ]
+  },
+  {
+    "header": "EditorImageDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "EditorImageDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Equipment.h",
+    "source_dependents": 1,
+    "sources": [
+      "QuestRewards.cpp"
+    ]
+  },
+  {
+    "header": "EquipmentRef.h",
+    "source_dependents": 1,
+    "sources": [
+      "SharedStash.cpp"
+    ]
+  },
+  {
+    "header": "ExecuteSkillProps.h",
+    "source_dependents": 1,
+    "sources": [
+      "ExecuteSkillProps.cpp"
+    ]
+  },
+  {
+    "header": "FormationNode.h",
+    "source_dependents": 1,
+    "sources": [
+      "FormationNode.cpp"
+    ]
+  },
+  {
+    "header": "FormationNodeSaveAndLoad.h",
+    "source_dependents": 1,
+    "sources": [
+      "FormationNode.cpp"
+    ]
+  },
+  {
+    "header": "GameGlobals.h",
+    "source_dependents": 1,
+    "sources": [
+      "Item.cpp"
+    ]
+  },
+  {
+    "header": "GameSpeed.h",
+    "source_dependents": 1,
+    "sources": [
+      "GameSpeed.cpp"
+    ]
+  },
+  {
+    "header": "GameStateControllerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "GameStateControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "GenericModelDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "GenericModelDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "GeometryRotateDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "GeometryRotateDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "GravityAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "GravityAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "InteractiveDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "InteractiveDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "InteractiveMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "interactiveMenu.cpp"
+    ]
+  },
+  {
+    "header": "Inventory.h",
+    "source_dependents": 1,
+    "sources": [
+      "SharedStash.cpp"
+    ]
+  },
+  {
+    "header": "ItemDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "ItemDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "JetAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "JetAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Keyframe.h",
+    "source_dependents": 1,
+    "sources": [
+      "Item.cpp"
+    ]
+  },
+  {
+    "header": "Layout.h",
+    "source_dependents": 1,
+    "sources": [
+      "Layout.cpp"
+    ]
+  },
+  {
+    "header": "LevelState.h",
+    "source_dependents": 1,
+    "sources": [
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "Light.h",
+    "source_dependents": 1,
+    "sources": [
+      "LightDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LightDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "LightDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LineAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "LineAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LinearForceAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "LinearForceAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LogicGroup.h",
+    "source_dependents": 1,
+    "sources": [
+      "LogicGroup.cpp"
+    ]
+  },
+  {
+    "header": "LogicNodeState.h",
+    "source_dependents": 1,
+    "sources": [
+      "levelstate.cpp"
+    ]
+  },
+  {
+    "header": "LogicTimerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "LogicTimerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "MainMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "MenuManager.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "MersenneTwister.h",
+    "source_dependents": 1,
+    "sources": [
+      "utilities.cpp"
+    ]
+  },
+  {
+    "header": "MissileDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "MissileDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "MissilePreloader.h",
+    "source_dependents": 1,
+    "sources": [
+      "MissilePreloader.cpp"
+    ]
+  },
+  {
+    "header": "Mod.h",
+    "source_dependents": 1,
+    "sources": [
+      "Mod.cpp"
+    ]
+  },
+  {
+    "header": "ModelViewerScene.h",
+    "source_dependents": 1,
+    "sources": [
+      "ModelViewerScene.cpp"
+    ]
+  },
+  {
+    "header": "MoneyTakerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "MoneyTakerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "MonsterDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "MonsterDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "MouseHandler.h",
+    "source_dependents": 1,
+    "sources": [
+      "MouseHandler.cpp"
+    ]
+  },
+  {
+    "header": "MusicObjectDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "MusicObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "NewGameMenu.h",
+    "source_dependents": 1,
+    "sources": [
+      "menumanager.cpp"
+    ]
+  },
+  {
+    "header": "OutputIncrementorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "OutputIncrementorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "POV.h",
+    "source_dependents": 1,
+    "sources": [
+      "pov.cpp"
+    ]
+  },
+  {
+    "header": "PairStyle.h",
+    "source_dependents": 1,
+    "sources": [
+      "PairStyle.cpp"
+    ]
+  },
+  {
+    "header": "ParticleCache.h",
+    "source_dependents": 1,
+    "sources": [
+      "ParticleCache.cpp"
+    ]
+  },
+  {
+    "header": "ParticleEmitterWrapper.h",
+    "source_dependents": 1,
+    "sources": [
+      "ParticleEmitterWrapper.cpp"
+    ]
+  },
+  {
+    "header": "ParticleScene.h",
+    "source_dependents": 1,
+    "sources": [
+      "ParticleScene.cpp"
+    ]
+  },
+  {
+    "header": "ParticleWrapperDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "ParticleWrapperDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Path.h",
+    "source_dependents": 1,
+    "sources": [
+      "path.cpp"
+    ]
+  },
+  {
+    "header": "PathControllerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "PathControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PathNodeDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "PathNodeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PlaneColliderDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "PlaneColliderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PropertyNode.h",
+    "source_dependents": 1,
+    "sources": [
+      "PropertyNodeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PropertyNodeDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "PropertyNodeDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PuzzleRandomizer.h",
+    "source_dependents": 1,
+    "sources": [
+      "PuzzleRandomizerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "PuzzleRandomizerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "PuzzleRandomizerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "QuestControllerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "QuestControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "QuestDialogItem.h",
+    "source_dependents": 1,
+    "sources": [
+      "QuestDialogItem.cpp"
+    ]
+  },
+  {
+    "header": "QuestRequirements.h",
+    "source_dependents": 1,
+    "sources": [
+      "QuestRequirements.cpp"
+    ]
+  },
+  {
+    "header": "QuestRewards.h",
+    "source_dependents": 1,
+    "sources": [
+      "QuestRewards.cpp"
+    ]
+  },
+  {
+    "header": "RandomChoiceDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "RandomChoiceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "RandomGroupDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "RandomGroupDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "RandomNames.h",
+    "source_dependents": 1,
+    "sources": [
+      "RandomNames.cpp"
+    ]
+  },
+  {
+    "header": "Recipes.h",
+    "source_dependents": 1,
+    "sources": [
+      "Recipes.cpp"
+    ]
+  },
+  {
+    "header": "RefManagerInterpreterFunc.h",
+    "source_dependents": 1,
+    "sources": [
+      "RefManagerInterpreterFunc.cpp"
+    ]
+  },
+  {
+    "header": "RoomDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "RoomPiece.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomPieceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "RoomPieceDataInformation.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomPieceDataInformation.cpp"
+    ]
+  },
+  {
+    "header": "RoomPieceDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomPieceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "ScaleAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "ScaleAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Sets.h",
+    "source_dependents": 1,
+    "sources": [
+      "Sets.cpp"
+    ]
+  },
+  {
+    "header": "SharedStash.h",
+    "source_dependents": 1,
+    "sources": [
+      "SharedStash.cpp"
+    ]
+  },
+  {
+    "header": "ShellUtils.h",
+    "source_dependents": 1,
+    "sources": [
+      "ShellUtils.cpp"
+    ]
+  },
+  {
+    "header": "SineForceAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "SineForceAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SkillControllerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "SkillControllerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SkillParser.h",
+    "source_dependents": 1,
+    "sources": [
+      "SkillParser.cpp"
+    ]
+  },
+  {
+    "header": "SkipCutsceneDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "CutsceneDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SoundBankDataInformation.h",
+    "source_dependents": 1,
+    "sources": [
+      "SoundBankDataInformation.cpp"
+    ]
+  },
+  {
+    "header": "SoundData.h",
+    "source_dependents": 1,
+    "sources": [
+      "SoundBankDataInformation.cpp"
+    ]
+  },
+  {
+    "header": "SoundInstance.h",
+    "source_dependents": 1,
+    "sources": [
+      "SoundManager.cpp"
+    ]
+  },
+  {
+    "header": "SoundObjectDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "SoundObjectDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "SpawnClass.h",
+    "source_dependents": 1,
+    "sources": [
+      "SpawnClassData.cpp"
+    ]
+  },
+  {
+    "header": "SpawnClassData.h",
+    "source_dependents": 1,
+    "sources": [
+      "SpawnClassData.cpp"
+    ]
+  },
+  {
+    "header": "SphereColliderDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "SphereColliderDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Splash.h",
+    "source_dependents": 1,
+    "sources": [
+      "SPLASH.cpp"
+    ]
+  },
+  {
+    "header": "StringRepository.h",
+    "source_dependents": 1,
+    "sources": [
+      "StringRepository.cpp"
+    ]
+  },
+  {
+    "header": "StringTranslate.h",
+    "source_dependents": 1,
+    "sources": [
+      "StringTranslate.cpp"
+    ]
+  },
+  {
+    "header": "TRepository.h",
+    "source_dependents": 1,
+    "sources": [
+      "StringTranslate.cpp"
+    ]
+  },
+  {
+    "header": "TeleportDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "TeleportDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TextureAnimateDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "TextureAnimateDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TextureRotateDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "TextureRotateDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TriggerBoxDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "TriggerBoxDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "TriggerSphereDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "TriggerSphereDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "Undo.h",
+    "source_dependents": 1,
+    "sources": [
+      "Undo.cpp"
+    ]
+  },
+  {
+    "header": "UnitSpawnerDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "UnitSpawnerDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "UnitThemeParticle.h",
+    "source_dependents": 1,
+    "sources": [
+      "UnitThemes.cpp"
+    ]
+  },
+  {
+    "header": "VortexAffectorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "VortexAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "VortexWrapper.h",
+    "source_dependents": 1,
+    "sources": [
+      "VortexAffectorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "WarperDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "WarperDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "WaypointActivatorDescriptor.h",
+    "source_dependents": 1,
+    "sources": [
+      "WaypointActivatorDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "iCollision.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomPieceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "iSnap.h",
+    "source_dependents": 1,
+    "sources": [
+      "RoomPieceDescriptor.cpp"
+    ]
+  },
+  {
+    "header": "LogicGroupDescriptor.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "LogicLink.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "OgreResourceFile.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "ParticleEmitterWrapperDescriptor.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "ParticleTechWrapperDescriptor.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "SDL.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "SkillProperty.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "TimelineDescriptor.h",
+    "source_dependents": 0,
+    "sources": []
+  },
+  {
+    "header": "UnitTriggerDescriptor.h",
+    "source_dependents": 0,
+    "sources": []
+  }
+]

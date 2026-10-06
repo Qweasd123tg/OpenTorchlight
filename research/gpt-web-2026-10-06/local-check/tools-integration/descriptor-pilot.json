@@ -1,0 +1,22 @@
+{
+ "schema": 1,
+ "provider": "descriptor",
+ "results": [
+  {
+   "tu": "AffectorDescriptor.cpp",
+   "status": "BLOCKED",
+   "reason": "descriptor trace incomplete; no candidate published",
+   "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/attempts/tu-mde7qhlf",
+   "published": false,
+   "provider": "descriptor",
+   "seconds": 4.500602594000156,
+   "inputs_digest": "8426230b3995afb4a0e025e251a59ff6e24c28350443e5bb7e963ce17562efe5"
+  }
+ ],
+ "budget": {
+  "limit": 1,
+  "seconds": 120,
+  "elapsed": 9.450783365000461
+ },
+ "stop": "finite task/time budget or selected queue exhausted"
+}

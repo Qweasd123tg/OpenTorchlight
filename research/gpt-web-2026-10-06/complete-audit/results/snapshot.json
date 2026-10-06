@@ -1,0 +1,1019 @@
+{
+  "scope": "Source snapshot read-only inventory; no current ELF/GCC acceptance run.",
+  "files": 2285,
+  "total_file_bytes": 52130546,
+  "decomp_sources": 201,
+  "decomp_headers": 314,
+  "active_python_tools_and_tests": 28,
+  "active_python_lines": 9351,
+  "active_java_files": 1,
+  "runtime_test_cpp_files": 38,
+  "runtime_test_macro_count": 58,
+  "unit_test_files": [
+    "test_autotest_returns.py",
+    "test_mutate_overloads.py",
+    "test_llm_loop_headers.py",
+    "test_ghidra_cpp.py",
+    "test_objdiff_literals.py"
+  ],
+  "recorded_autotests": 57,
+  "autotests_fewer_than_5_mutants": [
+    {
+      "address": "0x6f92c0",
+      "name": "CDescriptor::LinkProperty(unsigned int, unsigned int)",
+      "killed": 4,
+      "tried": 4,
+      "code": "4e8de9518314f35e"
+    },
+    {
+      "address": "0x6f9c10",
+      "name": "CDescriptor::AddInputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",
+      "killed": 3,
+      "tried": 3,
+      "code": "fc3e73ccfa2be93a"
+    },
+    {
+      "address": "0x7e9f90",
+      "name": "CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "2b37112009f1b24c"
+    },
+    {
+      "address": "0x8029d0",
+      "name": "CBaseUnit::getUnitDataName()",
+      "killed": 1,
+      "tried": 1,
+      "code": "35fc3a1a9cfe33c2"
+    },
+    {
+      "address": "0x804f50",
+      "name": "CBaseUnit::dontUseOnFull()",
+      "killed": 3,
+      "tried": 3,
+      "code": "d732f962e5a49e24"
+    },
+    {
+      "address": "0xa01f30",
+      "name": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
+      "killed": 3,
+      "tried": 3,
+      "code": "cd25ea618ae2655d"
+    },
+    {
+      "address": "0xc78540",
+      "name": "CGraph::clear(unsigned int)",
+      "killed": 4,
+      "tried": 4,
+      "code": "575c638211caefb0"
+    },
+    {
+      "address": "0xc816a0",
+      "name": "CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "cb3fe387a9a68c6a"
+    },
+    {
+      "address": "0xc817a0",
+      "name": "CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "cb3fe387a9a68c6a"
+    },
+    {
+      "address": "0xd264d0",
+      "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "8f367a3b826eb663"
+    },
+    {
+      "address": "0xd2dca0",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 2,
+      "tried": 2,
+      "code": "9a649aedd7940ca0"
+    },
+    {
+      "address": "0x7b67f0",
+      "name": "CTimeline::GetPropertyPointTimePercent(long long, int, int, bool)",
+      "killed": 1,
+      "tried": 1,
+      "code": "3c6aace83759cdb1"
+    },
+    {
+      "address": "0x7b6930",
+      "name": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+      "killed": 2,
+      "tried": 2,
+      "code": "cd56253d05700705"
+    },
+    {
+      "address": "0x7b6960",
+      "name": "CTimeline::AddPointToProperty(long long, int, bool)",
+      "killed": 1,
+      "tried": 1,
+      "code": "f4c4fc740c7f682d"
+    },
+    {
+      "address": "0x9f26e0",
+      "name": "CRandomGroup::CRandomGroup(CResourceManager*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "c994f282e1a11047"
+    },
+    {
+      "address": "0xa65930",
+      "name": "CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "f6ce3c203e2c764a"
+    }
+  ],
+  "native_executable_files_in_archive": [],
+  "symbol_addresses_with_size": 17015,
+  "historical_progress_lines": [
+    {
+      "line": 854,
+      "text": "Полный check.py: 67 тестов PASS, 423/5247 функций, 100 508 байт."
+    },
+    {
+      "line": 873,
+      "text": "Полный check.py: 69 тестов PASS, 432/5247 функций, 104 778 байт."
+    },
+    {
+      "line": 904,
+      "text": "437/5247 функций, 107 737 байт. Остаются rayCollision, sphereCollision,"
+    },
+    {
+      "line": 922,
+      "text": "их vtable проверены. Полный check.py: 75 тестов PASS, 438/5247 функций,"
+    },
+    {
+      "line": 942,
+      "text": "440/5247 функций, 111 970 байт. BaseUnit: 58/59, остался только unitInit."
+    },
+    {
+      "line": 960,
+      "text": "Полный check.py: 76 runtime tests PASS, 441/5247 игровых функций,"
+    },
+    {
+      "line": 970,
+      "text": "449/5247 игровых функций, 119410 байт. Окно игры не запускалось."
+    },
+    {
+      "line": 980,
+      "text": "461/5247 игровых функций, 119876 байт."
+    },
+    {
+      "line": 1011,
+      "text": "Полный check.py: 79 tests PASS, 471/5247 игровых функций, 121320 байт."
+    },
+    {
+      "line": 1022,
+      "text": "473/5247 игровых функций, 121541 байт."
+    },
+    {
+      "line": 1042,
+      "text": "477/5247 игровых функций, 121994 байта."
+    },
+    {
+      "line": 1060,
+      "text": "Итог check.py: 482/5247 функций, 122 964 байта, 81 тест PASS."
+    }
+  ],
+  "config": {
+    "schema": 1,
+    "compiler": "GCC 4.4.7 20120313 (Red Hat 4.4.7-3), binutils 2.20.51.0.2-5.36.el6",
+    "cflags": [
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG"
+    ],
+    "include": [
+      "decomp/include"
+    ],
+    "system_include": [
+      "@OGRE@/OgreMain/include",
+      "third_party/cegui-0.6.2/include"
+    ]
+  },
+  "largest_corpus": {
+    "available": true,
+    "source": "research/decomp-automation-audit-2026-10-04/measured.json",
+    "functions": 666,
+    "bytes": 2797634,
+    "historically_accepted": 23,
+    "top_n_bytes": {
+      "10": 392926,
+      "20": 651951,
+      "50": 1071146,
+      "100": 1469311,
+      "200": 1932622
+    },
+    "top_40": [
+      {
+        "address": "0xab8100",
+        "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)",
+        "tu": "gameui.cpp",
+        "bytes": 80437,
+        "accepted": false,
+        "raw_lines": 2,
+        "raw_hits": {
+          "string_cleanup": 0,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb569e0",
+        "name": "CInventoryMenu::createMenus()",
+        "tu": "inventorymenu.cpp",
+        "bytes": 40324,
+        "accepted": false,
+        "raw_lines": 5580,
+        "raw_hits": {
+          "string_cleanup": 78,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xc22580",
+        "name": "CStatsMenuFill::createMenus()",
+        "tu": "statsmenu_fill.cpp",
+        "bytes": 35573,
+        "accepted": false,
+        "raw_lines": 4791,
+        "raw_hits": {
+          "string_cleanup": 74,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xbe59e0",
+        "name": "CSkillMenu::updateLayout()",
+        "tu": "skillmenu.cpp",
+        "bytes": 35024,
+        "accepted": false,
+        "raw_lines": 4733,
+        "raw_hits": {
+          "string_cleanup": 90,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb6ed20",
+        "name": "CMerchantMenu::createMenus()",
+        "tu": "merchantmenu.cpp",
+        "bytes": 34170,
+        "accepted": false,
+        "raw_lines": 4872,
+        "raw_hits": {
+          "string_cleanup": 78,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xaf2540",
+        "name": "CConsole::executeCommandLine(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+        "tu": "Console.cpp",
+        "bytes": 33686,
+        "accepted": false,
+        "raw_lines": 4650,
+        "raw_hits": {
+          "string_cleanup": 56,
+          "tree_internals": 22,
+          "vector_internals": 2,
+          "array_internals": 34,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xc0c4e0",
+        "name": "CStatsMenu::update(float)",
+        "tu": "statsmenu.cpp",
+        "bytes": 33659,
+        "accepted": false,
+        "raw_lines": 4307,
+        "raw_hits": {
+          "string_cleanup": 273,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xe3c460",
+        "name": "CJournalMenu::updateLayout()",
+        "tu": "journalmenu.cpp",
+        "bytes": 33545,
+        "accepted": false,
+        "raw_lines": 4656,
+        "raw_hits": {
+          "string_cleanup": 233,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 2,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xaa6bf0",
+        "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)",
+        "tu": "gameui.cpp",
+        "bytes": 33458,
+        "accepted": false,
+        "raw_lines": 3654,
+        "raw_hits": {
+          "string_cleanup": 184,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 3,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xbfbe20",
+        "name": "CStashMenu::createMenus()",
+        "tu": "stashmenu.cpp",
+        "bytes": 33050,
+        "accepted": false,
+        "raw_lines": 4655,
+        "raw_hits": {
+          "string_cleanup": 78,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xa9e4a0",
+        "name": "CGameUI::create()",
+        "tu": "gameui.cpp",
+        "bytes": 32473,
+        "accepted": false,
+        "raw_lines": 3812,
+        "raw_hits": {
+          "string_cleanup": 102,
+          "tree_internals": 0,
+          "vector_internals": 19,
+          "array_internals": 2,
+          "nan_guard": 0,
+          "unknown_abi": 2,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb93350",
+        "name": "CPetMenu::createMenus()",
+        "tu": "petmenu.cpp",
+        "bytes": 30488,
+        "accepted": false,
+        "raw_lines": 4123,
+        "raw_hits": {
+          "string_cleanup": 50,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xec7940",
+        "name": "CAchievements::CAchievements()",
+        "tu": "Achievements.cpp",
+        "bytes": 26083,
+        "accepted": false,
+        "raw_lines": 4156,
+        "raw_hits": {
+          "string_cleanup": 147,
+          "tree_internals": 2,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb9b0d0",
+        "name": "CPetMenu::update(float)",
+        "tu": "petmenu.cpp",
+        "bytes": 26069,
+        "accepted": false,
+        "raw_lines": 3360,
+        "raw_hits": {
+          "string_cleanup": 182,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 4,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xaaeeb0",
+        "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)",
+        "tu": "gameui.cpp",
+        "bytes": 24781,
+        "accepted": false,
+        "raw_lines": 2669,
+        "raw_hits": {
+          "string_cleanup": 140,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x893660",
+        "name": "CEquipment::getEquipmentStats()",
+        "tu": "Equipment.cpp",
+        "bytes": 24219,
+        "accepted": false,
+        "raw_lines": 3261,
+        "raw_hits": {
+          "string_cleanup": 93,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xad7a50",
+        "name": "CCombineMenu::createMenus()",
+        "tu": "combinemenu.cpp",
+        "bytes": 24134,
+        "accepted": false,
+        "raw_lines": 3423,
+        "raw_hits": {
+          "string_cleanup": 56,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x9762f0",
+        "name": "CLevelTemplateData::load(wchar_t const*)",
+        "tu": "leveltemplatedata.cpp",
+        "bytes": 23722,
+        "accepted": false,
+        "raw_lines": 2904,
+        "raw_hits": {
+          "string_cleanup": 186,
+          "tree_internals": 0,
+          "vector_internals": 2,
+          "array_internals": 1,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb2e0a0",
+        "name": "CEnchantMenu::createMenus()",
+        "tu": "enchantmenu.cpp",
+        "bytes": 23696,
+        "accepted": false,
+        "raw_lines": 3378,
+        "raw_hits": {
+          "string_cleanup": 52,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xbc6b90",
+        "name": "CQuestMenu::createMenus()",
+        "tu": "questmenu.cpp",
+        "bytes": 23360,
+        "accepted": false,
+        "raw_lines": 3303,
+        "raw_hits": {
+          "string_cleanup": 54,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xd80cf0",
+        "name": "CSettings::CSettings(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+        "tu": "Settings.cpp",
+        "bytes": 22434,
+        "accepted": false,
+        "raw_lines": 2821,
+        "raw_hits": {
+          "string_cleanup": 282,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xbb08f0",
+        "name": "CQuestDialogMenu::createMenus()",
+        "tu": "questdialogmenu.cpp",
+        "bytes": 19340,
+        "accepted": false,
+        "raw_lines": 2739,
+        "raw_hits": {
+          "string_cleanup": 48,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x856310",
+        "name": "CCharacter::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+        "tu": "character.cpp",
+        "bytes": 18479,
+        "accepted": false,
+        "raw_lines": 2042,
+        "raw_hits": {
+          "string_cleanup": 142,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 15,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x88f420",
+        "name": "CEquipment::getEquipmentDescription(bool, bool)",
+        "tu": "Equipment.cpp",
+        "bytes": 16955,
+        "accepted": false,
+        "raw_lines": 2207,
+        "raw_hits": {
+          "string_cleanup": 152,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 3,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xce5f90",
+        "name": "CSkillProperty::CSkillProperty(CSkill*, CResourceManager*, CSkillProperty*, CDataGroup*, unsigned int)",
+        "tu": "SkillProperty.cpp",
+        "bytes": 16130,
+        "accepted": false,
+        "raw_lines": 1975,
+        "raw_hits": {
+          "string_cleanup": 140,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x915950",
+        "name": "CWardrobe::update(CInventory*)",
+        "tu": "wardrobe.cpp",
+        "bytes": 16051,
+        "accepted": false,
+        "raw_lines": 1894,
+        "raw_hits": {
+          "string_cleanup": 60,
+          "tree_internals": 0,
+          "vector_internals": 3,
+          "array_internals": 1,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x602dc0",
+        "name": "CMissileDescriptor::CMissileDescriptor()",
+        "tu": "MissileDescriptor.cpp",
+        "bytes": 15431,
+        "accepted": false,
+        "raw_lines": 1991,
+        "raw_hits": {
+          "string_cleanup": 210,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 4,
+          "unwind": 0
+        },
+        "source_file_present_now": true,
+        "source_relative_path": "decomp/src/MissileDescriptor.cpp",
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xc14860",
+        "name": "CStatsMenu::createMenus()",
+        "tu": "statsmenu.cpp",
+        "bytes": 15365,
+        "accepted": false,
+        "raw_lines": 2250,
+        "raw_hits": {
+          "string_cleanup": 18,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xedcfe0",
+        "name": "SDLEventHandler::SDLEventHandler()",
+        "tu": "SDLEventHandler.cpp",
+        "bytes": 14636,
+        "accepted": false,
+        "raw_lines": 2368,
+        "raw_hits": {
+          "string_cleanup": 0,
+          "tree_internals": 214,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x962630",
+        "name": "CLevel::populate(bool)",
+        "tu": "level.cpp",
+        "bytes": 14530,
+        "accepted": false,
+        "raw_lines": 1938,
+        "raw_hits": {
+          "string_cleanup": 114,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 4,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x563640",
+        "name": "CGame::createMaterials()",
+        "tu": "Game.cpp",
+        "bytes": 13875,
+        "accepted": false,
+        "raw_lines": 1586,
+        "raw_hits": {
+          "string_cleanup": 64,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 1,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x6e8010",
+        "name": "CParticleEmitterWrapperDescriptor::CParticleEmitterWrapperDescriptor()",
+        "tu": "ParticleEmitterWrapperDescriptor.cpp",
+        "bytes": 13871,
+        "accepted": false,
+        "raw_lines": 2032,
+        "raw_hits": {
+          "string_cleanup": 204,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 18,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb53430",
+        "name": "CInventoryMenu::updateLayout()",
+        "tu": "inventorymenu.cpp",
+        "bytes": 13733,
+        "accepted": false,
+        "raw_lines": 1853,
+        "raw_hits": {
+          "string_cleanup": 24,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x5880f0",
+        "name": "CGameClient::CGameClient(CSettings&, CMasterResourceManager*, Ogre::RenderWindow*, Ogre::Root*, CCameraControl*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CSoundManager&)",
+        "tu": "gameclient.cpp",
+        "bytes": 13533,
+        "accepted": false,
+        "raw_lines": 1350,
+        "raw_hits": {
+          "string_cleanup": 64,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 9,
+          "nan_guard": 0,
+          "unknown_abi": 2,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xb26290",
+        "name": "CEnchantMenu::performInteraction()",
+        "tu": "enchantmenu.cpp",
+        "bytes": 13234,
+        "accepted": false,
+        "raw_lines": 1429,
+        "raw_hits": {
+          "string_cleanup": 26,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x843ed0",
+        "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+        "tu": "character.cpp",
+        "bytes": 13218,
+        "accepted": false,
+        "raw_lines": 1241,
+        "raw_hits": {
+          "string_cleanup": 2,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 1,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x7e1200",
+        "name": "CEffect::CEffect(CDataGroup*, CBaseUnit*)",
+        "tu": "effect.cpp",
+        "bytes": 13069,
+        "accepted": false,
+        "raw_lines": 1599,
+        "raw_hits": {
+          "string_cleanup": 108,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 1,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x6f09a0",
+        "name": "CParticleTechWrapperDescriptor::CParticleTechWrapperDescriptor()",
+        "tu": "ParticleTechWrapperDescriptor.cpp",
+        "bytes": 13061,
+        "accepted": false,
+        "raw_lines": 1869,
+        "raw_hits": {
+          "string_cleanup": 186,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 38,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0xcc71d0",
+        "name": "CSkillEvent::CSkillEvent(CSkill*, CSkillProperty*, CResourceManager*, CDataGroup*)",
+        "tu": "SkillEvent.cpp",
+        "bytes": 12868,
+        "accepted": false,
+        "raw_lines": 1689,
+        "raw_hits": {
+          "string_cleanup": 118,
+          "tree_internals": 0,
+          "vector_internals": 0,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      },
+      {
+        "address": "0x95f150",
+        "name": "CLevel::loadRoomLayout(CLevelTemplateData*, bool, ELevelEntryType, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+        "tu": "level.cpp",
+        "bytes": 12694,
+        "accepted": false,
+        "raw_lines": 1765,
+        "raw_hits": {
+          "string_cleanup": 27,
+          "tree_internals": 36,
+          "vector_internals": 2,
+          "array_internals": 0,
+          "nan_guard": 0,
+          "unknown_abi": 0,
+          "unwind": 0
+        },
+        "source_file_present_now": false,
+        "source_relative_path": null,
+        "acceptance_warning": "accepted is from a historical measurement; file existence is not acceptance"
+      }
+    ]
+  },
+  "caution": "No counts from historical and active tracking are added. Native prerequisites may exist outside this archive."
+}

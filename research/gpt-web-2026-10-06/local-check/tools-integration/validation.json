@@ -1,0 +1,37 @@
+{
+ "schema": 1,
+ "date": "2026-10-07",
+ "baseline_commit": "cb92a6b",
+ "headless_tests": 103,
+ "headless_failed": 0,
+ "matched_functions": 895,
+ "accepted_functions": 895,
+ "accepted_bytes": 52558,
+ "new_published_game_functions": 0,
+ "generated_property_definitions_matched": 11,
+ "large_drafts": {
+  "merchantmenu.cpp:0xb6ab50": "COMPLETE",
+  "stashmenu.cpp:0xbf7cc0": "COMPLETE"
+ },
+ "SDK": {
+  "declarations": 31876,
+  "original_PLT_covered": 481,
+  "original_PLT_total": 1004,
+  "applied_live": 48,
+  "aggregate_or_unrepresented_live": 20
+ },
+ "game_source_changed": false,
+ "models_called": 0,
+ "GUI_opened": false,
+ "push": false,
+ "limitations": [
+  "Legacy handwritten declarations do not accept DIFF without per-function executed comparison evidence.",
+  "11 new property definitions are staged only.",
+  "Large drafts are inputs, not accepted source.",
+  "Unknown LSDA, secondary this adjustments, aggregate SDK ABI remain guarded."
+ ],
+ "tool_tests": 108,
+ "tool_test_failed": 0,
+ "project_ELF_checked_in_Ghidra": true,
+ "tools_review_note": "check.py covered current runtime/acceptance changes; subsequent Java/export-only changes covered by focused suite and final live Ghidra run."
+}

@@ -1,0 +1,9 @@
+{
+  "input_archive": "OpenTorchlight-main(4)(1).zip",
+  "sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d",
+  "files_compared": 2285,
+  "changed_files": [],
+  "missing_files": [],
+  "all_input_files_unchanged": true,
+  "note": "Ignores extra generated __pycache__ files; compares all original input files byte-for-byte."
+}

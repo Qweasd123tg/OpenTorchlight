@@ -1,0 +1,342 @@
+{
+ "schema": 1,
+ "scope": "tool-repair recommendations, not game-function stages",
+ "findings": [
+  {
+   "id": "A01",
+   "title": "Нулевой выбор тестов возвращает успех",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A02",
+   "title": "Провал процесса не запрещает принятие кандидата",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A03",
+   "title": "Старый mutation report привязывается к текущему коду",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A04",
+   "title": "Объявление оригинала считается покрытием",
+   "status": "guarded",
+   "decision": "Removed declaration-based acceptance; legacy fixtures await executed per-function receipts."
+  },
+  {
+   "id": "A05",
+   "title": "Отвергнутый кандидат виден в рабочем src",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A06",
+   "title": "Promotion сравнивает статус, а не проверенную реализацию",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A07",
+   "title": "Обрезание строк в ключе нормализации",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "A08",
+   "title": "Таблицы исключений вне сравнения тела",
+   "status": "guarded",
+   "decision": "LSDA stays DIFF; no claim of full CFI/LSDA canonicalization."
+  },
+  {
+   "id": "A09",
+   "title": "Потеря идентичности указателей и обрезание capture",
+   "status": "guarded",
+   "decision": "Overflow/external pointers/timeouts are incomplete; graph identities not implemented."
+  },
+  {
+   "id": "A10",
+   "title": "100% mutation score может означать одну мутацию",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B01",
+   "title": "Failed draft помечается свежим",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B02",
+   "title": "Общий io каталог удаляет чужое задание",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B03",
+   "title": "Зависимые callers не инвалидируются",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B04",
+   "title": "Проверка stale может читать старый types.json",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B05",
+   "title": "Потеря const/volatile",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B06",
+   "title": "Перегрузки и namespace склеиваются по короткому имени",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B07",
+   "title": "Потеря полного имени типа",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B08",
+   "title": "Ширина long теряется на пути в Ghidra",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "B09",
+   "title": "Нет полной типизации всех групп vtables",
+   "status": "guarded",
+   "decision": "All 1099 groups retained, 222 secondary groups ABI unverified."
+  },
+  {
+   "id": "B10",
+   "title": "Физическое размещение агрегатов известно не полностью",
+   "status": "guarded",
+   "decision": "Existing hidden-return support retained; aggregate/by-value unsupported remains explicit."
+  },
+  {
+   "id": "B11",
+   "title": "Импорты библиотек получают меньше сигнатур",
+   "status": "guarded",
+   "decision": "Exact DWARF declarations; 48 SDK signatures applied live, unknown aggregate/variadic skipped."
+  },
+  {
+   "id": "C01",
+   "title": "Прямой вызов превращается в виртуальный",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "C02",
+   "title": "Истинность подменяет значение",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "C03",
+   "title": "Замена типов меняет строковые литералы",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "C04",
+   "title": "Текстовая очистка не доказывает lifetime/ownership",
+   "status": "guarded",
+   "decision": "Unproven lifecycle/dead-store rewrites disabled by default."
+  },
+  {
+   "id": "C05",
+   "title": "Диагностическая сборка не равна production-приёмке",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D01",
+   "title": "Повторный разбор всей секции для каждого символа",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D02",
+   "title": "Новый более приоритетный include не инвалидирует кэш",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D03",
+   "title": "Ключ нормализации зависит от mtime, а не содержимого",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D04",
+   "title": "Частично написанные и большие TU исключены",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D05",
+   "title": "Детерминированные генераторы не замыкают общий цикл",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "D06",
+   "title": "Кэш после C++ и PCH",
+   "status": "bounded/deferred",
+   "decision": "PCH deferred: measured object indexing benefit; no measured PCH need for chosen route."
+  },
+  {
+   "id": "D07",
+   "title": "Правильное тело может зависеть от соседних определений",
+   "status": "bounded/deferred",
+   "decision": "TU retained in staging; final full object compared without trial includes. Broad IPA recipe remains experimental."
+  },
+  {
+   "id": "E01",
+   "title": "Операции памяти по происхождению байтов",
+   "status": "bounded/deferred",
+   "decision": "Memory collapse deferred until alias/overlap proof for a recipient."
+  },
+  {
+   "id": "E02",
+   "title": "CEGUI callback adapters",
+   "status": "bounded/deferred",
+   "decision": "CEGUI lifetime synthesis requires full subscriber ABI/event observations."
+  },
+  {
+   "id": "E03",
+   "title": "Чтения ресурсных параметров",
+   "status": "bounded/deferred",
+   "decision": "Default recipes need CFG/reaching definitions; text alone cannot authorize changes."
+  },
+  {
+   "id": "E04",
+   "title": "Перенос родственных функций по точной delta",
+   "status": "bounded/deferred",
+   "decision": "Merchant/Stash inputs now COMPLETE; no accepted donor yet, no blind copy."
+  },
+  {
+   "id": "E05",
+   "title": "Вывод соответствий полей между родственными классами",
+   "status": "guarded",
+   "decision": "Qualified layouts, exact widths and opaque pointer identity retained; ambiguous layout not inferred."
+  },
+  {
+   "id": "E06",
+   "title": "Компиляторный словарь контейнеров",
+   "status": "bounded/deferred",
+   "decision": "Compiler idiom dictionary waits for a concrete repeated failing shape."
+  },
+  {
+   "id": "E07",
+   "title": "Связи счётчиков и инварианты циклов",
+   "status": "bounded/deferred",
+   "decision": "Container replacement needs capacity/callback proof; original TArrayList retained."
+  },
+  {
+   "id": "E08",
+   "title": "Возврат точных операций OGRE",
+   "status": "bounded/deferred",
+   "decision": "FP/OGRE rewrite requires typed operation order; unsafe cleanup remains disabled."
+  },
+  {
+   "id": "E09",
+   "title": "Совместное восстановление save/load",
+   "status": "bounded/deferred",
+   "decision": "Serialization synthesis waits for versioned cross-load/error-offset fixtures."
+  },
+  {
+   "id": "E10",
+   "title": "Таблицы эффектов и static init",
+   "status": "guarded",
+   "decision": "Known-width string initializer tables reject holes, repeated writes and incomplete values."
+  },
+  {
+   "id": "E11",
+   "title": "Guarded statics и lazy fill",
+   "status": "bounded/deferred",
+   "decision": "Lazy/static reconstruction waits for initialization and destruction effects."
+  },
+  {
+   "id": "E12",
+   "title": "RAII по исключительным путям",
+   "status": "bounded/deferred",
+   "decision": "Structured exception reconstruction not substituted by unsafe regex cleanup."
+  },
+  {
+   "id": "E13",
+   "title": "Структурированные регионы и срезы",
+   "status": "bounded/deferred",
+   "decision": "HighFunction/CFG export remains future work; no new p-code interpreter."
+  },
+  {
+   "id": "E14",
+   "title": "Описания поведения часто вызываемых helpers",
+   "status": "bounded/deferred",
+   "decision": "No unproven purity summaries."
+  },
+  {
+   "id": "E15",
+   "title": "Межфункциональные типы и возможные динамические классы",
+   "status": "bounded/deferred",
+   "decision": "Dynamic/interprocedural type hypotheses deferred; static information loss repaired first."
+  },
+  {
+   "id": "F01",
+   "title": "Малые нативные эталоны",
+   "status": "bounded/deferred",
+   "decision": "Archival assembly capsules cannot replace hash-pinned original bytes; hybrid retained."
+  },
+  {
+   "id": "F02",
+   "title": "Достижимые состояния и повторы вызовов",
+   "status": "bounded/deferred",
+   "decision": "Existing headless fixtures retained; child budgets and immutable runtime pairs repaired, no universal state recorder."
+  },
+  {
+   "id": "F03",
+   "title": "Управляемые отказы и metamorphic tests",
+   "status": "bounded/deferred",
+   "decision": "Real dependencies/observations retained; no success-only failure stubs."
+  },
+  {
+   "id": "F04",
+   "title": "SMT/контрпримеры для небольших целочисленных участков",
+   "status": "bounded/deferred",
+   "decision": "SMT deferred to bounded concrete counterexamples, no universal VERIFIED."
+  },
+  {
+   "id": "F05",
+   "title": "Автоматическое уменьшение ошибок",
+   "status": "guarded",
+   "decision": "Compiler cause clustering and identical-input failure cache; general reducer not added."
+  },
+  {
+   "id": "F06",
+   "title": "Вторая сборка Core.dll/TorchED",
+   "status": "bounded/deferred",
+   "decision": "Optional Windows reference deferred; no Windows offsets imported."
+  },
+  {
+   "id": "F07",
+   "title": "Гибрид скрывает остаток данных и зависимостей",
+   "status": "implemented",
+   "decision": "Adapted in current tools; see integration report and focused regressions."
+  },
+  {
+   "id": "F08",
+   "title": "Не строить второй общий декомпилятор",
+   "status": "bounded/deferred",
+   "decision": "Alternative universal decompilers not installed; deterministic current path first."
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+{
+ "schema": 1,
+ "tu": "ShellUtils.cpp",
+ "provider": "deterministic",
+ "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/attempts/tu-9lqz61f8",
+ "input_digest": "aac51ad4f0d2727e891ebcd901587a56c0e0e6d9b8c5fbee8afdee9e8bd71796",
+ "candidate_sha256": "0cd03ca0c6a9d26e82b751439831147677c8b5848b3e757b2d441500776595f4",
+ "published": false,
+ "diagnostic_object": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733",
+ "final_object": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733",
+ "final_object_changed": false,
+ "functions": [
+  {
+   "name": "_ZN10ShellUtils13LaunchBrowserERKSs",
+   "demangled": "ShellUtils::LaunchBrowser(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+   "address": "0xf63380",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 49,
+   "original_size": 49,
+   "weak": false,
+   "code": "7f1d1860a4738fef",
+   "object_digest": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733"
+  },
+  {
+   "name": "_ZN10ShellUtils13LaunchProgramERKSsRKSt6vectorISsSaISsEE",
+   "demangled": "ShellUtils::LaunchProgram(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)",
+   "address": "0xf632d0",
+   "status": "MATCH",
+   "score": 1.0,
+   "size": 172,
+   "original_size": 172,
+   "weak": false,
+   "code": "1589d08f43a67e57",
+   "object_digest": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733"
+  },
+  {
+   "name": "_Z20lodepng_read32bitIntPKh",
+   "demangled": "lodepng_read32bitInt(unsigned char const*)",
+   "address": "0xf633c0",
+   "status": "MISSING",
+   "original_size": 31,
+   "object_digest": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733"
+  }
+ ],
+ "unknown": [],
+ "status": "MATCH"
+}

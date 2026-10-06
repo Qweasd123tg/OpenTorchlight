@@ -1,0 +1,29 @@
+test_cycles_in_include_graph (test_audit_snapshot.AuditTests.test_cycles_in_include_graph) ... ok
+test_files_ignore_build_and_symlinks (test_audit_snapshot.AuditTests.test_files_ignore_build_and_symlinks) ... ok
+test_invalid_root_rejected (test_audit_snapshot.AuditTests.test_invalid_root_rejected) ... ok
+test_inventory_preserves_source_hash (test_audit_snapshot.AuditTests.test_inventory_preserves_source_hash) ... ok
+test_missing_historical_corpus_is_unknown (test_audit_snapshot.AuditTests.test_missing_historical_corpus_is_unknown) ... ok
+test_nonsized_and_data_symbols_not_functions (test_audit_snapshot.AuditTests.test_nonsized_and_data_symbols_not_functions) ... ok
+test_output_may_not_write_source_tree (test_audit_snapshot.AuditTests.test_output_may_not_write_source_tree) ... ok
+test_symbol_alias_dedup (test_audit_snapshot.AuditTests.test_symbol_alias_dedup) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.011s
+
+OK
+{
+  "scope": "Source snapshot read-only inventory; no current ELF/GCC acceptance run.",
+  "files": 1,
+  "total_file_bytes": 2,
+  "decomp_sources": 0,
+  "decomp_headers": 0,
+  "active_python_tools_and_tests": 0,
+  "active_python_lines": 0,
+  "active_java_files": 0,
+  "runtime_test_cpp_files": 0,
+  "runtime_test_macro_count": 0,
+  "recorded_autotests": 0,
+  "native_executable_files_in_archive": [],
+  "symbol_addresses_with_size": 0,
+  "caution": "No counts from historical and active tracking are added. Native prerequisites may exist outside this archive."
+}

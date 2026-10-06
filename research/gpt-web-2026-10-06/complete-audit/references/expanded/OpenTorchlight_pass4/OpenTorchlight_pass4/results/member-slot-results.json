@@ -1,0 +1,28 @@
+{
+  "expected": {
+    "COver::f(int)": {
+      "encoded_ptr": 1,
+      "this_adjustment": 0,
+      "slot": 0
+    },
+    "COver::f(long)": {
+      "encoded_ptr": 9,
+      "this_adjustment": 0,
+      "slot": 1
+    },
+    "no_method_bodies_linked": true
+  },
+  "swapped": {
+    "COver::f(int)": {
+      "encoded_ptr": 9,
+      "this_adjustment": 0,
+      "slot": 1
+    },
+    "COver::f(long)": {
+      "encoded_ptr": 1,
+      "this_adjustment": 0,
+      "slot": 0
+    },
+    "no_method_bodies_linked": true
+  }
+}

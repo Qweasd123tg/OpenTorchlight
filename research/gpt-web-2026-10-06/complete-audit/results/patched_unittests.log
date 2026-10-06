@@ -1,0 +1,55 @@
+test_exact_types_and_reference_value (test_autotest_returns.ReturnTypes.test_exact_types_and_reference_value) ... ERROR
+test_standalone_fork_capture (test_autotest_returns.ReturnTypes.test_standalone_fork_capture) ... ERROR
+test_call_of_such_a_function_assigns_its_result (test_ghidra_cpp.HiddenReturnTest.test_call_of_such_a_function_assigns_its_result) ... ok
+test_function_returning_through_the_hidden_pointer (test_ghidra_cpp.HiddenReturnTest.test_function_returning_through_the_hidden_pointer) ... ok
+test_reference_parameters_take_the_object (test_ghidra_cpp.HiddenReturnTest.test_reference_parameters_take_the_object) ... ok
+test_literals_are_kept_byte_for_byte (test_ghidra_cpp.LiteralTest.test_literals_are_kept_byte_for_byte) ... ok
+test_guard_on_a_name_inside_an_operand_stays (test_ghidra_cpp.NanTest.test_guard_on_a_name_inside_an_operand_stays) ... ok
+test_guards_that_change_meaning_stay (test_ghidra_cpp.NanTest.test_guards_that_change_meaning_stay) ... ok
+test_redundant_guards_go (test_ghidra_cpp.NanTest.test_redundant_guards_go) ... ok
+test_count_reads_become_size (test_ghidra_cpp.TArrayListTest.test_count_reads_become_size) ... ok
+test_element_address_with_the_capacity_check (test_ghidra_cpp.TArrayListTest.test_element_address_with_the_capacity_check) ... ok
+test_element_value_and_return (test_ghidra_cpp.TArrayListTest.test_element_value_and_return) ... ok
+test_other_shapes_stay (test_ghidra_cpp.TArrayListTest.test_other_shapes_stay) ... ok
+test_labels_bound_to_mangled_names_are_refused (test_llm_loop_headers.AsmLabels.test_labels_bound_to_mangled_names_are_refused) ... ok
+test_class_without_public_section_gets_one (test_llm_loop_headers.CompleteHandHeader.test_class_without_public_section_gets_one) ... ok
+test_missing_methods_go_to_the_end_of_the_public_section (test_llm_loop_headers.CompleteHandHeader.test_missing_methods_go_to_the_end_of_the_public_section) ... ok
+test_virtual_and_other_class_methods_are_left_alone (test_llm_loop_headers.CompleteHandHeader.test_virtual_and_other_class_methods_are_left_alone) ... ok
+test_members_of_game_classes_absent_from_the_original (test_llm_loop_headers.UnknownMembers.test_members_of_game_classes_absent_from_the_original) ... ok
+test_duplicate_stays_unresolved (test_mutate_overloads.Overloads.test_duplicate_stays_unresolved) ... ok
+test_same_arity (test_mutate_overloads.Overloads.test_same_arity) ... ok
+test_unique_arity_keeps_existing_alias_behavior (test_mutate_overloads.Overloads.test_unique_arity_keeps_existing_alias_behavior) ... ok
+test_unknown_stays_unresolved (test_mutate_overloads.Overloads.test_unknown_stays_unresolved) ... ok
+test_unnamed_parameters (test_mutate_overloads.Overloads.test_unnamed_parameters) ... ok
+test_absolute_memory_backslashes (test_objdiff_literals.LiteralRelocationTest.test_absolute_memory_backslashes) ... ok
+test_immediate_backslashes (test_objdiff_literals.LiteralRelocationTest.test_immediate_backslashes) ... ok
+test_rip_relative_backslashes (test_objdiff_literals.LiteralRelocationTest.test_rip_relative_backslashes) ... ok
+
+======================================================================
+ERROR: test_exact_types_and_reference_value (test_autotest_returns.ReturnTypes.test_exact_types_and_reference_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/otl-combined-kto274zk/repo/tools/decomp/test_autotest_returns.py", line 58, in test_exact_types_and_reference_value
+    toolchain.compile_source(source, obj, ["-std=gnu++98"])
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/otl-combined-kto274zk/repo/tools/decomp/toolchain.py", line 186, in compile_source
+    raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
+SystemExit: toolchain missing; run: python3 tools/decomp/toolchain.py setup
+
+======================================================================
+ERROR: test_standalone_fork_capture (test_autotest_returns.ReturnTypes.test_standalone_fork_capture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/otl-combined-kto274zk/repo/tools/decomp/test_autotest_returns.py", line 85, in test_standalone_fork_capture
+    toolchain.compile_source(source, obj,
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+                             ["-std=gnu++98", "-I", str(toolchain.ROOT/"decomp/hybrid")])
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/otl-combined-kto274zk/repo/tools/decomp/toolchain.py", line 186, in compile_source
+    raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
+SystemExit: toolchain missing; run: python3 tools/decomp/toolchain.py setup
+
+----------------------------------------------------------------------
+Ran 26 tests in 0.013s
+
+FAILED (errors=2)

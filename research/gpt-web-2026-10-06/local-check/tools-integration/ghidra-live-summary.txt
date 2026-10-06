@@ -1,0 +1,6 @@
+INFO  DecompDrafts.java> applied 871 class layouts (GhidraScript)  
+INFO  DecompDrafts.java> applied 1970 method prototypes from the headers (1197 failed) (GhidraScript)  
+INFO  DecompDrafts.java> applied 48 exact scalar/pointer SDK prototypes (20 found but unrepresented/aggregate) (GhidraScript)  
+INFO  DecompDrafts.java> set __thiscall on 1346 methods (GhidraScript)  
+INFO  DecompDrafts.java> decompiled 2 functions (GhidraScript)  
+2/2 complete functions -> /home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/drafts; logs: /var/tmp/opentorchlight-ghidra/work/jobs/drafts-_n9gbs7b

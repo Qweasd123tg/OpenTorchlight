@@ -1,0 +1,3423 @@
+[
+  {
+    "path": "tools/decomp/autotest.py",
+    "lines": 446,
+    "doc": "Generate differential self-tests for decompiled functions.\n\n    python3 tools/decomp/autotest.py                 # every DIFF function of decomp/src\n    python3 tools/decomp/autotest.py 0x988020 ...    # chosen functions (original addresses)\n    python3 tools/decomp/autotest.py --run           # generate, then run the hybrid self-test\n\nFor each function the generator builds the object under test from the\nrecovered layout (build-decomp/types.json): random primitives, fake objects\nbehind class pointers, real std::wstring and TArrayList members, the original\nvtable. Arguments come from the symbol's parameter types. decomp/hybrid/AutoTest.h\nruns the original and the decompiled function in forked children and compares\nreturn value, arena bytes and list/string contents.\n\nGenerated sources go to build-decomp/hybrid/autotests/ (ignored); hybrid.py\ncompiles them into the blob when OTL_AUTOTEST=1. A test passes when no case\ndiffers and enough cases completed in both children.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "ghidra_cpp",
+      "json",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "Unsupported",
+        "line": 48,
+        "end_line": 49,
+        "doc": ""
+      },
+      {
+        "name": "is_list",
+        "line": 52,
+        "end_line": 53,
+        "doc": ""
+      },
+      {
+        "name": "return_type_lookup",
+        "line": 56,
+        "end_line": 69,
+        "doc": "Preserve reference returns: GNU typeof(call) removes references."
+      },
+      {
+        "name": "Generator",
+        "line": 72,
+        "end_line": 405,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 73,
+        "end_line": 83,
+        "doc": ""
+      },
+      {
+        "name": "class_headers",
+        "line": 86,
+        "end_line": 91,
+        "doc": ""
+      },
+      {
+        "name": "flat_fields",
+        "line": 93,
+        "end_line": 102,
+        "doc": ""
+      },
+      {
+        "name": "size_of",
+        "line": 104,
+        "end_line": 106,
+        "doc": ""
+      },
+      {
+        "name": "is_static",
+        "line": 108,
+        "end_line": 113,
+        "doc": ""
+      },
+      {
+        "name": "kind_of",
+        "line": 116,
+        "end_line": 118,
+        "doc": "Pool id of a class: pointers of one class may be reused as arguments and list elements."
+      },
+      {
+        "name": "object_size",
+        "line": 120,
+        "end_line": 127,
+        "doc": ""
+      },
+      {
+        "name": "fake",
+        "line": 129,
+        "end_line": 143,
+        "doc": "Variable with a pointer to a fake object of cls (may be NULL)."
+      },
+      {
+        "name": "pointer_to",
+        "line": 145,
+        "end_line": 150,
+        "doc": "Pointer expression: a new fake or, sometimes, one made earlier."
+      },
+      {
+        "name": "fill",
+        "line": 152,
+        "end_line": 176,
+        "doc": ""
+      },
+      {
+        "name": "element",
+        "line": 179,
+        "end_line": 189,
+        "doc": ""
+      },
+      {
+        "name": "fill_list",
+        "line": 191,
+        "end_line": 217,
+        "doc": "A TArrayList<t> at `at`, or (heap) a new one whose pointer is stored at `at`."
+      },
+      {
+        "name": "argument",
+        "line": 219,
+        "end_line": 263,
+        "doc": ""
+      },
+      {
+        "name": "dump",
+        "line": 265,
+        "end_line": 280,
+        "doc": ""
+      },
+      {
+        "name": "test_for",
+        "line": 283,
+        "end_line": 377,
+        "doc": ""
+      },
+      {
+        "name": "write",
+        "line": 379,
+        "end_line": 405,
+        "doc": ""
+      },
+      {
+        "name": "diff_functions",
+        "line": 408,
+        "end_line": 418,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 421,
+        "end_line": 442,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/calls.py",
+    "lines": 224,
+    "doc": "Readable call trace of a function: each call with its resolved arguments.\n\nConstructors of descriptors and menus are thousands of instructions that boil\ndown to calls with literal arguments. This folds them into lines such as\n\n    CDescriptor::AddProperty(L\"PROPERTIES\", L\"ENABLED\", L\"Sets the ...\",\n        CLogicTimerDescriptor::Set_setEnabled, CLogicTimerDescriptor::Get_getEnabled, 6, 0)\n\nArguments resolve to string literals (also through std::string/std::wstring\ntemporaries built on the stack), immediates, function addresses, `this`,\n`this+off` members and known globals. Unknown values print as `?`. Branches are\nnot followed: the trace is in address order and is a reading aid only.\n\n    python3 tools/decomp/calls.py 0x66a940\n    python3 tools/decomp/calls.py \"CLogicTimerDescriptor::CLogicTimerDescriptor\"",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "elfimage",
+      "layout",
+      "objdiff",
+      "pathlib",
+      "re",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "Tracer",
+        "line": 37,
+        "end_line": 209,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 38,
+        "end_line": 47,
+        "doc": ""
+      },
+      {
+        "name": "find",
+        "line": 49,
+        "end_line": 55,
+        "doc": ""
+      },
+      {
+        "name": "literal",
+        "line": 57,
+        "end_line": 73,
+        "doc": ""
+      },
+      {
+        "name": "immediate",
+        "line": 75,
+        "end_line": 84,
+        "doc": ""
+      },
+      {
+        "name": "show",
+        "line": 87,
+        "end_line": 93,
+        "doc": ""
+      },
+      {
+        "name": "trace",
+        "line": 95,
+        "end_line": 203,
+        "doc": ""
+      },
+      {
+        "name": "plt_names",
+        "line": 205,
+        "end_line": 209,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 212,
+        "end_line": 220,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/check.py",
+    "lines": 162,
+    "doc": "One command for the decomp track: database, matching, in-process shadow tests.\n\n    python3 tools/decomp/check.py            # all three stages\n    python3 tools/decomp/check.py --no-game  # skip the hybrid self-test\n\nFunctions recorded in decomp/autotests.json (tools/decomp/mutate.py --accept)\nget generated differential tests in the same run.\n\nThe hybrid self-test runs the original executable headless (no display, offscreen\nSDL) and exits before the game's main; it never opens a window or touches saves.\nExit status is non-zero when compilation, linking or a self-test fails. DIFF\nresults are progress, not failures.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "autotest",
+      "collections",
+      "elfdb",
+      "elfimage",
+      "hybrid",
+      "json",
+      "mutate",
+      "objdiff",
+      "os",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "ensure_db",
+        "line": 38,
+        "end_line": 49,
+        "doc": ""
+      },
+      {
+        "name": "shadow_covered",
+        "line": 52,
+        "end_line": 57,
+        "doc": "Original addresses named by TL_ORIGINAL in the self-tests (what they compare)."
+      },
+      {
+        "name": "generated_tests",
+        "line": 60,
+        "end_line": 76,
+        "doc": "Generates the autotests of DIFF functions recorded by mutate.py --accept whose"
+      },
+      {
+        "name": "main",
+        "line": 79,
+        "end_line": 158,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/descriptors.py",
+    "lines": 374,
+    "doc": "Generates the editor descriptor TUs (*Descriptor.cpp): class header, constructor, destructor.\n\n    python3 tools/decomp/descriptors.py [--force] [TU ...]   # default: every descriptor TU not in decomp/src\n\nA descriptor constructor is a base constructor call and a chain of AddProperty,\nAddPropertyWithInterpreterFunctions, AddInputLogic and AddOutputLogic calls\nwith literal arguments; calls.py resolves all of them from the machine code,\nstack arguments included. The class declaration comes from the generated\nheader (bases, virtual order, fields at verified offsets); the property and\ninterpreter functions the constructor takes the address of are declared as\nstatic members. Bases are generated first. Each TU is compiled and compared;\nthe remaining methods (CreateObject, InputLogicEvent, the property bodies...)\nare left to llm_loop.py --resume or to hand work.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "calls",
+      "collections",
+      "elfdb",
+      "ghidra_cpp",
+      "headers",
+      "objdiff",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "header_name",
+        "line": 42,
+        "end_line": 43,
+        "doc": ""
+      },
+      {
+        "name": "cpp_type",
+        "line": 46,
+        "end_line": 49,
+        "doc": ""
+      },
+      {
+        "name": "split_args",
+        "line": 52,
+        "end_line": 68,
+        "doc": ""
+      },
+      {
+        "name": "enum_names",
+        "line": 71,
+        "end_line": 83,
+        "doc": "Enumerator names by value."
+      },
+      {
+        "name": "flags_expr",
+        "line": 86,
+        "end_line": 91,
+        "doc": "m_iFlags constant as an OR of the DESCRIPTOR_FLAG_ names when it is exactly one."
+      },
+      {
+        "name": "property_variable",
+        "line": 94,
+        "end_line": 97,
+        "doc": ""
+      },
+      {
+        "name": "Generator",
+        "line": 100,
+        "end_line": 360,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 101,
+        "end_line": 117,
+        "doc": ""
+      },
+      {
+        "name": "ctor",
+        "line": 119,
+        "end_line": 121,
+        "doc": ""
+      },
+      {
+        "name": "trace",
+        "line": 123,
+        "end_line": 132,
+        "doc": ""
+      },
+      {
+        "name": "draft",
+        "line": 134,
+        "end_line": 163,
+        "doc": "Statements of the Ghidra draft: (\"call\", method, variable, args) and (\"store\", text)."
+      },
+      {
+        "name": "static_decl",
+        "line": 165,
+        "end_line": 181,
+        "doc": ""
+      },
+      {
+        "name": "value",
+        "line": 183,
+        "end_line": 201,
+        "doc": "C++ for one traced argument; None when the tracer could not resolve it."
+      },
+      {
+        "name": "generate",
+        "line": 203,
+        "end_line": 316,
+        "doc": "(header text, source text, complete?) for one descriptor TU."
+      },
+      {
+        "name": "run",
+        "line": 318,
+        "end_line": 350,
+        "doc": ""
+      },
+      {
+        "name": "check",
+        "line": 352,
+        "end_line": 360,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 363,
+        "end_line": 370,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/draft_trial.py",
+    "lines": 182,
+    "doc": "Trial build of converted Ghidra drafts for TUs nobody has written yet.\n\n    python3 tools/decomp/draft_trial.py Achievement.cpp ...   # chosen TUs\n    python3 tools/decomp/draft_trial.py --all                 # every game TU without decomp/src\n\nFor each TU the drafts of its functions (ghidra_draft.py drafts, converted by\nghidra_cpp.py) are joined into one file named like the original TU, with\nthe hand-written and generated headers (headers.py) of every class they\nname. The file is compiled; functions on which the compiler reports errors\nare dropped and the rest compiled again, until it builds. objdiff then\ncompares what is left with the original.\n\nResults: build-decomp/trial/<TU>.cpp (the part that compiles) and\nbuild-decomp/trial/summary.json (status per function). Nothing here goes\ninto decomp/src by itself.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "collections",
+      "concurrent.futures",
+      "elfdb",
+      "ghidra_cpp",
+      "headers",
+      "json",
+      "objdiff",
+      "pathlib",
+      "re",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "Trial",
+        "line": 56,
+        "end_line": 144,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 57,
+        "end_line": 65,
+        "doc": ""
+      },
+      {
+        "name": "drafts",
+        "line": 67,
+        "end_line": 80,
+        "doc": ""
+      },
+      {
+        "name": "includes",
+        "line": 82,
+        "end_line": 94,
+        "doc": ""
+      },
+      {
+        "name": "run",
+        "line": 96,
+        "end_line": 144,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 147,
+        "end_line": 178,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/elfdb.py",
+    "lines": 718,
+    "doc": "Build the decompilation database from the original Torchlight ELF.\n\nEverything here is mechanical (`original-code`): symbols, STT_FILE groups,\nvtables, RTTI, operator-new sizes and caller-side return-register use.\nHeuristic fields are named *_hint / confidence and are never promoted to facts.\n\nOutput (ignored build dir): elfdb.json, SUMMARY.md.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "collections",
+      "elfimage",
+      "json",
+      "os",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "default_elf",
+        "line": 30,
+        "end_line": 35,
+        "doc": ""
+      },
+      {
+        "name": "split_top",
+        "line": 42,
+        "end_line": 64,
+        "doc": "Split on `sep` outside <> and () nesting."
+      },
+      {
+        "name": "parse_demangled",
+        "line": 67,
+        "end_line": 114,
+        "doc": "Return (qualified_name, params, cv) for a demangled function name."
+      },
+      {
+        "name": "strip_template",
+        "line": 117,
+        "end_line": 126,
+        "doc": ""
+      },
+      {
+        "name": "name_key",
+        "line": 129,
+        "end_line": 131,
+        "doc": ""
+      },
+      {
+        "name": "class_key",
+        "line": 134,
+        "end_line": 138,
+        "doc": ""
+      },
+      {
+        "name": "classify_tu",
+        "line": 149,
+        "end_line": 161,
+        "doc": ""
+      },
+      {
+        "name": "split_operands",
+        "line": 173,
+        "end_line": 186,
+        "doc": ""
+      },
+      {
+        "name": "return_use",
+        "line": 189,
+        "end_line": 217,
+        "doc": "First touch of rax-family/xmm0 after a call: ('read', kind) | ('write', None) | None."
+      },
+      {
+        "name": "scan_text",
+        "line": 220,
+        "end_line": 289,
+        "doc": ""
+      },
+      {
+        "name": "flush",
+        "line": 230,
+        "end_line": 275,
+        "doc": ""
+      },
+      {
+        "name": "build",
+        "line": 295,
+        "end_line": 662,
+        "doc": ""
+      },
+      {
+        "name": "dyn_object",
+        "line": 374,
+        "end_line": 378,
+        "doc": ""
+      },
+      {
+        "name": "pointer_name",
+        "line": 380,
+        "end_line": 394,
+        "doc": ""
+      },
+      {
+        "name": "file_backed",
+        "line": 396,
+        "end_line": 398,
+        "doc": ""
+      },
+      {
+        "name": "scope_class",
+        "line": 502,
+        "end_line": 503,
+        "doc": ""
+      },
+      {
+        "name": "assign_runs",
+        "line": 506,
+        "end_line": 572,
+        "doc": ""
+      },
+      {
+        "name": "match",
+        "line": 519,
+        "end_line": 532,
+        "doc": ""
+      },
+      {
+        "name": "cls_entry",
+        "line": 605,
+        "end_line": 606,
+        "doc": ""
+      },
+      {
+        "name": "summary_markdown",
+        "line": 665,
+        "end_line": 695,
+        "doc": ""
+      },
+      {
+        "name": "load_db",
+        "line": 698,
+        "end_line": 702,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 705,
+        "end_line": 714,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/elfimage.py",
+    "lines": 231,
+    "doc": "Read-only ELF64 reader for the original Torchlight executable.\n\nParses sections, the full .symtab in file order (including STT_FILE groups),\n.dynsym, dynamic relocations and the PLT. No third-party packages.",
+    "imports": [
+      "__future__",
+      "dataclasses",
+      "hashlib",
+      "pathlib",
+      "struct",
+      "subprocess"
+    ],
+    "definitions": [
+      {
+        "name": "Section",
+        "line": 23,
+        "end_line": 33,
+        "doc": ""
+      },
+      {
+        "name": "Symbol",
+        "line": 37,
+        "end_line": 50,
+        "doc": ""
+      },
+      {
+        "name": "defined",
+        "line": 49,
+        "end_line": 50,
+        "doc": ""
+      },
+      {
+        "name": "Reloc",
+        "line": 54,
+        "end_line": 58,
+        "doc": ""
+      },
+      {
+        "name": "Image",
+        "line": 62,
+        "end_line": 108,
+        "doc": ""
+      },
+      {
+        "name": "section",
+        "line": 73,
+        "end_line": 77,
+        "doc": ""
+      },
+      {
+        "name": "section_at",
+        "line": 79,
+        "end_line": 83,
+        "doc": ""
+      },
+      {
+        "name": "read",
+        "line": 85,
+        "end_line": 90,
+        "doc": ""
+      },
+      {
+        "name": "u64",
+        "line": 92,
+        "end_line": 93,
+        "doc": ""
+      },
+      {
+        "name": "i64",
+        "line": 95,
+        "end_line": 96,
+        "doc": ""
+      },
+      {
+        "name": "u32",
+        "line": 98,
+        "end_line": 99,
+        "doc": ""
+      },
+      {
+        "name": "cstring",
+        "line": 101,
+        "end_line": 108,
+        "doc": ""
+      },
+      {
+        "name": "_parse_symbols",
+        "line": 111,
+        "end_line": 127,
+        "doc": ""
+      },
+      {
+        "name": "load",
+        "line": 130,
+        "end_line": 169,
+        "doc": ""
+      },
+      {
+        "name": "ObjReloc",
+        "line": 173,
+        "end_line": 177,
+        "doc": ""
+      },
+      {
+        "name": "Object",
+        "line": 181,
+        "end_line": 193,
+        "doc": "A relocatable object (ET_REL) produced by the decomp toolchain."
+      },
+      {
+        "name": "section_bytes",
+        "line": 189,
+        "end_line": 193,
+        "doc": ""
+      },
+      {
+        "name": "load_object",
+        "line": 196,
+        "end_line": 219,
+        "doc": ""
+      },
+      {
+        "name": "demangle",
+        "line": 222,
+        "end_line": 231,
+        "doc": "Batch-demangle with binutils c++filt; returns dict mangled -> readable."
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/examples.py",
+    "lines": 148,
+    "doc": "Worked examples for the model: Ghidra drafts next to the accepted source.\n\n    python3 tools/decomp/examples.py            # rebuild build-decomp/examples.json\n    python3 tools/decomp/examples.py 0xe16df0   # show the examples chosen for a function\n\nEvery accepted function (MATCH or self-test, from build-decomp/progress.json\nwritten by check.py) of up to MAX_SIZE bytes becomes an example: its converted\nGhidra draft and its definition in decomp/src. For a new function, choose()\nreturns the examples whose drafts share the most informative identifiers\n(calls, library internals, constants) with its draft, within a size budget.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "check",
+      "elfdb",
+      "ghidra_cpp",
+      "json",
+      "math",
+      "mutate",
+      "pathlib",
+      "re",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "features",
+        "line": 36,
+        "end_line": 37,
+        "doc": ""
+      },
+      {
+        "name": "accepted_addresses",
+        "line": 40,
+        "end_line": 47,
+        "doc": ""
+      },
+      {
+        "name": "converted_draft",
+        "line": 50,
+        "end_line": 58,
+        "doc": ""
+      },
+      {
+        "name": "source_of",
+        "line": 61,
+        "end_line": 74,
+        "doc": ""
+      },
+      {
+        "name": "build",
+        "line": 77,
+        "end_line": 90,
+        "doc": ""
+      },
+      {
+        "name": "load",
+        "line": 93,
+        "end_line": 94,
+        "doc": ""
+      },
+      {
+        "name": "choose",
+        "line": 97,
+        "end_line": 124,
+        "doc": "The most similar examples (idf-weighted shared identifiers) that fit in budget chars."
+      },
+      {
+        "name": "render",
+        "line": 127,
+        "end_line": 129,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 132,
+        "end_line": 144,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/ghidra_cpp.py",
+    "lines": 604,
+    "doc": "Clean Ghidra C output into a C++ draft.\n\n    python3 tools/decomp/ghidra_cpp.py build-decomp/drafts/AIFlag.cpp/raw/*.c > draft.cpp\n\nRewrites, each one local and conservative:\n- `void __thiscall C::m(C *this, ...)` -> `void C::m(...)`;\n- `this->field` -> `field`; `(*p->_vptr->Method)(p, a)` -> `p->Method(a)`;\n- `C::m(this, a)` -> `m(a)`, `C::m(p, a)` -> `p->m(a)` for known methods;\n- Ghidra integer types -> C++ types;\n- removes inlined std::string refcount blocks, try/catch markers,\n  compiler-generated vptr stores and base-constructor calls in constructors;\n- `p = (C *)Ogre::NedAllocImpl::allocBytes(n, 0, 0, 0); C::C(p, a);` -> `p = new C(a);`.\n\nThe output is a draft for a human or agent; it is not expected to compile as is.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "json",
+      "pathlib",
+      "re",
+      "sys",
+      "types_export"
+    ],
+    "definitions": [
+      {
+        "name": "balanced_block_end",
+        "line": 44,
+        "end_line": 56,
+        "doc": "Index just past the `}` that closes the first `{` at or after start."
+      },
+      {
+        "name": "drop_refcount_blocks",
+        "line": 59,
+        "end_line": 66,
+        "doc": ""
+      },
+      {
+        "name": "split_args",
+        "line": 69,
+        "end_line": 101,
+        "doc": "Splits on top-level commas; <> count as brackets in types, not as ->, <=, << or a < b."
+      },
+      {
+        "name": "_cast_to",
+        "line": 107,
+        "end_line": 113,
+        "doc": "arg is `(cls *)expr` (possibly with namespace differences)."
+      },
+      {
+        "name": "call_rewrite",
+        "line": 116,
+        "end_line": 150,
+        "doc": "C::m(obj, args) -> obj->m(args) / m(args) for this."
+      },
+      {
+        "name": "parse_enums",
+        "line": 153,
+        "end_line": 172,
+        "doc": "enum name -> {value: enumerator} from the recovered headers."
+      },
+      {
+        "name": "inline_temp_strings",
+        "line": 175,
+        "end_line": 189,
+        "doc": "std::wstring::wstring((T *)local_x, L\"lit\", &alloc); ... (T *)local_x  ->  L\"lit\"."
+      },
+      {
+        "name": "capture",
+        "line": 179,
+        "end_line": 181,
+        "doc": ""
+      },
+      {
+        "name": "side_effects",
+        "line": 195,
+        "end_line": 197,
+        "doc": "A call (named or through a pointer), assignment or increment inside expr."
+      },
+      {
+        "name": "drop_dead_stores",
+        "line": 200,
+        "end_line": 217,
+        "doc": "Stores into Ghidra temporaries nothing reads (left over when an inlined idiom"
+      },
+      {
+        "name": "drop_unused_locals",
+        "line": 220,
+        "end_line": 230,
+        "doc": ""
+      },
+      {
+        "name": "enum_arguments",
+        "line": 233,
+        "end_line": 249,
+        "doc": "Integer literals passed to enum-typed parameters -> enumerator names."
+      },
+      {
+        "name": "fix",
+        "line": 235,
+        "end_line": 248,
+        "doc": ""
+      },
+      {
+        "name": "closing_paren",
+        "line": 252,
+        "end_line": 259,
+        "doc": "Index of the parenthesis closing an already opened one."
+      },
+      {
+        "name": "_bare",
+        "line": 267,
+        "end_line": 269,
+        "doc": "(this->m_List) -> this->m_List."
+      },
+      {
+        "name": "_element",
+        "line": 272,
+        "end_line": 277,
+        "doc": "`X.m_pData + i` or `(T *)((ulong)i * 8 + (long)X.m_pData)`: element i of X."
+      },
+      {
+        "name": "tarraylist_access",
+        "line": 280,
+        "end_line": 302,
+        "doc": "The inlined TArrayList::operator[] -> `p = &X[i];` (its capacity check and fallback to"
+      },
+      {
+        "name": "fix",
+        "line": 289,
+        "end_line": 292,
+        "doc": ""
+      },
+      {
+        "name": "tarraylist_count",
+        "line": 305,
+        "end_line": 308,
+        "doc": "Reading X.m_nCount (not writing it: that is an inlined add/removeAt/clear) -> X.size()."
+      },
+      {
+        "name": "returned_by_pointer",
+        "line": 314,
+        "end_line": 322,
+        "doc": "Qualified names of the functions that return an object through a hidden pointer, from"
+      },
+      {
+        "name": "hidden_return_signature",
+        "line": 325,
+        "end_line": 338,
+        "doc": "`wstring * C::f(wstring *__return_storage_ptr__, C *this, T param_3)` -> `wstring C::f(T param_3)`"
+      },
+      {
+        "name": "renumber_params",
+        "line": 341,
+        "end_line": 343,
+        "doc": ""
+      },
+      {
+        "name": "hidden_return_body",
+        "line": 346,
+        "end_line": 368,
+        "doc": "Inside a function returning through the hidden pointer: constructing the result or"
+      },
+      {
+        "name": "construct",
+        "line": 351,
+        "end_line": 361,
+        "doc": ""
+      },
+      {
+        "name": "hidden_return_calls",
+        "line": 371,
+        "end_line": 381,
+        "doc": "`C::getName(&local_40, obj, args)` of a function returning through a hidden pointer ->"
+      },
+      {
+        "name": "fix",
+        "line": 376,
+        "end_line": 379,
+        "doc": ""
+      },
+      {
+        "name": "reference_arguments",
+        "line": 384,
+        "end_line": 399,
+        "doc": "`&x` passed where every overload of that arity takes a reference -> `x`."
+      },
+      {
+        "name": "fix",
+        "line": 386,
+        "end_line": 398,
+        "doc": ""
+      },
+      {
+        "name": "drop_nan_guards",
+        "line": 409,
+        "end_line": 439,
+        "doc": "`!NAN(x) && x < y` -> `x < y`. An ordered comparison (==, <, <=, >, >=) is already false"
+      },
+      {
+        "name": "bare",
+        "line": 414,
+        "end_line": 415,
+        "doc": ""
+      },
+      {
+        "name": "guarded",
+        "line": 417,
+        "end_line": 424,
+        "doc": ""
+      },
+      {
+        "name": "before",
+        "line": 426,
+        "end_line": 427,
+        "doc": ""
+      },
+      {
+        "name": "after",
+        "line": 429,
+        "end_line": 430,
+        "doc": ""
+      },
+      {
+        "name": "tidy_expressions",
+        "line": 442,
+        "end_line": 453,
+        "doc": ""
+      },
+      {
+        "name": "reindent",
+        "line": 456,
+        "end_line": 484,
+        "doc": "Join Ghidra's wrapped statements and re-indent by brace depth (4 spaces)."
+      },
+      {
+        "name": "convert",
+        "line": 487,
+        "end_line": 552,
+        "doc": ""
+      },
+      {
+        "name": "cxx_type",
+        "line": 555,
+        "end_line": 563,
+        "doc": ""
+      },
+      {
+        "name": "signatures_of",
+        "line": 570,
+        "end_line": 578,
+        "doc": "short name -> list of parameter type lists (all overloads)."
+      },
+      {
+        "name": "known_methods",
+        "line": 581,
+        "end_line": 589,
+        "doc": "(class, method) pairs of real classes; namespaces such as UTILITIES are excluded."
+      },
+      {
+        "name": "main",
+        "line": 592,
+        "end_line": 600,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/ghidra_draft.py",
+    "lines": 353,
+    "doc": "Draft C++ from Ghidra with recovered types.\n\n    python3 tools/decomp/ghidra_draft.py analyze            # once: import + auto-analysis (long)\n    python3 tools/decomp/ghidra_draft.py drafts AIFlag.cpp  # types + decompile + C++ cleanup\n    python3 tools/decomp/ghidra_draft.py drafts --all       # every game TU (long; run in background)\n    python3 tools/decomp/ghidra_draft.py stale              # drafts made with other types/scripts/ELF\n    python3 tools/decomp/ghidra_draft.py drafts --stale     # remake only those\n\n`drafts` exports class layouts from tools/decomp/layout.py and the recovered\nheaders as Ghidra structures, applies them as `this` types, decompiles every\nfunction of the TU and writes build-decomp/drafts/<TU>/<address>.c (raw) and\ndraft.cpp (cleaned). Drafts are input for writing decomp/src, never compiled\ninto the hybrid as is.\n\nGhidra and its project live in $OTL_GHIDRA_WORK (default /var/tmp/opentorchlight-ghidra).\nGhidra needs a JDK 21 in $OTL_DECOMP_CACHE/jdk/jdk-21*/ (Adoptium tarball;\nthe system often has only a JRE).",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "ghidra_cpp",
+      "hashlib",
+      "json",
+      "objdiff",
+      "os",
+      "pathlib",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys",
+      "tempfile",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "workspace",
+        "line": 43,
+        "end_line": 49,
+        "doc": ""
+      },
+      {
+        "name": "headless",
+        "line": 52,
+        "end_line": 63,
+        "doc": ""
+      },
+      {
+        "name": "analyze",
+        "line": 66,
+        "end_line": 72,
+        "doc": ""
+      },
+      {
+        "name": "_digest",
+        "line": 81,
+        "end_line": 83,
+        "doc": ""
+      },
+      {
+        "name": "tools_digest",
+        "line": 86,
+        "end_line": 87,
+        "doc": ""
+      },
+      {
+        "name": "class_digests",
+        "line": 90,
+        "end_line": 92,
+        "doc": ""
+      },
+      {
+        "name": "used_classes",
+        "line": 95,
+        "end_line": 100,
+        "doc": "Classes whose layout a TU's drafts were decompiled with: the TU's own and every one they name."
+      },
+      {
+        "name": "prototype_digest",
+        "line": 103,
+        "end_line": 105,
+        "doc": "Digest of the header prototypes of the given functions (types_export.py)."
+      },
+      {
+        "name": "draft_state",
+        "line": 108,
+        "end_line": 131,
+        "doc": "(\"fresh\" | \"stale\" | \"unknown\", reasons) for build-decomp/drafts/<TU>."
+      },
+      {
+        "name": "_types",
+        "line": 134,
+        "end_line": 139,
+        "doc": ""
+      },
+      {
+        "name": "_prototypes",
+        "line": 142,
+        "end_line": 144,
+        "doc": ""
+      },
+      {
+        "name": "stale",
+        "line": 147,
+        "end_line": 156,
+        "doc": ""
+      },
+      {
+        "name": "drafts",
+        "line": 159,
+        "end_line": 204,
+        "doc": ""
+      },
+      {
+        "name": "find_definition",
+        "line": 207,
+        "end_line": 232,
+        "doc": "(start, end) of the definition of f in a source file, or None."
+      },
+      {
+        "name": "_param_type",
+        "line": 235,
+        "end_line": 246,
+        "doc": "Comparable spelling of a parameter type: `const std::wstring& name` == `std::basic_string<...> const&`."
+      },
+      {
+        "name": "captured",
+        "line": 254,
+        "end_line": 257,
+        "doc": ""
+      },
+      {
+        "name": "measure",
+        "line": 260,
+        "end_line": 320,
+        "doc": ""
+      },
+      {
+        "name": "Tee",
+        "line": 261,
+        "end_line": 266,
+        "doc": ""
+      },
+      {
+        "name": "write",
+        "line": 262,
+        "end_line": 263,
+        "doc": ""
+      },
+      {
+        "name": "flush",
+        "line": 265,
+        "end_line": 266,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 323,
+        "end_line": 349,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/headers.py",
+    "lines": 712,
+    "doc": "Generated class headers for every game class without a hand-written one.\n\n    python3 tools/decomp/headers.py           # write build-decomp/include-gen/\n    python3 tools/decomp/headers.py --check   # also compile them and verify sizes/offsets\n\nOne header per class (`<Class>.h`), from mechanical sources only:\n- bases and their offsets from RTTI (elfdb);\n- virtual methods in the order of the class's own slots in the primary\n  vtable, so new virtuals land in the original slots; pure virtual slots\n  get placeholders; an override takes its base's return type;\n- other methods from the symbols, return types from the Ghidra prototypes\n  (build-decomp/drafts/<TU>/raw, see ghidra_draft.py);\n- fields from build-decomp/types.json; unknown or unsupported fields become\n  aligned byte arrays so that offsets and size stay the original ones.\n\nHand-written headers in decomp/include always win: a generated header\nincludes them for bases and members instead of generating the class again.\nGenTypes.h declares enums and typedefs no hand-written header declares.\nEverything is public. The output is a draft for compiling Ghidra drafts and\ngenerated tests, not source to commit.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "collections",
+      "elfdb",
+      "ghidra_cpp",
+      "json",
+      "pathlib",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys",
+      "tempfile",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "ogre_dir",
+        "line": 61,
+        "end_line": 62,
+        "doc": ""
+      },
+      {
+        "name": "class_dump",
+        "line": 65,
+        "end_line": 73,
+        "doc": "Compiles `source` and returns GCC's -fdump-class-hierarchy text."
+      },
+      {
+        "name": "dumped_vtable",
+        "line": 76,
+        "end_line": 94,
+        "doc": "Groups of slot names of `cls` in a class dump (None without a vtable)."
+      },
+      {
+        "name": "original_vtable",
+        "line": 97,
+        "end_line": 123,
+        "doc": "Groups of slots of the original vtable of `cls`, named like dumped_vtable (None without one)."
+      },
+      {
+        "name": "vtable_mismatch",
+        "line": 126,
+        "end_line": 148,
+        "doc": "None when the compiled vtable of `cls` has the original slots in the original"
+      },
+      {
+        "name": "Gen",
+        "line": 151,
+        "end_line": 689,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 152,
+        "end_line": 169,
+        "doc": ""
+      },
+      {
+        "name": "scan_hand_headers",
+        "line": 171,
+        "end_line": 185,
+        "doc": ""
+      },
+      {
+        "name": "resolve",
+        "line": 188,
+        "end_line": 199,
+        "doc": "C++ spelling of a type and what it needs; None when unknown."
+      },
+      {
+        "name": "need",
+        "line": 201,
+        "end_line": 236,
+        "doc": ""
+      },
+      {
+        "name": "ghidra_return",
+        "line": 238,
+        "end_line": 265,
+        "doc": "Return type from the Ghidra prototype of f, or None."
+      },
+      {
+        "name": "method_decl",
+        "line": 268,
+        "end_line": 288,
+        "doc": ""
+      },
+      {
+        "name": "virtual_signature",
+        "line": 290,
+        "end_line": 291,
+        "doc": ""
+      },
+      {
+        "name": "root_return",
+        "line": 293,
+        "end_line": 314,
+        "doc": "Return type of the virtual `sig` in the topmost game base that declares it."
+      },
+      {
+        "name": "own_slots",
+        "line": 316,
+        "end_line": 320,
+        "doc": ""
+      },
+      {
+        "name": "base_offsets",
+        "line": 322,
+        "end_line": 328,
+        "doc": "Every base of cls, direct or not -> its offset in cls."
+      },
+      {
+        "name": "pure_overriders",
+        "line": 330,
+        "end_line": 350,
+        "doc": "(class, slot) -> a function overriding that pure virtual slot in some derived class."
+      },
+      {
+        "name": "primary_base_slots",
+        "line": 352,
+        "end_line": 357,
+        "doc": ""
+      },
+      {
+        "name": "header",
+        "line": 359,
+        "end_line": 431,
+        "doc": ""
+      },
+      {
+        "name": "fields",
+        "line": 433,
+        "end_line": 470,
+        "doc": ""
+      },
+      {
+        "name": "natural_size",
+        "line": 472,
+        "end_line": 486,
+        "doc": ""
+      },
+      {
+        "name": "gap",
+        "line": 489,
+        "end_line": 492,
+        "doc": ""
+      },
+      {
+        "name": "types_header",
+        "line": 494,
+        "end_line": 522,
+        "doc": ""
+      },
+      {
+        "name": "globals_header",
+        "line": 524,
+        "end_line": 560,
+        "doc": "extern declarations of plain-named game globals no hand-written header declares."
+      },
+      {
+        "name": "trial_include",
+        "line": 562,
+        "end_line": 604,
+        "doc": "build-decomp/include-trial: decomp/include with partial classes completed by"
+      },
+      {
+        "name": "namespaces_header",
+        "line": 606,
+        "end_line": 639,
+        "doc": "Free functions of game namespaces (STRINGS::, FILESYSTEM::, ...) no hand header declares."
+      },
+      {
+        "name": "write",
+        "line": 641,
+        "end_line": 657,
+        "doc": ""
+      },
+      {
+        "name": "check",
+        "line": 659,
+        "end_line": 689,
+        "doc": "Compiles every generated header and checks sizeof and field offsets."
+      },
+      {
+        "name": "main",
+        "line": 692,
+        "end_line": 708,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/hybrid.py",
+    "lines": 490,
+    "doc": "Hybrid build: decompiled TUs linked into the original game process.\n\nEvery decomp/src/**/*.cpp is compiled with the original toolchain to assembly.\nData the original already owns (globals, TU-local statics, vtables, RTTI, guard\nvariables) is redirected to its original address, so decompiled code operates on\nthe game's real objects; the TU's static constructors are dropped because the\noriginal already ran them. The objects are linked at a fixed address within\nrel32 range of the non-PIE executable; every other symbol resolves to the\noriginal function, data or PLT entry. Functions of a decompiled TU replace the\noriginal ones through 5-byte jumps installed by decomp/hybrid/loader.c.\n\n    python3 tools/decomp/hybrid.py build\n    python3 tools/decomp/hybrid.py selftest        # original vs decomp, exits before main\n    python3 tools/decomp/hybrid.py run [-- ARGS]   # play with decompiled code (explicit task)",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "elfimage",
+      "hashlib",
+      "json",
+      "objdiff",
+      "os",
+      "pathlib",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "Context",
+        "line": 67,
+        "end_line": 88,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 68,
+        "end_line": 80,
+        "doc": ""
+      },
+      {
+        "name": "tu_functions",
+        "line": 82,
+        "end_line": 88,
+        "doc": ""
+      },
+      {
+        "name": "rewrite_assembly",
+        "line": 98,
+        "end_line": 142,
+        "doc": "Redirect owned data to original addresses; optionally drop .ctors entries."
+      },
+      {
+        "name": "defined_functions",
+        "line": 148,
+        "end_line": 150,
+        "doc": ""
+      },
+      {
+        "name": "undefined_symbols",
+        "line": 153,
+        "end_line": 155,
+        "doc": ""
+      },
+      {
+        "name": "defined_symbols",
+        "line": 158,
+        "end_line": 160,
+        "doc": ""
+      },
+      {
+        "name": "patch_window_ok",
+        "line": 163,
+        "end_line": 179,
+        "doc": "5-byte jmp must fit before the next function and not hit an internal branch target."
+      },
+      {
+        "name": "originals_script",
+        "line": 182,
+        "end_line": 220,
+        "doc": ""
+      },
+      {
+        "name": "provide",
+        "line": 186,
+        "end_line": 189,
+        "doc": ""
+      },
+      {
+        "name": "hooks_assembly",
+        "line": 223,
+        "end_line": 230,
+        "doc": ""
+      },
+      {
+        "name": "needed_libraries",
+        "line": 236,
+        "end_line": 253,
+        "doc": "Paths of the executable's DT_NEEDED libraries, searched as the run sets LD_LIBRARY_PATH"
+      },
+      {
+        "name": "library_objects",
+        "line": 256,
+        "end_line": 269,
+        "doc": "name -> size of the data objects among names, from the libraries' dynamic symbols."
+      },
+      {
+        "name": "imports_assembly",
+        "line": 277,
+        "end_line": 299,
+        "doc": "Library symbols the original executable never imported. A function becomes a jump"
+      },
+      {
+        "name": "build",
+        "line": 302,
+        "end_line": 394,
+        "doc": "src: decompiled sources (a mutated copy for tools/decomp/mutate.py);"
+      },
+      {
+        "name": "stage_runtime",
+        "line": 397,
+        "end_line": 410,
+        "doc": "ld.so splits LD_PRELOAD on spaces and colons; the repository path has a space."
+      },
+      {
+        "name": "steam_runtime_fallback",
+        "line": 413,
+        "end_line": 431,
+        "doc": "Directory with links to the libraries the system lacks (libGLU on a bare"
+      },
+      {
+        "name": "game_env",
+        "line": 434,
+        "end_line": 451,
+        "doc": ""
+      },
+      {
+        "name": "selftest",
+        "line": 454,
+        "end_line": 467,
+        "doc": "Runs the blob's tests before main; only: test name prefix. Returns (code, report lines)."
+      },
+      {
+        "name": "main",
+        "line": 470,
+        "end_line": 486,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/layout.py",
+    "lines": 570,
+    "doc": "Class layout recovery from machine code.\n\nFor a class, scans its methods (and constructors) for accesses through `this`:\nfield offsets, widths, value kinds (float, bool, pointer, ...), constructor\ninitial values, embedded strings/lists/objects, setter parameter types and\naccessor names. Also recognises trivial functions (getters, setters, empty\nbodies, empty destructors) and writes their C++ bodies.\n\n    python3 tools/decomp/layout.py CLogicTimer            # field table\n    python3 tools/decomp/layout.py --header CLogicTimer   # draft header\n\nEverything here is a draft for a human or agent: names are hints from accessor\nnames, types are guesses from instruction forms. objdiff and self-tests decide.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "bisect",
+      "collections",
+      "dataclasses",
+      "elfdb",
+      "pathlib",
+      "pickle",
+      "re",
+      "struct",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "split_operands",
+        "line": 58,
+        "end_line": 72,
+        "doc": ""
+      },
+      {
+        "name": "split_params",
+        "line": 75,
+        "end_line": 87,
+        "doc": ""
+      },
+      {
+        "name": "load_insns",
+        "line": 90,
+        "end_line": 115,
+        "doc": "address -> [(addr, mnemonic, operands-without-comment)] for every function."
+      },
+      {
+        "name": "Field",
+        "line": 119,
+        "end_line": 131,
+        "doc": ""
+      },
+      {
+        "name": "width",
+        "line": 130,
+        "end_line": 131,
+        "doc": ""
+      },
+      {
+        "name": "Layout",
+        "line": 134,
+        "end_line": 555,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 135,
+        "end_line": 144,
+        "doc": ""
+      },
+      {
+        "name": "scan",
+        "line": 147,
+        "end_line": 278,
+        "doc": ""
+      },
+      {
+        "name": "touch",
+        "line": 157,
+        "end_line": 164,
+        "doc": ""
+      },
+      {
+        "name": "base_end",
+        "line": 281,
+        "end_line": 287,
+        "doc": ""
+      },
+      {
+        "name": "extent",
+        "line": 289,
+        "end_line": 295,
+        "doc": "Size from the class's own accesses, rounded to 8, when no allocation size is known."
+      },
+      {
+        "name": "class_size",
+        "line": 297,
+        "end_line": 304,
+        "doc": ""
+      },
+      {
+        "name": "analyse",
+        "line": 306,
+        "end_line": 320,
+        "doc": ""
+      },
+      {
+        "name": "name_from_descriptor",
+        "line": 322,
+        "end_line": 348,
+        "doc": "Editor property accessors: static CXDescriptor::Get_getName/Set_setName(CEditorBaseObject*, ...)."
+      },
+      {
+        "name": "accessor",
+        "line": 350,
+        "end_line": 369,
+        "doc": "('get'|'set'|'empty', offset, register/width) for one-instruction bodies."
+      },
+      {
+        "name": "name_from_accessors",
+        "line": 371,
+        "end_line": 385,
+        "doc": ""
+      },
+      {
+        "name": "field_type",
+        "line": 388,
+        "end_line": 415,
+        "doc": ""
+      },
+      {
+        "name": "field_name",
+        "line": 417,
+        "end_line": 425,
+        "doc": ""
+      },
+      {
+        "name": "rows",
+        "line": 427,
+        "end_line": 458,
+        "doc": ""
+      },
+      {
+        "name": "table",
+        "line": 460,
+        "end_line": 470,
+        "doc": ""
+      },
+      {
+        "name": "show_value",
+        "line": 473,
+        "end_line": 479,
+        "doc": ""
+      },
+      {
+        "name": "header",
+        "line": 481,
+        "end_line": 524,
+        "doc": ""
+      },
+      {
+        "name": "return_type",
+        "line": 526,
+        "end_line": 533,
+        "doc": ""
+      },
+      {
+        "name": "trivial_body",
+        "line": 535,
+        "end_line": 555,
+        "doc": "C++ body for a trivial function, or None. `names`: offset -> field name."
+      },
+      {
+        "name": "main",
+        "line": 558,
+        "end_line": 566,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/llm_loop.py",
+    "lines": 685,
+    "doc": "Function-by-function decompilation with cheap models in a feedback loop.\n\n    python3 tools/decomp/llm_loop.py Graph.cpp [--models a,b] [--rounds 5] [--switch-after 2]\n\nRun inside a worktree (tools/decomp/parallel.py new ...). The model never\nsees the repository: every call is `opencode run` with the `plain` agent (all\ntools denied) and gets exactly what it needs. Models form a chain (default:\nthe free Space Bunny, then DeepSeek V4.1 Flash): a function moves on to the\nnext model after --switch-after rounds without acceptance or when a model\ndoes not answer.\n\n1. Header: the generated header (build-decomp/include-gen), the exact symbol\n   signatures and the Ghidra drafts go in; decomp/include/<Class>.h comes\n   out. It must compile with the original sizeof, field offsets and vtable.\n2. Functions, in rounds, all pending functions in parallel. The prompt is\n   tools/decomp/prompts/idioms.md (the same for every call, so it is cached),\n   the class header, accepted examples with similar drafts (examples.py), then\n   the ASM and the Ghidra draft; one definition comes out. Each candidate is\n   compiled with the accepted ones (objdiff): MATCH is accepted; DIFF\n   candidates get generated differential tests (autotest.py) in one game run.\n   A passing test accepts the function; compile errors, failing tests and the\n   instruction diff go back to the same model session for the next round.\n3. promote.py moves what the TU uses from the generated headers into\n   decomp/include; the TU must then build without them.\n\nAccepted functions land in decomp/src/<TU>; check.py and mutate.py --accept\ntake it from there. Log: build-decomp/llm-loop/<TU>/.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "autotest",
+      "collections",
+      "concurrent.futures",
+      "difflib",
+      "elfdb",
+      "examples",
+      "ghidra_cpp",
+      "ghidra_draft",
+      "headers",
+      "hybrid",
+      "json",
+      "objdiff",
+      "os",
+      "parallel",
+      "pathlib",
+      "promote",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys",
+      "time"
+    ],
+    "definitions": [
+      {
+        "name": "Model",
+        "line": 75,
+        "end_line": 120,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 76,
+        "end_line": 83,
+        "doc": ""
+      },
+      {
+        "name": "ask",
+        "line": 85,
+        "end_line": 120,
+        "doc": "Returns (code, session id)."
+      },
+      {
+        "name": "asm_of",
+        "line": 123,
+        "end_line": 129,
+        "doc": ""
+      },
+      {
+        "name": "return_from_code",
+        "line": 132,
+        "end_line": 168,
+        "doc": "float, double or bool when the original sets xmm0 or al that way before every ret it"
+      },
+      {
+        "name": "Loop",
+        "line": 171,
+        "end_line": 643,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 172,
+        "end_line": 208,
+        "doc": ""
+      },
+      {
+        "name": "draft",
+        "line": 210,
+        "end_line": 217,
+        "doc": ""
+      },
+      {
+        "name": "header",
+        "line": 220,
+        "end_line": 274,
+        "doc": ""
+      },
+      {
+        "name": "complete_hand_header",
+        "line": 276,
+        "end_line": 335,
+        "doc": "Declares in a hand-written header the non-virtual methods of this TU it lacks (partial"
+      },
+      {
+        "name": "check_header",
+        "line": 337,
+        "end_line": 367,
+        "doc": "None when the header compiles with the original size, field offsets and vtable slots."
+      },
+      {
+        "name": "unit",
+        "line": 370,
+        "end_line": 392,
+        "doc": ""
+      },
+      {
+        "name": "compile",
+        "line": 394,
+        "end_line": 417,
+        "doc": "(status, detail): compile-error / MATCH / DIFF with the instruction diff."
+      },
+      {
+        "name": "name_hints",
+        "line": 419,
+        "end_line": 437,
+        "doc": "Real symbols close to the names the compiler did not find."
+      },
+      {
+        "name": "instruction_diff",
+        "line": 439,
+        "end_line": 446,
+        "doc": ""
+      },
+      {
+        "name": "prompt_for",
+        "line": 448,
+        "end_line": 463,
+        "doc": ""
+      },
+      {
+        "name": "ask",
+        "line": 465,
+        "end_line": 485,
+        "doc": "Next candidate for a pending function. A function moves on to the next model of"
+      },
+      {
+        "name": "run",
+        "line": 487,
+        "end_line": 538,
+        "doc": ""
+      },
+      {
+        "name": "keep_existing",
+        "line": 540,
+        "end_line": 554,
+        "doc": "--resume: functions the TU already defines stay; only the missing ones are asked for."
+      },
+      {
+        "name": "finish",
+        "line": 556,
+        "end_line": 580,
+        "doc": "Moves the declarations the TU (and the class headers written for it) use from the"
+      },
+      {
+        "name": "compare",
+        "line": 582,
+        "end_line": 583,
+        "doc": ""
+      },
+      {
+        "name": "test",
+        "line": 585,
+        "end_line": 643,
+        "doc": "Generated differential tests for every DIFF candidate in one game run."
+      },
+      {
+        "name": "headers_by_class",
+        "line": 646,
+        "end_line": 653,
+        "doc": "Class or namespace name -> hand-written headers declaring it."
+      },
+      {
+        "name": "main",
+        "line": 656,
+        "end_line": 681,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/mutate.py",
+    "lines": 490,
+    "doc": "Mutation check of the generated differential self-tests.\n\n    python3 tools/decomp/mutate.py                 # every function with a passing autotest\n    python3 tools/decomp/mutate.py 0x988020 ...    # chosen functions (original addresses)\n\nA passing autotest says the decompiled function behaves like the original on\nthe generated inputs; it does not say the inputs reach the function's\nbranches. This tool plants small faults in a copy of decomp/src (flipped\ncomparisons and logic operators, +/- swaps, literal + 1, removed `!`, removed\nstatements) and checks that the test notices them.\n\nMutants that do not compile, or compile to the same code as the original\nfunction, are dropped. The rest run in rounds: one mutant per function per\nround, never two in a round when one function's test can reach the other's\nchanged code. A test is strong when it kills enough of its mutants; the\nresult goes to build-decomp/mutation.json.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "autotest",
+      "concurrent.futures",
+      "elfdb",
+      "ghidra_cpp",
+      "hybrid",
+      "json",
+      "objdiff",
+      "os",
+      "pathlib",
+      "random",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "mask",
+        "line": 59,
+        "end_line": 88,
+        "doc": "Text with comments and string/char literals blanked (offsets kept)."
+      },
+      {
+        "name": "blank",
+        "line": 63,
+        "end_line": 66,
+        "doc": ""
+      },
+      {
+        "name": "matching",
+        "line": 91,
+        "end_line": 100,
+        "doc": ""
+      },
+      {
+        "name": "canonical_parameter",
+        "line": 103,
+        "end_line": 118,
+        "doc": "Conservative spelling normalization for ordinary C++ parameter types."
+      },
+      {
+        "name": "definition",
+        "line": 121,
+        "end_line": 141,
+        "doc": "(body start, body end) of f's definition in a TU source, or None."
+      },
+      {
+        "name": "mutation_points",
+        "line": 144,
+        "end_line": 161,
+        "doc": ""
+      },
+      {
+        "name": "code_digests",
+        "line": 164,
+        "end_line": 174,
+        "doc": "Address -> objdiff.code_digest of our compiled function, for the TUs of `functions`."
+      },
+      {
+        "name": "load_accepted",
+        "line": 177,
+        "end_line": 178,
+        "doc": ""
+      },
+      {
+        "name": "record",
+        "line": 181,
+        "end_line": 193,
+        "doc": "Strong tests into decomp/autotests.json; weak or failed ones out of it."
+      },
+      {
+        "name": "describe",
+        "line": 196,
+        "end_line": 199,
+        "doc": ""
+      },
+      {
+        "name": "functions_in_asm",
+        "line": 203,
+        "end_line": 237,
+        "doc": "Normalized body of every function in a GCC .s file (local labels renamed,"
+      },
+      {
+        "name": "rename",
+        "line": 228,
+        "end_line": 232,
+        "doc": ""
+      },
+      {
+        "name": "references",
+        "line": 240,
+        "end_line": 243,
+        "doc": "Function -> functions of ours it calls or takes the address of."
+      },
+      {
+        "name": "Mutant",
+        "line": 247,
+        "end_line": 250,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 248,
+        "end_line": 250,
+        "doc": ""
+      },
+      {
+        "name": "probe",
+        "line": 253,
+        "end_line": 265,
+        "doc": "Compiles the mutated TU; fills mutant.affected, False when invalid or equivalent."
+      },
+      {
+        "name": "stats",
+        "line": 268,
+        "end_line": 274,
+        "doc": ""
+      },
+      {
+        "name": "verdicts",
+        "line": 277,
+        "end_line": 284,
+        "doc": "Test name -> passed, from the loader's PASS/FAIL lines."
+      },
+      {
+        "name": "build_and_test",
+        "line": 287,
+        "end_line": 294,
+        "doc": ""
+      },
+      {
+        "name": "hand_coverage",
+        "line": 297,
+        "end_line": 310,
+        "doc": "Function address -> names of the hand-written tests whose file declares it with TL_ORIGINAL."
+      },
+      {
+        "name": "main",
+        "line": 313,
+        "end_line": 486,
+        "doc": ""
+      },
+      {
+        "name": "reach",
+        "line": 373,
+        "end_line": 380,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/name_tables.py",
+    "lines": 135,
+    "doc": "Recover string-table definitions from original static initializers.\n\nMany headers define internal-linkage tables such as\n`static const std::wstring g_AIFLAG_TYPE_NAMES[] = { L\"AWARE\", ... };` that every\nincluding TU constructs in its static initializer. This reads the initializer\nof a TU that owns the table, maps each `basic_string(const T*, alloc)` call to\nits array slot and prints the C++ definition.\n\n    python3 tools/decomp/name_tables.py g_AIFLAG_TYPE_NAMES g_AISTAT_TYPE_NAMES\n    python3 tools/decomp/name_tables.py --tu AIFlag.cpp",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "elfimage",
+      "objdiff",
+      "pathlib",
+      "re",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "c_literal",
+        "line": 31,
+        "end_line": 32,
+        "doc": ""
+      },
+      {
+        "name": "Tables",
+        "line": 35,
+        "end_line": 113,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 36,
+        "end_line": 39,
+        "doc": ""
+      },
+      {
+        "name": "symbols_of",
+        "line": 41,
+        "end_line": 42,
+        "doc": ""
+      },
+      {
+        "name": "initializers",
+        "line": 44,
+        "end_line": 47,
+        "doc": ""
+      },
+      {
+        "name": "disassembly",
+        "line": 49,
+        "end_line": 55,
+        "doc": ""
+      },
+      {
+        "name": "read_text",
+        "line": 57,
+        "end_line": 62,
+        "doc": ""
+      },
+      {
+        "name": "recover",
+        "line": 64,
+        "end_line": 74,
+        "doc": "Return (owner, (kind, [strings], missing)) for a local table; tries a few owning TUs."
+      },
+      {
+        "name": "_recover_in",
+        "line": 76,
+        "end_line": 102,
+        "doc": ""
+      },
+      {
+        "name": "definition",
+        "line": 104,
+        "end_line": 113,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 116,
+        "end_line": 131,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/objdiff.py",
+    "lines": 631,
+    "doc": "Compare decompiled functions with the original machine code.\n\nCompiles a decomp source with the original toolchain (GCC 4.1.2-51), then\ncompares every function symbol of the object with the original function of the\nsame mangled name. Instructions are normalized: relocated operands and absolute\naddresses become symbol names, string literals become their contents, float\nconstants become their bytes and intra-function branches become instruction\nindices. Exact equality of the normalized streams is reported as MATCH.\n\n    python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp\n    python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp --show _ZN10CRunicCoreC2Ev\n    python3 tools/decomp/objdiff.py --all --json build-decomp/progress.json",
+    "imports": [
+      "__future__",
+      "argparse",
+      "bisect",
+      "difflib",
+      "elfdb",
+      "elfimage",
+      "hashlib",
+      "json",
+      "os",
+      "pathlib",
+      "pickle",
+      "re",
+      "subprocess",
+      "sys",
+      "tempfile",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "const_size",
+        "line": 43,
+        "end_line": 48,
+        "doc": ""
+      },
+      {
+        "name": "printable_string",
+        "line": 51,
+        "end_line": 72,
+        "doc": "Literal token for narrow (ASCII) or wide (UTF-32LE wchar_t) strings."
+      },
+      {
+        "name": "literal_token",
+        "line": 75,
+        "end_line": 83,
+        "doc": ""
+      },
+      {
+        "name": "run_objdump",
+        "line": 86,
+        "end_line": 89,
+        "doc": ""
+      },
+      {
+        "name": "parse_insns",
+        "line": 92,
+        "end_line": 103,
+        "doc": ""
+      },
+      {
+        "name": "Normalizer",
+        "line": 106,
+        "end_line": 165,
+        "doc": "Shared operand normalization; subclasses resolve addresses to tokens."
+      },
+      {
+        "name": "branch",
+        "line": 111,
+        "end_line": 118,
+        "doc": ""
+      },
+      {
+        "name": "table_size",
+        "line": 121,
+        "end_line": 127,
+        "doc": "Entries of a switch table from the bound check (`cmp $N` before the jump)."
+      },
+      {
+        "name": "jump_table",
+        "line": 129,
+        "end_line": 139,
+        "doc": "Token for `jmp *table(,%reg,8)`: the table's targets as instruction labels."
+      },
+      {
+        "name": "padding",
+        "line": 142,
+        "end_line": 144,
+        "doc": ""
+      },
+      {
+        "name": "normalize",
+        "line": 146,
+        "end_line": 165,
+        "doc": ""
+      },
+      {
+        "name": "OriginalSide",
+        "line": 168,
+        "end_line": 252,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 169,
+        "end_line": 188,
+        "doc": ""
+      },
+      {
+        "name": "name_at",
+        "line": 190,
+        "end_line": 219,
+        "doc": ""
+      },
+      {
+        "name": "token",
+        "line": 221,
+        "end_line": 252,
+        "doc": ""
+      },
+      {
+        "name": "entries",
+        "line": 233,
+        "end_line": 238,
+        "doc": ""
+      },
+      {
+        "name": "rip",
+        "line": 241,
+        "end_line": 243,
+        "doc": ""
+      },
+      {
+        "name": "absolute",
+        "line": 246,
+        "end_line": 250,
+        "doc": ""
+      },
+      {
+        "name": "ObjectSide",
+        "line": 255,
+        "end_line": 346,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 256,
+        "end_line": 267,
+        "doc": ""
+      },
+      {
+        "name": "target_name",
+        "line": 269,
+        "end_line": 296,
+        "doc": ""
+      },
+      {
+        "name": "prepare",
+        "line": 298,
+        "end_line": 301,
+        "doc": ""
+      },
+      {
+        "name": "token",
+        "line": 303,
+        "end_line": 346,
+        "doc": ""
+      },
+      {
+        "name": "entries",
+        "line": 313,
+        "end_line": 318,
+        "doc": ""
+      },
+      {
+        "name": "object_functions",
+        "line": 349,
+        "end_line": 376,
+        "doc": ""
+      },
+      {
+        "name": "image_symbol_names",
+        "line": 379,
+        "end_line": 382,
+        "doc": "Every symbol name of the original executable, its PLT included."
+      },
+      {
+        "name": "unknown_members",
+        "line": 385,
+        "end_line": 396,
+        "doc": "Symbols naming a member of a game class the original does not have: a wrong"
+      },
+      {
+        "name": "known_overloads",
+        "line": 399,
+        "end_line": 407,
+        "doc": "Demangled signatures the original has for the class member `mangled` names."
+      },
+      {
+        "name": "Original",
+        "line": 410,
+        "end_line": 478,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 411,
+        "end_line": 418,
+        "doc": ""
+      },
+      {
+        "name": "symbol_names",
+        "line": 420,
+        "end_line": 423,
+        "doc": ""
+      },
+      {
+        "name": "unknown_references",
+        "line": 425,
+        "end_line": 427,
+        "doc": ""
+      },
+      {
+        "name": "known_overloads",
+        "line": 429,
+        "end_line": 430,
+        "doc": ""
+      },
+      {
+        "name": "resolver",
+        "line": 432,
+        "end_line": 456,
+        "doc": ""
+      },
+      {
+        "name": "resolve",
+        "line": 446,
+        "end_line": 455,
+        "doc": ""
+      },
+      {
+        "name": "function",
+        "line": 458,
+        "end_line": 463,
+        "doc": ""
+      },
+      {
+        "name": "normalized",
+        "line": 465,
+        "end_line": 478,
+        "doc": "Normalized original function; cached on disk (the original never changes)."
+      },
+      {
+        "name": "_norm_key",
+        "line": 485,
+        "end_line": 489,
+        "doc": ""
+      },
+      {
+        "name": "_load_norm_cache",
+        "line": 492,
+        "end_line": 500,
+        "doc": ""
+      },
+      {
+        "name": "save_norm_cache",
+        "line": 503,
+        "end_line": 508,
+        "doc": ""
+      },
+      {
+        "name": "tu_for_source",
+        "line": 511,
+        "end_line": 514,
+        "doc": ""
+      },
+      {
+        "name": "globalize_locals",
+        "line": 517,
+        "end_line": 533,
+        "doc": "Make file-local symbols global so relocations keep symbol+addend (codegen unchanged)."
+      },
+      {
+        "name": "compile_for_diff",
+        "line": 536,
+        "end_line": 541,
+        "doc": ""
+      },
+      {
+        "name": "code_digest",
+        "line": 544,
+        "end_line": 547,
+        "doc": "Identity of a compiled function: its normalized instructions. A test result"
+      },
+      {
+        "name": "compare_source",
+        "line": 550,
+        "end_line": 587,
+        "doc": "quiet: compiler errors go into the SystemExit message instead of stderr."
+      },
+      {
+        "name": "report",
+        "line": 590,
+        "end_line": 602,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 605,
+        "end_line": 627,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/parallel.py",
+    "lines": 239,
+    "doc": "Parallel decomp work: one git worktree and branch per worker.\n\n    python3 tools/decomp/parallel.py queue [--limit 30]  # next TUs, dependency-ready first\n    python3 tools/decomp/parallel.py claim w7 [--budget 25000]  # worktree with the next batch\n    python3 tools/decomp/parallel.py new ai AIFlagManager.cpp AISkillManager.cpp\n    python3 tools/decomp/parallel.py list\n    python3 tools/decomp/parallel.py own dot Character.cpp player.cpp   # decomp/owners.json\n    python3 tools/decomp/parallel.py merge ai      # merge decomp/ai into the current branch\n    python3 tools/decomp/parallel.py drop ai       # remove the worktree and branch\n\nWorktrees live under /tmp/opencode/decomp-wt/<slug> (no spaces, so tools and\nLD_PRELOAD work directly). Each gets a copy of build-decomp/db and its own\nhybrid runtime directory; the GCC toolchain cache is shared read-only.\ndecomp/owners.json (tracked) splits TUs between workers on different machines:\nthe queue skips TUs owned by anyone but $OTL_OWNER.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "json",
+      "os",
+      "pathlib",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "owners",
+        "line": 44,
+        "end_line": 46,
+        "doc": "TU -> owner from the tracked decomp/owners.json."
+      },
+      {
+        "name": "owned_by_others",
+        "line": 49,
+        "end_line": 53,
+        "doc": "Owner of `tu` when it is someone else than `me` (default $OTL_OWNER), else None."
+      },
+      {
+        "name": "own",
+        "line": 56,
+        "end_line": 65,
+        "doc": ""
+      },
+      {
+        "name": "claims",
+        "line": 68,
+        "end_line": 69,
+        "doc": ""
+      },
+      {
+        "name": "save_claims",
+        "line": 72,
+        "end_line": 74,
+        "doc": ""
+      },
+      {
+        "name": "candidates",
+        "line": 77,
+        "end_line": 103,
+        "doc": "Open game TUs: (missing base headers, bytes, name, functions), readiest and smallest first."
+      },
+      {
+        "name": "queue",
+        "line": 106,
+        "end_line": 109,
+        "doc": ""
+      },
+      {
+        "name": "claim",
+        "line": 112,
+        "end_line": 131,
+        "doc": ""
+      },
+      {
+        "name": "git",
+        "line": 134,
+        "end_line": 135,
+        "doc": ""
+      },
+      {
+        "name": "new",
+        "line": 138,
+        "end_line": 170,
+        "doc": ""
+      },
+      {
+        "name": "listing",
+        "line": 173,
+        "end_line": 184,
+        "doc": ""
+      },
+      {
+        "name": "merge",
+        "line": 187,
+        "end_line": 192,
+        "doc": ""
+      },
+      {
+        "name": "drop",
+        "line": 195,
+        "end_line": 201,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 204,
+        "end_line": 235,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/promote.py",
+    "lines": 258,
+    "doc": "Moves what a decompiled TU needs from the generated headers into decomp/include.\n\n    python3 tools/decomp/promote.py decomp/src/Graph.cpp\n\nllm_loop.py compiles against build-decomp/include-gen (OTL_EXTRA_INCLUDE);\ncommitted sources must build without it. For every generated header the TU\nreaches:\n- a class header CFoo.h becomes decomp/include/Foo.h (CFoo.h when Foo.h is\n  another header), marked partial;\n- the enums, globals and namespace functions the TU and those headers use\n  from GenTypes.h, GenGlobals.h and GenNamespaces.h are added to\n  decomp/include/GameEnums.h, GameVariables.h and GameNamespaces.h.\n  A header of that name without the promotion note is a hand-written one\n  (GameGlobals.h is CGameGlobals) and is never overwritten.\nIncludes are rewritten and build-decomp/include-gen is regenerated, so the\ngenerated headers stop declaring what decomp/include now declares. Ghidra's\nhelper macros (CONCAT44, SUB41...) are not promoted: a TU using them does not\ncompile afterwards.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "elfdb",
+      "headers",
+      "pathlib",
+      "re",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "includes",
+        "line": 44,
+        "end_line": 45,
+        "doc": ""
+      },
+      {
+        "name": "rewrite_includes",
+        "line": 48,
+        "end_line": 54,
+        "doc": "Renames includes; a None target drops the include line."
+      },
+      {
+        "name": "guard",
+        "line": 57,
+        "end_line": 58,
+        "doc": ""
+      },
+      {
+        "name": "enum_entries",
+        "line": 62,
+        "end_line": 70,
+        "doc": "Name -> line, for the enums and integer typedefs (not Ghidra's helpers)."
+      },
+      {
+        "name": "global_entries",
+        "line": 73,
+        "end_line": 79,
+        "doc": ""
+      },
+      {
+        "name": "namespace_entries",
+        "line": 82,
+        "end_line": 92,
+        "doc": "(namespace -> {function name -> declarations}, includes, forward declarations)."
+      },
+      {
+        "name": "write_enums",
+        "line": 95,
+        "end_line": 101,
+        "doc": ""
+      },
+      {
+        "name": "write_globals",
+        "line": 104,
+        "end_line": 110,
+        "doc": ""
+      },
+      {
+        "name": "write_namespaces",
+        "line": 113,
+        "end_line": 122,
+        "doc": ""
+      },
+      {
+        "name": "defined_elsewhere",
+        "line": 125,
+        "end_line": 128,
+        "doc": "Enums and typedefs of `names` that a hand-written header defines: the bucket must not repeat them."
+      },
+      {
+        "name": "prune_buckets",
+        "line": 131,
+        "end_line": 142,
+        "doc": "Drops from GameEnums.h what hand-written headers now define (after merges or new headers)."
+      },
+      {
+        "name": "plan",
+        "line": 146,
+        "end_line": 169,
+        "doc": "(class header renames, promoted texts, reached decomp/include headers)."
+      },
+      {
+        "name": "promote",
+        "line": 172,
+        "end_line": 240,
+        "doc": "Promotes what `source` needs; returns the decomp/include headers written."
+      },
+      {
+        "name": "save",
+        "line": 183,
+        "end_line": 186,
+        "doc": ""
+      },
+      {
+        "name": "shared",
+        "line": 188,
+        "end_line": 199,
+        "doc": "Writes a shared header when it gains entries; an include of the generated one"
+      },
+      {
+        "name": "main",
+        "line": 243,
+        "end_line": 254,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/properties.py",
+    "lines": 409,
+    "doc": "Generates the property accessors of the editor descriptors: CXDescriptor::Set_setY / Get_getY.\n\n    python3 tools/decomp/properties.py [--dry-run] [TU ...]   # default: every descriptor TU in decomp/src\n\nThey are inline static members of the descriptor class (weak symbols in the original),\none pair per property the constructor registers:\n\n    if (object) static_cast<CX*>(object)->setY(value);\n    count = sizeof(value); gUnionOf32BitData[0] = static_cast<CX*>(object)->getY(); return gUnionOf32BitData;\n\nThe machine code says what setY/getY is: a field store or load is an inline accessor (added\nto the class that declares the field when no class of the hierarchy has that name; only in\nheaders of our own TUs), a direct or virtual tail call is the method it calls. Shapes it does\nnot know (strings, vectors, arithmetic) are left declared. Each TU is compiled and compared;\nonly byte-exact functions stay, with the accessors they use.",
+    "imports": [
+      "__future__",
+      "argparse",
+      "collections",
+      "descriptors",
+      "elfdb",
+      "json",
+      "objdiff",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "disassemble",
+        "line": 48,
+        "end_line": 63,
+        "doc": "address -> [(instruction, symbol of the comment)] for every instruction in [start, end)."
+      },
+      {
+        "name": "body",
+        "line": 66,
+        "end_line": 79,
+        "doc": "The instructions of f joined by \"; \" (calls by symbol when named)."
+      },
+      {
+        "name": "Generator",
+        "line": 101,
+        "end_line": 397,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 102,
+        "end_line": 115,
+        "doc": ""
+      },
+      {
+        "name": "hierarchy",
+        "line": 118,
+        "end_line": 122,
+        "doc": "(class, offset of its subobject) for cls and all its bases."
+      },
+      {
+        "name": "field_at",
+        "line": 124,
+        "end_line": 129,
+        "doc": ""
+      },
+      {
+        "name": "owned",
+        "line": 131,
+        "end_line": 138,
+        "doc": "The class's header belongs to a TU of ours."
+      },
+      {
+        "name": "declaration",
+        "line": 140,
+        "end_line": 152,
+        "doc": "(header, line, inline?) of the first declaration of method in cls's hierarchy."
+      },
+      {
+        "name": "class_block",
+        "line": 155,
+        "end_line": 160,
+        "doc": ""
+      },
+      {
+        "name": "string_plan",
+        "line": 163,
+        "end_line": 220,
+        "doc": "Strings travel as wchar_t text: Set_ builds a std::wstring from it, Get_ copies the value"
+      },
+      {
+        "name": "plan",
+        "line": 222,
+        "end_line": 292,
+        "doc": "(C++ body lines, accessor to add or None, reason) for one Set_/Get_ function."
+      },
+      {
+        "name": "property_types",
+        "line": 295,
+        "end_line": 300,
+        "doc": ""
+      },
+      {
+        "name": "target",
+        "line": 302,
+        "end_line": 308,
+        "doc": "The edited class: CXDescriptor describes CX or, for the particle and collider ones, CXWrapper."
+      },
+      {
+        "name": "generate",
+        "line": 310,
+        "end_line": 354,
+        "doc": ""
+      },
+      {
+        "name": "write",
+        "line": 356,
+        "end_line": 377,
+        "doc": ""
+      },
+      {
+        "name": "compare",
+        "line": 379,
+        "end_line": 384,
+        "doc": ""
+      },
+      {
+        "name": "run",
+        "line": 386,
+        "end_line": 397,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 400,
+        "end_line": 405,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/scaffold.py",
+    "lines": 311,
+    "doc": "Prepare a work packet for one original translation unit.\n\nWrites build-decomp/scaffold/<TU>/ (ignored):\n  PACKET.md        functions, classes, vtables, TU data, status of decomp/src/<TU>\n  asm/*.s          original disassembly per function (demangled)\n  skeleton.cpp     signatures in original order; reference only, never compiled\n  ghidra-targets.txt  input for tools/ghidra/ExportTargetDecompilations.java\n\nThe packet is navigation. Writing decomp/src/<TU> is the actual work; a function\ncounts when objdiff and the hybrid self-tests say so.\n\n    python3 tools/decomp/scaffold.py RunicCore.cpp\n    python3 tools/decomp/scaffold.py --list [--max-functions 10]",
+    "imports": [
+      "__future__",
+      "argparse",
+      "calls",
+      "collections",
+      "elfdb",
+      "elfimage",
+      "ghidra_cpp",
+      "ghidra_draft",
+      "json",
+      "layout",
+      "objdiff",
+      "pathlib",
+      "re",
+      "shutil",
+      "subprocess",
+      "sys"
+    ],
+    "definitions": [
+      {
+        "name": "tu_by_name",
+        "line": 40,
+        "end_line": 44,
+        "doc": ""
+      },
+      {
+        "name": "list_tus",
+        "line": 47,
+        "end_line": 61,
+        "doc": ""
+      },
+      {
+        "name": "disassemble",
+        "line": 64,
+        "end_line": 68,
+        "doc": ""
+      },
+      {
+        "name": "annotate",
+        "line": 71,
+        "end_line": 92,
+        "doc": "Append literal contents for immediates and RIP targets pointing into .rodata."
+      },
+      {
+        "name": "trial_build",
+        "line": 95,
+        "end_line": 120,
+        "doc": "trial.cpp and generated headers: what tools/decomp/draft_trial.py got to compile."
+      },
+      {
+        "name": "ghidra_drafts",
+        "line": 123,
+        "end_line": 149,
+        "doc": "ghidra.cpp: converted Ghidra drafts of the TU, when tools/decomp/ghidra_draft.py has run."
+      },
+      {
+        "name": "static_init_order",
+        "line": 152,
+        "end_line": 176,
+        "doc": "TU-local objects in the order the static initializer constructs them, with known headers."
+      },
+      {
+        "name": "safe_name",
+        "line": 179,
+        "end_line": 180,
+        "doc": ""
+      },
+      {
+        "name": "packet",
+        "line": 183,
+        "end_line": 290,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 293,
+        "end_line": 307,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_autotest_returns.py",
+    "lines": 92,
+    "doc": "C++98 regression for exact return ABI in generated differential tests.",
+    "imports": [
+      "autotest",
+      "pathlib",
+      "subprocess",
+      "tempfile",
+      "toolchain",
+      "unittest"
+    ],
+    "definitions": [
+      {
+        "name": "ReturnTypes",
+        "line": 12,
+        "end_line": 88,
+        "doc": ""
+      },
+      {
+        "name": "test_exact_types_and_reference_value",
+        "line": 13,
+        "end_line": 60,
+        "doc": ""
+      },
+      {
+        "name": "test_standalone_fork_capture",
+        "line": 63,
+        "end_line": 88,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_ghidra_cpp.py",
+    "lines": 122,
+    "doc": "ghidra_cpp.py rewrites: literals survive exactly, NaN guards go only where provably redundant.",
+    "imports": [
+      "ghidra_cpp",
+      "unittest"
+    ],
+    "definitions": [
+      {
+        "name": "LiteralTest",
+        "line": 8,
+        "end_line": 17,
+        "doc": ""
+      },
+      {
+        "name": "inline",
+        "line": 9,
+        "end_line": 12,
+        "doc": ""
+      },
+      {
+        "name": "test_literals_are_kept_byte_for_byte",
+        "line": 14,
+        "end_line": 17,
+        "doc": ""
+      },
+      {
+        "name": "NanTest",
+        "line": 20,
+        "end_line": 41,
+        "doc": ""
+      },
+      {
+        "name": "tidy",
+        "line": 21,
+        "end_line": 22,
+        "doc": ""
+      },
+      {
+        "name": "test_redundant_guards_go",
+        "line": 24,
+        "end_line": 30,
+        "doc": ""
+      },
+      {
+        "name": "test_guards_that_change_meaning_stay",
+        "line": 32,
+        "end_line": 35,
+        "doc": ""
+      },
+      {
+        "name": "test_guard_on_a_name_inside_an_operand_stays",
+        "line": 37,
+        "end_line": 41,
+        "doc": ""
+      },
+      {
+        "name": "HiddenReturnTest",
+        "line": 44,
+        "end_line": 75,
+        "doc": ""
+      },
+      {
+        "name": "test_function_returning_through_the_hidden_pointer",
+        "line": 52,
+        "end_line": 59,
+        "doc": ""
+      },
+      {
+        "name": "test_call_of_such_a_function_assigns_its_result",
+        "line": 61,
+        "end_line": 69,
+        "doc": ""
+      },
+      {
+        "name": "test_reference_parameters_take_the_object",
+        "line": 71,
+        "end_line": 75,
+        "doc": ""
+      },
+      {
+        "name": "TArrayListTest",
+        "line": 78,
+        "end_line": 118,
+        "doc": ""
+      },
+      {
+        "name": "test_element_address_with_the_capacity_check",
+        "line": 79,
+        "end_line": 88,
+        "doc": ""
+      },
+      {
+        "name": "test_element_value_and_return",
+        "line": 90,
+        "end_line": 96,
+        "doc": ""
+      },
+      {
+        "name": "test_other_shapes_stay",
+        "line": 98,
+        "end_line": 109,
+        "doc": ""
+      },
+      {
+        "name": "test_count_reads_become_size",
+        "line": 111,
+        "end_line": 118,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_llm_loop_headers.py",
+    "lines": 91,
+    "doc": null,
+    "imports": [
+      "llm_loop",
+      "objdiff",
+      "pathlib",
+      "tempfile",
+      "unittest"
+    ],
+    "definitions": [
+      {
+        "name": "FakeGen",
+        "line": 10,
+        "end_line": 20,
+        "doc": ""
+      },
+      {
+        "name": "__init__",
+        "line": 11,
+        "end_line": 12,
+        "doc": ""
+      },
+      {
+        "name": "ghidra_return",
+        "line": 14,
+        "end_line": 15,
+        "doc": ""
+      },
+      {
+        "name": "method_decl",
+        "line": 17,
+        "end_line": 20,
+        "doc": ""
+      },
+      {
+        "name": "func",
+        "line": 23,
+        "end_line": 24,
+        "doc": ""
+      },
+      {
+        "name": "CompleteHandHeader",
+        "line": 27,
+        "end_line": 68,
+        "doc": ""
+      },
+      {
+        "name": "complete",
+        "line": 28,
+        "end_line": 41,
+        "doc": ""
+      },
+      {
+        "name": "test_missing_methods_go_to_the_end_of_the_public_section",
+        "line": 46,
+        "end_line": 51,
+        "doc": ""
+      },
+      {
+        "name": "test_virtual_and_other_class_methods_are_left_alone",
+        "line": 53,
+        "end_line": 57,
+        "doc": ""
+      },
+      {
+        "name": "test_class_without_public_section_gets_one",
+        "line": 59,
+        "end_line": 68,
+        "doc": ""
+      },
+      {
+        "name": "AsmLabels",
+        "line": 71,
+        "end_line": 75,
+        "doc": ""
+      },
+      {
+        "name": "test_labels_bound_to_mangled_names_are_refused",
+        "line": 72,
+        "end_line": 75,
+        "doc": ""
+      },
+      {
+        "name": "UnknownMembers",
+        "line": 78,
+        "end_line": 87,
+        "doc": ""
+      },
+      {
+        "name": "test_members_of_game_classes_absent_from_the_original",
+        "line": 82,
+        "end_line": 87,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_mutate_overloads.py",
+    "lines": 29,
+    "doc": null,
+    "imports": [
+      "mutate",
+      "unittest"
+    ],
+    "definitions": [
+      {
+        "name": "Overloads",
+        "line": 5,
+        "end_line": 27,
+        "doc": ""
+      },
+      {
+        "name": "body",
+        "line": 11,
+        "end_line": 15,
+        "doc": ""
+      },
+      {
+        "name": "test_same_arity",
+        "line": 16,
+        "end_line": 19,
+        "doc": ""
+      },
+      {
+        "name": "test_unknown_stays_unresolved",
+        "line": 20,
+        "end_line": 21,
+        "doc": ""
+      },
+      {
+        "name": "test_duplicate_stays_unresolved",
+        "line": 22,
+        "end_line": 23,
+        "doc": ""
+      },
+      {
+        "name": "test_unique_arity_keeps_existing_alias_behavior",
+        "line": 24,
+        "end_line": 25,
+        "doc": ""
+      },
+      {
+        "name": "test_unnamed_parameters",
+        "line": 26,
+        "end_line": 27,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_objdiff_literals.py",
+    "lines": 33,
+    "doc": "Literal relocation tokens must not be parsed as regex replacement templates.",
+    "imports": [
+      "objdiff",
+      "types",
+      "unittest"
+    ],
+    "definitions": [
+      {
+        "name": "LiteralRelocationTest",
+        "line": 7,
+        "end_line": 30,
+        "doc": ""
+      },
+      {
+        "name": "token",
+        "line": 8,
+        "end_line": 14,
+        "doc": ""
+      },
+      {
+        "name": "test_immediate_backslashes",
+        "line": 16,
+        "end_line": 20,
+        "doc": ""
+      },
+      {
+        "name": "test_rip_relative_backslashes",
+        "line": 22,
+        "end_line": 25,
+        "doc": ""
+      },
+      {
+        "name": "test_absolute_memory_backslashes",
+        "line": 27,
+        "end_line": 30,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/toolchain.py",
+    "lines": 266,
+    "doc": "Original-compiler toolchain for the decomp track.\n\n`original-code`, .comment of the shipped ELF (in link order):\n  [0x00] GCC 4.4.6 (Red Hat 4.4.6-4)   glibc crt objects, merged by ld\n  [0x2c] GCC 4.4.7 (Red Hat 4.4.7-3)   every game object, merged by ld\n  61 x   GCC 4.1.2 (Red Hat 4.1.2-51)  prebuilt static-library objects from an\n                                      assembler that did not mark .comment mergeable\nGame code also shows GCC >= 4.4 features: `[clone .clone.N]` (IPA-CP) and direct\n`__cxa_atexit(dtor)` registration. We therefore fetch exactly gcc 4.4.7-3.el6 with\nbinutils 2.20.51.0.2-5.36.el6 and the CentOS 6.4 glibc/kernel headers from the\nCentOS vault, plus the pinned OGRE 1.6.5 archive for its headers. Everything is\nextracted into a cache directory whose path must not contain spaces (the GCC\ndriver composes sub-commands from specs).\n\n    python3 tools/decomp/toolchain.py setup\n    python3 tools/decomp/toolchain.py cc decomp/src/RunicCore.cpp -o /tmp/x.o\n    python3 tools/decomp/toolchain.py cc FILE -S -o FILE.s",
+    "imports": [
+      "__future__",
+      "argparse",
+      "hashlib",
+      "json",
+      "os",
+      "pathlib",
+      "shutil",
+      "subprocess",
+      "sys",
+      "tarfile",
+      "tempfile",
+      "urllib.request"
+    ],
+    "definitions": [
+      {
+        "name": "cache_dir",
+        "line": 63,
+        "end_line": 67,
+        "doc": ""
+      },
+      {
+        "name": "sha256",
+        "line": 70,
+        "end_line": 75,
+        "doc": ""
+      },
+      {
+        "name": "fetch",
+        "line": 78,
+        "end_line": 91,
+        "doc": ""
+      },
+      {
+        "name": "setup",
+        "line": 94,
+        "end_line": 120,
+        "doc": ""
+      },
+      {
+        "name": "config",
+        "line": 123,
+        "end_line": 124,
+        "doc": ""
+      },
+      {
+        "name": "include_args",
+        "line": 127,
+        "end_line": 143,
+        "doc": ""
+      },
+      {
+        "name": "driver_env",
+        "line": 146,
+        "end_line": 150,
+        "doc": ""
+      },
+      {
+        "name": "_digest",
+        "line": 156,
+        "end_line": 163,
+        "doc": ""
+      },
+      {
+        "name": "_cache_lookup",
+        "line": 166,
+        "end_line": 175,
+        "doc": "Cached output for this command, keyed by the source and the headers it used last time."
+      },
+      {
+        "name": "compile_source",
+        "line": 178,
+        "end_line": 234,
+        "doc": "Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path."
+      },
+      {
+        "name": "assemble",
+        "line": 237,
+        "end_line": 241,
+        "doc": ""
+      },
+      {
+        "name": "main",
+        "line": 244,
+        "end_line": 262,
+        "doc": ""
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/types_export.py",
+    "lines": 346,
+    "doc": "Class layouts of the recovered headers, read from GCC 4.4.7 debug info.\n\nCompiles every decomp/include header into one object with -g, parses\n`readelf --debug-dump=info` and writes build-decomp/types.json:\n\n    {\"classes\": {\"CLogicTimer\": {\"size\": 120, \"bases\": [{\"name\": ..., \"offset\": 0}],\n                                 \"fields\": [{\"offset\": 88, \"name\": \"m_fMinTime\", \"type\": \"float\", \"size\": 4}]}}}\n\nClasses without a recovered header are added from tools/decomp/layout.py\n(names are hints there). Used by tools/decomp/ghidra_draft.py.\n\n    python3 tools/decomp/types_export.py",
+    "imports": [
+      "__future__",
+      "elfdb",
+      "json",
+      "layout",
+      "pathlib",
+      "re",
+      "subprocess",
+      "sys",
+      "tempfile",
+      "toolchain"
+    ],
+    "definitions": [
+      {
+        "name": "compile_headers",
+        "line": 32,
+        "end_line": 38,
+        "doc": ""
+      },
+      {
+        "name": "parse_dies",
+        "line": 41,
+        "end_line": 78,
+        "doc": ""
+      },
+      {
+        "name": "type_name",
+        "line": 81,
+        "end_line": 109,
+        "doc": ""
+      },
+      {
+        "name": "type_size",
+        "line": 112,
+        "end_line": 126,
+        "doc": ""
+      },
+      {
+        "name": "header_dies",
+        "line": 129,
+        "end_line": 131,
+        "doc": ""
+      },
+      {
+        "name": "header_classes",
+        "line": 134,
+        "end_line": 154,
+        "doc": ""
+      },
+      {
+        "name": "strip",
+        "line": 161,
+        "end_line": 168,
+        "doc": "The DIE behind typedefs, const and volatile."
+      },
+      {
+        "name": "by_hidden_pointer",
+        "line": 171,
+        "end_line": 202,
+        "doc": "Itanium C++ ABI: a class with a user-declared copy constructor or destructor, or a base or"
+      },
+      {
+        "name": "ghidra_type",
+        "line": 205,
+        "end_line": 215,
+        "doc": "(type, size) spelled for DecompDrafts.java: references become pointers, enums int."
+      },
+      {
+        "name": "prototypes",
+        "line": 222,
+        "end_line": 254,
+        "doc": "Method prototypes the headers declare, keyed by the address of the original function"
+      },
+      {
+        "name": "promoted_classes",
+        "line": 257,
+        "end_line": 264,
+        "doc": "Classes whose header is a promoted placeholder (tools/decomp/promote.py)."
+      },
+      {
+        "name": "is_class",
+        "line": 267,
+        "end_line": 274,
+        "doc": "Real class (RTTI, vtable or constructor), not a namespace of free functions."
+      },
+      {
+        "name": "sane_type",
+        "line": 277,
+        "end_line": 285,
+        "doc": "Draft field types Ghidra can place: primitives, pointers, or an integer of the observed width."
+      },
+      {
+        "name": "draft_classes",
+        "line": 288,
+        "end_line": 306,
+        "doc": ""
+      },
+      {
+        "name": "vtables",
+        "line": 309,
+        "end_line": 323,
+        "doc": "Primary vtable slot names per class, for readable virtual calls."
+      },
+      {
+        "name": "main",
+        "line": 326,
+        "end_line": 342,
+        "doc": ""
+      }
+    ]
+  }
+]
