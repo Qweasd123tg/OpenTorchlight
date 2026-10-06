@@ -1,0 +1,16 @@
+{
+  "unchanged": {
+    "state": "fresh",
+    "reasons": []
+  },
+  "callee_return_changed": {
+    "state": "fresh",
+    "reasons": []
+  },
+  "own_return_changed": {
+    "state": "stale",
+    "reasons": [
+      "method prototypes changed"
+    ]
+  }
+}

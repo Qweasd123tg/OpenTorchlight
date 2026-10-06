@@ -1,0 +1,19 @@
+{
+  "README_RU.md": "1ac0febd73bd5daad2b6135522125f06bf1fbfee0898a4d23d93e59841cb2e26",
+  "REPORT_RU.md": "742bcc4248053354a70819282dce59f34bd028459d331d964b41c97d16cf221e",
+  "objdiff-section-index.patch": "1f382e6c22f0c316d7a3f86881702690e97fea9e0f5d9bde201e6a4a91f4456c",
+  "objdiff_fast_probe.py": "5ba7e849f77dd731ab9aff945b959900a30e1f86908b2e195a0178f7bedc327e",
+  "verify_patch.py": "4f18cc682437648837a76d8786597c043084f409d7c75ae8cd3eee239e69d305",
+  "probe_pass3.py": "4a2c14d9bac831cd690d27f7785ebe9ec451276172adced7c9ee3cdc75f3e7c8",
+  "probe_runtime.cpp": "d1bc03096f4482b84bdbde44d2b400c98b8f476766113d09c074aa196bc7709c",
+  "context_a.cpp": "f503ae2266277b31ee46aefe810d677777d15c0dc88da34f8ae6bb229920a9a6",
+  "context_b.cpp": "543e64fb087763df7362b7d9e00d3ee9874f4686be55b4cb59c389d917c0b6fd",
+  "algebra.cpp": "07db22e8646a0890e46a3ec32646c547a272ce1cca63966959abbf431593fb8b",
+  "results/candidate.smt2": "4f09e93c8182015e3dc2336dde043b4bd28fc1a9354c21cea189ccb27a6b16a5",
+  "results/inventory.json": "9f06770a2ce8ed35a0c49e75d525b1328dffc5bca08dca36e9c0f4e4758ecdb8",
+  "results/parser-benchmark.json": "552fbee9f944cc02d9e323eecd604e77de4ac3d8e286d43a2a5b6513fb88c732",
+  "results/patch-metadata.json": "0caad4a00823ad8761ae0d482fed247f841d03945011b6fbd4ce6e8ec5234ca7",
+  "results/patch-verification.json": "fe0c9d9cb10e6d838a7ac0bfadba1ff762d198081cab4c68992c32bcf6d3f4a9",
+  "results/probe-results.json": "af1aee911f5bd19ffdf4a6b89580443fd211e6b55392be6562d26361ceab49bf",
+  "results/wrong_candidate.smt2": "d939802b50932f0e4f20c8a48902398f2dcaf65ccdd45d0910ff9ce8f721e3f8"
+}

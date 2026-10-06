@@ -1,0 +1,6150 @@
+{
+  "guard_symbols": 281,
+  "identities": 277,
+  "unique_pairs": 272,
+  "records": [
+    {
+      "identity": "CCameraControl::updateGameCamera(float, CResourceManager*, Ogre::Vector3, ECAMERA_STATES)::g_PauseDolly",
+      "guards": [
+        {
+          "address": 21982888,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCameraControl::updateGameCamera(float, CResourceManager*, Ogre::Vector3, ECAMERA_STATES)::g_PauseDolly",
+          "line": 29066
+        }
+      ],
+      "objects": [
+        {
+          "address": 21982896,
+          "size": 4,
+          "kind": "b",
+          "name": "CCameraControl::updateGameCamera(float, CResourceManager*, Ogre::Vector3, ECAMERA_STATES)::g_PauseDolly",
+          "line": 29067
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::applyDamage(CLevel&, Ogre::Vector3 const&, float, Ogre::Vector3 const&, float, CCharacter*, bool, bool, bool, bool, unsigned int)::g_GlancingBlow",
+      "guards": [
+        {
+          "address": 21489696,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::applyDamage(CLevel&, Ogre::Vector3 const&, float, Ogre::Vector3 const&, float, CCharacter*, bool, bool, bool, bool, unsigned int)::g_GlancingBlow",
+          "line": 24527
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489704,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::applyDamage(CLevel&, Ogre::Vector3 const&, float, Ogre::Vector3 const&, float, CCharacter*, bool, bool, bool, bool, unsigned int)::g_GlancingBlow",
+          "line": 24528
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::applyInstantEffect(CEffect*)::g_Blocked",
+      "guards": [
+        {
+          "address": 21489856,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::applyInstantEffect(CEffect*)::g_Blocked",
+          "line": 24547
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489864,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::applyInstantEffect(CEffect*)::g_Blocked",
+          "line": 24548
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::awardFame(CLevel&, CCharacter*, int, bool)::g_Fame",
+      "guards": [
+        {
+          "address": 21489600,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::awardFame(CLevel&, CCharacter*, int, bool)::g_Fame",
+          "line": 24523
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489608,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::awardFame(CLevel&, CCharacter*, int, bool)::g_Fame",
+          "line": 24524
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::die(CCharacter*, Ogre::Vector3 const*, float, bool)::KDropVectors",
+      "guards": [
+        {
+          "address": 21489616,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::die(CCharacter*, Ogre::Vector3 const*, float, bool)::KDropVectors",
+          "line": 24525
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489632,
+          "size": 60,
+          "kind": "b",
+          "name": "CCharacter::die(CCharacter*, Ogre::Vector3 const*, float, bool)::KDropVectors",
+          "line": 24526
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::fameUp()::g_FameIncreased",
+      "guards": [
+        {
+          "address": 21489568,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::fameUp()::g_FameIncreased",
+          "line": 24519
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489592,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::fameUp()::g_FameIncreased",
+          "line": 24522
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::fameUp()::g_YouAttainedRank",
+      "guards": [
+        {
+          "address": 21489576,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::fameUp()::g_YouAttainedRank",
+          "line": 24520
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489584,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::fameUp()::g_YouAttainedRank",
+          "line": 24521
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+      "guards": [
+        {
+          "address": 21489816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+          "line": 24542
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489824,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+          "line": 24543
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::fishingAICatch(float, CLevel&)::g_Fishing",
+      "guards": [
+        {
+          "address": 21489808,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::fishingAICatch(float, CLevel&)::g_Fishing",
+          "line": 24541
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489832,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::fishingAICatch(float, CLevel&)::g_Fishing",
+          "line": 24544
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::getItem(CItem*, CLevel&)::g_Gold",
+      "guards": [
+        {
+          "address": 21489840,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::getItem(CItem*, CLevel&)::g_Gold",
+          "line": 24545
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489848,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::getItem(CItem*, CLevel&)::g_Gold",
+          "line": 24546
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::modifyDamage(int, EDAMAGE_TYPES, int, float)::g_Absorbed",
+      "guards": [
+        {
+          "address": 21489712,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::modifyDamage(int, EDAMAGE_TYPES, int, float)::g_Absorbed",
+          "line": 24529
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489720,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::modifyDamage(int, EDAMAGE_TYPES, int, float)::g_Absorbed",
+          "line": 24530
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Blocked",
+      "guards": [
+        {
+          "address": 21489752,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Blocked",
+          "line": 24534
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489760,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Blocked",
+          "line": 24535
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_HP",
+      "guards": [
+        {
+          "address": 21489728,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_HP",
+          "line": 24531
+        },
+        {
+          "address": 21489736,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_HP",
+          "line": 24532
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489776,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_HP",
+          "line": 24537
+        },
+        {
+          "address": 21489784,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_HP",
+          "line": 24538
+        }
+      ],
+      "status": "BLOCKED_AMBIGUOUS_OR_MISSING"
+    },
+    {
+      "identity": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Mana",
+      "guards": [
+        {
+          "address": 21489744,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Mana",
+          "line": 24533
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489768,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)::g_Mana",
+          "line": 24536
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCharacter::rollCritical(CCharacter*)::g_CriticalStrike",
+      "guards": [
+        {
+          "address": 21489792,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCharacter::rollCritical(CCharacter*)::g_CriticalStrike",
+          "line": 24539
+        }
+      ],
+      "objects": [
+        {
+          "address": 21489800,
+          "size": 8,
+          "kind": "b",
+          "name": "CCharacter::rollCritical(CCharacter*)::g_CriticalStrike",
+          "line": 24540
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+      "guards": [
+        {
+          "address": 22230816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 31146
+        }
+      ],
+      "objects": [
+        {
+          "address": 22230824,
+          "size": 8,
+          "kind": "b",
+          "name": "CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 31147
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Dead",
+      "guards": [
+        {
+          "address": 21862704,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Dead",
+          "line": 28375
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862872,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Dead",
+          "line": 28396
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Difficulty",
+      "guards": [
+        {
+          "address": 21862696,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Difficulty",
+          "line": 28374
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862880,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Difficulty",
+          "line": 28397
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Easy",
+      "guards": [
+        {
+          "address": 21862728,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Easy",
+          "line": 28378
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862848,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Easy",
+          "line": 28393
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Hard",
+      "guards": [
+        {
+          "address": 21862744,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Hard",
+          "line": 28380
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862832,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Hard",
+          "line": 28391
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Hardcore",
+      "guards": [
+        {
+          "address": 21862760,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Hardcore",
+          "line": 28382
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862816,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Hardcore",
+          "line": 28389
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Hrs",
+      "guards": [
+        {
+          "address": 21862768,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Hrs",
+          "line": 28383
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862808,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Hrs",
+          "line": 28388
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Level",
+      "guards": [
+        {
+          "address": 21862720,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Level",
+          "line": 28377
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862856,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Level",
+          "line": 28394
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Mins",
+      "guards": [
+        {
+          "address": 21862776,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Mins",
+          "line": 28384
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862800,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Mins",
+          "line": 28387
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Normal",
+      "guards": [
+        {
+          "address": 21862736,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Normal",
+          "line": 28379
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862840,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Normal",
+          "line": 28392
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Retired",
+      "guards": [
+        {
+          "address": 21862712,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Retired",
+          "line": 28376
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862864,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Retired",
+          "line": 28395
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_Secs",
+      "guards": [
+        {
+          "address": 21862784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_Secs",
+          "line": 28385
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862792,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_Secs",
+          "line": 28386
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CContinueGameMenu::updateCharacterList()::g_VeryHard",
+      "guards": [
+        {
+          "address": 21862752,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CContinueGameMenu::updateCharacterList()::g_VeryHard",
+          "line": 28381
+        }
+      ],
+      "objects": [
+        {
+          "address": 21862824,
+          "size": 8,
+          "kind": "b",
+          "name": "CContinueGameMenu::updateCharacterList()::g_VeryHard",
+          "line": 28390
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+      "guards": [
+        {
+          "address": 21752592,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27335
+        }
+      ],
+      "objects": [
+        {
+          "address": 21752600,
+          "size": 8,
+          "kind": "b",
+          "name": "CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27336
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Continue",
+      "guards": [
+        {
+          "address": 21758104,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Continue",
+          "line": 27392
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758112,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Continue",
+          "line": 27393
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::setOpen(bool)::g_Death",
+      "guards": [
+        {
+          "address": 21758024,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::setOpen(bool)::g_Death",
+          "line": 27382
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758096,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::setOpen(bool)::g_Death",
+          "line": 27391
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::setOpen(bool)::g_LoseGold",
+      "guards": [
+        {
+          "address": 21758048,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::setOpen(bool)::g_LoseGold",
+          "line": 27385
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758072,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::setOpen(bool)::g_LoseGold",
+          "line": 27388
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::setOpen(bool)::g_LoseXPFame",
+      "guards": [
+        {
+          "address": 21758056,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::setOpen(bool)::g_LoseXPFame",
+          "line": 27386
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758064,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::setOpen(bool)::g_LoseXPFame",
+          "line": 27387
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::setOpen(bool)::g_ResTown",
+      "guards": [
+        {
+          "address": 21758040,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::setOpen(bool)::g_ResTown",
+          "line": 27384
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758080,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::setOpen(bool)::g_ResTown",
+          "line": 27389
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CDieMenu::setOpen(bool)::g_Resurrect",
+      "guards": [
+        {
+          "address": 21758032,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CDieMenu::setOpen(bool)::g_Resurrect",
+          "line": 27383
+        }
+      ],
+      "objects": [
+        {
+          "address": 21758088,
+          "size": 8,
+          "kind": "b",
+          "name": "CDieMenu::setOpen(bool)::g_Resurrect",
+          "line": 27390
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CEditorBaseObject*>*)::gLayoutLinkNames",
+      "guards": [
+        {
+          "address": 21382760,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CEditorBaseObject*>*)::gLayoutLinkNames",
+          "line": 23646
+        }
+      ],
+      "objects": [
+        {
+          "address": 21382768,
+          "size": 24,
+          "kind": "b",
+          "name": "CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CEditorBaseObject*>*)::gLayoutLinkNames",
+          "line": 23647
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_All",
+      "guards": [
+        {
+          "address": 21459784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_All",
+          "line": 24292
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459792,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_All",
+          "line": 24293
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Electric",
+      "guards": [
+        {
+          "address": 21459768,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Electric",
+          "line": 24290
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459808,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Electric",
+          "line": 24295
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Fire",
+      "guards": [
+        {
+          "address": 21459752,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Fire",
+          "line": 24288
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459824,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Fire",
+          "line": 24297
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Ice",
+      "guards": [
+        {
+          "address": 21459760,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Ice",
+          "line": 24289
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459816,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Ice",
+          "line": 24296
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Magical",
+      "guards": [
+        {
+          "address": 21459744,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Magical",
+          "line": 24287
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459832,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Magical",
+          "line": 24298
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Poison",
+      "guards": [
+        {
+          "address": 21459776,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Poison",
+          "line": 24291
+        }
+      ],
+      "objects": [
+        {
+          "address": 21459800,
+          "size": 8,
+          "kind": "b",
+          "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)::g_Poison",
+          "line": 24294
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_AddedEnchantments",
+      "guards": [
+        {
+          "address": 21770104,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_AddedEnchantments",
+          "line": 27489
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770240,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_AddedEnchantments",
+          "line": 27506
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_AddedSockets",
+      "guards": [
+        {
+          "address": 21770096,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_AddedSockets",
+          "line": 27488
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770248,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_AddedSockets",
+          "line": 27507
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_AncientRites",
+      "guards": [
+        {
+          "address": 21770080,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_AncientRites",
+          "line": 27486
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770264,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_AncientRites",
+          "line": 27509
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_AreDestroyed",
+      "guards": [
+        {
+          "address": 21770144,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_AreDestroyed",
+          "line": 27494
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770200,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_AreDestroyed",
+          "line": 27501
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_Enchant",
+      "guards": [
+        {
+          "address": 21770168,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_Enchant",
+          "line": 27497
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770176,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_Enchant",
+          "line": 27498
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_GemsRecovered",
+      "guards": [
+        {
+          "address": 21770152,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_GemsRecovered",
+          "line": 27495
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770192,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_GemsRecovered",
+          "line": 27500
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_IntoTheLight",
+      "guards": [
+        {
+          "address": 21770128,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_IntoTheLight",
+          "line": 27492
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770216,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_IntoTheLight",
+          "line": 27503
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_NothingHappens",
+      "guards": [
+        {
+          "address": 21770088,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_NothingHappens",
+          "line": 27487
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770256,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_NothingHappens",
+          "line": 27508
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_RemovedEnchantments",
+      "guards": [
+        {
+          "address": 21770112,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_RemovedEnchantments",
+          "line": 27490
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770232,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_RemovedEnchantments",
+          "line": 27505
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_Sockets",
+      "guards": [
+        {
+          "address": 21770160,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_Sockets",
+          "line": 27496
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770184,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_Sockets",
+          "line": 27499
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_TheGemsWithin",
+      "guards": [
+        {
+          "address": 21770136,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_TheGemsWithin",
+          "line": 27493
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770208,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_TheGemsWithin",
+          "line": 27502
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::performInteraction()::g_YouPlunge",
+      "guards": [
+        {
+          "address": 21770120,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::performInteraction()::g_YouPlunge",
+          "line": 27491
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770224,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::performInteraction()::g_YouPlunge",
+          "line": 27504
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Destroy",
+      "guards": [
+        {
+          "address": 21770568,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Destroy",
+          "line": 27547
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770640,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Destroy",
+          "line": 27556
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Enchant",
+      "guards": [
+        {
+          "address": 21770560,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Enchant",
+          "line": 27546
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770648,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Enchant",
+          "line": 27557
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Heirloom",
+      "guards": [
+        {
+          "address": 21770600,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Heirloom",
+          "line": 27551
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770608,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Heirloom",
+          "line": 27552
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Recover",
+      "guards": [
+        {
+          "address": 21770584,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Recover",
+          "line": 27549
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770624,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Recover",
+          "line": 27554
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Retire",
+      "guards": [
+        {
+          "address": 21770592,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Retire",
+          "line": 27550
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770616,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Retire",
+          "line": 27553
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::setOpen(bool, EAIState)::g_Sockets",
+      "guards": [
+        {
+          "address": 21770576,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::setOpen(bool, EAIState)::g_Sockets",
+          "line": 27548
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770632,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::setOpen(bool, EAIState)::g_Sockets",
+          "line": 27555
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_CannotEnchant",
+      "guards": [
+        {
+          "address": 21770296,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_CannotEnchant",
+          "line": 27513
+        },
+        {
+          "address": 21770328,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_CannotEnchant",
+          "line": 27517
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770496,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_CannotEnchant",
+          "line": 27538
+        },
+        {
+          "address": 21770528,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_CannotEnchant",
+          "line": 27542
+        }
+      ],
+      "status": "BLOCKED_AMBIGUOUS_OR_MISSING"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_Disenchant",
+      "guards": [
+        {
+          "address": 21770288,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_Disenchant",
+          "line": 27512
+        },
+        {
+          "address": 21770320,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_Disenchant",
+          "line": 27516
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770504,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_Disenchant",
+          "line": 27539
+        },
+        {
+          "address": 21770536,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_Disenchant",
+          "line": 27543
+        }
+      ],
+      "status": "BLOCKED_AMBIGUOUS_OR_MISSING"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_EnchantPrice",
+      "guards": [
+        {
+          "address": 21770280,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_EnchantPrice",
+          "line": 27511
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770544,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_EnchantPrice",
+          "line": 27544
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_MaxEnchant",
+      "guards": [
+        {
+          "address": 21770272,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_MaxEnchant",
+          "line": 27510
+        },
+        {
+          "address": 21770304,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_MaxEnchant",
+          "line": 27514
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770520,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_MaxEnchant",
+          "line": 27541
+        },
+        {
+          "address": 21770552,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_MaxEnchant",
+          "line": 27545
+        }
+      ],
+      "status": "BLOCKED_AMBIGUOUS_OR_MISSING"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_NoGem",
+      "guards": [
+        {
+          "address": 21770360,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_NoGem",
+          "line": 27521
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770464,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_NoGem",
+          "line": 27534
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_NoGemsToRecover",
+      "guards": [
+        {
+          "address": 21770344,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_NoGemsToRecover",
+          "line": 27519
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770480,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_NoGemsToRecover",
+          "line": 27536
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_NoHeirloom",
+      "guards": [
+        {
+          "address": 21770376,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_NoHeirloom",
+          "line": 27523
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770448,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_NoHeirloom",
+          "line": 27532
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PlaceHereToEnchant",
+      "guards": [
+        {
+          "address": 21770384,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PlaceHereToEnchant",
+          "line": 27524
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770440,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PlaceHereToEnchant",
+          "line": 27531
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroyGems",
+      "guards": [
+        {
+          "address": 21770400,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroyGems",
+          "line": 27526
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770424,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroyGems",
+          "line": 27529
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroySocketable",
+      "guards": [
+        {
+          "address": 21770392,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroySocketable",
+          "line": 27525
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770432,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PlaceItemHereToDestroySocketable",
+          "line": 27530
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PlaceItemHereToPassDown",
+      "guards": [
+        {
+          "address": 21770408,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PlaceItemHereToPassDown",
+          "line": 27527
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770416,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PlaceItemHereToPassDown",
+          "line": 27528
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PressDestroyGem",
+      "guards": [
+        {
+          "address": 21770352,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PressDestroyGem",
+          "line": 27520
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770472,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PressDestroyGem",
+          "line": 27535
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PressEnchant",
+      "guards": [
+        {
+          "address": 21770312,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PressEnchant",
+          "line": 27515
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770512,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PressEnchant",
+          "line": 27540
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PressRecover",
+      "guards": [
+        {
+          "address": 21770336,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PressRecover",
+          "line": 27518
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770488,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PressRecover",
+          "line": 27537
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEnchantMenu::updateLayout()::g_PressRetire",
+      "guards": [
+        {
+          "address": 21770368,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEnchantMenu::updateLayout()::g_PressRetire",
+          "line": 27522
+        }
+      ],
+      "objects": [
+        {
+          "address": 21770456,
+          "size": 8,
+          "kind": "b",
+          "name": "CEnchantMenu::updateLayout()::g_PressRetire",
+          "line": 27533
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::effectsDescription(EEFFECT_ACTIVATION, bool, bool)::g_Damage",
+      "guards": [
+        {
+          "address": 21506656,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::effectsDescription(EEFFECT_ACTIVATION, bool, bool)::g_Damage",
+          "line": 24678
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506664,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::effectsDescription(EEFFECT_ACTIVATION, bool, bool)::g_Damage",
+          "line": 24679
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Average",
+      "guards": [
+        {
+          "address": 21507520,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Average",
+          "line": 24786
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507560,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Average",
+          "line": 24791
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fast",
+      "guards": [
+        {
+          "address": 21507528,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fast",
+          "line": 24787
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507552,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fast",
+          "line": 24790
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fastest",
+      "guards": [
+        {
+          "address": 21507536,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fastest",
+          "line": 24788
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507544,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Fastest",
+          "line": 24789
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slow",
+      "guards": [
+        {
+          "address": 21507512,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slow",
+          "line": 24785
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507568,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slow",
+          "line": 24792
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slowest",
+      "guards": [
+        {
+          "address": 21507504,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slowest",
+          "line": 24784
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507576,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)::g_Slowest",
+          "line": 24793
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Armor",
+      "guards": [
+        {
+          "address": 21506704,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Armor",
+          "line": 24684
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506952,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Armor",
+          "line": 24715
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Axe",
+      "guards": [
+        {
+          "address": 21506784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Axe",
+          "line": 24694
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506872,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Axe",
+          "line": 24705
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Bow",
+      "guards": [
+        {
+          "address": 21506776,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Bow",
+          "line": 24693
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506880,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Bow",
+          "line": 24706
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_BuyPrice",
+      "guards": [
+        {
+          "address": 21506728,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_BuyPrice",
+          "line": 24687
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506928,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_BuyPrice",
+          "line": 24712
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Damage",
+      "guards": [
+        {
+          "address": 21506696,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Damage",
+          "line": 24683
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506960,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Damage",
+          "line": 24716
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Enchanted",
+      "guards": [
+        {
+          "address": 21506760,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Enchanted",
+          "line": 24691
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506896,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Enchanted",
+          "line": 24708
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Potion",
+      "guards": [
+        {
+          "address": 21506808,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Potion",
+          "line": 24697
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506848,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Potion",
+          "line": 24702
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Rare",
+      "guards": [
+        {
+          "address": 21506752,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Rare",
+          "line": 24690
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506904,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Rare",
+          "line": 24709
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_RequiresLevel",
+      "guards": [
+        {
+          "address": 21506824,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_RequiresLevel",
+          "line": 24699
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506832,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_RequiresLevel",
+          "line": 24700
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Scroll",
+      "guards": [
+        {
+          "address": 21506816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Scroll",
+          "line": 24698
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506840,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Scroll",
+          "line": 24701
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_SellPrice",
+      "guards": [
+        {
+          "address": 21506736,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_SellPrice",
+          "line": 24688
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506920,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_SellPrice",
+          "line": 24711
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Sockets",
+      "guards": [
+        {
+          "address": 21506720,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Sockets",
+          "line": 24686
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506936,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Sockets",
+          "line": 24713
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Sword",
+      "guards": [
+        {
+          "address": 21506768,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Sword",
+          "line": 24692
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506888,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Sword",
+          "line": 24707
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Trinket",
+      "guards": [
+        {
+          "address": 21506800,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Trinket",
+          "line": 24696
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506856,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Trinket",
+          "line": 24703
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Type",
+      "guards": [
+        {
+          "address": 21506712,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Type",
+          "line": 24685
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506944,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Type",
+          "line": 24714
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Unidentified",
+      "guards": [
+        {
+          "address": 21506688,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Unidentified",
+          "line": 24682
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506968,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Unidentified",
+          "line": 24717
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Unique",
+      "guards": [
+        {
+          "address": 21506744,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Unique",
+          "line": 24689
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506912,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Unique",
+          "line": 24710
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentDescription(bool, bool)::g_Weapon",
+      "guards": [
+        {
+          "address": 21506792,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentDescription(bool, bool)::g_Weapon",
+          "line": 24695
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506864,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentDescription(bool, bool)::g_Weapon",
+          "line": 24704
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentStats()::g_Damage",
+      "guards": [
+        {
+          "address": 21506984,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentStats()::g_Damage",
+          "line": 24719
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507040,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentStats()::g_Damage",
+          "line": 24726
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentStats()::g_PhysicalDamage",
+      "guards": [
+        {
+          "address": 21506976,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentStats()::g_PhysicalDamage",
+          "line": 24718
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507048,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentStats()::g_PhysicalDamage",
+          "line": 24727
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentStats()::g_Set",
+      "guards": [
+        {
+          "address": 21507000,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentStats()::g_Set",
+          "line": 24721
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507024,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentStats()::g_Set",
+          "line": 24724
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentStats()::g_SetPieces",
+      "guards": [
+        {
+          "address": 21507008,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentStats()::g_SetPieces",
+          "line": 24722
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507016,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentStats()::g_SetPieces",
+          "line": 24723
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentStats()::g_Sockets",
+      "guards": [
+        {
+          "address": 21506992,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentStats()::g_Sockets",
+          "line": 24720
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507032,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentStats()::g_Sockets",
+          "line": 24725
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Armor",
+      "guards": [
+        {
+          "address": 21507240,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Armor",
+          "line": 24751
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507312,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Armor",
+          "line": 24760
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Axe",
+      "guards": [
+        {
+          "address": 21507112,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Axe",
+          "line": 24735
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507440,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Axe",
+          "line": 24776
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Belt",
+      "guards": [
+        {
+          "address": 21507208,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Belt",
+          "line": 24747
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507344,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Belt",
+          "line": 24764
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Boots",
+      "guards": [
+        {
+          "address": 21507200,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Boots",
+          "line": 24746
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507352,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Boots",
+          "line": 24765
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Bow",
+      "guards": [
+        {
+          "address": 21507104,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Bow",
+          "line": 24734
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507448,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Bow",
+          "line": 24777
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_ChestArmor",
+      "guards": [
+        {
+          "address": 21507216,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_ChestArmor",
+          "line": 24748
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507336,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_ChestArmor",
+          "line": 24763
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Crossbow",
+      "guards": [
+        {
+          "address": 21507160,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Crossbow",
+          "line": 24741
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507392,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Crossbow",
+          "line": 24770
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Enchanted",
+      "guards": [
+        {
+          "address": 21507080,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Enchanted",
+          "line": 24731
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507472,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Enchanted",
+          "line": 24780
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Gloves",
+      "guards": [
+        {
+          "address": 21507192,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Gloves",
+          "line": 24745
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507360,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Gloves",
+          "line": 24766
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Helmet",
+      "guards": [
+        {
+          "address": 21507184,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Helmet",
+          "line": 24744
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507368,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Helmet",
+          "line": 24767
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Mace",
+      "guards": [
+        {
+          "address": 21507120,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Mace",
+          "line": 24736
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507432,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Mace",
+          "line": 24775
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Pistol",
+      "guards": [
+        {
+          "address": 21507144,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Pistol",
+          "line": 24739
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507408,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Pistol",
+          "line": 24772
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Polearm",
+      "guards": [
+        {
+          "address": 21507128,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Polearm",
+          "line": 24737
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507424,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Polearm",
+          "line": 24774
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Potion",
+      "guards": [
+        {
+          "address": 21507264,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Potion",
+          "line": 24754
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507288,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Potion",
+          "line": 24757
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_QuestItem",
+      "guards": [
+        {
+          "address": 21507088,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_QuestItem",
+          "line": 24732
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507464,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_QuestItem",
+          "line": 24779
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Rare",
+      "guards": [
+        {
+          "address": 21507072,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Rare",
+          "line": 24730
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507480,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Rare",
+          "line": 24781
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Rifle",
+      "guards": [
+        {
+          "address": 21507152,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Rifle",
+          "line": 24740
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507400,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Rifle",
+          "line": 24771
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Scroll",
+      "guards": [
+        {
+          "address": 21507272,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Scroll",
+          "line": 24755
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507280,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Scroll",
+          "line": 24756
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Shield",
+      "guards": [
+        {
+          "address": 21507232,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Shield",
+          "line": 24750
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507320,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Shield",
+          "line": 24761
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_ShoulderArmor",
+      "guards": [
+        {
+          "address": 21507224,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_ShoulderArmor",
+          "line": 24749
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507328,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_ShoulderArmor",
+          "line": 24762
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Socketable",
+      "guards": [
+        {
+          "address": 21507248,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Socketable",
+          "line": 24752
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507304,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Socketable",
+          "line": 24759
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Staff",
+      "guards": [
+        {
+          "address": 21507136,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Staff",
+          "line": 24738
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507416,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Staff",
+          "line": 24773
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Sword",
+      "guards": [
+        {
+          "address": 21507096,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Sword",
+          "line": 24733
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507456,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Sword",
+          "line": 24778
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Trinket",
+      "guards": [
+        {
+          "address": 21507256,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Trinket",
+          "line": 24753
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507296,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Trinket",
+          "line": 24758
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Unidentified",
+      "guards": [
+        {
+          "address": 21507056,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Unidentified",
+          "line": 24728
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507496,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Unidentified",
+          "line": 24783
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Unique",
+      "guards": [
+        {
+          "address": 21507064,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Unique",
+          "line": 24729
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507488,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Unique",
+          "line": 24782
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Wand",
+      "guards": [
+        {
+          "address": 21507168,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Wand",
+          "line": 24742
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507384,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Wand",
+          "line": 24769
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::getEquipmentType(bool)::g_Weapon",
+      "guards": [
+        {
+          "address": 21507176,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::getEquipmentType(bool)::g_Weapon",
+          "line": 24743
+        }
+      ],
+      "objects": [
+        {
+          "address": 21507376,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::getEquipmentType(bool)::g_Weapon",
+          "line": 24768
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CEquipment::skillDescription()::g_Level",
+      "guards": [
+        {
+          "address": 21506672,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CEquipment::skillDescription()::g_Level",
+          "line": 24680
+        }
+      ],
+      "objects": [
+        {
+          "address": 21506680,
+          "size": 8,
+          "kind": "b",
+          "name": "CEquipment::skillDescription()::g_Level",
+          "line": 24681
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGame::createWindow(bool)::pList",
+      "guards": [
+        {
+          "address": 21128216,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGame::createWindow(bool)::pList",
+          "line": 21341
+        }
+      ],
+      "objects": [
+        {
+          "address": 21128224,
+          "size": 8,
+          "kind": "b",
+          "name": "CGame::createWindow(bool)::pList",
+          "line": 21342
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGame::frameStarted(Ogre::FrameEvent const&)::g_LastTime",
+      "guards": [
+        {
+          "address": 21128176,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGame::frameStarted(Ogre::FrameEvent const&)::g_LastTime",
+          "line": 21336
+        }
+      ],
+      "objects": [
+        {
+          "address": 21128192,
+          "size": 8,
+          "kind": "b",
+          "name": "CGame::frameStarted(Ogre::FrameEvent const&)::g_LastTime",
+          "line": 21338
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameClient::loadLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, int, ELevelEntryType, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Floor",
+      "guards": [
+        {
+          "address": 21137048,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameClient::loadLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, int, ELevelEntryType, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Floor",
+          "line": 21434
+        }
+      ],
+      "objects": [
+        {
+          "address": 21137056,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameClient::loadLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, int, ELevelEntryType, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Floor",
+          "line": 21435
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::onClick(ELayoutFunction)::g_Pet",
+      "guards": [
+        {
+          "address": 21731904,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::onClick(ELayoutFunction)::g_Pet",
+          "line": 27099
+        }
+      ],
+      "objects": [
+        {
+          "address": 21731928,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::onClick(ELayoutFunction)::g_Pet",
+          "line": 27102
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::onClick(ELayoutFunction)::g_PetCannotDepart",
+      "guards": [
+        {
+          "address": 21731912,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::onClick(ELayoutFunction)::g_PetCannotDepart",
+          "line": 27100
+        }
+      ],
+      "objects": [
+        {
+          "address": 21731920,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::onClick(ELayoutFunction)::g_PetCannotDepart",
+          "line": 27101
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::setPlayer(CCharacter*)::g_LeftClickAssign",
+      "guards": [
+        {
+          "address": 21732392,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::setPlayer(CCharacter*)::g_LeftClickAssign",
+          "line": 27153
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732400,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::setPlayer(CCharacter*)::g_LeftClickAssign",
+          "line": 27154
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Armor",
+      "guards": [
+        {
+          "address": 21731952,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Armor",
+          "line": 27106
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732184,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Armor",
+          "line": 27135
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_CantUseUnidentified",
+      "guards": [
+        {
+          "address": 21732056,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_CantUseUnidentified",
+          "line": 27119
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732080,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_CantUseUnidentified",
+          "line": 27122
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_DamagePerSecond",
+      "guards": [
+        {
+          "address": 21731944,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_DamagePerSecond",
+          "line": 27105
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732192,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_DamagePerSecond",
+          "line": 27136
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Equipped",
+      "guards": [
+        {
+          "address": 21731960,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Equipped",
+          "line": 27107
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732176,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Equipped",
+          "line": 27134
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_LeftHand",
+      "guards": [
+        {
+          "address": 21731968,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_LeftHand",
+          "line": 27108
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732168,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_LeftHand",
+          "line": 27133
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_OneHanded",
+      "guards": [
+        {
+          "address": 21731984,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_OneHanded",
+          "line": 27110
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732152,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_OneHanded",
+          "line": 27131
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Price",
+      "guards": [
+        {
+          "address": 21732040,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Price",
+          "line": 27117
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732096,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_Price",
+          "line": 27124
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDef",
+      "guards": [
+        {
+          "address": 21732032,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDef",
+          "line": 27116
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732104,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDef",
+          "line": 27125
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDex",
+      "guards": [
+        {
+          "address": 21732016,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDex",
+          "line": 27114
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732120,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresDex",
+          "line": 27127
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresLevel",
+      "guards": [
+        {
+          "address": 21732000,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresLevel",
+          "line": 27112
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732136,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresLevel",
+          "line": 27129
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresMag",
+      "guards": [
+        {
+          "address": 21732024,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresMag",
+          "line": 27115
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732112,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresMag",
+          "line": 27126
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresStr",
+      "guards": [
+        {
+          "address": 21732008,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresStr",
+          "line": 27113
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732128,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RequiresStr",
+          "line": 27128
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RightHand",
+      "guards": [
+        {
+          "address": 21731976,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RightHand",
+          "line": 27109
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732160,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_RightHand",
+          "line": 27132
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_SellPrice",
+      "guards": [
+        {
+          "address": 21732048,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_SellPrice",
+          "line": 27118
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732088,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_SellPrice",
+          "line": 27123
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_TwoHanded",
+      "guards": [
+        {
+          "address": 21731992,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_TwoHanded",
+          "line": 27111
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732144,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_TwoHanded",
+          "line": 27130
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_UseIdentify",
+      "guards": [
+        {
+          "address": 21732064,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_UseIdentify",
+          "line": 27120
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732072,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)::g_UseIdentify",
+          "line": 27121
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_CannotRetire",
+      "guards": [
+        {
+          "address": 21732320,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_CannotRetire",
+          "line": 27144
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732328,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_CannotRetire",
+          "line": 27145
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Fleeing",
+      "guards": [
+        {
+          "address": 21732304,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Fleeing",
+          "line": 27142
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732344,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Fleeing",
+          "line": 27147
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_HP",
+      "guards": [
+        {
+          "address": 21732280,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_HP",
+          "line": 27139
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732368,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_HP",
+          "line": 27150
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Mana",
+      "guards": [
+        {
+          "address": 21732288,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Mana",
+          "line": 27140
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732360,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Mana",
+          "line": 27149
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Retire",
+      "guards": [
+        {
+          "address": 21732312,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Retire",
+          "line": 27143
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732336,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_Retire",
+          "line": 27146
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_XP",
+      "guards": [
+        {
+          "address": 21732296,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_XP",
+          "line": 27141
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732352,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)::g_XP",
+          "line": 27148
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CGameUI::updateSlots()::g_LeftClickAssign",
+      "guards": [
+        {
+          "address": 21732376,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CGameUI::updateSlots()::g_LeftClickAssign",
+          "line": 27151
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732384,
+          "size": 8,
+          "kind": "b",
+          "name": "CGameUI::updateSlots()::g_LeftClickAssign",
+          "line": 27152
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CInventoryMenu::update(float)::g_GP",
+      "guards": [
+        {
+          "address": 21787456,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CInventoryMenu::update(float)::g_GP",
+          "line": 27701
+        }
+      ],
+      "objects": [
+        {
+          "address": 21787464,
+          "size": 8,
+          "kind": "b",
+          "name": "CInventoryMenu::update(float)::g_GP",
+          "line": 27702
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CInventoryMenu::updateLayout()::g_DragASpell",
+      "guards": [
+        {
+          "address": 21787488,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CInventoryMenu::updateLayout()::g_DragASpell",
+          "line": 27705
+        }
+      ],
+      "objects": [
+        {
+          "address": 21787496,
+          "size": 8,
+          "kind": "b",
+          "name": "CInventoryMenu::updateLayout()::g_DragASpell",
+          "line": 27706
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CInventoryMenu::updateLayout()::g_RemoveASpell",
+      "guards": [
+        {
+          "address": 21787472,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CInventoryMenu::updateLayout()::g_RemoveASpell",
+          "line": 27703
+        }
+      ],
+      "objects": [
+        {
+          "address": 21787512,
+          "size": 8,
+          "kind": "b",
+          "name": "CInventoryMenu::updateLayout()::g_RemoveASpell",
+          "line": 27708
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CInventoryMenu::updateLayout()::g_RemoveASpell2",
+      "guards": [
+        {
+          "address": 21787480,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CInventoryMenu::updateLayout()::g_RemoveASpell2",
+          "line": 27704
+        }
+      ],
+      "objects": [
+        {
+          "address": 21787504,
+          "size": 8,
+          "kind": "b",
+          "name": "CInventoryMenu::updateLayout()::g_RemoveASpell2",
+          "line": 27707
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CItemGold::CItemGold(CResourceManager*, int)::g_Gold",
+      "guards": [
+        {
+          "address": 21525176,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CItemGold::CItemGold(CResourceManager*, int)::g_Gold",
+          "line": 24934
+        }
+      ],
+      "objects": [
+        {
+          "address": 21525184,
+          "size": 8,
+          "kind": "b",
+          "name": "CItemGold::CItemGold(CResourceManager*, int)::g_Gold",
+          "line": 24935
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CItemGold::unitInit(CDataGroup*, bool)::g_Gold",
+      "guards": [
+        {
+          "address": 21525160,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CItemGold::unitInit(CDataGroup*, bool)::g_Gold",
+          "line": 24932
+        }
+      ],
+      "objects": [
+        {
+          "address": 21525168,
+          "size": 8,
+          "kind": "b",
+          "name": "CItemGold::unitInit(CDataGroup*, bool)::g_Gold",
+          "line": 24933
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Ancestors",
+      "guards": [
+        {
+          "address": 22181720,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Ancestors",
+          "line": 30728
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182064,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Ancestors",
+          "line": 30771
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_BarrelsBroken",
+      "guards": [
+        {
+          "address": 22181816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_BarrelsBroken",
+          "line": 30740
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181968,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_BarrelsBroken",
+          "line": 30759
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_ChampionsDefeated",
+      "guards": [
+        {
+          "address": 22181784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_ChampionsDefeated",
+          "line": 30736
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182000,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_ChampionsDefeated",
+          "line": 30763
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_ChestsOpened",
+      "guards": [
+        {
+          "address": 22181800,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_ChestsOpened",
+          "line": 30738
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181984,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_ChestsOpened",
+          "line": 30761
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Deaths",
+      "guards": [
+        {
+          "address": 22181768,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Deaths",
+          "line": 30734
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182016,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Deaths",
+          "line": 30765
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Difficulty",
+      "guards": [
+        {
+          "address": 22181672,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Difficulty",
+          "line": 30722
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182112,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Difficulty",
+          "line": 30777
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Easy",
+      "guards": [
+        {
+          "address": 22181680,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Easy",
+          "line": 30723
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182104,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Easy",
+          "line": 30776
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_FishCaught",
+      "guards": [
+        {
+          "address": 22181840,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_FishCaught",
+          "line": 30743
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181944,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_FishCaught",
+          "line": 30756
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_GoldGathered",
+      "guards": [
+        {
+          "address": 22181736,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_GoldGathered",
+          "line": 30730
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182048,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_GoldGathered",
+          "line": 30769
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Hard",
+      "guards": [
+        {
+          "address": 22181696,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Hard",
+          "line": 30725
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182088,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Hard",
+          "line": 30774
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Hardcore",
+      "guards": [
+        {
+          "address": 22181712,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Hardcore",
+          "line": 30727
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182072,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Hardcore",
+          "line": 30772
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Hrs",
+      "guards": [
+        {
+          "address": 22181872,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Hrs",
+          "line": 30747
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181912,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Hrs",
+          "line": 30752
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_ItemsEnchanted",
+      "guards": [
+        {
+          "address": 22181864,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_ItemsEnchanted",
+          "line": 30746
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181920,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_ItemsEnchanted",
+          "line": 30753
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_ItemsTransmuted",
+      "guards": [
+        {
+          "address": 22181856,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_ItemsTransmuted",
+          "line": 30745
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181928,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_ItemsTransmuted",
+          "line": 30754
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_LevelsExplored",
+      "guards": [
+        {
+          "address": 22181744,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_LevelsExplored",
+          "line": 30731
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182040,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_LevelsExplored",
+          "line": 30768
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Mins",
+      "guards": [
+        {
+          "address": 22181880,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Mins",
+          "line": 30748
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181904,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Mins",
+          "line": 30751
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_MonstersDefeated",
+      "guards": [
+        {
+          "address": 22181776,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_MonstersDefeated",
+          "line": 30735
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182008,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_MonstersDefeated",
+          "line": 30764
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Normal",
+      "guards": [
+        {
+          "address": 22181688,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Normal",
+          "line": 30724
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182096,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Normal",
+          "line": 30775
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_PortalsUsed",
+      "guards": [
+        {
+          "address": 22181832,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_PortalsUsed",
+          "line": 30742
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181952,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_PortalsUsed",
+          "line": 30757
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_PotionsUsed",
+      "guards": [
+        {
+          "address": 22181824,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_PotionsUsed",
+          "line": 30741
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181960,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_PotionsUsed",
+          "line": 30758
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_QuestsCompleted",
+      "guards": [
+        {
+          "address": 22181760,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_QuestsCompleted",
+          "line": 30733
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182024,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_QuestsCompleted",
+          "line": 30766
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_Secs",
+      "guards": [
+        {
+          "address": 22181888,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_Secs",
+          "line": 30749
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181896,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_Secs",
+          "line": 30750
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_SkillsCast",
+      "guards": [
+        {
+          "address": 22181792,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_SkillsCast",
+          "line": 30737
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181992,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_SkillsCast",
+          "line": 30762
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_StepsTaken",
+      "guards": [
+        {
+          "address": 22181752,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_StepsTaken",
+          "line": 30732
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182032,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_StepsTaken",
+          "line": 30767
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_TimePlayed",
+      "guards": [
+        {
+          "address": 22181728,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_TimePlayed",
+          "line": 30729
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182056,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_TimePlayed",
+          "line": 30770
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_TimesGambled",
+      "guards": [
+        {
+          "address": 22181848,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_TimesGambled",
+          "line": 30744
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181936,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_TimesGambled",
+          "line": 30755
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_TrapsSprung",
+      "guards": [
+        {
+          "address": 22181808,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_TrapsSprung",
+          "line": 30739
+        }
+      ],
+      "objects": [
+        {
+          "address": 22181976,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_TrapsSprung",
+          "line": 30760
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CJournalMenu::updateLayout()::g_VeryHard",
+      "guards": [
+        {
+          "address": 22181704,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CJournalMenu::updateLayout()::g_VeryHard",
+          "line": 30726
+        }
+      ],
+      "objects": [
+        {
+          "address": 22182080,
+          "size": 8,
+          "kind": "b",
+          "name": "CJournalMenu::updateLayout()::g_VeryHard",
+          "line": 30773
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CLayout::loadLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, CTimerStatics*, bool, bool, unsigned int)::mRecursiveFix",
+      "guards": [
+        {
+          "address": 21651640,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CLayout::loadLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, CTimerStatics*, bool, bool, unsigned int)::mRecursiveFix",
+          "line": 25977
+        }
+      ],
+      "objects": [
+        {
+          "address": 21651664,
+          "size": 24,
+          "kind": "b",
+          "name": "CLayout::loadLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, CTimerStatics*, bool, bool, unsigned int)::mRecursiveFix",
+          "line": 25979
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CLevel::getName()::g_Floor",
+      "guards": [
+        {
+          "address": 21580192,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CLevel::getName()::g_Floor",
+          "line": 25408
+        }
+      ],
+      "objects": [
+        {
+          "address": 21580200,
+          "size": 8,
+          "kind": "b",
+          "name": "CLevel::getName()::g_Floor",
+          "line": 25409
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CLevel::updateVisibleParticles(Ogre::Camera*, Ogre::Vector3 const&, bool)::mLastPos",
+      "guards": [
+        {
+          "address": 21580168,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CLevel::updateVisibleParticles(Ogre::Camera*, Ogre::Vector3 const&, bool)::mLastPos",
+          "line": 25406
+        }
+      ],
+      "objects": [
+        {
+          "address": 21580176,
+          "size": 12,
+          "kind": "b",
+          "name": "CLevel::updateVisibleParticles(Ogre::Camera*, Ogre::Vector3 const&, bool)::mLastPos",
+          "line": 25407
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CMissile::doAOEDamage(CBaseUnit*)::mCharacterList",
+      "guards": [
+        {
+          "address": 21992976,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CMissile::doAOEDamage(CBaseUnit*)::mCharacterList",
+          "line": 29155
+        }
+      ],
+      "objects": [
+        {
+          "address": 21993024,
+          "size": 24,
+          "kind": "b",
+          "name": "CMissile::doAOEDamage(CBaseUnit*)::mCharacterList",
+          "line": 29158
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CMissile::doAOEDamage(CBaseUnit*)::mItemList",
+      "guards": [
+        {
+          "address": 21992984,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CMissile::doAOEDamage(CBaseUnit*)::mItemList",
+          "line": 29156
+        }
+      ],
+      "objects": [
+        {
+          "address": 21992992,
+          "size": 24,
+          "kind": "b",
+          "name": "CMissile::doAOEDamage(CBaseUnit*)::mItemList",
+          "line": 29157
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+      "guards": [
+        {
+          "address": 21798376,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27799
+        }
+      ],
+      "objects": [
+        {
+          "address": 21798384,
+          "size": 8,
+          "kind": "b",
+          "name": "CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27800
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Options",
+      "guards": [
+        {
+          "address": 21803816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Options",
+          "line": 27846
+        }
+      ],
+      "objects": [
+        {
+          "address": 21803824,
+          "size": 8,
+          "kind": "b",
+          "name": "COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Options",
+          "line": 27847
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::update(float)::g_HP",
+      "guards": [
+        {
+          "address": 21810800,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::update(float)::g_HP",
+          "line": 27903
+        }
+      ],
+      "objects": [
+        {
+          "address": 21810816,
+          "size": 176,
+          "kind": "b",
+          "name": "CPetMenu::update(float)::g_HP",
+          "line": 27904
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::update(float)::g_MP",
+      "guards": [
+        {
+          "address": 21810792,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::update(float)::g_MP",
+          "line": 27902
+        }
+      ],
+      "objects": [
+        {
+          "address": 21811008,
+          "size": 176,
+          "kind": "b",
+          "name": "CPetMenu::update(float)::g_MP",
+          "line": 27905
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::update(float)::g_XP",
+      "guards": [
+        {
+          "address": 21810784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::update(float)::g_XP",
+          "line": 27901
+        }
+      ],
+      "objects": [
+        {
+          "address": 21811184,
+          "size": 8,
+          "kind": "b",
+          "name": "CPetMenu::update(float)::g_XP",
+          "line": 27906
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::updateLayout()::g_DragASpell",
+      "guards": [
+        {
+          "address": 21811208,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::updateLayout()::g_DragASpell",
+          "line": 27909
+        }
+      ],
+      "objects": [
+        {
+          "address": 21811216,
+          "size": 8,
+          "kind": "b",
+          "name": "CPetMenu::updateLayout()::g_DragASpell",
+          "line": 27910
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::updateLayout()::g_RemoveASpell",
+      "guards": [
+        {
+          "address": 21811192,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::updateLayout()::g_RemoveASpell",
+          "line": 27907
+        }
+      ],
+      "objects": [
+        {
+          "address": 21811232,
+          "size": 8,
+          "kind": "b",
+          "name": "CPetMenu::updateLayout()::g_RemoveASpell",
+          "line": 27912
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPetMenu::updateLayout()::g_RemoveASpell2",
+      "guards": [
+        {
+          "address": 21811200,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPetMenu::updateLayout()::g_RemoveASpell2",
+          "line": 27908
+        }
+      ],
+      "objects": [
+        {
+          "address": 21811224,
+          "size": 8,
+          "kind": "b",
+          "name": "CPetMenu::updateLayout()::g_RemoveASpell2",
+          "line": 27911
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::fishingAICatch(float, CLevel&)::g_Caught",
+      "guards": [
+        {
+          "address": 21546096,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::fishingAICatch(float, CLevel&)::g_Caught",
+          "line": 25114
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546120,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::fishingAICatch(float, CLevel&)::g_Caught",
+          "line": 25117
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::fishingAICatch(float, CLevel&)::g_CaughtContaining",
+      "guards": [
+        {
+          "address": 21546104,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::fishingAICatch(float, CLevel&)::g_CaughtContaining",
+          "line": 25115
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546112,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::fishingAICatch(float, CLevel&)::g_CaughtContaining",
+          "line": 25116
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+      "guards": [
+        {
+          "address": 21546088,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+          "line": 25113
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546128,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::fishingAICatch(float, CLevel&)::g_CaughtNothing",
+          "line": 25118
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::fishingAICatch(float, CLevel&)::g_Fishing",
+      "guards": [
+        {
+          "address": 21546080,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::fishingAICatch(float, CLevel&)::g_Fishing",
+          "line": 25112
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546136,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::fishingAICatch(float, CLevel&)::g_Fishing",
+          "line": 25119
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::levelUp()::g_Level",
+      "guards": [
+        {
+          "address": 21546152,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::levelUp()::g_Level",
+          "line": 25121
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546176,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::levelUp()::g_Level",
+          "line": 25124
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::levelUp()::g_LevelUp",
+      "guards": [
+        {
+          "address": 21546144,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::levelUp()::g_LevelUp",
+          "line": 25120
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546184,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::levelUp()::g_LevelUp",
+          "line": 25125
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CPlayer::levelUp()::g_Reached",
+      "guards": [
+        {
+          "address": 21546160,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CPlayer::levelUp()::g_Reached",
+          "line": 25122
+        }
+      ],
+      "objects": [
+        {
+          "address": 21546168,
+          "size": 8,
+          "kind": "b",
+          "name": "CPlayer::levelUp()::g_Reached",
+          "line": 25123
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+      "guards": [
+        {
+          "address": 21818648,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27974
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818656,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Dialog",
+          "line": 27975
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Quest",
+      "guards": [
+        {
+          "address": 21818616,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Quest",
+          "line": 27970
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818640,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_Quest",
+          "line": 27973
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_QuestLogFull",
+      "guards": [
+        {
+          "address": 21818624,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_QuestLogFull",
+          "line": 27971
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818632,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)::g_QuestLogFull",
+          "line": 27972
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_Fame",
+      "guards": [
+        {
+          "address": 21818584,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_Fame",
+          "line": 27966
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818592,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_Fame",
+          "line": 27967
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_GP",
+      "guards": [
+        {
+          "address": 21818568,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_GP",
+          "line": 27964
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818608,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_GP",
+          "line": 27969
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_XP",
+      "guards": [
+        {
+          "address": 21818576,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_XP",
+          "line": 27965
+        }
+      ],
+      "objects": [
+        {
+          "address": 21818600,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)::g_XP",
+          "line": 27968
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)::g_NewQuest",
+      "guards": [
+        {
+          "address": 22011520,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)::g_NewQuest",
+          "line": 29312
+        }
+      ],
+      "objects": [
+        {
+          "address": 22011528,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)::g_NewQuest",
+          "line": 29313
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)::g_QuestComplete",
+      "guards": [
+        {
+          "address": 22011536,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)::g_QuestComplete",
+          "line": 29314
+        }
+      ],
+      "objects": [
+        {
+          "address": 22011544,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)::g_QuestComplete",
+          "line": 29315
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestMenu::updateLayout()::g_Complete",
+      "guards": [
+        {
+          "address": 21824128,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestMenu::updateLayout()::g_Complete",
+          "line": 28022
+        }
+      ],
+      "objects": [
+        {
+          "address": 21824152,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestMenu::updateLayout()::g_Complete",
+          "line": 28025
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestMenu::updateLayout()::g_Incomplete",
+      "guards": [
+        {
+          "address": 21824136,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestMenu::updateLayout()::g_Incomplete",
+          "line": 28023
+        }
+      ],
+      "objects": [
+        {
+          "address": 21824144,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestMenu::updateLayout()::g_Incomplete",
+          "line": 28024
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CQuestUnitData::unitPickedUp(CBaseUnit*)::g_Found",
+      "guards": [
+        {
+          "address": 22021920,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CQuestUnitData::unitPickedUp(CBaseUnit*)::g_Found",
+          "line": 29405
+        }
+      ],
+      "objects": [
+        {
+          "address": 22021928,
+          "size": 8,
+          "kind": "b",
+          "name": "CQuestUnitData::unitPickedUp(CBaseUnit*)::g_Found",
+          "line": 29406
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Settings",
+      "guards": [
+        {
+          "address": 21829680,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Settings",
+          "line": 28075
+        }
+      ],
+      "objects": [
+        {
+          "address": 21829688,
+          "size": 8,
+          "kind": "b",
+          "name": "CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Settings",
+          "line": 28076
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescription(CBaseUnit*, unsigned int, bool)::g_ManaCost",
+      "guards": [
+        {
+          "address": 21952768,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescription(CBaseUnit*, unsigned int, bool)::g_ManaCost",
+          "line": 28763
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952776,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescription(CBaseUnit*, unsigned int, bool)::g_ManaCost",
+          "line": 28764
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_DuelWieldOnly",
+      "guards": [
+        {
+          "address": 21952800,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_DuelWieldOnly",
+          "line": 28767
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952856,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_DuelWieldOnly",
+          "line": 28774
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_LeftReq",
+      "guards": [
+        {
+          "address": 21952824,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_LeftReq",
+          "line": 28770
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952832,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_LeftReq",
+          "line": 28771
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightAndLeftReq",
+      "guards": [
+        {
+          "address": 21952808,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightAndLeftReq",
+          "line": 28768
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952848,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightAndLeftReq",
+          "line": 28773
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightReq",
+      "guards": [
+        {
+          "address": 21952816,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightReq",
+          "line": 28769
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952840,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_RightReq",
+          "line": 28772
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapon",
+      "guards": [
+        {
+          "address": 21952784,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapon",
+          "line": 28765
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952872,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapon",
+          "line": 28776
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapons",
+      "guards": [
+        {
+          "address": 21952792,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapons",
+          "line": 28766
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952864,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getDescriptionRequirments(CBaseUnit*)::g_Weapons",
+          "line": 28775
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getSkillTypeDisplayName()::g_CharmSpell",
+      "guards": [
+        {
+          "address": 21952728,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getSkillTypeDisplayName()::g_CharmSpell",
+          "line": 28758
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952736,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getSkillTypeDisplayName()::g_CharmSpell",
+          "line": 28759
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getSkillTypeDisplayName()::g_ClassSkill",
+      "guards": [
+        {
+          "address": 21952704,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getSkillTypeDisplayName()::g_ClassSkill",
+          "line": 28755
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952760,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getSkillTypeDisplayName()::g_ClassSkill",
+          "line": 28762
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getSkillTypeDisplayName()::g_DefensiveSpell",
+      "guards": [
+        {
+          "address": 21952720,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getSkillTypeDisplayName()::g_DefensiveSpell",
+          "line": 28757
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952744,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getSkillTypeDisplayName()::g_DefensiveSpell",
+          "line": 28760
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkill::getSkillTypeDisplayName()::g_OffensiveSpell",
+      "guards": [
+        {
+          "address": 21952712,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkill::getSkillTypeDisplayName()::g_OffensiveSpell",
+          "line": 28756
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952752,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkill::getSkillTypeDisplayName()::g_OffensiveSpell",
+          "line": 28761
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)::g_WeaponAttack",
+      "guards": [
+        {
+          "address": 21732464,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)::g_WeaponAttack",
+          "line": 27157
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732472,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)::g_WeaponAttack",
+          "line": 27158
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillMenu::update(float)::g_PointsRemaining",
+      "guards": [
+        {
+          "address": 21835584,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillMenu::update(float)::g_PointsRemaining",
+          "line": 28128
+        }
+      ],
+      "objects": [
+        {
+          "address": 21835592,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillMenu::update(float)::g_PointsRemaining",
+          "line": 28129
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillMenu::updateLayout()::g_Purchase",
+      "guards": [
+        {
+          "address": 21835600,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillMenu::updateLayout()::g_Purchase",
+          "line": 28130
+        }
+      ],
+      "objects": [
+        {
+          "address": 21835608,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillMenu::updateLayout()::g_Purchase",
+          "line": 28131
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillProperty::getSkillStats()::g_Inflicts",
+      "guards": [
+        {
+          "address": 21978200,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillProperty::getSkillStats()::g_Inflicts",
+          "line": 29021
+        }
+      ],
+      "objects": [
+        {
+          "address": 21978224,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillProperty::getSkillStats()::g_Inflicts",
+          "line": 29024
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillProperty::getSkillStats()::g_SecondaryEffects",
+      "guards": [
+        {
+          "address": 21978208,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillProperty::getSkillStats()::g_SecondaryEffects",
+          "line": 29022
+        }
+      ],
+      "objects": [
+        {
+          "address": 21978216,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillProperty::getSkillStats()::g_SecondaryEffects",
+          "line": 29023
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillProperty::getSkillStats()::g_WeaponDPS",
+      "guards": [
+        {
+          "address": 21978192,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillProperty::getSkillStats()::g_WeaponDPS",
+          "line": 29020
+        }
+      ],
+      "objects": [
+        {
+          "address": 21978232,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillProperty::getSkillStats()::g_WeaponDPS",
+          "line": 29025
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillProperty::getSkillStats()::g_WeaponDamage",
+      "guards": [
+        {
+          "address": 21978184,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillProperty::getSkillStats()::g_WeaponDamage",
+          "line": 29019
+        }
+      ],
+      "objects": [
+        {
+          "address": 21978240,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillProperty::getSkillStats()::g_WeaponDamage",
+          "line": 29026
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_AlwaysEnabled",
+      "guards": [
+        {
+          "address": 21732480,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_AlwaysEnabled",
+          "line": 27159
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732616,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_AlwaysEnabled",
+          "line": 27176
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Cooldown",
+      "guards": [
+        {
+          "address": 21732496,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Cooldown",
+          "line": 27161
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732600,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Cooldown",
+          "line": 27174
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_ManaCost",
+      "guards": [
+        {
+          "address": 21732488,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_ManaCost",
+          "line": 27160
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732608,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_ManaCost",
+          "line": 27175
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_NextLevel",
+      "guards": [
+        {
+          "address": 21732520,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_NextLevel",
+          "line": 27164
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732576,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_NextLevel",
+          "line": 27171
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_PerSecond",
+      "guards": [
+        {
+          "address": 21732504,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_PerSecond",
+          "line": 27162
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732592,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_PerSecond",
+          "line": 27173
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Rank",
+      "guards": [
+        {
+          "address": 21732544,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Rank",
+          "line": 27167
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732552,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Rank",
+          "line": 27168
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Requires",
+      "guards": [
+        {
+          "address": 21732528,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Requires",
+          "line": 27165
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732568,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Requires",
+          "line": 27170
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_RequiresLevel",
+      "guards": [
+        {
+          "address": 21732536,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_RequiresLevel",
+          "line": 27166
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732560,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_RequiresLevel",
+          "line": 27169
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Seconds",
+      "guards": [
+        {
+          "address": 21732512,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Seconds",
+          "line": 27163
+        }
+      ],
+      "objects": [
+        {
+          "address": 21732584,
+          "size": 8,
+          "kind": "b",
+          "name": "CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)::g_Seconds",
+          "line": 27172
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_BlockChance",
+      "guards": [
+        {
+          "address": 21846496,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_BlockChance",
+          "line": 28225
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846552,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_BlockChance",
+          "line": 28232
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_CritChance",
+      "guards": [
+        {
+          "address": 21846488,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_CritChance",
+          "line": 28224
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846560,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_CritChance",
+          "line": 28233
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_Fame",
+      "guards": [
+        {
+          "address": 21846480,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_Fame",
+          "line": 28223
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846568,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_Fame",
+          "line": 28234
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_HP",
+      "guards": [
+        {
+          "address": 21846520,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_HP",
+          "line": 28228
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846528,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_HP",
+          "line": 28229
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_MP",
+      "guards": [
+        {
+          "address": 21846512,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_MP",
+          "line": 28227
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846536,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_MP",
+          "line": 28230
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_PointsRemaining",
+      "guards": [
+        {
+          "address": 21846504,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_PointsRemaining",
+          "line": 28226
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846544,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_PointsRemaining",
+          "line": 28231
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CStatsMenu::update(float)::g_XP",
+      "guards": [
+        {
+          "address": 21846472,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CStatsMenu::update(float)::g_XP",
+          "line": 28222
+        }
+      ],
+      "objects": [
+        {
+          "address": 21846576,
+          "size": 8,
+          "kind": "b",
+          "name": "CStatsMenu::update(float)::g_XP",
+          "line": 28235
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Tip",
+      "guards": [
+        {
+          "address": 22187560,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Tip",
+          "line": 30823
+        }
+      ],
+      "objects": [
+        {
+          "address": 22187568,
+          "size": 8,
+          "kind": "b",
+          "name": "CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Tip",
+          "line": 30824
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CWaypointActivator::activate()::g_WaypointActivated",
+      "guards": [
+        {
+          "address": 22244976,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CWaypointActivator::activate()::g_WaypointActivated",
+          "line": 31271
+        }
+      ],
+      "objects": [
+        {
+          "address": 22244984,
+          "size": 8,
+          "kind": "b",
+          "name": "CWaypointActivator::activate()::g_WaypointActivated",
+          "line": 31272
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CWaypointMenu::CWaypointMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Waypoints",
+      "guards": [
+        {
+          "address": 22236880,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CWaypointMenu::CWaypointMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Waypoints",
+          "line": 31201
+        }
+      ],
+      "objects": [
+        {
+          "address": 22236888,
+          "size": 8,
+          "kind": "b",
+          "name": "CWaypointMenu::CWaypointMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)::g_Waypoints",
+          "line": 31202
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CWaypointMenu::setOpen(bool)::g_Floor",
+      "guards": [
+        {
+          "address": 22236856,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CWaypointMenu::setOpen(bool)::g_Floor",
+          "line": 31198
+        }
+      ],
+      "objects": [
+        {
+          "address": 22236864,
+          "size": 8,
+          "kind": "b",
+          "name": "CWaypointMenu::setOpen(bool)::g_Floor",
+          "line": 31199
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "CWaypointMenu::setOpen(bool)::g_Waypoints",
+      "guards": [
+        {
+          "address": 22236848,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for CWaypointMenu::setOpen(bool)::g_Waypoints",
+          "line": 31197
+        }
+      ],
+      "objects": [
+        {
+          "address": 22236872,
+          "size": 8,
+          "kind": "b",
+          "name": "CWaypointMenu::setOpen(bool)::g_Waypoints",
+          "line": 31200
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "FILESYSTEM::GetApplicationPath()::absolutePath",
+      "guards": [
+        {
+          "address": 21911824,
+          "size": 8,
+          "kind": "b",
+          "name": "guard variable for FILESYSTEM::GetApplicationPath()::absolutePath",
+          "line": 28566
+        }
+      ],
+      "objects": [
+        {
+          "address": 21911832,
+          "size": 8,
+          "kind": "b",
+          "name": "FILESYSTEM::GetApplicationPath()::absolutePath",
+          "line": 28567
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "Ogre::OverlayElement::getLights() const::ll",
+      "guards": [
+        {
+          "address": 21128232,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for Ogre::OverlayElement::getLights() const::ll",
+          "line": 21343
+        }
+      ],
+      "objects": [],
+      "status": "BLOCKED_AMBIGUOUS_OR_MISSING"
+    },
+    {
+      "identity": "ParticleUniverse::ParticleScriptTokeniser::getClientGrammerName() const::grammerName",
+      "guards": [
+        {
+          "address": 21128240,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for ParticleUniverse::ParticleScriptTokeniser::getClientGrammerName() const::grammerName",
+          "line": 21344
+        }
+      ],
+      "objects": [
+        {
+          "address": 22270536,
+          "size": 8,
+          "kind": "u",
+          "name": "ParticleUniverse::ParticleScriptTokeniser::getClientGrammerName() const::grammerName",
+          "line": 31519
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Any",
+      "guards": [
+        {
+          "address": 21952928,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_Any",
+          "line": 28783
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952984,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Any",
+          "line": 28790
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Melee",
+      "guards": [
+        {
+          "address": 21952896,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_Melee",
+          "line": 28779
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952960,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Melee",
+          "line": 28787
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Ranged",
+      "guards": [
+        {
+          "address": 21952920,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_Ranged",
+          "line": 28782
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952936,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_Ranged",
+          "line": 28784
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedMelee",
+      "guards": [
+        {
+          "address": 21952880,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedMelee",
+          "line": 28777
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952976,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedMelee",
+          "line": 28789
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedRanged",
+      "guards": [
+        {
+          "address": 21952904,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedRanged",
+          "line": 28780
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952952,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_SingleHandedRanged",
+          "line": 28786
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedMelee",
+      "guards": [
+        {
+          "address": 21952888,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedMelee",
+          "line": 28778
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952968,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedMelee",
+          "line": 28788
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    },
+    {
+      "identity": "getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedRanged",
+      "guards": [
+        {
+          "address": 21952912,
+          "size": 8,
+          "kind": "u",
+          "name": "guard variable for getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedRanged",
+          "line": 28781
+        }
+      ],
+      "objects": [
+        {
+          "address": 21952944,
+          "size": 8,
+          "kind": "u",
+          "name": "getWeaponString(UNITTYPES::EUNITTYPES)::g_TwoHandedRanged",
+          "line": 28785
+        }
+      ],
+      "status": "UNIQUE_SYMBOL_PAIR_TYPE_AND_CFG_REQUIRED"
+    }
+  ],
+  "scope": "symbol identity only; no inferred initializer, type, lifetime or source generation"
+}

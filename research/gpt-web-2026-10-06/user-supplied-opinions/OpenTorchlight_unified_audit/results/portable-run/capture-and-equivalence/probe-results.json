@@ -1,0 +1,179 @@
+{
+  "scope": "Synthetic local probes and archived metadata only. No target compiler, original ELF, Ghidra, game execution, or game acceptance.",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "capture": {
+    "external_pointer_collision": true,
+    "capture_overflow_is_silently_ignored": true,
+    "aggregate_padding_is_observed": true,
+    "aggregate_size": 8
+  },
+  "same_source_different_tu_context": {
+    "assembly": {
+      "a": [
+        [
+          "0",
+          "push",
+          "%rbp"
+        ],
+        [
+          "1",
+          "mov",
+          "%rdi,%rbp"
+        ],
+        [
+          "4",
+          "mov",
+          "%esi,%edi"
+        ],
+        [
+          "6",
+          "push",
+          "%rbx"
+        ],
+        [
+          "7",
+          "sub",
+          "$0x8,%rsp"
+        ],
+        [
+          "b",
+          "mov",
+          "0x0(%rbp),%ebx"
+        ],
+        [
+          "e",
+          "call",
+          "13 <probe+0x13>"
+        ],
+        [
+          "13",
+          "add",
+          "0x0(%rbp),%ebx"
+        ],
+        [
+          "16",
+          "add",
+          "$0x8,%rsp"
+        ],
+        [
+          "1a",
+          "add",
+          "%ebx,%eax"
+        ],
+        [
+          "1c",
+          "pop",
+          "%rbx"
+        ],
+        [
+          "1d",
+          "pop",
+          "%rbp"
+        ],
+        [
+          "1e",
+          "ret",
+          ""
+        ]
+      ],
+      "b": [
+        [
+          "10",
+          "mov",
+          "%rdi,%rax"
+        ],
+        [
+          "13",
+          "mov",
+          "%esi,%edi"
+        ],
+        [
+          "15",
+          "mov",
+          "(%rax),%edx"
+        ],
+        [
+          "17",
+          "call",
+          "1c <probe+0xc>"
+        ],
+        [
+          "1c",
+          "lea",
+          "(%rax,%rdx,2),%eax"
+        ],
+        [
+          "1f",
+          "ret",
+          ""
+        ]
+      ]
+    },
+    "body_equal": false,
+    "note": "helper body visible only in b; helper is noinline in both; same probe source and flags"
+  },
+  "integer_leaf_equivalence": {
+    "assembly": {
+      "original": [
+        [
+          "0",
+          "lea",
+          "0x0(,%rdi,8),%eax"
+        ],
+        [
+          "7",
+          "sub",
+          "%edi,%eax"
+        ],
+        [
+          "9",
+          "ret",
+          ""
+        ],
+        [
+          "a",
+          "nopw",
+          "0x0(%rax,%rax,1)"
+        ]
+      ],
+      "candidate": [
+        [
+          "0",
+          "imul",
+          "$0x7,%edi,%eax"
+        ],
+        [
+          "3",
+          "ret",
+          ""
+        ]
+      ],
+      "wrong_candidate": [
+        [
+          "c",
+          "lea",
+          "0x0(,%rdi,8),%eax"
+        ],
+        [
+          "13",
+          "ret",
+          ""
+        ]
+      ]
+    },
+    "expressions": {
+      "original": "(bvsub (bvmul x (_ bv8 32)) x)",
+      "candidate": "(bvmul x (_ bv7 32))",
+      "wrong_candidate": "(bvmul x (_ bv8 32))"
+    },
+    "scope": "only unsigned 32-bit return equivalence for these checked leaf instructions; not a general binary verifier",
+    "z3_version": "4.13.3.0",
+    "candidate": {
+      "check": "unsat"
+    },
+    "wrong_candidate": {
+      "check": "sat",
+      "counterexample": "sat\n((x #xffffffff))"
+    }
+  }
+}

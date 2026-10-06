@@ -1,0 +1,32 @@
+--- a/tools/decomp/ghidra_cpp.py
++++ b/tools/decomp/ghidra_cpp.py
+@@ -512,6 +512,9 @@
+             params = ", ".join(f"{cxx_type(t)} {n}" for t, n in zip(types, names))
+             prefix = "" if f["kind"] in ("ctor", "dtor") else head.split(f["demangled"].split("(")[0])[0]
+             head = f"{prefix}{f['demangled'].split('(')[0]}({params})"
++            # elfdb.parse_demangled stores textual qualifiers, not mangling letters.
++            if f.get("cv"):
++                head += " " + f["cv"].strip()
+     text = drop_refcount_blocks(text)
+     text = inline_temp_strings(text)
+     text = tarraylist_count(tarraylist_access(text))
+--- a/tools/decomp/headers.py
++++ b/tools/decomp/headers.py
+@@ -273,7 +273,7 @@
+             if t is None:
+                 return None
+             out.append(t)
+-        cv = " const" if "K" in (f.get("cv") or "") else ""
++        cv = (" " + f["cv"].strip()) if f.get("cv") else ""
+         name = f["method"]
+         if name == cls:
+             return f"{cls}({', '.join(out)});"
+@@ -288,7 +288,7 @@
+         return f"{'virtual ' if virtual else static}{rt} {name}({', '.join(out)}){cv};"
+ 
+     def virtual_signature(self, f):
+-        return (f["method"], f.get("params") or "", "K" in (f.get("cv") or ""))
++        return (f["method"], f.get("params") or "", tuple((f.get("cv") or "").split()))
+ 
+     def root_return(self, cls, sig, seen=None):
+         """Return type of the virtual `sig` in the topmost game base that declares it."""

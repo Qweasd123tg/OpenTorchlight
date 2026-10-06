@@ -1,0 +1,274 @@
+{
+  "scope": "synthetic host-compiler tests; no original ELF and no Ghidra run",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "probes": {
+    "namespace_identity": {
+      "input": [
+        "First::Cell (sizeof=4)",
+        "Second::Cell (sizeof=16)"
+      ],
+      "dwarf_cell_definitions": [
+        {
+          "ref": "0x27",
+          "size": 4,
+          "depth": 2
+        },
+        {
+          "ref": "0x52",
+          "size": 16,
+          "depth": 2
+        }
+      ],
+      "exported_keys": [
+        "Cell",
+        "Holder"
+      ],
+      "exported_cell": {
+        "size": 16,
+        "bases": [],
+        "fields": [
+          {
+            "offset": 0,
+            "name": "b",
+            "type": "double",
+            "size": 8
+          },
+          {
+            "offset": 8,
+            "name": "c",
+            "type": "long int",
+            "size": 8
+          }
+        ],
+        "source": "header"
+      },
+      "holder_fields": [
+        {
+          "offset": 0,
+          "name": "one",
+          "type": "Cell*",
+          "size": 8
+        },
+        {
+          "offset": 8,
+          "name": "two",
+          "type": "Cell*",
+          "size": 8
+        },
+        {
+          "offset": 16,
+          "name": "amount",
+          "type": "long int",
+          "size": 8
+        },
+        {
+          "offset": 24,
+          "name": "indices",
+          "type": "long unsigned int*",
+          "size": 8
+        }
+      ],
+      "collision_observed": true
+    },
+    "lp64_importer": {
+      "host_dwarf_amount_field": {
+        "offset": 16,
+        "name": "amount",
+        "type": "long int",
+        "size": 8
+      },
+      "signed_long_mapped_to_IntegerDataType_in_java": true,
+      "unsigned_long_pointer_pointee_uses_size_zero": true,
+      "note": "Java behavior established by source inspection, not execution in Ghidra."
+    },
+    "secondary_vtable": {
+      "input_groups": 2,
+      "input_slots": 2,
+      "exported": {
+        "Derived": [
+          "mainVirtual"
+        ]
+      },
+      "secondary_slot_missing": true,
+      "void_slot_pointer_in_java": true
+    },
+    "long_literal_normalization": {
+      "different_values_after_character_80": true,
+      "normalized_functions_equal": true,
+      "code_digest_equal": true,
+      "changed_first_character_detected": true,
+      "normalized_instructions": [
+        "mov $[lit:\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"],%edi",
+        "jmp sink"
+      ]
+    },
+    "typed_catch_normalization": {
+      "normalized_functions_equal": true,
+      "code_digest_equal": true,
+      "catch_int_runtime_output": "7",
+      "catch_double_runtime_output": "99",
+      "runtime_behavior_differs": true,
+      "exception_table_references": {
+        "int": [
+          "_ZTIi"
+        ],
+        "double": [
+          "_ZTId"
+        ]
+      },
+      "normalized_instructions": {
+        "int": [
+          "sub $0x8,%rsp",
+          "call raise_value",
+          "xor %eax,%eax",
+          "add $0x8,%rsp",
+          "ret",
+          "sub $0x1,%rdx",
+          "mov %rax,%rdi",
+          "jne L12",
+          "call __cxa_begin_catch",
+          "call __cxa_end_catch",
+          "mov $0x7,%eax",
+          "jmp L3",
+          "call _Unwind_Resume"
+        ],
+        "double": [
+          "sub $0x8,%rsp",
+          "call raise_value",
+          "xor %eax,%eax",
+          "add $0x8,%rsp",
+          "ret",
+          "sub $0x1,%rdx",
+          "mov %rax,%rdi",
+          "jne L12",
+          "call __cxa_begin_catch",
+          "call __cxa_end_catch",
+          "mov $0x7,%eax",
+          "jmp L3",
+          "call _Unwind_Resume"
+        ]
+      },
+      "note": "Outputs 7 and 99 are deliberately distinct catch paths, not crashes."
+    }
+  },
+  "multiple_inheritance_declarations": {
+    "count": 23,
+    "items": [
+      {
+        "header": "decomp/include/Achievement.h",
+        "class": "CAchievement",
+        "bases": "public CRunicCore, public iStatListener"
+      },
+      {
+        "header": "decomp/include/AffectorWrapper.h",
+        "class": "CAffectorWrapper",
+        "bases": "public CPositionableObject, public iSelected"
+      },
+      {
+        "header": "decomp/include/Character.h",
+        "class": "CCharacter",
+        "bases": "public CBaseUnit, public iInventoryListener, public iMissile"
+      },
+      {
+        "header": "decomp/include/CinematicObject.h",
+        "class": "CCinematicObject",
+        "bases": "public CEditorBaseObject, public iMenuListener, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/DamageShape.h",
+        "class": "CDamageShape",
+        "bases": "public CShape, public iLevelUpdate, public iLevelUpdatedCharacter"
+      },
+      {
+        "header": "decomp/include/Equipment.h",
+        "class": "CEquipment",
+        "bases": "public CItem, public iMissile"
+      },
+      {
+        "header": "decomp/include/FormationNode.h",
+        "class": "CFormationNode",
+        "bases": "public CPositionableObject, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/GameClient.h",
+        "class": "CGameClient",
+        "bases": "public CRunicCore, public Ogre::RenderTargetListener, public Ogre::RenderQueue::RenderableListener"
+      },
+      {
+        "header": "decomp/include/GenericModel.h",
+        "class": "CGenericModel",
+        "bases": "public CPositionableObject, public iRandomWeight, public iHighlight"
+      },
+      {
+        "header": "decomp/include/Interact.h",
+        "class": "CInteract",
+        "bases": "public CEditorBaseObject, public iMenuListener"
+      },
+      {
+        "header": "decomp/include/Layout.h",
+        "class": "CLayout",
+        "bases": "public CAllDescriptorsScene, public iRandomWeight, public iHighlight"
+      },
+      {
+        "header": "decomp/include/Particle.h",
+        "class": "CParticle",
+        "bases": "public CPositionableObject, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/ParticleEmitterWrapper.h",
+        "class": "CParticleEmitterWrapper",
+        "bases": "public CPositionableObject, public iSelected"
+      },
+      {
+        "header": "decomp/include/ParticleTechWrapper.h",
+        "class": "CParticleTechWrapper",
+        "bases": "public CParticleWrapper, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/ParticleWrapper.h",
+        "class": "CParticleWrapper",
+        "bases": "public CPositionableObject, public iResource, public iRandomWeight, public iSelected"
+      },
+      {
+        "header": "decomp/include/PropertyNode.h",
+        "class": "CPropertyNode",
+        "bases": "public CPositionableObject, public iLevelUpdatedCharacter"
+      },
+      {
+        "header": "decomp/include/PuzzleRandomizer.h",
+        "class": "CPuzzleRandomizer",
+        "bases": "public CEditorBaseObject, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/QuestController.h",
+        "class": "CQuestController",
+        "bases": "public CEditorBaseObject, public iMenuListener, public iLevelUpdate"
+      },
+      {
+        "header": "decomp/include/RandomGroup.h",
+        "class": "CRandomGroup",
+        "bases": "public CPositionableObject, public iRandomWeight"
+      },
+      {
+        "header": "decomp/include/RoomPiece.h",
+        "class": "CRoomPiece",
+        "bases": "public CPositionableObject, public iSnap, public iHighlight, public iCollision"
+      },
+      {
+        "header": "decomp/include/Skill.h",
+        "class": "CSkill",
+        "bases": "public CRunicCore, public iUnitObserver"
+      },
+      {
+        "header": "decomp/include/SoundObject.h",
+        "class": "CSoundObject",
+        "bases": "public CPositionableObject, public iSelected"
+      },
+      {
+        "header": "decomp/include/UnitSpawner.h",
+        "class": "CUnitSpawner",
+        "bases": "public CShape, public iRandomWeight, public iUnitObserver"
+      }
+    ]
+  }
+}

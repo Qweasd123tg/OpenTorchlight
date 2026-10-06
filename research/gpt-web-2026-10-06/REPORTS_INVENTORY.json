@@ -1,0 +1,60 @@
+{
+  "1": {
+    "path": "user-supplied-opinions/opinion-1.txt",
+    "bytes": 23394,
+    "kind": "forwarded_text_only"
+  },
+  "2": {
+    "path": "user-supplied-opinions/opinion-2.txt",
+    "bytes": 27196,
+    "kind": "forwarded_text_only"
+  },
+  "3": {
+    "path": "user-supplied-opinions/opinion-3.txt",
+    "bytes": 27917,
+    "kind": "forwarded_text_only"
+  },
+  "4": {
+    "path": "user-supplied-opinions/opinion-4.txt",
+    "bytes": 22911,
+    "kind": "forwarded_text_only"
+  },
+  "5": {
+    "path": "user-supplied-opinions/OpenTorchlight_pass5/REPORT_RU.md",
+    "bytes": 30824,
+    "kind": "report_with_supplied_zip_contents"
+  },
+  "6": {
+    "path": "user-supplied-opinions/OpenTorchlight_pass6/REPORT_RU.md",
+    "bytes": 30190,
+    "kind": "report_with_supplied_zip_contents"
+  },
+  "7": {
+    "path": "user-supplied-opinions/OpenTorchlight_pass7/REPORT_RU.md",
+    "bytes": 24018,
+    "kind": "report_with_supplied_zip_contents"
+  },
+  "8": {
+    "path": "user-supplied-opinions/OpenTorchlight_pass8/REPORT_RU.md",
+    "bytes": 26894,
+    "kind": "report_with_supplied_zip_contents",
+    "all_zip_members_identical": true
+  },
+  "9": {
+    "path": "user-supplied-opinions/OpenTorchlight_pass9/REPORT_RU.md",
+    "bytes": 24058,
+    "kind": "report_with_supplied_zip_contents",
+    "all_zip_members_identical": true
+  },
+  "unified_audit": {
+    "path": "user-supplied-opinions/OpenTorchlight_unified_audit",
+    "kind": "complete_supplied_unified_bundle",
+    "file_count": 250,
+    "standalone_report_identical": true,
+    "early_reproduction_sets": [
+      "types-and-comparison",
+      "fast-comparison",
+      "syntax-and-signatures"
+    ]
+  }
+}

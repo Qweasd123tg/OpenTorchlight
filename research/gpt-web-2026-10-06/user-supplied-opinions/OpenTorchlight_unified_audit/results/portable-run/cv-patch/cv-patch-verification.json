@@ -1,0 +1,69 @@
+{
+  "scope": "Narrow cv identity repair only. Other findings NOT repaired by this patch.",
+  "patch_apply": "patching file tools/decomp/ghidra_cpp.py\npatching file tools/decomp/headers.py",
+  "qualifier_cases": [
+    {
+      "cv": "",
+      "declaration": "int get();",
+      "definition": "int CProbe::get()\n{\n    return x;\n}\n",
+      "compiled": true,
+      "signature": [
+        "get",
+        "",
+        []
+      ]
+    },
+    {
+      "cv": "const",
+      "declaration": "int get() const;",
+      "definition": "int CProbe::get() const\n{\n    return x;\n}\n",
+      "compiled": true,
+      "signature": [
+        "get",
+        "",
+        [
+          "const"
+        ]
+      ]
+    },
+    {
+      "cv": "volatile",
+      "declaration": "int get() volatile;",
+      "definition": "int CProbe::get() volatile\n{\n    return x;\n}\n",
+      "compiled": true,
+      "signature": [
+        "get",
+        "",
+        [
+          "volatile"
+        ]
+      ]
+    },
+    {
+      "cv": "const volatile",
+      "declaration": "int get() const volatile;",
+      "definition": "int CProbe::get() const volatile\n{\n    return x;\n}\n",
+      "compiled": true,
+      "signature": [
+        "get",
+        "",
+        [
+          "const",
+          "volatile"
+        ]
+      ]
+    }
+  ],
+  "existing_tests": {
+    "original": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.018s\n\nOK\n"
+    },
+    "patched": {
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.017s\n\nOK\n"
+    }
+  }
+}

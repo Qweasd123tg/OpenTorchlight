@@ -1,0 +1,26 @@
+{
+  "patches": [
+    {
+      "patch": "objdiff-section-index.patch",
+      "applied_to_temporary_tree": true
+    },
+    {
+      "patch": "preserve-cv-qualifiers.patch",
+      "applied_to_temporary_tree": true
+    },
+    {
+      "patch": "draft-retry-isolation.patch",
+      "applied_to_temporary_tree": true
+    },
+    {
+      "patch": "test-execution-gate.patch",
+      "applied_to_temporary_tree": true
+    }
+  ],
+  "unit_tests_returncode": 0,
+  "unit_tests_log": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.015s\n\nOK\n",
+  "java_Ghidra_run": false,
+  "original_game_run": false,
+  "original_GCC447_run": false,
+  "scope": "all four patches apply together to temporary snapshot; 24 existing Python tests only"
+}

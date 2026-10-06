@@ -1,0 +1,199 @@
+{
+  "tables": [
+    {
+      "address": "0x1503de0",
+      "size": 1160,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_NAMES",
+      "line": 29531,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [
+        {
+          "function_address": "0x7e1200",
+          "function": "CEffect::CEffect",
+          "file": "research/decompiled-core/effect.c"
+        }
+      ],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1504280",
+      "size": 1160,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_DESCRIPTIONS_GOOD",
+      "line": 29532,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1504720",
+      "size": 1160,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_DESCRIPTIONS_GOOD_OT",
+      "line": 29533,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1504bc0",
+      "size": 1160,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_DESCRIPTIONS_BAD",
+      "line": 29534,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1505060",
+      "size": 1160,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_DESCRIPTIONS_BAD_OT",
+      "line": 29535,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1505500",
+      "size": 580,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_MIN_VALUES",
+      "line": 29536,
+      "element_width_assumption": 4,
+      "element_type_hypothesis": "int32 candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1505760",
+      "size": 580,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_MAX_VALUES",
+      "line": 29537,
+      "element_width_assumption": 4,
+      "element_type_hypothesis": "int32 candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [
+        {
+          "function_address": "0x7dedb0",
+          "function": "CEffect::getDisplayStats",
+          "file": "research/decompiled-core/effect.c"
+        }
+      ],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x15059c0",
+      "size": 580,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_BONUS",
+      "line": 29538,
+      "element_width_assumption": 4,
+      "element_type_hypothesis": "int32 candidate",
+      "suggested_shape": [
+        145
+      ],
+      "references_in_archive": [
+        {
+          "function_address": "0x7dedb0",
+          "function": "CEffect::getDisplayStats",
+          "file": "research/decompiled-core/effect.c"
+        }
+      ],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x1505c20",
+      "size": 5800,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_PROPERTY_TAGS",
+      "line": 29539,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145,
+        5
+      ],
+      "references_in_archive": [
+        {
+          "function_address": "0x7e1200",
+          "function": "CEffect::CEffect",
+          "file": "research/decompiled-core/effect.c"
+        }
+      ],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    },
+    {
+      "address": "0x15072e0",
+      "size": 5800,
+      "kind": "B",
+      "name": "gEFFECT_TYPE_GRAPHS",
+      "line": 29540,
+      "element_width_assumption": 8,
+      "element_type_hypothesis": "wstring candidate",
+      "suggested_shape": [
+        145,
+        5
+      ],
+      "references_in_archive": [
+        {
+          "function_address": "0x7de7f0",
+          "function": "CEffect::setGraphs",
+          "file": "research/decompiled-core/effect.c"
+        },
+        {
+          "function_address": "0x7e1200",
+          "function": "CEffect::CEffect",
+          "file": "research/decompiled-core/effect.c"
+        }
+      ],
+      "values": null,
+      "status": "SHAPE_CANDIDATE_ONLY"
+    }
+  ],
+  "table_count": 10,
+  "bytes": 19140,
+  "row_count_candidates": [
+    145
+  ],
+  "source_gate": "types, static initializer behavior, original ELF and table contents must be checked",
+  "name_tables_py_filter": "bind == local; these ten symbols have nm B, global BSS",
+  "original_elf_executed": false
+}

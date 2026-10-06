@@ -1,0 +1,23 @@
+Results: /mnt/data/OpenTorchlight_unified_audit/results/portable-run/draft-isolation
+The repository was not patched. Ghidra and the game were not executed.
+test_changed_inputs_force_full_refresh (__main__.Tests.test_changed_inputs_force_full_refresh) ... ok
+test_disabled_prototypes_force_refresh (__main__.Tests.test_disabled_prototypes_force_refresh) ... ok
+test_failed_run_returns_nonzero (__main__.Tests.test_failed_run_returns_nonzero) ... ok
+test_failure_is_not_fresh (__main__.Tests.test_failure_is_not_fresh) ... ok
+test_hard_backend_failure (__main__.Tests.test_hard_backend_failure) ... ok
+test_healthy_is_fresh (__main__.Tests.test_healthy_is_fresh) ... ok
+test_missing_is_stale (__main__.Tests.test_missing_is_stale) ... ok
+test_missing_output_does_not_leave_old_success (__main__.Tests.test_missing_output_does_not_leave_old_success) ... ok
+test_no_shared_io_deletion (__main__.Tests.test_no_shared_io_deletion) ... ok
+test_parallel_separate_worktrees (__main__.Tests.test_parallel_separate_worktrees) ... ok
+test_raw_status (__main__.Tests.test_raw_status) ... ok
+test_retry_already_done_does_not_launch (__main__.Tests.test_retry_already_done_does_not_launch) ... ok
+test_retry_preserves_type_dependencies (__main__.Tests.test_retry_preserves_type_dependencies) ... ok
+test_selective_retry (__main__.Tests.test_selective_retry) ... ok
+test_timeout_validation (__main__.Tests.test_timeout_validation) ... ok
+test_unknown_tu_rejected (__main__.Tests.test_unknown_tu_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.150s
+
+OK

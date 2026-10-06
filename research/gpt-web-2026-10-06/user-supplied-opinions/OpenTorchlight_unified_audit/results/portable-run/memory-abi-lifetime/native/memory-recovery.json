@@ -1,0 +1,44 @@
+{
+  "instructions": 54,
+  "byte_stores": 2560,
+  "recipes": [
+    {
+      "operation": "memcpy",
+      "destination": 17,
+      "source": 1809,
+      "bytes": 512
+    },
+    {
+      "operation": "memcpy",
+      "destination": 1041,
+      "source": 2833,
+      "bytes": 512
+    },
+    {
+      "operation": "memcpy",
+      "destination": 529,
+      "source": 2321,
+      "bytes": 512
+    },
+    {
+      "operation": "memset",
+      "destination": 1809,
+      "value": 0,
+      "bytes": 512
+    },
+    {
+      "operation": "memset",
+      "destination": 2833,
+      "value": 0,
+      "bytes": 512
+    }
+  ],
+  "symbolic_final_byte_maps_equal": true,
+  "preconditions": [
+    "valid ordinary object memory",
+    "no concurrent or volatile observations",
+    "DF=0",
+    "no memory faults"
+  ],
+  "scope": "static narrow instruction subset; no unknown operations allowed"
+}

@@ -1,0 +1,26 @@
+
+Relocation section '.rela.text.startup' at offset 0x2f0 contains 2 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000003  0000000700000002 R_X86_64_PC32          0000000000000000 _ZTV5COver + c
+000000000000000a  0000000800000002 R_X86_64_PC32          0000000000000000 instance - 4
+
+Relocation section '.rela.init_array' at offset 0x320 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000000300000001 R_X86_64_64            0000000000000000 .text.startup + 0
+
+Relocation section '.rela.data.rel.ro._ZTI5COver' at offset 0x338 contains 2 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000000  0000000b00000001 R_X86_64_64            0000000000000000 _ZTVN10__cxxabiv117__class_type_infoE + 10
+0000000000000008  0000000900000001 R_X86_64_64            0000000000000000 _ZTS5COver + 0
+
+Relocation section '.rela.data.rel.ro.local._ZTV5COver' at offset 0x368 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000008  0000000a00000001 R_X86_64_64            0000000000000000 _ZTI5COver + 0
+0000000000000010  0000000500000001 R_X86_64_64            0000000000000000 _ZN5COver1fEi + 0
+0000000000000018  0000000600000001 R_X86_64_64            0000000000000010 _ZN5COver1fEl + 0
+
+Relocation section '.rela.eh_frame' at offset 0x3b0 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000020  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 0
+0000000000000034  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 10
+0000000000000048  0000000300000002 R_X86_64_PC32          0000000000000000 .text.startup + 0

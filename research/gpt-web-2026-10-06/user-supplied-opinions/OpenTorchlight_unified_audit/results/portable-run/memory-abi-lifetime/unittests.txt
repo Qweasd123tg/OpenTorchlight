@@ -1,0 +1,37 @@
+test_call_rejected (test_prototypes.CapsuleTests.test_call_rejected) ... ok
+test_demangled_comment_not_opcode (test_prototypes.CapsuleTests.test_demangled_comment_not_opcode) ... ok
+test_external_branch (test_prototypes.CapsuleTests.test_external_branch) ... ok
+test_internal_jump (test_prototypes.CapsuleTests.test_internal_jump) ... ok
+test_missing_end (test_prototypes.CapsuleTests.test_missing_end) ... ok
+test_rip_rejected (test_prototypes.CapsuleTests.test_rip_rejected) ... ok
+test_duplicate (test_prototypes.GuardTests.test_duplicate) ... ok
+test_missing (test_prototypes.GuardTests.test_missing) ... ok
+test_namespaces (test_prototypes.GuardTests.test_namespaces) ... ok
+test_unique (test_prototypes.GuardTests.test_unique) ... ok
+test_call_rejected (test_prototypes.MathTests.test_call_rejected) ... ok
+test_changed_factor (test_prototypes.MathTests.test_changed_factor) ... ok
+test_explicit_left (test_prototypes.MathTests.test_explicit_left) ... ok
+test_invalid_rejected (test_prototypes.MathTests.test_invalid_rejected) ... ok
+test_ordered (test_prototypes.MathTests.test_ordered) ... ok
+test_repeated_component (test_prototypes.MathTests.test_repeated_component) ... ok
+test_right_rejected (test_prototypes.MathTests.test_right_rejected) ... ok
+test_unknown_type (test_prototypes.MathTests.test_unknown_type) ... ok
+test_constant_nonzero_rejected (test_prototypes.MemoryTests.test_constant_nonzero_rejected) ... ok
+test_copy (test_prototypes.MemoryTests.test_copy) ... ok
+test_low_byte (test_prototypes.MemoryTests.test_low_byte) ... ok
+test_operand_split (test_prototypes.MemoryTests.test_operand_split) ... ok
+test_overlap_rejected (test_prototypes.MemoryTests.test_overlap_rejected) ... ok
+test_pointer_escape (test_prototypes.MemoryTests.test_pointer_escape) ... ok
+test_rep (test_prototypes.MemoryTests.test_rep) ... ok
+test_stale_load_rejected (test_prototypes.MemoryTests.test_stale_load_rejected) ... ok
+test_symbolic_check (test_prototypes.MemoryTests.test_symbolic_check) ... ok
+test_unbounded_rep (test_prototypes.MemoryTests.test_unbounded_rep) ... ok
+test_unknown_address (test_prototypes.MemoryTests.test_unknown_address) ... ok
+test_unknown_opcode (test_prototypes.MemoryTests.test_unknown_opcode) ... ok
+test_zero_extension (test_prototypes.MemoryTests.test_zero_extension) ... ok
+test_zero_merge (test_prototypes.MemoryTests.test_zero_merge) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.005s
+
+OK

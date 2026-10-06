@@ -1,0 +1,144 @@
+{
+  "old_mutation_result_rebound_to_current_code": {
+    "reproduced": true,
+    "actual_recorded_entry": {
+      "name": "CProbe::f()",
+      "killed": 8,
+      "tried": 10,
+      "code": "CURRENT_CHANGED_CODE"
+    },
+    "mechanism": "real mutate.record; code_digests supplies a different current digest",
+    "new_mutation_execution": false,
+    "old_results_contain_baseline_digest": false
+  },
+  "loop_accepts_stats_despite_failed_process": {
+    "reproduced": true,
+    "process_returncode": 97,
+    "accepted": true,
+    "status": {
+      "0x100": "tested"
+    },
+    "pending": [],
+    "source_contains_candidate": true,
+    "mechanism": "real Loop.test; synthetic compile/generator/process report; no model called"
+  },
+  "rejected_candidate_left_in_public_source_during_round": {
+    "reproduced": true,
+    "accepted": false,
+    "status": {},
+    "pending": [
+      "0x100"
+    ],
+    "source_contains_candidate": true,
+    "scope": "Loop.test return, before normal Loop.run final rewrite; interruption or concurrent reader can observe this state"
+  },
+  "promotion_does_not_notice_changed_diff_body": {
+    "reproduced": true,
+    "log": "promoted into decomp/include: Probe.h",
+    "mechanism": "real Loop.finish, supplied before/after DIFF rows with different code hashes",
+    "game_code_change_demonstrated": false
+  },
+  "new_higher_priority_header_reuses_old_cache": {
+    "reproduced": true,
+    "cache_returned": 11,
+    "uncached_compilation_returned": 22,
+    "mechanism": "real _cache_lookup/_digest with system-compiled native control; old dependency list unchanged",
+    "original_GCC447_run": false
+  },
+  "normalized_cache_key_ignores_same_mtime_content_change": {
+    "reproduced": true,
+    "keys_equal": true,
+    "mechanism": "real objdiff._norm_key, database contents changed while mtime preserved"
+  },
+  "declaration_only_counts_as_shadow_coverage": {
+    "reproduced": true,
+    "covered": [
+      "0x100"
+    ],
+    "mechanism": "real check.shadow_covered, synthetic unused TL_ORIGINAL declaration",
+    "existing_handwritten_tests_proven_wrong": false
+  },
+  "real_loader_zero_selected_tests_succeeds": {
+    "reproduced": true,
+    "all_rc": 1,
+    "all_invoked": 2,
+    "none_rc": 0,
+    "none_invoked": 0,
+    "one_rc": 0,
+    "one_invoked": 1,
+    "log": "tlhybrid: good                                             PASS (0)\ntlhybrid: bad                                              FAIL (1)\ntlhybrid: 2 tests, 1 failed\ntlhybrid: 2 tests, 0 failed\ntlhybrid: good                                             PASS (0)\ntlhybrid: 2 tests, 0 failed\n",
+    "mechanism": "native real loader.c run_tests on synthetic section descriptors; no ELF/game loading"
+  },
+  "archived_acceptance_with_one_or_two_mutants": {
+    "entries": {
+      "0x7e9f90": {
+        "name": "CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+        "killed": 1,
+        "tried": 1,
+        "code": "2b37112009f1b24c"
+      },
+      "0x8029d0": {
+        "name": "CBaseUnit::getUnitDataName()",
+        "killed": 1,
+        "tried": 1,
+        "code": "35fc3a1a9cfe33c2"
+      },
+      "0xc816a0": {
+        "name": "CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+        "killed": 1,
+        "tried": 1,
+        "code": "cb3fe387a9a68c6a"
+      },
+      "0xc817a0": {
+        "name": "CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+        "killed": 1,
+        "tried": 1,
+        "code": "cb3fe387a9a68c6a"
+      },
+      "0xd264d0": {
+        "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+        "killed": 2,
+        "tried": 2,
+        "code": "8f367a3b826eb663"
+      },
+      "0xd2dca0": {
+        "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+        "killed": 2,
+        "tried": 2,
+        "code": "9a649aedd7940ca0"
+      },
+      "0x7b67f0": {
+        "name": "CTimeline::GetPropertyPointTimePercent(long long, int, int, bool)",
+        "killed": 1,
+        "tried": 1,
+        "code": "3c6aace83759cdb1"
+      },
+      "0x7b6930": {
+        "name": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+        "killed": 2,
+        "tried": 2,
+        "code": "cd56253d05700705"
+      },
+      "0x7b6960": {
+        "name": "CTimeline::AddPointToProperty(long long, int, bool)",
+        "killed": 1,
+        "tried": 1,
+        "code": "f4c4fc740c7f682d"
+      },
+      "0x9f26e0": {
+        "name": "CRandomGroup::CRandomGroup(CResourceManager*)",
+        "killed": 2,
+        "tried": 2,
+        "code": "c994f282e1a11047"
+      },
+      "0xa65930": {
+        "name": "CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*)",
+        "killed": 2,
+        "tried": 2,
+        "code": "f6ce3c203e2c764a"
+      }
+    },
+    "total_entries": 57,
+    "scope": "archive observations, not a claim these implementations are wrong"
+  }
+}

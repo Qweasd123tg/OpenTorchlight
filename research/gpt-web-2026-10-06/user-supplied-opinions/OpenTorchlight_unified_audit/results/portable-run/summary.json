@@ -1,0 +1,170 @@
+{
+  "scope": "archive audit, not game acceptance",
+  "input": "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+  "source_files": 2285,
+  "skipped_directories": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "build",
+    "build-decomp",
+    "node_modules",
+    "venv"
+  ],
+  "reviewed_inputs_changed_or_missing": [],
+  "original_game_executed": false,
+  "original_GCC447_run": false,
+  "verification_requested": true,
+  "runs": [
+    {
+      "name": "new-boundaries",
+      "returncode": 0,
+      "seconds": 1.282,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/tools/probe_pipeline_boundaries.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/new-boundaries"
+      ]
+    },
+    {
+      "name": "test-execution-gate",
+      "returncode": 0,
+      "seconds": 2.328,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/tools/verify_execution_gate.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/test-execution-gate"
+      ]
+    },
+    {
+      "name": "input-freshness",
+      "returncode": 0,
+      "seconds": 0.82,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/input-freshness/probe_draft_invalidation.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main"
+      ]
+    },
+    {
+      "name": "types-and-comparison",
+      "returncode": 0,
+      "seconds": 1.461,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/types-and-comparison/probe_pipeline.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/types-and-comparison/results.json"
+      ]
+    },
+    {
+      "name": "fast-comparison",
+      "returncode": 0,
+      "seconds": 3.418,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/fast-comparison/verify_patch.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/fast-comparison/results.json"
+      ]
+    },
+    {
+      "name": "capture-and-equivalence",
+      "returncode": 0,
+      "seconds": 2.613,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/fast-comparison/probe_pass3.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/capture-and-equivalence"
+      ]
+    },
+    {
+      "name": "syntax-and-signatures",
+      "returncode": 0,
+      "seconds": 2.523,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/probe_pass4.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--output",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/syntax-and-signatures"
+      ]
+    },
+    {
+      "name": "cv-patch",
+      "returncode": 0,
+      "seconds": 2.778,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/syntax-and-signatures/verify_cv_patch.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--output",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/cv-patch"
+      ]
+    },
+    {
+      "name": "control-flow",
+      "returncode": 0,
+      "seconds": 0.994,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/control-flow/scripts/test_stage_tools.py"
+      ]
+    },
+    {
+      "name": "families-and-loops",
+      "returncode": 0,
+      "seconds": 0.878,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/families-and-loops/scripts/test_stage_prototypes.py"
+      ]
+    },
+    {
+      "name": "resource-operations",
+      "returncode": 0,
+      "seconds": 15.913,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/resource-operations/tools/run_checks.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/resource-operations"
+      ]
+    },
+    {
+      "name": "memory-abi-lifetime",
+      "returncode": 0,
+      "seconds": 13.027,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/memory-abi-lifetime/run_all.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/memory-abi-lifetime"
+      ]
+    },
+    {
+      "name": "draft-isolation",
+      "returncode": 0,
+      "seconds": 1.661,
+      "command": [
+        "/opt/pyvenv/bin/python",
+        "/mnt/data/OpenTorchlight_unified_audit/reproductions/draft-isolation/run_checks.py",
+        "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+        "--out",
+        "/mnt/data/OpenTorchlight_unified_audit/results/portable-run/draft-isolation"
+      ]
+    }
+  ],
+  "source_unchanged": true,
+  "verification": "COMPLETED"
+}

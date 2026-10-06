@@ -1,0 +1,21 @@
+{
+  "scope": "narrow test-dispatch and process-exit gates; no coverage or mutation provenance fix; no game run",
+  "loop_good_accepted": true,
+  "loop_failed_process_rejected": true,
+  "loop_divergence_rejected": true,
+  "ambient_filter_removed": true,
+  "explicit_filter_preserved": true,
+  "native_loader": {
+    "all_rc": 1,
+    "all_invoked": 2,
+    "none_rc": 2,
+    "none_invoked": 0,
+    "one_rc": 0,
+    "one_invoked": 1
+  },
+  "native_log": "tlhybrid: good                                             PASS (0)\ntlhybrid: bad                                              FAIL (1)\ntlhybrid: 2 tests, 1 failed (2 available)\ntlhybrid: 0 tests, 0 failed (2 available)\ntlhybrid: no tests selected; refusing a successful selftest\ntlhybrid: good                                             PASS (0)\ntlhybrid: 1 tests, 0 failed (2 available)\n",
+  "existing_tests": {
+    "returncode": 0,
+    "log": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.018s\n\nOK\n"
+  }
+}

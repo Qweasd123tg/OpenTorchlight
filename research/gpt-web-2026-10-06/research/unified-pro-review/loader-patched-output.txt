@@ -1,0 +1,6 @@
+tlhybrid: 0 tests, 0 failed (2 available)
+tlhybrid: no tests selected; refusing a successful selftest
+tlhybrid: control_pass                                     PASS (0)
+tlhybrid: control_fail                                     FAIL (1)
+tlhybrid: 2 tests, 1 failed (2 available)
+empty: rc=2 calls=0; all: rc=1 calls=2

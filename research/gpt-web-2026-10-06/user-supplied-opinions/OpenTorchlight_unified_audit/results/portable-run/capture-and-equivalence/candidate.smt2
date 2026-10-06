@@ -1,0 +1,5 @@
+(set-option :timeout 10000)
+(set-option :produce-models true)
+(declare-const x (_ BitVec 32))
+(assert (not (= (bvsub (bvmul x (_ bv8 32)) x) (bvmul x (_ bv7 32)))))
+(check-sat)

@@ -1,0 +1,17 @@
+{
+  "input_archive_sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d",
+  "inspected_file_sha256": {
+    "AGENTS.md": "39912953c4d49d1baee2e10c6d6e26623dd25a53bc8428d7a083c56305bc6255",
+    "decomp/README.md": "bf221dc82ac62384d07918ec854c5f09bd4845b12f26164b39a683b2efb7eba2",
+    "tools/decomp/types_export.py": "7e8f920493eea94903187570cba31666a428e162dba6e1e85a0d425953acecc9",
+    "tools/decomp/ghidra/DecompDrafts.java": "2d0edcdb6d7693f99462a8ae22804457c5ad72f3f34c766ef04e9cba6d98cd6d",
+    "tools/decomp/layout.py": "274d4ff1c1a3938ff9da303db4198d9872600d8e84b1b4095d0845d2706cd708",
+    "tools/decomp/objdiff.py": "8d0fce3cc065f619b19eb5bde088919418849ce36d0302093193d8457d0ba570",
+    "tools/decomp/check.py": "43087abaf8adccd6b3b32ea77e1f0b0242af78474915088aa005f367653b5649",
+    "tools/decomp/hybrid.py": "26a6faac07a7c0915688ace0b23dce96d8133b6460406d1fd20c9aa5a545c301",
+    "tools/decomp/ghidra_cpp.py": "13850426585bea1fd8ba83aa937f647baa238eddc929f161e35c7bc30189a58f",
+    "research/torched-sdk.json": "0e57508d512e8da3cf0ade4332058383565b429e7250aa5238f68301973b35c7",
+    "research/torched-sdk.md": "1cb09a1b96632b99a2c32aeb64efc26a5cf63ded4b7c5dbbc0c363fc8b44d155",
+    "research/ui-function-bindings.md": "3b92bd53cc6564990342396982984b7098b0acfb2fb65d8e1ab98ab27ed84234"
+  }
+}

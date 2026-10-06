@@ -1,0 +1,26 @@
+{
+  "package_files_checked": 249,
+  "hash_errors": [],
+  "patch_checks": [
+    {
+      "patch": "draft-retry-isolation.patch",
+      "check_exit": 0,
+      "stderr": ""
+    },
+    {
+      "patch": "objdiff-section-index.patch",
+      "check_exit": 0,
+      "stderr": ""
+    },
+    {
+      "patch": "preserve-cv-qualifiers.patch",
+      "check_exit": 0,
+      "stderr": ""
+    },
+    {
+      "patch": "test-execution-gate.patch",
+      "check_exit": 0,
+      "stderr": ""
+    }
+  ]
+}

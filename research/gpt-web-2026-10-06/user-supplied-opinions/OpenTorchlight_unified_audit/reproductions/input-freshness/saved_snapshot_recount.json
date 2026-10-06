@@ -1,0 +1,36 @@
+{
+  "source": "research/decomp-automation-audit-2026-10-04/measured.json",
+  "note": "Recount of a saved historical snapshot, not a fresh Ghidra run. Groups overlap. Byte counts describe whole functions containing a marker, not bytes removable by a rewrite.",
+  "functions": 666,
+  "bytes": 2797634,
+  "markers": {
+    "string_cleanup": {
+      "functions": 506,
+      "bytes_of_containing_functions": 2370291
+    },
+    "tree_internals": {
+      "functions": 70,
+      "bytes_of_containing_functions": 264512
+    },
+    "vector_internals": {
+      "functions": 37,
+      "bytes_of_containing_functions": 252290
+    },
+    "array_internals": {
+      "functions": 134,
+      "bytes_of_containing_functions": 657602
+    },
+    "nan_guard": {
+      "functions": 71,
+      "bytes_of_containing_functions": 264895
+    },
+    "unknown_abi": {
+      "functions": 46,
+      "bytes_of_containing_functions": 239506
+    },
+    "unwind": {
+      "functions": 5,
+      "bytes_of_containing_functions": 19368
+    }
+  }
+}

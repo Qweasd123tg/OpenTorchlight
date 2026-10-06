@@ -1,0 +1,26 @@
+{
+  "scope": "Patch applied only to a temporary copy; synthetic GCC objects and normalizer unit tests.",
+  "cases": [
+    {
+      "name": "500_functions",
+      "functions": 500,
+      "outputs_identical": true
+    },
+    {
+      "name": "aliases_and_sections",
+      "functions": 17,
+      "outputs_identical": true
+    }
+  ],
+  "patch_output": "patching file tools/decomp/objdiff.py",
+  "original_normalizer_tests": {
+    "run": 3,
+    "successful": true,
+    "log": "test_absolute_memory_backslashes (test_objdiff_literals.LiteralRelocationTest.test_absolute_memory_backslashes) ... ok\ntest_immediate_backslashes (test_objdiff_literals.LiteralRelocationTest.test_immediate_backslashes) ... ok\ntest_rip_relative_backslashes (test_objdiff_literals.LiteralRelocationTest.test_rip_relative_backslashes) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  },
+  "patched_normalizer_tests": {
+    "run": 3,
+    "successful": true,
+    "log": "test_absolute_memory_backslashes (test_objdiff_literals.LiteralRelocationTest.test_absolute_memory_backslashes) ... ok\ntest_immediate_backslashes (test_objdiff_literals.LiteralRelocationTest.test_immediate_backslashes) ... ok\ntest_rip_relative_backslashes (test_objdiff_literals.LiteralRelocationTest.test_rip_relative_backslashes) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+  }
+}

@@ -1,0 +1,6 @@
+tlhybrid: good                                             PASS (0)
+tlhybrid: bad                                              FAIL (1)
+tlhybrid: 2 tests, 1 failed
+tlhybrid: 2 tests, 0 failed
+tlhybrid: good                                             PASS (0)
+tlhybrid: 2 tests, 0 failed

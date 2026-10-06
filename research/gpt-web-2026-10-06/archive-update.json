@@ -1,0 +1,19 @@
+{
+  "archive": "opentorchlight-morning-research-2026-10-06.tar (1).gz",
+  "archive_sha256": "49bb4cf95106b9795822bcb9a02a543772b0658b69c72d43bb03a07e597a3899",
+  "base_commit": "ab6a3e3",
+  "manifest_entries": 595,
+  "manifest_mismatches": 0,
+  "added_files": 262,
+  "updated_files": [
+    "FILES.sha256",
+    "START_HERE_RU.md",
+    "user-supplied-opinions/opinion-1.txt",
+    "user-supplied-opinions/opinion-2.txt"
+  ],
+  "unchanged_archive_files": 330,
+  "initial_changed_file_backups": "archive-history/initial/",
+  "local_evidence_and_prior_validation": "Preserved; absent local files are not deletions",
+  "new_review": "research/unified-pro-review/REVIEW_RU.md",
+  "limits": "Imported author results remain historical evidence; external tools and optional patches are not automatically installed"
+}

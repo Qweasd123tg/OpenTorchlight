@@ -1,0 +1,219 @@
+[
+  {
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/tests",
+      "-v"
+    ],
+    "returncode": 0,
+    "stderr": "test_call_rejected (test_prototypes.CapsuleTests.test_call_rejected) ... ok\ntest_demangled_comment_not_opcode (test_prototypes.CapsuleTests.test_demangled_comment_not_opcode) ... ok\ntest_external_branch (test_prototypes.CapsuleTests.test_external_branch) ... ok\ntest_internal_jump (test_prototypes.CapsuleTests.test_internal_jump) ... ok\ntest_missing_end (test_prototypes.CapsuleTests.test_missing_end) ... ok\ntest_rip_rejected (test_prototypes.CapsuleTests.test_rip_rejected) ... ok\ntest_duplicate (test_prototypes.GuardTests.test_duplicate) ... ok\ntest_missing (test_prototypes.GuardTests.test_missing) ... ok\ntest_namespaces (test_prototypes.GuardTests.test_namespaces) ... ok\ntest_unique (test_prototypes.GuardTests.test_unique) ... ok\ntest_call_rejected (test_prototypes.MathTests.test_call_rejected) ... ok\ntest_changed_factor (test_prototypes.MathTests.test_changed_factor) ... ok\ntest_explicit_left (test_prototypes.MathTests.test_explicit_left) ... ok\ntest_invalid_rejected (test_prototypes.MathTests.test_invalid_rejected) ... ok\ntest_ordered (test_prototypes.MathTests.test_ordered) ... ok\ntest_repeated_component (test_prototypes.MathTests.test_repeated_component) ... ok\ntest_right_rejected (test_prototypes.MathTests.test_right_rejected) ... ok\ntest_unknown_type (test_prototypes.MathTests.test_unknown_type) ... ok\ntest_constant_nonzero_rejected (test_prototypes.MemoryTests.test_constant_nonzero_rejected) ... ok\ntest_copy (test_prototypes.MemoryTests.test_copy) ... ok\ntest_low_byte (test_prototypes.MemoryTests.test_low_byte) ... ok\ntest_operand_split (test_prototypes.MemoryTests.test_operand_split) ... ok\ntest_overlap_rejected (test_prototypes.MemoryTests.test_overlap_rejected) ... ok\ntest_pointer_escape (test_prototypes.MemoryTests.test_pointer_escape) ... ok\ntest_rep (test_prototypes.MemoryTests.test_rep) ... ok\ntest_stale_load_rejected (test_prototypes.MemoryTests.test_stale_load_rejected) ... ok\ntest_symbolic_check (test_prototypes.MemoryTests.test_symbolic_check) ... ok\ntest_unbounded_rep (test_prototypes.MemoryTests.test_unbounded_rep) ... ok\ntest_unknown_address (test_prototypes.MemoryTests.test_unknown_address) ... ok\ntest_unknown_opcode (test_prototypes.MemoryTests.test_unknown_opcode) ... ok\ntest_zero_extension (test_prototypes.MemoryTests.test_zero_extension) ... ok\ntest_zero_merge (test_prototypes.MemoryTests.test_zero_merge) ... ok\n\n----------------------------------------------------------------------\nRan 32 tests in 0.003s\n\nOK\n"
+  },
+  {
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/tools/census.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/census.json"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/tools/static_guards.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/static-guards.json"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/tools/native_capsule.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/native"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/tools/memory_transfers.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/native"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "-D_GLIBCXX_USE_CXX11_ABI=0",
+      "-DOGRE_MEMORY_ALLOCATOR=1",
+      "-I",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main/third_party/ogre-1.6.5-math/OgreMain/include",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/abi_probe.cpp",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/capture_return.S",
+      "-o",
+      "/tmp/torchlight-pass8-f_19e_7p/abi_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/torchlight-pass8-f_19e_7p/abi_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "-D_GLIBCXX_USE_CXX11_ABI=0",
+      "-DOGRE_MEMORY_ALLOCATOR=1",
+      "-I",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main/third_party/ogre-1.6.5-math/OgreMain/include",
+      "-ffp-contract=off",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/math_probe.cpp",
+      "-o",
+      "/tmp/torchlight-pass8-f_19e_7p/math_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/torchlight-pass8-f_19e_7p/math_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/lifecycle_probe.cpp",
+      "-o",
+      "/tmp/torchlight-pass8-f_19e_7p/lifecycle_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/torchlight-pass8-f_19e_7p/lifecycle_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/native_probe.cpp",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/native/generated_capture.cpp",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/native/native_reference.S",
+      "-o",
+      "/tmp/torchlight-pass8-f_19e_7p/native_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/tmp/torchlight-pass8-f_19e_7p/native_probe"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "-D_GLIBCXX_USE_CXX11_ABI=0",
+      "-DOGRE_MEMORY_ALLOCATOR=1",
+      "-I",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main/third_party/ogre-1.6.5-math/OgreMain/include",
+      "-S",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/examples/abi_probe.cpp",
+      "-o",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/abi-probe.s"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "-std=gnu++98",
+      "-O2",
+      "-fno-strict-aliasing",
+      "-DNDEBUG",
+      "-c",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native/native/native_reference.S",
+      "-o",
+      "/tmp/torchlight-pass8-f_19e_7p/reference.o"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "objdump",
+      "-drw",
+      "/tmp/torchlight-pass8-f_19e_7p/reference.o"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "nm",
+      "-S",
+      "/tmp/torchlight-pass8-f_19e_7p/reference.o"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "/usr/bin/g++",
+      "--version"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  },
+  {
+    "command": [
+      "as",
+      "--version"
+    ],
+    "returncode": 0,
+    "stderr": ""
+  }
+]

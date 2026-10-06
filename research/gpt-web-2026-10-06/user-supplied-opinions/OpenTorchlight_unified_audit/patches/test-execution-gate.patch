@@ -1,0 +1,54 @@
+--- a/decomp/hybrid/loader.c
++++ b/decomp/hybrid/loader.c
+@@ -206,14 +206,20 @@
+     size_t count = s->sh_size / sizeof(*test);
+     const char *only = getenv("TLHYBRID_FILTER");
+     int failed = 0;
++    size_t executed = 0;
+     for (size_t i = 0; i < count; i++) {
+         if (only && !name_selected(test[i].name, only))
+             continue;
++        executed++;
+         int failures = test[i].run(&g_host);
+         fprintf(stderr, "tlhybrid: %-48s %s (%d)\n", test[i].name, failures ? "FAIL" : "PASS", failures);
+         failed += failures != 0;
+     }
+-    fprintf(stderr, "tlhybrid: %zu tests, %d failed\n", count, failed);
++    fprintf(stderr, "tlhybrid: %zu tests, %d failed (%zu available)\n", executed, failed, count);
++    if (!executed) {
++        fprintf(stderr, "tlhybrid: no tests selected; refusing a successful selftest\n");
++        return 2;
++    }
+     return failed ? 1 : 0;
+ }
+ 
+--- a/tools/decomp/hybrid.py
++++ b/tools/decomp/hybrid.py
+@@ -457,6 +457,8 @@
+     if only:
+         extra["TLHYBRID_FILTER"] = only
+     game, env = game_env(blob, loader, extra, headless=True)
++    if not only:
++        env.pop("TLHYBRID_FILTER", None)
+     result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game, env=env,
+                             capture_output=True, text=True,
+                             timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+--- a/tools/decomp/llm_loop.py
++++ b/tools/decomp/llm_loop.py
+@@ -603,11 +603,15 @@
+             os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(made))
+             try:
+                 blob, loader = hybrid.build(verbose=False, tests=tests)
+-                _, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
++                test_code, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
+             except subprocess.TimeoutExpired:
+                 report = []
+             except SystemExit as error:  # the game build itself is broken: no verdicts this round
+                 print(f"  hybrid build failed: {str(error)[:300]}", flush=True)
++                report = []
++            # A partial report from a failed process is not acceptance evidence.
++            if report and test_code != 0:
++                print(f"  hybrid selftest failed with exit code {test_code}; no candidates accepted", flush=True)
+                 report = []
+             for line in report:
+                 m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed (\d+) different (\d+)", line)

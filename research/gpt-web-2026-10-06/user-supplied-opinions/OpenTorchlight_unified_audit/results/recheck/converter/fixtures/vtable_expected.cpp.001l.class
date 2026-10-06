@@ -1,0 +1,13 @@
+Vtable for COver
+COver::_ZTV5COver: 4 entries
+0     (int (*)(...))0
+8     (int (*)(...))(& _ZTI5COver)
+16    (int (*)(...))COver::f
+24    (int (*)(...))COver::f
+
+Class COver
+   size=8 align=8
+   base size=8 base align=8
+COver (0x0x7f1238826480) 0 nearly-empty
+    vptr=((& COver::_ZTV5COver) + 16)
+

@@ -1,0 +1,246 @@
+{
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "scope": "Archived tool functions and synthetic C++98 fixtures; not the original game.",
+  "direct_call": {
+    "raw": "int __thiscall CWrapper::probe(CWrapper *this, CBase *param_1)\n{\n return CBase::step(param_1);\n}\n",
+    "converted": "int CWrapper::probe(CBase* param_1)\n{\n    return param_1->step();\n}\n",
+    "expected_direct": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "11"
+    },
+    "actual_rewrite": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "22"
+    }
+  },
+  "boolean_value": {
+    "before_code": "int normalize(int x) { return x != false; }",
+    "after_code": "int normalize(int x) { return x; }",
+    "before": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "1 0 1"
+    },
+    "after": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "-3 0 2"
+    }
+  },
+  "literal": {
+    "raw": "const char *message(void)\n{\n return \"bad UTF-8 continuation byte\";\n}\n",
+    "converted": "const char *message()\n{\n    return \"bad UTF-8 continuation unsigned char\";\n}\n",
+    "before": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "bad UTF-8 continuation byte"
+    },
+    "after": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "bad UTF-8 continuation unsigned char"
+    }
+  },
+  "archived_literal_hits": [
+    {
+      "file": "research/decompiled-core/generic_model.c",
+      "line": 10600,
+      "before": "\"bad UTF-8 continuation byte\"",
+      "after": "\"bad UTF-8 continuation unsigned char\""
+    },
+    {
+      "file": "research/decompiled-core/path_controller.c",
+      "line": 3150,
+      "before": "\"bad UTF-8 continuation byte\"",
+      "after": "\"bad UTF-8 continuation unsigned char\""
+    },
+    {
+      "file": "research/decompiled-core/trigger_unit.c",
+      "line": 4218,
+      "before": "\"bad UTF-8 continuation byte\"",
+      "after": "\"bad UTF-8 continuation unsigned char\""
+    }
+  ],
+  "const_schema": {
+    "elfdb_cv": "const",
+    "generated_declaration": "int get();",
+    "converted": "int CProbe::get()\n{\n    return x;\n}\n",
+    "actual_compile": {
+      "compiled": false,
+      "stderr": "/mnt/data/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/const_rewritten.cpp:3:5: error: no declaration matches ‘int CProbe::get()’\n    3 | int CProbe::get()\n      |     ^~~~~~\n/mnt/data/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/const_rewritten.cpp:2:28: note: candidate is: ‘int CProbe::get() const’\n    2 | struct CProbe { int x; int get() const; };\n      |                            ^~~\n/mnt/data/OpenTorchlight_unified_audit/results/recheck/converter/fixtures/const_rewritten.cpp:2:8: note: ‘struct CProbe’ defined here\n    2 | struct CProbe { int x; int get() const; };\n      |        ^~~~~~\n"
+    },
+    "control_restoring_const": {
+      "compiled": true,
+      "stderr": ""
+    }
+  },
+  "missing_overload": {
+    "added": 0,
+    "generated_header": "struct CProbe\n{\n int read(int);\n};\n",
+    "with_missing_declaration": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "11"
+    },
+    "complete_declarations": {
+      "compiled": true,
+      "stderr": "",
+      "returncode": 0,
+      "stdout": "22"
+    }
+  },
+  "namespace_suppression": {
+    "unrelated_header": "struct CNoise { int parse(int); };",
+    "wanted": "TOOLS::parse(int)",
+    "generated": "#ifndef GEN_NAMESPACES_H\n#define GEN_NAMESPACES_H\n\n// Free functions of game namespaces, from symbols; return types from Ghidra.\n\n\n#endif\n"
+  },
+  "vtable_overloads": {
+    "expected": {
+      "raw_gcc14_parsed": [
+        []
+      ],
+      "raw_gcc14_mismatch": "COver: virtual slot 0 is (nothing) in your header, COver::f in the original; original order: COver::f, COver::f",
+      "compatibility_adjustment": "Remove function-entry cast only; header casts unchanged.",
+      "parsed_by_project": [
+        [
+          "COver::f",
+          "COver::f"
+        ]
+      ],
+      "mismatch": null,
+      "real_relocation_targets": [
+        "_ZN5COver1fEi",
+        "_ZN5COver1fEl"
+      ]
+    },
+    "swapped": {
+      "raw_gcc14_parsed": [
+        []
+      ],
+      "raw_gcc14_mismatch": "COver: virtual slot 0 is (nothing) in your header, COver::f in the original; original order: COver::f, COver::f",
+      "compatibility_adjustment": "Remove function-entry cast only; header casts unchanged.",
+      "parsed_by_project": [
+        [
+          "COver::f",
+          "COver::f"
+        ]
+      ],
+      "mismatch": null,
+      "real_relocation_targets": [
+        "_ZN5COver1fEl",
+        "_ZN5COver1fEi"
+      ]
+    }
+  },
+  "queue": {
+    "candidates": [
+      [
+        0,
+        100,
+        "Small.cpp",
+        1
+      ]
+    ],
+    "excluded_despite_no_acceptance_evidence": [
+      "Partial.cpp",
+      "Large.cpp"
+    ]
+  },
+  "historical_queue_inventory": {
+    "source": "research/decomp-automation-audit-2026-10-04/measured.json",
+    "date": "2026-10-04",
+    "meaning": "Location of historical >=1024-byte sample, not outstanding or accepted work today.",
+    "sample_functions": 666,
+    "sample_bytes": 2797634,
+    "sample_functions_in_existing_source_files": 181,
+    "sample_bytes_in_existing_source_files": 456850,
+    "tus_over_60000_using_only_this_sample_as_lower_bound": {
+      "gameclient.cpp": 84811,
+      "character.cpp": 199534,
+      "Equipment.cpp": 116975,
+      "level.cpp": 104416,
+      "gameui.cpp": 232867,
+      "enchantmenu.cpp": 60746,
+      "inventorymenu.cpp": 73562,
+      "petmenu.cpp": 74693
+    },
+    "sample_covered_by_either_exclusion": 348,
+    "sample_bytes_covered_by_either_exclusion": 1404454
+  },
+  "identity_inventory": {
+    "meaning": "Strong C-prefixed class symbols only; not remaining work.",
+    "cv_qualified_symbols": 32,
+    "examples": [
+      {
+        "address": "0x80fe90",
+        "name": "CCharacter::animationExists(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x811630",
+        "name": "CCharacter::animationQueued(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x812930",
+        "name": "CCharacter::animationPlaying(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b210",
+        "name": "CDynamicLine::getOperationType() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b220",
+        "name": "CDynamicLine::getPoint(unsigned short) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b240",
+        "name": "CDynamicLine::getNumPoints() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86cbe0",
+        "name": "CDynamicRenderable::getSquaredViewDepth(Ogre::Camera const*) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86cca0",
+        "name": "CDynamicRenderable::getBoundingRadius() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x899f00",
+        "name": "CGenericModel::getAnimationCount() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x899f20",
+        "name": "CGenericModel::getAnimationName(unsigned int) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x89ab60",
+        "name": "CGenericModel::getAnimationLengthSeconds(int) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x89abb0",
+        "name": "CGenericModel::getAnimationLength(int) const",
+        "cv": "const"
+      }
+    ],
+    "overloaded_qualified_names": 123
+  }
+}

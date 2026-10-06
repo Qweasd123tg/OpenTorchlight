@@ -1,0 +1,26 @@
+{
+  "original_archive_sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d",
+  "files_before": 2285,
+  "files_after": 2285,
+  "modified_missing_or_added": [],
+  "unchanged": true,
+  "deliverable_compiled_binaries_removed": [
+    "results/portable-run/resource-operations/resource_default_test",
+    "results/portable-run/resource-operations/cegui_fixture",
+    "results/portable-run/resource-operations/synthetic-original-tables",
+    "results/portable-run/resource-operations/synthetic-regenerated-tables",
+    "results/portable-run/syntax-and-signatures/fixtures/overload_control.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/bool_expected.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/bool_rewritten.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/vtable_expected.o",
+    "results/portable-run/syntax-and-signatures/fixtures/literal_rewritten.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/const_control.o",
+    "results/portable-run/syntax-and-signatures/fixtures/overload_missing.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/vtable_swapped.o",
+    "results/portable-run/syntax-and-signatures/fixtures/literal_expected.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/direct_rewritten.exe",
+    "results/portable-run/syntax-and-signatures/fixtures/direct_expected.exe"
+  ],
+  "original_ELF_run": false,
+  "original_GCC447_run": false
+}

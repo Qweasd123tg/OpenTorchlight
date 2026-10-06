@@ -1,0 +1,106 @@
+{
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "queue": {
+    "candidates": [
+      [
+        0,
+        100,
+        "Small.cpp",
+        1
+      ]
+    ],
+    "excluded_despite_no_acceptance_evidence": [
+      "Partial.cpp",
+      "Large.cpp"
+    ]
+  },
+  "historical_queue_inventory": {
+    "source": "research/decomp-automation-audit-2026-10-04/measured.json",
+    "date": "2026-10-04",
+    "meaning": "Location of historical >=1024-byte sample, not outstanding or accepted work today.",
+    "sample_functions": 666,
+    "sample_bytes": 2797634,
+    "sample_functions_in_existing_source_files": 181,
+    "sample_bytes_in_existing_source_files": 456850,
+    "tus_over_60000_using_only_this_sample_as_lower_bound": {
+      "gameclient.cpp": 84811,
+      "character.cpp": 199534,
+      "Equipment.cpp": 116975,
+      "level.cpp": 104416,
+      "gameui.cpp": 232867,
+      "enchantmenu.cpp": 60746,
+      "inventorymenu.cpp": 73562,
+      "petmenu.cpp": 74693
+    },
+    "sample_covered_by_either_exclusion": 348,
+    "sample_bytes_covered_by_either_exclusion": 1404454
+  },
+  "identity_inventory": {
+    "meaning": "Strong C-prefixed class symbols only; not remaining work.",
+    "cv_qualified_symbols": 32,
+    "examples": [
+      {
+        "address": "0x80fe90",
+        "name": "CCharacter::animationExists(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x811630",
+        "name": "CCharacter::animationQueued(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x812930",
+        "name": "CCharacter::animationPlaying(std::string const&) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b210",
+        "name": "CDynamicLine::getOperationType() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b220",
+        "name": "CDynamicLine::getPoint(unsigned short) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86b240",
+        "name": "CDynamicLine::getNumPoints() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86cbe0",
+        "name": "CDynamicRenderable::getSquaredViewDepth(Ogre::Camera const*) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x86cca0",
+        "name": "CDynamicRenderable::getBoundingRadius() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x899f00",
+        "name": "CGenericModel::getAnimationCount() const",
+        "cv": "const"
+      },
+      {
+        "address": "0x899f20",
+        "name": "CGenericModel::getAnimationName(unsigned int) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x89ab60",
+        "name": "CGenericModel::getAnimationLengthSeconds(int) const",
+        "cv": "const"
+      },
+      {
+        "address": "0x89abb0",
+        "name": "CGenericModel::getAnimationLength(int) const",
+        "cv": "const"
+      }
+    ],
+    "overloaded_qualified_names": 123
+  }
+}
+All assertions passed. Detailed results: /mnt/data/OpenTorchlight_unified_audit/results/portable-run/syntax-and-signatures/probe-results.json

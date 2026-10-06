@@ -1,0 +1,126 @@
+[
+  {
+    "name": "invalidation",
+    "returncode": 0,
+    "seconds": 1.449,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_no_LLM_audit/ot_no_llm_notes/probe_draft_invalidation.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main"
+    ]
+  },
+  {
+    "name": "types-normalizer",
+    "returncode": 0,
+    "seconds": 1.676,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_deeper_no_llm/OpenTorchlight_deeper_no_llm/probe_pipeline.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/types-normalizer.json"
+    ]
+  },
+  {
+    "name": "normalizer-patch",
+    "returncode": 0,
+    "seconds": 3.612,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass3/OpenTorchlight_pass3/verify_patch.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/normalizer-patch.json"
+    ]
+  },
+  {
+    "name": "capture-and-equivalence",
+    "returncode": 0,
+    "seconds": 2.431,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass3/OpenTorchlight_pass3/probe_pass3.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/capture-and-equivalence"
+    ]
+  },
+  {
+    "name": "converter",
+    "returncode": 0,
+    "seconds": 3.065,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass4/OpenTorchlight_pass4/probe_pass4.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--output",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/converter"
+    ]
+  },
+  {
+    "name": "cv-patch",
+    "returncode": 0,
+    "seconds": 3.049,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass4/OpenTorchlight_pass4/verify_cv_patch.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--output",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/cv-patch"
+    ]
+  },
+  {
+    "name": "region-tests",
+    "returncode": 0,
+    "seconds": 1.173,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass5/OpenTorchlight_pass5/scripts/test_stage_tools.py"
+    ]
+  },
+  {
+    "name": "family-loop-tests",
+    "returncode": 0,
+    "seconds": 1.204,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass6/OpenTorchlight_pass6/scripts/test_stage_prototypes.py"
+    ]
+  },
+  {
+    "name": "resource-library-tables",
+    "returncode": 0,
+    "seconds": 12.101,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass7/OpenTorchlight_pass7/tools/run_checks.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/resource-library-tables"
+    ]
+  },
+  {
+    "name": "memory-abi-native",
+    "returncode": 0,
+    "seconds": 10.461,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass8/OpenTorchlight_pass8/run_all.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/memory-abi-native"
+    ]
+  },
+  {
+    "name": "draft-isolation-patch",
+    "returncode": 0,
+    "seconds": 2.05,
+    "command": [
+      "/opt/pyvenv/bin/python",
+      "/mnt/data/torchlight_review/OpenTorchlight_pass9/OpenTorchlight_pass9/run_checks.py",
+      "/mnt/data/torchlight_review/project/OpenTorchlight-main",
+      "--out",
+      "/mnt/data/OpenTorchlight_unified_audit/results/recheck/draft-isolation-patch"
+    ]
+  }
+]

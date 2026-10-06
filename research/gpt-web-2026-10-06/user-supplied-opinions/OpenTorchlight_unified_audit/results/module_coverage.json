@@ -1,0 +1,2485 @@
+[
+  {
+    "path": "tools/decomp/autotest.py",
+    "lines": 446,
+    "sha256": "d4f0f0e5d3957febf8f54ca53dbbdef6956980ae785667ab6cffc386b7dd3dd5",
+    "role": "Генерация тестов",
+    "coverage": "Типизированные аргументы/состояния и захват; ограничения жизненности состояния и наблюдения.",
+    "definitions": [
+      {
+        "name": "is_list",
+        "line": 52,
+        "end_line": 53
+      },
+      {
+        "name": "return_type_lookup",
+        "line": 56,
+        "end_line": 69
+      },
+      {
+        "name": "diff_functions",
+        "line": 408,
+        "end_line": 418
+      },
+      {
+        "name": "main",
+        "line": 421,
+        "end_line": 442
+      },
+      {
+        "name": "__init__",
+        "line": 73,
+        "end_line": 83
+      },
+      {
+        "name": "class_headers",
+        "line": 86,
+        "end_line": 91
+      },
+      {
+        "name": "flat_fields",
+        "line": 93,
+        "end_line": 102
+      },
+      {
+        "name": "size_of",
+        "line": 104,
+        "end_line": 106
+      },
+      {
+        "name": "is_static",
+        "line": 108,
+        "end_line": 113
+      },
+      {
+        "name": "kind_of",
+        "line": 116,
+        "end_line": 118
+      },
+      {
+        "name": "object_size",
+        "line": 120,
+        "end_line": 127
+      },
+      {
+        "name": "fake",
+        "line": 129,
+        "end_line": 143
+      },
+      {
+        "name": "pointer_to",
+        "line": 145,
+        "end_line": 150
+      },
+      {
+        "name": "fill",
+        "line": 152,
+        "end_line": 176
+      },
+      {
+        "name": "element",
+        "line": 179,
+        "end_line": 189
+      },
+      {
+        "name": "fill_list",
+        "line": 191,
+        "end_line": 217
+      },
+      {
+        "name": "argument",
+        "line": 219,
+        "end_line": 263
+      },
+      {
+        "name": "dump",
+        "line": 265,
+        "end_line": 280
+      },
+      {
+        "name": "test_for",
+        "line": 283,
+        "end_line": 377
+      },
+      {
+        "name": "write",
+        "line": 379,
+        "end_line": 405
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/calls.py",
+    "lines": 224,
+    "sha256": "3f40f8a66207ab04d3155586e43a6fcb388592c094fe0870685b01af8c90a386",
+    "role": "Аргументы вызовов",
+    "coverage": "Линейный tracer, не полный CFG/SSA. Его вывод — подсказки, не доказательство reachability.",
+    "definitions": [
+      {
+        "name": "main",
+        "line": 212,
+        "end_line": 220
+      },
+      {
+        "name": "__init__",
+        "line": 38,
+        "end_line": 47
+      },
+      {
+        "name": "find",
+        "line": 49,
+        "end_line": 55
+      },
+      {
+        "name": "literal",
+        "line": 57,
+        "end_line": 73
+      },
+      {
+        "name": "immediate",
+        "line": 75,
+        "end_line": 84
+      },
+      {
+        "name": "show",
+        "line": 87,
+        "end_line": 93
+      },
+      {
+        "name": "trace",
+        "line": 95,
+        "end_line": 203
+      },
+      {
+        "name": "plt_names",
+        "line": 205,
+        "end_line": 209
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/check.py",
+    "lines": 162,
+    "sha256": "43087abaf8adccd6b3b32ea77e1f0b0242af78474915088aa005f367653b5649",
+    "role": "Сводная приёмка",
+    "coverage": "MATCH/DIFF, ручная coverage по TL_ORIGINAL, auto digest, финальный отчёт. Код возврата != полнота игры.",
+    "definitions": [
+      {
+        "name": "ensure_db",
+        "line": 38,
+        "end_line": 49
+      },
+      {
+        "name": "shadow_covered",
+        "line": 52,
+        "end_line": 57
+      },
+      {
+        "name": "generated_tests",
+        "line": 60,
+        "end_line": 76
+      },
+      {
+        "name": "main",
+        "line": 79,
+        "end_line": 158
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/descriptors.py",
+    "lines": 374,
+    "sha256": "3a5a0787eb153c54c02d399fcb11e7112086210dc0850fdd53f9c52a52b8fb37",
+    "role": "Дескрипторы",
+    "coverage": "Существующий генератор. Есть записи в include/src; для общего batch нужен staging.",
+    "definitions": [
+      {
+        "name": "header_name",
+        "line": 42,
+        "end_line": 43
+      },
+      {
+        "name": "cpp_type",
+        "line": 46,
+        "end_line": 49
+      },
+      {
+        "name": "split_args",
+        "line": 52,
+        "end_line": 68
+      },
+      {
+        "name": "enum_names",
+        "line": 71,
+        "end_line": 83
+      },
+      {
+        "name": "flags_expr",
+        "line": 86,
+        "end_line": 91
+      },
+      {
+        "name": "property_variable",
+        "line": 94,
+        "end_line": 97
+      },
+      {
+        "name": "main",
+        "line": 363,
+        "end_line": 370
+      },
+      {
+        "name": "__init__",
+        "line": 101,
+        "end_line": 117
+      },
+      {
+        "name": "ctor",
+        "line": 119,
+        "end_line": 121
+      },
+      {
+        "name": "trace",
+        "line": 123,
+        "end_line": 132
+      },
+      {
+        "name": "draft",
+        "line": 134,
+        "end_line": 163
+      },
+      {
+        "name": "static_decl",
+        "line": 165,
+        "end_line": 181
+      },
+      {
+        "name": "value",
+        "line": 183,
+        "end_line": 201
+      },
+      {
+        "name": "generate",
+        "line": 203,
+        "end_line": 316
+      },
+      {
+        "name": "run",
+        "line": 318,
+        "end_line": 350
+      },
+      {
+        "name": "check",
+        "line": 352,
+        "end_line": 360
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/draft_trial.py",
+    "lines": 182,
+    "sha256": "6e7d31c77aa340866061597e71d4f26b6c2782940825034a28597dd20b29d932",
+    "role": "Массовый детерминированный trial",
+    "coverage": "Компиляционные исключения удаляют функции; нет общего автоматического ремонта/приёмки.",
+    "definitions": [
+      {
+        "name": "main",
+        "line": 147,
+        "end_line": 178
+      },
+      {
+        "name": "__init__",
+        "line": 57,
+        "end_line": 65
+      },
+      {
+        "name": "drafts",
+        "line": 67,
+        "end_line": 80
+      },
+      {
+        "name": "includes",
+        "line": 82,
+        "end_line": 94
+      },
+      {
+        "name": "run",
+        "line": 96,
+        "end_line": 144
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/elfdb.py",
+    "lines": 718,
+    "sha256": "39b6a390e23b12c09cf36b846a9e0d5d18278e0a0d5e5fb51449469e8508d044",
+    "role": "База оригинала",
+    "coverage": "TU, роли функций, RTTI, vtables, вызовы. Статический анализ + связанные пробы; исходный ELF не пересканирован.",
+    "definitions": [
+      {
+        "name": "default_elf",
+        "line": 30,
+        "end_line": 35
+      },
+      {
+        "name": "split_top",
+        "line": 42,
+        "end_line": 64
+      },
+      {
+        "name": "parse_demangled",
+        "line": 67,
+        "end_line": 114
+      },
+      {
+        "name": "strip_template",
+        "line": 117,
+        "end_line": 126
+      },
+      {
+        "name": "name_key",
+        "line": 129,
+        "end_line": 131
+      },
+      {
+        "name": "class_key",
+        "line": 134,
+        "end_line": 138
+      },
+      {
+        "name": "classify_tu",
+        "line": 149,
+        "end_line": 161
+      },
+      {
+        "name": "split_operands",
+        "line": 173,
+        "end_line": 186
+      },
+      {
+        "name": "return_use",
+        "line": 189,
+        "end_line": 217
+      },
+      {
+        "name": "scan_text",
+        "line": 220,
+        "end_line": 289
+      },
+      {
+        "name": "build",
+        "line": 295,
+        "end_line": 662
+      },
+      {
+        "name": "summary_markdown",
+        "line": 665,
+        "end_line": 695
+      },
+      {
+        "name": "load_db",
+        "line": 698,
+        "end_line": 702
+      },
+      {
+        "name": "main",
+        "line": 705,
+        "end_line": 714
+      },
+      {
+        "name": "flush",
+        "line": 230,
+        "end_line": 275
+      },
+      {
+        "name": "dyn_object",
+        "line": 374,
+        "end_line": 378
+      },
+      {
+        "name": "pointer_name",
+        "line": 380,
+        "end_line": 394
+      },
+      {
+        "name": "file_backed",
+        "line": 396,
+        "end_line": 398
+      },
+      {
+        "name": "scope_class",
+        "line": 502,
+        "end_line": 503
+      },
+      {
+        "name": "assign_runs",
+        "line": 506,
+        "end_line": 572
+      },
+      {
+        "name": "cls_entry",
+        "line": 605,
+        "end_line": 606
+      },
+      {
+        "name": "match",
+        "line": 519,
+        "end_line": 532
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/elfimage.py",
+    "lines": 231,
+    "sha256": "bedac5f8493d69b7ef1d6871eae50381a60d150fbc10228fb2223ac9987376bc",
+    "role": "Входной ELF и object-файлы",
+    "coverage": "Парсер, адреса, символы, релокации. Полная проверка оригинала здесь невозможна без ELF.",
+    "definitions": [
+      {
+        "name": "_parse_symbols",
+        "line": 111,
+        "end_line": 127
+      },
+      {
+        "name": "load",
+        "line": 130,
+        "end_line": 169
+      },
+      {
+        "name": "load_object",
+        "line": 196,
+        "end_line": 219
+      },
+      {
+        "name": "demangle",
+        "line": 222,
+        "end_line": 231
+      },
+      {
+        "name": "defined",
+        "line": 49,
+        "end_line": 50
+      },
+      {
+        "name": "section",
+        "line": 73,
+        "end_line": 77
+      },
+      {
+        "name": "section_at",
+        "line": 79,
+        "end_line": 83
+      },
+      {
+        "name": "read",
+        "line": 85,
+        "end_line": 90
+      },
+      {
+        "name": "u64",
+        "line": 92,
+        "end_line": 93
+      },
+      {
+        "name": "i64",
+        "line": 95,
+        "end_line": 96
+      },
+      {
+        "name": "u32",
+        "line": 98,
+        "end_line": 99
+      },
+      {
+        "name": "cstring",
+        "line": 101,
+        "end_line": 108
+      },
+      {
+        "name": "section_bytes",
+        "line": 189,
+        "end_line": 193
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/examples.py",
+    "lines": 148,
+    "sha256": "8a882069f36e34b2ac40f9b748cb745da27a0e6ac8f23e04b374c60690881c0c",
+    "role": "Банк примеров",
+    "coverage": "Подбор примеров для модели, не прямой semantic transfer; ограничение MAX_SIZE=1500.",
+    "definitions": [
+      {
+        "name": "features",
+        "line": 36,
+        "end_line": 37
+      },
+      {
+        "name": "accepted_addresses",
+        "line": 40,
+        "end_line": 47
+      },
+      {
+        "name": "converted_draft",
+        "line": 50,
+        "end_line": 58
+      },
+      {
+        "name": "source_of",
+        "line": 61,
+        "end_line": 74
+      },
+      {
+        "name": "build",
+        "line": 77,
+        "end_line": 90
+      },
+      {
+        "name": "load",
+        "line": 93,
+        "end_line": 94
+      },
+      {
+        "name": "choose",
+        "line": 97,
+        "end_line": 124
+      },
+      {
+        "name": "render",
+        "line": 127,
+        "end_line": 129
+      },
+      {
+        "name": "main",
+        "line": 132,
+        "end_line": 144
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/ghidra/DecompDrafts.java",
+    "lines": 373,
+    "sha256": "2d0edcdb6d7693f99462a8ae22804457c5ad72f3f34c766ef04e9cba6d98cd6d",
+    "role": "Импорт в Ghidra",
+    "coverage": "Изучены точки типов, vtable, ABI, timeout. В Ghidra скрипт не выполнялся.",
+    "definitions": []
+  },
+  {
+    "path": "tools/decomp/ghidra_cpp.py",
+    "lines": 604,
+    "sha256": "13850426585bea1fd8ba83aa937f647baa238eddc929f161e35c7bc30189a58f",
+    "role": "Преобразование C++",
+    "coverage": "Реальный convert на воспроизведениях; часть преобразований меняет семантику.",
+    "definitions": [
+      {
+        "name": "balanced_block_end",
+        "line": 44,
+        "end_line": 56
+      },
+      {
+        "name": "drop_refcount_blocks",
+        "line": 59,
+        "end_line": 66
+      },
+      {
+        "name": "split_args",
+        "line": 69,
+        "end_line": 101
+      },
+      {
+        "name": "_cast_to",
+        "line": 107,
+        "end_line": 113
+      },
+      {
+        "name": "call_rewrite",
+        "line": 116,
+        "end_line": 150
+      },
+      {
+        "name": "parse_enums",
+        "line": 153,
+        "end_line": 172
+      },
+      {
+        "name": "inline_temp_strings",
+        "line": 175,
+        "end_line": 189
+      },
+      {
+        "name": "side_effects",
+        "line": 195,
+        "end_line": 197
+      },
+      {
+        "name": "drop_dead_stores",
+        "line": 200,
+        "end_line": 217
+      },
+      {
+        "name": "drop_unused_locals",
+        "line": 220,
+        "end_line": 230
+      },
+      {
+        "name": "enum_arguments",
+        "line": 233,
+        "end_line": 249
+      },
+      {
+        "name": "closing_paren",
+        "line": 252,
+        "end_line": 259
+      },
+      {
+        "name": "_bare",
+        "line": 267,
+        "end_line": 269
+      },
+      {
+        "name": "_element",
+        "line": 272,
+        "end_line": 277
+      },
+      {
+        "name": "tarraylist_access",
+        "line": 280,
+        "end_line": 302
+      },
+      {
+        "name": "tarraylist_count",
+        "line": 305,
+        "end_line": 308
+      },
+      {
+        "name": "returned_by_pointer",
+        "line": 314,
+        "end_line": 322
+      },
+      {
+        "name": "hidden_return_signature",
+        "line": 325,
+        "end_line": 338
+      },
+      {
+        "name": "renumber_params",
+        "line": 341,
+        "end_line": 343
+      },
+      {
+        "name": "hidden_return_body",
+        "line": 346,
+        "end_line": 368
+      },
+      {
+        "name": "hidden_return_calls",
+        "line": 371,
+        "end_line": 381
+      },
+      {
+        "name": "reference_arguments",
+        "line": 384,
+        "end_line": 399
+      },
+      {
+        "name": "drop_nan_guards",
+        "line": 409,
+        "end_line": 439
+      },
+      {
+        "name": "tidy_expressions",
+        "line": 442,
+        "end_line": 453
+      },
+      {
+        "name": "reindent",
+        "line": 456,
+        "end_line": 484
+      },
+      {
+        "name": "convert",
+        "line": 487,
+        "end_line": 552
+      },
+      {
+        "name": "cxx_type",
+        "line": 555,
+        "end_line": 563
+      },
+      {
+        "name": "signatures_of",
+        "line": 570,
+        "end_line": 578
+      },
+      {
+        "name": "known_methods",
+        "line": 581,
+        "end_line": 589
+      },
+      {
+        "name": "main",
+        "line": 592,
+        "end_line": 600
+      },
+      {
+        "name": "capture",
+        "line": 179,
+        "end_line": 181
+      },
+      {
+        "name": "fix",
+        "line": 235,
+        "end_line": 248
+      },
+      {
+        "name": "fix",
+        "line": 289,
+        "end_line": 292
+      },
+      {
+        "name": "construct",
+        "line": 351,
+        "end_line": 361
+      },
+      {
+        "name": "fix",
+        "line": 376,
+        "end_line": 379
+      },
+      {
+        "name": "fix",
+        "line": 386,
+        "end_line": 398
+      },
+      {
+        "name": "bare",
+        "line": 414,
+        "end_line": 415
+      },
+      {
+        "name": "guarded",
+        "line": 417,
+        "end_line": 424
+      },
+      {
+        "name": "before",
+        "line": 426,
+        "end_line": 427
+      },
+      {
+        "name": "after",
+        "line": 429,
+        "end_line": 430
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/ghidra_draft.py",
+    "lines": 353,
+    "sha256": "e4e91f75d93d8b166935f4b974efbe33a58b44f6bee026cc8ffd7c2a180f1890",
+    "role": "Экспорт и актуальность",
+    "coverage": "Регрессии зависимостей, failed-as-fresh, shared io; patch в копии.",
+    "definitions": [
+      {
+        "name": "workspace",
+        "line": 43,
+        "end_line": 49
+      },
+      {
+        "name": "headless",
+        "line": 52,
+        "end_line": 63
+      },
+      {
+        "name": "analyze",
+        "line": 66,
+        "end_line": 72
+      },
+      {
+        "name": "_digest",
+        "line": 81,
+        "end_line": 83
+      },
+      {
+        "name": "tools_digest",
+        "line": 86,
+        "end_line": 87
+      },
+      {
+        "name": "class_digests",
+        "line": 90,
+        "end_line": 92
+      },
+      {
+        "name": "used_classes",
+        "line": 95,
+        "end_line": 100
+      },
+      {
+        "name": "prototype_digest",
+        "line": 103,
+        "end_line": 105
+      },
+      {
+        "name": "draft_state",
+        "line": 108,
+        "end_line": 131
+      },
+      {
+        "name": "_types",
+        "line": 134,
+        "end_line": 139
+      },
+      {
+        "name": "_prototypes",
+        "line": 142,
+        "end_line": 144
+      },
+      {
+        "name": "stale",
+        "line": 147,
+        "end_line": 156
+      },
+      {
+        "name": "drafts",
+        "line": 159,
+        "end_line": 204
+      },
+      {
+        "name": "find_definition",
+        "line": 207,
+        "end_line": 232
+      },
+      {
+        "name": "_param_type",
+        "line": 235,
+        "end_line": 246
+      },
+      {
+        "name": "captured",
+        "line": 254,
+        "end_line": 257
+      },
+      {
+        "name": "measure",
+        "line": 260,
+        "end_line": 320
+      },
+      {
+        "name": "main",
+        "line": 323,
+        "end_line": 349
+      },
+      {
+        "name": "write",
+        "line": 262,
+        "end_line": 263
+      },
+      {
+        "name": "flush",
+        "line": 265,
+        "end_line": 266
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/headers.py",
+    "lines": 712,
+    "sha256": "5974fe3a45c433d1a47e5189dde49c2540aa6ccf084e92ac2b9b7942c8aba88f",
+    "role": "Генерация объявлений",
+    "coverage": "Проверены ошибки cv, overload, namespace; компиляторные пробы на синтетике.",
+    "definitions": [
+      {
+        "name": "ogre_dir",
+        "line": 61,
+        "end_line": 62
+      },
+      {
+        "name": "class_dump",
+        "line": 65,
+        "end_line": 73
+      },
+      {
+        "name": "dumped_vtable",
+        "line": 76,
+        "end_line": 94
+      },
+      {
+        "name": "original_vtable",
+        "line": 97,
+        "end_line": 123
+      },
+      {
+        "name": "vtable_mismatch",
+        "line": 126,
+        "end_line": 148
+      },
+      {
+        "name": "main",
+        "line": 692,
+        "end_line": 708
+      },
+      {
+        "name": "__init__",
+        "line": 152,
+        "end_line": 169
+      },
+      {
+        "name": "scan_hand_headers",
+        "line": 171,
+        "end_line": 185
+      },
+      {
+        "name": "resolve",
+        "line": 188,
+        "end_line": 199
+      },
+      {
+        "name": "need",
+        "line": 201,
+        "end_line": 236
+      },
+      {
+        "name": "ghidra_return",
+        "line": 238,
+        "end_line": 265
+      },
+      {
+        "name": "method_decl",
+        "line": 268,
+        "end_line": 288
+      },
+      {
+        "name": "virtual_signature",
+        "line": 290,
+        "end_line": 291
+      },
+      {
+        "name": "root_return",
+        "line": 293,
+        "end_line": 314
+      },
+      {
+        "name": "own_slots",
+        "line": 316,
+        "end_line": 320
+      },
+      {
+        "name": "base_offsets",
+        "line": 322,
+        "end_line": 328
+      },
+      {
+        "name": "pure_overriders",
+        "line": 330,
+        "end_line": 350
+      },
+      {
+        "name": "primary_base_slots",
+        "line": 352,
+        "end_line": 357
+      },
+      {
+        "name": "header",
+        "line": 359,
+        "end_line": 431
+      },
+      {
+        "name": "fields",
+        "line": 433,
+        "end_line": 470
+      },
+      {
+        "name": "natural_size",
+        "line": 472,
+        "end_line": 486
+      },
+      {
+        "name": "gap",
+        "line": 489,
+        "end_line": 492
+      },
+      {
+        "name": "types_header",
+        "line": 494,
+        "end_line": 522
+      },
+      {
+        "name": "globals_header",
+        "line": 524,
+        "end_line": 560
+      },
+      {
+        "name": "trial_include",
+        "line": 562,
+        "end_line": 604
+      },
+      {
+        "name": "namespaces_header",
+        "line": 606,
+        "end_line": 639
+      },
+      {
+        "name": "write",
+        "line": 641,
+        "end_line": 657
+      },
+      {
+        "name": "check",
+        "line": 659,
+        "end_line": 689
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/hybrid.py",
+    "lines": 490,
+    "sha256": "26a6faac07a7c0915688ace0b23dce96d8133b6460406d1fd20c9aa5a545c301",
+    "role": "Гибрид/тестовый запуск",
+    "coverage": "Сборка, imports/redirects, staging runtime, inherited filter. Полного build/run не было.",
+    "definitions": [
+      {
+        "name": "rewrite_assembly",
+        "line": 98,
+        "end_line": 142
+      },
+      {
+        "name": "defined_functions",
+        "line": 148,
+        "end_line": 150
+      },
+      {
+        "name": "undefined_symbols",
+        "line": 153,
+        "end_line": 155
+      },
+      {
+        "name": "defined_symbols",
+        "line": 158,
+        "end_line": 160
+      },
+      {
+        "name": "patch_window_ok",
+        "line": 163,
+        "end_line": 179
+      },
+      {
+        "name": "originals_script",
+        "line": 182,
+        "end_line": 220
+      },
+      {
+        "name": "hooks_assembly",
+        "line": 223,
+        "end_line": 230
+      },
+      {
+        "name": "needed_libraries",
+        "line": 236,
+        "end_line": 253
+      },
+      {
+        "name": "library_objects",
+        "line": 256,
+        "end_line": 269
+      },
+      {
+        "name": "imports_assembly",
+        "line": 277,
+        "end_line": 299
+      },
+      {
+        "name": "build",
+        "line": 302,
+        "end_line": 394
+      },
+      {
+        "name": "stage_runtime",
+        "line": 397,
+        "end_line": 410
+      },
+      {
+        "name": "steam_runtime_fallback",
+        "line": 413,
+        "end_line": 431
+      },
+      {
+        "name": "game_env",
+        "line": 434,
+        "end_line": 451
+      },
+      {
+        "name": "selftest",
+        "line": 454,
+        "end_line": 467
+      },
+      {
+        "name": "main",
+        "line": 470,
+        "end_line": 486
+      },
+      {
+        "name": "__init__",
+        "line": 68,
+        "end_line": 80
+      },
+      {
+        "name": "tu_functions",
+        "line": 82,
+        "end_line": 88
+      },
+      {
+        "name": "provide",
+        "line": 186,
+        "end_line": 189
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/layout.py",
+    "lines": 570,
+    "sha256": "274d4ff1c1a3938ff9da303db4198d9872600d8e84b1b4095d0845d2706cd708",
+    "role": "Layout и простые методы",
+    "coverage": "Эвристические поля и trivial_body; предположение ширины не становится подтверждённым типом.",
+    "definitions": [
+      {
+        "name": "split_operands",
+        "line": 58,
+        "end_line": 72
+      },
+      {
+        "name": "split_params",
+        "line": 75,
+        "end_line": 87
+      },
+      {
+        "name": "load_insns",
+        "line": 90,
+        "end_line": 115
+      },
+      {
+        "name": "main",
+        "line": 558,
+        "end_line": 566
+      },
+      {
+        "name": "width",
+        "line": 130,
+        "end_line": 131
+      },
+      {
+        "name": "__init__",
+        "line": 135,
+        "end_line": 144
+      },
+      {
+        "name": "scan",
+        "line": 147,
+        "end_line": 278
+      },
+      {
+        "name": "base_end",
+        "line": 281,
+        "end_line": 287
+      },
+      {
+        "name": "extent",
+        "line": 289,
+        "end_line": 295
+      },
+      {
+        "name": "class_size",
+        "line": 297,
+        "end_line": 304
+      },
+      {
+        "name": "analyse",
+        "line": 306,
+        "end_line": 320
+      },
+      {
+        "name": "name_from_descriptor",
+        "line": 322,
+        "end_line": 348
+      },
+      {
+        "name": "accessor",
+        "line": 350,
+        "end_line": 369
+      },
+      {
+        "name": "name_from_accessors",
+        "line": 371,
+        "end_line": 385
+      },
+      {
+        "name": "field_type",
+        "line": 388,
+        "end_line": 415
+      },
+      {
+        "name": "field_name",
+        "line": 417,
+        "end_line": 425
+      },
+      {
+        "name": "rows",
+        "line": 427,
+        "end_line": 458
+      },
+      {
+        "name": "table",
+        "line": 460,
+        "end_line": 470
+      },
+      {
+        "name": "show_value",
+        "line": 473,
+        "end_line": 479
+      },
+      {
+        "name": "header",
+        "line": 481,
+        "end_line": 524
+      },
+      {
+        "name": "return_type",
+        "line": 526,
+        "end_line": 533
+      },
+      {
+        "name": "trivial_body",
+        "line": 535,
+        "end_line": 555
+      },
+      {
+        "name": "touch",
+        "line": 157,
+        "end_line": 164
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/llm_loop.py",
+    "lines": 685,
+    "sha256": "c871f550f6e8d18ab93e63ca13c03bacc8bb1178e8ec5713dac83e2d6b1f2c46",
+    "role": "Цикл кандидата",
+    "coverage": "Получение новых вариантов через Model.ask. Проверены приёмка, публикация, promotion на изолированных объектах Loop.",
+    "definitions": [
+      {
+        "name": "asm_of",
+        "line": 123,
+        "end_line": 129
+      },
+      {
+        "name": "return_from_code",
+        "line": 132,
+        "end_line": 168
+      },
+      {
+        "name": "headers_by_class",
+        "line": 646,
+        "end_line": 653
+      },
+      {
+        "name": "main",
+        "line": 656,
+        "end_line": 681
+      },
+      {
+        "name": "__init__",
+        "line": 76,
+        "end_line": 83
+      },
+      {
+        "name": "ask",
+        "line": 85,
+        "end_line": 120
+      },
+      {
+        "name": "__init__",
+        "line": 172,
+        "end_line": 208
+      },
+      {
+        "name": "draft",
+        "line": 210,
+        "end_line": 217
+      },
+      {
+        "name": "header",
+        "line": 220,
+        "end_line": 274
+      },
+      {
+        "name": "complete_hand_header",
+        "line": 276,
+        "end_line": 335
+      },
+      {
+        "name": "check_header",
+        "line": 337,
+        "end_line": 367
+      },
+      {
+        "name": "unit",
+        "line": 370,
+        "end_line": 392
+      },
+      {
+        "name": "compile",
+        "line": 394,
+        "end_line": 417
+      },
+      {
+        "name": "name_hints",
+        "line": 419,
+        "end_line": 437
+      },
+      {
+        "name": "instruction_diff",
+        "line": 439,
+        "end_line": 446
+      },
+      {
+        "name": "prompt_for",
+        "line": 448,
+        "end_line": 463
+      },
+      {
+        "name": "ask",
+        "line": 465,
+        "end_line": 485
+      },
+      {
+        "name": "run",
+        "line": 487,
+        "end_line": 538
+      },
+      {
+        "name": "keep_existing",
+        "line": 540,
+        "end_line": 554
+      },
+      {
+        "name": "finish",
+        "line": 556,
+        "end_line": 580
+      },
+      {
+        "name": "compare",
+        "line": 582,
+        "end_line": 583
+      },
+      {
+        "name": "test",
+        "line": 585,
+        "end_line": 643
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/mutate.py",
+    "lines": 490,
+    "sha256": "20beee3742aa76855cfbeee171c1d494c0325756ac4890fdfeefc2a80c39b0eb",
+    "role": "Оценка тестов",
+    "coverage": "Мутации, record/accept. Воспроизведена подмена baseline при записи старого результата.",
+    "definitions": [
+      {
+        "name": "mask",
+        "line": 59,
+        "end_line": 88
+      },
+      {
+        "name": "matching",
+        "line": 91,
+        "end_line": 100
+      },
+      {
+        "name": "canonical_parameter",
+        "line": 103,
+        "end_line": 118
+      },
+      {
+        "name": "definition",
+        "line": 121,
+        "end_line": 141
+      },
+      {
+        "name": "mutation_points",
+        "line": 144,
+        "end_line": 161
+      },
+      {
+        "name": "code_digests",
+        "line": 164,
+        "end_line": 174
+      },
+      {
+        "name": "load_accepted",
+        "line": 177,
+        "end_line": 178
+      },
+      {
+        "name": "record",
+        "line": 181,
+        "end_line": 193
+      },
+      {
+        "name": "describe",
+        "line": 196,
+        "end_line": 199
+      },
+      {
+        "name": "functions_in_asm",
+        "line": 203,
+        "end_line": 237
+      },
+      {
+        "name": "references",
+        "line": 240,
+        "end_line": 243
+      },
+      {
+        "name": "probe",
+        "line": 253,
+        "end_line": 265
+      },
+      {
+        "name": "stats",
+        "line": 268,
+        "end_line": 274
+      },
+      {
+        "name": "verdicts",
+        "line": 277,
+        "end_line": 284
+      },
+      {
+        "name": "build_and_test",
+        "line": 287,
+        "end_line": 294
+      },
+      {
+        "name": "hand_coverage",
+        "line": 297,
+        "end_line": 310
+      },
+      {
+        "name": "main",
+        "line": 313,
+        "end_line": 486
+      },
+      {
+        "name": "blank",
+        "line": 63,
+        "end_line": 66
+      },
+      {
+        "name": "__init__",
+        "line": 248,
+        "end_line": 250
+      },
+      {
+        "name": "reach",
+        "line": 373,
+        "end_line": 380
+      },
+      {
+        "name": "rename",
+        "line": 228,
+        "end_line": 232
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/name_tables.py",
+    "lines": 135,
+    "sha256": "a2527362d3b7b913286776e14459acc8677b6b515ee0cfb91165dca09171c53c",
+    "role": "Статические справочники",
+    "coverage": "Local symbols + static initializer; глобальные BSS-таблицы не покрыты.",
+    "definitions": [
+      {
+        "name": "c_literal",
+        "line": 31,
+        "end_line": 32
+      },
+      {
+        "name": "main",
+        "line": 116,
+        "end_line": 131
+      },
+      {
+        "name": "__init__",
+        "line": 36,
+        "end_line": 39
+      },
+      {
+        "name": "symbols_of",
+        "line": 41,
+        "end_line": 42
+      },
+      {
+        "name": "initializers",
+        "line": 44,
+        "end_line": 47
+      },
+      {
+        "name": "disassembly",
+        "line": 49,
+        "end_line": 55
+      },
+      {
+        "name": "read_text",
+        "line": 57,
+        "end_line": 62
+      },
+      {
+        "name": "recover",
+        "line": 64,
+        "end_line": 74
+      },
+      {
+        "name": "_recover_in",
+        "line": 76,
+        "end_line": 102
+      },
+      {
+        "name": "definition",
+        "line": 104,
+        "end_line": 113
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/objdiff.py",
+    "lines": 631,
+    "sha256": "8d0fce3cc065f619b19eb5bde088919418849ce36d0302093193d8457d0ba570",
+    "role": "Сравнение",
+    "coverage": "Пробы нормализации, метаданных, кэша, performance patch. Не полная семантическая эквивалентность.",
+    "definitions": [
+      {
+        "name": "const_size",
+        "line": 43,
+        "end_line": 48
+      },
+      {
+        "name": "printable_string",
+        "line": 51,
+        "end_line": 72
+      },
+      {
+        "name": "literal_token",
+        "line": 75,
+        "end_line": 83
+      },
+      {
+        "name": "run_objdump",
+        "line": 86,
+        "end_line": 89
+      },
+      {
+        "name": "parse_insns",
+        "line": 92,
+        "end_line": 103
+      },
+      {
+        "name": "object_functions",
+        "line": 349,
+        "end_line": 376
+      },
+      {
+        "name": "image_symbol_names",
+        "line": 379,
+        "end_line": 382
+      },
+      {
+        "name": "unknown_members",
+        "line": 385,
+        "end_line": 396
+      },
+      {
+        "name": "known_overloads",
+        "line": 399,
+        "end_line": 407
+      },
+      {
+        "name": "_norm_key",
+        "line": 485,
+        "end_line": 489
+      },
+      {
+        "name": "_load_norm_cache",
+        "line": 492,
+        "end_line": 500
+      },
+      {
+        "name": "save_norm_cache",
+        "line": 503,
+        "end_line": 508
+      },
+      {
+        "name": "tu_for_source",
+        "line": 511,
+        "end_line": 514
+      },
+      {
+        "name": "globalize_locals",
+        "line": 517,
+        "end_line": 533
+      },
+      {
+        "name": "compile_for_diff",
+        "line": 536,
+        "end_line": 541
+      },
+      {
+        "name": "code_digest",
+        "line": 544,
+        "end_line": 547
+      },
+      {
+        "name": "compare_source",
+        "line": 550,
+        "end_line": 587
+      },
+      {
+        "name": "report",
+        "line": 590,
+        "end_line": 602
+      },
+      {
+        "name": "main",
+        "line": 605,
+        "end_line": 627
+      },
+      {
+        "name": "branch",
+        "line": 111,
+        "end_line": 118
+      },
+      {
+        "name": "table_size",
+        "line": 121,
+        "end_line": 127
+      },
+      {
+        "name": "jump_table",
+        "line": 129,
+        "end_line": 139
+      },
+      {
+        "name": "padding",
+        "line": 142,
+        "end_line": 144
+      },
+      {
+        "name": "normalize",
+        "line": 146,
+        "end_line": 165
+      },
+      {
+        "name": "__init__",
+        "line": 169,
+        "end_line": 188
+      },
+      {
+        "name": "name_at",
+        "line": 190,
+        "end_line": 219
+      },
+      {
+        "name": "token",
+        "line": 221,
+        "end_line": 252
+      },
+      {
+        "name": "__init__",
+        "line": 256,
+        "end_line": 267
+      },
+      {
+        "name": "target_name",
+        "line": 269,
+        "end_line": 296
+      },
+      {
+        "name": "prepare",
+        "line": 298,
+        "end_line": 301
+      },
+      {
+        "name": "token",
+        "line": 303,
+        "end_line": 346
+      },
+      {
+        "name": "__init__",
+        "line": 411,
+        "end_line": 418
+      },
+      {
+        "name": "symbol_names",
+        "line": 420,
+        "end_line": 423
+      },
+      {
+        "name": "unknown_references",
+        "line": 425,
+        "end_line": 427
+      },
+      {
+        "name": "known_overloads",
+        "line": 429,
+        "end_line": 430
+      },
+      {
+        "name": "resolver",
+        "line": 432,
+        "end_line": 456
+      },
+      {
+        "name": "function",
+        "line": 458,
+        "end_line": 463
+      },
+      {
+        "name": "normalized",
+        "line": 465,
+        "end_line": 478
+      },
+      {
+        "name": "rip",
+        "line": 241,
+        "end_line": 243
+      },
+      {
+        "name": "absolute",
+        "line": 246,
+        "end_line": 250
+      },
+      {
+        "name": "resolve",
+        "line": 446,
+        "end_line": 455
+      },
+      {
+        "name": "entries",
+        "line": 233,
+        "end_line": 238
+      },
+      {
+        "name": "entries",
+        "line": 313,
+        "end_line": 318
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/parallel.py",
+    "lines": 239,
+    "sha256": "1bbf5c70bf9744d04ffee032ea91b485e6b557777ef2bddf003640cceaec35c0",
+    "role": "Владение TU/worker",
+    "coverage": "Worktree и owners уже есть; shared Ghidra io вне worktree, исключение существующих/больших TU.",
+    "definitions": [
+      {
+        "name": "owners",
+        "line": 44,
+        "end_line": 46
+      },
+      {
+        "name": "owned_by_others",
+        "line": 49,
+        "end_line": 53
+      },
+      {
+        "name": "own",
+        "line": 56,
+        "end_line": 65
+      },
+      {
+        "name": "claims",
+        "line": 68,
+        "end_line": 69
+      },
+      {
+        "name": "save_claims",
+        "line": 72,
+        "end_line": 74
+      },
+      {
+        "name": "candidates",
+        "line": 77,
+        "end_line": 103
+      },
+      {
+        "name": "queue",
+        "line": 106,
+        "end_line": 109
+      },
+      {
+        "name": "claim",
+        "line": 112,
+        "end_line": 131
+      },
+      {
+        "name": "git",
+        "line": 134,
+        "end_line": 135
+      },
+      {
+        "name": "new",
+        "line": 138,
+        "end_line": 170
+      },
+      {
+        "name": "listing",
+        "line": 173,
+        "end_line": 184
+      },
+      {
+        "name": "merge",
+        "line": 187,
+        "end_line": 192
+      },
+      {
+        "name": "drop",
+        "line": 195,
+        "end_line": 201
+      },
+      {
+        "name": "main",
+        "line": 204,
+        "end_line": 235
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/promote.py",
+    "lines": 258,
+    "sha256": "6974b22a48e2d438d50d2d9046866cd8c26cba1c4cff86c57ec88b7b3c28b83a",
+    "role": "Публикация заголовков",
+    "coverage": "Путь изменения исходников и общих bucket-заголовков; нужна транзакционная повторная проверка.",
+    "definitions": [
+      {
+        "name": "includes",
+        "line": 44,
+        "end_line": 45
+      },
+      {
+        "name": "rewrite_includes",
+        "line": 48,
+        "end_line": 54
+      },
+      {
+        "name": "guard",
+        "line": 57,
+        "end_line": 58
+      },
+      {
+        "name": "enum_entries",
+        "line": 62,
+        "end_line": 70
+      },
+      {
+        "name": "global_entries",
+        "line": 73,
+        "end_line": 79
+      },
+      {
+        "name": "namespace_entries",
+        "line": 82,
+        "end_line": 92
+      },
+      {
+        "name": "write_enums",
+        "line": 95,
+        "end_line": 101
+      },
+      {
+        "name": "write_globals",
+        "line": 104,
+        "end_line": 110
+      },
+      {
+        "name": "write_namespaces",
+        "line": 113,
+        "end_line": 122
+      },
+      {
+        "name": "defined_elsewhere",
+        "line": 125,
+        "end_line": 128
+      },
+      {
+        "name": "prune_buckets",
+        "line": 131,
+        "end_line": 142
+      },
+      {
+        "name": "plan",
+        "line": 146,
+        "end_line": 169
+      },
+      {
+        "name": "promote",
+        "line": 172,
+        "end_line": 240
+      },
+      {
+        "name": "main",
+        "line": 243,
+        "end_line": 254
+      },
+      {
+        "name": "save",
+        "line": 183,
+        "end_line": 186
+      },
+      {
+        "name": "shared",
+        "line": 188,
+        "end_line": 199
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/prompts/idioms.md",
+    "lines": 84,
+    "sha256": "c7a5d0889716d5bffb93b57b877ee7722c41b9d9734ec7e1316fd3b669de9b93",
+    "role": "Опорные идиомы",
+    "coverage": "Контекст для модели, не выполняемые формальные правила.",
+    "definitions": []
+  },
+  {
+    "path": "tools/decomp/properties.py",
+    "lines": 409,
+    "sha256": "3608a093e14a8a87f4b8eab53e5c87791778c166bc783914b4c19a7162c0d3c3",
+    "role": "Свойства",
+    "coverage": "Существующий генератор: не предлагать заново. Включить в безопасный кандидатный путь.",
+    "definitions": [
+      {
+        "name": "disassemble",
+        "line": 48,
+        "end_line": 63
+      },
+      {
+        "name": "body",
+        "line": 66,
+        "end_line": 79
+      },
+      {
+        "name": "main",
+        "line": 400,
+        "end_line": 405
+      },
+      {
+        "name": "__init__",
+        "line": 102,
+        "end_line": 115
+      },
+      {
+        "name": "hierarchy",
+        "line": 118,
+        "end_line": 122
+      },
+      {
+        "name": "field_at",
+        "line": 124,
+        "end_line": 129
+      },
+      {
+        "name": "owned",
+        "line": 131,
+        "end_line": 138
+      },
+      {
+        "name": "declaration",
+        "line": 140,
+        "end_line": 152
+      },
+      {
+        "name": "class_block",
+        "line": 155,
+        "end_line": 160
+      },
+      {
+        "name": "string_plan",
+        "line": 163,
+        "end_line": 220
+      },
+      {
+        "name": "plan",
+        "line": 222,
+        "end_line": 292
+      },
+      {
+        "name": "property_types",
+        "line": 295,
+        "end_line": 300
+      },
+      {
+        "name": "target",
+        "line": 302,
+        "end_line": 308
+      },
+      {
+        "name": "generate",
+        "line": 310,
+        "end_line": 354
+      },
+      {
+        "name": "write",
+        "line": 356,
+        "end_line": 377
+      },
+      {
+        "name": "compare",
+        "line": 379,
+        "end_line": 384
+      },
+      {
+        "name": "run",
+        "line": 386,
+        "end_line": 397
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/scaffold.py",
+    "lines": 311,
+    "sha256": "b25538725d17cf4351cc7f8f67b8a75c16a0cc379b2ac70136111a27adb43356",
+    "role": "Задание по TU",
+    "coverage": "Пакет данных и каркас; сам каркас не готовая игровая реализация.",
+    "definitions": [
+      {
+        "name": "tu_by_name",
+        "line": 40,
+        "end_line": 44
+      },
+      {
+        "name": "list_tus",
+        "line": 47,
+        "end_line": 61
+      },
+      {
+        "name": "disassemble",
+        "line": 64,
+        "end_line": 68
+      },
+      {
+        "name": "annotate",
+        "line": 71,
+        "end_line": 92
+      },
+      {
+        "name": "trial_build",
+        "line": 95,
+        "end_line": 120
+      },
+      {
+        "name": "ghidra_drafts",
+        "line": 123,
+        "end_line": 149
+      },
+      {
+        "name": "static_init_order",
+        "line": 152,
+        "end_line": 176
+      },
+      {
+        "name": "safe_name",
+        "line": 179,
+        "end_line": 180
+      },
+      {
+        "name": "packet",
+        "line": 183,
+        "end_line": 290
+      },
+      {
+        "name": "main",
+        "line": 293,
+        "end_line": 307
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_autotest_returns.py",
+    "lines": 92,
+    "sha256": "a1ae669b35e58e3ff93069df32a5193318c7226b0a06f38d1a2bf43f6fdd866d",
+    "role": "Регрессионный тест",
+    "coverage": "Запущен общий unittest: 24 успешны; два toolchain-dependent теста завершились ошибкой отсутствия GCC 4.4.7.",
+    "definitions": [
+      {
+        "name": "test_exact_types_and_reference_value",
+        "line": 13,
+        "end_line": 60
+      },
+      {
+        "name": "test_standalone_fork_capture",
+        "line": 63,
+        "end_line": 88
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_ghidra_cpp.py",
+    "lines": 122,
+    "sha256": "379c0b3f398bc1d5aeca3c218a2aa51ba65815edd8d39d261302723274daa1b0",
+    "role": "Регрессионный тест",
+    "coverage": "Запущен общий unittest: 24 успешны; два toolchain-dependent теста завершились ошибкой отсутствия GCC 4.4.7.",
+    "definitions": [
+      {
+        "name": "inline",
+        "line": 9,
+        "end_line": 12
+      },
+      {
+        "name": "test_literals_are_kept_byte_for_byte",
+        "line": 14,
+        "end_line": 17
+      },
+      {
+        "name": "tidy",
+        "line": 21,
+        "end_line": 22
+      },
+      {
+        "name": "test_redundant_guards_go",
+        "line": 24,
+        "end_line": 30
+      },
+      {
+        "name": "test_guards_that_change_meaning_stay",
+        "line": 32,
+        "end_line": 35
+      },
+      {
+        "name": "test_guard_on_a_name_inside_an_operand_stays",
+        "line": 37,
+        "end_line": 41
+      },
+      {
+        "name": "test_function_returning_through_the_hidden_pointer",
+        "line": 52,
+        "end_line": 59
+      },
+      {
+        "name": "test_call_of_such_a_function_assigns_its_result",
+        "line": 61,
+        "end_line": 69
+      },
+      {
+        "name": "test_reference_parameters_take_the_object",
+        "line": 71,
+        "end_line": 75
+      },
+      {
+        "name": "test_element_address_with_the_capacity_check",
+        "line": 79,
+        "end_line": 88
+      },
+      {
+        "name": "test_element_value_and_return",
+        "line": 90,
+        "end_line": 96
+      },
+      {
+        "name": "test_other_shapes_stay",
+        "line": 98,
+        "end_line": 109
+      },
+      {
+        "name": "test_count_reads_become_size",
+        "line": 111,
+        "end_line": 118
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_llm_loop_headers.py",
+    "lines": 91,
+    "sha256": "e0e0540c911fea98814d5f2f5ae5c0e1d4fb88fda5ca8528f278176fb7fccde3",
+    "role": "Регрессионный тест",
+    "coverage": "Запущен общий unittest: 24 успешны; два toolchain-dependent теста завершились ошибкой отсутствия GCC 4.4.7.",
+    "definitions": [
+      {
+        "name": "func",
+        "line": 23,
+        "end_line": 24
+      },
+      {
+        "name": "__init__",
+        "line": 11,
+        "end_line": 12
+      },
+      {
+        "name": "ghidra_return",
+        "line": 14,
+        "end_line": 15
+      },
+      {
+        "name": "method_decl",
+        "line": 17,
+        "end_line": 20
+      },
+      {
+        "name": "complete",
+        "line": 28,
+        "end_line": 41
+      },
+      {
+        "name": "test_missing_methods_go_to_the_end_of_the_public_section",
+        "line": 46,
+        "end_line": 51
+      },
+      {
+        "name": "test_virtual_and_other_class_methods_are_left_alone",
+        "line": 53,
+        "end_line": 57
+      },
+      {
+        "name": "test_class_without_public_section_gets_one",
+        "line": 59,
+        "end_line": 68
+      },
+      {
+        "name": "test_labels_bound_to_mangled_names_are_refused",
+        "line": 72,
+        "end_line": 75
+      },
+      {
+        "name": "test_members_of_game_classes_absent_from_the_original",
+        "line": 82,
+        "end_line": 87
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_mutate_overloads.py",
+    "lines": 29,
+    "sha256": "72c7b523b04578682d1b109864d6099b99cebf6b474723aa5f3128b08078a4c9",
+    "role": "Регрессионный тест",
+    "coverage": "Запущен общий unittest: 24 успешны; два toolchain-dependent теста завершились ошибкой отсутствия GCC 4.4.7.",
+    "definitions": [
+      {
+        "name": "body",
+        "line": 11,
+        "end_line": 15
+      },
+      {
+        "name": "test_same_arity",
+        "line": 16,
+        "end_line": 19
+      },
+      {
+        "name": "test_unknown_stays_unresolved",
+        "line": 20,
+        "end_line": 21
+      },
+      {
+        "name": "test_duplicate_stays_unresolved",
+        "line": 22,
+        "end_line": 23
+      },
+      {
+        "name": "test_unique_arity_keeps_existing_alias_behavior",
+        "line": 24,
+        "end_line": 25
+      },
+      {
+        "name": "test_unnamed_parameters",
+        "line": 26,
+        "end_line": 27
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/test_objdiff_literals.py",
+    "lines": 33,
+    "sha256": "b92f5d621d907d3e9a38ced2f33c52203dde25b1fc1573e62000223d867c46ca",
+    "role": "Регрессионный тест",
+    "coverage": "Запущен общий unittest: 24 успешны; два toolchain-dependent теста завершились ошибкой отсутствия GCC 4.4.7.",
+    "definitions": [
+      {
+        "name": "token",
+        "line": 8,
+        "end_line": 14
+      },
+      {
+        "name": "test_immediate_backslashes",
+        "line": 16,
+        "end_line": 20
+      },
+      {
+        "name": "test_rip_relative_backslashes",
+        "line": 22,
+        "end_line": 25
+      },
+      {
+        "name": "test_absolute_memory_backslashes",
+        "line": 27,
+        "end_line": 30
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/toolchain.py",
+    "lines": 266,
+    "sha256": "9ea7827a2cb09c9b1a4671b441db6bfe5517082c499810b3b36179fe104613e7",
+    "role": "Компиляция/кэш",
+    "coverage": "Существующий source dependency cache; доказан shadow-header invalidation gap.",
+    "definitions": [
+      {
+        "name": "cache_dir",
+        "line": 63,
+        "end_line": 67
+      },
+      {
+        "name": "sha256",
+        "line": 70,
+        "end_line": 75
+      },
+      {
+        "name": "fetch",
+        "line": 78,
+        "end_line": 91
+      },
+      {
+        "name": "setup",
+        "line": 94,
+        "end_line": 120
+      },
+      {
+        "name": "config",
+        "line": 123,
+        "end_line": 124
+      },
+      {
+        "name": "include_args",
+        "line": 127,
+        "end_line": 143
+      },
+      {
+        "name": "driver_env",
+        "line": 146,
+        "end_line": 150
+      },
+      {
+        "name": "_digest",
+        "line": 156,
+        "end_line": 163
+      },
+      {
+        "name": "_cache_lookup",
+        "line": 166,
+        "end_line": 175
+      },
+      {
+        "name": "compile_source",
+        "line": 178,
+        "end_line": 234
+      },
+      {
+        "name": "assemble",
+        "line": 237,
+        "end_line": 241
+      },
+      {
+        "name": "main",
+        "line": 244,
+        "end_line": 262
+      }
+    ]
+  },
+  {
+    "path": "tools/decomp/types_export.py",
+    "lines": 346,
+    "sha256": "7e8f920493eea94903187570cba31666a428e162dba6e1e85a0d425953acecc9",
+    "role": "Передача типов",
+    "coverage": "DWARF, классы, прототипы, sret. Проверены namespace/width/vtable ограничения.",
+    "definitions": [
+      {
+        "name": "compile_headers",
+        "line": 32,
+        "end_line": 38
+      },
+      {
+        "name": "parse_dies",
+        "line": 41,
+        "end_line": 78
+      },
+      {
+        "name": "type_name",
+        "line": 81,
+        "end_line": 109
+      },
+      {
+        "name": "type_size",
+        "line": 112,
+        "end_line": 126
+      },
+      {
+        "name": "header_dies",
+        "line": 129,
+        "end_line": 131
+      },
+      {
+        "name": "header_classes",
+        "line": 134,
+        "end_line": 154
+      },
+      {
+        "name": "strip",
+        "line": 161,
+        "end_line": 168
+      },
+      {
+        "name": "by_hidden_pointer",
+        "line": 171,
+        "end_line": 202
+      },
+      {
+        "name": "ghidra_type",
+        "line": 205,
+        "end_line": 215
+      },
+      {
+        "name": "prototypes",
+        "line": 222,
+        "end_line": 254
+      },
+      {
+        "name": "promoted_classes",
+        "line": 257,
+        "end_line": 264
+      },
+      {
+        "name": "is_class",
+        "line": 267,
+        "end_line": 274
+      },
+      {
+        "name": "sane_type",
+        "line": 277,
+        "end_line": 285
+      },
+      {
+        "name": "draft_classes",
+        "line": 288,
+        "end_line": 306
+      },
+      {
+        "name": "vtables",
+        "line": 309,
+        "end_line": 323
+      },
+      {
+        "name": "main",
+        "line": 326,
+        "end_line": 342
+      }
+    ]
+  }
+]

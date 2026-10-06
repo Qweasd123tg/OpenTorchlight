@@ -1,0 +1,1 @@
+{"scope":"synthetic lifecycle model only","lazy_sequences":256,"calls_per_sequence":4,"recovered_cache_mismatches":0,"once_initialization_mutant_sequences":84,"failure_injection_cases":5,"raii_trace_mismatches":0,"leak_mutant_cases_detected":3,"leak_mutant_cases_detected_by_return_only":0}

@@ -1,0 +1,78 @@
+{
+  "tests_run": 16,
+  "failures": 0,
+  "errors": 0,
+  "scope": "Real Python code; Ghidra backend replaced only for deterministic orchestration tests",
+  "records": {
+    "failed_export_freshness": {
+      "original": {
+        "state": "fresh",
+        "reasons": []
+      },
+      "patched": {
+        "state": "stale",
+        "reasons": [
+          "incomplete raw exports: 0x100 failed"
+        ]
+      }
+    },
+    "parallel_io": {
+      "original": {
+        "jobs": {
+          "B": {
+            "expected": [
+              "0x200"
+            ],
+            "observed": [
+              "0x200"
+            ],
+            "log": "drafts"
+          },
+          "A": {
+            "expected": [
+              "0x100"
+            ],
+            "observed": [
+              "0x200"
+            ],
+            "log": "drafts"
+          }
+        },
+        "A_body_exists": false,
+        "B_body_exists": true
+      },
+      "patched": {
+        "jobs": {
+          "B": {
+            "expected": [
+              "0x200"
+            ],
+            "observed": [
+              "0x200"
+            ],
+            "log": "drafts-2vsdoe5w"
+          },
+          "A": {
+            "expected": [
+              "0x100"
+            ],
+            "observed": [
+              "0x100"
+            ],
+            "log": "drafts-951canh4"
+          }
+        },
+        "A_body_exists": true,
+        "B_body_exists": true
+      }
+    },
+    "selective_retry": {
+      "targets": [
+        "0x110"
+      ],
+      "timeout": "600",
+      "healthy_body_preserved": true
+    }
+  },
+  "stdout": "2/2 exports contain a body; 0 incomplete; run: /tmp/tmpgf1y29b7/shared/io/drafts-pi9bu6cd\n2/2 exports contain a body; 0 incomplete; run: /tmp/tmpzlyof6xz/shared/io/drafts-3jqo0d_u\n0/1 exports contain a body; 1 incomplete; run: /tmp/tmp9jsmgn06/shared/io/drafts-4yjxozll\n0/1 exports contain a body; 1 incomplete; run: /tmp/tmp77a3nvmn/shared/io/drafts-frpmy4th\n1/1 exports contain a body; 0 incomplete; run: /tmp/tmpx_vpobfd/shared/io/drafts-b5ndqobu\n1 functions -> build-decomp/drafts/<TU>/raw/ (fingerprints in <TU>/inputs.json)\n1 functions -> build-decomp/drafts/<TU>/raw/ (fingerprints in <TU>/inputs.json)\n1/1 exports contain a body; 0 incomplete; run: /tmp/tmph_dilcfq/patched/shared/io/drafts-2vsdoe5w\n1/1 exports contain a body; 0 incomplete; run: /tmp/tmph_dilcfq/patched/shared/io/drafts-951canh4\nno pending exports for the requested TUs\n1/1 exports contain a body; 0 incomplete; run: /tmp/tmpzl2o0aka/shared/io/drafts-vu3ywx16\n1/1 exports contain a body; 0 incomplete; run: /tmp/tmpq_b4kodh/shared/io/drafts-qtmzf5nn\n"
+}

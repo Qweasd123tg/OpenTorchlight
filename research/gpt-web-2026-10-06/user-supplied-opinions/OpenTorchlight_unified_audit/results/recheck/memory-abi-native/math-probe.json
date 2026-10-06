@@ -1,0 +1,1 @@
+{"cases":12000,"special_bit_pattern_triples":2744,"squared_length_mismatches":0,"normalise_mismatches":0,"zero_only_guard_mutant_mismatches":484,"reassociation_counterexample":{"left":1,"right":0},"observed":"result bits, vector component bits, FP flags, errno; current default environment"}

@@ -1,0 +1,20 @@
+{
+  "logical_tables_equal": true,
+  "tables": 3,
+  "cells": 18,
+  "strings": 14,
+  "scope": "synthetic tables only; not original Torchlight initialization semantics",
+  "abi_original": "wstring_bytes=8 wchar_bytes=4",
+  "abi_regenerated": "wstring_bytes=8 wchar_bytes=4",
+  "checks": [
+    "empty strings",
+    "embedded NUL with explicit length",
+    "quotes and backslash",
+    "Cyrillic",
+    "non-BMP character",
+    "control followed by digits",
+    "2D shape",
+    "signed int32 endpoints"
+  ],
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0"
+}

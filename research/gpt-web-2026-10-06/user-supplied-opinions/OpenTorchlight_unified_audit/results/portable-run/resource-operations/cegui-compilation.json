@@ -1,0 +1,16 @@
+{
+  "scope": "synthetic owner methods, actual bundled CEGUI headers and SubscriberSlot.cpp",
+  "generated_expressions": 81,
+  "owner_classes": 9,
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "stdout": "PMF 16 17 16 0\nTOTAL 162 0\n",
+  "stderr": "",
+  "returncode": 0,
+  "not_tested": [
+    "original callback bodies",
+    "original class layouts",
+    "event connection lifetime",
+    "exceptional paths",
+    "GCC 4.4.7"
+  ]
+}
