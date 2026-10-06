@@ -378,7 +378,13 @@ def returned_by_pointer():
     key = hashlib.sha256(raw).hexdigest()
     if _SRET is None or _SRET_INPUT != key:
         protos = json.loads(raw).get("prototypes", {})
-        _SRET = {p["name"].split("(")[0] for p in protos.values() if p.get("sret")}
+        # Draft call text has no exact symbol identity. A qualified name shared
+        # by overloads cannot identify the hidden-return ABI safely.
+        grouped = {}
+        for prototype in protos.values():
+            grouped.setdefault(prototype["name"].split("(")[0], []).append(prototype)
+        _SRET = {name for name, rows in grouped.items()
+                 if len(rows) == 1 and rows[0].get("sret")}
         _SRET_INPUT = key
     return _SRET
 
