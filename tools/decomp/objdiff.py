@@ -219,8 +219,16 @@ class Normalizer:
 
     @staticmethod
     def padding(mnemonic, operands):
-        return (mnemonic in ("nop", "nopw", "nopl", "xchg") and (mnemonic != "xchg" or operands == "%ax,%ax")
-                or mnemonic.startswith(("data16", "cs")))
+        # objdump prints some long NOPs as "data16 cs nopw ...", but
+        # these prefixes can also precede real arithmetic or memory access.
+        while mnemonic in ("data16", "cs"):
+            parts = operands.split(None, 1)
+            if not parts:
+                return False
+            mnemonic = parts[0]
+            operands = parts[1] if len(parts) > 1 else ""
+        return (mnemonic in ("nop", "nopw", "nopl")
+                or (mnemonic == "xchg" and operands == "%ax,%ax"))
 
     def normalize(self, insns, start, end):
         self.unverified = []
@@ -240,8 +248,6 @@ class Normalizer:
             nxt = offsets[k + 1] if k + 1 < len(offsets) else end
             operands = operands.split("#", 1)[0].strip() if "#" in operands and "(%rip)" in operands else operands
             result.append(self.token(k, address, nxt, mnemonic, operands, start, end, offsets, insns))
-        while result and result[-1].split(" ")[0] in ("nop", "xchg"):
-            result.pop()
         return result
 
 
