@@ -8,6 +8,7 @@
 #define AUTOTEST_H
 
 #include <cstring>
+#include <cwchar>
 #include <errno.h>
 #include <malloc.h>
 #include <new>
@@ -219,6 +220,48 @@ inline void record(Capture& out, const Value<bool>& v)
 {
     unsigned char b = v.value ? 1 : 0;
     out.add(&b, 1);
+}
+
+// Exact return category supplied by the generated function signature. The
+// legacy Void/Value route above remains for existing handwritten tests.
+template <class R> struct ReturnTag {};
+template <class R> struct ReturnIdentity { typedef R type; };
+template <class R> struct Returned { R value; };
+template <class R>
+Returned<R> operator,(typename ReturnIdentity<R>::type value, ReturnTag<R>)
+{
+    Returned<R> result = {value};
+    return result;
+}
+inline void record(Capture&, ReturnTag<void>) {}
+
+template <class T> void observeReturn(Capture& out, const T& value)
+{
+    out.add(&value, sizeof(T));
+}
+template <class T> void observeReturn(Capture& out, T* const& value)
+{
+    out.addPointer(value);
+}
+inline void observeReturn(Capture& out, const std::wstring& value)
+{
+    out.addText(value);
+}
+inline void observeReturn(Capture& out, const bool& value)
+{
+    unsigned char byte = value ? 1 : 0;
+    out.add(&byte, 1);
+}
+template <class R> void record(Capture& out, const Returned<R>& result)
+{
+    observeReturn(out, result.value);
+}
+template <class T> void record(Capture& out, const Returned<T&>& result)
+{
+    out.addPointer(&result.value);
+    // Unknown external identity sets incomplete before any referent is read.
+    if (out.issue == Capture::Complete)
+        observeReturn(out, result.value);
 }
 
 typedef void (*Body)(void* context, Capture& out);

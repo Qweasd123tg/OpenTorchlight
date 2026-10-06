@@ -19,6 +19,7 @@ differs and enough cases completed in both children.
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import json
 from pathlib import Path
 import re
@@ -47,6 +48,15 @@ OGRE_VALUES = {"Ogre::Vector3": 3, "Ogre::Vector2": 2, "Ogre::Quaternion": 4, "O
 
 class Unsupported(Exception):
     pass
+
+
+@dataclass(frozen=True)
+class ArgumentPlan:
+    """One source-level argument contract, shared by both call paths."""
+    declared_type: str
+    expression: str
+    observations: tuple = ()
+    cleanup: tuple = ()
 
 
 def is_list(t):
@@ -216,7 +226,7 @@ class Generator:
         for line in buffer:
             emit(line)
 
-    def argument(self, ptype, index, emit, members, dumps):
+    def argument(self, ptype, index, emit, members):
         t = ghidra_cpp.cxx_type(ptype).replace(WSTRING, "std::wstring")
         core = t.replace("const ", "").strip()
         name = f"a{index}"
@@ -230,37 +240,54 @@ class Generator:
             members.append(f"{core} {name};")
             emit(f"c.{name} = ({core})autotest::randomFloat(r);")
         elif core == "wchar_t*":
-            members.append(f"const wchar_t* {name};")
-            emit(f"c.{name} = autotest::randomText(r);")
+            # Own writable backing even for const input pointers. The exact
+            # declared parameter type below still controls the actual binding.
+            members.append(f"wchar_t* {name};")
+            emit(f"const wchar_t* text_{name} = autotest::randomText(r);")
+            emit(f"size_t count_{name} = std::wcslen(text_{name}) + 1;")
+            emit(f"c.{name} = (wchar_t*)autotest::allocate(count_{name} * sizeof(wchar_t));")
+            emit(f"std::memcpy(c.{name}, text_{name}, count_{name} * sizeof(wchar_t));")
         elif core in ("std::wstring&", "std::wstring"):
             members.append(f"std::wstring* {name};")
             emit(f"c.{name} = new (autotest::allocate(sizeof(std::wstring))) std::wstring(autotest::randomText(r));")
-            return f"*c.{name}", f"c.{name}"
+            return ArgumentPlan(t, f"*c.{name}", (f"out.addText(*c.{name});",),
+                                (f"{{ typedef std::wstring Text; c.{name}->~Text(); }}",))
         elif core.rstrip("&").strip() in OGRE_VALUES:
             vt = core.rstrip("&").strip()
             members.append(f"{vt}* {name};")
             emit(f"c.{name} = ({vt}*)autotest::allocate(sizeof({vt}));")
             emit(f"for (int i = 0; i < {OGRE_VALUES[vt]}; i++) ((float*)c.{name})[i] = (float)autotest::randomFloat(r);")
-            return f"*c.{name}", (f"c.{name}" if core.endswith("&") else f"*c.{name}")
+            return ArgumentPlan(t, f"*c.{name}")
         elif core.endswith("&") and core[:-1].strip() in INTS | FLOATS | {"bool"}:
             vt = core[:-1].strip()
             members.append(f"{vt}* {name};")
             emit(f"c.{name} = ({vt}*)autotest::allocate(sizeof({vt}));")
-            return f"*c.{name}", f"c.{name}"
+            value = ("(r.next() & 1) != 0" if vt == "bool" else
+                     f"({vt})autotest::randomFloat(r)" if vt in FLOATS else
+                     f"({vt})autotest::randomInt(r)")
+            emit(f"*c.{name} = {value};")
+            return ArgumentPlan(t, f"*c.{name}")
         elif core.endswith("*") and core[:-1].strip() in self.classes and core[:-1].strip() in self.headers:
             cls = core[:-1].strip()
             members.append(f"{cls}* {name};")
             emit(f"c.{name} = ({cls}*){self.pointer_to(cls, 1, emit)};")
+            observations = []
+            self.dump(cls, f"(char*)c.{name}", observations.append)
+            if observations:
+                observations = [f"if (c.{name}) {{", *observations, "}"]
+            return ArgumentPlan(t, f"c.{name}", tuple(observations))
         elif core.endswith("&") and core[:-1].strip() in self.classes and core[:-1].strip() in self.headers:
             cls = core[:-1].strip()
             members.append(f"{cls}* {name};")
             var = self.fake(cls, 1, emit)
             emit(f"if (!{var}) {var} = (char*)autotest::allocate({self.object_size(cls)});")
             emit(f"c.{name} = ({cls}*)autotest::pick(r, {self.kind_of(cls)}, {var});")
-            return f"*c.{name}", f"c.{name}"
+            observations = []
+            self.dump(cls, f"(char*)c.{name}", observations.append)
+            return ArgumentPlan(t, f"*c.{name}", tuple(observations))
         else:
             raise Unsupported(ptype)
-        return f"c.{name}", f"c.{name}"
+        return ArgumentPlan(t, f"c.{name}")
 
     def dump(self, cls, var, emit):
         for f in self.flat_fields(cls):
@@ -304,15 +331,13 @@ class Generator:
             emit(f"c.self = (char*)autotest::allocate({size});")
             if kind != "ctor":
                 self.fill(cls, "c.self", 0, emit)
-        orig_list = []
-        for i, p in enumerate(params):
-            ours_arg, orig_arg = self.argument(p, i, emit, members, None)
-            call_args.append(ours_arg)
-            orig_list.append(orig_arg)
+        plans = [self.argument(p, i, emit, members) for i, p in enumerate(params)]
+        call_args = [plan.expression for plan in plans]
         args = ", ".join(call_args)
-        # References and non-trivial classes by value travel as pointers in the ABI.
-        orig_params = ", ".join((["void*"] if not static else []) + [f"__typeof__({a})" for a in orig_list])
-        orig_args = ", ".join((["c.self"] if not static else []) + orig_list)
+        # Let the compiler implement value copies, reference binding and hidden
+        # return storage. Physical argument locations alone do not encode lifetime.
+        orig_params = ", ".join((["void*"] if not static else []) + [plan.declared_type for plan in plans])
+        orig_args = ", ".join((["c.self"] if not static else []) + call_args)
         prelude = []
         return_declarations = []
         if kind == "ctor":
@@ -324,16 +349,20 @@ class Generator:
             original = f"(((void (*)(void*))orig_{tag})(c.self), autotest::Void())"
         else:
             call = f"{cls}::{method}({args})" if static else f"(({cls}*)c.self)->{cls}::{method}({args})"
-            ours = f"({call}, autotest::Void())"
-            original = f"(((Fn)orig_{tag})({orig_args}), autotest::Void())"
+            ours = f"({call}, autotest::ReturnTag<Result>())"
+            original = f"(((Fn)orig_{tag})({orig_args}), autotest::ReturnTag<Result>())"
             return_declarations, prelude = return_type_lookup(
                 cls, method, params, static, "const" in ghidra_cpp.cv_suffix(f), "volatile" in ghidra_cpp.cv_suffix(f))
             prelude.append(f"typedef Result (*Fn)({orig_params});")
-        dumps = []
+        dumps = [line for plan in plans for line in plan.observations]
+        cleanup = [line for plan in reversed(plans) for line in plan.cleanup]
         if not static and kind != "dtor":
             self.dump(cls, "c.self", dumps.append)
         name = f"auto_{tag}"
         code = [f"// {f['address']} {f['demangled']}",
+                *[f"// argument {i}: {plan.declared_type}; expression {plan.expression}; "
+                  f"deep observations {len(plan.observations)}; cleanup actions {len(plan.cleanup)}"
+                  for i, plan in enumerate(plans)],
                 f'extern "C" char orig_{tag}[] __asm__("__tlorig_{mangled}");',
                 f'extern "C" char ours_{tag}[] __asm__("{mangled}");',
                 f"namespace t{tag} {{",
@@ -347,6 +376,7 @@ class Generator:
                 *[f"    {l}" for l in prelude],
                 f"    autotest::record(out, {original});", "    report(c, out);", "}",
                 "void ours(void* p, autotest::Capture& out)", "{", "    Context& c = *(Context*)p;",
+                *[f"    {l}" for l in prelude],
                 f"    autotest::record(out, {ours});", "    report(c, out);", "}",
                 "}", "",
                 f"TL_TEST({name})", "{",
@@ -359,6 +389,7 @@ class Generator:
                 f"        autotest::Rng r({int(f['address'], 16)}ULL + i);",
                 f"        t{tag}::Context c;", f"        t{tag}::build(r, c);",
                 f'        autotest::compareCase(t{tag}::original, t{tag}::ours, &c, stats, host, "{name}", i);',
+                *[f"        {line}" for line in cleanup],
                 "    }",
                 '    host->log("    stats %s same %d both-failed %d different %d incomplete %d\\n", "' + name +
                 '", stats.same, stats.bothFailed, stats.different, stats.incomplete);',
