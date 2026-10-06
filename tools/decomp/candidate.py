@@ -91,10 +91,16 @@ def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental
             added = [r for r in definitions if r.get("address") not in prior]
             wanted = added if incremental else definitions
             result["new_matched"] = [r["address"] for r in added if r.get("address") and r["status"] == "MATCH"]
+            remaining = {r["address"] for r in definitions if r.get("address")}
+            result["missing_previous"] = sorted(set(prior) - remaining)
             preserved = preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db,
                                           before_object=before_object, after_object=final.get("object_digest")) if prior else True
             needs_comparison = bool(wanted) and (not preserved or any(r["status"] != "MATCH" for r in wanted))
-            if not definitions or (incremental and not added) or final.get("unknown"):
+            # A green suite cannot compensate for dropping an existing definition.
+            if result["missing_previous"]:
+                result["status"] = "DIFF"
+                result["reason"] = "candidate omitted existing definitions: " + ", ".join(result["missing_previous"])
+            elif not definitions or (incremental and not added) or final.get("unknown"):
                 result["status"] = "DIFF"
                 result["reason"] = "empty/no-new definitions or unknown signature; cannot accept candidate"
             else:
