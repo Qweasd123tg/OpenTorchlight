@@ -1,0 +1,5841 @@
+{
+  "scope": "Scalar bitvector/state-model obligations only. No full original function or x86 semantics proof; no generated game C++.",
+  "z3_version": "4.13.3.0",
+  "obligations": [
+    {
+      "name": "base",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.006960362999961944,
+      "meaning": "Zero initial index and offset establish relation."
+    },
+    {
+      "name": "step_with_uint_bound",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.011290344999906665,
+      "meaning": "i<n, both uint32, rules out wrap on this increment."
+    },
+    {
+      "name": "same_memory_read",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.005989224000018112,
+      "meaning": "Same effective address in flat read-only memory model. Does not prove C++ pointer validity."
+    },
+    {
+      "name": "missing_bound",
+      "expected": "sat",
+      "status": "sat",
+      "output": "sat",
+      "model": "sat\n((i #xffffffff)\n (n #x00000000)\n (capacity #x00000000)\n (off #x00000007fffffff8)\n (nextOffset #x0000000800000000)\n (expectedNext #x0000000000000000)\n (mutantOffset #x0000000800000008))",
+      "seconds": 0.005133092999926703,
+      "meaning": "Counterexample if the increment may occur at UINT_MAX."
+    },
+    {
+      "name": "wrong_stride",
+      "expected": "sat",
+      "status": "sat",
+      "output": "sat",
+      "model": "sat\n((i #x00000000)\n (n #x00000001)\n (capacity #x00000000)\n (off #x0000000000000000)\n (nextOffset #x0000000000000008)\n (expectedNext #x0000000000000008)\n (mutantOffset #x0000000000000010))",
+      "seconds": 0.005412925999962681,
+      "meaning": "A stride of 16 is not equivalent to index increment for 8-byte elements."
+    },
+    {
+      "name": "capacity_branch_under_invariant",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.0096179839999877,
+      "meaning": "Only under count<=capacity can the out-of-capacity path be excluded."
+    },
+    {
+      "name": "capacity_branch_without_invariant",
+      "expected": "sat",
+      "status": "sat",
+      "output": "sat",
+      "model": "sat\n((i #x00000001)\n (n #x00000002)\n (capacity #x00000001)\n (off #x0000000000000000)\n (nextOffset #x0000000000000008)\n (expectedNext #x0000000000000010)\n (mutantOffset #x0000000000000010))",
+      "seconds": 0.005424063000077695,
+      "meaning": "A valid search bound alone does not justify bypassing TArrayList fallback."
+    },
+    {
+      "name": "invariant_preserved_by_increment_in_capacity",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.011303114000043024,
+      "meaning": "Already-reserved append preserves count<=capacity in uint32 model."
+    },
+    {
+      "name": "invariant_preserved_by_remove",
+      "expected": "unsat",
+      "status": "unsat",
+      "output": "unsat",
+      "model": null,
+      "seconds": 0.01043917300000885,
+      "meaning": "Valid removal decreases count without unsigned wrap."
+    },
+    {
+      "name": "capacity_growth_wrap_counterexample",
+      "expected": "sat",
+      "status": "sat",
+      "output": "sat",
+      "model": "sat\n((i #x00000000)\n (n #xfffffffe)\n (capacity #xfffffffe)\n (off #x0000000000000000)\n (nextOffset #x0000000000000008)\n (expectedNext #x0000000000000008)\n (mutantOffset #x0000000000000010))",
+      "seconds": 0.005525781999949686,
+      "meaning": "Naive preservation by growing an unsigned capacity fails on wrap; actual allocation behavior not modeled."
+    }
+  ],
+  "recurrence_cooccurrence_functions": 245,
+  "recurrence_candidates": [
+    {
+      "address": "0x592710",
+      "symbol": "CAstarPathfinder::generateSuccessor",
+      "path": "research/decompiled-core/astar_pathfinder.c",
+      "line": 432,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4",
+          "uVar4"
+        ],
+        "8": [
+          "pCVar3",
+          "pCVar7",
+          "pCVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f60e0",
+      "symbol": "CBaseUnit::hasUnitTheme",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 199,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ff390",
+      "symbol": "CBaseUnit::hasUnitTheme",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 3022,
+      "increments": {
+        "1": [
+          "uVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ffd60",
+      "symbol": "CBaseUnit::removeUnitTheme",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 3397,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ffe50",
+      "symbol": "CBaseUnit::removeUnitTheme",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 3460,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x800d90",
+      "symbol": "CBaseUnit::addUnitTheme",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 3870,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x803100",
+      "symbol": "CBaseUnit::unitInit",
+      "path": "research/decompiled-core/base_unit.c",
+      "line": 4701,
+      "increments": {
+        "1": [
+          "local_380"
+        ],
+        "8": [
+          "local_388"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x80f410",
+      "symbol": "CCharacter::setActiveSkill",
+      "path": "research/decompiled-core/character.c",
+      "line": 1274,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x810b30",
+      "symbol": "CCharacter::applyDamageEffects",
+      "path": "research/decompiled-core/character.c",
+      "line": 2307,
+      "increments": {
+        "1": [
+          "piVar4",
+          "uVar7"
+        ],
+        "8": [
+          "lVar5"
+        ],
+        "4": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x813170",
+      "symbol": "CCharacter::setActiveInLevel",
+      "path": "research/decompiled-core/character.c",
+      "line": 3874,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x816ea0",
+      "symbol": "CCharacter::deleteUnitSpecificData",
+      "path": "research/decompiled-core/character.c",
+      "line": 5998,
+      "increments": {
+        "1": [
+          "uVar9",
+          "uVar9",
+          "iVar11",
+          "uVar9"
+        ],
+        "8": [
+          "pCVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x823bf0",
+      "symbol": "CCharacter::unLearnSpell",
+      "path": "research/decompiled-core/character.c",
+      "line": 9674,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4"
+        ],
+        "4": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8267e0",
+      "symbol": "CCharacter::fillSaveState",
+      "path": "research/decompiled-core/character.c",
+      "line": 11252,
+      "increments": {
+        "4": [
+          "lVar7",
+          "lVar7"
+        ],
+        "1": [
+          "uVar11",
+          "uVar11",
+          "uVar11",
+          "local_74"
+        ],
+        "8": [
+          "lVar7",
+          "lVar14",
+          "lVar14"
+        ],
+        "24": [
+          "lVar14"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8300f0",
+      "symbol": "CCharacter::createSpecificUnitThemeParticles",
+      "path": "research/decompiled-core/character.c",
+      "line": 15158,
+      "increments": {
+        "1": [
+          "uVar8",
+          "uVar8",
+          "local_9c"
+        ],
+        "8": [
+          "lVar13"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x830800",
+      "symbol": "CCharacter::unitThemeUpdated",
+      "path": "research/decompiled-core/character.c",
+      "line": 15433,
+      "increments": {
+        "1": [
+          "uVar13",
+          "uVar13"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x830f40",
+      "symbol": "CCharacter::CCharacter",
+      "path": "research/decompiled-core/character.c",
+      "line": 15687,
+      "increments": {
+        "8": [
+          "lVar3",
+          "lVar3"
+        ],
+        "4": [
+          "pCVar9",
+          "lVar3"
+        ],
+        "1": [
+          "uVar2",
+          "iVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x834c40",
+      "symbol": "CCharacter::createAdditionalUnitThemeParticles",
+      "path": "research/decompiled-core/character.c",
+      "line": 17508,
+      "increments": {
+        "1": [
+          "uVar9",
+          "uVar18",
+          "local_b8"
+        ],
+        "8": [
+          "lVar14"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x835d20",
+      "symbol": "CCharacter::setRimlight",
+      "path": "research/decompiled-core/character.c",
+      "line": 18114,
+      "increments": {
+        "1": [
+          "uVar12",
+          "iVar11"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x836a80",
+      "symbol": "CCharacter::setPathToFollowByName",
+      "path": "research/decompiled-core/character.c",
+      "line": 18609,
+      "increments": {
+        "1": [
+          "uVar8"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x838ed0",
+      "symbol": "CCharacter::die",
+      "path": "research/decompiled-core/character.c",
+      "line": 19468,
+      "increments": {
+        "1": [
+          "uVar21"
+        ],
+        "12": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x83dd50",
+      "symbol": "CCharacter::convertCharacter",
+      "path": "research/decompiled-core/character.c",
+      "line": 21152,
+      "increments": {
+        "1": [
+          "uVar16"
+        ],
+        "8": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x83ead0",
+      "symbol": "CCharacter::setLevel",
+      "path": "research/decompiled-core/character.c",
+      "line": 21561,
+      "increments": {
+        "4": [
+          "pCVar20",
+          "lVar15",
+          "pCVar22"
+        ],
+        "1": [
+          "uVar17"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x840db0",
+      "symbol": "CCharacter::applySaveState",
+      "path": "research/decompiled-core/character.c",
+      "line": 22773,
+      "increments": {
+        "4": [
+          "lVar8",
+          "lVar8"
+        ],
+        "1": [
+          "iVar17",
+          "uVar13",
+          "uVar13",
+          "uVar7",
+          "uVar7"
+        ],
+        "8": [
+          "lVar15",
+          "lVar18",
+          "lVar15"
+        ],
+        "24": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x841a80",
+      "symbol": "CCharacter::revertTransformation",
+      "path": "research/decompiled-core/character.c",
+      "line": 23221,
+      "increments": {
+        "1": [
+          "uVar11"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x850570",
+      "symbol": "CCharacter::equipmentUnequipped",
+      "path": "research/decompiled-core/character.c",
+      "line": 26843,
+      "increments": {
+        "1": [
+          "uVar11"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x850cf0",
+      "symbol": "CCharacter::equipmentEquipped",
+      "path": "research/decompiled-core/character.c",
+      "line": 27111,
+      "increments": {
+        "1": [
+          "local_154"
+        ],
+        "8": [
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x856310",
+      "symbol": "CCharacter::loadModel",
+      "path": "research/decompiled-core/character.c",
+      "line": 29938,
+      "increments": {
+        "8": [
+          "lVar18"
+        ],
+        "1": [
+          "uVar34",
+          "local_56c",
+          "uVar12",
+          "iVar13",
+          "puVar32"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x862eb0",
+      "symbol": "CCharacterSaveState::load",
+      "path": "research/decompiled-core/character_save_state.c",
+      "line": 1570,
+      "increments": {
+        "1": [
+          "uVar16",
+          "uVar16",
+          "uVar16",
+          "puVar8",
+          "puVar8",
+          "uVar17",
+          "uVar16",
+          "uVar16",
+          "iVar18",
+          "local_170",
+          "local_15c"
+        ],
+        "8": [
+          "lVar12"
+        ],
+        "24": [
+          "pCVar23"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8644f0",
+      "symbol": "CCharacterSaveState::~CCharacterSaveState",
+      "path": "research/decompiled-core/character_save_state.c",
+      "line": 2182,
+      "increments": {
+        "1": [
+          "iVar12",
+          "uVar6"
+        ],
+        "8": [
+          "lVar11"
+        ],
+        "24": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x5a8cb0",
+      "symbol": "CCollisionList::rayCollision",
+      "path": "research/decompiled-core/collision_list.c",
+      "line": 891,
+      "increments": {
+        "1": [
+          "iVar12"
+        ],
+        "4": [
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xad6470",
+      "symbol": "CCombineMenu::performInteraction",
+      "path": "research/decompiled-core/combine_menu.c",
+      "line": 2454,
+      "increments": {
+        "4": [
+          "pCVar21",
+          "pCVar21",
+          "pCVar21",
+          "pCVar21",
+          "pCVar21"
+        ],
+        "1": [
+          "uVar25",
+          "local_13c",
+          "local_158",
+          "uVar25",
+          "local_16c",
+          "local_16c"
+        ],
+        "8": [
+          "lVar28",
+          "lVar28",
+          "local_148",
+          "lVar28"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xad7690",
+      "symbol": "CCombineMenu::mapEventHandlers",
+      "path": "research/decompiled-core/combine_menu.c",
+      "line": 3137,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xad7a50",
+      "symbol": "CCombineMenu::createMenus",
+      "path": "research/decompiled-core/combine_menu.c",
+      "line": 3284,
+      "increments": {
+        "1": [
+          "lVar12",
+          "puVar19",
+          "pcVar31",
+          "lVar12",
+          "pcVar27",
+          "puVar19",
+          "lVar12",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "pcVar13",
+          "puVar19",
+          "lVar12",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pbVar16",
+          "puVar19",
+          "lVar12",
+          "puVar19",
+          "pcVar31",
+          "pbVar16",
+          "puVar19",
+          "pbVar16",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "pcVar28",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "pcVar27",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pcVar31",
+          "puVar19",
+          "pbVar16",
+          "puVar19",
+          "lVar12",
+          "pcVar31",
+          "puVar19",
+          "lVar12",
+          "puVar19",
+          "pcVar31"
+        ],
+        "2": [
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9"
+        ],
+        "8": [
+          "pCVar30"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xadde00",
+      "symbol": "CCombineMenu::updateLayout",
+      "path": "research/decompiled-core/combine_menu.c",
+      "line": 6971,
+      "increments": {
+        "1": [
+          "pbVar18",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pcVar20",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "uVar27",
+          "lVar14",
+          "puVar22",
+          "uVar27",
+          "uVar33",
+          "pbVar18",
+          "puVar22",
+          "pcVar20",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pcVar20",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pcVar20",
+          "puVar22",
+          "pbVar18",
+          "puVar22",
+          "pbVar18",
+          "puVar22"
+        ],
+        "8": [
+          "pCVar29"
+        ],
+        "4": [
+          "local_14a0"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9c2020",
+      "symbol": "CDamageShape::doDamageToItem",
+      "path": "research/decompiled-core/damage_shape.c",
+      "line": 305,
+      "increments": {
+        "1": [
+          "uVar5",
+          "uVar5"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9ca1e0",
+      "symbol": "CDamageShape::getDamageOnlyUnitTypeLoadIndex",
+      "path": "research/decompiled-core/damage_shape.c",
+      "line": 1991,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "4": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7de7f0",
+      "symbol": "CEffect::setGraphs",
+      "path": "research/decompiled-core/effect.c",
+      "line": 2379,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7e1200",
+      "symbol": "CEffect::CEffect",
+      "path": "research/decompiled-core/effect.c",
+      "line": 3762,
+      "increments": {
+        "1": [
+          "iVar27",
+          "puVar34",
+          "iVar27",
+          "puVar34",
+          "uVar28",
+          "uVar20",
+          "uVar33",
+          "uVar20",
+          "local_410",
+          "local_410",
+          "uVar20",
+          "uVar20",
+          "iVar27",
+          "puVar34",
+          "local_300",
+          "local_3a0"
+        ],
+        "8": [
+          "lVar29",
+          "pwVar35",
+          "pwVar30",
+          "lVar29",
+          "pwVar35",
+          "pwVar30",
+          "lVar29",
+          "lVar29",
+          "lVar29",
+          "local_3b8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eb4e0",
+      "symbol": "CEffectManager::getEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 32,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ],
+        "24": [
+          "pCVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eb580",
+      "symbol": "CEffectManager::hasEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 80,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ],
+        "24": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eb5f0",
+      "symbol": "CEffectManager::getEffectValue",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 121,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4",
+          "iVar6"
+        ],
+        "8": [
+          "lVar5",
+          "lVar5"
+        ],
+        "24": [
+          "this"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eb7c0",
+      "symbol": "CEffectManager::getEffectValue",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 231,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4"
+        ],
+        "8": [
+          "lVar5",
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eb9c0",
+      "symbol": "CEffectManager::hasEffectFromSkill",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 345,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ],
+        "24": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7eba70",
+      "symbol": "CEffectManager::removeEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 402,
+      "increments": {
+        "1": [
+          "uVar7"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ebd40",
+      "symbol": "CEffectManager::clearEffects",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 591,
+      "increments": {
+        "1": [
+          "iVar8",
+          "uVar4"
+        ],
+        "24": [
+          "pCVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ebf30",
+      "symbol": "CEffectManager::calculateEffectValues",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 699,
+      "increments": {
+        "1": [
+          "uVar2",
+          "plVar9",
+          "iVar14"
+        ],
+        "24": [
+          "pCVar13"
+        ],
+        "4": [
+          "pCVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7ec450",
+      "symbol": "CEffectManager::deleteAffix",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 968,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f2a30",
+      "symbol": "CEffectManager::getEffects",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 2505,
+      "increments": {
+        "1": [
+          "uVar5",
+          "uVar6",
+          "puVar7"
+        ],
+        "24": [
+          "local_40"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f2b70",
+      "symbol": "CEffectManager::getAffix",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 2576,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f2c30",
+      "symbol": "CEffectManager::removeEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 2629,
+      "increments": {
+        "1": [
+          "iVar9"
+        ],
+        "24": [
+          "pCVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f2f10",
+      "symbol": "CEffectManager::addNewEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 2812,
+      "increments": {
+        "1": [
+          "iVar10"
+        ],
+        "24": [
+          "pCVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f32f0",
+      "symbol": "CEffectManager::getEffectValue",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 2999,
+      "increments": {
+        "1": [
+          "uVar5",
+          "uVar5",
+          "iVar7"
+        ],
+        "8": [
+          "lVar6",
+          "lVar6"
+        ],
+        "24": [
+          "this"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f34f0",
+      "symbol": "CEffectManager::hasEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 3062,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar6"
+        ],
+        "24": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f35e0",
+      "symbol": "CEffectManager::hasEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 3120,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar6"
+        ],
+        "24": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f36c0",
+      "symbol": "CEffectManager::getEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 3173,
+      "increments": {
+        "8": [
+          "lVar8",
+          "lVar8"
+        ],
+        "1": [
+          "local_4c"
+        ],
+        "24": [
+          "pCVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f37f0",
+      "symbol": "CEffectManager::deleteDeadEffects",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 3247,
+      "increments": {
+        "1": [
+          "uVar10",
+          "uVar10"
+        ],
+        "24": [
+          "pCVar12",
+          "pCVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f3b50",
+      "symbol": "CEffectManager::removeNonSavedEffects",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 3412,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "24": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f58f0",
+      "symbol": "CEffectManager::createEffect",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 4090,
+      "increments": {
+        "1": [
+          "uVar11"
+        ],
+        "8": [
+          "lVar12"
+        ],
+        "24": [
+          "lVar13"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7f5bd0",
+      "symbol": "CEffectManager::createEffects",
+      "path": "research/decompiled-core/effect_manager.c",
+      "line": 4213,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb252c0",
+      "symbol": "CEnchantMenu::mapEventHandlers",
+      "path": "research/decompiled-core/enchant_menu.c",
+      "line": 2758,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb2e0a0",
+      "symbol": "CEnchantMenu::createMenus",
+      "path": "research/decompiled-core/enchant_menu.c",
+      "line": 6702,
+      "increments": {
+        "1": [
+          "lVar10",
+          "pcVar28",
+          "puVar17",
+          "lVar10",
+          "pcVar28",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar11",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pbVar14",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "pbVar14",
+          "puVar17",
+          "pbVar14",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar12",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pbVar14",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar26",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "pcVar29",
+          "puVar17",
+          "lVar10",
+          "pcVar11",
+          "puVar17"
+        ],
+        "2": [
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8",
+          "uVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x86d340",
+      "symbol": "CEquipment::hasEffects",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 6,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x86d440",
+      "symbol": "CEquipment::getDamageBonus",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 110,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar3",
+          "uVar4",
+          "uVar4",
+          "uVar3"
+        ],
+        "8": [
+          "lVar8",
+          "lVar8",
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x86df50",
+      "symbol": "CEquipment::isMagical",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 719,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x86e020",
+      "symbol": "CEquipment::removeAffixesThatDontSupportUnitType",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 783,
+      "increments": {
+        "8": [
+          "lVar3",
+          "lVar6"
+        ],
+        "1": [
+          "uVar7",
+          "local_54",
+          "uVar5",
+          "uVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x86f6e0",
+      "symbol": "CEquipment::destroyIcon",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 1943,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x87e640",
+      "symbol": "CEquipment::skillDescription",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 6084,
+      "increments": {
+        "1": [
+          "uVar8"
+        ],
+        "8": [
+          "local_178"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x87fa70",
+      "symbol": "CEquipment::isWardrobed",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 6775,
+      "increments": {
+        "1": [
+          "uVar14"
+        ],
+        "8": [
+          "lVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x882e30",
+      "symbol": "CEquipment::createIcon",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 7727,
+      "increments": {
+        "1": [
+          "uVar20",
+          "pbVar14",
+          "puVar15"
+        ],
+        "8": [
+          "lVar19"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x886240",
+      "symbol": "CEquipment::createElementalDamages",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 9562,
+      "increments": {
+        "1": [
+          "uVar7",
+          "uVar7"
+        ],
+        "8": [
+          "lVar8",
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8863b0",
+      "symbol": "CEquipment::applySaveState",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 9655,
+      "increments": {
+        "1": [
+          "iVar11",
+          "uVar9"
+        ],
+        "8": [
+          "lVar10"
+        ],
+        "24": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8867c0",
+      "symbol": "CEquipment::fillSaveState",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 9816,
+      "increments": {
+        "1": [
+          "uVar11",
+          "uVar11",
+          "uVar11",
+          "local_64"
+        ],
+        "8": [
+          "lVar15",
+          "lVar15"
+        ],
+        "24": [
+          "lVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x887b30",
+      "symbol": "CEquipment::loadModel",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 10505,
+      "increments": {
+        "1": [
+          "uVar11"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x888920",
+      "symbol": "CEquipment::reskinByClass",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 10971,
+      "increments": {
+        "1": [
+          "uVar10"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x88b180",
+      "symbol": "CEquipment::effectsDescription",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 11258,
+      "increments": {
+        "1": [
+          "uVar13",
+          "uVar13",
+          "uVar13"
+        ],
+        "8": [
+          "lVar14"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x88f420",
+      "symbol": "CEquipment::getEquipmentDescription",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 13393,
+      "increments": {
+        "1": [
+          "uVar13",
+          "iVar4",
+          "pfVar8",
+          "iVar4"
+        ],
+        "4": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x893660",
+      "symbol": "CEquipment::getEquipmentStats",
+      "path": "research/decompiled-core/equipment.c",
+      "line": 15522,
+      "increments": {
+        "1": [
+          "iVar23",
+          "iVar23",
+          "pfVar8",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "local_a34",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "puVar19",
+          "local_a34"
+        ],
+        "4": [
+          "lVar20"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x57f7c0",
+      "symbol": "CGameClient::restoreLevelState",
+      "path": "research/decompiled-core/game_client.c",
+      "line": 5483,
+      "increments": {
+        "1": [
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar23",
+          "uVar22"
+        ],
+        "8": [
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_190",
+          "local_168"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x581bc0",
+      "symbol": "CGameClient::storedUnitExists",
+      "path": "research/decompiled-core/game_client.c",
+      "line": 6660,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x5880f0",
+      "symbol": "CGameClient::CGameClient",
+      "path": "research/decompiled-core/game_client.c",
+      "line": 8688,
+      "increments": {
+        "32": [
+          "lVar10",
+          "lVar10",
+          "lVar10",
+          "lVar10",
+          "lVar10",
+          "pCVar20"
+        ],
+        "1": [
+          "uVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x58b5d0",
+      "symbol": "CGameClient::saveCharacter",
+      "path": "research/decompiled-core/game_client.c",
+      "line": 10019,
+      "increments": {
+        "1": [
+          "iVar22",
+          "iVar22",
+          "uVar18",
+          "uVar18",
+          "uVar18",
+          "iVar22",
+          "iVar22",
+          "iVar22",
+          "uVar23",
+          "pwVar14"
+        ],
+        "8": [
+          "lVar20",
+          "lVar20"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x58d110",
+      "symbol": "CGameClient::performWarp",
+      "path": "research/decompiled-core/game_client.c",
+      "line": 10851,
+      "increments": {
+        "1": [
+          "iVar27"
+        ],
+        "8": [
+          "lVar24"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa83ed0",
+      "symbol": "CGameUI::convertToScreenScale",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 1286,
+      "increments": {
+        "1": [
+          "iVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa97e00",
+      "symbol": "CGameUI::mapEventHandlers",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 5244,
+      "increments": {
+        "1": [
+          "iVar5"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa980e0",
+      "symbol": "CGameUI::mapToFunctions",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 5323,
+      "increments": {
+        "1": [
+          "iVar9",
+          "iVar4",
+          "puVar7",
+          "iVar4",
+          "puVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa98c20",
+      "symbol": "CGameUI::updateSlots",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 5805,
+      "increments": {
+        "1": [
+          "uVar15"
+        ],
+        "8": [
+          "pCVar13"
+        ],
+        "4": [
+          "pCVar16"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa9dff0",
+      "symbol": "CGameUI::handle_SkillClick",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 7469,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "pEVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa9e4a0",
+      "symbol": "CGameUI::create",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 7623,
+      "increments": {
+        "1": [
+          "uVar31",
+          "iVar12",
+          "iVar12",
+          "iVar12",
+          "iVar12"
+        ],
+        "4": [
+          "lVar16",
+          "lVar16"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xaa6380",
+      "symbol": "CGameUI::CGameUI",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 11400,
+      "increments": {
+        "1": [
+          "iVar2"
+        ],
+        "4": [
+          "pCVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xab4f80",
+      "symbol": "CGameUI::handleKeyPresses",
+      "path": "research/decompiled-core/game_ui.c",
+      "line": 15168,
+      "increments": {
+        "1": [
+          "puVar20"
+        ],
+        "2": [
+          "psVar21"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8a17d0",
+      "symbol": "CGenericModel::generateExtremes",
+      "path": "research/decompiled-core/generic_model.c",
+      "line": 2416,
+      "increments": {
+        "1": [
+          "uVar12",
+          "local_90"
+        ],
+        "24": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8a68e0",
+      "symbol": "CGenericModel::clearQueuedAnimations",
+      "path": "research/decompiled-core/generic_model.c",
+      "line": 5306,
+      "increments": {
+        "1": [
+          "iVar13",
+          "lVar9",
+          "iVar14"
+        ],
+        "8": [
+          "lVar16"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8a8690",
+      "symbol": "CGenericModel::loadAnimations",
+      "path": "research/decompiled-core/generic_model.c",
+      "line": 6598,
+      "increments": {
+        "1": [
+          "uVar30",
+          "uVar27",
+          "uVar30",
+          "uVar27",
+          "local_368"
+        ],
+        "8": [
+          "local_1e0",
+          "lVar24",
+          "lVar24",
+          "lVar24",
+          "local_370"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8ac190",
+      "symbol": "CGenericModel::reInitialize",
+      "path": "research/decompiled-core/generic_model.c",
+      "line": 8676,
+      "increments": {
+        "64": [
+          "lVar26",
+          "lVar26"
+        ],
+        "1": [
+          "iVar33",
+          "local_494",
+          "uVar12",
+          "uVar11",
+          "uVar11",
+          "iVar33"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91afe0",
+      "symbol": "CInventory::updateBonuses",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 75,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar5"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b130",
+      "symbol": "CInventory::itemsInPane",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 205,
+      "increments": {
+        "1": [
+          "iVar3",
+          "uVar5"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b220",
+      "symbol": "CInventory::isEquipmentInInventory",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 288,
+      "increments": {
+        "1": [
+          "uVar1"
+        ],
+        "8": [
+          "lVar2"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b280",
+      "symbol": "CInventory::EquipmentsInSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 322,
+      "increments": {
+        "8": [
+          "lVar4",
+          "lVar4"
+        ],
+        "1": [
+          "uVar2"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b340",
+      "symbol": "CInventory::getEquipmentInSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 379,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b3a0",
+      "symbol": "CInventory::getEquipmentRefInSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 415,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b3f0",
+      "symbol": "CInventory::findEquipmentSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 451,
+      "increments": {
+        "1": [
+          "uVar4",
+          "iVar2"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b460",
+      "symbol": "CInventory::getEquipmentEquippedAt",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 498,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b4c0",
+      "symbol": "CInventory::getEquipmentsEquippedLocation",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 534,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar5"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b540",
+      "symbol": "CInventory::isEquipmentEquipped",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 584,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar5"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b5b0",
+      "symbol": "CInventory::getEquipmentCountOfGuid",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 630,
+      "increments": {
+        "1": [
+          "uVar6",
+          "iVar4",
+          "uVar6"
+        ],
+        "8": [
+          "lVar5",
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91b680",
+      "symbol": "CInventory::getEquipmentOfGuid",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 694,
+      "increments": {
+        "1": [
+          "uVar7",
+          "uVar7"
+        ],
+        "8": [
+          "lVar6",
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91ba50",
+      "symbol": "CInventory::findFreeSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 997,
+      "increments": {
+        "1": [
+          "uVar6",
+          "iVar9",
+          "uVar6",
+          "iVar8"
+        ],
+        "8": [
+          "lVar7",
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91bd10",
+      "symbol": "CInventory::canEquipIntoSpecificLocation",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 1145,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91bdc0",
+      "symbol": "CInventory::canEquip",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 1197,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar4",
+          "uVar4",
+          "iVar11",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3"
+        ],
+        "8": [
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar7",
+          "lVar7",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91c2a0",
+      "symbol": "CInventory::getComparisonItems",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 1532,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar4",
+          "uVar4",
+          "uVar4",
+          "uVar4",
+          "iVar10"
+        ],
+        "8": [
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar6",
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91c720",
+      "symbol": "CInventory::executeProcs",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 1833,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar10",
+          "uVar2",
+          "iVar11"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91c9d0",
+      "symbol": "CInventory::updateSkillManagers",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 1952,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar5"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91ca60",
+      "symbol": "CInventory::getEffectValue",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 2001,
+      "increments": {
+        "1": [
+          "uVar2",
+          "uVar2",
+          "iVar6"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91cbb0",
+      "symbol": "CInventory::getEffectValueFromEquipmentSlot",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 2075,
+      "increments": {
+        "1": [
+          "uVar2",
+          "uVar2"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91cd60",
+      "symbol": "CInventory::transferEffects",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 2165,
+      "increments": {
+        "1": [
+          "uVar3",
+          "iVar6"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91ce00",
+      "symbol": "CInventory::calculateEffectValue",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 2214,
+      "increments": {
+        "1": [
+          "uVar2",
+          "uVar2",
+          "iVar6"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x91cf50",
+      "symbol": "CInventory::identifyAll",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 2286,
+      "increments": {
+        "1": [
+          "uVar2",
+          "iVar5"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x924200",
+      "symbol": "CInventory::getSetCount",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4097,
+      "increments": {
+        "1": [
+          "uVar4",
+          "iVar8"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x924440",
+      "symbol": "CInventory::calculateEffectValues",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4216,
+      "increments": {
+        "1": [
+          "uVar7",
+          "iVar14",
+          "iVar15",
+          "iVar14"
+        ],
+        "8": [
+          "lVar10"
+        ],
+        "48": [
+          "pCVar17"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x924810",
+      "symbol": "CInventory::removeEquipment",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4420,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar8",
+          "uVar8",
+          "uVar4"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x924ab0",
+      "symbol": "CInventory::verifyEquipment",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4547,
+      "increments": {
+        "1": [
+          "iVar7",
+          "uVar4",
+          "iVar7",
+          "iVar8"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x924bd0",
+      "symbol": "CInventory::pickupEquipment",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4621,
+      "increments": {
+        "1": [
+          "uVar6",
+          "uVar6",
+          "uVar16",
+          "uVar12"
+        ],
+        "8": [
+          "lVar10",
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9251b0",
+      "symbol": "CInventory::pickupEquipment",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 4864,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar4",
+          "uVar4",
+          "uVar4",
+          "uVar5",
+          "iVar3"
+        ],
+        "8": [
+          "lVar7",
+          "lVar7",
+          "lVar7",
+          "lVar7",
+          "lVar8",
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9256a0",
+      "symbol": "CInventory::equipEquipmentIntoSpecificLocation",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 5130,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar3",
+          "uVar8"
+        ],
+        "8": [
+          "lVar5",
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x925970",
+      "symbol": "CInventory::equipEquipmentIntoFirstFreeLocation",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 5264,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar4",
+          "uVar4",
+          "uVar5",
+          "uVar5",
+          "uVar3",
+          "uVar3",
+          "iVar10"
+        ],
+        "8": [
+          "lVar9",
+          "lVar9",
+          "lVar9",
+          "lVar9",
+          "lVar9",
+          "lVar8",
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x925d30",
+      "symbol": "CInventory::swapWeaponSet",
+      "path": "research/decompiled-core/inventory.c",
+      "line": 5470,
+      "increments": {
+        "1": [
+          "uVar6",
+          "uVar6",
+          "uVar6",
+          "uVar6",
+          "uVar11",
+          "uVar11",
+          "uVar11",
+          "uVar11"
+        ],
+        "8": [
+          "lVar7",
+          "lVar7",
+          "lVar7",
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb4f1b0",
+      "symbol": "CInventoryMenu::mapEventHandlers",
+      "path": "research/decompiled-core/inventory_menu.c",
+      "line": 2575,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb53430",
+      "symbol": "CInventoryMenu::updateLayout",
+      "path": "research/decompiled-core/inventory_menu.c",
+      "line": 4551,
+      "increments": {
+        "8": [
+          "lVar20",
+          "lVar20",
+          "pCVar24",
+          "pCVar24",
+          "local_22c8"
+        ],
+        "1": [
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "uVar26",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pcVar13",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "uVar19",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "local_2300",
+          "pbVar12",
+          "puVar17",
+          "pbVar12",
+          "puVar17",
+          "uVar19"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb569e0",
+      "symbol": "CInventoryMenu::createMenus",
+      "path": "research/decompiled-core/inventory_menu.c",
+      "line": 6398,
+      "increments": {
+        "1": [
+          "lVar12",
+          "puVar25",
+          "pcVar33",
+          "lVar12",
+          "pcVar34",
+          "puVar25",
+          "lVar12",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "lVar12",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "lVar12",
+          "puVar25",
+          "pcVar13",
+          "lVar12",
+          "pcVar33",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "lVar32",
+          "pcVar34",
+          "puVar25",
+          "lVar32",
+          "pcVar34",
+          "puVar25",
+          "lVar32",
+          "pcVar33",
+          "puVar25",
+          "uVar10",
+          "iVar7",
+          "iVar7",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "lVar12",
+          "pcVar33",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25",
+          "pbVar16",
+          "puVar25",
+          "lVar12",
+          "puVar25",
+          "pcVar30",
+          "lVar12",
+          "pcVar30",
+          "puVar25",
+          "lVar12",
+          "pcVar34",
+          "puVar25",
+          "local_44f8",
+          "iVar7",
+          "pcVar34",
+          "puVar25",
+          "pcVar34",
+          "puVar25"
+        ],
+        "2": [
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10"
+        ],
+        "5": [
+          "plVar19"
+        ],
+        "8": [
+          "lVar12",
+          "pCVar36",
+          "local_44d0"
+        ],
+        "176": [
+          "pCVar36"
+        ],
+        "4": [
+          "pCVar36"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d1670",
+      "symbol": "CItemSaveState::save",
+      "path": "research/decompiled-core/item_save_state.c",
+      "line": 1294,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "4": [
+          "lVar6"
+        ],
+        "24": [
+          "local_a0"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d2080",
+      "symbol": "CItemSaveState::~CItemSaveState",
+      "path": "research/decompiled-core/item_save_state.c",
+      "line": 1485,
+      "increments": {
+        "1": [
+          "iVar10",
+          "uVar7"
+        ],
+        "8": [
+          "lVar9"
+        ],
+        "24": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d2390",
+      "symbol": "CItemSaveState::load",
+      "path": "research/decompiled-core/item_save_state.c",
+      "line": 1616,
+      "increments": {
+        "1": [
+          "uVar18",
+          "uVar16",
+          "iVar17",
+          "iVar1",
+          "local_15c"
+        ],
+        "8": [
+          "lVar13"
+        ],
+        "24": [
+          "pCVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xe3c460",
+      "symbol": "CJournalMenu::updateLayout",
+      "path": "research/decompiled-core/journal_menu.c",
+      "line": 2310,
+      "increments": {
+        "1": [
+          "uVar20",
+          "uVar20",
+          "uVar20",
+          "uVar20",
+          "uVar20",
+          "uVar20",
+          "puVar22",
+          "puVar22",
+          "puVar22",
+          "puVar22",
+          "puVar22",
+          "uVar20",
+          "uVar20",
+          "local_2a24",
+          "local_2a1c"
+        ],
+        "2": [
+          "local_2a1c"
+        ],
+        "4": [
+          "local_2a18"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9dfe70",
+      "symbol": "CLayout::loadLayoutFile",
+      "path": "research/decompiled-core/layout.c",
+      "line": 3460,
+      "increments": {
+        "1": [
+          "uVar12",
+          "puVar13",
+          "puVar10",
+          "puVar10",
+          "uVar12",
+          "DAT_014a60d8",
+          "uVar12"
+        ],
+        "8": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x936330",
+      "symbol": "CLevel::updateLayouts",
+      "path": "research/decompiled-core/level.c",
+      "line": 427,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x937a40",
+      "symbol": "CLevel::incrementObjectPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 1586,
+      "increments": {
+        "2": [
+          "lVar7"
+        ],
+        "1": [
+          "iVar11"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x937c10",
+      "symbol": "CLevel::decrementMapPassabilityCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 1679,
+      "increments": {
+        "1": [
+          "iVar9",
+          "local_8c"
+        ],
+        "2": [
+          "lVar10"
+        ],
+        "8": [
+          "local_98"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x937ee0",
+      "symbol": "CLevel::incrementMapPassabilityCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 1797,
+      "increments": {
+        "1": [
+          "iVar9",
+          "local_8c"
+        ],
+        "2": [
+          "lVar10"
+        ],
+        "8": [
+          "local_98"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9453f0",
+      "symbol": "CLevel::isInNoSpawnRegion",
+      "path": "research/decompiled-core/level.c",
+      "line": 5573,
+      "increments": {
+        "1": [
+          "uVar5",
+          "uVar5"
+        ],
+        "8": [
+          "lVar2",
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9459d0",
+      "symbol": "CLevel::incrementObjectPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 5816,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x945ce0",
+      "symbol": "CLevel::decrementObjectPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 5934,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x945ff0",
+      "symbol": "CLevel::decrementObjectPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 6052,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9468b0",
+      "symbol": "CLevel::incrementMapPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 6381,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x946bc0",
+      "symbol": "CLevel::decrementMapPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 6499,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x946ed0",
+      "symbol": "CLevel::decrementMapPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 6617,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9471e0",
+      "symbol": "CLevel::incrementMapPassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 6734,
+      "increments": {
+        "1": [
+          "iVar3",
+          "iVar3",
+          "iVar11"
+        ],
+        "2": [
+          "lVar7",
+          "lVar7"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x949430",
+      "symbol": "CLevel::addCharacterUpdateListener",
+      "path": "research/decompiled-core/level.c",
+      "line": 7619,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x94da90",
+      "symbol": "CLevel::sortForCollisionByPoints",
+      "path": "research/decompiled-core/level.c",
+      "line": 9545,
+      "increments": {
+        "1": [
+          "uVar10",
+          "uVar10"
+        ],
+        "8": [
+          "lVar11",
+          "lVar11",
+          "local_60"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x94dec0",
+      "symbol": "CLevel::sortForCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 9731,
+      "increments": {
+        "1": [
+          "uVar10",
+          "uVar10"
+        ],
+        "8": [
+          "lVar11",
+          "lVar11",
+          "local_50"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x94e250",
+      "symbol": "CLevel::rayCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 9896,
+      "increments": {
+        "1": [
+          "uVar8",
+          "uVar8"
+        ],
+        "8": [
+          "lVar9",
+          "local_e8",
+          "lVar9",
+          "local_e8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x94edb0",
+      "symbol": "CLevel::sphereCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 10336,
+      "increments": {
+        "1": [
+          "uVar7",
+          "uVar7"
+        ],
+        "8": [
+          "lVar9",
+          "local_c8",
+          "lVar9",
+          "local_c8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x950660",
+      "symbol": "CLevel::findParticles",
+      "path": "research/decompiled-core/level.c",
+      "line": 10859,
+      "increments": {
+        "1": [
+          "uVar11",
+          "uVar12",
+          "uVar4",
+          "uVar11"
+        ],
+        "8": [
+          "lVar14"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x950a40",
+      "symbol": "CLevel::updateMaterialAmbient",
+      "path": "research/decompiled-core/level.c",
+      "line": 11034,
+      "increments": {
+        "1": [
+          "uVar7",
+          "uVar8"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x954580",
+      "symbol": "CLevel::calculatePassability",
+      "path": "research/decompiled-core/level.c",
+      "line": 12251,
+      "increments": {
+        "2": [
+          "lVar17",
+          "lVar17",
+          "lVar14"
+        ],
+        "1": [
+          "iVar5",
+          "local_148",
+          "iVar5",
+          "local_16c",
+          "iVar16",
+          "local_124",
+          "local_16c"
+        ],
+        "8": [
+          "local_160",
+          "local_168",
+          "lVar17"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x955210",
+      "symbol": "CLevel::bakeCollision",
+      "path": "research/decompiled-core/level.c",
+      "line": 12593,
+      "increments": {
+        "1": [
+          "uVar30",
+          "uVar30",
+          "local_3ac",
+          "uVar30",
+          "uVar31"
+        ],
+        "8": [
+          "lVar33",
+          "local_3f8",
+          "local_3a8",
+          "lVar33"
+        ],
+        "40": [
+          "lVar35"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x957f00",
+      "symbol": "CLevel::bake",
+      "path": "research/decompiled-core/level.c",
+      "line": 13700,
+      "increments": {
+        "1": [
+          "uVar22",
+          "uVar28",
+          "local_2fc",
+          "uVar4",
+          "iVar30",
+          "local_304",
+          "uVar28",
+          "local_318"
+        ],
+        "8": [
+          "local_310"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x95a5d0",
+      "symbol": "CLevel::activate",
+      "path": "research/decompiled-core/level.c",
+      "line": 14722,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x95b420",
+      "symbol": "CLevel::setProjectorPass",
+      "path": "research/decompiled-core/level.c",
+      "line": 15228,
+      "increments": {
+        "1": [
+          "uVar20",
+          "uVar21",
+          "uVar21"
+        ],
+        "8": [
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x95f150",
+      "symbol": "CLevel::loadRoomLayout",
+      "path": "research/decompiled-core/level.c",
+      "line": 17364,
+      "increments": {
+        "1": [
+          "puVar32",
+          "uVar26",
+          "local_290",
+          "iVar35",
+          "local_290",
+          "uVar36",
+          "uVar36",
+          "uVar36",
+          "uVar26",
+          "uVar26",
+          "local_344",
+          "uVar26"
+        ],
+        "8": [
+          "lVar33",
+          "lVar37",
+          "lVar29",
+          "lVar29",
+          "local_320",
+          "lVar29"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x970670",
+      "symbol": "CLevelState::load",
+      "path": "research/decompiled-core/level_state.c",
+      "line": 1738,
+      "increments": {
+        "1": [
+          "iVar6",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar5",
+          "uVar9"
+        ],
+        "4": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x970dd0",
+      "symbol": "CLevelState::~CLevelState",
+      "path": "research/decompiled-core/level_state.c",
+      "line": 2008,
+      "increments": {
+        "1": [
+          "iVar10",
+          "iVar10",
+          "iVar10"
+        ],
+        "8": [
+          "lVar7",
+          "lVar7",
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x971410",
+      "symbol": "CLevelTemplateData::resetOdds",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 56,
+      "increments": {
+        "1": [
+          "uVar6",
+          "uVar9"
+        ],
+        "4": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9725d0",
+      "symbol": "CLevelTemplateData::exitsMatch",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 543,
+      "increments": {
+        "1": [
+          "uVar8",
+          "iVar13",
+          "uVar10"
+        ],
+        "12": [
+          "lVar11",
+          "lVar15"
+        ],
+        "8": [
+          "lVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x972980",
+      "symbol": "CLevelTemplateData::intersectsChunks",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 687,
+      "increments": {
+        "1": [
+          "iVar6"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x972e90",
+      "symbol": "CLevelTemplateData::matchExits",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 892,
+      "increments": {
+        "1": [
+          "uVar8",
+          "local_74",
+          "local_84"
+        ],
+        "12": [
+          "lVar9",
+          "local_50"
+        ],
+        "8": [
+          "local_80"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x973370",
+      "symbol": "CLevelTemplateData::createRandomLayout",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 1068,
+      "increments": {
+        "1": [
+          "uVar21",
+          "uVar21",
+          "iVar28",
+          "local_108",
+          "local_120",
+          "uVar12",
+          "uVar26",
+          "iVar11",
+          "iVar32",
+          "local_10c"
+        ],
+        "4": [
+          "lVar18",
+          "lVar18",
+          "lVar22"
+        ],
+        "12": [
+          "local_128",
+          "local_130",
+          "lVar30",
+          "local_118"
+        ],
+        "8": [
+          "local_148",
+          "local_128",
+          "lVar29",
+          "lVar27",
+          "lVar27",
+          "lVar27",
+          "lVar27",
+          "lVar27"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9762f0",
+      "symbol": "CLevelTemplateData::load",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 2655,
+      "increments": {
+        "1": [
+          "uVar21",
+          "uVar40",
+          "uVar21",
+          "puVar28",
+          "puVar28",
+          "uVar40",
+          "uVar21",
+          "uVar37",
+          "uVar40",
+          "uVar37",
+          "puVar28",
+          "puVar28",
+          "local_730",
+          "uVar37",
+          "uVar20",
+          "uVar21",
+          "uVar21",
+          "uVar21",
+          "uVar21",
+          "uVar41",
+          "uVar34",
+          "uVar40",
+          "uVar37"
+        ],
+        "8": [
+          "lVar42",
+          "local_880",
+          "local_750",
+          "lVar42",
+          "local_8a0",
+          "local_868"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x97bfa0",
+      "symbol": "CLevelTemplateData::CLevelTemplateData",
+      "path": "research/decompiled-core/level_template_data.c",
+      "line": 5539,
+      "increments": {
+        "8": [
+          "lVar1",
+          "lVar1"
+        ],
+        "1": [
+          "pCVar2"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa5f0e0",
+      "symbol": "CMasterResourceManager::addResourceLocation",
+      "path": "research/decompiled-core/master_resource_manager.c",
+      "line": 1314,
+      "increments": {
+        "1": [
+          "iVar8"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb6a790",
+      "symbol": "CMerchantMenu::mapEventHandlers",
+      "path": "research/decompiled-core/merchant_menu.c",
+      "line": 2563,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb6dc70",
+      "symbol": "CMerchantMenu::updateLayout",
+      "path": "research/decompiled-core/merchant_menu.c",
+      "line": 4458,
+      "increments": {
+        "1": [
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar11",
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb6ed20",
+      "symbol": "CMerchantMenu::createMenus",
+      "path": "research/decompiled-core/merchant_menu.c",
+      "line": 5045,
+      "increments": {
+        "1": [
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "pcVar27",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar27",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "iVar6",
+          "pbVar15",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "local_3ea4",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "local_3ea4"
+        ],
+        "2": [
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9"
+        ],
+        "4": [
+          "pCVar26"
+        ],
+        "8": [
+          "pCVar26",
+          "local_3e90"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcf9840",
+      "symbol": "CMissile::handleDeathOfMissile",
+      "path": "research/decompiled-core/missile.c",
+      "line": 508,
+      "increments": {
+        "8": [
+          "lVar7"
+        ],
+        "1": [
+          "uVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd02720",
+      "symbol": "CMissile::updatePositionByVelocity",
+      "path": "research/decompiled-core/missile.c",
+      "line": 2642,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd038a0",
+      "symbol": "CMissile::checkCollision",
+      "path": "research/decompiled-core/missile.c",
+      "line": 3160,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar3",
+          "uVar3",
+          "uVar3"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd04610",
+      "symbol": "CMissile::fireMissile",
+      "path": "research/decompiled-core/missile.c",
+      "line": 3577,
+      "increments": {
+        "8": [
+          "lVar10",
+          "lVar10"
+        ],
+        "1": [
+          "uVar9",
+          "uVar9",
+          "uVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d4bf0",
+      "symbol": "CMonster::hasOffensiveSkill",
+      "path": "research/decompiled-core/monster.c",
+      "line": 30,
+      "increments": {
+        "1": [
+          "plVar9",
+          "uVar8"
+        ],
+        "8": [
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d4d60",
+      "symbol": "CMonster::hasDefensiveSkill",
+      "path": "research/decompiled-core/monster.c",
+      "line": 106,
+      "increments": {
+        "1": [
+          "plVar10",
+          "uVar9"
+        ],
+        "8": [
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d4f60",
+      "symbol": "CMonster::selectOffensiveSkill",
+      "path": "research/decompiled-core/monster.c",
+      "line": 199,
+      "increments": {
+        "1": [
+          "plVar9",
+          "uVar10"
+        ],
+        "8": [
+          "lVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8d51e0",
+      "symbol": "CMonster::selectDefensiveSkill",
+      "path": "research/decompiled-core/monster.c",
+      "line": 318,
+      "increments": {
+        "1": [
+          "plVar8",
+          "uVar5"
+        ],
+        "8": [
+          "lVar12",
+          "lVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xc87e30",
+      "symbol": "CPath::GetAngleOverDistance",
+      "path": "research/decompiled-core/path.c",
+      "line": 477,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar5",
+          "uVar5"
+        ],
+        "4": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x593c80",
+      "symbol": "CPathController::getNextPointAtPercent",
+      "path": "research/decompiled-core/path_controller.c",
+      "line": 132,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "4": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x59ec70",
+      "symbol": "CPathController::setArrayOfVectors",
+      "path": "research/decompiled-core/path_controller.c",
+      "line": 3534,
+      "increments": {
+        "1": [
+          "uVar14",
+          "param_1"
+        ],
+        "3": [
+          "uVar5",
+          "uVar14"
+        ],
+        "12": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb93070",
+      "symbol": "CPetMenu::mapEventHandlers",
+      "path": "research/decompiled-core/pet_menu.c",
+      "line": 2796,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xb93350",
+      "symbol": "CPetMenu::createMenus",
+      "path": "research/decompiled-core/pet_menu.c",
+      "line": 2909,
+      "increments": {
+        "1": [
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "local_48c4",
+          "plVar26",
+          "iVar6",
+          "iVar6",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pcVar10",
+          "puVar18",
+          "pbVar12",
+          "puVar18",
+          "local_48c4",
+          "iVar6"
+        ],
+        "5": [
+          "plVar14"
+        ],
+        "8": [
+          "pCVar20",
+          "pCVar20",
+          "local_48b8"
+        ],
+        "176": [
+          "pCVar25"
+        ],
+        "4": [
+          "pCVar20"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xba26b0",
+      "symbol": "CPetMenu::updateLayout",
+      "path": "research/decompiled-core/pet_menu.c",
+      "line": 11052,
+      "increments": {
+        "8": [
+          "lVar18",
+          "lVar18",
+          "pCVar22",
+          "pCVar22",
+          "pCVar22",
+          "pCVar22"
+        ],
+        "1": [
+          "uVar21",
+          "pbVar11",
+          "puVar16",
+          "pcVar12",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pcVar12",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "uVar25",
+          "pbVar11",
+          "puVar16",
+          "pcVar12",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pcVar12",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pcVar12",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "uVar21",
+          "uVar21",
+          "pbVar11",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "pbVar11",
+          "puVar16",
+          "local_22c8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8e4490",
+      "symbol": "CPlayer::createPortals",
+      "path": "research/decompiled-core/player.c",
+      "line": 328,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8ef520",
+      "symbol": "CPlayer::getDungeonRank",
+      "path": "research/decompiled-core/player.c",
+      "line": 3349,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8efa70",
+      "symbol": "CPlayer::addWaypoint",
+      "path": "research/decompiled-core/player.c",
+      "line": 3493,
+      "increments": {
+        "1": [
+          "uVar10",
+          "uVar8"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8efbc0",
+      "symbol": "CPlayer::updateFishingLine",
+      "path": "research/decompiled-core/player.c",
+      "line": 3581,
+      "increments": {
+        "1": [
+          "uVar11"
+        ],
+        "2": [
+          "uVar13"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f0d10",
+      "symbol": "CPlayer::updateAnimation",
+      "path": "research/decompiled-core/player.c",
+      "line": 3995,
+      "increments": {
+        "1": [
+          "uVar12"
+        ],
+        "8": [
+          "lVar13"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f3450",
+      "symbol": "CPlayer::CPlayer",
+      "path": "research/decompiled-core/player.c",
+      "line": 4572,
+      "increments": {
+        "8": [
+          "lVar3",
+          "lVar3"
+        ],
+        "1": [
+          "pCVar4",
+          "iVar9"
+        ],
+        "4": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f3ba0",
+      "symbol": "CPlayer::updateStoredLevels",
+      "path": "research/decompiled-core/player.c",
+      "line": 4782,
+      "increments": {
+        "1": [
+          "uVar16",
+          "local_a8",
+          "uVar16",
+          "local_84"
+        ],
+        "8": [
+          "lVar17",
+          "lVar17"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f4c60",
+      "symbol": "CPlayer::clearDungeonHistory",
+      "path": "research/decompiled-core/player.c",
+      "line": 5219,
+      "increments": {
+        "1": [
+          "iVar5"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f4d90",
+      "symbol": "CPlayer::getMaxDepth",
+      "path": "research/decompiled-core/player.c",
+      "line": 5277,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f4ee0",
+      "symbol": "CPlayer::hasDungeonHistory",
+      "path": "research/decompiled-core/player.c",
+      "line": 5347,
+      "increments": {
+        "1": [
+          "iVar5"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f5380",
+      "symbol": "CPlayer::resetSkills",
+      "path": "research/decompiled-core/player.c",
+      "line": 5561,
+      "increments": {
+        "1": [
+          "uVar8"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f5c50",
+      "symbol": "CPlayer::updateDungeonTracking",
+      "path": "research/decompiled-core/player.c",
+      "line": 5845,
+      "increments": {
+        "1": [
+          "uVar12",
+          "uVar5"
+        ],
+        "8": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x8f6080",
+      "symbol": "CPlayer::storeLevelSavedState",
+      "path": "research/decompiled-core/player.c",
+      "line": 6031,
+      "increments": {
+        "1": [
+          "uVar20",
+          "uVar20",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar22",
+          "uVar20"
+        ],
+        "8": [
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "lVar25",
+          "local_1e0"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd0cc10",
+      "symbol": "CQuest::isComplete",
+      "path": "research/decompiled-core/quest.c",
+      "line": 386,
+      "increments": {
+        "1": [
+          "uVar12",
+          "uVar4"
+        ],
+        "24": [
+          "lVar11"
+        ],
+        "8": [
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd17200",
+      "symbol": "CQuest::reinitializeQuest",
+      "path": "research/decompiled-core/quest.c",
+      "line": 3874,
+      "increments": {
+        "1": [
+          "iVar16",
+          "uVar15",
+          "uVar10",
+          "uVar13",
+          "uVar13",
+          "uVar14",
+          "uVar15",
+          "uVar15",
+          "uVar15",
+          "uVar15",
+          "uVar15"
+        ],
+        "8": [
+          "lVar19",
+          "lVar19"
+        ],
+        "24": [
+          "lVar19"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd181a0",
+      "symbol": "CQuest::replaceStringTags",
+      "path": "research/decompiled-core/quest.c",
+      "line": 4533,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar9",
+          "uVar4",
+          "uVar9",
+          "local_2c4",
+          "local_2d0"
+        ],
+        "8": [
+          "lVar11",
+          "lVar11"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd1b5e0",
+      "symbol": "CQuest::loadQuestData",
+      "path": "research/decompiled-core/quest.c",
+      "line": 6314,
+      "increments": {
+        "1": [
+          "puVar10",
+          "puVar10",
+          "uVar20",
+          "uVar25",
+          "puVar10",
+          "puVar10",
+          "uVar17",
+          "local_2cc"
+        ],
+        "24": [
+          "pCVar22"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd2d8e0",
+      "symbol": "CQuestManager::getQuestIsActive",
+      "path": "research/decompiled-core/quest_manager.c",
+      "line": 164,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd2ec10",
+      "symbol": "CQuestManager::save",
+      "path": "research/decompiled-core/quest_manager.c",
+      "line": 566,
+      "increments": {
+        "1": [
+          "local_40",
+          "uVar11"
+        ],
+        "8": [
+          "lVar15"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd300e0",
+      "symbol": "CQuestManager::getQuestForNPC",
+      "path": "research/decompiled-core/quest_manager.c",
+      "line": 1222,
+      "increments": {
+        "8": [
+          "lVar16",
+          "lVar16",
+          "lVar18"
+        ],
+        "1": [
+          "uVar24",
+          "uVar21",
+          "uVar8",
+          "uVar24",
+          "uVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd30830",
+      "symbol": "CQuestManager::getNPCIcon",
+      "path": "research/decompiled-core/quest_manager.c",
+      "line": 1553,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xd30900",
+      "symbol": "CQuestManager::calculateNPCIcon",
+      "path": "research/decompiled-core/quest_manager.c",
+      "line": 1605,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbc1cb0",
+      "symbol": "CQuestMenu::abandonQuest",
+      "path": "research/decompiled-core/quest_menu.c",
+      "line": 1711,
+      "increments": {
+        "1": [
+          "iVar8",
+          "uVar6"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbc28c0",
+      "symbol": "CQuestMenu::mapEventHandlers",
+      "path": "research/decompiled-core/quest_menu.c",
+      "line": 2047,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbc4430",
+      "symbol": "CQuestMenu::updateLayout",
+      "path": "research/decompiled-core/quest_menu.c",
+      "line": 3014,
+      "increments": {
+        "1": [
+          "uVar24",
+          "pcVar12",
+          "puVar19",
+          "pcVar12",
+          "puVar19",
+          "pcVar12",
+          "puVar19",
+          "pcVar12",
+          "puVar19",
+          "pcVar12",
+          "puVar19",
+          "pbVar13",
+          "puVar19",
+          "pbVar13",
+          "puVar19",
+          "pbVar13",
+          "puVar19",
+          "uVar26",
+          "lVar29",
+          "uVar26",
+          "puVar19",
+          "uVar26",
+          "lVar11",
+          "uVar26",
+          "puVar19",
+          "uVar26",
+          "lVar11",
+          "uVar26",
+          "puVar19",
+          "uVar26",
+          "lVar11",
+          "uVar26",
+          "puVar19",
+          "uVar9",
+          "uVar26",
+          "lVar11",
+          "uVar26",
+          "puVar19",
+          "local_b7c",
+          "uVar24",
+          "local_b7c"
+        ],
+        "8": [
+          "pCVar27",
+          "lVar11",
+          "local_b88"
+        ],
+        "2": [
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbc6b90",
+      "symbol": "CQuestMenu::createMenus",
+      "path": "research/decompiled-core/quest_menu.c",
+      "line": 4526,
+      "increments": {
+        "1": [
+          "lVar12",
+          "puVar24",
+          "pcVar15",
+          "lVar12",
+          "pcVar30",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pbVar17",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "iVar7",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "lVar12",
+          "puVar24",
+          "pcVar30",
+          "lVar12",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "lVar12",
+          "pcVar30",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pbVar17",
+          "puVar24",
+          "lVar12",
+          "pcVar15",
+          "puVar24",
+          "lVar12",
+          "puVar24",
+          "pcVar30",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24",
+          "pcVar15",
+          "puVar24"
+        ],
+        "2": [
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10",
+          "uVar10"
+        ],
+        "8": [
+          "pCVar33",
+          "local_2bb0"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbcc6d0",
+      "symbol": "CQuestMenu::CQuestMenu",
+      "path": "research/decompiled-core/quest_menu.c",
+      "line": 7874,
+      "increments": {
+        "1": [
+          "iVar3"
+        ],
+        "4": [
+          "pCVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xdfe5d0",
+      "symbol": "CQuestRequirements::parseRequirementTag",
+      "path": "research/decompiled-core/quest_requirements.c",
+      "line": 1698,
+      "increments": {
+        "1": [
+          "puVar7",
+          "puVar7",
+          "uVar11",
+          "local_e4"
+        ],
+        "8": [
+          "local_d8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xdfec90",
+      "symbol": "CQuestRequirements::questRequirmentsHaveBeenMet",
+      "path": "research/decompiled-core/quest_requirements.c",
+      "line": 1980,
+      "increments": {
+        "2": [
+          "plVar11"
+        ],
+        "1": [
+          "uVar12",
+          "plVar11",
+          "uVar12"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xc9d480",
+      "symbol": "CSkill::getTargetIsValid",
+      "path": "research/decompiled-core/skill.c",
+      "line": 831,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xca5950",
+      "symbol": "CSkill::triggerEvent",
+      "path": "research/decompiled-core/skill.c",
+      "line": 3455,
+      "increments": {
+        "1": [
+          "uVar9",
+          "uVar1",
+          "uVar9",
+          "local_6c",
+          "uVar9"
+        ],
+        "8": [
+          "lVar6",
+          "lVar10"
+        ],
+        "5": [
+          "local_5c"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xca5f80",
+      "symbol": "CSkill::stopSkill",
+      "path": "research/decompiled-core/skill.c",
+      "line": 3733,
+      "increments": {
+        "1": [
+          "uVar6"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcabf10",
+      "symbol": "CSkillEffectAndAffixes::getPortalSkillName",
+      "path": "research/decompiled-core/skill_effects_and_affixes.c",
+      "line": 516,
+      "increments": {
+        "1": [
+          "uVar4",
+          "uVar7"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcac960",
+      "symbol": "CSkillEffectAndAffixes::isDamaging",
+      "path": "research/decompiled-core/skill_effects_and_affixes.c",
+      "line": 1016,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar5"
+        ],
+        "8": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcb3f10",
+      "symbol": "CSkillEffectAndAffixes::fillOutStatBonuses",
+      "path": "research/decompiled-core/skill_effects_and_affixes.c",
+      "line": 2799,
+      "increments": {
+        "1": [
+          "uVar13",
+          "uVar13",
+          "iVar7",
+          "pfVar10",
+          "uVar12"
+        ],
+        "4": [
+          "lVar9",
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcb73c0",
+      "symbol": "CSkillEvent::getCharacterCanBeHarmedByMissile",
+      "path": "research/decompiled-core/skill_event.c",
+      "line": 204,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcc1e40",
+      "symbol": "CSkillEvent::getCharacterCanBeAffectedByDamageShape",
+      "path": "research/decompiled-core/skill_event.c",
+      "line": 3696,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca580",
+      "symbol": "CSkillManager::getSkillByGuid",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 39,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca620",
+      "symbol": "CSkillManager::getSkillByGuid",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 88,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "8": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca6a0",
+      "symbol": "CSkillManager::knownSkills",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 125,
+      "increments": {
+        "1": [
+          "uVar3"
+        ],
+        "8": [
+          "lVar2"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca720",
+      "symbol": "CSkillManager::getNumOfSkillsExecutableByActivationType",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 189,
+      "increments": {
+        "1": [
+          "iVar2",
+          "uVar4",
+          "uVar4"
+        ],
+        "8": [
+          "lVar3",
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca7b0",
+      "symbol": "CSkillManager::getAnySkillsCoolingByActivationType",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 240,
+      "increments": {
+        "1": [
+          "uVar2",
+          "uVar3",
+          "uVar3"
+        ],
+        "8": [
+          "lVar5",
+          "lVar5",
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca8c0",
+      "symbol": "CSkillManager::getSkillIsCooling",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 315,
+      "increments": {
+        "1": [
+          "uVar2",
+          "uVar2"
+        ],
+        "8": [
+          "lVar4",
+          "lVar4"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcca9d0",
+      "symbol": "CSkillManager::getSkillCoolingTime",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 383,
+      "increments": {
+        "1": [
+          "uVar3",
+          "uVar4",
+          "uVar4"
+        ],
+        "8": [
+          "lVar6",
+          "lVar6",
+          "lVar6"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xccab50",
+      "symbol": "CSkillManager::getSkillPoints",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 482,
+      "increments": {
+        "1": [
+          "uVar4"
+        ],
+        "8": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xcd45c0",
+      "symbol": "CSkillManager::executeSkill",
+      "path": "research/decompiled-core/skill_manager.c",
+      "line": 2810,
+      "increments": {
+        "1": [
+          "uVar8",
+          "uVar9",
+          "uVar9",
+          "plVar10"
+        ],
+        "8": [
+          "lVar16"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa68830",
+      "symbol": "CSoundBank::bankPlaying",
+      "path": "research/decompiled-core/sound_bank.c",
+      "line": 31,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "4": [
+          "lVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa6b030",
+      "symbol": "CSoundManager::findSound",
+      "path": "research/decompiled-core/sound_manager.c",
+      "line": 163,
+      "increments": {
+        "1": [
+          "uVar5"
+        ],
+        "8": [
+          "lVar7"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa6b280",
+      "symbol": "CSoundManager::stopAllSounds",
+      "path": "research/decompiled-core/sound_manager.c",
+      "line": 287,
+      "increments": {
+        "1": [
+          "uVar2"
+        ],
+        "24": [
+          "pCVar3"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa6d270",
+      "symbol": "CSoundManager::update",
+      "path": "research/decompiled-core/sound_manager.c",
+      "line": 1461,
+      "increments": {
+        "1": [
+          "iVar6"
+        ],
+        "8": [
+          "lVar7"
+        ],
+        "4": [
+          "lVar5"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbf7900",
+      "symbol": "CStashMenu::mapEventHandlers",
+      "path": "research/decompiled-core/stash_menu.c",
+      "line": 2524,
+      "increments": {
+        "1": [
+          "iVar8",
+          "pcVar6",
+          "puVar7",
+          "pcVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbfad60",
+      "symbol": "CStashMenu::updateLayout",
+      "path": "research/decompiled-core/stash_menu.c",
+      "line": 4402,
+      "increments": {
+        "1": [
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7",
+          "pbVar6",
+          "puVar7"
+        ],
+        "8": [
+          "lVar11",
+          "lVar13"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xbfbe20",
+      "symbol": "CStashMenu::createMenus",
+      "path": "research/decompiled-core/stash_menu.c",
+      "line": 4992,
+      "increments": {
+        "1": [
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar27",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar27",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "iVar6",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "lVar11",
+          "pcVar13",
+          "puVar20",
+          "local_3a84",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pcVar13",
+          "puVar20",
+          "pbVar15",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "pcVar13",
+          "lVar11",
+          "puVar20",
+          "local_3a84"
+        ],
+        "2": [
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9",
+          "uVar9"
+        ],
+        "4": [
+          "pCVar26"
+        ],
+        "8": [
+          "pCVar26",
+          "local_3a70"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x7bc0d0",
+      "symbol": "CTimeline::loadTimelineFromDataGroup",
+      "path": "research/decompiled-core/timeline.c",
+      "line": 2678,
+      "increments": {
+        "1": [
+          "local_17c",
+          "iVar6",
+          "puVar15",
+          "uVar14",
+          "local_154"
+        ],
+        "8": [
+          "local_120"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9073b0",
+      "symbol": "CTriggerUnit::fillSaveState",
+      "path": "research/decompiled-core/trigger_unit.c",
+      "line": 3002,
+      "increments": {
+        "1": [
+          "local_64"
+        ],
+        "24": [
+          "lVar8"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x908c10",
+      "symbol": "CTriggerUnit::trigger",
+      "path": "research/decompiled-core/trigger_unit.c",
+      "line": 3245,
+      "increments": {
+        "1": [
+          "uVar11",
+          "uVar11",
+          "uVar11"
+        ],
+        "8": [
+          "lVar9"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x9095c0",
+      "symbol": "CTriggerUnit::interact",
+      "path": "research/decompiled-core/trigger_unit.c",
+      "line": 3592,
+      "increments": {
+        "1": [
+          "uVar9",
+          "uVar9",
+          "uVar3",
+          "uVar11"
+        ],
+        "8": [
+          "lVar10",
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0xa14510",
+      "symbol": "CUnitSpawner::unitStateChange",
+      "path": "research/decompiled-core/unit_spawner.c",
+      "line": 2684,
+      "increments": {
+        "1": [
+          "uVar5",
+          "uVar9",
+          "uVar9"
+        ],
+        "8": [
+          "lVar10",
+          "lVar10",
+          "lVar10"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    },
+    {
+      "address": "0x915950",
+      "symbol": "CWardrobe::update",
+      "path": "research/decompiled-core/wardrobe.c",
+      "line": 1774,
+      "increments": {
+        "1": [
+          "uVar27",
+          "local_88c",
+          "uVar29",
+          "local_844",
+          "uVar27",
+          "iVar15",
+          "iVar17",
+          "local_88c",
+          "iVar17",
+          "iVar18",
+          "uVar28",
+          "plVar23"
+        ],
+        "8": [
+          "lVar32",
+          "lVar32",
+          "lVar32",
+          "local_430",
+          "local_430",
+          "local_430"
+        ],
+        "4": [
+          "lVar32",
+          "lVar33",
+          "local_858",
+          "lVar32",
+          "lVar32"
+        ]
+      },
+      "status": "LEXICAL_CANDIDATE_ONLY",
+      "limitation": "Co-occurrence does not establish same loop, dominance, initialization, invariant or absence of other assignments."
+    }
+  ]
+}

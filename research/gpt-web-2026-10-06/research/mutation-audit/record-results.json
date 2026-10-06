@@ -1,0 +1,14 @@
+{
+  "old_tested_code": "c2ed95082f202483",
+  "new_current_code": "608813f22d87e061",
+  "real_record_output": {
+    "0x123": {
+      "name": "probe(int)",
+      "killed": 9,
+      "tried": 10,
+      "code": "608813f22d87e061"
+    }
+  },
+  "old_results_rebound_to_new_code": true,
+  "scope": "record() regression fixture; no real prior mutation run or original ELF; code digests from real different synthetic objects"
+}

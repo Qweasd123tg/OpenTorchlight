@@ -1,0 +1,59 @@
+[
+  {
+    "from": "CMerchantMenu::setPetSlotIcon",
+    "to": "CStashMenu::setPetSlotIcon",
+    "tokens": [
+      5359,
+      5359
+    ],
+    "different_positions": 9,
+    "substitutions": [
+      {
+        "old": "CMerchantMenu",
+        "new": "CStashMenu",
+        "count": 1
+      },
+      {
+        "old": "0x3440",
+        "new": "0x3410",
+        "count": 8
+      }
+    ]
+  },
+  {
+    "from": "CStashMenu::setPetSlotIcon",
+    "to": "CStashMenu::setSlotIcon",
+    "tokens": [
+      5359,
+      5359
+    ],
+    "different_positions": 15,
+    "substitutions": [
+      {
+        "old": "0x26f8",
+        "new": "0x1de8",
+        "count": 1
+      },
+      {
+        "old": "0x2ea8",
+        "new": "0x1960",
+        "count": 3
+      },
+      {
+        "old": "0x2988",
+        "new": "0x14d8",
+        "count": 2
+      },
+      {
+        "old": "0x2c18",
+        "new": "0x1050",
+        "count": 6
+      },
+      {
+        "old": "0x3138",
+        "new": "0x2270",
+        "count": 3
+      }
+    ]
+  }
+]

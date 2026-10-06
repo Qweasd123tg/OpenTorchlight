@@ -1,0 +1,179 @@
+{
+  "instruction_counts": [
+    1087,
+    1087
+  ],
+  "different_instructions": 8,
+  "deltas": [
+    {
+      "index": 124,
+      "a": [
+        11972107,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12550011,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 316,
+      "a": [
+        11973395,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12551299,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 529,
+      "a": [
+        11974595,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12552499,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 651,
+      "a": [
+        11975307,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12553211,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 722,
+      "a": [
+        11975771,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12553675,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 780,
+      "a": [
+        11976102,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12554006,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 918,
+      "a": [
+        11976929,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12554833,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    },
+    {
+      "index": 943,
+      "a": [
+        11977050,
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "b": [
+        12554954,
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ],
+      "normalized_a": [
+        "mov",
+        "0x3440(%rbp),%rdi"
+      ],
+      "normalized_b": [
+        "mov",
+        "0x3410(%rbp),%rdi"
+      ]
+    }
+  ],
+  "caveat": "Instruction comparison only; no runtime, exception table or aliasing proof"
+}
+Five normalization guards PASS; eight exact field-offset deltas PASS

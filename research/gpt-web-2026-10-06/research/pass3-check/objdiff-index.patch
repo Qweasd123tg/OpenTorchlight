@@ -1,0 +1,22 @@
+--- a/tools/decomp/objdiff.py
++++ b/tools/decomp/objdiff.py
+@@ -359,6 +359,8 @@
+             continue
+         if current is not None:
+             sections[current].append(line)
++    parsed_sections = {name: parse_insns("\n".join(lines)) for name, lines in sections.items()}
++    section_addrs = {name: [i[0] for i in insns] for name, insns in parsed_sections.items()}
+     by_name = {s.name: s.index for s in obj.sections}
+     side = ObjectSide(obj, resolve, name_at)
+     result = {}
+@@ -366,8 +368,8 @@
+         if sym.type != elfimage.STT_FUNC or not sym.defined:
+             continue
+         section = obj.sections[sym.shndx]
+-        insns = [i for i in parse_insns("\n".join(sections.get(section.name, [])))
+-                 if sym.value <= i[0] < sym.value + sym.size]
++        addresses = section_addrs.get(section.name, [])
++        insns = parsed_sections.get(section.name, [])[bisect.bisect_left(addresses, sym.value):bisect.bisect_left(addresses, sym.value + sym.size)]
+         side.prepare(by_name[section.name])
+         side.current = sym.name
+         bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind

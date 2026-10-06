@@ -1,0 +1,18 @@
+{
+  "scope": "Lexical round-trip and specific historic pair; no source generation or semantic proof.",
+  "body_round_trips": 2608,
+  "round_trip_failures": [],
+  "merchant_stash_same_template": true,
+  "merchant_stash_body_tokens": 5359,
+  "merchant_stash_non_alpha_deltas": {
+    "@TYPE:3": {
+      "from": "CMerchantMenu",
+      "to": "CStashMenu"
+    },
+    "@NUMBER:36": {
+      "from": "0x3440",
+      "to": "0x3410"
+    }
+  },
+  "expected_top_pair_deltas_match": true
+}

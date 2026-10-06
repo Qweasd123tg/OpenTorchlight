@@ -1,0 +1,47 @@
+{
+  "status": "normal-flow candidate only; not recovered C++",
+  "function": "CInventoryMenu::createMenus()",
+  "function_address": "0xb569e0",
+  "region": {
+    "header": "0xb57517",
+    "merge": "0xb57534",
+    "block_count": 2,
+    "instruction_count": 7,
+    "calls": 2,
+    "call_addresses": [
+      "0xb57527",
+      "0xb5752f"
+    ],
+    "block_addresses": [
+      "0xb57517",
+      "0xb57524"
+    ]
+  },
+  "calls": [
+    {
+      "address": "0xb57527",
+      "target": "556578 <_ZN5CEGUI9BoundSlotD1Ev@plt>",
+      "guard_blocks": [
+        "0xb57517"
+      ],
+      "enclosing_regions": [
+        "0xb57425",
+        "0xb57504",
+        "0xb57517"
+      ]
+    },
+    {
+      "address": "0xb5752f",
+      "target": "553f18 <_ZdlPv@plt>",
+      "guard_blocks": [
+        "0xb57517"
+      ],
+      "enclosing_regions": [
+        "0xb57425",
+        "0xb57504",
+        "0xb57517"
+      ]
+    }
+  ],
+  "limitations": "NORMAL-flow candidate analysis only. Calls assumed to return; EH edges, memory dependencies and listing completeness not established. Regions overlap and are not independent implementations."
+}

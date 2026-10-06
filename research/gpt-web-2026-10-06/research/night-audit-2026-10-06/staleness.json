@@ -1,0 +1,20 @@
+{
+  "unchanged": [
+    "fresh",
+    []
+  ],
+  "callee_other_tu_return_changed": [
+    "fresh",
+    []
+  ],
+  "referenced_base_layout_changed": [
+    "fresh",
+    []
+  ],
+  "own_return_changed": [
+    "stale",
+    [
+      "method prototypes changed"
+    ]
+  ]
+}

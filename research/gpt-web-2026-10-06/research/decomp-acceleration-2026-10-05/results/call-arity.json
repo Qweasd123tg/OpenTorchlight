@@ -1,0 +1,3777 @@
+[
+  {
+    "address": "0x8ac190",
+    "arms": {
+      "baseline": {
+        "calls": 117,
+        "nonconformant": 107,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::NedAllocImpl::deallocBytes",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "local_2a0"
+          },
+          {
+            "name": "Ogre::AnimationState::setTimePosition",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(float *)(*plVar19 + 0x20)"
+          },
+          {
+            "name": "Ogre::AnimationState::setEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*puVar37,0)"
+          },
+          {
+            "name": "Ogre::Material::isTransparent",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                       (*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar29)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                       (*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar29)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                            (*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar29)"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                     (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29),\n                            (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)uVar16,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)uVar16,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "uVar31,(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                     (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29),\n                            (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                       (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29),\n                              (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                             (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29\n                                             ),(Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                           (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29),\n                                  (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                           (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29),\n                                  (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                         (*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29),\n                                (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)\n                                       (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29),\n                              (Renderable *)0x0"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*(undefined8 *)\n                                  (*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar29),0)"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*(undefined8 *)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar29)\n                             ,0)"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*(undefined8 *)(lVar21 + 0x20),0)"
+          },
+          {
+            "name": "Ogre::Material::setLightingEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(uVar16,0)"
+          },
+          {
+            "name": "Ogre::GpuProgramParameters::setNamedAutoConstant",
+            "observed": 3,
+            "expected": 4,
+            "conformant": false,
+            "arguments": "local_360,local_168,0x79"
+          },
+          {
+            "name": "Ogre::GpuProgramParameters::setNamedAutoConstant",
+            "observed": 3,
+            "expected": 4,
+            "conformant": false,
+            "arguments": "local_380,(string *)local_1f8,0x79"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setCubicTextureName",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81((string *)&local_3f0,0)"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureCoordSet",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)psVar22"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureAddressingMode",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "psVar22,2"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperationEx",
+            "observed": 6,
+            "expected": 7,
+            "conformant": false,
+            "arguments": "0,uVar16,3,1,0,&Ogre::ColourValue::White"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperationEx",
+            "observed": 6,
+            "expected": 7,
+            "conformant": false,
+            "arguments": "0,uVar16,4,1,0,&Ogre::ColourValue::White"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperation",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "psVar22"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setEnvironmentMap",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "psVar22,1,3"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setEnvironmentMap",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "uVar16,1,1"
+          },
+          {
+            "name": "Ogre::Entity::getMesh",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Entity::getMesh",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)param_1"
+          },
+          {
+            "name": "Ogre::Entity::getNumSubEntities",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Entity::getAnimationState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(string *)param_1"
+          },
+          {
+            "name": "Ogre::Entity::getAnimationState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(string *)param_1"
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Pass::setAmbient",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar24"
+          },
+          {
+            "name": "Ogre::Pass::setDiffuse",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar24"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)lVar21"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)pCVar24"
+          },
+          {
+            "name": "Ogre::Pass::removeTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(pCVar24,0)"
+          },
+          {
+            "name": "Ogre::Pass::setMaxSimultaneousLights",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)pCVar24"
+          },
+          {
+            "name": "Ogre::Pass::setFog",
+            "observed": 5,
+            "expected": 7,
+            "conformant": false,
+            "arguments": "0x3a83126f,0,pCVar24,1,0"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_a8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_118,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_108,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_f8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_e8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_138,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_128,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_158,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_148,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_1a8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81((string *)local_198,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_188,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81((string *)local_178,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_1c8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81((string *)local_1b8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81(local_1e8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "psVar22,SUB81((string *)local_1d8,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(string *)pCVar24,SUB81((string *)local_268,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(string *)pCVar24,SUB81((string *)local_258,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(string *)pCVar24,SUB81((string *)local_278,0)"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(string *)pCVar24,SUB81((string *)local_288,0)"
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgramParameters",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgramParameters",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgram",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgram",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar10"
+          },
+          {
+            "name": "Ogre::Technique::setDepthWriteEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "bVar8"
+          },
+          {
+            "name": "Ogre::Technique::setDepthFunction",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "uVar16,7"
+          },
+          {
+            "name": "Ogre::SubEntity::setMaterialName",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "psVar20"
+          }
+        ]
+      },
+      "enriched": {
+        "calls": 117,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::NedAllocImpl::deallocBytes",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "local_2a0"
+          },
+          {
+            "name": "Ogre::AnimationState::setTimePosition",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)*puVar34,*(float *)(*plVar17 + 0x20)"
+          },
+          {
+            "name": "Ogre::AnimationState::setEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)*puVar34,true"
+          },
+          {
+            "name": "Ogre::Material::isTransparent",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "*(void **)(lVar20 + 0x10)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar27),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar27),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x20 + lVar27),0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar27),0,\n                             (void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar27),0,\n                             (void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar27),0,\n                               (void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 +\n                                               lVar27),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar27\n                                             ),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar27\n                                             ),0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar27),\n                                 0,(void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::getBestTechnique",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar27),0,\n                               (void *)0x0"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x10 + lVar27),true"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ModelData1C8 + 0x40) + 0x18 + lVar27),true"
+          },
+          {
+            "name": "Ogre::Material::compile",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(lVar20 + 0x20),true"
+          },
+          {
+            "name": "Ogre::Material::setLightingEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,false"
+          },
+          {
+            "name": "Ogre::GpuProgramParameters::setNamedAutoConstant",
+            "observed": 4,
+            "expected": 4,
+            "conformant": true,
+            "arguments": "local_360,local_168,0x79,0"
+          },
+          {
+            "name": "Ogre::GpuProgramParameters::setNamedAutoConstant",
+            "observed": 4,
+            "expected": 4,
+            "conformant": true,
+            "arguments": "local_380,(string *)local_1f8,0x79,0"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setCubicTextureName",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pTVar23,&local_3f0,true"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureCoordSet",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pTVar23,1"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureAddressingMode",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pTVar23,2"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperationEx",
+            "observed": 7,
+            "expected": 7,
+            "conformant": true,
+            "arguments": "pTVar23,3,1,0,(ColourValue *)&Ogre::ColourValue::White,\n                         (ColourValue *)&Ogre::ColourValue::White,0.0"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperationEx",
+            "observed": 7,
+            "expected": 7,
+            "conformant": true,
+            "arguments": "pTVar23,4,1,0,(ColourValue *)&Ogre::ColourValue::White,\n                           (ColourValue *)&Ogre::ColourValue::White,0.0"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setColourOperation",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pTVar23,1"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setEnvironmentMap",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pTVar23,true,3"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setEnvironmentMap",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pTVar23,true,1"
+          },
+          {
+            "name": "Ogre::Entity::getMesh",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "param_1"
+          },
+          {
+            "name": "Ogre::Entity::getMesh",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "param_1"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "param_1,local_494"
+          },
+          {
+            "name": "Ogre::Entity::getNumSubEntities",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "param_1"
+          },
+          {
+            "name": "Ogre::Entity::getAnimationState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "param_1,(string *)((ulong)uVar11 * 8 + *(long *)(lVar27 + 0x28))"
+          },
+          {
+            "name": "Ogre::Entity::getAnimationState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "param_1,(string *)(lVar20 + *(long *)(lVar27 + 0x28))"
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Pass::setAmbient",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,&local_2b8"
+          },
+          {
+            "name": "Ogre::Pass::setDiffuse",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,&local_2c8"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,(ushort)iVar33"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Pass::removeTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,(short)(lVar20 - lVar28 >> 3) - 1"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,false"
+          },
+          {
+            "name": "Ogre::Pass::setMaxSimultaneousLights",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Pass::setFog",
+            "observed": 7,
+            "expected": 7,
+            "conformant": true,
+            "arguments": "pvVar14,true,0,(ColourValue *)&Ogre::ColourValue::White,0.001,0.0,1.0"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar15,local_a8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_118,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_108,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_f8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_e8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_138,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_128,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_158,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,local_148,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_1a8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_198,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_188,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_178,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_1c8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_1b8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_1e8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_1d8,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_268,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_258,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_278,true"
+          },
+          {
+            "name": "Ogre::Pass::setVertexProgram",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pvVar14,(string *)local_288,true"
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgramParameters",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [32])local_368,pvVar14"
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgramParameters",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [32])&local_388,pvVar14"
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgram",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "pvVar14"
+          },
+          {
+            "name": "Ogre::Pass::getVertexProgram",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "pvVar14"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar14,0"
+          },
+          {
+            "name": "Ogre::Technique::setDepthWriteEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,false"
+          },
+          {
+            "name": "Ogre::Technique::setDepthFunction",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar15,7"
+          },
+          {
+            "name": "Ogre::SubEntity::setMaterialName",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "plVar17,(string *)local_208"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "address": "0x92b4b0",
+    "arms": {
+      "baseline": {
+        "calls": 19,
+        "nonconformant": 13,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)local_f0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)local_f0"
+          },
+          {
+            "name": "Ogre::Material::setCullingMode",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_f0,1"
+          },
+          {
+            "name": "Ogre::Material::setLightingEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(local_f0,0)"
+          },
+          {
+            "name": "Ogre::BillboardSet::createBillboard",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "this->m_pStaticTileBillboardSet,param_4"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureName",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "uVar12,&local_140,2"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureFiltering",
+            "observed": 4,
+            "expected": 4,
+            "conformant": true,
+            "arguments": "uVar12,2,2,0"
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Billboard::setRotation",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_a0"
+          },
+          {
+            "name": "Ogre::Billboard::setDimensions",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "param_2,param_3"
+          },
+          {
+            "name": "Ogre::Billboard::setColour",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ColourValue *)local_a0"
+          },
+          {
+            "name": "Ogre::Billboard::setTexcoordRect",
+            "observed": 4,
+            "expected": 5,
+            "conformant": false,
+            "arguments": "1.0,0.0,0.0,1.0"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar9"
+          },
+          {
+            "name": "Ogre::Pass::setDepthCheckEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(psVar15,0)"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(psVar15,0)"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar9"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar9"
+          }
+        ]
+      },
+      "enriched": {
+        "calls": 19,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_f0,0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_f0,0"
+          },
+          {
+            "name": "Ogre::Material::setCullingMode",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_f0,1"
+          },
+          {
+            "name": "Ogre::Material::setLightingEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_f0,false"
+          },
+          {
+            "name": "Ogre::BillboardSet::createBillboard",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "this->m_pStaticTileBillboardSet,param_4,\n                        (ColourValue *)&Ogre::ColourValue::White"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureName",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pTVar12,&local_140,2"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureFiltering",
+            "observed": 4,
+            "expected": 4,
+            "conformant": true,
+            "arguments": "pTVar12,2,2,0"
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::MaterialManager::getSingleton",
+            "observed": 0,
+            "expected": 0,
+            "conformant": true,
+            "arguments": ""
+          },
+          {
+            "name": "Ogre::Billboard::setRotation",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_a0,local_58"
+          },
+          {
+            "name": "Ogre::Billboard::setDimensions",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "local_a0,param_2,param_3"
+          },
+          {
+            "name": "Ogre::Billboard::setColour",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_a0,&local_b8"
+          },
+          {
+            "name": "Ogre::Billboard::setTexcoordRect",
+            "observed": 5,
+            "expected": 5,
+            "conformant": true,
+            "arguments": "local_a0,1.0,0.0,0.0,1.0"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,0"
+          },
+          {
+            "name": "Ogre::Pass::setDepthCheckEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,true"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,false"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,0"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "address": "0xba26b0",
+    "arms": {
+      "baseline": {
+        "calls": 99,
+        "nonconformant": 99,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1558"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_6e8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_638"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_218"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_378"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_8f8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_9a8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_c68"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1138"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_e78"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)pSVar23"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1088"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1348"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1298"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1ef8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1e48"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_2058"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_1fa8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_21b8"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ulong)&local_2108"
+          },
+          {
+            "name": "CEGUI::String::build_utf8_buff",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::EventSet::setMutedState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(bool)((char)local_22b8 + '8')"
+          },
+          {
+            "name": "CEGUI::EventSet::setMutedState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(bool)((char)pUVar19 + '8')"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(String *)this->m_iUnknown9108"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1608,local_14a8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1B28,local_1608"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1898,local_1768"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1378,local_1978"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1B28,(String *)&local_638"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1B28,local_588"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1B28,(String *)&local_378"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1608,(String *)&local_8f8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1608,(String *)&local_9a8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1898,(String *)&local_c68"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1898,(String *)&local_1138"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1898,(String *)&local_e78"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1898,(String *)&local_1088"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1378,(String *)&local_1298"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1040,local_1c38"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1040,local_1ad8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1930,(String *)&local_1e48"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown1BC0,(String *)&local_1fa8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(String *)pCVar20->m_iUnknown16A0,(String *)&local_2108"
+          },
+          {
+            "name": "CEGUI::Window::isVisible",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*(undefined8 *)((long)pCVar20->m_pUnknown1378 + 0xb0),0)"
+          },
+          {
+            "name": "CEGUI::Window::isVisible",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(*(undefined8 *)((long)pCVar20->m_pUnknown1378 + 0xb0),0)"
+          },
+          {
+            "name": "CEGUI::Window::isChild",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "this->m_pUnknown30"
+          },
+          {
+            "name": "CEGUI::Window::setText",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1E50"
+          },
+          {
+            "name": "CEGUI::Window::addChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::addChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "this->m_pUnknown30"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pWVar5"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pWVar5"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(Window **)(local_22b8 + 0xb0)"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(Window **)(pUVar19 + 0xb0)"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pWVar5"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::moveToBack",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1040"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar20->m_pUnknown1040"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pUVar19"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(UVector2 *)pCVar20->m_iUnknown1B28"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(UVector2 *)pCVar20->m_iUnknown1898"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pUVar19"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::getPosition",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getPosition",
+            "observed": 0,
+            "expected": 1,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 0,
+            "expected": 2,
+            "conformant": false,
+            "arguments": ""
+          },
+          {
+            "name": "CEGUI::Window::update",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "0.001"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_4d8"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_2c8"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_848"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_bb8"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_dc8"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_fd8"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "local_1a28"
+          }
+        ]
+      },
+      "enriched": {
+        "calls": 99,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1558,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_6e8,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_638,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_218,0xd"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_378,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0xc"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_8f8,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_9a8,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0xc"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_c68,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1138,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0xc"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_e78,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pSVar22,0xd"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1088,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1348,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1298,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1ef8,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1e48,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_2058,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_1fa8,5"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_21b8,0"
+          },
+          {
+            "name": "CEGUI::String::grow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(String *)&local_2108,5"
+          },
+          {
+            "name": "CEGUI::String::build_utf8_buff",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "(String *)(&this->m_Unknown58A8 + (ulong)uVar21 * 0x16)"
+          },
+          {
+            "name": "CEGUI::EventSet::setMutedState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)((long)local_22b8 + 0x38),true"
+          },
+          {
+            "name": "CEGUI::EventSet::setMutedState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)((long)pvVar11 + 0x38),true"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,local_428"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,(String *)&local_218"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,pSVar22"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,pSVar22"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,pSVar22"
+          },
+          {
+            "name": "CEGUI::Imageset::getImage",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)this->m_iUnknown9108,pSVar22"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1608,local_14a8,&local_1558"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28,local_1608,local_16b8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,local_1768,local_1818"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378,local_1978,&this->m_Unknown2048 + (ulong)uVar21 * 0x16"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28,&local_638,&local_6e8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28,local_588,local_4d8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28,(String *)&local_378,local_2c8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1608,(String *)&local_8f8,local_848"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1608,(String *)&local_9a8,pSVar22"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,(String *)&local_c68,local_bb8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,(String *)&local_1138,pSVar22"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,(String *)&local_e78,local_dc8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,(String *)&local_1088,local_fd8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378,&local_1298,&local_1348"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1040,local_1c38,local_1ce8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1040,local_1ad8,local_1a28"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1930,(String *)&local_1e48,&local_1ef8"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1BC0,(String *)&local_1fa8,&local_2058"
+          },
+          {
+            "name": "CEGUI::PropertySet::setProperty",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown16A0,(String *)&local_2108,&local_21b8"
+          },
+          {
+            "name": "CEGUI::Window::isVisible",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)((long)pCVar19->m_pUnknown1378 + 0xb0),false"
+          },
+          {
+            "name": "CEGUI::Window::isVisible",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)((long)pCVar19->m_pUnknown1378 + 0xb0),false"
+          },
+          {
+            "name": "CEGUI::Window::isChild",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "this->m_pUnknown30,pvVar11"
+          },
+          {
+            "name": "CEGUI::Window::setText",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1E50,local_2268"
+          },
+          {
+            "name": "CEGUI::Window::addChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378,local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::addChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "this->m_pUnknown30,pvVar11"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,(void *)**(undefined8 **)((long)pvVar11 + 0x78)"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,(void *)**(undefined8 **)((long)pvVar11 + 0x78)"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)((long)local_22b8 + 0xb0),local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)((long)pvVar11 + 0xb0),pvVar11"
+          },
+          {
+            "name": "CEGUI::Window::removeChildWindow",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,(void *)**(undefined8 **)((long)pvVar11 + 0x78)"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "pvVar11"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "local_22b8"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "this->m_pUnknown48"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "this->m_pUnknown28"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "this->m_pUnknown30"
+          },
+          {
+            "name": "CEGUI::Window::moveToFront",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "this->m_pUnknown40"
+          },
+          {
+            "name": "CEGUI::Window::moveToBack",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "this->m_pUnknown20"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378,local_18c8"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378,local_13f8"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1040,local_1d98"
+          },
+          {
+            "name": "CEGUI::Window::setTooltipText",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1040,local_1b88"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,&local_f8"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_22b8,&local_128"
+          },
+          {
+            "name": "CEGUI::Window::setPosition",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_22b8,&local_138"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1B28,&local_158"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)pCVar19->m_iUnknown1898,&local_168"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar11,&local_108"
+          },
+          {
+            "name": "CEGUI::Window::setSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_22b8,&local_148"
+          },
+          {
+            "name": "CEGUI::Window::getPosition",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getPosition",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_158,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_168,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_e8,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_108,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_118,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::getSize",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "&local_148,pCVar19->m_pUnknown1378"
+          },
+          {
+            "name": "CEGUI::Window::update",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "local_22b8,0.001"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_4d8,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_2c8,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_848,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_bb8,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_dc8,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_fd8,pvVar11"
+          },
+          {
+            "name": "CEGUI::PropertyHelper::imageToString",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(undefined1 (*) [176])local_1a28,pvVar11"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "address": "0xa06b30",
+    "arms": {
+      "baseline": {
+        "calls": 28,
+        "nonconformant": 27,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::Math::AngleUnitsToRadians",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "(180.0 - fVar16) - fVar18"
+          },
+          {
+            "name": "Ogre::Quaternion::FromAngleAxis",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "local_1e8,(Vector3 *)&local_138"
+          },
+          {
+            "name": "Ogre::Quaternion::FromAngleAxis",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "local_1c8,(Vector3 *)local_58"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB42(local_200,0)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)(lVar13 + 8)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)(lVar13 + 8)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)(lVar13 + 8)"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(ushort)*(undefined8 *)(lVar13 + 8)"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureScroll",
+            "observed": 2,
+            "expected": 3,
+            "conformant": false,
+            "arguments": "(fVar18 / -360.0 + 1.0) * 0.5,\n                         (float)(~uVar15 & 0x3d4ccccd | (uint)(fVar16 / fVar17) & uVar15) * -0.5"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)\n                                        (*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)\n                                            (*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)\n                                              (*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)\n                                                (*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "(uint)*(undefined8 *)\n                                                  (*(long *)(this->m_ShapeData100 + 0x48) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(string **)(*(long *)(this->m_ShapeData100 + 0x50) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(string **)(*(long *)(this->m_ShapeData100 + 0x58) + 0x60)"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "*(string **)(*(long *)(this->m_ShapeData100 + 0x60) + 0x60)"
+          },
+          {
+            "name": "Ogre::Pass::setAmbient",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar11"
+          },
+          {
+            "name": "Ogre::Pass::setDiffuse",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "pCVar11"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar8"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "SUB81(pCVar11,0)"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar8"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar8"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar8"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "uVar8"
+          },
+          {
+            "name": "Ogre::SubEntity::setMaterialName",
+            "observed": 1,
+            "expected": 2,
+            "conformant": false,
+            "arguments": "psVar12"
+          }
+        ]
+      },
+      "enriched": {
+        "calls": 28,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": [
+          {
+            "name": "Ogre::Math::AngleUnitsToRadians",
+            "observed": 1,
+            "expected": 1,
+            "conformant": true,
+            "arguments": "(180.0 - fVar14) - fVar16"
+          },
+          {
+            "name": "Ogre::Quaternion::FromAngleAxis",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "local_1e8,&local_138,(Vector3 *)&Ogre::Vector3::UNIT_Y"
+          },
+          {
+            "name": "Ogre::Quaternion::FromAngleAxis",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "(Quaternion *)&local_1c8,local_58,(Vector3 *)&Ogre::Vector3::UNIT_Y"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "(void *)CONCAT44(uStack_1fc,local_208.z),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(lVar12 + 8),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(lVar12 + 8),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(lVar12 + 8),0"
+          },
+          {
+            "name": "Ogre::Material::getTechnique",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(lVar12 + 8),0"
+          },
+          {
+            "name": "Ogre::TextureUnitState::setTextureScroll",
+            "observed": 3,
+            "expected": 3,
+            "conformant": true,
+            "arguments": "this_00,(fVar16 / -360.0 + 1.0) * 0.5,\n                         (float)(~uVar13 & 0x3d4ccccd | (uint)(fVar14 / fVar15) & uVar13) * -0.5"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::getSubEntity",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x48) + 0x60),0"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x50) + 0x60),(string *)local_c8"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x58) + 0x60),(string *)local_f8"
+          },
+          {
+            "name": "Ogre::Entity::setMaterialName",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "*(void **)(*(long *)(this->m_ShapeData100 + 0x60) + 0x60),(string *)local_128"
+          },
+          {
+            "name": "Ogre::Pass::setAmbient",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,&local_1a8"
+          },
+          {
+            "name": "Ogre::Pass::setDiffuse",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,&local_1b8"
+          },
+          {
+            "name": "Ogre::Pass::getTextureUnitState",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,0"
+          },
+          {
+            "name": "Ogre::Pass::setDepthWriteEnabled",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,false"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,0"
+          },
+          {
+            "name": "Ogre::Technique::getPass",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,0"
+          },
+          {
+            "name": "Ogre::SubEntity::setMaterialName",
+            "observed": 2,
+            "expected": 2,
+            "conformant": true,
+            "arguments": "pvVar10,psVar9"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "address": "0x87f880",
+    "arms": {
+      "baseline": {
+        "calls": 0,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": []
+      },
+      "enriched": {
+        "calls": 0,
+        "nonconformant": 0,
+        "extraout_markers": 0,
+        "details": []
+      }
+    }
+  }
+]

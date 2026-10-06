@@ -1,0 +1,4 @@
+Right::f(int) pointer=1 adjustment=0 slot_if_virtual=0
+Right::f(int) viewed as Derived pointer=1 adjustment=8 slot_if_virtual=0
+Right::f(long) viewed as Derived pointer=9 adjustment=8 slot_if_virtual=1
+Derived::f(int) pointer=9 adjustment=0 slot_if_virtual=1

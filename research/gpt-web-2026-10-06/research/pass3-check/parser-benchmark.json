@@ -1,0 +1,29 @@
+[
+  {
+    "functions": 50,
+    "same_result": true,
+    "seconds": {
+      "baseline": 0.014721511000971077,
+      "indexed": 0.0030355039998539723
+    },
+    "ratio": 4.849774864957937
+  },
+  {
+    "functions": 200,
+    "same_result": true,
+    "seconds": {
+      "baseline": 0.1786794010004087,
+      "indexed": 0.005284439999741153
+    },
+    "ratio": 33.81236252264401
+  },
+  {
+    "functions": 500,
+    "same_result": true,
+    "seconds": {
+      "baseline": 1.1600871040009224,
+      "indexed": 0.010893791000853525
+    },
+    "ratio": 106.4906701358627
+  }
+]

@@ -1,0 +1,5818 @@
+{
+  "scope": "Lexical direct-this offsets from historical drafts. Numeric size, access width, base adjustment, aliasing, callee semantics, EH and current headers still require verification.",
+  "class_pairs": [
+    {
+      "source_class": "CCharacter",
+      "target_class": "CEquipment",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x200",
+          "to_offset": "0x2b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 512,
+              "to": 688,
+              "source_function": "0x85ab80",
+              "target_function": "0x899520",
+              "source_symbol": "CCharacter::getUnitModel()",
+              "target_symbol": "CEquipment::getUnitModel()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x4c8",
+          "to_offset": "0x2c0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 1224,
+              "to": 704,
+              "source_function": "0x85ab90",
+              "target_function": "0x899540",
+              "source_symbol": "CCharacter::getUnitCollisionModel()",
+              "target_symbol": "CEquipment::getUnitCollisionModel()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCharacter",
+      "target_class": "CMonster",
+      "distinct_function_pairs": 1,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x1e8",
+          "to_offset": "0x1e8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 488,
+              "to": 488,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 289
+            }
+          ]
+        },
+        {
+          "from_offset": "0x268",
+          "to_offset": "0x268",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 616,
+              "to": 616,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 21
+            },
+            {
+              "from": 616,
+              "to": 616,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 41
+            },
+            {
+              "from": 616,
+              "to": 616,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 223
+            }
+          ]
+        },
+        {
+          "from_offset": "0x278",
+          "to_offset": "0x278",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 632,
+              "to": 632,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 276
+            }
+          ]
+        },
+        {
+          "from_offset": "0x750",
+          "to_offset": "0x750",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 5,
+          "evidence": [
+            {
+              "from": 1872,
+              "to": 1872,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 70
+            },
+            {
+              "from": 1872,
+              "to": 1872,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 108
+            },
+            {
+              "from": 1872,
+              "to": 1872,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 132
+            },
+            {
+              "from": 1872,
+              "to": 1872,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 167
+            },
+            {
+              "from": 1872,
+              "to": 1872,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 194
+            }
+          ]
+        },
+        {
+          "from_offset": "0x758",
+          "to_offset": "0x758",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 1880,
+              "to": 1880,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 119
+            },
+            {
+              "from": 1880,
+              "to": 1880,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 179
+            }
+          ]
+        },
+        {
+          "from_offset": "0x768",
+          "to_offset": "0x768",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 1896,
+              "to": 1896,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 55
+            },
+            {
+              "from": 1896,
+              "to": 1896,
+              "source_function": "0x823a70",
+              "target_function": "0x8d5c40",
+              "source_symbol": "CCharacter::setPathToFollow(CPathController*)",
+              "target_symbol": "CMonster::setPathToFollow(CPathController*)",
+              "token_position": 240
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCharacter",
+      "target_class": "CQuest",
+      "distinct_function_pairs": 1,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x490",
+          "to_offset": "0x128",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 1168,
+              "to": 296,
+              "source_function": "0x817500",
+              "target_function": "0xd0d810",
+              "source_symbol": "CCharacter::destroyIcons()",
+              "target_symbol": "CQuest::destroyIcons()",
+              "token_position": 12
+            },
+            {
+              "from": 1168,
+              "to": 296,
+              "source_function": "0x817500",
+              "target_function": "0xd0d810",
+              "source_symbol": "CCharacter::destroyIcons()",
+              "target_symbol": "CQuest::destroyIcons()",
+              "token_position": 35
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCharacter",
+      "target_class": "CTriggerUnit",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x200",
+          "to_offset": "0x230",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 512,
+              "to": 560,
+              "source_function": "0x85ab80",
+              "target_function": "0x90da30",
+              "source_symbol": "CCharacter::getUnitModel()",
+              "target_symbol": "CTriggerUnit::getUnitModel()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x4c8",
+          "to_offset": "0x238",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 1224,
+              "to": 568,
+              "source_function": "0x85ab90",
+              "target_function": "0x90da40",
+              "source_symbol": "CCharacter::getUnitCollisionModel()",
+              "target_symbol": "CTriggerUnit::getUnitCollisionModel()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CEnchantMenu",
+      "distinct_function_pairs": 10,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 48,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 224
+            },
+            {
+              "from": 96,
+              "to": 48,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 211
+            },
+            {
+              "from": 96,
+              "to": 48,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 293
+            }
+          ]
+        },
+        {
+          "from_offset": "0x68",
+          "to_offset": "0x38",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 104,
+              "to": 56,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 247
+            },
+            {
+              "from": 104,
+              "to": 56,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 234
+            },
+            {
+              "from": 104,
+              "to": 56,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 262
+            }
+          ]
+        },
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 88,
+              "source_function": "0xae1640",
+              "target_function": "0xb34290",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CEnchantMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x90",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 4,
+          "evidence": [
+            {
+              "from": 144,
+              "to": 96,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 34
+            },
+            {
+              "from": 144,
+              "to": 96,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 63
+            },
+            {
+              "from": 144,
+              "to": 96,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 37
+            },
+            {
+              "from": 144,
+              "to": 96,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 100
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x70",
+          "conflict": true,
+          "distinct_function_pairs": 3,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 112,
+              "source_function": "0xae1620",
+              "target_function": "0xb34270",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CEnchantMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 112,
+              "source_function": "0xad7560",
+              "target_function": "0xb29650",
+              "source_symbol": "CCombineMenu::onClick(ELayoutFunction)",
+              "target_symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+              "token_position": 8
+            },
+            {
+              "from": 152,
+              "to": 112,
+              "source_function": "0xae1600",
+              "target_function": "0xb34250",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CEnchantMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xacd3a0",
+              "target_function": "0xb1bb80",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x71",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 113,
+              "source_function": "0xae1600",
+              "target_function": "0xb34250",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CEnchantMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9a",
+          "to_offset": "0x72",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 154,
+              "to": 114,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb23ba0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            },
+            {
+              "from": 154,
+              "to": 114,
+              "source_function": "0xad7560",
+              "target_function": "0xb29650",
+              "source_symbol": "CCombineMenu::onClick(ELayoutFunction)",
+              "target_symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa8",
+          "to_offset": "0x80",
+          "conflict": false,
+          "distinct_function_pairs": 3,
+          "occurrences": 8,
+          "evidence": [
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 154
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 189
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb23ba0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb23ba0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb23ba0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad7560",
+              "target_function": "0xb29650",
+              "source_symbol": "CCombineMenu::onClick(ELayoutFunction)",
+              "target_symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+              "token_position": 53
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad7560",
+              "target_function": "0xb29650",
+              "source_symbol": "CCombineMenu::onClick(ELayoutFunction)",
+              "target_symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+              "token_position": 82
+            },
+            {
+              "from": 168,
+              "to": 128,
+              "source_function": "0xad7560",
+              "target_function": "0xb29650",
+              "source_symbol": "CCombineMenu::onClick(ELayoutFunction)",
+              "target_symbol": "CEnchantMenu::onClick(ELayoutFunction)",
+              "token_position": 393
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0xb0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 176,
+              "source_function": "0xae1630",
+              "target_function": "0xb34280",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CEnchantMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x188",
+          "to_offset": "0xe8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 392,
+              "to": 232,
+              "source_function": "0xacd330",
+              "target_function": "0xb1bb10",
+              "source_symbol": "CCombineMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 68
+            }
+          ]
+        },
+        {
+          "from_offset": "0x18c",
+          "to_offset": "0xec",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 396,
+              "to": 236,
+              "source_function": "0xacd330",
+              "target_function": "0xb1bb10",
+              "source_symbol": "CCombineMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 117
+            }
+          ]
+        },
+        {
+          "from_offset": "0x190",
+          "to_offset": "0xf0",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 400,
+              "to": 240,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 118
+            },
+            {
+              "from": 400,
+              "to": 240,
+              "source_function": "0xacd3d0",
+              "target_function": "0xb1bbb0",
+              "source_symbol": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 131
+            },
+            {
+              "from": 400,
+              "to": 240,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 142
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1a0",
+          "to_offset": "0x100",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 416,
+              "to": 256,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 404
+            },
+            {
+              "from": 416,
+              "to": 256,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 423
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1a8",
+          "to_offset": "0x108",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 424,
+              "to": 264,
+              "source_function": "0xacd460",
+              "target_function": "0xb1bc40",
+              "source_symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 437
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CInventoryMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 80,
+              "source_function": "0xae1640",
+              "target_function": "0xb60f20",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CInventoryMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x60",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1620",
+              "target_function": "0xb60f00",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CInventoryMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1600",
+              "target_function": "0xb60ee0",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CInventoryMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xacd3a0",
+              "target_function": "0xb458d0",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 97,
+              "source_function": "0xae1600",
+              "target_function": "0xb60ee0",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CInventoryMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0x9180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 37248,
+              "source_function": "0xae1630",
+              "target_function": "0xb60f10",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CInventoryMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CJournalMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 48,
+              "source_function": "0xae1640",
+              "target_function": "0xe447c0",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CJournalMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 136,
+              "to": 48,
+              "source_function": "0xacd2c0",
+              "target_function": "0xe332a0",
+              "source_symbol": "CCombineMenu::setOwner(CCharacter*)",
+              "target_symbol": "CJournalMenu::setOwner(CCharacter*)",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x38",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 56,
+              "source_function": "0xae1620",
+              "target_function": "0xe447a0",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CJournalMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 56,
+              "source_function": "0xae1600",
+              "target_function": "0xe44780",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x39",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 57,
+              "source_function": "0xae1600",
+              "target_function": "0xe44780",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 112,
+              "source_function": "0xae1630",
+              "target_function": "0xe447b0",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CJournalMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CMerchantMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 80,
+              "source_function": "0xae1640",
+              "target_function": "0xb775d0",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CMerchantMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x60",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1620",
+              "target_function": "0xb775b0",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CMerchantMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1600",
+              "target_function": "0xb77590",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xacd3a0",
+              "target_function": "0xb610a0",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 97,
+              "source_function": "0xae1600",
+              "target_function": "0xb77590",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9a",
+          "to_offset": "0x62",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 154,
+              "to": 98,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa8",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 160,
+              "source_function": "0xae1630",
+              "target_function": "0xb775c0",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CMerchantMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CPetMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 88,
+              "source_function": "0xae1640",
+              "target_function": "0xba51d0",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CPetMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xae1620",
+              "target_function": "0xba51b0",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CPetMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xae1600",
+              "target_function": "0xba5190",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xacd3a0",
+              "target_function": "0xb88870",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x69",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 105,
+              "source_function": "0xae1600",
+              "target_function": "0xba5190",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0x91b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 37296,
+              "source_function": "0xae1630",
+              "target_function": "0xba51c0",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CPetMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 384,
+              "source_function": "0xae1640",
+              "target_function": "0xbccac0",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 136,
+              "to": 384,
+              "source_function": "0xacd2c0",
+              "target_function": "0xbba030",
+              "source_symbol": "CCombineMenu::setOwner(CCharacter*)",
+              "target_symbol": "CQuestMenu::setOwner(CCharacter*)",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xacd3a0",
+              "target_function": "0xbba0f0",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x188",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 392,
+              "source_function": "0xae1620",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 392,
+              "source_function": "0xae1600",
+              "target_function": "0xbcca80",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 393,
+              "source_function": "0xae1600",
+              "target_function": "0xbcca80",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 464,
+              "source_function": "0xae1630",
+              "target_function": "0xbccab0",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CCombineMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x88",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 136,
+              "to": 80,
+              "source_function": "0xae1640",
+              "target_function": "0xc04250",
+              "source_symbol": "CCombineMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x60",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1620",
+              "target_function": "0xc04230",
+              "source_symbol": "CCombineMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 152,
+              "to": 96,
+              "source_function": "0xae1600",
+              "target_function": "0xc04210",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xacd3a0",
+              "target_function": "0xbee480",
+              "source_symbol": "CCombineMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x99",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 153,
+              "to": 97,
+              "source_function": "0xae1600",
+              "target_function": "0xc04210",
+              "source_symbol": "CCombineMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9a",
+          "to_offset": "0x62",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 154,
+              "to": 98,
+              "source_function": "0xad4bb0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa8",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 168,
+              "to": 112,
+              "source_function": "0xad4bb0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            }
+          ]
+        },
+        {
+          "from_offset": "0xd8",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 216,
+              "to": 160,
+              "source_function": "0xae1630",
+              "target_function": "0xc04240",
+              "source_symbol": "CCombineMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CInventoryMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 80,
+              "source_function": "0xb34290",
+              "target_function": "0xb60f20",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CInventoryMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34270",
+              "target_function": "0xb60f00",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CInventoryMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34250",
+              "target_function": "0xb60ee0",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CInventoryMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 97,
+              "source_function": "0xb34250",
+              "target_function": "0xb60ee0",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CInventoryMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb1bb80",
+              "target_function": "0xb458d0",
+              "source_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0x9180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 37248,
+              "source_function": "0xb34280",
+              "target_function": "0xb60f10",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CInventoryMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CJournalMenu",
+      "distinct_function_pairs": 4,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 48,
+              "source_function": "0xb34290",
+              "target_function": "0xe447c0",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CJournalMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x38",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 56,
+              "source_function": "0xb34270",
+              "target_function": "0xe447a0",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CJournalMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 56,
+              "source_function": "0xb34250",
+              "target_function": "0xe44780",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x39",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 57,
+              "source_function": "0xb34250",
+              "target_function": "0xe44780",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 112,
+              "source_function": "0xb34280",
+              "target_function": "0xe447b0",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CJournalMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CMerchantMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 80,
+              "source_function": "0xb34290",
+              "target_function": "0xb775d0",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CMerchantMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34270",
+              "target_function": "0xb775b0",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CMerchantMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34250",
+              "target_function": "0xb77590",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 97,
+              "source_function": "0xb34250",
+              "target_function": "0xb77590",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x72",
+          "to_offset": "0x62",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 114,
+              "to": 98,
+              "source_function": "0xb23ba0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0x80",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xb68ca0",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb1bb80",
+              "target_function": "0xb610a0",
+              "source_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 160,
+              "source_function": "0xb34280",
+              "target_function": "0xb775c0",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CMerchantMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CPetMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb34290",
+              "target_function": "0xba51d0",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CPetMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 104,
+              "source_function": "0xb34270",
+              "target_function": "0xba51b0",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CPetMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 104,
+              "source_function": "0xb34250",
+              "target_function": "0xba5190",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x69",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 105,
+              "source_function": "0xb34250",
+              "target_function": "0xba5190",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb1bb80",
+              "target_function": "0xb88870",
+              "source_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0x91b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 37296,
+              "source_function": "0xb34280",
+              "target_function": "0xba51c0",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CPetMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 384,
+              "source_function": "0xb34290",
+              "target_function": "0xbccac0",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x188",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 392,
+              "source_function": "0xb34270",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 392,
+              "source_function": "0xb34250",
+              "target_function": "0xbcca80",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 393,
+              "source_function": "0xb34250",
+              "target_function": "0xbcca80",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xb1bb80",
+              "target_function": "0xbba0f0",
+              "source_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 464,
+              "source_function": "0xb34280",
+              "target_function": "0xbccab0",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEnchantMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 80,
+              "source_function": "0xb34290",
+              "target_function": "0xc04250",
+              "source_symbol": "CEnchantMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34270",
+              "target_function": "0xc04230",
+              "source_symbol": "CEnchantMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 112,
+              "to": 96,
+              "source_function": "0xb34250",
+              "target_function": "0xc04210",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x71",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 113,
+              "to": 97,
+              "source_function": "0xb34250",
+              "target_function": "0xc04210",
+              "source_symbol": "CEnchantMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x72",
+          "to_offset": "0x62",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 114,
+              "to": 98,
+              "source_function": "0xb23ba0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0x80",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 128,
+              "to": 112,
+              "source_function": "0xb23ba0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb1bb80",
+              "target_function": "0xbee480",
+              "source_symbol": "CEnchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xb0",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 176,
+              "to": 160,
+              "source_function": "0xb34280",
+              "target_function": "0xc04240",
+              "source_symbol": "CEnchantMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CEquipment",
+      "target_class": "CTriggerUnit",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x2b0",
+          "to_offset": "0x230",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 688,
+              "to": 560,
+              "source_function": "0x899520",
+              "target_function": "0x90da30",
+              "source_symbol": "CEquipment::getUnitModel()",
+              "target_symbol": "CTriggerUnit::getUnitModel()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x2c0",
+          "to_offset": "0x238",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 704,
+              "to": 568,
+              "source_function": "0x899540",
+              "target_function": "0x90da40",
+              "source_symbol": "CEquipment::getUnitCollisionModel()",
+              "target_symbol": "CTriggerUnit::getUnitCollisionModel()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CGenericModel",
+      "target_class": "CLayout",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x220",
+          "to_offset": "0x1a4",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 544,
+              "to": 420,
+              "source_function": "0x8b1030",
+              "target_function": "0x9e0a20",
+              "source_symbol": "CGenericModel::SetRandomWeight(unsigned int)",
+              "target_symbol": "CLayout::SetRandomWeight(unsigned int)",
+              "token_position": 9
+            },
+            {
+              "from": 544,
+              "to": 420,
+              "source_function": "0x8b1010",
+              "target_function": "0x9e0a00",
+              "source_symbol": "CGenericModel::GetRandomWeight()",
+              "target_symbol": "CLayout::GetRandomWeight()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CGenericModel",
+      "target_class": "CUnitSpawner",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x220",
+          "to_offset": "0x1a8",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 544,
+              "to": 424,
+              "source_function": "0x8b1030",
+              "target_function": "0xa17da0",
+              "source_symbol": "CGenericModel::SetRandomWeight(unsigned int)",
+              "target_symbol": "CUnitSpawner::SetRandomWeight(unsigned int)",
+              "token_position": 9
+            },
+            {
+              "from": 544,
+              "to": 424,
+              "source_function": "0x8b1010",
+              "target_function": "0xa17d80",
+              "source_symbol": "CGenericModel::GetRandomWeight()",
+              "target_symbol": "CUnitSpawner::GetRandomWeight()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CInventoryMenu",
+      "target_class": "CJournalMenu",
+      "distinct_function_pairs": 4,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 48,
+              "source_function": "0xb60f20",
+              "target_function": "0xe447c0",
+              "source_symbol": "CInventoryMenu::getOwner()",
+              "target_symbol": "CJournalMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x38",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 56,
+              "source_function": "0xb60f00",
+              "target_function": "0xe447a0",
+              "source_symbol": "CInventoryMenu::openPartial()",
+              "target_symbol": "CJournalMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 56,
+              "source_function": "0xb60ee0",
+              "target_function": "0xe44780",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x39",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 57,
+              "source_function": "0xb60ee0",
+              "target_function": "0xe44780",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CJournalMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9180",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37248,
+              "to": 112,
+              "source_function": "0xb60f10",
+              "target_function": "0xe447b0",
+              "source_symbol": "CInventoryMenu::screenEdge()",
+              "target_symbol": "CJournalMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CInventoryMenu",
+      "target_class": "CMerchantMenu",
+      "distinct_function_pairs": 7,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 208
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x38",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 56,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 231
+            }
+          ]
+        },
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 80,
+              "source_function": "0xb60f20",
+              "target_function": "0xb775d0",
+              "source_symbol": "CInventoryMenu::getOwner()",
+              "target_symbol": "CMerchantMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 80,
+              "to": 80,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 34
+            },
+            {
+              "from": 80,
+              "to": 80,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 63
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb60f00",
+              "target_function": "0xb775b0",
+              "source_symbol": "CInventoryMenu::openPartial()",
+              "target_symbol": "CMerchantMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb60ee0",
+              "target_function": "0xb77590",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb60ee0",
+              "target_function": "0xb77590",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 138
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 173
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb458d0",
+              "target_function": "0xb610a0",
+              "source_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            },
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb458c0",
+              "target_function": "0xb610d0",
+              "source_symbol": "CInventoryMenu::setTab(int)",
+              "target_symbol": "CMerchantMenu::setTab(int)",
+              "token_position": 17
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1020",
+          "to_offset": "0x3438",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 4128,
+              "to": 13368,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 102
+            },
+            {
+              "from": 4128,
+              "to": 13368,
+              "source_function": "0xb45d30",
+              "target_function": "0xb611f0",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 115
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9180",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37248,
+              "to": 160,
+              "source_function": "0xb60f10",
+              "target_function": "0xb775c0",
+              "source_symbol": "CInventoryMenu::screenEdge()",
+              "target_symbol": "CMerchantMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CInventoryMenu",
+      "target_class": "CPetMenu",
+      "distinct_function_pairs": 13,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x28",
+          "to_offset": "0x28",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 40,
+              "to": 40,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 300
+            }
+          ]
+        },
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 208
+            },
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 192
+            },
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 272
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x40",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 64,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 231
+            },
+            {
+              "from": 56,
+              "to": 64,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 215
+            },
+            {
+              "from": 56,
+              "to": 64,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 241
+            }
+          ]
+        },
+        {
+          "from_offset": "0x48",
+          "to_offset": "0x48",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 72,
+              "to": 72,
+              "source_function": "0xb45ff0",
+              "target_function": "0xb89110",
+              "source_symbol": "CInventoryMenu::equipmentUnequipped(CEquipment*)",
+              "target_symbol": "CPetMenu::equipmentUnequipped(CEquipment*)",
+              "token_position": 24
+            },
+            {
+              "from": 72,
+              "to": 72,
+              "source_function": "0xb46020",
+              "target_function": "0xb89140",
+              "source_symbol": "CInventoryMenu::equipmentPickedUp(CEquipment*)",
+              "target_symbol": "CPetMenu::equipmentPickedUp(CEquipment*)",
+              "token_position": 24
+            }
+          ]
+        },
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 4,
+          "occurrences": 8,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb60f20",
+              "target_function": "0xba51d0",
+              "source_symbol": "CInventoryMenu::getOwner()",
+              "target_symbol": "CPetMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 34
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 63
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 38
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 73
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 103
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 42
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 73
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 104,
+              "source_function": "0xb60f00",
+              "target_function": "0xba51b0",
+              "source_symbol": "CInventoryMenu::openPartial()",
+              "target_symbol": "CPetMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 104,
+              "source_function": "0xb60ee0",
+              "target_function": "0xba5190",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x69",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 105,
+              "source_function": "0xb60ee0",
+              "target_function": "0xba5190",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x90",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 144,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 138
+            },
+            {
+              "from": 112,
+              "to": 144,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 173
+            }
+          ]
+        },
+        {
+          "from_offset": "0x78",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 120,
+              "to": 152,
+              "source_function": "0xb45810",
+              "target_function": "0xb887a0",
+              "source_symbol": "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 68
+            }
+          ]
+        },
+        {
+          "from_offset": "0x7c",
+          "to_offset": "0x9c",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 124,
+              "to": 156,
+              "source_function": "0xb45810",
+              "target_function": "0xb887a0",
+              "source_symbol": "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 101
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb458d0",
+              "target_function": "0xb88870",
+              "source_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            },
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb458c0",
+              "target_function": "0xb888a0",
+              "source_symbol": "CInventoryMenu::setTab(int)",
+              "target_symbol": "CPetMenu::setTab(int)",
+              "token_position": 17
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1020",
+          "to_offset": "0x1370",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 4128,
+              "to": 4976,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 102
+            },
+            {
+              "from": 4128,
+              "to": 4976,
+              "source_function": "0xb45d30",
+              "target_function": "0xb88d40",
+              "source_symbol": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 115
+            },
+            {
+              "from": 4128,
+              "to": 4976,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 122
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1d00",
+          "to_offset": "0x9110",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 7424,
+              "to": 37136,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 378
+            },
+            {
+              "from": 7424,
+              "to": 37136,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 397
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9108",
+          "to_offset": "0x91c0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37128,
+              "to": 37312,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 248
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9110",
+          "to_offset": "0x91c8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37136,
+              "to": 37320,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 144
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9118",
+          "to_offset": "0x91d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37144,
+              "to": 37328,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 196
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9160",
+          "to_offset": "0x9188",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37216,
+              "to": 37256,
+              "source_function": "0xb4d590",
+              "target_function": "0xb914d0",
+              "source_symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+              "token_position": 411
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9161",
+          "to_offset": "0x9189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37217,
+              "to": 37257,
+              "source_function": "0xb45900",
+              "target_function": "0xb888b0",
+              "source_symbol": "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 46
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9168",
+          "to_offset": "0x9190",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37224,
+              "to": 37264,
+              "source_function": "0xb45900",
+              "target_function": "0xb888b0",
+              "source_symbol": "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 62
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9180",
+          "to_offset": "0x91b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37248,
+              "to": 37296,
+              "source_function": "0xb60f10",
+              "target_function": "0xba51c0",
+              "source_symbol": "CInventoryMenu::screenEdge()",
+              "target_symbol": "CPetMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x91a8",
+          "to_offset": "0x91f8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37288,
+              "to": 37368,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 264
+            }
+          ]
+        },
+        {
+          "from_offset": "0x91a9",
+          "to_offset": "0x91f9",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37289,
+              "to": 37369,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 160
+            }
+          ]
+        },
+        {
+          "from_offset": "0x91aa",
+          "to_offset": "0x91fa",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37290,
+              "to": 37370,
+              "source_function": "0xb45f00",
+              "target_function": "0xb89020",
+              "source_symbol": "CInventoryMenu::checkForUpdate(CEquipment*)",
+              "target_symbol": "CPetMenu::checkForUpdate(CEquipment*)",
+              "token_position": 212
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CInventoryMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 384,
+              "source_function": "0xb60f20",
+              "target_function": "0xbccac0",
+              "source_symbol": "CInventoryMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x188",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 392,
+              "source_function": "0xb60f00",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CInventoryMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 392,
+              "source_function": "0xb60ee0",
+              "target_function": "0xbcca80",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 393,
+              "source_function": "0xb60ee0",
+              "target_function": "0xbcca80",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xb458d0",
+              "target_function": "0xbba0f0",
+              "source_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9180",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37248,
+              "to": 464,
+              "source_function": "0xb60f10",
+              "target_function": "0xbccab0",
+              "source_symbol": "CInventoryMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CInventoryMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 80,
+              "source_function": "0xb60f20",
+              "target_function": "0xc04250",
+              "source_symbol": "CInventoryMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb60f00",
+              "target_function": "0xc04230",
+              "source_symbol": "CInventoryMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb60ee0",
+              "target_function": "0xc04210",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb60ee0",
+              "target_function": "0xc04210",
+              "source_symbol": "CInventoryMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x78",
+          "to_offset": "0x3400",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 120,
+              "to": 13312,
+              "source_function": "0xb45810",
+              "target_function": "0xbee420",
+              "source_symbol": "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 68
+            }
+          ]
+        },
+        {
+          "from_offset": "0x7c",
+          "to_offset": "0x3404",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 124,
+              "to": 13316,
+              "source_function": "0xb45810",
+              "target_function": "0xbee420",
+              "source_symbol": "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 101
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb458d0",
+              "target_function": "0xbee480",
+              "source_symbol": "CInventoryMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9180",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37248,
+              "to": 160,
+              "source_function": "0xb60f10",
+              "target_function": "0xc04240",
+              "source_symbol": "CInventoryMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CJournalMenu",
+      "target_class": "CMerchantMenu",
+      "distinct_function_pairs": 4,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 80,
+              "source_function": "0xe447c0",
+              "target_function": "0xb775d0",
+              "source_symbol": "CJournalMenu::getOwner()",
+              "target_symbol": "CMerchantMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 96,
+              "source_function": "0xe447a0",
+              "target_function": "0xb775b0",
+              "source_symbol": "CJournalMenu::openPartial()",
+              "target_symbol": "CMerchantMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 56,
+              "to": 96,
+              "source_function": "0xe44780",
+              "target_function": "0xb77590",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x39",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 57,
+              "to": 97,
+              "source_function": "0xe44780",
+              "target_function": "0xb77590",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CMerchantMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 160,
+              "source_function": "0xe447b0",
+              "target_function": "0xb775c0",
+              "source_symbol": "CJournalMenu::screenEdge()",
+              "target_symbol": "CMerchantMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CJournalMenu",
+      "target_class": "CPetMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 88,
+              "source_function": "0xe447c0",
+              "target_function": "0xba51d0",
+              "source_symbol": "CJournalMenu::getOwner()",
+              "target_symbol": "CPetMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 104,
+              "source_function": "0xe447a0",
+              "target_function": "0xba51b0",
+              "source_symbol": "CJournalMenu::openPartial()",
+              "target_symbol": "CPetMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 56,
+              "to": 104,
+              "source_function": "0xe44780",
+              "target_function": "0xba5190",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x39",
+          "to_offset": "0x69",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 57,
+              "to": 105,
+              "source_function": "0xe44780",
+              "target_function": "0xba5190",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3a",
+          "to_offset": "0x6a",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 58,
+              "to": 106,
+              "source_function": "0xe332b0",
+              "target_function": "0xb887f0",
+              "source_symbol": "CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 19
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x91b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 37296,
+              "source_function": "0xe447b0",
+              "target_function": "0xba51c0",
+              "source_symbol": "CJournalMenu::screenEdge()",
+              "target_symbol": "CPetMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CJournalMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 7,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x10",
+          "to_offset": "0x10",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 16,
+              "to": 16,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 590
+            }
+          ]
+        },
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 384,
+              "source_function": "0xe447c0",
+              "target_function": "0xbccac0",
+              "source_symbol": "CJournalMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 48,
+              "to": 384,
+              "source_function": "0xe332a0",
+              "target_function": "0xbba030",
+              "source_symbol": "CJournalMenu::setOwner(CCharacter*)",
+              "target_symbol": "CQuestMenu::setOwner(CCharacter*)",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x188",
+          "conflict": false,
+          "distinct_function_pairs": 3,
+          "occurrences": 4,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 392,
+              "source_function": "0xe447a0",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CJournalMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 56,
+              "to": 392,
+              "source_function": "0xe44780",
+              "target_function": "0xbcca80",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            },
+            {
+              "from": 56,
+              "to": 392,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 57
+            },
+            {
+              "from": 56,
+              "to": 392,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 851
+            }
+          ]
+        },
+        {
+          "from_offset": "0x39",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 57,
+              "to": 393,
+              "source_function": "0xe44780",
+              "target_function": "0xbcca80",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            },
+            {
+              "from": 57,
+              "to": 393,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 840
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3a",
+          "to_offset": "0x18a",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 58,
+              "to": 394,
+              "source_function": "0xe332b0",
+              "target_function": "0xbba040",
+              "source_symbol": "CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 19
+            }
+          ]
+        },
+        {
+          "from_offset": "0x40",
+          "to_offset": "0x198",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 64,
+              "to": 408,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 115
+            },
+            {
+              "from": 64,
+              "to": 408,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 134
+            }
+          ]
+        },
+        {
+          "from_offset": "0x48",
+          "to_offset": "0x48",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 72,
+              "to": 72,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 618
+            }
+          ]
+        },
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x1b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 7,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 159
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 175
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 215
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 351
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 403
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 459
+            },
+            {
+              "from": 88,
+              "to": 432,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 720
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 464,
+              "source_function": "0xe447b0",
+              "target_function": "0xbccab0",
+              "source_symbol": "CJournalMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x80",
+          "to_offset": "0x1d8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 128,
+              "to": 472,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 84
+            },
+            {
+              "from": 128,
+              "to": 472,
+              "source_function": "0xe3a680",
+              "target_function": "0xbc2550",
+              "source_symbol": "CJournalMenu::setOpen(bool)",
+              "target_symbol": "CQuestMenu::setOpen(bool)",
+              "token_position": 671
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CJournalMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 4,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 80,
+              "source_function": "0xe447c0",
+              "target_function": "0xc04250",
+              "source_symbol": "CJournalMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 96,
+              "source_function": "0xe447a0",
+              "target_function": "0xc04230",
+              "source_symbol": "CJournalMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 56,
+              "to": 96,
+              "source_function": "0xe44780",
+              "target_function": "0xc04210",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x39",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 57,
+              "to": 97,
+              "source_function": "0xe44780",
+              "target_function": "0xc04210",
+              "source_symbol": "CJournalMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 160,
+              "source_function": "0xe447b0",
+              "target_function": "0xc04240",
+              "source_symbol": "CJournalMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CLayout",
+      "target_class": "CUnitSpawner",
+      "distinct_function_pairs": 2,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x1a4",
+          "to_offset": "0x1a8",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 420,
+              "to": 424,
+              "source_function": "0x9e0a20",
+              "target_function": "0xa17da0",
+              "source_symbol": "CLayout::SetRandomWeight(unsigned int)",
+              "target_symbol": "CUnitSpawner::SetRandomWeight(unsigned int)",
+              "token_position": 9
+            },
+            {
+              "from": 420,
+              "to": 424,
+              "source_function": "0x9e0a00",
+              "target_function": "0xa17d80",
+              "source_symbol": "CLayout::GetRandomWeight()",
+              "target_symbol": "CUnitSpawner::GetRandomWeight()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CLevel",
+      "target_class": "CQuest",
+      "distinct_function_pairs": 1,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x220",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 544,
+              "to": 464,
+              "source_function": "0x936550",
+              "target_function": "0xd0c700",
+              "source_symbol": "CLevel::getPlayer()",
+              "target_symbol": "CQuest::getPlayer()",
+              "token_position": 18
+            },
+            {
+              "from": 544,
+              "to": 464,
+              "source_function": "0x936550",
+              "target_function": "0xd0c700",
+              "source_symbol": "CLevel::getPlayer()",
+              "target_symbol": "CQuest::getPlayer()",
+              "token_position": 40
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CMerchantMenu",
+      "target_class": "CPetMenu",
+      "distinct_function_pairs": 7,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x30",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 208
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x40",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 64,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 231
+            }
+          ]
+        },
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb775d0",
+              "target_function": "0xba51d0",
+              "source_symbol": "CMerchantMenu::getOwner()",
+              "target_symbol": "CPetMenu::getOwner()",
+              "token_position": 10
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 34
+            },
+            {
+              "from": 80,
+              "to": 88,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 63
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 104,
+              "source_function": "0xb775b0",
+              "target_function": "0xba51b0",
+              "source_symbol": "CMerchantMenu::openPartial()",
+              "target_symbol": "CPetMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 104,
+              "source_function": "0xb77590",
+              "target_function": "0xba5190",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x69",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 105,
+              "source_function": "0xb77590",
+              "target_function": "0xba5190",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CPetMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x90",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 144,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 138
+            },
+            {
+              "from": 112,
+              "to": 144,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 173
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb610a0",
+              "target_function": "0xb88870",
+              "source_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            },
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb610d0",
+              "target_function": "0xb888a0",
+              "source_symbol": "CMerchantMenu::setTab(int)",
+              "target_symbol": "CPetMenu::setTab(int)",
+              "token_position": 17
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa0",
+          "to_offset": "0x91b0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 160,
+              "to": 37296,
+              "source_function": "0xb775c0",
+              "target_function": "0xba51c0",
+              "source_symbol": "CMerchantMenu::screenEdge()",
+              "target_symbol": "CPetMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3438",
+          "to_offset": "0x1370",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 13368,
+              "to": 4976,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 102
+            },
+            {
+              "from": 13368,
+              "to": 4976,
+              "source_function": "0xb611f0",
+              "target_function": "0xb88d40",
+              "source_symbol": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+              "token_position": 115
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CMerchantMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 384,
+              "source_function": "0xb775d0",
+              "target_function": "0xbccac0",
+              "source_symbol": "CMerchantMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x188",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 392,
+              "source_function": "0xb775b0",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CMerchantMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 392,
+              "source_function": "0xb77590",
+              "target_function": "0xbcca80",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 393,
+              "source_function": "0xb77590",
+              "target_function": "0xbcca80",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xb610a0",
+              "target_function": "0xbba0f0",
+              "source_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa0",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 160,
+              "to": 464,
+              "source_function": "0xb775c0",
+              "target_function": "0xbccab0",
+              "source_symbol": "CMerchantMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CMerchantMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 13,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x10",
+          "to_offset": "0x10",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 16,
+              "to": 16,
+              "source_function": "0xb61740",
+              "target_function": "0xbee9f0",
+              "source_symbol": "CMerchantMenu::setPlayer(CCharacter*)",
+              "target_symbol": "CStashMenu::setPlayer(CCharacter*)",
+              "token_position": 104
+            },
+            {
+              "from": 16,
+              "to": 16,
+              "source_function": "0xb61740",
+              "target_function": "0xbee9f0",
+              "source_symbol": "CMerchantMenu::setPlayer(CCharacter*)",
+              "target_symbol": "CStashMenu::setPlayer(CCharacter*)",
+              "token_position": 214
+            }
+          ]
+        },
+        {
+          "from_offset": "0x18",
+          "to_offset": "0x18",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 24,
+              "to": 24,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1426
+            }
+          ]
+        },
+        {
+          "from_offset": "0x28",
+          "to_offset": "0x28",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 40,
+              "to": 40,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 349
+            },
+            {
+              "from": 40,
+              "to": 40,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 563
+            }
+          ]
+        },
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x30",
+          "conflict": true,
+          "distinct_function_pairs": 3,
+          "occurrences": 3,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 255
+            },
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 171
+            },
+            {
+              "from": 48,
+              "to": 48,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 2999
+            }
+          ]
+        },
+        {
+          "from_offset": "0x30",
+          "to_offset": "0x38",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 48,
+              "to": 56,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 241
+            },
+            {
+              "from": 48,
+              "to": 56,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 290
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x30",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 48,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 264
+            },
+            {
+              "from": 56,
+              "to": 48,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 321
+            }
+          ]
+        },
+        {
+          "from_offset": "0x38",
+          "to_offset": "0x38",
+          "conflict": true,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 56,
+              "to": 56,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 278
+            },
+            {
+              "from": 56,
+              "to": 56,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 194
+            }
+          ]
+        },
+        {
+          "from_offset": "0x40",
+          "to_offset": "0x40",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 64,
+              "to": 64,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 823
+            }
+          ]
+        },
+        {
+          "from_offset": "0x50",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 80,
+              "to": 80,
+              "source_function": "0xb775d0",
+              "target_function": "0xc04250",
+              "source_symbol": "CMerchantMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x58",
+          "conflict": false,
+          "distinct_function_pairs": 4,
+          "occurrences": 7,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 28
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb61740",
+              "target_function": "0xbee9f0",
+              "source_symbol": "CMerchantMenu::setPlayer(CCharacter*)",
+              "target_symbol": "CStashMenu::setPlayer(CCharacter*)",
+              "token_position": 14
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb61740",
+              "target_function": "0xbee9f0",
+              "source_symbol": "CMerchantMenu::setPlayer(CCharacter*)",
+              "target_symbol": "CStashMenu::setPlayer(CCharacter*)",
+              "token_position": 118
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 36
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 58
+            },
+            {
+              "from": 88,
+              "to": 88,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 3241
+            }
+          ]
+        },
+        {
+          "from_offset": "0x60",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 3,
+          "occurrences": 5,
+          "evidence": [
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb775b0",
+              "target_function": "0xc04230",
+              "source_symbol": "CMerchantMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb77590",
+              "target_function": "0xc04210",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 133
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 206
+            },
+            {
+              "from": 96,
+              "to": 96,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1137
+            }
+          ]
+        },
+        {
+          "from_offset": "0x61",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 4,
+          "evidence": [
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb77590",
+              "target_function": "0xc04210",
+              "source_symbol": "CMerchantMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            },
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 218
+            },
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1149
+            },
+            {
+              "from": 97,
+              "to": 97,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1432
+            }
+          ]
+        },
+        {
+          "from_offset": "0x62",
+          "to_offset": "0x62",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 98,
+              "to": 98,
+              "source_function": "0xb68ca0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 26
+            }
+          ]
+        },
+        {
+          "from_offset": "0x68",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 104,
+              "to": 104,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 104
+            },
+            {
+              "from": 104,
+              "to": 104,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 123
+            }
+          ]
+        },
+        {
+          "from_offset": "0x70",
+          "to_offset": "0x70",
+          "conflict": false,
+          "distinct_function_pairs": 4,
+          "occurrences": 12,
+          "evidence": [
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb68ca0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 53
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb68ca0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 82
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb68ca0",
+              "target_function": "0xbf5f90",
+              "source_symbol": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 393
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 185
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 220
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 496
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 530
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 799
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1064
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1091
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 872
+            },
+            {
+              "from": 112,
+              "to": 112,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 2828
+            }
+          ]
+        },
+        {
+          "from_offset": "0x90",
+          "to_offset": "0x90",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 11,
+          "evidence": [
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 245
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 278
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 445
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 584
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 755
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 844
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1015
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1192
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1242
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1389
+            },
+            {
+              "from": 144,
+              "to": 144,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1405
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb610a0",
+              "target_function": "0xbee480",
+              "source_symbol": "CMerchantMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            },
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb610e0",
+              "target_function": "0xbee4b0",
+              "source_symbol": "CMerchantMenu::setPetTab(int)",
+              "target_symbol": "CStashMenu::setPetTab(int)",
+              "token_position": 17
+            }
+          ]
+        },
+        {
+          "from_offset": "0xa0",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 160,
+              "to": 160,
+              "source_function": "0xb775c0",
+              "target_function": "0xc04240",
+              "source_symbol": "CMerchantMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            },
+            {
+              "from": 160,
+              "to": 160,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 1127
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3428",
+          "to_offset": "0x33f8",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 13352,
+              "to": 13304,
+              "source_function": "0xb610f0",
+              "target_function": "0xbee4c0",
+              "source_symbol": "CMerchantMenu::handle_PetItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetItemClick(CEGUI::EventArgs const&)",
+              "token_position": 68
+            }
+          ]
+        },
+        {
+          "from_offset": "0x342c",
+          "to_offset": "0x33fc",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 13356,
+              "to": 13308,
+              "source_function": "0xb610f0",
+              "target_function": "0xbee4c0",
+              "source_symbol": "CMerchantMenu::handle_PetItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetItemClick(CEGUI::EventArgs const&)",
+              "token_position": 101
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3438",
+          "to_offset": "0x3408",
+          "conflict": false,
+          "distinct_function_pairs": 3,
+          "occurrences": 4,
+          "evidence": [
+            {
+              "from": 13368,
+              "to": 13320,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 149
+            },
+            {
+              "from": 13368,
+              "to": 13320,
+              "source_function": "0xb61140",
+              "target_function": "0xbee510",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+              "token_position": 162
+            },
+            {
+              "from": 13368,
+              "to": 13320,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 171
+            },
+            {
+              "from": 13368,
+              "to": 13320,
+              "source_function": "0xb69c00",
+              "target_function": "0xbf6ef0",
+              "source_symbol": "CMerchantMenu::update(float)",
+              "target_symbol": "CStashMenu::update(float)",
+              "token_position": 150
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3440",
+          "to_offset": "0x3410",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 8,
+          "evidence": [
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 1583
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 1838
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 2077
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 3447
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 3821
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 4141
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 4247
+            },
+            {
+              "from": 13376,
+              "to": 13328,
+              "source_function": "0xb6ab50",
+              "target_function": "0xbf7cc0",
+              "source_symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "target_symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+              "token_position": 4763
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3448",
+          "to_offset": "0x3418",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 13384,
+              "to": 13336,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 427
+            },
+            {
+              "from": 13384,
+              "to": 13336,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 446
+            }
+          ]
+        },
+        {
+          "from_offset": "0x3450",
+          "to_offset": "0x3420",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 13392,
+              "to": 13344,
+              "source_function": "0xb68530",
+              "target_function": "0xbf5be0",
+              "source_symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+              "token_position": 460
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CPetMenu",
+      "target_class": "CQuestMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x180",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 384,
+              "source_function": "0xba51d0",
+              "target_function": "0xbccac0",
+              "source_symbol": "CPetMenu::getOwner()",
+              "target_symbol": "CQuestMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x68",
+          "to_offset": "0x188",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 104,
+              "to": 392,
+              "source_function": "0xba51b0",
+              "target_function": "0xbccaa0",
+              "source_symbol": "CPetMenu::openPartial()",
+              "target_symbol": "CQuestMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 104,
+              "to": 392,
+              "source_function": "0xba5190",
+              "target_function": "0xbcca80",
+              "source_symbol": "CPetMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x69",
+          "to_offset": "0x189",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 105,
+              "to": 393,
+              "source_function": "0xba5190",
+              "target_function": "0xbcca80",
+              "source_symbol": "CPetMenu::open()",
+              "target_symbol": "CQuestMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x6a",
+          "to_offset": "0x18a",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 106,
+              "to": 394,
+              "source_function": "0xb887f0",
+              "target_function": "0xbba040",
+              "source_symbol": "CPetMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+              "token_position": 19
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x68",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 104,
+              "source_function": "0xb88870",
+              "target_function": "0xbba0f0",
+              "source_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x91b0",
+          "to_offset": "0x1d0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37296,
+              "to": 464,
+              "source_function": "0xba51c0",
+              "target_function": "0xbccab0",
+              "source_symbol": "CPetMenu::screenEdge()",
+              "target_symbol": "CQuestMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CPetMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 6,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x58",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 88,
+              "to": 80,
+              "source_function": "0xba51d0",
+              "target_function": "0xc04250",
+              "source_symbol": "CPetMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x68",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 104,
+              "to": 96,
+              "source_function": "0xba51b0",
+              "target_function": "0xc04230",
+              "source_symbol": "CPetMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 104,
+              "to": 96,
+              "source_function": "0xba5190",
+              "target_function": "0xc04210",
+              "source_symbol": "CPetMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x69",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 105,
+              "to": 97,
+              "source_function": "0xba5190",
+              "target_function": "0xc04210",
+              "source_symbol": "CPetMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x98",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 152,
+              "source_function": "0xb88870",
+              "target_function": "0xbee480",
+              "source_symbol": "CPetMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x98",
+          "to_offset": "0x3400",
+          "conflict": true,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 152,
+              "to": 13312,
+              "source_function": "0xb887a0",
+              "target_function": "0xbee420",
+              "source_symbol": "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 68
+            }
+          ]
+        },
+        {
+          "from_offset": "0x9c",
+          "to_offset": "0x3404",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 156,
+              "to": 13316,
+              "source_function": "0xb887a0",
+              "target_function": "0xbee420",
+              "source_symbol": "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+              "token_position": 101
+            }
+          ]
+        },
+        {
+          "from_offset": "0x91b0",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 37296,
+              "to": 160,
+              "source_function": "0xba51c0",
+              "target_function": "0xc04240",
+              "source_symbol": "CPetMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    },
+    {
+      "source_class": "CQuestMenu",
+      "target_class": "CStashMenu",
+      "distinct_function_pairs": 5,
+      "offset_correspondences": [
+        {
+          "from_offset": "0x68",
+          "to_offset": "0x98",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 104,
+              "to": 152,
+              "source_function": "0xbba0f0",
+              "target_function": "0xbee480",
+              "source_symbol": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "target_symbol": "CStashMenu::handle_onClick(CEGUI::EventArgs const&)",
+              "token_position": 55
+            }
+          ]
+        },
+        {
+          "from_offset": "0x180",
+          "to_offset": "0x50",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 384,
+              "to": 80,
+              "source_function": "0xbccac0",
+              "target_function": "0xc04250",
+              "source_symbol": "CQuestMenu::getOwner()",
+              "target_symbol": "CStashMenu::getOwner()",
+              "token_position": 10
+            }
+          ]
+        },
+        {
+          "from_offset": "0x188",
+          "to_offset": "0x60",
+          "conflict": false,
+          "distinct_function_pairs": 2,
+          "occurrences": 2,
+          "evidence": [
+            {
+              "from": 392,
+              "to": 96,
+              "source_function": "0xbccaa0",
+              "target_function": "0xc04230",
+              "source_symbol": "CQuestMenu::openPartial()",
+              "target_symbol": "CStashMenu::openPartial()",
+              "token_position": 4
+            },
+            {
+              "from": 392,
+              "to": 96,
+              "source_function": "0xbcca80",
+              "target_function": "0xc04210",
+              "source_symbol": "CQuestMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 12
+            }
+          ]
+        },
+        {
+          "from_offset": "0x189",
+          "to_offset": "0x61",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 393,
+              "to": 97,
+              "source_function": "0xbcca80",
+              "target_function": "0xc04210",
+              "source_symbol": "CQuestMenu::open()",
+              "target_symbol": "CStashMenu::open()",
+              "token_position": 28
+            }
+          ]
+        },
+        {
+          "from_offset": "0x1d0",
+          "to_offset": "0xa0",
+          "conflict": false,
+          "distinct_function_pairs": 1,
+          "occurrences": 1,
+          "evidence": [
+            {
+              "from": 464,
+              "to": 160,
+              "source_function": "0xbccab0",
+              "target_function": "0xc04240",
+              "source_symbol": "CQuestMenu::screenEdge()",
+              "target_symbol": "CStashMenu::screenEdge()",
+              "token_position": 10
+            }
+          ]
+        }
+      ],
+      "status": "CANDIDATE_ONLY"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "unit_tests": 32,
+  "abi_probes": 6,
+  "native": {
+    "reference": "native reassembly of archival text; not independently verified ELF",
+    "capture_cases": 4096,
+    "capture_mismatches": 0,
+    "wrong_held_clear_mutant": 4096,
+    "keyheld_cases": 8192,
+    "keyheld_mismatches": 0,
+    "truthiness_mutant": 4096,
+    "randomizer_cases_per_method": 20000,
+    "count_le_capacity_cases_per_method": 10000,
+    "getodds_mismatches": 0,
+    "setodds_mismatches": 0,
+    "removechoice_mismatches": 0,
+    "always_dirty_mutant": 7930,
+    "comparison": "return values and entire object/backing arrays with pointer identity normalized"
+  },
+  "memory": {
+    "instructions": 54,
+    "byte_stores": 2560,
+    "recipes": [
+      {
+        "operation": "memcpy",
+        "destination": 17,
+        "source": 1809,
+        "bytes": 512
+      },
+      {
+        "operation": "memcpy",
+        "destination": 1041,
+        "source": 2833,
+        "bytes": 512
+      },
+      {
+        "operation": "memcpy",
+        "destination": 529,
+        "source": 2321,
+        "bytes": 512
+      },
+      {
+        "operation": "memset",
+        "destination": 1809,
+        "value": 0,
+        "bytes": 512
+      },
+      {
+        "operation": "memset",
+        "destination": 2833,
+        "value": 0,
+        "bytes": 512
+      }
+    ],
+    "symbolic_final_byte_maps_equal": true,
+    "preconditions": [
+      "valid ordinary object memory",
+      "no concurrent or volatile observations",
+      "DF=0",
+      "no memory faults"
+    ],
+    "scope": "static narrow instruction subset; no unknown operations allowed"
+  },
+  "math": {
+    "cases": 12000,
+    "special_bit_pattern_triples": 2744,
+    "squared_length_mismatches": 0,
+    "normalise_mismatches": 0,
+    "zero_only_guard_mutant_mismatches": 484,
+    "reassociation_counterexample": {
+      "left": 1,
+      "right": 0
+    },
+    "observed": "result bits, vector component bits, FP flags, errno; current default environment"
+  },
+  "lifecycle": {
+    "scope": "synthetic lifecycle model only",
+    "lazy_sequences": 256,
+    "calls_per_sequence": 4,
+    "recovered_cache_mismatches": 0,
+    "once_initialization_mutant_sequences": 84,
+    "failure_injection_cases": 5,
+    "raii_trace_mismatches": 0,
+    "leak_mutant_cases_detected": 3,
+    "leak_mutant_cases_detected_by_return_only": 0
+  },
+  "integrity": {
+    "files_before": 2285,
+    "files_after": 2285,
+    "changed_or_deleted": [],
+    "added": [],
+    "unchanged": true,
+    "matches_initial_pass8_manifest": true
+  },
+  "new_functions_accepted_by_project": 0,
+  "overall_speedup_measured": false
+}

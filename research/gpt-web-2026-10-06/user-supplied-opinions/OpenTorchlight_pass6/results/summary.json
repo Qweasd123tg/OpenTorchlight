@@ -1,0 +1,636 @@
+{
+  "family_census": {
+    "scope": "Historical pseudocode, not current backlog or semantic verification. Body token matching excludes function signature compatibility. Every concrete hole remains an unverified semantic obligation.",
+    "unique_functions": 2608,
+    "exact_alpha_families": 71,
+    "exact_alpha_members": 262,
+    "hole_families": 153,
+    "hole_members": 793,
+    "families_with_member_ge_500_bytes": 7,
+    "members_in_these_families": 15,
+    "sum_bytes_of_these_families": 29527
+  },
+  "large_families": [
+    {
+      "members": [
+        {
+          "symbol": "CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",
+          "address": "0xb6ab50",
+          "bytes": 6229,
+          "path": "research/decompiled-core/merchant_menu.c",
+          "line": 2709
+        },
+        {
+          "symbol": "CStashMenu::setPetSlotIcon(CEquipment*, int, int)",
+          "address": "0xbf7cc0",
+          "bytes": 6229,
+          "path": "research/decompiled-core/stash_menu.c",
+          "line": 2670
+        },
+        {
+          "symbol": "CStashMenu::setSlotIcon(CEquipment*, int, int)",
+          "address": "0xbf9520",
+          "bytes": 6197,
+          "path": "research/decompiled-core/stash_menu.c",
+          "line": 3536
+        }
+      ],
+      "body_tokens": 5359,
+      "deltas": [
+        {
+          "target": "0xbf7cc0",
+          "changes": {
+            "@TYPE:3": {
+              "from": "CMerchantMenu",
+              "to": "CStashMenu"
+            },
+            "@NUMBER:36": {
+              "from": "0x3440",
+              "to": "0x3410"
+            }
+          }
+        },
+        {
+          "target": "0xbf9520",
+          "changes": {
+            "@NUMBER:24": {
+              "from": "0x26f8",
+              "to": "0x1de8"
+            },
+            "@TYPE:3": {
+              "from": "CMerchantMenu",
+              "to": "CStashMenu"
+            },
+            "@NUMBER:34": {
+              "from": "0x2ea8",
+              "to": "0x1960"
+            },
+            "@NUMBER:36": {
+              "from": "0x3440",
+              "to": "0x3410"
+            },
+            "@NUMBER:37": {
+              "from": "0x2988",
+              "to": "0x14d8"
+            },
+            "@NUMBER:51": {
+              "from": "0x2c18",
+              "to": "0x1050"
+            },
+            "@NUMBER:56": {
+              "from": "0x3138",
+              "to": "0x2270"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CMerchantMenu::update(float)",
+          "address": "0xb69c00",
+          "bytes": 1555,
+          "path": "research/decompiled-core/merchant_menu.c",
+          "line": 2256
+        },
+        {
+          "symbol": "CStashMenu::update(float)",
+          "address": "0xbf6ef0",
+          "bytes": 1555,
+          "path": "research/decompiled-core/stash_menu.c",
+          "line": 2248
+        }
+      ],
+      "body_tokens": 1445,
+      "deltas": [
+        {
+          "target": "0xbf6ef0",
+          "changes": {
+            "@TYPE:1": {
+              "from": "CMerchantMenu",
+              "to": "CStashMenu"
+            },
+            "@NUMBER:7": {
+              "from": "0x3438",
+              "to": "0x3408"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+          "address": "0xb68530",
+          "bytes": 933,
+          "path": "research/decompiled-core/merchant_menu.c",
+          "line": 2094
+        },
+        {
+          "symbol": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+          "address": "0xbf5be0",
+          "bytes": 933,
+          "path": "research/decompiled-core/stash_menu.c",
+          "line": 2143
+        }
+      ],
+      "body_tokens": 480,
+      "deltas": [
+        {
+          "target": "0xbf5be0",
+          "changes": {
+            "@NUMBER:10": {
+              "from": "0x3438",
+              "to": "0x3408"
+            },
+            "@NUMBER:14": {
+              "from": "0x30",
+              "to": "0x38"
+            },
+            "@NUMBER:15": {
+              "from": "0x38",
+              "to": "0x30"
+            },
+            "@NUMBER:17": {
+              "from": "0x3448",
+              "to": "0x3418"
+            },
+            "@NUMBER:18": {
+              "from": "0x3450",
+              "to": "0x3420"
+            },
+            "@TYPE:3": {
+              "from": "CMerchantMenu",
+              "to": "CStashMenu"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+          "address": "0xb4d590",
+          "bytes": 901,
+          "path": "research/decompiled-core/inventory_menu.c",
+          "line": 2300
+        },
+        {
+          "symbol": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+          "address": "0xb914d0",
+          "bytes": 901,
+          "path": "research/decompiled-core/pet_menu.c",
+          "line": 2584
+        }
+      ],
+      "body_tokens": 427,
+      "deltas": [
+        {
+          "target": "0xb914d0",
+          "changes": {
+            "@NUMBER:3": {
+              "from": "0x50",
+              "to": "0x58"
+            },
+            "@NUMBER:7": {
+              "from": "0x1020",
+              "to": "0x1370"
+            },
+            "@NUMBER:12": {
+              "from": "0x38",
+              "to": "0x40"
+            },
+            "@NUMBER:14": {
+              "from": "0x1d00",
+              "to": "0x9110"
+            },
+            "@NUMBER:15": {
+              "from": "0x9160",
+              "to": "0x9188"
+            },
+            "@TYPE:3": {
+              "from": "CInventoryMenu",
+              "to": "CPetMenu"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CJournalMenu::setOpen(bool)",
+          "address": "0xe3a680",
+          "bytes": 848,
+          "path": "research/decompiled-core/journal_menu.c",
+          "line": 1717
+        },
+        {
+          "symbol": "CQuestMenu::setOpen(bool)",
+          "address": "0xbc2550",
+          "bytes": 880,
+          "path": "research/decompiled-core/quest_menu.c",
+          "line": 1931
+        }
+      ],
+      "body_tokens": 862,
+      "deltas": [
+        {
+          "target": "0xbc2550",
+          "changes": {
+            "@NUMBER:2": {
+              "from": "0x38",
+              "to": "0x188"
+            },
+            "@TYPE:0": {
+              "from": "CJournalMenu",
+              "to": "CQuestMenu"
+            },
+            "@NUMBER:4": {
+              "from": "0x80",
+              "to": "0x1d8"
+            },
+            "@NUMBER:7": {
+              "from": "0x40",
+              "to": "0x198"
+            },
+            "@NUMBER:8": {
+              "from": "0x58",
+              "to": "0x1b0"
+            },
+            "@NUMBER:17": {
+              "from": "0x39",
+              "to": "0x189"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+          "address": "0xacd460",
+          "bytes": 658,
+          "path": "research/decompiled-core/combine_menu.c",
+          "line": 177
+        },
+        {
+          "symbol": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+          "address": "0xb1bc40",
+          "bytes": 658,
+          "path": "research/decompiled-core/enchant_menu.c",
+          "line": 269
+        }
+      ],
+      "body_tokens": 449,
+      "deltas": [
+        {
+          "target": "0xb1bc40",
+          "changes": {
+            "@NUMBER:2": {
+              "from": "0x90",
+              "to": "0x60"
+            },
+            "@NUMBER:7": {
+              "from": "0xe8",
+              "to": "0xc0"
+            },
+            "@NUMBER:9": {
+              "from": "400",
+              "to": "0xf0"
+            },
+            "@NUMBER:13": {
+              "from": "0x60",
+              "to": "0x30"
+            },
+            "@NUMBER:14": {
+              "from": "0x68",
+              "to": "0x38"
+            },
+            "@NUMBER:15": {
+              "from": "0x28",
+              "to": "0x1a"
+            },
+            "@NUMBER:17": {
+              "from": "0x1a0",
+              "to": "0x100"
+            },
+            "@NUMBER:18": {
+              "from": "0x1a8",
+              "to": "0x108"
+            },
+            "@TYPE:3": {
+              "from": "CCombineMenu",
+              "to": "CEnchantMenu"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "members": [
+        {
+          "symbol": "CMerchantMenu::processInput(void*, float, bool)",
+          "address": "0xb61530",
+          "bytes": 525,
+          "path": "research/decompiled-core/merchant_menu.c",
+          "line": 407
+        },
+        {
+          "symbol": "CStashMenu::processInput(void*, float, bool)",
+          "address": "0xbee7e0",
+          "bytes": 525,
+          "path": "research/decompiled-core/stash_menu.c",
+          "line": 368
+        }
+      ],
+      "body_tokens": 802,
+      "deltas": [
+        {
+          "target": "0xbee7e0",
+          "changes": {
+            "@NUMBER:0": {
+              "from": "0x3438",
+              "to": "0x3408"
+            },
+            "@NUMBER:14": {
+              "from": "0x3450",
+              "to": "0x3420"
+            },
+            "@NUMBER:15": {
+              "from": "0x3430",
+              "to": "0x3400"
+            },
+            "@NUMBER:17": {
+              "from": "0x3434",
+              "to": "0x3404"
+            },
+            "@NUMBER:18": {
+              "from": "0x3428",
+              "to": "0x33f8"
+            },
+            "@NUMBER:19": {
+              "from": "0x342c",
+              "to": "0x33fc"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "merchant_stash_member_correspondence": {
+    "source_class": "CMerchantMenu",
+    "target_class": "CStashMenu",
+    "distinct_function_pairs": 13,
+    "status": "CANDIDATE_ONLY",
+    "total_offset_pairs": 24,
+    "offset_pairs": [
+      {
+        "from_offset": "0x10",
+        "to_offset": "0x10",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x18",
+        "to_offset": "0x18",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x28",
+        "to_offset": "0x28",
+        "conflict": false,
+        "distinct_function_pairs": 2,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x30",
+        "to_offset": "0x30",
+        "conflict": true,
+        "distinct_function_pairs": 3,
+        "occurrences": 3
+      },
+      {
+        "from_offset": "0x30",
+        "to_offset": "0x38",
+        "conflict": true,
+        "distinct_function_pairs": 1,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x38",
+        "to_offset": "0x30",
+        "conflict": true,
+        "distinct_function_pairs": 1,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x38",
+        "to_offset": "0x38",
+        "conflict": true,
+        "distinct_function_pairs": 2,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x40",
+        "to_offset": "0x40",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x50",
+        "to_offset": "0x50",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x58",
+        "to_offset": "0x58",
+        "conflict": false,
+        "distinct_function_pairs": 4,
+        "occurrences": 7
+      },
+      {
+        "from_offset": "0x60",
+        "to_offset": "0x60",
+        "conflict": false,
+        "distinct_function_pairs": 3,
+        "occurrences": 5
+      },
+      {
+        "from_offset": "0x61",
+        "to_offset": "0x61",
+        "conflict": false,
+        "distinct_function_pairs": 2,
+        "occurrences": 4
+      },
+      {
+        "from_offset": "0x62",
+        "to_offset": "0x62",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x68",
+        "to_offset": "0x68",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x70",
+        "to_offset": "0x70",
+        "conflict": false,
+        "distinct_function_pairs": 4,
+        "occurrences": 12
+      },
+      {
+        "from_offset": "0x90",
+        "to_offset": "0x90",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 11
+      },
+      {
+        "from_offset": "0x98",
+        "to_offset": "0x98",
+        "conflict": false,
+        "distinct_function_pairs": 2,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0xa0",
+        "to_offset": "0xa0",
+        "conflict": false,
+        "distinct_function_pairs": 2,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x3428",
+        "to_offset": "0x33f8",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x342c",
+        "to_offset": "0x33fc",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      },
+      {
+        "from_offset": "0x3438",
+        "to_offset": "0x3408",
+        "conflict": false,
+        "distinct_function_pairs": 3,
+        "occurrences": 4
+      },
+      {
+        "from_offset": "0x3440",
+        "to_offset": "0x3410",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 8
+      },
+      {
+        "from_offset": "0x3448",
+        "to_offset": "0x3418",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 2
+      },
+      {
+        "from_offset": "0x3450",
+        "to_offset": "0x3420",
+        "conflict": false,
+        "distinct_function_pairs": 1,
+        "occurrences": 1
+      }
+    ]
+  },
+  "synthetic_loop_test": {
+    "cases": 7220,
+    "indexed_mismatches": 0,
+    "direct_mismatches": 1122,
+    "bounded_cases": 3800,
+    "direct_bounded_mismatches": 0
+  },
+  "scope": "Historical candidate census and explicit synthetic checks, NOT new accepted game functions. See REPORT_RU.md.",
+  "invariant_checks": {
+    "solver": "4.13.3.0",
+    "lexical_candidate_functions": 245,
+    "obligations": [
+      {
+        "name": "base",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "Zero initial index and offset establish relation."
+      },
+      {
+        "name": "step_with_uint_bound",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "i<n, both uint32, rules out wrap on this increment."
+      },
+      {
+        "name": "same_memory_read",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "Same effective address in flat read-only memory model. Does not prove C++ pointer validity."
+      },
+      {
+        "name": "missing_bound",
+        "expected": "sat",
+        "status": "sat",
+        "meaning": "Counterexample if the increment may occur at UINT_MAX."
+      },
+      {
+        "name": "wrong_stride",
+        "expected": "sat",
+        "status": "sat",
+        "meaning": "A stride of 16 is not equivalent to index increment for 8-byte elements."
+      },
+      {
+        "name": "capacity_branch_under_invariant",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "Only under count<=capacity can the out-of-capacity path be excluded."
+      },
+      {
+        "name": "capacity_branch_without_invariant",
+        "expected": "sat",
+        "status": "sat",
+        "meaning": "A valid search bound alone does not justify bypassing TArrayList fallback."
+      },
+      {
+        "name": "invariant_preserved_by_increment_in_capacity",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "Already-reserved append preserves count<=capacity in uint32 model."
+      },
+      {
+        "name": "invariant_preserved_by_remove",
+        "expected": "unsat",
+        "status": "unsat",
+        "meaning": "Valid removal decreases count without unsigned wrap."
+      },
+      {
+        "name": "capacity_growth_wrap_counterexample",
+        "expected": "sat",
+        "status": "sat",
+        "meaning": "Naive preservation by growing an unsigned capacity fails on wrap; actual allocation behavior not modeled."
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "variant": "int",
+    "object_sha256": "8033fa39ccec92377d4f2042ed678129f5dde01ee968319755cafcd675bb1470",
+    "lsda_sha256": "5cc5a511f3d667aa651b33b933651ae06dfde560712d10107e2cdc4a441b160f",
+    "relocations": [
+      [
+        16,
+        10,
+        "_ZTIi",
+        0
+      ]
+    ]
+  },
+  {
+    "variant": "double",
+    "object_sha256": "b43d52048dbdf746f8bea6a97a736d0f15eb238b94300a1d9a6f9fef6c7e8c6c",
+    "lsda_sha256": "5cc5a511f3d667aa651b33b933651ae06dfde560712d10107e2cdc4a441b160f",
+    "relocations": [
+      [
+        16,
+        10,
+        "_ZTId",
+        0
+      ]
+    ]
+  }
+]

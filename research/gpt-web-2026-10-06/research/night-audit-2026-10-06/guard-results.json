@@ -1,0 +1,17 @@
+{
+  "changed_inputs_rejected": [
+    "callee",
+    "base",
+    "vtable",
+    "tool",
+    "header",
+    "elf",
+    "lit80a vs lit80b",
+    "lit300a vs lit300b",
+    "catch_int vs catch_double",
+    "harness changed"
+  ],
+  "unchanged_accepted": true,
+  "legacy_missing_digest_rejected": true,
+  "scope": "fingerprint tests only; no production integration and no semantic equivalence proof"
+}

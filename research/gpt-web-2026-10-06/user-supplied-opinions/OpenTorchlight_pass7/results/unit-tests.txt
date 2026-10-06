@@ -1,0 +1,33 @@
+test_adjustment_not_discarded (test_prototypes.BindingTests.test_adjustment_not_discarded) ... ok
+test_branch_rejected (test_prototypes.BindingTests.test_branch_rejected) ... ok
+test_comment_fake_alloc (test_prototypes.BindingTests.test_comment_fake_alloc) ... ok
+test_direct (test_prototypes.BindingTests.test_direct) ... ok
+test_duplicate_field_rejected (test_prototypes.BindingTests.test_duplicate_field_rejected) ... ok
+test_invalid_slot (test_prototypes.BindingTests.test_invalid_slot) ... ok
+test_missing_field_rejected (test_prototypes.BindingTests.test_missing_field_rejected) ... ok
+test_null (test_prototypes.BindingTests.test_null) ... ok
+test_string_fake_alloc (test_prototypes.BindingTests.test_string_fake_alloc) ... ok
+test_unknown_type_not_emitted (test_prototypes.BindingTests.test_unknown_type_not_emitted) ... ok
+test_virtual (test_prototypes.BindingTests.test_virtual) ... ok
+test_closing_paren_in_string (test_prototypes.LexicalTests.test_closing_paren_in_string) ... ok
+test_nested_comma (test_prototypes.LexicalTests.test_nested_comma) ... ok
+test_string_comment_marker (test_prototypes.LexicalTests.test_string_comment_marker) ... ok
+test_bool_default_preserved (test_prototypes.ResourceTests.test_bool_default_preserved) ... ok
+test_different_destination (test_prototypes.ResourceTests.test_different_destination) ... ok
+test_fixed_default_not_field_default (test_prototypes.ResourceTests.test_fixed_default_not_field_default) ... ok
+test_key_reconstruction_still_candidate (test_prototypes.ResourceTests.test_key_reconstruction_still_candidate) ... ok
+test_literal_preservation (test_prototypes.ResourceTests.test_literal_preservation) ... ok
+test_no_nearest_unrelated (test_prototypes.ResourceTests.test_no_nearest_unrelated) ... ok
+test_2d (test_prototypes.TableTests.test_2d) ... ok
+test_duplicate_names_rejected (test_prototypes.TableTests.test_duplicate_names_rejected) ... ok
+test_embedded_nul_length (test_prototypes.TableTests.test_embedded_nul_length) ... ok
+test_int_min (test_prototypes.TableTests.test_int_min) ... ok
+test_shape_mismatch (test_prototypes.TableTests.test_shape_mismatch) ... ok
+test_surrogate_rejected (test_prototypes.TableTests.test_surrogate_rejected) ... ok
+test_type_not_guessed (test_prototypes.TableTests.test_type_not_guessed) ... ok
+test_unknown_rejected (test_prototypes.TableTests.test_unknown_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 0.003s
+
+OK

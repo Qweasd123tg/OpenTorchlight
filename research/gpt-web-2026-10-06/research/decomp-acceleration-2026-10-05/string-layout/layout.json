@@ -1,0 +1,49 @@
+{
+  "size": 176,
+  "bases": [],
+  "fields": [
+    {
+      "offset": 0,
+      "name": "d_cplength",
+      "type": "long unsigned int",
+      "size": 8
+    },
+    {
+      "offset": 8,
+      "name": "d_reserve",
+      "type": "long unsigned int",
+      "size": 8
+    },
+    {
+      "offset": 16,
+      "name": "d_encodedbuff",
+      "type": "unsigned char*",
+      "size": 8
+    },
+    {
+      "offset": 24,
+      "name": "d_encodeddatlen",
+      "type": "long unsigned int",
+      "size": 8
+    },
+    {
+      "offset": 32,
+      "name": "d_encodedbufflen",
+      "type": "long unsigned int",
+      "size": 8
+    },
+    {
+      "offset": 40,
+      "name": "d_quickbuff",
+      "type": "unsigned int[32]",
+      "size": 128
+    },
+    {
+      "offset": 168,
+      "name": "d_buffer",
+      "type": "unsigned int*",
+      "size": 8
+    }
+  ],
+  "source": "header"
+}

@@ -1,0 +1,76 @@
+[
+  {
+    "arm": "baseline",
+    "wall_seconds": 13.860064142998453,
+    "exit": 0,
+    "outputs": [
+      {
+        "address": "0x8ac190",
+        "bytes": 69232,
+        "lines": 1409,
+        "success": true
+      },
+      {
+        "address": "0x92b4b0",
+        "bytes": 13674,
+        "lines": 348,
+        "success": true
+      },
+      {
+        "address": "0xba26b0",
+        "bytes": 53592,
+        "lines": 1425,
+        "success": true
+      },
+      {
+        "address": "0xa06b30",
+        "bytes": 23128,
+        "lines": 500,
+        "success": true
+      },
+      {
+        "address": "0x87f880",
+        "bytes": 925,
+        "lines": 34,
+        "success": true
+      }
+    ]
+  },
+  {
+    "arm": "enriched",
+    "wall_seconds": 12.172994182001275,
+    "exit": 0,
+    "outputs": [
+      {
+        "address": "0x8ac190",
+        "bytes": 68955,
+        "lines": 1403,
+        "success": true
+      },
+      {
+        "address": "0x92b4b0",
+        "bytes": 14012,
+        "lines": 361,
+        "success": true
+      },
+      {
+        "address": "0xba26b0",
+        "bytes": 55681,
+        "lines": 1444,
+        "success": true
+      },
+      {
+        "address": "0xa06b30",
+        "bytes": 22622,
+        "lines": 495,
+        "success": true
+      },
+      {
+        "address": "0x87f880",
+        "bytes": 925,
+        "lines": 34,
+        "success": true
+      }
+    ]
+  }
+]

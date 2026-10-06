@@ -1,0 +1,3 @@
+claimed 1 TUs, 100 bytes: Only.cpp
+claimed 1 TUs, 100 bytes: Only.cpp
+RESULT={"scope": "Actual parallel.claim/candidates/save_claims with synthetic DB, temporary root and new() stub. No real worktrees, compilation or game touched.", "concurrent": {"created": [{"worker": "worker-a", "tus": ["Only.cpp"]}, {"worker": "worker-b", "tus": ["Only.cpp"]}], "ledger": {"worker-b": ["Only.cpp"]}, "errors": []}, "creation_failure": {"ledger": {"failed-worker": ["Only.cpp"]}, "remaining_candidates": []}}

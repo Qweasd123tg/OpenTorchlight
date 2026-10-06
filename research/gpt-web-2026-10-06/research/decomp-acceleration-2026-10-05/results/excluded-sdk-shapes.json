@@ -1,0 +1,21 @@
+{
+  "0x553318": "Ogre::NedAllocImpl::allocBytes(unsigned long, char const*, int, char const*)",
+  "0x5536d8": "Ogre::Math::ASin(float)",
+  "0x555578": "Ogre::Math::intersects(Ogre::Ray const&, Ogre::Plane const&)",
+  "0x553b78": "Ogre::Math::intersects(Ogre::Ray const&, Ogre::AxisAlignedBox const&)",
+  "0x5532e8": "Ogre::Quaternion::getRoll(bool) const",
+  "0x5558d8": "Ogre::Quaternion::getPitch(bool) const",
+  "0x553d98": "Ogre::Quaternion::getYaw(bool) const",
+  "0x552f88": "Ogre::ResourceGroupManager::openResource(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, Ogre::Resource*)",
+  "0x552ff8": "Ogre::ResourceGroupManager::findResourceFileInfo(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool)",
+  "0x556448": "Ogre::Material::clone(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const",
+  "0x5541f8": "Ogre::MovableObject::getShadowVolumeRenderableIterator(Ogre::ShadowTechnique, Ogre::Light const*, Ogre::HardwareIndexBufferSharedPtr*, bool, float, unsigned long)",
+  "0x555228": "Ogre::ConfigFile::getSectionIterator()",
+  "0x555688": "Ogre::Mesh::clone(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+  "0x552e08": "Ogre::Mesh::getBoneAssignmentIterator()",
+  "0x552a18": "Ogre::Root::getSceneManagerIterator()",
+  "0x5528c8": "Ogre::SubMesh::getBoneAssignmentIterator()",
+  "0x553858": "CEGUI::Window::getPixelRect() const",
+  "0x553908": "CEGUI::ComponentArea::getPixelRect(CEGUI::Window const&) const",
+  "0x552b68": "CEGUI::ListboxItem::setSelectionColours(CEGUI::colour, CEGUI::colour, CEGUI::colour, CEGUI::colour)"
+}

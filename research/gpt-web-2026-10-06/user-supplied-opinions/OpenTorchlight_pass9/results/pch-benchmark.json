@@ -1,0 +1,114 @@
+{
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "flags": [
+    "-std=gnu++98",
+    "-O2",
+    "-fno-strict-aliasing",
+    "-DNDEBUG",
+    "-D_GLIBCXX_USE_CXX11_ABI=0",
+    "-I",
+    "/mnt/data/ot_pass9_src/OpenTorchlight-main/decomp/include",
+    "-I",
+    "/mnt/data/ot_pass9_src/OpenTorchlight-main/third_party/ogre-1.6.5-math/OgreMain/include",
+    "-I",
+    "/mnt/data/ot_pass9_src/OpenTorchlight-main/third_party/cegui-0.6.2/include"
+  ],
+  "pch_build_seconds": 0.11640281699999377,
+  "repeats_per_mode": 9,
+  "warmup_per_mode": 1,
+  "rows": [
+    {
+      "source": "decomp/src/BinaryStyle.cpp",
+      "seconds": {
+        "plain": [
+          0.05882507399996939,
+          0.05824618500002998,
+          0.05891157200005637,
+          0.058589153999946575,
+          0.061111347999940335,
+          0.06236229299997831,
+          0.06064073899995037,
+          0.0609918000000107,
+          0.06146153199995297
+        ],
+        "pch": [
+          0.02680143700001736,
+          0.028463583000075232,
+          0.030913279999936094,
+          0.027285044999985075,
+          0.027126558999952977,
+          0.02668192999999519,
+          0.027106139000011353,
+          0.02933562799989886,
+          0.028279369999950177
+        ]
+      },
+      "median_seconds": {
+        "plain": 0.06064073899995037,
+        "pch": 0.027285044999985075
+      },
+      "ratio": 2.222489975735189,
+      "pch_confirmed_used": true,
+      "object_bytes": {
+        "plain": 5424,
+        "pch": 5424
+      },
+      "object_sha256": {
+        "plain": [
+          "230af854970806bbcb3e4be16a30f39f11b84198cebf99ddebacce8feb554aae"
+        ],
+        "pch": [
+          "230af854970806bbcb3e4be16a30f39f11b84198cebf99ddebacce8feb554aae"
+        ]
+      },
+      "objects_byte_identical": true
+    },
+    {
+      "source": "decomp/src/utilities.cpp",
+      "seconds": {
+        "plain": [
+          0.26646206899999925,
+          0.24617342299995926,
+          0.29798037000000477,
+          0.2625210410000136,
+          0.24251387699996485,
+          0.24397376399997484,
+          0.247432195999977,
+          0.2471832070000346,
+          0.2780592259999821
+        ],
+        "pch": [
+          0.21817133000001832,
+          0.2213782789999641,
+          0.21865362599999116,
+          0.2152306849999377,
+          0.2243636590000051,
+          0.20899241600000096,
+          0.21734886399997322,
+          0.23259333399994375,
+          0.24631164400000216
+        ]
+      },
+      "median_seconds": {
+        "plain": 0.247432195999977,
+        "pch": 0.21865362599999116
+      },
+      "ratio": 1.13161716330278,
+      "pch_confirmed_used": true,
+      "object_bytes": {
+        "plain": 15368,
+        "pch": 15368
+      },
+      "object_sha256": {
+        "plain": [
+          "a078cfb649f1d6d3c4153b08d8edc0eeb9d5201c833962e1c59efe1abd9c549a"
+        ],
+        "pch": [
+          "a078cfb649f1d6d3c4153b08d8edc0eeb9d5201c833962e1c59efe1abd9c549a"
+        ]
+      },
+      "objects_byte_identical": true
+    }
+  ],
+  "scope": "Compiler-only benchmark, no cc-cache, unchanged real source files, host GCC; no game equivalence or whole-pipeline speedup measured"
+}

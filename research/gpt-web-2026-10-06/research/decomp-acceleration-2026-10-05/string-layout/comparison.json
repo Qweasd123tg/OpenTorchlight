@@ -1,0 +1,39 @@
+[
+  {
+    "address": "0x8ac190",
+    "before_lines": 1410,
+    "after_lines": 1410,
+    "identical": true,
+    "new_warnings": []
+  },
+  {
+    "address": "0x92b4b0",
+    "before_lines": 346,
+    "after_lines": 346,
+    "identical": true,
+    "new_warnings": []
+  },
+  {
+    "address": "0xba26b0",
+    "before_lines": 1431,
+    "after_lines": 1254,
+    "identical": false,
+    "new_warnings": [
+      "/* WARNING: Type propagation algorithm not settling */"
+    ]
+  },
+  {
+    "address": "0xa06b30",
+    "before_lines": 490,
+    "after_lines": 490,
+    "identical": true,
+    "new_warnings": []
+  },
+  {
+    "address": "0x87f880",
+    "before_lines": 34,
+    "after_lines": 34,
+    "identical": true,
+    "new_warnings": []
+  }
+]

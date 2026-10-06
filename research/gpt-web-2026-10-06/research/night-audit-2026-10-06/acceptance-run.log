@@ -1,0 +1,68 @@
+{
+  "literal_80": {
+    "norm_equal": true,
+    "digest_equal": true,
+    "norm_a": [
+      "mov $[lit:\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"],%edi",
+      "jmp sink"
+    ],
+    "norm_b": [
+      "mov $[lit:\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"],%edi",
+      "jmp sink"
+    ]
+  },
+  "literal_300": {
+    "norm_equal": true,
+    "digest_equal": true,
+    "norm_a": [
+      "mov $[const:41414141],%edi",
+      "jmp sink"
+    ],
+    "norm_b": [
+      "mov $[const:41414141],%edi",
+      "jmp sink"
+    ]
+  },
+  "catch_int": {
+    "norm": [
+      "sub $0x8,%rsp",
+      "call raise_value",
+      "xor %eax,%eax",
+      "add $0x8,%rsp",
+      "ret",
+      "cmp $0x1,%rdx",
+      "mov %rax,%rdi",
+      "je L9",
+      "call _Unwind_Resume",
+      "call __cxa_begin_catch",
+      "call __cxa_end_catch",
+      "mov $0x7,%eax",
+      "jmp L3"
+    ],
+    "digest": "bb2f197f8a1dabb4",
+    "lsda_hex": "ff0311010804051001190f000001000000000000",
+    "exit": 7
+  },
+  "catch_double": {
+    "norm": [
+      "sub $0x8,%rsp",
+      "call raise_value",
+      "xor %eax,%eax",
+      "add $0x8,%rsp",
+      "ret",
+      "cmp $0x1,%rdx",
+      "mov %rax,%rdi",
+      "je L9",
+      "call _Unwind_Resume",
+      "call __cxa_begin_catch",
+      "call __cxa_end_catch",
+      "mov $0x7,%eax",
+      "jmp L3"
+    ],
+    "digest": "bb2f197f8a1dabb4",
+    "lsda_hex": "ff0311010804051001190f000001000000000000",
+    "exit": 99
+  },
+  "catch_norm_equal": true
+}
+Reproduced both acceptance gaps with pinned compiler

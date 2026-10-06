@@ -1,0 +1,8 @@
+{
+  "const_declaration": "int get();",
+  "virtual_identity_const_equals_nonconst": true,
+  "overload_declarations_added": 0,
+  "queue": [
+    "small.cpp"
+  ]
+}

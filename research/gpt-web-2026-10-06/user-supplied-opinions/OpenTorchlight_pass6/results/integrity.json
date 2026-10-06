@@ -1,0 +1,10 @@
+{
+  "archive": "OpenTorchlight-main(4)(1).zip",
+  "archive_sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d",
+  "files_checked": 2285,
+  "missing": [],
+  "changed": [],
+  "python": "3.13.5",
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "scope": "All extracted original files compared with original ZIP. Generated audit files are outside that tree."
+}

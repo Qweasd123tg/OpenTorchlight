@@ -1,0 +1,58 @@
+{
+  "scope": "Independent static checks against saved original-symbols.txt; no binary/CEGUI/compiler execution",
+  "recipes": 89,
+  "verified_named_callback_and_vptr_records": 81,
+  "effect_tables": {
+    "gEFFECT_TYPE_NAMES": {
+      "address": 22035936,
+      "size": 1160,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_DESCRIPTIONS_GOOD": {
+      "address": 22037120,
+      "size": 1160,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_DESCRIPTIONS_GOOD_OT": {
+      "address": 22038304,
+      "size": 1160,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_DESCRIPTIONS_BAD": {
+      "address": 22039488,
+      "size": 1160,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_DESCRIPTIONS_BAD_OT": {
+      "address": 22040672,
+      "size": 1160,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_MIN_VALUES": {
+      "address": 22041856,
+      "size": 580,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_MAX_VALUES": {
+      "address": 22042464,
+      "size": 580,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_BONUS": {
+      "address": 22043072,
+      "size": 580,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_PROPERTY_TAGS": {
+      "address": 22043680,
+      "size": 5800,
+      "kind": "B"
+    },
+    "gEFFECT_TYPE_GRAPHS": {
+      "address": 22049504,
+      "size": 5800,
+      "kind": "B"
+    }
+  },
+  "effect_table_total_symbol_storage_bytes": 19140
+}

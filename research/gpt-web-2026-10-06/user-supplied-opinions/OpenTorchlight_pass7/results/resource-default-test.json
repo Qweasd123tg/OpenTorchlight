@@ -1,0 +1,6 @@
+{
+  "cases": 216,
+  "preserved_default_mismatches": 0,
+  "forced_false_mismatches": 91,
+  "scope": "synthetic bool lookup model"
+}

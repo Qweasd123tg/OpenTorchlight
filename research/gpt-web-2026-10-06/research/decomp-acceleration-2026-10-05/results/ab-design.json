@@ -1,0 +1,23 @@
+{
+  "targets": [
+    "0x8ac190",
+    "0x92b4b0",
+    "0xba26b0",
+    "0xa06b30",
+    "0x87f880"
+  ],
+  "negative_control": "0x87f880 (accepted, no SDK calls)",
+  "SDK_added_prototypes": 399,
+  "SDK_added_value_layouts": [
+    "UDim",
+    "UVector2",
+    "Vector3",
+    "Quaternion",
+    "ColourValue",
+    "colour"
+  ],
+  "timeout_seconds": 600,
+  "payload_MiB": 128,
+  "script_base": "2464d59 DecompDrafts.java; common resource settings changed identically for A/B",
+  "not_fixed_here": "protoType(void) falls back to inferred return; retained in both arms to isolate SDK delta"
+}

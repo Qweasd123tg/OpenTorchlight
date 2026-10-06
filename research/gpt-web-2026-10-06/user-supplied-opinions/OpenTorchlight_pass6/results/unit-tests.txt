@@ -1,0 +1,20 @@
+test_all_ten_explicit_obligations (__main__.InvariantTests.test_all_ten_explicit_obligations) ... ok
+test_call_identity_is_preserved (__main__.TokenTests.test_call_identity_is_preserved) ... ok
+test_comments_do_not_affect_key (__main__.TokenTests.test_comments_do_not_affect_key) ... ok
+test_label_alpha_rename (__main__.TokenTests.test_label_alpha_rename) ... ok
+test_literal_delta_retained (__main__.TokenTests.test_literal_delta_retained) ... ok
+test_literal_identity_is_preserved (__main__.TokenTests.test_literal_identity_is_preserved) ... ok
+test_local_alpha_rename (__main__.TokenTests.test_local_alpha_rename) ... ok
+test_missing_body_rejected (__main__.TokenTests.test_missing_body_rejected) ... ok
+test_only_direct_this_offsets_extracted (__main__.TokenTests.test_only_direct_this_offsets_extracted) ... ok
+test_operator_difference_not_parameterized (__main__.TokenTests.test_operator_difference_not_parameterized) ... ok
+test_original_identifier_cannot_collide_with_placeholder (__main__.TokenTests.test_original_identifier_cannot_collide_with_placeholder) ... ok
+test_signature_is_intentionally_not_in_key (__main__.TokenTests.test_signature_is_intentionally_not_in_key) ... ok
+test_string_braces_are_not_syntax (__main__.TokenTests.test_string_braces_are_not_syntax) ... ok
+test_string_contents_preserved_in_exact_mode (__main__.TokenTests.test_string_contents_preserved_in_exact_mode) ... ok
+test_string_with_fake_offset_not_extracted (__main__.TokenTests.test_string_with_fake_offset_not_extracted) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.072s
+
+OK

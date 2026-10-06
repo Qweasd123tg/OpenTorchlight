@@ -1,0 +1,143 @@
+[
+  {
+    "address": "0x8ac190",
+    "arms": {
+      "baseline": {
+        "converted_lines": 791,
+        "geometry_changes": [],
+        "repaired_lines": 791
+      },
+      "enriched": {
+        "converted_lines": 781,
+        "geometry_changes": [],
+        "repaired_lines": 781
+      }
+    }
+  },
+  {
+    "address": "0x92b4b0",
+    "arms": {
+      "baseline": {
+        "converted_lines": 149,
+        "geometry_changes": [],
+        "repaired_lines": 149
+      },
+      "enriched": {
+        "converted_lines": 155,
+        "geometry_changes": [],
+        "repaired_lines": 155
+      }
+    }
+  },
+  {
+    "address": "0xba26b0",
+    "arms": {
+      "baseline": {
+        "converted_lines": 1113,
+        "geometry_changes": [],
+        "repaired_lines": 1113
+      },
+      "enriched": {
+        "converted_lines": 1139,
+        "geometry_changes": [
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_158,pCVar19->m_pUnknown1378)",
+            "after": "local_158 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setSize",
+            "before": "CEGUI::Window::setSize((void *)pCVar19->m_iUnknown1B28,&local_158)",
+            "after": "((CEGUI::Window*)((void *)pCVar19->m_iUnknown1B28))->CEGUI::Window::setSize(local_158)"
+          },
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_168,pCVar19->m_pUnknown1378)",
+            "after": "local_168 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setSize",
+            "before": "CEGUI::Window::setSize((void *)pCVar19->m_iUnknown1898,&local_168)",
+            "after": "((CEGUI::Window*)((void *)pCVar19->m_iUnknown1898))->CEGUI::Window::setSize(local_168)"
+          },
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_e8,pCVar19->m_pUnknown1378)",
+            "after": "local_e8 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setPosition",
+            "before": "CEGUI::Window::setPosition(pvVar11,&local_f8)",
+            "after": "((CEGUI::Window*)(pvVar11))->CEGUI::Window::setPosition(local_f8)"
+          },
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_108,pCVar19->m_pUnknown1378)",
+            "after": "local_108 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setSize",
+            "before": "CEGUI::Window::setSize(pvVar11,&local_108)",
+            "after": "((CEGUI::Window*)(pvVar11))->CEGUI::Window::setSize(local_108)"
+          },
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_118,pCVar19->m_pUnknown1378)",
+            "after": "local_118 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setPosition",
+            "before": "CEGUI::Window::setPosition(local_22b8,&local_128)",
+            "after": "((CEGUI::Window*)(local_22b8))->CEGUI::Window::setPosition(local_128)"
+          },
+          {
+            "method": "setPosition",
+            "before": "CEGUI::Window::setPosition(local_22b8,&local_138)",
+            "after": "((CEGUI::Window*)(local_22b8))->CEGUI::Window::setPosition(local_138)"
+          },
+          {
+            "method": "getSize",
+            "before": "CEGUI::Window::getSize(&local_148,pCVar19->m_pUnknown1378)",
+            "after": "local_148 = ((CEGUI::Window*)(pCVar19->m_pUnknown1378))->CEGUI::Window::getSize()"
+          },
+          {
+            "method": "setSize",
+            "before": "CEGUI::Window::setSize(local_22b8,&local_148)",
+            "after": "((CEGUI::Window*)(local_22b8))->CEGUI::Window::setSize(local_148)"
+          }
+        ],
+        "repaired_lines": 1139
+      }
+    }
+  },
+  {
+    "address": "0xa06b30",
+    "arms": {
+      "baseline": {
+        "converted_lines": 260,
+        "geometry_changes": [],
+        "repaired_lines": 260
+      },
+      "enriched": {
+        "converted_lines": 268,
+        "geometry_changes": [],
+        "repaired_lines": 268
+      }
+    }
+  },
+  {
+    "address": "0x87f880",
+    "arms": {
+      "baseline": {
+        "converted_lines": 13,
+        "geometry_changes": [],
+        "repaired_lines": 13
+      },
+      "enriched": {
+        "converted_lines": 13,
+        "geometry_changes": [],
+        "repaired_lines": 13
+      }
+    }
+  }
+]

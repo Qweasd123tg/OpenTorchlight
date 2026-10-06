@@ -1,0 +1,31 @@
+{
+  "commands": [
+    {
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "/mnt/data/OpenTorchlight_pass9/patches/draft-retry-isolation.patch"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "apply",
+        "/mnt/data/OpenTorchlight_pass9/patches/draft-retry-isolation.patch"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "equals_tested_preview": {
+    "tools/decomp/ghidra_draft.py": true,
+    "tools/decomp/ghidra/DecompDrafts.java": true
+  },
+  "python_syntax_ok": true,
+  "java_ghidra_compiled_or_run": false
+}

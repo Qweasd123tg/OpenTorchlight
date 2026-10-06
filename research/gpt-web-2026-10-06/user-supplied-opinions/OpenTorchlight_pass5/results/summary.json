@@ -1,0 +1,131 @@
+{
+  "function_census": {
+    "unique_exported_functions": 2630,
+    "with_goto": 519,
+    "with_10_or_more_gotos": 65
+  },
+  "region_examples": [
+    {
+      "name": "CInventoryMenu::createMenus()",
+      "address": "0xb569e0",
+      "archived_instruction_count": 7590,
+      "normal_flow_blocks": 1251,
+      "region_count": 460,
+      "unresolved_transfers": [],
+      "scope": "NORMAL-flow candidate analysis only. Calls assumed to return; EH edges, memory dependencies and listing completeness not established. Regions overlap and are not independent implementations."
+    },
+    {
+      "name": "CInventoryMenu::updateLayout()",
+      "address": "0xb53430",
+      "archived_instruction_count": 2329,
+      "normal_flow_blocks": 341,
+      "region_count": 124,
+      "unresolved_transfers": [],
+      "scope": "NORMAL-flow candidate analysis only. Calls assumed to return; EH edges, memory dependencies and listing completeness not established. Regions overlap and are not independent implementations."
+    },
+    {
+      "name": "CEquipment::unitInit(CDataGroup*, bool)",
+      "address": "0x889110",
+      "archived_instruction_count": 1875,
+      "normal_flow_blocks": 369,
+      "region_count": 184,
+      "unresolved_transfers": [],
+      "scope": "NORMAL-flow candidate analysis only. Calls assumed to return; EH edges, memory dependencies and listing completeness not established. Regions overlap and are not independent implementations."
+    },
+    {
+      "name": "CCharacter::rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES)",
+      "address": "0x843ed0",
+      "archived_instruction_count": 2505,
+      "normal_flow_blocks": 245,
+      "region_count": 96,
+      "unresolved_transfers": [],
+      "scope": "NORMAL-flow candidate analysis only. Calls assumed to return; EH edges, memory dependencies and listing completeness not established. Regions overlap and are not independent implementations."
+    }
+  ],
+  "small_helpers": [
+    {
+      "address": "0x9e7080",
+      "symbol": "CPositionableObject::getPosition",
+      "distinct_callers": 243,
+      "body_size": 96,
+      "archived_callers_with_pseudocode": 194
+    },
+    {
+      "address": "0x7f62a0",
+      "symbol": "CBaseUnit::ISA",
+      "distinct_callers": 224,
+      "body_size": 35,
+      "archived_callers_with_pseudocode": 215
+    },
+    {
+      "address": "0xa54490",
+      "symbol": "CMasterResourceManager::getSingleton",
+      "distinct_callers": 199,
+      "body_size": 8,
+      "archived_callers_with_pseudocode": 107
+    },
+    {
+      "address": "0xc5f370",
+      "symbol": "CDataGroup::GetDataValue",
+      "distinct_callers": 100,
+      "body_size": 37,
+      "archived_callers_with_pseudocode": 48
+    },
+    {
+      "address": "0xd6f4e0",
+      "symbol": "CResourceManager::getEditorIsRunning",
+      "distinct_callers": 91,
+      "body_size": 19,
+      "archived_callers_with_pseudocode": 38
+    },
+    {
+      "address": "0x9e70e0",
+      "symbol": "CPositionableObject::setPosition",
+      "distinct_callers": 86,
+      "body_size": 87,
+      "archived_callers_with_pseudocode": 67
+    },
+    {
+      "address": "0xa698a0",
+      "symbol": "CSoundBank::playSample",
+      "distinct_callers": 78,
+      "body_size": 689,
+      "archived_callers_with_pseudocode": 55
+    },
+    {
+      "address": "0xc5f310",
+      "symbol": "CDataGroup::GetDataValue",
+      "distinct_callers": 51,
+      "body_size": 36,
+      "archived_callers_with_pseudocode": 31
+    },
+    {
+      "address": "0x8137e0",
+      "symbol": "CCharacter::getEffectValue",
+      "distinct_callers": 51,
+      "body_size": 184,
+      "archived_callers_with_pseudocode": 50
+    },
+    {
+      "address": "0x825310",
+      "symbol": "CCharacter::setTarget",
+      "distinct_callers": 50,
+      "body_size": 408,
+      "archived_callers_with_pseudocode": 45
+    },
+    {
+      "address": "0xc5f3a0",
+      "symbol": "CDataGroup::GetDataValue",
+      "distinct_callers": 47,
+      "body_size": 63,
+      "archived_callers_with_pseudocode": 23
+    },
+    {
+      "address": "0xc5f340",
+      "symbol": "CDataGroup::GetDataValue",
+      "distinct_callers": 42,
+      "body_size": 36,
+      "archived_callers_with_pseudocode": 26
+    }
+  ]
+}

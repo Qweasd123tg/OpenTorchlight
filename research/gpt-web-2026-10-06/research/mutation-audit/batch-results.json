@@ -1,0 +1,23 @@
+{
+  "outputs_caller_then_helper": {
+    "baseline": "11 11",
+    "caller_only": "11 11",
+    "helper_only": "21 21",
+    "both": "21 21"
+  },
+  "caller_references": [],
+  "caller_reach": [
+    "_Z6calleri"
+  ],
+  "helper_reach": [
+    "_Z6helperi"
+  ],
+  "caller_mutation_affected": [
+    "_Z6calleri"
+  ],
+  "helper_mutation_affected": [
+    "_Z6helperi"
+  ],
+  "existing_reach_conflict_check_allows_batch": true,
+  "scope": "real functions_in_asm/references and real compiled synthetic programs; whole Torchlight mutation runner not executed"
+}

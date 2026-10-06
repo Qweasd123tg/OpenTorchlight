@@ -1,0 +1,85 @@
+{
+  "entries": 57,
+  "one_mutant": 6,
+  "two_mutants": 5,
+  "examples": [
+    {
+      "address": "0x7e9f90",
+      "name": "CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "2b37112009f1b24c"
+    },
+    {
+      "address": "0x8029d0",
+      "name": "CBaseUnit::getUnitDataName()",
+      "killed": 1,
+      "tried": 1,
+      "code": "35fc3a1a9cfe33c2"
+    },
+    {
+      "address": "0xc816a0",
+      "name": "CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "cb3fe387a9a68c6a"
+    },
+    {
+      "address": "0xc817a0",
+      "name": "CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 1,
+      "tried": 1,
+      "code": "cb3fe387a9a68c6a"
+    },
+    {
+      "address": "0xd264d0",
+      "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "8f367a3b826eb663"
+    },
+    {
+      "address": "0xd2dca0",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "killed": 2,
+      "tried": 2,
+      "code": "9a649aedd7940ca0"
+    },
+    {
+      "address": "0x7b67f0",
+      "name": "CTimeline::GetPropertyPointTimePercent(long long, int, int, bool)",
+      "killed": 1,
+      "tried": 1,
+      "code": "3c6aace83759cdb1"
+    },
+    {
+      "address": "0x7b6930",
+      "name": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+      "killed": 2,
+      "tried": 2,
+      "code": "cd56253d05700705"
+    },
+    {
+      "address": "0x7b6960",
+      "name": "CTimeline::AddPointToProperty(long long, int, bool)",
+      "killed": 1,
+      "tried": 1,
+      "code": "f4c4fc740c7f682d"
+    },
+    {
+      "address": "0x9f26e0",
+      "name": "CRandomGroup::CRandomGroup(CResourceManager*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "c994f282e1a11047"
+    },
+    {
+      "address": "0xa65930",
+      "name": "CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*)",
+      "killed": 2,
+      "tried": 2,
+      "code": "f6ce3c203e2c764a"
+    }
+  ],
+  "scope": "saved snapshot counts, not current PC or evidence of wrong game implementations"
+}

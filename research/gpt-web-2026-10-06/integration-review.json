@@ -1,0 +1,129 @@
+{
+  "head": "bccc25273b574e5de6ed5493f9c7ba82767fb4bc",
+  "archive": "opentorchlight-morning-research-2026-10-06.tar.gz",
+  "archive_integrity": {
+    "manifest_entries": 333,
+    "mismatches": 0
+  },
+  "already_fixed": [
+    "Direct callee prototype changes invalidate drafts",
+    "CLI stale refreshes exported types before selection"
+  ],
+  "confirmed_remaining": {
+    "objdiff": [
+      "Literal truncation at 80 characters and reads limited to 256 bytes",
+      "EH relocation/type targets absent from MATCH/digest; catch(int) and catch(double) normalize equally but return 7 vs 99"
+    ],
+    "observation": [
+      "Capture silently truncates at 256 KiB",
+      "External non-null pointers collapse to one token",
+      "Missing or truncated child report can be accepted as an empty capture"
+    ],
+    "mutation_evidence": [
+      "record() can attach prior results to new code digest",
+      "Indirect-call dependencies can allow incorrect batch attribution"
+    ],
+    "convert": {
+      "boolean": {
+        "before": "1 0 1",
+        "after": "-3 0 2",
+        "converted": "int probe(int x)\n{\n    return x;\n}\n"
+      },
+      "literal": {
+        "before": "bad UTF-8 continuation byte",
+        "after": "bad UTF-8 continuation unsigned char",
+        "converted": "const char* probe()\n{\n    return \"bad UTF-8 continuation unsigned char\";\n}\n"
+      },
+      "comment_in_literal": {
+        "before": "keep /* payload */ exact",
+        "after": "keep  exact",
+        "converted": "const char* probe()\n{\n    return \"keep  exact\";\n}\n"
+      },
+      "dispatch": {
+        "before": "11",
+        "after": "22",
+        "converted": "int probe(CBase* object)\n{\n    return object->step();\n}\n"
+      },
+      "cv": {
+        "converted": "int CProbe::get()\n{\n    return x;\n}\n"
+      }
+    },
+    "tables": {
+      "scope": "Actual name_tables.Tables.definition with synthetic recover result. No original ELF or recovered game table used.",
+      "generated": "// WARNING: slots [1] not found in sample.cpp\nstatic const std::wstring sample[] =\n{\n    L\"FIRST\",\n    /* slot 1 not recovered */\n    L\"THIRD\",\n};",
+      "runtime": "count=2 slot1_is_THIRD=1",
+      "expected_logical_slot_count": 3,
+      "actual_slot_count": 2,
+      "source_changed": false
+    },
+    "table_strings": {
+      "empty": null,
+      "narrow_AB_padded": "䉁"
+    },
+    "queue": {
+      "scope": "Actual parallel.claim/candidates/save_claims with synthetic DB, temporary root and new() stub. No real worktrees, compilation or game touched.",
+      "concurrent": {
+        "created": [
+          {
+            "worker": "worker-a",
+            "tus": [
+              "Only.cpp"
+            ]
+          },
+          {
+            "worker": "worker-b",
+            "tus": [
+              "Only.cpp"
+            ]
+          }
+        ],
+        "ledger": {
+          "worker-b": [
+            "Only.cpp"
+          ]
+        },
+        "errors": []
+      },
+      "creation_failure": {
+        "ledger": {
+          "failed-worker": [
+            "Only.cpp"
+          ]
+        },
+        "remaining_candidates": []
+      }
+    },
+    "draft_cache": [
+      "Timeout raw may be fresh",
+      "Referenced base changes may be fresh",
+      "Missing prototype fingerprint may be fresh",
+      "A new higher-priority include does not invalidate compiler cache"
+    ],
+    "type_names": [
+      "Two distinct namespace String types collapse to one export key",
+      "Typedef underlying type is not resolved"
+    ]
+  },
+  "source_review_only": [
+    "LP64 width mapping in Java remains problematic",
+    "Only primary vtable group exported, slot types void*",
+    "Shared Ghidra IO remains; retry patch not integrated"
+  ],
+  "verification_boundaries": {
+    "probes": "Synthetic inputs invoking current production tools; objdiff objects built with pinned GCC 4.4.7; catch executables and other C++ probes linked/built using system compiler",
+    "unit_tests": "11 converter tests, 8 literals/overload tests, 1 draft state test passed",
+    "full_check": false,
+    "ghidra_execution": false,
+    "graphical_game": false,
+    "game_function_corruption_count": "Not established",
+    "production_changes": false
+  },
+  "further_evidence": "local-check/acceptance/",
+  "recommended_first_tranche": [
+    "Repair MATCH literal/EH validation",
+    "Repair capture completeness and identities",
+    "Bind test and mutation evidence to immutable input snapshots"
+  ],
+  "archive_sha256": "2bbc2e90dd20f6f2aebfe425b11fce5a93e46d17258160b8d6d2d6db5b15f263",
+  "import_layout": "Original archive paths preserved below research/gpt-web-2026-10-06; tools are research prototypes, not installed production stages"
+}

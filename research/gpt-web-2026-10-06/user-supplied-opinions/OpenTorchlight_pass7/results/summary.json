@@ -1,0 +1,15 @@
+{
+  "scope": "archived candidates and limited fixtures only; no game binary executed",
+  "binding_complete_recipes": 89,
+  "binding_typed_candidates": 81,
+  "binding_exact_callback_signatures": 81,
+  "resource_literal_candidates": 558,
+  "resource_bool_copyback_candidates": 18,
+  "effect_table_shapes": 10,
+  "effect_table_candidate_rows": [
+    145
+  ],
+  "game_table_values_extracted": false,
+  "original_files_unchanged": true,
+  "new_original_game_functions_accepted": 0
+}

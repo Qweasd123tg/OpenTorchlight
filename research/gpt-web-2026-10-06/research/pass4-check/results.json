@@ -1,0 +1,25 @@
+{
+  "boolean": {
+    "before": "1 0 1",
+    "after": "-3 0 2",
+    "converted": "int probe(int x)\n{\n    return x;\n}\n"
+  },
+  "literal": {
+    "before": "bad UTF-8 continuation byte",
+    "after": "bad UTF-8 continuation unsigned char",
+    "converted": "const char* probe()\n{\n    return \"bad UTF-8 continuation unsigned char\";\n}\n"
+  },
+  "comment_in_literal": {
+    "before": "keep /* payload */ exact",
+    "after": "keep  exact",
+    "converted": "const char* probe()\n{\n    return \"keep  exact\";\n}\n"
+  },
+  "dispatch": {
+    "before": "11",
+    "after": "22",
+    "converted": "int probe(CBase* object)\n{\n    return object->step();\n}\n"
+  },
+  "cv": {
+    "converted": "int CProbe::get()\n{\n    return x;\n}\n"
+  }
+}

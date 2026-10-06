@@ -1,0 +1,15 @@
+{
+  "unchanged_command": true,
+  "old_recorded_dependency_unchanged": true,
+  "new_higher_priority_header": "hand/Value.h",
+  "cache_returns_old_object": true,
+  "cached_norm": [
+    "mov $0x1,%eax",
+    "ret"
+  ],
+  "fresh_norm": [
+    "mov $0x2,%eax",
+    "ret"
+  ],
+  "scope": "real _cache_lookup/_digest with synthetic dependency index and system GCC14.2; no production cache changed"
+}

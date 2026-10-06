@@ -1,0 +1,41 @@
+[
+  {
+    "input_sha256": "4387156fca10ed04076e0f9a90778678ec9d11fa1c81be62e22fcde6b53169d2",
+    "script_sha256": "c454045aed13e60b45d157590db8abcfb434f4ef251c32d488d4cf5abfcd4f44",
+    "arm": "string-layout",
+    "wall_seconds": 13.001288896000915,
+    "exit": 0,
+    "outputs": [
+      {
+        "address": "0x8ac190",
+        "bytes": 69599,
+        "lines": 1410,
+        "success": true
+      },
+      {
+        "address": "0x92b4b0",
+        "bytes": 13635,
+        "lines": 346,
+        "success": true
+      },
+      {
+        "address": "0xba26b0",
+        "bytes": 55227,
+        "lines": 1254,
+        "success": true
+      },
+      {
+        "address": "0xa06b30",
+        "bytes": 22727,
+        "lines": 490,
+        "success": true
+      },
+      {
+        "address": "0x87f880",
+        "bytes": 925,
+        "lines": 34,
+        "success": true
+      }
+    ]
+  }
+]

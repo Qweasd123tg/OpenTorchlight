@@ -1,0 +1,8 @@
+{
+  "scope": "Actual name_tables.Tables.definition with synthetic recover result. No original ELF or recovered game table used.",
+  "generated": "// WARNING: slots [1] not found in sample.cpp\nstatic const std::wstring sample[] =\n{\n    L\"FIRST\",\n    /* slot 1 not recovered */\n    L\"THIRD\",\n};",
+  "runtime": "count=2 slot1_is_THIRD=1",
+  "expected_logical_slot_count": 3,
+  "actual_slot_count": 2,
+  "source_changed": false
+}

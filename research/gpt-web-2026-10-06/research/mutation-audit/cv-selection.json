@@ -1,0 +1,5 @@
+{
+  "source": "int CProbe::get()\n{\nreturn 1;\n}\nint CProbe::get() const\n{\nreturn 2;\n}\n",
+  "selected_body": null,
+  "meaning": "safe rejection but cv overload cannot be mutation-tested by this selector"
+}

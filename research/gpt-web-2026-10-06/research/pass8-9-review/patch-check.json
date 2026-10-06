@@ -1,0 +1,8 @@
+{
+  "scope": "Temporary copy only; Python syntax checked, Java/Ghidra not run",
+  "patch_applies": true,
+  "matches_preview": {
+    "tools/decomp/ghidra_draft.py": true,
+    "tools/decomp/ghidra/DecompDrafts.java": true
+  }
+}

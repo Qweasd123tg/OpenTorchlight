@@ -1,0 +1,857 @@
+{
+  "scope": "Name occurrence screening only, not definition/signature/acceptance verification. Snapshot 0abcd3c.",
+  "families_with_hits": 35,
+  "candidates": [
+    {
+      "family_id": "cd69e7e9376b321b",
+      "largest_bytes": 354,
+      "members": 4,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::getDefenseRequirement",
+          "address": "0x86d800",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 354
+        },
+        {
+          "name": "CEquipment::getMagicRequirement",
+          "address": "0x86d970",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 354
+        },
+        {
+          "name": "CEquipment::getDexterityRequirement",
+          "address": "0x86dae0",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 354
+        },
+        {
+          "name": "CEquipment::getStrengthRequirement",
+          "address": "0x86dc50",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 354
+        }
+      ]
+    },
+    {
+      "family_id": "734cac3c9b22bce4",
+      "largest_bytes": 270,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CPath::GetTweenedRadiusRight",
+          "address": "0xc877c0",
+          "path": "decomp/src/path.cpp",
+          "bytes": 270
+        },
+        {
+          "name": "CPath::GetTweenedRadiusLeft",
+          "address": "0xc878d0",
+          "path": "decomp/src/path.cpp",
+          "bytes": 270
+        }
+      ]
+    },
+    {
+      "family_id": "2177410f440bf139",
+      "largest_bytes": 231,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::removeUnitTheme",
+          "address": "0x7ffd60",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 231
+        },
+        {
+          "name": "CBaseUnit::addUnitTheme",
+          "address": "0x800d90",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 231
+        }
+      ]
+    },
+    {
+      "family_id": "2d0ae381a08f6f06",
+      "largest_bytes": 184,
+      "members": 4,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::getFlavorDescription",
+          "address": "0x87d5f0",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 184
+        },
+        {
+          "name": "CEquipment::getSet",
+          "address": "0x87d6b0",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 184
+        }
+      ]
+    },
+    {
+      "family_id": "132f8577597b9580",
+      "largest_bytes": 167,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::hasUnitTheme",
+          "address": "0x7f60e0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 167
+        },
+        {
+          "name": "CBaseUnit::removeUnitTheme",
+          "address": "0x7ffe50",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 167
+        }
+      ]
+    },
+    {
+      "family_id": "c8764721fc549682",
+      "largest_bytes": 79,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CTimeline::GetPropertyPointValue",
+          "address": "0x7b6820",
+          "path": "decomp/src/Timeline.cpp",
+          "bytes": 79
+        },
+        {
+          "name": "CTimeline::SetPropertyPointValueByString",
+          "address": "0x7b68b0",
+          "path": "decomp/src/Timeline.cpp",
+          "bytes": 79
+        }
+      ]
+    },
+    {
+      "family_id": "50f6c814d3b85d88",
+      "largest_bytes": 74,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CPath::GetRadiusLeft",
+          "address": "0xc876e0",
+          "path": "decomp/src/path.cpp",
+          "bytes": 74
+        },
+        {
+          "name": "CPath::GetRadiusRight",
+          "address": "0xc87730",
+          "path": "decomp/src/path.cpp",
+          "bytes": 74
+        }
+      ]
+    },
+    {
+      "family_id": "6428622d3b221499",
+      "largest_bytes": 44,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CPath::GetPointDistance",
+          "address": "0xc87680",
+          "path": "decomp/src/path.cpp",
+          "bytes": 44
+        },
+        {
+          "name": "CPath::GetSegmentAngle",
+          "address": "0xc876b0",
+          "path": "decomp/src/path.cpp",
+          "bytes": 36
+        }
+      ]
+    },
+    {
+      "family_id": "12bf3a4ccdf458de",
+      "largest_bytes": 42,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CAstarPathfinder::openNode",
+          "address": "0x592400",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 42
+        },
+        {
+          "name": "CAstarPathfinder::closedNode",
+          "address": "0x592430",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 42
+        }
+      ]
+    },
+    {
+      "family_id": "a945dfc04f976760",
+      "largest_bytes": 40,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CAstarPathfinder::getNextNodeX",
+          "address": "0x592310",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 40
+        },
+        {
+          "name": "CAstarPathfinder::getNextNodeY",
+          "address": "0x592340",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 40
+        }
+      ]
+    },
+    {
+      "family_id": "74fa7b1ad7394c00",
+      "largest_bytes": 39,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CTimeline::GetPropertyPointTimePercent",
+          "address": "0x7b67f0",
+          "path": "decomp/src/Timeline.cpp",
+          "bytes": 37
+        },
+        {
+          "name": "CTimeline::RemovePointFromProperty",
+          "address": "0x7b6930",
+          "path": "decomp/src/Timeline.cpp",
+          "bytes": 39
+        }
+      ]
+    },
+    {
+      "family_id": "cdf628ecb861fe3e",
+      "largest_bytes": 38,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CQuestController::questHasBeenAccepted",
+          "address": "0xde6ab0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 38
+        },
+        {
+          "name": "CQuestController::questHasBeenCompleted",
+          "address": "0xde6af0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 38
+        }
+      ]
+    },
+    {
+      "family_id": "c840061c4e9fd3f1",
+      "largest_bytes": 36,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CAstarPathfinder::getNodeX",
+          "address": "0x5922b0",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 36
+        },
+        {
+          "name": "CAstarPathfinder::getNodeY",
+          "address": "0x5922e0",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 36
+        }
+      ]
+    },
+    {
+      "family_id": "872b5689a9457726",
+      "largest_bytes": 34,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::resetVisualLayout",
+          "address": "0x86d640",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 34
+        }
+      ]
+    },
+    {
+      "family_id": "0ec4affc293fe1f6",
+      "largest_bytes": 29,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CPath::SetRadiusLeft",
+          "address": "0xc87780",
+          "path": "decomp/src/path.cpp",
+          "bytes": 29
+        },
+        {
+          "name": "CPath::SetRadiusRight",
+          "address": "0xc877a0",
+          "path": "decomp/src/path.cpp",
+          "bytes": 29
+        }
+      ]
+    },
+    {
+      "family_id": "075467c907d88e1a",
+      "largest_bytes": 28,
+      "members": 3,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::hasEffect",
+          "address": "0x7f61c0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 27
+        },
+        {
+          "name": "CBaseUnit::hasEffect",
+          "address": "0x7f61e0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 27
+        }
+      ]
+    },
+    {
+      "family_id": "738d8aa369e86a7e",
+      "largest_bytes": 27,
+      "members": 5,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::hasEffect",
+          "address": "0x7f6200",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 27
+        },
+        {
+          "name": "CBaseUnit::removeAffix",
+          "address": "0x7f6280",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 27
+        }
+      ]
+    },
+    {
+      "family_id": "fb1b017429fe4891",
+      "largest_bytes": 26,
+      "members": 6,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::getEffectValue",
+          "address": "0x7f6220",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 26
+        },
+        {
+          "name": "CBaseUnit::getEffectValue",
+          "address": "0x7f6240",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 26
+        },
+        {
+          "name": "CBaseUnit::getEffectValue",
+          "address": "0x7f6260",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "family_id": "533b93f3dd888d0f",
+      "largest_bytes": 24,
+      "members": 4,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::getMinBounds",
+          "address": "0x7f5ff0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 24
+        },
+        {
+          "name": "CBaseUnit::getMaxBounds",
+          "address": "0x7f6010",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 24
+        },
+        {
+          "name": "CBaseUnit::getLocalMinBounds",
+          "address": "0x7f6030",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 24
+        },
+        {
+          "name": "CBaseUnit::getLocalMaxBounds",
+          "address": "0x7f6050",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 24
+        }
+      ]
+    },
+    {
+      "family_id": "8e550616704819b6",
+      "largest_bytes": 23,
+      "members": 5,
+      "source_name_hits": [
+        {
+          "name": "CSoundObject::isLooping",
+          "address": "0xa07e40",
+          "path": "decomp/src/SoundObject.cpp",
+          "bytes": 23
+        }
+      ]
+    },
+    {
+      "family_id": "184ac40e9be741b9",
+      "largest_bytes": 18,
+      "members": 70,
+      "source_name_hits": [
+        {
+          "name": "CAIFlagManager::~CAIFlagManager",
+          "address": "0xd4a410",
+          "path": "decomp/src/AIFlagManager.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CAIManager::~CAIManager",
+          "address": "0xd50e30",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CAISkill::~CAISkill",
+          "address": "0xd86c80",
+          "path": "decomp/src/AISkill.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CAISkillManager::~CAISkillManager",
+          "address": "0xd86d30",
+          "path": "decomp/src/AISkillManager.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CAIStatWatcher::~CAIStatWatcher",
+          "address": "0xd5dd70",
+          "path": "decomp/src/AIStatWatcher.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CAstarPathfinder::~CAstarPathfinder",
+          "address": "0x593860",
+          "path": "decomp/src/astarpathfinder.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CBaseUnit::~CBaseUnit",
+          "address": "0x7feff0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CEffectGroupManager::~CEffectGroupManager",
+          "address": "0x7e9f70",
+          "path": "decomp/src/EffectGroupManager.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CEquipment::~CEquipment",
+          "address": "0x87de00",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CGameStateController::~CGameStateController",
+          "address": "0xdd40c0",
+          "path": "decomp/src/GameStateController.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CLayout::~CLayout",
+          "address": "0x9dfe50",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CLayoutScene::~CLayoutScene",
+          "address": "0x75ef10",
+          "path": "decomp/src/LayoutScene.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CPath::~CPath",
+          "address": "0xc88970",
+          "path": "decomp/src/path.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CPositionableObject::~CPositionableObject",
+          "address": "0x9e7170",
+          "path": "decomp/src/PositionableObject.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CQuestController::~CQuestController",
+          "address": "0xdef510",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CResourceManager::~CResourceManager",
+          "address": "0xd6fac0",
+          "path": "decomp/src/ResourceManager.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CSharedStash::~CSharedStash",
+          "address": "0xe16410",
+          "path": "decomp/src/SharedStash.cpp",
+          "bytes": 18
+        },
+        {
+          "name": "CSoundObject::~CSoundObject",
+          "address": "0xa082e0",
+          "path": "decomp/src/SoundObject.cpp",
+          "bytes": 18
+        }
+      ]
+    },
+    {
+      "family_id": "f8ec1fcb23f03b74",
+      "largest_bytes": 15,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CQuestDialog::reinitialize",
+          "address": "0xd1de80",
+          "path": "decomp/src/QuestDialog.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "109b742c212d1f6e",
+      "largest_bytes": 12,
+      "members": 70,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::~CEquipment",
+          "address": "0x87dde0",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CEquipment::~CEquipment",
+          "address": "0x87ddf0",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CLayout::~CLayout",
+          "address": "0x9dfe10",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CLayout::~CLayout",
+          "address": "0x9dfe20",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CLayout::~CLayout",
+          "address": "0x9dfe30",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CLayout::~CLayout",
+          "address": "0x9dfe40",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CQuestController::~CQuestController",
+          "address": "0xdef4d0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CQuestController::~CQuestController",
+          "address": "0xdef4e0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CQuestController::~CQuestController",
+          "address": "0xdef4f0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 6
+        },
+        {
+          "name": "CQuestController::~CQuestController",
+          "address": "0xdef500",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 6
+        },
+        {
+          "name": "CSoundObject::~CSoundObject",
+          "address": "0xa082c0",
+          "path": "decomp/src/SoundObject.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CSoundObject::~CSoundObject",
+          "address": "0xa082d0",
+          "path": "decomp/src/SoundObject.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "b575b2ed89123435",
+      "largest_bytes": 12,
+      "members": 3,
+      "source_name_hits": [
+        {
+          "name": "CLayout::resume",
+          "address": "0x9de280",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CLayout::pause",
+          "address": "0x9de290",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 12
+        },
+        {
+          "name": "CLayout::startBackwards",
+          "address": "0x9de2b0",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 12
+        }
+      ]
+    },
+    {
+      "family_id": "322f2fec72c461b0",
+      "largest_bytes": 9,
+      "members": 21,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::missileDieing",
+          "address": "0x86e350",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CLayout::setHighlighted",
+          "address": "0x9d3df0",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CSoundObject::editorSelectionChanged",
+          "address": "0xa081c0",
+          "path": "decomp/src/SoundObject.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "4f8d9c09971c68c1",
+      "largest_bytes": 9,
+      "members": 13,
+      "source_name_hits": [
+        {
+          "name": "CQuestController::menuEventOccured",
+          "address": "0xde6cb0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 6
+        }
+      ]
+    },
+    {
+      "family_id": "9a9e1aa1863d3d65",
+      "largest_bytes": 9,
+      "members": 3,
+      "source_name_hits": [
+        {
+          "name": "CAIManager::addAIFlag",
+          "address": "0xd50c10",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CAIManager::hasAIFlag",
+          "address": "0xd50c40",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CAIManager::removeAIFlag",
+          "address": "0xd50c60",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "c55265a99525cd8a",
+      "largest_bytes": 9,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CAIManager::hasAISkill",
+          "address": "0xd50c30",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 9
+        },
+        {
+          "name": "CAIManager::removeAISkill",
+          "address": "0xd50c50",
+          "path": "decomp/src/AIManager.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "e861d85763b3ec26",
+      "largest_bytes": 9,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::missileApplyingEffects",
+          "address": "0x86e530",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 9
+        }
+      ]
+    },
+    {
+      "family_id": "2c147b893c6583f0",
+      "largest_bytes": 9,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CQuestController::updateLevelObject",
+          "address": "0xde6eb0",
+          "path": "decomp/src/QuestController.cpp",
+          "bytes": 6
+        }
+      ]
+    },
+    {
+      "family_id": "ca3f3a73fc894eba",
+      "largest_bytes": 8,
+      "members": 25,
+      "source_name_hits": [
+        {
+          "name": "CEquipment::getUnitModel",
+          "address": "0x899520",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CEquipment::getUnitModelSecondary",
+          "address": "0x899530",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CEquipment::getUnitCollisionModel",
+          "address": "0x899540",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CEquipment::getEquippedTo",
+          "address": "0x899550",
+          "path": "decomp/src/Equipment.cpp",
+          "bytes": 8
+        }
+      ]
+    },
+    {
+      "family_id": "0b6e3c5323e7867b",
+      "largest_bytes": 8,
+      "members": 14,
+      "source_name_hits": [
+        {
+          "name": "CBaseUnit::getCastsShadows",
+          "address": "0x7f5fe0",
+          "path": "decomp/src/BaseUnit.cpp",
+          "bytes": 8
+        }
+      ]
+    },
+    {
+      "family_id": "c954a74c1aa6c36b",
+      "largest_bytes": 8,
+      "members": 4,
+      "source_name_hits": [
+        {
+          "name": "CQuestManager::setPlayer",
+          "address": "0xd264b0",
+          "path": "decomp/src/QuestManager.cpp",
+          "bytes": 5
+        }
+      ]
+    },
+    {
+      "family_id": "395788aa12582783",
+      "largest_bytes": 8,
+      "members": 2,
+      "source_name_hits": [
+        {
+          "name": "CGameUI::getSingleton",
+          "address": "0xa828e0",
+          "path": "decomp/src/QuestManager.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CGameUI::getSingleton",
+          "address": "0xa828e0",
+          "path": "decomp/src/CinematicObject.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CGameUI::getSingleton",
+          "address": "0xa828e0",
+          "path": "decomp/src/GameStateController.cpp",
+          "bytes": 8
+        },
+        {
+          "name": "CGameUI::getSingleton",
+          "address": "0xa828e0",
+          "path": "decomp/src/PathNode.cpp",
+          "bytes": 8
+        }
+      ]
+    },
+    {
+      "family_id": "65a61420eec40b1e",
+      "largest_bytes": 2,
+      "members": 43,
+      "source_name_hits": [
+        {
+          "name": "CAIFlagManager::updateAIFlag",
+          "address": "0xd4a050",
+          "path": "decomp/src/AIFlagManager.cpp",
+          "bytes": 2
+        },
+        {
+          "name": "CLayout::editorObjectLoaded",
+          "address": "0x9d3b40",
+          "path": "decomp/src/Layout.cpp",
+          "bytes": 2
+        },
+        {
+          "name": "CQuestManager::update",
+          "address": "0xd264c0",
+          "path": "decomp/src/QuestManager.cpp",
+          "bytes": 2
+        }
+      ]
+    }
+  ]
+}

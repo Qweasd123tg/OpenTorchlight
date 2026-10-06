@@ -1,0 +1,16 @@
+[
+  {
+    "case": "known narrow AB",
+    "raw_hex": "4142000000000000",
+    "expected": "AB",
+    "actual": "䉁",
+    "equal": false
+  },
+  {
+    "case": "known empty wide",
+    "raw_hex": "00000000000000000000000000000000",
+    "expected": "",
+    "actual": null,
+    "equal": false
+  }
+]

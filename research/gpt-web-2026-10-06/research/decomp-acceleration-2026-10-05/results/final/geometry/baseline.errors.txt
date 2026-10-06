@@ -1,0 +1,11 @@
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp: In function 'void geometry(CEGUI::Window*)':
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp:4: error: no matching function for call to 'CEGUI::Window::getSize(CEGUI::UVector2*, CEGUI::Window*&)'
+/workspace/scratch/3ba0fff8d310/otl-recovery-1518/pipeline-integration-2464d59/third_party/cegui-0.6.2/include/CEGUIWindow.h:2421: note: candidates are: CEGUI::UVector2 CEGUI::Window::getSize() const
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp:5: error: no matching function for call to 'CEGUI::Window::getWidth(CEGUI::UDim*, CEGUI::Window*&)'
+/workspace/scratch/3ba0fff8d310/otl-recovery-1518/pipeline-integration-2464d59/third_party/cegui-0.6.2/include/CEGUIWindow.h:2437: note: candidates are: CEGUI::UDim CEGUI::Window::getWidth() const
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp:6: error: no matching function for call to 'CEGUI::Window::getHeight(CEGUI::UDim*, CEGUI::Window*&)'
+/workspace/scratch/3ba0fff8d310/otl-recovery-1518/pipeline-integration-2464d59/third_party/cegui-0.6.2/include/CEGUIWindow.h:2453: note: candidates are: CEGUI::UDim CEGUI::Window::getHeight() const
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp:7: error: no matching function for call to 'CEGUI::Window::setSize(CEGUI::Window*&, CEGUI::UVector2*)'
+/workspace/scratch/3ba0fff8d310/otl-recovery-1518/pipeline-integration-2464d59/third_party/cegui-0.6.2/include/CEGUIWindow.h:2261: note: candidates are: void CEGUI::Window::setSize(const CEGUI::UVector2&)
+build-decomp/sdk-prototype-experiment/geometry/baseline.cpp:8: error: no matching function for call to 'CEGUI::Window::setPosition(CEGUI::Window*&, CEGUI::UVector2*)'
+/workspace/scratch/3ba0fff8d310/otl-recovery-1518/pipeline-integration-2464d59/third_party/cegui-0.6.2/include/CEGUIWindow.h:2207: note: candidates are: void CEGUI::Window::setPosition(const CEGUI::UVector2&)

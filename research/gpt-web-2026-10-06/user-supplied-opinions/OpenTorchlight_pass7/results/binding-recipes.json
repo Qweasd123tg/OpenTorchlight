@@ -1,0 +1,2754 @@
+{
+  "scope": "archived pseudocode; not binary equivalence or current work status",
+  "functions_scanned": 2630,
+  "vtable_specializations": 18,
+  "marker_occurrences": 107,
+  "complete_recipes": 89,
+  "functions_with_recipes": 17,
+  "kinds": {
+    "virtual": 8,
+    "symbol": 81
+  },
+  "typed_construction_candidates": 81,
+  "exact_callback_signatures_confirmed": 81,
+  "by_function": {
+    "CCombineMenu::mapEventHandlers": 1,
+    "CCombineMenu::createMenus": 4,
+    "CEnchantMenu::mapEventHandlers": 1,
+    "CEnchantMenu::createMenus": 4,
+    "CGameUI::mapEventHandlers": 1,
+    "CGameUI::create": 17,
+    "CInventoryMenu::mapEventHandlers": 1,
+    "CInventoryMenu::createMenus": 16,
+    "CJournalMenu::createMenus": 2,
+    "CMerchantMenu::mapEventHandlers": 1,
+    "CMerchantMenu::createMenus": 8,
+    "CPetMenu::mapEventHandlers": 1,
+    "CPetMenu::createMenus": 16,
+    "CQuestMenu::mapEventHandlers": 2,
+    "CQuestMenu::createMenus": 5,
+    "CStashMenu::mapEventHandlers": 1,
+    "CStashMenu::createMenus": 8
+  },
+  "recipes": [
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3274,
+      "adapter_type": "CCombineMenu",
+      "vptr": "0xfe6410",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00fe6410",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xad7690",
+      "function": "CCombineMenu::mapEventHandlers",
+      "file": "research/decompiled-core/combine_menu.c",
+      "approximate_line": 3260
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 34441,
+      "adapter_type": "CCombineMenu",
+      "vptr": "0xfe6410",
+      "allocation_size": 32,
+      "slot_storage": "local_78[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe6410",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CCombineMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CCombineMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xacd390",
+        "symbol_line": 8573
+      },
+      "function_address": "0xad7a50",
+      "function": "CCombineMenu::createMenus",
+      "file": "research/decompiled-core/combine_menu.c",
+      "approximate_line": 4446
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 81143,
+      "adapter_type": "CCombineMenu",
+      "vptr": "0xfe6410",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe6410",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CCombineMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xacd460",
+        "symbol_line": 8576
+      },
+      "function_address": "0xad7a50",
+      "function": "CCombineMenu::createMenus",
+      "file": "research/decompiled-core/combine_menu.c",
+      "approximate_line": 5789
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 82121,
+      "adapter_type": "CCombineMenu",
+      "vptr": "0xfe6410",
+      "allocation_size": 32,
+      "slot_storage": "local_f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe6410",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CCombineMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xacd460",
+        "symbol_line": 8576
+      },
+      "function_address": "0xad7a50",
+      "function": "CCombineMenu::createMenus",
+      "file": "research/decompiled-core/combine_menu.c",
+      "approximate_line": 5810
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 83097,
+      "adapter_type": "CCombineMenu",
+      "vptr": "0xfe6410",
+      "allocation_size": 32,
+      "slot_storage": "local_108[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe6410",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CCombineMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xacd3d0",
+        "symbol_line": 8575
+      },
+      "function_address": "0xad7a50",
+      "function": "CCombineMenu::createMenus",
+      "file": "research/decompiled-core/combine_menu.c",
+      "approximate_line": 5831
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3274,
+      "adapter_type": "CEnchantMenu",
+      "vptr": "0xfef410",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00fef410",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xb252c0",
+      "function": "CEnchantMenu::mapEventHandlers",
+      "file": "research/decompiled-core/enchant_menu.c",
+      "approximate_line": 2881
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 34248,
+      "adapter_type": "CEnchantMenu",
+      "vptr": "0xfef410",
+      "allocation_size": 32,
+      "slot_storage": "local_78[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fef410",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CEnchantMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CEnchantMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xb1bb70",
+        "symbol_line": 8900
+      },
+      "function_address": "0xb2e0a0",
+      "function": "CEnchantMenu::createMenus",
+      "file": "research/decompiled-core/enchant_menu.c",
+      "approximate_line": 7859
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 60048,
+      "adapter_type": "CEnchantMenu",
+      "vptr": "0xfef410",
+      "allocation_size": 32,
+      "slot_storage": "local_c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fef410",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CEnchantMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb1bc40",
+        "symbol_line": 8903
+      },
+      "function_address": "0xb2e0a0",
+      "function": "CEnchantMenu::createMenus",
+      "file": "research/decompiled-core/enchant_menu.c",
+      "approximate_line": 8593
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 60969,
+      "adapter_type": "CEnchantMenu",
+      "vptr": "0xfef410",
+      "allocation_size": 32,
+      "slot_storage": "local_d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fef410",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CEnchantMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb1bc40",
+        "symbol_line": 8903
+      },
+      "function_address": "0xb2e0a0",
+      "function": "CEnchantMenu::createMenus",
+      "file": "research/decompiled-core/enchant_menu.c",
+      "approximate_line": 8613
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 61888,
+      "adapter_type": "CEnchantMenu",
+      "vptr": "0xfef410",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fef410",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CEnchantMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb1bbb0",
+        "symbol_line": 8902
+      },
+      "function_address": "0xb2e0a0",
+      "function": "CEnchantMenu::createMenus",
+      "file": "research/decompiled-core/enchant_menu.c",
+      "approximate_line": 8633
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 1774,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_onClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_onClick"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_onClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_onClick(CEGUI::EventArgs const&)",
+        "address": "0xa83690",
+        "symbol_line": 8368
+      },
+      "function_address": "0xa97e00",
+      "function": "CGameUI::mapEventHandlers",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 5299
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 54680,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_278[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xa83e20",
+        "symbol_line": 8387
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 9059
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 60250,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_2a8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_ClickThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_ClickThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_ClickThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_ClickThrough(CEGUI::EventArgs const&)",
+        "address": "0xa8e090",
+        "symbol_line": 8417
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 9180
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 103951,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_388[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10022
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 104941,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_398[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10043
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 105929,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3a8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xa836c0",
+        "symbol_line": 8369
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10064
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 106918,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3b8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillClick(CEGUI::EventArgs const&)",
+        "address": "0xa9dff0",
+        "symbol_line": 8519
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10085
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 109053,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10123
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 110043,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10144
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 111031,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xa836c0",
+        "symbol_line": 8369
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10165
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 112020,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_3f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillClick(CEGUI::EventArgs const&)",
+        "address": "0xa9dff0",
+        "symbol_line": 8519
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10186
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 114221,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_408[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10225
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 115211,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_418[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10246
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 116199,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_428[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xa836c0",
+        "symbol_line": 8369
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10267
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 117188,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_438[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillClick(CEGUI::EventArgs const&)",
+        "address": "0xa9dff0",
+        "symbol_line": 8519
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10288
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 130809,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_4e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xa83820",
+        "symbol_line": 8375
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10592
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 131823,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_4f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xa836c0",
+        "symbol_line": 8369
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10613
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 132838,
+      "adapter_type": "CGameUI",
+      "vptr": "0xfe5d10",
+      "allocation_size": 32,
+      "slot_storage": "local_508[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SkillClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fe5d10",
+        "2": "0",
+        "1": "handle_SkillClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CGameUI::handle_SkillClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CGameUI::handle_SkillClick(CEGUI::EventArgs const&)",
+        "address": "0xa9dff0",
+        "symbol_line": 8519
+      },
+      "function_address": "0xa9e4a0",
+      "function": "CGameUI::create",
+      "file": "research/decompiled-core/game_ui.c",
+      "approximate_line": 10634
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3217,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xb4f1b0",
+      "function": "CInventoryMenu::mapEventHandlers",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 2697
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 39441,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_88[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xb458a0",
+        "symbol_line": 9064
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 7797
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 76778,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_a8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xb4d920",
+        "symbol_line": 9087
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 8892
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 78799,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_b8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_ItemClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_ItemClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_ItemClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+        "address": "0xb45810",
+        "symbol_line": 9059
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 8946
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 81648,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateLeft",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_EndRotateLeft",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_EndRotateLeft, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonUp",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)",
+        "address": "0xb45870",
+        "symbol_line": 9061
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9019
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 82575,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateLeft",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_EndRotateLeft",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_EndRotateLeft, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)",
+        "address": "0xb45870",
+        "symbol_line": 9061
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9039
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 85418,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_108[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateRight",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_EndRotateRight",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_EndRotateRight, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonUp",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_EndRotateRight(CEGUI::EventArgs const&)",
+        "address": "0xb45890",
+        "symbol_line": 9063
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9111
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 86353,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_118[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateRight",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_EndRotateRight",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_EndRotateRight, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_EndRotateRight(CEGUI::EventArgs const&)",
+        "address": "0xb45890",
+        "symbol_line": 9063
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9131
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 89990,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_138[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb4d590",
+        "symbol_line": 9086
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9216
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 90995,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_148[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb4d590",
+        "symbol_line": 9086
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9237
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 91998,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_158[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb45d30",
+        "symbol_line": 9071
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 9258
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 140499,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_1f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb4d590",
+        "symbol_line": 9086
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 10585
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 141484,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_208[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb4d590",
+        "symbol_line": 9086
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 10606
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 142467,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_218[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb45d30",
+        "symbol_line": 9071
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 10627
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 186957,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_2d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SpellMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_SpellMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_SpellMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb45900",
+        "symbol_line": 9067
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 11821
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 188003,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_2e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SpellMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_SpellMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_SpellMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_SpellMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb45930",
+        "symbol_line": 9068
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 11842
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 189050,
+      "adapter_type": "CInventoryMenu",
+      "vptr": "0xfefcd0",
+      "allocation_size": 32,
+      "slot_storage": "local_2f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SetSpell",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00fefcd0",
+        "2": "0",
+        "1": "handle_SetSpell",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CInventoryMenu::handle_SetSpell, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CInventoryMenu::handle_SetSpell(CEGUI::EventArgs const&)",
+        "address": "0xb45940",
+        "symbol_line": 9069
+      },
+      "function_address": "0xb569e0",
+      "function": "CInventoryMenu::createMenus",
+      "file": "research/decompiled-core/inventory_menu.c",
+      "approximate_line": 11863
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 6058,
+      "adapter_type": "CJournalMenu",
+      "vptr": "0xffefd0",
+      "allocation_size": 32,
+      "slot_storage": "local_48",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ffefd0",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CJournalMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CJournalMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xe332d0",
+        "symbol_line": 12749
+      },
+      "function_address": "0xe3b5e0",
+      "function": "CJournalMenu::createMenus",
+      "file": "research/decompiled-core/journal_menu.c",
+      "approximate_line": 1985
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 11044,
+      "adapter_type": "CJournalMenu",
+      "vptr": "0xffefd0",
+      "allocation_size": 32,
+      "slot_storage": "local_68[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ffefd0",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CJournalMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xe332b0",
+        "symbol_line": 12748
+      },
+      "function_address": "0xe3b5e0",
+      "function": "CJournalMenu::createMenus",
+      "file": "research/decompiled-core/journal_menu.c",
+      "approximate_line": 2092
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3214,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xb6a790",
+      "function": "CMerchantMenu::mapEventHandlers",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 2685
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 37357,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_88[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xb61090",
+        "symbol_line": 9153
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 6351
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 62888,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_a8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xb68ca0",
+        "symbol_line": 9173
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 7093
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 73259,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb688e0",
+        "symbol_line": 9172
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 7390
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 74237,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb688e0",
+        "symbol_line": 9172
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 7411
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 75213,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_108[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb611f0",
+        "symbol_line": 9159
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 7432
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 125565,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_1c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_PetMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_PetMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb68530",
+        "symbol_line": 9171
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 8814
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 126553,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_1d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_PetMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_PetMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb68530",
+        "symbol_line": 9171
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 8835
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 127539,
+      "adapter_type": "CMerchantMenu",
+      "vptr": "0xff0270",
+      "allocation_size": 32,
+      "slot_storage": "local_1e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0270",
+        "2": "0",
+        "1": "handle_PetMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CMerchantMenu::handle_PetMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb61140",
+        "symbol_line": 9158
+      },
+      "function_address": "0xb6ed20",
+      "function": "CMerchantMenu::createMenus",
+      "file": "research/decompiled-core/merchant_menu.c",
+      "approximate_line": 8856
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 2474,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xb93070",
+      "function": "CPetMenu::mapEventHandlers",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 2885
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 25375,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_68[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xb88850",
+        "symbol_line": 9317
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 3849
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 58639,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_88[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xb887f0",
+        "symbol_line": 9312
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 4823
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 60645,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_98[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_ItemClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_ItemClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_ItemClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_ItemClick(CEGUI::EventArgs const&)",
+        "address": "0xb887a0",
+        "symbol_line": 9311
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 4876
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 63488,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_b8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateLeft",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_EndRotateLeft",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_EndRotateLeft, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonUp",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)",
+        "address": "0xb88820",
+        "symbol_line": 9314
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 4948
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 64414,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateLeft",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_EndRotateLeft",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_EndRotateLeft, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_EndRotateLeft(CEGUI::EventArgs const&)",
+        "address": "0xb88820",
+        "symbol_line": 9314
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 4968
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 67254,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateRight",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_EndRotateRight",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_EndRotateRight, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonUp",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_EndRotateRight(CEGUI::EventArgs const&)",
+        "address": "0xb88840",
+        "symbol_line": 9316
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 5040
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 68181,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_EndRotateRight",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_EndRotateRight",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_EndRotateRight, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_EndRotateRight(CEGUI::EventArgs const&)",
+        "address": "0xb88840",
+        "symbol_line": 9316
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 5060
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 71849,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_118[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb914d0",
+        "symbol_line": 9339
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 5148
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 72891,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_128[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb914d0",
+        "symbol_line": 9339
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 5169
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 73931,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_138[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb88d40",
+        "symbol_line": 9324
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 5190
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 111723,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_1d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb914d0",
+        "symbol_line": 9339
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6146
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 112765,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_1e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb914d0",
+        "symbol_line": 9339
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6167
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 113805,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_1f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb88d40",
+        "symbol_line": 9324
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6188
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 141811,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_2b8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SpellMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_SpellMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_SpellMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xb888b0",
+        "symbol_line": 9320
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6850
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 142894,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_2c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SpellMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_SpellMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_SpellMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_SpellMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xb888e0",
+        "symbol_line": 9321
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6871
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 143978,
+      "adapter_type": "CPetMenu",
+      "vptr": "0xff0850",
+      "allocation_size": 32,
+      "slot_storage": "local_2d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_SetSpell",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0850",
+        "2": "0",
+        "1": "handle_SetSpell",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CPetMenu::handle_SetSpell, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CPetMenu::handle_SetSpell(CEGUI::EventArgs const&)",
+        "address": "0xb88dd0",
+        "symbol_line": 9325
+      },
+      "function_address": "0xb93350",
+      "function": "CPetMenu::createMenus",
+      "file": "research/decompiled-core/pet_menu.c",
+      "approximate_line": 6892
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3345,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "0x59",
+        "3": "this"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xbc28c0",
+      "function": "CQuestMenu::mapEventHandlers",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 2173
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 4311,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_58[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "0x59",
+        "3": "this"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseDoubleClick",
+      "function_address": "0xbc28c0",
+      "function": "CQuestMenu::mapEventHandlers",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 2194
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 27992,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_68[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CQuestMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CQuestMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xbba060",
+        "symbol_line": 9457
+      },
+      "function_address": "0xbc6b90",
+      "function": "CQuestMenu::createMenus",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 5492
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 35173,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_88[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CQuestMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xbba040",
+        "symbol_line": 9456
+      },
+      "function_address": "0xbc6b90",
+      "function": "CQuestMenu::createMenus",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 5696
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 46218,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_b8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_QuestClick",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "handle_QuestClick",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CQuestMenu::handle_QuestClick, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CQuestMenu::handle_QuestClick(CEGUI::EventArgs const&)",
+        "address": "0xbba070",
+        "symbol_line": 9458
+      },
+      "function_address": "0xbc6b90",
+      "function": "CQuestMenu::createMenus",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 6037
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 70736,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_138[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CQuestMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xbba1e0",
+        "symbol_line": 9462
+      },
+      "function_address": "0xbc6b90",
+      "function": "CQuestMenu::createMenus",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 6718
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 71719,
+      "adapter_type": "CQuestMenu",
+      "vptr": "0xff0ef0",
+      "allocation_size": 32,
+      "slot_storage": "local_148[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff0ef0",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CQuestMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xbba120",
+        "symbol_line": 9461
+      },
+      "function_address": "0xbc6b90",
+      "function": "CQuestMenu::createMenus",
+      "file": "research/decompiled-core/quest_menu.c",
+      "approximate_line": 6739
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 3205,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_48[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "virtual",
+        "vtable_byte_offset": 88,
+        "slot": 11,
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "3": "this",
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "0x59"
+      },
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "function_address": "0xbf7900",
+      "function": "CStashMenu::mapEventHandlers",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 2646
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 36282,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_88[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseThrough",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_MouseThrough",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_MouseThrough, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_MouseThrough(CEGUI::EventArgs const&)",
+        "address": "0xbee470",
+        "symbol_line": 9636
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 6252
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 61810,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_a8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_CloseButton",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_CloseButton",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_CloseButton, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseButtonDown",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+        "address": "0xbf5f90",
+        "symbol_line": 9655
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 6994
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 66215,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xbf5830",
+        "symbol_line": 9653
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 7106
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 67193,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_f8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_MouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_MouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+        "address": "0xbf5830",
+        "symbol_line": 9653
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 7127
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 68169,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_108[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_MouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_MouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_MouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+        "address": "0xbee710",
+        "symbol_line": 9642
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 7148
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 118596,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_1c8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_PetMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_PetMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseEnters",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xbf5be0",
+        "symbol_line": 9654
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 8532
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 119566,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_1d8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOver",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_PetMouseOver",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_PetMouseOver, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseMove",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_PetMouseOver(CEGUI::EventArgs const&)",
+        "address": "0xbf5be0",
+        "symbol_line": 9654
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 8553
+    },
+    {
+      "status": "CANDIDATE_ONLY",
+      "text_offset": 120534,
+      "adapter_type": "CStashMenu",
+      "vptr": "0xff17b0",
+      "allocation_size": 32,
+      "slot_storage": "local_1e8[0]",
+      "receiver": "this",
+      "member_pointer": {
+        "kind": "symbol",
+        "symbol": "handle_PetMouseOut",
+        "this_adjustment": 0
+      },
+      "assignments": {
+        "0": "&PTR__MemberFunctionSlot_00ff17b0",
+        "2": "0",
+        "1": "handle_PetMouseOut",
+        "3": "this"
+      },
+      "construction_candidate": "CEGUI::SubscriberSlot(&CStashMenu::handle_PetMouseOut, this)",
+      "nearby_event_candidate": "CEGUI::Window::EventMouseLeaves",
+      "callback_symbol_evidence": {
+        "signature": "CStashMenu::handle_PetMouseOut(CEGUI::EventArgs const&)",
+        "address": "0xbee510",
+        "symbol_line": 9640
+      },
+      "function_address": "0xbfbe20",
+      "function": "CStashMenu::createMenus",
+      "file": "research/decompiled-core/stash_menu.c",
+      "approximate_line": 8574
+    }
+  ]
+}

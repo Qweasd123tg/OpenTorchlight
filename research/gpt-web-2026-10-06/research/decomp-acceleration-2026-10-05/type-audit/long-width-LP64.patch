@@ -1,0 +1,15 @@
+--- a/tools/decomp/ghidra/DecompDrafts.java
++++ b/tools/decomp/ghidra/DecompDrafts.java
+@@ -99,8 +99,10 @@
+ 
+     private DataType primitive(String t, int size) {
+         switch (t) {
+-            case "int": case "long int": return IntegerDataType.dataType;
+-            case "unsigned int": case "long unsigned int": return size == 8 ? UnsignedLongLongDataType.dataType : UnsignedIntegerDataType.dataType;
++            case "int": return IntegerDataType.dataType;
++            case "long int": return LongLongDataType.dataType;
++            case "unsigned int": return UnsignedIntegerDataType.dataType;
++            case "long unsigned int": return UnsignedLongLongDataType.dataType;
+             case "long long": case "long long int": return LongLongDataType.dataType;
+             case "long long unsigned int": case "unsigned long long": return UnsignedLongLongDataType.dataType;
+             case "short": case "short int": return ShortDataType.dataType;

@@ -1,0 +1,21 @@
+{
+  "archive": "OpenTorchlight-main(4)(1).zip",
+  "files_checked": 2285,
+  "changed_or_missing": [],
+  "all_archive_files_unchanged": true,
+  "environment": {
+    "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "networkx": "3.6.1"
+  },
+  "binary_execution_performed": false,
+  "game_cpp_modified": false,
+  "original_ELF_present": false,
+  "SAILR_executed": false,
+  "prototype_tests": {
+    "test_count": 12,
+    "passed": 12,
+    "game_tests": 0
+  },
+  "archive_sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d"
+}

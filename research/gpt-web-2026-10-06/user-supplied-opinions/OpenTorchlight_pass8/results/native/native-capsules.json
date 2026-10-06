@@ -1,0 +1,890 @@
+{
+  "limitation": "Reassembled archival instruction text, not independently verified original ELF bytes. Test reference only.",
+  "functions": [
+    {
+      "original_address": "0x91a980",
+      "name": "CKeyManager::capture()",
+      "size": 281,
+      "capsule_name": "ref_capture",
+      "source": "research/disassembly/91a980.asm",
+      "source_sha256": "b9e5170714ec41523d4ee022c54eee8baf8b8adf853a2d4731e7d8c9660b7c1b",
+      "instruction_count": 54,
+      "rows": [
+        {
+          "address": 9546112,
+          "text": "movzbl 0x711(%rdi),%eax",
+          "line": 8
+        },
+        {
+          "address": 9546119,
+          "text": "mov    %rdi,%rdx",
+          "line": 9
+        },
+        {
+          "address": 9546122,
+          "text": "lea    0x718(%rdx),%rsi",
+          "line": 10
+        },
+        {
+          "address": 9546129,
+          "text": "mov    %al,0x11(%rdi)",
+          "line": 11
+        },
+        {
+          "address": 9546132,
+          "text": "movzwl 0x712(%rdi),%eax",
+          "line": 12
+        },
+        {
+          "address": 9546139,
+          "text": "mov    %ax,0x12(%rdi)",
+          "line": 13
+        },
+        {
+          "address": 9546143,
+          "text": "mov    0x714(%rdi),%eax",
+          "line": 14
+        },
+        {
+          "address": 9546149,
+          "text": "mov    %eax,0x14(%rdi)",
+          "line": 15
+        },
+        {
+          "address": 9546152,
+          "text": "mov    $0x3f,%eax",
+          "line": 16
+        },
+        {
+          "address": 9546157,
+          "text": "lea    0x18(%rdi),%rdi",
+          "line": 17
+        },
+        {
+          "address": 9546161,
+          "text": "mov    %rax,%rcx",
+          "line": 18
+        },
+        {
+          "address": 9546164,
+          "text": "rep movsq (%rsi),(%rdi)",
+          "line": 19
+        },
+        {
+          "address": 9546167,
+          "text": "mov    %rcx,%rax",
+          "line": 20
+        },
+        {
+          "address": 9546170,
+          "text": "movzbl (%rsi),%ecx",
+          "line": 21
+        },
+        {
+          "address": 9546173,
+          "text": "lea    0xb18(%rdx),%rsi",
+          "line": 22
+        },
+        {
+          "address": 9546180,
+          "text": "mov    %cl,(%rdi)",
+          "line": 23
+        },
+        {
+          "address": 9546182,
+          "text": "movzbl 0xb11(%rdx),%ecx",
+          "line": 24
+        },
+        {
+          "address": 9546189,
+          "text": "lea    0x418(%rdx),%rdi",
+          "line": 25
+        },
+        {
+          "address": 9546196,
+          "text": "mov    %cl,0x411(%rdx)",
+          "line": 26
+        },
+        {
+          "address": 9546202,
+          "text": "movzwl 0xb12(%rdx),%ecx",
+          "line": 27
+        },
+        {
+          "address": 9546209,
+          "text": "mov    %cx,0x412(%rdx)",
+          "line": 28
+        },
+        {
+          "address": 9546216,
+          "text": "mov    0xb14(%rdx),%ecx",
+          "line": 29
+        },
+        {
+          "address": 9546222,
+          "text": "mov    %ecx,0x414(%rdx)",
+          "line": 30
+        },
+        {
+          "address": 9546228,
+          "text": "mov    $0x3f,%ecx",
+          "line": 31
+        },
+        {
+          "address": 9546233,
+          "text": "rep movsq (%rsi),(%rdi)",
+          "line": 32
+        },
+        {
+          "address": 9546236,
+          "text": "movzbl (%rsi),%ecx",
+          "line": 33
+        },
+        {
+          "address": 9546239,
+          "text": "lea    0x918(%rdx),%rsi",
+          "line": 34
+        },
+        {
+          "address": 9546246,
+          "text": "mov    %cl,(%rdi)",
+          "line": 35
+        },
+        {
+          "address": 9546248,
+          "text": "movzbl 0x911(%rdx),%ecx",
+          "line": 36
+        },
+        {
+          "address": 9546255,
+          "text": "lea    0x218(%rdx),%rdi",
+          "line": 37
+        },
+        {
+          "address": 9546262,
+          "text": "mov    %cl,0x211(%rdx)",
+          "line": 38
+        },
+        {
+          "address": 9546268,
+          "text": "movzwl 0x912(%rdx),%ecx",
+          "line": 39
+        },
+        {
+          "address": 9546275,
+          "text": "mov    %cx,0x212(%rdx)",
+          "line": 40
+        },
+        {
+          "address": 9546282,
+          "text": "mov    0x914(%rdx),%ecx",
+          "line": 41
+        },
+        {
+          "address": 9546288,
+          "text": "mov    %ecx,0x214(%rdx)",
+          "line": 42
+        },
+        {
+          "address": 9546294,
+          "text": "mov    $0x3f,%ecx",
+          "line": 43
+        },
+        {
+          "address": 9546299,
+          "text": "rep movsq (%rsi),(%rdi)",
+          "line": 44
+        },
+        {
+          "address": 9546302,
+          "text": "movzbl (%rsi),%ecx",
+          "line": 45
+        },
+        {
+          "address": 9546305,
+          "text": "mov    %cl,(%rdi)",
+          "line": 46
+        },
+        {
+          "address": 9546307,
+          "text": "lea    0x718(%rdx),%rdi",
+          "line": 47
+        },
+        {
+          "address": 9546314,
+          "text": "mov    $0x3f,%ecx",
+          "line": 48
+        },
+        {
+          "address": 9546319,
+          "text": "movb   $0x0,0x711(%rdx)",
+          "line": 49
+        },
+        {
+          "address": 9546326,
+          "text": "movw   $0x0,0x712(%rdx)",
+          "line": 50
+        },
+        {
+          "address": 9546335,
+          "text": "movl   $0x0,0x714(%rdx)",
+          "line": 51
+        },
+        {
+          "address": 9546345,
+          "text": "rep stos %rax,(%rdi)",
+          "line": 52
+        },
+        {
+          "address": 9546348,
+          "text": "movb   $0x0,(%rdi)",
+          "line": 53
+        },
+        {
+          "address": 9546351,
+          "text": "lea    0xb18(%rdx),%rdi",
+          "line": 54
+        },
+        {
+          "address": 9546358,
+          "text": "mov    $0x3f,%cl",
+          "line": 55
+        },
+        {
+          "address": 9546360,
+          "text": "movb   $0x0,0xb11(%rdx)",
+          "line": 56
+        },
+        {
+          "address": 9546367,
+          "text": "movw   $0x0,0xb12(%rdx)",
+          "line": 57
+        },
+        {
+          "address": 9546376,
+          "text": "movl   $0x0,0xb14(%rdx)",
+          "line": 58
+        },
+        {
+          "address": 9546386,
+          "text": "rep stos %rax,(%rdi)",
+          "line": 59
+        },
+        {
+          "address": 9546389,
+          "text": "movb   $0x0,(%rdi)",
+          "line": 60
+        },
+        {
+          "address": 9546392,
+          "text": "ret",
+          "line": 61
+        }
+      ]
+    },
+    {
+      "original_address": "0x91a680",
+      "name": "CKeyManager::keyHeld(unsigned int)",
+      "size": 27,
+      "capsule_name": "ref_keyheld",
+      "source": "research/disassembly/91a680.asm",
+      "source_sha256": "420fb11f7c7c89eb680ba9e6996bad675bb6ea64b9e015ebf270a88f75edb6a7",
+      "instruction_count": 7,
+      "rows": [
+        {
+          "address": 9545344,
+          "text": "mov    %esi,%esi",
+          "line": 8
+        },
+        {
+          "address": 9545346,
+          "text": "mov    $0x1,%eax",
+          "line": 9
+        },
+        {
+          "address": 9545351,
+          "text": "cmpb   $0x1,0x211(%rdi,%rsi,1)",
+          "line": 10
+        },
+        {
+          "address": 9545359,
+          "text": "je     91a699",
+          "line": 11
+        },
+        {
+          "address": 9545361,
+          "text": "cmpb   $0x1,0x11(%rdi,%rsi,1)",
+          "line": 12
+        },
+        {
+          "address": 9545366,
+          "text": "sete   %al",
+          "line": 13
+        },
+        {
+          "address": 9545369,
+          "text": "repz ret",
+          "line": 14
+        }
+      ]
+    },
+    {
+      "original_address": "0xc8a210",
+      "name": "CRandomizer::getOdds(int)",
+      "size": 45,
+      "capsule_name": "ref_getodds",
+      "source": "research/disassembly/CRandomizer.txt",
+      "source_sha256": "1b10125d462c45798437ac70264b493cfaa3f782339bc7d15f28bfc98f0717f1",
+      "instruction_count": 13,
+      "rows": [
+        {
+          "address": 13148688,
+          "text": "cmp    esi,DWORD PTR [rdi+0x34]",
+          "line": 8
+        },
+        {
+          "address": 13148691,
+          "text": "jae    c8a230",
+          "line": 9
+        },
+        {
+          "address": 13148693,
+          "text": "mov    esi,esi",
+          "line": 10
+        },
+        {
+          "address": 13148695,
+          "text": "shl    rsi,0x2",
+          "line": 11
+        },
+        {
+          "address": 13148699,
+          "text": "add    rsi,QWORD PTR [rdi+0x28]",
+          "line": 12
+        },
+        {
+          "address": 13148703,
+          "text": "movss  xmm0,DWORD PTR [rsi]",
+          "line": 13
+        },
+        {
+          "address": 13148707,
+          "text": "cvttss2si eax,xmm0",
+          "line": 14
+        },
+        {
+          "address": 13148711,
+          "text": "ret",
+          "line": 15
+        },
+        {
+          "address": 13148712,
+          "text": "nop    DWORD PTR [rax+rax*1+0x0]",
+          "line": 16
+        },
+        {
+          "address": 13148720,
+          "text": "mov    rsi,QWORD PTR [rdi+0x28]",
+          "line": 17
+        },
+        {
+          "address": 13148724,
+          "text": "movss  xmm0,DWORD PTR [rsi]",
+          "line": 18
+        },
+        {
+          "address": 13148728,
+          "text": "cvttss2si eax,xmm0",
+          "line": 19
+        },
+        {
+          "address": 13148732,
+          "text": "ret",
+          "line": 20
+        }
+      ]
+    },
+    {
+      "original_address": "0xc8a240",
+      "name": "CRandomizer::setChoiceOdds(int, int)",
+      "size": 119,
+      "capsule_name": "ref_setodds",
+      "source": "research/disassembly/CRandomizer.txt",
+      "source_sha256": "1b10125d462c45798437ac70264b493cfaa3f782339bc7d15f28bfc98f0717f1",
+      "instruction_count": 38,
+      "rows": [
+        {
+          "address": 13148736,
+          "text": "mov    r9d,DWORD PTR [rdi+0x18]",
+          "line": 25
+        },
+        {
+          "address": 13148740,
+          "text": "test   r9d,r9d",
+          "line": 26
+        },
+        {
+          "address": 13148743,
+          "text": "je     c8a298",
+          "line": 27
+        },
+        {
+          "address": 13148745,
+          "text": "mov    r10d,DWORD PTR [rdi+0x1c]",
+          "line": 28
+        },
+        {
+          "address": 13148749,
+          "text": "xor    ecx,ecx",
+          "line": 29
+        },
+        {
+          "address": 13148751,
+          "text": "xor    eax,eax",
+          "line": 30
+        },
+        {
+          "address": 13148753,
+          "text": "jmp    c8a26d",
+          "line": 31
+        },
+        {
+          "address": 13148755,
+          "text": "nop    DWORD PTR [rax+rax*1+0x0]",
+          "line": 32
+        },
+        {
+          "address": 13148760,
+          "text": "mov    r8,QWORD PTR [rdi+0x10]",
+          "line": 33
+        },
+        {
+          "address": 13148764,
+          "text": "cmp    DWORD PTR [r8],esi",
+          "line": 34
+        },
+        {
+          "address": 13148767,
+          "text": "je     c8a27e",
+          "line": 35
+        },
+        {
+          "address": 13148769,
+          "text": "add    eax,0x1",
+          "line": 36
+        },
+        {
+          "address": 13148772,
+          "text": "add    rcx,0x4",
+          "line": 37
+        },
+        {
+          "address": 13148776,
+          "text": "cmp    eax,r9d",
+          "line": 38
+        },
+        {
+          "address": 13148779,
+          "text": "jae    c8a298",
+          "line": 39
+        },
+        {
+          "address": 13148781,
+          "text": "cmp    r10d,eax",
+          "line": 40
+        },
+        {
+          "address": 13148784,
+          "text": "jbe    c8a258",
+          "line": 41
+        },
+        {
+          "address": 13148786,
+          "text": "mov    r8,rcx",
+          "line": 42
+        },
+        {
+          "address": 13148789,
+          "text": "add    r8,QWORD PTR [rdi+0x10]",
+          "line": 43
+        },
+        {
+          "address": 13148793,
+          "text": "cmp    DWORD PTR [r8],esi",
+          "line": 44
+        },
+        {
+          "address": 13148796,
+          "text": "jne    c8a261",
+          "line": 45
+        },
+        {
+          "address": 13148798,
+          "text": "cmp    DWORD PTR [rdi+0x34],eax",
+          "line": 46
+        },
+        {
+          "address": 13148801,
+          "text": "ja     c8a2a0",
+          "line": 47
+        },
+        {
+          "address": 13148803,
+          "text": "cvtsi2ss xmm0,edx",
+          "line": 48
+        },
+        {
+          "address": 13148807,
+          "text": "mov    rax,QWORD PTR [rdi+0x28]",
+          "line": 49
+        },
+        {
+          "address": 13148811,
+          "text": "movss  DWORD PTR [rax],xmm0",
+          "line": 50
+        },
+        {
+          "address": 13148815,
+          "text": "mov    BYTE PTR [rdi+0x60],0x1",
+          "line": 51
+        },
+        {
+          "address": 13148819,
+          "text": "ret",
+          "line": 52
+        },
+        {
+          "address": 13148820,
+          "text": "nop    DWORD PTR [rax+0x0]",
+          "line": 53
+        },
+        {
+          "address": 13148824,
+          "text": "repz ret",
+          "line": 54
+        },
+        {
+          "address": 13148826,
+          "text": "nop    WORD PTR [rax+rax*1+0x0]",
+          "line": 55
+        },
+        {
+          "address": 13148832,
+          "text": "cvtsi2ss xmm0,edx",
+          "line": 56
+        },
+        {
+          "address": 13148836,
+          "text": "mov    eax,eax",
+          "line": 57
+        },
+        {
+          "address": 13148838,
+          "text": "shl    rax,0x2",
+          "line": 58
+        },
+        {
+          "address": 13148842,
+          "text": "add    rax,QWORD PTR [rdi+0x28]",
+          "line": 59
+        },
+        {
+          "address": 13148846,
+          "text": "movss  DWORD PTR [rax],xmm0",
+          "line": 60
+        },
+        {
+          "address": 13148850,
+          "text": "mov    BYTE PTR [rdi+0x60],0x1",
+          "line": 61
+        },
+        {
+          "address": 13148854,
+          "text": "ret",
+          "line": 62
+        }
+      ]
+    },
+    {
+      "original_address": "0xc8a2c0",
+      "name": "CRandomizer::removeChoice(unsigned int)",
+      "size": 162,
+      "capsule_name": "ref_removechoice",
+      "source": "research/disassembly/CRandomizer.txt",
+      "source_sha256": "1b10125d462c45798437ac70264b493cfaa3f782339bc7d15f28bfc98f0717f1",
+      "instruction_count": 54,
+      "rows": [
+        {
+          "address": 13148864,
+          "text": "mov    r8d,DWORD PTR [rdi+0x18]",
+          "line": 67
+        },
+        {
+          "address": 13148868,
+          "text": "test   r8d,r8d",
+          "line": 68
+        },
+        {
+          "address": 13148871,
+          "text": "je     c8a360",
+          "line": 69
+        },
+        {
+          "address": 13148877,
+          "text": "mov    r9d,DWORD PTR [rdi+0x1c]",
+          "line": 70
+        },
+        {
+          "address": 13148881,
+          "text": "xor    edx,edx",
+          "line": 71
+        },
+        {
+          "address": 13148883,
+          "text": "xor    eax,eax",
+          "line": 72
+        },
+        {
+          "address": 13148885,
+          "text": "jmp    c8a2f4",
+          "line": 73
+        },
+        {
+          "address": 13148887,
+          "text": "nop    WORD PTR [rax+rax*1+0x0]",
+          "line": 74
+        },
+        {
+          "address": 13148896,
+          "text": "mov    rcx,QWORD PTR [rdi+0x10]",
+          "line": 75
+        },
+        {
+          "address": 13148900,
+          "text": "cmp    DWORD PTR [rcx],esi",
+          "line": 76
+        },
+        {
+          "address": 13148902,
+          "text": "je     c8a304",
+          "line": 77
+        },
+        {
+          "address": 13148904,
+          "text": "add    eax,0x1",
+          "line": 78
+        },
+        {
+          "address": 13148907,
+          "text": "add    rdx,0x4",
+          "line": 79
+        },
+        {
+          "address": 13148911,
+          "text": "cmp    eax,r8d",
+          "line": 80
+        },
+        {
+          "address": 13148914,
+          "text": "jae    c8a360",
+          "line": 81
+        },
+        {
+          "address": 13148916,
+          "text": "cmp    r9d,eax",
+          "line": 82
+        },
+        {
+          "address": 13148919,
+          "text": "jbe    c8a2e0",
+          "line": 83
+        },
+        {
+          "address": 13148921,
+          "text": "mov    rcx,rdx",
+          "line": 84
+        },
+        {
+          "address": 13148924,
+          "text": "add    rcx,QWORD PTR [rdi+0x10]",
+          "line": 85
+        },
+        {
+          "address": 13148928,
+          "text": "cmp    DWORD PTR [rcx],esi",
+          "line": 86
+        },
+        {
+          "address": 13148930,
+          "text": "jne    c8a2e8",
+          "line": 87
+        },
+        {
+          "address": 13148932,
+          "text": "mov    edx,DWORD PTR [rdi+0x30]",
+          "line": 88
+        },
+        {
+          "address": 13148935,
+          "text": "cmp    edx,eax",
+          "line": 89
+        },
+        {
+          "address": 13148937,
+          "text": "jbe    c8a323",
+          "line": 90
+        },
+        {
+          "address": 13148939,
+          "text": "mov    rcx,QWORD PTR [rdi+0x28]",
+          "line": 91
+        },
+        {
+          "address": 13148943,
+          "text": "sub    edx,0x1",
+          "line": 92
+        },
+        {
+          "address": 13148946,
+          "text": "mov    esi,eax",
+          "line": 93
+        },
+        {
+          "address": 13148948,
+          "text": "mov    DWORD PTR [rdi+0x30],edx",
+          "line": 94
+        },
+        {
+          "address": 13148951,
+          "text": "mov    edx,edx",
+          "line": 95
+        },
+        {
+          "address": 13148953,
+          "text": "mov    edx,DWORD PTR [rcx+rdx*4]",
+          "line": 96
+        },
+        {
+          "address": 13148956,
+          "text": "mov    DWORD PTR [rcx+rsi*4],edx",
+          "line": 97
+        },
+        {
+          "address": 13148959,
+          "text": "mov    r8d,DWORD PTR [rdi+0x18]",
+          "line": 98
+        },
+        {
+          "address": 13148963,
+          "text": "cmp    eax,r8d",
+          "line": 99
+        },
+        {
+          "address": 13148966,
+          "text": "jae    c8a340",
+          "line": 100
+        },
+        {
+          "address": 13148968,
+          "text": "mov    rdx,QWORD PTR [rdi+0x10]",
+          "line": 101
+        },
+        {
+          "address": 13148972,
+          "text": "sub    r8d,0x1",
+          "line": 102
+        },
+        {
+          "address": 13148976,
+          "text": "mov    ecx,eax",
+          "line": 103
+        },
+        {
+          "address": 13148978,
+          "text": "mov    DWORD PTR [rdi+0x18],r8d",
+          "line": 104
+        },
+        {
+          "address": 13148982,
+          "text": "mov    r8d,r8d",
+          "line": 105
+        },
+        {
+          "address": 13148985,
+          "text": "mov    esi,DWORD PTR [rdx+r8*4]",
+          "line": 106
+        },
+        {
+          "address": 13148989,
+          "text": "mov    DWORD PTR [rdx+rcx*4],esi",
+          "line": 107
+        },
+        {
+          "address": 13148992,
+          "text": "mov    edx,DWORD PTR [rdi+0x48]",
+          "line": 108
+        },
+        {
+          "address": 13148995,
+          "text": "cmp    edx,eax",
+          "line": 109
+        },
+        {
+          "address": 13148997,
+          "text": "jbe    c8a35b",
+          "line": 110
+        },
+        {
+          "address": 13148999,
+          "text": "mov    rcx,QWORD PTR [rdi+0x40]",
+          "line": 111
+        },
+        {
+          "address": 13149003,
+          "text": "sub    edx,0x1",
+          "line": 112
+        },
+        {
+          "address": 13149006,
+          "text": "mov    eax,eax",
+          "line": 113
+        },
+        {
+          "address": 13149008,
+          "text": "mov    DWORD PTR [rdi+0x48],edx",
+          "line": 114
+        },
+        {
+          "address": 13149011,
+          "text": "mov    edx,edx",
+          "line": 115
+        },
+        {
+          "address": 13149013,
+          "text": "mov    edx,DWORD PTR [rcx+rdx*4]",
+          "line": 116
+        },
+        {
+          "address": 13149016,
+          "text": "mov    DWORD PTR [rcx+rax*4],edx",
+          "line": 117
+        },
+        {
+          "address": 13149019,
+          "text": "mov    BYTE PTR [rdi+0x60],0x1",
+          "line": 118
+        },
+        {
+          "address": 13149023,
+          "text": "ret",
+          "line": 119
+        },
+        {
+          "address": 13149024,
+          "text": "repz ret",
+          "line": 120
+        }
+      ]
+    }
+  ]
+}

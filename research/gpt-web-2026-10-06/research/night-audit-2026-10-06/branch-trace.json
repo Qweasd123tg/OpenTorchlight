@@ -1,0 +1,12 @@
+{
+  "trace": [
+    "0x30  sink(2)",
+    "// --- after the first ret: shared tails, slow paths, EH cleanups ---"
+  ],
+  "actual_join_values": [
+    1,
+    2
+  ],
+  "scope": "synthetic branch CFG, existing human-readable linear tracer; not proof any current descriptor was misgenerated",
+  "recommendation": "generator must track per-block state and join conflicting values to unknown or phi; never emit unconditional constant from this trace"
+}

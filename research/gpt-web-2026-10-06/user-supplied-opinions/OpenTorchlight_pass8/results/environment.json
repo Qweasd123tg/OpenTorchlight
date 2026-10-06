@@ -1,0 +1,10 @@
+{
+  "compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "machine": "x86_64",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "assembler": "GNU assembler (GNU Binutils for Debian) 2.44",
+  "ogre_probe_allocator": "OGRE_MEMORY_ALLOCATOR=1; standalone math headers only",
+  "original_gcc_4_4_7_run": false,
+  "original_ELF_run": false
+}

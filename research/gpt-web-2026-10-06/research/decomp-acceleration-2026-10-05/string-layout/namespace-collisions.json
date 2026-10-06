@@ -1,0 +1,38 @@
+[
+  {
+    "address": "0xefeac0",
+    "name": "Ogre::ExceptionFactory::create(Ogre::ExceptionCodeType<2>, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*, long)",
+    "params": [
+      {
+        "type": "ExceptionCodeType<2>",
+        "size": 0
+      },
+      {
+        "type": "String*",
+        "size": 8
+      },
+      {
+        "type": "String*",
+        "size": 8
+      },
+      {
+        "type": "char*",
+        "size": 8
+      },
+      {
+        "type": "long int",
+        "size": 8
+      }
+    ]
+  },
+  {
+    "address": "0x86bfb0",
+    "name": "Ogre::AnimableObject::createAnimableValue(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+    "params": [
+      {
+        "type": "String*",
+        "size": 8
+      }
+    ]
+  }
+]

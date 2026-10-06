@@ -1,0 +1,17 @@
+
+Relocation section '.rela.text' at offset 0x6d8 contains 4 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000005  0000000c00000002 R_X86_64_PC32          0000000000000000 raise_value - 4
+000000000000001a  0000000900000002 R_X86_64_PC32          0000000000000000 _Unwind_Resume - 4
+000000000000001f  0000000d00000002 R_X86_64_PC32          0000000000000000 __cxa_begin_catch - 4
+0000000000000024  0000000e00000002 R_X86_64_PC32          0000000000000000 __cxa_end_catch - 4
+
+Relocation section '.rela.gcc_except_table' at offset 0x738 contains 1 entry:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000010  0000000f0000000a R_X86_64_32            0000000000000000 _ZTId + 0
+
+Relocation section '.rela.eh_frame' at offset 0x750 contains 3 entries:
+    Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+0000000000000013  0000000b0000000a R_X86_64_32            0000000000000000 __gxx_personality_v0 + 0
+0000000000000028  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 0
+0000000000000031  000000050000000a R_X86_64_32            0000000000000000 .gcc_except_table + 0

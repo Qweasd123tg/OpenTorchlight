@@ -1,0 +1,55 @@
+{
+  "z3_version": "4.13.3.0",
+  "checks": [
+    {
+      "name": "base",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "capacity_branch_under_invariant",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "capacity_branch_without_invariant",
+      "expected": "sat",
+      "actual": "sat"
+    },
+    {
+      "name": "capacity_growth_wrap_counterexample",
+      "expected": "sat",
+      "actual": "sat"
+    },
+    {
+      "name": "invariant_preserved_by_increment_in_capacity",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "invariant_preserved_by_remove",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "missing_bound",
+      "expected": "sat",
+      "actual": "sat"
+    },
+    {
+      "name": "same_memory_read",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "step_with_uint_bound",
+      "expected": "unsat",
+      "actual": "unsat"
+    },
+    {
+      "name": "wrong_stride",
+      "expected": "sat",
+      "actual": "sat"
+    }
+  ]
+}

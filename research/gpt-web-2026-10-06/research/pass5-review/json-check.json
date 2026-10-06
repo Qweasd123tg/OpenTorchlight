@@ -1,0 +1,9 @@
+{
+  "records": 199,
+  "processed": 184,
+  "skipped": 15,
+  "regions": 2657,
+  "with_unresolved_transfers": 19,
+  "structural_invariant_errors": [],
+  "scope": "independent validation of supplied JSON structural invariants; not CFG/ELF or semantics validation; upstream scripts not executed"
+}
