@@ -1,7 +1,7 @@
 # large-10: menu text, pause and glyph upload
 
-Historical integration record. Current method: [code-first](code-first.md).
-Current menu boundary and successor checks: [controller/painter](mainmenu-controller-painter.md).
+Historical integration record for the frozen port. Former method: [code-first](archive/frozen-directions/code-first.md).
+Recorded menu boundary and successor checks of that port: [controller/painter](mainmenu-controller-painter.md).
 
 ## Evidence recorded before implementation
 

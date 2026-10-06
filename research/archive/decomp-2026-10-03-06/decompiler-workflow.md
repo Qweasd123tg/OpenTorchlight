@@ -1,0 +1,169 @@
+> **Архив прежнего workflow.** Code-first пакеты, p-code и реестры ниже
+> заморожены. Действующий экспорт: [decompiler-workflow](../../decompiler-workflow.md).
+
+# Декомпиляция оригинального runtime
+
+## Зачем нужен постоянный проект
+
+Полный анализ ELF полезен один раз как индекс кода: Ghidra сохраняет функции,
+перекрёстные ссылки, строки, типы и результаты анализа в проекте. Рабочий цикл
+после этого состоит из небольших целевых экспортов и проверок, а не из огромного
+дампа псевдокода, который невозможно осмысленно сравнить или сопровождать.
+
+Исходный вход зафиксирован как `original-code`:
+
+- `/home/qweasd123tg/Games/Torchlight/game/Torchlight.bin.x86_64`;
+- SHA-256
+  `91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b`.
+
+`tools/ghidra/analyze_original.sh` отказывается анализировать другой ELF. База
+и логи находятся в ignored `build-ghidra/`; tool cache — в
+`build-source-cache/ghidra/`. Полная база и оригинальный бинарник не попадают
+в git. Внешний ELF остаётся входом только для чтения. Небольшие целевые экспорты адресов из
+`research/decompile-targets.txt` синхронизируются в `research/decompiled/`,
+чтобы по ним можно было искать связи локально и во внешнем анализаторе.
+
+## Зафиксированный инструмент
+
+Проверен headless-анализ Ghidra 12.1.3 из официального архива
+`ghidra_12.1.3_PUBLIC_20260817.zip`, SHA-256
+`93a5d11a9ad510622acaaf908c556a7b9b764d338e78a7567f3689bf5081fd54`.
+По умолчанию используется распакованный каталог
+`build-source-cache/ghidra/ghidra_12.1.3_PUBLIC`. Другой закреплённый tool cache
+можно передать через `GHIDRA_HOME`; базу — через `TORCHLIGHT_GHIDRA_ROOT`.
+Установка проверяет SHA архива, пути ZIP и critical tool inputs; последующие
+пробы также проверяют сохранённые хеши инструкции/эмулятора x86.
+
+```sh
+python3 tools/setup_ghidra.py --download
+tools/ghidra/analyze_original.sh /home/qweasd123tg/Games/Torchlight/game
+```
+
+Первый запуск создаёт и полностью анализирует проект. Следующие запуски
+обрабатывают сохранённую программу и повторно экспортируют только адреса из
+`research/decompile-targets.txt`. Новый адрес добавляется в виде:
+
+```text
+8aa4b0 generic_model_update_animation
+```
+
+Результат появится в
+`build-ghidra/output/generic_model_update_animation.c` вместе с
+фактическим адресом и именем найденной функции.
+
+После экспорта обнови читаемую копию в репозитории:
+
+```sh
+tools/ghidra/sync_target_decompilations.sh
+```
+
+Скрипт копирует только перечисленные цели, проверяет адрес в заголовке каждого
+файла и удаляет устаревшие `.c` из целевого каталога. Это ограниченный
+поисковый срез, а не полный дамп программы.
+
+Для внешнего поиска связей существует более широкий, но всё ещё ограниченный
+срез центральных runtime-классов:
+
+```sh
+tools/ghidra/export_core_classes.sh
+```
+
+Список пространств имён задан в `research/decompile-classes.txt`, результат
+пишется по одному файлу на класс в `research/decompiled-core/`. Туда входят
+персонажи, бой, экипировка, навыки, эффекты, уровень, пути, квесты, торговля,
+звук, сохранения и игровой цикл; сторонние библиотеки, UI редактора и массовые
+ресурсные дескрипторы не экспортируются.
+
+Полный разрешённый граф вызовов и строки ELF с адресами обновляются отдельно:
+
+```sh
+tools/ghidra/export_analysis_indexes.sh \
+  /home/qweasd123tg/Games/Torchlight/game
+```
+
+Результаты находятся в `research/original-callgraph.tsv` и
+`research/original-strings.txt`. Граф позволяет переходить между классами без
+массовой декомпиляции всех сторонних библиотек, а строки помогают находить
+события, состояния, имена ресурсов и диагностические ветви.
+
+Граф хранит только множество вызываемых функций (порядок, ветви и повторы
+теряются). Места вызовов с адресами инструкций экспортируются отдельно:
+
+```sh
+tools/ghidra/export_call_sites.sh \
+  /home/qweasd123tg/Games/Torchlight/game
+```
+
+Результат — `research/original-callsites.tsv`
+(`caller_address`, `caller_symbol`, `callsite_address`, `callee_address`,
+`callee_symbol`, `mnemonic`). Условия ветвей и виртуальные цели в нём не
+разрешаются — они восстанавливаются пофункционно из дизассемблирования.
+`tools/function_package.py --address 0x...` собирает полный пакет на
+функцию (реестр, стадии из `research/function-transfer.json`, рёбра графа,
+места вызовов, попадания в декомпиляции, ссылки порта).
+
+Для пакетной выгрузки одной функции в JSON (тело, декомпиляция, границы,
+SHA-гейт на ELF, лимит 1–64 функции, без подмены interior-адреса) есть
+`tools/ghidra/ExportCodeFirstPacket.java`:
+
+```sh
+# targets.txt — по одному адресу на строку; каталог вывода не должен существовать
+"$ghidra_home/support/analyzeHeadless" ... \
+    -postScript ExportCodeFirstPacket.java targets.txt /tmp/packet-out \
+        91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b
+```
+
+2026-09-20 скрипт скомпилирован и исполнен с Ghidra 12.1.3 / Java 25.0.4
+на четырёх адресах. Найден tail `JMP @0xa0ae8c → fireMissile @0xd04610`,
+который Ghidra представляет как `CALL_TERMINATOR`, а также DATA/INDIRECTION
+entry refs. Сохранять и mnemonic/bytes, и тип ссылки анализатора.
+Свежий полный анализ ELF в этом пилоте достиг лимита 600 s: экспорт отражает
+записанные статические ссылки частично проанализированной базы.
+Измерения, пути свежего проекта и границы — в
+[library-match-pilot.md](../../library-match-pilot.md).
+
+Краткий пилот встроенных BSim/FID доступен через
+`tools/ghidra/LibraryMatchPilot.java` и `tools/library_match_report.py`.
+Он строит кандидатов по признакам и хешам, сохраняя равные результаты и
+неполные сигнатуры. Имена используются для оценки после scoring.
+`function_package.py --ghidra-dir build-ghidra/probes/PACKET` потребляет также
+проверенный structured JSON, entry refs, ширины памяти и локальные выражения;
+изменённые после сбора raw/evidence файлы отклоняются по SHA.
+
+## Ограниченное исследование поведения
+
+Для raw-пакетов без полного cache доступен отдельный
+[bounded pipeline](../../lift-pipeline-live.md): `prepare_lift_project.py` импортирует
+ELF с `-noanalysis` в `build-ghidra-lift`, проверяет точные STT_FUNC диапазоны
+и дизассемблирует только flow внутри выбранных spans. Декомпилятор и incremental
+analysis выключены. Он расширяет только свой помеченный проект; существующий
+полный/unowned проект не исправляет. Последующий `ExportLiftBatch` остаётся
+`-process -noanalysis -readOnly`. `run_lift_pipeline.py --prepare-project`
+связывает подготовку, экспорт и bounded обход зависимостей.
+
+`tools/ghidra_probe.py` использует сохранённую базу без повторного полного
+анализа и без изменения программы. Экспорт schema 2 содержит raw p-code
+операции с varnode space/offset/width/register. `tools/analyze_pcode.py`
+собирает чтения, записи и условия внутри базового блока. После вызова,
+частичной записи регистра и внутренних micro-ветвей неопределённость
+сохраняется; имена полей, ABI, владельцы и состояния объектов не выводятся.
+
+При `--profile explicit.json` дополнительно используется закреплённый
+`PcodeEmulator`. Все регистры и области задаются явно. Незаданный регистр,
+чужой вызов, unmapped memory и исчерпанный бюджет дают `UNKNOWN`; результат
+не превращается в выдуманный stub. Пример и прямое сравнение с native bytes:
+[p-code automation](../../pcode-automation.md).
+
+API-источники: [raw p-code](https://ghidra.re/ghidra_docs/languages/html/pcoderef.html),
+[PcodeEmulator](https://ghidra.re/ghidra_docs/api/ghidra/pcode/emu/PcodeEmulator.html).
+Декомпиляция, raw p-code и bounded execution дополняют просмотр ASM. Ни один
+инструмент не повышает стадии переноса или `completion` автоматически.
+
+## Как использовать результат
+
+Псевдокод Ghidra считается навигацией, а не самодостаточным доказательством.
+Существенный вывод нужно сверять с дизассемблированием, ресурсами или прямым
+исполнением небольшой исходной функции. В `research/` сохраняются только адреса,
+алгоритм, проверенные константы и границы вывода. Для графики особенно полезно
+отдельно фиксировать GL-состояния оригинала через `apitrace`, а для камеры,
+света и анимационных весов — значения на входе функций короткой трассировкой.
