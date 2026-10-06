@@ -352,7 +352,7 @@ class Generator:
                 f"TL_TEST({name})", "{",
                 "    autotest::Stats stats = {0, 0, 0};",
                 "    double started = autotest::seconds();",
-                f"    for (int i = 0; i < {CASES} && stats.different == 0 && autotest::seconds() - started < {BUDGET_SECONDS}; i++)",
+                f"    for (int i = 0; i < {CASES} && stats.different == 0 && stats.incomplete == 0 && autotest::seconds() - started < {BUDGET_SECONDS}; i++)",
                 "    {",
                 "        autotest::g_arenaUsed = 0;",
                 "        autotest::g_pool.count = 0;",
@@ -360,9 +360,9 @@ class Generator:
                 f"        t{tag}::Context c;", f"        t{tag}::build(r, c);",
                 f'        autotest::compareCase(t{tag}::original, t{tag}::ours, &c, stats, host, "{name}", i);',
                 "    }",
-                '    host->log("    stats %s same %d both-failed %d different %d\\n", "' + name +
-                '", stats.same, stats.bothFailed, stats.different);',
-                "    return stats.different;", "}"]
+                '    host->log("    stats %s same %d both-failed %d different %d incomplete %d\\n", "' + name +
+                '", stats.same, stats.bothFailed, stats.different, stats.incomplete);',
+                f"    return stats.different + stats.incomplete + (stats.same < {MIN_COMPLETED} ? 1 : 0);", "}"]
         includes = {self.headers[cls]}
         for p in params:
             core = ghidra_cpp.cxx_type(p).replace("const ", "").strip().rstrip("*&").strip()

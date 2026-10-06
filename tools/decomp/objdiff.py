@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Compare decompiled functions with the original machine code.
 
-Compiles a decomp source with the original toolchain (GCC 4.1.2-51), then
+Compiles a decomp source with the original toolchain (GCC 4.4.7-3), then
 compares every function symbol of the object with the original function of the
 same mangled name. Instructions are normalized: relocated operands and absolute
 addresses become symbol names, string literals become their contents, float
 constants become their bytes and intra-function branches become instruction
-indices. Exact equality of the normalized streams is reported as MATCH.
+indices. Exact instruction equality is MATCH only when referenced data is
+complete and there is no unverified per-function personality/LSDA metadata.
 
     python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp
     python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp --show _ZN10CRunicCoreC2Ev
@@ -30,6 +31,7 @@ import threading
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 import elfimage  # noqa: E402
+import objdiff_eh  # noqa: E402
 import toolchain  # noqa: E402
 
 ROOT = elfdb.ROOT
@@ -42,11 +44,38 @@ PACKED = ("ps", "pd", "dqa", "dqu", "aps", "apd")
 
 
 def const_size(mnemonic):
+    if mnemonic.startswith("data-size:"):
+        return int(mnemonic.split(":")[1])
+    integer = re.match(r"^(?:mov|add|sub|and|or|xor|cmp|test|imul|inc|dec|neg|not)([bwlq])$", mnemonic)
+    if integer:
+        return {"b": 1, "w": 2, "l": 4, "q": 8}[integer.group(1)]
+    if mnemonic in ("flds", "fldl", "fldt", "movlps", "movhps", "movlpd", "movhpd"):
+        return {"flds": 4, "fldl": 8, "fldt": 10}.get(mnemonic, 8)
     if mnemonic.endswith(PACKED) or mnemonic in ("pxor", "pand", "por", "andps", "xorps"):
         return 16
     if "sd" in mnemonic or mnemonic.endswith("q"):
         return 8
     return 4
+
+
+def memory_mnemonic(mnemonic, operands):
+    """objdump omits integer width suffixes when the destination determines it."""
+    if mnemonic.startswith(("movzb", "movsb")):
+        return "data-size:1"
+    if mnemonic.startswith(("movzw", "movsw")):
+        return "data-size:2"
+    if mnemonic.startswith("movsl"):
+        return "data-size:4"
+    integer = ("mov", "movabs", "add", "sub", "and", "or", "xor", "cmp", "test", "imul")
+    if mnemonic in integer:
+        register = operands.rsplit(",", 1)[-1].strip()
+        if re.fullmatch(r"%(?:r(?:ax|bx|cx|dx|si|di|bp|sp|[0-9]+))", register):
+            return "data-size:8"
+        if re.fullmatch(r"%(?:[abcd]x|si|di|bp|sp|r[0-9]+w)", register):
+            return "data-size:2"
+        if re.fullmatch(r"%(?:[abcd][lh]|sil|dil|bpl|spl|r[0-9]+b)", register):
+            return "data-size:1"
+    return mnemonic
 
 
 def printable_string(raw):
@@ -73,15 +102,50 @@ def printable_string(raw):
     return None
 
 
-def literal_token(raw):
-    # Width is not part of the token: L"1" and "1" plus padding share bytes, and
-    # the consuming call (string vs wstring) already tells them apart.
-    text = printable_string(raw)
-    if text is None:
+class UnverifiedData(ValueError):
+    pass
+
+
+def literal_token(raw, width=None):
+    """Full terminated bytes, including character width and payload length.
+
+    Linked .rodata has lost string-section width. If both interpretations are
+    possible, instruction equality cannot establish the width of the literal.
+    """
+    def narrow():
+        end = raw.find(b"\0")
+        if end < 0:
+            return None
+        if width is None and not all(32 <= b < 127 or b in (9, 10, 13) for b in raw[:end]):
+            return None
+        return raw[:end]
+
+    def wide():
+        for end in range(0, len(raw) - 3, 4):
+            code = int.from_bytes(raw[end:end + 4], "little")
+            if code == 0:
+                return raw[:end]
+            if width is None and (code > 0x10ffff or 0xd800 <= code <= 0xdfff
+                                  or not (chr(code).isprintable() or code in (9, 10, 13))):
+                return None
         return None
-    if text.startswith('L"'):
-        text = text[2:]
-    return f'lit:"{text[:80]}"'
+
+    if width not in (None, 1, 4):
+        raise UnverifiedData("unsupported string width")
+    candidates = [(w, payload) for w, payload in
+                  ((1, narrow() if width in (None, 1) else None),
+                   (4, wide() if width in (None, 4) else None)) if payload is not None]
+    if len(candidates) > 1:
+        raise UnverifiedData("ambiguous narrow/wide literal in linked rodata")
+    if not candidates:
+        raise UnverifiedData("unterminated or unclassified literal")
+    w, payload = candidates[0]
+    return f"lit:w{w}:n{len(payload) // w}:{payload.hex()}"
+
+
+def string_width(section):
+    match = re.match(r"^\.rodata\.str([0-9]+)\.", section.name)
+    return int(match.group(1)) if match else None
 
 
 def run_objdump(args):
@@ -108,6 +172,20 @@ class Normalizer:
     """Shared operand normalization; subclasses resolve addresses to tokens."""
 
     JUMP_TABLE = re.compile(r"^\*(0x[0-9a-f]+)\(,(%\w+),8\)$")
+
+    def data_token(self, raw, mnemonic, address_operand=False, width=None):
+        try:
+            if address_operand:
+                return literal_token(raw, width)
+            size = const_size(mnemonic)
+            if len(raw) < size:
+                raise UnverifiedData(f"truncated {size}-byte constant")
+            return "const:" + raw[:size].hex()
+        except UnverifiedData as exc:
+            if not hasattr(self, "unverified"):
+                self.unverified = []
+            self.unverified.append(str(exc))
+            return "unverified-data:" + hashlib.sha256(raw).hexdigest()
 
     def branch(self, insn_index, target, start, end, offsets):
         if start <= target < end:
@@ -145,6 +223,7 @@ class Normalizer:
                 or mnemonic.startswith(("data16", "cs")))
 
     def normalize(self, insns, start, end):
+        self.unverified = []
         offsets = [i[0] for i in insns]
         # Branch labels count kept instructions only: alignment padding differs
         # between the original and our object and must not shift the indices.
@@ -188,7 +267,7 @@ class OriginalSide(Normalizer):
         self.rodata = [image.section(n) for n in (".rodata",) if n]
         self.low, self.high = 0x400000, max(s.addr + s.size for s in image.sections if s.addr)
 
-    def name_at(self, address, mnemonic):
+    def name_at(self, address, mnemonic, address_operand=False):
         if address in self.func_start:
             return self.func_start[address]
         if address in self.image.plt:
@@ -204,17 +283,11 @@ class OriginalSide(Normalizer):
         section = self.image.section_at(address)
         if section and section.name.startswith(".rodata"):
             try:
-                raw = self.image.read(address, 256)
+                available = section.addr + section.size - address
+                raw = self.image.read(address, available if address_operand else min(available, const_size(mnemonic)))
             except ValueError:
                 raw = b""
-            token = literal_token(raw)
-            if token is not None:
-                return token
-            if mnemonic == "mov" and raw[:1] == b"\0":
-                # An empty string literal: its neighbours are arbitrary.
-                return 'lit:""'
-            n = const_size(mnemonic)
-            return "const:" + raw[:n].hex()
+            return self.data_token(raw, mnemonic, address_operand, string_width(section))
         if section:
             return f"{section.name}:{address:#x}"
         return f"{address:#x}"
@@ -241,13 +314,13 @@ class OriginalSide(Normalizer):
 
         def rip(mm):
             target = nxt + int(mm.group(1), 16) * (-1 if mm.group(0).startswith("-") else 1)
-            return f"[{self.name_at(target, mnemonic)}](%rip)"
+            return f"[{self.name_at(target, memory_mnemonic(mnemonic, operands), mnemonic.startswith('lea'))}](%rip)"
         operands = re.sub(r"-?0x([0-9a-f]+)\(%rip\)", rip, operands)
 
         def absolute(mm):
             value = int(mm.group(2), 16)
             if self.low <= value < self.high:
-                return f"{mm.group(1)}[{self.name_at(value, mnemonic)}]"
+                return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'))}]"
             return mm.group(0)
         operands = re.sub(r"(\$|(?<![\w%]))0x([0-9a-f]+)(?=\b)", absolute, operands)
         return f"{mnemonic} {operands}".strip()
@@ -267,26 +340,23 @@ class ObjectSide(Normalizer):
             if s.type == elfimage.STT_OBJECT and s.defined and s.shndx < len(obj.sections):
                 self.locals_by_section.setdefault(s.shndx, {})[s.value] = s.name
 
-    def target_name(self, symbol, offset, mnemonic):
+    def target_name(self, symbol, offset, mnemonic, address_operand=False):
         obj = self.obj
         if symbol.name and not symbol.name.startswith(".L") and symbol.type != elfimage.STT_SECTION:
             # Same token as the original side: symbol + addend mapped to the original address.
             address = self.resolve(symbol.name)
             if address is not None and self.name_at:
-                return self.name_at(address + offset, mnemonic)
+                return self.name_at(address + offset, mnemonic, address_operand)
         if symbol.defined and symbol.shndx < len(obj.sections) and (
                 symbol.type == elfimage.STT_SECTION or not symbol.name or symbol.name.startswith(".L")):
             offset += symbol.value if symbol.type != elfimage.STT_SECTION else 0
             section = obj.sections[symbol.shndx]
             name = section.name
             if name.startswith(".rodata"):
-                raw = obj.section_bytes(symbol.shndx)[offset:offset + 256]
-                token = literal_token(raw)
-                if token is not None:
-                    return token
-                if name.startswith(".rodata.str") and raw[:1] == b"\0":
-                    return 'lit:""'
-                return "const:" + raw[:const_size(mnemonic)].hex()
+                data = obj.section_bytes(symbol.shndx)
+                stop = section.size if address_operand else offset + const_size(mnemonic)
+                raw = data[offset:stop] if 0 <= offset < section.size and len(data) == section.size else b""
+                return self.data_token(raw, mnemonic, address_operand, string_width(section))
             named = self.locals_by_section.get(symbol.shndx, {}).get(offset)
             if named:
                 return named
@@ -335,11 +405,11 @@ class ObjectSide(Normalizer):
             return f"{mnemonic} {func or hex(target)}"
         for r in relocs:
             if r.type in PC_RELATIVE:
-                name = self.target_name(r.symbol, r.addend + (nxt - r.offset), mnemonic)
+                name = self.target_name(r.symbol, r.addend + (nxt - r.offset), memory_mnemonic(mnemonic, operands), mnemonic.startswith("lea"))
                 operands = re.sub(r"-?0x[0-9a-f]+\(%rip\)", lambda _: f"[{name}](%rip)", operands, count=1)
             elif r.type in ABSOLUTE:
-                name = self.target_name(r.symbol, r.addend, mnemonic)
                 imm_last = r.offset == nxt - 4 and "$" in operands
+                name = self.target_name(r.symbol, r.addend, memory_mnemonic(mnemonic, operands), imm_last or mnemonic.startswith("lea"))
                 if imm_last:
                     operands = re.sub(r"\$0x[0-9a-f]+", lambda _: f"$[{name}]", operands, count=1)
                 else:
@@ -349,6 +419,7 @@ class ObjectSide(Normalizer):
 
 def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
     obj = elfimage.load_object(obj_path)
+    frames = objdiff_eh.inspect(obj, relocatable=True)
     text = run_objdump([str(obj_path)])
     sections = {}
     current = None
@@ -372,8 +443,14 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
         side.prepare(by_name[section.name])
         side.current = sym.name
         bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind
-        result[sym.name] = {"size": sym.size, "bind": bind,
-                            "norm": side.normalize(insns, sym.value, sym.value + sym.size)}
+        norm = side.normalize(insns, sym.value, sym.value + sym.size)
+        reasons = list(dict.fromkeys(side.unverified))
+        eh = frames.reason(sym.value, sym.size, sym.shndx)
+        if eh:
+            reasons.append(eh)
+        result[sym.name] = {"size": sym.size, "bind": bind, "norm": norm,
+                            "metadata_reasons": reasons,
+                            "personalities": frames.personalities(sym.value, sym.size, sym.shndx)}
     return result
 
 
@@ -413,6 +490,7 @@ class Original:
         self.db = db or elfdb.load_db()
         self.image = elfimage.load(elf or elfdb.default_elf())
         self.side = OriginalSide(self.image, self.db)
+        self.frames = objdiff_eh.inspect(self.image)
         self._lock = threading.RLock()  # the normalizer keeps per-function state
         self.by_name = {}
         for address, f in self.db["functions"].items():
@@ -471,26 +549,38 @@ class Original:
             cache = self.__dict__.get("_norm_cache")
             if cache is None:
                 cache = self.__dict__["_norm_cache"] = _load_norm_cache()
-            key = f["address"]
+            key = self.image.sha256 + ":" + f["address"]
             if key not in cache:
                 start = int(f["address"], 16)
                 end = start + f["size"]
                 insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
                                                  str(self.image.path)]))
-                cache[key] = self.side.normalize(insns, start, end)
+                norm = self.side.normalize(insns, start, end)
+                cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified))}
                 _NORM_DIRTY.add(key)
-            return cache[key]
+            return cache[key]["norm"]
+
+    def metadata_reasons(self, f):
+        with self._lock:
+            self.normalized(f)
+            reasons = list(self._norm_cache[self.image.sha256 + ":" + f["address"]]["metadata_reasons"])
+            reason = self.frames.reason(int(f["address"], 16), f["size"])
+            if reason:
+                reasons.append(reason)
+            return reasons
 
 
 NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
 _NORM_DIRTY = set()
+NORMALIZER_VERSION = 2
 
 
 def _norm_key():
     # Normalization depends on this file, the database and the ELF image reader.
     here = Path(__file__).resolve().parent
-    return [p.stat().st_mtime for p in (here / "objdiff.py", here / "elfimage.py",
-                                        NORM_CACHE.parent / "elfdb.json") if p.exists()]
+    return [NORMALIZER_VERSION] + [hashlib.sha256(p.read_bytes()).hexdigest()
+                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py",
+                                             NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 
 def _load_norm_cache():
@@ -546,8 +636,11 @@ def compile_for_diff(source, tmp, extra=(), quiet=False):
 
 
 def code_digest(norm):
-    """Identity of a compiled function: its normalized instructions. A test result
-    stays valid while this holds, whatever happens to the source text or headers."""
+    """Progress fingerprint of normalized instructions, not full object identity.
+
+    Acceptance evidence must use object_digest, which includes data, EH and
+    relocations as well as code.
+    """
     return hashlib.sha256("\n".join(norm).encode()).hexdigest()[:16]
 
 
@@ -556,6 +649,7 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
     tu = tu_for_source(original.db, source)
     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
         obj, globalized = compile_for_diff(source, tmp, extra, quiet)
+        object_digest = hashlib.sha256(Path(obj).read_bytes()).hexdigest()
         ours = object_functions(obj, original.resolver(tu), original.side.name_at, globalized)
         unknown = original.unknown_references(obj)
     rows = []
@@ -563,18 +657,25 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
     for name, mine in sorted(ours.items()):
         f = original.function(name, mine["bind"] == elfimage.STB_LOCAL, tu)
         if not f:
-            rows.append({"name": name, "status": "EXTRA", "size": mine["size"]})
+            rows.append({"name": name, "status": "EXTRA", "size": mine["size"],
+                         "object_digest": object_digest})
             continue
         theirs = original.normalized(f)
+        metadata_reasons = list(dict.fromkeys(mine["metadata_reasons"] + original.metadata_reasons(f)))
+        if mine["personalities"] != original.frames.personalities(int(f["address"], 16), f["size"]):
+            metadata_reasons.append("EH personality differs")
         seen.add(f["address"])
-        if mine["norm"] == theirs:
+        if mine["norm"] == theirs and not metadata_reasons:
             status, score = "MATCH", 1.0
         else:
             score = difflib.SequenceMatcher(None, mine["norm"], theirs, autojunk=False).ratio()
             status = "DIFF"
         row = {"name": name, "demangled": f["demangled"], "address": f["address"], "status": status,
                "score": round(score, 4), "size": mine["size"], "original_size": f["size"],
-               "weak": mine["bind"] == elfimage.STB_WEAK, "code": code_digest(mine["norm"])}
+               "weak": mine["bind"] == elfimage.STB_WEAK, "code": code_digest(mine["norm"]),
+               "object_digest": object_digest}
+        if metadata_reasons:
+            row["metadata_reasons"] = metadata_reasons
         rows.append(row)
         if show and (show == "all" or show in (name, f["demangled"])):
             print(f"--- ours {name}\n+++ original {f['address']} {f['demangled']}")
@@ -585,9 +686,10 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
         for address, f in original.db["functions"].items():
             if f["tu"] == tu["id"] and address not in seen and f["kind"] not in ("compiler", "inline_or_template"):
                 rows.append({"name": f["mangled"], "demangled": f["demangled"], "address": address,
-                             "status": "MISSING", "original_size": f["size"]})
+                             "status": "MISSING", "original_size": f["size"], "object_digest": object_digest})
     return {"source": str(Path(source).resolve().relative_to(ROOT)) if Path(source).resolve().is_relative_to(ROOT) else str(source),
             "tu": tu["name"] if tu else None, "functions": rows,
+            "object_digest": object_digest,
             "unknown": [{"name": n, "known": original.known_overloads(n)} for n in unknown]}
 
 
@@ -598,6 +700,8 @@ def report(result):
         score = f"{row['score'] * 100:5.1f}%" if "score" in row else "     "
         weak = " (inline)" if row.get("weak") else ""
         print(f"  {row['status']:7} {score} {row.get('address', ''):>9} {label}{weak}")
+        for reason in row.get("metadata_reasons", []):
+            print(f"          {reason}")
     counts = {}
     for row in result["functions"]:
         counts[row["status"]] = counts.get(row["status"], 0) + 1

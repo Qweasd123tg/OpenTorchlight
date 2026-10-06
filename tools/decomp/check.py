@@ -26,6 +26,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 import elfimage  # noqa: E402
+import evidence  # noqa: E402
 import autotest  # noqa: E402
 import hybrid  # noqa: E402
 import mutate  # noqa: E402
@@ -62,12 +63,17 @@ def generated_tests(db, diff):
     """Generates the autotests of DIFF functions recorded by mutate.py --accept whose
     compiled code has not changed since; returns their addresses."""
     wanted = []
+    inputs = None
     for address, entry in mutate.load_accepted().items():
         f = db["functions"].get(address)
         if address not in diff or not f:
             continue
-        if diff[address].get("code") != entry.get("code"):
-            print(f"stale mutation check: {address} {entry['name']} compiles differently now; "
+        versioned = (entry.get("evidence") or {}).get("schema") == evidence.SCHEMA
+        if versioned and inputs is None:
+            inputs = evidence.input_digest(db)
+        if (diff[address].get("code") != entry.get("code")
+                or not evidence.current(entry, diff[address].get("object_digest"), inputs)):
+            print(f"stale mutation check: {address} {entry['name']} has no current complete evidence; "
                   f"run tools/decomp/mutate.py --accept {address}")
             continue
         wanted.append(f)
@@ -125,7 +131,11 @@ def main():
                 if row["status"] == "DIFF" and row.get("address") in counted}
         generated = generated_tests(db, diff)
         os.environ["OTL_AUTOTEST"] = "1"
-        os.environ["OTL_SELFTEST_TIMEOUT"] = str(120 + 12 * len(generated))
+        # Each shard also runs expensive handwritten differential fixtures.
+        # Quarantining old automatic evidence must not remove their time budget.
+        shards = max(1, int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs()))
+        test_files = len(list(hybrid.TESTS.glob("*.cpp"))) + len(generated)
+        os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 12 * ((test_files + shards - 1) // shards)))
         blob, loader = hybrid.build()
         selftest, report = hybrid.selftest(blob, loader)
         print("\n".join(report))
@@ -134,8 +144,9 @@ def main():
             covered = shadow_covered(db)
             auto = set()
             for line in report:
-                m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed \d+ different (\d+)", line)
-                if m and int(m.group(3)) == 0 and int(m.group(2)) >= autotest.MIN_COMPLETED:
+                m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed \d+ different (\d+)(?: incomplete (\d+))?", line)
+                if (m and int(m.group(3)) == 0 and int(m.group(4) or 0) == 0
+                        and int(m.group(2)) >= autotest.MIN_COMPLETED):
                     auto.add(f"0x{m.group(1)}")
             for address, row in diff.items():
                 if address in covered or address in auto:

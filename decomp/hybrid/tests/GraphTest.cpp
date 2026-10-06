@@ -130,7 +130,7 @@ bool run(Case& c,bool ours,autotest::Capture& out) {
         signal(SIGSEGV,autotest::crashed);signal(SIGBUS,autotest::crashed);
         signal(SIGABRT,autotest::crashed);alarm(2);
         autotest::Capture captured={};runSide(c,ours,captured);
-        if(captured.length>=autotest::Capture::kSize)_exit(5);
+        if(captured.issue!=autotest::Capture::Complete||captured.length>=autotest::Capture::kSize)_exit(5);
         size_t at=0;
         while(at<captured.length) {
             ssize_t n=write(fds[1],captured.data+at,captured.length-at);

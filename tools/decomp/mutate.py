@@ -32,6 +32,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import autotest  # noqa: E402
 import elfdb  # noqa: E402
+import evidence  # noqa: E402
 import ghidra_cpp  # noqa: E402
 import hybrid  # noqa: E402
 import objdiff  # noqa: E402
@@ -162,15 +163,21 @@ def mutation_points(text, masked, start, end):
 
 
 def code_digests(db, functions):
-    """Address -> objdiff.code_digest of our compiled function, for the TUs of `functions`."""
+    """Instruction-similarity keys, retained for diagnostic callers only."""
+    return {address: row["code"] for address, row in compiled_evidence(db, functions).items()}
+
+
+def compiled_evidence(db, functions):
+    """Full TU objects, including data/EH/relocations, not just instructions."""
     original = objdiff.Original(db=db)
     names = {t["id"]: t["name"] for t in db["tus"]}
     sources = {p.name: p for p in SRC.rglob("*.cpp")}
     out = {}
     for tu in sorted({names[f["tu"]] for f in functions if names.get(f["tu"]) in sources}):
-        for row in objdiff.compare_source(sources[tu], original, quiet=True)["functions"]:
-            if row.get("code") and not row.get("weak"):
-                out[row["address"]] = row["code"]
+        unit = objdiff.compare_source(sources[tu], original, quiet=True)
+        for row in unit["functions"]:
+            if row.get("code") and row.get("address") and not row.get("weak"):
+                out[row["address"]] = {"code": row["code"], "object_digest": row.get("object_digest")}
     return out
 
 
@@ -179,15 +186,24 @@ def load_accepted():
 
 
 def record(db, functions, results):
-    """Strong tests into decomp/autotests.json; weak or failed ones out of it."""
+    """Publish only evidence still bound to the inputs actually tested."""
     accepted = load_accepted()
-    codes = code_digests(db, functions)
+    versioned = [f for f in functions if (results.get(f["address"], {}).get("evidence") or {}).get("schema") == evidence.SCHEMA]
+    inputs = evidence.input_digest(db) if versioned else None
+    builds = compiled_evidence(db, versioned) if versioned else {}
+    if versioned and evidence.input_digest(db) != inputs:
+        raise SystemExit("inputs changed while recording mutation evidence; rerun the check")
     for f in functions:
         r = results.get(f["address"], {})
-        if r.get("strong") and codes.get(f["address"]):
+        build = builds.get(f["address"], {})
+        fresh = evidence.current(r, build.get("object_digest"), inputs)
+        generated = (r.get("evidence") or {}).get("parameters", {}).get("hand") is False
+        if r.get("strong") and fresh and generated and r.get("code_at_test") == build.get("code"):
             accepted[f["address"]] = {"name": f["demangled"], "killed": r["killed"], "tried": r["tried"],
-                                      "code": codes[f["address"]]}
+                                      "code": r["code_at_test"], "evidence": r["evidence"]}
         else:
+            if r.get("strong"):
+                print(f"stale mutation evidence: {f['address']}; rerun it on the current inputs")
             accepted.pop(f["address"], None)
     ACCEPTED.write_text(json.dumps(dict(sorted(accepted.items())), indent=1, ensure_ascii=False) + "\n")
     print(f"{ACCEPTED.relative_to(ROOT)}: {len(accepted)} functions")
@@ -268,10 +284,18 @@ def probe(source, text, mutant, baseline, slot):
 def stats(report):
     out = {}
     for line in report:
-        m = re.match(r"\s+stats (\S+) same (\d+) both-failed (\d+) different (\d+)", line)
+        m = re.match(r"\s*stats (\S+) same (\d+) both-failed (\d+) different (\d+)(?: incomplete (\d+))?", line)
         if m:
-            out[m.group(1)] = tuple(int(x) for x in m.groups()[1:])
+            out[m.group(1)] = tuple(int(x or 0) for x in m.groups()[1:])
     return out
+
+
+def generated_outcome(value):
+    if value is None or value[3]:
+        return "error"
+    if value[2]:
+        return "killed"
+    return "survived" if value[0] >= autotest.MIN_COMPLETED else "error"
 
 
 def verdicts(report):
@@ -339,6 +363,8 @@ def main():
         tests = sorted(hybrid.TESTS.glob("*.cpp"))
         covering = lambda f: sorted(coverage[f["address"]])  # noqa: E731
         print(f"baseline: {len(functions)} functions under hand-written tests")
+        tested_inputs = evidence.input_digest(db)
+        tested_builds = compiled_evidence(db, functions)
         _, report = build_and_test(SRC, tests, [n for f in functions for n in covering(f)], WORK / "base")
         passed = verdicts(report)
         targets = [f for f in functions if all(passed.get(n) for n in covering(f))]
@@ -353,10 +379,19 @@ def main():
         tests = sorted(autotest.OUT.glob("*.cpp"))
         covering = lambda f: [f"auto_{f['address'][2:]}"]  # noqa: E731
         print(f"baseline: {len(made)} autotests")
+        tested_inputs = evidence.input_digest(db)
+        tested_builds = compiled_evidence(db, made)
         base, report = build_and_test(SRC, tests, [n for f in made for n in covering(f)], WORK / "base")
         targets = [f for f in made if covering(f)[0] in base and base[covering(f)[0]][2] == 0
+                   and base[covering(f)[0]][3] == 0
                    and base[covering(f)[0]][0] >= autotest.MIN_COMPLETED]
         print(f"  {len(targets)} pass with at least {autotest.MIN_COMPLETED} completed cases")
+
+    if evidence.input_digest(db) != tested_inputs:
+        raise SystemExit("inputs changed during baseline testing; rerun on a stable snapshot")
+    parameters = {"max_mutants": args.max, "probes": PROBES, "strong_threshold": STRONG,
+                  "cases": autotest.CASES, "min_completed": autotest.MIN_COMPLETED,
+                  "budget_seconds": autotest.BUDGET_SECONDS, "hand": args.hand}
 
     # Our functions, their code and what they reach.
     tu_names = {t["id"]: t["name"] for t in db["tus"]}
@@ -456,12 +491,20 @@ def main():
                     outcome = "survived" if all(passed[n] for n in names) else "killed"
             else:
                 s = got.get(names[0])
-                outcome = "error" if s is None else "killed" if s[2] else "survived"
-            done[m.target["address"]].append({"mutant": m.what, "outcome": outcome, "stats": s})
+                outcome = generated_outcome(s)
+            # Symbol scans cannot prove independence through indirect calls.
+            # Batch discoveries are cheap candidates; only an isolated kill is evidence.
+            if outcome == "killed" and len(chosen) > 1:
+                m.alone = True
+                queues[m.target["address"]].insert(0, m)
+                continue
+            done[m.target["address"]].append({"mutant": m.what, "outcome": outcome, "stats": s,
+                                               "isolated": len(chosen) == 1})
         print(f"round {round_no}: {len(chosen)} mutants, ", end="")
         print(
               f"{sum(1 for m in chosen if done[m.target['address']] and done[m.target['address']][-1]['mutant'] == m.what and done[m.target['address']][-1]['outcome'] == 'killed')} killed", flush=True)
 
+    unchanged = evidence.input_digest(db) == tested_inputs
     for f in targets:
         rows = done.get(f["address"], [])
         tried = [r for r in rows if r["outcome"] != "error"]
@@ -469,7 +512,13 @@ def main():
         results.setdefault(f["address"], {}).update(
             name=f["demangled"], tried=len(tried), killed=killed,
             score=round(killed / len(tried), 2) if tried else None,
-            strong=bool(tried) and killed / len(tried) >= STRONG, mutants=rows)
+            strong=unchanged and bool(tried) and killed / len(tried) >= STRONG, mutants=rows,
+            code_at_test=tested_builds.get(f["address"], {}).get("code"))
+        build = tested_builds.get(f["address"], {})
+        if unchanged and build.get("object_digest"):
+            results[f["address"]]["evidence"] = evidence.tested(build["object_digest"], tested_inputs, parameters)
+    if not unchanged:
+        print("inputs changed during mutation testing; results are diagnostic only and cannot be recorded")
     RESULT.write_text(json.dumps(results, indent=1, ensure_ascii=False))
     if args.accept and not args.hand:
         record(db, functions, results)

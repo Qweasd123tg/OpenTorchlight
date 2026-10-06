@@ -1,0 +1,42 @@
+{
+  "research_import_commit": "0bbb621",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "tool_unit_tests": {
+    "command": "OTL_NO_CC_CACHE=1 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/decomp -p 'test_*.py'",
+    "ran": 48,
+    "failed": 0
+  },
+  "integrated_check": {
+    "command": "OTL_NO_CC_CACHE=1 PYTHONDONTWRITEBYTECODE=1 python3 tools/decomp/check.py",
+    "exit_code": 0,
+    "selftests": 103,
+    "failed": 0,
+    "matched_functions": 895,
+    "accepted_functions": 1039,
+    "game_functions": 5247,
+    "accepted_bytes": 238676,
+    "accepted_by_hand": 144,
+    "accepted_by_generated_tests": 0
+  },
+  "repaired": [
+    "Full literal content/width/length identity and access-width numeric constants",
+    "Per-function FDE/personality validation; LSDA blocks instruction-only MATCH",
+    "Capture overflow, unsupported pointers and incomplete framing fail closed",
+    "Versioned object, ELF, toolchain, dependency, observer and parameter fingerprints",
+    "Batch kills require isolated confirmation",
+    "Full-check time budget includes handwritten fixtures and respects explicit overrides"
+  ],
+  "limits": [
+    "Canonical LSDA/action/type and full CFI equivalence remain unimplemented",
+    "256 KiB capture remains bounded; identities outside arena remain unsupported",
+    "Fingerprints conservatively invalidate unrelated TU changes too",
+    "Legacy accepted mutation entries are preserved as historical data and require reruns",
+    "Converter, draft freshness, LP64/type identity, include cache, queue and table-generator repairs remain future work",
+    "No measured whole-project cost or speedup claim"
+  ],
+  "archive_checksums": {
+    "checked": 333,
+    "mismatches": 0
+  },
+  "game_window_opened": false
+}
