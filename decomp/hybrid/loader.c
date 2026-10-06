@@ -224,6 +224,11 @@ static int run_tests(const struct blob *b)
         failed += failures != 0;
     }
     fprintf(stderr, "tlhybrid: %zu tests, %d failed\n", ran, failed);
+    if (!selected) {
+        fprintf(stderr, "tlhybrid: no tests selected; refusing a successful selftest\n");
+        return 2;
+    }
+    /* An empty shard is valid when other shards own the selected tests. */
     return failed ? 1 : 0;
 }
 

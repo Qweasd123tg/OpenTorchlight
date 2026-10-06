@@ -314,7 +314,9 @@ def build_and_test(src, tests, names, out):
     try:
         code, report = hybrid.selftest(blob, loader, only=",".join(sorted(set(names))))
     except subprocess.TimeoutExpired:
-        return {}, ["timeout"]  # a hang outside a forked child: the tests noticed something
+        return {}, []  # incomplete process output cannot establish a mutant kill
+    if code not in (0, 1):
+        return {}, []
     return stats(report), report
 
 

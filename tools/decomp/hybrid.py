@@ -467,11 +467,15 @@ def selftest(blob, loader, only=None, shards=None):
     The tests are split over `shards` game processes running at once (OTL_SELFTEST_SHARDS,
     by default up to 4); each process gets the whole timeout."""
     shards = shards or int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs())
+    if shards < 1:
+        raise ValueError("selftest needs at least one shard")
     extra = {"TLHYBRID_SELFTEST": "1"}
     if only:
         extra["TLHYBRID_FILTER"] = only
 
     game, env = game_env(blob, loader, extra, headless=True)  # stages the runtime once for all
+    if not only:
+        env.pop("TLHYBRID_FILTER", None)
 
     def run(index):
         return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
@@ -485,11 +489,17 @@ def selftest(blob, loader, only=None, shards=None):
         summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
         if not summary:
             return 2, report + lines + [result.stderr[-2000:],
-                                        "selftest: loader report missing; the hybrid runtime was not injected"]
-        ran += int(summary.group(1))
-        failed += int(summary.group(2))
+                                        "selftest: complete loader report missing"]
+        shard_ran, shard_failed = int(summary.group(1)), int(summary.group(2))
+        expected_exit = 1 if shard_failed else 0
+        if result.returncode != expected_exit:
+            return 2, report + lines + [f"selftest: process exited {result.returncode}; report is not acceptance evidence"]
+        ran += shard_ran
+        failed += shard_failed
         report += [l for l in lines if l is not summary.string]
         code = max(code, result.returncode)
+    if not ran:
+        return 2, report + ["selftest: no tests executed"]
     return code, report + [f"tlhybrid: {ran} tests, {failed} failed"]
 
 

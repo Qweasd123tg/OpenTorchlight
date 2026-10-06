@@ -603,16 +603,19 @@ class Loop:
             os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(made))
             try:
                 blob, loader = hybrid.build(verbose=False, tests=tests)
-                _, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
+                test_code, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
+                if test_code != 0:
+                    print(f"  hybrid selftest failed with exit code {test_code}; no candidates accepted", flush=True)
+                    report = []
             except subprocess.TimeoutExpired:
                 report = []
             except SystemExit as error:  # the game build itself is broken: no verdicts this round
                 print(f"  hybrid build failed: {str(error)[:300]}", flush=True)
                 report = []
             for line in report:
-                m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed (\d+) different (\d+)", line)
+                m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed (\d+) different (\d+)(?: incomplete (\d+))?", line)
                 if m:
-                    verdicts[f"0x{m.group(1)}"] = tuple(int(x) for x in m.groups()[1:])
+                    verdicts[f"0x{m.group(1)}"] = tuple(int(x or 0) for x in m.groups()[1:])
             cases = {}
             for line in report:
                 m = re.match(r"\s+auto_(\w+) case (\d+): (.*)", line)
@@ -620,7 +623,7 @@ class Loop:
                     cases.setdefault(f"0x{m.group(1)}", m.group(3))
         for a, code in candidates.items():
             v = verdicts.get(a)
-            if v and v[2] == 0 and v[0] >= autotest.MIN_COMPLETED:
+            if v and v[2] == 0 and v[3] == 0 and v[0] >= autotest.MIN_COMPLETED:
                 self.accepted[a] = code
                 self.status[a] = "tested"
                 del pending[a]

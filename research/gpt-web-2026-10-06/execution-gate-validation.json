@@ -1,0 +1,57 @@
+{
+  "archive_update_commit": "b23c5f6",
+  "source": "research/unified-pro-review/REVIEW_RU.md and archived test-execution-gate.patch, adapted to current sharding",
+  "before_fix": {
+    "missing_filter_executed": 0,
+    "missing_filter_return_code": 0,
+    "full_control_executed": 2,
+    "full_control_return_code": 1
+  },
+  "tool_unit_tests": {
+    "command": "OTL_NO_CC_CACHE=1 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/decomp -p 'test_*.py'",
+    "ran": 57,
+    "failed": 0
+  },
+  "full_check": {
+    "command": "python3 tools/decomp/check.py",
+    "exit_code": 0,
+    "selftests": 103,
+    "failed": 0,
+    "matched_functions": 895,
+    "accepted_functions": 1039,
+    "game_functions": 5247,
+    "accepted_bytes": 238676,
+    "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+  },
+  "negative_cases": [
+    "No selected tests",
+    "No aggregate executed tests",
+    "Inherited full-run filter",
+    "Signal after positive statistics",
+    "Exit inconsistent with complete summary",
+    "Missing final summary",
+    "Negative shard count",
+    "Candidate incomplete observation",
+    "Mutation process abort/timeout"
+  ],
+  "positive_controls": [
+    "One selected passing test",
+    "Complete failed test remains a valid mutation verdict",
+    "Empty shard with another executing shard",
+    "Explicit target filter retained",
+    "Complete candidate success accepted"
+  ],
+  "archive_integrity": {
+    "new_manifest_entries": 595,
+    "initial_manifest_overlay_entries": 333,
+    "mismatches": 0,
+    "original_artifact_whitespace": "Retained for checksum integrity"
+  },
+  "remaining": [
+    "Other optional patches remain research material",
+    "Header promotion final-object identity and candidate staging remain separate repairs",
+    "No external analyzer installation or whole-project speed/cost claim"
+  ],
+  "new_game_functions": 0,
+  "game_window_opened": false
+}
