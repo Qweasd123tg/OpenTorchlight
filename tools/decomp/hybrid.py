@@ -25,6 +25,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
@@ -306,12 +307,20 @@ def imports_assembly(names, objects=None):
 
 
 def build(out=OUT, verbose=True, src=SRC, tests=None):
+    import publication
+    with publication.tree_lock():
+        return _build(out, verbose, src, tests)
+
+
+def _build(out=OUT, verbose=True, src=SRC, tests=None):
     """src: decompiled sources (a mutated copy for tools/decomp/mutate.py);
     tests: test sources, by default decomp/hybrid/tests plus generated
     autotests when OTL_AUTOTEST=1."""
     ctx = Context()
     out.mkdir(parents=True, exist_ok=True)
     objects, hooks, notes = [], [], []
+    production_undefined, production_defined = set(), set()
+    data_redirects, omitted_initializers, source_versions = {}, {}, {}
     if tests is None:
         tests = sorted(TESTS.glob("*.cpp"))
         if os.environ.get("OTL_AUTOTEST"):
@@ -334,11 +343,20 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
         if tu:
             redirect.update(ctx.local_data.get(tu["name"], {}))
         text, redirected = rewrite_assembly(asm.read_text(), redirect, drop_ctors=not is_test)
+        if not is_test:
+            relative = str(source.relative_to(ROOT))
+            source_versions[relative] = hashlib.sha256(source.read_bytes()).hexdigest()
+            data_redirects[relative] = sorted(redirected)
+            omitted_initializers[relative] = sorted(set(re.findall(
+                r"\.type\s+([^,\s]*(?:_GLOBAL__I_|__static_initialization)[^,\s]*),\s*@function", asm.read_text())))
         patched = out / f"{stem}.hybrid.s"
         patched.write_text(text)
         obj = out / f"{stem}.o"
         toolchain.assemble(patched, obj)
         objects.append(obj)
+        if not is_test:
+            production_defined |= defined_symbols(obj)
+            production_undefined |= undefined_symbols(obj)
         unit_hooks = 0
         if tu:
             owned = ctx.tu_functions(tu)
@@ -396,6 +414,16 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
                           for h in hooks],
                 "runtime_imports": [n for n in missing if n not in copies],
                 "runtime_copies": sorted(copies), "notes": notes}
+    manifest["standalone_residual"] = {
+        "schema": 1, "source_sha256": source_versions,
+        "original_imports": sorted((production_undefined - production_defined) & provided),
+        "runtime_library_imports": sorted((production_undefined - production_defined) & set(missing)),
+        "original_data_redirects": {k: v for k, v in data_redirects.items() if v},
+        "original_initializers_omitted": {k: v for k, v in omitted_initializers.items() if v},
+        "rtti_imports": sorted(n for n in production_undefined - production_defined if n.startswith(("_ZTI", "_ZTS"))),
+        "vtable_imports": sorted(n for n in production_undefined - production_defined if n.startswith("_ZTV")),
+        "standalone_link_closed": False,
+        "reason": "hybrid resolves original ELF addresses and omits original entrypoint/initialization; this is not a standalone game"}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
     if verbose:
         print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing) - len(copies)} runtime imports, "
@@ -407,13 +435,24 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
 
 def stage_runtime(blob, loader):
     """ld.so splits LD_PRELOAD on spaces and colons; the repository path has a space."""
-    # One directory per checkout, so parallel worktrees do not overwrite each other.
-    runtime = toolchain.cache_dir() / "hybrid" / hashlib.sha1(str(ROOT).encode()).hexdigest()[:12]
+    payloads = [(Path(path), Path(path).read_bytes()) for path in (blob, loader)]
+    identity = hashlib.sha256()
+    for path, data in payloads:
+        identity.update(path.name.encode() + b"\0" + hashlib.sha256(data).digest())
+    # Separate immutable blob/loader pairs even within the same checkout.
+    runtime = toolchain.cache_dir() / "hybrid" / hashlib.sha1(str(ROOT).encode()).hexdigest()[:12] / identity.hexdigest()
     runtime.mkdir(parents=True, exist_ok=True)
     staged = []
-    for path in (blob, loader):
+    for path, data in payloads:
         target = runtime / path.name
-        target.write_bytes(path.read_bytes())
+        if not target.exists() or target.read_bytes() != data:
+            fd, temporary = tempfile.mkstemp(prefix=".stage-", dir=runtime)
+            try:
+                with os.fdopen(fd, "wb") as stream:
+                    stream.write(data)
+                os.replace(temporary, target)
+            finally:
+                Path(temporary).unlink(missing_ok=True)
         staged.append(target)
     for path in staged:
         if re.search(r"[\s:]", str(path)):
@@ -478,14 +517,22 @@ def selftest(blob, loader, only=None, shards=None):
         env.pop("TLHYBRID_FILTER", None)
 
     def run(index):
-        return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
-                              env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
-                              capture_output=True, text=True,
-                              timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+        try:
+            return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
+                                  env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
+                                  capture_output=True, text=True,
+                                  timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+        except subprocess.TimeoutExpired as error:
+            from types import SimpleNamespace
+            partial = error.stderr or ""
+            if isinstance(partial, bytes):
+                partial = partial.decode(errors="replace")
+            return SimpleNamespace(returncode=2, stderr=partial +
+                                   f"\nselftest: shard {index}/{shards} timeout after {error.timeout} seconds\n")
     code, report, ran, failed = 0, [], 0, 0
     for result in toolchain.parallel_map(run, range(shards)):
         # Loader lines plus the indented details tests log under a failure.
-        lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "    "))]
+        lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "selftest:", "    "))]
         summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
         if not summary:
             return 2, report + lines + [result.stderr[-2000:],

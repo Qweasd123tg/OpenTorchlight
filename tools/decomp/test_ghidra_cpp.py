@@ -19,7 +19,7 @@ class LiteralTest(unittest.TestCase):
 
 class NanTest(unittest.TestCase):
     def tidy(self, text):
-        return ghidra_cpp.tidy_expressions(text)
+        return ghidra_cpp.tidy_expressions(text, proven_nan_operands=True)
 
     def test_redundant_guards_go(self):
         self.assertEqual(self.tidy("if (!NAN(a) && a == b) {"), "if (a == b) {")
@@ -51,12 +51,17 @@ class HiddenReturnTest(unittest.TestCase):
 
     def test_function_returning_through_the_hidden_pointer(self):
         f = {"demangled": "CUnit::getStats(CSkill*, int)", "params": "CSkill*, int", "kind": "function"}
-        out = ghidra_cpp.convert(self.draft, {("CSkill", "getLevelStats")}, f)
+        old = ghidra_cpp._SRET
+        ghidra_cpp._SRET = {"CSkill::getLevelStats"}
+        try:
+            out = ghidra_cpp.convert(self.draft, {("CSkill", "getLevelStats")}, f)
+        finally:
+            ghidra_cpp._SRET = old
         self.assertIn("std::wstring CUnit::getStats(CSkill* param_1, int param_2)", out)
         self.assertIn('return L"";', out)
-        self.assertIn("return param_1->getLevelStats(param_2);", out)
+        self.assertIn("return param_1->CSkill::getLevelStats(param_2);", out)
         self.assertNotIn("__return_storage_ptr__", out)
-        self.assertNotIn("local_29", out)
+        self.assertIn("allocator local_29", out)  # no lifetime proof for dropping it
 
     def test_call_of_such_a_function_assigns_its_result(self):
         old = ghidra_cpp._SRET

@@ -46,6 +46,8 @@ ACCEPTED = ROOT / "decomp" / "autotests.json"
 MAX_MUTANTS = 10
 PROBES = 24
 STRONG = 0.8
+MIN_MUTANTS = 3
+MIN_CLASSES = 2
 
 # "Type name = ...;", "Type* name;", "std::wstring name(...);" (removing one only breaks the build).
 DECLARATION = re.compile(r"(?!(?:delete|throw|goto|case|else)\b)(?:[A-Za-z_][\w:<>,]*(?:\s*[*&]+\s*|\s+))+"
@@ -130,6 +132,11 @@ def definition(text, masked, f):
         brace, semi = masked.find("{", close), masked.find(";", close)
         if close < 0 or brace < 0 or (0 <= semi < brace):
             continue
+        suffix = " ".join(masked[close + 1:brace].strip().split())
+        if f.get("kind") == "ctor" and suffix.startswith(":"):
+            suffix = ""  # member/base initializer list follows the parameter list
+        if suffix != ghidra_cpp.cv_suffix(f).strip():
+            continue
         params = masked[m.end():close].strip()
         count = 0 if params in ("", "void") else len(ghidra_cpp.split_args(params))
         types = [canonical_parameter(p, named=True) for p in ghidra_cpp.split_args(params) if p and p != "void"]
@@ -198,7 +205,8 @@ def record(db, functions, results):
         build = builds.get(f["address"], {})
         fresh = evidence.current(r, build.get("object_digest"), inputs)
         generated = (r.get("evidence") or {}).get("parameters", {}).get("hand") is False
-        if r.get("strong") and fresh and generated and r.get("code_at_test") == build.get("code"):
+        if (r.get("strong") and mutation_strength(r.get("mutants", [])) and fresh and generated
+                and r.get("code_at_test") == build.get("code")):
             accepted[f["address"]] = {"name": f["demangled"], "killed": r["killed"], "tried": r["tried"],
                                       "code": r["code_at_test"], "evidence": r["evidence"]}
         else:
@@ -263,7 +271,19 @@ def references(asm_functions, known):
 class Mutant:
     def __init__(self, target, point, text):
         self.target, self.point, self.what = target, point, describe(text, point)
+        old, new = text[point[0]:point[1]].strip(), point[2].strip()
+        self.category = ("statement" if new == ";" else "constant" if old.isdigit() else
+                         "boolean" if old in ("true", "false", "!") else
+                         "comparison" if old in ("<", "<=", ">", ">=", "==", "!=") else
+                         "logical" if old in ("&&", "||") else "arithmetic")
         self.affected = set()
+
+
+def mutation_strength(rows):
+    tried = [r for r in rows if r.get("outcome") in ("killed", "survived")]
+    classes = {r.get("category") for r in tried if r.get("category")}
+    killed = sum(r["outcome"] == "killed" and r.get("isolated") is True for r in tried)
+    return len(tried) >= MIN_MUTANTS and len(classes) >= MIN_CLASSES and killed / len(tried) >= STRONG
 
 
 def probe(source, text, mutant, baseline, slot):
@@ -355,6 +375,7 @@ def main():
     shutil.rmtree(WORK, ignore_errors=True)
     WORK.mkdir(parents=True)
     toolchain.CC_CACHE = WORK / "cc-cache"  # mutated sources would only litter the shared cache
+    base = {}
 
     if args.hand:
         db = elfdb.load_db()
@@ -392,6 +413,7 @@ def main():
     if evidence.input_digest(db) != tested_inputs:
         raise SystemExit("inputs changed during baseline testing; rerun on a stable snapshot")
     parameters = {"max_mutants": args.max, "probes": PROBES, "strong_threshold": STRONG,
+                  "min_mutants": MIN_MUTANTS, "min_classes": MIN_CLASSES,
                   "cases": autotest.CASES, "min_completed": autotest.MIN_COMPLETED,
                   "budget_seconds": autotest.BUDGET_SECONDS, "hand": args.hand}
 
@@ -501,7 +523,7 @@ def main():
                 queues[m.target["address"]].insert(0, m)
                 continue
             done[m.target["address"]].append({"mutant": m.what, "outcome": outcome, "stats": s,
-                                               "isolated": len(chosen) == 1})
+                                               "isolated": len(chosen) == 1, "category": m.category})
         print(f"round {round_no}: {len(chosen)} mutants, ", end="")
         print(
               f"{sum(1 for m in chosen if done[m.target['address']] and done[m.target['address']][-1]['mutant'] == m.what and done[m.target['address']][-1]['outcome'] == 'killed')} killed", flush=True)
@@ -514,7 +536,8 @@ def main():
         results.setdefault(f["address"], {}).update(
             name=f["demangled"], tried=len(tried), killed=killed,
             score=round(killed / len(tried), 2) if tried else None,
-            strong=unchanged and bool(tried) and killed / len(tried) >= STRONG, mutants=rows,
+            strong=unchanged and mutation_strength(rows), mutants=rows,
+            mutation_classes=sorted({r["category"] for r in tried}), baseline_stats=base.get(covering(f)[0]),
             code_at_test=tested_builds.get(f["address"], {}).get("code"))
         build = tested_builds.get(f["address"], {})
         if unchanged and build.get("object_digest"):

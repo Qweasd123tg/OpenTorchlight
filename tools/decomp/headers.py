@@ -135,6 +135,16 @@ def vtable_mismatch(db, cls, dump):
         return f"{cls} must not have virtual methods: the original has no vtable"
     if len(got) != len(want):
         return f"{cls}: {len(got)} vtable groups (one per polymorphic base), the original has {len(want)}"
+    for group in db["vtables"][cls]["groups"]:
+        identities = {}
+        for slot in group["slots"]:
+            f = db["functions"].get(slot) if isinstance(slot, str) else None
+            if f is None or f["kind"] in ("ctor", "dtor"):
+                continue
+            key = ghidra_cpp.signature_key(f)
+            identities.setdefault(key[0], set()).add(key[1:])
+        if any(len(overloads) > 1 for overloads in identities.values()):
+            return f"{cls}: overloaded virtual slots need relocation identities; class-dump names are insufficient"
     for k, (g, w) in enumerate(zip(got, want)):
         for i in range(max(len(g), len(w))):
             a = g[i] if i < len(g) else "(nothing)"
@@ -148,10 +158,70 @@ def vtable_mismatch(db, cls, dump):
     return None
 
 
+def declared_signatures(text, name):
+    """Parameter/cv/static identities of simple declarations at this scope.
+
+    Nested class, namespace and inline-function bodies are excluded. Unknown
+    declarator forms stay unresolved rather than suppressing every overload.
+    """
+    code, _ = ghidra_cpp.protect_lexical(text)
+    depth, direct = 0, []
+    for ch in code:
+        if ch == "{":
+            depth += 1
+            direct.append(";" if depth == 1 else " ")
+        elif ch == "}":
+            depth -= 1
+            direct.append(" ")
+        else:
+            direct.append(ch if depth == 0 else ("\n" if ch == "\n" else " "))
+    direct = "".join(direct)
+    result = set()
+    keywords = {"void", "bool", "char", "short", "int", "long", "float", "double",
+                "signed", "unsigned", "const", "volatile", "wchar_t"}
+    for m in re.finditer(rf"(?P<prefix>[^;{{}}]*?)\b{re.escape(name)}\s*\((?P<params>[^()]*)\)\s*"
+                         r"(?P<cv>(?:(?:const|volatile)\s*)*)\s*(?:;|=)", direct):
+        params = []
+        for p in ghidra_cpp.split_args(m.group("params")):
+            p = p.split("=", 1)[0].strip()
+            if p == "void":
+                continue
+            named = re.fullmatch(r"(.+?)[\s*&]+([A-Za-z_]\w*)", p)
+            if named and named.group(2) not in keywords and named.group(1).strip() not in keywords:
+                # Preserve pointer/reference declarators while dropping the name.
+                p = p[:p.rfind(named.group(2))].strip()
+            elif named and named.group(2) not in keywords and named.group(1).strip() in keywords - {"const", "volatile"}:
+                p = p[:p.rfind(named.group(2))].strip()
+            params.append(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p)))
+        cv = ghidra_cpp.cv_suffix({"cv": m.group("cv")}).strip()
+        result.add((tuple(params), cv, bool(re.search(r"\bstatic\b", m.group("prefix")))))
+    return result
+
+
+def namespace_bodies(text, scope):
+    """Only bodies belonging to the complete requested namespace path."""
+    current = [text]
+    for part in scope.split("::"):
+        nested = []
+        for body in current:
+            code, _ = ghidra_cpp.protect_lexical(body)
+            for m in re.finditer(rf"\bnamespace\s+{re.escape(part)}\s*\{{", code):
+                before = code[:m.start()]
+                if before.count("{") != before.count("}"):
+                    continue
+                end = ghidra_cpp.balanced_block_end(code, m.start())
+                # Protected text retains the declarations needed here.
+                nested.append(code[m.end():end - 1])
+        current = nested
+    return current
+
+
 class Gen:
     def __init__(self):
         self.db = elfdb.load_db()
-        self.types = json.loads(TYPES.read_text())["classes"]
+        exported = json.loads(TYPES.read_text())
+        self.types = exported["classes"]
+        self.prototypes = exported.get("prototypes", {})
         self.funcs = self.db["functions"]
         self.tu_names = {t["id"]: t["name"] for t in self.db["tus"]}
         game = {t["id"] for t in self.db["tus"] if t["kind"] == "game"}
@@ -273,22 +343,31 @@ class Gen:
             if t is None:
                 return None
             out.append(t)
-        cv = " const" if "K" in (f.get("cv") or "") else ""
+        cv = ghidra_cpp.cv_suffix(f)
         name = f["method"]
         if name == cls:
             return f"{cls}({', '.join(out)});"
         if name.startswith("~"):
             return f"{'virtual ' if virtual else ''}~{cls}();"
-        static = ""
-        if name in ("getSingleton", "getSingletonPtr") and not params:
-            static, ret = "static ", f"{cls}*"
+        prototype = getattr(self, "prototypes", {}).get(f.get("address"))
+        static_fact = (prototype or {}).get("static")
+        if static_fact is None:
+            if virtual or f.get("vslots") or cv:
+                static_fact = False
+            else:
+                return None  # member/static is not encoded by the symbol name
+        if static_fact and (virtual or cv):
+            return None
+        static = "static " if static_fact else ""
         if ret is None:
             ret = self.ghidra_return(f) or "void"
         rt = self.resolve(ret, deps) or "void*" if ret.endswith("*") else self.resolve(ret, deps) or "int"
         return f"{'virtual ' if virtual else static}{rt} {name}({', '.join(out)}){cv};"
 
     def virtual_signature(self, f):
-        return (f["method"], f.get("params") or "", "K" in (f.get("cv") or ""))
+        return (f["method"], tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
+                                  for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"),
+                ghidra_cpp.cv_suffix(f).strip())
 
     def root_return(self, cls, sig, seen=None):
         """Return type of the virtual `sig` in the topmost game base that declares it."""
@@ -300,9 +379,10 @@ class Gen:
         if library or cls in self.hand:
             path = library or INCLUDE / self.hand[cls]
             text = path.read_text(errors="replace") if path.exists() else ""
-            m = re.search(rf"\bvirtual\s+([\w:<>,*& ]+?)\s*\b{re.escape(sig[0])}\s*\(", text)
-            if m:
-                return m.group(1).strip()
+            for m in re.finditer(rf"\bvirtual\s+([\w:<>,*& ]+?)\s*\b{re.escape(sig[0])}\s*"
+                                 r"\([^()]*\)\s*(?:(?:const|volatile)\s*)*(?:;|=|\{)", text):
+                if (sig[1], sig[2], False) in declared_signatures(m.group(0), sig[0]):
+                    return m.group(1).strip()
         for b in self.db["classes"].get(cls, {}).get("bases", []):
             r = self.root_return(b["class"], sig)
             if r:
@@ -581,10 +661,14 @@ class Gen:
                 for a in self.db["classes"][cls].get("methods", []):
                     f = self.funcs[a]
                     name = f["method"]
-                    if (f.get("scope") != cls or f.get("vslots") or name in seen or name.startswith("~")
-                            or name == cls or re.search(rf"\b{re.escape(name)}\s*\(", body)):
+                    key = ghidra_cpp.signature_key(f)
+                    prototype = getattr(self, "prototypes", {}).get(f.get("address"), {})
+                    key = key[:3] + (prototype.get("static", False if ghidra_cpp.cv_suffix(f) else key[3]),)
+                    identity = (key[1], key[2], key[3])
+                    if (f.get("scope") != cls or f.get("vslots") or key in seen or name.startswith("~")
+                            or name == cls or identity in declared_signatures(body, name)):
                         continue
-                    seen.add(name)
+                    seen.add(key)
                     trial = {"sys": set(), "local": set(), "forward": set()}
                     decl = self.method_decl(f, cls, trial)
                     # Only declarations whose types are already visible or can be forward-declared.
@@ -611,10 +695,13 @@ class Gen:
         deps = {"sys": set(), "local": set(), "forward": set()}
         for f in self.funcs.values():
             scope = f.get("scope") or ""
-            if (f["tu"] not in game or not scope or "::" in scope or scope in self.game_classes
-                    or scope in self.hand or scope in ("Ogre", "std", "CEGUI") or re.match(r"C[A-Z]", scope)
-                    or not re.fullmatch(r"[A-Za-z_]\w*", scope) or f["kind"] not in ("function", "static")
-                    or re.search(rf"\b{re.escape(f['method'])}\s*\(", hand_text)):
+            if (f["tu"] not in game or not scope or scope in self.game_classes
+                    or scope in self.hand or scope.split("::")[0] in ("Ogre", "std", "CEGUI") or re.match(r"C[A-Z]", scope)
+                    or not re.fullmatch(r"[A-Za-z_]\w*(?:::[A-Za-z_]\w*)*", scope) or f["kind"] not in ("function", "static")):
+                continue
+            key = ghidra_cpp.signature_key(f)
+            identity = (key[1], key[2], False)  # free namespace function, no implicit receiver
+            if any(identity in declared_signatures(body, f["method"]) for body in namespace_bodies(hand_text, scope)):
                 continue
             params = []
             for p in ghidra_cpp.split_args(f.get("params") or ""):
@@ -635,7 +722,9 @@ class Gen:
         lines += [f'#include "{h}"' for h in sorted(deps["local"]) if not h.startswith("C")]
         lines += [f"class {n};" for n in sorted(deps["forward"])]
         for scope, decls in sorted(groups.items()):
-            lines += ["", f"namespace {scope}", "{"] + [f"    {d}" for d in sorted(decls)] + ["}"]
+            parts = scope.split("::")
+            lines += [""] + [f"namespace {part} {{" for part in parts]
+            lines += [f"    {d}" for d in sorted(decls)] + ["}" for _ in parts]
         return "\n".join(lines + ["", "#endif"]) + "\n"
 
     def write(self):

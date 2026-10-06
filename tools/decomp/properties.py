@@ -308,6 +308,7 @@ class Generator:
         return None
 
     def generate(self, tu_id):
+        self.last_matched = set()
         tu = self.tu_names[tu_id]
         funcs = [f for f in self.db["functions"].values()
                  if f["tu"] == tu_id and re.match(r"(Get|Set)_", f.get("method") or "")]
@@ -324,7 +325,11 @@ class Generator:
         types = self.property_types(tu)
         stats = Counter()
         plans = {}
+        overloads = Counter(f["method"] for f in funcs)
         for f in funcs:
+            if overloads[f["method"]] != 1:
+                stats["ambiguous overload"] += 1
+                continue
             lines, add, reason = self.plan(f, body(insns, f), target, types.get(f["method"]))
             if reason == "shape":
                 lines, add, reason = self.string_plan(f, body(insns, f, named=True), target)
@@ -350,6 +355,7 @@ class Generator:
                         p.write_text(text)
                     plans = {}
         stats["MATCH"] = len(plans)
+        self.last_matched = set(plans)
         stats["compiled, no match"] = len(bad)
         return stats
 

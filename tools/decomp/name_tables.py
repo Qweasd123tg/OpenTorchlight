@@ -28,8 +28,11 @@ STRING_CTORS = {
 }
 
 
-def c_literal(text):
-    return text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n").replace("\t", "\\t")
+def c_literal(text, wide=False):
+    escaped = {"\\": "\\\\", '"': '\\"', "\n": "\\n", "\t": "\\t", "\r": "\\r"}
+    return "".join(escaped[c] if c in escaped else c if 32 <= ord(c) < 127 else
+                   f"\\u{ord(c):04x}" if wide and ord(c) <= 0xffff else
+                   f"\\U{ord(c):08x}" if wide else f"\\{ord(c):03o}" for c in text)
 
 
 class Tables:
@@ -54,12 +57,23 @@ class Tables:
                 [f"--start-address={a:#x}", f"--stop-address={a + f['size']:#x}", str(self.image.path)]))
         return cache[f["address"]]
 
-    def read_text(self, address):
-        raw = self.image.read(address, 4096)
-        text = objdiff.printable_string(raw)
-        if text is None:
+    def read_text(self, address, width):
+        section = self.image.section_at(address)
+        if section is None or width not in (1, 4) or (width == 4 and address % 4):
             return None
-        return text[2:] if text.startswith('L"') else text
+        try:
+            raw = self.image.read(address, section.addr + section.size - address)
+            units = []
+            for offset in range(0, len(raw) - width + 1, width):
+                value = int.from_bytes(raw[offset:offset + width], "little")
+                if value == 0:
+                    return bytes(units).decode("latin-1") if width == 1 else "".join(chr(v) for v in units)
+                if width == 4 and (value > 0x10ffff or 0xd800 <= value <= 0xdfff):
+                    return None
+                units.append(value)
+        except ValueError:
+            return None
+        return None
 
     def recover(self, name, tu_name=None):
         """Return (owner, (kind, [strings], missing)) for a local table; tries a few owning TUs."""
@@ -92,24 +106,40 @@ class Tables:
                     if callee in STRING_CTORS and "di" in regs and "si" in regs:
                         dest = regs["di"]
                         if start <= dest < start + size:
+                            if kind is not None and kind != STRING_CTORS[callee]:
+                                return None
                             kind = STRING_CTORS[callee]
-                            slots[(dest - start) // 8] = self.read_text(regs["si"])
+                            if (dest - start) % 8:
+                                return None
+                            slot = (dest - start) // 8
+                            if slot in slots:
+                                return None  # repeated writes need ordered-effect reconstruction
+                            slots[slot] = self.read_text(regs["si"], 4 if kind[1] else 1)
                     regs = {}
+                else:
+                    if mnemonic.startswith("j"):
+                        regs = {}
+                    # A clobbered argument register is no longer a known address.
+                    destination = operands.rsplit(",", 1)[-1].strip()
+                    if destination in ("%rdi", "%edi", "%di", "%dil"):
+                        regs.pop("di", None)
+                    if destination in ("%rsi", "%esi", "%si", "%sil"):
+                        regs.pop("si", None)
         if not slots:
             return None
         count = size // 8
-        missing = [i for i in range(count) if i not in slots]
+        missing = [i for i in range(count) if slots.get(i) is None]
         return kind, [slots.get(i) for i in range(count)], missing
 
     def definition(self, name, tu_name=None):
         owner, (kind, values, missing) = self.recover(name, tu_name)
         cxx_type, prefix = kind
+        if missing:
+            raise SystemExit(f"{name}: incomplete table in {owner['file']}; unresolved slots {missing}; no definition emitted")
         lines = [f"static const {cxx_type} {owner['demangled']}[] =", "{"]
         for i, value in enumerate(values):
-            lines.append(f'    {prefix}"{c_literal(value)}",' if value is not None else f"    /* slot {i} not recovered */")
+            lines.append(f'    {prefix}"{c_literal(value, bool(prefix))}",')
         lines.append("};")
-        if missing:
-            lines.insert(0, f"// WARNING: slots {missing} not found in {owner['file']}")
         return "\n".join(lines)
 
 

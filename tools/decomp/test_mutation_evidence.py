@@ -55,6 +55,8 @@ class EvidenceTests(unittest.TestCase):
 
     def result(self):
         return {"strong": True, "killed": 9, "tried": 10, "code_at_test": "instructions",
+                "mutants": [{"outcome": "killed" if i < 9 else "survived", "isolated": True,
+                             "category": "constant" if i % 2 else "comparison"} for i in range(10)],
                 "evidence": evidence.tested("object", "inputs", {"hand": False})}
 
     def test_record_cannot_stamp_old_result_with_new_code(self):
@@ -151,7 +153,7 @@ class EvidenceTests(unittest.TestCase):
             self.assertEqual([["auto_1", "auto_2"], ["auto_1"], ["auto_2"]], rounds)
             self.assertFalse(results["0x1"]["strong"])
             self.assertEqual(0, results["0x1"]["killed"])
-            self.assertTrue(results["0x2"]["strong"])
+            self.assertFalse(results["0x2"]["strong"])  # one kill is diagnostic, not strong evidence
             self.assertTrue(results["0x2"]["mutants"][0]["isolated"])
 
 

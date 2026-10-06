@@ -53,7 +53,7 @@ def is_list(t):
     return t.startswith("TArrayList<") and t.endswith(">")
 
 
-def return_type_lookup(cls, method, params, static=False, const=False):
+def return_type_lookup(cls, method, params, static=False, const=False, volatile=False):
     """Preserve reference returns: GNU typeof(call) removes references.
 
     Deduction from the exact function/member-pointer signature retains R& and
@@ -61,7 +61,7 @@ def return_type_lookup(cls, method, params, static=False, const=False):
     Declarations are unevaluated; no extra runtime helper is linked.
     """
     arguments = ", ".join(ghidra_cpp.cxx_type(p) for p in params)
-    pointer = f"R (*)({arguments})" if static else f"R ({cls}::*)({arguments})" + (" const" if const else "")
+    pointer = f"R (*)({arguments})" if static else f"R ({cls}::*)({arguments})" + (" const" if const else "") + (" volatile" if volatile else "")
     declarations = ["template <class R> struct ReturnType { typedef R type; };",
                     f"template <class R> ReturnType<R> returnType({pointer});"]
     prelude = [f"typedef __typeof__(returnType(&{cls}::{method})) ReturnInfo;",
@@ -327,7 +327,7 @@ class Generator:
             ours = f"({call}, autotest::Void())"
             original = f"(((Fn)orig_{tag})({orig_args}), autotest::Void())"
             return_declarations, prelude = return_type_lookup(
-                cls, method, params, static, f["demangled"].endswith(" const"))
+                cls, method, params, static, "const" in ghidra_cpp.cv_suffix(f), "volatile" in ghidra_cpp.cv_suffix(f))
             prelude.append(f"typedef Result (*Fn)({orig_params});")
         dumps = []
         if not static and kind != "dtor":

@@ -6,11 +6,11 @@
 Rewrites, each one local and conservative:
 - `void __thiscall C::m(C *this, ...)` -> `void C::m(...)`;
 - `this->field` -> `field`; `(*p->_vptr->Method)(p, a)` -> `p->Method(a)`;
-- `C::m(this, a)` -> `m(a)`, `C::m(p, a)` -> `p->m(a)` for known methods;
+- `C::m(this, a)` -> `C::m(a)`, `C::m(p, a)` -> `p->C::m(a)` for known methods;
 - Ghidra integer types -> C++ types;
-- removes inlined std::string refcount blocks, try/catch markers,
-  compiler-generated vptr stores and base-constructor calls in constructors;
-- `p = (C *)Ogre::NedAllocImpl::allocBytes(n, 0, 0, 0); C::C(p, a);` -> `p = new C(a);`.
+
+Lifecycle/idiom cleanup requires experimental_cleanup=True. It is a diagnostic
+experiment without ownership, effect or type proofs and is disabled by default.
 
 The output is a draft for a human or agent; it is not expected to compile as is.
 """
@@ -21,11 +21,70 @@ import json
 from pathlib import Path
 import re
 import sys
+from functools import wraps
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 
 ROOT = elfdb.ROOT
+
+
+def protect_lexical(text):
+    """Hide literal contents and comments from textual rewrites, retaining syntax.
+
+    The tokens are private to this input and restored after every rewrite. Keeping
+    quotes lets argument and string-constructor patterns still recognize literals.
+    """
+    prefix = "__OTL_LEX_"
+    while prefix in text:
+        prefix += "_"
+    tokens = {}
+    pattern = re.compile(r'//[^\n]*|/\*.*?\*/|(?:L)?"(?:[^"\\]|\\.)*"|(?:L)?\'(?:[^\'\\]|\\.)*\'', re.S)
+
+    def hide(m):
+        original = m.group(0)
+        token = f"{prefix}{len(tokens)}__"
+        if original.startswith(("//", "/*")):
+            replacement = f"/*{token}*/"
+        else:
+            wide = "L" if original.startswith("L") else ""
+            quote = original[len(wide)]
+            replacement = f"{wide}{quote}{token}{quote}"
+        # Reindentation may join a comment to a following declaration. A restored
+        # line comment must always terminate before the next code token.
+        tokens[replacement] = original + ("\n" if original.startswith("//") else "")
+        return replacement
+
+    protected = pattern.sub(hide, text)
+
+    def restore(result):
+        for token, original in tokens.items():
+            result = result.replace(token, original)
+        return result
+    return protected, restore
+
+
+def lexical_rewrite(fn):
+    @wraps(fn)
+    def protected(text, *args, **kwargs):
+        code, restore = protect_lexical(text)
+        return restore(fn(code, *args, **kwargs))
+    return protected
+
+
+def cv_suffix(f):
+    """elfdb stores textual cv qualifiers, not Itanium mangling letters."""
+    cv = f.get("cv")
+    if cv is None:
+        cv = elfdb.parse_demangled(f.get("demangled", ""))[2]
+    words = set((cv or "").split())
+    return "".join(" " + word for word in ("const", "volatile") if word in words)
+
+
+def signature_key(f):
+    qualified = f.get("qualified") or elfdb.parse_demangled(f["demangled"])[0]
+    params = tuple(re.sub(r"\s+", "", cxx_type(t)) for t in split_args(f.get("params") or "") if t != "void")
+    return qualified, params, cv_suffix(f).strip(), f.get("static")
 
 TYPES = [
     (r"\bundefined1\b", "char"), (r"\bundefined2\b", "short"), (r"\bundefined4\b", "int"),
@@ -101,22 +160,20 @@ def split_args(text):
     return out
 
 
-STATIC_METHODS = {"getSingleton", "getSingletonPtr"}
-
-
 def _cast_to(arg, cls):
     """arg is `(cls *)expr` (possibly with namespace differences)."""
     m = re.match(r"\(([\w:<>, ]+?)\s*\*\)", arg)
     if not m:
         return False
-    norm = lambda t: re.sub(r"\s+|std::", "", t).split("::")[-1]  # noqa: E731
+    norm = lambda t: re.sub(r"\s+", "", t)  # noqa: E731
     return norm(m.group(1)) == norm(cls)
 
 
+@lexical_rewrite
 def call_rewrite(text, methods):
-    """C::m(obj, args) -> obj->m(args) / m(args) for this."""
+    """Explicit C::m(obj, args) stays a qualified direct call in C++ syntax."""
     out, i = [], 0
-    pattern = re.compile(r"\b([A-Za-z_]\w*(?:<[^()]*?>)?)::(~?[A-Za-z_]\w*)\(")
+    pattern = re.compile(r"\b((?:[A-Za-z_]\w*(?:<[^()]*?>)?::)*[A-Za-z_]\w*(?:<[^()]*?>)?)::(~?[A-Za-z_]\w*)\(")
     while True:
         m = pattern.search(text, i)
         if not m:
@@ -131,21 +188,19 @@ def call_rewrite(text, methods):
         args = split_args(text[start:j - 1])
         out.append(text[i:m.start()])
         if (cls, meth) in methods and args and meth != cls:
-            obj = re.sub(r"^\((\w[\w:<>, ]*?) \*\)", "", args[0])
+            # The receiver cast may encode a base adjustment or a void* type;
+            # keep it rather than guessing that it is redundant.
+            obj = args[0]
             rest = ", ".join(args[1:])
-            if meth in STATIC_METHODS and (cls, meth) in methods:
-                # Ghidra gives static methods a bogus `this` (they all got __thiscall).
+            if obj == "this":
                 out.append(f"{cls}::{meth}({rest})")
-            elif obj == "this":
-                out.append(f"{meth}({rest})")
             elif re.fullmatch(r"&?[\w.\->\[\]]+", obj):
-                out.append(f"{obj[1:]}.{meth}({rest})" if obj.startswith("&") else f"{obj}->{meth}({rest})")
+                out.append(f"{obj[1:]}.{cls}::{meth}({rest})" if obj.startswith("&") else f"{obj}->{cls}::{meth}({rest})")
             else:
-                out.append(f"({obj})->{meth}({rest})")
-        elif args and meth != cls.split("<")[0] and _cast_to(args[0], cls):
-            # Library method with explicit `this`: X::m((X *)obj, args) -> ((X *)obj)->m(args).
-            out.append(f"({args[0]})->{meth}({', '.join(args[1:])})")
+                out.append(f"({obj})->{cls}::{meth}({rest})")
         else:
+            # A cast of the first argument alone does not establish an implicit
+            # receiver: a static method can also take a pointer to its class.
             out.append(text[m.start():j])
         i = j
 
@@ -234,7 +289,8 @@ def enum_arguments(text, signatures, enums):
     """Integer literals passed to enum-typed parameters -> enumerator names."""
     def fix(m):
         name, args = m.group(1), split_args(m.group(2))
-        params = next((p for p in signatures.get(name, []) if len(p) == len(args)), None)
+        overloads = [p for p in signatures.get(name, []) if len(p) == len(args)]
+        params = overloads[0] if overloads and all(p == overloads[0] for p in overloads) else None
         if params is not None and name in PARAM_ENUMS:
             params = list(params)
             for i, enum in PARAM_ENUMS[name].items():
@@ -246,7 +302,7 @@ def enum_arguments(text, signatures, enums):
             if table and re.fullmatch(r"-?\d+|0x[0-9a-f]+", arg) and int(arg, 0) in table:
                 args[i] = table[int(arg, 0)]
         return f"{name}({', '.join(args)})"
-    return re.sub(r"\b(\w+)\(((?:[^()]|\([^()]*\))*)\)", fix, text)
+    return re.sub(r"\b((?:\w+::)*\w+)\(((?:[^()]|\([^()]*\))*)\)", fix, text)
 
 
 def closing_paren(text):
@@ -309,16 +365,21 @@ def tarraylist_count(text):
 
 RETURN_STORAGE = "__return_storage_ptr__"
 _SRET = None
+_SRET_INPUT = None
 
 
 def returned_by_pointer():
     """Qualified names of the functions that return an object through a hidden pointer, from
     the header prototypes types_export.py writes (Ghidra gets them as custom storage)."""
-    global _SRET
-    if _SRET is None:
-        path = ROOT / "build-decomp" / "types.json"
-        protos = json.loads(path.read_text()).get("prototypes", {}) if path.exists() else {}
+    global _SRET, _SRET_INPUT
+    import hashlib
+    path = ROOT / "build-decomp" / "types.json"
+    raw = path.read_bytes() if path.exists() else b"{}"
+    key = hashlib.sha256(raw).hexdigest()
+    if _SRET is None or _SRET_INPUT != key:
+        protos = json.loads(raw).get("prototypes", {})
         _SRET = {p["name"].split("(")[0] for p in protos.values() if p.get("sret")}
+        _SRET_INPUT = key
     return _SRET
 
 
@@ -368,6 +429,39 @@ def hidden_return_body(text):
     return text
 
 
+def recoverable_hidden_return(text):
+    """Only terminal construction/forwarding can become an early C++ return.
+
+    Subsequent cleanup, effects, an overwrite or an unknown storage consumer
+    requires structured lifetime analysis. Keep that draft ABI explicit instead
+    of silently deleting those statements by returning too early.
+    """
+    storage = rf"(?:\([\w:<>, ]+ \*\))?{RETURN_STORAGE}"
+    pattern = re.compile(rf"\n[ \t]*((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*[^;]*\);")
+    calls = list(pattern.finditer(text))
+    if not calls:
+        return False
+    known = returned_by_pointer()
+    for call in calls:
+        if not re.fullmatch(r"std::w?string::(?:w?string|basic_string)", call.group(1)) and call.group(1) not in known:
+            return False
+    # The first result write must end its branch. An overwrite in the same
+    # branch would otherwise be replaced by an unconditional early return.
+    for call in calls:
+        next_close = text.find("}", call.end())
+        tail = text[call.end():next_close if next_close >= 0 else len(text)]
+        tail = re.sub(rf"\breturn\s+{RETURN_STORAGE}\s*;", "", tail)
+        if tail.strip():
+            return False
+    suffix = text[calls[0].start():]
+    for call in reversed(calls):
+        begin, end = call.start() - calls[0].start(), call.end() - calls[0].start()
+        suffix = suffix[:begin] + suffix[end:]
+    suffix = re.sub(rf"\breturn\s+{RETURN_STORAGE}\s*;", "", suffix)
+    suffix = re.sub(r"\belse\b|[{}\s]", "", suffix)
+    return not suffix and RETURN_STORAGE not in text[:calls[0].start()]
+
+
 def hidden_return_calls(text):
     """`C::getName(&local_40, obj, args)` of a function returning through a hidden pointer ->
     `local_40 = C::getName(obj, args)`, which call_rewrite then turns into a method call."""
@@ -396,7 +490,7 @@ def reference_arguments(text, signatures):
                     args[i] = plain.group(1)
                     changed = True
         return f"{name}({', '.join(args)})" if changed else m.group(0)
-    return re.sub(r"\b(\w+)\(((?:[^()]|\([^()]*\))*)\)", fix, text)
+    return re.sub(r"\b((?:\w+::)*\w+)\(((?:[^()]|\([^()]*\))*)\)", fix, text)
 
 
 NAN_GUARD = r"(?:!NAN\(([^()]*)\)|\(!NAN\(([^()]*)\)\))"
@@ -439,15 +533,18 @@ def drop_nan_guards(text):
     return text
 
 
-def tidy_expressions(text):
+@lexical_rewrite
+def tidy_expressions(text, *, proven_nan_operands=False):
     text = re.sub(r"\boperator_new__\(", "operator new[](", text)
     text = re.sub(r"\boperator_delete__\(", "operator delete[](", text)
     text = re.sub(r"\boperator_new\(", "operator new(", text)
     text = re.sub(r"\boperator_delete\(", "operator delete(", text)
-    text = re.sub(r"\b([\w.\->\[\]]+) != (?:false|'\\0')", r"\1", text)
-    text = re.sub(r"\b([\w.\->\[\]]+) == (?:false|'\\0')", r"!\1", text)
+    # Comparisons produce a boolean even when their operand is an integer or
+    # pointer. Without a proven boolean type, replacing one with its operand
+    # changes values in returns, arithmetic, assignments and call arguments.
     text = re.sub(r"\(\(([^()]*)\)\)", r"(\1)", text)
-    text = drop_nan_guards(text)
+    if proven_nan_operands:
+        text = drop_nan_guards(text)
     text = re.sub(r"\([\w:<> ]+ \*\)0x0\b", "NULL", text)
     text = re.sub(r"\+ -(\d)", r"- \1", text)
     return text
@@ -484,8 +581,8 @@ def reindent(text):
     return re.sub(r"\n{3,}", "\n\n", text)
 
 
-def convert(code, methods, f=None, signatures=None, enums=None):
-    text = re.sub(r"/\*.*?\*/", "", code, flags=re.S)
+def convert(code, methods, f=None, signatures=None, enums=None, *, experimental_cleanup=False):
+    text, restore = protect_lexical(code)
     # Ghidra wraps long calls between the name and the parenthesis, and long
     # qualified names before `::`.
     text = re.sub(r"(\w)\s*\n\s*\(", r"\1(", text)
@@ -495,9 +592,12 @@ def convert(code, methods, f=None, signatures=None, enums=None):
     # Signature (everything before the opening brace): drop __thiscall and `this`.
     brace = re.search(r"\n\{", text)
     head, text = (text[:brace.start()], text[brace.start():]) if brace else ("", text)
-    head = re.sub(r"/\*[^*]*\*/\n?", "", head)
     head = re.sub(r"__thiscall\s+", "", head)
-    head, hidden = hidden_return_signature(head)
+    proposed_head, hidden = hidden_return_signature(head)
+    if hidden and not recoverable_hidden_return(text):
+        hidden = 0
+    else:
+        head = proposed_head
     if hidden:
         head = renumber_params(head, hidden)
         text = hidden_return_body(renumber_params(text, hidden))
@@ -510,22 +610,28 @@ def convert(code, methods, f=None, signatures=None, enums=None):
         types = [t for t in split_args(f.get("params") or "") if t != "void"]
         if len(names) == len(types):
             params = ", ".join(f"{cxx_type(t)} {n}" for t, n in zip(types, names))
-            prefix = "" if f["kind"] in ("ctor", "dtor") else head.split(f["demangled"].split("(")[0])[0]
-            head = f"{prefix}{f['demangled'].split('(')[0]}({params})"
-    text = drop_refcount_blocks(text)
-    text = inline_temp_strings(text)
-    text = tarraylist_count(tarraylist_access(text))
+            qualified = f.get("qualified") or elfdb.parse_demangled(f["demangled"])[0]
+            prefix = "" if f["kind"] in ("ctor", "dtor") else head.split(qualified)[0]
+            head = f"{prefix}{qualified}({params}){cv_suffix(f)}"
+        elif cv_suffix(f) and not head.endswith(cv_suffix(f)):
+            head += cv_suffix(f)
+    if experimental_cleanup:
+        text = drop_refcount_blocks(text)
+        text = inline_temp_strings(text)
+        text = tarraylist_count(tarraylist_access(text))
     # Constructors: base-constructor calls and vptr stores are implicit in C++.
     init = re.search(r"\n[ \t]*(\w+)::\1\s*\(\s*\(\w+ \*\)this\s*,?\s*([^;]*)\);", text)
-    if init and f is not None and f["kind"] == "ctor":
+    if experimental_cleanup and init and f is not None and f["kind"] == "ctor":
         head += f"\n    : {init.group(1)}({re.sub(chr(10) + r'\s*', ' ', init.group(2)).rstrip(')').strip()})"
         text = text[:init.start()] + text[init.end():]
-    text = re.sub(r"\n[ \t]*(?:\*\([^;]*\*\*\)\s*)?\(?this\)?->_vptr\s*=\s*[^;]*;", "", text)
-    text = re.sub(r"\n[ \t]*\*\(\w+ \*\*\*?\)this = [^;]*;", "", text)
+    if experimental_cleanup and f is not None and f["kind"] in ("ctor", "dtor"):
+        text = re.sub(r"\n[ \t]*(?:\*\([^;]*\*\*\)\s*)?\(?this\)?->_vptr\s*=\s*[^;]*;", "", text)
+        text = re.sub(r"\n[ \t]*\*\(\w+ \*\*\*?\)this = [^;]*;", "", text)
     # new: allocation followed by the constructor call on the same pointer.
-    text = re.sub(r"(\w+) = \((\w+) \*\)(?:Ogre::NedAllocImpl::allocBytes|operator_new)\([^;]*\);\n([ \t]*)"
-                  r"\2::\2\(\1(?:,\s*)?([^;]*)\);",
-                  lambda m: f"{m.group(1)} = new {m.group(2)}({m.group(4)});", text)
+    if experimental_cleanup:
+        text = re.sub(r"(\w+) = \((\w+) \*\)(?:Ogre::NedAllocImpl::allocBytes|operator_new)\([^;]*\);\n([ \t]*)"
+                      r"\2::\2\(\1(?:,\s*)?([^;]*)\);",
+                      lambda m: f"{m.group(1)} = new {m.group(2)}({m.group(4)});", text)
     # Virtual calls through typed vtables.
     text = re.sub(r"\(\*\(?this\)?->_vptr->(\w+)\)\(this,?\s*", r"\1(", text)
     text = re.sub(r"\(\*\(?([\w\[\]]+)\)?->_vptr->(\w+)\)\(\1,?\s*", r"\1->\2(", text)
@@ -540,16 +646,17 @@ def convert(code, methods, f=None, signatures=None, enums=None):
                   lambda m: f"{m.group(1)}(void*){m.group(2)}, (void*){m.group(3)},", text)
     text = re.sub(r"\bthis->(?=\w)", "", text)
     # Base and member destructor calls on this are implicit in a destructor.
-    text = re.sub(r"\n[ \t]*~\w+\(\);", "", text)
-    text = re.sub(r"(?<![>.\w])(\w+)\(this\)", r"\1()", text)
-    text = re.sub(r"(?<![>.\w])(\w+)\(this,\s*", r"\1(", text)
-    text = tidy_expressions(text)
-    text = drop_dead_stores(text)
-    text = drop_unused_locals(text)
+    if experimental_cleanup and f is not None and f["kind"] == "dtor":
+        text = re.sub(r"\n[ \t]*~\w+\(\);", "", text)
+    # Unqualified helper(this, ...) may be a real free function, not a member.
+    text = tidy_expressions(text, proven_nan_operands=experimental_cleanup)
+    if experimental_cleanup:
+        text = drop_dead_stores(text)
+        text = drop_unused_locals(text)
     text = reindent(text)
     text = re.sub(r"\n[ \t]*return;\n\}\s*$", "\n}", text)
     text = re.sub(r"\n{3,}", "\n\n", head + text)
-    return text.strip() + "\n"
+    return restore(text.strip()) + "\n"
 
 
 def cxx_type(demangled):
@@ -568,13 +675,13 @@ PARAM_ENUMS = {"BroadcastEvent": {0: "EOUTPUT_EVENTS"}}
 
 
 def signatures_of(db):
-    """short name -> list of parameter type lists (all overloads)."""
+    """Complete qualified name -> overloads; never merge unrelated scopes."""
     out = {}
     for f in db["functions"].values():
-        short = f["demangled"].split("(")[0].split("::")[-1]
+        qualified = f.get("qualified") or elfdb.parse_demangled(f["demangled"])[0]
         params = [p for p in split_args(f.get("params") or "") if p != "void"]
-        if params not in out.setdefault(short, []):
-            out[short].append(params)
+        if params not in out.setdefault(qualified, []):
+            out[qualified].append(params)
     return out
 
 
@@ -582,10 +689,16 @@ def known_methods(db):
     """(class, method) pairs of real classes; namespaces such as UTILITIES are excluded."""
     import types_export
     real = {name for name in db["classes"] if types_export.is_class(db, name)}
+    path = ROOT / "build-decomp" / "types.json"
+    protos = json.loads(path.read_text()).get("prototypes", {}) if path.exists() else {}
     out = set()
     for f in db["functions"].values():
-        if f.get("scope") in real and f["kind"] in ("function", "dtor", "inline_or_template"):
-            out.add((f["scope"], f["demangled"].split("(")[0].split("::")[-1]))
+        prototype = protos.get(f["address"], {})
+        member = (prototype.get("static") is False or f["kind"] == "dtor"
+                  or bool(f.get("vslots")) or bool(cv_suffix(f)))
+        if (f.get("scope") in real and f["kind"] in ("function", "dtor", "inline_or_template")
+                and member and prototype.get("static") is not True):
+            out.add((f["scope"], f.get("method") or elfdb.parse_demangled(f["demangled"])[0].split("::")[-1]))
     return out
 
 

@@ -80,6 +80,9 @@ static void overflow(void*,autotest::Capture& c) {
     full(0,c); c.add(&x,1);
 }
 static void huge(void*,autotest::Capture& c) { c.add(&x,(size_t)-1); }
+static void sleepComplete(void*,autotest::Capture& c) { usleep(400000); c.add(&x,sizeof(x)); }
+static void spin(void*,autotest::Capture&) { for(;;) {} }
+static void block(void*,autotest::Capture&) { for(;;) pause(); }
 
 static bool compare(autotest::Body a,autotest::Body b,int same,int failed,int different,int incomplete) {
     autotest::Stats stats={0,0,0};
@@ -128,6 +131,12 @@ int main() {
     mode=5; CHECK(compare(complete,complete,0,0,0,1)); // Observer write failure is not a killed mutation.
     mode=0;
     autotest::Outcome outcome;
+    autotest::runChild(sleepComplete,0,outcome);
+    CHECK(outcome.reportValid && !autotest::incomplete(outcome)); // no old 300ms wall false alarm
+    autotest::runChild(spin,0,outcome,25,1000);
+    CHECK(WIFSIGNALED(outcome.childStatus) && WTERMSIG(outcome.childStatus)==SIGPROF && autotest::incomplete(outcome));
+    autotest::runChild(block,0,outcome,1000,25);
+    CHECK(WIFSIGNALED(outcome.childStatus) && WTERMSIG(outcome.childStatus)==SIGALRM && autotest::incomplete(outcome));
     autotest::runChild(absent,0,outcome);
     CHECK(!outcome.reportValid && outcome.childStatus==0 && WEXITSTATUS(outcome.status)!=0);
     autotest::runChild(externalA,0,outcome);

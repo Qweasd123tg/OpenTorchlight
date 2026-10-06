@@ -40,6 +40,7 @@ import ghidra.program.model.listing.VariableUtilities;
 import ghidra.program.model.symbol.Namespace;
 import ghidra.program.model.symbol.SourceType;
 import ghidra.program.model.symbol.SymbolTable;
+import ghidra.program.model.symbol.SymbolUtilities;
 import ghidra.app.util.NamespaceUtils;
 import ghidra.util.task.TaskMonitor;
 
@@ -47,35 +48,85 @@ public class DecompDrafts extends GhidraScript {
     private DataTypeManager dtm;
     private JsonObject classes;
     private JsonObject vtables;
+    private final Set<String> typeErrors = new HashSet<>();
+    private final Set<Function> prototypeErrors = new HashSet<>();
     private final Map<String, Structure> structs = new HashMap<>();
     private final CategoryPath category = new CategoryPath("/decomp");
 
+    private static List<String> qualifiedParts(String name) throws Exception {
+        List<String> parts = new ArrayList<>();
+        int start = 0;
+        int templates = 0;
+        for (int i = 0; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if (c == '<') templates++;
+            if (c == '>') templates--;
+            if (templates < 0) throw new IllegalArgumentException("unbalanced type name " + name);
+            if (templates == 0 && c == ':' && i + 1 < name.length() && name.charAt(i + 1) == ':') {
+                parts.add(name.substring(start, i));
+                start = ++i + 1;
+            }
+        }
+        if (templates != 0) throw new IllegalArgumentException("unbalanced type name " + name);
+        parts.add(name.substring(start));
+        for (String part : parts) {
+            SymbolUtilities.validateName(part);
+        }
+        return parts;
+    }
+
     private Structure structFor(String name) throws Exception {
+        if (typeErrors.contains(name)) {
+            throw new IllegalArgumentException("unsupported/conflicting class " + name);
+        }
         if (structs.containsKey(name)) {
             return structs.get(name);
         }
+        List<String> parts = qualifiedParts(name);
         SymbolTable table = currentProgram.getSymbolTable();
-        Namespace ns = table.getNamespace(name, currentProgram.getGlobalNamespace());
-        Structure s = null;
-        if (ns != null) {
-            GhidraClass cls = ns instanceof GhidraClass ? (GhidraClass) ns : NamespaceUtils.convertNamespaceToClass(ns);
-            s = VariableUtilities.findOrCreateClassStruct(cls, dtm);
+        Namespace ns = currentProgram.getGlobalNamespace();
+        for (String part : parts) {
+            Namespace child = table.getNamespace(part, ns);
+            ns = child != null ? child : table.createNameSpace(ns, part, SourceType.USER_DEFINED);
         }
-        if (s == null) {
-            s = (Structure) dtm.addDataType(new StructureDataType(category, name, 0, dtm),
-                DataTypeConflictHandler.REPLACE_HANDLER);
-        }
+        GhidraClass cls = ns instanceof GhidraClass ? (GhidraClass) ns : NamespaceUtils.convertNamespaceToClass(ns);
+        Structure s = VariableUtilities.findOrCreateClassStruct(cls, dtm);
         structs.put(name, s);
         return s;
     }
 
+    private boolean prepareClass(String name) {
+        try {
+            structFor(name);
+            return true;
+        } catch (Exception e) {
+            typeErrors.add(name);
+            printerr("diagnostic skip: class " + name + ": " + e);
+            return false;
+        }
+    }
+
     private DataType basic(String type, int size) throws Exception {
-        String t = type.replace("const ", "").trim();
+        String t = type.replace("const ", "").replace("volatile ", "").trim();
         if (t.endsWith("*")) {
             String inner = t.substring(0, t.length() - 1).trim();
-            DataType target = inner.endsWith("*") ? basic(inner, 8)
-                : classes.has(inner) ? structFor(inner) : primitive(inner, 0);
-            return new PointerDataType(target == null ? VoidDataType.dataType : target, 8, dtm);
+            DataType target;
+            if (typeErrors.contains(inner) && classes.has(inner) && structs.containsKey(inner)) {
+                // A known C++ class can be incomplete behind a pointer. Its
+                // invalid field layout must not contaminate an enclosing 8-byte
+                // pointer field or a scalar/pointer call ABI. Never reuse its
+                // old, partially populated structure for dereferences.
+                StructureDataType opaque = new StructureDataType(category,
+                    "opaque_" + Integer.toHexString(inner.hashCode()) + "_" + inner.replace("::", "_"), 0, dtm);
+                opaque.setDescription("Incomplete pointee: " + inner + "; pointer identity only, no field layout or by-value ABI");
+                target = dtm.addDataType(opaque, DataTypeConflictHandler.KEEP_HANDLER);
+            } else {
+                target = basic(inner, 0);
+            }
+            if (target == null) {
+                return null;  // unknown pointees are not silently replaced with void
+            }
+            return new PointerDataType(target, 8, dtm);
         }
         int bracket = t.indexOf('[');
         if (bracket > 0 && t.endsWith("]")) {
@@ -94,13 +145,20 @@ public class DecompDrafts extends GhidraScript {
         if (p != null) {
             return p;
         }
-        return size > 0 ? Undefined.getUndefinedDataType(size) : null;
+        if (size > 0 && (t.startsWith("undefined") || t.equals("?"))) {
+            return Undefined.getUndefinedDataType(size);
+        }
+        return null;
     }
 
     private DataType primitive(String t, int size) {
         switch (t) {
-            case "int": case "long int": return IntegerDataType.dataType;
-            case "unsigned int": case "long unsigned int": return size == 8 ? UnsignedLongLongDataType.dataType : UnsignedIntegerDataType.dataType;
+            case "int": case "signed int": return size == 0 || size == 4 ? IntegerDataType.dataType : null;
+            case "long": case "long int": case "signed long": case "signed long int":
+                return size == 0 || size == 8 ? LongLongDataType.dataType : null;
+            case "unsigned int": return size == 0 || size == 4 ? UnsignedIntegerDataType.dataType : null;
+            case "unsigned long": case "unsigned long int": case "long unsigned int":
+                return size == 0 || size == 8 ? UnsignedLongLongDataType.dataType : null;
             case "long long": case "long long int": return LongLongDataType.dataType;
             case "long long unsigned int": case "unsigned long long": return UnsignedLongLongDataType.dataType;
             case "short": case "short int": return ShortDataType.dataType;
@@ -147,17 +205,18 @@ public class DecompDrafts extends GhidraScript {
             int offset = base + fo.get("offset").getAsInt();
             String fname = fo.get("name").getAsString();
             int size = fo.get("size").getAsInt();
-            DataType dt = fname.startsWith("_vptr") ? null : basic(fo.get("type").getAsString(), size);
+            DataType dt = fname.startsWith("_vptr") ? null : basic(fo.get(fo.has("ghidra_type") ? "ghidra_type" : "type").getAsString(), size);
             if (fname.startsWith("_vptr")) {
                 continue;  // vptrs are set by the caller with the most derived vtable type
             }
-            if (dt == null || dt.getLength() <= 0 || offset + dt.getLength() > out.getLength()) {
-                continue;
+            if (dt == null || dt.getLength() <= 0 || dt.getLength() != size
+                    || offset + dt.getLength() > out.getLength()) {
+                throw new IllegalArgumentException("unrepresented/conflicting field " + name + "::" + fname);
             }
             try {
                 out.replaceAtOffset(offset, dt, dt.getLength(), fname, null);
             } catch (Exception e) {
-                // overlapping draft fields: keep the first
+                throw new IllegalArgumentException("overlapping field " + name + "::" + fname, e);
             }
         }
     }
@@ -195,7 +254,7 @@ public class DecompDrafts extends GhidraScript {
     private DataType protoType(String type, int size) throws Exception {
         DataType dt = "?".equals(type) ? null : basic(type, size);
         if (dt == null || dt.getLength() <= 0) {
-            dt = size > 0 && size <= 8 ? Undefined.getUndefinedDataType(size) : null;
+            dt = "?".equals(type) && size > 0 && size <= 8 ? Undefined.getUndefinedDataType(size) : null;
         }
         return dt;
     }
@@ -205,11 +264,21 @@ public class DecompDrafts extends GhidraScript {
     // object returned through a hidden pointer as the first argument (RDI, then `this` in RSI),
     // which Ghidra does not infer for non-trivial classes of 8 bytes such as std::wstring.
     private boolean applyPrototype(Function fn, JsonObject p) throws Exception {
-        boolean isStatic = p.get("static").getAsBoolean();
+        if (p.has("variadic") && p.get("variadic").getAsBoolean()) {
+            return false;  // preserve a variadic signature until its call ABI is represented
+        }
+        if (typeErrors.contains(p.get("ret").getAsString())) {
+            return false;
+        }
+        boolean isStatic = p.has("member") ? !p.get("member").getAsBoolean() : p.get("static").getAsBoolean();
         List<DataType> types = new ArrayList<>();
         for (JsonElement e : p.getAsJsonArray("params")) {
             JsonObject po = e.getAsJsonObject();
-            DataType dt = protoType(po.get("type").getAsString(), po.get("size").getAsInt());
+            String spelling = po.get("type").getAsString();
+            if (typeErrors.contains(spelling.replace("const ", "").replace("volatile ", "").replace("*", "").trim())) {
+                return false;
+            }
+            DataType dt = protoType(spelling, po.get("size").getAsInt());
             if (dt == null) {
                 return false;  // an object passed by value: Ghidra's own signature stays
             }
@@ -228,7 +297,7 @@ public class DecompDrafts extends GhidraScript {
             int floats = 0;
             params.add(new ParameterImpl("__return_storage_ptr__", pointer, intRegister(ints++, 8), currentProgram));
             if (!isStatic) {
-                DataType self = parent != null && classes.has(parent.getName()) ? structFor(parent.getName())
+                DataType self = parent != null && classes.has(parent.getName(true)) ? structFor(parent.getName(true))
                     : VoidDataType.dataType;
                 params.add(new ParameterImpl("this", new PointerDataType(self, 8, dtm), intRegister(ints++, 8),
                     currentProgram));
@@ -266,26 +335,44 @@ public class DecompDrafts extends GhidraScript {
         return true;
     }
 
+    private void writeStatus(Path out, String address, String status, String error) throws Exception {
+        JsonObject receipt = new JsonObject();
+        receipt.addProperty("status", status);
+        receipt.addProperty("error", error == null ? "" : error);
+        Files.writeString(out.resolve(address + ".status.json"), receipt.toString(), StandardCharsets.UTF_8);
+    }
+
     @Override
     protected void run() throws Exception {
         String[] args = getScriptArgs();
         dtm = currentProgram.getDataTypeManager();
         JsonObject root = JsonParser.parseString(Files.readString(Paths.get(args[0]))).getAsJsonObject();
+        String expectedElf = root.get("original_elf_sha256").getAsString();
+        if (!expectedElf.equals(currentProgram.getExecutableSHA256())) {
+            throw new IllegalArgumentException("Ghidra project executable SHA256 differs from the requested original ELF");
+        }
         classes = root.getAsJsonObject("classes");
         vtables = root.getAsJsonObject("vtables");
+        if (root.has("class_conflicts")) {
+            typeErrors.addAll(root.getAsJsonObject("class_conflicts").keySet());
+        }
         List<String> targets = Files.readAllLines(Paths.get(args[1]), StandardCharsets.UTF_8);
         Path out = Paths.get(args[2]);
         Files.createDirectories(out);
 
         for (String name : classes.keySet()) {
-            structFor(name);
+            prepareClass(name);
         }
         int filled = 0;
         for (String name : classes.keySet()) {
+            if (typeErrors.contains(name)) {
+                continue;
+            }
             try {
                 fill(name);
                 filled++;
             } catch (Exception e) {
+                typeErrors.add(name);
                 printerr("type " + name + ": " + e);
             }
         }
@@ -294,6 +381,15 @@ public class DecompDrafts extends GhidraScript {
         Set<Function> prototyped = new HashSet<>();
         JsonObject prototypes = root.has("prototypes") ? root.getAsJsonObject("prototypes") : new JsonObject();
         int failed = 0;
+        if (root.has("prototype_conflicts")) {
+            for (String address : root.getAsJsonObject("prototype_conflicts").keySet()) {
+                Function fn = getFunctionAt(toAddr(address));
+                if (fn != null) {
+                    prototypeErrors.add(fn);
+                    failed++;
+                }
+            }
+        }
         for (String address : prototypes.keySet()) {
             Function fn = getFunctionAt(toAddr(address));
             if (fn == null) {
@@ -302,13 +398,51 @@ public class DecompDrafts extends GhidraScript {
             try {
                 if (applyPrototype(fn, prototypes.getAsJsonObject(address))) {
                     prototyped.add(fn);
+                } else {
+                    prototypeErrors.add(fn);
+                    failed++;
                 }
             } catch (Exception e) {
                 failed++;
+                prototypeErrors.add(fn);
                 printerr("prototype " + address + ": " + e);
             }
         }
         println("applied " + prototyped.size() + " method prototypes from the headers (" + failed + " failed)");
+
+        // SDK signatures are keyed by exact ELF linkage name. Demangled short names are
+        // deliberately not matched, and aggregate register classes still require an ABI probe.
+        JsonObject sdk = root.has("sdk_prototypes") ? root.getAsJsonObject("sdk_prototypes") : new JsonObject();
+        int sdkApplied = 0;
+        int sdkUnverified = 0;
+        for (Function fn : currentProgram.getFunctionManager().getFunctions(true)) {
+            Function target = fn.isThunk() ? fn.getThunkedFunction(true) : fn;
+            String link = target != null && sdk.has(target.getName()) ? target.getName()
+                : sdk.has(fn.getName()) ? fn.getName() : null;
+            if (link == null) {
+                continue;
+            }
+            JsonObject p = sdk.getAsJsonObject(link);
+            if (!"SCALAR_OR_POINTER".equals(p.get("abi_status").getAsString())) {
+                sdkUnverified++;
+                continue;
+            }
+            try {
+                if (applyPrototype(fn, p)) {
+                    prototyped.add(fn);
+                    sdkApplied++;
+                } else {
+                    prototypeErrors.add(fn);
+                    sdkUnverified++;
+                }
+            } catch (Exception e) {
+                prototypeErrors.add(fn);
+                sdkUnverified++;
+                printerr("SDK prototype " + link + ": " + e);
+            }
+        }
+        println("applied " + sdkApplied + " exact scalar/pointer SDK prototypes (" + sdkUnverified
+            + " found but unrepresented/aggregate)");
 
         // Methods whose `this` Ghidra dropped (unused in the body) still take it at call sites.
         int fixed = 0;
@@ -316,7 +450,7 @@ public class DecompDrafts extends GhidraScript {
             Namespace parent = fn.getParentNamespace();
             String fname = fn.getName();
             // Only real classes: Ghidra also turns plain namespaces (UTILITIES, MATH) into classes.
-            boolean real = parent != null && (classes.has(parent.getName()) || vtables.has(parent.getName()));
+            boolean real = parent != null && (classes.has(parent.getName(true)) || vtables.has(parent.getName(true)));
             if (!(parent instanceof GhidraClass) || !real || fname.startsWith("Get_") || fname.startsWith("Set_")
                     || prototyped.contains(fn) || "__thiscall".equals(fn.getCallingConventionName())) {
                 continue;
@@ -342,7 +476,7 @@ public class DecompDrafts extends GhidraScript {
                 f = createFunction(address, null);
             }
             if (f == null) {
-                Files.writeString(out.resolve(line + ".c"), "// no function\n");
+                writeStatus(out, line, "NO_BODY", "no function");
                 continue;
             }
             functions.add(f);
@@ -355,14 +489,44 @@ public class DecompDrafts extends GhidraScript {
             @Override
             public String process(DecompileResults r, TaskMonitor m) throws Exception {
                 Function f = r.getFunction();
-                String code = r.decompileCompleted() ? r.getDecompiledFunction().getC()
-                    : "// failed: " + r.getErrorMessage() + "\n";
-                Files.writeString(out.resolve("0x" + Long.toHexString(f.getEntryPoint().getOffset()) + ".c"), code,
-                    StandardCharsets.UTF_8);
+                String address = "0x" + Long.toHexString(f.getEntryPoint().getOffset());
+                Namespace parent = f.getParentNamespace();
+                boolean typeError = parent != null && typeErrors.contains(parent.getName(true));
+                boolean protoError = prototypeErrors.contains(f);
+                List<String> blockers = new ArrayList<>();
+                if (typeError) blockers.add("layout: " + parent.getName(true));
+                if (protoError) blockers.add("prototype: " + f.getName(true) + " @" + address);
+                for (Function callee : f.getCalledFunctions(m)) {
+                    if (prototypeErrors.contains(callee)) {
+                        protoError = true;
+                        blockers.add("callee prototype: " + callee.getName(true) + " @0x" +
+                                     Long.toHexString(callee.getEntryPoint().getOffset()));
+                    }
+                }
+                if (typeError || protoError) {
+                    java.util.Collections.sort(blockers);
+                    writeStatus(out, address, "TYPE_ERROR", String.join("; ", blockers));
+                } else if (r.isTimedOut()) {
+                    writeStatus(out, address, "TIMEOUT", r.getErrorMessage());
+                } else if (!r.decompileCompleted() || r.getDecompiledFunction() == null) {
+                    writeStatus(out, address, "NO_BODY", r.getErrorMessage());
+                } else {
+                    String code = r.getDecompiledFunction().getC();
+                    if (code == null || !code.contains("{")) {
+                        writeStatus(out, address, "NO_BODY", "decompiler returned no body");
+                    } else {
+                        Files.writeString(out.resolve(address + ".c"), code, StandardCharsets.UTF_8);
+                        writeStatus(out, address, "COMPLETE", "");
+                    }
+                }
                 return null;
             }
         };
-        callback.setTimeout(120);
+        int timeout = args.length > 3 ? Integer.parseInt(args[3]) : 120;
+        if (timeout <= 0) {
+            throw new IllegalArgumentException("positive decompilation timeout required");
+        }
+        callback.setTimeout(timeout);
         try {
             ParallelDecompiler.decompileFunctions(callback, functions, monitor);
         } finally {

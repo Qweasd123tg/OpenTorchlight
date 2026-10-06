@@ -20,12 +20,16 @@ the system often has only a JRE).
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
@@ -44,31 +48,52 @@ def workspace():
     if not (GHIDRA_HOME / "support" / "analyzeHeadless").exists():
         raise SystemExit(f"unpack the pinned Ghidra archive (build-source-cache/ghidra/*.zip) into {WORK}")
     base = WORK / "work"
-    for sub in ("project", "config", "cache", "io"):
+    for sub in ("project", "config", "cache", "jobs"):
         (base / sub).mkdir(parents=True, exist_ok=True)
     return base
 
 
-def headless(args, log_name, background=False):
+@contextmanager
+def file_lock(path):
+    """Serialize writers; unique job IO does not make a shared Ghidra project safe."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+
+def job_dir(base, name):
+    # Keep logs and failed export artifacts for diagnosis; never delete another job's IO.
+    return Path(tempfile.mkdtemp(prefix=name + "-", dir=base / "jobs"))
+
+
+def headless(args, log_name, background=False, job=None, locked=False):
     base = workspace()
+    job = job or job_dir(base, log_name)
     env = dict(os.environ, XDG_CONFIG_HOME=str(base / "config"), XDG_CACHE_HOME=str(base / "cache"))
-    # Ghidra needs a full JDK (it compiles scripts); the system may only have a JRE.
     jdks = sorted((toolchain.cache_dir() / "jdk").glob("jdk-21*/bin/javac"))
     if jdks:
         env["JAVA_HOME"] = str(jdks[-1].parent.parent)
         env["PATH"] = f"{jdks[-1].parent}:{env['PATH']}"
     env.setdefault("GHIDRA_HEADLESS_MAXMEM", "5G")
     cmd = [str(GHIDRA_HOME / "support" / "analyzeHeadless"), str(base / "project"), "Torchlight", *args,
-           "-log", str(base / f"{log_name}.log"), "-scriptlog", str(base / f"{log_name}.script.log")]
-    return subprocess.run(cmd, env=env, check=False)
+           "-log", str(job / f"{log_name}.log"), "-scriptlog", str(job / f"{log_name}.script.log")]
+    if locked:
+        return subprocess.run(cmd, env=env, check=False)
+    with file_lock(base / "project.lock"):
+        return subprocess.run(cmd, env=env, check=False)
 
 
 def analyze():
     base = workspace()
-    if (base / "project" / "Torchlight.gpr").exists():
-        raise SystemExit(f"project exists: {base / 'project'}")
-    result = headless(["-import", str(elfdb.default_elf()), "-max-cpu", "3", "-analysisTimeoutPerFile", "14400"],
-                      "analyze")
+    with file_lock(base / "project.lock"):
+        if (base / "project" / "Torchlight.gpr").exists():
+            raise SystemExit(f"project exists: {base / 'project'}")
+        result = headless(["-import", str(elfdb.default_elf()), "-max-cpu", "3", "-analysisTimeoutPerFile", "14400"],
+                          "analyze", locked=True)
     return result.returncode
 
 
@@ -121,49 +146,69 @@ def shaping_functions(db, tu_id, insns=None):
     return out
 
 
-_exported = False
+DRAFT_SCHEMA = 3
+EXPORT_STATUSES = frozenset(("COMPLETE", "TIMEOUT", "TYPE_ERROR", "NO_BODY"))
+
+
+def types_fingerprint(data):
+    """Conservative closure: bases, fields, all vtables and signatures share one versioned hash."""
+    payload = json.dumps({"schema": 1, "types": data}, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode()).hexdigest()
 
 
 def export_types():
-    """build-decomp/types.json from the current headers, once per process."""
-    global _exported
-    if not _exported:
+    """Refresh for every API invocation, even when types.json exists or this process exported before."""
+    with file_lock(ROOT / "build-decomp" / "types-export.lock"):
         subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
-        _exported = True
+        return json.loads((ROOT / "build-decomp" / "types.json").read_text())
 
 
-def draft_state(tu, db=None, types=None, insns=None):
-    """("fresh" | "stale" | "unknown", reasons) for build-decomp/drafts/<TU>, against the
-    existing build-decomp/types.json (export_types() first to see header changes)."""
-    import json
+def draft_state(tu, db=None, types=None, insns=None, addresses=None):
+    """Fresh only if every requested body completed and still matches its versioned receipt."""
     meta = OUT / tu / "inputs.json"
     if not meta.exists():
         return "unknown", ["no inputs.json: made before drafts were fingerprinted"]
-    data = json.loads(meta.read_text())
+    try:
+        data = json.loads(meta.read_text())
+    except (ValueError, OSError):
+        return "stale", ["unreadable inputs.json"]
     db = db or elfdb.load_db()
-    types = types if types is not None else _types()
+    snapshot = export_types() if types is None else types
+    # Existing Python callers may supply just the classes mapping.
+    if "classes" not in snapshot:
+        snapshot = {"classes": snapshot, "prototypes": _prototypes(), "vtables": _vtables()}
     reasons = []
+    if data.get("schema") != DRAFT_SCHEMA:
+        reasons.append("unversioned or obsolete draft receipt")
     if data.get("elf") != db["original_elf_sha256"]:
         reasons.append("another ELF")
     if data.get("tools") != tools_digest():
         reasons.append("decompiler scripts changed")
-    if "prototypes" in data:
-        tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
-        if data["prototypes"] != prototype_digest(_prototypes(), shaping_functions(db, tu_id, insns)):
-            reasons.append("prototypes of its functions or their callees changed")
-    now = class_digests(types, data.get("classes", {}))
-    changed = sorted(n for n, d in data.get("classes", {}).items() if now.get(n) != d)
-    if changed:
-        reasons.append("types changed: " + ", ".join(changed[:8]) + (" ..." if len(changed) > 8 else ""))
+    if data.get("types_fingerprint") != types_fingerprint(snapshot):
+        reasons.append("type/layout/vtable/prototype inputs changed")
+    tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
+    expected = {a for a, f in db["functions"].items()
+                if f["tu"] == tu_id and f.get("kind", "function") in WRITTEN}
+    if addresses is not None:
+        requested = {hex(int(a, 16)) for a in addresses}
+        if not requested or not requested <= expected:
+            raise ValueError("requested addresses are not written functions of this TU")
+        expected = requested
+    exports = data.get("exports", {})
+    if (not expected or not expected <= set(exports) or (addresses is None and set(exports) != expected)):
+        reasons.append("requested function export set incomplete")
+    for address in sorted(expected):
+        receipt = exports.get(address, {})
+        raw = OUT / tu / "raw" / f"{address}.c"
+        if receipt.get("status") != "COMPLETE":
+            reasons.append(f"{address}: {receipt.get('status', 'NO_BODY')}")
+        elif not raw.exists() or hashlib.sha256(raw.read_bytes()).hexdigest() != receipt.get("raw_sha256"):
+            reasons.append(f"{address}: missing or changed raw body")
     return ("stale" if reasons else "fresh"), reasons
 
 
 def _types():
-    import json
-    path = ROOT / "build-decomp" / "types.json"
-    if not path.exists():
-        subprocess.run([sys.executable, str(ROOT / "tools" / "decomp" / "types_export.py")], check=True)
-    return json.loads(path.read_text())["classes"]
+    return export_types()["classes"]
 
 
 def _prototypes():
@@ -171,14 +216,18 @@ def _prototypes():
     return json.loads(path.read_text()).get("prototypes", {}) if path.exists() else {}
 
 
+def _vtables():
+    path = ROOT / "build-decomp" / "types.json"
+    return json.loads(path.read_text()).get("vtables", {}) if path.exists() else {}
+
+
 def stale(all_tus=False):
     import layout
     db = elfdb.load_db()
-    export_types()
-    types = _types()
+    types = export_types()
     insns = layout.load_insns(db)
     out = []
-    for d in sorted(p for p in OUT.iterdir() if (p / "raw").is_dir()):
+    for d in sorted(p for p in OUT.iterdir() if (p / "raw").is_dir()) if OUT.exists() else []:
         state, reasons = draft_state(d.name, db, types, insns)
         if state == "stale" or (all_tus and state == "unknown"):
             out.append(d.name)
@@ -186,54 +235,96 @@ def stale(all_tus=False):
     return out
 
 
-def drafts(tus):
+def read_export(out, address):
+    """Only an explicit COMPLETE record with a real body may become usable raw C."""
+    raw = out / f"{address}.c"
+    status_file = out / f"{address}.status.json"
+    try:
+        receipt = json.loads(status_file.read_text())
+    except (OSError, ValueError):
+        return {"status": "NO_BODY", "error": "no valid export status"}
+    if receipt.get("status") not in EXPORT_STATUSES:
+        return {"status": "NO_BODY", "error": "unknown export status"}
+    if receipt["status"] == "COMPLETE":
+        if not raw.exists() or not raw.read_text(errors="replace").strip() or "{" not in raw.read_text(errors="replace"):
+            return {"status": "NO_BODY", "error": "COMPLETE export has no body"}
+        receipt["raw_sha256"] = hashlib.sha256(raw.read_bytes()).hexdigest()
+    return receipt
+
+
+def drafts(tus, timeout=120, retries=0, addresses=None):
     import shutil
-    import layout
+    if timeout <= 0 or retries < 0:
+        raise ValueError("timeout must be positive and retries nonnegative")
     db = elfdb.load_db()
-    export_types()
+    data = export_types()
     base = workspace()
-    io = base / "io"
-    shutil.rmtree(io, ignore_errors=True)
+    draft_tools = tools_digest()
+    job = job_dir(base, "drafts")
+    io = job / "io"
     (io / "scripts").mkdir(parents=True)
     shutil.copy(ROOT / "tools" / "decomp" / "ghidra" / "DecompDrafts.java", io / "scripts")
-    shutil.copy(ROOT / "build-decomp" / "types.json", io / "types.json")
-    if os.environ.get("OTL_DRAFT_PROTOTYPES") == "0":  # for measuring their effect only
-        data = json.loads((io / "types.json").read_text())
+    if os.environ.get("OTL_DRAFT_PROTOTYPES") == "0":
         data.pop("prototypes", None)
-        (io / "types.json").write_text(json.dumps(data))
+    (io / "types.json").write_text(json.dumps(data))
     names = {t["id"]: t["name"] for t in db["tus"]}
     if tus == ["--all"]:
         tus = [t["name"] for t in db["tus"] if t["kind"] == "game"]
     wanted = {t["id"] for t in db["tus"] if t["name"] in tus}
-    if len(wanted) != len(set(tus)):
-        raise SystemExit(f"unknown TU among {tus}")
+    if len(wanted) != len(set(tus)) or not wanted:
+        raise SystemExit(f"unknown or empty TU selection: {tus}")
     funcs = [f for f in db["functions"].values() if f["tu"] in wanted and f["kind"] in WRITTEN]
-    (io / "targets.txt").write_text("".join(f"{f['address']}\n" for f in funcs))
-    result = headless(["-process", "Torchlight.bin.x86_64", "-noanalysis", "-readOnly",
-                       "-scriptPath", str(io / "scripts"),
-                       "-postScript", "DecompDrafts.java", str(io / "types.json"), str(io / "targets.txt"),
-                       str(io / "out")], "drafts")
-    if result.returncode:
-        raise SystemExit("Ghidra failed; see " + str(base / "drafts.log"))
-    data = json.loads((io / "types.json").read_text())
-    types, prototypes = data["classes"], data.get("prototypes", {})
-    by_tu = {}
-    for f in funcs:
-        raw = io / "out" / f"{f['address']}.c"
-        tu_dir = OUT / names[f["tu"]] / "raw"
-        tu_dir.mkdir(parents=True, exist_ok=True)
-        if raw.exists():
-            shutil.copy(raw, tu_dir / f"{f['address']}.c")
-            by_tu.setdefault(names[f["tu"]], []).append((raw.read_text(errors="replace"), f.get("scope") or ""))
-    insns = layout.load_insns(db)
-    for tu, items in by_tu.items():
-        classes = used_classes(types, [t for t, _ in items], [s.split("::")[0] for _, s in items])
-        tu_id = next(t["id"] for t in db["tus"] if t["name"] == tu)
-        shaping = shaping_functions(db, tu_id, insns)
-        (OUT / tu / "inputs.json").write_text(json.dumps({
-            "elf": db["original_elf_sha256"], "tools": tools_digest(),
-            "classes": class_digests(types, classes), "prototypes": prototype_digest(prototypes, shaping)}, indent=1))
-    print(f"{len(funcs)} functions -> {OUT.relative_to(ROOT)}/<TU>/raw/ (fingerprints in <TU>/inputs.json)")
+    if addresses is not None:
+        chosen = {hex(int(a, 16)) for a in addresses}
+        if not chosen or not chosen <= {f["address"] for f in funcs}:
+            raise ValueError("requested addresses are outside the selected TUs")
+        funcs = [f for f in funcs if f["address"] in chosen]
+    pending = funcs
+    receipts, raw_paths = {}, {}
+    for attempt in range(retries + 1):
+        attempt_dir = io / f"attempt-{attempt}"
+        attempt_dir.mkdir()
+        targets = attempt_dir / "targets.txt"
+        targets.write_text("".join(f"{f['address']}\n" for f in pending))
+        out = attempt_dir / "out"
+        result = headless(["-process", "Torchlight.bin.x86_64", "-noanalysis", "-readOnly",
+                           "-scriptPath", str(io / "scripts"), "-postScript", "DecompDrafts.java",
+                           str(io / "types.json"), str(targets), str(out), str(timeout * (2 ** attempt))],
+                          f"drafts-{attempt}", job=job)
+        for f in pending:
+            address = f["address"]
+            receipt = read_export(out, address) if not result.returncode else {
+                "status": "NO_BODY", "error": f"headless exit {result.returncode}"}
+            receipt["attempt"] = attempt + 1
+            receipt["timeout_seconds"] = timeout * (2 ** attempt)
+            receipts[address] = receipt
+            if receipt["status"] == "COMPLETE":
+                raw_paths[address] = out / f"{address}.c"
+        pending = [f for f in pending if receipts[f["address"]]["status"] == "TIMEOUT"]
+        if not pending:
+            break
+    # Receipt is written last under a publication lock. Any intermediate body mismatch is stale.
+    with file_lock(OUT / ".publish.lock"):
+        for tu in tus:
+            tu_dir = OUT / tu
+            (tu_dir / "raw").mkdir(parents=True, exist_ok=True)
+            exports = {f["address"]: receipts[f["address"]] for f in funcs if names[f["tu"]] == tu}
+            for address, receipt in exports.items():
+                destination = tu_dir / "raw" / f"{address}.c"
+                if receipt["status"] == "COMPLETE":
+                    temporary = destination.with_suffix(".c.new")
+                    shutil.copy(raw_paths[address], temporary)
+                    os.replace(temporary, destination)
+                elif destination.exists():
+                    destination.unlink()  # never leave an earlier body looking like this failed export
+            stamp = {"schema": DRAFT_SCHEMA, "elf": db["original_elf_sha256"], "tools": draft_tools,
+                     "types_fingerprint": types_fingerprint(data), "exports": exports, "job": str(job)}
+            temporary = tu_dir / "inputs.json.new"
+            temporary.write_text(json.dumps(stamp, indent=1))
+            os.replace(temporary, tu_dir / "inputs.json")
+    failed = sum(r["status"] != "COMPLETE" for r in receipts.values())
+    print(f"{len(funcs) - failed}/{len(funcs)} complete functions -> {OUT}; logs: {job}")
+    return 1 if failed else 0
 
 
 def find_definition(text, f):
@@ -358,7 +449,12 @@ def main():
     sub.add_parser("analyze")
     d = sub.add_parser("drafts")
     d.add_argument("tus", nargs="*")
+    d.add_argument("--timeout", type=int, default=int(os.environ.get("OTL_DRAFT_TIMEOUT", "120")),
+                   help="seconds per function; retries double this budget")
+    d.add_argument("--retries", type=int, default=int(os.environ.get("OTL_DRAFT_RETRIES", "0")),
+                   help="retry timed out functions only")
     d.add_argument("--all", action="store_true", help="every game TU")
+    d.add_argument("--address", action="append", help="export only these original addresses; full TU stays incomplete")
     s = sub.add_parser("stale", help="TUs whose drafts were made with other types, scripts or ELF")
     s.add_argument("--unknown", action="store_true", help="also those made before fingerprinting")
     d.add_argument("--stale", action="store_true", help="every TU `stale` lists")
@@ -377,8 +473,8 @@ def main():
         if not tus:
             print("no stale drafts")
             return 0
-        return drafts(tus)
-    drafts(["--all"] if getattr(args, "all", False) else args.tus)
+        return drafts(tus, args.timeout, args.retries, args.address)
+    return drafts(["--all"] if getattr(args, "all", False) else args.tus, args.timeout, args.retries, args.address)
 
 
 if __name__ == "__main__":

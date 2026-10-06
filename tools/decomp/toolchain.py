@@ -133,7 +133,8 @@ def include_args(root, cfg):
                  root / "usr" / "include"):
         args += ["-isystem", str(path)]
     for item in cfg.get("include", []):
-        args += ["-I", str(ROOT / item)]
+        base = Path(os.environ.get("OTL_INCLUDE_ROOT", ROOT)) if item.startswith("decomp/") else ROOT
+        args += ["-I", str(base / item)]
     # Generated headers for work in progress (llm_loop.py); committed sources must not need them.
     for item in filter(None, os.environ.get("OTL_EXTRA_INCLUDE", "").split(":")):
         args += ["-I", item]
@@ -154,23 +155,44 @@ def driver_env(root):
 CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
 
 
-def _digest(cmd, source, deps):
+def _digest(cmd, source, deps, preprocessed=None):
     h = hashlib.sha256("\0".join(cmd).encode())
+    h.update((preprocessed or "").encode())
     for path in [source, *deps]:
         try:
-            h.update(Path(path).read_bytes())
+            data = Path(path).read_bytes()
+            h.update(str(path).encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
         except OSError:
             return None
     return h.hexdigest()
 
 
-def _cache_lookup(cmd, source):
-    """Cached output for this command, keyed by the source and the headers it used last time."""
+def _preprocessed_digest(cmd, source, root):
+    """Resolve includes anew: adding a shadow header must invalidate an old hit."""
+    args = [a for a in cmd if a not in ("-c", "-S")]
+    result = subprocess.run(args + ["-E", str(source)], env=driver_env(root), capture_output=True)
+    if result.returncode:
+        return None
+    h = hashlib.sha256(result.stdout)
+    # Both the driver and cc1 can change without a command-line change.
+    for path in (Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
+                 root / "usr/bin/as"):
+        h.update(sha256(path).encode())
+    return h.hexdigest()
+
+
+def _cache_lookup(cmd, source, preprocessed=None):
+    """Cached output bound to current include resolution and compiler contents."""
     index = CC_CACHE / (hashlib.sha256(("\0".join(cmd) + str(source)).encode()).hexdigest() + ".json")
     if not index.exists():
         return index, None
-    entry = json.loads(index.read_text())
-    digest = _digest(cmd, source, entry["deps"])
+    try:
+        entry = json.loads(index.read_text())
+        if entry.get("schema") != 2 or not preprocessed:
+            return index, None
+        digest = _digest(cmd, source, entry["deps"], preprocessed)
+    except (OSError, ValueError, KeyError, TypeError):
+        return index, None
     if digest and digest == entry["digest"] and (CC_CACHE / entry["output"]).exists():
         return index, CC_CACHE / entry["output"]
     return index, None
@@ -214,8 +236,9 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
         cmd = base + include_args(root, cfg) + list(cfg["cflags"]) + list(extra)
         cmd += ["-S" if assembly else "-c"]
         use_cache = cache and not probe and not os.environ.get("OTL_NO_CC_CACHE")
+        preprocessed = _preprocessed_digest(cmd, source, root) if use_cache else None
         if use_cache:
-            index, hit = _cache_lookup(cmd, source)
+            index, hit = _cache_lookup(cmd, source, preprocessed)
             if hit:
                 output = Path(output)
                 output.parent.mkdir(parents=True, exist_ok=True)
@@ -244,13 +267,13 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
             # Make-style dependency list: "\\ " escapes spaces in paths, "\\\n" continues lines.
             body = depfile.read_text().replace("\\\n", " ").split(": ", 1)[1].replace("\\ ", "\0")
             deps = [d.replace("\0", " ") for d in body.split() if d.replace("\0", " ") != str(source)]
-            digest = _digest(cmd, source, deps)
+            digest = _digest(cmd, source, deps, preprocessed) if preprocessed else None
             if digest:
                 CC_CACHE.mkdir(parents=True, exist_ok=True)
                 name = digest + (".s" if assembly else ".o")
                 shutil.copyfile(out, CC_CACHE / name)
                 partial = index.with_suffix(f".{os.getpid()}.{id(out)}.tmp")
-                partial.write_text(json.dumps({"deps": deps, "digest": digest, "output": name}))
+                partial.write_text(json.dumps({"schema": 2, "deps": deps, "digest": digest, "output": name}))
                 os.replace(partial, index)
     return output
 

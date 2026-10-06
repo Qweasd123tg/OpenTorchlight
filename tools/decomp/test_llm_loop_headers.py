@@ -56,6 +56,12 @@ class CompleteHandHeader(unittest.TestCase):
         self.assertEqual(added, [])
         self.assertEqual(text, self.header)
 
+    def test_existing_short_name_does_not_hide_cv_overload(self):
+        function = {**func("CUnit", "getA"), "params": "", "cv": "const"}
+        added, text = self.complete(self.header, [function], {"getA": ("int getA() const;", set())})
+        self.assertEqual(["int getA() const;"], added)
+        self.assertIn("int getA();\n    int getA() const;", text)
+
     def test_class_without_public_section_gets_one(self):
         header = "class CUnit\n{\n    int m_iA;\n};\n"
         added, text = self.complete(header, [func("CUnit", "getA")], {"getA": ("int getA();", set())})

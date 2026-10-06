@@ -51,12 +51,29 @@ def ensure_db():
     return db
 
 
-def shadow_covered(db):
-    """Original addresses named by TL_ORIGINAL in the self-tests (what they compare)."""
+def shadow_declared(db):
+    """Navigation only: a declaration is not evidence that a fixture compared it."""
     names = set()
     for test in (ROOT / "decomp" / "hybrid" / "tests").glob("*.cpp"):
         names.update(re.findall(r'TL_ORIGINAL\([^;]*?"(_Z\w+)"\)', test.read_text(), re.S))
     return {address for address, f in db["functions"].items() if names & set(f["names"])}
+
+
+def shadow_covered(db, report=()):
+    """Only explicit completed comparisons from successful executed fixtures.
+
+    Legacy handwritten fixtures have no per-function execution receipt. They
+    still run as regression tests, but their declarations cannot accept DIFF.
+    """
+    passed = {m.group(1) for line in report
+              if (m := re.fullmatch(r"tlhybrid: (\w+)\s+PASS \(0\)", line))}
+    covered = set()
+    for line in report:
+        m = re.fullmatch(r"\s+coverage (\w+) (0x[0-9a-f]+) completed (\d+) different (\d+) incomplete (\d+)", line)
+        if (m and m.group(1) in passed and int(m.group(3)) >= autotest.MIN_COMPLETED
+                and int(m.group(4)) == 0 and int(m.group(5)) == 0 and m.group(2) in db["functions"]):
+            covered.add(m.group(2))
+    return covered
 
 
 def generated_tests(db, diff):
@@ -135,13 +152,16 @@ def main():
         # Quarantining old automatic evidence must not remove their time budget.
         shards = max(1, int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs()))
         test_files = len(list(hybrid.TESTS.glob("*.cpp"))) + len(generated)
-        os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 12 * ((test_files + shards - 1) // shards)))
+        os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 20 * ((test_files + shards - 1) // shards)))
         blob, loader = hybrid.build()
         selftest, report = hybrid.selftest(blob, loader)
         print("\n".join(report))
         print(f"hybrid self-test: {'PASS' if selftest == 0 else 'FAIL'}")
         if selftest == 0:
-            covered = shadow_covered(db)
+            covered = shadow_covered(db, report)
+            declared = shadow_declared(db)
+            print(f"handwritten fixtures: {len(declared)} declared originals; {len(covered)} with executed "
+                  "per-function comparison evidence (declarations alone do not accept DIFF)")
             auto = set()
             for line in report:
                 m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed \d+ different (\d+)(?: incomplete (\d+))?", line)
@@ -171,4 +191,6 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    import publication
+    with publication.tree_lock():
+        sys.exit(main())

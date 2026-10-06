@@ -18,6 +18,8 @@ the queue skips TUs owned by anyone but $OTL_OWNER.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -25,6 +27,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
@@ -38,7 +41,6 @@ OWNERS = ROOT / "decomp" / "owners.json"
 WRITTEN = ("function", "ctor", "dtor", "static")
 # Reserved for generators or special handling instead of the worker queue.
 RESERVED_SUFFIX = ("binreloc.c",)
-LARGE_TU = 60000
 
 
 def owners():
@@ -71,7 +73,24 @@ def claims():
 
 def save_claims(data):
     CLAIMS.parent.mkdir(parents=True, exist_ok=True)
-    CLAIMS.write_text(json.dumps(data, indent=1))
+    fd, temporary = tempfile.mkstemp(prefix="claims-", dir=CLAIMS.parent)
+    try:
+        with os.fdopen(fd, "w") as stream:
+            json.dump(data, stream, indent=1)
+        os.replace(temporary, CLAIMS)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
+@contextmanager
+def claims_lock():
+    CLAIMS.parent.mkdir(parents=True, exist_ok=True)
+    with CLAIMS.with_suffix(".lock").open("a+") as stream:
+        fcntl.flock(stream, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(stream, fcntl.LOCK_UN)
 
 
 def candidates(db):
@@ -84,15 +103,26 @@ def candidates(db):
         if f["kind"] in WRITTEN:
             by_tu.setdefault(f["tu"], []).append(f)
     rows = []
+    original = None
     for t in db["tus"]:
         name = t["name"]
         funcs = by_tu.get(t["id"], [])
-        if (t["kind"] != "game" or not funcs or (ROOT / "decomp" / "src" / name).exists() or name in claimed
+        if (t["kind"] != "game" or not funcs or name in claimed
                 or name.endswith(RESERVED_SUFFIX)):
             continue
+        source = ROOT / "decomp" / "src" / name
+        if source.exists():
+            import objdiff
+            original = original or objdiff.Original(db=db)
+            try:
+                unit = objdiff.compare_source(source, original, quiet=True)
+                done = {r["address"] for r in unit["functions"] if r.get("address") and r["status"] == "MATCH"}
+                funcs = [f for f in funcs if f["address"] not in done]
+            except SystemExit:
+                print(f"queue: {name} does not compile; retained for repair", file=sys.stderr)
+            if not funcs:
+                continue
         size = sum(f["size"] for f in funcs)
-        if size > LARGE_TU:
-            continue
         missing = set()
         for cls in {f["scope"] for f in funcs if f.get("scope")}:
             for b in db["classes"].get(cls, {}).get("bases", []):
@@ -110,6 +140,15 @@ def queue(limit):
 
 
 def claim(slug, budget):
+    with claims_lock():
+        return _claim(slug, budget)
+
+
+def _claim(slug, budget):
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", slug):
+        raise SystemExit("worker slug must contain only letters, digits, underscores and hyphens")
+    if slug in claims():
+        raise SystemExit(f"{slug} already has a claim")
     db = elfdb.load_db()
     rows = candidates(db)
     if not rows:
@@ -127,7 +166,13 @@ def claim(slug, budget):
     data = claims()
     data[slug] = batch
     save_claims(data)
-    new(slug, batch)
+    try:
+        new(slug, batch)
+    except BaseException:
+        data = claims()
+        data.pop(slug, None)
+        save_claims(data)
+        raise
     print(f"claimed {len(batch)} TUs, {total} bytes: {' '.join(batch)}")
 
 
@@ -196,9 +241,10 @@ def drop(slug):
     git("worktree", "remove", "--force", str(BASE / slug), check=False)
     git("worktree", "prune")
     git("branch", "-D", f"decomp/{slug}", check=False)
-    data = claims()
-    if data.pop(slug, None) is not None:
-        save_claims(data)
+    with claims_lock():
+        data = claims()
+        if data.pop(slug, None) is not None:
+            save_claims(data)
 
 
 def main():

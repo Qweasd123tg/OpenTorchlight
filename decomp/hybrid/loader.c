@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -219,7 +220,13 @@ static int run_tests(const struct blob *b)
         if (selected++ % shard_count != shard_index)
             continue;
         ran++;
+        struct timespec started, finished;
+        clock_gettime(CLOCK_MONOTONIC, &started);
+        fprintf(stderr, "tlhybrid: begin %s\n", test[i].name);
         int failures = test[i].run(&g_host);
+        clock_gettime(CLOCK_MONOTONIC, &finished);
+        fprintf(stderr, "tlhybrid: timing %s %.3f seconds\n", test[i].name,
+                (finished.tv_sec - started.tv_sec) + (finished.tv_nsec - started.tv_nsec) / 1e9);
         fprintf(stderr, "tlhybrid: %-48s %s (%d)\n", test[i].name, failures ? "FAIL" : "PASS", failures);
         failed += failures != 0;
     }

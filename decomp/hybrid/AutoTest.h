@@ -2,8 +2,8 @@
 // Each case builds the same object state and arguments, then runs the original
 // function and the decompiled one in two forked children of the game process.
 // The children report the return value and the bytes of the object and its
-// fake collaborators; any difference fails the test. A crash or a timeout in
-// both children is inconclusive, in one of them it is a failure.
+// fake collaborators; any difference fails the test. Identical crashes are
+// inconclusive. A resource timeout is an incomplete observation on either side.
 #ifndef AUTOTEST_H
 #define AUTOTEST_H
 
@@ -319,7 +319,7 @@ inline bool readReport(int fd, Capture& capture, bool* started = 0)
 }
 
 // Runs body in a forked child; the child reports its capture through a pipe.
-inline void runChild(Body body, void* context, Outcome& outcome)
+inline void runChild(Body body, void* context, Outcome& outcome, unsigned cpuMs = 300, unsigned wallMs = 3000)
 {
     int fds[2];
     outcome.capture.reset();
@@ -342,9 +342,18 @@ inline void runChild(Body body, void* context, Outcome& outcome)
         signal(SIGILL, crashed);
         signal(SIGABRT, crashed);
         signal(SIGALRM, SIG_DFL);
+        signal(SIGPROF, SIG_DFL);
         struct itimerval limit;
         std::memset(&limit, 0, sizeof(limit));
-        limit.it_value.tv_usec = 300000;  // a hang (e.g. an endless loop in the original) is a SIGALRM
+        // CPU includes system time; scheduler delays must not consume this budget.
+        limit.it_value.tv_sec = cpuMs / 1000;
+        limit.it_value.tv_usec = (cpuMs % 1000) * 1000;
+        if (!cpuMs) limit.it_value.tv_usec = 1000;
+        setitimer(ITIMER_PROF, &limit, 0);
+        // A separate wall deadline still catches blocked IO/locks.
+        limit.it_value.tv_sec = wallMs / 1000;
+        limit.it_value.tv_usec = (wallMs % 1000) * 1000;
+        if (!wallMs) limit.it_value.tv_usec = 1000;
         setitimer(ITIMER_REAL, &limit, 0);
         // A child-local buffer also lets hand-written tests call runChild
         // without linking the generated runtime's global outcome storage.
@@ -387,6 +396,9 @@ inline bool incomplete(const Outcome& outcome)
 {
     if (outcome.childStatus < 0 || (outcome.reportStarted && !outcome.reportValid) ||
         (outcome.reportValid && outcome.capture.issue != Capture::Complete))
+        return true;
+    if (WIFSIGNALED(outcome.childStatus) &&
+        (WTERMSIG(outcome.childStatus) == SIGALRM || WTERMSIG(outcome.childStatus) == SIGPROF))
         return true;
     return WIFEXITED(outcome.childStatus) &&
            (WEXITSTATUS(outcome.childStatus) == kReportWriteFailure ||

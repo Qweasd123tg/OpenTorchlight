@@ -170,6 +170,8 @@ def return_from_code(f):
 
 class Loop:
     def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False):
+        if ROOT == elfdb.ROOT:
+            raise RuntimeError("Loop requires publication.Stage.activate(); live-tree experiments are forbidden")
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
         os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
@@ -292,10 +294,14 @@ class Loop:
         extra, forward, system, seen = [], set(), set(), set()
         for f in self.funcs:
             method = f.get("method") or ""
+            params = tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
+                           for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
+            identity = (method, params, ghidra_cpp.cv_suffix(f).strip())
             if (f.get("scope") != cls or f.get("vslots") or f["kind"] not in ("function", "ctor")
-                    or method in seen or re.search(rf"(?<![\w~]){re.escape(method)}\s*\(", body)):
+                    or identity in seen or any((p, cv) == identity[1:]
+                                               for p, cv, _ in headers.declared_signatures(body, method))):
                 continue
-            seen.add(method)
+            seen.add(identity)
             deps = {"sys": set(), "local": set(), "forward": set()}
             ghidra = gen.ghidra_return(f)
             # The code decides only where Ghidra guessed an integer: its void/bool/float are reliable.
@@ -524,7 +530,8 @@ class Loop:
             self.source.write_text(self.unit())
         for address, item in pending.items():
             self.status[address] = "not accepted"
-        self.finish()
+        if not self.finish():
+            raise RuntimeError(f"final TU was not accepted; attempt retained in {self.work}")
         traffic = {m.model: {"sent": m.sent, "received": m.received} for m in self.models}
         (self.work / "result.json").write_text(json.dumps({
             "status": self.status, "by_model": {a: self.by_model.get(a) for a in self.status},
@@ -558,26 +565,56 @@ class Loop:
         generated headers into decomp/include and checks that it builds without them, with
         the same results. A TU without accepted functions is removed, its headers stay."""
         try:
-            before = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+            before = self.compare()
         except SystemExit as error:
             print(f"  the TU does not compile:\n{str(error)[:1500]}")
-            return
+            return False
         written = promote.promote(self.source)
         saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
         try:
-            after = {r["address"]: r["status"] for r in self.compare()["functions"] if r.get("address")}
+            after = self.compare()
         except SystemExit as error:
             print(f"  promoted {', '.join(written)}, but the TU no longer compiles without the generated "
                   f"headers:\n{str(error)[:1500]}")
-            return
+            return False
         finally:
             if saved is not None:
                 os.environ["OTL_EXTRA_INCLUDE"] = saved
             if not self.accepted and not self.existing:
                 self.source.unlink(missing_ok=True)
-        changed = sorted(a for a in before if after.get(a) != before[a])
+        final = {r["address"]: r for r in after["functions"] if r.get("address")}
+        changed = [a for a, status in self.status.items() if status == "MATCH"
+                   and final.get(a, {}).get("status") != "MATCH"]
+        if changed or after.get("unknown"):
+            print(f"  final signatures/MATCH changed: {changed}; publication refused")
+            return False
+        if before.get("object_digest") != after.get("object_digest"):
+            tested = [f for f in self.funcs if self.status.get(f["address"]) == "tested"]
+            if tested:
+                made, skipped = autotest.Generator().write(tested)
+                if skipped or len(made) != len(tested):
+                    print("  final object changed; differential tests unavailable; publication refused")
+                    return False
+                saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
+                try:
+                    blob, loader = hybrid.build(out=self.work / "final-test", src=ROOT / "decomp/src",
+                                                tests=sorted(autotest.OUT.glob("*.cpp")), verbose=False)
+                    code, report = hybrid.selftest(blob, loader, only=",".join("auto_" + f["address"][2:] for f in made))
+                    completed = set()
+                    for line in report:
+                        m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed \d+ different (\d+)(?: incomplete (\d+))?", line)
+                        if (m and int(m.group(2)) >= autotest.MIN_COMPLETED
+                                and int(m.group(3)) == 0 and int(m.group(4) or 0) == 0):
+                            completed.add("0x" + m.group(1))
+                    if code or completed != {f["address"] for f in made}:
+                        print("  final object changed and its differential retest failed; publication refused")
+                        return False
+                finally:
+                    if saved is not None:
+                        os.environ["OTL_EXTRA_INCLUDE"] = saved
         print(f"  promoted into decomp/include: {', '.join(written) or 'nothing'}"
-              + (f"; status changed for {', '.join(changed)}" if changed else ""))
+              + "; final object checked without generated includes")
+        return True
 
     def compare(self):
         return objdiff.compare_source(self.source, self.original, quiet=True)
@@ -602,7 +639,7 @@ class Loop:
         if made:
             os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(made))
             try:
-                blob, loader = hybrid.build(verbose=False, tests=tests)
+                blob, loader = hybrid.build(out=self.work / "test", src=ROOT / "decomp/src", verbose=False, tests=tests)
                 test_code, report = hybrid.selftest(blob, loader, only=",".join(f"auto_{f['address'][2:]}" for f in made))
                 if test_code != 0:
                     print(f"  hybrid selftest failed with exit code {test_code}; no candidates accepted", flush=True)
@@ -678,8 +715,15 @@ def main():
     if (ROOT / "decomp" / "src" / args.tu).exists() and not (args.resume or args.overwrite):
         raise SystemExit(f"decomp/src/{args.tu} exists: --resume keeps its functions, --overwrite replaces it")
     started = time.time()
-    status = Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs,
-                  args.resume).run()
+    import publication
+    stage = publication.Stage()
+    print(f"isolated attempt: {stage.path}")
+    with stage.activate():
+        import llm_loop as engine
+        status = engine.Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs,
+                             args.resume).run()
+    stage.validate()
+    print("published:", ", ".join(stage.publish()) or "unchanged")
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
 

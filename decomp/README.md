@@ -1928,3 +1928,7 @@ No foreign source TU or generic pipeline was changed.
 Integrated check: 148 tests, 0 failed; 1,311 / 5,247 accepted game functions,
 446,230 original bytes. Destructor watched-free, effects allocation/trim and
 filtering heap regressions all pass on this final source.
+
+### Ремонт по трём пакетам исследований, 7 октября 2026
+
+Общий путь без модели: `candidate.py`, `no_llm_loop.py`, изолированный `publication.Stage`; финальные TU/headers проверяются до публикации. Исправлены freshness/jobs Ghidra, типы/ABI указателей, сигнатуры и конвертер, include cache, очередь, runtime isolation и mutation minimum. Ручная TL_ORIGINAL declaration больше не принимает DIFF. Текущий check: 103 теста, 0 ошибок; 895 строгих MATCH. Полная карта внедрения, пилоты и остающиеся ограничения — [IMPLEMENTED_RU.md](../research/gpt-web-2026-10-06/IMPLEMENTED_RU.md).

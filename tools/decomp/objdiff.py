@@ -431,6 +431,8 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
             continue
         if current is not None:
             sections[current].append(line)
+    parsed = {name: parse_insns("\n".join(lines)) for name, lines in sections.items()}
+    addresses = {name: [i[0] for i in insns] for name, insns in parsed.items()}
     by_name = {s.name: s.index for s in obj.sections}
     side = ObjectSide(obj, resolve, name_at)
     result = {}
@@ -438,8 +440,9 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
         if sym.type != elfimage.STT_FUNC or not sym.defined:
             continue
         section = obj.sections[sym.shndx]
-        insns = [i for i in parse_insns("\n".join(sections.get(section.name, [])))
-                 if sym.value <= i[0] < sym.value + sym.size]
+        positions = addresses.get(section.name, [])
+        insns = parsed.get(section.name, [])[bisect.bisect_left(positions, sym.value):
+                                            bisect.bisect_left(positions, sym.value + sym.size)]
         side.prepare(by_name[section.name])
         side.current = sym.name
         bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind
