@@ -21,6 +21,9 @@ import toolchain
 
 
 class Publication(unittest.TestCase):
+    def setUp(self):
+        self.enterContext(patch.object(publication.Stage, "_input_digest", return_value="synthetic-inputs"))
+        self.enterContext(patch.object(publication.Stage, "_verify_published_objects", return_value=None))
     def fixture(self, folder):
         root = Path(folder)
         (root / "decomp/src").mkdir(parents=True)
@@ -50,10 +53,12 @@ class Publication(unittest.TestCase):
             root = self.fixture(folder)
             stage = publication.Stage(root)
             stage.validated = publication.tree_state(stage.path)
+            stage.validated_inputs = "synthetic-inputs"
             (stage.path / "decomp/include/Unit.h").write_text("changed after tests")
             with self.assertRaisesRegex(RuntimeError, "requires validation"):
                 stage.publish()
             stage.validated = publication.tree_state(stage.path)
+            stage.validated_inputs = "synthetic-inputs"
             (root / "decomp/src/Unit.cpp").write_text("another editor")
             with self.assertRaisesRegex(RuntimeError, "changed during"):
                 stage.publish()
@@ -67,6 +72,7 @@ class Publication(unittest.TestCase):
             for path in (stage.path / "decomp/src/Unit.cpp", stage.path / "decomp/include/Unit.h"):
                 path.write_text("validated new content")
             stage.validated = publication.tree_state(stage.path)
+            stage.validated_inputs = "synthetic-inputs"
             replace = stage._replace
             count = 0
             def fail_once(name, data):

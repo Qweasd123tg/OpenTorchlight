@@ -1,0 +1,1882 @@
+{
+  "original_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "dispatches": 126,
+  "functions": 106,
+  "old_prefix_truncated": 1,
+  "old_range_unknown": 51,
+  "proved_range": 47,
+  "bound_disagreements": 0,
+  "conclusion": "Static audit of table-comparison coverage; no evidence that any accepted game function is wrong.",
+  "rows": [
+    {
+      "address": "0x5ea290",
+      "name": "CLayoutDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 15,
+      "dispatch": "0x5ea322",
+      "register": "%rdx",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 28,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x6079c0",
+      "name": "CMonsterDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 18,
+      "dispatch": "0x607a12",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 84,
+      "old_termination": "target outside function",
+      "proved_count": 84,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x652850",
+      "name": "CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 28,
+      "dispatch": "0x652882",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 27,
+      "old_compared_prefix": 27,
+      "old_termination": null,
+      "proved_count": 27,
+      "observations": []
+    },
+    {
+      "address": "0x65f2d0",
+      "name": "CCounterDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 29,
+      "dispatch": "0x65f302",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 9,
+      "old_compared_prefix": 9,
+      "old_termination": null,
+      "proved_count": 9,
+      "observations": []
+    },
+    {
+      "address": "0x66ed00",
+      "name": "CPuzzleRandomizerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 33,
+      "dispatch": "0x66ed32",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 46,
+      "old_compared_prefix": 46,
+      "old_termination": null,
+      "proved_count": 46,
+      "observations": []
+    },
+    {
+      "address": "0x684270",
+      "name": "CUnitTriggerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 39,
+      "dispatch": "0x6842a2",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 79,
+      "old_compared_prefix": 79,
+      "old_termination": null,
+      "proved_count": 79,
+      "observations": []
+    },
+    {
+      "address": "0x709e10",
+      "name": "CDescriptorProp::getPropertyValueAsString(CEditorBaseObject*)",
+      "tu": 66,
+      "dispatch": "0x709f09",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x38(%rbp)",
+      "old_assumed_count": 10,
+      "old_compared_prefix": 10,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x70a730",
+      "name": "CDescriptorProp::saveProperty(CEditorBaseObject*, CDataGroup*)",
+      "tu": 66,
+      "dispatch": "0x70a82b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x38(%r13)",
+      "old_assumed_count": 10,
+      "old_compared_prefix": 10,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x70c3b0",
+      "name": "CDescriptorProp::loadProperty(CEditorBaseObject*, CDataGroup*, unsigned int)",
+      "tu": 66,
+      "dispatch": "0x70c655",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x38(%rbx)",
+      "old_assumed_count": 10,
+      "old_compared_prefix": 10,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x71e1b0",
+      "name": "Ogre::UTFString::asUTF8_c_str() const",
+      "tu": 69,
+      "dispatch": "0x71e506",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x18(%rsp)",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x7316c0",
+      "name": "EditorFireEvent(unsigned int, long long, unsigned int)",
+      "tu": 71,
+      "dispatch": "0x73173a",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 14,
+      "old_termination": "target outside function",
+      "proved_count": 14,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x736eb0",
+      "name": "EditorLoadScene(unsigned int, wchar_t*, bool)",
+      "tu": 71,
+      "dispatch": "0x73824f",
+      "register": "%r15",
+      "old_nearest_cmp_operand": "%r15",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0x775d60",
+      "name": "CObjectControl3D::configureDragType()",
+      "tu": 78,
+      "dispatch": "0x7760cb",
+      "register": "%r15",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": 6,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x780b60",
+      "name": "CObjectControl3D::manipulateSelectedItems(float, TArrayList<CEditorBaseObject*>&)",
+      "tu": 78,
+      "dispatch": "0x78191e",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x797b00",
+      "name": "CLogicGroupDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 83,
+      "dispatch": "0x797b32",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 8,
+      "old_compared_prefix": 8,
+      "old_termination": null,
+      "proved_count": 8,
+      "observations": []
+    },
+    {
+      "address": "0x7bd400",
+      "name": "CTimelineDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 88,
+      "dispatch": "0x7bd432",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 30,
+      "old_compared_prefix": 30,
+      "old_termination": null,
+      "proved_count": 30,
+      "observations": []
+    },
+    {
+      "address": "0x7c88d0",
+      "name": "CTimelineProperty::fillSplineWithData()",
+      "tu": 89,
+      "dispatch": "0x7c8972",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 9,
+      "old_termination": "target outside function",
+      "proved_count": 9,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x7c8c40",
+      "name": "CTimelineProperty::DoLinearInterpolation(CTimeline*, float, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*)",
+      "tu": 89,
+      "dispatch": "0x7c8e82",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 10,
+      "old_termination": "target outside function",
+      "proved_count": 10,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x7c9170",
+      "name": "CTimelineProperty::DoSplineInterpolation(CTimeline*, float)",
+      "tu": 89,
+      "dispatch": "0x7c91f2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 9,
+      "old_termination": "target outside function",
+      "proved_count": 9,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x7d6020",
+      "name": "CEffect::getDamageTypeDisplayString(EDAMAGE_TYPES)",
+      "tu": 91,
+      "dispatch": "0x7d6049",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": "%ebp",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0x7dc9f0",
+      "name": "CEffect::calculateBaseValue(CEffect::ECALCULATETYPES)",
+      "tu": 91,
+      "dispatch": "0x7dcafa",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "(%rax)",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x7dc9f0",
+      "name": "CEffect::calculateBaseValue(CEffect::ECALCULATETYPES)",
+      "tu": 91,
+      "dispatch": "0x7dcc3e",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "(%rax)",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x7e4520",
+      "name": "CEffect::modifyEffectsByCharacter(CCharacter*)",
+      "tu": 91,
+      "dispatch": "0x7e457e",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "(%rax)",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x825d40",
+      "name": "CCharacter::updateAI(float, bool)",
+      "tu": 96,
+      "dispatch": "0x825dc2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 42,
+      "old_termination": "target outside function",
+      "proved_count": 42,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0x8424a0",
+      "name": "CCharacter::applyInstantEffect(CEffect*)",
+      "tu": 96,
+      "dispatch": "0x842515",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 137,
+      "old_compared_prefix": 137,
+      "old_termination": null,
+      "proved_count": 137,
+      "observations": []
+    },
+    {
+      "address": "0x8435c0",
+      "name": "CCharacter::applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*)",
+      "tu": 96,
+      "dispatch": "0x84362a",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 122,
+      "old_compared_prefix": 122,
+      "old_termination": null,
+      "proved_count": 122,
+      "observations": []
+    },
+    {
+      "address": "0x848870",
+      "name": "CCharacter::updateAnimation(float)",
+      "tu": 96,
+      "dispatch": "0x848b75",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 25,
+      "old_compared_prefix": 25,
+      "old_termination": null,
+      "proved_count": 25,
+      "observations": []
+    },
+    {
+      "address": "0x86f790",
+      "name": "CEquipment::getAttackSpeedString(EWeaponSpeed)",
+      "tu": 101,
+      "dispatch": "0x86f7b9",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": "%ebp",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": 5,
+      "observations": []
+    },
+    {
+      "address": "0x886d40",
+      "name": "CEquipment::attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)",
+      "tu": 101,
+      "dispatch": "0x887501",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 12,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x8e2d30",
+      "name": "CMonster::idleAI(float, CLevel&, bool)",
+      "tu": 107,
+      "dispatch": "0x8e3073",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x334(%rbx)",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x8e3a40",
+      "name": "CMonster::updateAI(float, bool)",
+      "tu": 107,
+      "dispatch": "0x8e3bf7",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x330(%rbx)",
+      "old_assumed_count": 42,
+      "old_compared_prefix": 42,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x8e41c0",
+      "name": "CPlayer::incrementJournalStatistic(EJournalStatistic, int)",
+      "tu": 108,
+      "dispatch": "0x8e41e2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 17,
+      "old_compared_prefix": 17,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x91a6b0",
+      "name": "CKeyManager::shiftCharacter(int, bool)",
+      "tu": 111,
+      "dispatch": "0x91a6c2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 204,
+      "old_compared_prefix": 204,
+      "old_termination": null,
+      "proved_count": 204,
+      "observations": []
+    },
+    {
+      "address": "0x91ac90",
+      "name": "CMouseManager::mouseEvent(unsigned int, unsigned int)",
+      "tu": 112,
+      "dispatch": "0x91ac9d",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 10,
+      "old_compared_prefix": 10,
+      "old_termination": null,
+      "proved_count": 10,
+      "observations": []
+    },
+    {
+      "address": "0x95f150",
+      "name": "CLevel::loadRoomLayout(CLevelTemplateData*, bool, ELevelEntryType, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": 116,
+      "dispatch": "0x960328",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 16,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x97de70",
+      "name": "CCounter::updateCounter()",
+      "tu": 119,
+      "dispatch": "0x97de8b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x64(%rdi)",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x991e20",
+      "name": "COutputIncrementor::increment()",
+      "tu": 123,
+      "dispatch": "0x991eb2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x9ddc00",
+      "name": "CLayout::callFunctionOnObjects(CLayout::ELAYOUT_FUNCTION_TYPES, bool)",
+      "tu": 133,
+      "dispatch": "0x9ddc43",
+      "register": "%r12",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 15,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x9ddc00",
+      "name": "CLayout::callFunctionOnObjects(CLayout::ELAYOUT_FUNCTION_TYPES, bool)",
+      "tu": 133,
+      "dispatch": "0x9ddd40",
+      "register": "%r13",
+      "old_nearest_cmp_operand": "%r12d",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0x9ddc00",
+      "name": "CLayout::callFunctionOnObjects(CLayout::ELAYOUT_FUNCTION_TYPES, bool)",
+      "tu": 133,
+      "dispatch": "0x9ddf20",
+      "register": "%r13",
+      "old_nearest_cmp_operand": "%r12d",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xa06700",
+      "name": "CShape::calculateOrientation(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",
+      "tu": 141,
+      "dispatch": "0xa0673a",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x108(%rdi)",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xa30da0",
+      "name": "getDynPropFromArray(float const*, unsigned int)",
+      "tu": 163,
+      "dispatch": "0xa30e23",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": 6,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xa45540",
+      "name": "CParticleTechWrapper::setRenderType(unsigned int, bool)",
+      "tu": 167,
+      "dispatch": "0xa45912",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": 5,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xa6d4b0",
+      "name": "CSoundManager::createSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, SOUND_TYPE, bool, float, float)",
+      "tu": 180,
+      "dispatch": "0xa6d76b",
+      "register": "%r13",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": 7,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xa6f350",
+      "name": "Ogre::UTFString::operator std::basic_string<char, std::char_traits<char>, std::allocator<char> >() const",
+      "tu": 180,
+      "dispatch": "0xa6f6c7",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x10(%rsp)",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xa83d60",
+      "name": "CGameUI::updateHardwareCursor()",
+      "tu": 184,
+      "dispatch": "0xa83daa",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xa843a0",
+      "name": "CGameUI::keyEvent(unsigned int, unsigned int, long)",
+      "tu": 184,
+      "dispatch": "0xa84412",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": 6,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xa924c0",
+      "name": "CGameUI::onClick(ELayoutFunction)",
+      "tu": 184,
+      "dispatch": "0xa9250c",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 85,
+      "old_compared_prefix": 85,
+      "old_termination": null,
+      "proved_count": 85,
+      "observations": []
+    },
+    {
+      "address": "0xab8100",
+      "name": "CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)",
+      "tu": 184,
+      "dispatch": "0xac2de8",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xb243c0",
+      "name": "CEnchantMenu::setOpen(bool, EAIState)",
+      "tu": 190,
+      "dispatch": "0xb2484c",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0xb26290",
+      "name": "CEnchantMenu::performInteraction()",
+      "tu": 190,
+      "dispatch": "0xb26486",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0xb2af60",
+      "name": "CEnchantMenu::updateLayout()",
+      "tu": 190,
+      "dispatch": "0xb2c090",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xb2af60",
+      "name": "CEnchantMenu::updateLayout()",
+      "tu": 190,
+      "dispatch": "0xb2c9e4",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xb61280",
+      "name": "CMerchantMenu::onClick(ELayoutFunction)",
+      "tu": 194,
+      "dispatch": "0xb612a2",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 53,
+      "old_termination": "target outside function",
+      "proved_count": 53,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xb9b0d0",
+      "name": "CPetMenu::update(float)",
+      "tu": 197,
+      "dispatch": "0xb9d9af",
+      "register": "%r15",
+      "old_nearest_cmp_operand": "%r15",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0xbd47e0",
+      "name": "CSettingsMenu::update(float)",
+      "tu": 200,
+      "dispatch": "0xbd4e95",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%ebp",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xc2b9d0",
+      "name": "CMenuManager::setActiveMenu(EMenu)",
+      "tu": 205,
+      "dispatch": "0xc2b9fa",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": 6,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xc3fe80",
+      "name": "CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": 206,
+      "dispatch": "0xc3fea2",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 88,
+      "old_termination": "target outside function",
+      "proved_count": 88,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xc42cb0",
+      "name": "CDifficultyMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": 207,
+      "dispatch": "0xc42cd2",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 11,
+      "old_termination": "target outside function",
+      "proved_count": 11,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xc62f90",
+      "name": "CDataValue::GetValueTypeAsString()",
+      "tu": 212,
+      "dispatch": "0xc62fc3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 9,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xc63280",
+      "name": "CDataValue::GetValueAsString()",
+      "tu": 212,
+      "dispatch": "0xc632b3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 9,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xc74490",
+      "name": "FILESYSTEM::setFileTime(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long, long long, long long)",
+      "tu": 218,
+      "dispatch": "0xc749cf",
+      "register": "%r15",
+      "old_nearest_cmp_operand": "%r15",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0xc87330",
+      "name": "OGRE_UTILITIES::createEntity(Ogre::SceneManager*, OGRE_UTILITIES::EPRIMITIVES, OGRE_UTILITIES::EQUERYMASK, char const*)",
+      "tu": 225,
+      "dispatch": "0xc8743a",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": 6,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xcb47f0",
+      "name": "CSkillEffectAndAffixes::CSkillEffectAndAffixes(CSkill*, CDataGroup*, CSkillEffectAndAffixes*)",
+      "tu": 233,
+      "dispatch": "0xcb49a4",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 9,
+      "old_compared_prefix": 9,
+      "old_termination": null,
+      "proved_count": 9,
+      "observations": []
+    },
+    {
+      "address": "0xcb87a0",
+      "name": "CSkillEvent::getBonePosition(CBaseUnit*, ESKILL_BONE_ATTACHMENT, bool)",
+      "tu": 234,
+      "dispatch": "0xcb89e3",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": "%ebp",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xd0ce90",
+      "name": "CQuest::questEventUpdate(EQUEST_EVENTS, CBaseUnit*, CBaseUnit*)",
+      "tu": 242,
+      "dispatch": "0xd0cea5",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xd600f0",
+      "name": "CAIStatWatcher::update(float)",
+      "tu": 250,
+      "dispatch": "0xd601a3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xd7fd30",
+      "name": "CSettings::assignDefault(int, int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",
+      "tu": 255,
+      "dispatch": "0xd80191",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 6,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xdba0b0",
+      "name": "CQuestControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "tu": 265,
+      "dispatch": "0xdba0e2",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%ebx",
+      "old_assumed_count": 9,
+      "old_compared_prefix": 9,
+      "old_termination": null,
+      "proved_count": 9,
+      "observations": []
+    },
+    {
+      "address": "0xdd3ca0",
+      "name": "CGameStateController::doActualGameState(bool)",
+      "tu": 268,
+      "dispatch": "0xdd3ce8",
+      "register": "%rdx",
+      "old_nearest_cmp_operand": "0x64(%rbx)",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xe3c460",
+      "name": "CJournalMenu::updateLayout()",
+      "tu": 283,
+      "dispatch": "0xe402b4",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x24(%rsp)",
+      "old_assumed_count": 19,
+      "old_compared_prefix": 18,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old table prefix truncated",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xe50b00",
+      "name": "CFileSystem::CFileSystem(bool)",
+      "tu": 285,
+      "dispatch": "0xe513fd",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xea45d0",
+      "name": "CWaypointMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": 295,
+      "dispatch": "0xea462a",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 56,
+      "old_termination": "target outside function",
+      "proved_count": 56,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xec7940",
+      "name": "CAchievements::CAchievements()",
+      "tu": 304,
+      "dispatch": "0xeccc45",
+      "register": "%rdi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 7,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee59b2",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 35,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5a2d",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5aeb",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5b0b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5b2b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5b4b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee5650",
+      "name": "ParticleUniverse::ParticleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 308,
+      "dispatch": "0xee5b6b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xee6270",
+      "name": "ParticleUniverse::DynamicAttributeFactory::cloneDynamicAttribute(ParticleUniverse::DynamicAttribute*)",
+      "tu": 308,
+      "dispatch": "0xee62af",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": 5,
+      "observations": []
+    },
+    {
+      "address": "0xefcb20",
+      "name": "ParticleUniverse::ParticleSystemManager::destroyAlias(ParticleUniverse::IAlias*)",
+      "tu": 314,
+      "dispatch": "0xefcb41",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x10(%rsi)",
+      "old_assumed_count": 9,
+      "old_compared_prefix": 9,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf02250",
+      "name": "ParticleUniverse::ParticleSystemManagerTokens::UseAliasToken::parse(ParticleUniverse::ParticleScriptParser*)",
+      "tu": 315,
+      "dispatch": "0xf02288",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x10(%rax)",
+      "old_assumed_count": 9,
+      "old_compared_prefix": 9,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf1a620",
+      "name": "ParticleUniverse::GeometryRotator::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 337,
+      "dispatch": "0xf1a6ca",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": 5,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xf1c9e0",
+      "name": "ParticleUniverse::JetAffector::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 343,
+      "dispatch": "0xf1ca42",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf219c0",
+      "name": "ParticleUniverse::ScaleAffector::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 356,
+      "dispatch": "0xf21aa3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf219c0",
+      "name": "ParticleUniverse::ScaleAffector::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 356,
+      "dispatch": "0xf21ac3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf219c0",
+      "name": "ParticleUniverse::ScaleAffector::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 356,
+      "dispatch": "0xf21ae3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf24080",
+      "name": "ParticleUniverse::TextureAnimator::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 362,
+      "dispatch": "0xf2411f",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf24080",
+      "name": "ParticleUniverse::TextureAnimator::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 362,
+      "dispatch": "0xf2413f",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf25160",
+      "name": "ParticleUniverse::TextureRotator::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 364,
+      "dispatch": "0xf251ef",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf25160",
+      "name": "ParticleUniverse::TextureRotator::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 364,
+      "dispatch": "0xf2520f",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf267a0",
+      "name": "ParticleUniverse::VortexAffector::copyAttributesTo(ParticleUniverse::ParticleAffector*)",
+      "tu": 368,
+      "dispatch": "0xf26852",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf29630",
+      "name": "ParticleUniverse::CircleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 373,
+      "dispatch": "0xf29773",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf29630",
+      "name": "ParticleUniverse::CircleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 373,
+      "dispatch": "0xf29793",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf29630",
+      "name": "ParticleUniverse::CircleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 373,
+      "dispatch": "0xf297b3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf29630",
+      "name": "ParticleUniverse::CircleEmitter::copyAttributesTo(ParticleUniverse::ParticleEmitter*)",
+      "tu": 373,
+      "dispatch": "0xf297d3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf3c330",
+      "name": "ParticleUniverse::OnQuotaObserver::_postProcessParticles(ParticleUniverse::ParticleTechnique*, float)",
+      "tu": 409,
+      "dispatch": "0xf3c3a2",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": 5,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xf3e200",
+      "name": "ParticleUniverse::BillboardRenderer::setBillboardType(ParticleUniverse::BillboardRenderer::BillboardType)",
+      "tu": 415,
+      "dispatch": "0xf3e24a",
+      "register": "%rbp",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 10,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf590b0",
+      "name": "ParticleUniverse::ParticlePool::isEmpty(ParticleUniverse::Particle::ParticleType)",
+      "tu": 440,
+      "dispatch": "0xf590bc",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf59170",
+      "name": "ParticleUniverse::ParticlePool::getSize(ParticleUniverse::Particle::ParticleType)",
+      "tu": 440,
+      "dispatch": "0xf59179",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": 5,
+      "observations": []
+    },
+    {
+      "address": "0xf59380",
+      "name": "ParticleUniverse::ParticlePool::getFirst(ParticleUniverse::Particle::ParticleType)",
+      "tu": 440,
+      "dispatch": "0xf593ce",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf59500",
+      "name": "ParticleUniverse::ParticlePool::end(ParticleUniverse::Particle::ParticleType)",
+      "tu": 440,
+      "dispatch": "0xf5951a",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": 5,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xf595c0",
+      "name": "ParticleUniverse::ParticlePool::getNext(ParticleUniverse::Particle::ParticleType)",
+      "tu": 440,
+      "dispatch": "0xf595e5",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 5,
+      "old_compared_prefix": 5,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf59710",
+      "name": "ParticleUniverse::ParticlePool::getNext()",
+      "tu": 440,
+      "dispatch": "0xf5974b",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf59d20",
+      "name": "ParticleUniverse::ParticlePool::lockLatestParticle()",
+      "tu": 441,
+      "dispatch": "0xf59d53",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf5d790",
+      "name": "ParticleUniverse::ParticlePool::increasePool(ParticleUniverse::Particle::ParticleType, unsigned long, std::vector<ParticleUniverse::ParticleBehaviour*, std::allocator<ParticleUniverse::ParticleBehaviour*> >&, ParticleUniverse::ParticleTechnique*)",
+      "tu": 441,
+      "dispatch": "0xf5d7a1",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf5d860",
+      "name": "ParticleUniverse::ParticlePool::releaseParticle(ParticleUniverse::Particle::ParticleType, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+      "tu": 441,
+      "dispatch": "0xf5d892",
+      "register": "%rsi",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": 5,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xf637f0",
+      "name": "checkColorValidity(LodePNGColorType, unsigned int)",
+      "tu": 452,
+      "dispatch": "0xf63802",
+      "register": "%rdi",
+      "old_nearest_cmp_operand": "%edi",
+      "old_assumed_count": 7,
+      "old_compared_prefix": 7,
+      "old_termination": null,
+      "proved_count": 7,
+      "observations": []
+    },
+    {
+      "address": "0xf64380",
+      "name": "unfilter(unsigned char*, unsigned char const*, unsigned int, unsigned int, unsigned int)",
+      "tu": 452,
+      "dispatch": "0xf643f4",
+      "register": "%rdx",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf64840",
+      "name": "filterScanline(unsigned char*, unsigned char const*, unsigned char const*, unsigned long, unsigned long, unsigned char)",
+      "tu": 452,
+      "dispatch": "0xf64854",
+      "register": "%r9",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 5,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf6fba0",
+      "name": "ConvertUTF8toUTF16",
+      "tu": 453,
+      "dispatch": "0xf6fc23",
+      "register": "%rdx",
+      "old_nearest_cmp_operand": "%r14w",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf6ff30",
+      "name": "ConvertUTF8toUTF32",
+      "tu": 453,
+      "dispatch": "0xf6ffc9",
+      "register": "%rbx",
+      "old_nearest_cmp_operand": "%r13w",
+      "old_assumed_count": 6,
+      "old_compared_prefix": 6,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf725a0",
+      "name": "Fl_Widget::redraw_label()",
+      "tu": 455,
+      "dispatch": "0xf726e0",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 15,
+      "old_termination": "target outside function",
+      "proved_count": 15,
+      "observations": [
+        "old range unknown"
+      ]
+    },
+    {
+      "address": "0xf728d0",
+      "name": "Fl::handle_(int, Fl_Window*)",
+      "tu": 455,
+      "dispatch": "0xf72967",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 24,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf739a0",
+      "name": "Fl_Group::handle(int)",
+      "tu": 456,
+      "dispatch": "0xf739c3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%r12d",
+      "old_assumed_count": 22,
+      "old_compared_prefix": 22,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf7cd10",
+      "name": "fl_handle(_XEvent const&)",
+      "tu": 464,
+      "dispatch": "0xf7ce12",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 90,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf7cd10",
+      "name": "fl_handle(_XEvent const&)",
+      "tu": 464,
+      "dispatch": "0xf7ceec",
+      "register": "%rax",
+      "old_nearest_cmp_operand": null,
+      "old_assumed_count": null,
+      "old_compared_prefix": 66,
+      "old_termination": "target outside function",
+      "proved_count": null,
+      "observations": [
+        "old range unknown",
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf7cd10",
+      "name": "fl_handle(_XEvent const&)",
+      "tu": 464,
+      "dispatch": "0xf7daa1",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%rax",
+      "old_assumed_count": 32,
+      "old_compared_prefix": 32,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf89400",
+      "name": "fl_read_image(unsigned char*, int, int, int, int, int)",
+      "tu": 478,
+      "dispatch": "0xf896ed",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%eax",
+      "old_assumed_count": 25,
+      "old_compared_prefix": 25,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf89400",
+      "name": "fl_read_image(unsigned char*, int, int, int, int, int)",
+      "tu": 478,
+      "dispatch": "0xf89a0d",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "0x30(%rbp)",
+      "old_assumed_count": 13,
+      "old_compared_prefix": 13,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf8bfd0",
+      "name": "fl_draw_symbol(char const*, int, int, int, int, unsigned int)",
+      "tu": 482,
+      "dispatch": "0xf8c0b1",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%al",
+      "old_assumed_count": 10,
+      "old_compared_prefix": 10,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf95700",
+      "name": "Fl_Button::handle(int)",
+      "tu": 496,
+      "dispatch": "0xf95727",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 13,
+      "old_compared_prefix": 13,
+      "old_termination": null,
+      "proved_count": 13,
+      "observations": []
+    },
+    {
+      "address": "0xf980d0",
+      "name": "Fl_Input::handle(int)",
+      "tu": 499,
+      "dispatch": "0xf98105",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 24,
+      "old_compared_prefix": 24,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    },
+    {
+      "address": "0xf9a280",
+      "name": "Fl_Input_::handletext(int, int, int, int, int)",
+      "tu": 500,
+      "dispatch": "0xf9a2b3",
+      "register": "%rax",
+      "old_nearest_cmp_operand": "%esi",
+      "old_assumed_count": 18,
+      "old_compared_prefix": 18,
+      "old_termination": null,
+      "proved_count": null,
+      "observations": [
+        "current index range unverified"
+      ]
+    }
+  ]
+}

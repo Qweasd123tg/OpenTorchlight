@@ -11,6 +11,7 @@
 #include "Level.h"
 
 TL_ORIGINAL(void, originalWarperActivate, (CWarper*), "_ZN7CWarper8activateEv")
+extern "C" void recoveredWarperActivate(CWarper*) __asm__("_ZN7CWarper8activateEv");
 TL_FUNCTION(warperAddWaypoint, "_ZN7CPlayer11addWaypointESbIwSt11char_traitsIwESaIwEEi")
 TL_FUNCTION(warperWarpLevels, "_ZN11CGameClient10warpLevelsESbIwSt11char_traitsIwESaIwEEiibS3_b")
 
@@ -119,7 +120,8 @@ void side(const Case& c, bool ours, autotest::Capture& out) {
     TL_REDIRECT(patches,warperAddWaypoint,&waypointSpy);
     TL_REDIRECT(patches,warperWarpLevels,&warpSpy);
     if (patches.failed()) _exit(33);
-    if (ours) object->activate(); else originalWarperActivate(object);
+    if (ours) autotest::invoke(out,recoveredWarperActivate,object);
+    else autotest::invoke(out,originalWarperActivate,object);
     record(3); record(callbackCount); record(identity(object->m_pResourceManager));
     record(object->m_bEnabled); record(object->m_bWaypoint);
     record(object->m_iLevelDelta); record(object->m_iLevelDepth);
@@ -141,16 +143,14 @@ void recovered(void* p,autotest::Capture& out) { side(*static_cast<Case*>(p),tru
 TL_TEST(warper_activate_differential) {
     int failures=0;
     unsigned cases=0;
+    autotest::Stats stats={0,0,0};
+    autotest::Coverage coverage("warper_activate_differential",(uint64_t)(uintptr_t)&originalWarperActivate);
     // Stable cases cover all nullable-player combinations and both waypoint,
     // enabled and shared-player values. Enabled is deliberately ignored.
     for (unsigned n=0;n<=3;++n) for (unsigned mask=0;mask<(1u<<n);++mask)
     for (unsigned flags=0;flags<8;++flags) {
         Case c={n,mask,0,(n+mask+flags)%5, bool(flags&1),bool(flags&2),bool(flags&4)};
-        autotest::Outcome a,b; autotest::runChild(original,&c,a); autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&
-            a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&
-            std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if (!ok) host->log("    warper static %u: statuses %d/%d bytes %lu/%lu\n",cases,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);
+        bool ok=autotest::compareCase(original,recovered,&c,stats,host,"warper_activate_differential",cases,&coverage);
         TL_CHECK(failures,ok); ++cases;
     }
     // Clear only during warpLevels: clearing before the current client is
@@ -158,13 +158,9 @@ TL_TEST(warper_activate_differential) {
     const unsigned modes[]={1,2,4,8,32,1|2|4|8|32,64|1,64|2,64|4,64|8,64|16,64|32,64|1|2|4|8|32};
     for (unsigned m=0;m<sizeof(modes)/sizeof(modes[0]);++m) for (unsigned w=0;w<2;++w) {
         Case c={2,0,modes[m],m%5,bool(w),false,true};
-        autotest::Outcome a,b; autotest::runChild(original,&c,a); autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&
-            a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&
-            std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if (!ok) host->log("    warper mutation mode %u waypoint %u: statuses %d/%d bytes %lu/%lu\n",modes[m],w,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);
+        bool ok=autotest::compareCase(original,recovered,&c,stats,host,"warper_activate_differential",cases,&coverage);
         TL_CHECK(failures,ok); ++cases;
     }
-    host->log("    warper: %u completed protocol comparisons\n",cases);
-    return failures;
+    coverage.report(host);
+    return failures + stats.incomplete + (coverage.completed<20 ? 1 : 0);
 }

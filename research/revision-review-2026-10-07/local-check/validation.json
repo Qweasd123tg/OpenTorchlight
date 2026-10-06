@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "date": "2026-10-07",
+  "baseline_commit": "1f98f4abb08c4588d0a0dd6b6cf6286ee5638c4e",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "inputs_digest": "79bddfca11d8bae4338c66f0e561d0ec89a941f6210f2f338d8c2513bccc7b5e",
+  "checks": {
+    "tools": {
+      "command": "python3 -m unittest discover -s tools/decomp -p 'test_*.py'",
+      "exit": 0,
+      "tests": 164,
+      "result": "PASS"
+    },
+    "headless": {
+      "command": "python3 tools/decomp/check.py",
+      "exit": 0,
+      "tests": 103,
+      "failed": 0,
+      "result": "PASS",
+      "GUI": false
+    }
+  },
+  "progress": {
+    "game_functions": 5247,
+    "matched_functions": 894,
+    "matched_bytes": 52414,
+    "accepted_functions": 895,
+    "accepted_bytes": 53036,
+    "hybrid_selftest": 0
+  },
+  "comparison_evidence": {
+    "0x9b8e60": {
+      "policy": 1,
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "evidence": {
+        "schema": 1,
+        "object_digest": "a9e0e7b007b334ff46471f8ec744d0614513d0518b9642fb233d372a141ff7b1",
+        "inputs_digest": "79bddfca11d8bae4338c66f0e561d0ec89a941f6210f2f338d8c2513bccc7b5e",
+        "parameters": {
+          "fixtures": [
+            "warper_activate_differential"
+          ],
+          "runtime_abi": 2
+        }
+      }
+    }
+  },
+  "warper_receipt": {
+    "address": "0x9b8e60",
+    "completed": 146,
+    "different": 0,
+    "incomplete": 0
+  },
+  "game_source_changes": [],
+  "logs": {
+    "tools-tests.log": {
+      "path": "build-decomp/revision-review/tools-tests.log",
+      "sha256": "4d93a1acde5a0b947d985962e6cb3102bd1f777f6b26c0e3d62bf727980259bd"
+    },
+    "headless-check.log": {
+      "path": "build-decomp/revision-review/headless-check.log",
+      "sha256": "6b4d22de4079781de9e1597efca4acc5ce8519964e7e7ac5d6cc87f14e3d8955"
+    }
+  },
+  "artifacts": {
+    "jump-before.json": "8e40f1e40228fee6c9f55bac58d224297a205be144412bd8b07f104dcf841cb4",
+    "jump-after.json": "856cccec8b7102ea4d815ae3f57197e0a9ede2d1c47d6ba8a2531f49ea2093b2",
+    "original-jump-table-audit.json": "14b61edcf773762b1ff6d2568e8755ec53ccc01259675f70977c43ecddffbb4a",
+    "candidate-qa.json": "73bc670530c535425c9c257c51280e0f3d6aae8aadd586be37d9d3824c505c79",
+    "cross-tu-regression.json": "7bbfff9f88b11e7eaf896bd17db243a63e56acbdb120b2fc88f92c325a7af66a",
+    "shared-cache-benchmark.json": "87b2b4c05bfae0fe89acfacf647a3d22191db168e895342a5d8f992a8794290b"
+  },
+  "limits": [
+    "Only first handwritten fixture migrated to native receipts; legacy declarations do not accept DIFF.",
+    "Unsupported jump table proofs remain DIFF.",
+    "Shared-cache timing is one TU backend compilation, not full workflow speedup.",
+    "Process termination recovery tested; power-loss durability not separately exercised.",
+    "Hybrid pass is not proof of standalone game or GUI."
+  ]
+}

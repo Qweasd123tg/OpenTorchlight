@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+import fcntl
 import hashlib
 import json
 import os
@@ -30,6 +31,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import threading
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -153,6 +155,182 @@ def driver_env(root):
 
 
 CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
+# Opt-in: Stage can share backend compilation while retaining its own first-level
+# path-sensitive cache. Preprocessing always resolves the current headers afresh.
+SHARED_CC_CACHE = None
+_SHARED_STATS = {"hit": 0, "miss": 0, "fallback": 0}
+_SHARED_STATS_LOCK = threading.Lock()
+_SHARED_BYPASS = object()
+
+
+def shared_cache_stats(reset=False):
+    with _SHARED_STATS_LOCK:
+        result = dict(_SHARED_STATS)
+        if reset:
+            for key in _SHARED_STATS:
+                _SHARED_STATS[key] = 0
+        return result
+
+
+def _shared_count(name):
+    with _SHARED_STATS_LOCK:
+        _SHARED_STATS[name] += 1
+
+
+def _shared_flags(flags):
+    """Only understood release flags; path-sensitive or unknown modes stay local."""
+    semantic, index = [], 0
+    allowed = {"-fno-strict-aliasing", "-fstrict-aliasing", "-fno-exceptions", "-fexceptions",
+               "-fno-rtti", "-frtti", "-fno-omit-frame-pointer", "-fomit-frame-pointer",
+               "-std=gnu++98", "-std=c++98", "-pthread", "-fPIC", "-fpic", "-fno-common"}
+    while index < len(flags):
+        flag = flags[index]
+        if flag in ("-I", "-isystem", "-iquote", "-idirafter"):
+            if index + 1 >= len(flags):
+                return None
+            index += 2
+            continue
+        if flag.startswith("-I") and len(flag) > 2:
+            index += 1
+            continue
+        if flag in ("-D", "-U"):
+            if index + 1 >= len(flags):
+                return None
+            semantic += [flag, flags[index + 1]]
+            index += 2
+            continue
+        if (flag in allowed or flag in ("-O0", "-O1", "-O2", "-O3", "-Os")
+                or (flag.startswith(("-D", "-U")) and len(flag) > 2)):
+            semantic.append(flag)
+            index += 1
+            continue
+        return None
+    return semantic
+
+
+def _compiler_identity(cmd, root):
+    digest = hashlib.sha256()
+    for path in (Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
+                 root / "usr/bin/as"):
+        digest.update(sha256(path).encode())
+    # cc1plus also uses the pinned GMP/MPFR and C++ runtime. Header contents
+    # already participate via fresh preprocessing; these affect the backend.
+    libraries = root / "usr/lib64"
+    for path in sorted(libraries.rglob("*")):
+        if path.is_file():
+            digest.update(path.relative_to(libraries).as_posix().encode() + b"\0")
+            digest.update(sha256(path).encode())
+    specs = subprocess.run([cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")], "-dumpspecs"],
+                           env=driver_env(root), capture_output=True)
+    if specs.returncode:
+        return None
+    digest.update(specs.stdout)
+    return digest.hexdigest()
+
+
+def _dependency_paths(path):
+    body = path.read_text().replace("\\\n", " ").split(": ", 1)[1].replace("\\ ", "\0")
+    if "\\" in body or "$" in body:
+        raise ValueError("unsupported Make dependency escaping")
+    return [Path(item.replace("\0", " ")) for item in body.split()]
+
+
+def _shared_preprocess(cmd, source, root, tmp):
+    """Exact expanded bytes at stable paths, never a rewritten arbitrary command."""
+    depfile = Path(tmp) / "shared.d"
+    args = [arg for arg in cmd if arg not in ("-c", "-S")]
+    result = subprocess.run(args + ["-E", "-P", "-MD", "-MF", str(depfile), str(source)],
+                            env=driver_env(root), capture_output=True)
+    if result.returncode or not depfile.exists():
+        return None
+    # A PCH is an additional compiler input which this route does not model.
+    try:
+        dependencies = _dependency_paths(depfile)
+    except (OSError, ValueError, IndexError):
+        return None
+    for path in dependencies:
+        if Path(str(path) + ".gch").exists() or path.suffix == ".gch":
+            return None
+    import re
+    text = result.stdout
+    if (re.search(rb"\.(?:incbin|include|file|loc)\b", text)
+            or re.search(rb"__builtin_(?:FILE|LINE|FUNCTION|source_location)\b", text)):
+        return None
+    for pragma in re.findall(rb"^\s*#\s*pragma\s+([^\n]+)", text, re.M):
+        if not re.match(rb"(?:pack\s*\(|GCC\s+visibility\s+)", pragma):
+            return None
+    # Preserve the original TU basename in .file/STT_FILE. All macro expansion
+    # already occurred with the real source/header paths (including __FILE__).
+    try:
+        prefix = ("# 1 " + json.dumps(Path(source).name, ensure_ascii=False) + "\n").encode()
+    except UnicodeError:
+        return None
+    return prefix + text, result.stderr
+
+
+def _shared_compile(cmd, source, output, root, flags, assembly, quiet, tmp):
+    if SHARED_CC_CACHE is None:
+        return None
+    semantic = _shared_flags(flags)
+    if semantic is None or Path(source).suffix not in (".cpp", ".cc", ".cxx", ".C"):
+        _shared_count("fallback")
+        return _SHARED_BYPASS
+    prepared = _shared_preprocess(cmd, source, root, tmp)
+    if prepared is None:
+        _shared_count("fallback")
+        return _SHARED_BYPASS
+    preprocessed, warnings = prepared
+    identity = _compiler_identity(cmd, root)
+    if identity is None:
+        _shared_count("fallback")
+        return _SHARED_BYPASS
+    if warnings.strip() and not quiet:
+        sys.stderr.write(warnings.decode(errors="replace"))
+    context = json.dumps({"schema": 1, "compiler": identity, "flags": semantic,
+                          "assembly": assembly}, sort_keys=True).encode()
+    key = hashlib.sha256(context + b"\0" + preprocessed).hexdigest()
+    folder = Path(SHARED_CC_CACHE) / key
+    folder.mkdir(parents=True, exist_ok=True)
+    cached = folder / ("output.s" if assembly else "output.o")
+    manifest = folder / "result.json"
+    with (folder / "lock").open("a+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            entry = json.loads(manifest.read_text()) if manifest.exists() else {}
+            hit = (isinstance(entry, dict) and entry.get("schema") == 1 and cached.exists()
+                   and entry.get("output_sha256") == sha256(cached))
+        except (OSError, ValueError, TypeError):
+            hit = False
+        if hit:
+            _shared_count("hit")
+        else:
+            _shared_count("miss")
+            source_path = folder / "input.ii"
+            source_path.write_bytes(preprocessed)
+            staged = Path(tmp) / cached.name
+            base = [cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")]]
+            result = subprocess.run(base + semantic + ["-S" if assembly else "-c", str(source_path),
+                                    "-o", str(staged)], env=driver_env(root), capture_output=True, text=True)
+            if result.returncode:
+                # Keeping the original pipeline preserves diagnostic provenance
+                # and supports cases which GCC does not accept as .ii input.
+                _shared_count("fallback")
+                return _SHARED_BYPASS
+            if result.stderr.strip() and not quiet:
+                sys.stderr.write(result.stderr)
+            if _compiler_identity(cmd, root) != identity:
+                _shared_count("fallback")
+                return _SHARED_BYPASS
+            temporary = folder / (".output-" + str(os.getpid()) + "-" + str(threading.get_ident()))
+            shutil.copyfile(staged, temporary)
+            os.replace(temporary, cached)
+            partial = folder / (".result-" + str(os.getpid()) + "-" + str(threading.get_ident()))
+            partial.write_text(json.dumps({"schema": 1, "output_sha256": sha256(cached)}))
+            os.replace(partial, manifest)
+        output = Path(output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(cached, output)
+        return output
 
 
 def _digest(cmd, source, deps, preprocessed=None):
@@ -221,7 +399,10 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
 
     Results are cached in build-decomp/cc-cache by source, dependency and flag
     digests; set OTL_NO_CC_CACHE=1 or cache=False to bypass (side outputs such
-    as dumps are not cached)."""
+    as dumps are not cached). When SHARED_CC_CACHE is set, understood release
+    builds share compilation of freshly expanded inputs at stable content paths.
+    Unsupported modes use the original compilation without object-only caching.
+    shared_cache_stats() reports actual shared hits, misses and fallbacks."""
     root = cache_dir() / "gcc447"
     if not (root / ".complete.json").exists():
         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
@@ -236,6 +417,15 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
         cmd = base + include_args(root, cfg) + list(cfg["cflags"]) + list(extra)
         cmd += ["-S" if assembly else "-c"]
         use_cache = cache and not probe and not os.environ.get("OTL_NO_CC_CACHE")
+        if use_cache:
+            shared = _shared_compile(cmd, source, output, root, list(cfg["cflags"]) + list(extra),
+                                     assembly, quiet, tmp)
+            if shared is _SHARED_BYPASS:
+                # Unmodelled inputs (PCH/assembler reads) and side-output flags
+                # cannot safely reuse even a first-level object-only entry.
+                use_cache = False
+            elif shared is not None:
+                return shared
         preprocessed = _preprocessed_digest(cmd, source, root) if use_cache else None
         if use_cache:
             index, hit = _cache_lookup(cmd, source, preprocessed)

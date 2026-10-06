@@ -1,0 +1,159 @@
+SOURCE tools/decomp/no_llm_loop.py
+SHA256 c31f8c3628ed5bc9c0a2cce18543806eac54869308cb2c78c1d985550d4f8317
+
+0001: #!/usr/bin/env python3
+0002: """Finite deterministic candidate queue, using the existing generators.
+0003: 
+0004:     python3 tools/decomp/no_llm_loop.py LogicTimerDescriptor.cpp --provider properties
+0005:     python3 tools/decomp/no_llm_loop.py --provider descriptor --limit 3
+0006: 
+0007: No model construction or calls. Unsupported jobs are retained with a cause.
+0008: Use --publish to validate and publish new MATCH definitions in the original TU.
+0009: """
+0010: import argparse
+0011: import hashlib
+0012: import json
+0013: import os
+0014: from pathlib import Path
+0015: import re
+0016: import time
+0017: 
+0018: import candidate
+0019: import elfdb
+0020: import evidence
+0021: import ghidra_cpp
+0022: import mutate
+0023: import publication
+0024: 
+0025: 
+0026: def outline_properties(stage, tu, cls, db, methods=None):
+0027:     """Move generated static definitions to their owning TU; weak header code is not a transfer."""
+0028:     import descriptors
+0029:     header = stage.path / "decomp/include" / descriptors.header_name(cls)
+0030:     text = header.read_text()
+0031:     masked = mutate.mask(text)
+0032:     functions = [f for f in db["functions"].values() if f.get("scope") == cls
+0033:                  and f.get("tu") == tu["id"] and re.match(r"(?:Get|Set)_", f.get("method") or "")]
+0034:     source = stage.path / "decomp/src" / tu["name"]
+0035:     old = source.read_text()
+0036:     old_mask = mutate.mask(old)
+0037:     edits, bodies, seen = [], [], set()
+0038:     for f in functions:
+0039:         if methods is not None and f["method"] not in methods:
+0040:             continue
+0041:         if f["method"] in seen or mutate.definition(old, old_mask, f):
+0042:             continue
+0043:         seen.add(f["method"])
+0044:         pattern = rf"(?m)^([ \t]*)static ([^;\n]*\b{re.escape(f['method'])}\([^\n]*\))\s*\n[ \t]*\{{"
+0045:         matches = list(re.finditer(pattern, masked))
+0046:         if len(matches) != 1:
+0047:             continue
+0048:         m = matches[0]
+0049:         begin = masked.index("{", m.start())
+0050:         end = mutate.matching(masked, begin, "{", "}")
+0051:         if end < 0:
+0052:             continue
+0053:         signature = text[m.start(2):m.end(2)]
+0054:         qualifier = re.sub(rf"\b{re.escape(f['method'])}\(", f"{cls}::{f['method']}(" , signature, count=1)
+0055:         definition = qualifier + "\n" + text[begin:end + 1]
+0056:         if mutate.definition(definition, mutate.mask(definition), f) is None:
+0057:             continue
+0058:         bodies.append(definition)
+0059:         edits.append((m.start(), end + 1, m.group(1) + "static " + signature + ";"))
+0060:     for start, end, replacement in sorted(edits, reverse=True):
+0061:         text = text[:start] + replacement + text[end:]
+0062:     header.write_text(text)
+0063:     source.write_text(old.rstrip() + "\n\n" + "\n\n".join(bodies) + "\n")
+0064:     return len(bodies)
+0065: 
+0066: 
+0067: def provide(stage, tu, provider, db):
+0068:     target = stage.path / "decomp/src" / tu["name"]
+0069:     with stage.activate():
+0070:         if provider == "descriptor":
+0071:             import descriptors
+0072:             if target.exists():
+0073:                 raise RuntimeError("descriptor constructor provider will not replace an existing TU")
+0074:             cls, base, header, source, complete = descriptors.Generator().generate(tu["id"])
+0075:             if not complete:
+0076:                 raise RuntimeError("descriptor trace incomplete; no candidate published")
+0077:             (stage.path / "decomp/include" / descriptors.header_name(cls)).write_text(header)
+0078:             target.parent.mkdir(parents=True, exist_ok=True)
+0079:             target.write_text(source)
+0080:         elif provider == "properties":
+0081:             import properties
+0082:             if not target.exists():
+0083:                 raise RuntimeError("property provider needs the descriptor's constructor TU")
+0084:             generator = properties.Generator()
+0085:             stats = generator.generate(tu["id"])
+0086:             if not stats.get("MATCH"):
+0087:                 raise RuntimeError("no supported matching property operations: " + str(dict(stats)))
+0088:             funcs = [f for f in db["functions"].values() if f["tu"] == tu["id"] and f.get("scope")
+0089:                      and re.match(r"(?:Get|Set)_", f.get("method") or "")]
+0090:             if not funcs or not outline_properties(stage, tu, funcs[0]["scope"], db, generator.last_matched):
+0091:                 raise RuntimeError("no new owning-TU property definitions; header-only weak code is not accepted")
+0092:         else:
+0093:             raise ValueError(provider)
+0094:     return target
+0095: 
+0096: 
+0097: def run(tus, provider, publish=False, limit=3, seconds=120):
+0098:     import parallel
+0099:     db = elfdb.load_db()
+0100:     tasks = {t["name"]: t for t in db["tus"] if t["kind"] == "game" and t["name"].endswith("Descriptor.cpp")}
+0101:     names = tus or sorted(tasks)
+0102:     missing = set(names) - set(tasks)
+0103:     if missing:
+0104:         raise ValueError("not a game descriptor TU: " + ", ".join(sorted(missing)))
+0105:     work = elfdb.ROOT / "build-decomp/no-llm"
+0106:     work.mkdir(parents=True, exist_ok=True)
+0107:     inputs = evidence.input_digest(db)
+0108:     start, results = time.monotonic(), []
+0109:     for name in names:
+0110:         if len(results) >= limit or time.monotonic() - start >= seconds:
+0111:             break
+0112:         if publish and parallel.owned_by_others(name):
+0113:             results.append({"tu": name, "status": "BLOCKED", "reason": "owned by " + parallel.owned_by_others(name)})
+0114:             continue
+0115:         key = hashlib.sha256((inputs + provider + name).encode()).hexdigest()
+0116:         cache = work / f"{key}.json"
+0117:         if cache.exists():
+0118:             row = json.loads(cache.read_text())
+0119:             if row["status"] != "MATCH":
+0120:                 results.append({**row, "cached_failure": True})
+0121:                 continue
+0122:         stage = publication.Stage()
+0123:         started = time.monotonic()
+0124:         try:
+0125:             target = provide(stage, tasks[name], provider, db)
+0126:             row = candidate.evaluate(name, target, publish=publish, stage=stage, incremental=True)
+0127:         except (ValueError, RuntimeError, SystemExit, OSError) as error:
+0128:             row = {"tu": name, "status": "BLOCKED", "reason": str(error), "attempt": str(stage.path), "published": False}
+0129:         row.update(provider=provider, seconds=time.monotonic() - started, inputs_digest=inputs)
+0130:         cache.write_text(json.dumps(row, indent=1, ensure_ascii=False) + "\n")
+0131:         results.append(row)
+0132:         # A successful publication changes inputs; independent remaining jobs use the new snapshot.
+0133:         if row.get("published"):
+0134:             inputs = evidence.input_digest(db)
+0135:     report = {"schema": 1, "provider": provider, "results": results,
+0136:               "budget": {"limit": limit, "seconds": seconds, "elapsed": time.monotonic() - start},
+0137:               "stop": "finite task/time budget or selected queue exhausted"}
+0138:     (work / "latest.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
+0139:     return report
+0140: 
+0141: 
+0142: def main():
+0143:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0144:     parser.add_argument("tus", nargs="*")
+0145:     parser.add_argument("--provider", choices=("descriptor", "properties"), required=True)
+0146:     parser.add_argument("--publish", action="store_true")
+0147:     parser.add_argument("--limit", type=int, default=3)
+0148:     parser.add_argument("--seconds", type=int, default=120)
+0149:     args = parser.parse_args()
+0150:     if args.limit <= 0 or args.seconds <= 0:
+0151:         parser.error("task/time budgets must be positive")
+0152:     print(json.dumps(run(args.tus, args.provider, args.publish, args.limit, args.seconds), indent=1, ensure_ascii=False))
+0153: 
+0154: 
+0155: if __name__ == "__main__":
+0156:     main()

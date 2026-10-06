@@ -1,0 +1,576 @@
+SOURCE tools/decomp/hybrid.py
+SHA256 db53c1eb0d747e2a49f7644cccd587fd44cff0a43f3624fcf58195a7ae659bdd
+
+0001: #!/usr/bin/env python3
+0002: """Hybrid build: decompiled TUs linked into the original game process.
+0003: 
+0004: Every decomp/src/**/*.cpp is compiled with the original toolchain to assembly.
+0005: Data the original already owns (globals, TU-local statics, vtables, RTTI, guard
+0006: variables) is redirected to its original address, so decompiled code operates on
+0007: the game's real objects; the TU's static constructors are dropped because the
+0008: original already ran them. The objects are linked at a fixed address within
+0009: rel32 range of the non-PIE executable; every other symbol resolves to the
+0010: original function, data or PLT entry. Functions of a decompiled TU replace the
+0011: original ones through 5-byte jumps installed by decomp/hybrid/loader.c.
+0012: 
+0013:     python3 tools/decomp/hybrid.py build
+0014:     python3 tools/decomp/hybrid.py selftest        # original vs decomp, exits before main
+0015:     python3 tools/decomp/hybrid.py run [-- ARGS]   # play with decompiled code (explicit task)
+0016: """
+0017: from __future__ import annotations
+0018: 
+0019: import argparse
+0020: import hashlib
+0021: import json
+0022: import os
+0023: from pathlib import Path
+0024: import re
+0025: import shutil
+0026: import subprocess
+0027: import sys
+0028: import tempfile
+0029: 
+0030: sys.path.insert(0, str(Path(__file__).resolve().parent))
+0031: import elfdb  # noqa: E402
+0032: import elfimage  # noqa: E402
+0033: import objdiff  # noqa: E402
+0034: import toolchain  # noqa: E402
+0035: 
+0036: ROOT = elfdb.ROOT
+0037: SRC = ROOT / "decomp" / "src"
+0038: HYBRID = ROOT / "decomp" / "hybrid"
+0039: TESTS = HYBRID / "tests"
+0040: OUT = ROOT / "build-decomp" / "hybrid"
+0041: # Within rel32 and imm32 reach of the executable (0x400000..0x1600000), and above
+0042: # the brk heap: on x86-64 the kernel places it up to 1 GiB past the end of .bss.
+0043: BLOB_BASE = 0x60000000
+0044: 
+0045: LINKER_SCRIPT = """\
+0046: SECTIONS
+0047: {{
+0048:   . = {base:#x};
+0049:   __tlhybrid_text_start = .;
+0050:   .text : {{ *(.text .text.* .gnu.linkonce.t.*) }}
+0051:   __tlhybrid_text_end = .;
+0052:   . = ALIGN(4096);
+0053:   .rodata : {{ *(.rodata .rodata.* .gnu.linkonce.r.*) }}
+0054:   .eh_frame : {{ KEEP(*(.eh_frame)) LONG(0) }}
+0055:   .gcc_except_table : {{ *(.gcc_except_table .gcc_except_table.*) }}
+0056:   .tlhybrid.hooks : {{ KEEP(*(.tlhybrid.hooks)) }}
+0057:   .tlhybrid.tests : {{ KEEP(*(.tlhybrid.tests)) }}
+0058:   .tlhybrid.imports : {{ KEEP(*(.tlhybrid.imports)) }}
+0059:   .tlhybrid.copies : {{ KEEP(*(.tlhybrid.copies)) }}
+0060:   . = ALIGN(4096);
+0061:   .data : {{ *(.data .data.* .gnu.linkonce.d.* .data.rel.ro .data.rel.ro.*) }}
+0062:   .tlhybrid.ctors : {{ KEEP(*(.ctors)) }}
+0063:   .bss : {{ *(.bss .bss.* .gnu.linkonce.b.*) *(COMMON) }}
+0064:   /DISCARD/ : {{ *(.note.GNU-stack) *(.comment) *(.dtors) *(.jcr) *(.eh_frame_hdr) }}
+0065: }}
+0066: INCLUDE originals.ld
+0067: """
+0068: 
+0069: 
+0070: # Symbols the linker script defines for the blob's own code.
+0071: LINKER_DEFINED = {"__tlhybrid_text_start", "__tlhybrid_text_end"}
+0072: 
+0073: 
+0074: class Context:
+0075:     def __init__(self):
+0076:         self.db = elfdb.load_db()
+0077:         self.image = elfimage.load(elfdb.default_elf())
+0078:         self.functions = {int(a, 16): f for a, f in self.db["functions"].items()}
+0079:         self.order = sorted(self.functions)
+0080:         self.global_data = {}
+0081:         self.local_data = {}
+0082:         for g in self.db["globals"]:
+0083:             address = int(g["address"], 16)
+0084:             if g["bind"] == "local":
+0085:                 self.local_data.setdefault(g["file"], {})[g["name"]] = address
+0086:             else:
+0087:                 self.global_data[g["name"]] = address
+0088: 
+0089:     def tu_functions(self, tu):
+0090:         names = {}
+0091:         for address, f in self.functions.items():
+0092:             if f["tu"] == tu["id"]:
+0093:                 for name in f["names"]:
+0094:                     names[name] = f
+0095:         return names
+0096: 
+0097: 
+0098: # --------------------------------------------------------------------------
+0099: # Assembly rewrite
+0100: 
+0101: 
+0102: SECTION_DIRECTIVE = re.compile(r"^\s*\.(text|data|bss|section\s+([^,\s]+).*|previous|pushsection\s+([^,\s]+).*|popsection)\s*$")
+0103: 
+0104: 
+0105: def rewrite_assembly(text, redirect, drop_ctors):
+0106:     """Redirect owned data to original addresses; optionally drop .ctors entries."""
+0107:     lines = text.splitlines()
+0108:     objects = set()
+0109:     for line in lines:
+0110:         m = re.match(r"^\s*\.type\s+([^,\s]+),\s*@object", line)
+0111:         if m:
+0112:             objects.add(m.group(1))
+0113:         m = re.match(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),", line)
+0114:         if m:
+0115:             objects.add(m.group(1))
+0116:     targets = {name: redirect[name] for name in objects if name in redirect}
+0117:     out, section, stack, dead = [], ".text", [], 0
+0118:     previous = ".text"
+0119:     for line in lines:
+0120:         m = SECTION_DIRECTIVE.match(line)
+0121:         if m:
+0122:             word = m.group(1).split()[0]
+0123:             if word in ("text", "data", "bss"):
+0124:                 previous, section = section, "." + word
+0125:             elif word == "section":
+0126:                 previous, section = section, m.group(2)
+0127:             elif word == "previous":
+0128:                 previous, section = section, previous
+0129:             elif word == "pushsection":
+0130:                 stack.append(section)
+0131:                 section = m.group(3)
+0132:             elif word == "popsection":
+0133:                 section = stack.pop()
+0134:             out.append(line)
+0135:             continue
+0136:         if drop_ctors and section == ".ctors" and re.match(r"^\s*\.quad\s", line):
+0137:             continue
+0138:         label = re.match(r"^([^\s:.][^\s:]*):\s*$", line)
+0139:         if label and label.group(1) in targets:
+0140:             out.append(f".Ltlhybrid_dead_{dead}:")
+0141:             dead += 1
+0142:             continue
+0143:         comm = re.match(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),", line)
+0144:         if comm and comm.group(1) in targets:
+0145:             continue
+0146:         out.append(line)
+0147:     for name, address in sorted(targets.items()):
+0148:         out.append(f"\t.set\t{name}, {address:#x}")
+0149:     return "\n".join(out) + "\n", sorted(targets)
+0150: 
+0151: 
+0152: # --------------------------------------------------------------------------
+0153: 
+0154: 
+0155: def defined_functions(obj_path):
+0156:     obj = elfimage.load_object(obj_path)
+0157:     return [(s.name, s.bind) for s in obj.symbols if s.type == elfimage.STT_FUNC and s.defined]
+0158: 
+0159: 
+0160: def undefined_symbols(obj_path):
+0161:     obj = elfimage.load_object(obj_path)
+0162:     return {s.name for s in obj.symbols if not s.defined and s.name}
+0163: 
+0164: 
+0165: def defined_symbols(obj_path):
+0166:     obj = elfimage.load_object(obj_path)
+0167:     return {s.name for s in obj.symbols if s.defined and s.name and s.bind != elfimage.STB_LOCAL}
+0168: 
+0169: 
+0170: def patch_window_ok(ctx, address):
+0171:     """5-byte jmp must fit before the next function and not hit an internal branch target."""
+0172:     i = ctx.order.index(address)
+0173:     nxt = ctx.order[i + 1] if i + 1 < len(ctx.order) else address + ctx.functions[address]["size"]
+0174:     if nxt - address < 5:
+0175:         return "function slot shorter than 5 bytes"
+0176:     f = ctx.functions[address]
+0177:     insns = objdiff.parse_insns(objdiff.run_objdump([f"--start-address={address:#x}",
+0178:                                                      f"--stop-address={address + f['size']:#x}",
+0179:                                                      str(ctx.image.path)]))
+0180:     for _, mnemonic, operands in insns:
+0181:         m = re.match(r"^([0-9a-f]+) <", operands)
+0182:         if m and mnemonic.startswith(("j", "loop", "call")):
+0183:             target = int(m.group(1), 16)
+0184:             if address < target < address + 5:
+0185:                 return f"internal branch into the patched bytes ({target:#x})"
+0186:     return None
+0187: 
+0188: 
+0189: def originals_script(ctx, extra_aliases):
+0190:     lines = []
+0191:     seen = set()
+0192: 
+0193:     def provide(name, address):
+0194:         if name and name not in seen and '"' not in name:
+0195:             seen.add(name)
+0196:             lines.append(f'PROVIDE("{name}" = {address:#x});')
+0197: 
+0198:     local_counts = {}
+0199:     for f in ctx.functions.values():
+0200:         for name, bind in zip(f["names"], f["bind"]):
+0201:             if bind == "local":
+0202:                 local_counts[name] = local_counts.get(name, 0) + 1
+0203:     for address, f in sorted(ctx.functions.items()):
+0204:         for name, bind in zip(f["names"], f["bind"]):
+0205:             if bind != "local":
+0206:                 provide(name, address)
+0207:             if bind != "local" or local_counts.get(name) == 1:
+0208:                 provide("__tlorig_" + name, address)
+0209:     for name, address in sorted(ctx.global_data.items()):
+0210:         provide(name, address)
+0211:     # Unique local data (e.g. the hidden __dso_handle) is unambiguous by name.
+0212:     local_data_counts = {}
+0213:     for symbols in ctx.local_data.values():
+0214:         for name in symbols:
+0215:             local_data_counts[name] = local_data_counts.get(name, 0) + 1
+0216:     for symbols in ctx.local_data.values():
+0217:         for name, address in symbols.items():
+0218:             if local_data_counts[name] == 1:
+0219:                 provide(name, address)
+0220:     for address, name in sorted(ctx.image.plt.items()):
+0221:         provide(name.split("@")[0], address)
+0222:     for s in ctx.image.dynsyms:
+0223:         if s.defined and s.value and s.name:
+0224:             provide(s.name.split("@")[0], s.value)
+0225:     for name, address in extra_aliases:
+0226:         provide(name, address)
+0227:     return "\n".join(lines) + "\n", seen
+0228: 
+0229: 
+0230: def hooks_assembly(hooks):
+0231:     out = ["\t.section .tlhybrid.hooks,\"a\",@progbits", "\t.align 8"]
+0232:     names = ["\t.section .rodata.tlhybrid_names,\"a\",@progbits"]
+0233:     for i, hook in enumerate(hooks):
+0234:         out.append(f"\t.quad {hook['original']:#x}, {hook['symbol']}, .Ltlhybrid_name_{i}")
+0235:         out.append("\t.byte " + ", ".join(f"{b:#x}" for b in hook["expected"]))
+0236:         names.append(f".Ltlhybrid_name_{i}:\n\t.string \"{hook['demangled'][:200]}\"")
+0237:     return "\n".join(out + names) + "\n"
+0238: 
+0239: 
+0240: C_LOCALE = {**os.environ, "LC_ALL": "C"}
+0241: 
+0242: 
+0243: def needed_libraries(elf):
+0244:     """Paths of the executable's DT_NEEDED libraries, searched as the run sets LD_LIBRARY_PATH
+0245:     (the game's lib64, the game directory) and then as the system linker would."""
+0246:     game = Path(elf).parent
+0247:     dynamic = subprocess.run(["readelf", "-d", "-W", str(elf)], capture_output=True, text=True, check=True,
+0248:                              env=C_LOCALE).stdout
+0249:     system = {}
+0250:     for line in subprocess.run([shutil.which("ldconfig") or "/sbin/ldconfig", "-p"], capture_output=True, text=True, env=C_LOCALE).stdout.splitlines():
+0251:         m = re.match(r"\s+(\S+) \(([^)]*)\) => (\S+)", line)
+0252:         if m and "x86-64" in m.group(2):
+0253:             system.setdefault(m.group(1), m.group(3))
+0254:     out = []
+0255:     for name in re.findall(r"\(NEEDED\)\s+Shared library: \[([^\]]+)\]", dynamic):
+0256:         for candidate in (game / "lib64" / name, game / name, Path(system.get(name, "/nonexistent"))):
+0257:             if candidate.exists():
+0258:                 out.append(candidate)
+0259:                 break
+0260:     return out
+0261: 
+0262: 
+0263: def library_objects(elf, names):
+0264:     """name -> size of the data objects among names, from the libraries' dynamic symbols."""
+0265:     wanted, found = set(names), {}
+0266:     for lib in needed_libraries(elf):
+0267:         text = subprocess.run(["readelf", "--dyn-syms", "-W", str(lib)], capture_output=True, text=True,
+0268:                               env=C_LOCALE).stdout
+0269:         for line in text.splitlines():
+0270:             parts = line.split()
+0271:             if len(parts) < 8 or parts[3] not in ("OBJECT", "TLS") or parts[6] == "UND":
+0272:                 continue
+0273:             name = parts[7].split("@")[0]
+0274:             if name in wanted and name not in found:
+0275:                 found[name] = int(parts[2], 16) if parts[2].startswith("0x") else int(parts[2])
+0276:     return found
+0277: 
+0278: 
+0279: # Library data a copy may stand for: RTTI and vtables are never written, and type_info
+0280: # equality falls back to the name (libstdc++ __GXX_MERGED_TYPEINFO_NAMES == 0).
+0281: COPYABLE = ("_ZTI", "_ZTS", "_ZTV", "_ZTT")
+0282: 
+0283: 
+0284: def imports_assembly(names, objects=None):
+0285:     """Library symbols the original executable never imported. A function becomes a jump
+0286:     through a slot the loader fills. Code addresses data with 32-bit absolute relocations,
+0287:     so an object needs a place in the blob, which the loader fills with the library's bytes
+0288:     (what a COPY relocation would do for the executable)."""
+0289:     objects = objects or {}
+0290:     out = ["\t.text"]
+0291:     data = ["\t.data", "\t.align 8"]
+0292:     table = ["\t.section .tlhybrid.imports,\"a\",@progbits", "\t.align 8"]
+0293:     strings = ["\t.section .rodata.tlhybrid_imports,\"a\",@progbits"]
+0294:     copies = ["\t.section .tlhybrid.copies,\"a\",@progbits", "\t.align 8"]
+0295:     for i, name in enumerate(sorted(names)):
+0296:         strings.append(f".Ltlhybrid_import_{i}:\n\t.string \"{name}\"")
+0297:         if name in objects:
+0298:             data += ["\t.align 16", f"\t.globl {name}", f"\t.type {name}, @object", f"\t.size {name}, {objects[name]}",
+0299:                      f"{name}:", f"\t.zero {objects[name]}"]
+0300:             copies.append(f"\t.quad .Ltlhybrid_import_{i}, {name}, {objects[name]}")
+0301:             continue
+0302:         out += [f"\t.globl {name}", f"\t.type {name}, @function", f"{name}:",
+0303:                 f"\tjmp *.Ltlhybrid_slot_{i}(%rip)"]
+0304:         data.append(f".Ltlhybrid_slot_{i}:\n\t.quad 0")
+0305:         table.append(f"\t.quad .Ltlhybrid_import_{i}, .Ltlhybrid_slot_{i}")
+0306:     return "\n".join(out + data + table + copies + strings) + "\n"
+0307: 
+0308: 
+0309: def build(out=OUT, verbose=True, src=SRC, tests=None):
+0310:     import publication
+0311:     with publication.tree_lock():
+0312:         return _build(out, verbose, src, tests)
+0313: 
+0314: 
+0315: def _build(out=OUT, verbose=True, src=SRC, tests=None):
+0316:     """src: decompiled sources (a mutated copy for tools/decomp/mutate.py);
+0317:     tests: test sources, by default decomp/hybrid/tests plus generated
+0318:     autotests when OTL_AUTOTEST=1."""
+0319:     ctx = Context()
+0320:     out.mkdir(parents=True, exist_ok=True)
+0321:     objects, hooks, notes = [], [], []
+0322:     production_undefined, production_defined = set(), set()
+0323:     data_redirects, omitted_initializers, source_versions = {}, {}, {}
+0324:     if tests is None:
+0325:         tests = sorted(TESTS.glob("*.cpp"))
+0326:         if os.environ.get("OTL_AUTOTEST"):
+0327:             # Generated differential tests (tools/decomp/autotest.py).
+0328:             tests += sorted((ROOT / "build-decomp" / "hybrid" / "autotests").glob("*.cpp"))
+0329:     units = [(p, False) for p in sorted(Path(src).rglob("*.cpp"))] + [(p, True) for p in tests]
+0330: 
+0331:     def compile_unit(unit):
+0332:         source, is_test = unit
+0333:         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
+0334:         toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
+0335:     toolchain.parallel_map(compile_unit, units)
+0336:     for source, is_test in units:
+0337:         tu = None if is_test else objdiff.tu_for_source(ctx.db, source)
+0338:         if not is_test and tu is None:
+0339:             raise SystemExit(f"{source}: no unique original TU named {source.name}")
+0340:         stem = ("test_" if is_test else "") + source.stem
+0341:         asm = out / f"{stem}.s"
+0342:         redirect = dict(ctx.global_data)
+0343:         if tu:
+0344:             redirect.update(ctx.local_data.get(tu["name"], {}))
+0345:         text, redirected = rewrite_assembly(asm.read_text(), redirect, drop_ctors=not is_test)
+0346:         if not is_test:
+0347:             relative = str(source.relative_to(ROOT))
+0348:             source_versions[relative] = hashlib.sha256(source.read_bytes()).hexdigest()
+0349:             data_redirects[relative] = sorted(redirected)
+0350:             omitted_initializers[relative] = sorted(set(re.findall(
+0351:                 r"\.type\s+([^,\s]*(?:_GLOBAL__I_|__static_initialization)[^,\s]*),\s*@function", asm.read_text())))
+0352:         patched = out / f"{stem}.hybrid.s"
+0353:         patched.write_text(text)
+0354:         obj = out / f"{stem}.o"
+0355:         toolchain.assemble(patched, obj)
+0356:         objects.append(obj)
+0357:         if not is_test:
+0358:             production_defined |= defined_symbols(obj)
+0359:             production_undefined |= undefined_symbols(obj)
+0360:         unit_hooks = 0
+0361:         if tu:
+0362:             owned = ctx.tu_functions(tu)
+0363:             for name, bind in defined_functions(obj):
+0364:                 f = owned.get(name)
+0365:                 if not f or f["kind"] == "compiler":
+0366:                     continue
+0367:                 address = int(f["address"], 16)
+0368:                 if any(h["original"] == address for h in hooks):
+0369:                     continue
+0370:                 problem = patch_window_ok(ctx, address)
+0371:                 if problem:
+0372:                     notes.append(f"not hooked {f['demangled']}: {problem}")
+0373:                     continue
+0374:                 hooks.append({"original": address, "symbol": name, "demangled": f["demangled"],
+0375:                               "expected": list(ctx.image.read(address, 8)), "unit": str(source.relative_to(ROOT))})
+0376:                 unit_hooks += 1
+0377:         if verbose:
+0378:             print(f"  {source.relative_to(ROOT)}: {len(redirected)} data symbols redirected, {unit_hooks} hooks")
+0379: 
+0380:     hooks_s = out / "hooks.s"
+0381:     hooks_s.write_text(hooks_assembly(hooks))
+0382:     toolchain.assemble(hooks_s, out / "hooks.o")
+0383:     script, provided = originals_script(ctx, [])
+0384:     (out / "originals.ld").write_text(script)
+0385:     defined = set()
+0386:     undefined = set()
+0387:     for obj in objects + [out / "hooks.o"]:
+0388:         defined |= defined_symbols(obj)
+0389:         undefined |= undefined_symbols(obj)
+0390:     missing = sorted(n for n in undefined - defined - provided - LINKER_DEFINED if not n.startswith(".L"))
+0391:     absent = objdiff.unknown_members(ctx.db, objdiff.image_symbol_names(ctx.image), missing)
+0392:     if absent:
+0393:         raise SystemExit("the decompiled code calls members the original does not have:\n" + "\n".join(
+0394:             f"  {n}; the original has: {'; '.join(objdiff.known_overloads(ctx.db, n)) or 'no such member'}"
+0395:             for n in absent))
+0396:     copies = library_objects(ctx.image.path, missing)
+0397:     shared = sorted(n for n in copies if not n.startswith(COPYABLE))
+0398:     if shared:
+0399:         raise SystemExit("the decompiled code uses library data the original never imported; a copy in the "
+0400:                          "blob would be a different object:\n" + "\n".join(f"  {n}" for n in shared))
+0401:     imports_s = out / "imports.s"
+0402:     imports_s.write_text(imports_assembly(missing, copies))
+0403:     toolchain.assemble(imports_s, out / "imports.o")
+0404:     (out / "hybrid.ld").write_text(LINKER_SCRIPT.format(base=BLOB_BASE))
+0405:     blob = out / "tlhybrid-blob.elf"
+0406:     subprocess.run(["ld", "-nostdlib", "-static", "-e", "0", "--build-id=none", "-z", "noexecstack",
+0407:                     "-z", "max-page-size=4096", "--no-warn-rwx-segments", "-T", "hybrid.ld", "-o", blob.name,
+0408:                     *[o.name for o in objects], "hooks.o", "imports.o"], cwd=out, check=True)
+0409:     loader = out / "libtlhybrid.so"
+0410:     subprocess.run(["cc", "-O2", "-Wall", "-Wextra", "-fPIC", "-shared", "-I", str(HYBRID), "-o", str(loader),
+0411:                     str(HYBRID / "loader.c"), "-ldl"], check=True)
+0412:     manifest = {"schema": 1, "original_elf_sha256": ctx.image.sha256, "blob_base": f"{BLOB_BASE:#x}",
+0413:                 "hooks": [{k: (f"{v:#x}" if k == "original" else v) for k, v in h.items() if k != "expected"}
+0414:                           for h in hooks],
+0415:                 "runtime_imports": [n for n in missing if n not in copies],
+0416:                 "runtime_copies": sorted(copies), "notes": notes}
+0417:     manifest["standalone_residual"] = {
+0418:         "schema": 1, "source_sha256": source_versions,
+0419:         "original_imports": sorted((production_undefined - production_defined) & provided),
+0420:         "runtime_library_imports": sorted((production_undefined - production_defined) & set(missing)),
+0421:         "original_data_redirects": {k: v for k, v in data_redirects.items() if v},
+0422:         "original_initializers_omitted": {k: v for k, v in omitted_initializers.items() if v},
+0423:         "rtti_imports": sorted(n for n in production_undefined - production_defined if n.startswith(("_ZTI", "_ZTS"))),
+0424:         "vtable_imports": sorted(n for n in production_undefined - production_defined if n.startswith("_ZTV")),
+0425:         "standalone_link_closed": False,
+0426:         "reason": "hybrid resolves original ELF addresses and omits original entrypoint/initialization; this is not a standalone game"}
+0427:     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
+0428:     if verbose:
+0429:         print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing) - len(copies)} runtime imports, "
+0430:               f"{len(copies)} copied library objects")
+0431:         for note in notes:
+0432:             print("  note:", note)
+0433:     return blob, loader
+0434: 
+0435: 
+0436: def stage_runtime(blob, loader):
+0437:     """ld.so splits LD_PRELOAD on spaces and colons; the repository path has a space."""
+0438:     payloads = [(Path(path), Path(path).read_bytes()) for path in (blob, loader)]
+0439:     identity = hashlib.sha256()
+0440:     for path, data in payloads:
+0441:         identity.update(path.name.encode() + b"\0" + hashlib.sha256(data).digest())
+0442:     # Separate immutable blob/loader pairs even within the same checkout.
+0443:     runtime = toolchain.cache_dir() / "hybrid" / hashlib.sha1(str(ROOT).encode()).hexdigest()[:12] / identity.hexdigest()
+0444:     runtime.mkdir(parents=True, exist_ok=True)
+0445:     staged = []
+0446:     for path, data in payloads:
+0447:         target = runtime / path.name
+0448:         if not target.exists() or target.read_bytes() != data:
+0449:             fd, temporary = tempfile.mkstemp(prefix=".stage-", dir=runtime)
+0450:             try:
+0451:                 with os.fdopen(fd, "wb") as stream:
+0452:                     stream.write(data)
+0453:                 os.replace(temporary, target)
+0454:             finally:
+0455:                 Path(temporary).unlink(missing_ok=True)
+0456:         staged.append(target)
+0457:     for path in staged:
+0458:         if re.search(r"[\s:]", str(path)):
+0459:             raise SystemExit(f"runtime path unusable for LD_PRELOAD: {path}")
+0460:     return staged
+0461: 
+0462: 
+0463: def steam_runtime_fallback(game, env):
+0464:     """Directory with links to the libraries the system lacks (libGLU on a bare
+0465:     Fedora), taken from the game's own Steam runtime; None when nothing is missing.
+0466:     Only the missing ones are linked so the system copies of the rest still win."""
+0467:     result = subprocess.run(["ldd", str(game / "Torchlight.bin.x86_64")], env=env, capture_output=True, text=True)
+0468:     missing = re.findall(r"^\s*(\S+) => not found", result.stdout, re.M)
+0469:     if not missing:
+0470:         return None
+0471:     target = toolchain.cache_dir() / "hybrid" / "missing-libs"
+0472:     target.mkdir(parents=True, exist_ok=True)
+0473:     for name in missing:
+0474:         found = [p for d in ("usr/lib/x86_64-linux-gnu", "lib/x86_64-linux-gnu")
+0475:                  for p in [game / "steam-runtime" / d / name] if p.exists()]
+0476:         if not found:
+0477:             raise SystemExit(f"the game needs {name}: install it or put it into {target}")
+0478:         link = target / name
+0479:         if not link.exists():
+0480:             link.symlink_to(found[0].resolve())
+0481:     return target
+0482: 
+0483: 
+0484: def game_env(blob, loader, extra=None, headless=False):
+0485:     blob, loader = stage_runtime(blob, loader)
+0486:     game = Path(os.environ.get("TORCHLIGHT_GAME_DIR", Path.home() / "Games/Torchlight/game"))
+0487:     env = dict(os.environ)
+0488:     if headless:
+0489:         # Safety net: if the loader is not injected the game must not open a window.
+0490:         for name in ("DISPLAY", "WAYLAND_DISPLAY", "XAUTHORITY"):
+0491:             env.pop(name, None)
+0492:         env["SDL_VIDEODRIVER"] = "offscreen"
+0493:         env["SDL_AUDIODRIVER"] = "dummy"
+0494:     env["LD_LIBRARY_PATH"] = f"{game / 'lib64'}:{game}" + (":" + env["LD_LIBRARY_PATH"] if env.get("LD_LIBRARY_PATH") else "")
+0495:     fallback = steam_runtime_fallback(game, env)
+0496:     if fallback:
+0497:         env["LD_LIBRARY_PATH"] += f":{fallback}"
+0498:     env["LD_PRELOAD"] = str(loader)
+0499:     env["TLHYBRID_BLOB"] = str(blob)
+0500:     env.update(extra or {})
+0501:     return game, env
+0502: 
+0503: 
+0504: def selftest(blob, loader, only=None, shards=None):
+0505:     """Runs the blob's tests before main; only: test name prefix. Returns (code, report lines).
+0506:     The tests are split over `shards` game processes running at once (OTL_SELFTEST_SHARDS,
+0507:     by default up to 4); each process gets the whole timeout."""
+0508:     shards = shards or int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs())
+0509:     if shards < 1:
+0510:         raise ValueError("selftest needs at least one shard")
+0511:     extra = {"TLHYBRID_SELFTEST": "1"}
+0512:     if only:
+0513:         extra["TLHYBRID_FILTER"] = only
+0514: 
+0515:     game, env = game_env(blob, loader, extra, headless=True)  # stages the runtime once for all
+0516:     if not only:
+0517:         env.pop("TLHYBRID_FILTER", None)
+0518: 
+0519:     def run(index):
+0520:         try:
+0521:             return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
+0522:                                   env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
+0523:                                   capture_output=True, text=True,
+0524:                                   timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+0525:         except subprocess.TimeoutExpired as error:
+0526:             from types import SimpleNamespace
+0527:             partial = error.stderr or ""
+0528:             if isinstance(partial, bytes):
+0529:                 partial = partial.decode(errors="replace")
+0530:             return SimpleNamespace(returncode=2, stderr=partial +
+0531:                                    f"\nselftest: shard {index}/{shards} timeout after {error.timeout} seconds\n")
+0532:     code, report, ran, failed = 0, [], 0, 0
+0533:     for result in toolchain.parallel_map(run, range(shards)):
+0534:         # Loader lines plus the indented details tests log under a failure.
+0535:         lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "selftest:", "    "))]
+0536:         summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
+0537:         if not summary:
+0538:             return 2, report + lines + [result.stderr[-2000:],
+0539:                                         "selftest: complete loader report missing"]
+0540:         shard_ran, shard_failed = int(summary.group(1)), int(summary.group(2))
+0541:         expected_exit = 1 if shard_failed else 0
+0542:         if result.returncode != expected_exit:
+0543:             return 2, report + lines + [f"selftest: process exited {result.returncode}; report is not acceptance evidence"]
+0544:         ran += shard_ran
+0545:         failed += shard_failed
+0546:         report += [l for l in lines if l is not summary.string]
+0547:         code = max(code, result.returncode)
+0548:     if not ran:
+0549:         return 2, report + ["selftest: no tests executed"]
+0550:     return code, report + [f"tlhybrid: {ran} tests, {failed} failed"]
+0551: 
+0552: 
+0553: def main():
+0554:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0555:     sub = parser.add_subparsers(dest="command", required=True)
+0556:     sub.add_parser("build")
+0557:     sub.add_parser("selftest")
+0558:     run = sub.add_parser("run")
+0559:     run.add_argument("args", nargs="*")
+0560:     args = parser.parse_args()
+0561:     blob, loader = build()
+0562:     if args.command == "build":
+0563:         return 0
+0564:     if args.command == "selftest":
+0565:         code, report = selftest(blob, loader)
+0566:         print("\n".join(report))
+0567:         return code
+0568:     game, env = game_env(blob, loader)
+0569:     return subprocess.run([str(game / "Torchlight.bin.x86_64")] + args.args, cwd=game, env=env).returncode
+0570: 
+0571: 
+0572: if __name__ == "__main__":
+0573:     sys.exit(main())

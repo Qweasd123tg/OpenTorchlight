@@ -22,6 +22,8 @@ import ghidra_cpp
 import mutate
 import publication
 
+POLICY_VERSION = 2
+
 
 def outline_properties(stage, tu, cls, db, methods=None):
     """Move generated static definitions to their owning TU; weak header code is not a transfer."""
@@ -94,47 +96,59 @@ def provide(stage, tu, provider, db):
     return target
 
 
-def run(tus, provider, publish=False, limit=3, seconds=120):
+def run(tus, provider, publish=False, limit=3, seconds=120, input_dir=None):
     import parallel
     db = elfdb.load_db()
-    tasks = {t["name"]: t for t in db["tus"] if t["kind"] == "game" and t["name"].endswith("Descriptor.cpp")}
+    if provider == "candidate" and (not tus or input_dir is None):
+        raise ValueError("candidate provider requires explicitly selected TUs and --input-dir")
+    tasks = {t["name"]: t for t in db["tus"] if t["kind"] == "game"
+             and (provider == "candidate" or t["name"].endswith("Descriptor.cpp"))}
     names = tus or sorted(tasks)
     missing = set(names) - set(tasks)
     if missing:
-        raise ValueError("not a game descriptor TU: " + ", ".join(sorted(missing)))
+        raise ValueError("not a supported game TU: " + ", ".join(sorted(missing)))
     work = elfdb.ROOT / "build-decomp/no-llm"
     work.mkdir(parents=True, exist_ok=True)
     inputs = evidence.input_digest(db)
-    start, results = time.monotonic(), []
+    start, results, attempted, inspected, cached_count = time.monotonic(), [], 0, 0, 0
     for name in names:
-        if len(results) >= limit or time.monotonic() - start >= seconds:
+        if attempted >= limit or time.monotonic() - start >= seconds:
             break
+        inspected += 1
         if publish and parallel.owned_by_others(name):
             results.append({"tu": name, "status": "BLOCKED", "reason": "owned by " + parallel.owned_by_others(name)})
             continue
-        key = hashlib.sha256((inputs + provider + name).encode()).hexdigest()
+        source = Path(input_dir) / name if provider == "candidate" else None
+        source_hash = hashlib.sha256(source.read_bytes()).hexdigest() if source and source.exists() else None
+        key = hashlib.sha256(json.dumps([POLICY_VERSION, inputs, provider, name, source_hash], separators=(",", ":")).encode()).hexdigest()
         cache = work / f"{key}.json"
         if cache.exists():
             row = json.loads(cache.read_text())
-            if row["status"] != "MATCH":
+            if row["status"] in ("BLOCKED", "DIFF"):
                 results.append({**row, "cached_failure": True})
+                cached_count += 1
                 continue
+        attempted += 1
         stage = publication.Stage()
         started = time.monotonic()
         try:
-            target = provide(stage, tasks[name], provider, db)
+            target = source if provider == "candidate" else provide(stage, tasks[name], provider, db)
             row = candidate.evaluate(name, target, publish=publish, stage=stage, incremental=True)
         except (ValueError, RuntimeError, SystemExit, OSError) as error:
-            row = {"tu": name, "status": "BLOCKED", "reason": str(error), "attempt": str(stage.path), "published": False}
+            row = {"tu": name, "status": "ERROR" if isinstance(error, (OSError, SystemExit)) else "BLOCKED",
+                   "reason": str(error), "attempt": str(stage.path), "published": False}
         row.update(provider=provider, seconds=time.monotonic() - started, inputs_digest=inputs)
-        cache.write_text(json.dumps(row, indent=1, ensure_ascii=False) + "\n")
+        if row["status"] in ("BLOCKED", "DIFF"):
+            cache.write_text(json.dumps(row, indent=1, ensure_ascii=False) + "\n")
         results.append(row)
         # A successful publication changes inputs; independent remaining jobs use the new snapshot.
         if row.get("published"):
             inputs = evidence.input_digest(db)
-    report = {"schema": 1, "provider": provider, "results": results,
+    report = {"schema": 2, "provider": provider, "results": results,
               "budget": {"limit": limit, "seconds": seconds, "elapsed": time.monotonic() - start},
-              "stop": "finite task/time budget or selected queue exhausted"}
+              "inspected": inspected, "attempted": attempted, "cached_failures": cached_count,
+              "stop": ("attempt budget" if attempted >= limit else "time budget"
+                       if time.monotonic() - start >= seconds else "selected queue exhausted")}
     (work / "latest.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
     return report
 
@@ -142,14 +156,15 @@ def run(tus, provider, publish=False, limit=3, seconds=120):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("tus", nargs="*")
-    parser.add_argument("--provider", choices=("descriptor", "properties"), required=True)
+    parser.add_argument("--provider", choices=("descriptor", "properties", "candidate"), required=True)
+    parser.add_argument("--input-dir", type=Path, help="full TU candidates for explicitly selected game TUs")
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--limit", type=int, default=3)
     parser.add_argument("--seconds", type=int, default=120)
     args = parser.parse_args()
     if args.limit <= 0 or args.seconds <= 0:
         parser.error("task/time budgets must be positive")
-    print(json.dumps(run(args.tus, args.provider, args.publish, args.limit, args.seconds), indent=1, ensure_ascii=False))
+    print(json.dumps(run(args.tus, args.provider, args.publish, args.limit, args.seconds, args.input_dir), indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":

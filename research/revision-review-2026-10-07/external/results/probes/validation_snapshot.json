@@ -1,0 +1,11 @@
+{
+  "proof_type": "real Stage receipt/publication rules; completed validation token modeled explicitly",
+  "test_config_changes_invalidate_stamp": false,
+  "published_files": [
+    "decomp/src/Unit.cpp"
+  ],
+  "new_test_published": false,
+  "live_old_test": "// tested version\n",
+  "detected": true,
+  "probe_completed": true
+}

@@ -1,0 +1,34 @@
+{
+  "proof_type": "real Stage.activate/cache identity functions, no compilation or speed claim",
+  "stages": [
+    {
+      "cache": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/build-decomp/cc-cache",
+      "index": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/build-decomp/cc-cache/494e01f73dd97424c0908d2da9559acbdb90f29f139c4c2f105640797ca282ef.json",
+      "content_hash": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+      "command": [
+        "g++",
+        "-I",
+        "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/decomp/include",
+        "-c"
+      ],
+      "digest": "fb21d92f4731b83b27cb9f04f6e4705f45c736c1f771b037fe87703845502561"
+    },
+    {
+      "cache": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/build-decomp/cc-cache",
+      "index": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/build-decomp/cc-cache/bac6bb55b627bb2dbe1dd9d0c2a8a869a53023786f8e48b281d548214e184738.json",
+      "content_hash": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+      "command": [
+        "g++",
+        "-I",
+        "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/decomp/include",
+        "-c"
+      ],
+      "digest": "9ffd957cc9671e8d24d332956501ab025d07d1e2a6e07da22ec9963f7b63cfe3"
+    }
+  ],
+  "same_source": true,
+  "same_cache_location": false,
+  "same_content_key": false,
+  "detected": true,
+  "probe_completed": true
+}

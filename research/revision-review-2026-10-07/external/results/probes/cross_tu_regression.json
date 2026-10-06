@@ -1,0 +1,27 @@
+{
+  "proof_type": "real Stage.validate/publish, native C++98 synthetic programs; replacement comparator and one native control test, no original game",
+  "native_value_before": 7,
+  "native_value_after": 99,
+  "comparison_rows": [
+    {
+      "source": "A.cpp",
+      "address": "0x100",
+      "status": "MATCH",
+      "observed": 5,
+      "expected": 5
+    },
+    {
+      "source": "B.cpp",
+      "address": "0x200",
+      "status": "DIFF",
+      "observed": 99,
+      "expected": 7
+    }
+  ],
+  "published": [
+    "decomp/include/Shared.h",
+    "decomp/src/A.cpp"
+  ],
+  "detected": true,
+  "probe_completed": true
+}

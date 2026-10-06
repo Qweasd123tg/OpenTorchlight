@@ -15,6 +15,25 @@ import toolchain
 
 
 class Providers(unittest.TestCase):
+    def test_cached_failures_do_not_starve_the_remaining_queue(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            tus = [{"id": i, "name": n + "Descriptor.cpp", "kind": "game"} for i, n in enumerate("ABCDE")]
+            with patch.object(no_llm_loop.elfdb, "ROOT", root), \
+                    patch.object(no_llm_loop.elfdb, "load_db", return_value={"tus": tus}), \
+                    patch.object(no_llm_loop.evidence, "input_digest", return_value="inputs"), \
+                    patch.object(no_llm_loop.publication, "Stage", return_value=SimpleNamespace(path=root)), \
+                    patch.object(no_llm_loop, "provide", side_effect=RuntimeError("unsupported ABI")) as provider:
+                first = no_llm_loop.run([], "descriptor", limit=3)
+                second = no_llm_loop.run([], "descriptor", limit=3)
+                third = no_llm_loop.run([], "descriptor", limit=3)
+            self.assertEqual(3, first["attempted"])
+            self.assertEqual(2, second["attempted"])
+            self.assertEqual(3, second["cached_failures"])
+            self.assertEqual(0, third["attempted"])
+            self.assertEqual(5, third["cached_failures"])
+            self.assertEqual([t["name"] for t in tus], [c.args[1]["name"] for c in provider.call_args_list])
+
     def test_generated_property_belongs_to_tu_as_a_strong_definition(self):
         with tempfile.TemporaryDirectory(prefix="otl-property-provider-") as folder:
             root = Path(folder)
@@ -61,7 +80,8 @@ public:
             a, b = Path(folder) / "a.cpp", Path(folder) / "b.cpp"
             a.write_text("int C::f() { return 1; }\n")
             b.write_text("int C::f() { return 2; }\n")
-            row = {"address": "0x1", "status": "DIFF", "code": "same", "metadata_reasons": ["unknown EH"]}
+            row = {"address": "0x1", "status": "DIFF", "code": "same", "object_digest": "full-object",
+                   "metadata_reasons": ["unknown EH"]}
             f = {"demangled": "C::f()", "params": "", "cv": ""}
             self.assertFalse(candidate.preserve_existing(a, b, {"0x1": row}, [row], {"functions": {"0x1": f}}))
             b.write_text(a.read_text() + "int C::g() { return 3; }\n")

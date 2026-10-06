@@ -15,6 +15,7 @@ results are progress, not failures.
 from __future__ import annotations
 
 import argparse
+import acceptance
 from collections import Counter
 import json
 import os
@@ -107,6 +108,8 @@ def main():
     args = parser.parse_args()
 
     db = ensure_db()
+    comparison_evidence = acceptance.load_comparisons(ROOT, db)
+    inputs_before = evidence.input_digest(db) if not args.no_game or comparison_evidence else None
     game_tus = {t["id"] for t in db["tus"] if t["kind"] == "game"}
     total = [f for f in db["functions"].values() if f["tu"] in game_tus and f["kind"] in WRITTEN]
     total_bytes = sum(f["size"] for f in total)
@@ -162,19 +165,32 @@ def main():
             declared = shadow_declared(db)
             print(f"handwritten fixtures: {len(declared)} declared originals; {len(covered)} with executed "
                   "per-function comparison evidence (declarations alone do not accept DIFF)")
-            auto = set()
-            for line in report:
-                m = re.match(r"\s+stats auto_(\w+) same (\d+) both-failed \d+ different (\d+)(?: incomplete (\d+))?", line)
-                if (m and int(m.group(3)) == 0 and int(m.group(4) or 0) == 0
-                        and int(m.group(2)) >= autotest.MIN_COMPLETED):
-                    auto.add(f"0x{m.group(1)}")
+            inputs_after = evidence.input_digest(db)
+            if inputs_after != inputs_before:
+                print("FAIL: comparison inputs changed during the check")
+                return 2
+            fresh_bindings = acceptance.comparison_bindings(db, units, report, ROOT, inputs_after)
+            comparison_evidence.update(fresh_bindings)
             for address, row in diff.items():
-                if address in covered or address in auto:
+                if address in fresh_bindings:
                     accepted[address] = row["original_size"]
             by_hand = sum(1 for a in accepted if a not in matched and a in covered)
             print(f"accepted: {len(accepted)} of {len(total)} game functions "
                   f"({sum(accepted.values())} bytes); {by_hand} by self-test, "
                   f"{sum(1 for a in accepted if a not in matched and a not in covered)} by generated tests")
+
+    if args.no_game and comparison_evidence:
+        inputs_after = evidence.input_digest(db)
+        if inputs_after != inputs_before:
+            print("FAIL: inputs changed during object comparison")
+            return 2
+        for unit in units:
+            for row in unit["functions"]:
+                address = row.get("address")
+                receipt = comparison_evidence.get(address)
+                if (row["status"] == "DIFF" and address in counted and receipt
+                        and evidence.current(receipt, unit.get("object_digest"), inputs_after)):
+                    accepted[address] = row["original_size"]
 
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps({
@@ -185,6 +201,7 @@ def main():
         "matched_static_init_bytes": sum(generated_by_compiler.values()),
         "accepted_functions": len(accepted), "accepted_bytes": sum(accepted.values()),
         "accepted": sorted(accepted),
+        "comparison_evidence": comparison_evidence,
         "status": dict(status), "hybrid_selftest": selftest, "units": units,
     }, indent=1))
     return 1 if selftest not in (None, 0) else 0

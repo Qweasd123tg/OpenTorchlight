@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ghidra_cpp.py rewrites: literals survive exactly, NaN guards go only where provably redundant."""
 import unittest
+from unittest.mock import patch
 
 import ghidra_cpp
 
@@ -51,12 +52,9 @@ class HiddenReturnTest(unittest.TestCase):
 
     def test_function_returning_through_the_hidden_pointer(self):
         f = {"demangled": "CUnit::getStats(CSkill*, int)", "params": "CSkill*, int", "kind": "function"}
-        old = ghidra_cpp._SRET
-        ghidra_cpp._SRET = {"CSkill::getLevelStats"}
-        try:
+        targets = {"CSkill::getLevelStats": {"member": True, "params": [{"type": "int"}]}}
+        with patch.object(ghidra_cpp, "hidden_return_targets", return_value=(targets, set(targets))):
             out = ghidra_cpp.convert(self.draft, {("CSkill", "getLevelStats")}, f)
-        finally:
-            ghidra_cpp._SRET = old
         self.assertIn("std::wstring CUnit::getStats(CSkill* param_1, int param_2)", out)
         self.assertIn('return L"";', out)
         self.assertIn("return param_1->CSkill::getLevelStats(param_2);", out)
@@ -64,12 +62,9 @@ class HiddenReturnTest(unittest.TestCase):
         self.assertIn("allocator local_29", out)  # no lifetime proof for dropping it
 
     def test_call_of_such_a_function_assigns_its_result(self):
-        old = ghidra_cpp._SRET
-        ghidra_cpp._SRET = {"CUnit::getName"}
-        try:
+        targets = {"CUnit::getName": {"member": True, "params": []}}
+        with patch.object(ghidra_cpp, "hidden_return_targets", return_value=(targets, set(targets))):
             out = ghidra_cpp.hidden_return_calls("\n  CUnit::getName(&local_40,pUnit);\n  CUnit::other(&local_48,pUnit);")
-        finally:
-            ghidra_cpp._SRET = old
         self.assertIn("local_40 = CUnit::getName(pUnit);", out)
         self.assertIn("CUnit::other(&local_48,pUnit);", out)
 

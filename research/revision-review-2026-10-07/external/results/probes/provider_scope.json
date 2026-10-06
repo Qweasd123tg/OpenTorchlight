@@ -1,0 +1,8 @@
+{
+  "proof_type": "static source lines",
+  "no_llm_descriptor_filter": "tasks = {t[\"name\"]: t for t in db[\"tus\"] if t[\"kind\"] == \"game\" and t[\"name\"].endswith(\"Descriptor.cpp\")}",
+  "providers": "parser.add_argument(\"--provider\", choices=(\"descriptor\", \"properties\"), required=True)",
+  "candidate_requires_match": "if (not definitions or not added or any(r[\"status\"] != \"MATCH\" for r in added)",
+  "lsda_policy": "reason = \"EH LSDA equivalence unverified\" if lsda else None",
+  "probe_completed": true
+}

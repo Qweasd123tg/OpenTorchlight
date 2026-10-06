@@ -1,0 +1,11 @@
+{
+  "proof_type": "real child process exits immediately after first real _replace, validation token modeled; temp files only",
+  "child_exit": 77,
+  "changed_files": [
+    "decomp/include/Unit.h"
+  ],
+  "source": "int value() { return 7; }\n",
+  "header": "new header\n",
+  "detected": true,
+  "probe_completed": true
+}

@@ -1,0 +1,80 @@
+{
+  "discovered": 108,
+  "run": 95,
+  "passed": 91,
+  "skipped": [
+    {
+      "test": "test_ghidra_draft_java.GhidraJava.test_script_api_and_lp64_widths",
+      "reason": "requires the installed Ghidra SDK and a JDK"
+    },
+    {
+      "test": "test_objdiff_eh.PinnedAcceptanceTest.test_catch_type_cannot_match_and_plain_function_still_matches",
+      "reason": "requires cached pinned GCC 4.4.7 and host linker"
+    },
+    {
+      "test": "test_objdiff_eh.PinnedAcceptanceTest.test_corrupt_unresolved_eh_fails_closed",
+      "reason": "requires cached pinned GCC 4.4.7 and host linker"
+    },
+    {
+      "test": "test_objdiff_eh.PinnedAcceptanceTest.test_linked_and_object_long_literals_compare_completely",
+      "reason": "requires cached pinned GCC 4.4.7 and host linker"
+    }
+  ],
+  "not_run": [
+    {
+      "test": "test_autotest_capture.CaptureProtocol.test_actual_runtime",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_autotest_capture.CaptureProtocol.test_generated_acceptance_requires_complete_minimum",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_autotest_returns.ReturnTypes.test_exact_types_and_reference_value",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_autotest_returns.ReturnTypes.test_standalone_fork_capture",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_no_llm_loop.Providers.test_generated_property_belongs_to_tu_as_a_strong_definition",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_pipeline_safety.CompilerCache.test_new_higher_priority_header_changes_real_object_and_warm_hit",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_conflicting_prototypes_are_quarantined_and_free_functions_have_no_this",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_disagreeing_same_qualified_identity_is_quarantined",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_exact_sdk_linkage_and_c_imports_without_short_name_guessing",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_namespaces_nested_types_and_alias_targets_are_distinct",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_secondary_groups_keep_targets_and_unknown_adjustment_abi",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_typedef_cv_and_unknown_array_extent_are_preserved",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    },
+    {
+      "test": "test_types_export_identity.QualifiedTypes.test_unknown_span_keeps_its_width",
+      "reason": "requires installed GCC 4.4.7; not substituted with host compiler"
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "pinned_available": false
+}

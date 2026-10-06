@@ -1,0 +1,313 @@
+SOURCE tools/decomp/toolchain.py
+SHA256 1bc7adc857c8bca9b759be453480fab44d6fb291d2f7472e5c8af67928c46b93
+
+0001: #!/usr/bin/env python3
+0002: """Original-compiler toolchain for the decomp track.
+0003: 
+0004: `original-code`, .comment of the shipped ELF (in link order):
+0005:   [0x00] GCC 4.4.6 (Red Hat 4.4.6-4)   glibc crt objects, merged by ld
+0006:   [0x2c] GCC 4.4.7 (Red Hat 4.4.7-3)   every game object, merged by ld
+0007:   61 x   GCC 4.1.2 (Red Hat 4.1.2-51)  prebuilt static-library objects from an
+0008:                                       assembler that did not mark .comment mergeable
+0009: Game code also shows GCC >= 4.4 features: `[clone .clone.N]` (IPA-CP) and direct
+0010: `__cxa_atexit(dtor)` registration. We therefore fetch exactly gcc 4.4.7-3.el6 with
+0011: binutils 2.20.51.0.2-5.36.el6 and the CentOS 6.4 glibc/kernel headers from the
+0012: CentOS vault, plus the pinned OGRE 1.6.5 archive for its headers. Everything is
+0013: extracted into a cache directory whose path must not contain spaces (the GCC
+0014: driver composes sub-commands from specs).
+0015: 
+0016:     python3 tools/decomp/toolchain.py setup
+0017:     python3 tools/decomp/toolchain.py cc decomp/src/RunicCore.cpp -o /tmp/x.o
+0018:     python3 tools/decomp/toolchain.py cc FILE -S -o FILE.s
+0019: """
+0020: from __future__ import annotations
+0021: 
+0022: import argparse
+0023: from concurrent.futures import ThreadPoolExecutor
+0024: import hashlib
+0025: import json
+0026: import os
+0027: from pathlib import Path
+0028: import shutil
+0029: import subprocess
+0030: import sys
+0031: import tarfile
+0032: import tempfile
+0033: import urllib.request
+0034: 
+0035: ROOT = Path(__file__).resolve().parents[2]
+0036: CONFIG = ROOT / "decomp" / "config.json"
+0037: VAULT = "https://vault.centos.org/6.4/os/x86_64/Packages/"
+0038: RPMS = {
+0039:     "cpp-4.4.7-3.el6.x86_64.rpm": "c6da133d2a49c60c21a21d1a9011b6c7ca86c90ddeead9fbd3d511240a936066",
+0040:     "gcc-4.4.7-3.el6.x86_64.rpm": "ee5ce795fbab3e040722ff1433e45783922c54669e93eb882c2dd3599df5d144",
+0041:     "gcc-c++-4.4.7-3.el6.x86_64.rpm": "f7530ae18667a7a28c110a250727af6fffaf0ce20cf0c3b8deab38809cd750b1",
+0042:     "libstdc++-devel-4.4.7-3.el6.x86_64.rpm": "c462b3238ef079f79330946818d949779ad18e23f21876b16756d6ee0256642b",
+0043:     "libstdc++-4.4.7-3.el6.x86_64.rpm": "40782298be4fabef812f7f5f57a507b0b677b9de2a056df9e72242f907fbb3e0",
+0044:     "libgcc-4.4.7-3.el6.x86_64.rpm": "6ea1489aacaa4d024dcc804de658ff192cf4cde9570b659eef58d91f90b6bf99",
+0045:     "libgomp-4.4.7-3.el6.x86_64.rpm": "a573151f19c40feaa026c6e9701bd65098a58ed905a795e4c95fe81f5e7c87da",
+0046:     "gmp-4.3.1-7.el6_2.2.x86_64.rpm": "ec257a3a9b58ac802f344623cf4bb8a507c75583c18c0a3d798dafd69059b7fe",
+0047:     "mpfr-2.4.1-6.el6.x86_64.rpm": "20d2ce3bc1ea03844a0beb1726b01ef50d8555b3c9facb65264055a634709cf4",
+0048:     "ppl-0.10.2-11.el6.x86_64.rpm": "3a11f39d0564597f5b66e8c623f6f0acbe1cc97d70679d6797b1d38eeb4f4e9a",
+0049:     "cloog-ppl-0.15.7-1.2.el6.x86_64.rpm": "911246e85a7bebc0872cba05d87941e7871b494931f295e2abebdc64f1c28020",
+0050:     "glibc-headers-2.12-1.107.el6.x86_64.rpm": "183fc4f18598e6c4eac5c75e3299a9fafb3468ea36eab6acea365104d8e3cbf1",
+0051:     "glibc-devel-2.12-1.107.el6.x86_64.rpm": "f0162adeb816f1f111000a48112fef828876e44114fd5b396f7b59e9b3632621",
+0052:     "kernel-headers-2.6.32-358.el6.x86_64.rpm": "cb79b7c214402c80dc4e579a19e8ca235faf8b93b958d95cca15e1f473b4595a",
+0053:     "binutils-2.20.51.0.2-5.36.el6.x86_64.rpm": "a8dfefada3011c0f1631a1cafab3ddb766fd0151d9815ab13f372188cb1c0523",
+0054: }
+0055: # Same archive and digest as third_party/ogre-1.6.5-math/source-inputs.json.
+0056: OGRE = ("ogre-v1-6-5.tar.bz2",
+0057:         "https://sourceforge.net/projects/ogre/files/ogre/1.6.5/ogre-v1-6-5.tar.bz2/download",
+0058:         "7fc0e948679c1c1f10751756d267a41d0e3395a6520a23f7853a0ae39a1281f5")
+0059: GCC_TRIPLE = "x86_64-redhat-linux"
+0060: GCC_VERSION = "4.4.7"
+0061: EXPECTED_COMMENT = "GCC: (GNU) 4.4.7 20120313 (Red Hat 4.4.7-3)"
+0062: 
+0063: 
+0064: def cache_dir():
+0065:     base = Path(os.environ.get("OTL_DECOMP_CACHE", Path.home() / ".cache" / "opentorchlight" / "decomp"))
+0066:     if " " in str(base):
+0067:         raise SystemExit(f"OTL_DECOMP_CACHE must not contain spaces: {base}")
+0068:     return base
+0069: 
+0070: 
+0071: def sha256(path):
+0072:     h = hashlib.sha256()
+0073:     with open(path, "rb") as stream:
+0074:         for chunk in iter(lambda: stream.read(1 << 20), b""):
+0075:             h.update(chunk)
+0076:     return h.hexdigest()
+0077: 
+0078: 
+0079: def fetch(url, target, digest):
+0080:     if target.exists() and sha256(target) == digest:
+0081:         return target
+0082:     target.parent.mkdir(parents=True, exist_ok=True)
+0083:     tmp = target.with_suffix(target.suffix + ".part")
+0084:     print(f"fetch {url}")
+0085:     with urllib.request.urlopen(url) as response, open(tmp, "wb") as out:
+0086:         shutil.copyfileobj(response, out)
+0087:     actual = sha256(tmp)
+0088:     if actual != digest:
+0089:         tmp.unlink()
+0090:         raise SystemExit(f"checksum mismatch for {url}: {actual}")
+0091:     tmp.rename(target)
+0092:     return target
+0093: 
+0094: 
+0095: def setup():
+0096:     cache = cache_dir()
+0097:     downloads = cache / "downloads"
+0098:     root = cache / "gcc447"
+0099:     stamp = root / ".complete.json"
+0100:     expected = {"rpms": RPMS, "ogre": OGRE[2]}
+0101:     if stamp.exists() and json.loads(stamp.read_text()) == expected:
+0102:         print(f"toolchain ready: {root}")
+0103:         return
+0104:     if root.exists():
+0105:         shutil.rmtree(root)
+0106:     root.mkdir(parents=True)
+0107:     for name, digest in RPMS.items():
+0108:         rpm = fetch(VAULT + name, downloads / name, digest)
+0109:         cpio = subprocess.run(["rpm2cpio", str(rpm)], check=True, capture_output=True).stdout
+0110:         subprocess.run(["cpio", "-idmu", "--quiet"], input=cpio, cwd=root, check=True,
+0111:                        capture_output=True)
+0112:     archive = fetch(OGRE[1], downloads / OGRE[0], OGRE[2])
+0113:     ogre = root / "ogre-1.6.5"
+0114:     with tarfile.open(archive) as tar:
+0115:         members = [m for m in tar.getmembers()
+0116:                    if m.name.startswith(("ogre/OgreMain/include/", "ogre/COPYING"))
+0117:                    and ".." not in m.name]
+0118:         tar.extractall(ogre, members=members, filter="data")
+0119:     stamp.write_text(json.dumps(expected, sort_keys=True))
+0120:     check = compile_source(None, None, probe=True)
+0121:     print(f"toolchain ready: {root}\n  {check}")
+0122: 
+0123: 
+0124: def config():
+0125:     return json.loads(CONFIG.read_text())
+0126: 
+0127: 
+0128: def include_args(root, cfg):
+0129:     gcc_inc = root / "usr" / "include" / "c++" / GCC_VERSION
+0130:     args = ["-nostdinc", "-nostdinc++"]
+0131:     for path in (gcc_inc, gcc_inc / GCC_TRIPLE, gcc_inc / "backward",
+0132:                  root / "usr" / "lib" / "gcc" / GCC_TRIPLE / GCC_VERSION / "include",
+0133:                  root / "usr" / "include"):
+0134:         args += ["-isystem", str(path)]
+0135:     for item in cfg.get("include", []):
+0136:         base = Path(os.environ.get("OTL_INCLUDE_ROOT", ROOT)) if item.startswith("decomp/") else ROOT
+0137:         args += ["-I", str(base / item)]
+0138:     # Generated headers for work in progress (llm_loop.py); committed sources must not need them.
+0139:     for item in filter(None, os.environ.get("OTL_EXTRA_INCLUDE", "").split(":")):
+0140:         args += ["-I", item]
+0141:     for item in cfg.get("system_include", []):
+0142:         path = item.replace("@OGRE@", str(root / "ogre-1.6.5" / "ogre"))
+0143:         path = path if os.path.isabs(path) else str(ROOT / path)
+0144:         args += ["-isystem", path]
+0145:     return args
+0146: 
+0147: 
+0148: def driver_env(root):
+0149:     env = dict(os.environ)
+0150:     env["LD_LIBRARY_PATH"] = str(root / "usr" / "lib64")
+0151:     env["LC_ALL"] = "C"
+0152:     return env
+0153: 
+0154: 
+0155: CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
+0156: 
+0157: 
+0158: def _digest(cmd, source, deps, preprocessed=None):
+0159:     h = hashlib.sha256("\0".join(cmd).encode())
+0160:     h.update((preprocessed or "").encode())
+0161:     for path in [source, *deps]:
+0162:         try:
+0163:             data = Path(path).read_bytes()
+0164:             h.update(str(path).encode() + b"\0" + str(len(data)).encode() + b"\0" + data)
+0165:         except OSError:
+0166:             return None
+0167:     return h.hexdigest()
+0168: 
+0169: 
+0170: def _preprocessed_digest(cmd, source, root):
+0171:     """Resolve includes anew: adding a shadow header must invalidate an old hit."""
+0172:     args = [a for a in cmd if a not in ("-c", "-S")]
+0173:     result = subprocess.run(args + ["-E", str(source)], env=driver_env(root), capture_output=True)
+0174:     if result.returncode:
+0175:         return None
+0176:     h = hashlib.sha256(result.stdout)
+0177:     # Both the driver and cc1 can change without a command-line change.
+0178:     for path in (Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
+0179:                  root / "usr/bin/as"):
+0180:         h.update(sha256(path).encode())
+0181:     return h.hexdigest()
+0182: 
+0183: 
+0184: def _cache_lookup(cmd, source, preprocessed=None):
+0185:     """Cached output bound to current include resolution and compiler contents."""
+0186:     index = CC_CACHE / (hashlib.sha256(("\0".join(cmd) + str(source)).encode()).hexdigest() + ".json")
+0187:     if not index.exists():
+0188:         return index, None
+0189:     try:
+0190:         entry = json.loads(index.read_text())
+0191:         if entry.get("schema") != 2 or not preprocessed:
+0192:             return index, None
+0193:         digest = _digest(cmd, source, entry["deps"], preprocessed)
+0194:     except (OSError, ValueError, KeyError, TypeError):
+0195:         return index, None
+0196:     if digest and digest == entry["digest"] and (CC_CACHE / entry["output"]).exists():
+0197:         return index, CC_CACHE / entry["output"]
+0198:     return index, None
+0199: 
+0200: 
+0201: def jobs():
+0202:     """Parallel compiler processes: OTL_JOBS, by default all cores but one (at most 5)."""
+0203:     if os.environ.get("OTL_JOBS"):
+0204:         return max(1, int(os.environ["OTL_JOBS"]))
+0205:     return max(1, min(5, (os.cpu_count() or 2) - 1))
+0206: 
+0207: 
+0208: def parallel_map(fn, items):
+0209:     """[fn(x) for x in items] on jobs() threads (the work is in compiler subprocesses), in order;
+0210:     the first exception, SystemExit included, is raised after the others finish."""
+0211:     items = list(items)
+0212:     if jobs() == 1 or len(items) < 2:
+0213:         return [fn(x) for x in items]
+0214:     with ThreadPoolExecutor(max_workers=jobs()) as pool:
+0215:         futures = [pool.submit(fn, x) for x in items]
+0216:     return [f.result() for f in futures]
+0217: 
+0218: 
+0219: def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False, cache=True):
+0220:     """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
+0221: 
+0222:     Results are cached in build-decomp/cc-cache by source, dependency and flag
+0223:     digests; set OTL_NO_CC_CACHE=1 or cache=False to bypass (side outputs such
+0224:     as dumps are not cached)."""
+0225:     root = cache_dir() / "gcc447"
+0226:     if not (root / ".complete.json").exists():
+0227:         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
+0228:     cfg = config()
+0229:     gxx = root / "usr" / "bin" / "g++"
+0230:     base = [str(gxx), f"-B{root}/usr/libexec/gcc/{GCC_TRIPLE}/{GCC_VERSION}/", f"-B{root}/usr/bin/"]
+0231:     with tempfile.TemporaryDirectory(prefix="otl-cc-") as tmp:
+0232:         if probe:
+0233:             source = Path(tmp) / "probe.cpp"
+0234:             source.write_text("int probe(int x) { return x * 3; }\n")
+0235:         out = Path(tmp) / ("out.s" if assembly else "out.o")
+0236:         cmd = base + include_args(root, cfg) + list(cfg["cflags"]) + list(extra)
+0237:         cmd += ["-S" if assembly else "-c"]
+0238:         use_cache = cache and not probe and not os.environ.get("OTL_NO_CC_CACHE")
+0239:         preprocessed = _preprocessed_digest(cmd, source, root) if use_cache else None
+0240:         if use_cache:
+0241:             index, hit = _cache_lookup(cmd, source, preprocessed)
+0242:             if hit:
+0243:                 output = Path(output)
+0244:                 output.parent.mkdir(parents=True, exist_ok=True)
+0245:                 shutil.copyfile(hit, output)
+0246:                 return output
+0247:         depfile = Path(tmp) / "out.d"
+0248:         cmd_full = cmd + [str(source), "-o", str(out)] + (["-MD", "-MF", str(depfile)] if use_cache else [])
+0249:         result = subprocess.run(cmd_full, env=driver_env(root), capture_output=True, text=True)
+0250:         if result.returncode:
+0251:             if quiet:
+0252:                 raise SystemExit(f"compile failed: {source}\n{result.stderr}")
+0253:             sys.stderr.write(result.stderr)
+0254:             raise SystemExit(f"compile failed: {source}")
+0255:         if result.stderr.strip() and not quiet:
+0256:             sys.stderr.write(result.stderr)
+0257:         if probe:
+0258:             comment = subprocess.run(["readelf", "-p", ".comment", str(out)], capture_output=True,
+0259:                                      text=True).stdout
+0260:             if EXPECTED_COMMENT not in comment:
+0261:                 raise SystemExit(f"unexpected compiler identity:\n{comment}")
+0262:             return EXPECTED_COMMENT
+0263:         output = Path(output)
+0264:         output.parent.mkdir(parents=True, exist_ok=True)
+0265:         shutil.copyfile(out, output)
+0266:         if use_cache and depfile.exists():
+0267:             # Make-style dependency list: "\\ " escapes spaces in paths, "\\\n" continues lines.
+0268:             body = depfile.read_text().replace("\\\n", " ").split(": ", 1)[1].replace("\\ ", "\0")
+0269:             deps = [d.replace("\0", " ") for d in body.split() if d.replace("\0", " ") != str(source)]
+0270:             digest = _digest(cmd, source, deps, preprocessed) if preprocessed else None
+0271:             if digest:
+0272:                 CC_CACHE.mkdir(parents=True, exist_ok=True)
+0273:                 name = digest + (".s" if assembly else ".o")
+0274:                 shutil.copyfile(out, CC_CACHE / name)
+0275:                 partial = index.with_suffix(f".{os.getpid()}.{id(out)}.tmp")
+0276:                 partial.write_text(json.dumps({"schema": 2, "deps": deps, "digest": digest, "output": name}))
+0277:                 os.replace(partial, index)
+0278:     return output
+0279: 
+0280: 
+0281: def assemble(source, output):
+0282:     root = cache_dir() / "gcc447"
+0283:     subprocess.run([str(root / "usr" / "bin" / "as"), "--64", "-o", str(output), str(source)],
+0284:                    env=driver_env(root), check=True)
+0285:     return output
+0286: 
+0287: 
+0288: def main():
+0289:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0290:     sub = parser.add_subparsers(dest="command", required=True)
+0291:     sub.add_parser("setup")
+0292:     cc = sub.add_parser("cc")
+0293:     cc.add_argument("source", type=Path)
+0294:     cc.add_argument("-o", "--output", type=Path, required=True)
+0295:     cc.add_argument("-S", dest="assembly", action="store_true")
+0296:     cc.add_argument("extra", nargs="*")
+0297:     sub.add_parser("env")
+0298:     args = parser.parse_args()
+0299:     if args.command == "setup":
+0300:         setup()
+0301:     elif args.command == "cc":
+0302:         print(compile_source(args.source, args.output, args.extra, args.assembly))
+0303:     else:
+0304:         root = cache_dir() / "gcc447"
+0305:         print(json.dumps({"root": str(root), "config": config(),
+0306:                           "include_args": include_args(root, config())}, indent=1))
+0307: 
+0308: 
+0309: if __name__ == "__main__":
+0310:     main()

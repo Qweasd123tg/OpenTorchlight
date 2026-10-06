@@ -1,0 +1,6 @@
+{
+  "blocked": true,
+  "reason": "previous MATCH lost without fresh behavioral evidence: 0x200",
+  "live_header": "#define SIDE_VALUE 7\n",
+  "proof": "native C++98 programs, mock comparator/runtime interface from archived reproduction; no game"
+}

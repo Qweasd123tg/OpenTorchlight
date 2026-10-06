@@ -125,12 +125,17 @@ struct Capture
     enum Issue { Complete = 0, Overflow = 1, UnsupportedPointer = 2, InvalidReport = 3 };
     size_t length;
     unsigned int issue;
+    uint64_t callTarget;
+    unsigned int callStarted;
+    unsigned int callCompleted;
     char data[kSize];
 
     void reset()
     {
         length = 0;
         issue = Complete;
+        callTarget = 0;
+        callStarted = callCompleted = 0;
     }
     void add(const void* p, size_t n)
     {
@@ -221,6 +226,119 @@ inline void record(Capture& out, const Value<bool>& v)
     out.add(&b, 1);
 }
 
+// The function pointer itself is invoked; a declaration cannot mark an execution.
+template<class Fn> bool beginInvocation(Capture& out, Fn fn)
+{
+    if (out.callStarted || !fn) { out.issue = Capture::InvalidReport; return false; }
+    out.callTarget = (uint64_t)reinterpret_cast<uintptr_t>(fn);
+    out.callStarted = 1;
+    return true;
+}
+
+template<class Fn>
+void invoke(Capture& out, Fn fn)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0>
+void invoke(Capture& out, Fn fn, A0 a0)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6, a7), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6, a7, a8), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10), Void()));
+    out.callCompleted = 1;
+}
+
+template<class Fn, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+void invoke(Capture& out, Fn fn, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11)
+{
+    if (!beginInvocation(out, fn)) return;
+    record(out, (fn(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11), Void()));
+    out.callCompleted = 1;
+}
+
 typedef void (*Body)(void* context, Capture& out);
 
 struct Outcome
@@ -247,6 +365,9 @@ struct ReportHeader
     uint32_t version;
     uint32_t length;
     uint32_t issue;
+    uint64_t callTarget;
+    uint32_t callStarted;
+    uint32_t callCompleted;
 };
 const uint32_t kReportMagic = 0x544c4350;
 // Reserved by the observer; a failed pipe write is not a function failure.
@@ -290,7 +411,8 @@ inline bool readExact(int fd, void* data, size_t length, size_t* completed = 0)
 
 inline bool writeReport(int fd, const Capture& capture)
 {
-    ReportHeader header = {kReportMagic, 1, (uint32_t)capture.length, capture.issue};
+    ReportHeader header = {kReportMagic, 2, (uint32_t)capture.length, capture.issue,
+                           capture.callTarget, capture.callStarted, capture.callCompleted};
     return writeExact(fd, &header, sizeof(header)) && writeExact(fd, capture.data, capture.length);
 }
 
@@ -303,8 +425,10 @@ inline bool readReport(int fd, Capture& capture, bool* started = 0)
     bool gotHeader = readExact(fd, &header, sizeof(header), &headerBytes);
     if (started)
         *started = headerBytes != 0;
-    if (!gotHeader || header.magic != kReportMagic || header.version != 1 ||
+    if (!gotHeader || header.magic != kReportMagic || header.version != 2 ||
         header.length > Capture::kSize || header.issue > Capture::UnsupportedPointer ||
+        header.callStarted > 1 || header.callCompleted > header.callStarted ||
+        (header.callStarted && !header.callTarget) ||
         !readExact(fd, capture.data, header.length))
         return false;
     // Exactly one frame, including EOF, is required; no trailing partial frame.
@@ -315,6 +439,9 @@ inline bool readReport(int fd, Capture& capture, bool* started = 0)
         return false;
     capture.length = header.length;
     capture.issue = header.issue;
+    capture.callTarget = header.callTarget;
+    capture.callStarted = header.callStarted;
+    capture.callCompleted = header.callCompleted;
     return true;
 }
 
@@ -405,14 +532,61 @@ inline bool incomplete(const Outcome& outcome)
             (WEXITSTATUS(outcome.childStatus) == 0 && !outcome.reportValid));
 }
 
+// Receipts count observed comparisons of the exact original/replacement pair,
+// not fixture iterations or declarations. Legacy bodies remain regressions
+// until their primary call uses invoke() and the receipt is explicitly emitted.
+struct Coverage
+{
+    const char* name;
+    uint64_t original;
+    unsigned int completed, different, missing;
+    Coverage(const char* fixture, uint64_t address)
+        : name(fixture), original(address), completed(0), different(0), missing(0) {}
+    int observe(const tlhybrid_host* host, const Outcome& a, const Outcome& b)
+    {
+        bool cleanA = a.childStatus >= 0 && WIFEXITED(a.childStatus) && WEXITSTATUS(a.childStatus) == 0;
+        bool cleanB = b.childStatus >= 0 && WIFEXITED(b.childStatus) && WEXITSTATUS(b.childStatus) == 0;
+        if (!cleanA || !cleanB || !a.reportValid || !b.reportValid || incomplete(a) || incomplete(b) ||
+            a.capture.issue != Capture::Complete || b.capture.issue != Capture::Complete ||
+            a.capture.callStarted != 1 || a.capture.callCompleted != 1 ||
+            b.capture.callStarted != 1 || b.capture.callCompleted != 1 ||
+            a.capture.callTarget != original || !host || host->abi_version != TLHYBRID_ABI_VERSION ||
+            !host->comparison_pair || !host->comparison_pair(original, b.capture.callTarget))
+        {
+            ++missing;
+            return 2;
+        }
+        ++completed;
+        if (a.capture.length != b.capture.length ||
+            std::memcmp(a.capture.data, b.capture.data, a.capture.length) != 0)
+        {
+            ++different;
+            return 1;
+        }
+        return 0;
+    }
+    void report(const tlhybrid_host* host) const
+    {
+        host->log("    coverage %s 0x%llx completed %u different %u incomplete %u\n",
+                  name, (unsigned long long)original, completed, different, missing);
+    }
+};
+
 // One differential case; incomplete observation is separate from a difference.
 inline bool compareCase(Body original, Body ours, void* context, Stats& stats, const tlhybrid_host* host,
-                        const char* name, int index)
+                        const char* name, int index, Coverage* coverage = 0)
 {
     runChild(original, context, g_outcomes[0]);
     runChild(ours, context, g_outcomes[1]);
     const Outcome& a = g_outcomes[0];
     const Outcome& b = g_outcomes[1];
+    if (coverage && coverage->observe(host, a, b) == 2)
+    {
+        ++stats.incomplete;
+        if (stats.incomplete <= 3)
+            host->log("    %s case %d: no completed original/replacement call pair\n", name, index);
+        return false;
+    }
     bool okA = a.childStatus >= 0 && WIFEXITED(a.childStatus) && WEXITSTATUS(a.childStatus) == 0;
     bool okB = b.childStatus >= 0 && WIFEXITED(b.childStatus) && WEXITSTATUS(b.childStatus) == 0;
     if (incomplete(a) || incomplete(b))

@@ -77,8 +77,8 @@ def runtime_inputs(elf):
     return [("runtime/" + name, path) for name, path in sorted(paths.items())]
 
 
-def input_digest(db):
-    root = elfdb.ROOT
+def input_digest(db, root=None):
+    root = Path(root) if root is not None else elfdb.ROOT
     paths = []
     for name in ("decomp", "tools/decomp", "third_party"):
         paths += directory_inputs(name, root / name, INPUT_SUFFIXES)

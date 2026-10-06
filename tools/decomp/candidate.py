@@ -20,6 +20,10 @@ import evidence
 import objdiff
 import promote
 import publication
+import acceptance
+import toolchain
+
+POLICY_VERSION = 2
 
 
 def failure_class(message):
@@ -30,14 +34,15 @@ def failure_class(message):
     return hashlib.sha256(normalized.encode()).hexdigest()[:16], normalized
 
 
-def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental=False):
+def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental=False, retries=1):
     db = elfdb.load_db()
     if tu not in {t["name"] for t in db["tus"] if t["kind"] == "game"}:
         raise ValueError(f"unknown game TU: {tu}")
     candidate = Path(source).read_bytes()
     inputs = evidence.input_digest(db)
     proposal = json.dumps(publication.tree_state(stage.path), sort_keys=True).encode() if stage else b""
-    key = hashlib.sha256(tu.encode() + b"\0" + candidate + inputs.encode() + proposal).hexdigest()
+    policy = json.dumps({"version": POLICY_VERSION, "incremental": bool(incremental)}, sort_keys=True).encode()
+    key = hashlib.sha256(tu.encode() + b"\0" + candidate + inputs.encode() + proposal + policy).hexdigest()
     failures = root / "build-decomp/candidate-failures"
     failures.mkdir(parents=True, exist_ok=True)
     cached = failures / f"{key}.json"
@@ -49,7 +54,8 @@ def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental
     target = stage.path / "decomp/src" / tu
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(candidate)
-    result = {"schema": 1, "tu": tu, "provider": "deterministic", "attempt": str(stage.path),
+    result = {"schema": 2, "policy": POLICY_VERSION, "incremental": bool(incremental),
+              "tu": tu, "provider": "deterministic", "attempt": str(stage.path),
               "input_digest": inputs, "candidate_sha256": hashlib.sha256(candidate).hexdigest(),
               "published": False}
     try:
@@ -65,45 +71,75 @@ def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental
                           functions=final["functions"], unknown=final.get("unknown", []))
             definitions = [r for r in final["functions"] if r["status"] != "MISSING" and not r.get("weak")]
             prior = {}
-            if incremental and (root / "decomp/src" / tu).exists():
+            before_object = None
+            if (root / "decomp/src" / tu).exists():
                 # Compare the actual original context, with its actual hand headers.
                 saved_root, saved_extra = os.environ.pop("OTL_INCLUDE_ROOT", None), os.environ.pop("OTL_EXTRA_INCLUDE", None)
+                saved_config = toolchain.CONFIG
                 try:
-                    prior = {r["address"]: r for r in objdiff.compare_source(root / "decomp/src" / tu, original, quiet=True)["functions"]
+                    toolchain.CONFIG = root / "decomp/config.json"
+                    before = objdiff.compare_source(root / "decomp/src" / tu, original, quiet=True)
+                    before_object = before.get("object_digest")
+                    prior = {r["address"]: r for r in before["functions"]
                              if r.get("address") and r["status"] != "MISSING" and not r.get("weak")}
                 finally:
+                    toolchain.CONFIG = saved_config
                     if saved_root is not None:
                         os.environ["OTL_INCLUDE_ROOT"] = saved_root
                     if saved_extra is not None:
                         os.environ["OTL_EXTRA_INCLUDE"] = saved_extra
             added = [r for r in definitions if r.get("address") not in prior]
+            wanted = added if incremental else definitions
             result["new_matched"] = [r["address"] for r in added if r.get("address") and r["status"] == "MATCH"]
-            preserved = preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db) if prior else True
-            if (not definitions or not added or any(r["status"] != "MATCH" for r in added)
-                    or not preserved or final.get("unknown")):
+            preserved = preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db,
+                                          before_object=before_object, after_object=final.get("object_digest")) if prior else True
+            needs_comparison = bool(wanted) and (not preserved or any(r["status"] != "MATCH" for r in wanted))
+            if not definitions or (incremental and not added) or final.get("unknown"):
                 result["status"] = "DIFF"
-                result["reason"] = "final TU requires behavioral evidence; instruction percentage cannot publish it"
+                result["reason"] = "empty/no-new definitions or unknown signature; cannot accept candidate"
             else:
                 result["status"] = "MATCH"
-        if publish and result["status"] == "MATCH":
+        if result["status"] == "MATCH" and (needs_comparison or publish):
             stage.validate()
+            target_unit = next(u for u in stage.final_units if Path(u["source"]).name == tu)
+            result["final_object"] = target_unit["object_digest"]
+            result["functions"] = target_unit["functions"]
+            after = [r for r in target_unit["functions"] if r["status"] != "MISSING" and not r.get("weak")]
+            wanted = [r for r in after if not incremental or r.get("address") not in prior]
+            preserved = preserve_existing(root / "decomp/src" / tu, target, prior, after, db,
+                                          before_object=before_object, after_object=target_unit["object_digest"],
+                                          fresh_covered=stage.covered) if prior else True
+            if not preserved or any(r["status"] != "MATCH" and r.get("address") not in stage.covered for r in wanted):
+                result["status"] = "DIFF"
+                result["reason"] = "final definitions lack preserved or freshly executed behavioral evidence"
+            else:
+                result["status"] = "BEHAVIORAL" if any(r["status"] != "MATCH" for r in wanted) else "MATCH"
+                result["comparison_evidence"] = acceptance.comparison_bindings(db, stage.final_units, stage.report,
+                                                                              stage.path, stage.validated_inputs)
+        if publish and result["status"] in ("MATCH", "BEHAVIORAL"):
             if evidence.input_digest(db) != inputs:
                 raise RuntimeError("inputs changed during candidate validation")
             result["files"] = stage.publish()
             result["published"] = True
     except (SystemExit, RuntimeError) as error:
+        if (retries and publish and publication.tree_state(root) != stage.baseline):
+            stage.rebase()
+            retried = evaluate(tu, target, publish=publish, root=root, stage=stage,
+                               incremental=incremental, retries=retries-1)
+            retried["rebased"] = True
+            return retried
         result["status"] = "ERROR"
         result["reason"] = str(error)
         result["failure_class"], result["compiler_diagnostics"] = failure_class(str(error))
     (stage.path / "result.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
-    if result["status"] != "MATCH":
+    if result["status"] == "DIFF":
         temporary = cached.with_suffix(f".{os.getpid()}.tmp")
         temporary.write_text(json.dumps(result, indent=1, ensure_ascii=False))
         os.replace(temporary, cached)
     return result
 
 
-def preserve_existing(before, after, prior, definitions, db):
+def preserve_existing(before, after, prior, definitions, db, *, before_object=None, after_object=None, fresh_covered=()):
     """Do not replace existing source bodies or change their compiler context silently."""
     import mutate
     old, new = before.read_text(), after.read_text()
@@ -112,8 +148,16 @@ def preserve_existing(before, after, prior, definitions, db):
     for address, row in prior.items():
         other = final.get(address)
         if not other or (row["status"] == "MATCH" and other["status"] != "MATCH"):
+            if other and address in fresh_covered:
+                continue
             return False
         if row["status"] != "MATCH":
+            if other["status"] == "MATCH" or address in fresh_covered:
+                continue
+            old_object = before_object or row.get("object_digest")
+            new_object = after_object or other.get("object_digest")
+            if not old_object or old_object != new_object:
+                return False
             if row.get("code") != other.get("code") or row.get("metadata_reasons") != other.get("metadata_reasons"):
                 return False
             function = db["functions"].get(address)
@@ -146,7 +190,7 @@ def main():
             parser.error(f"draft provider unavailable ({state}): {'; '.join(reasons)}")
     result = evaluate(args.tu, source, args.publish)
     print(json.dumps(result, indent=1, ensure_ascii=False))
-    return 0 if result["status"] == "MATCH" else 1
+    return 0 if result["status"] in ("MATCH", "BEHAVIORAL") else 1
 
 
 if __name__ == "__main__":

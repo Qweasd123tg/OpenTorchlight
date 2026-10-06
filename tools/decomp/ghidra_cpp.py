@@ -368,19 +368,74 @@ _SRET = None
 _SRET_INPUT = None
 
 
-def returned_by_pointer():
-    """Qualified names of the functions that return an object through a hidden pointer, from
-    the header prototypes types_export.py writes (Ghidra gets them as custom storage)."""
+def hidden_return_targets(signatures=None):
+    """Resolve sret only against a complete, address-keyed ELF function family.
+
+    Raw C does not identify the callee of an overloaded call. Neither its name
+    nor its apparent ABI argument count establishes which overload was called.
+    Missing prototypes and cv overloads therefore also block reconstruction.
+    """
     global _SRET, _SRET_INPUT
     import hashlib
     path = ROOT / "build-decomp" / "types.json"
     raw = path.read_bytes() if path.exists() else b"{}"
     key = hashlib.sha256(raw).hexdigest()
     if _SRET is None or _SRET_INPUT != key:
-        protos = json.loads(raw).get("prototypes", {})
-        _SRET = {p["name"].split("(")[0] for p in protos.values() if p.get("sret")}
+        _SRET = json.loads(raw).get("prototypes", {})
         _SRET_INPUT = key
-    return _SRET
+    families = getattr(signatures, "functions", {})
+    targets, possible = {}, set()
+    for address, proto in _SRET.items():
+        if proto.get("sret") is not True or not proto.get("name"):
+            continue
+        name = elfdb.parse_demangled(proto["name"])[0]
+        possible.add(name)
+        family = families.get(name, ())
+        if (len(family) != 1 or family[0].get("address") != address
+                or family[0].get("demangled") != proto["name"]
+                or proto.get("trusted") is not True or proto.get("variadic") is not False
+                or type(proto.get("member")) is not bool or type(proto.get("static")) is not bool
+                or not isinstance(proto.get("params"), list)):
+            continue
+        params = [p for p in split_args(family[0].get("params") or "") if p != "void"]
+        if (len(params) != len(proto["params"]) or "..." in params
+                or (cv_suffix(family[0]) and not proto["member"])):
+            continue
+        targets[name] = proto
+    return targets, possible
+
+
+def returned_by_pointer(signatures=None):
+    return set(hidden_return_targets(signatures)[0])
+
+
+def preserve_call_expressions(text, names):
+    """Keep unresolved ABI calls opaque to all following textual rewrites."""
+    if not names:
+        return text, lambda result: result
+    prefix = "__OTL_ABI_CALL_"
+    while prefix in text:
+        prefix += "_"
+    pattern = re.compile(r"(?<![\w:])(?:" + "|".join(re.escape(n) for n in sorted(names, key=len, reverse=True)) + r")\s*\(")
+    tokens, parts, pos = {}, [], 0
+    while match := pattern.search(text, pos):
+        depth, end = 1, match.end()
+        while end < len(text) and depth:
+            depth += {"(": 1, ")": -1}.get(text[end], 0)
+            end += 1
+        if depth:
+            break
+        token = f"{prefix}{len(tokens)}__"
+        tokens[token] = text[match.start():end]
+        parts.extend((text[pos:match.start()], token))
+        pos = end
+    parts.append(text[pos:])
+
+    def restore(result):
+        for token, original in tokens.items():
+            result = result.replace(token, original)
+        return result
+    return "".join(parts), restore
 
 
 def hidden_return_signature(head):
@@ -404,7 +459,7 @@ def renumber_params(text, hidden):
                   if int(m.group(1)) > hidden else m.group(0), text)
 
 
-def hidden_return_body(text):
+def hidden_return_body(text, targets=None, callee_name=lambda name: name):
     """Inside a function returning through the hidden pointer: constructing the result or
     passing the pointer on to another such call is a return statement."""
     storage = rf"(?:\([\w:<>, ]+ \*\))?{RETURN_STORAGE}"
@@ -422,14 +477,18 @@ def hidden_return_body(text):
         return f"{m.group(1)}return std::wstring({', '.join(args)});"
     text = re.sub(rf"(\n[ \t]*)std::w?string::(?:w?string|basic_string)\s*\(\s*{storage}\s*,\s*([^;]*)\);",
                   construct, text)
-    text = re.sub(rf"(\n[ \t]*)((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*([^;]*)\);",
-                  lambda m: f"{m.group(1)}return {m.group(2)}({m.group(3)});", text)
+    def forward(m):
+        proto = (targets or {}).get(m.group(2))
+        if not proto or len(split_args(m.group(3))) != len(proto["params"]) + int(proto["member"]):
+            return m.group(0)
+        return f"{m.group(1)}return {callee_name(m.group(2))}({m.group(3)});"
+    text = re.sub(rf"(\n[ \t]*)((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*([^;]*)\);", forward, text)
     if len(re.findall(RETURN_STORAGE, text)) == len(re.findall(rf"\breturn {RETURN_STORAGE};", text)):
         text = re.sub(rf"\n[ \t]*return {RETURN_STORAGE};", "", text)
     return text
 
 
-def recoverable_hidden_return(text):
+def recoverable_hidden_return(text, targets=None):
     """Only terminal construction/forwarding can become an early C++ return.
 
     Subsequent cleanup, effects, an overwrite or an unknown storage consumer
@@ -437,14 +496,15 @@ def recoverable_hidden_return(text):
     of silently deleting those statements by returning too early.
     """
     storage = rf"(?:\([\w:<>, ]+ \*\))?{RETURN_STORAGE}"
-    pattern = re.compile(rf"\n[ \t]*((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*[^;]*\);")
+    pattern = re.compile(rf"\n[ \t]*((?:[A-Za-z_]\w*::)*[A-Za-z_~]\w*)\(\s*{storage}\s*,\s*([^;]*)\);")
     calls = list(pattern.finditer(text))
     if not calls:
         return False
-    known = returned_by_pointer()
     for call in calls:
-        if not re.fullmatch(r"std::w?string::(?:w?string|basic_string)", call.group(1)) and call.group(1) not in known:
-            return False
+        if not re.fullmatch(r"std::w?string::(?:w?string|basic_string)", call.group(1)):
+            proto = (targets or {}).get(call.group(1))
+            if not proto or len(split_args(call.group(2))) != len(proto["params"]) + int(proto["member"]):
+                return False
     # The first result write must end its branch. An overwrite in the same
     # branch would otherwise be replaced by an unconditional early return.
     for call in calls:
@@ -462,15 +522,16 @@ def recoverable_hidden_return(text):
     return not suffix and RETURN_STORAGE not in text[:calls[0].start()]
 
 
-def hidden_return_calls(text):
+def hidden_return_calls(text, signatures=None, *, targets=None, callee_name=lambda name: name):
     """`C::getName(&local_40, obj, args)` of a function returning through a hidden pointer ->
     `local_40 = C::getName(obj, args)`, which call_rewrite then turns into a method call."""
-    sret = returned_by_pointer()
+    targets = hidden_return_targets(signatures)[0] if targets is None else targets
 
     def fix(m):
-        if m.group(2) not in sret:
+        proto = targets.get(m.group(2))
+        if not proto or len(split_args(m.group(4))) != len(proto["params"]) + int(proto["member"]):
             return m.group(0)
-        return f"{m.group(1)}{m.group(3)} = {m.group(2)}({m.group(4)});"
+        return f"{m.group(1)}{m.group(3)} = {callee_name(m.group(2))}({m.group(4)});"
     return re.sub(r"(\n[ \t]*)((?:[A-Za-z_]\w*::)+[A-Za-z_]\w*)\(\s*(?:\([\w:<>, ]+ \*\))?&(local_\w+)\s*,?\s*([^;]*)\);",
                   fix, text)
 
@@ -592,15 +653,27 @@ def convert(code, methods, f=None, signatures=None, enums=None, *, experimental_
     # Signature (everything before the opening brace): drop __thiscall and `this`.
     brace = re.search(r"\n\{", text)
     head, text = (text[:brace.start()], text[brace.start():]) if brace else ("", text)
+    targets, possible_sret = hidden_return_targets(signatures)
+    text, restore_ambiguous = preserve_call_expressions(text, possible_sret - set(targets))
+    converted_names = {}
+    name_prefix = "__OTL_SRET_NAME_"
+    while name_prefix in text:
+        name_prefix += "_"
+
+    def callee_name(name):
+        token = f"{name_prefix}{len(converted_names)}__"
+        converted_names[token] = name
+        return token
+
     head = re.sub(r"__thiscall\s+", "", head)
     proposed_head, hidden = hidden_return_signature(head)
-    if hidden and not recoverable_hidden_return(text):
+    if hidden and not recoverable_hidden_return(text, targets):
         hidden = 0
     else:
         head = proposed_head
     if hidden:
         head = renumber_params(head, hidden)
-        text = hidden_return_body(renumber_params(text, hidden))
+        text = hidden_return_body(renumber_params(text, hidden), targets, callee_name)
     head = re.sub(r"\(([\w:<>, ]+) \*this,?\s*", "(", head, count=1)
     head = re.sub(r"\(void\)", "()", head, count=1)
     head = re.sub(r"\s+", " ", head).strip()
@@ -635,7 +708,12 @@ def convert(code, methods, f=None, signatures=None, enums=None, *, experimental_
     # Virtual calls through typed vtables.
     text = re.sub(r"\(\*\(?this\)?->_vptr->(\w+)\)\(this,?\s*", r"\1(", text)
     text = re.sub(r"\(\*\(?([\w\[\]]+)\)?->_vptr->(\w+)\)\(\1,?\s*", r"\1->\2(", text)
-    text = hidden_return_calls(text)
+    text = hidden_return_calls(text, targets=targets, callee_name=callee_name)
+    # Only reconstructed calls lose the ABI storage argument. All remaining
+    # sret-family calls retain their receiver/arguments, including bad arities.
+    text, restore_unconverted = preserve_call_expressions(text, possible_sret)
+    for token, name in converted_names.items():
+        text = text.replace(token, name)
     text = call_rewrite(text, methods)
     if signatures:
         text = reference_arguments(text, signatures)
@@ -656,7 +734,7 @@ def convert(code, methods, f=None, signatures=None, enums=None, *, experimental_
     text = reindent(text)
     text = re.sub(r"\n[ \t]*return;\n\}\s*$", "\n}", text)
     text = re.sub(r"\n{3,}", "\n\n", head + text)
-    return restore(text.strip()) + "\n"
+    return restore(restore_ambiguous(restore_unconverted(text.strip()))) + "\n"
 
 
 def cxx_type(demangled):
@@ -674,11 +752,19 @@ def cxx_type(demangled):
 PARAM_ENUMS = {"BroadcastEvent": {0: "EOUTPUT_EVENTS"}}
 
 
+class FunctionSignatures(dict):
+    """Parameter hints plus the complete ELF identities, including cv/unknown ABI."""
+    def __init__(self):
+        super().__init__()
+        self.functions = {}
+
+
 def signatures_of(db):
     """Complete qualified name -> overloads; never merge unrelated scopes."""
-    out = {}
+    out = FunctionSignatures()
     for f in db["functions"].values():
         qualified = f.get("qualified") or elfdb.parse_demangled(f["demangled"])[0]
+        out.functions.setdefault(qualified, []).append(f)
         params = [p for p in split_args(f.get("params") or "") if p != "void"]
         if params not in out.setdefault(qualified, []):
             out[qualified].append(params)

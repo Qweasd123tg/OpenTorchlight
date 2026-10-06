@@ -316,10 +316,12 @@ class Generator:
         prelude = []
         return_declarations = []
         if kind == "ctor":
+            prelude.append(f"typedef void (*Fn)({orig_params});")
             # Our constructor through its symbol, like the original: works for abstract classes too.
             ours = f"(((void (*)({orig_params}))ours_{tag})({orig_args}), autotest::Void())"
             original = f"(((void (*)({orig_params}))orig_{tag})({orig_args}), autotest::Void())"
         elif kind == "dtor":
+            prelude.append(f"typedef void (*Fn)({orig_params});")
             ours = f"(((({cls}*)c.self)->{cls}::~{cls}()), autotest::Void())"
             original = f"(((void (*)(void*))orig_{tag})(c.self), autotest::Void())"
         else:
@@ -345,12 +347,16 @@ class Generator:
                 *[f"    {l}" for l in dumps], "}",
                 "void original(void* p, autotest::Capture& out)", "{", "    Context& c = *(Context*)p;",
                 *[f"    {l}" for l in prelude],
-                f"    autotest::record(out, {original});", "    report(c, out);", "}",
+                f"    autotest::invoke(out, (Fn)orig_{tag}" + (f", {orig_args}" if orig_args else "") + ");",
+                "    report(c, out);", "}",
                 "void ours(void* p, autotest::Capture& out)", "{", "    Context& c = *(Context*)p;",
-                f"    autotest::record(out, {ours});", "    report(c, out);", "}",
+                *[f"    {l}" for l in prelude],
+                f"    autotest::invoke(out, (Fn)ours_{tag}" + (f", {orig_args}" if orig_args else "") + ");",
+                "    report(c, out);", "}",
                 "}", "",
                 f"TL_TEST({name})", "{",
                 "    autotest::Stats stats = {0, 0, 0};",
+                f'    autotest::Coverage coverage("{name}", (uint64_t)(uintptr_t)orig_{tag});',
                 "    double started = autotest::seconds();",
                 f"    for (int i = 0; i < {CASES} && stats.different == 0 && stats.incomplete == 0 && autotest::seconds() - started < {BUDGET_SECONDS}; i++)",
                 "    {",
@@ -358,10 +364,11 @@ class Generator:
                 "        autotest::g_pool.count = 0;",
                 f"        autotest::Rng r({int(f['address'], 16)}ULL + i);",
                 f"        t{tag}::Context c;", f"        t{tag}::build(r, c);",
-                f'        autotest::compareCase(t{tag}::original, t{tag}::ours, &c, stats, host, "{name}", i);',
+                f'        autotest::compareCase(t{tag}::original, t{tag}::ours, &c, stats, host, "{name}", i, &coverage);',
                 "    }",
                 '    host->log("    stats %s same %d both-failed %d different %d incomplete %d\\n", "' + name +
                 '", stats.same, stats.bothFailed, stats.different, stats.incomplete);',
+                "    coverage.report(host);",
                 f"    return stats.different + stats.incomplete + (stats.same < {MIN_COMPLETED} ? 1 : 0);", "}"]
         includes = {self.headers[cls]}
         for p in params:

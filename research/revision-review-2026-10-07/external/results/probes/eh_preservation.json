@@ -1,0 +1,59 @@
+{
+  "proof_type": "real normalization and preserve_existing; native GCC system C++98 objects/execution, no Torchlight ELF",
+  "rows": [
+    {
+      "address": "0x100",
+      "status": "DIFF",
+      "code": "cf24987180e4e2f7",
+      "metadata_reasons": [
+        "EH LSDA equivalence unverified"
+      ],
+      "object_digest": "7edc0c2636efcc47f2e44ccaadcf96a9a0518a803d289f70acdba2255278ba87",
+      "norm": [
+        "sub $0x8,%rsp",
+        "call _Z11raise_valuev",
+        "xor %eax,%eax",
+        "add $0x8,%rsp",
+        "ret",
+        "sub $0x1,%rdx",
+        "mov %rax,%rdi",
+        "jne L12",
+        "call __cxa_begin_catch",
+        "call __cxa_end_catch",
+        "mov $0x7,%eax",
+        "jmp L3",
+        "call _Unwind_Resume"
+      ],
+      "execution": 7
+    },
+    {
+      "address": "0x100",
+      "status": "DIFF",
+      "code": "cf24987180e4e2f7",
+      "metadata_reasons": [
+        "EH LSDA equivalence unverified"
+      ],
+      "object_digest": "fac4b5696656c9c1e73837be666f30e0a25818a1b96338350fa228117a74c8d1",
+      "norm": [
+        "sub $0x8,%rsp",
+        "call _Z11raise_valuev",
+        "xor %eax,%eax",
+        "add $0x8,%rsp",
+        "ret",
+        "sub $0x1,%rdx",
+        "mov %rax,%rdi",
+        "jne L12",
+        "call __cxa_begin_catch",
+        "call __cxa_end_catch",
+        "mov $0x7,%eax",
+        "jmp L3",
+        "call _Unwind_Resume"
+      ],
+      "execution": 99
+    }
+  ],
+  "same_function_source": true,
+  "preserve_existing": true,
+  "detected": true,
+  "probe_completed": true
+}

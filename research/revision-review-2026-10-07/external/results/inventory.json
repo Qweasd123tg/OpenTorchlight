@@ -1,0 +1,101 @@
+{
+  "source_cpp": 202,
+  "headers": 317,
+  "test_cpp": 81,
+  "tool_python": 44,
+  "added_tool_files": [
+    "tools/decomp/candidate.py",
+    "tools/decomp/evidence.py",
+    "tools/decomp/no_llm_loop.py",
+    "tools/decomp/objdiff_eh.py",
+    "tools/decomp/publication.py",
+    "tools/decomp/standalone.py",
+    "tools/decomp/test_autotest_capture.py",
+    "tools/decomp/test_converter_acceptance.py",
+    "tools/decomp/test_ghidra_draft_java.py",
+    "tools/decomp/test_ghidra_draft_state.py",
+    "tools/decomp/test_mutation_evidence.py",
+    "tools/decomp/test_no_llm_loop.py",
+    "tools/decomp/test_objdiff_eh.py",
+    "tools/decomp/test_pipeline_safety.py",
+    "tools/decomp/test_selftest_execution.py",
+    "tools/decomp/test_types_export_identity.py"
+  ],
+  "changed_tool_files": [
+    "tools/decomp/autotest.py",
+    "tools/decomp/check.py",
+    "tools/decomp/ghidra/DecompDrafts.java",
+    "tools/decomp/ghidra_cpp.py",
+    "tools/decomp/ghidra_draft.py",
+    "tools/decomp/headers.py",
+    "tools/decomp/hybrid.py",
+    "tools/decomp/llm_loop.py",
+    "tools/decomp/mutate.py",
+    "tools/decomp/name_tables.py",
+    "tools/decomp/objdiff.py",
+    "tools/decomp/parallel.py",
+    "tools/decomp/properties.py",
+    "tools/decomp/test_ghidra_cpp.py",
+    "tools/decomp/test_llm_loop_headers.py",
+    "tools/decomp/test_objdiff_literals.py",
+    "tools/decomp/toolchain.py",
+    "tools/decomp/types_export.py"
+  ],
+  "archive_jump_table_occurrences": 6,
+  "archive_jump_table_unique_addresses": 6,
+  "jump_tables": [
+    {
+      "file": "research/disassembly/652850-spawner-input.asm",
+      "line": 26,
+      "function": "CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+      "instruction_address": "652882",
+      "table_address": "0xfb6ab8",
+      "index_register": "%rbx"
+    },
+    {
+      "file": "research/disassembly/848870.asm",
+      "line": 199,
+      "function": "CCharacter::updateAnimation(float)",
+      "instruction_address": "848b75",
+      "table_address": "0xfcdc78",
+      "index_register": "%rax"
+    },
+    {
+      "file": "research/disassembly/91ac90.asm",
+      "line": 12,
+      "function": "CMouseManager::mouseEvent(unsigned int, unsigned int)",
+      "instruction_address": "91ac9d",
+      "table_address": "0xfd48a8",
+      "index_register": "%rsi"
+    },
+    {
+      "file": "research/disassembly/a843a0.asm",
+      "line": 37,
+      "function": "CGameUI::keyEvent(unsigned int, unsigned int, long)",
+      "instruction_address": "a84412",
+      "table_address": "0xfe4340",
+      "index_register": "%rbp"
+    },
+    {
+      "file": "research/disassembly/a924c0.asm",
+      "line": 27,
+      "function": "CGameUI::onClick(ELayoutFunction)",
+      "instruction_address": "a9250c",
+      "table_address": "0xfe4370",
+      "index_register": "%rsi"
+    },
+    {
+      "file": "research/disassembly/continue-menu-native-ui.asm",
+      "line": 27,
+      "function": "CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "instruction_address": "c3fea2",
+      "table_address": "0xff27d8",
+      "index_register": "%rsi"
+    }
+  ],
+  "added_by_top_directory": {
+    "decomp": 47,
+    "research": 935,
+    "tools": 16
+  }
+}

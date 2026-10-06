@@ -197,30 +197,170 @@ class Normalizer:
         return None
 
     @staticmethod
-    def table_size(k, insns):
-        """Entries of a switch table from the bound check (`cmp $N` before the jump)."""
-        for _, mnemonic, operands in reversed(insns[max(0, k - 6):k]):
-            m = re.match(r"^\$0x([0-9a-f]+),", operands)
-            if mnemonic.startswith("cmp") and m:
-                return int(m.group(1), 16) + 1
+    def register(operand):
+        """Canonical integer register and width; partial writes still clobber it."""
+        old = {"ax": "a", "bx": "b", "cx": "c", "dx": "d",
+               "si": "si", "di": "di", "bp": "bp", "sp": "sp"}
+        for suffix, family in old.items():
+            if operand == "%r" + suffix:
+                return family, 64
+            if operand == "%e" + suffix:
+                return family, 32
+            if operand == "%" + suffix:
+                return family, 16
+        byte = {"al": "a", "ah": "a", "bl": "b", "bh": "b", "cl": "c", "ch": "c",
+                "dl": "d", "dh": "d", "sil": "si", "dil": "di", "bpl": "bp", "spl": "sp"}
+        if operand.lstrip("%") in byte and operand.startswith("%"):
+            return byte[operand[1:]], 8
+        m = re.fullmatch(r"%r(8|9|1[0-5])([dwb]?)", operand)
+        return (m.group(1), {"": 64, "d": 32, "w": 16, "b": 8}[m.group(2)]) if m else None
+
+    @staticmethod
+    def direct_target(operands):
+        match = re.fullmatch(r"([0-9a-f]+)(?: <[^>]+>)?", operands)
+        return int(match.group(1), 16) if match else None
+
+    @classmethod
+    def reaches_without(cls, entry, goal, blocked, insns):
+        """Conservative CFG reachability; an unknown indirect edge may reach goal."""
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        pending, seen = [entry], set()
+        while pending:
+            i = pending.pop()
+            if i == blocked or i in seen or i is None or not 0 <= i < len(insns):
+                continue
+            if i == goal:
+                return True
+            seen.add(i)
+            _, mnemonic, operands = insns[i]
+            if mnemonic.startswith("ret") or mnemonic in ("ud2", "hlt"):
+                continue
+            if mnemonic.startswith(("j", "loop")):
+                target = cls.direct_target(operands)
+                if target is None:
+                    return True
+                if target not in positions:
+                    return True  # external/unparsed continuation is not a proved exit
+                pending.append(positions[target])
+                if mnemonic == "jmp":
+                    continue
+            pending.append(i + 1)
+        return False
+
+    @classmethod
+    def table_size(cls, k, insns, register=None):
+        """Prove an unsigned guard of this index, rather than use a nearby cmp.
+
+        Supported guards dominate the dispatch and their in-range edge follows
+        one straight path to it. Register copies are tracked, including the
+        zero extension needed when a 32-bit comparison bounds a 64-bit index.
+        Unsupported control/data flow deliberately leaves the range unknown.
+        """
+        if register is None:
+            table = cls.JUMP_TABLE.match(insns[k][2])
+            register = table.group(2) if table else None
+        index = cls.register(register or "")
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        for compare in range(k - 1, -1, -1):
+            _, mnemonic, operands = insns[compare]
+            match = re.fullmatch(r"\$0x([0-9a-f]+),(%\w+)", operands)
+            bound = cls.register(match.group(2)) if match and mnemonic in ("cmp", "cmpl", "cmpq") else None
+            if not bound or bound[1] not in (32, 64):
+                continue
+            guard = compare + 1
+            while guard < k and cls.padding(insns[guard][1], insns[guard][2]):
+                guard += 1
+            if guard >= k:
+                continue
+            _, jump, target_operand = insns[guard]
+            if jump not in ("ja", "jae", "jbe", "jb"):
+                continue
+            target = cls.direct_target(target_operand)
+            if target is None:
+                continue
+            count = int(match.group(1), 16) + (jump in ("ja", "jbe"))
+            if not 0 < count <= 4096:
+                continue
+            taken = positions.get(target)
+            if taken is None:  # an external guard edge has unverified continuation
+                continue
+            inside, outside = ((guard + 1, taken) if jump in ("ja", "jae") else (taken, guard + 1))
+            if (cls.reaches_without(0, guard, compare, insns)
+                    or cls.reaches_without(0, k, guard, insns)
+                    or cls.reaches_without(outside, k, guard, insns)):
+                continue
+            values = {bound[0]: bound[1] == 64}
+            # A dominating 32-bit write may already have cleared the upper half.
+            if bound[1] == 32:
+                for before in range(compare - 1, -1, -1):
+                    _, op, args = insns[before]
+                    if op.startswith(("j", "call", "ret", "loop")):
+                        break
+                    dest = cls.register(args.rsplit(",", 1)[-1].strip())
+                    if dest and dest[0] == bound[0] and op not in ("cmp", "cmpl", "cmpq", "test", "testl", "testq"):
+                        if (op in ("mov", "movl") and dest[1] == 32
+                                and not cls.reaches_without(0, compare, before, insns)):
+                            values[bound[0]] = True
+                        break
+            cursor, visited = inside, set()
+            while cursor is not None and cursor != k and cursor not in visited:
+                if not 0 <= cursor < len(insns):
+                    break
+                visited.add(cursor)
+                _, op, args = insns[cursor]
+                if cls.padding(op, args):
+                    cursor += 1
+                    continue
+                if op == "jmp":
+                    cursor = positions.get(cls.direct_target(args))
+                    continue
+                if op not in ("mov", "movb", "movw", "movl", "movq", "cmp", "cmpb", "cmpw", "cmpl", "cmpq",
+                              "test", "testb", "testw", "testl", "testq") and not op.startswith("set"):
+                    break
+                source, _, destination = args.rpartition(",")
+                dest = cls.register(destination.strip())
+                src = cls.register(source.strip())
+                if not op.startswith(("cmp", "test")) and dest:
+                    old = values.get(src[0]) if src else None
+                    values.pop(dest[0], None)
+                    if op in ("mov", "movl", "movq") and old is not None and src[1] == dest[1] and dest[1] in (32, 64):
+                        values[dest[0]] = dest[1] == 32 or old
+                cursor += 1
+            if cursor == k and index and values.get(index[0]) is True:
+                return count
         return None
 
     def jump_table(self, k, entries, register, start, end, offsets, insns):
-        """Token for `jmp *table(,%reg,8)`: the table's targets as instruction labels."""
-        count = self.table_size(k, insns)
-        labels = []
-        for target in entries:
-            if count is not None and len(labels) == count:
-                break
-            if target is None or not start <= target < end:
-                break
-            labels.append(self.branch(k, target, start, end, offsets))
+        """Compare every entry of a proved range; missing targets forbid MATCH."""
+        count = self.table_size(k, insns, register)
+        if count is None:
+            self.unverified.append("jump table index range unverified")
+            return f"jmp *[unverified-table:range](,{register},8)"
+        labels, entries = [], iter(entries)
+        for i in range(count):
+            target = next(entries, None)
+            if isinstance(target, str):
+                labels.append(target)
+                continue
+            label = self.branch(k, target, start, end, offsets) if target is not None else None
+            if label is None or label.startswith("L?"):
+                self.unverified.append(f"jump table entry {i} target unverified")
+                labels.append(f"unverified:{target!r}")
+            else:
+                labels.append(label)
         return f"jmp *[table:{','.join(labels)}](,{register},8)"
 
     @staticmethod
     def padding(mnemonic, operands):
-        return (mnemonic in ("nop", "nopw", "nopl", "xchg") and (mnemonic != "xchg" or operands == "%ax,%ax")
-                or mnemonic.startswith(("data16", "cs")))
+        # objdump may put the third word of a long prefixed nop in operands.
+        # A segment/size prefix alone does not make a real instruction padding.
+        words = (mnemonic + " " + operands).split()
+        while words and words[0] in ("data16", "cs"):
+            words.pop(0)
+        if not words:
+            return False
+        return (words[0] in ("nop", "nopw", "nopl")
+                or words[0] == "xchg" and "".join(words[1:]) == "%ax,%ax")
 
     def normalize(self, insns, start, end):
         self.unverified = []
@@ -305,11 +445,20 @@ class OriginalSide(Normalizer):
             base = int(table.group(1), 16)
 
             def entries():
+                section = self.image.section_at(base)
                 for i in range(4096):
+                    address = base + 8 * i
+                    if not section or address + 8 > section.addr + section.size:
+                        return
                     try:
-                        yield int.from_bytes(self.image.read(base + 8 * i, 8), "little")
+                        target = int.from_bytes(self.image.read(address, 8), "little")
                     except ValueError:
                         return
+                    if not start <= target < end:
+                        name = self.func_start.get(target) or self.image.plt.get(target)
+                        yield "external:" + name.split("@")[0] if name else target
+                    else:
+                        yield target
             return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
 
         def rip(mm):
@@ -382,11 +531,27 @@ class ObjectSide(Normalizer):
             rows = {r.offset: r for r in self.obj.relocs.get(symbol.shndx, [])}
 
             def entries():
+                section = self.obj.sections[symbol.shndx]
                 for i in range(4096):
-                    r = rows.get(base + 8 * i)
-                    if r is None or r.symbol.shndx != self.section_index:
+                    offset = base + 8 * i
+                    if offset < 0 or offset + 8 > section.size:
                         return
-                    yield r.addend + (r.symbol.value if r.symbol.type != elfimage.STT_SECTION else 0)
+                    r = rows.get(offset)
+                    if r is None or r.type != 1:  # R_X86_64_64, a complete pointer relocation
+                        yield None
+                        continue
+                    target = r.addend + (r.symbol.value if r.symbol.type != elfimage.STT_SECTION else 0)
+                    if r.symbol.shndx == self.section_index and start <= target < end:
+                        yield target
+                        continue
+                    name = (self.funcs_by_section.get(r.symbol.shndx, {}).get(target)
+                            if r.symbol.defined else r.symbol.name if target == 0 else None)
+                    resolved = self.resolve(name) if name else None
+                    token = self.name_at(resolved, "jmp") if resolved is not None and self.name_at else None
+                    if token and token == name:
+                        yield "external:" + token
+                    else:
+                        yield None
             return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
         if m and mnemonic.startswith(("j", "call", "loop")):
@@ -575,7 +740,7 @@ class Original:
 
 NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
 _NORM_DIRTY = set()
-NORMALIZER_VERSION = 2
+NORMALIZER_VERSION = 3
 
 
 def _norm_key():

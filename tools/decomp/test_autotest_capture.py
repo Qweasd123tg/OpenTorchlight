@@ -143,14 +143,14 @@ int main() {
     CHECK(outcome.reportValid && outcome.capture.issue==autotest::Capture::UnsupportedPointer &&
           outcome.childStatus==0 && WEXITSTATUS(outcome.status)!=0);
     const char data[]="abc";
-    autotest::ReportHeader header={autotest::kReportMagic,1,3,0};
+    autotest::ReportHeader header={autotest::kReportMagic,2,3,0};
     CHECK(frame(header,data,3,true));
     CHECK(frame(header,data,2,false));
     CHECK(frame(header,data,0,false,false,sizeof(header)-1));
     CHECK(frame(header,data,3,false,true));
     header.magic=0; CHECK(frame(header,data,3,false));
-    header.magic=autotest::kReportMagic;header.version=2; CHECK(frame(header,data,3,false));
-    header.version=1;header.length=autotest::Capture::kSize+1; CHECK(frame(header,data,3,false));
+    header.magic=autotest::kReportMagic;header.version=1; CHECK(frame(header,data,3,false));
+    header.version=2;header.length=autotest::Capture::kSize+1; CHECK(frame(header,data,3,false));
     header.length=3;header.issue=99; CHECK(frame(header,data,3,false));
     return 0;
 }
@@ -191,7 +191,8 @@ namespace autotest {
 char g_arena[kArenaSize]; size_t g_arenaUsed; Pool g_pool; Outcome g_outcomes[2];
 }
 static int mode;
-struct Fixture { int dummy; int value() { if(mode==1)raise(SIGSEGV); return 23; } };
+struct Fixture { int dummy; int value(); };
+int Fixture::value() { if(mode==1)raise(SIGSEGV); return 23; }
 extern "C" int originalValue(void*) __asm__("__tlorig__ZN7Fixture5valueEv");
 extern "C" int originalValue(void*) {
     if(mode==1)raise(SIGSEGV);
@@ -200,8 +201,11 @@ extern "C" int originalValue(void*) {
 }
 static void logline(const char*, ...) {}
 ''' + short + enough + r'''
+static int pair(uint64_t a,uint64_t b) {
+    return a==(uint64_t)(uintptr_t)&originalValue && b==(uint64_t)(uintptr_t)ours_1234;
+}
 int main() {
-    tlhybrid_host host={TLHYBRID_ABI_VERSION,logline};
+    tlhybrid_host host={TLHYBRID_ABI_VERSION,logline,pair};
     if(auto_1234(&host)==0)return 1; // Equal but fewer than MIN_COMPLETED cases.
     if(auto_1235(&host)!=0)return 2; // Equal and sufficient completed cases.
     mode=1;if(auto_1235(&host)==0)return 3; // Both crashes: zero completed cases.

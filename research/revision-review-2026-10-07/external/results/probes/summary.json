@@ -1,0 +1,1273 @@
+{
+  "schema": 1,
+  "project": "/mnt/data/_review_new/OpenTorchlight-main",
+  "host_compiler": "g++ (Debian 14.2.0-19) 14.2.0",
+  "original_elf_used": false,
+  "pinned_gcc_used": false,
+  "models_called": false,
+  "probes": {
+    "queue_progress": {
+      "proof_type": "real runner, synthetic DB/provider/digest; no compiler or model",
+      "runs": [
+        {
+          "schema": 1,
+          "provider": "descriptor",
+          "results": [
+            {
+              "tu": "ADescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 2.978200006964471e-05,
+              "inputs_digest": "fixed-inputs"
+            },
+            {
+              "tu": "BDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 1.3922999983151385e-05,
+              "inputs_digest": "fixed-inputs"
+            },
+            {
+              "tu": "CDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 9.64200000908022e-06,
+              "inputs_digest": "fixed-inputs"
+            }
+          ],
+          "budget": {
+            "limit": 3,
+            "seconds": 120,
+            "elapsed": 0.00047706400005154137
+          },
+          "stop": "finite task/time budget or selected queue exhausted"
+        },
+        {
+          "schema": 1,
+          "provider": "descriptor",
+          "results": [
+            {
+              "tu": "ADescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 2.978200006964471e-05,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            },
+            {
+              "tu": "BDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 1.3922999983151385e-05,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            },
+            {
+              "tu": "CDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 9.64200000908022e-06,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            }
+          ],
+          "budget": {
+            "limit": 3,
+            "seconds": 120,
+            "elapsed": 0.00020645500001137407
+          },
+          "stop": "finite task/time budget or selected queue exhausted"
+        },
+        {
+          "schema": 1,
+          "provider": "descriptor",
+          "results": [
+            {
+              "tu": "ADescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 2.978200006964471e-05,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            },
+            {
+              "tu": "BDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 1.3922999983151385e-05,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            },
+            {
+              "tu": "CDescriptor.cpp",
+              "status": "BLOCKED",
+              "reason": "unsupported shape",
+              "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+              "published": false,
+              "provider": "descriptor",
+              "seconds": 9.64200000908022e-06,
+              "inputs_digest": "fixed-inputs",
+              "cached_failure": true
+            }
+          ],
+          "budget": {
+            "limit": 3,
+            "seconds": 120,
+            "elapsed": 0.0006231840000054945
+          },
+          "stop": "finite task/time budget or selected queue exhausted"
+        }
+      ],
+      "never_reached_after_three_default_runs": [
+        "DDescriptor.cpp",
+        "EDescriptor.cpp"
+      ],
+      "explicit_selection_reaches_D": true,
+      "provider_calls": [
+        "ADescriptor.cpp",
+        "BDescriptor.cpp",
+        "CDescriptor.cpp",
+        "DDescriptor.cpp"
+      ],
+      "Equipment_selection": "not a game descriptor TU: Equipment.cpp",
+      "detected": true,
+      "probe_completed": true
+    },
+    "coverage_wiring": {
+      "proof_type": "static inventory plus real receipt parser on synthetic successful log; not game execution",
+      "cpp_files": 81,
+      "fixtures": 103,
+      "unique_original_symbols": 178,
+      "declared_addresses_in_synthetic_map": 178,
+      "emitting_files": [],
+      "accepted_with_PASS_only": 0,
+      "positive_receipt_control": [
+        "0x1000"
+      ],
+      "equipment_files": 43,
+      "fixtures_by_file": [
+        {
+          "file": "decomp/hybrid/tests/AIStatWatcherTest.cpp",
+          "fixtures": [
+            "AIStatWatcher_constructor_shadow",
+            "AIStatWatcher_behaviour_shadow"
+          ],
+          "originals": [
+            "_ZN14CAIStatWatcherC1EP10CDataGroupP10CAIManager",
+            "_ZN14CAIStatWatcherD1Ev",
+            "_ZN14CAIStatWatcher10getTargetsER10TArrayListIP10CCharacterE",
+            "_ZN14CAIStatWatcher7addFlagEv",
+            "_ZN14CAIStatWatcher6updateEf"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/AstarPathfinderTest.cpp",
+          "fixtures": [
+            "Astar_reverse",
+            "Astar_propagate",
+            "Astar_successor",
+            "Astar_successors",
+            "Astar_free",
+            "Astar_create",
+            "Astar_wide",
+            "Astar_nearest",
+            "Astar_directed",
+            "Astar_find"
+          ],
+          "originals": [
+            "_ZN16CAstarPathfinder12reverseNodesEPNS_10CAstarNodeE",
+            "_ZN16CAstarPathfinder13propagateDownEPNS_10CAstarNodeE",
+            "_ZN16CAstarPathfinder17generateSuccessorEPNS_10CAstarNodeEjjjj",
+            "_ZN16CAstarPathfinder18generateSuccessorsEPNS_10CAstarNodeEjj",
+            "_ZN16CAstarPathfinder9freeNodesEv",
+            "_ZN16CAstarPathfinder10createPathEiiiib",
+            "_ZN16CAstarPathfinder19findNearestWideOpenEjjjjRjS0_",
+            "_ZN16CAstarPathfinder15findNearestOpenEjjjjRjS0_",
+            "_ZN16CAstarPathfinder23findNearestOpenDirectedEjjjjRjS0_",
+            "_ZN16CAstarPathfinder8findPathEffff"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitActivateEffectTest.cpp",
+          "fixtures": [
+            "base_unit_activate_skill_effects"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit14activateEffectEP7CEffect"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitAvoidanceTest.cpp",
+          "fixtures": [
+            "base_unit_avoidance_grid_changes"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit17addToAvoidanceMapER6CLevel",
+            "_ZN9CBaseUnit22removeFromAvoidanceMapER6CLevel"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitBoundsTest.cpp",
+          "fixtures": [
+            "base_unit_transformed_culling_bounds"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit19updateCullingBoundsEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitCollisionTest.cpp",
+          "fixtures": [
+            "base_unit_real_mesh_collisions"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit12rayCollisionERKN4Ogre7Vector3ES3_RS1_S4_b",
+            "_ZN9CBaseUnit15sphereCollisionERKN4Ogre7Vector3ES3_fRS1_S4_S4_"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitEventTest.cpp",
+          "fixtures": [
+            "base_unit_hp_threshold_events"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit27broadcastHPThreshholdEventsEffff"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitInitTest.cpp",
+          "fixtures": [
+            "base_unit_full_initialization"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit8unitInitEP10CDataGroupb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitInitThemesTest.cpp",
+          "fixtures": [
+            "base_unit_init_theme_data"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit14unitInitThemesEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitReapplyAffixesTest.cpp",
+          "fixtures": [
+            "base_unit_reapply_affix_data"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit14reapplyAffixesEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitReapplyEffectsTest.cpp",
+          "fixtures": [
+            "base_unit_reapply_effect_data"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit14reapplyEffectsEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/BaseUnitThemeTest.cpp",
+          "fixtures": [
+            "base_unit_editor_theme_selection"
+          ],
+          "originals": [
+            "_ZN9CBaseUnit16setEditorThemeIDEj"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/DescriptorTest.cpp",
+          "fixtures": [
+            "Descriptor_logicWrappers",
+            "Descriptor_addProperty",
+            "Descriptor_propertyValues",
+            "Descriptor_defaults",
+            "Descriptor_dataGroups",
+            "Descriptor_binary",
+            "Descriptor_events"
+          ],
+          "originals": [
+            "_ZN11CDescriptor31GetInputLogicFuncIndexByWrapperEP13CLogicWrapper",
+            "_ZN11CDescriptor32GetOutputLogicFuncIndexByWrapperEP13CLogicWrapper",
+            "_ZN11CDescriptor13AddInputLogicESbIwSt11char_traitsIwESaIwEEj",
+            "_ZN11CDescriptor35getUniqueNumericValueRepresentationEv",
+            "_ZN11CDescriptor12LinkPropertyEjj",
+            "_ZN11CDescriptor11SetPropertyEP17CEditorBaseObjectjPKvj",
+            "_ZN11CDescriptor22calculateDefaultValuesEP17CEditorBaseObject",
+            "_ZN11CDescriptor11AddPropertyESbIwSt11char_traitsIwESaIwEES3_S3_PvS4_15EVARIABLE_TYPESi",
+            "_ZN11CDescriptor5CloneEP17CEditorBaseObjectS1_S1_",
+            "_ZN11CDescriptor10loadObjectEP10CDataGroupP28CDescriptorLoadConfiguration",
+            "_ZN11CDescriptor11loadObjectsEP10CDataGroupP28CDescriptorLoadConfiguration",
+            "_ZN11CDescriptor18postProcessObjectsEP10CDataGroupP28CDescriptorLoadConfiguration",
+            "_ZN11CDescriptor10saveObjectEP17CEditorBaseObjectP10CDataGroupP28CDescriptorSaveConfiguration",
+            "_ZN11CDescriptor11saveObjectsEP10CDataGroupP28CDescriptorSaveConfiguration",
+            "_ZN11CDescriptor24loadObjectFromBinaryFileER11COgreReaderP17CEditorBaseObjectR28CDescriptorLoadConfiguration",
+            "_ZN11CDescriptor24BroadcastEventFromObjectEP17CEditorBaseObjectj",
+            "_ZN11CDescriptor16deleteAllObjectsEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EditorBaseObjectTest.cpp",
+          "fixtures": [
+            "EditorBaseObject_shadow"
+          ],
+          "originals": [
+            "_Z27EditorGetObjectDescriptorIDx",
+            "_Z28EditorParticleMovementConfigRfS_b"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentActiveTest.cpp",
+          "fixtures": [
+            "equipment_active_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment16setActiveInLevelEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentAffixFilterTest.cpp",
+          "fixtures": [
+            "equipment_affixfilter_differential",
+            "equipment_container_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment36removeAffixesThatDontSupportUnitTypeEN9UNITTYPES10EUNITTYPESE",
+            "_ZN10CEquipment16addContainerItemEPS_"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentApplySaveTest.cpp",
+          "fixtures": [
+            "equipment_applysave_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment14applySaveStateER14CItemSaveState"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentAttachTest.cpp",
+          "fixtures": [
+            "equipment_attach_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment21attachToGivenLocationEP10CCharacter16EEQUIP_LOCATIONS"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentCanEquipTest.cpp",
+          "fixtures": [
+            "equipment_canequip_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment8canEquipEP10CCharacterb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentCanUseTest.cpp",
+          "fixtures": [
+            "equipment_canuse_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment14canUseOnTargetEP10CCharacterP9CBaseUnit"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentCombatStatsTest.cpp",
+          "fixtures": [
+            "equipment_combat_stats_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment20calculateCombatStatsEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentDPSTest.cpp",
+          "fixtures": [
+            "equipment_dps_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment3DPSEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentDamageArraysTest.cpp",
+          "fixtures": [
+            "equipment_damage_arrays_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment17addInherentDamageE13EDAMAGE_TYPESi",
+            "_ZN10CEquipment14addDamageBonusE13EDAMAGE_TYPESi",
+            "_ZN10CEquipment14getDamageBonusE13EDAMAGE_TYPES"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentDescriptionTest.cpp",
+          "fixtures": [
+            "equipment_description_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment23getEquipmentDescriptionEbb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentDestructorTest.cpp",
+          "fixtures": [
+            "equipment_destructor_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipmentD1Ev"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentDetachTest.cpp",
+          "fixtures": [
+            "equipment_detach_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment18detachFromLocationEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentEffectsDescriptionTest.cpp",
+          "fixtures": [
+            "equipment_effects_description_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment18effectsDescriptionE18EEFFECT_ACTIVATIONbb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentEffectsTest.cpp",
+          "fixtures": [
+            "equipment_effects_differential",
+            "equipment_effects_trim_helper"
+          ],
+          "originals": [
+            "_ZN10CEquipment19getEquipmentEffectsEv",
+            "_Z16removeWhiteSpaceRKSbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentElementalTest.cpp",
+          "fixtures": [
+            "equipment_elemental_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment22createElementalDamagesEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentEnchantTest.cpp",
+          "fixtures": [
+            "equipment_enchant_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment7enchantEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentFireMissilesTest.cpp",
+          "fixtures": [
+            "equipment_fire_missiles_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment12fireMissilesEP10CCharacterS1_"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentFullNameTest.cpp",
+          "fixtures": [
+            "equipment_full_name_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment15getFullItemNameEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentGraphPriceTest.cpp",
+          "fixtures": [
+            "equipment_graph_price_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment14setGraphDamageEj",
+            "_ZN10CEquipment10setGraphACEj",
+            "_ZN10CEquipment12enchantPriceEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentHeirloomTest.cpp",
+          "fixtures": [
+            "equipment_heirloom_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment15improveHeirloomEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentIconTest.cpp",
+          "fixtures": [
+            "equipment_icon_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment10createIconER7CGameUIb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentInitTest.cpp",
+          "fixtures": [
+            "equipment_init_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment8unitInitEP10CDataGroupb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentInventoryEntryTest.cpp",
+          "fixtures": [
+            "equipment_inventory_entry_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment16addedToInventoryEP10CInventoryP10CCharacter"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentLoadModelTest.cpp",
+          "fixtures": [
+            "equipment_loadmodel_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment9loadModelESbIwSt11char_traitsIwESaIwEES3_"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentMissileApplyTest.cpp",
+          "fixtures": [
+            "equipment_missile_apply_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment22missileApplyingEffectsEP8CMissileP10CCharacterPKN4Ogre7Vector3Eff"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentMissileDeathTest.cpp",
+          "fixtures": [
+            "equipment_missile_death_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment13missileDieingEP8CMissile"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentParticlesTest.cpp",
+          "fixtures": [
+            "equipment_particles_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment15createParticlesEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentPriceTest.cpp",
+          "fixtures": [
+            "equipment_price_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment16recalculatePriceEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentProcsTest.cpp",
+          "fixtures": [
+            "equipment_procs_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment12executeProcsEP10CCharacter12EEFFECT_TYPEP9CBaseUnit"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentRenderBehindTest.cpp",
+          "fixtures": [
+            "equipment_renderbehind_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment15setRenderBehindEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentRequirementValuesTest.cpp",
+          "fixtures": [
+            "equipment_requirement_values_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment22getStrengthRequirementEP10CCharacter",
+            "_ZN10CEquipment23getDexterityRequirementEP10CCharacter",
+            "_ZN10CEquipment19getMagicRequirementEP10CCharacter",
+            "_ZN10CEquipment21getDefenseRequirementEP10CCharacter",
+            "_ZN10CEquipment19getLevelRequirementEP10CCharacter"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentRequirementsTest.cpp",
+          "fixtures": [
+            "equipment_requirements_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment15setRequirementsEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentReskinTest.cpp",
+          "fixtures": [
+            "equipment_reskin_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment13reskinByClassESbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentSaveTest.cpp",
+          "fixtures": [
+            "equipment_save_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment13fillSaveStateER14CItemSaveStateib"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentSkillDescriptionTest.cpp",
+          "fixtures": [
+            "equipment_skill_description_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment16skillDescriptionEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentSocketsTest.cpp",
+          "fixtures": [
+            "equipment_sockets_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment13getMaxSocketsEv",
+            "_ZN10CEquipment10addSocketsEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentStatsTest.cpp",
+          "fixtures": [
+            "equipment_stats_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment17getEquipmentStatsEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentTextTest.cpp",
+          "fixtures": [
+            "equipment_text_colors_and_order"
+          ],
+          "originals": [
+            "_ZN10CEquipment22setItemTextHighlightedEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentTradePriceTest.cpp",
+          "fixtures": [
+            "equipment_trade_price_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment8buyPriceEv",
+            "_ZN10CEquipment9sellPriceEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentTypeTest.cpp",
+          "fixtures": [
+            "equipment_type_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment16getEquipmentTypeEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentUpdateDropTest.cpp",
+          "fixtures": [
+            "equipment_update_drop_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment10updateDropEf"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentUseTest.cpp",
+          "fixtures": [
+            "equipment_use_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment11useOnTargetEP10CCharacterP9CBaseUnit"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/EquipmentWardrobeTest.cpp",
+          "fixtures": [
+            "equipment_wardrobe_differential"
+          ],
+          "originals": [
+            "_ZN10CEquipment11isWardrobedESbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/FileReaderTest.cpp",
+          "fixtures": [
+            "file_reader_lines_tokens_and_encoding"
+          ],
+          "originals": [
+            "_ZN11CFileReader8ReadLineEw",
+            "_ZN11CFileReader16ReadLineTokenizeEPSt5queueISbIwSt11char_traitsIwESaIwEESt5dequeIS4_SaIS4_EEEPKww",
+            "_ZN11CFileReader20ConvertFileToUnicodeEP8_IO_FILERKSbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/FileSystemTest.cpp",
+          "fixtures": [
+            "FileSystem_layout",
+            "FileSystem_destructor_shadow",
+            "FileSystem_resolve_shadow",
+            "FileSystem_stringListAdd_shadow"
+          ],
+          "originals": [
+            "_ZN10CRunicCoreC2Ev",
+            "_ZN11CFileSystemD2Ev",
+            "_ZN11CFileSystem20fileIsNewerOrEqualToER9CFileInfoS1_",
+            "_ZN11CFileSystem15getAbsolutePathERKSbIwSt11char_traitsIwESaIwEER9CFileInfob",
+            "_ZN11CFileSystem11getFileInfoERKSbIwSt11char_traitsIwESaIwEER9CFileInfobbb",
+            "_ZN11CFileSystem19getFilesInDirectoryER10TArrayListISbIwSt11char_traitsIwESaIwEEERSsS7_bbbRKSs",
+            "_ZN11CFileSystem11getFileListERKSbIwSt11char_traitsIwESaIwEER10TArrayListIS3_ES3_bbbb",
+            "_ZN13CMeshListener19processMaterialNameEPN4Ogre4MeshEPSs",
+            "_ZN13CMeshListener19processSkeletonNameEPN4Ogre4MeshEPSs",
+            "_ZN15CScriptListener11handleEventEPN4Ogre14ScriptCompilerERKSsRKSt6vectorINS0_3AnyESaIS6_EEPS6_",
+            "_ZN10TArrayListISsE3addESs"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/GameStateControlTest.cpp",
+          "fixtures": [
+            "game_state_switch_callbacks",
+            "game_state_update_callbacks"
+          ],
+          "originals": [
+            "_ZN20CGameStateController17doActualGameStateEb",
+            "_ZN20CGameStateController6updateEf"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/GameStateHPTest.cpp",
+          "fixtures": [
+            "game_state_player_hp_thresholds"
+          ],
+          "originals": [
+            "_ZN20CGameStateController33broadcastPlayerHPThreshholdEventsEfff"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/GraphManagerTest.cpp",
+          "fixtures": [
+            "graph_manager_loading_and_duplicates"
+          ],
+          "originals": [
+            "_ZN13CGraphManager9loadGraphESbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/GraphTest.cpp",
+          "fixtures": [
+            "graph_curve_loading"
+          ],
+          "originals": [
+            "_ZN6CGraph9loadGraphEPKw",
+            "_ZN6CGraph13loadGraphLineEP10CDataGroup",
+            "_ZN6CGraph12addGraphLineE12EGRAPH_TYPES"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/HeadlessEnvironmentTest.cpp",
+          "fixtures": [
+            "headless_environment"
+          ],
+          "originals": [],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/HybridExceptionsTest.cpp",
+          "fixtures": [
+            "Hybrid_exceptions"
+          ],
+          "originals": [],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemAnimationTest.cpp",
+          "fixtures": [
+            "item_animation_event_dispatch"
+          ],
+          "originals": [
+            "_ZN5CItem15updateAnimationEf"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemOpacityTest.cpp",
+          "fixtures": [
+            "item_opacity_transitions"
+          ],
+          "originals": [
+            "_ZN5CItem13updateOpacityEfb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemRangeTest.cpp",
+          "fixtures": [
+            "item_active_range_and_shadows"
+          ],
+          "originals": [
+            "_ZN5CItem20calculateActiveRangeERKN4Ogre7Vector3E"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemSaveStateTest.cpp",
+          "fixtures": [
+            "item_restore_and_spawner_binding"
+          ],
+          "originals": [
+            "_ZN5CItem14applySaveStateER14CItemSaveState"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemTextTest.cpp",
+          "fixtures": [
+            "item_text_colors_and_order"
+          ],
+          "originals": [
+            "_ZN5CItem22setItemTextHighlightedEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/ItemUpdateTest.cpp",
+          "fixtures": [
+            "item_frame_visibility_sound_and_light"
+          ],
+          "originals": [
+            "_ZN5CItem6updateEPN4Ogre6CameraERKNS0_7Vector3Ef"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/LogicObjectsTest.cpp",
+          "fixtures": [
+            "LogicTimer_shadow",
+            "OutputIncrementor_shadow"
+          ],
+          "originals": [
+            "_ZN11CLogicTimerC1EP16CResourceManager",
+            "_ZN11CLogicTimerD1Ev",
+            "_ZN11CLogicTimer6updateEf",
+            "_ZN11CLogicTimer10setEnabledEb",
+            "_ZN18COutputIncrementorC1EP16CResourceManager",
+            "_ZN18COutputIncrementorD1Ev",
+            "_ZN18COutputIncrementor9incrementEv",
+            "_ZN18COutputIncrementor10setEnabledEb"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/MoneyTakerLayoutTest.cpp",
+          "fixtures": [],
+          "originals": [],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/RandomizerTest.cpp",
+          "fixtures": [
+            "Randomizer_shadow"
+          ],
+          "originals": [
+            "_ZN11CRandomizerC1E16ERANDOMIZER_TYPE",
+            "_ZN11CRandomizerD1Ev",
+            "_ZN11CRandomizer7getOddsEi",
+            "_ZN11CRandomizer13setChoiceOddsEii",
+            "_ZN11CRandomizer12removeChoiceEj",
+            "_ZN11CRandomizer5clearEv",
+            "_ZN11CRandomizer9addChoiceEii",
+            "_ZN11CRandomizer11computeOddsEv",
+            "_ZN11CRandomizer21setRandomizerToNormalEf",
+            "_ZN11CRandomizer9getRandomERi",
+            "_ZN11CRandomizer9getRandomEv",
+            "_ZN11CRandomizer15hasValidChoicesEv"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/RunicCoreTest.cpp",
+          "fixtures": [
+            "RunicCore_shadow"
+          ],
+          "originals": [
+            "_ZN10CRunicCoreC1Ev",
+            "_ZN10CRunicCoreD1Ev",
+            "_ZN10CRunicCore14addSafePointerEP12TSafePointerIPvE",
+            "_ZN10CRunicCore17removeSafePointerEP12TSafePointerIPvEj"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/SceneNodeObjectTest.cpp",
+          "fixtures": [
+            "SceneNodeObject_shadow"
+          ],
+          "originals": [
+            "_ZN16CSceneNodeObject18setResourceManagerEP16CResourceManager",
+            "_ZN16CSceneNodeObject27setParentPositionableObjectEP19CPositionableObject"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/StringTranslateTest.cpp",
+          "fixtures": [
+            "StringTranslate_reload"
+          ],
+          "originals": [
+            "_ZN16CStringTranslateC1ERKSbIwSt11char_traitsIwESaIwEE",
+            "_ZN16CStringTranslateD1Ev",
+            "_ZN16CStringTranslate6reloadEv",
+            "_ZN10CDataGroupC1ERKSbIwSt11char_traitsIwESaIwEEPS_jjP11TRepositoryIS3_E",
+            "_ZN10CDataGroupD1Ev",
+            "_ZN10CDataGroup12AddDataGroupERKSbIwSt11char_traitsIwESaIwEE",
+            "_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEES5_b",
+            "_ZN7STRINGS11StringUpperERKSbIwSt11char_traitsIwESaIwEE",
+            "_ZN10FILESYSTEM9CleanPathERKSbIwSt11char_traitsIwESaIwEE"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/TeleportTest.cpp",
+          "fixtures": [
+            "teleport_activate_differential"
+          ],
+          "originals": [
+            "_ZN9CTeleport8activateEN4Ogre7Vector3ES1_"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/TriggerGeometryTest.cpp",
+          "fixtures": [
+            "trigger_geometry_boundaries_and_events"
+          ],
+          "originals": [
+            "_ZN14CTriggerSphere13updateTriggerEfP12CEditorScene",
+            "_ZN11CTriggerBox13updateTriggerEfP12CEditorScene"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/UtilitiesMathTest.cpp",
+          "fixtures": [
+            "UtilitiesMath_shadow"
+          ],
+          "originals": [
+            "_ZN4MATH12worldToLocalERN4Ogre7Vector3ERKS1_RKNS0_7Matrix4E",
+            "_ZN4MATH23worldToLocalPerspectiveERN4Ogre7Vector3ERKS1_RKNS0_7Matrix4E",
+            "_ZN4MATH13classifyPointERKN4Ogre7Vector3ES3_S3_",
+            "_ZN4MATH22classifyPointForSphereERKN4Ogre7Vector3ES3_S3_f",
+            "_ZN4MATH22closestPointOnTriangleERKN4Ogre7Vector3ES3_S3_S3_RS1_",
+            "_ZN4MATH15matrixRotationXERN4Ogre7Matrix4Ef",
+            "_ZN4MATH15matrixRotationYERN4Ogre7Matrix4Ef",
+            "_ZN4MATH7rotateXEPN4Ogre7Vector3Ef",
+            "_ZN4MATH7rotateYEPN4Ogre7Vector3Ef",
+            "_ZN4MATH7rotateZEPN4Ogre7Vector3Ef",
+            "_ZN4MATH16screenToWorldRayEPN4Ogre6CameraEffff"
+          ],
+          "has_coverage_text": false
+        },
+        {
+          "file": "decomp/hybrid/tests/WarperTest.cpp",
+          "fixtures": [
+            "warper_activate_differential"
+          ],
+          "originals": [
+            "_ZN7CWarper8activateEv"
+          ],
+          "has_coverage_text": false
+        }
+      ],
+      "detected": true,
+      "probe_completed": true
+    },
+    "cross_tu_regression": {
+      "proof_type": "real Stage.validate/publish, native C++98 synthetic programs; replacement comparator and one native control test, no original game",
+      "native_value_before": 7,
+      "native_value_after": 99,
+      "comparison_rows": [
+        {
+          "source": "A.cpp",
+          "address": "0x100",
+          "status": "MATCH",
+          "observed": 5,
+          "expected": 5
+        },
+        {
+          "source": "B.cpp",
+          "address": "0x200",
+          "status": "DIFF",
+          "observed": 99,
+          "expected": 7
+        }
+      ],
+      "published": [
+        "decomp/include/Shared.h",
+        "decomp/src/A.cpp"
+      ],
+      "detected": true,
+      "probe_completed": true
+    },
+    "eh_preservation": {
+      "proof_type": "real normalization and preserve_existing; native GCC system C++98 objects/execution, no Torchlight ELF",
+      "rows": [
+        {
+          "address": "0x100",
+          "status": "DIFF",
+          "code": "cf24987180e4e2f7",
+          "metadata_reasons": [
+            "EH LSDA equivalence unverified"
+          ],
+          "object_digest": "7edc0c2636efcc47f2e44ccaadcf96a9a0518a803d289f70acdba2255278ba87",
+          "norm": [
+            "sub $0x8,%rsp",
+            "call _Z11raise_valuev",
+            "xor %eax,%eax",
+            "add $0x8,%rsp",
+            "ret",
+            "sub $0x1,%rdx",
+            "mov %rax,%rdi",
+            "jne L12",
+            "call __cxa_begin_catch",
+            "call __cxa_end_catch",
+            "mov $0x7,%eax",
+            "jmp L3",
+            "call _Unwind_Resume"
+          ],
+          "execution": 7
+        },
+        {
+          "address": "0x100",
+          "status": "DIFF",
+          "code": "cf24987180e4e2f7",
+          "metadata_reasons": [
+            "EH LSDA equivalence unverified"
+          ],
+          "object_digest": "fac4b5696656c9c1e73837be666f30e0a25818a1b96338350fa228117a74c8d1",
+          "norm": [
+            "sub $0x8,%rsp",
+            "call _Z11raise_valuev",
+            "xor %eax,%eax",
+            "add $0x8,%rsp",
+            "ret",
+            "sub $0x1,%rdx",
+            "mov %rax,%rdi",
+            "jne L12",
+            "call __cxa_begin_catch",
+            "call __cxa_end_catch",
+            "mov $0x7,%eax",
+            "jmp L3",
+            "call _Unwind_Resume"
+          ],
+          "execution": 99
+        }
+      ],
+      "same_function_source": true,
+      "preserve_existing": true,
+      "detected": true,
+      "probe_completed": true
+    },
+    "validation_snapshot": {
+      "proof_type": "real Stage receipt/publication rules; completed validation token modeled explicitly",
+      "test_config_changes_invalidate_stamp": false,
+      "published_files": [
+        "decomp/src/Unit.cpp"
+      ],
+      "new_test_published": false,
+      "live_old_test": "// tested version\n",
+      "detected": true,
+      "probe_completed": true
+    },
+    "interrupted_publication": {
+      "proof_type": "real child process exits immediately after first real _replace, validation token modeled; temp files only",
+      "child_exit": 77,
+      "changed_files": [
+        "decomp/include/Unit.h"
+      ],
+      "source": "int value() { return 7; }\n",
+      "header": "new header\n",
+      "detected": true,
+      "probe_completed": true
+    },
+    "independent_publications": {
+      "proof_type": "real stages and publication, simulated prior validation; no game execution",
+      "first_published": [
+        "decomp/src/A.cpp"
+      ],
+      "second_error": "source/header tree changed during the attempt; rebase and validate again",
+      "second_work_preserved_at": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/parallel/build-decomp/attempts/tu-l2hc066f",
+      "interpretation": "safe conservative refusal, not false acceptance; automatic rebase/revalidation is missing",
+      "detected": true,
+      "probe_completed": true
+    },
+    "failure_cache_modes": {
+      "proof_type": "real candidate decision and cache; compiler/digest mocked with explicit records",
+      "first_nonincremental": "DIFF",
+      "second_incremental": "DIFF",
+      "second_used_cache": true,
+      "fresh_incremental": "MATCH",
+      "detected": true,
+      "probe_completed": true
+    },
+    "stage_cache": {
+      "proof_type": "real Stage.activate/cache identity functions, no compilation or speed claim",
+      "stages": [
+        {
+          "cache": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/build-decomp/cc-cache",
+          "index": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/build-decomp/cc-cache/494e01f73dd97424c0908d2da9559acbdb90f29f139c4c2f105640797ca282ef.json",
+          "content_hash": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+          "command": [
+            "g++",
+            "-I",
+            "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-hiz87vxm/decomp/include",
+            "-c"
+          ],
+          "digest": "fb21d92f4731b83b27cb9f04f6e4705f45c736c1f771b037fe87703845502561"
+        },
+        {
+          "cache": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/build-decomp/cc-cache",
+          "index": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/build-decomp/cc-cache/bac6bb55b627bb2dbe1dd9d0c2a8a869a53023786f8e48b281d548214e184738.json",
+          "content_hash": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+          "command": [
+            "g++",
+            "-I",
+            "/mnt/data/_revision_verify/run-1p37dirz/boundaries/cache-isolation/build-decomp/attempts/tu-qfra1f0r/decomp/include",
+            "-c"
+          ],
+          "digest": "9ffd957cc9671e8d24d332956501ab025d07d1e2a6e07da22ec9963f7b63cfe3"
+        }
+      ],
+      "same_source": true,
+      "same_cache_location": false,
+      "same_content_key": false,
+      "detected": true,
+      "probe_completed": true
+    },
+    "provider_scope": {
+      "proof_type": "static source lines",
+      "no_llm_descriptor_filter": "tasks = {t[\"name\"]: t for t in db[\"tus\"] if t[\"kind\"] == \"game\" and t[\"name\"].endswith(\"Descriptor.cpp\")}",
+      "providers": "parser.add_argument(\"--provider\", choices=(\"descriptor\", \"properties\"), required=True)",
+      "candidate_requires_match": "if (not definitions or not added or any(r[\"status\"] != \"MATCH\" for r in added)",
+      "lsda_policy": "reason = \"EH LSDA equivalence unverified\" if lsda else None",
+      "probe_completed": true
+    }
+  }
+}

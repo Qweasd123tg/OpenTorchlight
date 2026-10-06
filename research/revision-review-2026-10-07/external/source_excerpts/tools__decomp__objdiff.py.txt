@@ -1,0 +1,745 @@
+SOURCE tools/decomp/objdiff.py
+SHA256 39b280675bfdf516a2cd12c5d6764277c798126a1020c448b43d984caea7e0a0
+
+0001: #!/usr/bin/env python3
+0002: """Compare decompiled functions with the original machine code.
+0003: 
+0004: Compiles a decomp source with the original toolchain (GCC 4.4.7-3), then
+0005: compares every function symbol of the object with the original function of the
+0006: same mangled name. Instructions are normalized: relocated operands and absolute
+0007: addresses become symbol names, string literals become their contents, float
+0008: constants become their bytes and intra-function branches become instruction
+0009: indices. Exact instruction equality is MATCH only when referenced data is
+0010: complete and there is no unverified per-function personality/LSDA metadata.
+0011: 
+0012:     python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp
+0013:     python3 tools/decomp/objdiff.py decomp/src/RunicCore.cpp --show _ZN10CRunicCoreC2Ev
+0014:     python3 tools/decomp/objdiff.py --all --json build-decomp/progress.json
+0015: """
+0016: from __future__ import annotations
+0017: 
+0018: import argparse
+0019: import bisect
+0020: import difflib
+0021: import hashlib
+0022: import json
+0023: import os
+0024: from pathlib import Path
+0025: import re
+0026: import subprocess
+0027: import sys
+0028: import tempfile
+0029: import threading
+0030: 
+0031: sys.path.insert(0, str(Path(__file__).resolve().parent))
+0032: import elfdb  # noqa: E402
+0033: import elfimage  # noqa: E402
+0034: import objdiff_eh  # noqa: E402
+0035: import toolchain  # noqa: E402
+0036: 
+0037: ROOT = elfdb.ROOT
+0038: SRC = ROOT / "decomp" / "src"
+0039: INSN = re.compile(r"^\s*([0-9a-f]+):\s+(\S+(?: \S+)?)\s*(.*)$")
+0040: PREFIXES = ("rep", "repz", "repnz", "lock", "data16", "cs", "ds", "addr32", "rex", "rex.W")
+0041: PC_RELATIVE = {2, 4}          # R_X86_64_PC32, R_X86_64_PLT32
+0042: ABSOLUTE = {1, 10, 11}        # R_X86_64_64, R_X86_64_32, R_X86_64_32S
+0043: PACKED = ("ps", "pd", "dqa", "dqu", "aps", "apd")
+0044: 
+0045: 
+0046: def const_size(mnemonic):
+0047:     if mnemonic.startswith("data-size:"):
+0048:         return int(mnemonic.split(":")[1])
+0049:     integer = re.match(r"^(?:mov|add|sub|and|or|xor|cmp|test|imul|inc|dec|neg|not)([bwlq])$", mnemonic)
+0050:     if integer:
+0051:         return {"b": 1, "w": 2, "l": 4, "q": 8}[integer.group(1)]
+0052:     if mnemonic in ("flds", "fldl", "fldt", "movlps", "movhps", "movlpd", "movhpd"):
+0053:         return {"flds": 4, "fldl": 8, "fldt": 10}.get(mnemonic, 8)
+0054:     if mnemonic.endswith(PACKED) or mnemonic in ("pxor", "pand", "por", "andps", "xorps"):
+0055:         return 16
+0056:     if "sd" in mnemonic or mnemonic.endswith("q"):
+0057:         return 8
+0058:     return 4
+0059: 
+0060: 
+0061: def memory_mnemonic(mnemonic, operands):
+0062:     """objdump omits integer width suffixes when the destination determines it."""
+0063:     if mnemonic.startswith(("movzb", "movsb")):
+0064:         return "data-size:1"
+0065:     if mnemonic.startswith(("movzw", "movsw")):
+0066:         return "data-size:2"
+0067:     if mnemonic.startswith("movsl"):
+0068:         return "data-size:4"
+0069:     integer = ("mov", "movabs", "add", "sub", "and", "or", "xor", "cmp", "test", "imul")
+0070:     if mnemonic in integer:
+0071:         register = operands.rsplit(",", 1)[-1].strip()
+0072:         if re.fullmatch(r"%(?:r(?:ax|bx|cx|dx|si|di|bp|sp|[0-9]+))", register):
+0073:             return "data-size:8"
+0074:         if re.fullmatch(r"%(?:[abcd]x|si|di|bp|sp|r[0-9]+w)", register):
+0075:             return "data-size:2"
+0076:         if re.fullmatch(r"%(?:[abcd][lh]|sil|dil|bpl|spl|r[0-9]+b)", register):
+0077:             return "data-size:1"
+0078:     return mnemonic
+0079: 
+0080: 
+0081: def printable_string(raw):
+0082:     """Literal token for narrow (ASCII) or wide (UTF-32LE wchar_t) strings."""
+0083:     wide = []
+0084:     for i in range(0, len(raw) - 3, 4):
+0085:         code = int.from_bytes(raw[i:i + 4], "little")
+0086:         if code == 0:
+0087:             break
+0088:         if not (32 <= code < 0x10000 or code in (9, 10, 13)):
+0089:             wide = None
+0090:             break
+0091:         wide.append(chr(code))
+0092:     else:
+0093:         wide = None
+0094:     if wide:
+0095:         return 'L"' + "".join(wide)
+0096:     end = raw.find(b"\0")
+0097:     if end <= 0:
+0098:         return None
+0099:     text = raw[:end]
+0100:     if all(32 <= b < 127 or b in (9, 10, 13) for b in text):
+0101:         return text.decode("ascii")
+0102:     return None
+0103: 
+0104: 
+0105: class UnverifiedData(ValueError):
+0106:     pass
+0107: 
+0108: 
+0109: def literal_token(raw, width=None):
+0110:     """Full terminated bytes, including character width and payload length.
+0111: 
+0112:     Linked .rodata has lost string-section width. If both interpretations are
+0113:     possible, instruction equality cannot establish the width of the literal.
+0114:     """
+0115:     def narrow():
+0116:         end = raw.find(b"\0")
+0117:         if end < 0:
+0118:             return None
+0119:         if width is None and not all(32 <= b < 127 or b in (9, 10, 13) for b in raw[:end]):
+0120:             return None
+0121:         return raw[:end]
+0122: 
+0123:     def wide():
+0124:         for end in range(0, len(raw) - 3, 4):
+0125:             code = int.from_bytes(raw[end:end + 4], "little")
+0126:             if code == 0:
+0127:                 return raw[:end]
+0128:             if width is None and (code > 0x10ffff or 0xd800 <= code <= 0xdfff
+0129:                                   or not (chr(code).isprintable() or code in (9, 10, 13))):
+0130:                 return None
+0131:         return None
+0132: 
+0133:     if width not in (None, 1, 4):
+0134:         raise UnverifiedData("unsupported string width")
+0135:     candidates = [(w, payload) for w, payload in
+0136:                   ((1, narrow() if width in (None, 1) else None),
+0137:                    (4, wide() if width in (None, 4) else None)) if payload is not None]
+0138:     if len(candidates) > 1:
+0139:         raise UnverifiedData("ambiguous narrow/wide literal in linked rodata")
+0140:     if not candidates:
+0141:         raise UnverifiedData("unterminated or unclassified literal")
+0142:     w, payload = candidates[0]
+0143:     return f"lit:w{w}:n{len(payload) // w}:{payload.hex()}"
+0144: 
+0145: 
+0146: def string_width(section):
+0147:     match = re.match(r"^\.rodata\.str([0-9]+)\.", section.name)
+0148:     return int(match.group(1)) if match else None
+0149: 
+0150: 
+0151: def run_objdump(args):
+0152:     env = dict(os.environ, LC_ALL="C")
+0153:     return subprocess.run(["objdump", "-d", "-w", "--no-show-raw-insn"] + args, check=True,
+0154:                           capture_output=True, text=True, env=env).stdout
+0155: 
+0156: 
+0157: def parse_insns(text):
+0158:     out = []
+0159:     for line in text.splitlines():
+0160:         m = INSN.match(line)
+0161:         if m and not line.lstrip().startswith(("R_X86", "Disassembly")):
+0162:             mnemonic, operands = m.group(2), m.group(3).strip()
+0163:             # objdump prints prefixes as part of the mnemonic field ("repz ret").
+0164:             first = mnemonic.split(" ")
+0165:             if len(first) == 2 and first[0] not in PREFIXES:
+0166:                 mnemonic, operands = first[0], (first[1] + " " + operands).strip()
+0167:             out.append([int(m.group(1), 16), mnemonic, operands])
+0168:     return out
+0169: 
+0170: 
+0171: class Normalizer:
+0172:     """Shared operand normalization; subclasses resolve addresses to tokens."""
+0173: 
+0174:     JUMP_TABLE = re.compile(r"^\*(0x[0-9a-f]+)\(,(%\w+),8\)$")
+0175: 
+0176:     def data_token(self, raw, mnemonic, address_operand=False, width=None):
+0177:         try:
+0178:             if address_operand:
+0179:                 return literal_token(raw, width)
+0180:             size = const_size(mnemonic)
+0181:             if len(raw) < size:
+0182:                 raise UnverifiedData(f"truncated {size}-byte constant")
+0183:             return "const:" + raw[:size].hex()
+0184:         except UnverifiedData as exc:
+0185:             if not hasattr(self, "unverified"):
+0186:                 self.unverified = []
+0187:             self.unverified.append(str(exc))
+0188:             return "unverified-data:" + hashlib.sha256(raw).hexdigest()
+0189: 
+0190:     def branch(self, insn_index, target, start, end, offsets):
+0191:         if start <= target < end:
+0192:             labels = getattr(self, "labels", None)
+0193:             if labels and target in labels:
+0194:                 return f"L{labels[target]}"
+0195:             pos = bisect.bisect_left(offsets, target)
+0196:             return f"L{pos}" if pos < len(offsets) and offsets[pos] == target else f"L?{target - start:#x}"
+0197:         return None
+0198: 
+0199:     @staticmethod
+0200:     def table_size(k, insns):
+0201:         """Entries of a switch table from the bound check (`cmp $N` before the jump)."""
+0202:         for _, mnemonic, operands in reversed(insns[max(0, k - 6):k]):
+0203:             m = re.match(r"^\$0x([0-9a-f]+),", operands)
+0204:             if mnemonic.startswith("cmp") and m:
+0205:                 return int(m.group(1), 16) + 1
+0206:         return None
+0207: 
+0208:     def jump_table(self, k, entries, register, start, end, offsets, insns):
+0209:         """Token for `jmp *table(,%reg,8)`: the table's targets as instruction labels."""
+0210:         count = self.table_size(k, insns)
+0211:         labels = []
+0212:         for target in entries:
+0213:             if count is not None and len(labels) == count:
+0214:                 break
+0215:             if target is None or not start <= target < end:
+0216:                 break
+0217:             labels.append(self.branch(k, target, start, end, offsets))
+0218:         return f"jmp *[table:{','.join(labels)}](,{register},8)"
+0219: 
+0220:     @staticmethod
+0221:     def padding(mnemonic, operands):
+0222:         return (mnemonic in ("nop", "nopw", "nopl", "xchg") and (mnemonic != "xchg" or operands == "%ax,%ax")
+0223:                 or mnemonic.startswith(("data16", "cs")))
+0224: 
+0225:     def normalize(self, insns, start, end):
+0226:         self.unverified = []
+0227:         offsets = [i[0] for i in insns]
+0228:         # Branch labels count kept instructions only: alignment padding differs
+0229:         # between the original and our object and must not shift the indices.
+0230:         self.labels = {}
+0231:         kept = 0
+0232:         for address, mnemonic, operands in insns:
+0233:             self.labels[address] = kept
+0234:             if not self.padding(mnemonic, operands):
+0235:                 kept += 1
+0236:         result = []
+0237:         for k, (address, mnemonic, operands) in enumerate(insns):
+0238:             if self.padding(mnemonic, operands):
+0239:                 continue
+0240:             nxt = offsets[k + 1] if k + 1 < len(offsets) else end
+0241:             operands = operands.split("#", 1)[0].strip() if "#" in operands and "(%rip)" in operands else operands
+0242:             result.append(self.token(k, address, nxt, mnemonic, operands, start, end, offsets, insns))
+0243:         while result and result[-1].split(" ")[0] in ("nop", "xchg"):
+0244:             result.pop()
+0245:         return result
+0246: 
+0247: 
+0248: class OriginalSide(Normalizer):
+0249:     def __init__(self, image, db):
+0250:         self.image = image
+0251:         self.func_start = {int(a, 16): f["mangled"] for a, f in db["functions"].items()}
+0252:         objects = []
+0253:         for s in image.symbols:
+0254:             if s.type == elfimage.STT_OBJECT and s.defined and s.size and s.name:
+0255:                 objects.append((s.value, s.size, s.name))
+0256:         for s in image.dynsyms:
+0257:             if s.type == elfimage.STT_OBJECT and s.defined and s.size and s.name:
+0258:                 objects.append((s.value, s.size, s.name))
+0259:         objects.sort()
+0260:         self.obj_starts = [o[0] for o in objects]
+0261:         self.objects = objects
+0262:         # Exact-address names, including zero-sized markers such as __dso_handle.
+0263:         self.exact = {}
+0264:         for s in list(image.symbols) + list(image.dynsyms):
+0265:             if s.defined and s.name and s.type in (elfimage.STT_OBJECT, elfimage.STT_NOTYPE) and s.value:
+0266:                 self.exact.setdefault(s.value, s.name.split("@")[0])
+0267:         self.rodata = [image.section(n) for n in (".rodata",) if n]
+0268:         self.low, self.high = 0x400000, max(s.addr + s.size for s in image.sections if s.addr)
+0269: 
+0270:     def name_at(self, address, mnemonic, address_operand=False):
+0271:         if address in self.func_start:
+0272:             return self.func_start[address]
+0273:         if address in self.image.plt:
+0274:             return self.image.plt[address].split("@")[0]
+0275:         i = bisect.bisect_right(self.obj_starts, address) - 1
+0276:         if i >= 0:
+0277:             start, size, name = self.objects[i]
+0278:             name = name.split("@")[0]
+0279:             if start <= address < start + size:
+0280:                 return name if address == start else f"{name}+{address - start:#x}"
+0281:         if address in self.exact:
+0282:             return self.exact[address]
+0283:         section = self.image.section_at(address)
+0284:         if section and section.name.startswith(".rodata"):
+0285:             try:
+0286:                 available = section.addr + section.size - address
+0287:                 raw = self.image.read(address, available if address_operand else min(available, const_size(mnemonic)))
+0288:             except ValueError:
+0289:                 raw = b""
+0290:             return self.data_token(raw, mnemonic, address_operand, string_width(section))
+0291:         if section:
+0292:             return f"{section.name}:{address:#x}"
+0293:         return f"{address:#x}"
+0294: 
+0295:     def token(self, k, address, nxt, mnemonic, operands, start, end, offsets, insns):
+0296:         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
+0297:         if m and (mnemonic.startswith(("j", "call", "loop"))):
+0298:             target = int(m.group(1), 16)
+0299:             label = self.branch(k, target, start, end, offsets)
+0300:             if label:
+0301:                 return f"{mnemonic} {label}"
+0302:             return f"{mnemonic} {self.name_at(target, mnemonic)}"
+0303:         table = self.JUMP_TABLE.match(operands) if mnemonic == "jmp" else None
+0304:         if table:
+0305:             base = int(table.group(1), 16)
+0306: 
+0307:             def entries():
+0308:                 for i in range(4096):
+0309:                     try:
+0310:                         yield int.from_bytes(self.image.read(base + 8 * i, 8), "little")
+0311:                     except ValueError:
+0312:                         return
+0313:             return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+0314: 
+0315:         def rip(mm):
+0316:             target = nxt + int(mm.group(1), 16) * (-1 if mm.group(0).startswith("-") else 1)
+0317:             return f"[{self.name_at(target, memory_mnemonic(mnemonic, operands), mnemonic.startswith('lea'))}](%rip)"
+0318:         operands = re.sub(r"-?0x([0-9a-f]+)\(%rip\)", rip, operands)
+0319: 
+0320:         def absolute(mm):
+0321:             value = int(mm.group(2), 16)
+0322:             if self.low <= value < self.high:
+0323:                 return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'))}]"
+0324:             return mm.group(0)
+0325:         operands = re.sub(r"(\$|(?<![\w%]))0x([0-9a-f]+)(?=\b)", absolute, operands)
+0326:         return f"{mnemonic} {operands}".strip()
+0327: 
+0328: 
+0329: class ObjectSide(Normalizer):
+0330:     def __init__(self, obj, resolve=None, name_at=None):
+0331:         self.obj = obj
+0332:         self.resolve = resolve or (lambda name: None)
+0333:         self.name_at = name_at
+0334:         self.funcs_by_section = {}
+0335:         for s in obj.symbols:
+0336:             if s.type == elfimage.STT_FUNC and s.defined:
+0337:                 self.funcs_by_section.setdefault(s.shndx, {})[s.value] = s.name
+0338:         self.locals_by_section = {}
+0339:         for s in obj.symbols:
+0340:             if s.type == elfimage.STT_OBJECT and s.defined and s.shndx < len(obj.sections):
+0341:                 self.locals_by_section.setdefault(s.shndx, {})[s.value] = s.name
+0342: 
+0343:     def target_name(self, symbol, offset, mnemonic, address_operand=False):
+0344:         obj = self.obj
+0345:         if symbol.name and not symbol.name.startswith(".L") and symbol.type != elfimage.STT_SECTION:
+0346:             # Same token as the original side: symbol + addend mapped to the original address.
+0347:             address = self.resolve(symbol.name)
+0348:             if address is not None and self.name_at:
+0349:                 return self.name_at(address + offset, mnemonic, address_operand)
+0350:         if symbol.defined and symbol.shndx < len(obj.sections) and (
+0351:                 symbol.type == elfimage.STT_SECTION or not symbol.name or symbol.name.startswith(".L")):
+0352:             offset += symbol.value if symbol.type != elfimage.STT_SECTION else 0
+0353:             section = obj.sections[symbol.shndx]
+0354:             name = section.name
+0355:             if name.startswith(".rodata"):
+0356:                 data = obj.section_bytes(symbol.shndx)
+0357:                 stop = section.size if address_operand else offset + const_size(mnemonic)
+0358:                 raw = data[offset:stop] if 0 <= offset < section.size and len(data) == section.size else b""
+0359:                 return self.data_token(raw, mnemonic, address_operand, string_width(section))
+0360:             named = self.locals_by_section.get(symbol.shndx, {}).get(offset)
+0361:             if named:
+0362:                 return named
+0363:             func = self.funcs_by_section.get(symbol.shndx, {}).get(offset)
+0364:             if func:
+0365:                 return func
+0366:             return f"{name}+{offset:#x}"
+0367:         return symbol.name if offset == 0 else f"{symbol.name}+{offset:#x}"
+0368: 
+0369:     def prepare(self, section_index):
+0370:         self.relocs = sorted(self.obj.relocs.get(section_index, []), key=lambda r: r.offset)
+0371:         self.reloc_offsets = [r.offset for r in self.relocs]
+0372:         self.section_index = section_index
+0373: 
+0374:     def token(self, k, address, nxt, mnemonic, operands, start, end, offsets, insns):
+0375:         lo = bisect.bisect_left(self.reloc_offsets, address)
+0376:         hi = bisect.bisect_left(self.reloc_offsets, nxt)
+0377:         relocs = self.relocs[lo:hi]
+0378:         table = self.JUMP_TABLE.match(operands) if mnemonic == "jmp" and len(relocs) == 1 else None
+0379:         if table and relocs[0].symbol.shndx < len(self.obj.sections):
+0380:             symbol = relocs[0].symbol
+0381:             base = relocs[0].addend + (symbol.value if symbol.type != elfimage.STT_SECTION else 0)
+0382:             rows = {r.offset: r for r in self.obj.relocs.get(symbol.shndx, [])}
+0383: 
+0384:             def entries():
+0385:                 for i in range(4096):
+0386:                     r = rows.get(base + 8 * i)
+0387:                     if r is None or r.symbol.shndx != self.section_index:
+0388:                         return
+0389:                     yield r.addend + (r.symbol.value if r.symbol.type != elfimage.STT_SECTION else 0)
+0390:             return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+0391:         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
+0392:         if m and mnemonic.startswith(("j", "call", "loop")):
+0393:             if relocs:
+0394:                 r = relocs[0]
+0395:                 offset = r.addend + (nxt - r.offset) if r.type in PC_RELATIVE else r.addend
+0396:                 if r.symbol.name and r.symbol.name == getattr(self, "current", None) and offset == 0:
+0397:                     # Direct recursion: the original side sees a branch to its own entry.
+0398:                     return f"{mnemonic} {self.branch(k, start, start, end, offsets)}"
+0399:                 return f"{mnemonic} {self.target_name(r.symbol, offset, mnemonic)}"
+0400:             target = int(m.group(1), 16)
+0401:             label = self.branch(k, target, start, end, offsets)
+0402:             if label:
+0403:                 return f"{mnemonic} {label}"
+0404:             func = self.funcs_by_section.get(self.section_index, {}).get(target)
+0405:             return f"{mnemonic} {func or hex(target)}"
+0406:         for r in relocs:
+0407:             if r.type in PC_RELATIVE:
+0408:                 name = self.target_name(r.symbol, r.addend + (nxt - r.offset), memory_mnemonic(mnemonic, operands), mnemonic.startswith("lea"))
+0409:                 operands = re.sub(r"-?0x[0-9a-f]+\(%rip\)", lambda _: f"[{name}](%rip)", operands, count=1)
+0410:             elif r.type in ABSOLUTE:
+0411:                 imm_last = r.offset == nxt - 4 and "$" in operands
+0412:                 name = self.target_name(r.symbol, r.addend, memory_mnemonic(mnemonic, operands), imm_last or mnemonic.startswith("lea"))
+0413:                 if imm_last:
+0414:                     operands = re.sub(r"\$0x[0-9a-f]+", lambda _: f"$[{name}]", operands, count=1)
+0415:                 else:
+0416:                     operands = re.sub(r"(?<![\w%$])0x[0-9a-f]+(?=\()", lambda _: f"[{name}]", operands, count=1)
+0417:         return f"{mnemonic} {operands}".strip()
+0418: 
+0419: 
+0420: def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
+0421:     obj = elfimage.load_object(obj_path)
+0422:     frames = objdiff_eh.inspect(obj, relocatable=True)
+0423:     text = run_objdump([str(obj_path)])
+0424:     sections = {}
+0425:     current = None
+0426:     for line in text.splitlines():
+0427:         m = re.match(r"^Disassembly of section (.+):$", line)
+0428:         if m:
+0429:             current = m.group(1)
+0430:             sections[current] = []
+0431:             continue
+0432:         if current is not None:
+0433:             sections[current].append(line)
+0434:     parsed = {name: parse_insns("\n".join(lines)) for name, lines in sections.items()}
+0435:     addresses = {name: [i[0] for i in insns] for name, insns in parsed.items()}
+0436:     by_name = {s.name: s.index for s in obj.sections}
+0437:     side = ObjectSide(obj, resolve, name_at)
+0438:     result = {}
+0439:     for sym in obj.symbols:
+0440:         if sym.type != elfimage.STT_FUNC or not sym.defined:
+0441:             continue
+0442:         section = obj.sections[sym.shndx]
+0443:         positions = addresses.get(section.name, [])
+0444:         insns = parsed.get(section.name, [])[bisect.bisect_left(positions, sym.value):
+0445:                                             bisect.bisect_left(positions, sym.value + sym.size)]
+0446:         side.prepare(by_name[section.name])
+0447:         side.current = sym.name
+0448:         bind = elfimage.STB_LOCAL if sym.name in globalized else sym.bind
+0449:         norm = side.normalize(insns, sym.value, sym.value + sym.size)
+0450:         reasons = list(dict.fromkeys(side.unverified))
+0451:         eh = frames.reason(sym.value, sym.size, sym.shndx)
+0452:         if eh:
+0453:             reasons.append(eh)
+0454:         result[sym.name] = {"size": sym.size, "bind": bind, "norm": norm,
+0455:                             "metadata_reasons": reasons,
+0456:                             "personalities": frames.personalities(sym.value, sym.size, sym.shndx)}
+0457:     return result
+0458: 
+0459: 
+0460: def image_symbol_names(image):
+0461:     """Every symbol name of the original executable, its PLT included."""
+0462:     names = {s.name.split("@")[0] for s in list(image.symbols) + list(image.dynsyms) if s.name}
+0463:     return names | {n.split("@")[0] for n in image.plt.values()}
+0464: 
+0465: 
+0466: def unknown_members(db, original_names, symbols):
+0467:     """Symbols naming a member of a game class the original does not have: a wrong
+0468:     signature (constness, reference, parameter type) or an invented method."""
+0469:     out = []
+0470:     for name in symbols:
+0471:         if name in original_names:
+0472:             continue
+0473:         m = re.match(r"_ZNK?(\d+)", name)
+0474:         scope = m and name[m.end():m.end() + int(m.group(1))]
+0475:         if scope and scope in db["classes"] and scope not in ("Ogre", "CEGUI", "std", "ParticleUniverse"):
+0476:             out.append(name)
+0477:     return sorted(set(out))
+0478: 
+0479: 
+0480: def known_overloads(db, mangled):
+0481:     """Demangled signatures the original has for the class member `mangled` names."""
+0482:     m = re.match(r"_ZNK?(\d+)", mangled)
+0483:     scope = mangled[m.end():m.end() + int(m.group(1))]
+0484:     rest = mangled[m.end() + int(m.group(1)):]
+0485:     n = re.match(r"(\d+)", rest)
+0486:     method = rest[n.end():n.end() + int(n.group(1))] if n else None
+0487:     return sorted(f["demangled"] for f in db["functions"].values()
+0488:                   if f.get("scope") == scope and f.get("method") == method)
+0489: 
+0490: 
+0491: class Original:
+0492:     def __init__(self, db=None, elf=None):
+0493:         self.db = db or elfdb.load_db()
+0494:         self.image = elfimage.load(elf or elfdb.default_elf())
+0495:         self.side = OriginalSide(self.image, self.db)
+0496:         self.frames = objdiff_eh.inspect(self.image)
+0497:         self._lock = threading.RLock()  # the normalizer keeps per-function state
+0498:         self.by_name = {}
+0499:         for address, f in self.db["functions"].items():
+0500:             for name in f["names"]:
+0501:                 self.by_name.setdefault(name, []).append(f)
+0502: 
+0503:     def symbol_names(self):
+0504:         with self._lock:
+0505:             if not hasattr(self, "_names"):
+0506:                 self._names = image_symbol_names(self.image)
+0507:             return self._names
+0508: 
+0509:     def unknown_references(self, obj):
+0510:         return unknown_members(self.db, self.symbol_names(),
+0511:                                (s.name for s in elfimage.load_object(obj).symbols if not s.defined and s.name))
+0512: 
+0513:     def known_overloads(self, mangled):
+0514:         return known_overloads(self.db, mangled)
+0515: 
+0516:     def resolver(self, tu):
+0517:         data = {}
+0518:         for g in self.db["globals"]:
+0519:             if g["bind"] != "local":
+0520:                 data.setdefault(g["name"], int(g["address"], 16))
+0521:         if tu:
+0522:             for g in self.db["globals"]:
+0523:                 if g["bind"] == "local" and g["file"] == tu["name"]:
+0524:                     data[g["name"]] = int(g["address"], 16)
+0525:         imports = {n.split("@")[0]: a for a, n in self.image.plt.items()}
+0526:         for s in self.image.dynsyms:
+0527:             if s.defined and s.value and s.name:
+0528:                 imports.setdefault(s.name.split("@")[0], s.value)
+0529: 
+0530:         def resolve(name):
+0531:             if name in data:
+0532:                 return data[name]
+0533:             f = self.function(name, False, tu)
+0534:             if f and any(b != "local" for n, b in zip(f["names"], f["bind"]) if n == name):
+0535:                 return int(f["address"], 16)
+0536:             f = self.function(name, True, tu)
+0537:             if f:
+0538:                 return int(f["address"], 16)
+0539:             return imports.get(name)
+0540:         return resolve
+0541: 
+0542:     def function(self, name, local=False, tu=None):
+0543:         found = self.by_name.get(name) or []
+0544:         if local:
+0545:             # Local names (__tcf_0, _GLOBAL__I_..., static functions) repeat across TUs.
+0546:             found = [f for f in found if tu is not None and f["tu"] == tu["id"]]
+0547:         return found[0] if found else None
+0548: 
+0549:     def normalized(self, f):
+0550:         """Normalized original function; cached on disk (the original never changes)."""
+0551:         with self._lock:
+0552:             cache = self.__dict__.get("_norm_cache")
+0553:             if cache is None:
+0554:                 cache = self.__dict__["_norm_cache"] = _load_norm_cache()
+0555:             key = self.image.sha256 + ":" + f["address"]
+0556:             if key not in cache:
+0557:                 start = int(f["address"], 16)
+0558:                 end = start + f["size"]
+0559:                 insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
+0560:                                                  str(self.image.path)]))
+0561:                 norm = self.side.normalize(insns, start, end)
+0562:                 cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified))}
+0563:                 _NORM_DIRTY.add(key)
+0564:             return cache[key]["norm"]
+0565: 
+0566:     def metadata_reasons(self, f):
+0567:         with self._lock:
+0568:             self.normalized(f)
+0569:             reasons = list(self._norm_cache[self.image.sha256 + ":" + f["address"]]["metadata_reasons"])
+0570:             reason = self.frames.reason(int(f["address"], 16), f["size"])
+0571:             if reason:
+0572:                 reasons.append(reason)
+0573:             return reasons
+0574: 
+0575: 
+0576: NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
+0577: _NORM_DIRTY = set()
+0578: NORMALIZER_VERSION = 2
+0579: 
+0580: 
+0581: def _norm_key():
+0582:     # Normalization depends on this file, the database and the ELF image reader.
+0583:     here = Path(__file__).resolve().parent
+0584:     return [NORMALIZER_VERSION] + [hashlib.sha256(p.read_bytes()).hexdigest()
+0585:                                    for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py",
+0586:                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
+0587: 
+0588: 
+0589: def _load_norm_cache():
+0590:     import pickle
+0591:     try:
+0592:         data = pickle.loads(NORM_CACHE.read_bytes())
+0593:         if data.get("key") == _norm_key():
+0594:             return data["functions"]
+0595:     except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError):
+0596:         pass
+0597:     return {}
+0598: 
+0599: 
+0600: def save_norm_cache(original):
+0601:     import pickle
+0602:     cache = original.__dict__.get("_norm_cache")
+0603:     if cache and _NORM_DIRTY:
+0604:         NORM_CACHE.write_bytes(pickle.dumps({"key": _norm_key(), "functions": cache}))
+0605:         _NORM_DIRTY.clear()
+0606: 
+0607: 
+0608: def tu_for_source(db, source):
+0609:     name = Path(source).name
+0610:     matches = [t for t in db["tus"] if t["name"].lower() == name.lower()]
+0611:     return matches[0] if len(matches) == 1 else None
+0612: 
+0613: 
+0614: def globalize_locals(text):
+0615:     """Make file-local symbols global so relocations keep symbol+addend (codegen unchanged)."""
+0616:     names = set()
+0617:     out = []
+0618:     declared = set(re.findall(r"^\s*\.(?:globl|weak)\s+(\S+)", text, re.M))
+0619:     for line in text.splitlines():
+0620:         m = re.match(r"^\s*\.local\s+(\S+)\s*$", line)
+0621:         if m:
+0622:             names.add(m.group(1))
+0623:             out.append(f"\t.globl\t{m.group(1)}")
+0624:             continue
+0625:         m = re.match(r"^([A-Za-z_][\w.$]*):\s*$", line)
+0626:         if m and m.group(1) not in declared:
+0627:             names.add(m.group(1))
+0628:             out.append(f"\t.globl\t{m.group(1)}")
+0629:         out.append(line)
+0630:     return "\n".join(out) + "\n", names
+0631: 
+0632: 
+0633: def compile_for_diff(source, tmp, extra=(), quiet=False):
+0634:     asm = toolchain.compile_source(source, Path(tmp) / "unit.s", extra, assembly=True, quiet=quiet)
+0635:     text, globalized = globalize_locals(Path(asm).read_text())
+0636:     patched = Path(tmp) / "unit.global.s"
+0637:     patched.write_text(text)
+0638:     return toolchain.assemble(patched, Path(tmp) / "unit.o"), globalized
+0639: 
+0640: 
+0641: def code_digest(norm):
+0642:     """Progress fingerprint of normalized instructions, not full object identity.
+0643: 
+0644:     Acceptance evidence must use object_digest, which includes data, EH and
+0645:     relocations as well as code.
+0646:     """
+0647:     return hashlib.sha256("\n".join(norm).encode()).hexdigest()[:16]
+0648: 
+0649: 
+0650: def compare_source(source, original, show=None, extra=(), quiet=False):
+0651:     """quiet: compiler errors go into the SystemExit message instead of stderr."""
+0652:     tu = tu_for_source(original.db, source)
+0653:     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
+0654:         obj, globalized = compile_for_diff(source, tmp, extra, quiet)
+0655:         object_digest = hashlib.sha256(Path(obj).read_bytes()).hexdigest()
+0656:         ours = object_functions(obj, original.resolver(tu), original.side.name_at, globalized)
+0657:         unknown = original.unknown_references(obj)
+0658:     rows = []
+0659:     seen = set()
+0660:     for name, mine in sorted(ours.items()):
+0661:         f = original.function(name, mine["bind"] == elfimage.STB_LOCAL, tu)
+0662:         if not f:
+0663:             rows.append({"name": name, "status": "EXTRA", "size": mine["size"],
+0664:                          "object_digest": object_digest})
+0665:             continue
+0666:         theirs = original.normalized(f)
+0667:         metadata_reasons = list(dict.fromkeys(mine["metadata_reasons"] + original.metadata_reasons(f)))
+0668:         if mine["personalities"] != original.frames.personalities(int(f["address"], 16), f["size"]):
+0669:             metadata_reasons.append("EH personality differs")
+0670:         seen.add(f["address"])
+0671:         if mine["norm"] == theirs and not metadata_reasons:
+0672:             status, score = "MATCH", 1.0
+0673:         else:
+0674:             score = difflib.SequenceMatcher(None, mine["norm"], theirs, autojunk=False).ratio()
+0675:             status = "DIFF"
+0676:         row = {"name": name, "demangled": f["demangled"], "address": f["address"], "status": status,
+0677:                "score": round(score, 4), "size": mine["size"], "original_size": f["size"],
+0678:                "weak": mine["bind"] == elfimage.STB_WEAK, "code": code_digest(mine["norm"]),
+0679:                "object_digest": object_digest}
+0680:         if metadata_reasons:
+0681:             row["metadata_reasons"] = metadata_reasons
+0682:         rows.append(row)
+0683:         if show and (show == "all" or show in (name, f["demangled"])):
+0684:             print(f"--- ours {name}\n+++ original {f['address']} {f['demangled']}")
+0685:             for line in difflib.unified_diff(mine["norm"], theirs, lineterm="", n=1000):
+0686:                 if not line.startswith(("---", "+++")):
+0687:                     print(line)
+0688:     if tu:
+0689:         for address, f in original.db["functions"].items():
+0690:             if f["tu"] == tu["id"] and address not in seen and f["kind"] not in ("compiler", "inline_or_template"):
+0691:                 rows.append({"name": f["mangled"], "demangled": f["demangled"], "address": address,
+0692:                              "status": "MISSING", "original_size": f["size"], "object_digest": object_digest})
+0693:     return {"source": str(Path(source).resolve().relative_to(ROOT)) if Path(source).resolve().is_relative_to(ROOT) else str(source),
+0694:             "tu": tu["name"] if tu else None, "functions": rows,
+0695:             "object_digest": object_digest,
+0696:             "unknown": [{"name": n, "known": original.known_overloads(n)} for n in unknown]}
+0697: 
+0698: 
+0699: def report(result):
+0700:     print(f"{result['source']}  (original TU: {result['tu'] or '?'})")
+0701:     for row in result["functions"]:
+0702:         label = row.get("demangled") or row["name"]
+0703:         score = f"{row['score'] * 100:5.1f}%" if "score" in row else "     "
+0704:         weak = " (inline)" if row.get("weak") else ""
+0705:         print(f"  {row['status']:7} {score} {row.get('address', ''):>9} {label}{weak}")
+0706:         for reason in row.get("metadata_reasons", []):
+0707:             print(f"          {reason}")
+0708:     counts = {}
+0709:     for row in result["functions"]:
+0710:         counts[row["status"]] = counts.get(row["status"], 0) + 1
+0711:     for ref in result.get("unknown", []):
+0712:         print(f"  UNKNOWN {ref['name']}: not in the original; it has: {'; '.join(ref['known']) or 'no such member'}")
+0713:     print("  " + ", ".join(f"{k} {v}" for k, v in sorted(counts.items())))
+0714: 
+0715: 
+0716: def main():
+0717:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0718:     parser.add_argument("sources", nargs="*", type=Path)
+0719:     parser.add_argument("--all", action="store_true", help="every decomp/src/**/*.cpp")
+0720:     parser.add_argument("--show", help="mangled/demangled name or 'all': print normalized diff")
+0721:     parser.add_argument("--json", type=Path)
+0722:     parser.add_argument("--elf", type=Path, default=None)
+0723:     args = parser.parse_args()
+0724:     sources = list(args.sources)
+0725:     if args.all:
+0726:         sources += sorted(SRC.rglob("*.cpp"))
+0727:     if not sources:
+0728:         parser.error("no sources")
+0729:     original = Original(elf=args.elf)
+0730:     results = [compare_source(s, original, args.show) for s in sources]
+0731:     save_norm_cache(original)
+0732:     for r in results:
+0733:         report(r)
+0734:     if args.json:
+0735:         args.json.parent.mkdir(parents=True, exist_ok=True)
+0736:         args.json.write_text(json.dumps({"schema": 1, "elf": original.image.sha256, "units": results}, indent=1))
+0737:     bad = sum(1 for r in results for f in r["functions"] if f["status"] == "DIFF")
+0738:     return 1 if bad and not args.show else 0
+0739: 
+0740: 
+0741: if __name__ == "__main__":
+0742:     sys.exit(main())

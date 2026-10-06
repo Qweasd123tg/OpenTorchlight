@@ -1,0 +1,9 @@
+{
+  "proof_type": "real candidate decision and cache; compiler/digest mocked with explicit records",
+  "first_nonincremental": "DIFF",
+  "second_incremental": "DIFF",
+  "second_used_cache": true,
+  "fresh_incremental": "MATCH",
+  "detected": true,
+  "probe_completed": true
+}

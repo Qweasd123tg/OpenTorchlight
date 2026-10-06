@@ -1,0 +1,156 @@
+SOURCE tools/decomp/candidate.py
+SHA256 a9757e73ce42f39a3f6013b4554ec3c50dd549a9fb9121995cffbfbe7b8e643e
+
+0001: #!/usr/bin/env python3
+0002: """Compile and accept a deterministic full-TU candidate without model calls.
+0003: 
+0004:     python3 tools/decomp/candidate.py T.cpp --input candidate/T.cpp
+0005:     python3 tools/decomp/candidate.py T.cpp --provider trial
+0006: 
+0007: Diagnostics and rejected bodies stay in build-decomp/attempts. --publish
+0008: requires final MATCH for all definitions, followed by the whole headless suite.
+0009: Trial builds with permissive flags are never acceptance evidence.
+0010: """
+0011: import argparse
+0012: import hashlib
+0013: import json
+0014: import os
+0015: from pathlib import Path
+0016: import re
+0017: 
+0018: import elfdb
+0019: import evidence
+0020: import objdiff
+0021: import promote
+0022: import publication
+0023: 
+0024: 
+0025: def failure_class(message):
+0026:     """Stable cause groups for repairing shared rules instead of paying per body."""
+0027:     lines = [line for line in message.splitlines() if "error:" in line]
+0028:     normalized = re.sub(r"(?:/[^\s:]+)+:\d+(?::\d+)?", "<source>", "\n".join(lines) or message)
+0029:     normalized = re.sub(r"\b(?:param_|local_|uVar|iVar|pVar)\w*\b", "<temporary>", normalized)
+0030:     return hashlib.sha256(normalized.encode()).hexdigest()[:16], normalized
+0031: 
+0032: 
+0033: def evaluate(tu, source, publish=False, root=elfdb.ROOT, stage=None, incremental=False):
+0034:     db = elfdb.load_db()
+0035:     if tu not in {t["name"] for t in db["tus"] if t["kind"] == "game"}:
+0036:         raise ValueError(f"unknown game TU: {tu}")
+0037:     candidate = Path(source).read_bytes()
+0038:     inputs = evidence.input_digest(db)
+0039:     proposal = json.dumps(publication.tree_state(stage.path), sort_keys=True).encode() if stage else b""
+0040:     key = hashlib.sha256(tu.encode() + b"\0" + candidate + inputs.encode() + proposal).hexdigest()
+0041:     failures = root / "build-decomp/candidate-failures"
+0042:     failures.mkdir(parents=True, exist_ok=True)
+0043:     cached = failures / f"{key}.json"
+0044:     if cached.exists():
+0045:         result = json.loads(cached.read_text())
+0046:         result["cached_failure"] = True
+0047:         return result
+0048:     stage = stage or publication.Stage(root)
+0049:     target = stage.path / "decomp/src" / tu
+0050:     target.parent.mkdir(parents=True, exist_ok=True)
+0051:     target.write_bytes(candidate)
+0052:     result = {"schema": 1, "tu": tu, "provider": "deterministic", "attempt": str(stage.path),
+0053:               "input_digest": inputs, "candidate_sha256": hashlib.sha256(candidate).hexdigest(),
+0054:               "published": False}
+0055:     try:
+0056:         with stage.activate():
+0057:             os.environ["OTL_EXTRA_INCLUDE"] = str(stage.path / "build-decomp/include-gen")
+0058:             original = objdiff.Original(db=db)
+0059:             diagnostic = objdiff.compare_source(target, original, quiet=True)
+0060:             promote.promote(target, regenerate=False)
+0061:             os.environ.pop("OTL_EXTRA_INCLUDE", None)
+0062:             final = objdiff.compare_source(target, original, quiet=True)
+0063:             result.update(diagnostic_object=diagnostic["object_digest"], final_object=final["object_digest"],
+0064:                           final_object_changed=diagnostic["object_digest"] != final["object_digest"],
+0065:                           functions=final["functions"], unknown=final.get("unknown", []))
+0066:             definitions = [r for r in final["functions"] if r["status"] != "MISSING" and not r.get("weak")]
+0067:             prior = {}
+0068:             if incremental and (root / "decomp/src" / tu).exists():
+0069:                 # Compare the actual original context, with its actual hand headers.
+0070:                 saved_root, saved_extra = os.environ.pop("OTL_INCLUDE_ROOT", None), os.environ.pop("OTL_EXTRA_INCLUDE", None)
+0071:                 try:
+0072:                     prior = {r["address"]: r for r in objdiff.compare_source(root / "decomp/src" / tu, original, quiet=True)["functions"]
+0073:                              if r.get("address") and r["status"] != "MISSING" and not r.get("weak")}
+0074:                 finally:
+0075:                     if saved_root is not None:
+0076:                         os.environ["OTL_INCLUDE_ROOT"] = saved_root
+0077:                     if saved_extra is not None:
+0078:                         os.environ["OTL_EXTRA_INCLUDE"] = saved_extra
+0079:             added = [r for r in definitions if r.get("address") not in prior]
+0080:             result["new_matched"] = [r["address"] for r in added if r.get("address") and r["status"] == "MATCH"]
+0081:             preserved = preserve_existing(root / "decomp/src" / tu, target, prior, definitions, db) if prior else True
+0082:             if (not definitions or not added or any(r["status"] != "MATCH" for r in added)
+0083:                     or not preserved or final.get("unknown")):
+0084:                 result["status"] = "DIFF"
+0085:                 result["reason"] = "final TU requires behavioral evidence; instruction percentage cannot publish it"
+0086:             else:
+0087:                 result["status"] = "MATCH"
+0088:         if publish and result["status"] == "MATCH":
+0089:             stage.validate()
+0090:             if evidence.input_digest(db) != inputs:
+0091:                 raise RuntimeError("inputs changed during candidate validation")
+0092:             result["files"] = stage.publish()
+0093:             result["published"] = True
+0094:     except (SystemExit, RuntimeError) as error:
+0095:         result["status"] = "ERROR"
+0096:         result["reason"] = str(error)
+0097:         result["failure_class"], result["compiler_diagnostics"] = failure_class(str(error))
+0098:     (stage.path / "result.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+0099:     if result["status"] != "MATCH":
+0100:         temporary = cached.with_suffix(f".{os.getpid()}.tmp")
+0101:         temporary.write_text(json.dumps(result, indent=1, ensure_ascii=False))
+0102:         os.replace(temporary, cached)
+0103:     return result
+0104: 
+0105: 
+0106: def preserve_existing(before, after, prior, definitions, db):
+0107:     """Do not replace existing source bodies or change their compiler context silently."""
+0108:     import mutate
+0109:     old, new = before.read_text(), after.read_text()
+0110:     old_mask, new_mask = mutate.mask(old), mutate.mask(new)
+0111:     final = {r["address"]: r for r in definitions if r.get("address")}
+0112:     for address, row in prior.items():
+0113:         other = final.get(address)
+0114:         if not other or (row["status"] == "MATCH" and other["status"] != "MATCH"):
+0115:             return False
+0116:         if row["status"] != "MATCH":
+0117:             if row.get("code") != other.get("code") or row.get("metadata_reasons") != other.get("metadata_reasons"):
+0118:                 return False
+0119:             function = db["functions"].get(address)
+0120:             if function and function.get("kind") == "compiler":
+0121:                 continue  # no source definition; identical normalized code/data and metadata above
+0122:             a = mutate.definition(old, old_mask, function) if function else None
+0123:             b = mutate.definition(new, new_mask, function) if function else None
+0124:             if not a or not b or old[a[0]:a[1] + 1] != new[b[0]:b[1] + 1]:
+0125:                 return False
+0126:     return True
+0127: 
+0128: 
+0129: def main():
+0130:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0131:     parser.add_argument("tu")
+0132:     parser.add_argument("--input", type=Path)
+0133:     parser.add_argument("--provider", choices=("trial",), help="use the converted TU from draft_trial.py")
+0134:     parser.add_argument("--publish", action="store_true")
+0135:     args = parser.parse_args()
+0136:     if bool(args.input) == bool(args.provider):
+0137:         parser.error("choose exactly one deterministic provider: --input or --provider trial")
+0138:     import parallel
+0139:     if args.publish and (owner := parallel.owned_by_others(args.tu)):
+0140:         parser.error(f"{args.tu} belongs to {owner}; set OTL_OWNER")
+0141:     source = args.input or elfdb.ROOT / "build-decomp/trial" / args.tu
+0142:     if args.provider:
+0143:         import ghidra_draft
+0144:         state, reasons = ghidra_draft.draft_state(args.tu, elfdb.load_db())
+0145:         if state != "fresh":
+0146:             parser.error(f"draft provider unavailable ({state}): {'; '.join(reasons)}")
+0147:     result = evaluate(args.tu, source, args.publish)
+0148:     print(json.dumps(result, indent=1, ensure_ascii=False))
+0149:     return 0 if result["status"] == "MATCH" else 1
+0150: 
+0151: 
+0152: if __name__ == "__main__":
+0153:     raise SystemExit(main())

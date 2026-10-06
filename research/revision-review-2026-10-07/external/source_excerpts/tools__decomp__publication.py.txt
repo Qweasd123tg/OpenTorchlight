@@ -1,0 +1,153 @@
+SOURCE tools/decomp/publication.py
+SHA256 9dde69f74f4a448ae5eaf8dbd1ec8a9a915875a4ce98f211d472ae1ad5eb6a40
+
+0001: """Isolated TU attempts and checked, locked publication of source and headers."""
+0002: from contextlib import contextmanager
+0003: import fcntl
+0004: import hashlib
+0005: import os
+0006: from pathlib import Path
+0007: import shutil
+0008: import tempfile
+0009: 
+0010: import elfdb
+0011: import toolchain
+0012: 
+0013: 
+0014: @contextmanager
+0015: def tree_lock(root=elfdb.ROOT, exclusive=False):
+0016:     path = root / "build-decomp" / "publication.lock"
+0017:     path.parent.mkdir(parents=True, exist_ok=True)
+0018:     with path.open("a+") as stream:
+0019:         fcntl.flock(stream, fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH)
+0020:         try:
+0021:             yield
+0022:         finally:
+0023:             fcntl.flock(stream, fcntl.LOCK_UN)
+0024: 
+0025: 
+0026: def tree_state(root):
+0027:     return {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+0028:             for base in (root / "decomp/src", root / "decomp/include")
+0029:             for p in sorted(base.rglob("*")) if p.is_file()}
+0030: 
+0031: 
+0032: class Stage:
+0033:     def __init__(self, root=elfdb.ROOT):
+0034:         self.root = root
+0035:         work = root / "build-decomp" / "attempts"
+0036:         work.mkdir(parents=True, exist_ok=True)
+0037:         self.path = Path(tempfile.mkdtemp(prefix="tu-", dir=work))
+0038:         with tree_lock(root):
+0039:             self.baseline = tree_state(root)
+0040:             shutil.copytree(root / "decomp", self.path / "decomp")
+0041:         build = self.path / "build-decomp"
+0042:         build.mkdir()
+0043:         for name in ("include-gen", "drafts", "types.json", "examples.json"):
+0044:             source = root / "build-decomp" / name
+0045:             if source.is_dir():
+0046:                 shutil.copytree(source, build / name)
+0047:             elif source.exists():
+0048:                 shutil.copy2(source, build / name)
+0049:         for name in ("db", "scaffold"):
+0050:             source = root / "build-decomp" / name
+0051:             if source.exists():
+0052:                 (build / name).symlink_to(source, target_is_directory=True)
+0053: 
+0054:     @contextmanager
+0055:     def activate(self):
+0056:         import autotest
+0057:         import descriptors
+0058:         import ghidra_cpp
+0059:         import headers
+0060:         import llm_loop
+0061:         import promote
+0062:         import properties
+0063:         replacements = [(llm_loop, "ROOT", self.path), (headers, "ROOT", self.path),
+0064:                         (ghidra_cpp, "ROOT", self.path), (ghidra_cpp, "_SRET", None), (ghidra_cpp, "_SRET_INPUT", None),
+0065:                         (toolchain, "CC_CACHE", self.path / "build-decomp/cc-cache"),
+0066:                         (headers, "INCLUDE", self.path / "decomp/include"),
+0067:                         (headers, "OUT", self.path / "build-decomp/include-gen"),
+0068:                         (headers, "DRAFTS", self.path / "build-decomp/drafts"),
+0069:                         (headers, "TYPES", self.path / "build-decomp/types.json"),
+0070:                         (promote, "INCLUDE", self.path / "decomp/include"),
+0071:                         (promote, "GEN", self.path / "build-decomp/include-gen"),
+0072:                         (autotest, "ROOT", self.path),
+0073:                         (autotest, "TYPES", self.path / "build-decomp/types.json"),
+0074:                         (autotest, "OUT", self.path / "build-decomp/hybrid/autotests")]
+0075:         for module in (descriptors, properties):
+0076:             replacements.extend([(module, "ROOT", self.path), (module, "INCLUDE", self.path / "decomp/include"),
+0077:                                  (module, "SRC", self.path / "decomp/src")])
+0078:         replacements.append((descriptors, "GEN", self.path / "build-decomp/include-gen"))
+0079:         saved = [(module, name, getattr(module, name)) for module, name, _ in replacements]
+0080:         environment = {k: os.environ.get(k) for k in ("OTL_INCLUDE_ROOT", "OTL_EXTRA_INCLUDE",
+0081:                                                      "OTL_SELFTEST_TIMEOUT", "OTL_AUTOTEST")}
+0082:         for module, name, value in replacements:
+0083:             setattr(module, name, value)
+0084:         os.environ["OTL_INCLUDE_ROOT"] = str(self.path)
+0085:         try:
+0086:             yield self
+0087:         finally:
+0088:             for module, name, value in saved:
+0089:                 setattr(module, name, value)
+0090:             for key, value in environment.items():
+0091:                 if value is None:
+0092:                     os.environ.pop(key, None)
+0093:                 else:
+0094:                     os.environ[key] = value
+0095: 
+0096:     def validate(self):
+0097:         """Check every final TU and the complete headless suite before publishing."""
+0098:         import hybrid
+0099:         import objdiff
+0100:         with self.activate():
+0101:             os.environ.pop("OTL_EXTRA_INCLUDE", None)
+0102:             original = objdiff.Original()
+0103:             sources = sorted((self.path / "decomp/src").rglob("*.cpp"))
+0104:             units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True), sources)
+0105:             if any(unit.get("unknown") for unit in units):
+0106:                 raise RuntimeError("final sources contain unknown original signatures")
+0107:             count = len(list((self.path / "decomp/hybrid/tests").glob("*.cpp")))
+0108:             shards = max(1, int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs()))
+0109:             os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 20 * ((count + shards - 1) // shards)))
+0110:             blob, loader = hybrid.build(out=self.path / "build-decomp/hybrid/final", src=self.path / "decomp/src",
+0111:                                         tests=sorted((self.path / "decomp/hybrid/tests").glob("*.cpp")), verbose=False)
+0112:             code, report = hybrid.selftest(blob, loader)
+0113:             if code:
+0114:                 raise RuntimeError("final headless selftest failed:\n" + "\n".join(report))
+0115:         self.validated = tree_state(self.path)
+0116: 
+0117:     def publish(self):
+0118:         if getattr(self, "validated", None) != tree_state(self.path):
+0119:             raise RuntimeError("publication requires validation of the unchanged final tree")
+0120:         final = tree_state(self.path)
+0121:         changed = [name for name in sorted(set(final) | set(self.baseline))
+0122:                    if final.get(name) != self.baseline.get(name)]
+0123:         with tree_lock(self.root, exclusive=True):
+0124:             if tree_state(self.root) != self.baseline:
+0125:                 raise RuntimeError("source/header tree changed during the attempt; rebase and validate again")
+0126:             originals = {name: (self.root / name).read_bytes() if (self.root / name).exists() else None
+0127:                          for name in changed}
+0128:             try:
+0129:                 for name in changed:
+0130:                     self._replace(name, (self.path / name).read_bytes() if name in final else None)
+0131:             except BaseException:
+0132:                 for name, data in originals.items():
+0133:                     self._replace(name, data)
+0134:                 raise
+0135:         return changed
+0136: 
+0137:     def _replace(self, name, data):
+0138:         target = self.root / name
+0139:         if data is None:
+0140:             target.unlink(missing_ok=True)
+0141:             return
+0142:         target.parent.mkdir(parents=True, exist_ok=True)
+0143:         fd, temporary = tempfile.mkstemp(prefix=".publish-", dir=target.parent)
+0144:         try:
+0145:             with os.fdopen(fd, "wb") as stream:
+0146:                 stream.write(data)
+0147:             os.chmod(temporary, target.stat().st_mode & 0o777 if target.exists() else 0o644)
+0148:             os.replace(temporary, target)
+0149:         finally:
+0150:             Path(temporary).unlink(missing_ok=True)

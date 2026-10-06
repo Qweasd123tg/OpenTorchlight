@@ -1,0 +1,28 @@
+{
+  "scope": "two identical isolated Equipment.cpp backend assembly compilations; fresh preprocessing each time, no full game check",
+  "rows": [
+    {
+      "attempt": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/attempts/tu-0xgax55d",
+      "seconds": 4.449502649000351,
+      "stats": {
+        "hit": 0,
+        "miss": 1,
+        "fallback": 0
+      }
+    },
+    {
+      "attempt": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/attempts/tu-zis648ug",
+      "seconds": 0.18722497400085558,
+      "stats": {
+        "hit": 1,
+        "miss": 1,
+        "fallback": 0
+      }
+    },
+    {
+      "identical_assembly": true
+    }
+  ],
+  "cold_seconds": 3.82889839100244,
+  "shared_equals_uncached_original_assembly": true
+}

@@ -59,7 +59,8 @@ static void host_log(const char *fmt, ...)
     va_end(ap);
 }
 
-static const tlhybrid_host g_host = {TLHYBRID_ABI_VERSION, host_log};
+static int comparison_pair(uint64_t original, uint64_t replacement);
+static const tlhybrid_host g_host = {TLHYBRID_ABI_VERSION, host_log, comparison_pair};
 
 struct blob {
     unsigned char *file;
@@ -68,6 +69,7 @@ struct blob {
     const Elf64_Shdr *sh;
     const char *shstr;
 };
+static const struct blob *g_test_blob;
 
 static const Elf64_Shdr *find_section(const struct blob *b, const char *name)
 {
@@ -75,6 +77,20 @@ static const Elf64_Shdr *find_section(const struct blob *b, const char *name)
         if (strcmp(b->shstr + b->sh[i].sh_name, name) == 0)
             return &b->sh[i];
     return NULL;
+}
+
+static int comparison_pair(uint64_t original, uint64_t replacement)
+{
+    if (!g_test_blob || !original || original == replacement)
+        return 0;
+    const Elf64_Shdr *s = find_section(g_test_blob, ".tlhybrid.hooks");
+    if (!s)
+        return 0;
+    const tlhybrid_hook *hooks = (const tlhybrid_hook *)s->sh_addr;
+    for (size_t i = 0; i < s->sh_size / sizeof(*hooks); ++i)
+        if (hooks[i].original == original && hooks[i].replacement == replacement)
+            return 1;
+    return 0;
 }
 
 static void load_blob(struct blob *b, const char *path)
@@ -198,6 +214,7 @@ static int name_selected(const char *name, const char *prefixes)
 
 static int run_tests(const struct blob *b)
 {
+    g_test_blob = b;
     const Elf64_Shdr *s = find_section(b, ".tlhybrid.tests");
     if (!s) {
         fprintf(stderr, "tlhybrid: no tests in blob\n");

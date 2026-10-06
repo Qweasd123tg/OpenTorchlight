@@ -1,0 +1,109 @@
+SOURCE tools/decomp/standalone.py
+SHA256 04e97c6496e2d60edb09245ecd78da62c1835e3c061c58c02f8fa0f6d7ff750f
+
+0001: #!/usr/bin/env python3
+0002: """Link-only residual without originals.ld, hooks or original data redirects.
+0003: 
+0004:     python3 tools/decomp/standalone.py [--tu T.cpp] [--library /pinned/library.so]
+0005: 
+0006: Builds ordinary GCC 4.4 objects. A failed link is the expected remaining work;
+0007: no unresolved symbol is replaced by a stub or an original ELF address.
+0008: Even a closed link-only slice is not evidence of a runnable standalone game.
+0009: """
+0010: import argparse
+0011: import hashlib
+0012: import json
+0013: from pathlib import Path
+0014: import subprocess
+0015: 
+0016: import elfdb
+0017: import elfimage
+0018: import hybrid
+0019: import publication
+0020: import toolchain
+0021: 
+0022: 
+0023: def classify(names, db, image):
+0024:     game = {t["id"] for t in db["tus"] if t["kind"] == "game"}
+0025:     functions = {n for f in db["functions"].values() if f["tu"] in game for n in f["names"]}
+0026:     files = {t["name"] for t in db["tus"] if t["kind"] == "game"}
+0027:     data = {g["name"] for g in db["globals"] if g.get("file") in files}
+0028:     external = {s.name.split("@")[0] for s in image.dynsyms if not s.defined}
+0029:     rows = {key: [] for key in ("game_functions", "game_data", "rtti", "vtables", "library_imports", "unknown")}
+0030:     for name in sorted(names):
+0031:         kind = ("game_functions" if name in functions else "game_data" if name in data else
+0032:                 "rtti" if name.startswith(("_ZTI", "_ZTS")) else "vtables" if name.startswith(("_ZTV", "_ZTT")) else
+0033:                 "library_imports" if name in external else "unknown")
+0034:         rows[kind].append(name)
+0035:     return rows
+0036: 
+0037: 
+0038: def inspect(tus=(), libraries=(), out=None):
+0039:     root = elfdb.ROOT
+0040:     out = out or root / "build-decomp/standalone"
+0041:     out.mkdir(parents=True, exist_ok=True)
+0042:     db = elfdb.load_db()
+0043:     image = elfimage.load(elfdb.default_elf())
+0044:     if image.sha256 != elfimage.ORIGINAL_SHA256:
+0045:         raise RuntimeError("original ELF identity changed")
+0046:     sources = sorted((root / "decomp/src").rglob("*.cpp"))
+0047:     if tus:
+0048:         unknown = set(tus) - {p.name for p in sources}
+0049:         if unknown:
+0050:             raise ValueError("no source for " + ", ".join(sorted(unknown)))
+0051:         sources = [p for p in sources if p.name in tus]
+0052:     if not sources:
+0053:         raise ValueError("no source slice")
+0054:     libraries = [Path(p).resolve(strict=True) for p in libraries]
+0055:     versions = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in libraries}
+0056:     def compile_unit(source):
+0057:         # Ordinary objects retain source data and static initialization.
+0058:         path = out / (source.name + ".o")
+0059:         toolchain.compile_source(source, path, quiet=True, cache=False)
+0060:         return path
+0061:     with publication.tree_lock():
+0062:         snapshot = publication.tree_state(root)
+0063:         objects = toolchain.parallel_map(compile_unit, sources)
+0064:         defined, undefined, initializers, locals_ = set(), set(), set(), []
+0065:         for path in objects:
+0066:             obj = elfimage.load_object(path)
+0067:             defined |= hybrid.defined_symbols(path)
+0068:             undefined |= hybrid.undefined_symbols(path)
+0069:             initializers |= {s.name for s in obj.symbols if s.defined and s.name.startswith(("_GLOBAL__I_", "_GLOBAL__sub_I"))}
+0070:             locals_ += [{"object": path.name, "symbol": s.name, "size": s.size} for s in obj.symbols
+0071:                         if s.defined and s.bind == elfimage.STB_LOCAL and s.type == elfimage.STT_OBJECT]
+0072:         unresolved = undefined - defined
+0073:         output = out / "link-only.elf"
+0074:         output.unlink(missing_ok=True)  # never leave a previous success next to a failed probe
+0075:         command = ["ld", "-nostdlib", "-e", "0", "--build-id=none", "-o", str(output),
+0076:                    *map(str, objects), *map(str, libraries)]
+0077:         result = subprocess.run(command, capture_output=True, text=True)
+0078:         if snapshot != publication.tree_state(root):
+0079:             raise RuntimeError("source/header tree changed during link probe")
+0080:     report = {"schema": 1, "original_elf_sha256": image.sha256,
+0081:               "sources_sha256": {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
+0082:               "libraries_sha256": versions, "command": command, "link_exit": result.returncode,
+0083:               "link_closed": result.returncode == 0, "standalone_game_verified": False,
+0084:               "residual_before_libraries": classify(unresolved, db, image),
+0085:               "static_initializers": sorted(initializers), "local_static_data": locals_,
+0086:               "diagnostics": result.stderr, "no_original_resolution": True,
+0087:               "limitation": "link-only probe, entrypoint 0; no process execution or behavioral parity inferred"}
+0088:     (out / "report.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n")
+0089:     return report
+0090: 
+0091: 
+0092: def main():
+0093:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0094:     parser.add_argument("--tu", action="append", default=[])
+0095:     parser.add_argument("--library", action="append", default=[])
+0096:     parser.add_argument("--out", type=Path)
+0097:     args = parser.parse_args()
+0098:     report = inspect(args.tu, args.library, args.out)
+0099:     print(json.dumps({"link_exit": report["link_exit"], "link_closed": report["link_closed"],
+0100:                       "standalone_game_verified": False,
+0101:                       "residual": {k: len(v) for k, v in report["residual_before_libraries"].items()}}, indent=1))
+0102:     # A nonzero link is a reported residual, not a failed inspection command.
+0103: 
+0104: 
+0105: if __name__ == "__main__":
+0106:     main()

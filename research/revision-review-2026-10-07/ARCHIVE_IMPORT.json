@@ -1,0 +1,699 @@
+{
+ "schema": 1,
+ "archive_path": "/home/qweasd123tg/Загрузки/OpenTorchlight_revision_review.zip",
+ "archive_sha256": "5b8a967bcc04618f9363260b25ae24712f2ebd8dbe2d6f5565dd43f26b9272e7",
+ "package_checksum_entries_verified": 114,
+ "files": [
+  {
+   "path": "OpenTorchlight_revision_review/IMPLEMENTATION_ADDENDUM_RU.txt",
+   "bytes": 9031,
+   "sha256": "94048c2faf8acc37b9f2efb7e68ea4d519c384af73f6aedebbd09c791928a4db",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/README.md",
+   "bytes": 1174,
+   "sha256": "34684176fa29d9abf30694cbbed2785af60be76c33ef3584ed0aa4616bb226d0",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/REPORT_RU.md",
+   "bytes": 31893,
+   "sha256": "e3bea5338521559a2b5edeadc51bb91cd155a4dd773fc53c9b9f17f45d4f9806",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/archive_diff.json",
+   "bytes": 97004,
+   "sha256": "71867ede26d50e08962370adf747f9db1bbc3b9e3f075aef6f2ec3f2610f50a9",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/new_manifest.json",
+   "bytes": 542503,
+   "sha256": "c3ad6e4883858341bf1679707fadb0dcb4d3cd441d0badfbefefe3eabde47196",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/probes/jump_tables.py",
+   "bytes": 5021,
+   "sha256": "4c60e0d7bff6ecb06ee542af5fd6a49b0a706b4dbb2e851a7a01291f4b8f34f3",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/probes/review.py",
+   "bytes": 18691,
+   "sha256": "fe22a4b7e18c69988c683d9669aa3201b5c11676b07ff010aa1fad1702e44075",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/probes/run_existing.py",
+   "bytes": 2359,
+   "sha256": "6ed25f156854b61aca806fdd04f5440481cbba6f7656958e747696916e0dfbdd",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/existing-eligible.txt",
+   "bytes": 13880,
+   "sha256": "a492c10ff9ace33d0cebfb75b882256a7fdf8369bb4f5232a4acf1ef091d19a2",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/existing-summary.json",
+   "bytes": 3513,
+   "sha256": "dfa2515e213958b63b2383695c5d1539dfd5ce74df52bddddc06ceae6fb7e2e8",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/existing-tests.txt",
+   "bytes": 14639,
+   "sha256": "d477133e37897a40c0be5dbdb8fbd3a8eb0656b2a91d09a0219e232e6efed497",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/inventory.json",
+   "bytes": 3282,
+   "sha256": "c00e00268fe445c721274437aafad393b7f21cc583c2055a28bf09d5cbda3671",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/internal_targets/Probe.cpp",
+   "bytes": 38,
+   "sha256": "8cbcae31cdab1bf92e723b388c7d12d75366a5a54390b55bde10d01e597082de",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/internal_targets/main.cpp",
+   "bytes": 241,
+   "sha256": "c290eb4302fd7f0d4f65152036096052d0ea85648f3c8f979bf2cfae4dca2648",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/internal_targets/v0.s",
+   "bytes": 468,
+   "sha256": "b6272c10c4ac47f038a5cc2c210af70f4dac1970675731d259ed9efe373ff100",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/internal_targets/v1.s",
+   "bytes": 468,
+   "sha256": "768a4c20194b13c81dbf698e1517affea58ca0aee385297891aae12a2cd8b1fb",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/outside_target/Probe.cpp",
+   "bytes": 38,
+   "sha256": "8cbcae31cdab1bf92e723b388c7d12d75366a5a54390b55bde10d01e597082de",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/outside_target/main.cpp",
+   "bytes": 241,
+   "sha256": "c290eb4302fd7f0d4f65152036096052d0ea85648f3c8f979bf2cfae4dca2648",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/outside_target/v0.s",
+   "bytes": 330,
+   "sha256": "a376a163d35790016915319c162d3a87c4d9187a1c8b36e771dfcbf6d60e8dbe",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/outside_target/v1.s",
+   "bytes": 330,
+   "sha256": "5b9830758dbe0cb6ec8551bf90aefee8923c2e1523f41aa6a78791867877508a",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/results.json",
+   "bytes": 5089,
+   "sha256": "33f622493dc8df49b5e2264992ef392864ba315ecc4cdde6c33a096cd0ab825e",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/unrelated_cmp/Probe.cpp",
+   "bytes": 38,
+   "sha256": "8cbcae31cdab1bf92e723b388c7d12d75366a5a54390b55bde10d01e597082de",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/unrelated_cmp/main.cpp",
+   "bytes": 241,
+   "sha256": "c290eb4302fd7f0d4f65152036096052d0ea85648f3c8f979bf2cfae4dca2648",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/unrelated_cmp/v0.s",
+   "bytes": 519,
+   "sha256": "adfa3f218054847436ace6a9a8080d2fa2ca9a2087a5ac1a0e5f47948d895c7d",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/jump-tables/unrelated_cmp/v1.s",
+   "bytes": 519,
+   "sha256": "612e6b3c3960f8623b88a0056aae58a7f8919a5c657fe803f6621e967d6f1413",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/build-decomp/attempts/tu-ona6k4qg/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/build-decomp/attempts/tu-ona6k4qg/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/build-decomp/attempts/tu-u3nab0yo/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/build-decomp/attempts/tu-u3nab0yo/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cache-isolation/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/coverage_wiring.json",
+   "bytes": 28113,
+   "sha256": "7677c31851e899119e29f1efe2b7acee44015545f5542a1801dfd0391f12f9ec",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/crash/build-decomp/attempts/tu-fx3jh3hu/decomp/include/Unit.h",
+   "bytes": 11,
+   "sha256": "244ed9a6e9011d571f835e50d01d32053554a69dc6bb4c0f8e81610bbd33f413",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/crash/build-decomp/attempts/tu-fx3jh3hu/decomp/src/Unit.cpp",
+   "bytes": 11,
+   "sha256": "040202f366ca8469f70ff1987cb47ce0e2406eb55ec9d4b1764cac361e9ad44e",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/crash/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/crash/decomp/include/Unit.h",
+   "bytes": 11,
+   "sha256": "244ed9a6e9011d571f835e50d01d32053554a69dc6bb4c0f8e81610bbd33f413",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/crash/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/build-decomp/attempts/tu-9uybym1d/decomp/include/Shared.h",
+   "bytes": 22,
+   "sha256": "6b3236f37942fc933ff588a152b1e436f750efb01f3ffa8333876774f511b33f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/build-decomp/attempts/tu-9uybym1d/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/build-decomp/attempts/tu-9uybym1d/decomp/src/A.cpp",
+   "bytes": 70,
+   "sha256": "96326296bf48a2c0d25070d65bf9604940646181c7d09b2a8d93ef7fd99090eb",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/build-decomp/attempts/tu-9uybym1d/decomp/src/B.cpp",
+   "bytes": 64,
+   "sha256": "28da92ba0f9f5138f208a806089d9d8fdad445a3068d56f94d61936e9d8af422",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/decomp/include/Shared.h",
+   "bytes": 22,
+   "sha256": "6b3236f37942fc933ff588a152b1e436f750efb01f3ffa8333876774f511b33f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/decomp/src/A.cpp",
+   "bytes": 70,
+   "sha256": "96326296bf48a2c0d25070d65bf9604940646181c7d09b2a8d93ef7fd99090eb",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu/decomp/src/B.cpp",
+   "bytes": 64,
+   "sha256": "28da92ba0f9f5138f208a806089d9d8fdad445a3068d56f94d61936e9d8af422",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu-artifacts/selftest.cpp",
+   "bytes": 160,
+   "sha256": "d339917cb7d829d9ff99e8e5766a3b1fdfbeffceeaa5a53c4ac932d3bd98e5dd",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu-artifacts/v0.cpp",
+   "bytes": 83,
+   "sha256": "f386fa12830851e050ade9e0bced7cd3d14711afe5a3d445001397ad871c50ff",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu-artifacts/v1.cpp",
+   "bytes": 85,
+   "sha256": "37855da80197b95294f86f79de824e5c828bd88cea194a9d0949afc796ae226f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu-artifacts/v2.cpp",
+   "bytes": 83,
+   "sha256": "f386fa12830851e050ade9e0bced7cd3d14711afe5a3d445001397ad871c50ff",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross-tu-artifacts/v4.cpp",
+   "bytes": 83,
+   "sha256": "f386fa12830851e050ade9e0bced7cd3d14711afe5a3d445001397ad871c50ff",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/cross_tu_regression.json",
+   "bytes": 619,
+   "sha256": "7b642bca6fe4450ecef86e441d2809ee8e38da3c1ca3df04c691b7666c26123f",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/after/Probe.cpp",
+   "bytes": 126,
+   "sha256": "606f444b51aa3f6b647ce3e95ee82b61b7c5dd28e626b4a364e6f6e100a2d85b",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/after/Types.h",
+   "bytes": 26,
+   "sha256": "91280a69ef3d0da4bed0ee5b6c20ec3361d4b48a87aa2f64519570487f4e55ed",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/after/main.cpp",
+   "bytes": 134,
+   "sha256": "5ac7e4c1c2c825e0550a43b20ca83cfa75f924f8a0299742de78278653b498f3",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/before/Probe.cpp",
+   "bytes": 126,
+   "sha256": "606f444b51aa3f6b647ce3e95ee82b61b7c5dd28e626b4a364e6f6e100a2d85b",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/before/Types.h",
+   "bytes": 23,
+   "sha256": "1850d8acaf557cffac08d0e1eedb14c9986608ad46d7e14d1912fc36752693a9",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh/before/main.cpp",
+   "bytes": 134,
+   "sha256": "5ac7e4c1c2c825e0550a43b20ca83cfa75f924f8a0299742de78278653b498f3",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/eh_preservation.json",
+   "bytes": 1536,
+   "sha256": "095f35995c14107797c2e696d3e983dc82abbb1eceddae96b8d6611a054689ac",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/failure_cache_modes.json",
+   "bytes": 276,
+   "sha256": "c7293e29dfeb7521b16d0d802055b243115e73c4c39922179e6ff0d1acce14e7",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/independent_publications.json",
+   "bytes": 529,
+   "sha256": "141c96c207440f7a82ceee8839ee982d0db23edc433ded4693b5fd883f1a74f7",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/interrupted_publication.json",
+   "bytes": 320,
+   "sha256": "15785688168781260137f75994892d22dd02e96924970f3b68b6734730b1313a",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/build-decomp/attempts/tu-z2i9m1k1/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/build-decomp/attempts/tu-z2i9m1k1/decomp/src/Unit.cpp",
+   "bytes": 49,
+   "sha256": "33a135251570334c85f0aefe835a1a68afc4f0782a90902ce945ca422a61f48d",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/build-decomp/attempts/tu-z2i9m1k1/result.json",
+   "bytes": 704,
+   "sha256": "6bc3ff987b5d8d637462641d74179e5accd7c167c5ab7b36b8f7672ad6d3e953",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/mode-cache/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-h0tk8rz9/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-h0tk8rz9/decomp/src/A.cpp",
+   "bytes": 19,
+   "sha256": "faee66036f12fb4942b804302c92e625f2cd6735835d7f8202766adfa75e1cb0",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-h0tk8rz9/decomp/src/B.cpp",
+   "bytes": 19,
+   "sha256": "49c009ad7c6465f89e22c40f4452c7720786eb946841a22338fe66da51da1035",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-i1wul_ww/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-i1wul_ww/decomp/src/A.cpp",
+   "bytes": 19,
+   "sha256": "098563bcd7b5ff4c9e99ec7e409acd87859b4c8828f9dea3f478bdd83320fa6f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/attempts/tu-i1wul_ww/decomp/src/B.cpp",
+   "bytes": 19,
+   "sha256": "40369f4d4f4660c474f0a6d52755322391a81add2d6a6674783623532a061fec",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/decomp/src/A.cpp",
+   "bytes": 19,
+   "sha256": "098563bcd7b5ff4c9e99ec7e409acd87859b4c8828f9dea3f478bdd83320fa6f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/parallel/decomp/src/B.cpp",
+   "bytes": 19,
+   "sha256": "40369f4d4f4660c474f0a6d52755322391a81add2d6a6674783623532a061fec",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/provider_scope.json",
+   "bytes": 529,
+   "sha256": "ce568fd2fb8a5bbcb96acd0b45c9cdb76acbb179b32b437c34bd0e970bc1371f",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/build-decomp/no-llm/913168516f8c8863a9464234f5ea508453909d422e7a32cda2cd26961ca4f71d.json",
+   "bytes": 278,
+   "sha256": "641492d47f2bb8bb9b217c652d498d539c383d8bd1f4060ced900c8f36fe614c",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/build-decomp/no-llm/c6186bccbbaae53544f4c5340b774f5686273270a82dae9332b1b9b19c7a86f0.json",
+   "bytes": 278,
+   "sha256": "67a6e7d86481d2de25a3f16b9f4353a3d2ad3cb3ee82bf483282eadfb34d517c",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/build-decomp/no-llm/cbac73d8f58eff0af4de5502d8d2cca32cca8c584d4b7e019fb51191e250e293.json",
+   "bytes": 278,
+   "sha256": "a3103482752f15ce70c6f5cfcf2f2649bacf088d5af9b5880da7679103c389ac",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/build-decomp/no-llm/ea83ea0f133978e926cf11cf1777c49666f9272e5ef26669bdf57edc5b352a9f.json",
+   "bytes": 277,
+   "sha256": "c9d1b9a5700587dbfce2e297c19c899f4985fc3c09b68055cdcfc04077d419ea",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/build-decomp/no-llm/latest.json",
+   "bytes": 509,
+   "sha256": "4690e640136eb0d7e027d7dce3a391059b8d33f9f269bfe1f45ec703fa9df4be",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue/decomp/src/Unit.cpp",
+   "bytes": 26,
+   "sha256": "34a6b5c7535d68b4276d24eb98702875d200503d2537c888fd9ae833e2b5e883",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/queue_progress.json",
+   "bytes": 4739,
+   "sha256": "95881c9165bee9c7dd65839fbc96993e5d1cd7ecc1e12e98ebbab19d34b1af4f",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/stage_cache.json",
+   "bytes": 1717,
+   "sha256": "1bfa190a4aa363a1a6085e4917d8e3dedc6d021dc6a92d76b006b02a9c76f975",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/summary.json",
+   "bytes": 44212,
+   "sha256": "7d9c811ac9dc99921d95a273062c5e0e1d84ceaf1acd6c46690ace94dd83c44d",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/attempts/tu-tzjcp1gr/decomp/config.json",
+   "bytes": 34,
+   "sha256": "e5480b819f5e27a03e40276f84021272518ecd3107d5d440a3cdd96d6bbffe30",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/attempts/tu-tzjcp1gr/decomp/hybrid/tests/Control.cpp",
+   "bytes": 28,
+   "sha256": "87e2cfb604cbe2a4a80ce27e9190c5f351dee7b9b9102e212c64114b92de2936",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/attempts/tu-tzjcp1gr/decomp/hybrid/tests/New.cpp",
+   "bytes": 36,
+   "sha256": "cde9e5b0dccdbec06e6d850af0bb4c2ded34d29a2df80f712656ba4d5151dd8f",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/attempts/tu-tzjcp1gr/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/attempts/tu-tzjcp1gr/decomp/src/Unit.cpp",
+   "bytes": 23,
+   "sha256": "768282959d059fb348dd7187c229c0a7d9b6a4f24a28e6e09d52fc50d38c4d84",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/build-decomp/publication.lock",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/decomp/hybrid/tests/Control.cpp",
+   "bytes": 18,
+   "sha256": "d1da02d111571b121731dcc721dc10da164318c9006d0b08d70c003d895c13be",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/decomp/include/Unit.h",
+   "bytes": 19,
+   "sha256": "5ba716b87b66ae1cddb6547c99e4f8dde1f09db400b009d27b712316fdf3be41",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation-snapshot/decomp/src/Unit.cpp",
+   "bytes": 23,
+   "sha256": "768282959d059fb348dd7187c229c0a7d9b6a4f24a28e6e09d52fc50d38c4d84",
+   "retained": false
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/probes/validation_snapshot.json",
+   "bytes": 329,
+   "sha256": "58164c5e5f8f6ccec9eb0a45e86031a12970e015704118ed493181f04073a7dc",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/source_integrity.json",
+   "bytes": 537,
+   "sha256": "4353d56b6018ed81054d6036d6bc935f9cef15d1dd0764e9cc2be0a03b274d59",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/results/verification_summary.json",
+   "bytes": 4243,
+   "sha256": "e9d498cf46cdb4e02996108f2e22fbcb8a61f5bf115445b751ec9edc3eb421ba",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/run_all.py",
+   "bytes": 1619,
+   "sha256": "3a4e67519343595fdb6436af04251660298964efb7907d478789082f6ed6b64f",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/decomp__hybrid__AutoTest.h.txt",
+   "bytes": 16594,
+   "sha256": "f2828b0c0854e0a1698e521b5a767433563ce5498b76bef0679177c0a82fabc2",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__candidate.py.txt",
+   "bytes": 8953,
+   "sha256": "3a770d7719e24686a934ccfadeed2d80ff54ace02fcbb140aaa761089949de8e",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__check.py.txt",
+   "bytes": 10541,
+   "sha256": "8a58f7ee6a3e78dd56edcff357b189f90bb5d40509a190c4b48e736e89931f46",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__hybrid.py.txt",
+   "bytes": 29930,
+   "sha256": "277b5fd5366833d61128d6930f20a9160dbe228546feeb9a0ca7e592e255b3fe",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__mutate.py.txt",
+   "bytes": 28707,
+   "sha256": "b9f8a2c960b36994a12224c7e2eba0dae9b34eb4ab424d57a4a550c23e8799c2",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__no_llm_loop.py.txt",
+   "bytes": 8313,
+   "sha256": "eaa3a0be3dd6e7a2e9a479ca1e06f93e5f797084eeeb7452f0c3ce98426fdb2d",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__objdiff.py.txt",
+   "bytes": 38056,
+   "sha256": "6c4f9dd8c8c32cc0f184df11120067e3c1bdc06a3143e896a5a3098e11f8bd03",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__objdiff_eh.py.txt",
+   "bytes": 13229,
+   "sha256": "cd64014b0adf4b9b871cdb58f5ae848958f000fe2f736cef2bbb15f957fd2c1f",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__publication.py.txt",
+   "bytes": 8156,
+   "sha256": "cee609a3e2c6bfa3a8d3bca5a4495f163fafcfd012e9eefab91d4928ba3aa810",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__standalone.py.txt",
+   "bytes": 6146,
+   "sha256": "64326907f8db930e1b5b3eba1ecd21b78e56d74ed2866e8b1dbb32a287ac8d5a",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/source_excerpts/tools__decomp__toolchain.py.txt",
+   "bytes": 16061,
+   "sha256": "c603a3210c1a174fadaa806c20b7848e2292095cb329ef93113b209feb99ca9e",
+   "retained": true
+  },
+  {
+   "path": "OpenTorchlight_revision_review/PACKAGE_CHECKSUMS.sha256",
+   "bytes": 13404,
+   "sha256": "8691f5f8c98017d74398360f9c22421bc898e182b9a0d8765cdef633243de949",
+   "retained": true
+  }
+ ],
+ "limits": "Original author reports are preserved inputs, not local validation. Temporary stage trees/cache records remain in external ZIP and ignored extraction."
+}

@@ -1,0 +1,11 @@
+{
+  "proof_type": "real stages and publication, simulated prior validation; no game execution",
+  "first_published": [
+    "decomp/src/A.cpp"
+  ],
+  "second_error": "source/header tree changed during the attempt; rebase and validate again",
+  "second_work_preserved_at": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/parallel/build-decomp/attempts/tu-l2hc066f",
+  "interpretation": "safe conservative refusal, not false acceptance; automatic rebase/revalidation is missing",
+  "detected": true,
+  "probe_completed": true
+}

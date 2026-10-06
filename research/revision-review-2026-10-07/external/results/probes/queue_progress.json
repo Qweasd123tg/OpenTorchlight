@@ -1,0 +1,151 @@
+{
+  "proof_type": "real runner, synthetic DB/provider/digest; no compiler or model",
+  "runs": [
+    {
+      "schema": 1,
+      "provider": "descriptor",
+      "results": [
+        {
+          "tu": "ADescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 2.978200006964471e-05,
+          "inputs_digest": "fixed-inputs"
+        },
+        {
+          "tu": "BDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 1.3922999983151385e-05,
+          "inputs_digest": "fixed-inputs"
+        },
+        {
+          "tu": "CDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 9.64200000908022e-06,
+          "inputs_digest": "fixed-inputs"
+        }
+      ],
+      "budget": {
+        "limit": 3,
+        "seconds": 120,
+        "elapsed": 0.00047706400005154137
+      },
+      "stop": "finite task/time budget or selected queue exhausted"
+    },
+    {
+      "schema": 1,
+      "provider": "descriptor",
+      "results": [
+        {
+          "tu": "ADescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 2.978200006964471e-05,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        },
+        {
+          "tu": "BDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 1.3922999983151385e-05,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        },
+        {
+          "tu": "CDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 9.64200000908022e-06,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        }
+      ],
+      "budget": {
+        "limit": 3,
+        "seconds": 120,
+        "elapsed": 0.00020645500001137407
+      },
+      "stop": "finite task/time budget or selected queue exhausted"
+    },
+    {
+      "schema": 1,
+      "provider": "descriptor",
+      "results": [
+        {
+          "tu": "ADescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 2.978200006964471e-05,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        },
+        {
+          "tu": "BDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 1.3922999983151385e-05,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        },
+        {
+          "tu": "CDescriptor.cpp",
+          "status": "BLOCKED",
+          "reason": "unsupported shape",
+          "attempt": "/mnt/data/_revision_verify/run-1p37dirz/boundaries/queue",
+          "published": false,
+          "provider": "descriptor",
+          "seconds": 9.64200000908022e-06,
+          "inputs_digest": "fixed-inputs",
+          "cached_failure": true
+        }
+      ],
+      "budget": {
+        "limit": 3,
+        "seconds": 120,
+        "elapsed": 0.0006231840000054945
+      },
+      "stop": "finite task/time budget or selected queue exhausted"
+    }
+  ],
+  "never_reached_after_three_default_runs": [
+    "DDescriptor.cpp",
+    "EDescriptor.cpp"
+  ],
+  "explicit_selection_reaches_D": true,
+  "provider_calls": [
+    "ADescriptor.cpp",
+    "BDescriptor.cpp",
+    "CDescriptor.cpp",
+    "DDescriptor.cpp"
+  ],
+  "Equipment_selection": "not a game descriptor TU: Equipment.cpp",
+  "detected": true,
+  "probe_completed": true
+}

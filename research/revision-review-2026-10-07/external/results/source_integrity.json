@@ -1,0 +1,17 @@
+{
+  "original_files_checked": 3283,
+  "changed": [],
+  "missing": [],
+  "all_original_bytes_unchanged": true,
+  "archives": {
+    "OpenTorchlight-main(4)(1).zip": {
+      "size": 9100355,
+      "sha256": "0206c21092d6b91570d64a7175899326204e3e07b53fd6f0383b1a45d4d1e65d"
+    },
+    "OpenTorchlight-main(5)(2).zip": {
+      "size": 13028137,
+      "sha256": "c8d23f5d7c243cab0cee5a8a333707eae1d6c3223ca8c001716260789e2465a8"
+    }
+  },
+  "scope": "Only original archived files; imported Python may create disposable __pycache__ files."
+}

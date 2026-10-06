@@ -1,0 +1,189 @@
+{
+  "outside_target": {
+    "proof_type": "real Original/compare_source/ELF parser/normalizer/decision, native synthetic x86-64; reference identity set to fixture hash; compile step supplied preassembled object",
+    "mode": "outside_target",
+    "executed_original": "11 22 -1",
+    "executed_candidate": "11 33 -1",
+    "comparison": {
+      "name": "probe",
+      "demangled": "probe(unsigned int, unsigned int)",
+      "address": "0x401126",
+      "status": "MATCH",
+      "score": 1.0,
+      "size": 26,
+      "original_size": 26,
+      "weak": false,
+      "code": "1ca1af70838609ec",
+      "object_digest": "79b97ad91a26ccf0895b5d4cad2542908a86e8637875981bb25e3bca16d68ec7"
+    },
+    "identical_control_status": "MATCH",
+    "unknown": [],
+    "object_normalization": [
+      {
+        "size": 26,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L6",
+          "mov %edi,%edi",
+          "jmp *[table:L4](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      },
+      {
+        "size": 26,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L6",
+          "mov %edi,%edi",
+          "jmp *[table:L4](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      }
+    ],
+    "false_MATCH": true
+  },
+  "unrelated_cmp": {
+    "proof_type": "real Original/compare_source/ELF parser/normalizer/decision, native synthetic x86-64; reference identity set to fixture hash; compile step supplied preassembled object",
+    "mode": "unrelated_cmp",
+    "executed_original": "11 22 -1",
+    "executed_candidate": "11 33 -1",
+    "comparison": {
+      "name": "probe",
+      "demangled": "probe(unsigned int, unsigned int)",
+      "address": "0x401126",
+      "status": "MATCH",
+      "score": 1.0,
+      "size": 50,
+      "original_size": 50,
+      "weak": false,
+      "code": "7a5bbd9832ecd2a0",
+      "object_digest": "d2c06808d5cc0f40b83acdf2ac7e82701967a4c37cad00a78b493e0ddc63745f"
+    },
+    "identical_control_status": "MATCH",
+    "unknown": [],
+    "object_normalization": [
+      {
+        "size": 50,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L13",
+          "mov %edi,%edi",
+          "cmp $0x0,%esi",
+          "sete %al",
+          "mov %al,[saved_flag](%rip)",
+          "jmp *[table:L7](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0x16,%eax",
+          "ret",
+          "mov $0x21,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      },
+      {
+        "size": 50,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L13",
+          "mov %edi,%edi",
+          "cmp $0x0,%esi",
+          "sete %al",
+          "mov %al,[saved_flag](%rip)",
+          "jmp *[table:L7](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0x16,%eax",
+          "ret",
+          "mov $0x21,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      }
+    ],
+    "false_MATCH": true
+  },
+  "internal_targets": {
+    "proof_type": "real Original/compare_source/ELF parser/normalizer/decision, native synthetic x86-64; reference identity set to fixture hash; compile step supplied preassembled object",
+    "mode": "internal_targets",
+    "executed_original": "11 22 -1",
+    "executed_candidate": "11 33 -1",
+    "comparison": {
+      "name": "probe",
+      "demangled": "probe(unsigned int, unsigned int)",
+      "address": "0x401126",
+      "status": "DIFF",
+      "score": 0.9167,
+      "size": 38,
+      "original_size": 38,
+      "weak": false,
+      "code": "0b7bd49a41fd68fd",
+      "object_digest": "08a50d9c7c6b25cdb6956f17378591a6169031c6d3fab0525453750a2da30941"
+    },
+    "identical_control_status": "MATCH",
+    "unknown": [],
+    "object_normalization": [
+      {
+        "size": 38,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L10",
+          "mov %edi,%edi",
+          "jmp *[table:L4,L6](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0x16,%eax",
+          "ret",
+          "mov $0x21,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      },
+      {
+        "size": 38,
+        "bind": 1,
+        "norm": [
+          "cmp $0x1,%edi",
+          "ja L10",
+          "mov %edi,%edi",
+          "jmp *[table:L4,L8](,%rdi,8)",
+          "mov $0xb,%eax",
+          "ret",
+          "mov $0x16,%eax",
+          "ret",
+          "mov $0x21,%eax",
+          "ret",
+          "mov $0xffffffff,%eax",
+          "ret"
+        ],
+        "metadata_reasons": [],
+        "personalities": []
+      }
+    ],
+    "false_MATCH": false
+  }
+}

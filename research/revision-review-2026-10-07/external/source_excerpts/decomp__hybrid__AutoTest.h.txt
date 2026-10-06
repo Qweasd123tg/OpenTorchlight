@@ -1,0 +1,462 @@
+SOURCE decomp/hybrid/AutoTest.h
+SHA256 73baafc532fca55b701d5c0f88845f4009e1f7a69b870c394e9e547566c6a6a7
+
+0001: // Runtime for generated differential self-tests (tools/decomp/autotest.py).
+0002: // Each case builds the same object state and arguments, then runs the original
+0003: // function and the decompiled one in two forked children of the game process.
+0004: // The children report the return value and the bytes of the object and its
+0005: // fake collaborators; any difference fails the test. Identical crashes are
+0006: // inconclusive. A resource timeout is an incomplete observation on either side.
+0007: #ifndef AUTOTEST_H
+0008: #define AUTOTEST_H
+0009: 
+0010: #include <cstring>
+0011: #include <errno.h>
+0012: #include <malloc.h>
+0013: #include <new>
+0014: #include <string>
+0015: #include <signal.h>
+0016: #include <stdint.h>
+0017: #include <sys/prctl.h>
+0018: #include <sys/time.h>
+0019: #include <sys/wait.h>
+0020: #include <time.h>
+0021: #include <unistd.h>
+0022: 
+0023: #include "HybridTest.h"
+0024: 
+0025: namespace autotest
+0026: {
+0027: 
+0028: struct Rng
+0029: {
+0030:     uint64_t state;
+0031:     explicit Rng(uint64_t seed) : state(seed * 2654435761u + 1) {}
+0032:     unsigned int next()
+0033:     {
+0034:         state = state * 6364136223846793005ULL + 1442695040888963407ULL;
+0035:         return (unsigned int)(state >> 33);
+0036:     }
+0037: };
+0038: 
+0039: // Values close to the boundaries code usually tests, plus random ones.
+0040: inline long long randomInt(Rng& r)
+0041: {
+0042:     static const long long picks[] = {0, 1, -1, 2, 3, 4, 5, 7, 10, 16, 100, -2, -100, 255, 1000};
+0043:     unsigned int k = r.next() % 20;
+0044:     if (k < sizeof(picks) / sizeof(picks[0]))
+0045:         return picks[k];
+0046:     return (long long)(r.next() % 2001) - 1000;
+0047: }
+0048: 
+0049: inline double randomFloat(Rng& r)
+0050: {
+0051:     static const double picks[] = {0.0, 1.0, -1.0, 0.5, 2.0, -0.25, 10.0, 0.001, 100.0};
+0052:     unsigned int k = r.next() % 14;
+0053:     if (k < sizeof(picks) / sizeof(picks[0]))
+0054:         return picks[k];
+0055:     return ((double)(r.next() % 20001) - 10000.0) / 100.0;
+0056: }
+0057: 
+0058: inline const wchar_t* randomText(Rng& r)
+0059: {
+0060:     static const wchar_t* picks[] = {L"", L"a", L"TEST", L"Hello World", L"media/test.dat", L"0", L"12"};
+0061:     return picks[r.next() % (sizeof(picks) / sizeof(picks[0]))];
+0062: }
+0063: 
+0064: // Arena for the object under test and fake collaborators: same addresses in
+0065: // both children, so pointers into it compare equal.
+0066: const size_t kArenaSize = 1 << 20;
+0067: extern char g_arena[kArenaSize];
+0068: extern size_t g_arenaUsed;
+0069: 
+0070: inline void* allocate(size_t size)
+0071: {
+0072:     size_t at = (g_arenaUsed + 15) & ~(size_t)15;
+0073:     if (at + size > kArenaSize)
+0074:         return 0;
+0075:     g_arenaUsed = at + size;
+0076:     std::memset(g_arena + at, 0, size);
+0077:     return g_arena + at;
+0078: }
+0079: 
+0080: inline bool inArena(const void* p)
+0081: {
+0082:     uintptr_t at = reinterpret_cast<uintptr_t>(p);
+0083:     uintptr_t start = reinterpret_cast<uintptr_t>(g_arena);
+0084:     return at >= start && at - start < kArenaSize;
+0085: }
+0086: 
+0087: // Fake objects made for a case, by class; arguments and list elements
+0088: // sometimes reuse them, so lookups and removals find what they look for.
+0089: struct Pool
+0090: {
+0091:     enum { kSize = 256 };
+0092:     void* pointer[kSize];
+0093:     int kind[kSize];
+0094:     int count;
+0095: };
+0096: extern Pool g_pool;
+0097: 
+0098: inline void remember(void* p, int kind)
+0099: {
+0100:     if (g_pool.count < Pool::kSize)
+0101:     {
+0102:         g_pool.pointer[g_pool.count] = p;
+0103:         g_pool.kind[g_pool.count] = kind;
+0104:         g_pool.count++;
+0105:     }
+0106: }
+0107: 
+0108: inline void* pick(Rng& r, int kind, void* fresh)
+0109: {
+0110:     int n = 0;
+0111:     for (int i = 0; i < g_pool.count; i++)
+0112:         n += g_pool.kind[i] == kind && g_pool.pointer[i] != fresh;
+0113:     if (n == 0 || r.next() % 3 == 0)
+0114:         return fresh;
+0115:     int k = r.next() % n;
+0116:     for (int i = 0; i < g_pool.count; i++)
+0117:         if (g_pool.kind[i] == kind && g_pool.pointer[i] != fresh && k-- == 0)
+0118:             return g_pool.pointer[i];
+0119:     return fresh;
+0120: }
+0121: 
+0122: struct Capture
+0123: {
+0124:     enum { kSize = 256 * 1024 };
+0125:     enum Issue { Complete = 0, Overflow = 1, UnsupportedPointer = 2, InvalidReport = 3 };
+0126:     size_t length;
+0127:     unsigned int issue;
+0128:     char data[kSize];
+0129: 
+0130:     void reset()
+0131:     {
+0132:         length = 0;
+0133:         issue = Complete;
+0134:     }
+0135:     void add(const void* p, size_t n)
+0136:     {
+0137:         if (issue != Complete)
+0138:             return;
+0139:         // A bounded buffer is intentional; an unobserved tail is never equal.
+0140:         if (length > kSize || n > kSize - length)
+0141:         {
+0142:             issue = Overflow;
+0143:             return;
+0144:         }
+0145:         if (!n)
+0146:             return;
+0147:         std::memcpy(data + length, p, n);
+0148:         length += n;
+0149:     }
+0150:     void addPointer(const void* p)
+0151:     {
+0152:         if (issue != Complete)
+0153:             return;
+0154:         // Pool's generated fake objects live in the arena and retain identity
+0155:         // across forks. Child allocations and other external pointers have no
+0156:         // logical identity here; neither raw addresses nor malloc totals prove it.
+0157:         if (p && !inArena(p))
+0158:         {
+0159:             issue = UnsupportedPointer;
+0160:             return;
+0161:         }
+0162:         long long token = p == 0 ? 0 : 1 + ((const char*)p - g_arena);
+0163:         add(&token, sizeof(token));
+0164:     }
+0165:     // Bytes in use on the malloc heap: both children start from the same heap,
+0166:     // so a missing delete or an extra allocation shows here.
+0167:     void addHeapInUse()
+0168:     {
+0169:         struct mallinfo info = mallinfo();
+0170:         long long used = info.uordblks;
+0171:         add(&used, sizeof(used));
+0172:     }
+0173:     void addText(const std::wstring& s)
+0174:     {
+0175:         if (issue != Complete)
+0176:             return;
+0177:         size_t n = s.size();
+0178:         add(&n, sizeof(n));
+0179:         if (n > kSize / sizeof(wchar_t))
+0180:         {
+0181:             issue = Overflow;
+0182:             return;
+0183:         }
+0184:         add(s.data(), n * sizeof(wchar_t));
+0185:     }
+0186: };
+0187: 
+0188: // Return values of any type (void included) through the comma operator.
+0189: struct Void
+0190: {
+0191: };
+0192: template <class T>
+0193: struct Value
+0194: {
+0195:     T value;
+0196: };
+0197: template <class T>
+0198: Value<T> operator,(const T& value, Void)
+0199: {
+0200:     Value<T> v = {value};
+0201:     return v;
+0202: }
+0203: inline void record(Capture&, Void) {}
+0204: template <class T>
+0205: void record(Capture& out, const Value<T>& v)
+0206: {
+0207:     out.add(&v.value, sizeof(T));
+0208: }
+0209: template <class T>
+0210: void record(Capture& out, const Value<T*>& v)
+0211: {
+0212:     out.addPointer(v.value);
+0213: }
+0214: inline void record(Capture& out, const Value<std::wstring>& v)
+0215: {
+0216:     out.addText(v.value);
+0217: }
+0218: inline void record(Capture& out, const Value<bool>& v)
+0219: {
+0220:     unsigned char b = v.value ? 1 : 0;
+0221:     out.add(&b, 1);
+0222: }
+0223: 
+0224: typedef void (*Body)(void* context, Capture& out);
+0225: 
+0226: struct Outcome
+0227: {
+0228:     // status stays compatible with handwritten tests: clean exit is exposed
+0229:     // only when a complete report arrived. childStatus is the actual wait status.
+0230:     int status;
+0231:     int childStatus;
+0232:     bool reportValid;
+0233:     bool reportStarted;
+0234:     Capture capture;
+0235: };
+0236: 
+0237: extern Outcome g_outcomes[2];
+0238: 
+0239: inline void crashed(int signal)
+0240: {
+0241:     _exit(128 + signal);
+0242: }
+0243: 
+0244: struct ReportHeader
+0245: {
+0246:     uint32_t magic;
+0247:     uint32_t version;
+0248:     uint32_t length;
+0249:     uint32_t issue;
+0250: };
+0251: const uint32_t kReportMagic = 0x544c4350;
+0252: // Reserved by the observer; a failed pipe write is not a function failure.
+0253: const int kReportWriteFailure = 253;
+0254: 
+0255: inline bool writeExact(int fd, const void* data, size_t length)
+0256: {
+0257:     const char* at = (const char*)data;
+0258:     while (length)
+0259:     {
+0260:         ssize_t n = write(fd, at, length);
+0261:         if (n < 0 && errno == EINTR)
+0262:             continue;
+0263:         if (n <= 0)
+0264:             return false;
+0265:         at += n;
+0266:         length -= n;
+0267:     }
+0268:     return true;
+0269: }
+0270: 
+0271: inline bool readExact(int fd, void* data, size_t length, size_t* completed = 0)
+0272: {
+0273:     char* at = (char*)data;
+0274:     if (completed)
+0275:         *completed = 0;
+0276:     while (length)
+0277:     {
+0278:         ssize_t n = read(fd, at, length);
+0279:         if (n < 0 && errno == EINTR)
+0280:             continue;
+0281:         if (n <= 0)
+0282:             return false;
+0283:         at += n;
+0284:         length -= n;
+0285:         if (completed)
+0286:             *completed += n;
+0287:     }
+0288:     return true;
+0289: }
+0290: 
+0291: inline bool writeReport(int fd, const Capture& capture)
+0292: {
+0293:     ReportHeader header = {kReportMagic, 1, (uint32_t)capture.length, capture.issue};
+0294:     return writeExact(fd, &header, sizeof(header)) && writeExact(fd, capture.data, capture.length);
+0295: }
+0296: 
+0297: inline bool readReport(int fd, Capture& capture, bool* started = 0)
+0298: {
+0299:     capture.reset();
+0300:     capture.issue = Capture::InvalidReport;
+0301:     ReportHeader header;
+0302:     size_t headerBytes;
+0303:     bool gotHeader = readExact(fd, &header, sizeof(header), &headerBytes);
+0304:     if (started)
+0305:         *started = headerBytes != 0;
+0306:     if (!gotHeader || header.magic != kReportMagic || header.version != 1 ||
+0307:         header.length > Capture::kSize || header.issue > Capture::UnsupportedPointer ||
+0308:         !readExact(fd, capture.data, header.length))
+0309:         return false;
+0310:     // Exactly one frame, including EOF, is required; no trailing partial frame.
+0311:     char extra;
+0312:     ssize_t n;
+0313:     do { n = read(fd, &extra, 1); } while (n < 0 && errno == EINTR);
+0314:     if (n != 0)
+0315:         return false;
+0316:     capture.length = header.length;
+0317:     capture.issue = header.issue;
+0318:     return true;
+0319: }
+0320: 
+0321: // Runs body in a forked child; the child reports its capture through a pipe.
+0322: inline void runChild(Body body, void* context, Outcome& outcome, unsigned cpuMs = 300, unsigned wallMs = 3000)
+0323: {
+0324:     int fds[2];
+0325:     outcome.capture.reset();
+0326:     outcome.capture.issue = Capture::InvalidReport;
+0327:     outcome.status = -1;
+0328:     outcome.childStatus = -1;
+0329:     outcome.reportValid = false;
+0330:     outcome.reportStarted = false;
+0331:     if (pipe(fds) != 0)
+0332:         return;
+0333:     pid_t pid = fork();
+0334:     if (pid == 0)
+0335:     {
+0336:         close(fds[0]);
+0337:         // A crash ends the child at once: no game crash handler, no core dump.
+0338:         prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
+0339:         signal(SIGSEGV, crashed);
+0340:         signal(SIGBUS, crashed);
+0341:         signal(SIGFPE, crashed);
+0342:         signal(SIGILL, crashed);
+0343:         signal(SIGABRT, crashed);
+0344:         signal(SIGALRM, SIG_DFL);
+0345:         signal(SIGPROF, SIG_DFL);
+0346:         struct itimerval limit;
+0347:         std::memset(&limit, 0, sizeof(limit));
+0348:         // CPU includes system time; scheduler delays must not consume this budget.
+0349:         limit.it_value.tv_sec = cpuMs / 1000;
+0350:         limit.it_value.tv_usec = (cpuMs % 1000) * 1000;
+0351:         if (!cpuMs) limit.it_value.tv_usec = 1000;
+0352:         setitimer(ITIMER_PROF, &limit, 0);
+0353:         // A separate wall deadline still catches blocked IO/locks.
+0354:         limit.it_value.tv_sec = wallMs / 1000;
+0355:         limit.it_value.tv_usec = (wallMs % 1000) * 1000;
+0356:         if (!wallMs) limit.it_value.tv_usec = 1000;
+0357:         setitimer(ITIMER_REAL, &limit, 0);
+0358:         // A child-local buffer also lets hand-written tests call runChild
+0359:         // without linking the generated runtime's global outcome storage.
+0360:         Capture capture;
+0361:         capture.reset();
+0362:         body(context, capture);
+0363:         if (!writeReport(fds[1], capture))
+0364:             _exit(kReportWriteFailure);
+0365:         _exit(0);
+0366:     }
+0367:     close(fds[1]);
+0368:     if (pid > 0)
+0369:         outcome.reportValid = readReport(fds[0], outcome.capture, &outcome.reportStarted);
+0370:     close(fds[0]);
+0371:     if (pid > 0)
+0372:     {
+0373:         int status;
+0374:         pid_t waited;
+0375:         do { waited = waitpid(pid, &status, 0); } while (waited < 0 && errno == EINTR);
+0376:         if (waited == pid)
+0377:         {
+0378:             outcome.childStatus = status;
+0379:             outcome.status = status;
+0380:             if (WIFEXITED(status) && WEXITSTATUS(status) == 0 &&
+0381:                 (!outcome.reportValid || outcome.capture.issue != Capture::Complete))
+0382:                 outcome.status = 4 << 8;
+0383:         }
+0384:     }
+0385: }
+0386: 
+0387: struct Stats
+0388: {
+0389:     int same;
+0390:     int bothFailed;
+0391:     int different;
+0392:     int incomplete;
+0393: };
+0394: 
+0395: inline bool incomplete(const Outcome& outcome)
+0396: {
+0397:     if (outcome.childStatus < 0 || (outcome.reportStarted && !outcome.reportValid) ||
+0398:         (outcome.reportValid && outcome.capture.issue != Capture::Complete))
+0399:         return true;
+0400:     if (WIFSIGNALED(outcome.childStatus) &&
+0401:         (WTERMSIG(outcome.childStatus) == SIGALRM || WTERMSIG(outcome.childStatus) == SIGPROF))
+0402:         return true;
+0403:     return WIFEXITED(outcome.childStatus) &&
+0404:            (WEXITSTATUS(outcome.childStatus) == kReportWriteFailure ||
+0405:             (WEXITSTATUS(outcome.childStatus) == 0 && !outcome.reportValid));
+0406: }
+0407: 
+0408: // One differential case; incomplete observation is separate from a difference.
+0409: inline bool compareCase(Body original, Body ours, void* context, Stats& stats, const tlhybrid_host* host,
+0410:                         const char* name, int index)
+0411: {
+0412:     runChild(original, context, g_outcomes[0]);
+0413:     runChild(ours, context, g_outcomes[1]);
+0414:     const Outcome& a = g_outcomes[0];
+0415:     const Outcome& b = g_outcomes[1];
+0416:     bool okA = a.childStatus >= 0 && WIFEXITED(a.childStatus) && WEXITSTATUS(a.childStatus) == 0;
+0417:     bool okB = b.childStatus >= 0 && WIFEXITED(b.childStatus) && WEXITSTATUS(b.childStatus) == 0;
+0418:     if (incomplete(a) || incomplete(b))
+0419:     {
+0420:         stats.incomplete++;
+0421:         if (stats.incomplete <= 3)
+0422:             host->log("    %s case %d: incomplete observation, original report %d issue %u, ours report %d issue %u\n",
+0423:                       name, index, a.reportValid, a.capture.issue, b.reportValid, b.capture.issue);
+0424:         return false;
+0425:     }
+0426:     if (!okA && !okB && a.childStatus == b.childStatus)
+0427:     {
+0428:         stats.bothFailed++;
+0429:         return true;
+0430:     }
+0431:     if (okA && okB && a.capture.length == b.capture.length &&
+0432:         std::memcmp(a.capture.data, b.capture.data, a.capture.length) == 0)
+0433:     {
+0434:         stats.same++;
+0435:         return true;
+0436:     }
+0437:     stats.different++;
+0438:     if (stats.different <= 3)
+0439:     {
+0440:         size_t at = 0;
+0441:         while (at < a.capture.length && at < b.capture.length && a.capture.data[at] == b.capture.data[at])
+0442:             at++;
+0443:         host->log("    %s case %d: original status %d len %lu, ours status %d len %lu, first difference at %lu\n",
+0444:                   name, index, a.status, (unsigned long)a.capture.length, b.status,
+0445:                   (unsigned long)b.capture.length, (unsigned long)at);
+0446:     }
+0447:     return false;
+0448: }
+0449: 
+0450: inline double seconds()
+0451: {
+0452:     struct timespec now;
+0453:     clock_gettime(CLOCK_MONOTONIC, &now);
+0454:     return now.tv_sec + now.tv_nsec * 1e-9;
+0455: }
+0456: 
+0457: } // namespace autotest
+0458: 
+0459: #endif

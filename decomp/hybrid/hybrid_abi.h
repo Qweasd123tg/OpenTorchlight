@@ -4,7 +4,7 @@
 
 #include <stdint.h>
 
-#define TLHYBRID_ABI_VERSION 1
+#define TLHYBRID_ABI_VERSION 2
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,6 +13,7 @@ extern "C" {
 typedef struct tlhybrid_host {
     int abi_version;
     void (*log)(const char *fmt, ...);
+    int (*comparison_pair)(uint64_t original, uint64_t replacement);
 } tlhybrid_host;
 
 /* .tlhybrid.hooks: original entry -> decompiled replacement. */

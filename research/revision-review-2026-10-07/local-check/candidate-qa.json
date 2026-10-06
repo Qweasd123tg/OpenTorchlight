@@ -1,0 +1,486 @@
+{
+  "eh": {
+    "status": "PASS",
+    "result": {
+      "proof": "real pinned GCC 4.4.7 compile, real objdiff normalization, real native execution; host linker/runtime",
+      "rows": [
+        {
+          "address": "0x100",
+          "status": "DIFF",
+          "code": "8255241cd02e9e0c",
+          "metadata_reasons": [
+            "EH LSDA equivalence unverified"
+          ],
+          "object_digest": "8869cc3c620278c7639717a95688bcba5ab5bc49fc534e0f8f84c27a1f985ab9",
+          "execution": 7
+        },
+        {
+          "address": "0x100",
+          "status": "DIFF",
+          "code": "8255241cd02e9e0c",
+          "metadata_reasons": [
+            "EH LSDA equivalence unverified"
+          ],
+          "object_digest": "830ecf7983660a6b238fdb3a34b4ab3f9f30c00295228d6674a8625fd03246a6",
+          "execution": 99
+        }
+      ],
+      "same_function_source": true,
+      "same_normalized_code": true,
+      "preserve_existing": false,
+      "compiler_comment": "String dump of section '.comment':\n  [     1]  GCC: (GNU) 4.4.7 20120313 (Red Hat 4.4.7-3)"
+    }
+  },
+  "cache_modes": {
+    "status": "PASS",
+    "result": {
+      "proof": "real candidate control flow/cache/preservation/report parser; compiler/digests and Stage validation IO explicitly mocked",
+      "nonincremental": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": false,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/cache-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "same-full-object",
+        "final_object": "same-full-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "same",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "incremental": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/cache-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "same-full-object",
+        "final_object": "same-full-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "same",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "MATCH"
+      },
+      "repeated_nonincremental": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": false,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/cache-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "same-full-object",
+        "final_object": "same-full-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "same",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence",
+        "cached_failure": true
+      },
+      "compiler_calls": 6,
+      "stage_validate_calls": 1
+    }
+  },
+  "preservation": {
+    "status": "PASS",
+    "result": {
+      "same_object": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/preservation-same_object-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "old-object",
+        "final_object": "old-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "unchanged",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "MATCH"
+      },
+      "missing_object": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/preservation-missing_object-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": null,
+        "final_object": null,
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "unchanged",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "changed_object": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/preservation-changed_object-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "changed-object",
+        "final_object": "changed-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "unchanged",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "fresh_changed_object": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/preservation-fresh_changed_object-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "e5d03f0efcf47507f4da581c5c0348e6329fe4762c19e68160f0c4f0d9a5ddac",
+        "published": false,
+        "diagnostic_object": "changed-object",
+        "final_object": "changed-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x1",
+            "status": "DIFF",
+            "code": "unchanged",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          },
+          {
+            "address": "0x2",
+            "status": "MATCH",
+            "code": "new"
+          }
+        ],
+        "unknown": [],
+        "new_matched": [
+          "0x2"
+        ],
+        "status": "MATCH",
+        "comparison_evidence": {
+          "0x1": {
+            "policy": 1,
+            "method": "executed-call-pair",
+            "original_elf_sha256": "fake-original",
+            "evidence": {
+              "schema": 1,
+              "object_digest": "changed-object",
+              "inputs_digest": "fresh-stage-inputs",
+              "parameters": {
+                "fixtures": [
+                  "Existing"
+                ],
+                "runtime_abi": 2
+              }
+            }
+          }
+        }
+      },
+      "proof": "real candidate preservation/control flow; identical function source and normalized rows, explicitly mocked full-object digests/Stage IO"
+    }
+  },
+  "behavioral": {
+    "status": "PASS",
+    "result": {
+      "fresh": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/behavioral-fresh-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "1f833f20e824a48bde8bc51d2f10f7041c7a32db8d5b4589cfdbdcaa7411a790",
+        "published": false,
+        "diagnostic_object": "earlier-final-object",
+        "final_object": "validated-final-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x3",
+            "status": "DIFF",
+            "code": "new",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          }
+        ],
+        "unknown": [],
+        "new_matched": [],
+        "status": "BEHAVIORAL",
+        "comparison_evidence": {
+          "0x3": {
+            "policy": 1,
+            "method": "executed-call-pair",
+            "original_elf_sha256": "fake-original",
+            "evidence": {
+              "schema": 1,
+              "object_digest": "validated-final-object",
+              "inputs_digest": "fresh-stage-inputs",
+              "parameters": {
+                "fixtures": [
+                  "NewValue"
+                ],
+                "runtime_abi": 2
+              }
+            }
+          }
+        }
+      },
+      "object_binding_negative_controls": {
+        "missing_object": false,
+        "changed_object": false,
+        "changed_inputs": false,
+        "fresh_object": true
+      },
+      "absent": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/behavioral-absent-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "1f833f20e824a48bde8bc51d2f10f7041c7a32db8d5b4589cfdbdcaa7411a790",
+        "published": false,
+        "diagnostic_object": "earlier-final-object",
+        "final_object": "validated-final-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x3",
+            "status": "DIFF",
+            "code": "new",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          }
+        ],
+        "unknown": [],
+        "new_matched": [],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "incomplete": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/behavioral-incomplete-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "1f833f20e824a48bde8bc51d2f10f7041c7a32db8d5b4589cfdbdcaa7411a790",
+        "published": false,
+        "diagnostic_object": "earlier-final-object",
+        "final_object": "validated-final-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x3",
+            "status": "DIFF",
+            "code": "new",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          }
+        ],
+        "unknown": [],
+        "new_matched": [],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "different": {
+        "schema": 2,
+        "policy": 2,
+        "incremental": true,
+        "tu": "Unit.cpp",
+        "provider": "deterministic",
+        "attempt": "/home/qweasd123tg/Code/левые проекты/OpenTorchlight/build-decomp/revision-review/local-candidate/behavioral-different-stage",
+        "input_digest": "same-inputs",
+        "candidate_sha256": "1f833f20e824a48bde8bc51d2f10f7041c7a32db8d5b4589cfdbdcaa7411a790",
+        "published": false,
+        "diagnostic_object": "earlier-final-object",
+        "final_object": "validated-final-object",
+        "final_object_changed": false,
+        "functions": [
+          {
+            "address": "0x3",
+            "status": "DIFF",
+            "code": "new",
+            "metadata_reasons": [
+              "unverified EH"
+            ]
+          }
+        ],
+        "unknown": [],
+        "new_matched": [],
+        "status": "DIFF",
+        "reason": "final definitions lack preserved or freshly executed behavioral evidence"
+      },
+      "proof": "real candidate, check receipt parser, acceptance binding/load, evidence identity; compiler rows and Stage execution mocked, no Torchlight execution"
+    }
+  },
+  "provider": {
+    "status": "PASS",
+    "result": {
+      "proof": "real provider routing and argument guards; evaluate and Stage IO mocked, model/generator methods forbidden",
+      "explicit_candidate": {
+        "schema": 2,
+        "provider": "candidate",
+        "results": [
+          {
+            "tu": "Equipment.cpp",
+            "status": "MATCH",
+            "published": false,
+            "provider": "candidate",
+            "seconds": 0.0011188860007678159,
+            "inputs_digest": "same-inputs"
+          }
+        ],
+        "budget": {
+          "limit": 3,
+          "seconds": 120,
+          "elapsed": 0.0012428490008460358
+        },
+        "inspected": 1,
+        "attempted": 1,
+        "cached_failures": 0,
+        "stop": "selected queue exhausted"
+      },
+      "negative_controls": {
+        "implicit_candidate": "candidate provider requires explicitly selected TUs and --input-dir",
+        "missing_input": "candidate provider requires explicitly selected TUs and --input-dir",
+        "unsupported_descriptor": "not a supported game TU: Equipment.cpp"
+      },
+      "model_calls": 0,
+      "generator_calls": 0
+    }
+  }
+}

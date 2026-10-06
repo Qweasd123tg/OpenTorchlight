@@ -1,0 +1,567 @@
+SOURCE tools/decomp/mutate.py
+SHA256 b6aff34c426059ecc2a57bc3783b0bfdd0e29c6ff59c2f7af4b1d29a7f0f8771
+
+0001: #!/usr/bin/env python3
+0002: """Mutation check of the generated differential self-tests.
+0003: 
+0004:     python3 tools/decomp/mutate.py                 # every function with a passing autotest
+0005:     python3 tools/decomp/mutate.py 0x988020 ...    # chosen functions (original addresses)
+0006: 
+0007: A passing autotest says the decompiled function behaves like the original on
+0008: the generated inputs; it does not say the inputs reach the function's
+0009: branches. This tool plants small faults in a copy of decomp/src (flipped
+0010: comparisons and logic operators, +/- swaps, literal + 1, removed `!`, removed
+0011: statements) and checks that the test notices them.
+0012: 
+0013: Mutants that do not compile, or compile to the same code as the original
+0014: function, are dropped. The rest run in rounds: one mutant per function per
+0015: round, never two in a round when one function's test can reach the other's
+0016: changed code. A test is strong when it kills enough of its mutants; the
+0017: result goes to build-decomp/mutation.json.
+0018: """
+0019: from __future__ import annotations
+0020: 
+0021: import argparse
+0022: from concurrent.futures import ThreadPoolExecutor
+0023: import json
+0024: import os
+0025: from pathlib import Path
+0026: import random
+0027: import re
+0028: import shutil
+0029: import subprocess
+0030: import sys
+0031: 
+0032: sys.path.insert(0, str(Path(__file__).resolve().parent))
+0033: import autotest  # noqa: E402
+0034: import elfdb  # noqa: E402
+0035: import evidence  # noqa: E402
+0036: import ghidra_cpp  # noqa: E402
+0037: import hybrid  # noqa: E402
+0038: import objdiff  # noqa: E402
+0039: import toolchain  # noqa: E402
+0040: 
+0041: ROOT = elfdb.ROOT
+0042: SRC = ROOT / "decomp" / "src"
+0043: WORK = ROOT / "build-decomp" / "mutate"
+0044: RESULT = ROOT / "build-decomp" / "mutation.json"
+0045: ACCEPTED = ROOT / "decomp" / "autotests.json"
+0046: MAX_MUTANTS = 10
+0047: PROBES = 24
+0048: STRONG = 0.8
+0049: MIN_MUTANTS = 3
+0050: MIN_CLASSES = 2
+0051: 
+0052: # "Type name = ...;", "Type* name;", "std::wstring name(...);" (removing one only breaks the build).
+0053: DECLARATION = re.compile(r"(?!(?:delete|throw|goto|case|else)\b)(?:[A-Za-z_][\w:<>,]*(?:\s*[*&]+\s*|\s+))+"
+0054:                          r"[A-Za-z_]\w*\s*(?:=|;|\(|\[)")
+0055: OPERATORS = [(" < ", " <= "), (" <= ", " < "), (" > ", " >= "), (" >= ", " > "),
+0056:              (" == ", " != "), (" != ", " == "), (" && ", " || "), (" || ", " && "),
+0057:              (" + ", " - "), (" - ", " + "), (" += ", " -= "), (" -= ", " += "),
+0058:              ("++", "--"), ("--", "++")]
+0059: 
+0060: 
+0061: # -- source -------------------------------------------------------------------
+0062: def mask(text):
+0063:     """Text with comments and string/char literals blanked (offsets kept)."""
+0064:     out = list(text)
+0065: 
+0066:     def blank(i, j):
+0067:         for k in range(i, j):
+0068:             if out[k] != "\n":
+0069:                 out[k] = " "
+0070: 
+0071:     i, n = 0, len(text)
+0072:     while i < n:
+0073:         if text.startswith("//", i):
+0074:             j = text.find("\n", i)
+0075:             j = n if j < 0 else j
+0076:             blank(i, j)
+0077:             i = j
+0078:         elif text.startswith("/*", i):
+0079:             j = text.find("*/", i + 2)
+0080:             j = n if j < 0 else j + 2
+0081:             blank(i, j)
+0082:             i = j
+0083:         elif text[i] in "\"'":
+0084:             j = i + 1
+0085:             while j < n and text[j] not in (text[i], "\n"):
+0086:                 j += 2 if text[j] == "\\" else 1
+0087:             blank(i + 1, j)
+0088:             i = j + 1
+0089:         else:
+0090:             i += 1
+0091:     return "".join(out)
+0092: 
+0093: 
+0094: def matching(text, at, open_, close):
+0095:     depth = 0
+0096:     for i in range(at, len(text)):
+0097:         if text[i] == open_:
+0098:             depth += 1
+0099:         elif text[i] == close:
+0100:             depth -= 1
+0101:             if depth == 0:
+0102:                 return i
+0103:     return -1
+0104: 
+0105: 
+0106: def canonical_parameter(parameter, named=False):
+0107:     """Conservative spelling normalization for ordinary C++ parameter types.
+0108: 
+0109:     Used only to disambiguate same-arity overloads. Complex declarators or
+0110:     unresolved aliases remain unmatched rather than selecting another body.
+0111:     """
+0112:     p = parameter.strip()
+0113:     p = p.replace(autotest.WSTRING, "std::wstring")
+0114:     if named:
+0115:         p = re.sub(r"\s*=.*$", "", p)
+0116:         # Strip a name only after a pointer/reference or a separated type.
+0117:         m = re.search(r"([*&]\s*|\s+)([A-Za-z_]\w*)$", p)
+0118:         if m and m.group(2) not in {"int", "long", "short", "char", "double", "float", "const", "volatile", "unsigned", "signed"}:
+0119:             p = p[:m.start(2)].strip()
+0120:     p = re.sub(r"^(.+?)\s+const\s*([*&].*)$", r"const \1\2", p)
+0121:     return re.sub(r"\s+", "", p)
+0122: 
+0123: 
+0124: def definition(text, masked, f):
+0125:     """(body start, body end) of f's definition in a TU source, or None."""
+0126:     qual = f["demangled"].split("(")[0]
+0127:     want = len([p for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"])
+0128:     found = []
+0129:     wanted_types = [canonical_parameter(p) for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"]
+0130:     for m in re.finditer(r"(?m)^[\w:<>,*&\s]*?" + re.escape(qual) + r"\s*\(", masked):
+0131:         close = matching(masked, m.end() - 1, "(", ")")
+0132:         brace, semi = masked.find("{", close), masked.find(";", close)
+0133:         if close < 0 or brace < 0 or (0 <= semi < brace):
+0134:             continue
+0135:         suffix = " ".join(masked[close + 1:brace].strip().split())
+0136:         if f.get("kind") == "ctor" and suffix.startswith(":"):
+0137:             suffix = ""  # member/base initializer list follows the parameter list
+0138:         if suffix != ghidra_cpp.cv_suffix(f).strip():
+0139:             continue
+0140:         params = masked[m.end():close].strip()
+0141:         count = 0 if params in ("", "void") else len(ghidra_cpp.split_args(params))
+0142:         types = [canonical_parameter(p, named=True) for p in ghidra_cpp.split_args(params) if p and p != "void"]
+0143:         found.append((count, brace, matching(masked, brace, "{", "}"), types))
+0144:     exact = [x for x in found if x[0] == want]
+0145:     if len(exact) != 1:
+0146:         exact = [x for x in exact if x[3] == wanted_types]
+0147:     if len(exact) != 1:
+0148:         return None
+0149:     return exact[0][1], exact[0][2]
+0150: 
+0151: 
+0152: def mutation_points(text, masked, start, end):
+0153:     points = []
+0154:     body = masked[start:end]
+0155:     for old, new in OPERATORS:
+0156:         for m in re.finditer(re.escape(old), body):
+0157:             points.append((start + m.start(), start + m.end(), new))
+0158:     for m in re.finditer(r"!(?!=)", body):
+0159:         points.append((start + m.start(), start + m.end(), ""))
+0160:     for m in re.finditer(r"(?<![\w.])(\d+)(?![\w.])", body):
+0161:         points.append((start + m.start(), start + m.end(), str(int(m.group(1)) + 1)))
+0162:     for m in re.finditer(r"\b(true|false)\b", body):
+0163:         points.append((start + m.start(), start + m.end(), "false" if m.group(1) == "true" else "true"))
+0164:     for m in re.finditer(r"(?m)^[ \t]*([^\s{}][^\n{}]*;)[ \t]*$", body):
+0165:         statement = m.group(1)
+0166:         if re.match(r"(return|break|continue)\b", statement) or DECLARATION.match(statement):
+0167:             continue
+0168:         points.append((start + m.start(1), start + m.end(1), ";"))
+0169:     return points
+0170: 
+0171: 
+0172: def code_digests(db, functions):
+0173:     """Instruction-similarity keys, retained for diagnostic callers only."""
+0174:     return {address: row["code"] for address, row in compiled_evidence(db, functions).items()}
+0175: 
+0176: 
+0177: def compiled_evidence(db, functions):
+0178:     """Full TU objects, including data/EH/relocations, not just instructions."""
+0179:     original = objdiff.Original(db=db)
+0180:     names = {t["id"]: t["name"] for t in db["tus"]}
+0181:     sources = {p.name: p for p in SRC.rglob("*.cpp")}
+0182:     out = {}
+0183:     for tu in sorted({names[f["tu"]] for f in functions if names.get(f["tu"]) in sources}):
+0184:         unit = objdiff.compare_source(sources[tu], original, quiet=True)
+0185:         for row in unit["functions"]:
+0186:             if row.get("code") and row.get("address") and not row.get("weak"):
+0187:                 out[row["address"]] = {"code": row["code"], "object_digest": row.get("object_digest")}
+0188:     return out
+0189: 
+0190: 
+0191: def load_accepted():
+0192:     return json.loads(ACCEPTED.read_text()) if ACCEPTED.exists() else {}
+0193: 
+0194: 
+0195: def record(db, functions, results):
+0196:     """Publish only evidence still bound to the inputs actually tested."""
+0197:     accepted = load_accepted()
+0198:     versioned = [f for f in functions if (results.get(f["address"], {}).get("evidence") or {}).get("schema") == evidence.SCHEMA]
+0199:     inputs = evidence.input_digest(db) if versioned else None
+0200:     builds = compiled_evidence(db, versioned) if versioned else {}
+0201:     if versioned and evidence.input_digest(db) != inputs:
+0202:         raise SystemExit("inputs changed while recording mutation evidence; rerun the check")
+0203:     for f in functions:
+0204:         r = results.get(f["address"], {})
+0205:         build = builds.get(f["address"], {})
+0206:         fresh = evidence.current(r, build.get("object_digest"), inputs)
+0207:         generated = (r.get("evidence") or {}).get("parameters", {}).get("hand") is False
+0208:         if (r.get("strong") and mutation_strength(r.get("mutants", [])) and fresh and generated
+0209:                 and r.get("code_at_test") == build.get("code")):
+0210:             accepted[f["address"]] = {"name": f["demangled"], "killed": r["killed"], "tried": r["tried"],
+0211:                                       "code": r["code_at_test"], "evidence": r["evidence"]}
+0212:         else:
+0213:             if r.get("strong"):
+0214:                 print(f"stale mutation evidence: {f['address']}; rerun it on the current inputs")
+0215:             accepted.pop(f["address"], None)
+0216:     ACCEPTED.write_text(json.dumps(dict(sorted(accepted.items())), indent=1, ensure_ascii=False) + "\n")
+0217:     print(f"{ACCEPTED.relative_to(ROOT)}: {len(accepted)} functions")
+0218: 
+0219: 
+0220: def describe(text, point):
+0221:     a, b, new = point
+0222:     line = text.count("\n", 0, a) + 1
+0223:     return f"line {line}: '{text[a:b].strip()}' -> '{new.strip()}'"
+0224: 
+0225: 
+0226: # -- assembly -----------------------------------------------------------------
+0227: def functions_in_asm(text):
+0228:     """Normalized body of every function in a GCC .s file (local labels renamed,
+0229:     referenced .LC constants inlined)."""
+0230:     lines = text.splitlines()
+0231:     data, current = {}, None
+0232:     for line in lines:
+0233:         m = re.match(r"^(\.LC\d+):$", line)
+0234:         if m:
+0235:             current = m.group(1)
+0236:             data[current] = []
+0237:         elif current and (re.match(r"^\S+:$", line) or line.strip().startswith((".section", ".text"))):
+0238:             current = None
+0239:         elif current:
+0240:             data[current].append(line.strip())
+0241:     names = set(re.findall(r"\.type\s+([^,\s]+),\s*@function", text))
+0242:     out, name, body = {}, None, []
+0243:     for line in lines:
+0244:         if name is None:
+0245:             m = re.match(r"^([^\s:]+):$", line)
+0246:             if m and m.group(1) in names:
+0247:                 name, body = m.group(1), []
+0248:             continue
+0249:         if re.match(rf"^\s*\.size\s+{re.escape(name)},", line):
+0250:             labels = {}
+0251: 
+0252:             def rename(m):
+0253:                 tok = m.group(0)
+0254:                 if tok in data:
+0255:                     return "<" + ";".join(data[tok]) + ">"
+0256:                 return labels.setdefault(tok, f".L#{len(labels)}")
+0257:             out[name] = "\n".join(re.sub(r"\.L\w+", rename, l) for l in body)
+0258:             name = None
+0259:         else:
+0260:             body.append(line)
+0261:     return out
+0262: 
+0263: 
+0264: def references(asm_functions, known):
+0265:     """Function -> functions of ours it calls or takes the address of."""
+0266:     return {name: {t for t in re.findall(r"[\w.$@]+", body) if t in known and t != name}
+0267:             for name, body in asm_functions.items()}
+0268: 
+0269: 
+0270: # -- the run ------------------------------------------------------------------
+0271: class Mutant:
+0272:     def __init__(self, target, point, text):
+0273:         self.target, self.point, self.what = target, point, describe(text, point)
+0274:         old, new = text[point[0]:point[1]].strip(), point[2].strip()
+0275:         self.category = ("statement" if new == ";" else "constant" if old.isdigit() else
+0276:                          "boolean" if old in ("true", "false", "!") else
+0277:                          "comparison" if old in ("<", "<=", ">", ">=", "==", "!=") else
+0278:                          "logical" if old in ("&&", "||") else "arithmetic")
+0279:         self.affected = set()
+0280: 
+0281: 
+0282: def mutation_strength(rows):
+0283:     tried = [r for r in rows if r.get("outcome") in ("killed", "survived")]
+0284:     classes = {r.get("category") for r in tried if r.get("category")}
+0285:     killed = sum(r["outcome"] == "killed" and r.get("isolated") is True for r in tried)
+0286:     return len(tried) >= MIN_MUTANTS and len(classes) >= MIN_CLASSES and killed / len(tried) >= STRONG
+0287: 
+0288: 
+0289: def probe(source, text, mutant, baseline, slot):
+0290:     """Compiles the mutated TU; fills mutant.affected, False when invalid or equivalent."""
+0291:     a, b, new = mutant.point
+0292:     path = WORK / "probe" / str(slot) / source.name
+0293:     path.parent.mkdir(parents=True, exist_ok=True)
+0294:     path.write_text(text[:a] + new + text[b:])
+0295:     try:
+0296:         toolchain.compile_source(path, path.with_suffix(".s"), ["-I", str(hybrid.HYBRID)], assembly=True, quiet=True)
+0297:     except SystemExit:
+0298:         return False
+0299:     after = functions_in_asm(path.with_suffix(".s").read_text())
+0300:     mutant.affected = {n for n in set(after) | set(baseline) if after.get(n) != baseline.get(n)}
+0301:     return bool(mutant.affected & set(mutant.target["names"]))
+0302: 
+0303: 
+0304: def stats(report):
+0305:     out = {}
+0306:     for line in report:
+0307:         m = re.match(r"\s*stats (\S+) same (\d+) both-failed (\d+) different (\d+)(?: incomplete (\d+))?", line)
+0308:         if m:
+0309:             out[m.group(1)] = tuple(int(x or 0) for x in m.groups()[1:])
+0310:     return out
+0311: 
+0312: 
+0313: def generated_outcome(value):
+0314:     if value is None or value[3]:
+0315:         return "error"
+0316:     if value[2]:
+0317:         return "killed"
+0318:     return "survived" if value[0] >= autotest.MIN_COMPLETED else "error"
+0319: 
+0320: 
+0321: def verdicts(report):
+0322:     """Test name -> passed, from the loader's PASS/FAIL lines."""
+0323:     out = {}
+0324:     for line in report:
+0325:         m = re.match(r"tlhybrid: (\S+)\s+(PASS|FAIL) \(", line)
+0326:         if m:
+0327:             out[m.group(1)] = m.group(2) == "PASS"
+0328:     return out
+0329: 
+0330: 
+0331: def build_and_test(src, tests, names, out):
+0332:     os.environ["OTL_SELFTEST_TIMEOUT"] = str(60 + 12 * len(names))
+0333:     blob, loader = hybrid.build(out=out, verbose=False, src=src, tests=tests)
+0334:     try:
+0335:         code, report = hybrid.selftest(blob, loader, only=",".join(sorted(set(names))))
+0336:     except subprocess.TimeoutExpired:
+0337:         return {}, []  # incomplete process output cannot establish a mutant kill
+0338:     if code not in (0, 1):
+0339:         return {}, []
+0340:     return stats(report), report
+0341: 
+0342: 
+0343: def hand_coverage(db):
+0344:     """Function address -> names of the hand-written tests whose file declares it with TL_ORIGINAL."""
+0345:     out = {}
+0346:     by_name = {}
+0347:     for a, f in db["functions"].items():
+0348:         for n in f["names"]:
+0349:             by_name[n] = a
+0350:     for test in sorted(hybrid.TESTS.glob("*.cpp")):
+0351:         text = test.read_text(errors="replace")
+0352:         names = re.findall(r"^TL_TEST\((\w+)\)", text, re.M)
+0353:         for mangled in re.findall(r'TL_ORIGINAL\([^;]*?"(_Z\w+)"\)', text, re.S):
+0354:             if mangled in by_name:
+0355:                 out.setdefault(by_name[mangled], set()).update(names)
+0356:     return out
+0357: 
+0358: 
+0359: def main():
+0360:     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+0361:     parser.add_argument("addresses", nargs="*")
+0362:     parser.add_argument("--max", type=int, default=MAX_MUTANTS, help="mutants per function")
+0363:     parser.add_argument("--accept", action="store_true",
+0364:                         help=f"record strong tests in {ACCEPTED.relative_to(ROOT)} (check.py accepts them)")
+0365:     parser.add_argument("--hand", action="store_true",
+0366:                         help="check the hand-written tests in decomp/hybrid/tests (TL_ORIGINAL) instead of "
+0367:                              "generated ones; addresses default to every DIFF function they cover")
+0368:     parser.add_argument("--record", action="store_true",
+0369:                         help=f"only record the last run ({RESULT.relative_to(ROOT)}) in {ACCEPTED.relative_to(ROOT)}")
+0370:     args = parser.parse_args()
+0371:     if args.record:
+0372:         db = elfdb.load_db()
+0373:         results = json.loads(RESULT.read_text())
+0374:         return record(db, [db["functions"][a] for a in results if "tried" in results[a]], results)
+0375:     shutil.rmtree(WORK, ignore_errors=True)
+0376:     WORK.mkdir(parents=True)
+0377:     toolchain.CC_CACHE = WORK / "cc-cache"  # mutated sources would only litter the shared cache
+0378:     base = {}
+0379: 
+0380:     if args.hand:
+0381:         db = elfdb.load_db()
+0382:         coverage = hand_coverage(db)
+0383:         functions = ([db["functions"][hex(int(a, 16))] for a in args.addresses] if args.addresses
+0384:                      else [f for f in autotest.diff_functions(db) if f["address"] in coverage])
+0385:         functions = [f for f in {f["address"]: f for f in functions}.values() if f["address"] in coverage]
+0386:         tests = sorted(hybrid.TESTS.glob("*.cpp"))
+0387:         covering = lambda f: sorted(coverage[f["address"]])  # noqa: E731
+0388:         print(f"baseline: {len(functions)} functions under hand-written tests")
+0389:         tested_inputs = evidence.input_digest(db)
+0390:         tested_builds = compiled_evidence(db, functions)
+0391:         _, report = build_and_test(SRC, tests, [n for f in functions for n in covering(f)], WORK / "base")
+0392:         passed = verdicts(report)
+0393:         targets = [f for f in functions if all(passed.get(n) for n in covering(f))]
+0394:         print(f"  {len(targets)} with passing tests")
+0395:     else:
+0396:         gen = autotest.Generator()
+0397:         db = gen.db
+0398:         functions = ([db["functions"][hex(int(a, 16))] for a in args.addresses] if args.addresses
+0399:                      else autotest.diff_functions(db))
+0400:         functions = list({f["address"]: f for f in functions}.values())
+0401:         made, _ = gen.write(functions)
+0402:         tests = sorted(autotest.OUT.glob("*.cpp"))
+0403:         covering = lambda f: [f"auto_{f['address'][2:]}"]  # noqa: E731
+0404:         print(f"baseline: {len(made)} autotests")
+0405:         tested_inputs = evidence.input_digest(db)
+0406:         tested_builds = compiled_evidence(db, made)
+0407:         base, report = build_and_test(SRC, tests, [n for f in made for n in covering(f)], WORK / "base")
+0408:         targets = [f for f in made if covering(f)[0] in base and base[covering(f)[0]][2] == 0
+0409:                    and base[covering(f)[0]][3] == 0
+0410:                    and base[covering(f)[0]][0] >= autotest.MIN_COMPLETED]
+0411:         print(f"  {len(targets)} pass with at least {autotest.MIN_COMPLETED} completed cases")
+0412: 
+0413:     if evidence.input_digest(db) != tested_inputs:
+0414:         raise SystemExit("inputs changed during baseline testing; rerun on a stable snapshot")
+0415:     parameters = {"max_mutants": args.max, "probes": PROBES, "strong_threshold": STRONG,
+0416:                   "min_mutants": MIN_MUTANTS, "min_classes": MIN_CLASSES,
+0417:                   "cases": autotest.CASES, "min_completed": autotest.MIN_COMPLETED,
+0418:                   "budget_seconds": autotest.BUDGET_SECONDS, "hand": args.hand}
+0419: 
+0420:     # Our functions, their code and what they reach.
+0421:     tu_names = {t["id"]: t["name"] for t in db["tus"]}
+0422:     sources = {p.name: p for p in SRC.rglob("*.cpp")}
+0423:     asm = {}
+0424:     for name in sources:
+0425:         s = WORK / "base" / f"{Path(name).stem}.s"
+0426:         asm[name] = functions_in_asm(s.read_text()) if s.exists() else {}
+0427:     known = {n for funcs in asm.values() for n in funcs}
+0428:     calls = {}
+0429:     for funcs in asm.values():
+0430:         calls.update(references(funcs, known))
+0431: 
+0432:     def reach(f):
+0433:         seen, todo = set(), [n for n in f["names"] if n in known]
+0434:         while todo:
+0435:             n = todo.pop()
+0436:             if n not in seen:
+0437:                 seen.add(n)
+0438:                 todo += calls.get(n, ())
+0439:         return seen
+0440: 
+0441:     # Candidate mutants per target, compiled in parallel.
+0442:     queues, results = {}, {}
+0443:     jobs = []
+0444:     for f in targets:
+0445:         source = sources.get(tu_names.get(f["tu"], ""))
+0446:         if not source:
+0447:             results[f["address"]] = {"error": "no source"}
+0448:             continue
+0449:         text = source.read_text()
+0450:         masked = mask(text)
+0451:         span = definition(text, masked, f)
+0452:         if not span:
+0453:             results[f["address"]] = {"error": "definition not found"}
+0454:             continue
+0455:         points = mutation_points(text, masked, *span)
+0456:         random.Random(int(f["address"], 16)).shuffle(points)
+0457:         for p in points[:PROBES]:
+0458:             jobs.append((f, source, text, Mutant(f, p, text)))
+0459:     print(f"probing {len(jobs)} candidate mutants")
+0460:     with ThreadPoolExecutor(4) as pool:
+0461:         valid = list(pool.map(lambda j: probe(j[1], j[2], j[3], asm[j[1].name], id(j[3])), jobs))
+0462:     for (f, source, text, m), ok in zip(jobs, valid):
+0463:         q = queues.setdefault(f["address"], [])
+0464:         if ok and len(q) < args.max:
+0465:             m.source, m.reach = source, None
+0466:             q.append(m)
+0467:     reaches = {f["address"]: reach(f) for f in targets}
+0468: 
+0469:     # Rounds.
+0470:     done = {a: [] for a in queues}
+0471:     round_no = 0
+0472:     while any(queues.values()):
+0473:         round_no += 1
+0474:         chosen = []
+0475:         for address, q in queues.items():
+0476:             if not q or (chosen and getattr(q[0], "alone", False)):
+0477:                 continue
+0478:             m = q[0]
+0479:             # One mutant per test: a failure must point at a single mutant.
+0480:             if all(not (reaches[address] & c.affected) and not (reaches[c.target["address"]] & m.affected)
+0481:                    and not set(covering(m.target)) & set(covering(c.target)) for c in chosen):
+0482:                 chosen.append(q.pop(0))
+0483:                 if getattr(m, "alone", False):
+0484:                     break
+0485:         src = WORK / "src"
+0486:         shutil.rmtree(src, ignore_errors=True)
+0487:         shutil.copytree(SRC, src)
+0488:         by_file = {}
+0489:         for m in chosen:
+0490:             by_file.setdefault(m.source.relative_to(SRC), []).append(m)
+0491:         for rel, ms in by_file.items():
+0492:             text = (SRC / rel).read_text()
+0493:             for m in sorted(ms, key=lambda m: -m.point[0]):
+0494:                 a, b, new = m.point
+0495:                 text = text[:a] + new + text[b:]
+0496:             (src / rel).write_text(text)
+0497:         try:
+0498:             got, report = build_and_test(src, tests, [n for m in chosen for n in covering(m.target)], WORK / "round")
+0499:         except SystemExit as error:
+0500:             got, report = {}, []
+0501:             print(f"  round {round_no}: build failed: {error}")
+0502:         passed = verdicts(report)
+0503:         for m in chosen:
+0504:             names = covering(m.target)
+0505:             if args.hand:
+0506:                 s = None
+0507:                 if any(n not in passed for n in names):
+0508:                     # The run died (a crash outside a forked child): retry the mutant alone.
+0509:                     if len(chosen) > 1 and not getattr(m, "alone", False):
+0510:                         m.alone = True
+0511:                         queues[m.target["address"]].insert(0, m)
+0512:                         continue
+0513:                     outcome = "killed" if report else "error"
+0514:                 else:
+0515:                     outcome = "survived" if all(passed[n] for n in names) else "killed"
+0516:             else:
+0517:                 s = got.get(names[0])
+0518:                 outcome = generated_outcome(s)
+0519:             # Symbol scans cannot prove independence through indirect calls.
+0520:             # Batch discoveries are cheap candidates; only an isolated kill is evidence.
+0521:             if outcome == "killed" and len(chosen) > 1:
+0522:                 m.alone = True
+0523:                 queues[m.target["address"]].insert(0, m)
+0524:                 continue
+0525:             done[m.target["address"]].append({"mutant": m.what, "outcome": outcome, "stats": s,
+0526:                                                "isolated": len(chosen) == 1, "category": m.category})
+0527:         print(f"round {round_no}: {len(chosen)} mutants, ", end="")
+0528:         print(
+0529:               f"{sum(1 for m in chosen if done[m.target['address']] and done[m.target['address']][-1]['mutant'] == m.what and done[m.target['address']][-1]['outcome'] == 'killed')} killed", flush=True)
+0530: 
+0531:     unchanged = evidence.input_digest(db) == tested_inputs
+0532:     for f in targets:
+0533:         rows = done.get(f["address"], [])
+0534:         tried = [r for r in rows if r["outcome"] != "error"]
+0535:         killed = sum(r["outcome"] == "killed" for r in tried)
+0536:         results.setdefault(f["address"], {}).update(
+0537:             name=f["demangled"], tried=len(tried), killed=killed,
+0538:             score=round(killed / len(tried), 2) if tried else None,
+0539:             strong=unchanged and mutation_strength(rows), mutants=rows,
+0540:             mutation_classes=sorted({r["category"] for r in tried}), baseline_stats=base.get(covering(f)[0]),
+0541:             code_at_test=tested_builds.get(f["address"], {}).get("code"))
+0542:         build = tested_builds.get(f["address"], {})
+0543:         if unchanged and build.get("object_digest"):
+0544:             results[f["address"]]["evidence"] = evidence.tested(build["object_digest"], tested_inputs, parameters)
+0545:     if not unchanged:
+0546:         print("inputs changed during mutation testing; results are diagnostic only and cannot be recorded")
+0547:     RESULT.write_text(json.dumps(results, indent=1, ensure_ascii=False))
+0548:     if args.accept and not args.hand:
+0549:         record(db, functions, results)
+0550:     strong = [a for a, r in results.items() if r.get("strong")]
+0551:     print(f"\n{len(strong)} of {len(targets)} tests are strong (kill >= {STRONG:.0%} of mutants)")
+0552:     for address, r in sorted(results.items()):
+0553:         if "error" in r and "tried" not in r:
+0554:             print(f"  {address} {db['functions'][address]['demangled'][:50]}: {r['error']}")
+0555:             continue
+0556:         print(f"  {address} {r['name'][:50]:50} {r['killed']}/{r['tried']}")
+0557:         for row in r["mutants"]:
+0558:             if row["outcome"] == "survived":
+0559:                 print(f"      survived {row['mutant']}")
+0560:     shutil.rmtree(WORK / "probe", ignore_errors=True)
+0561: 
+0562: 
+0563: if __name__ == "__main__":
+0564:     main()
