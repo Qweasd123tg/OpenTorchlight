@@ -32,6 +32,7 @@ import elfdb  # noqa: E402
 import elfimage  # noqa: E402
 import objdiff  # noqa: E402
 import toolchain  # noqa: E402
+import resource_slots  # noqa: E402
 
 ROOT = elfdb.ROOT
 SRC = ROOT / "decomp" / "src"
@@ -407,7 +408,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
                     "-z", "max-page-size=4096", "--no-warn-rwx-segments", "-T", "hybrid.ld", "-o", blob.name,
                     *[o.name for o in objects], "hooks.o", "imports.o"], cwd=out, check=True)
     loader = out / "libtlhybrid.so"
-    subprocess.run(["cc", "-O2", "-Wall", "-Wextra", "-fPIC", "-shared", "-I", str(HYBRID), "-o", str(loader),
+    toolchain.run_compiler(["cc", "-O2", "-Wall", "-Wextra", "-fPIC", "-shared", "-I", str(HYBRID), "-o", str(loader),
                     str(HYBRID / "loader.c"), "-ldl"], check=True)
     manifest = {"schema": 1, "original_elf_sha256": ctx.image.sha256, "blob_base": f"{BLOB_BASE:#x}",
                 "hooks": [{k: (f"{v:#x}" if k == "original" else v) for k, v in h.items() if k != "expected"}
@@ -518,10 +519,11 @@ def selftest(blob, loader, only=None, shards=None):
 
     def run(index):
         try:
-            return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
-                                  env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
-                                  capture_output=True, text=True,
-                                  timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+            with resource_slots.slot("selftest"):
+                return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
+                                      env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
+                                      capture_output=True, text=True,
+                                      timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
         except subprocess.TimeoutExpired as error:
             from types import SimpleNamespace
             partial = error.stderr or ""

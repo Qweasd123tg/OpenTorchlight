@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import tempfile
 
@@ -158,15 +159,28 @@ class Stage:
     @classmethod
     def resume(cls, path, root=None):
         """Open an existing attempt after a process exit; its validation is lost."""
-        path = Path(path)
+        path = Path(path).resolve()
         saved = json.loads((path / "stage.json").read_text())
         if saved.get("schema") != 1 or not isinstance(saved.get("baseline"), dict):
             raise RuntimeError("unsupported saved Stage metadata")
+        saved_root = Path(saved["root"]).resolve()
+        if root is not None and Path(root).resolve() != saved_root:
+            raise RuntimeError("saved Stage root mismatch")
+        attempts = (saved_root / "build-decomp/attempts").resolve()
+        if path.parent != attempts:
+            raise RuntimeError("saved Stage must be inside root/build-decomp/attempts")
+        for name, digest in saved["baseline"].items():
+            if (not isinstance(name, str) or Path(name).is_absolute() or ".." in Path(name).parts
+                    or Path(name).as_posix() != name
+                    or not name.startswith(("decomp/", "tools/decomp/"))
+                    or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+                raise RuntimeError("invalid saved Stage baseline")
         instance = cls.__new__(cls)
         instance.path = path
-        instance.root = Path(root) if root is not None else Path(saved["root"])
+        instance.root = saved_root
         instance.baseline = saved["baseline"]
         instance.validated = None
+        instance.validated_inputs = None
         instance._link_external_inputs()
         return instance
 
@@ -223,9 +237,12 @@ class Stage:
         """Check every final TU and the complete headless suite before publishing."""
         import hybrid
         import objdiff
+        import autotest
         self.validated = None
         self.validated_inputs = None
+        autotest.write_runtime(self.path / "build-decomp/hybrid/autotests")
         final_state = tree_state(self.path)
+        final_fixtures = self._generated_tests_state()
         final_inputs = self._input_digest()
         tool_changes = [name for name in set(final_state) | set(self.baseline)
                         if name.startswith("tools/") and final_state.get(name) != self.baseline.get(name)]
@@ -259,11 +276,13 @@ class Stage:
             units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True), sources)
             if any(unit.get("unknown") for unit in units):
                 raise RuntimeError("final sources contain unknown original signatures")
-            count = len(list((self.path / "decomp/hybrid/tests").glob("*.cpp")))
+            tests = sorted((self.path / "decomp/hybrid/tests").glob("*.cpp"))
+            tests += sorted((self.path / "build-decomp/hybrid/autotests").glob("*.cpp"))
+            count = len(tests)
             shards = max(1, int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs()))
             os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 20 * ((count + shards - 1) // shards)))
             blob, loader = hybrid.build(out=self.path / "build-decomp/hybrid/final", src=self.path / "decomp/src",
-                                        tests=sorted((self.path / "decomp/hybrid/tests").glob("*.cpp")), verbose=False)
+                                        tests=tests, verbose=False)
             code, report = hybrid.selftest(blob, loader)
             if code:
                 raise RuntimeError("final headless selftest failed:\n" + "\n".join(report))
@@ -272,9 +291,12 @@ class Stage:
                 covered = check.shadow_covered(getattr(original, "db", {"functions": {}}), report)
             else:
                 covered = set(coverage_provider(self, units, report))
-        self._preserve(baseline_units, units, covered, final_state, baseline_covered)
+        self._preserve(baseline_units, units, covered, final_state, baseline_covered,
+                       db=getattr(original, "db", {}))
         if tree_state(self.path) != final_state:
             raise RuntimeError("validation inputs changed while the final tree was being checked")
+        if self._generated_tests_state() != final_fixtures:
+            raise RuntimeError("generated comparison fixtures changed during validation")
         if self._input_digest() != final_inputs:
             raise RuntimeError("external validation inputs changed during the final checks")
         with tree_lock(self.root):
@@ -287,7 +309,13 @@ class Stage:
         self.covered, self.report = covered, report
         self.validated = final_state
         self.validated_inputs = final_inputs
+        self.validated_fixtures = final_fixtures
         return units
+
+    def _generated_tests_state(self):
+        base = self.path / "build-decomp/hybrid/autotests"
+        return {p.relative_to(base).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in sorted(base.rglob("*")) if p.is_file()}
 
     def _input_digest(self):
         """Fingerprint the actual staged build, compiler, original and runtime."""
@@ -296,11 +324,21 @@ class Stage:
             os.environ.pop("OTL_EXTRA_INCLUDE", None)
             return evidence.input_digest(elfdb.load_db(), root=self.path)
 
-    def _preserve(self, baseline_units, final_units, covered, final_state, baseline_covered=()):
+    def _preserve(self, baseline_units, final_units, covered, final_state, baseline_covered=(), db=None):
+        db = db or {}
+        functions = db.get("functions", {})
         def definitions(units):
-            return {row["address"]: (row, unit.get("object_digest", row.get("object_digest")))
-                    for unit in units for row in unit["functions"]
-                    if row.get("address") and row["status"] not in ("MISSING", "EXTRA") and not row.get("weak")}
+            result = {}
+            for index, unit in enumerate(units):
+                owner = unit.get("tu") or Path(unit.get("source", str(index))).name
+                for row in unit["functions"]:
+                    address = row.get("address")
+                    if (row["status"] == "MISSING"
+                            or functions.get(address, {}).get("kind") == "compiler"):
+                        continue  # hybrid does not hook compiler initialization functions
+                    key = (owner, row.get("name") or address, address)
+                    result.setdefault(key, []).append((row, unit.get("object_digest", row.get("object_digest"))))
+            return result
         before, after = definitions(baseline_units), definitions(final_units)
         # An unchanged instruction stream is insufficient for EH and data.
         # Unknown existing definitions are allowed only with the same full object
@@ -312,19 +350,53 @@ class Stage:
                                  if not key.startswith(("decomp/src/", "decomp/hybrid/tests/"))
                                  and key != "decomp/autotests.json"}
         same_context = context(self.baseline) == context(final_state)
-        for address, (old, old_object) in before.items():
-            current = after.get(address)
-            if not current:
-                raise RuntimeError("existing definition disappeared: " + address)
-            row, new_object = current
-            if row["status"] == "MATCH" or address in covered:
-                continue
-            if old["status"] == "MATCH":
-                raise RuntimeError("previous MATCH lost without fresh behavioral evidence: " + address)
-            if address in baseline_covered:
-                raise RuntimeError("previous behavioral acceptance lost without fresh comparison: " + address)
-            if not same_context or not old_object or old_object != new_object:
-                raise RuntimeError("existing DIFF changed without fresh behavioral evidence: " + address)
+        for key, old_rows in before.items():
+            if key not in after:
+                # Compiler extras are absent from the hook table and may disappear.
+                if all(row["status"] == "EXTRA" and self._compiler_extra(row.get("name", ""))
+                       for row, _ in old_rows):
+                    continue
+                raise RuntimeError("existing definition disappeared: " + str(key[2] or key[1]))
+        for key, rows in after.items():
+            old_rows = before.get(key, [])
+            for row, new_object in rows:
+                address = row.get("address")
+                name = row.get("name", "")
+                if row["status"] == "EXTRA" or not address:
+                    if self._helper_extra(name):
+                        continue
+                    if (same_context and new_object and old_rows
+                            and all(old_object == new_object for _, old_object in old_rows)):
+                        continue
+                    import objdiff
+                    original_names = {n for f in functions.values() for n in f.get("names", [])}
+                    invented = objdiff.unknown_members({"classes": db.get("classes", {})}, original_names, [name])
+                    if invented:
+                        raise RuntimeError("invented game definition: " + name)
+                    raise RuntimeError("unsupported extra definition: " + name)
+                if row["status"] == "MATCH" or address in covered:
+                    continue
+                if not old_rows:
+                    raise RuntimeError("new definition lacks MATCH or fresh behavioral evidence: " + address)
+                if any(old["status"] == "MATCH" for old, _ in old_rows):
+                    raise RuntimeError("previous MATCH lost without fresh behavioral evidence: " + address)
+                if address in baseline_covered:
+                    raise RuntimeError("previous behavioral acceptance lost without fresh comparison: " + address)
+                if (not same_context or not new_object
+                        or any(not old_object or old_object != new_object for _, old_object in old_rows)):
+                    raise RuntimeError("existing DIFF changed without fresh behavioral evidence: " + address)
+
+    @staticmethod
+    def _compiler_extra(name):
+        return bool(re.match(r"^(?:_GLOBAL__[ID]_|__tcf_\d+(?:$|\.)|"
+                             r"_Z41__static_initialization_and_destruction_0ii(?:$|\.))", name))
+
+    @classmethod
+    def _helper_extra(cls, name):
+        # Only pinned standard-library template namespaces and GCC initialization
+        # scaffolding. Game helpers are not accepted merely because they are weak.
+        return cls._compiler_extra(name) or bool(re.match(
+            r"^_Z(?:St|N[KVR]*(?:St|9__gnu_cxx))\d+[A-Za-z_][A-Za-z_0-9]*I", name))
 
     def rebase(self, validate=False, coverage_provider=None):
         """Reapply the saved file delta to the current tree, without regenerating it."""
@@ -351,7 +423,8 @@ class Stage:
             self._save_baseline()
         self.validated = None
         self.validated_inputs = None
-        for name in ("baseline_units", "final_units", "final_objects", "validation_db", "covered", "report"):
+        for name in ("baseline_units", "final_units", "final_objects", "validation_db", "covered", "report",
+                     "validated_fixtures"):
             self.__dict__.pop(name, None)
         if validate:
             self.validate(coverage_provider=coverage_provider)
@@ -362,6 +435,9 @@ class Stage:
             raise RuntimeError("publication requires validation of the unchanged final tree")
         if not getattr(self, "validated_inputs", None):
             raise RuntimeError("publication requires validation of the complete build inputs")
+        if (hasattr(self, "validated_fixtures")
+                and self._generated_tests_state() != self.validated_fixtures):
+            raise RuntimeError("generated comparison fixtures changed after validation")
         final = tree_state(self.path)
         changed = [name for name in sorted(set(final) | set(self.baseline))
                    if final.get(name) != self.baseline.get(name)]
@@ -372,10 +448,13 @@ class Stage:
                 raise RuntimeError("source/header tree changed during the attempt; rebase and validate again")
             if self._input_digest() != self.validated_inputs:
                 raise RuntimeError("build inputs changed after validation")
+            if (hasattr(self, "validated_fixtures")
+                    and self._generated_tests_state() != self.validated_fixtures):
+                raise RuntimeError("generated comparison fixtures changed after validation")
             if hasattr(self, "validation_db"):
                 import acceptance
                 self._preserve(self.baseline_units, self.final_units, self.covered, final,
-                               acceptance.prior_compared(self.root, self.validation_db))
+                               acceptance.prior_compared(self.root, self.validation_db), db=self.validation_db)
             contents = {name: (self.path / name).read_bytes() if name in final else None for name in changed}
             if any(data is not None and hashlib.sha256(data).hexdigest() != final[name]
                    for name, data in contents.items()):
@@ -389,6 +468,9 @@ class Stage:
                     raise RuntimeError("publication tree changed during final object verification")
                 if self._input_digest() != self.validated_inputs:
                     raise RuntimeError("build inputs changed during publication verification")
+                if (hasattr(self, "validated_fixtures")
+                        and self._generated_tests_state() != self.validated_fixtures):
+                    raise RuntimeError("generated comparison fixtures changed during publication verification")
                 _write_file(journal / "committed", b"1\n")
                 _sync_directory(journal)
             except BaseException:

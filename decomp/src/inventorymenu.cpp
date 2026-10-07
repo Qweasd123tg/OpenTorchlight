@@ -23,3 +23,20 @@ bool CInventoryMenu::handle_EndRotateRight(const CEGUI::EventArgs&)
     m_bRotateRight = false;
     return true;
 }
+
+#include "Equipment.h"
+
+void CInventoryMenu::equipmentDropped(CEquipment*)
+{
+    updateLayout();
+}
+
+void CInventoryMenu::equipmentEquipped(CEquipment*)
+{
+    updateLayout();
+}
+
+void CInventoryMenu::equipmentUsed(CEquipment*)
+{
+    updateLayout();
+}

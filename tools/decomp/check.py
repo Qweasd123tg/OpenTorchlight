@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import acceptance
+import fcntl
 from collections import Counter
 import json
 import os
@@ -50,6 +51,18 @@ def ensure_db():
     if db["link_order_inversions"]:
         raise SystemExit(f"TU partition inconsistent: {db['link_order_inversions']} link-order inversions")
     return db
+
+
+def ensure_types():
+    """A fresh worktree must have types before evidence fingerprints them."""
+    path = ROOT / "build-decomp/types.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.with_suffix(".prepare.lock").open("a+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        if not path.exists():
+            subprocess.run([sys.executable, str(ROOT / "tools/decomp/types_export.py")], check=True)
+        if not path.exists():
+            raise SystemExit("types export did not create build-decomp/types.json")
 
 
 def shadow_declared(db):
@@ -108,6 +121,7 @@ def main():
     args = parser.parse_args()
 
     db = ensure_db()
+    ensure_types()
     comparison_evidence = acceptance.load_comparisons(ROOT, db)
     inputs_before = evidence.input_digest(db) if not args.no_game or comparison_evidence else None
     game_tus = {t["id"] for t in db["tus"] if t["kind"] == "game"}
