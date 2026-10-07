@@ -109,6 +109,7 @@
   "LogicTimerDescriptor.cpp": "opencode",
   "MasterResourceManager.cpp": "opencode",
   "menumanager.cpp": "opencode",
+  "MerchantMenu.cpp": "dot",
   "Missile.cpp": "pc2",
   "MissileDescriptor.cpp": "opencode",
   "MissilePreloader.cpp": "opencode",
