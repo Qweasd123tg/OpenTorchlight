@@ -401,6 +401,7 @@ class PublishedObjects(SyntheticStage):
                         "unknown": [], "object_digest": digest}
             with patch.object(objdiff, "Original", return_value=SimpleNamespace(db=FIXTURE_DB)), \
                     patch.object(objdiff, "compare_source", side_effect=compare), \
+                    patch.object(objdiff, "compiled_identity", side_effect=compare), \
                     patch.object(toolchain, "parallel_map", side_effect=lambda fn, items: [fn(item) for item in items]), \
                     patch.object(hybrid, "build", return_value=(Path("blob"), Path("loader"))), \
                     patch.object(hybrid, "selftest", return_value=(0, ["tlhybrid: control PASS (0)"])), \

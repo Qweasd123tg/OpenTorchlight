@@ -118,6 +118,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--no-game", action="store_true")
     parser.add_argument("--json", type=Path, default=ROOT / "build-decomp" / "progress.json")
+    parser.add_argument("--scores", action="store_true", help="also calculate slow DIFF similarity percentages (not acceptance)")
     args = parser.parse_args()
 
     db = ensure_db()
@@ -131,7 +132,7 @@ def main():
 
     sources = sorted((ROOT / "decomp" / "src").rglob("*.cpp"))
     original = objdiff.Original(db=db)
-    units = toolchain.parallel_map(lambda s: objdiff.compare_source(s, original), sources)
+    units = toolchain.parallel_map(lambda s: objdiff.compare_source(s, original, scores=args.scores), sources)
     objdiff.save_norm_cache(original)
     status = Counter()
     matched = {}

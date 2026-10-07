@@ -5,10 +5,10 @@
     prompt = build_prompt(f, root=root, tu="RunicCore.cpp", headers={"CRunicCore": "RunCore.h"},
                           draft=converted, idioms=IDIOMS.read_text(), examples=rendered)
 
-The model never reads the repository (llm_loop.py): everything it gets is packed here, so this
-only ever reads the owning class header, one disassembly and the texts the caller passes in.
-No database, no types.json, no Ghidra: build_prompt() reads the header and packet
-ASM, or asks objdump for just the requested range of the original ELF.
+The model never reads the repository (llm_loop.py): everything it gets is packed here.
+An optional reusable ContextIndex selects direct dependencies and referenced data
+from the same exact ASM shown in the packet. It borrows Loop's existing DB/ELF;
+no reload, types.json or Ghidra run is needed to assemble a packet.
 
 Which header goes in is deliberate: only the one that owns the class, whole. A trimmed class body
 (a field left out, a virtual moved, a declaration dropped) compiles into a different object, so
@@ -29,6 +29,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 import scaffold  # noqa: E402
+from llm_context import compose_prompt  # noqa: E402
 
 NO_ASM = "(no ASM for this function: the scaffold packet has none and objdump could not run)"
 NO_DRAFT = "(no Ghidra draft for this function)"
@@ -37,7 +38,7 @@ DEFAULT_MAX_CHARS = 131072
 RULES = (
     "Rules: C++98, the GNU++98 dialect GCC 4.4.7 understands; use the names of the header above; call "
     "the other functions normally (std::wstring, TArrayList methods instead of inlined internals, objects "
-    "through their classes); globals are declared in GenGlobals.h, other classes in their own headers; "
+    "through their classes); use the supplied declarations and machine/data references, never invent an API; "
     "add no #include; answer with exactly one fenced ```cpp block that holds this one definition and "
     "nothing else; never bind a symbol with an __asm__ label and never leave a stub or a placeholder body."
 )
@@ -181,19 +182,21 @@ def _header_block(root, wanted, owned):
     return f"{what}\n" + "\n\n".join(blocks), missing
 
 
-def build_prompt(f, *, root, tu, headers, draft, idioms, examples="", stale_note="", max_chars=DEFAULT_MAX_CHARS):
+def build_prompt(f, *, root, tu, headers, draft, idioms, examples="", stale_note="", max_chars=DEFAULT_MAX_CHARS,
+                 context_index=None, asm=None):
     """The whole task as one string. See the module docstring for what goes in and why."""
     root = Path(root)
     address = address_of(f)
     plain_name(tu, "TU")  # the name also builds the packet path asm_of() uses
     owned = bool(owning_class(f))
-    wanted = header_names(f, headers)
+    wanted = header_names(f, headers) if owned or context_index is None else []
     headers_text, missing = _header_block(root, wanted, owned)
     shown = [name for name in wanted if name not in missing]
     others = [name for name in _unique([h for v in headers.values()
                                         for h in ([v] if isinstance(v, str) else v)])
               if name not in shown and header_path(root, name).exists()]
-    asm = asm_of(root, tu, f)
+    asm = asm_of(root, tu, f) if asm is None else asm
+    context = context_index.build(f, asm, tu=tu, already_shown=shown).require_complete() if context_index is not None else ""
     draft_text = (draft or "").strip()
 
     # Same text first for every call of a class (the provider caches the prefix), then this
@@ -210,15 +213,10 @@ def build_prompt(f, *, root, tu, headers, draft, idioms, examples="", stale_note
             f"```cpp\n{draft_text or NO_DRAFT}\n```",
             RULES]
 
-    mandatory = "\n\n".join(part for part in fixed + tail if part)
-    if examples:
-        optional = ("Accepted functions of the game next to their drafts, for the style and the idioms:\n\n"
-                    f"{examples.strip()}")
-        full = "\n\n".join(part for part in fixed + [optional] + tail if part)
-        if len(full) <= max_chars:
-            return full
-    if len(mandatory) > max_chars:
-        raise ValueError(f"{f.get('demangled') or address}: the mandatory part is {len(mandatory)} chars, "
-                         f"over the {max_chars} budget (idioms {len(idioms)}, headers {len(headers_text)}, "
-                         f"ASM {len(asm)}, draft {len(draft_text)}); raise max_chars or map fewer headers")
-    return mandatory
+    optional = ("Accepted functions of the game next to their drafts, for the style and the idioms:\n\n"
+                f"{examples.strip()}") if examples else ""
+    try:
+        return compose_prompt(fixed=fixed, context=context, tail=tail, examples=optional, max_chars=max_chars)
+    except ValueError as error:
+        raise ValueError(f"{f.get('demangled') or address}: {error} "
+                         f"(idioms {len(idioms)}, headers {len(headers_text)}, ASM {len(asm)}, draft {len(draft_text)})") from error

@@ -3,6 +3,7 @@ import json
 import io
 from contextlib import nullcontext, redirect_stdout
 from pathlib import Path
+from types import SimpleNamespace
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -296,6 +297,70 @@ class Pipeline(unittest.TestCase):
             self.loop.run()
         self.assertIn("accepted 1 of 2 (1 MATCH); pending 0; blocked 1", output.getvalue())
         self.assertNotIn("accepted 2 of 2", output.getvalue())
+
+    def context_packet(self):
+        self.loop.prompt_for = llm_loop.Loop.prompt_for.__get__(self.loop)
+        self.loop.examples, self.loop.stale_note = [], ""
+        self.loop.original.image = SimpleNamespace(symbols=[], dynsyms=[], relocs={},
+                                                   section_at=lambda address: None)
+        self.loop.db["tus"] = [{"id": 1, "name": "Probe.cpp", "kind": "game"}]
+        (self.root / "decomp/include/Probe.h").write_text(
+            "class CProbe\n{\npublic:\n    int work();\n    int other();\n};\n")
+        prompts = self.root / "tools/decomp/prompts"
+        prompts.mkdir(parents=True)
+        (prompts / "idioms.md").write_text("C++98; ASM is authoritative.\n")
+
+    def test_context_index_and_exact_asm_are_prepared_once_not_each_round(self):
+        self.context_packet()
+        self.loop.prepare_only = True
+        self.loop.funcs.append(function("0x3", "CProbe::other()"))
+        with patch.object(llm_loop, "ContextIndex", wraps=llm_loop.ContextIndex) as index, \
+                patch("llm_packet.asm_of", return_value="2: ret\n3: ret") as asm:
+            self.loop.run()
+            one = self.loop.prompt_for(self.loop.funcs[0])
+            self.assertEqual(one, self.loop.prompt_for(self.loop.funcs[0]))
+        self.assertEqual(1, index.call_count)
+        self.assertIs(index.call_args.kwargs["image"], self.loop.original.image)
+        self.assertEqual(2, asm.call_count)
+        self.model_class.assert_not_called()
+
+    def test_real_packet_preparation_missing_dependency_blocks_before_model(self):
+        self.context_packet()
+        self.loop.db["tus"].append({"id": 2, "name": "Dependency.cpp", "kind": "game"})
+        callee = dict(function("0x20", "CUnknown::value()", tu=2), scope="CUnknown", method="value")
+        self.loop.db["functions"]["0x20"] = callee
+        with patch("llm_packet.asm_of", return_value="2: call 20\n7: ret"):
+            self.loop.run()
+        self.assertEqual({"0x2": "blocked"}, self.result()["status"])
+        self.assertIn("No existing declaration of direct callee", self.result()["blocked"]["0x2"])
+        self.model_class.assert_not_called()
+
+    def test_real_packet_automatically_supplies_known_dependency_and_data(self):
+        self.context_packet()
+        self.loop.prepare_only = True
+        self.loop.db["tus"].append({"id": 2, "name": "Dependency.cpp", "kind": "game"})
+        callee = dict(function("0x20", "CCallee::value()", tu=2), scope="CCallee", method="value")
+        self.loop.db["functions"]["0x20"] = callee
+        self.loop.db["globals"] = [{"address": "0x6000", "name": "gBalance", "size": 4, "bind": "global"}]
+        (self.root / "decomp/include/Callee.h").write_text("class CCallee { public: int value(); int balance; };\n")
+        (self.root / "decomp/include/Variables.h").write_text("extern int gBalance;\nextern int unrelated;\n")
+        with patch("llm_packet.asm_of", return_value="2: call 20\n7: mov 0x6000,%eax\nb: ret"):
+            self.loop.run()
+        prompt = (self.loop.work / "prompts/0x2.md").read_text()
+        self.assertIn("class CCallee { public: int value(); int balance; };", prompt)
+        self.assertIn("extern int gBalance;", prompt)
+        self.assertNotIn("extern int unrelated;", prompt)
+        self.assertEqual({}, self.result()["blocked"])
+        self.model_class.assert_not_called()
+
+    def test_over_budget_repair_blocks_instead_of_sending_partial_feedback(self):
+        self.loop.max_prompt_chars = 64
+        self.model.ask.return_value = ("int CProbe::work() { return 1; }", "session")
+        self.loop.compile = Mock(return_value=("compile-error", "full diagnostic " * 100))
+        self.loop.run()
+        self.assertEqual({"0x2": "blocked"}, self.result()["status"])
+        self.assertIn("no code/feedback was truncated", self.result()["blocked"]["0x2"])
+        self.model.ask.assert_called_once()
 
     def test_unit_preserves_macros_conditional_includes_and_original_bytes(self):
         self.loop.existing = '#define FLAG 1\r\n#if FLAG\r\n#include "Probe.h"\r\n#endif\r\n// original\r\n'

@@ -38,6 +38,7 @@ import promote  # noqa: E402
 import toolchain  # noqa: E402
 import llm_definitions as definitions  # noqa: E402
 from llm_model import Model  # noqa: E402
+from llm_context import ContextIndex  # noqa: E402
 from llm_packet import DEFAULT_MAX_CHARS, build_prompt  # noqa: E402
 
 ROOT = elfdb.ROOT
@@ -283,7 +284,7 @@ class Loop:
             probe = self.work / "baseline" / self.tu["name"]
             probe.parent.mkdir(exist_ok=True)
             probe.write_bytes(self.existing.encode())
-            rows = objdiff.compare_source(probe, self.original, quiet=True)["functions"]
+            rows = objdiff.compare_source(probe, self.original, quiet=True, scores=False)["functions"]
             present = {r["address"] for r in rows if r.get("address") and r["status"] not in ("MISSING", "EXTRA")}
             self.status.update({a: "existing" for a in selected if a in present})
         for address, code in self.accepted.items():
@@ -294,7 +295,7 @@ class Loop:
             probe = self.work / "restored" / self.tu["name"]
             probe.parent.mkdir(exist_ok=True)
             probe.write_bytes(self.unit().encode())
-            unit = objdiff.compare_source(probe, self.original, quiet=True)
+            unit = objdiff.compare_source(probe, self.original, quiet=True, scores=False)
             for address in self.accepted:
                 status, detail = definitions.verdict(selected[address], unit, self.db)
                 if status != "MATCH" or unit.get("unknown"):
@@ -522,7 +523,7 @@ class Loop:
         trial.parent.mkdir(parents=True, exist_ok=True)
         trial.write_text(self.unit([code]))
         try:
-            result = objdiff.compare_source(trial, self.original, quiet=True)
+            result = objdiff.compare_source(trial, self.original, quiet=True, scores=False)
         except SystemExit as error:
             lines = [l.split(": error: ", 1)[-1] for l in str(error).splitlines() if "error" in l][:12]
             return "compile-error", "\n".join(lines) + self.name_hints(lines)
@@ -563,12 +564,21 @@ class Loop:
         return "\n".join(diff[:80])
 
     def prompt_for(self, f):
+        if not hasattr(self, "_packet_prompts"):
+            self._packet_prompts = {}
+        if f["address"] in self._packet_prompts:
+            return self._packet_prompts[f["address"]]
+        if not hasattr(self, "_context_index"):
+            self._context_index = ContextIndex(root=ROOT, db=self.db, image=self.original.image,
+                                               headers=headers_by_class())
         draft = self.draft(f)
         chosen = examples.choose(self.examples, draft, exclude={f["address"]})
-        return build_prompt(f, root=ROOT, tu=self.tu["name"], headers=self.headers, draft=draft,
+        prompt = build_prompt(f, root=ROOT, tu=self.tu["name"], headers=self.headers, draft=draft,
                             idioms=(ROOT / "tools/decomp/prompts/idioms.md").read_text(),
                             examples=examples.render(chosen) if chosen else "", stale_note=self.stale_note,
-                            max_chars=self.max_prompt_chars)
+                            max_chars=self.max_prompt_chars, context_index=self._context_index)
+        self._packet_prompts[f["address"]] = prompt
+        return prompt
 
     def ask(self, item, round_no):
         """Next candidate for a pending function. A function moves on to the next model of
@@ -578,13 +588,17 @@ class Loop:
             item.update(model=item["model"] + 1, tries=0, session=None)
         while True:
             if item["session"] and item["feedback"]:
-                prompt = item["feedback"][:self.max_prompt_chars]
+                prompt = item["feedback"]
             else:
                 prompt = self.prompt_for(f)
                 if item.get("code") and item["feedback"]:
                     addition = (f"\n\nAn earlier attempt was not accepted:\n```cpp\n{item['code']}\n```\n"
                                 f"{item['feedback']}")
-                    prompt += addition[:max(0, self.max_prompt_chars - len(prompt))]
+                    prompt += addition
+            if len(prompt) > self.max_prompt_chars:
+                item["blocked_reason"] = (f"Complete repair input is {len(prompt)} chars, over the "
+                                          f"{self.max_prompt_chars} budget; no code/feedback was truncated.")
+                return f["address"], "", item["session"]
             model = self.models[item["model"]]
             code, sid = model.ask(prompt, item["session"], tag=f"{f['address']} round {round_no} {model.model}")
             if code or item["model"] + 1 >= len(self.models):
@@ -645,6 +659,11 @@ class Loop:
             diffs = {}
             for address, code, sid in answers:
                 item = pending[address]
+                if item.get("blocked_reason"):
+                    item["feedback"] = item.pop("blocked_reason")
+                    self.status[address] = "blocked"
+                    del pending[address]
+                    continue
                 item["session"], item["code"] = sid, code
                 self.by_model[address] = self.models[item["model"]].model
                 if not code:
@@ -794,7 +813,7 @@ class Loop:
         return True
 
     def compare(self):
-        return objdiff.compare_source(self.source, self.original, quiet=True)
+        return objdiff.compare_source(self.source, self.original, quiet=True, scores=False)
 
     def test(self, pending, diffs, round_no):
         """Generated differential tests for every DIFF candidate in one game run."""
@@ -803,7 +822,7 @@ class Loop:
         text = self.unit(candidates.values())
         self.source.write_text(text)
         try:
-            objdiff.compare_source(self.source, self.original, quiet=True)
+            objdiff.compare_source(self.source, self.original, quiet=True, scores=False)
         except SystemExit:
             for a in candidates:  # fall back: test them one by one next round
                 pending[a]["feedback"] = ("Your definition compiles alone but conflicts with the other functions "

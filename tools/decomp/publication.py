@@ -262,7 +262,7 @@ class Stage:
                 os.environ["OTL_INCLUDE_ROOT"] = str(self.root)
                 os.environ.pop("OTL_EXTRA_INCLUDE", None)
                 baseline_sources = sorted((self.root / "decomp/src").rglob("*.cpp"))
-                baseline_units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True), baseline_sources)
+                baseline_units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True, scores=False), baseline_sources)
             finally:
                 toolchain.CONFIG = saved_config
                 for key, value in saved_environment.items():
@@ -273,7 +273,7 @@ class Stage:
         with self.activate():
             os.environ.pop("OTL_EXTRA_INCLUDE", None)
             sources = sorted((self.path / "decomp/src").rglob("*.cpp"))
-            units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True), sources)
+            units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True, scores=False), sources)
             if any(unit.get("unknown") for unit in units):
                 raise RuntimeError("final sources contain unknown original signatures")
             tests = sorted((self.path / "decomp/hybrid/tests").glob("*.cpp"))
@@ -503,7 +503,7 @@ class Stage:
             toolchain.SHARED_CC_CACHE = self.root / "build-decomp/shared-cc-cache"
             os.environ["OTL_INCLUDE_ROOT"] = str(self.root)
             os.environ.pop("OTL_EXTRA_INCLUDE", None)
-            units = toolchain.parallel_map(lambda source: objdiff.compare_source(source, original, quiet=True), sources)
+            units = toolchain.parallel_map(lambda source: objdiff.compiled_identity(source, original, quiet=True), sources)
         finally:
             toolchain.CONFIG, toolchain.SHARED_CC_CACHE = saved_config, saved_cache
             for key, value in environment.items():
