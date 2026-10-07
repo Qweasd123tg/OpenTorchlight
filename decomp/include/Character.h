@@ -23,7 +23,13 @@ enum EJournalStatistic { EJournalStatistic_GEN_LAST = 0x7fffffff };
 enum EAIState
 {
     // Leaves updateAI without an action; berserk resets the AI to it.
-    AISTATE_IDLE = 2
+    AISTATE_IDLE = 2,
+    // Dead or dying: alive() is false for it and for AISTATE_DEAD, and both
+    // make updateHP and updateMotion leave the unit alone.
+    AISTATE_DYING = 5,
+    // The state that additionally drives the corpse fade-out in
+    // characterShouldFadeOut.
+    AISTATE_DEAD = 6
 };
 
 // Partial: members used by recovered TUs. The vtable is complete; return
@@ -109,6 +115,13 @@ public:
     virtual void calculateMaxMana();
     virtual void calculateMaxHP();
 
+    int petIndex(CCharacter* pet);
+    bool hasPet(CCharacter* pet);
+
+    bool spendPerkPoint();
+    bool spendSkillPoint();
+    void spendMeleePoint();
+
     void incrementJournalStatistic(EJournalStatistic statistic,int amount);
     void performUnknownSkill(CSkill* skill);
     float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
@@ -162,9 +175,21 @@ public:
     Ogre::SceneNode* m_pRightShoulderNode;
     Ogre::SceneNode* m_pHeadNode;
 private:
-    char m_CharacterData320[0x444-0x320];
+    char m_CharacterData320[0x330 - 0x320];
+    EAIState m_eAIState;
+    char m_CharacterData334[0x414 - 0x334];
+    float m_fHPFloat;
+    char m_CharacterData418[0x42c - 0x418];
+    int m_iMeleeStat;
+    char m_CharacterData430[0x438 - 0x430];
+    float m_fManaFloat;
+    char m_CharacterData43c[0x444 - 0x43c];
     int m_iGold;
-    char m_CharacterData448[0x4a0 - 0x448];
+    char m_CharacterData448[0x45c - 0x448];
+    int m_iUnusedStatPoints;
+    int m_iUnusedSkillPoints;
+    int m_iUnusedPerkPoints;
+    char m_CharacterData468[0x4a0 - 0x468];
     bool m_bCharacterFlag4A0;
     char m_CharacterData4A1[0x52e - 0x4a1];
     bool m_bInvulnerable;
