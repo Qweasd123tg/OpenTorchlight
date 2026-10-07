@@ -46,6 +46,23 @@ WSTRING = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<
 OGRE_VALUES = {"Ogre::Vector3": 3, "Ogre::Vector2": 2, "Ogre::Quaternion": 4, "Ogre::ColourValue": 4}
 
 
+def write_runtime(out=None):
+    """Shared observer storage, also required by handwritten comparisons.
+
+    Do not clear fixtures here: final Stage validation must retain its selected
+    differential tests even when no new tests are being generated.
+    """
+    out = OUT if out is None else Path(out)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / "AutoTestRuntime.cpp"
+    text = ('#include "AutoTest.h"\n\nnamespace autotest\n{\n'
+            'char g_arena[kArenaSize] __attribute__((aligned(16)));\nsize_t g_arenaUsed;\nPool g_pool;\n'
+            'Outcome g_outcomes[2];\n}\n')
+    if not path.exists() or path.read_text() != text:
+        path.write_text(text)
+    return path
+
+
 class Unsupported(Exception):
     pass
 
@@ -425,10 +442,7 @@ class Generator:
         OUT.mkdir(parents=True, exist_ok=True)
         for old in list(OUT.glob("*.cpp")) + list(OUT.glob("*.failed")):
             old.unlink()
-        (OUT / "AutoTestRuntime.cpp").write_text(
-            '#include "AutoTest.h"\n\nnamespace autotest\n{\n'
-            "char g_arena[kArenaSize] __attribute__((aligned(16)));\nsize_t g_arenaUsed;\nPool g_pool;\n"
-            "Outcome g_outcomes[2];\n}\n")
+        write_runtime()
         made, skipped = [], {}
         for f in functions:
             try:

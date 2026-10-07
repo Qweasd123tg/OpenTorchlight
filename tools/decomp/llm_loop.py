@@ -1,42 +1,27 @@
 #!/usr/bin/env python3
-"""Function-by-function decompilation with cheap models in a feedback loop.
+"""Bounded function recovery in an isolated, resumable publication.Stage.
 
-    python3 tools/decomp/llm_loop.py Graph.cpp [--models a,b] [--rounds 5] [--switch-after 2]
+    python3 tools/decomp/llm_loop.py Graph.cpp --address 0x123 --prepare-only
+    python3 tools/decomp/llm_loop.py Graph.cpp --address 0x123 --attempt PATH
 
-Run inside a worktree (tools/decomp/parallel.py new ...). The model never
-sees the repository: every call is `opencode run` with the `plain` agent (all
-tools denied) and gets exactly what it needs. Models form a chain (default:
-the free Space Bunny, then DeepSeek V4.1 Flash): a function moves on to the
-next model after --switch-after rounds without acceptance or when a model
-does not answer.
-
-1. Header: the generated header (build-decomp/include-gen), the exact symbol
-   signatures and the Ghidra drafts go in; decomp/include/<Class>.h comes
-   out. It must compile with the original sizeof, field offsets and vtable.
-2. Functions, in rounds, all pending functions in parallel. The prompt is
-   tools/decomp/prompts/idioms.md (the same for every call, so it is cached),
-   the class header, accepted examples with similar drafts (examples.py), then
-   the ASM and the Ghidra draft; one definition comes out. Each candidate is
-   compiled with the accepted ones (objdiff): MATCH is accepted; DIFF
-   candidates get generated differential tests (autotest.py) in one game run.
-   A passing test accepts the function; compile errors, failing tests and the
-   instruction diff go back to the same model session for the next round.
-3. promote.py moves what the TU uses from the generated headers into
-   decomp/include; the TU must then build without them.
-
-Accepted functions land in decomp/src/<TU>; check.py and mutate.py --accept
-take it from there. Log: build-decomp/llm-loop/<TU>/.
+Default: at most 16 definitions, at most 4096 original bytes each, free model
+only, diagnostics/artifacts retained in the Stage, no publication. Existing
+definitions are always preserved. Model calls are parallel; compile and check
+operations are serial. --no-autotest rejects DIFFs without running a game.
+--publish explicitly runs unchanged Stage validation/publication safeguards.
+Resume requires the same selection, model settings and immutable inputs.
 """
 from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 import difflib
+import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import sys
 import time
@@ -50,74 +35,18 @@ import headers  # noqa: E402
 import hybrid  # noqa: E402
 import objdiff  # noqa: E402
 import promote  # noqa: E402
+import toolchain  # noqa: E402
+import llm_definitions as definitions  # noqa: E402
+from llm_model import Model  # noqa: E402
+from llm_context import ContextIndex  # noqa: E402
+from llm_packet import DEFAULT_MAX_CHARS, build_prompt  # noqa: E402
 
 ROOT = elfdb.ROOT
-AGENT_DIR = Path("/tmp/opencode/llm-loop")
 IDIOMS = Path(__file__).resolve().parent / "prompts" / "idioms.md"
-# Free model first; the cheap paid one takes over what it does not get accepted.
-MODELS = ("opencode-go/space-bunny-free#high", "opencode-go/deepseek-v4.1-flash#high")
+# Paid providers are used only when explicitly named.
+MODELS = ("opencode/space-bunny-free",)
 WRITTEN = ("function", "ctor", "dtor", "static")
 ASM_LABEL = re.compile(r"\b(?:__asm__|asm)\s*(?:volatile\s*)?\(\s*\"_Z")
-AGENT = """---
-description: Answers with code only, no tools
-mode: primary
-permissions:
-  - action: "*"
-    resource: "*"
-    effect: deny
----
-
-You translate decompiled x86-64 code (GCC 4.4.7 -O2, Linux) back into the C++98 source
-it was compiled from. Answer with exactly one fenced ```cpp code block and nothing else.
-"""
-
-
-class Model:
-    def __init__(self, model, log):
-        self.model, self.log = model, log
-        self.sent = self.received = 0
-        agent = AGENT_DIR / ".opencode" / "agents" / "plain.md"
-        agent.parent.mkdir(parents=True, exist_ok=True)
-        if not agent.exists() or agent.read_text() != AGENT:
-            agent.write_text(AGENT)
-            time.sleep(30)  # the OpenCode service reloads agents asynchronously
-
-    def ask(self, prompt, session=None, tag=""):
-        """Returns (code, session id)."""
-        cmd = ["opencode", "run", "--agent", "plain", "-m", self.model, "--format", "json"]
-        if session:
-            cmd += ["--session", session]
-        errors = []
-        for attempt in range(5):
-            try:
-                # opencode takes its directory from PWD, not from the process working directory.
-                result = subprocess.run(cmd + [prompt], cwd=AGENT_DIR, capture_output=True, text=True, timeout=900,
-                                        env=dict(os.environ, PWD=str(AGENT_DIR)))
-            except subprocess.TimeoutExpired:
-                errors.append("timeout")
-                continue
-            text, sid = "", session
-            for line in result.stdout.splitlines():
-                try:
-                    event = json.loads(line)
-                except ValueError:
-                    continue
-                sid = event.get("sessionID", sid)
-                if event.get("type") == "text":
-                    text += event["part"].get("text", "")
-                elif event.get("type") == "error":
-                    errors.append(str(event.get("error"))[:300])
-            if text:
-                break
-            time.sleep(15 * (attempt + 1))
-        self.sent += len(prompt)
-        self.received += len(text)
-        with open(self.log / "calls.log", "a") as f:
-            f.write(f"===== {tag} session={sid}\n--- prompt ({len(prompt)} chars)\n{prompt}\n--- answer\n{text}\n"
-                    + (f"--- errors\n{chr(10).join(errors)}\n" if errors else ""))
-        blocks = re.findall(r"```(?:cpp|c\+\+|c)?\s*\n(.*?)```", text, re.S)
-        # No code block (a refusal, or a model imitating tool calls): no answer.
-        return (blocks[-1].strip() if blocks else ""), sid
 
 
 def asm_of(tu, f):
@@ -168,38 +97,120 @@ def return_from_code(f):
     return None
 
 
+def select_functions(db, tu_name, addresses=(), limit=16, max_size=4096, excluded=()):
+    """Resolve symbol/address aliases before deduplicating source definitions."""
+    tus = [t for t in db["tus"] if t["name"] == tu_name and t.get("kind") == "game"]
+    if len(tus) != 1 or Path(tu_name).name != tu_name:
+        raise ValueError("expected one canonical game TU name")
+    tu = tus[0]
+    funcs = sorted((f for f in db["functions"].values() if f["tu"] == tu["id"]
+                    and f["kind"] in WRITTEN and "thunk to " not in f["demangled"]
+                    and not any(n.endswith("D0Ev") for n in f["names"])),
+                   key=lambda f: int(f["address"], 16))
+    canonical, aliases = {}, {}
+    for f in funcs:
+        key = definitions.identity(f)
+        canonical.setdefault(key, f)
+    for f in db["functions"].values():
+        main = canonical.get(definitions.identity(f)) if f["tu"] == tu["id"] else None
+        if main and not any(n.endswith("D0Ev") for n in f["names"]):
+            aliases[int(f["address"], 16)] = main
+            for name in f["names"]:
+                aliases[name] = main
+    chosen = {}
+    for address in addresses:
+        try:
+            key = int(address, 16)
+        except ValueError:
+            key = address
+        if key not in aliases:
+            raise ValueError(f"{address}: not an eligible symbol/address of {tu_name}")
+        f = aliases[key]
+        if f["size"] > max_size:
+            raise ValueError(f"{address}: exceeds --max-size {max_size}")
+        chosen[f["address"]] = f
+    selected = sorted(chosen.values() if addresses else
+                      (f for f in canonical.values() if f["size"] <= max_size
+                       and not (definitions.closure(f, db) & set(excluded))),
+                      key=lambda f: int(f["address"], 16))
+    if addresses and len(selected) > limit:
+        raise ValueError("explicit selection exceeds --limit")
+    selected = selected[:limit]
+    if not selected:
+        raise ValueError("no eligible functions selected")
+    return tu, selected
+
+
+def atomic_json(path, data):
+    import publication
+    publication._replace_file(path.parent, path.name, json.dumps(data, indent=2, sort_keys=True).encode())
+
+
+def packet_inputs(root):
+    """Draft/header inputs are copied; db/scaffold may be read-only links."""
+    out = {}
+    for name in ("db", "scaffold", "drafts", "include-gen", "types.json", "examples.json"):
+        base = root / "build-decomp" / name
+        # Instruction/normalization caches are derived and mutable, not work
+        # inputs. They must not inflate every checkpoint or break a restart.
+        files = [base / "elfdb.json"] if name == "db" else sorted(base.rglob("*")) if base.is_dir() else [base]
+        for path in files:
+            if path.is_file():
+                out[path.relative_to(root).as_posix()] = toolchain.sha256(path)
+    elf = elfdb.default_elf()
+    out["elf"] = {"path": str(elf.resolve()), "sha256": toolchain.sha256(elf)}
+    return out
+
+
 class Loop:
-    def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False):
+    def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False, *,
+                 addresses=(), limit=16, max_size=4096, prepare_only=False, no_autotest=False,
+                 model_timeout=180, model_retries=2, attempt_resume=False, max_prompt_chars=DEFAULT_MAX_CHARS):
         if ROOT == elfdb.ROOT:
             raise RuntimeError("Loop requires publication.Stage.activate(); live-tree experiments are forbidden")
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
         os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
-        self.tu = next(t for t in self.db["tus"] if t["name"] == tu_name)
+        self.source = ROOT / "decomp" / "src" / tu_name
+        self.original = objdiff.Original(db=self.db)
+        self.baseline_rows = []
+        self.existing = ""
+        if not attempt_resume and self.source.exists():
+            self.existing = self.source.read_bytes().decode("utf-8")
+            self.baseline_rows = self.baseline_compare()["functions"]
+        excluded = {r["address"] for r in self.baseline_rows if r.get("address")
+                    and r["status"] not in ("MISSING", "EXTRA")}
+        request = []
+        if addresses:
+            _, explicit = select_functions(self.db, tu_name, addresses, limit, max_size)
+            request = [f["address"] for f in explicit]
+        if attempt_resume:
+            saved = json.loads((ROOT / "build-decomp/llm-loop" / tu_name / "checkpoint.json").read_text())
+            selected = saved["settings"]["selected"]
+            if any(self.db["functions"].get(f["address"]) != f for f in selected):
+                raise RuntimeError("checkpoint selected identities changed")
+            self.tu, self.funcs = select_functions(self.db, tu_name, [f["address"] for f in selected], limit, max_size)
+        else:
+            self.tu, self.funcs = select_functions(self.db, tu_name, addresses, limit, max_size, excluded)
         self.rounds, self.switch_after, self.jobs = rounds, switch_after, jobs
         self.work = ROOT / "build-decomp" / "llm-loop" / tu_name
-        shutil.rmtree(self.work, ignore_errors=True)
-        self.work.mkdir(parents=True)
-        self.models = [Model(m, self.work) for m in models]
+        self.work.mkdir(parents=True, exist_ok=True)
+        self.model_names = list(models)
+        self.models = []
+        self.prepare_only, self.no_autotest = prepare_only, no_autotest
+        self.model_timeout, self.model_retries = model_timeout, model_retries
+        self.max_prompt_chars = max_prompt_chars
+        self.attempt_resume = attempt_resume
+        self.settings = {"tu": tu_name, "models": list(models), "rounds": rounds,
+                         "switch_after": switch_after, "jobs": jobs, "limit": limit, "max_size": max_size,
+                         "no_autotest": no_autotest, "model_timeout": model_timeout, "model_retries": model_retries,
+                         "selected": self.funcs, "selection_request": request, "max_prompt_chars": max_prompt_chars}
         self.examples = examples.load()
         self.by_model = {}
-        self.funcs = sorted((f for f in self.db["functions"].values() if f["tu"] == self.tu["id"]
-                             and f["kind"] in WRITTEN and not any(n.endswith("D0Ev") for n in f["names"])),
-                            key=lambda f: f["address"])
-        # One entry per definition: C1/C2 constructor copies share a source definition.
-        seen, unique = set(), []
-        for f in self.funcs:
-            key = (f["demangled"], f["kind"])
-            if key not in seen:
-                seen.add(key)
-                unique.append(f)
-        self.funcs = unique
         self.classes = sorted({(f.get("scope") or "").split("::")[0] for f in self.funcs} - {""})
-        self.original = objdiff.Original(db=self.db)
         self.methods = ghidra_cpp.known_methods(self.db)
         self.signatures = ghidra_cpp.signatures_of(self.db)
         self.enums = ghidra_cpp.parse_enums()
-        self.source = ROOT / "decomp" / "src" / tu_name
         import ghidra_draft
         state, reasons = ghidra_draft.draft_state(tu_name, self.db)
         self.stale_note = (f"; STALE, made before these changes: {'; '.join(reasons)}. Where it disagrees with "
@@ -207,7 +218,106 @@ class Loop:
         self.accepted = {}  # address -> code
         self.status = {}
         self.resume = resume
-        self.existing = ""  # --resume: the TU as found; its functions are kept as they are
+        self.allowed_headers = set()
+        self.pending = {}
+        self.items = {}
+        self.round_no = 0
+
+    def checkpoint(self):
+        import publication
+        atomic_json(self.work / "checkpoint.json", {
+            "schema": 1, "settings": self.settings, "inputs": packet_inputs(ROOT),
+            "tree": publication.tree_state(ROOT), "immutable": self.immutable,
+            "accepted": self.accepted, "status": self.status, "existing": self.existing,
+            "headers": self.headers, "pending": self.pending, "round": self.round_no,
+            "items": self.items, "by_model": self.by_model, "allowed_headers": sorted(self.allowed_headers)})
+
+    def restore(self):
+        import publication
+        data = json.loads((self.work / "checkpoint.json").read_text())
+        if (data.get("schema") != 1 or data.get("settings") != self.settings
+                or data.get("inputs") != packet_inputs(ROOT)
+                or data.get("tree") != publication.tree_state(ROOT)):
+            raise RuntimeError("checkpoint inputs/settings changed; refusing resume")
+        self.immutable = data["immutable"]
+        if (ROOT / "stage.json").exists():
+            metadata = json.loads((ROOT / "stage.json").read_text())
+            baseline = metadata["baseline"]
+            if self.immutable["tree"] != baseline:
+                raise RuntimeError("checkpoint immutable baseline changed")
+            if self.immutable["inputs"] != packet_inputs(Path(metadata["root"])):
+                raise RuntimeError("immutable work inputs changed since selection")
+        if self.immutable["settings"] != self.settings:
+            raise RuntimeError("immutable model/selection settings changed")
+        # Never widen publication scope using a checkpoint-provided allowlist.
+        self.allowed_headers = set(data["headers"].values())
+        selected = {f["address"]: f for f in self.funcs}
+        if not (set(data["accepted"]) <= set(selected) and set(data["items"]) <= set(selected)
+                and set(data["status"]) <= set(selected) and set(data["pending"]) <= set(data["items"])):
+            raise RuntimeError("invalid checkpoint item keys")
+        if any(s not in ("MATCH", "tested", "existing", "blocked", "rejected") for s in data["status"].values()):
+            raise RuntimeError("invalid checkpoint status")
+        for address, item in data["items"].items():
+            if (item.get("f") != selected[address] or type(item.get("model")) is not int
+                    or not 0 <= item["model"] < len(self.model_names)
+                    or type(item.get("tries")) is not int or item["tries"] < 0):
+                raise RuntimeError("invalid checkpoint item identity/model/tries")
+        if type(data["round"]) is not int or not 0 <= data["round"] <= self.rounds:
+            raise RuntimeError("invalid checkpoint round")
+        initial_source = self.immutable["tree"].get("decomp/src/" + self.tu["name"])
+        existing = data["existing"]
+        digest = hashlib.sha256(existing.encode()).hexdigest() if initial_source is not None or existing else None
+        if digest != initial_source:
+            raise RuntimeError("checkpoint existing source differs from immutable baseline")
+        if any(Path(h).name != h or not h.endswith(".h") for h in data["headers"].values()):
+            raise RuntimeError("invalid checkpoint header")
+        if set(data["headers"]) != set(self.classes):
+            raise RuntimeError("checkpoint header owners differ from selected classes")
+        for attr in ("accepted", "status", "existing", "headers", "pending", "items", "by_model"):
+            setattr(self, attr, data[attr])
+        # Reestablish shared per-item state after JSON deserialization.
+        self.pending = {a: self.items[a] for a in self.pending}
+        self.round_no = data["round"]
+        # Status strings are scheduling hints, never acceptance receipts.
+        self.status = {a: "blocked" for a, s in self.status.items() if s == "blocked"}
+        if self.existing:
+            probe = self.work / "baseline" / self.tu["name"]
+            probe.parent.mkdir(exist_ok=True)
+            probe.write_bytes(self.existing.encode())
+            rows = objdiff.compare_source(probe, self.original, quiet=True, scores=False)["functions"]
+            present = {r["address"] for r in rows if r.get("address") and r["status"] not in ("MISSING", "EXTRA")}
+            self.status.update({a: "existing" for a in selected if a in present})
+        for address, code in self.accepted.items():
+            error = definitions.single_definition(selected[address], code)
+            if error:
+                raise RuntimeError("invalid restored definition: " + error)
+        if self.accepted and not self.prepare_only:
+            probe = self.work / "restored" / self.tu["name"]
+            probe.parent.mkdir(exist_ok=True)
+            probe.write_bytes(self.unit().encode())
+            unit = objdiff.compare_source(probe, self.original, quiet=True, scores=False)
+            for address in self.accepted:
+                status, detail = definitions.verdict(selected[address], unit, self.db)
+                if status != "MATCH" or unit.get("unknown"):
+                    raise RuntimeError("restored candidate is not freshly MATCH: " + detail)
+                self.status[address] = "MATCH"
+        self.pending = {a: self.items.get(a, {"f": f, "model": 0, "tries": 0,
+                                             "session": None, "feedback": None, "code": ""})
+                        for a, f in selected.items() if a not in self.status and a not in self.accepted}
+        self.items.update(self.pending)
+
+    def baseline_compare(self):
+        saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
+        try:
+            result = self.compare()
+            if result.get("unknown"):
+                raise RuntimeError("existing TU has unknown original definitions")
+            return result
+        except SystemExit as error:
+            raise RuntimeError("existing TU does not compile; preserved unchanged, refusing to start fresh") from error
+        finally:
+            if saved is not None:
+                os.environ["OTL_EXTRA_INCLUDE"] = saved
 
     def draft(self, f):
         raw = ROOT / "build-decomp" / "drafts" / self.tu["name"] / "raw" / f"{f['address']}.c"
@@ -220,6 +330,7 @@ class Loop:
 
     # -- header -------------------------------------------------------------
     def header(self):
+        before = {p.name: p.read_bytes() for p in (ROOT / "decomp/include").glob("*.h")}
         out = {}
         hand = headers_by_class()
         for cls in self.classes:
@@ -231,49 +342,41 @@ class Loop:
                     print(f"  header {out[cls]}: declared {len(added)} methods of this TU it lacked", flush=True)
                 continue
             if not gen.exists():
-                continue
+                raise RuntimeError(f"no known or generated header for {cls}; prepare inputs first")
             name = (cls[1:] if re.match(r"C[A-Z]", cls) else cls) + ".h"
-            size = (json.loads((ROOT / "build-decomp" / "types.json").read_text())["classes"].get(cls) or {}).get("size")
-            sigs = "\n".join(f"  {f['demangled']}" for f in self.db["functions"].values()
-                             if (f.get("scope") or "") == cls and f["kind"] in WRITTEN)
-            drafts = "\n\n".join(self.draft(f) for f in self.funcs if (f.get("scope") or "") == cls)
-            hand = ", ".join(sorted(p.name for p in (ROOT / "decomp" / "include").glob("*.h")))
-            prompt = (f"Write the header decomp/include/{name} for class {cls}.\n\n"
-                      f"Generated draft header (bases, virtual order and field OFFSETS are verified; field names, "
-                      f"field types and return types are guesses):\n```cpp\n{gen.read_text()}```\n\n"
-                      f"Exact method signatures from the symbols:\n{sigs}\n\n"
-                      f"Ghidra decompilation of the methods (drafts, types may be wrong):\n```cpp\n{drafts}\n```\n\n"
-                      "Requirements:\n"
-                      f"- keep the base classes, the virtual methods in the same order and every field at the same "
-                      f"offset; sizeof({cls}) must stay {size};\n"
-                      "- fix return types (float for values returned in xmm0, bool for flags...), constness and "
-                      "field types (std::wstring, TArrayList<T> for 24-byte lists, class pointers), and give "
-                      "fields meaningful m_-prefixed names;\n"
-                      f"- include only what you need from: {hand}, GenTypes.h (enums), GenGlobals.h;\n"
-                      f"- guard macro {name.upper().replace('.', '_')}; C++98.")
             path = ROOT / "decomp" / "include" / name
-            for model in self.models:
-                code, sid = model.ask(prompt, tag=f"header {cls} {model.model}")
-                for attempt in range(4):
-                    path.write_text(code.rstrip() + "\n")
-                    error = self.check_header(name, cls, size) if code else "no answer"
-                    if not error or not code or attempt == 3:
-                        break
-                    code, sid = model.ask(f"The header does not compile or changes the layout:\n{error}\n"
-                                          "Return the corrected full header.", sid, tag=f"header {cls} fix")
-                if not error:
-                    break
-            else:
-                # Fall back to the generated one, written like a promoted header.
-                text = gen.read_text().replace(promote.GENERATED_NOTE, promote.PARTIAL_NOTE)
-                path.write_text(re.sub(r"\bGEN_\w+_H\b", promote.guard(name), text))
-                print(f"  header {cls}: models failed, using the generated header")
+            # A layout snapshot, never a hypothetical model-generated header.
+            text = gen.read_text().replace(promote.GENERATED_NOTE, promote.PARTIAL_NOTE)
+            path.write_text(re.sub(r"\bGEN_\w+_H\b", promote.guard(name), text))
             out[cls] = name
             # Generated headers that pulled in the draft now get the real one.
             for other in (ROOT / "build-decomp" / "include-gen").glob("*.h"):
                 other.write_text(other.read_text().replace(f'#include "{cls}.h"', f'#include "{name}"'))
             gen.unlink()
         self.headers = out
+        self.allowed_headers.update(p.name for p in (ROOT / "decomp/include").glob("*.h")
+                                    if before.get(p.name) != p.read_bytes())
+
+    def declaration_error(self, f):
+        if not f.get("method") or not f.get("scope"):
+            return None
+        name = self.headers.get(f["scope"].split("::")[0])
+        if not name:
+            return "No known owning header for selected method."
+        text = (ROOT / "decomp/include" / name).read_text()
+        match = re.search(rf"\b(?:class|struct)\s+{re.escape(f['scope'])}\b[^;{{]*{{", text)
+        if not match:
+            return "Owning class declaration cannot be located safely."
+        end = text.find("\n};", match.end())
+        if end < 0:
+            return "Owning class declaration cannot be located safely."
+        params = tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
+                       for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
+        cv = ghidra_cpp.cv_suffix(f).strip()
+        if not any((p, c) == (params, cv) for p, c, _ in
+                   headers.declared_signatures(text[match.end():end], f["method"])):
+            return "Selected method signature is absent from the known header; declaration unavailable."
+        return None
 
     def complete_hand_header(self, cls, name):
         """Declares in a hand-written header the non-virtual methods of this TU it lacks (partial
@@ -288,9 +391,6 @@ class Loop:
         if end < 0:
             return []
         body = text[m.end():end]
-        if not hasattr(self, "_decls"):
-            self._decls = headers.Gen()
-        gen = self._decls
         extra, forward, system, seen = [], set(), set(), set()
         for f in self.funcs:
             method = f.get("method") or ""
@@ -302,6 +402,9 @@ class Loop:
                                                for p, cv, _ in headers.declared_signatures(body, method))):
                 continue
             seen.add(identity)
+            if not hasattr(self, "_decls"):
+                self._decls = headers.Gen()
+            gen = self._decls
             deps = {"sys": set(), "local": set(), "forward": set()}
             ghidra = gen.ghidra_return(f)
             # The code decides only where Ghidra guessed an integer: its void/bool/float are reliable.
@@ -374,12 +477,25 @@ class Loop:
 
     # -- functions ----------------------------------------------------------
     def unit(self, extra=()):
-        parts = ['#include "EmptyStrings.h"'] + [f'#include "{g}"' for g in ("GenTypes.h", "GenGlobals.h", "GenNamespaces.h")
-                                                 if (headers.OUT / g).exists()]
+        extra = list(extra)
+        parts = [] if self.existing else ['#include "EmptyStrings.h"'] + [
+            f'#include "{g}"' for g in ("GenTypes.h", "GenGlobals.h", "GenNamespaces.h") if (headers.OUT / g).exists()]
         parts += [f'#include "{h}"' for h in self.headers.values()]
         names = set()
-        for code in list(self.accepted.values()) + list(extra):
-            names.update(re.findall(r"\b[A-Za-z_]\w*\b", code))
+        for code in list(self.accepted.values()) + extra:
+            names.update(re.findall(r"\b[A-Za-z_]\w*\b", definitions.mutate.mask(code)))
+        if self.existing:
+            if names & {"EMPTY_STRING", "EMPTY_WSTRING"}:
+                parts.append('#include "EmptyStrings.h"')
+            for generated in ("GenTypes.h", "GenGlobals.h"):
+                path = headers.OUT / generated
+                if not path.exists():
+                    continue
+                text = path.read_text()
+                declared = set(re.findall(r"\b(?:enum|class|struct)\s+(\w+)", text))
+                declared.update(re.findall(r"\bextern\s+[^;{}]+?\b(\w+)\s*(?:\[[^]]*\])?\s*;", text))
+                if names & declared:
+                    parts.append(f'#include "{generated}"')
         incl = {p.name for p in (ROOT / "decomp" / "include").glob("*.h")}
         hand = headers_by_class()
         for n in sorted(names):
@@ -387,27 +503,27 @@ class Loop:
                 parts += [f'#include "{h}"' for h in hand[n] if h not in self.headers.values()]
             elif (ROOT / "build-decomp" / "include-gen" / f"{n}.h").exists() and f"{n}.h" not in incl:
                 parts.append(f'#include "{n}.h"')
-        body = [self.accepted[a] for a in sorted(self.accepted)] + list(extra)
+        body = [self.accepted[a] for a in sorted(self.accepted, key=lambda a: int(a, 16))] + extra
         if self.existing:
-            lines = self.existing.splitlines()
-            n = 0
-            while n < len(lines) and (lines[n].startswith("#include") or not lines[n].strip()):
-                n += 1
-            parts = [l for l in lines[:n] if l.strip()] + parts
-            body = ["\n".join(lines[n:]).strip("\n")] + body
-        return "\n".join(dict.fromkeys(parts)) + "\n\n" + "\n\n".join(body) + "\n"
+            present = set(re.findall(r'#\s*include\s*"([^"]+)"', self.existing))
+            parts = [p for p in parts if p.split('"')[1] not in present]
+        additions = "\n".join(dict.fromkeys(parts)) + "\n\n" + "\n\n".join(body) + "\n"
+        return (self.existing + "\n" if self.existing else "") + additions
 
     def compile(self, f, code):
         """(status, detail): compile-error / MATCH / DIFF with the instruction diff."""
         if ASM_LABEL.search(code):
             return "compile-error", ("Symbols bound with asm labels are not source code. Define the function as "
                                      "the member the header declares, and call other functions through their "
-                                     "classes (object->method(...)).")
+                                      "classes (object->method(...)).")
+        error = definitions.single_definition(f, code)
+        if error:
+            return "compile-error", error
         trial = self.work / "trial" / f["address"] / self.tu["name"]
         trial.parent.mkdir(parents=True, exist_ok=True)
         trial.write_text(self.unit([code]))
         try:
-            result = objdiff.compare_source(trial, self.original, quiet=True)
+            result = objdiff.compare_source(trial, self.original, quiet=True, scores=False)
         except SystemExit as error:
             lines = [l.split(": error: ", 1)[-1] for l in str(error).splitlines() if "error" in l][:12]
             return "compile-error", "\n".join(lines) + self.name_hints(lines)
@@ -415,12 +531,8 @@ class Loop:
             return "compile-error", "Calls functions the game does not have:\n" + "\n".join(
                 f"- {r['name']}; the game has: {'; '.join(r['known']) or 'no such member'}"
                 for r in result["unknown"]) + "\nCall the existing overload (mind constness and references)."
-        row = next((r for r in result["functions"] if r.get("address") == f["address"]), None)
-        if not row:
-            return "compile-error", "the definition did not produce the function (wrong signature?)"
-        if row["status"] == "MATCH":
-            return "MATCH", ""
-        return "DIFF", self.instruction_diff(trial, f)
+        status, detail = definitions.verdict(f, result, self.db)
+        return status, detail + ("\n" + self.instruction_diff(trial, f) if status == "DIFF" else "")
 
     def name_hints(self, lines):
         """Real symbols close to the names the compiler did not find."""
@@ -452,21 +564,21 @@ class Loop:
         return "\n".join(diff[:80])
 
     def prompt_for(self, f):
+        if not hasattr(self, "_packet_prompts"):
+            self._packet_prompts = {}
+        if f["address"] in self._packet_prompts:
+            return self._packet_prompts[f["address"]]
+        if not hasattr(self, "_context_index"):
+            self._context_index = ContextIndex(root=ROOT, db=self.db, image=self.original.image,
+                                               headers=headers_by_class())
         draft = self.draft(f)
         chosen = examples.choose(self.examples, draft, exclude={f["address"]})
-        header = "\n\n".join((ROOT / "decomp" / "include" / h).read_text() for h in self.headers.values())
-        # Same text first for every call (the provider caches the prefix), then this TU, then this function.
-        return (IDIOMS.read_text() + "\n"
-                + (f"Class header:\n```cpp\n{header}```\n\n" if header else "")
-                + (f"Accepted functions of the game next to their drafts, for the style and the idioms:\n\n"
-                   f"{examples.render(chosen)}\n\n" if chosen else "")
-                + f"Write the C++98 definition of `{f['demangled']}` exactly as declared in the header.\n\n"
-                f"Original machine code (objdump):\n```\n{asm_of(self.tu['name'], f)}\n```\n\n"
-                f"Ghidra decompilation (a draft; types and temporaries may be wrong{self.stale_note}):\n"
-                f"```cpp\n{draft}\n```\n\n"
-                "Rules: C++98; use the header's names; call other functions normally (std::wstring, "
-                "TArrayList methods instead of inlined internals); globals are declared in GenGlobals.h, other "
-                "classes in their headers (already included); no includes; return only this definition.")
+        prompt = build_prompt(f, root=ROOT, tu=self.tu["name"], headers=self.headers, draft=draft,
+                            idioms=(ROOT / "tools/decomp/prompts/idioms.md").read_text(),
+                            examples=examples.render(chosen) if chosen else "", stale_note=self.stale_note,
+                            max_chars=self.max_prompt_chars, context_index=self._context_index)
+        self._packet_prompts[f["address"]] = prompt
+        return prompt
 
     def ask(self, item, round_no):
         """Next candidate for a pending function. A function moves on to the next model of
@@ -480,8 +592,13 @@ class Loop:
             else:
                 prompt = self.prompt_for(f)
                 if item.get("code") and item["feedback"]:
-                    prompt += (f"\n\nAn earlier attempt was not accepted:\n```cpp\n{item['code']}\n```\n"
-                               f"{item['feedback']}")
+                    addition = (f"\n\nAn earlier attempt was not accepted:\n```cpp\n{item['code']}\n```\n"
+                                f"{item['feedback']}")
+                    prompt += addition
+            if len(prompt) > self.max_prompt_chars:
+                item["blocked_reason"] = (f"Complete repair input is {len(prompt)} chars, over the "
+                                          f"{self.max_prompt_chars} budget; no code/feedback was truncated.")
+                return f["address"], "", item["session"]
             model = self.models[item["model"]]
             code, sid = model.ask(prompt, item["session"], tag=f"{f['address']} round {round_no} {model.model}")
             if code or item["model"] + 1 >= len(self.models):
@@ -492,13 +609,49 @@ class Loop:
 
     def run(self):
         print(f"{self.tu['name']}: {len(self.funcs)} functions, classes {', '.join(self.classes)}", flush=True)
-        self.header()
-        print(f"  header: {', '.join(self.headers.values())}", flush=True)
-        if self.resume and self.source.exists():
-            self.keep_existing()
-        pending = {f["address"]: {"f": f, "session": None, "feedback": None, "model": 0, "tries": 0}
-                   for f in self.funcs if f["address"] not in self.status}
-        for round_no in range(1, self.rounds + 1):
+        import publication
+        if self.attempt_resume:
+            self.restore()
+        else:
+            if (self.work / "checkpoint.json").exists():
+                raise RuntimeError("attempt already has a checkpoint; use --attempt")
+            self.immutable = {"tree": publication.tree_state(ROOT), "inputs": packet_inputs(ROOT),
+                              "settings": self.settings}
+            if self.source.exists():
+                self.keep_existing()
+            self.header()
+            for f in self.funcs:
+                error = self.declaration_error(f)
+                if error and f["address"] not in self.status:
+                    self.status[f["address"]] = "blocked"
+            self.pending = {f["address"]: {"f": f, "session": None, "feedback": None,
+                                         "model": 0, "tries": 0, "code": ""}
+                            for f in self.funcs if f["address"] not in self.status}
+            self.items = dict(self.pending)
+            for f in self.funcs:
+                if self.status.get(f["address"]) == "blocked":
+                    self.items[f["address"]] = {"f": f, "model": 0, "tries": 0,
+                        "session": None, "code": "", "feedback": self.declaration_error(f)}
+            self.checkpoint()
+        prompts = self.work / "prompts"
+        prompts.mkdir(exist_ok=True)
+        for f in self.funcs:
+            if self.status.get(f["address"]) not in ("blocked", "existing"):
+                try:
+                    (prompts / (f["address"] + ".md")).write_text(self.prompt_for(f))
+                except ValueError as error:
+                    self.status[f["address"]] = "blocked"
+                    self.items[f["address"]]["feedback"] = str(error)
+                    self.pending.pop(f["address"], None)
+        self.checkpoint()
+        if self.prepare_only:
+            self.write_result(prepared=True)
+            return self.status
+        pending = self.pending
+        if pending and self.round_no < self.rounds:
+            self.models = [Model(m, self.work, timeout=self.model_timeout, retries=self.model_retries)
+                           for m in self.model_names]
+        for round_no in range(self.round_no + 1, self.rounds + 1):
             if not pending:
                 break
             with ThreadPoolExecutor(self.jobs) as pool:
@@ -506,10 +659,19 @@ class Loop:
             diffs = {}
             for address, code, sid in answers:
                 item = pending[address]
+                if item.get("blocked_reason"):
+                    item["feedback"] = item.pop("blocked_reason")
+                    self.status[address] = "blocked"
+                    del pending[address]
+                    continue
                 item["session"], item["code"] = sid, code
                 self.by_model[address] = self.models[item["model"]].model
                 if not code:
-                    item["feedback"] = None
+                    item["feedback"] = "No code returned; provide the full definition."
+                    model = self.models[item["model"]]
+                    getter = getattr(model, "error_for", None)
+                    error = getter(sid) if callable(getter) else None
+                    item["error"] = error if isinstance(error, str) else getattr(model, "last_error", None) or "no-code"
                     continue
                 status, detail = self.compile(item["f"], code)
                 if status == "MATCH":
@@ -521,21 +683,38 @@ class Loop:
                                         "Return the corrected full definition only.")
                 else:
                     diffs[address] = detail
-            if diffs:
-                self.test(pending, diffs, round_no)
-            done = sum(1 for s in self.status.values())
+            if diffs and not self.no_autotest:
+                try:
+                    self.test(pending, diffs, round_no)
+                finally:
+                    self.save_source()
+            elif diffs:
+                for address, detail in diffs.items():
+                    pending[address]["feedback"] = f"DIFF (autotest disabled):\n{detail}\nReturn a corrected definition."
+            # Never leave unsupported candidates in the staged source.
+            self.save_source()
+            self.round_no = round_no
+            self.checkpoint()
+            done = sum(s in ("MATCH", "tested") for s in self.status.values())
             print(f"  round {round_no}: accepted {done} of {len(self.funcs)} "
-                  f"({sum(1 for s in self.status.values() if s == 'MATCH')} MATCH); pending {len(pending)}", flush=True)
-        if self.accepted or not self.existing:
+                  f"({sum(1 for s in self.status.values() if s == 'MATCH')} MATCH); pending {len(pending)}; "
+                  f"blocked {sum(s == 'blocked' for s in self.status.values())}; "
+                  f"existing {sum(s == 'existing' for s in self.status.values())}", flush=True)
+        if self.accepted:
             self.source.write_text(self.unit())
         for address, item in pending.items():
-            self.status[address] = "not accepted"
-        if not self.finish():
+            self.status[address] = "rejected"
+            if item.get("code"):
+                rejected = self.work / "rejected"
+                rejected.mkdir(exist_ok=True)
+                (rejected / (address + ".cpp")).write_text(item["code"])
+        if self.accepted and not self.finish():
+            self.checkpoint()
+            self.write_result(error="final TU was not accepted")
             raise RuntimeError(f"final TU was not accepted; attempt retained in {self.work}")
-        traffic = {m.model: {"sent": m.sent, "received": m.received} for m in self.models}
-        (self.work / "result.json").write_text(json.dumps({
-            "status": self.status, "by_model": {a: self.by_model.get(a) for a in self.status},
-            "traffic": traffic}, indent=1))
+        self.checkpoint()
+        self.write_result()
+        traffic = {m.model: {"sent": getattr(m, "sent", 0), "received": getattr(m, "received", 0)} for m in self.models}
         for model, t in traffic.items():
             print(f"  {model}: {t['sent'] // 1000}K chars sent, {t['received'] // 1000}K received")
         tested = sorted(a for a, s in self.status.items() if s == "tested")
@@ -544,17 +723,34 @@ class Loop:
                   f"  python3 tools/decomp/mutate.py --accept {' '.join(tested)}")
         return self.status
 
+    def save_source(self):
+        if self.accepted:
+            self.source.write_text(self.unit())
+        elif self.existing or self.immutable["tree"].get("decomp/src/" + self.tu["name"]) is not None:
+            self.source.write_text(self.existing)
+        else:
+            self.source.unlink(missing_ok=True)
+
+    def write_result(self, prepared=False, error=None):
+        atomic_json(self.work / "result.json", {
+            "status": self.status, "prepared": prepared, "error": error,
+            "published": [], "existing": [a for a, s in self.status.items() if s == "existing"],
+            "diagnostics": {a: s for a, s in self.status.items() if s in ("MATCH", "tested")},
+            "rejected": {a: {"reason": item.get("feedback"), "error": item.get("error")}
+                         for a, item in self.pending.items() if self.status.get(a) == "rejected"},
+            "blocked": {a: self.items[a].get("feedback") for a, s in self.status.items() if s == "blocked"},
+            "by_model": self.by_model,
+            "artifacts": {"stage": str(ROOT), "work": str(self.work), "source": str(self.source),
+                          "prompts": str(self.work / "prompts"), "checkpoint": str(self.work / "checkpoint.json")}})
+
     def keep_existing(self):
         """--resume: functions the TU already defines stay; only the missing ones are asked for."""
         try:
-            rows = self.compare()["functions"]
-        except SystemExit:
-            kept = self.work / "abandoned.cpp"
-            shutil.copy(self.source, kept)
-            print(f"  the existing TU does not compile; kept as {kept}, starting fresh", flush=True)
-            return
+            rows = self.baseline_compare()["functions"]
+        except SystemExit as error:
+            raise RuntimeError("existing TU does not compile; preserved unchanged, refusing to start fresh") from error
         present = {r["address"] for r in rows if r.get("address") and r["status"] != "MISSING"}
-        self.existing = self.source.read_text()
+        self.existing = self.source.read_bytes().decode("utf-8")
         for f in self.funcs:
             if f["address"] in present:
                 self.status[f["address"]] = "existing"
@@ -570,6 +766,7 @@ class Loop:
             print(f"  the TU does not compile:\n{str(error)[:1500]}")
             return False
         written = promote.promote(self.source)
+        self.allowed_headers.update(Path(p).name for p in written)
         saved = os.environ.pop("OTL_EXTRA_INCLUDE", None)
         try:
             after = self.compare()
@@ -582,9 +779,8 @@ class Loop:
                 os.environ["OTL_EXTRA_INCLUDE"] = saved
             if not self.accepted and not self.existing:
                 self.source.unlink(missing_ok=True)
-        final = {r["address"]: r for r in after["functions"] if r.get("address")}
-        changed = [a for a, status in self.status.items() if status == "MATCH"
-                   and final.get(a, {}).get("status") != "MATCH"]
+        changed = [f["address"] for f in self.funcs if self.status.get(f["address"]) == "MATCH"
+                   and definitions.verdict(f, after, self.db)[0] != "MATCH"]
         if changed or after.get("unknown"):
             print(f"  final signatures/MATCH changed: {changed}; publication refused")
             return False
@@ -617,7 +813,7 @@ class Loop:
         return True
 
     def compare(self):
-        return objdiff.compare_source(self.source, self.original, quiet=True)
+        return objdiff.compare_source(self.source, self.original, quiet=True, scores=False)
 
     def test(self, pending, diffs, round_no):
         """Generated differential tests for every DIFF candidate in one game run."""
@@ -626,7 +822,7 @@ class Loop:
         text = self.unit(candidates.values())
         self.source.write_text(text)
         try:
-            objdiff.compare_source(self.source, self.original, quiet=True)
+            objdiff.compare_source(self.source, self.original, quiet=True, scores=False)
         except SystemExit:
             for a in candidates:  # fall back: test them one by one next round
                 pending[a]["feedback"] = ("Your definition compiles alone but conflicts with the other functions "
@@ -701,29 +897,83 @@ def main():
     parser.add_argument("--rounds", type=int, default=5)
     parser.add_argument("--switch-after", type=int, default=2)
     parser.add_argument("--jobs", type=int, default=4, help="model calls in parallel")
-    parser.add_argument("--resume", action="store_true",
-                        help="keep the functions an existing decomp/src/<TU> defines, ask only for the rest")
-    parser.add_argument("--overwrite", action="store_true",
-                        help="replace an existing decomp/src/<TU> with what this run accepts (default: refuse)")
+    parser.add_argument("--resume", action="store_true", help="compatibility alias; existing definitions are always kept")
+    parser.add_argument("--address", action="append", default=[], help="repeatable ELF address or symbol alias in this TU")
+    parser.add_argument("--limit", type=int, default=16, help="maximum selected definitions")
+    parser.add_argument("--max-size", type=int, default=4096, help="maximum original function bytes")
+    parser.add_argument("--publish", action="store_true", help="validate the final Stage and explicitly publish")
+    parser.add_argument("--no-autotest", action="store_true", help="MATCH diagnostics only; keep DIFF candidates out")
+    parser.add_argument("--prepare-only", action="store_true", help="snapshot headers and prompts; no model/game calls")
+    parser.add_argument("--attempt", type=Path, help="resume this existing Stage; changed inputs fail closed")
+    parser.add_argument("--model-timeout", type=int, default=180)
+    parser.add_argument("--model-retries", type=int, default=2)
+    parser.add_argument("--max-prompt-chars", type=int, default=DEFAULT_MAX_CHARS)
     parser.add_argument("--ignore-owner", action="store_true", help="work on a TU decomp/owners.json gives to "
                         "someone else than $OTL_OWNER")
     args = parser.parse_args()
+    if any(getattr(args, n) <= 0 for n in ("rounds", "switch_after", "jobs", "limit", "max_size", "model_timeout", "max_prompt_chars")) or args.model_retries < 0:
+        parser.error("bounds/timeouts must be positive; retries must be nonnegative")
+    if args.prepare_only and args.publish:
+        parser.error("--prepare-only cannot publish")
+    models = [m.strip() for m in args.models.split(",") if m.strip()]
+    if not models:
+        parser.error("at least one explicit model is required")
+    select_functions(elfdb.load_db(), args.tu, args.address, args.limit, args.max_size)
     import parallel
     owner = parallel.owned_by_others(args.tu)
     if owner and not args.ignore_owner:
         raise SystemExit(f"{args.tu} belongs to {owner} (decomp/owners.json); set OTL_OWNER or --ignore-owner")
-    if (ROOT / "decomp" / "src" / args.tu).exists() and not (args.resume or args.overwrite):
-        raise SystemExit(f"decomp/src/{args.tu} exists: --resume keeps its functions, --overwrite replaces it")
     started = time.time()
     import publication
-    stage = publication.Stage()
-    print(f"isolated attempt: {stage.path}")
-    with stage.activate():
-        import llm_loop as engine
-        status = engine.Loop(args.tu, args.models.split(","), args.rounds, args.switch_after, args.jobs,
-                             args.resume).run()
-    stage.validate()
-    print("published:", ", ".join(stage.publish()) or "unchanged")
+    locks = ROOT / "build-decomp/llm-loop-locks"
+    locks.mkdir(parents=True, exist_ok=True)
+    with (locks / (args.tu + ".lock")).open("a+") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise SystemExit(f"another process is working on {args.tu}")
+        if args.attempt:
+            metadata = json.loads((args.attempt / "stage.json").read_text())
+            if Path(metadata["root"]).resolve() != ROOT.resolve():
+                raise RuntimeError("attempt belongs to a different checkout")
+        stage = publication.Stage.resume(args.attempt, root=ROOT) if args.attempt else publication.Stage()
+        # Stage.activate redirects module paths, not Python implementations. The
+        # loaded live tools must be precisely the immutable copied tools.
+        if publication.tree_state(ROOT) != stage.baseline:
+            raise RuntimeError("live source/header/tool inputs changed; refusing attempt reuse")
+        copied = publication.tree_state(stage.path)
+        if ({n: h for n, h in copied.items() if n.startswith("tools/")} !=
+                {n: h for n, h in stage.baseline.items() if n.startswith("tools/")}):
+            raise RuntimeError("staged tools differ from runtime snapshot")
+        checkpoints = list((stage.path / "build-decomp/llm-loop").glob("*/checkpoint.json"))
+        expected = stage.path / "build-decomp/llm-loop" / args.tu / "checkpoint.json"
+        if args.attempt and checkpoints != [expected]:
+            raise RuntimeError("attempt must contain exactly this TU checkpoint")
+        print(f"isolated attempt: {stage.path}")
+        with stage.activate():
+            import llm_loop as engine
+            loop = engine.Loop(args.tu, models, args.rounds, args.switch_after, args.jobs, args.resume,
+                               addresses=args.address, limit=args.limit, max_size=args.max_size,
+                               prepare_only=args.prepare_only, no_autotest=args.no_autotest,
+                                model_timeout=args.model_timeout, model_retries=args.model_retries,
+                               attempt_resume=bool(args.attempt), max_prompt_chars=args.max_prompt_chars)
+            status = loop.run()
+        if args.publish:
+            if not loop.accepted:
+                raise RuntimeError("no accepted candidates to publish")
+            final = publication.tree_state(stage.path)
+            allowed = {"decomp/src/" + args.tu} | {"decomp/include/" + n for n in loop.allowed_headers}
+            unexpected = [n for n in set(final) | set(stage.baseline)
+                          if final.get(n) != stage.baseline.get(n) and n not in allowed]
+            if unexpected:
+                raise RuntimeError("unexpected attempt delta: " + ", ".join(sorted(unexpected)))
+            stage.validate()
+            published = stage.publish()
+            result_path = loop.work / "result.json"
+            result = json.loads(result_path.read_text())
+            result["published"] = published
+            atomic_json(result_path, result)
+            print("published:", ", ".join(published) or "unchanged")
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
 

@@ -34,6 +34,8 @@ import tempfile
 import threading
 import urllib.request
 
+import resource_slots
+
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = ROOT / "decomp" / "config.json"
 VAULT = "https://vault.centos.org/6.4/os/x86_64/Packages/"
@@ -154,6 +156,12 @@ def driver_env(root):
     return env
 
 
+def run_compiler(cmd, **kwargs):
+    """Bound backend and preprocessor subprocesses across independent worktrees."""
+    with resource_slots.slot("compiler"):
+        return subprocess.run(cmd, **kwargs)
+
+
 CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
 # Opt-in: Stage can share backend compilation while retaining its own first-level
 # path-sensitive cache. Preprocessing always resolves the current headers afresh.
@@ -239,7 +247,7 @@ def _shared_preprocess(cmd, source, root, tmp):
     """Exact expanded bytes at stable paths, never a rewritten arbitrary command."""
     depfile = Path(tmp) / "shared.d"
     args = [arg for arg in cmd if arg not in ("-c", "-S")]
-    result = subprocess.run(args + ["-E", "-P", "-MD", "-MF", str(depfile), str(source)],
+    result = run_compiler(args + ["-E", "-P", "-MD", "-MF", str(depfile), str(source)],
                             env=driver_env(root), capture_output=True)
     if result.returncode or not depfile.exists():
         return None
@@ -309,7 +317,7 @@ def _shared_compile(cmd, source, output, root, flags, assembly, quiet, tmp):
             source_path.write_bytes(preprocessed)
             staged = Path(tmp) / cached.name
             base = [cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")]]
-            result = subprocess.run(base + semantic + ["-S" if assembly else "-c", str(source_path),
+            result = run_compiler(base + semantic + ["-S" if assembly else "-c", str(source_path),
                                     "-o", str(staged)], env=driver_env(root), capture_output=True, text=True)
             if result.returncode:
                 # Keeping the original pipeline preserves diagnostic provenance
@@ -348,7 +356,7 @@ def _digest(cmd, source, deps, preprocessed=None):
 def _preprocessed_digest(cmd, source, root):
     """Resolve includes anew: adding a shadow header must invalidate an old hit."""
     args = [a for a in cmd if a not in ("-c", "-S")]
-    result = subprocess.run(args + ["-E", str(source)], env=driver_env(root), capture_output=True)
+    result = run_compiler(args + ["-E", str(source)], env=driver_env(root), capture_output=True)
     if result.returncode:
         return None
     h = hashlib.sha256(result.stdout)
@@ -436,7 +444,7 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
                 return output
         depfile = Path(tmp) / "out.d"
         cmd_full = cmd + [str(source), "-o", str(out)] + (["-MD", "-MF", str(depfile)] if use_cache else [])
-        result = subprocess.run(cmd_full, env=driver_env(root), capture_output=True, text=True)
+        result = run_compiler(cmd_full, env=driver_env(root), capture_output=True, text=True)
         if result.returncode:
             if quiet:
                 raise SystemExit(f"compile failed: {source}\n{result.stderr}")
@@ -470,8 +478,8 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
 
 def assemble(source, output):
     root = cache_dir() / "gcc447"
-    subprocess.run([str(root / "usr" / "bin" / "as"), "--64", "-o", str(output), str(source)],
-                   env=driver_env(root), check=True)
+    run_compiler([str(root / "usr" / "bin" / "as"), "--64", "-o", str(output), str(source)],
+                    env=driver_env(root), check=True)
     return output
 
 

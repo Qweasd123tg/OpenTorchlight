@@ -5,6 +5,7 @@ instruction-only MATCH; personality targets are resolved and compared.
 Malformed or unsupported associations fail closed. Ordinary unwind-only
 FDEs do not reject unrelated functions in the same TU.
 """
+from bisect import bisect_left
 from dataclasses import dataclass
 
 
@@ -62,26 +63,52 @@ class Reader:
         return value
 
 
-@dataclass
+@dataclass(frozen=True)
 class Frames:
     # (code section index or None for a linked ELF, start, end, reason, personality)
-    ranges: list
+    ranges: tuple
     error: str | None = None
+
+    def __post_init__(self):
+        # Parsed metadata is an immutable snapshot; no stale index after mutation.
+        object.__setattr__(self, "ranges", tuple(self.ranges))
+        groups = {}
+        for row in self.ranges:
+            groups.setdefault(row[0], []).append(row)
+        index = {}
+        for section, rows in groups.items():
+            rows.sort(key=lambda row: row[1])
+            starts, maximum = [], []
+            high = None
+            for row in rows:
+                starts.append(row[1])
+                high = row[2] if high is None else max(high, row[2])
+                maximum.append(high)
+            index[section] = (tuple(rows), tuple(starts), tuple(maximum))
+        object.__setattr__(self, "_index", index)
+
+    def _overlapping(self, start, size, section):
+        rows, starts, maximum = self._index.get(section, ((), (), ()))
+        i = bisect_left(starts, start + size) - 1
+        # Prefix maxima retain nested/overlapping FDEs, not just the nearest one.
+        while i >= 0 and maximum[i] > start:
+            row = rows[i]
+            if start < row[2]:
+                yield row
+            i -= 1
 
     def reason(self, start, size, section=None):
         if self.error:
             return self.error
-        matches = [(lo, hi, why) for sec, lo, hi, why, _ in self.ranges
-                   if sec == section and lo < start + size and start < hi]
-        if any(lo > start or hi < start + size for lo, hi, _ in matches):
+        matches = list(self._overlapping(start, size, section))
+        if any(row[1] > start or row[2] < start + size for row in matches):
             return "EH FDE partially overlaps function; association unverified"
         if len(matches) > 1:
             return "multiple EH FDEs overlap function; association unverified"
-        return matches[0][2] if matches else None
+        return matches[0][3] if matches else None
 
     def personalities(self, start, size, section=None):
-        return sorted({personality for sec, lo, hi, _, personality in self.ranges
-                       if sec == section and lo < start + size and start < hi and personality})
+        return sorted({row[4] for row in self._overlapping(start, size, section) if row[4]})
 
 
 def personality_name(image, field, width, value, encoding, relocatable, relocs):
