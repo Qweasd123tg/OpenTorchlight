@@ -101,6 +101,10 @@ class Context:
 
 
 SECTION_DIRECTIVE = re.compile(r"^\s*\.(text|data|bss|section\s+([^,\s]+).*|previous|pushsection\s+([^,\s]+).*|popsection)\s*$")
+OBJECT_DIRECTIVE = re.compile(r"^\s*\.type\s+([^,\s]+),\s*@object")
+COMM_DIRECTIVE = re.compile(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),")
+ASM_LABEL = re.compile(r"^([^\s:.][^\s:]*):\s*$")
+QUAD_DIRECTIVE = re.compile(r"^\s*\.quad\s")
 
 
 def rewrite_assembly(text, redirect, drop_ctors):
@@ -108,17 +112,21 @@ def rewrite_assembly(text, redirect, drop_ctors):
     lines = text.splitlines()
     objects = set()
     for line in lines:
-        m = re.match(r"^\s*\.type\s+([^,\s]+),\s*@object", line)
-        if m:
-            objects.add(m.group(1))
-        m = re.match(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),", line)
-        if m:
-            objects.add(m.group(1))
+        stripped = line.lstrip()
+        if stripped.startswith(".type"):
+            m = OBJECT_DIRECTIVE.match(line)
+            if m:
+                objects.add(m.group(1))
+        elif stripped.startswith((".comm", ".lcomm")):
+            m = COMM_DIRECTIVE.match(line)
+            if m:
+                objects.add(m.group(1))
     targets = {name: redirect[name] for name in objects if name in redirect}
     out, section, stack, dead = [], ".text", [], 0
     previous = ".text"
     for line in lines:
-        m = SECTION_DIRECTIVE.match(line)
+        stripped = line.lstrip()
+        m = SECTION_DIRECTIVE.match(line) if stripped.startswith(".") else None
         if m:
             word = m.group(1).split()[0]
             if word in ("text", "data", "bss"):
@@ -134,14 +142,14 @@ def rewrite_assembly(text, redirect, drop_ctors):
                 section = stack.pop()
             out.append(line)
             continue
-        if drop_ctors and section == ".ctors" and re.match(r"^\s*\.quad\s", line):
+        if drop_ctors and section == ".ctors" and stripped.startswith(".quad") and QUAD_DIRECTIVE.match(line):
             continue
-        label = re.match(r"^([^\s:.][^\s:]*):\s*$", line)
+        label = ASM_LABEL.match(line) if line.rstrip().endswith(":") else None
         if label and label.group(1) in targets:
             out.append(f".Ltlhybrid_dead_{dead}:")
             dead += 1
             continue
-        comm = re.match(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),", line)
+        comm = COMM_DIRECTIVE.match(line) if stripped.startswith((".comm", ".lcomm")) else None
         if comm and comm.group(1) in targets:
             continue
         out.append(line)

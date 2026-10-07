@@ -774,18 +774,22 @@ def tu_for_source(db, source):
     return matches[0] if len(matches) == 1 else None
 
 
+LOCAL_DIRECTIVE = re.compile(r"^\s*\.local\s+(\S+)\s*$")
+GLOBAL_LABEL = re.compile(r"^([A-Za-z_][\w.$]*):\s*$")
+
+
 def globalize_locals(text):
     """Make file-local symbols global so relocations keep symbol+addend (codegen unchanged)."""
     names = set()
     out = []
     declared = set(re.findall(r"^\s*\.(?:globl|weak)\s+(\S+)", text, re.M))
     for line in text.splitlines():
-        m = re.match(r"^\s*\.local\s+(\S+)\s*$", line)
+        m = LOCAL_DIRECTIVE.match(line) if line.lstrip().startswith(".local") else None
         if m:
             names.add(m.group(1))
             out.append(f"\t.globl\t{m.group(1)}")
             continue
-        m = re.match(r"^([A-Za-z_][\w.$]*):\s*$", line)
+        m = GLOBAL_LABEL.match(line) if line.rstrip().endswith(":") else None
         if m and m.group(1) not in declared:
             names.add(m.group(1))
             out.append(f"\t.globl\t{m.group(1)}")
