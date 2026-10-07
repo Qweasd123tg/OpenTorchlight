@@ -380,8 +380,6 @@ class Normalizer:
             nxt = offsets[k + 1] if k + 1 < len(offsets) else end
             operands = operands.split("#", 1)[0].strip() if "#" in operands and "(%rip)" in operands else operands
             result.append(self.token(k, address, nxt, mnemonic, operands, start, end, offsets, insns))
-        while result and result[-1].split(" ")[0] in ("nop", "xchg"):
-            result.pop()
         return result
 
 
