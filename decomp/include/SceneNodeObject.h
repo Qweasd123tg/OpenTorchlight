@@ -18,6 +18,7 @@ namespace Ogre
 class CSceneNodeObject : public CEditorBaseObject
 {
 public:
+    Ogre::Entity* getEntity() const { return m_pEntity; }
     CSceneNodeObject(CResourceManager* resourceManager, Ogre::SceneManager* sceneManager);
     virtual ~CSceneNodeObject();
 

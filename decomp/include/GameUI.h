@@ -10,7 +10,7 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
-namespace CEGUI { class Image; }
+namespace CEGUI { class Image; class Window; }
 class CTextEvent;
 class CCharacter;
 class iMenuListener;
@@ -18,6 +18,8 @@ class iMenuListener;
 class CGameUI : public CRunicCore
 {
 public:
+    void convertToScreenScale(CEGUI::Window*, bool);
+    void mapToFunctions(CEGUI::Window*);
     virtual ~CGameUI();
     virtual long long onClick(ELayoutFunction);
     static CGameUI* getSingleton();

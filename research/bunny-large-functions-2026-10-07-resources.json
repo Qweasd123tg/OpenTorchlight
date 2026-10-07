@@ -1,0 +1,10 @@
+{
+  "media/UI/merchantmenu.layout": {
+    "sha256": "a973d76b436f9b71a7644da1067d953496e65655b425bf9e4c2f6b73968fc9c6",
+    "windows": 214
+  },
+  "media/UI/stashmenu.layout": {
+    "sha256": "3cf158aa34822c26bf157e9703213f22336a0c12acd9ca62415fbae7010bb2a1",
+    "windows": 122
+  }
+}
