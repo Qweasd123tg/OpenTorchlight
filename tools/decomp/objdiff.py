@@ -774,18 +774,22 @@ def tu_for_source(db, source):
     return matches[0] if len(matches) == 1 else None
 
 
+LOCAL_DIRECTIVE = re.compile(r"^\s*\.local\s+(\S+)\s*$")
+GLOBAL_LABEL = re.compile(r"^([A-Za-z_][\w.$]*):\s*$")
+
+
 def globalize_locals(text):
     """Make file-local symbols global so relocations keep symbol+addend (codegen unchanged)."""
     names = set()
     out = []
     declared = set(re.findall(r"^\s*\.(?:globl|weak)\s+(\S+)", text, re.M))
     for line in text.splitlines():
-        m = re.match(r"^\s*\.local\s+(\S+)\s*$", line)
+        m = LOCAL_DIRECTIVE.match(line) if line.lstrip().startswith(".local") else None
         if m:
             names.add(m.group(1))
             out.append(f"\t.globl\t{m.group(1)}")
             continue
-        m = re.match(r"^([A-Za-z_][\w.$]*):\s*$", line)
+        m = GLOBAL_LABEL.match(line) if line.rstrip().endswith(":") else None
         if m and m.group(1) not in declared:
             names.add(m.group(1))
             out.append(f"\t.globl\t{m.group(1)}")
@@ -810,8 +814,27 @@ def code_digest(norm):
     return hashlib.sha256("\n".join(norm).encode()).hexdigest()[:16]
 
 
-def compare_source(source, original, show=None, extra=(), quiet=False):
-    """quiet: compiler errors go into the SystemExit message instead of stderr."""
+def compiled_identity(source, original, extra=(), quiet=False):
+    """Complete object identity and unknown references, without function analysis.
+
+    For verifying live paths against an already validated object. This is not
+    MATCH or behavioral acceptance of a new object: data/EH/relocations must be
+    byte-identical to the one whose functions were checked.
+    """
+    with tempfile.TemporaryDirectory(prefix="otl-identity-") as tmp:
+        obj, _ = compile_for_diff(source, tmp, extra, quiet)
+        digest = hashlib.sha256(Path(obj).read_bytes()).hexdigest()
+        unknown = original.unknown_references(obj)
+    return {"object_digest": digest,
+            "unknown": [{"name": n, "known": original.known_overloads(n)} for n in unknown]}
+
+
+def compare_source(source, original, show=None, extra=(), quiet=False, *, scores=True):
+    """quiet: compiler errors go into the SystemExit message instead of stderr.
+
+    scores=False omits cosmetic DIFF similarity percentages, never code/data/EH
+    checks. Explicit diagnostics retain the original exact score calculation.
+    """
     tu = tu_for_source(original.db, source)
     with tempfile.TemporaryDirectory(prefix="otl-diff-") as tmp:
         obj, globalized = compile_for_diff(source, tmp, extra, quiet)
@@ -834,14 +857,16 @@ def compare_source(source, original, show=None, extra=(), quiet=False):
         if mine["norm"] == theirs and not metadata_reasons:
             status, score = "MATCH", 1.0
         else:
-            score = difflib.SequenceMatcher(None, mine["norm"], theirs, autojunk=False).ratio()
+            score = difflib.SequenceMatcher(None, mine["norm"], theirs, autojunk=False).ratio() if scores else None
             status = "DIFF"
         row = {"name": name, "demangled": f["demangled"], "address": f["address"], "status": status,
-               "score": round(score, 4), "size": mine["size"], "original_size": f["size"],
+               "size": mine["size"], "original_size": f["size"],
                "weak": mine["bind"] == elfimage.STB_WEAK, "code": code_digest(mine["norm"]),
                "object_digest": object_digest}
         if metadata_reasons:
             row["metadata_reasons"] = metadata_reasons
+        if score is not None:
+            row["score"] = round(score, 4)
         rows.append(row)
         if show and (show == "all" or show in (name, f["demangled"])):
             print(f"--- ours {name}\n+++ original {f['address']} {f['demangled']}")
