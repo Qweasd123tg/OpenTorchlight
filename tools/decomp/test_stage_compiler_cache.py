@@ -48,7 +48,7 @@ class SharedCompilerCache(unittest.TestCase):
         main.write_text('#include <cstdio>\n' + declaration + '\nint main(){std::printf("' +
                         ("%s" if string else "%d") + '",' + expression + ');}\n')
         executable = obj.with_suffix(".exe")
-        subprocess.run(["g++", str(obj), str(main), "-o", str(executable)], capture_output=True, check=True)
+        subprocess.run(["g++", "-no-pie", str(obj), str(main), "-o", str(executable)], capture_output=True, check=True)
         return subprocess.run([str(executable)], capture_output=True, text=True, check=True).stdout
 
     def test_two_real_stage_attempts_share_objects_and_assembly(self):
