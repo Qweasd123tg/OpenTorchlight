@@ -784,7 +784,7 @@ void CMerchantMenu::createMenus()
 
         }
 
-        m_pUnknown1E80[idx] = slot;
+        m_pSocketedSizeWindows[idx + 19] = slot;
 
         // --------------------------------------------------------------
         // [A] Item-name label: "GuiLook/StaticText" (rodata 0xfe4872) with a

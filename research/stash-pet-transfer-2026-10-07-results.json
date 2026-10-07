@@ -1,0 +1,49 @@
+{
+  "base_commit": "b5c450c425fca65b4521f21eb093d1555c6af702",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "full_check": {
+    "tests": 109,
+    "failed": 0,
+    "accepted_functions": 899,
+    "accepted_bytes": 132714,
+    "added": [
+      "0xbf7cc0"
+    ],
+    "removed": []
+  },
+  "boundary_matrix": {
+    "slots": [
+      0,
+      1,
+      18,
+      19,
+      60,
+      81
+    ],
+    "data_indices": [
+      0,
+      3,
+      399,
+      25,
+      144,
+      399
+    ],
+    "completed": 77760,
+    "different": 0,
+    "incomplete": 0
+  },
+  "negative_control": {
+    "completed": 6,
+    "different": 5,
+    "incomplete": 0
+  },
+  "source_sha256": {
+    "decomp/src/MerchantMenu.cpp": "c0c4369552c3d7564ae5d7ec4147b27c33fdfdbc1754d7ed7ca34f45271d97bc",
+    "decomp/src/StashMenu.cpp": "5a96bc8e4cc75a4cab788a5a1a82dd1b094d4bfc3750aaccdcc813c5c05dd096",
+    "decomp/include/MerchantMenu.h": "e9e43a9414b13748e987897eb6ed286f7debdd38794dbdd698f27171f060625e",
+    "decomp/include/StashMenu.h": "7132ef4528584fdf3cac4f32364c81f7afcb601c72ddb30670bbe1d3cc12a43a",
+    "decomp/hybrid/tests/StashPetTransfer.cpp": "cdf18aa09d6764f595fc558ae7ec62e1e00d07a022fcfc9e1b569ba2d85aa8c8",
+    "research/check_stash_pet_transfer.py": "e8ed4b6f7055b5b3f78d7723fe81a5a556e229c06a503e3a685538389d64471f",
+    "research/stash-pet-transfer-2026-10-07.md": "a27258251c907e9fd919d98beb43568b962f874529108db5c341b0df9cf7b45f"
+  }
+}

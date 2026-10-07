@@ -201,33 +201,20 @@ public:
 
     // image, added to m_pUnknown38 ("SSocketsO"), muted
     CEGUI::Window* m_apItemSocketOverlayWindows[126];     // +0x19f8
-    long long      m_Unknown1DE8;                          // +0x1de8
-    unsigned char  m_Unrecovered1DF0[0x90];               // +0x1df0
-
-    // the layout's own "Slot<n>" window; also the user-data owner
-    CEGUI::Window* m_apItemSlotWindows[126];               // +0x1e80
+    // One 145-entry main-slot block; indexed from +0x1de8 by setPetSlotIcon.
+    CEGUI::Window* m_pSocketedSizeWindows[145]; // +0x1de8
     long long      m_Unknown2270;                          // +0x2270
     unsigned char  m_Unrecovered2278[0x90];               // +0x2278
 
     // GuiLook/StaticText item-count label
     CEGUI::Window* m_apItemCountWindows[126];              // +0x2308
-    long long      m_Unknown26F8;                          // +0x26f8
-    unsigned char  m_Unrecovered2700[0x90];               // +0x2700
-
-    // ===== the five pet-socket arrays ======================================
-    // Loop: for (i = 1; i < 64; ++i), element i-1.  63 of 82 slots are written.
-    // The last array is bounded at 63 by the six Window* members at +0x33c8.
-
-    // the "PetSlot<n>" window in BottomFrame; also the user-data owner
-    CEGUI::Window* m_apPetSlotWindows[82];                 // +0x2790
-    // image, added to slot->getParent(), then setAlwaysOnTop(true)
-    CEGUI::Window* m_apPetStackWindows[82];                // +0x2a20
-    // image, added to slot->getParent(), muted, copies the slot's rect
-    CEGUI::Window* m_apPetSocketGlowWindows[82];           // +0x2cb0
-    // image, added to m_pUnknown38 ("SSocketsO"), muted
-    CEGUI::Window* m_apPetSocketOverlayWindows[82];        // +0x2f40
-    // GuiLook/StaticText pet-item-count label.  Exactly 63: 0x31d0 + 63*8 == 0x33c8.
-    CEGUI::Window* m_apPetCountWindows[63];                // +0x31d0
+    // Five complete 82-entry pet blocks. createMenus fills indices19..81;
+    // setPetSlotIcon uses the original full-index domain from each true base.
+    CEGUI::Window* m_pSlotWindows[82];         // +0x26f8
+    CEGUI::Window* m_pUnidentifiedWindows[82]; // +0x2988
+    CEGUI::Window* m_pSlotGlowWindows[82];     // +0x2c18
+    CEGUI::Window* m_pSocketGlowWindows[82];   // +0x2ea8
+    CEGUI::Window* m_pStackWindows[82];        // +0x3138
 
     // ---- six DISTINCT pet-tab windows, all found in BottomFrame -----------
     // [A] Each is stored by its own `mov %rax,off(%rbx)` and reloaded for its
