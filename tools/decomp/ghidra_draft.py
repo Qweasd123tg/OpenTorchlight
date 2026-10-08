@@ -163,9 +163,10 @@ def export_types():
         return json.loads((ROOT / "build-decomp" / "types.json").read_text())
 
 
-def draft_state(tu, db=None, types=None, insns=None, addresses=None):
+def draft_state(tu, db=None, types=None, insns=None, addresses=None, root=None):
     """Fresh only if every requested body completed and still matches its versioned receipt."""
-    meta = OUT / tu / "inputs.json"
+    out = Path(root) / "build-decomp/drafts" if root is not None else OUT
+    meta = out / tu / "inputs.json"
     if not meta.exists():
         return "unknown", ["no inputs.json: made before drafts were fingerprinted"]
     try:
@@ -173,10 +174,23 @@ def draft_state(tu, db=None, types=None, insns=None, addresses=None):
     except (ValueError, OSError):
         return "stale", ["unreadable inputs.json"]
     db = db or elfdb.load_db()
-    snapshot = export_types() if types is None else types
+    rooted_types = None
+    if root is not None and (types is None or "classes" not in types):
+        try:
+            rooted_types = json.loads((Path(root) / "build-decomp/types.json").read_text())
+        except (ValueError, OSError):
+            return "unknown", ["missing or unreadable types snapshot in this attempt"]
+    snapshot = (rooted_types if root is not None else export_types()) if types is None else types
     # Existing Python callers may supply just the classes mapping.
     if "classes" not in snapshot:
-        snapshot = {"classes": snapshot, "prototypes": _prototypes(), "vtables": _vtables()}
+        snapshot = {"classes": snapshot,
+                    "prototypes": rooted_types.get("prototypes", {}) if rooted_types is not None else _prototypes(),
+                    "vtables": rooted_types.get("vtables", {}) if rooted_types is not None else _vtables(),
+                    **({"source_inputs": rooted_types.get("source_inputs")} if rooted_types is not None else {})}
+    if root is not None:
+        import type_inputs
+        if not type_inputs.current(snapshot, root):
+            return "stale", ["type snapshot inputs do not match the current attempt headers/configuration"]
     reasons = []
     if data.get("schema") != DRAFT_SCHEMA:
         reasons.append("unversioned or obsolete draft receipt")
@@ -199,7 +213,7 @@ def draft_state(tu, db=None, types=None, insns=None, addresses=None):
         reasons.append("requested function export set incomplete")
     for address in sorted(expected):
         receipt = exports.get(address, {})
-        raw = OUT / tu / "raw" / f"{address}.c"
+        raw = out / tu / "raw" / f"{address}.c"
         if receipt.get("status") != "COMPLETE":
             reasons.append(f"{address}: {receipt.get('status', 'NO_BODY')}")
         elif not raw.exists() or hashlib.sha256(raw.read_bytes()).hexdigest() != receipt.get("raw_sha256"):

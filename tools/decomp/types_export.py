@@ -77,7 +77,7 @@ def parse_dies(obj):
             elif name == "DW_AT_data_member_location":
                 n = re.search(r"DW_OP_plus_uconst: (\d+)", value)
                 current["attrs"][name] = int(n.group(1)) if n else (int(value, 0) if re.fullmatch(r"0x[0-9a-f]+|\d+", value) else None)
-            elif name in ("DW_AT_byte_size", "DW_AT_upper_bound"):
+            elif name in ("DW_AT_byte_size", "DW_AT_upper_bound", "DW_AT_bit_size", "DW_AT_bit_offset"):
                 current["attrs"][name] = int(value, 0) if re.fullmatch(r"0x[0-9a-f]+|\d+", value) else None
             elif name in ("DW_AT_name", "DW_AT_MIPS_linkage_name", "DW_AT_linkage_name"):
                 current["attrs"]["DW_AT_linkage_name" if "linkage" in name else name] = value.split(": ")[-1].strip()
@@ -107,6 +107,9 @@ def qualified_name(dies, ref, seen=None):
     if spec in dies:
         return qualified_name(dies, spec, seen)
     name = d["attrs"].get("DW_AT_name", "?")
+    if name == "?" and d["tag"] == "DW_TAG_union_type":
+        # Anonymous unions have a DWARF identity, but no C++ symbol name.
+        name = f"__anonymous_union_{ref:x}"
     parent_ref = d.get("parent")
     parent = dies.get(parent_ref)
     if parent and parent["tag"] in ("DW_TAG_namespace", "DW_TAG_class_type", "DW_TAG_structure_type",
@@ -174,28 +177,113 @@ def type_size(dies, ref, depth=0):
 
 def header_dies():
     with tempfile.TemporaryDirectory(prefix="otl-types-") as tmp:
-        return parse_dies(compile_headers(tmp))
+        obj = compile_headers(tmp)
+        dies = parse_dies(obj)
+        # A vector declaration mentions an incomplete iterator DIE. Materialize
+        # these exact SDK types with sizeof so call parameters carry a compiler
+        # layout rather than an inferred pointer-sized surrogate.
+        iterators = materialized_iterators(dies, elfdb.load_db())
+        if iterators:
+            source = Path(tmp) / "all_headers.cpp"
+            with source.open("a") as stream:
+                for i, name in enumerate(iterators):
+                    stream.write(f"typedef char force_iterator_{i}[(sizeof({name}) > 0) ? 1 : -1];\n")
+            obj = toolchain.compile_source(source, Path(tmp) / "materialized.o",
+                                          ["-g", "-O0", "-fno-eliminate-unused-debug-types", "-femit-class-debug-always"])
+            dies = parse_dies(obj)
+        return dies
+
+
+def materialized_iterators(dies, db):
+    """Only exact by-value iterator parameters of original game-TU symbols.
+
+    Unrelated SDK iterators can name private/protected nested implementation
+    types. They must not become external sizeof probes merely by appearing in
+    an included header.
+    """
+    import ghidra_cpp
+    game = {tu["id"] for tu in db["tus"] if tu.get("kind") == "game"}
+    wanted = {re.sub(r"\s+", "", p) for f in db["functions"].values() if f.get("tu") in game
+              for p in ghidra_cpp.split_args(f.get("params") or "")
+              if p.startswith("__gnu_cxx::__normal_iterator<") and p.endswith(">")}
+    return sorted({qualified_name(dies, ref) for ref, d in dies.items()
+                   if d["tag"] in ("DW_TAG_class_type", "DW_TAG_structure_type")
+                   and d["attrs"].get("DW_AT_declaration")
+                   and re.sub(r"\s+", "", qualified_name(dies, ref)) in wanted})
 
 
 def header_classes(dies, conflicts=None):
+    """Recovered classes and their by-value/base closure in the pinned DWARF.
+
+    std/__gnu_cxx classes are not roots: only layouts actually needed by a
+    recovered field/base are exported. Pointers do not establish a value layout.
+    """
     classes = {}
     conflicts = {} if conflicts is None else conflicts
+    refs = {id(d): ref for ref, d in dies.items()}
+    definitions = {}
+    roots = set()
     for ref, d in dies.items():
-        attrs = die_attrs(dies, ref)
-        if d["tag"] not in ("DW_TAG_class_type", "DW_TAG_structure_type") or d["attrs"].get("DW_AT_declaration"):
+        if d["tag"] not in ("DW_TAG_class_type", "DW_TAG_structure_type", "DW_TAG_union_type") or d["attrs"].get("DW_AT_declaration"):
             continue
         name = qualified_name(dies, ref)
-        short = attrs.get("DW_AT_name", "")
-        if not short or short.startswith("_") or name.startswith("std::"):
+        definitions.setdefault(name, []).append(ref)
+        short = die_attrs(dies, ref).get("DW_AT_name", "")
+        if short and not short.startswith("_") and not name.startswith(("std::", "__gnu_cxx::")):
+            roots.add(name)
+    # Value parameters/results are layout dependencies just like value fields.
+    # Pointer/reference parameters retain identity without forcing a layout.
+    for ref, d in dies.items():
+        if d["tag"] not in ("DW_TAG_formal_parameter", "DW_TAG_subprogram"):
+            continue
+        target = strip(dies, die_attrs(dies, ref).get("DW_AT_type"))
+        if target and target["tag"] in ("DW_TAG_class_type", "DW_TAG_structure_type", "DW_TAG_union_type"):
+            roots.add(qualified_name(dies, refs[id(target)]))
+    reachable = set()
+    pending = list(roots)
+    while pending:
+        name = pending.pop()
+        if name in reachable:
+            continue
+        reachable.add(name)
+        for ref in definitions.get(name, []):
+            for c in dies[ref]["children"]:
+                child = dies[c]
+                if child["tag"] not in ("DW_TAG_member", "DW_TAG_inheritance"):
+                    continue
+                target_ref = die_attrs(dies, c).get("DW_AT_type")
+                seen = set()
+                while target_ref in dies and target_ref not in seen:
+                    seen.add(target_ref)
+                    target = dies[target_ref]
+                    if target["tag"] not in ("DW_TAG_typedef", "DW_TAG_const_type", "DW_TAG_volatile_type", "DW_TAG_array_type"):
+                        break
+                    target_ref = target["attrs"].get("DW_AT_type")
+                target = dies.get(target_ref)
+                if target and target["tag"] in ("DW_TAG_class_type", "DW_TAG_structure_type", "DW_TAG_union_type"):
+                    pending.append(type_name(dies, target_ref))
+    for ref, d in dies.items():
+        attrs = die_attrs(dies, ref)
+        if d["tag"] not in ("DW_TAG_class_type", "DW_TAG_structure_type", "DW_TAG_union_type") or d["attrs"].get("DW_AT_declaration"):
+            continue
+        name = qualified_name(dies, ref)
+        if name not in reachable:
             continue
         entry = {"size": attrs.get("DW_AT_byte_size") or 0, "bases": [], "fields": [], "source": "header"}
+        if d["tag"] == "DW_TAG_union_type":
+            entry["kind"] = "union"
         for c in d["children"]:
             child = dies[c]
             off = child["attrs"].get("DW_AT_data_member_location")
+            if d["tag"] == "DW_TAG_union_type" and off is None:
+                off = 0  # DWARF union members share the start of the object.
             if child["tag"] == "DW_TAG_inheritance":
                 entry["bases"].append({"name": type_name(dies, child["attrs"].get("DW_AT_type")), "offset": off})
-            elif child["tag"] == "DW_TAG_member" and off is not None:
+            elif child["tag"] == "DW_TAG_member" and not child["attrs"].get("DW_AT_declaration"):
                 target = child["attrs"].get("DW_AT_type")
+                if off is None or "DW_AT_bit_size" in child["attrs"]:
+                    entry.setdefault("layout_errors", []).append("unrepresented member " + child["attrs"].get("DW_AT_name", "?"))
+                    continue
                 entry["fields"].append({"offset": off, "name": child["attrs"].get("DW_AT_name", f"field_{off:x}"),
                                         "type": type_name(dies, target), "ghidra_type": ghidra_type(dies, target)[0],
                                         "size": type_size(dies, target)})
@@ -469,6 +557,8 @@ def vtable_groups(db, protos):
 
 
 def main():
+    import type_inputs
+    source_inputs = type_inputs.capture(ROOT)
     db = elfdb.load_db()
     dies = header_dies()
     conflicts = {}
@@ -482,8 +572,11 @@ def main():
     protos = prototypes(dies, db, promoted_classes(), matched, proto_conflicts)
     sdk_conflicts = {}
     sdk = sdk_prototypes(dies, db, sdk_conflicts)
+    if type_inputs.capture(ROOT) != source_inputs:
+        raise SystemExit("type export inputs changed during generation; snapshot not written")
     OUT.parent.mkdir(parents=True, exist_ok=True)
     output = json.dumps({"schema": 2, "original_elf_sha256": db["original_elf_sha256"],
+                              "source_inputs": source_inputs,
                               "classes": merged, "class_conflicts": conflicts,
                               "type_identities": type_identities(dies), "vtables": vtables(db),
                               "vtable_groups": vtable_groups(db, protos), "prototypes": protos,

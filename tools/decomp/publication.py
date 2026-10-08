@@ -124,7 +124,7 @@ class Stage:
                                 ignore=shutil.ignore_patterns("__pycache__"))
         build = self.path / "build-decomp"
         build.mkdir()
-        for name in ("include-gen", "drafts", "types.json", "examples.json"):
+        for name in ("include-gen", "drafts", "types.json", "examples.json", "progress.json"):
             source = root / "build-decomp" / name
             if source.is_dir():
                 shutil.copytree(source, build / name)

@@ -61,6 +61,29 @@ class Selection(unittest.TestCase):
 
 
 class InputFingerprint(unittest.TestCase):
+    def test_progress_return_trust_is_copied_and_only_match_set_invalidates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "decomp").mkdir()
+            (root / "build-decomp").mkdir()
+            progress = root / "build-decomp/progress.json"
+            report = {"units": [{"functions": [{"address": "0x10", "status": "MATCH", "score": 1.0},
+                                                {"address": "0x20", "status": "DIFF", "score": .5}]}]}
+            progress.write_text(json.dumps(report))
+            elf = root / "original"
+            elf.write_bytes(b"ELF")
+            with patch.object(llm_loop.elfdb, "default_elf", return_value=elf):
+                before = llm_loop.packet_inputs(root)
+                stage = publication.Stage(root)
+                self.assertEqual(progress.read_bytes(), (stage.path / "build-decomp/progress.json").read_bytes())
+                self.assertEqual(before, llm_loop.packet_inputs(stage.path))
+                report["units"][0]["functions"][1]["score"] = .7
+                progress.write_text(json.dumps(report))
+                self.assertEqual(before, llm_loop.packet_inputs(root))
+                report["units"][0]["functions"][1]["status"] = "MATCH"
+                progress.write_text(json.dumps(report))
+                self.assertNotEqual(before, llm_loop.packet_inputs(root))
+
     def test_mutable_instruction_caches_are_not_checkpoint_inputs(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

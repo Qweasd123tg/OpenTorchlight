@@ -19,6 +19,8 @@ class QualifiedTypes(unittest.TestCase):
         source = Path(cls.folder.name) / 'identity.cpp'
         obj = source.with_suffix('.o')
         source.write_text('''
+#include <vector>
+#include <map>
 namespace Left { struct Item { int value; }; typedef Item Alias; }
 namespace Right { struct Item { long value; }; }
 struct Owner { struct Nested { unsigned long value; }; Left::Alias* item; };
@@ -26,6 +28,11 @@ Left::Alias left;
 Right::Item right;
 Owner::Nested nested;
 Owner owner;
+struct Containers { std::vector<Left::Alias> values; std::map<long long, Left::Alias*> lookup; } containers;
+std::vector<double> unrelated;
+struct Matrix { union { float rows[4][4]; float flat[16]; }; } matrix;
+std::vector<Left::Alias>::iterator iterator;
+void iterator_parameter(std::vector<Left::Alias>::iterator);
 ''')
         toolchain.compile_source(source, obj, ['-g', '-O0', '-fno-eliminate-unused-debug-types',
                                               '-femit-class-debug-always'], cache=False)
@@ -47,6 +54,34 @@ Owner owner;
         names = {entry['name'] for entry in types_export.type_identities(self.dies).values()}
         self.assertIn('Left::Alias', names)
 
+    def test_anonymous_union_and_value_parameter_layouts_are_exact(self):
+        classes = types_export.header_classes(self.dies)
+        matrix = classes['Matrix']
+        union = classes[matrix['fields'][0]['type']]
+        self.assertEqual('union', union['kind'])
+        self.assertEqual(64, union['size'])
+        self.assertEqual([0, 0], [f['offset'] for f in union['fields']])
+        self.assertEqual(['float[4][4]', 'float[16]'], [f['type'] for f in union['fields']])
+        iterator = next(v for k, v in classes.items() if k.startswith('__gnu_cxx::__normal_iterator<Left::Item*'))
+        self.assertEqual(8, iterator['size'])
+        self.assertEqual('Left::Item*', iterator['fields'][0]['type'])
+
+    def test_materialization_uses_original_game_value_parameters_only(self):
+        dies = copy.deepcopy(self.dies)
+        name = next(types_export.qualified_name(dies, ref) for ref, d in dies.items()
+                    if d['tag'] in ('DW_TAG_class_type', 'DW_TAG_structure_type')
+                    and types_export.qualified_name(dies, ref).startswith('__gnu_cxx::__normal_iterator<Left::Item*'))
+        for ref, d in dies.items():
+            if types_export.qualified_name(dies, ref) == name:
+                d['attrs']['DW_AT_declaration'] = True
+        db = {'tus': [{'id': 1, 'kind': 'game'}, {'id': 2, 'kind': 'library'}],
+              'functions': {'value': {'tu': 1, 'params': name},
+                            'reference': {'tu': 1, 'params': name + ' const&'},
+                            'private': {'tu': 2, 'params': '__gnu_cxx::__normal_iterator<Private*, std::vector<Private> >'}}}
+        self.assertEqual([name], types_export.materialized_iterators(dies, db))
+        db['functions'].pop('value')
+        self.assertEqual([], types_export.materialized_iterators(dies, db))
+
     def test_disagreeing_same_qualified_identity_is_quarantined(self):
         dies = copy.deepcopy(self.dies)
         ref = next(ref for ref in dies if types_export.qualified_name(dies, ref) == 'Left::Item'
@@ -60,6 +95,53 @@ Owner owner;
         self.assertNotIn('Left::Item', classes)
         self.assertEqual(len(conflicts['Left::Item']), 2)
         self.assertIn('Right::Item', classes)
+
+    def test_pinned_containers_export_exact_private_base_and_typedef_closure(self):
+        classes = types_export.header_classes(self.dies)
+        seen = set()
+        fields = []
+        def flatten(name, offset=0):
+            self.assertIn(name, classes, name)
+            seen.add(name)
+            entry = classes[name]
+            self.assertNotIn('layout_errors', entry)
+            for base in entry['bases']:
+                self.assertIsNotNone(base['offset'])
+                flatten(base['name'], offset + base['offset'])
+            for field in entry['fields']:
+                value = field['type']
+                if value in classes:
+                    flatten(value, offset + field['offset'])
+                else:
+                    fields.append((field['name'], offset + field['offset'], value, field['size']))
+        vector = classes['Containers']['fields'][0]
+        flatten(vector['type'])
+        self.assertEqual(vector['size'], classes[vector['type']]['size'])
+        self.assertEqual(fields, [('_M_start', 0, 'Left::Item*', 8),
+                                  ('_M_finish', 8, 'Left::Item*', 8),
+                                  ('_M_end_of_storage', 16, 'Left::Item*', 8)])
+        self.assertTrue(any('::_Vector_impl' in name for name in seen))
+        fields[:] = []
+        lookup = classes['Containers']['fields'][1]
+        flatten(lookup['type'])
+        self.assertEqual(lookup['size'], classes[lookup['type']]['size'])
+        self.assertEqual([(n, o, s) for n, o, _, s in fields],
+                         [('_M_color', 8, 4), ('_M_parent', 16, 8), ('_M_left', 24, 8),
+                          ('_M_right', 32, 8), ('_M_node_count', 40, 8)])
+        self.assertTrue(any('::_Rb_tree_impl' in name for name in seen))
+        self.assertFalse(any(name.startswith('std::vector<double,') for name in classes))
+
+    def test_missing_member_offset_and_bitfields_remain_blockers(self):
+        dies = copy.deepcopy(self.dies)
+        ref = next(ref for ref in dies if types_export.qualified_name(dies, ref) == 'Left::Item'
+                   and dies[ref]['tag'] == 'DW_TAG_structure_type'
+                   and not dies[ref]['attrs'].get('DW_AT_declaration'))
+        member = next(dies[c] for c in dies[ref]['children'] if dies[c]['tag'] == 'DW_TAG_member')
+        member['attrs'].pop('DW_AT_data_member_location')
+        self.assertIn('layout_errors', types_export.header_classes(dies)['Left::Item'])
+        member['attrs']['DW_AT_data_member_location'] = 0
+        member['attrs']['DW_AT_bit_size'] = 3
+        self.assertIn('layout_errors', types_export.header_classes(dies)['Left::Item'])
 
     def test_typedef_cv_and_unknown_array_extent_are_preserved(self):
         dies = {1: {'tag': 'DW_TAG_base_type', 'attrs': {'DW_AT_name': 'long int', 'DW_AT_byte_size': 8},

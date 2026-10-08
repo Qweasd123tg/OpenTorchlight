@@ -190,7 +190,11 @@ class ContextIndex:
         # Narrow imported libstdc++ data evidence from the borrowed ELF. A DB
         # label/namespace or version-looking game name alone must not suppress gaps.
         self.elf_object_names = {}
+        self.local_object_names = set()
         for symbol in [*getattr(image, "symbols", ()), *getattr(image, "dynsyms", ())]:
+            if (symbol.type == 1 and symbol.bind == 0 and symbol.defined and symbol.value
+                    and getattr(symbol, "size", 0) > 0 and getattr(symbol, "file", None)):
+                self.local_object_names.add((symbol.value, symbol.name, symbol.size, symbol.file))
             if (symbol.type == 1 and symbol.bind in (1, 2) and symbol.defined
                     and symbol.value and symbol.name):  # STT_OBJECT, GLOBAL/WEAK
                 key = (symbol.value, symbol.name.split("@", 1)[0])
@@ -389,7 +393,7 @@ class ContextIndex:
                 facts.append(f"Named data {address:#x}: {name}+{offset:#x}; symbol base {obj['address']}, "
                              f"size {obj.get('size', 0)}; linkage {obj.get('bind', '?')}"
                              + (f", STT_FILE owner {owner}" if owner else "") + ".")
-                if obj.get("name", "").startswith(("_ZTV", "_ZTI", "_ZTS", "_ZGV")):
+                if obj.get("name", "").startswith(("_ZTV", "_ZTT", "_ZTI", "_ZTS", "_ZGV")):
                     notes.append(f"{address:#x}: compiler/ABI metadata; no C++ data declaration synthesized.")
                     continue
                 library = self._library_data(obj)
@@ -399,6 +403,21 @@ class ContextIndex:
                     continue
                 if obj.get("bind") == "local" and (not owner or owner != tu):
                     gaps.append(f"Local data {name} belongs to {owner}, not target TU {tu}; no same-name declaration substituted")
+                    continue
+                raw = obj.get("name", "")
+                section = self.image.section_at(_address(obj["address"]))
+                local_identity = (_address(obj["address"]), raw, obj.get("size", 0), owner)
+                if (obj.get("bind") == "local" and owner == tu
+                        and local_identity in self.local_object_names
+                        and name.startswith(f.get("demangled", "") + "::")
+                        and any(raw.startswith("_ZZ" + symbol[2:] + "E")
+                                for symbol in f.get("names", [f.get("mangled", "")]) if symbol.startswith("_Z"))
+                        and section and section.type == 8 and section.flags & 2
+                        and obj.get("size", 0) > 0
+                        and _address(obj["address"]) + obj["size"] <= section.addr + section.size):
+                    notes.append(f"{address:#x}: target function-local static storage; exact ELF local STT_OBJECT, "
+                                 "matching mangled function identity and STT_FILE; SHT_NOBITS zero initialization. "
+                                 "No external header declaration needed; C++ type is not inferred.")
                     continue
                 matches = self._matching(name, "data")
                 if not matches:

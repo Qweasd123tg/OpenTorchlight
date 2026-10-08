@@ -129,6 +129,42 @@ class PacketContextTests(TestCase):
         self.assertIn("compiler/ABI metadata", result.text)
         self.assertIn("Named data 0x5008: vtable for CAchievement+0x8", result.text)
 
+    def test_vtt_is_compiler_abi_metadata_without_a_source_global(self):
+        data = object_symbol(0x5000, "VTT for std::basic_stringstream<char>", size=32)
+        data['name'] = '_ZTTSt18basic_stringstreamIcSt11char_traitsIcESaIcEE'
+        self.db['globals'] = [data]
+        result = self.index().build(self.target, '1000: mov $0x5008,%rax')
+        self.assertFalse(result.gaps)
+        self.assertIn('compiler/ABI metadata', result.text)
+        self.assertIn('VTT for std::basic_stringstream', result.text)
+
+    def test_target_function_local_bss_has_identity_without_a_header_type_guess(self):
+        mangled = '_ZN12CAchievement6updateEv'
+        self.target['names'] = [mangled]
+        raw = '_ZZ' + mangled[2:] + 'E7counter'
+        data = object_symbol(0x7000, self.target['demangled'] + '::counter', size=4,
+                             bind='local', file='Achievement.cpp')
+        data['name'] = raw
+        self.db['globals'] = [data]
+        self.image.symbols = [SimpleNamespace(name=raw, value=0x7000, size=4, type=1,
+                                              bind=0, defined=True, file='Achievement.cpp')]
+        result = self.index().build(self.target, '1000: mov $0x7000,%rax')
+        self.assertFalse(result.gaps)
+        self.assertIn('SHT_NOBITS zero initialization', result.text)
+        self.assertIn('C++ type is not inferred', result.text)
+        self.assertFalse(self.image.reads)
+        for change in ('symbol_name', 'size', 'function', 'owner', 'initialized', 'missing_elf'):
+            with self.subTest(change=change):
+                db = copy.deepcopy(self.db)
+                image = copy.deepcopy(self.image)
+                if change == 'symbol_name': image.symbols[0].name = '_ZZanother_functionE7counter'
+                elif change == 'size': image.symbols[0].size = 8
+                elif change == 'function': db['globals'][0]['demangled'] = 'COther::update()::counter'
+                elif change == 'owner': db['globals'][0]['file'] = 'Other.cpp'
+                elif change == 'initialized': image.sections[-1].type = 1
+                elif change == 'missing_elf': image.symbols = []
+                self.assertTrue(self.index(db=db, image=image).build(self.target, '1000: mov $0x7000,%rax').gaps)
+
     def imported_data(self, raw, readable, *, address=0x7000, version="GLIBCXX_3.4"):
         # Version comes from the borrowed ELF symbol, not just the DB label.
         data = object_symbol(address, readable, size=32)

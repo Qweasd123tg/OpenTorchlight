@@ -118,7 +118,25 @@ def canonical_parameter(parameter, named=False):
         if m and m.group(2) not in {"int", "long", "short", "char", "double", "float", "const", "volatile", "unsigned", "signed"}:
             p = p[:m.start(2)].strip()
     p = re.sub(r"^(.+?)\s+const\s*([*&].*)$", r"const \1\2", p)
-    return re.sub(r"\s+", "", p)
+    p = re.sub(r"\s+", "", p)
+    # Only erase the exact standard defaults, retaining custom allocators and
+    # element qualifiers. Symbols spell defaults which source can omit.
+    for char, alias in (("char", "string"), ("wchar_t", "wstring")):
+        p = p.replace(f"std::basic_string<{char},std::char_traits<{char}>,std::allocator<{char}>>",
+                      "std::" + alias)
+    start = p.find("std::vector<")
+    while start >= 0:
+        opening = start + len("std::vector")
+        end = matching(p, opening, "<", ">")
+        if end < 0:
+            break
+        args = [canonical_parameter(a) for a in ghidra_cpp.split_args(p[opening + 1:end])]
+        if len(args) == 2 and args[1] == "std::allocator<" + args[0] + ">":
+            args.pop()
+        replacement = "std::vector<" + ",".join(args) + ">"
+        p = p[:start] + replacement + p[end + 1:]
+        start = p.find("std::vector<", start + len(replacement))
+    return p
 
 
 def definition(text, masked, f):

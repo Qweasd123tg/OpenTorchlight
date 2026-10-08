@@ -74,6 +74,38 @@ class CompleteHandHeader(unittest.TestCase):
         self.assertIn("    int m_iA;\npublic:\n    int getA();\n};", text)
 
 
+class DeclarationReadiness(unittest.TestCase):
+    def check(self, files, scope, method, params, cv=""):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "decomp/include").mkdir(parents=True)
+            for name, body in files.items():
+                (root / "decomp/include" / name).write_text(body)
+            loop = llm_loop.Loop.__new__(llm_loop.Loop)
+            loop.headers = {scope.split("::")[0]: next(iter(files))}
+            with patch.object(llm_loop, "ROOT", root):
+                return loop.declaration_error({"scope": scope, "method": method, "params": params, "cv": cv})
+
+    def test_reopened_namespace_finds_exact_declaration_in_another_header(self):
+        files = {"Globals.h": "namespace STRINGS { extern int counter; }",
+                 "Strings.h": "namespace STRINGS { std::string upper(const std::string& text); }"}
+        self.assertIsNone(self.check(files, "STRINGS", "upper", "std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&"))
+        self.assertIsNotNone(self.check(files, "STRINGS", "upper", "std::wstring const&"))
+
+    def test_nested_namespace_does_not_borrow_unrelated_or_nested_class_declaration(self):
+        files = {"Names.h": "namespace A { namespace B { int work(int); struct C { int work(float); }; } } namespace Other { int work(double); }"}
+        self.assertIsNone(self.check(files, "A::B", "work", "int"))
+        self.assertIsNotNone(self.check(files, "A::B", "work", "float"))
+        self.assertIsNotNone(self.check(files, "A::B", "work", "double"))
+
+    def test_template_defaults_match_without_accepting_a_custom_allocator_or_wrong_cv(self):
+        files = {"Unit.h": "class CUnit\n{\npublic:\n void work(const std::vector<unsigned int>& values);\n};\n"}
+        self.assertIsNone(self.check(files, "CUnit", "work", "std::vector<unsigned int, std::allocator<unsigned int> > const&"))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", "std::vector<unsigned int, CustomAllocator<unsigned int> > const&"))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", "std::vector<unsigned int>&"))
+
+
 class AsmLabels(unittest.TestCase):
     def test_labels_bound_to_mangled_names_are_refused(self):
         self.assertTrue(llm_loop.ASM_LABEL.search('extern "C" void f(C*) __asm__("_ZN1C1fEv");'))

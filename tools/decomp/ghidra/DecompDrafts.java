@@ -51,6 +51,10 @@ public class DecompDrafts extends GhidraScript {
     private final Set<String> typeErrors = new HashSet<>();
     private final Set<Function> prototypeErrors = new HashSet<>();
     private final Map<String, Structure> structs = new HashMap<>();
+    private final Map<String, Union> unions = new HashMap<>();
+    private final Set<String> filledClasses = new HashSet<>();
+    private final Set<String> fillingClasses = new HashSet<>();
+    private final Set<String> declaredClasses = new HashSet<>();
     private final CategoryPath category = new CategoryPath("/decomp");
 
     private static List<String> qualifiedParts(String name) throws Exception {
@@ -82,6 +86,16 @@ public class DecompDrafts extends GhidraScript {
         if (structs.containsKey(name)) {
             return structs.get(name);
         }
+        if (name.indexOf('<') >= 0) {
+            // C++ template spellings can contain spaces rejected by the symbol
+            // table. Datatype names support those spellings, so keep the exact
+            // identity without inventing a class namespace or flattening scopes.
+            StructureDataType body = new StructureDataType(category, name, 0, dtm);
+            body.setDescription("C++ type: " + name);
+            Structure s = (Structure) dtm.addDataType(body, DataTypeConflictHandler.REPLACE_HANDLER);
+            structs.put(name, s);
+            return s;
+        }
         List<String> parts = qualifiedParts(name);
         SymbolTable table = currentProgram.getSymbolTable();
         Namespace ns = currentProgram.getGlobalNamespace();
@@ -97,7 +111,7 @@ public class DecompDrafts extends GhidraScript {
 
     private boolean prepareClass(String name) {
         try {
-            structFor(name);
+            classType(name);
             return true;
         } catch (Exception e) {
             typeErrors.add(name);
@@ -106,22 +120,50 @@ public class DecompDrafts extends GhidraScript {
         }
     }
 
+    private DataType classType(String name) throws Exception {
+        JsonObject layout = classes.getAsJsonObject(name);
+        if (layout != null && layout.has("kind") && layout.get("kind").getAsString().equals("union")) {
+            if (typeErrors.contains(name)) throw new IllegalArgumentException("unsupported union " + name);
+            if (!unions.containsKey(name)) {
+                unions.put(name, (Union) dtm.addDataType(new UnionDataType(category, name, dtm),
+                    DataTypeConflictHandler.REPLACE_HANDLER));
+            }
+            return unions.get(name);
+        }
+        return structFor(name);
+    }
+
+    private void importClassIdentities(JsonObject identities) {
+        if (identities == null) return;
+        for (String ref : identities.keySet()) {
+            JsonObject identity = identities.getAsJsonObject(ref);
+            String tag = identity.get("tag").getAsString();
+            if (tag.equals("DW_TAG_class_type") || tag.equals("DW_TAG_structure_type")
+                    || tag.equals("DW_TAG_union_type")) {
+                declaredClasses.add(identity.get("name").getAsString());
+            }
+        }
+    }
+
     private DataType basic(String type, int size) throws Exception {
-        String t = type.replace("const ", "").replace("volatile ", "").trim();
+        String t = type.trim().replaceFirst("^(?:(?:const|volatile)\\s+)+", "");
         if (t.endsWith("*")) {
             String inner = t.substring(0, t.length() - 1).trim();
             DataType target;
-            if (typeErrors.contains(inner) && classes.has(inner) && structs.containsKey(inner)) {
+            if ((typeErrors.contains(inner) && classes.has(inner) && structs.containsKey(inner))
+                    || (!classes.has(inner) && declaredClasses.contains(inner))) {
                 // A known C++ class can be incomplete behind a pointer. Its
                 // invalid field layout must not contaminate an enclosing 8-byte
                 // pointer field or a scalar/pointer call ABI. Never reuse its
                 // old, partially populated structure for dereferences.
-                StructureDataType opaque = new StructureDataType(category,
-                    "opaque_" + Integer.toHexString(inner.hashCode()) + "_" + inner.replace("::", "_"), 0, dtm);
+                StructureDataType opaque = new StructureDataType(new CategoryPath("/decomp/incomplete-pointees"),
+                    "opaque_" + inner, 0, dtm);
                 opaque.setDescription("Incomplete pointee: " + inner + "; pointer identity only, no field layout or by-value ABI");
                 target = dtm.addDataType(opaque, DataTypeConflictHandler.KEEP_HANDLER);
             } else {
-                target = basic(inner, 0);
+                // Pointees may be incomplete and do not create a value-layout
+                // dependency (including self-referential tree/list nodes).
+                target = classes.has(inner) ? classType(inner) : basic(inner, 0);
             }
             if (target == null) {
                 return null;  // unknown pointees are not silently replaced with void
@@ -130,8 +172,11 @@ public class DecompDrafts extends GhidraScript {
         }
         int bracket = t.indexOf('[');
         if (bracket > 0 && t.endsWith("]")) {
-            String inner = t.substring(0, bracket);
-            int count = Integer.parseInt(t.substring(bracket + 1, t.indexOf(']')));
+            int closing = t.indexOf(']', bracket);
+            String extent = t.substring(bracket + 1, closing);
+            if (!extent.matches("[0-9]+")) return null;
+            String inner = t.substring(0, bracket) + t.substring(closing + 1);
+            int count = Integer.parseInt(extent);
             DataType element = basic(inner, 0);
             if (element != null && element.getLength() > 0 && count > 0) {
                 return new ArrayDataType(element, count, element.getLength(), dtm);
@@ -139,7 +184,8 @@ public class DecompDrafts extends GhidraScript {
             return null;
         }
         if (classes.has(t)) {
-            return structFor(t);
+            fill(t);
+            return classType(t);
         }
         DataType p = primitive(t, size);
         if (p != null) {
@@ -192,13 +238,24 @@ public class DecompDrafts extends GhidraScript {
 
     // Flattened fields of a class and its bases at their final offsets.
     private void collect(String name, int base, StructureDataType out, int depth) throws Exception {
-        if (depth > 12 || !classes.has(name)) {
-            return;
+        if (depth > 40 || !classes.has(name) || typeErrors.contains(name)) {
+            throw new IllegalArgumentException("unrepresented/cyclic base " + name);
         }
         JsonObject c = classes.getAsJsonObject(name);
+        if (c.has("layout_errors")) {
+            throw new IllegalArgumentException("unsupported DWARF layout " + name + ": " + c.get("layout_errors"));
+        }
         for (JsonElement b : c.getAsJsonArray("bases")) {
             JsonObject bo = b.getAsJsonObject();
-            collect(bo.get("name").getAsString(), base + bo.get("offset").getAsInt(), out, depth + 1);
+            if (bo.get("offset").isJsonNull() || bo.get("offset").getAsInt() < 0) {
+                throw new IllegalArgumentException("unknown base offset " + name);
+            }
+            String baseName = bo.get("name").getAsString();
+            // An empty/unknown-size base must not be accepted simply because
+            // flattening it contributes no fields. Validate the entire base
+            // before its owner can enter filledClasses, regardless of order.
+            fill(baseName);
+            collect(baseName, base + bo.get("offset").getAsInt(), out, depth + 1);
         }
         for (JsonElement f : c.getAsJsonArray("fields")) {
             JsonObject fo = f.getAsJsonObject();
@@ -222,19 +279,54 @@ public class DecompDrafts extends GhidraScript {
     }
 
     private void fill(String name) throws Exception {
-        JsonObject c = classes.getAsJsonObject(name);
-        int size = c.get("size").getAsInt();
-        if (size <= 0) {
-            return;
+        if (typeErrors.contains(name)) {
+            throw new IllegalArgumentException("unsupported/conflicting class " + name);
         }
-        StructureDataType body = new StructureDataType(category, name, size, dtm);
-        Structure vt = vtableFor(name);
-        if (vt != null) {
-            body.replaceAtOffset(0, new PointerDataType(vt, 8, dtm), 8, "_vptr", null);
+        if (filledClasses.contains(name)) return;
+        if (!fillingClasses.add(name)) {
+            throw new IllegalArgumentException("cyclic value layout " + name);
         }
-        collect(name, 0, body, 0);
-        Structure target = structFor(name);
-        target.replaceWith(body);
+        try {
+            JsonObject c = classes.getAsJsonObject(name);
+            int size = c.get("size").getAsInt();
+            if (size <= 0) {
+                throw new IllegalArgumentException("unknown class size " + name);
+            }
+            if (c.has("kind") && c.get("kind").getAsString().equals("union")) {
+                if (c.has("layout_errors") || c.getAsJsonArray("bases").size() != 0) {
+                    throw new IllegalArgumentException("unsupported union layout " + name);
+                }
+                UnionDataType body = new UnionDataType(category, name, dtm);
+                for (JsonElement element : c.getAsJsonArray("fields")) {
+                    JsonObject field = element.getAsJsonObject();
+                    int width = field.get("size").getAsInt();
+                    DataType type = basic(field.get(field.has("ghidra_type") ? "ghidra_type" : "type").getAsString(), width);
+                    if (field.get("offset").getAsInt() != 0 || type == null || type.getLength() <= 0
+                            || type.getLength() != width || width > size) {
+                        throw new IllegalArgumentException("unrepresented union member " + name);
+                    }
+                    body.add(type, width, field.get("name").getAsString(), null);
+                }
+                if (body.getLength() != size) throw new IllegalArgumentException("conflicting union size " + name);
+                ((Union) classType(name)).replaceWith(body);
+                filledClasses.add(name);
+                return;
+            }
+            StructureDataType body = new StructureDataType(category, name, size, dtm);
+            Structure vt = vtableFor(name);
+            if (vt != null) {
+                body.replaceAtOffset(0, new PointerDataType(vt, 8, dtm), 8, "_vptr", null);
+            }
+            collect(name, 0, body, 0);
+            Structure target = structFor(name);
+            target.replaceWith(body);
+            filledClasses.add(name);
+        } catch (Exception e) {
+            typeErrors.add(name);
+            throw e;
+        } finally {
+            fillingClasses.remove(name);
+        }
     }
 
     // Integer argument registers of the System V AMD64 ABI by operand size.
@@ -289,7 +381,7 @@ public class DecompDrafts extends GhidraScript {
         Namespace parent = fn.getParentNamespace();
         if (p.get("sret").getAsBoolean()) {
             DataType object = ret != null && ret.getLength() > 0 && !(ret instanceof Undefined) ? ret
-                : classes.has(p.get("ret").getAsString()) ? structFor(p.get("ret").getAsString())
+                : classes.has(p.get("ret").getAsString()) ? classType(p.get("ret").getAsString())
                 : new ArrayDataType(ByteDataType.dataType, Math.max(1, retSize), 1, dtm);
             DataType pointer = new PointerDataType(object, 8, dtm);
             List<Variable> params = new ArrayList<>();
@@ -352,6 +444,7 @@ public class DecompDrafts extends GhidraScript {
             throw new IllegalArgumentException("Ghidra project executable SHA256 differs from the requested original ELF");
         }
         classes = root.getAsJsonObject("classes");
+        importClassIdentities(root.getAsJsonObject("type_identities"));
         vtables = root.getAsJsonObject("vtables");
         if (root.has("class_conflicts")) {
             typeErrors.addAll(root.getAsJsonObject("class_conflicts").keySet());

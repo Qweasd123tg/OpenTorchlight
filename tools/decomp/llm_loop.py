@@ -149,6 +149,8 @@ def atomic_json(path, data):
 def packet_inputs(root):
     """Draft/header inputs are copied; db/scaffold may be read-only links."""
     out = {}
+    import type_inputs
+    out["type-return-matches"] = type_inputs.matched_addresses(root)
     for name in ("db", "scaffold", "drafts", "include-gen", "types.json", "examples.json"):
         base = root / "build-decomp" / name
         # Instruction/normalization caches are derived and mutable, not work
@@ -212,9 +214,10 @@ class Loop:
         self.signatures = ghidra_cpp.signatures_of(self.db)
         self.enums = ghidra_cpp.parse_enums()
         import ghidra_draft
-        state, reasons = ghidra_draft.draft_state(tu_name, self.db)
-        self.stale_note = (f"; STALE, made before these changes: {'; '.join(reasons)}. Where it disagrees with "
-                           "the header, the header is right" if state == "stale" else "")
+        state, reasons = ghidra_draft.draft_state(tu_name, self.db,
+                                                addresses=[f["address"] for f in self.funcs], root=ROOT)
+        self.stale_note = (f"; unavailable current draft inputs: {'; '.join(reasons)}"
+                           if state != "fresh" else "")
         self.accepted = {}  # address -> code
         self.status = {}
         self.resume = resume
@@ -323,6 +326,11 @@ class Loop:
         raw = ROOT / "build-decomp" / "drafts" / self.tu["name"] / "raw" / f"{f['address']}.c"
         if not raw.exists():
             return "(no draft)"
+        import ghidra_draft
+        state, reasons = ghidra_draft.draft_state(self.tu["name"], self.db,
+                                                addresses=[f["address"]], root=ROOT)
+        if state != "fresh":
+            return "(Ghidra draft omitted: " + "; ".join(reasons) + ")"
         try:
             return ghidra_cpp.convert(raw.read_text(errors="replace"), self.methods, f, self.signatures, self.enums)
         except Exception:  # noqa: BLE001
@@ -364,16 +372,27 @@ class Loop:
         if not name:
             return "No known owning header for selected method."
         text = (ROOT / "decomp/include" / name).read_text()
+        canonical = definitions.mutate.canonical_parameter
+        params = tuple(canonical(ghidra_cpp.cxx_type(p))
+                       for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
+        cv = ghidra_cpp.cv_suffix(f).strip()
+        # A namespace can be reopened in several hand headers. Its free
+        # functions have no class receiver, but still need an exact declaration.
+        namespace_bodies = [body for header in (ROOT / "decomp/include").glob("*.h")
+                            for body in headers.namespace_bodies(header.read_text(), f["scope"])]
+        if namespace_bodies:
+            if any((tuple(canonical(p) for p in declared), suffix) == (params, cv)
+                   for body in namespace_bodies
+                   for declared, suffix, _ in headers.declared_signatures(body, f["method"])):
+                return None
+            return "Selected namespace function signature is absent from known headers; declaration unavailable."
         match = re.search(rf"\b(?:class|struct)\s+{re.escape(f['scope'])}\b[^;{{]*{{", text)
         if not match:
             return "Owning class declaration cannot be located safely."
         end = text.find("\n};", match.end())
         if end < 0:
             return "Owning class declaration cannot be located safely."
-        params = tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
-                       for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
-        cv = ghidra_cpp.cv_suffix(f).strip()
-        if not any((p, c) == (params, cv) for p, c, _ in
+        if not any((tuple(canonical(t) for t in p), c) == (params, cv) for p, c, _ in
                    headers.declared_signatures(text[match.end():end], f["method"])):
             return "Selected method signature is absent from the known header; declaration unavailable."
         return None
@@ -394,11 +413,11 @@ class Loop:
         extra, forward, system, seen = [], set(), set(), set()
         for f in self.funcs:
             method = f.get("method") or ""
-            params = tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
+            params = tuple(definitions.mutate.canonical_parameter(ghidra_cpp.cxx_type(p))
                            for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
             identity = (method, params, ghidra_cpp.cv_suffix(f).strip())
             if (f.get("scope") != cls or f.get("vslots") or f["kind"] not in ("function", "ctor")
-                    or identity in seen or any((p, cv) == identity[1:]
+                    or identity in seen or any((tuple(definitions.mutate.canonical_parameter(t) for t in p), cv) == identity[1:]
                                                for p, cv, _ in headers.declared_signatures(body, method))):
                 continue
             seen.add(identity)
