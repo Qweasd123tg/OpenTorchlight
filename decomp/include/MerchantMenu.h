@@ -228,8 +228,7 @@ public:
     CEGUI::Window* m_pUnknown1570[126];                    // +0x1570  [A] overlay A (slot's parent)
     CEGUI::Window* m_pUnknown1960[19];                     // +0x1960  [C] element, [B] extent
     CEGUI::Window* m_pUnknown19F8[126];                    // +0x19f8  [A] overlay B (child of MSocketsO)
-    CEGUI::Window* m_pSocketedSizeWindows[19];            // +0x1de8  [B] 19-pointer socket block
-    CEGUI::Window* m_pUnknown1E80[126];                    // +0x1e80  [A] the slot windows themselves
+    CEGUI::Window* m_pSocketedSizeWindows[145];            // +0x1de8  [B] 19-pointer socket block
     CEGUI::Window* m_pUnknown2270[19];                     // +0x2270  [C] element, [B] extent
     CEGUI::Window* m_pUnknown2308[126];                    // +0x2308  [A] item-name StaticText
 
