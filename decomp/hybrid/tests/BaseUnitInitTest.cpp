@@ -17,6 +17,7 @@
 #include "UnitThemes.h"
 #include "Utilities.h"
 TL_ORIGINAL(void, originalUnitInit, (CBaseUnit*,CDataGroup*,bool), "_ZN9CBaseUnit8unitInitEP10CDataGroupb")
+extern "C" void recoveredUnitInit(CBaseUnit*,CDataGroup*,bool) __asm__("_ZN9CBaseUnit8unitInitEP10CDataGroupb");
 extern "C" void unitInitAddFloat(CDataGroup*,const std::wstring&,float) __asm__("_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEf");
 extern "C" void* initBaseTable[] __asm__("_ZTV9CBaseUnit");
 extern void* initSkillParser __asm__("_ZL13g_SkillParser");
@@ -24,7 +25,7 @@ extern CUnitThemes* initThemes __asm__("_ZL13g_pUnitThemes");
 extern CGraphManager* initGraphs __asm__("_ZL15g_pGraphManager");
 extern CMasterResourceManager* m_pMasterResourceManager;
 namespace {
-struct Case {unsigned int seed;};
+struct Case {unsigned int seed,warm;};
 unsigned int modelCalls;
 void* noModel(void*) {++modelCalls;return NULL;}
 void pointerAt(void* p,size_t offset,void* v) {std::memcpy(static_cast<char*>(p)+offset,&v,sizeof(v));}
@@ -90,8 +91,10 @@ void side(Case& c,bool ours,autotest::Capture& out) {
     pointerAt(master,0x58,catalog);CMasterResourceManager* savedMaster=m_pMasterResourceManager;m_pMasterResourceManager=reinterpret_cast<CMasterResourceManager*>(master);
     CBaseUnit* object=reinterpret_cast<CBaseUnit*>(base);if(c.seed&64)pointerAt(base,0x1c8,new CSkillManager(reinterpret_cast<CResourceManager*>(resources),object));if(c.seed&128)pointerAt(base,0x1b8,new CEffectManager(NULL));
     CDataGroup* input=c.seed%23?&data:NULL;modelCalls=0;
-    for(unsigned int step=0;step<2;++step) {
-        if(ours)object->CBaseUnit::unitInit(input,(c.seed&1)!=0);else originalUnitInit(object,input,(c.seed&1)!=0);
+    for(unsigned int step=0;step<=c.warm;++step) {
+        bool flag=(c.seed&1)!=0;
+        if(step==c.warm){if(ours)autotest::invoke(out,&recoveredUnitInit,object,input,flag);else autotest::invoke(out,&originalUnitInit,object,input,flag);}
+        else {if(ours)recoveredUnitInit(object,input,flag);else originalUnitInit(object,input,flag);}
         int dataId=readPointer(base,0x1b0)==&data?1:readPointer(base,0x1b0)==&oldData?2:0;out.add(&dataId,4);
         out.add(self+0x100,4);out.add(self+0x18d,4);out.add(self+0x19c,1);out.add(self+0x1a0,8);out.add(self+0x1a9,1);out.add(self+0x1ac,4);out.add(self+0x90,12);out.add(&node.getScale(),sizeof(Ogre::Vector3));out.add(&modelCalls,4);
         CSkillManager* skillManager=static_cast<CSkillManager*>(readPointer(base,0x1c8));bool present=skillManager!=NULL;out.add(&present,1);
@@ -100,6 +103,15 @@ void side(Case& c,bool ours,autotest::Capture& out) {
         if(effectManager) {char* manager=reinterpret_cast<char*>(effectManager);out.add(manager+0x80,0x248);TArrayList<void*>* applied=reinterpret_cast<TArrayList<void*>*>(manager+0x10);unsigned int n=applied->size();out.add(&n,4);for(unsigned int i=0;i<n;++i){char* value=static_cast<char*>((*applied)[i]);dumpText(*reinterpret_cast<std::wstring*>(value+0x50),out);out.add(value+0x7c,4);}for(unsigned int activation=0;activation<3;++activation){TArrayList<void*>* effects=reinterpret_cast<TArrayList<void*>*>(manager+0x28+activation*0x18);n=effects->size();out.add(&n,4);for(unsigned int i=0;i<n;++i){char* effect=static_cast<char*>((*effects)[i]);out.add(effect+0x10,4);out.add(effect+0x1c,8);dumpText(*reinterpret_cast<std::wstring*>(effect+0x80),out);}}}
         float next=UTILITIES::randomBetweenVolatile(-1,1);out.add(&next,4);
     }
+    // Full initialized base-unit state; only named object/storage pointers are normalized.
+    unsigned char state[sizeof(base)];std::memcpy(state,base,sizeof(state));
+    const size_t fixed[]={0,0x58,0x68};
+    void* expected[]={table+2,&node,resources};
+    for(unsigned i=0;i<3;++i){uintptr_t id=readPointer(base,fixed[i])==expected[i]?i+1:readPointer(base,fixed[i])?100+i:0;std::memcpy(state+fixed[i],&id,8);}
+    const size_t allocated[]={8,0x1b8,0x1c8};
+    for(unsigned i=0;i<3;++i){uintptr_t id=readPointer(base,allocated[i])?1:0;std::memcpy(state+allocated[i],&id,8);}
+    uintptr_t dataID=readPointer(base,0x1b0)==&data?1:readPointer(base,0x1b0)==&oldData?2:readPointer(base,0x1b0)?3:0;
+    std::memcpy(state+0x1b0,&dataID,8);out.add(state,sizeof(state));
     size_t n=logs.entries.size();out.add(&n,sizeof(n));for(size_t i=0;i<n;++i){size_t len=logs.entries[i].text.size();out.add(&len,sizeof(len));out.add(logs.entries[i].text.data(),len);out.add(&logs.entries[i].level,4);out.add(&logs.entries[i].debug,1);}
     delete static_cast<CSkillManager*>(readPointer(base,0x1c8));delete static_cast<CEffectManager*>(readPointer(base,0x1b8));typedef TArrayList<TSafePointer<void*>*> SafeList;delete static_cast<SafeList*>(readPointer(base,8));
     initSkillParser=savedParser;initThemes=savedThemes;initGraphs=savedGraphs;m_pMasterResourceManager=savedMaster;skills->~Skills();themeList->~TArrayList<CUnitTheme*>();byName->~Graphs();byFile->~Graphs();entries->~Affixes();for(unsigned int offset=0x48;offset<=0x60;offset+=8)reinterpret_cast<std::wstring*>(templateAffix+offset)->~basic_string();clients->~TArrayList<CGameClient*>();types->~Types();relations->~Relations();log->removeListener(&logs);
@@ -108,9 +120,10 @@ void original(void* p,autotest::Capture& out) {side(*static_cast<Case*>(p),false
 void recovered(void* p,autotest::Capture& out) {side(*static_cast<Case*>(p),true,out);}
 }
 TL_TEST(base_unit_full_initialization) {
-    int failures=0;
-    for(unsigned int seed=0;seed<192;++seed) {Case c={seed};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if(!ok) {size_t at=0;while(at<a.capture.length&&at<b.capture.length&&a.capture.data[at]==b.capture.data[at])++at;host->log("    unit init seed %u status %d/%d bytes %lu/%lu difference %lu\n",seed,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)at);}TL_CHECK(failures,ok);}
-    return failures;
+    autotest::Coverage coverage("base_unit_full_initialization",(uint64_t)(uintptr_t)&originalUnitInit);unsigned count=0;
+    for(unsigned int seed=0;seed<384;++seed)for(unsigned warm=0;warm<2;++warm) {Case c={seed,warm};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+        int pair=coverage.observe(host,a,b);bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok) {size_t at=0;while(at<a.capture.length&&at<b.capture.length&&a.capture.data[at]==b.capture.data[at])++at;host->log("    unit init seed %u warm %u status %d/%d bytes %lu/%lu difference %lu\n",seed,warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)at);coverage.report(host);return 1;}
+    }
+    coverage.report(host);host->log("    base unit initialization: %u completed cold/warm cases\n",count);return 0;
 }
