@@ -9,3 +9,30 @@ void CAffectorDescriptor::deleteNotification()
 CAffectorDescriptor::~CAffectorDescriptor()
 {
 }
+
+#include "AffectorWrapper.h"
+#include <map>
+#include <string>
+
+bool CAffectorDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
+{
+    static_cast<CAffectorWrapper*>(object)->destroyAffector();
+    return true;
+}
+
+void CAffectorDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* initiator)
+{
+    if (object)
+    {
+        CAffectorWrapper* target = dynamic_cast<CAffectorWrapper*>(object);
+        if (target)
+        {
+            switch (event)
+            {
+            case 2: target->setEnabled(true); break;
+            case 3: target->setEnabled(false); break;
+            }
+            CPositionableObjectDescriptor::InputLogicEvent(object, event, initiator);
+        }
+    }
+}

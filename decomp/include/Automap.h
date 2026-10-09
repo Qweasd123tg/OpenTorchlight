@@ -26,7 +26,7 @@ public:
 
     void clear();
     void setRevealed(int x, int z, float value);
-    int getRevealed(int x, int z);
+    float getRevealed(int x, int z);
     void clearNPCIcons();
     void setNPCBillboardVisible(Ogre::Billboard* billboard, bool visible);
     void finalize();
@@ -60,7 +60,8 @@ public:
     unsigned char m_gap69[7];
     Ogre::Billboard* m_pPlayerBillboard;
 
-    unsigned char m_PetIconAndBoundsState[0x18] __attribute__((aligned(8)));
+    Ogre::Billboard* m_pPetBillboard;
+    unsigned char m_PetBoundsState[0x10] __attribute__((aligned(8)));
     int m_iMapGridWidth;
     int m_iMapGridHeight;
     float* m_pRevealedTiles;

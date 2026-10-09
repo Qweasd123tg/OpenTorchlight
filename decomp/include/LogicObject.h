@@ -15,17 +15,24 @@ public:
     CLogicObject(CEditorScene* scene, long long objectID, unsigned int id);
     virtual ~CLogicObject();
 
+    CEditorBaseObject* GetObject();
+    CLogicLink* GetLogicLinkByIndex(unsigned int index);
+    void setObjectID(long long objectID);
+    bool RemoveLinksToLogicObject(CLogicObject* object);
+    bool RemoveLogicLinksRefingObjectID(long long objectID);
     void Invoke(unsigned int event);
     bool RemoveLinkByIndex(unsigned int linkIndex);
 
 private:
+    friend class CLogicLink;
+    friend struct SmallmatchPass7Probe;
     unsigned int m_iID;
     long long m_iObjectID;
-    CEditorBaseObject* m_pObject;
-    int m_iX;
-    int m_iY;
-    int m_iWidth;
-    int m_iHeight;
+    CDescriptor* m_pLinkedDescriptor;
+    float m_fLeft;
+    float m_fTop;
+    float m_fRight;
+    float m_fBottom;
     TArrayList<CLogicLink*> m_Links;
 };
 

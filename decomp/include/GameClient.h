@@ -7,7 +7,10 @@
 #include <string>
 
 #include "RunicCore.h"
+#include "QuestEventTypes.h"
 
+class CBaseUnit;
+class CCharacter;
 class CPlayer;
 class CGameUI;
 
@@ -27,6 +30,7 @@ public:
 
     void setStateControlFlag(bool value) { m_bStateControl10BC = value; }
     bool getPlayerIsCheat();
+    void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     CPlayer* getPlayer() { return m_pPlayer; }
     CGameUI* getGameUI() { return m_pGameUI; }
 

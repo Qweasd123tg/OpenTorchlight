@@ -18,7 +18,7 @@ class CMissilePreloader : public CRunicCore
 public:
     virtual ~CMissilePreloader();
 
-    CMissilePreloader* getSinglelton();
+    static CMissilePreloader* getSinglelton();
     void notifyOfDeletion(iMissile* pMissile, CPositionableObject* pObject);
 
     CMissilePreloader(CResourceSettings* pResourceSettings);
