@@ -29,6 +29,9 @@ public:
     void setTextureOverride(const std::wstring& texture);
     void setTextureOverrideSingle(const std::string& name,const std::wstring& texture);
     void updateAnimation(float elapsed, bool force);
+    void blendAnimation(const std::string&, bool, float, float, float);
+    void playAnimation(const std::string&, bool, float, float);
+    void queueBlendAnimation(const std::string&, bool, float, float);
     bool animationPlaying(const std::string&) const;
     bool animationQueued(const std::string&) const;
     const std::vector<CKeyframe*>& getAnimationEvents() const { return m_AnimationEvents; }

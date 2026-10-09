@@ -836,3 +836,87 @@ __attribute__((flatten)) void CEnchantMenu::createMenus()
         m_pSocketedSizeWindows[i]->moveToFront();
     }
 }
+
+#include "EnchantMenu.h"
+#include "Equipment.h"
+#include "Inventory.h"
+#include "Level.h"
+#include "GenericModel.h"
+#include "Settings.h"
+#include "SoundBank.h"
+#include "StringTranslate.h"
+#include "StringUtilities.h"
+#include <CEGUI.h>
+
+void CEnchantMenu::setOpen(bool open, EAIState state)
+{
+    m_iMode = state;
+    if (m_bOpen) {
+        if (open) {
+            m_bOpen = open;
+            updateLayout();
+            return;
+        }
+        if (m_pCharacter) {
+            CEquipment* item = m_pCharacter->m_pInventory->getEquipmentInSlot(14);
+            if (item) {
+                m_pCharacter->m_pInventory->removeEquipment(item);
+                if (!m_pCharacter->m_pInventory->pickupEquipment(item, true)) {
+                    Ogre::Vector3 position = m_pCharacter->getPosition(true);
+                    m_pCharacter->getLevel()->addItem(item, position, true);
+                    item->drop();
+                }
+            }
+        }
+        m_pSoundBank->playSample(66, 0, 0.0f, 0.0f, false);
+        m_pMenuModel->blendAnimation("CLOSE", false, 0.1f, 2.0f, -1.0f);
+        gap71 = 0;
+        m_bOpen = false;
+        return;
+    }
+    if (!open) {
+        m_bOpen = false;
+        return;
+    }
+    m_pSettings->GetInt(KSETTINGS_RES_WIDTH);
+    m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+#define OPEN_TRANSLATION(NAME, TEXT) static std::wstring NAME; if (NAME.empty()) NAME = CStringTranslate::getSinglton()->getTranslateString(TEXT)
+    OPEN_TRANSLATION(g_Enchant, L"Enchant");
+    OPEN_TRANSLATION(g_Destroy, L"Destroy");
+    OPEN_TRANSLATION(g_Sockets, L"Sockets");
+    OPEN_TRANSLATION(g_Recover, L"Recover");
+    OPEN_TRANSLATION(g_Retire, L"Retire");
+    OPEN_TRANSLATION(g_Heirloom, L"Heirloom");
+#undef OPEN_TRANSLATION
+    switch (m_iMode) {
+    case 21:
+    case 22:
+        m_pTitle->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Enchant.c_str())).c_str()));
+        m_pAccept->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Enchant.c_str())).c_str()));
+        break;
+    case 25:
+        m_pTitle->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Sockets.c_str())).c_str()));
+        m_pAccept->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Destroy.c_str())).c_str()));
+        break;
+    case 26:
+        m_pTitle->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Sockets.c_str())).c_str()));
+        m_pAccept->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Recover.c_str())).c_str()));
+        break;
+    case 27:
+        m_pTitle->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Heirloom.c_str())).c_str()));
+        m_pAccept->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(std::wstring(g_Retire.c_str())).c_str()));
+        break;
+    }
+    m_pSoundBank->playSample(22, 0, 0.0f, 0.0f, false);
+    m_pMenuModel->setVisible(true);
+    if (m_pMenuModel->animationPlaying("CLOSE"))
+        m_pMenuModel->blendAnimation("OPEN", false, 0.1f, 2.0f, -1.0f);
+    else
+        m_pMenuModel->playAnimation("OPEN", false, 2.0f, -1.0f);
+    m_pMenuModel->queueBlendAnimation("IDLE", true, 0.1f, 1.0f);
+    m_pParent->addChildWindow(m_pBackground);
+    m_pBackground->moveToBack();
+    m_pGameUI->queueTip(static_cast<EContextTip>(13));
+    m_bOpen = open;
+    updateLayout();
+}
