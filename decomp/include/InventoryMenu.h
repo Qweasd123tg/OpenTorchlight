@@ -33,6 +33,7 @@ class Imageset;
 class CInventoryMenu : public CSubMenu, public iInventoryListener
 {
 public:
+    void toggleWeaponSet();
     virtual ~CInventoryMenu();
     void setTab(int);
     virtual CBaseUnit* getOwner();

@@ -31,6 +31,14 @@ public:
     bool modalDialogOpenPartial();
     void captureProcessInput();
     void handleKeyPresses();
+    void toggleConsole();
+    void toggleInventory();
+    void toggleJournal();
+    void togglePet();
+    void toggleQuest();
+    void toggleSkill();
+    void toggleStats();
+
     void togglePause();
     void unPause();
     void useItem(CLevel&,CEquipment*);

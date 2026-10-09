@@ -13,6 +13,7 @@ namespace FILESYSTEM
     std::wstring CleanPath(const std::wstring& path);
     std::string RemoveFileName(const std::string& path);
     bool FileExists(const std::wstring& path);
+    bool CreateAppDataDirectory(const std::wstring& path);
     long long GetFileTime(const wchar_t* path);
 }
 

@@ -126,6 +126,9 @@ public:
     int petIndex(CCharacter* pet);
     bool hasPet(CCharacter* pet);
 
+    void cycleSkill(int);
+    bool hasWeaponsInOffSet();
+    void swapSkills();
     bool castSkill(long long);
     void setTargetItem(CItem*);
     void setRenderBehind(bool);

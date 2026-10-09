@@ -1128,3 +1128,91 @@ void CSkillFoldout::load(CGameUI* ui,std::wstring path) {
             "SkillHotkey"+STRINGS::GetValueAsString(column+1)+STRINGS::GetValueAsString(row+1)));
     }
 }
+
+#include "Console.h"
+#include "FileUtilities.h"
+#include "Utilities.h"
+#include "EditorScene.h"
+#include <OgreRenderWindow.h>
+#include <OgreUTFString.h>
+namespace gameui_keys_detail {
+struct ConsoleFields { char prefix[0x1690]; CConsole* console; };
+struct RenderFields { char prefix[0xb0]; Ogre::RenderWindow* window; };
+struct LevelFields { char prefix[0x1a4]; int depth; char gap[0x228-0x1a8]; int seed; };
+struct RoomFields { char prefix[0x168]; std::wstring file; };
+struct ActorFields { char prefix[0x58]; Ogre::SceneNode* node; };
+#define OTL_KEYS_OFFSET(T,F,O) typedef char check_##T##_##F[__builtin_offsetof(T,F)==O?1:-1]
+OTL_KEYS_OFFSET(ConsoleFields,console,0x1690);
+OTL_KEYS_OFFSET(RenderFields,window,0xb0);
+OTL_KEYS_OFFSET(LevelFields,depth,0x1a4);
+OTL_KEYS_OFFSET(LevelFields,seed,0x228);
+OTL_KEYS_OFFSET(RoomFields,file,0x168);
+OTL_KEYS_OFFSET(ActorFields,node,0x58);
+#undef OTL_KEYS_OFFSET
+
+inline __attribute__((always_inline)) void capture(CGameUI* self) {
+    gameui_input_detail::InputState& s=gameui_input_detail::input(self);
+    s.mouseThrough=false;s.leftSlot=-1;s.rightSlot=-1;s.pendingRightSlot=-1;
+    self->captureProcessInput();
+}
+inline __attribute__((always_inline)) bool pressed(CGameUI* self,unsigned setting) {
+    return gameui_input_detail::keys(self).keyPressed(gameui_input_detail::settings(self)->GetInt(setting));
+}
+}
+void CGameUI::handleKeyPresses()
+{
+    using namespace gameui_input_detail;
+    using namespace gameui_keys_detail;
+    menu_item_click_detail::UIState& ui=menu_item_click_detail::state(this);
+    if(!ui.resourceManager)return;
+    if(CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_KEYMAP_CONSOLE_HOLD)<=0 ||
+       keys(this).keyHeld(CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_KEYMAP_CONSOLE_HOLD))) {
+        if(keys(this).keyPressed(CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_KEYMAP_CONSOLE_PRESS))) {
+            capture(this);toggleConsole();
+        }
+    }
+    if(reinterpret_cast<ConsoleFields*>(this)->console->getVisible()){capture(this);return;}
+    if(pressed(this,KSETTINGS_KEYMAP_INVENTORY)||gToggleInventory){gToggleInventory=false;toggleInventory();}
+    if(pressed(this,KSETTINGS_KEYMAP_WEAPONSET)&&ui.inventoryMenu) {
+        if(ui.player->hasWeaponsInOffSet()||ui.inventoryMenu->open())ui.inventoryMenu->toggleWeaponSet();
+    }
+    if(pressed(this,KSETTINGS_KEYMAP_SKILLS))toggleSkill();
+    if(pressed(this,KSETTINGS_KEYMAP_JOURNAL))toggleJournal();
+    if(pressed(this,KSETTINGS_KEYMAP_QUESTS))toggleQuest();
+    if(pressed(this,KSETTINGS_KEYMAP_STATS)||gToggleStats){gToggleStats=false;toggleStats();}
+    if(pressed(this,KSETTINGS_KEYMAP_PET)||gTogglePet){gTogglePet=false;togglePet();}
+    if(pressed(this,KSETTINGS_KEYMAP_SWAPSKILLS)) {
+        ui.player->swapSkills();detachFromActualParent(foldout(skillWindows(this).foldout).root);
+    }
+    if(ui.level) {
+        if(pressed(this,KSETTINGS_KEYMAP_AUTOMAP)&&!input(this).paused)ui.level->toggleAutomap();
+        if(pressed(this,KSETTINGS_KEYMAP_AUTOMAPZOOMOUT))ui.level->zoomAutomap(5.0f);
+        if(pressed(this,KSETTINGS_KEYMAP_AUTOMAPZOOMIN))ui.level->zoomAutomap(-5.0f);
+        if(keys(this).keyPressed(0x90)) {
+            std::wstring text=L"Seed: "+STRINGS::GetValueAsWString(reinterpret_cast<LevelFields*>(ui.level)->seed)+L"\r\n";
+            text+=L"Depth: "+STRINGS::GetValueAsWString(reinterpret_cast<LevelFields*>(ui.level)->depth)+L"\r\n";
+            if(ui.player&&ui.level) {
+                Ogre::Vector3 position=ui.player->getPosition(true);
+                CEditorScene* room=ui.level->getRoomThatPositionIsIn(position);
+                if(room)text+=std::wstring((Ogre::UTFString("Room: ")+Ogre::UTFString(std::wstring(reinterpret_cast<RoomFields*>(room)->file))).asWStr());
+            }
+            UTILITIES::SetClipBoardText(std::wstring(text));
+        }
+        if(keys(this).keyHeld(0x10)&&keys(this).keyPressed(0x78)) {
+            Ogre::RenderWindow* window=reinterpret_cast<RenderFields*>(CMasterResourceManager::getSingleton())->window;
+            if(window) {
+                const std::wstring& folder=settings(this)->GetString(KSETTINGS_S_PATH_SCREENSHOTS);
+                std::wstring full=FILESYSTEM::GetAppDataPath()+folder;
+                FILESYSTEM::CreateAppDataDirectory(full);
+                window->writeContentsToTimestampedFile(STRINGS::StringConvertToNarrow(full.c_str()),".png");
+            }
+        }
+    }
+    if(pressed(this,KSETTINGS_KEYMAP_CYCLESKILLDOWN)) {
+        ui.soundBank->playSample(30,reinterpret_cast<ActorFields*>(ui.player)->node,0.0f,0.0f,false);
+        ui.player->cycleSkill(-1);
+    } else if(pressed(this,KSETTINGS_KEYMAP_CYCLESKILLUP)) {
+        ui.soundBank->playSample(30,reinterpret_cast<ActorFields*>(ui.player)->node,0.0f,0.0f,false);
+        ui.player->cycleSkill(1);
+    }
+}
