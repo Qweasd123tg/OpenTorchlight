@@ -221,3 +221,314 @@ if(!m_bOpenPartial && !m_bFullyClosed && !m_pModel->animationPlaying("CLOSE") &&
 }
 
 }
+
+#include "FileSystem.h"
+#include "Settings.h"
+#include <OgreMesh.h>
+
+// Original c16129/c16138 uses a hidden std::wstring result, then assign.
+namespace STRINGS { std::wstring StringConvertUTF8ToWide(const std::string&); }
+
+__attribute__((flatten)) void CStatsMenu::createMenus()
+{
+    float width = static_cast<float>(m_pProperties->GetInt(KSETTINGS_RES_WIDTH));
+    float height = static_cast<float>(m_pProperties->GetInt(KSETTINGS_RES_HEIGHT));
+    m_pModel = m_pResourceManager->createGenericModel(m_pSceneManager,
+        L"media/ui/models/character/character.mesh", L"", false, false, false);
+    m_pModel->generateExtremes(10, true);
+    Ogre::AxisAlignedBox bounds(Ogre::Vector3(-100000.0f, -100000.0f, -100000.0f),
+                                Ogre::Vector3(100000.0f, 100000.0f, 100000.0f));
+    m_pModel->getEntity()->getMesh()->_setBounds(bounds, true);
+    float scale = width - height / 0.75f;
+    scale /= m_pProperties->GetFloat(KSETTINGS_YRATIO);
+    m_pModel->setPosition(-0.5f * scale, 0.0f, 0.0f);
+    m_pModel->setVisible(false);
+    CEGUI::ImagesetManager::getSingleton().getImageset(
+        reinterpret_cast<const unsigned char*>("GuiLook"));
+    m_pRoot = CEGUI::WindowManager::getSingleton().createWindow(
+        reinterpret_cast<const unsigned char*>("DefaultWindow"),
+        reinterpret_cast<const unsigned char*>("CharacterSheet"), "");
+    m_pRoot->setSize(CEGUI::UVector2(CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+    m_pRoot->setProperty("RiseOnClick", "False");
+    m_pRoot->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0)));
+    m_pRoot->setMousePassThroughEnabled(true);
+    m_pRoot->setZOrderingEnabled(false);
+
+    CFileInfo fileInfo;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/statsmenu.layout", fileInfo, false, true, false);
+    CEGUI::Window* layoutRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(fileInfo.m_sResourceName), true);
+    m_pGameUI->convertToScreenScale(layoutRoot, false);
+    m_pGameUI->mapToFunctions(layoutRoot);
+
+    CEGUI::Window* blocker = layoutRoot->recursiveChildSearch("Blocker");
+    blocker->getParent()->removeChildWindow(blocker);
+    m_pRoot->addChildWindow(blocker);
+    blocker->setProperty("RiseOnClick", "False");
+    blocker->moveToBack();
+    blocker->setZOrderingEnabled(false);
+
+    CEGUI::Window* close = layoutRoot->recursiveChildSearch("Close");
+    close->setRiseOnClickEnabled(false);
+    close->moveToFront();
+    {
+        CEGUI::Event::Connection connection = close->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_CloseButton, this));
+        (void)connection;
+    }
+    m_pNameText = layoutRoot->recursiveChildSearch("CharacterName");
+    m_pFameTitleText = layoutRoot->recursiveChildSearch("CharacterTitle");
+    m_pLevelText = layoutRoot->recursiveChildSearch("Level");
+    m_pFameLevelText = layoutRoot->recursiveChildSearch("FameLevel");
+    m_pExperienceText = layoutRoot->recursiveChildSearch("XP");
+    m_pFameText = layoutRoot->recursiveChildSearch("Fame");
+    m_pHealthText = layoutRoot->recursiveChildSearch("HP");
+    m_pManaText = layoutRoot->recursiveChildSearch("Mana");
+    m_pExperienceBar = layoutRoot->recursiveChildSearch("ExperienceBar");
+    m_pFameBar = layoutRoot->recursiveChildSearch("FameBar");
+    CEGUI::UVector2 fameSize = m_pFameBar->getSize();
+    m_FameWidth = fameSize.d_x;
+    m_FameHeight = fameSize.d_y;
+    CEGUI::UVector2 experienceSize = m_pExperienceBar->getSize();
+    m_ExperienceWidth = experienceSize.d_x;
+    m_ExperienceHeight = experienceSize.d_y;
+    m_AttributeTexts[0] = layoutRoot->recursiveChildSearch("Strength");
+    m_AttributeTexts[1] = layoutRoot->recursiveChildSearch("Dexterity");
+    m_AttributeTexts[2] = layoutRoot->recursiveChildSearch("Magic");
+    m_AttributeTexts[3] = layoutRoot->recursiveChildSearch("Defense");
+    m_DamageTexts[0] = layoutRoot->recursiveChildSearch("Melee Damage");
+    m_TextA0 = STRINGS::StringConvertUTF8ToWide(std::string(m_DamageTexts[0]->getTooltipText().c_str()));
+    m_DamageTexts[1] = layoutRoot->recursiveChildSearch("Ranged Damage");
+    m_TextB0 = STRINGS::StringConvertUTF8ToWide(std::string(m_DamageTexts[1]->getTooltipText().c_str()));
+    m_DamageTexts[2] = layoutRoot->recursiveChildSearch("Magic Damage");
+    m_DamageDescription = STRINGS::StringConvertUTF8ToWide(std::string(m_DamageTexts[2]->getTooltipText().c_str()));
+    m_pArmorText = layoutRoot->recursiveChildSearch("Damage Absorb");
+    m_ArmorDescription = STRINGS::StringConvertUTF8ToWide(std::string(m_pArmorText->getTooltipText().c_str()));
+    m_ResistanceTexts[0] = layoutRoot->recursiveChildSearch("Poison Resist");
+    m_ResistanceTexts[3] = layoutRoot->recursiveChildSearch("Fire Resist");
+    m_ResistanceTexts[1] = layoutRoot->recursiveChildSearch("Ice Resist");
+    m_ResistanceTexts[2] = layoutRoot->recursiveChildSearch("Lightning Resist");
+    m_pPointsText = layoutRoot->recursiveChildSearch("Stat Points");
+    m_pPointsContainer = layoutRoot->recursiveChildSearch("SpendPoints");
+    m_SpendButtons[0] = layoutRoot->recursiveChildSearch("SpendStrength");
+    {
+        CEGUI::Event::Connection connection = m_SpendButtons[0]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_SpendMelee, this));
+        (void)connection;
+    }
+    m_SpendButtons[0]->setWantsMultiClickEvents(false);
+    m_ReclaimButtons[0] = layoutRoot->recursiveChildSearch("ReclaimStrength");
+    {
+        CEGUI::Event::Connection connection = m_ReclaimButtons[0]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_ReclaimMelee, this));
+        (void)connection;
+    }
+    m_ReclaimButtons[0]->setWantsMultiClickEvents(false);
+    m_SpendButtons[1] = layoutRoot->recursiveChildSearch("SpendDexterity");
+    {
+        CEGUI::Event::Connection connection = m_SpendButtons[1]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_SpendRanged, this));
+        (void)connection;
+    }
+    m_SpendButtons[1]->setWantsMultiClickEvents(false);
+    m_ReclaimButtons[1] = layoutRoot->recursiveChildSearch("ReclaimDexterity");
+    {
+        CEGUI::Event::Connection connection = m_ReclaimButtons[1]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_ReclaimRanged, this));
+        (void)connection;
+    }
+    m_ReclaimButtons[1]->setWantsMultiClickEvents(false);
+    m_SpendButtons[2] = layoutRoot->recursiveChildSearch("SpendMagic");
+    {
+        CEGUI::Event::Connection connection = m_SpendButtons[2]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_SpendMagic, this));
+        (void)connection;
+    }
+    m_SpendButtons[2]->setWantsMultiClickEvents(false);
+    m_ReclaimButtons[2] = layoutRoot->recursiveChildSearch("ReclaimMagic");
+    {
+        CEGUI::Event::Connection connection = m_ReclaimButtons[2]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_ReclaimMagic, this));
+        (void)connection;
+    }
+    m_ReclaimButtons[2]->setWantsMultiClickEvents(false);
+    m_SpendButtons[3] = layoutRoot->recursiveChildSearch("SpendDefense");
+    {
+        CEGUI::Event::Connection connection = m_SpendButtons[3]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_SpendDefense, this));
+        (void)connection;
+    }
+    m_SpendButtons[3]->setWantsMultiClickEvents(false);
+    m_ReclaimButtons[3] = layoutRoot->recursiveChildSearch("ReclaimDefense");
+    {
+        CEGUI::Event::Connection connection = m_ReclaimButtons[3]->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CStatsMenu::handle_ReclaimDefense, this));
+        (void)connection;
+    }
+    m_ReclaimButtons[3]->setWantsMultiClickEvents(false);
+    m_pBottomPanel = layoutRoot->recursiveChildSearch("BottomFrame");
+    m_pBottomPanel->getParent()->removeChildWindow(m_pBottomPanel);
+    m_pRoot->addChildWindow(m_pBottomPanel);
+    m_pBottomPanel->setProperty("RiseOnClick", "False");
+    m_pBottomPanel->moveToFront();
+    m_pBottomPanel->setZOrderingEnabled(false);
+    m_pTopPanel = layoutRoot->recursiveChildSearch("TopFrame");
+    m_pTopPanel->getParent()->removeChildWindow(m_pTopPanel);
+    m_pRoot->addChildWindow(m_pTopPanel);
+    m_pTopPanel->setProperty("RiseOnClick", "False");
+    m_pTopPanel->moveToFront();
+    m_pTopPanel->setZOrderingEnabled(false);
+}
+
+void CStatsMenu::setOwner(CCharacter* owner)
+{
+    m_pOwner = owner;
+}
+
+bool CStatsMenu::handle_CloseButton(const CEGUI::EventArgs& args)
+{
+    if (static_cast<const CEGUI::MouseEventArgs&>(args).button == CEGUI::LeftButton)
+        m_bInputFlag = true;
+    return true;
+}
+
+bool CStatsMenu::processInput(void*, float, bool active)
+{
+    if (active && m_bInputFlag) {
+        setOpen(false);
+        m_bInputFlag = false;
+        return false;
+    }
+    return true;
+}
+
+#include "SoundBank.h"
+namespace { typedef char stats_sound_offset[__builtin_offsetof(CStatsMenu,m_pSoundBank)==0x1b8?1:-1]; }
+void CStatsMenu::setOpen(bool open)
+{
+    if (!m_bOpenPartial && open) {
+        m_pProperties->GetInt(KSETTINGS_RES_WIDTH);
+        m_pProperties->GetInt(KSETTINGS_RES_HEIGHT);
+        m_pSoundBank->playSample(22, 0, 0.0f, 0.0f, false);
+        m_pModel->setVisible(true);
+        if (m_pModel->animationPlaying("CLOSE"))
+            m_pModel->blendAnimation("OPEN", false, 0.1f, 2.0f, -1.0f);
+        else
+            m_pModel->playAnimation("OPEN", false, 2.0f, -1.0f);
+        m_pModel->queueBlendAnimation("IDLE", true, 0.1f, 1.0f);
+        m_pParent->addChildWindow(m_pRoot);
+        m_pRoot->moveToBack();
+    } else if (m_bOpenPartial && !open) {
+        m_InvestedPoints[0] = 0;
+        m_InvestedPoints[1] = 0;
+        m_InvestedPoints[3] = 0;
+        m_InvestedPoints[2] = 0;
+        m_pSoundBank->playSample(66, 0, 0.0f, 0.0f, false);
+        m_pModel->blendAnimation("CLOSE", false, 0.1f, 2.0f, -1.0f);
+        m_bFullyClosed = false;
+    }
+    m_bOpenPartial = open;
+}
+
+#include "Inventory.h"
+
+bool CStatsMenu::handle_ReclaimMelee(const CEGUI::EventArgs&)
+{
+    if (m_InvestedPoints[0] > 0) {
+        --m_InvestedPoints[0];
+        m_pOwner->reclaimMeleePoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+        m_pOwner->m_pInventory->verifyEquipment();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_SpendMelee(const CEGUI::EventArgs&)
+{
+    if (m_pOwner->m_iUnusedStatPoints > 0) {
+        ++m_InvestedPoints[0];
+        m_pOwner->spendMeleePoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_ReclaimRanged(const CEGUI::EventArgs&)
+{
+    if (m_InvestedPoints[1] > 0) {
+        --m_InvestedPoints[1];
+        m_pOwner->reclaimRangedPoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+        m_pOwner->m_pInventory->verifyEquipment();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_SpendRanged(const CEGUI::EventArgs&)
+{
+    if (m_pOwner->m_iUnusedStatPoints > 0) {
+        ++m_InvestedPoints[1];
+        m_pOwner->spendRangedPoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_ReclaimDefense(const CEGUI::EventArgs&)
+{
+    if (m_InvestedPoints[3] > 0) {
+        --m_InvestedPoints[3];
+        m_pOwner->reclaimDefensePoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+        m_pOwner->m_pInventory->verifyEquipment();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_SpendDefense(const CEGUI::EventArgs&)
+{
+    if (m_pOwner->m_iUnusedStatPoints > 0) {
+        ++m_InvestedPoints[3];
+        m_pOwner->spendDefensePoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_ReclaimMagic(const CEGUI::EventArgs&)
+{
+    if (m_InvestedPoints[2] > 0) {
+        --m_InvestedPoints[2];
+        m_pOwner->reclaimMagicPoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+        m_pOwner->m_pInventory->verifyEquipment();
+    }
+    return true;
+}
+
+bool CStatsMenu::handle_SpendMagic(const CEGUI::EventArgs&)
+{
+    if (m_pOwner->m_iUnusedStatPoints > 0) {
+        ++m_InvestedPoints[2];
+        m_pOwner->spendMagicPoint();
+        m_pSoundBank->playSample(27, 0, 0.0f, 0.0f, false);
+        m_pGameUI->statsChanged();
+    }
+    return true;
+}

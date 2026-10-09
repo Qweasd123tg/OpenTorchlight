@@ -40,6 +40,7 @@ public:
     void updateIngameUI(float, CGameClient*, Ogre::RenderWindow*);
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
+    void statsChanged();
     virtual ~CGameUI();
     bool create();
     bool handle_MouseThrough(const CEGUI::EventArgs&);
