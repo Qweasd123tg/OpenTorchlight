@@ -467,3 +467,143 @@ __attribute__((flatten)) void CCombineMenu::createMenus()
         m_pMainSocketGlowWindows[i]=socketGlow;
     }
 }
+
+#include "Recipes.h"
+#include "Level.h"
+#include "SpawnClass.h"
+#include "UnitResourceList.h"
+#include "EmptyStrings.h"
+#include "SoundBank.h"
+namespace combine_interaction_detail {
+struct Ingredient { UNITTYPES::EUNITTYPES type; char pad4[4]; std::wstring name; int count; };
+struct Output { std::wstring spawnClass; std::wstring itemName; };
+struct RecipeFields { char prefix[8]; TArrayList<Ingredient*> inputs; TArrayList<Output*> outputs; };
+struct OwnerFields { char prefix[0x100]; int level; char pad104[0x298-0x104]; CSoundBank* sound; char pad2a0[0x490-0x2a0]; CInventory* inventory; };
+typedef char check_ingredient_name[__builtin_offsetof(Ingredient,name)==8?1:-1];
+typedef char check_ingredient_count[__builtin_offsetof(Ingredient,count)==0x10?1:-1];
+typedef char check_recipe_outputs[__builtin_offsetof(RecipeFields,outputs)==0x20?1:-1];
+typedef char check_owner_sound[__builtin_offsetof(OwnerFields,sound)==0x298?1:-1];
+typedef char check_owner_inventory[__builtin_offsetof(OwnerFields,inventory)==0x490?1:-1];
+__attribute__((always_inline)) inline RecipeFields& recipe(CRecipe* p){return *reinterpret_cast<RecipeFields*>(p);}
+__attribute__((always_inline)) inline OwnerFields& owner(CCharacter* p){return *reinterpret_cast<OwnerFields*>(p);}
+__attribute__((always_inline)) inline int subtract(int a,int b){return static_cast<int>(static_cast<unsigned int>(a)-static_cast<unsigned int>(b));}
+__attribute__((always_inline)) inline bool typeMatch(CRecipe* r,unsigned i,CEquipment* item){
+    bool magical=false;
+    if(recipe(r).inputs[i]->type==static_cast<UNITTYPES::EUNITTYPES>(135)) {
+        if(item && item->isMagical() && !item->ISA(static_cast<UNITTYPES::EUNITTYPES>(54)) && !item->ISA(static_cast<UNITTYPES::EUNITTYPES>(55)))magical=true;
+    }
+    if(!item)return false;
+    return item->ISA(recipe(r).inputs[i]->type)||magical;
+}
+__attribute__((always_inline)) inline CDataGroup* namedGroup(CCombineMenu* menu,CRecipe* r,unsigned i){
+    const std::wstring& name=recipe(r).inputs[i]->name;
+    std::wstring category(L"ITEMS");
+    return menu->m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(category,name);
+}
+__attribute__((always_inline)) inline long long guid(CCombineMenu* menu,CDataGroup* data){
+    std::wstring key(L"UNIT_GUID");return menu->m_pResourceManager->getUnitGuidByDataGroup(data,key);
+}
+__attribute__((always_inline)) inline void consume(CCombineMenu* menu,CEquipment* item,int& remaining){
+    if(item->m_iUnknown238>1){
+        int count=item->m_iUnknown238<remaining?item->m_iUnknown238:remaining;
+        item->incrementStackBy(-count);remaining=subtract(remaining,count);
+        if(item->m_iUnknown238>0)return;
+    }else remaining=subtract(remaining,1);
+    owner(menu->m_pCharacter).inventory->removeEquipment(item);
+    menu->itemUpdatedInMenu(item,false);
+    delete item;
+}
+}
+__attribute__((flatten))
+void CCombineMenu::performInteraction(){
+    using namespace combine_interaction_detail;
+    std::wstring resultName;
+    int count=static_cast<int>(CRecipes::getSingleton()->m_recipes.size());
+    CRecipes* recipes=CRecipes::getSingleton();
+    TArrayList<CRecipe*> matches(10);
+    for(int i=0;i<count;++i){
+        CRecipe* current=recipes->m_recipes[i];
+        unsigned ingredients=recipe(current).inputs.size();bool matched=true;
+        for(unsigned j=0;j<ingredients;++j){
+            int remaining=recipe(current).inputs[j]->count;
+            if(recipe(current).inputs[j]->type==static_cast<UNITTYPES::EUNITTYPES>(22)){
+                CDataGroup* group=namedGroup(this,current,j);
+                if(group){
+                    long long requiredGuid=guid(this,group);
+                    for(unsigned slot=0;slot<4;++slot){
+                        CEquipment* item=owner(m_pCharacter).inventory->getEquipmentInSlot(m_aiSlotData[slot]);
+                        if(item && guid(this,item->getDataGroup())==requiredGuid)remaining=subtract(remaining,item->m_iUnknown238);
+                    }
+                }
+            }else{
+                for(unsigned slot=0;slot<4;++slot){
+                    CEquipment* item=owner(m_pCharacter).inventory->getEquipmentInSlot(m_aiSlotData[slot]);
+                    if(typeMatch(current,j,item))remaining=subtract(remaining,item->m_iUnknown238);
+                }
+            }
+            if(remaining>0){matched=false;break;}
+        }
+        if(matched)matches.add(current);
+    }
+    if(matches.size()==0){m_pSoundBank->playSample(24,m_pCharacter->getSceneNode(),0.0f,0.0f,false);return;}
+    CRecipe* selected=matches[0];unsigned threshold=0;
+    for(unsigned i=0;i<matches.size();++i){
+        unsigned required=0;
+        for(unsigned j=0;j<recipe(matches[i]).inputs.size();++j)required+=static_cast<unsigned>(recipe(matches[i]).inputs[j]->count);
+        if(required>threshold){selected=matches[i];threshold=recipe(selected).inputs.size();}
+    }
+    // The original compares total quantity but retains ingredient count as its threshold.
+    for(unsigned j=0;j<recipe(selected).inputs.size();++j){
+        int remaining=recipe(selected).inputs[j]->count;
+        if(recipe(selected).inputs[j]->type==static_cast<UNITTYPES::EUNITTYPES>(22)){
+            CDataGroup* group=namedGroup(this,selected,j);
+            if(group){
+                long long requiredGuid=guid(this,group);
+                for(unsigned slot=0;slot<4;++slot){
+                    if(remaining<=0)continue;
+                    CEquipment* item=owner(m_pCharacter).inventory->getEquipmentInSlot(m_aiSlotData[slot]);
+                    if(item && guid(this,item->getDataGroup())==requiredGuid)consume(this,item,remaining);
+                }
+            }
+        }else{
+            for(unsigned slot=0;slot<4;++slot){
+                if(remaining<=0)continue;
+                CEquipment* item=owner(m_pCharacter).inventory->getEquipmentInSlot(m_aiSlotData[slot]);
+                if(typeMatch(selected,j,item))consume(this,item,remaining);
+            }
+        }
+    }
+    m_pSoundBank->playSample(36,m_pCharacter->getSceneNode(),0.0f,0.0f,false);
+    if(owner(m_pCharacter).sound)owner(m_pCharacter).sound->queueGlobalSample(63,0.0f,0.1f);
+    if(recipe(selected).outputs.size()==0)return;
+    for(unsigned slot=0;slot<4;++slot){
+        CEquipment* item=owner(m_pCharacter).inventory->getEquipmentInSlot(m_aiSlotData[slot]);
+        if(item){
+            owner(m_pCharacter).inventory->removeEquipment(item);
+            if(!owner(m_pCharacter).inventory->pickupEquipment(item,true)){
+                Ogre::Vector3 position=m_pCharacter->getPosition(true);
+                m_pCharacter->getLevel()->addItem(item,position,true);
+                item->drop();
+            }
+        }
+    }
+    Output* output=recipe(selected).outputs[0];
+    if(output->spawnClass==EMPTY_WSTRING){
+        CEquipment* item=m_pResourceManager->createEquipment(output->itemName.c_str(),false,true);
+        if(item)owner(m_pCharacter).inventory->pickupEquipment(item,m_aiSlotData[0],true);
+    }else{
+        CSpawnClass* spawn=m_pResourceManager->getSpawnClassByName(output->spawnClass);
+        if(!spawn)return;
+        TArrayList<CDataGroup*> groups;
+        TArrayList<bool> enchanted;
+        CCharacter* character=m_pCharacter;
+        spawn->rollSpawnClass(groups,&enchanted,character,character,owner(character).level,static_cast<unsigned>(-1),0,-1,0,0);
+        for(unsigned i=0;i<(groups.size()<4?groups.size():4);++i){
+            CEquipment* item;
+            {std::wstring key(L"NAME");item=m_pResourceManager->createEquipment(groups[i]->GetDataValue(key,EMPTY_WSTRING).c_str(),false,true);}
+            if(enchanted[i])item->enchant(true);
+            owner(m_pCharacter).inventory->pickupEquipment(item,m_aiSlotData[i],true);
+        }
+    }
+    m_pCharacter->incrementJournalStatistic(static_cast<EJournalStatistic>(16),1);
+}

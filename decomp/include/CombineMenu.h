@@ -4,6 +4,7 @@
 #include "SubMenu.h"
 #include "iInventoryListener.h"
 class CSettings;
+class CSoundBank;
 class CGenericModel;
 class CResourceManager;
 namespace Ogre { class SceneManager; class RenderWindow; }
@@ -31,6 +32,8 @@ public:
  virtual void equipmentUsed(CEquipment*);
  virtual void inventoryDestroyed();
 
+ void performInteraction();
+ void itemUpdatedInMenu(CEquipment*,bool);
  void createMenus();
  void mapEventHandlers(CEGUI::Window*);
  bool handle_ItemClick(const CEGUI::EventArgs&);
@@ -59,7 +62,8 @@ char gap18[0x48-0x18];
  char gapC0[8];
  CGenericModel* m_pMenuModel;
  CResourceManager* m_pResourceManager;
- char gapD8[0xe8-0xd8];
+ char gapD8[8];
+ CSoundBank* m_pSoundBank;
  int m_aiSlotData[4];
  int m_aiLocalSlotData[4];
  CEGUI::Window* m_pMainGlowWindows[4];

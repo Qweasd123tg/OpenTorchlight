@@ -9,6 +9,8 @@ class CGameUI;
 #include "TArrayList.h"
 
 class CMissile;
+class CEquipment;
+class CSpawnClass;
 namespace Ogre { class TextureManager; }
 class CBaseUnit;
 class CGameClient;
@@ -34,6 +36,8 @@ class CResourceManager : public CRunicCore
 {
 public:
     CGameUI* getGameUI();
+    CEquipment* createEquipment(const wchar_t*,bool,bool);
+    CSpawnClass* getSpawnClassByName(const std::wstring&);
     CMissilePreloader* getMissilePreloader();
     CMissile* createMissile(const std::wstring& name);
     std::map<long long, CDataGroup*>* getGroupByName(const std::wstring& name);
