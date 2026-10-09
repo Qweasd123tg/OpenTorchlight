@@ -81,3 +81,66 @@ void CStatsMenuFill::createMenus() {
  m_pExperienceText=create("GuiLook/StaticText");attach(this,m_pExperienceText);
  rect(this,m_pExperienceText,320,15,65,310);m_pExperienceText->setText(CEGUI::String(reinterpret_cast<const unsigned char*>("Total Experience to spend:0")));textStyle(m_pExperienceText,"CenterAligned");
 }
+
+#include "StatsMenuFill.h"
+#include "StringUtilities.h"
+#include <CEGUI.h>
+#include <algorithm>
+
+namespace stats_fill_visual_detail {
+// Named views of the original player's base-stat and allocated-experience fields.
+struct PlayerFields {
+    char prefix[0x428];
+    int stat1,stat0,stat3,stat2;
+    char gap438[0x448-0x438];
+    int experience;
+    char gap44c[0x870-0x44c];
+    int allocated0,allocated1,allocated3,allocated2,spent;
+};
+static const PlayerFields& fields(const CPlayer* player) {
+    return *reinterpret_cast<const PlayerFields*>(player);
+}
+static int stat(const CPlayer* player,unsigned index) {
+    const PlayerFields& p=fields(player);
+    switch(index){case 1:return p.stat1;case 2:return p.stat2;case 3:return p.stat3;default:return p.stat0;}
+}
+static int allocated(const CPlayer* player,unsigned index) {
+    const PlayerFields& p=fields(player);
+    switch(index){case 1:return p.allocated1;case 2:return p.allocated2;case 3:return p.allocated3;default:return p.allocated0;}
+}
+}
+void CStatsMenuFill::updateVisuals()
+{
+    for(unsigned i=0;i<4;++i) {
+        CEGUI::Window* bar=m_Bars[i];
+        CEGUI::Window* amount=m_AmountTexts[i];
+        CEGUI::Window* statText=m_PercentTexts[i];
+        if(!m_pPlayer) {
+            bar->setVisible(false);
+            statText->setText(CEGUI::String((const unsigned char*)""));
+            continue;
+        }
+        std::wstring value=STRINGS::GetValueAsWString(stats_fill_visual_detail::stat(m_pPlayer,i))+L"";
+        statText->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(value).c_str()));
+        float total=getStatBarTotalAmount(static_cast<ESTATSMENU_STATS>(i));
+        float allocated=(float)(m_pPlayer?stats_fill_visual_detail::allocated(m_pPlayer,i):0);
+        float ratio=allocated/total;
+        bool visible=ratio>0.0f;
+        bar->setVisible(visible);
+        std::wstring text=L""+STRINGS::GetValueAsWString(allocated)+L"/"+STRINGS::GetValueAsWString(total);
+        amount->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(text).c_str()));
+        if(visible) {
+            float height=m_pGameUI->scaledY(8.0f);
+            float width=m_pGameUI->scaledY(std::max(1.0f,ratio*180.0f));
+            bar->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
+        }
+    }
+    int remaining=0;
+    if(m_pPlayer) {
+        const stats_fill_visual_detail::PlayerFields& p=stats_fill_visual_detail::fields(m_pPlayer);
+        remaining=static_cast<int>(static_cast<unsigned>(p.experience)-static_cast<unsigned>(p.spent));
+    }
+    std::wstring text=L"Total Experience to spend: "+STRINGS::GetValueAsWString(remaining);
+    m_pExperienceText->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(text).c_str()));
+    calculateMouseOver();
+}
