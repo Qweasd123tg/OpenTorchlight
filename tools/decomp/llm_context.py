@@ -145,6 +145,19 @@ def _scan(text):
     return declarations, types
 
 
+def _standard_string_aliases(text):
+    """Only the two standard typedefs in the pinned pre-C++11 string ABI.
+
+    Normalize before the shared parser strips whitespace or moves const. No
+    custom traits/allocator, inline ABI namespace, or similarly named namespace.
+    This changes lookup text only, never the supplied source declaration.
+    """
+    pattern = (r"(?<![\w:])std::basic_string\s*<\s*(char|wchar_t)\s*,\s*"
+               r"std::char_traits\s*<\s*\1\s*>\s*,\s*"
+               r"std::allocator\s*<\s*\1\s*>\s*>" )
+    return re.sub(pattern, lambda m: "std::wstring" if m[1] == "wchar_t" else "std::string", text)
+
+
 def _declares_callee(declaration, callee):
     """Match parameter and member-cv identity, never a name-only overload.
 
@@ -157,12 +170,13 @@ def _declares_callee(declaration, callee):
     method = callee.get("method", "")
     if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
         return False
-    text = declaration.text
+    text = _standard_string_aliases(declaration.text)
     # The shared parser's word boundary is before an identifier, not '~'.
     if method.startswith("~"):
         text = re.sub(r"~\s*" + re.escape(method[1:]) + r"(?=\s*\()", method[1:], text)
         method = method[1:]
-    expected = ghidra_cpp.signature_key(callee)[1:3]
+    canonical = dict(callee, params=_standard_string_aliases(callee["params"]))
+    expected = ghidra_cpp.signature_key(canonical)[1:3]
     declared = declaration_headers.declared_signatures(text, method)
     return any((params, cv) == expected for params, cv, _static in declared)
 
@@ -361,16 +375,33 @@ class ContextIndex:
             occurrences += 1
             if mnemonic != "mov" or not re.fullmatch(r"\$0x0*" + f"{base:x}" + r",%edx", code):
                 return False
-            if i + 3 >= len(insns):
-                return False
-            for (address, op, args), register in zip(insns[i + 1:i + 3], ("esi", "edi")):
-                args = args.split("#", 1)[0].split(";", 1)[0].strip()
-                if op != "mov" or not re.fullmatch(r"\$0x[0-9a-f]+,%" + register, args):
-                    return False
-            _, op, args = insns[i + 3]
-            target = re.match(r"^(?:0x)?([0-9a-fA-F]+)(?:\s|$)", args)
-            if (op not in ("call", "callq") or not target
-                    or getattr(self.image, "plt", {}).get(int(target[1], 16)) != "__cxa_atexit"):
+            # The three independent immediate argument loads may appear in
+            # any order. Require a complete contiguous triple, unique registers,
+            # the same handle in EDX, and the real imported call immediately after.
+            valid = False
+            for start in range(max(0, i - 2), i + 1):
+                if start + 3 >= len(insns):
+                    continue
+                assigned = {}
+                for _, op, args in insns[start:start + 3]:
+                    args = args.split("#", 1)[0].split(";", 1)[0].strip()
+                    value = re.fullmatch(r"\$0x([0-9a-f]+),%(edi|esi|edx)", args)
+                    if op != "mov" or not value or value[2] in assigned:
+                        break
+                    assigned[value[2]] = int(value[1], 16)
+                else:
+                    _, op, args = insns[start + 3]
+                    target = re.match(r"^(?:0x)?([0-9a-fA-F]+)(?:\s|$)", args)
+                    interiors = {x[0] for x in insns[start + 1:start + 4]}
+                    enters_inside = any(
+                        branch.startswith("j") and (jump := re.match(r"^(?:0x)?([0-9a-fA-F]+)(?:\s|$)", operand))
+                        and int(jump[1], 16) in interiors for _, branch, operand in insns)
+                    if (set(assigned) == {"edi", "esi", "edx"} and assigned["edx"] == base
+                            and op in ("call", "callq") and target and not enters_inside
+                            and getattr(self.image, "plt", {}).get(int(target[1], 16)) == "__cxa_atexit"):
+                        valid = True
+                        break
+            if not valid:
                 return False
         return occurrences > 0
 
@@ -685,7 +716,7 @@ class ContextIndex:
                     if any(k == "class" for k, _ in declaration.scopes):
                         wanted.add(header)  # preserve class layout, not a trimmed fake class
                     elif header not in shown:
-                        text = declaration.text
+                        text = _standard_string_aliases(declaration.text)
                         for _, namespace in reversed(declaration.scopes):
                             text = f"namespace {namespace} {{\n{text}\n}}"
                         data_blocks.append((header, text))

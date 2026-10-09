@@ -160,6 +160,67 @@ class PacketContextTests(TestCase):
         self.add_function(function(0x2000, "CLocal", "load", params="CDataGroup*"))
         self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
 
+    def test_standard_wstring_const_reference_db_to_typedef(self):
+        full = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&"
+        self.assertFalse(self.overload_case("void createUnit(const std::wstring& text);", full).gaps)
+
+    def test_standard_wstring_typedef_to_full_header(self):
+        full = "std::basic_string< wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        self.assertFalse(self.overload_case("void createUnit(const " + full + "& text);", "std::wstring const&").gaps)
+
+    def test_standard_narrow_string_alias_both_directions(self):
+        full = "std::basic_string<char, std::char_traits<char>, std::allocator<char> >"
+        self.assertFalse(self.overload_case("void createUnit(const std::string&);", full + " const&").gaps)
+        self.assertFalse(self.overload_case("void createUnit(const " + full + "&);", "std::string const&").gaps)
+
+    def test_standard_string_alias_inside_template(self):
+        full = "std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&"
+        self.assertFalse(self.overload_case("void createUnit(const std::vector<std::wstring>& words);", full).gaps)
+
+    def test_standard_string_alias_does_not_hide_custom_traits_allocator_or_abi(self):
+        for full in ("std::basic_string<wchar_t, CustomTraits, std::allocator<wchar_t> >",
+                     "std::basic_string<wchar_t, std::char_traits<wchar_t>, CustomAllocator>",
+                     "otherstd::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >",
+                     "custom::std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >",
+                     "std::__cxx11::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >",
+                     "std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >"):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case("void createUnit(const std::wstring&);", full + " const&").gaps)
+
+    def test_standard_string_alias_preserves_reference_and_cv_distinctions(self):
+        full = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        for params in (full + "&", full + " const*", full, full + " const&, int"):
+            with self.subTest(params=params):
+                self.assertTrue(self.overload_case("void createUnit(const std::wstring&);", params).gaps)
+
+    def test_dso_registration_all_immediate_argument_permutations(self):
+        import itertools
+        self.dso_handle()
+        values = ("$0x5000,%edx", "$0x7010,%esi", "$0x3100,%edi")
+        for order in itertools.permutations(values):
+            with self.subTest(order=order):
+                asm = "\n".join("%x: mov %s" % (0x1000+5*i,x) for i,x in enumerate(order))
+                self.index().build(self.target, asm + "\n100f: call 3000\n1014: ret").require_complete()
+
+    def test_dso_registration_branch_into_partial_argument_setup_is_unresolved(self):
+        self.dso_handle()
+        for target in ("1005", "100a", "100f"):
+            with self.subTest(target=target):
+                asm = self.dso_handle() + "\n1015: jmp " + target
+                self.assertTrue(self.index().build(self.target, asm).gaps)
+
+    def test_dso_registration_branch_to_complete_setup_remains_valid(self):
+        asm = self.dso_handle() + "\n1015: jmp 1000"
+        self.index().build(self.target, asm).require_complete()
+
+    def test_dso_registration_reordered_duplicate_argument_not_accepted(self):
+        asm = self.dso_handle().replace("100a: mov $0x3100,%edi", "100a: mov $0x3100,%esi")
+        self.assertTrue(self.index().build(self.target, asm).gaps)
+
+    def test_dso_registration_reordered_nonimmediate_not_accepted(self):
+        asm = self.dso_handle().replace("1005: mov $0x7010,%esi", "1005: mov %r12d,%esi")
+        self.assertTrue(self.index().build(self.target, asm).gaps)
+
     def test_direct_callee_header_whole_not_transitive_or_all_mapped(self):
         self.add_function(function(0x2000, "CSteamStats", "getStatInt", tu=1))
         self.add_function(function(0x3000, "CUnrelated", "update", tu=2))
