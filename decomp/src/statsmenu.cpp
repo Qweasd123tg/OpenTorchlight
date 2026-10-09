@@ -532,3 +532,41 @@ bool CStatsMenu::handle_SpendMagic(const CEGUI::EventArgs&)
     }
     return true;
 }
+
+CStatsMenu::~CStatsMenu()
+{
+    if (m_pModel) {
+        delete m_pModel;
+        m_pModel = 0;
+    }
+    if (m_pSoundBank) {
+        delete m_pSoundBank;
+        m_pSoundBank = 0;
+    }
+}
+
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CStatsMenu::CStatsMenu(CGameUI& ui, CSettings& settings, Ogre::RenderWindow* render,
+                     Ogre::SceneManager* scene, CEGUI::Window* parent,
+                     CResourceManager* resources)
+    : m_pParent(parent), m_pOwner(0), m_bOpenPartial(false), m_bFullyClosed(true),
+      m_bInputFlag(false), m_pProperties(&settings), m_pGameUI(&ui),
+      m_pSceneManager(scene), m_pRenderWindow(render), m_pModel(0),
+      m_pResourceManager(resources), m_fScreenEdge(0.0f), m_pSoundBank(0)
+{
+    m_InvestedPoints[0] = 0;
+    m_InvestedPoints[1] = 0;
+    m_InvestedPoints[2] = 0;
+    m_InvestedPoints[3] = 0;
+    CSoundBankDataInformation* sounds = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+    m_pSoundBank = new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager, false);
+    CSoundData* open = sounds->getSoundDataObject(L"STATSOPEN");
+    if (open) m_pSoundBank->addSample(22, open->m_iGuid);
+    CSoundData* assign = sounds->getSoundDataObject(L"POINTASSIGN");
+    if (assign) m_pSoundBank->addSample(27, assign->m_iGuid);
+    CSoundData* close = sounds->getSoundDataObject(L"STATSCLOSE");
+    if (close) m_pSoundBank->addSample(66, close->m_iGuid);
+    m_fScreenEdge = 0.0f;
+    createMenus();
+}
