@@ -242,7 +242,7 @@ class ContextIndex:
     }
 
     OGRE_HEADER_SHA256 = {'OgreResourceGroupManager.h': '1ff3bf682e6723128544d4f0d948fc7408b1179cb1bb42961f80e1967b107529', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf'}
-    OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7'}
+    OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7', 'OgreMatrix4.h': '9d379f1bd2be7be264de50fed7b6ddad034af06e30eb30a3c2ce752f36e8d416'}
     OGRE_CONFIG_SHA256 = '0a11e5cd5b3dafe9f832362747afb8147f24f912c88a1e31a303dd466ca47317'
 
     SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
@@ -488,8 +488,9 @@ class ContextIndex:
         return value
 
     def _ogre_value_data(self, obj):
-        """Only three reviewed COPY-imported constants in the pinned default ABI."""
+        """Only four reviewed COPY-imported constants in the pinned default ABI."""
         identities = {
+            "_ZN4Ogre7Matrix48IDENTITYE": ("Ogre::Matrix4::IDENTITY", 64, "OgreMatrix4.h", "Matrix4", "IDENTITY"),
             "_ZN4Ogre7Vector34ZEROE": ("Ogre::Vector3::ZERO", 12, "OgreVector3.h", "Vector3", "ZERO"),
             "_ZN4Ogre10Quaternion8IDENTITYE": ("Ogre::Quaternion::IDENTITY", 16, "OgreQuaternion.h", "Quaternion", "IDENTITY"),
             "_ZN4Ogre10StringUtil5BLANKE": ("Ogre::StringUtil::BLANK", 8, "OgreString.h", "String", "BLANK"),
@@ -540,7 +541,7 @@ class ContextIndex:
             return None
         return ("OGRE1.6.5 SDK declaration " + _mask(matches[0].text).strip()
                 + "; exact ELF object/COPY identity, pinned float/narrow-string profile, "
-                + str(size) + " bytes; six SDK header pins and decomp/config.json SHA256 "
+                + str(size) + " bytes; seven SDK header pins and decomp/config.json SHA256 "
                 + self.OGRE_CONFIG_SHA256 + "; referenced subobject offsets do not imply separate symbols")
 
     def _ogre_data(self, obj):
