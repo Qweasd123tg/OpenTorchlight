@@ -3,14 +3,26 @@
 #include "SubMenu.h"
 #include <CEGUIUDim.h>
 #include <string>
-namespace CEGUI { class Window; }
+namespace CEGUI { class Window; class EventArgs; }
 class CGameUI;class CResourceManager;class CDynamicPropertyFile;class CGenericModel;
 namespace Ogre {class SceneManager;class RenderWindow;}
 // Partial through the fields used by update(float); allocation size not asserted.
 class CSettings;
+class CSoundBank;
 class CStatsMenu : public CSubMenu {
 public:
     CStatsMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
+
+ void createMenus();
+ bool handle_CloseButton(const CEGUI::EventArgs&);
+ bool handle_ReclaimMagic(const CEGUI::EventArgs&);
+ bool handle_ReclaimDefense(const CEGUI::EventArgs&);
+ bool handle_ReclaimRanged(const CEGUI::EventArgs&);
+ bool handle_ReclaimMelee(const CEGUI::EventArgs&);
+ bool handle_SpendMagic(const CEGUI::EventArgs&);
+ bool handle_SpendDefense(const CEGUI::EventArgs&);
+ bool handle_SpendRanged(const CEGUI::EventArgs&);
+ bool handle_SpendMelee(const CEGUI::EventArgs&);
 
  virtual ~CStatsMenu();
  virtual CBaseUnit* getOwner();
@@ -65,7 +77,8 @@ public:
  CGenericModel* m_pModel;
  CResourceManager* m_pResourceManager;
  float m_fScreenEdge;
- char m_Data1B4[12];
+ char m_Data1B4[4];
+ CSoundBank* m_pSoundBank;
  int m_InvestedPoints[4];
 };
 #endif

@@ -132,6 +132,14 @@ public:
     bool spendPerkPoint();
     bool spendSkillPoint();
     void spendMeleePoint();
+    void spendRangedPoint();
+    void spendMagicPoint();
+    void spendDefensePoint();
+    void reclaimMeleePoint();
+    void reclaimRangedPoint();
+    void reclaimMagicPoint();
+    void reclaimDefensePoint();
+
 
     void incrementJournalStatistic(EJournalStatistic statistic,int amount);
     void performUnknownSkill(CSkill* skill);
@@ -213,6 +221,7 @@ private:
     CInventory* m_pInventory;
     char m_CharacterData498[8];
     friend class CInventoryMenu;
+    friend class CStatsMenu;
     friend class CPetMenu;
     friend class CEnchantMenu;
     friend class CCombineMenu;
