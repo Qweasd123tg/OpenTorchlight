@@ -9,13 +9,16 @@
 #include "GameGlobals.h"
 
 TL_ORIGINAL(void, originalEquipmentText, (CEquipment*,bool), "_ZN10CEquipment22setItemTextHighlightedEb")
+extern "C" void recoveredEquipmentText(CEquipment*,bool) __asm__("_ZN10CEquipment22setItemTextHighlightedEb");
 extern "C" void* textItemTable[] __asm__("_ZTV10CEquipment");
 extern CGameGlobals* textGameGlobals __asm__("_ZL14g_pGameGlobals");
 TL_FUNCTION(etSet,"_ZN10CEquipment6getSetEv")
 namespace {
 unsigned currentSeed;autotest::Capture* trace;
 std::wstring equipmentSet(CEquipment*) { int marker=42;trace->add(&marker,sizeof(marker));return (currentSeed/96)%2?L"A set":L""; }
-struct Case { unsigned int seed; };
+struct Case { unsigned int seed,warm; };
+struct Snapshot {std::vector<unsigned char> bytes;Snapshot(const void* p,size_t n):bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}void pointer(size_t o,uintptr_t v){if(o+sizeof(v)>bytes.size())_exit(71);std::memcpy(&bytes[o],&v,sizeof(v));}void emit(autotest::Capture& c){c.add(&bytes[0],bytes.size());}};
+
 bool oldHighlight,magical;
 bool highlightedForItem(void*) {return oldHighlight;}
 bool magicalForItem(void*) {return magical;}
@@ -57,10 +60,16 @@ void side(Case& c,bool ours,autotest::Capture& out) {
     root->addChildWindow(label);root->addChildWindow(other);
     putPointer(self,0x1e8,(c.seed/192)%2?NULL:label);
     CEquipment* item=reinterpret_cast<CEquipment*>(self);
-    if(ours)item->CEquipment::setItemTextHighlighted(requested);else originalEquipmentText(item,requested);
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentText,item,requested);else autotest::invoke(out,&originalEquipmentText,item,requested);}else{if(ours)item->CEquipment::setItemTextHighlighted(requested);else originalEquipmentText(item,requested);}}
     std::string color=label->getProperty("TextColour").c_str();size_t n=color.size();out.add(&n,sizeof(n));out.add(color.data(),n);
     bool inFront=root->getChildAtPosition(CEGUI::Vector2(10,10))==label;out.add(&inFront,sizeof(inFront));
     out.add(self+0x1ac,sizeof(type));out.add(self+0x208,3);
+    Snapshot eq(item,sizeof(*item));eq.pointer(0,*reinterpret_cast<void***>(item)==table?1:255);void* resource;std::memcpy(&resource,self+0x68,sizeof(resource));eq.pointer(0x68,resource==managerStorage?1:255);void* itemText;std::memcpy(&itemText,self+0x1e8,sizeof(itemText));eq.pointer(0x1e8,itemText==label?1:itemText?255:0);eq.emit(out);
+    Snapshot mgr(managerStorage,sizeof(managerStorage));void* hierarchy;std::memcpy(&hierarchy,reinterpret_cast<char*>(managerStorage)+0x20,sizeof(hierarchy));mgr.pointer(0x20,hierarchy==hierarchyStorage?1:255);mgr.emit(out);
+    size_t size=relations->size();out.add(&size,sizeof(size));for(Relations::const_iterator i=relations->begin();i!=relations->end();++i){out.add(&i->first,sizeof(i->first));size=i->second.size();out.add(&size,sizeof(size));for(size_t j=0;j<size;++j)out.add(&i->second[j],sizeof(i->second[j]));}
+    for(unsigned i=0;i<11;++i){size=globals.colors[i].size();out.add(&size,sizeof(size));out.add(globals.colors[i].data(),size*sizeof(wchar_t));}
+    const CEGUI::String& labelText=label->getText();size=labelText.length();out.add(&size,sizeof(size));for(size_t i=0;i<size;++i){CEGUI::utf32 ch=labelText[i];out.add(&ch,sizeof(ch));}
+    bool visible=label->isVisible(),enabled=!label->isDisabled(),parent=label->getParent()==root;float alpha=label->getAlpha();out.add(&visible,sizeof(visible));out.add(&enabled,sizeof(enabled));out.add(&parent,sizeof(parent));out.add(&alpha,sizeof(alpha));
     CEGUI::System::getSingleton().setGUISheet(NULL);windows.destroyWindow(root);
     relations->~Relations();textGameGlobals=saved;
 }
@@ -74,13 +83,14 @@ void original(void* p,autotest::Capture& out) {guarded(p,false,out);}
 void recovered(void* p,autotest::Capture& out) {guarded(p,true,out);}
 }
 TL_TEST(equipment_text_colors_and_order) {
-    int failures=0;
+    int failures=0;autotest::Coverage coverage("equipment_text_colors_and_order",(uint64_t)(uintptr_t)&originalEquipmentText);
     try {
         tlheadless::Environment environment;environment.loadGameSkin();
-        for(unsigned int seed=0;seed<384;++seed) {
-            Case c={seed};autotest::Outcome a,b;
+        for(unsigned int seed=0;seed<384;++seed)for(unsigned warm=0;warm<2;++warm) {
+            Case c={seed,warm};autotest::Outcome a,b;
             autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-            bool same=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&
+            int pair=coverage.observe(host,a,b);
+            bool same=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&
                       WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&
                       a.capture.length>0&&b.capture.length>0&&a.capture.data[0]==1&&b.capture.data[0]==1&&
                       a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&
@@ -89,8 +99,8 @@ TL_TEST(equipment_text_colors_and_order) {
                               (unsigned long)a.capture.length,(unsigned long)b.capture.length);
             if(seed==0 && a.capture.length>1 && a.capture.data[0]==0)host->log("    original CEGUI: %s\n",a.capture.data+1);
             if(seed==0 && b.capture.length>1 && b.capture.data[0]==0)host->log("    recovered CEGUI: %s\n",b.capture.data+1);
-            TL_CHECK(failures,same);
+            TL_CHECK(failures,same);if(!same){coverage.report(host);return failures;}
         }
     } catch(const CEGUI::Exception& e) {host->log("    CEGUI: %s\n",e.getMessage().c_str());return 1;}
-    return failures;
+    coverage.report(host);host->log("    equipment text: 768 completed cold/warm cases\n");return failures;
 }
