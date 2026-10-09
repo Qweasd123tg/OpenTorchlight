@@ -310,6 +310,71 @@ class PacketContextTests(TestCase):
         self.image.relocs = {address: SimpleNamespace(offset=address, symbol=raw, type=5)}
         return data
 
+    def template_data(self, code='j'):
+        ctype, address = {'j': ('unsigned int', 0x1426460), 't': ('unsigned short', 0x1426440)}[code]
+        raw = '_ZNSbI%sSt11char_traitsI%sESaI%sEE4_Rep20_S_empty_rep_storageE' % (code, code, code)
+        label = 'std::basic_string<%s, std::char_traits<%s>, std::allocator<%s> >::_Rep::_S_empty_rep_storage' % (ctype, ctype, ctype)
+        data = object_symbol(address, label, bind='?'); data.update(name=raw, section='.bss')
+        self.db['globals'] = [data]
+        original = '91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b'
+        self.db['original_elf_sha256'] = self.image.sha256 = original
+        self.image.sections.append(section('.bss', address, b'', flags=3, typ=8, size=32))
+        symbol = SimpleNamespace(name=raw, value=address, type=1, bind=10, size=32, defined=True)
+        self.image.symbols = [symbol]; self.image.dynsyms = [copy.copy(symbol)]
+        return data, address
+
+    def test_pinned_unsigned_string_template_reps(self):
+        for code in ('j', 't'):
+            with self.subTest(code=code), mock.patch.object(ContextIndex, '_string_template_headers', return_value=True):
+                data, address = self.template_data(code)
+                result = self.index().build(self.target, '1000: mov $0x%x,%%rax\n1005: mov $0x%x,%%rdx' % (address, address+24))
+                result.require_complete()
+                self.assertEqual(result.text.count('pinned GNU-unique'), 2)
+                self.assertIn('Named data', result.text)
+                self.assertNotIn('Referenced data declaration', result.text)
+                self.assertFalse(self.image.reads)
+
+    def test_template_rep_evidence_fail_closed(self):
+        data, address = self.template_data()
+        cases = ['db_hash', 'image_hash', 'label', 'raw', 'db_address', 'db_size', 'db_bind', 'db_owner', 'db_section',
+                 'elf_missing', 'dyn_missing', 'elf_duplicate', 'dyn_duplicate', 'elf_bind', 'dyn_bind',
+                 'elf_size', 'dyn_size', 'elf_type', 'dyn_type', 'elf_defined', 'dyn_defined',
+                 'elf_address', 'dyn_address', 'section_type', 'section_name', 'section_flags', 'section_size', 'copy']
+        for change in cases:
+            with self.subTest(change=change), mock.patch.object(ContextIndex, '_string_template_headers', return_value=True):
+                db, image = copy.deepcopy(self.db), copy.deepcopy(self.image)
+                obj = db['globals'][0]
+                if change == 'db_hash': db['original_elf_sha256'] = 'wrong'
+                elif change == 'image_hash': image.sha256 = 'wrong'
+                elif change == 'label': obj['demangled'] = 'CGame::value'
+                elif change == 'raw': obj['name'] += '_fake'
+                elif change == 'db_address': obj['address'] = hex(address+1)
+                elif change == 'db_size': obj['size'] = 24
+                elif change == 'db_bind': obj['bind'] = 'weak'
+                elif change == 'db_owner': obj['file'] = 'Achievement.cpp'
+                elif change == 'db_section': obj['section'] = '.data'
+                elif change == 'copy': image.relocs[address] = SimpleNamespace(offset=address, symbol=obj['name'], type=5)
+                elif change.startswith('section_'):
+                    attr = change.split('_',1)[1]
+                    setattr(image.sections[-1], attr, {'type':1,'name':'.data','flags':7,'size':31}[attr])
+                else:
+                    table, attr = change.split('_',1); symbols = image.symbols if table=='elf' else image.dynsyms
+                    if attr=='missing': symbols.clear()
+                    elif attr=='duplicate': symbols.append(copy.copy(symbols[0]))
+                    else: setattr(symbols[0], {'address':'value'}.get(attr,attr), {'bind':2,'size':24,'type':2,'defined':False,'address':address+1}[attr])
+                self.assertIsNone(self.index(db=db,image=image)._string_template_data(obj))
+        with mock.patch.object(ContextIndex, '_string_template_headers', return_value=False):
+            self.assertIsNone(self.index()._string_template_data(data))
+
+    def test_template_rep_header_hashes_are_required(self):
+        cache=self.root/'compiler-cache'; bits=cache/'gcc447/usr/include/c++/4.4.4/bits'; bits.mkdir(parents=True)
+        hashes={'basic_string.h':hashlib.sha256(b'declaration').hexdigest(), 'basic_string.tcc':hashlib.sha256(b'definition').hexdigest()}
+        with mock.patch.dict(os.environ, {'OTL_DECOMP_CACHE':str(cache)}), mock.patch.object(ContextIndex,'STRING_TEMPLATE_HEADERS',hashes):
+            index=self.index(); self.assertFalse(index._string_template_headers())
+            (bits/'basic_string.h').write_bytes(b'declaration'); (bits/'basic_string.tcc').write_bytes(b'definition')
+            self.assertTrue(index._string_template_headers())
+            (bits/'basic_string.tcc').write_bytes(b'changed definition'); self.assertFalse(index._string_template_headers())
+
     def test_std_library_abi_data_preserves_facts_without_gap_or_declaration(self):
         raw = "_ZNSbIwSt11char_traitsIwESaIwEE4_Rep20_S_empty_rep_storageE"
         name = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::_Rep::_S_empty_rep_storage"
