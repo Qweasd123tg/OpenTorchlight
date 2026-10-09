@@ -284,3 +284,73 @@ __attribute__((flatten)) void CSkillMenu::createMenus()
         reinterpret_cast<skill_create_detail::UIRoot*>(m_pGameUI)->root);
     m_pTooltip->load(m_pGameUI, L"media/UI/skilltooltip.layout");
 }
+
+#include <OgreUTFString.h>
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+
+namespace skill_update_detail {
+struct PointerFields { char prefix[0x12d0]; long x,y; };
+}
+
+__attribute__((flatten)) void CSkillMenu::update(float elapsed)
+{
+    int width=m_pProperties->GetInt(KSETTINGS_RES_WIDTH);
+    int height=m_pProperties->GetInt(KSETTINGS_RES_HEIGHT);
+    int points=skill_layout::actor(m_pOwner).points;
+    if(m_iCachedSkillPoints!=points) {
+        m_iCachedSkillPoints=points;
+        updateLayout();
+    }
+    static std::wstring g_PointsRemaining;
+    if(g_PointsRemaining.empty())
+        g_PointsRemaining=CStringTranslate::getSinglton()->getTranslateString(L"Points Remaining");
+    CEGUI::String text(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(
+        std::wstring((Ogre::UTFString(g_PointsRemaining)+Ogre::UTFString(": ")+
+        Ogre::UTFString(STRINGS::GetValueAsString(skill_layout::actor(m_pOwner).points))).asWStr())).c_str()));
+    if(m_pSkillPoints->getText()!=text)
+        m_pSkillPoints->setText(reinterpret_cast<const unsigned char*>(text.c_str()));
+    if(!m_bOpenPartial && m_bClosed) {
+        if(m_pTooltip && m_pTooltip->m_pWindow->getParent())
+            m_pTooltip->m_pWindow->getParent()->removeChildWindow(m_pTooltip->m_pWindow);
+        return;
+    }
+    m_pModel->updateAnimation(elapsed,false);
+    m_pModel->getEntity()->_updateAnimation();
+    Ogre::Bone* top=m_pModel->m_pSkeleton->getBone("tag_topskill");
+    Ogre::Vector3 position=m_pModel->getPosition(false);
+    const Ogre::Vector3& tag=top->_getDerivedPosition();
+    float sumY=tag.y+position.y;
+    float scaledX=m_pGameUI->scaledY(tag.x+position.x);
+    float halfWidth=float(width)*0.5f;
+    float panelY=-(m_pGameUI->scaledY(sumY)+float(height)*-0.5f);
+    m_fTopX=scaledX+halfWidth;
+    m_pTopFrame->setPosition(CEGUI::UVector2(CEGUI::UDim(0,m_fTopX),CEGUI::UDim(0,panelY)));
+    Ogre::Bone* bottom=m_pModel->m_pSkeleton->getBone("tag_bottomskill");
+    position=m_pModel->getPosition(false);
+    float bottomX=bottom->_getDerivedPosition().x+position.x;
+    float scaledBottom=m_pGameUI->scaledY(bottomX);
+    float bottomScreen=halfWidth+scaledBottom;
+    m_pBottomFrame->setPosition(CEGUI::UVector2(CEGUI::UDim(0,bottomScreen),CEGUI::UDim(0,panelY)));
+    float edge=m_pGameUI->scaledY(50.0f)+bottomScreen;
+    m_fScreenEdge=edge<float(width)?edge:float(width);
+    if(!m_bOpenPartial && !m_bClosed) {
+        if(!m_pModel->animationPlaying("CLOSE") && !m_pModel->animationQueued("CLOSE")) {
+            m_pModel->setVisible(false);
+            m_bClosed=true;
+            m_pRoot->removeChildWindow(m_pBackground);
+        }
+    }
+    if(m_bSkillHovered && m_pOwner) {
+        CSkillManager* manager=skill_layout::actor(m_pOwner).manager;
+        long long guid=m_HoveredSkillGuid;
+        if(!manager)return;
+        CSkill* skill=manager->getSkillByGuid(guid);
+        if(!skill)return;
+        skill_update_detail::PointerFields& mouse=*reinterpret_cast<skill_update_detail::PointerFields*>(m_pGameUI);
+        m_pTooltip->showTooltip(m_pOwner,skill,float(mouse.x),float(mouse.y));
+    } else {
+        CEGUI::Window* window=m_pTooltip->m_pWindow;
+        if(window->getParent())window->getParent()->removeChildWindow(window);
+    }
+}

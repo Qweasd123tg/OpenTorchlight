@@ -348,6 +348,57 @@ class ContextIndex:
                 return f"{owner}; borrowed ELF STT_OBJECT + {version[1]} + matching R_X86_64_COPY"
         return None
 
+    STRING_TEMPLATE_HEADERS = {
+        "basic_string.h": "7addd054a6f6853580380360029bd06e428828d3577472a34058b7d39381b3f4",
+        "basic_string.tcc": "d3c6bff2d8eb0b804da6faf0fad4b282eb3c7421ec5cd92795f30da3c0ba6e19",
+    }
+
+    def _string_template_headers(self):
+        """Read reviewed compiler headers only; never install or run anything."""
+        cache = Path(os.environ.get("OTL_DECOMP_CACHE", str(Path.home() / ".cache/opentorchlight/decomp")))
+        directory = cache / "gcc447/usr/include/c++/4.4.4/bits"
+        try:
+            return all(hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest
+                       for name, digest in self.STRING_TEMPLATE_HEADERS.items())
+        except OSError:
+            return False
+
+    def _string_template_data(self, obj):
+        """Two reviewed GNU-unique empty reps from the pinned original image.
+
+        These are template definitions, not imported GLIBCXX COPY objects.
+        Require original identity, exact DB and both ELF table identities,
+        GNU-unique binding, 32-byte allocated writable zero-fill storage and
+        the reviewed compiler declaration/definition. No namespace exemption.
+        """
+        original = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+        if self.db.get("original_elf_sha256") != original or getattr(self.image, "sha256", None) != original:
+            return None
+        variants = {"j": ("unsigned int", 0x1426460), "t": ("unsigned short", 0x1426440)}
+        for code, (ctype, base) in variants.items():
+            raw = "_ZNSbI%sSt11char_traitsI%sESaI%sEE4_Rep20_S_empty_rep_storageE" % (code, code, code)
+            label = "std::basic_string<%s, std::char_traits<%s>, std::allocator<%s> >::_Rep::_S_empty_rep_storage" % (ctype, ctype, ctype)
+            if obj.get("name") != raw:
+                continue
+            if (obj.get("demangled") != label or _address(obj["address"]) != base
+                    or obj.get("size") != 32 or obj.get("bind") != "?"
+                    or obj.get("file") is not None or obj.get("section") != ".bss"):
+                return None
+            for symbols in (getattr(self.image, "symbols", ()), getattr(self.image, "dynsyms", ())):
+                found = [v for v in symbols if v.name == raw]
+                if (len(found) != 1 or not found[0].defined or found[0].type != 1
+                        or found[0].bind != 10 or found[0].value != base
+                        or found[0].size != 32):
+                    return None
+            sec = self.image.section_at(base)
+            if (not sec or sec.name != ".bss" or sec.type != 8 or sec.flags & 7 != 3
+                    or base + 32 > sec.addr + sec.size or base in self.copy_data):
+                return None
+            if not self._string_template_headers():
+                return None
+            return "std::basic_string<%s>; pinned GNU-unique STT_OBJECT in both ELF tables, 32-byte BSS, reviewed basic_string.h/tcc" % ctype
+        return None
+
     def _dso_registration_handle(self, obj, f, asm):
         """Recognize only the pinned compiler's immediate __cxa_atexit triple.
 
@@ -735,7 +786,7 @@ class ContextIndex:
                                  "all references are compiler __cxa_atexit argument triples; "
                                  "no game declaration required or synthesized.")
                     continue
-                library = self._library_data(obj) or self._cegui_data(obj) or self._ogre_data(obj)
+                library = self._library_data(obj) or self._string_template_data(obj) or self._cegui_data(obj) or self._ogre_data(obj)
                 if library:
                     notes.append(f"{address:#x}: library-owned ABI data ({library}); "
                                  "no game declaration required or synthesized.")
