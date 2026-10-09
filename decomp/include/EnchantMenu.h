@@ -1,6 +1,7 @@
 #ifndef ENCHANT_MENU_H
 #define ENCHANT_MENU_H
 #include "GameUI.h"
+#include "Character.h"
 #include "SubMenu.h"
 #include "iInventoryListener.h"
 class CItem; class CSoundBank;
@@ -22,6 +23,7 @@ public:
  virtual float screenEdge();
  virtual void setOwner(CCharacter*);
  virtual void setOpen(bool);
+ void setOpen(bool, EAIState);
  virtual void update(float);
  virtual void equipmentPickedUp(CEquipment*);
  virtual void equipmentDropped(CEquipment*);
