@@ -763,10 +763,11 @@ class PacketContextTests(TestCase):
     def ogre_value_setup(self, kind="Vector3"):
         sdk, configuration = self.ogre_data_setup()
         values = {
+            "OgreMath.h": "namespace Ogre { class _OgreExport Math { public: static const Real POS_INFINITY; }; }",
             "OgrePrerequisites.h": "namespace Ogre { typedef float Real; typedef std::string _StringBase; typedef _StringBase String; }",
             "OgrePlatform.h": "// pinned platform\n",
             "OgreConfig.h": "#define OGRE_DOUBLE_PRECISION 0\n",
-            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; }; }",
+            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; static const Vector3 UNIT_Y; }; }",
             "OgreMatrix4.h": "namespace Ogre { class _OgreExport Matrix4 { public: Real m[4][4]; static const Matrix4 IDENTITY; }; }",
             "OgreQuaternion.h": "namespace Ogre { class _OgreExport Quaternion { public: Real w,x,y,z; static const Quaternion IDENTITY; }; }",
             "OgreString.h": "namespace Ogre { class _OgreExport StringUtil { public: static const String BLANK; }; }",
@@ -776,6 +777,8 @@ class PacketContextTests(TestCase):
         patch = mock.patch.dict(ContextIndex.OGRE_VALUE_HEADER_SHA256, pins, clear=True)
         patch.start(); self.addCleanup(patch.stop)
         identities = {
+            "UnitY": ("Ogre::Vector3::UNIT_Y", "_ZN4Ogre7Vector36UNIT_YE", 12),
+            "Infinity": ("Ogre::Math::POS_INFINITY", "_ZN4Ogre4Math12POS_INFINITYE", 4),
             "Vector3": ("Ogre::Vector3::ZERO", "_ZN4Ogre7Vector34ZEROE", 12),
             "Matrix4": ("Ogre::Matrix4::IDENTITY", "_ZN4Ogre7Matrix48IDENTITYE", 64),
             "Quaternion": ("Ogre::Quaternion::IDENTITY", "_ZN4Ogre10Quaternion8IDENTITYE", 16),
@@ -785,7 +788,7 @@ class PacketContextTests(TestCase):
         return sdk, configuration
 
     def test_ogre_values_exact_constants_and_interior_references(self):
-        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64)):
+        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64),("UnitY",12),("Infinity",4)):
             with self.subTest(kind=kind):
                 self.ogre_value_setup(kind)
                 for offset in range(0,size,4):
@@ -793,6 +796,31 @@ class PacketContextTests(TestCase):
                     self.assertIn("exact ELF object/COPY identity",result.text)
                     self.assertIn("pinned float/narrow-string profile",result.text)
                     self.assertNotIn("Referenced data declaration",result.text)
+
+    def test_missile_constants_reject_metadata_mismatches(self):
+        for kind in ("UnitY", "Infinity"):
+            for change in ("no_copy", "wrong_copy", "no_symbol", "wrong_size", "wrong_db_size", "wrong_type", "wrong_label", "readonly", "short"):
+                with self.subTest(kind=kind,change=change):
+                    self.ogre_value_setup(kind)
+                    if change=="no_copy": self.image.relocs={}
+                    elif change=="wrong_copy": self.image.relocs[0x7000].symbol="wrong"
+                    elif change=="no_symbol": self.image.symbols=[]
+                    elif change=="wrong_size": self.image.symbols[0].size=32
+                    elif change=="wrong_db_size": self.db["globals"][0]["size"]=32
+                    elif change=="wrong_type": self.image.symbols[0].type=2
+                    elif change=="wrong_label": self.db["globals"][0]["demangled"]="Ogre::Other::FAKE"
+                    elif change=="readonly": self.image.sections[-1].flags=2
+                    elif change=="short": self.image.sections[-1].size=1
+                    with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_missile_constants_reject_declaration_mismatches(self):
+        for kind,header,owner,typ,member in (("UnitY","OgreVector3.h","Vector3","Vector3","UNIT_Y"),("Infinity","OgreMath.h","Math","Real","POS_INFINITY")):
+            for declaration in ("static {typ} {member};", "static const int {member};", "static const {typ} WRONG;", "static const {typ} {member}; static const {typ} {member};"):
+                with self.subTest(kind=kind,declaration=declaration):
+                    sdk,_=self.ogre_value_setup(kind)
+                    source="namespace Ogre { class "+owner+" { public: "+declaration.format(typ=typ,member=member)+" }; }"
+                    (sdk/header).write_text(source);ContextIndex.OGRE_VALUE_HEADER_SHA256[header]=hashlib.sha256(source.encode()).hexdigest()
+                    with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
 
     def test_ogre_values_reject_abi_and_identity_mismatches(self):
         for change in ("no_copy","wrong_copy","no_symbol","undefined","local_symbol","wrong_symbol_type","wrong_symbol_size","wrong_both_sizes","db_local","db_raw","db_label","wrong_section","readonly","short_section"):
@@ -835,7 +863,7 @@ class PacketContextTests(TestCase):
                 with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
 
     def test_ogre_values_reject_changed_configuration_or_header(self):
-        for name in ("config","OgreConfig.h","OgrePrerequisites.h","OgrePlatform.h","OgreVector3.h","OgreQuaternion.h","OgreString.h","OgreMatrix4.h"):
+        for name in ("config","OgreConfig.h","OgrePrerequisites.h","OgrePlatform.h","OgreVector3.h","OgreQuaternion.h","OgreString.h","OgreMatrix4.h","OgreMath.h"):
             with self.subTest(name=name):
                 sdk,config=self.ogre_value_setup()
                 target=config if name=="config" else sdk/name
