@@ -3,13 +3,18 @@
 #include "SubMenu.h"
 #include "GameUI.h"
 #include "TArrayList.h"
-namespace CEGUI { class Window; class Imageset; }
+namespace CEGUI { class Window; class Imageset; class RadioButton; }
 class CGameUI; class CResourceManager; class CDynamicPropertyFile; class CSkillTooltip;
 // Partial data declaration through fields used by updateLayout.
+class CGenericModel;
 class CSettings;
 namespace Ogre { class RenderWindow; class SceneManager; }
 class CSkillMenu : public CSubMenu {
 public:
+    void createMenus();
+    void mapEventHandlers(CEGUI::Window*);
+    bool handle_MouseThrough(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     CSkillMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
 
  virtual ~CSkillMenu();
@@ -31,19 +36,22 @@ public:
  bool handle_MouseOut(const CEGUI::EventArgs&);
  char m_Data10[8];
  CEGUI::Window* m_pBackground;
- char m_Data20[16];
+ CEGUI::Window* m_pTopFrame;
+ CEGUI::Window* m_pBottomFrame;
  CCharacter* m_pOwner;
  bool m_bOpenPartial;
  char m_Data39[15];
  CDynamicPropertyFile* m_pProperties;
  CGameUI* m_pGameUI;
- char m_Data58[16];
+ Ogre::SceneManager* m_pSceneManager;
+ CGenericModel* m_pModel;
  CResourceManager* m_pResourceManager;
  char m_Data70[8];
  CEGUI::Imageset* m_pImages;
- char m_Data80[16];
+ char m_Data80[8];
+ CEGUI::Window* m_pSkillPoints;
  CEGUI::Window* m_Panes[4];
- char m_DataB0[24];
+ CEGUI::RadioButton* m_Tabs[3];
  CEGUI::Window* m_TabLabels[3];
  int m_iPane;
  char m_DataE4[12];

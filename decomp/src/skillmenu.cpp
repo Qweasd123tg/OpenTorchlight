@@ -174,3 +174,113 @@ void CSkillMenu::updateLayout() {
  }
  m_pBackground->moveToBack();
 }
+
+#include <OgreMesh.h>
+#include <OgreEntity.h>
+#include "DynamicPropertyFile.h"
+#include "Settings.h"
+#include "GameVariables.h"
+#include "GenericModel.h"
+#include "FileSystem.h"
+#include "SkillTooltip.h"
+
+namespace skill_create_detail {
+struct UIRoot { char prefix[0x488]; CEGUI::Window* root; };
+}
+
+inline __attribute__((always_inline))
+CSkillTooltip::CSkillTooltip(CGameUI* ui, CEGUI::Window* root)
+    : m_pGameUI(ui), m_sText(EMPTY_WSTRING), m_iIndex(-1), m_pRoot(root) {}
+
+__attribute__((flatten)) void CSkillMenu::createMenus()
+{
+    float width = static_cast<float>(m_pProperties->GetInt(KSETTINGS_RES_WIDTH));
+    float height = static_cast<float>(m_pProperties->GetInt(KSETTINGS_RES_HEIGHT));
+    m_pModel = m_pResourceManager->createGenericModel(m_pSceneManager,
+        L"media/ui/models/skill/skill.mesh", L"", false, false, false);
+    m_pModel->generateExtremes(5, true);
+    Ogre::AxisAlignedBox bounds(Ogre::Vector3(-100000.0f, -100000.0f, -100000.0f),
+                                Ogre::Vector3(100000.0f, 100000.0f, 100000.0f));
+    m_pModel->getEntity()->getMesh()->_setBounds(bounds, true);
+    float scale = width - height / 0.75f;
+    scale /= m_pProperties->GetFloat(KSETTINGS_YRATIO);
+    m_pModel->setPosition(0.5f * scale, 0.0f, 0.0f);
+    m_pModel->setVisible(false);
+    m_pImages = CEGUI::ImagesetManager::getSingleton().getImageset(
+        reinterpret_cast<const unsigned char*>("ui2"));
+    m_pBackground = CEGUI::WindowManager::getSingleton().createWindow(
+        reinterpret_cast<const unsigned char*>("DefaultWindow"),
+        reinterpret_cast<const unsigned char*>("SkillSheet"), "");
+    m_pBackground->setSize(CEGUI::UVector2(CEGUI::UDim(1, 0), CEGUI::UDim(1, 0)));
+    m_pBackground->setProperty("RiseOnClick", "False");
+    m_pBackground->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0), CEGUI::UDim(0, 0)));
+    m_pBackground->setMousePassThroughEnabled(true);
+    m_pBackground->setZOrderingEnabled(false);
+    {
+        CEGUI::Event::Connection connection = m_pBackground->subscribeEvent(
+            CEGUI::Window::EventMouseMove,
+            CEGUI::SubscriberSlot(&CSkillMenu::handle_MouseThrough, this));
+        (void)connection;
+    }
+
+    CFileInfo fileInfo;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/skillmenu.layout", fileInfo, false, true, false);
+    CEGUI::Window* layoutRoot = CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(fileInfo.m_sResourceName), true);
+    m_pGameUI->convertToScreenScale(layoutRoot, false);
+    m_pGameUI->mapToFunctions(layoutRoot);
+    mapEventHandlers(layoutRoot);
+
+    CEGUI::Window* blocker = layoutRoot->recursiveChildSearch("Blocker");
+    blocker->getParent()->removeChildWindow(blocker);
+    m_pBackground->addChildWindow(blocker);
+    blocker->setProperty("RiseOnClick", "False");
+    blocker->moveToBack();
+    blocker->setZOrderingEnabled(false);
+
+    CEGUI::Window* close = layoutRoot->recursiveChildSearch("Close");
+    close->setRiseOnClickEnabled(false);
+    close->moveToFront();
+    {
+        CEGUI::Event::Connection connection = close->subscribeEvent(
+            CEGUI::Window::EventMouseButtonDown,
+            CEGUI::SubscriberSlot(&CSkillMenu::handle_CloseButton, this));
+        (void)connection;
+    }
+    m_Panes[0] = layoutRoot->recursiveChildSearch("SkillFrameA");
+    m_Panes[1] = layoutRoot->recursiveChildSearch("SkillFrameB");
+    m_Panes[1]->setVisible(false);
+    m_Panes[2] = layoutRoot->recursiveChildSearch("SkillFrameC");
+    m_Panes[2]->setVisible(false);
+    m_TabLabels[0] = layoutRoot->recursiveChildSearch("TabTextA");
+    m_TabLabels[1] = layoutRoot->recursiveChildSearch("TabTextB");
+    m_TabLabels[2] = layoutRoot->recursiveChildSearch("TabTextC");
+    m_Tabs[0] = static_cast<CEGUI::RadioButton*>(layoutRoot->recursiveChildSearch("TabA"));
+    m_Tabs[0]->setSelected(true);
+    m_Tabs[1] = static_cast<CEGUI::RadioButton*>(layoutRoot->recursiveChildSearch("TabB"));
+    m_Tabs[1]->setSelected(false);
+    m_Tabs[2] = static_cast<CEGUI::RadioButton*>(layoutRoot->recursiveChildSearch("TabC"));
+    m_Tabs[2]->setSelected(false);
+    m_Tabs[0]->setZOrderingEnabled(false);
+    m_Tabs[1]->setZOrderingEnabled(false);
+    m_Tabs[2]->setZOrderingEnabled(false);
+    m_Panes[3] = layoutRoot->recursiveChildSearch("SpellFrame");
+    m_pSkillPoints = layoutRoot->recursiveChildSearch("Skill Points");
+
+    m_pBottomFrame = layoutRoot->recursiveChildSearch("BottomFrame");
+    m_pBottomFrame->getParent()->removeChildWindow(m_pBottomFrame);
+    m_pBackground->addChildWindow(m_pBottomFrame);
+    m_pBottomFrame->setProperty("RiseOnClick", "False");
+    m_pBottomFrame->moveToFront();
+    m_pBottomFrame->setZOrderingEnabled(false);
+    m_pTopFrame = layoutRoot->recursiveChildSearch("TopFrame");
+    m_pTopFrame->getParent()->removeChildWindow(m_pTopFrame);
+    m_pBackground->addChildWindow(m_pTopFrame);
+    m_pTopFrame->setProperty("RiseOnClick", "False");
+    m_pTopFrame->moveToFront();
+    m_pTopFrame->setZOrderingEnabled(false);
+
+    m_pTooltip = new CSkillTooltip(m_pGameUI,
+        reinterpret_cast<skill_create_detail::UIRoot*>(m_pGameUI)->root);
+    m_pTooltip->load(m_pGameUI, L"media/UI/skilltooltip.layout");
+}
