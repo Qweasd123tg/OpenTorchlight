@@ -447,8 +447,9 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     for(unsigned i=0;i<8;++i)world->children[i][0]=reinterpret_cast<unsigned long long>(i<4?world->vt:world->dropdownVT);
     for(unsigned family=0;family<2;++family){unsigned base=family?0x1948:0x1930;for(unsigned i=0;i<4;++i){world->lists[family][i]=world->children[family*4+i];world->alternate[family][i]=world->children[family*4+3-i];}at<void**>(world->ui,base)=world->lists[family];at<void**>(world->ui,base+8)=world->lists[family]+(family?c.dropCount:c.subCount);}
     detour::Set patches;
+    detour::Set slotPatches;
     TL_REDIRECT(patches,settingsGet,&setting);TL_REDIRECT(patches,mousePressed,&pressed);TL_REDIRECT(patches,mouseHeld,&pressed);
-    TL_REDIRECT(patches,updateSlots,&unused);TL_REDIRECT(patches,editorSingleton,&editor);TL_REDIRECT(patches,modalPartial,&modal);
+    TL_REDIRECT(slotPatches,updateSlots,&unused);TL_REDIRECT(patches,editorSingleton,&editor);TL_REDIRECT(patches,modalPartial,&modal);
     TL_REDIRECT(patches,characterHP,&hp);TL_REDIRECT(patches,characterMaxHP,&maxhp);
     TL_REDIRECT(patches,characterMana,&mana);TL_REDIRECT(patches,characterMaxMana,&maxmana);TL_REDIRECT(patches,masterSingleton,&manager);TL_REDIRECT(patches,experienceGate,&gate);
     patches.redirect(reinterpret_cast<char*>(0x554718),reinterpret_cast<char*>(&gameui_detail::service::native_visible),&visible);
@@ -482,7 +483,7 @@ patches.redirect(reinterpret_cast<char*>(0x5530d8),reinterpret_cast<char*>(&game
 patches.redirect(reinterpret_cast<char*>(0x554028),reinterpret_cast<char*>(&gameui_detail::service::native_font),&font);
 patches.redirect(reinterpret_cast<char*>(0x555ba8),reinterpret_cast<char*>(&gameui_detail::service::native_textExtent),&extent);
 patches.redirect(reinterpret_cast<char*>(0x5532a8),reinterpret_cast<char*>(&gameui_detail::service::native_windowSize),&getSize);
-    if(patches.failed()) _exit(42);
+    if(patches.failed() || slotPatches.failed()) _exit(42);
     for(unsigned repeat=0;repeat<2;++repeat){
         reachedBoundary=false;world->managerCalls=world->gateCalls=world->modalCalls=world->orientationCalls=0;world->changed[0]=world->changed[1]=false;
         try { if(expected)if(repeat==0){autotest::invoke(capture,&restoredUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{restoredUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);}else if(repeat==0){autotest::invoke(capture,&originalUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{originalUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);} }

@@ -714,3 +714,102 @@ RefreshTargetMenus:
     if(s.stashMenu->open())s.stashMenu->updateLayout();
     clearHoverAndTooltips(s);CEGUI::System::getSingleton().injectMouseMove(1.0f,0.0f);return false;
 }
+
+#include "GameUISlotsState.h"
+void CGameUI::updateSlots() {
+    using namespace gameui_slots_detail;
+    UIState& ui=state(this);
+    if(!ui.player || !actor(ui.player).inventory)return;
+    primary(this,ui,0,ui.leftIcon,ui.leftCooldown,ui.leftGuid);
+    primary(this,ui,1,ui.rightIcon,ui.rightCooldown,ui.rightGuid);
+    primary(this,ui,2,ui.attackIcon,ui.attackCooldown,ui.attackGuid);
+    for(int i=0;i<10;++i) {
+        if(!ui.buttons[i])continue;
+        long long skillGuid=actor(ui.player).hotkeySkills[i];
+        CSkill* skill=actor(ui.player).skills ? actor(ui.player).skills->getSkillByGuid(skillGuid) : NULL;
+        if(skill && !skill->getSkillIcon().empty()) {
+            ui.icons[i]->setSize(CEGUI::UVector2(CEGUI::UDim(0,ui.slotWidth),CEGUI::UDim(0,ui.slotHeight)));
+            if(ui.skillGuids[i]!=skillGuid) {
+                ui.icons[i]->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
+                image(ui.icons[i],getImageFromImageSet(reinterpret_cast<const unsigned char*>(
+                    STRINGS::StringConvertToNarrow(skill->getSkillIcon().c_str()).c_str())));
+                ui.icons[i]->getParent()->setUserData(&ui.skillGuids[i]);
+                ui.buttons[i]->setTooltipText(utf8(""));
+                ui.counts[i]=-1;
+            }
+            int seconds=static_cast<int>(ceilf(actor(ui.player).skills->getSkillCoolingTime(skill)));
+            if(ui.counts[i]!=seconds) {
+                ui.counts[i]=seconds;
+                if(seconds>0) {
+                    tint(ui.icons[i],0.6f);
+                    ui.labels[i]->setText(utf8(STRINGS::StringConvertToUTF8(STRINGS::GetValueAsWString(seconds))));
+                } else {
+                    tint(ui.icons[i],1.0f);
+                    clearText(ui.labels[i]);
+                }
+            }
+            ui.buttons[i]->setID(0);
+            ui.itemGuids[i]=-1;
+            ui.skillGuids[i]=skillGuid;
+        } else {
+            static std::string g_LeftClickAssign=STRINGS::StringConvertToUTF8(
+                CStringTranslate::getSinglton()->getTranslateString(L"Left-Click to assign Skills or Items"));
+            long long itemGuid=actor(ui.player).hotkeyItems[i];
+            if(itemGuid!=-1) {
+                ui.skillGuids[i]=-1;
+                CDataGroup* data=ui.resources->getUnitDataByGuid(itemGuid);
+                if(data) {
+                    if(ui.itemGuids[i]!=itemGuid) {
+                        ui.counts[i]=-1;
+                        const CEGUI::Image* itemImage=getImageFromImageSet(reinterpret_cast<const unsigned char*>(
+                            STRINGS::StringConvertToNarrow(data->GetDataValue(L"ICON",EMPTY_WSTRING).c_str()).c_str()));
+                        // The original abandons all remaining slots if this icon is missing.
+                        if(!itemImage)return;
+                        float width=itemImage->getWidth();
+                        unsigned ratioKey=KSETTINGS_YRATIO;
+                        width=scaledY(width/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
+                        float height=itemImage->getHeight();
+                        ratioKey=KSETTINGS_YRATIO;
+                        height=scaledY(height/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
+                        float scale=ui.slotWidth/height;
+                        width*=scale; height*=scale;
+                        ui.icons[i]->setPosition(CEGUI::UVector2(CEGUI::UDim(0,(ui.slotWidth-width)*0.5f),CEGUI::UDim(0,0)));
+                        ui.icons[i]->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
+                        image(ui.icons[i],itemImage);
+                        ui.buttons[i]->setID(1000);
+                        ui.buttons[i]->setUserData(&ui.itemGuids[i]);
+                    }
+                    int count=actor(ui.player).inventory->getEquipmentCountOfGuid(itemGuid);
+                    if(count!=ui.counts[i] || itemGuid!=ui.itemGuids[i]) {
+                        ui.counts[i]=count;
+                        if(count!=0) {
+                            ui.labels[i]->setText(utf8(STRINGS::StringConvertToUTF8(STRINGS::GetValueAsWString(static_cast<unsigned>(count)))));
+                            tint(ui.icons[i],1.0f);
+                            ui.buttons[i]->setTooltipText(utf8(""));
+                        } else {
+                            clearText(ui.labels[i]);
+                            tint(ui.icons[i],0.6f);
+                            ui.buttons[i]->setTooltipText(utf8(g_LeftClickAssign));
+                        }
+                    }
+                    ui.itemGuids[i]=itemGuid;
+                } else if(ui.itemGuids[i]!=-1) {
+                    ui.itemGuids[i]=-1;
+                    clearText(ui.labels[i]);
+                    ui.buttons[i]->setTooltipText(utf8(g_LeftClickAssign));
+                    ui.buttons[i]->setID(0);
+                    ui.icons[i]->setProperty("Image","");
+                    ui.icons[i]->getParent()->setUserData(&ui.emptyGuid);
+                }
+            } else if(ui.itemGuids[i]!=-1 || ui.skillGuids[i]!=-1) {
+                ui.skillGuids[i]=-1;
+                ui.itemGuids[i]=-1;
+                ui.buttons[i]->setTooltipText(utf8(g_LeftClickAssign));
+                ui.buttons[i]->setID(0);
+                clearText(ui.labels[i]);
+                ui.icons[i]->setProperty("Image","");
+                ui.icons[i]->getParent()->setUserData(&ui.emptyGuid);
+            }
+        }
+    }
+}

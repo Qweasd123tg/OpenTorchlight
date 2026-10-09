@@ -31,6 +31,7 @@ public:
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
     virtual ~CGameUI();
+    void updateSlots();
     bool menuItemClick(CCharacter*, CSubMenu*, int, bool);
     void returnDraggedItem();
     void setCursorState(ECursorState);
