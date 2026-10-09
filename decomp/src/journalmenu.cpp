@@ -7,7 +7,7 @@
 #include <CEGUI.h>
 #include <OgreUTFString.h>
 #include <cmath>
-static const std::wstring EMPTY_WSTRING;
+#include "EmptyStrings.h"
 namespace journal_layout {
 struct PlayerFields {char prefix[0x388];float timePlayed;char gap38c[0x7dc-0x38c];int counters[18];char gap824[0xa10-0x824];int ancestors;char flagA14;bool hardcore;};
 struct ClientFields {char prefix[0x38ec];int difficulty;};
@@ -86,3 +86,64 @@ __attribute__((flatten)) void CJournalMenu::updateLayout(){
  m_pRoot->moveToBack();
 }
 #undef TRANSLATION
+
+#include "JournalMenu.h"
+#include "Settings.h"
+#include "GameVariables.h"
+#include "GenericModel.h"
+#include "FileSystem.h"
+#include "ResourceManager.h"
+#include <OgreEntity.h>
+#include <OgreMesh.h>
+#include <CEGUI.h>
+
+void CJournalMenu::createMenus()
+{
+    float width = (float)m_pSettings->GetInt(KSETTINGS_RES_WIDTH);
+    float height = (float)m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+    m_pModel = m_pResourceManager->createGenericModel(m_pSceneManager,
+        L"media/ui/models/journal/journal.mesh", L"", false, false, false);
+    m_pModel->generateExtremes(5, true);
+    Ogre::AxisAlignedBox bounds(Ogre::Vector3(-100000,-100000,-100000),
+                               Ogre::Vector3(100000,100000,100000));
+    m_pModel->getEntity()->getMesh()->_setBounds(bounds, true);
+    float x = width - height / 0.75f;
+    m_pModel->setPosition(0.5f * (x / m_pSettings->GetFloat(KSETTINGS_YRATIO)),0.0f,0.0f);
+    m_pModel->setVisible(false);
+    m_pImageset = CEGUI::ImagesetManager::getSingleton().getImageset("GuiLook");
+    m_pRoot = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow","JournalSheet","");
+    m_pRoot->setSize(CEGUI::UVector2(CEGUI::UDim(1,0),CEGUI::UDim(1,0)));
+    m_pRoot->setProperty("RiseOnClick","False");
+    m_pRoot->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
+    m_pRoot->setMousePassThroughEnabled(true);
+    m_pRoot->setZOrderingEnabled(false);
+    m_pRoot->subscribeEvent(CEGUI::Window::EventMouseMove,CEGUI::SubscriberSlot(&CJournalMenu::handle_MouseThrough,this));
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/journalmenu.layout",info,false,true,false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName),true);
+    m_pGameUI->convertToScreenScale(layout,false);
+    m_pGameUI->mapToFunctions(layout);
+    CEGUI::Window* blocker=layout->recursiveChildSearch("Blocker");
+    blocker->getParent()->removeChildWindow(blocker);
+    m_pRoot->addChildWindow(blocker);
+    blocker->setProperty("RiseOnClick","False");
+    blocker->moveToBack();
+    blocker->setZOrderingEnabled(false);
+    CEGUI::Window* close=layout->recursiveChildSearch("Close");
+    close->setRiseOnClickEnabled(false);
+    close->moveToFront();
+    close->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::SubscriberSlot(&CJournalMenu::handle_CloseButton,this));
+    m_pContent=layout->recursiveChildSearch("JournalFrame");
+    m_pBottomFrame=layout->recursiveChildSearch("BottomFrame");
+    m_pBottomFrame->getParent()->removeChildWindow(m_pBottomFrame);
+    m_pRoot->addChildWindow(m_pBottomFrame);
+    m_pBottomFrame->setProperty("RiseOnClick","False");
+    m_pBottomFrame->moveToFront();
+    m_pBottomFrame->setZOrderingEnabled(false);
+    m_pTopFrame=layout->recursiveChildSearch("TopFrame");
+    m_pTopFrame->getParent()->removeChildWindow(m_pTopFrame);
+    m_pRoot->addChildWindow(m_pTopFrame);
+    m_pTopFrame->setProperty("RiseOnClick","False");
+    m_pTopFrame->moveToFront();
+    m_pTopFrame->setZOrderingEnabled(false);
+}
