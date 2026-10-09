@@ -9,6 +9,9 @@ namespace CEGUI { class Window; }
 class CFishingMenu : public CRunicCore {
 public:
     virtual ~CFishingMenu();
+    virtual void update(float);
+    virtual void setVisible(bool);
+    virtual bool processInput(void*,float,bool);
     CFishingMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
     char m_Unrecovered10[0x30];
 };

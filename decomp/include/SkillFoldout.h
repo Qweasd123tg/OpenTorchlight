@@ -3,10 +3,12 @@
 #include "RunicCore.h"
 #include <string>
 class CGameUI;
+class CBaseUnit;
 namespace CEGUI { class Window; }
 // Partial: allocation 0xcb8, base and initializer offsets verified in GameUI::create.
 class CSkillFoldout : public CRunicCore {
 public:
+    void showFoldout(CBaseUnit*,float,float,bool,bool);
     virtual ~CSkillFoldout();
     CSkillFoldout(CGameUI*,CEGUI::Window*);
     void load(CGameUI*,std::wstring);

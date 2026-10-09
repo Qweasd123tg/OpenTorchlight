@@ -6,6 +6,8 @@
 
 #include <string>
 
+extern int KSETTINGS_KEYMAP_CLOSEALL;
+extern int KSETTINGS_KEYMAP_PAUSE;
 extern int KSETTINGS_KEYMAP_ZOOMIN;
 extern int KSETTINGS_KEYMAP_ZOOMOUT;
 extern int KSETTINGS_RES_HEIGHT;

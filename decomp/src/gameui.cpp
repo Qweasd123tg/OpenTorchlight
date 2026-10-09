@@ -848,3 +848,28 @@ bool CGameUI::create() {
     finalize(this,ui,scenes,sheets,menus,finalState);
     return true;
 }
+
+#include "GameUIInput/Lifecycle.h"
+#include "GameUIInput/Hover.h"
+#include "GameUIInput/Skills.h"
+// Inline only private phases, retaining calls to other original GameUI entries.
+bool CGameUI::processIngameInput(void* window,float elapsed,bool enabled)
+{
+    using namespace gameui_input_detail;
+    menu_item_click_detail::UIState& ui=menu_item_click_detail::state(this);
+    InputState& state=input(this);
+    if(!ui.player)return finish(this,true);
+    bool result=!state.consumeNextInput;
+    state.consumeNextInput=false;
+    if(!enabled)return finish(this,result);
+    captureAndPosition(this,window,elapsed,result);
+    processPlayerState(this);
+    Selection selected=collectClicks(this,result);
+    processClicks(this,selected,result);
+    dispatchMenus(this,window,elapsed,enabled,result);
+    processWorldClick(this,result);
+    if(!state.labelHovered)detachFromActualParent(state.hoveredLabel);
+    updateEquipmentTooltips(this,selected);
+    processSkillKeys(this);
+    return finish(this,result);
+}
