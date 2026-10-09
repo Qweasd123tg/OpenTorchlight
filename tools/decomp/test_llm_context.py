@@ -759,6 +759,92 @@ class PacketContextTests(TestCase):
         outside.write_bytes(path.read_bytes());path.unlink();path.symlink_to(outside)
         with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
 
+
+    def ogre_value_setup(self, kind="Vector3"):
+        sdk, configuration = self.ogre_data_setup()
+        values = {
+            "OgrePrerequisites.h": "namespace Ogre { typedef float Real; typedef std::string _StringBase; typedef _StringBase String; }",
+            "OgrePlatform.h": "// pinned platform\n",
+            "OgreConfig.h": "#define OGRE_DOUBLE_PRECISION 0\n",
+            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; }; }",
+            "OgreQuaternion.h": "namespace Ogre { class _OgreExport Quaternion { public: Real w,x,y,z; static const Quaternion IDENTITY; }; }",
+            "OgreString.h": "namespace Ogre { class _OgreExport StringUtil { public: static const String BLANK; }; }",
+        }
+        for name, value in values.items(): (sdk / name).write_text(value)
+        pins = {name: hashlib.sha256(value.encode()).hexdigest() for name, value in values.items()}
+        patch = mock.patch.dict(ContextIndex.OGRE_VALUE_HEADER_SHA256, pins, clear=True)
+        patch.start(); self.addCleanup(patch.stop)
+        identities = {
+            "Vector3": ("Ogre::Vector3::ZERO", "_ZN4Ogre7Vector34ZEROE", 12),
+            "Quaternion": ("Ogre::Quaternion::IDENTITY", "_ZN4Ogre10Quaternion8IDENTITYE", 16),
+            "StringUtil": ("Ogre::StringUtil::BLANK", "_ZN4Ogre10StringUtil5BLANKE", 8),
+        }
+        self.sdk_object(*identities[kind])
+        return sdk, configuration
+
+    def test_ogre_values_exact_constants_and_interior_references(self):
+        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8)):
+            with self.subTest(kind=kind):
+                self.ogre_value_setup(kind)
+                for offset in range(0,size,4):
+                    result=self.index().build(self.target,"1000: mov $%#x,%%rax"%(0x7000+offset)).require_complete()
+                    self.assertIn("exact ELF object/COPY identity",result.text)
+                    self.assertIn("pinned float/narrow-string profile",result.text)
+                    self.assertNotIn("Referenced data declaration",result.text)
+
+    def test_ogre_values_reject_abi_and_identity_mismatches(self):
+        for change in ("no_copy","wrong_copy","no_symbol","undefined","local_symbol","wrong_symbol_type","wrong_symbol_size","wrong_both_sizes","db_local","db_raw","db_label","wrong_section","readonly","short_section"):
+            with self.subTest(change=change):
+                self.ogre_value_setup()
+                if change=="no_copy": self.image.relocs={}
+                elif change=="wrong_copy": self.image.relocs[0x7000].symbol="wrong"
+                elif change=="no_symbol": self.image.symbols=[]
+                elif change=="undefined": self.image.symbols[0].defined=False
+                elif change=="local_symbol": self.image.symbols[0].bind=0
+                elif change=="wrong_symbol_type": self.image.symbols[0].type=2
+                elif change=="wrong_symbol_size": self.image.symbols[0].size=16
+                elif change=="wrong_both_sizes": self.image.symbols[0].size=self.db["globals"][0]["size"]=16
+                elif change=="db_local": self.db["globals"][0]["bind"]="local"
+                elif change=="db_raw": self.db["globals"][0]["name"]="_ZN4Ogre7Vector34FAKEE"
+                elif change=="db_label": self.db["globals"][0]["demangled"]="Ogre::Vector3::FAKE"
+                elif change=="wrong_section": self.image.sections[-1].type=1
+                elif change=="readonly": self.image.sections[-1].flags=2
+                elif change=="short_section": self.image.sections[-1].size=8
+                with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_values_reject_changed_configuration_or_header(self):
+        for name in ("config","OgreConfig.h","OgrePrerequisites.h","OgrePlatform.h","OgreVector3.h","OgreQuaternion.h","OgreString.h"):
+            with self.subTest(name=name):
+                sdk,config=self.ogre_value_setup()
+                target=config if name=="config" else sdk/name
+                target.write_bytes(target.read_bytes()+b"\n// changed")
+                with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_values_reject_wrong_type_owner_constness_duplicate_and_namespace(self):
+        for declaration in (
+            "namespace Ogre { class Vector3 { public: static Vector3 ZERO; }; }",
+            "namespace Ogre { class Vector3 { public: static const int ZERO; }; }",
+            "namespace Ogre { class Other { public: static const Vector3 ZERO; }; }",
+            "namespace Other { class Vector3 { public: static const Vector3 ZERO; }; }",
+            "namespace Ogre { class Vector3 { public: static const Vector3 ZERO; static const Vector3 ZERO; }; }"):
+            with self.subTest(declaration=declaration):
+                sdk,_=self.ogre_value_setup();(sdk/"OgreVector3.h").write_text(declaration)
+                ContextIndex.OGRE_VALUE_HEADER_SHA256["OgreVector3.h"]=hashlib.sha256(declaration.encode()).hexdigest()
+                with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_values_reject_profile_changes_even_with_updated_header_pin(self):
+        for name,value in (("OgreConfig.h","#define OGRE_DOUBLE_PRECISION 1\n"),("OgrePrerequisites.h","typedef double Real; typedef std::wstring _StringBase; typedef _StringBase String;")):
+            sdk,_=self.ogre_value_setup();(sdk/name).write_text(value)
+            ContextIndex.OGRE_VALUE_HEADER_SHA256[name]=hashlib.sha256(value.encode()).hexdigest()
+            with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_values_reject_symlink_escape_and_missing_header(self):
+        for kind in ("escape","missing"):
+            sdk,_=self.ogre_value_setup();path=sdk/"OgreVector3.h"
+            outside=self.root/"outside-values.h";outside.write_bytes(path.read_bytes());path.unlink()
+            if kind=="escape":path.symlink_to(outside)
+            with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
     def test_sdk_event_rejects_identity_and_abi_mismatches(self):
         for change in ("no_copy", "wrong_copy", "no_symbol", "undefined", "local_symbol",
                        "wrong_symbol_type", "wrong_symbol_size", "wrong_both_sizes", "db_local",

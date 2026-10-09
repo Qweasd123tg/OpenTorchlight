@@ -1,0 +1,11 @@
+# Pinned OGRE constant context, 2026-10-09
+
+The strict context pipeline previously blocked existing CBaseUnit::updateCullingBounds (0x7fff00) and CEquipment::attachToGivenLocation (0x886d40) on externally owned OGRE constants. This change adds a bounded recognition path for exactly Ogre::Vector3::ZERO, Ogre::Quaternion::IDENTITY and Ogre::StringUtil::BLANK, rather than accepting a namespace or name alone.
+
+Recognition requires matching DB/mangled/display identity, global/weak object binding, exact ELF symbol and COPY relocation at the same base, exact ABI size (12/16/8 bytes), writable SHT_NOBITS bounds, unchanged build configuration and six pinned OGRE 1.6.5 SDK headers. It checks default float/narrow-string declarations and the exact static-const member in its original class/namespace. Interior references resolve to the containing verified object. It does not invent declarations, read COPY storage as a file-backed literal, or accept arbitrary OGRE globals.
+
+128 offline context tests pass. New positive tests cover all three constants and interior field offsets. Negative cases include absent/mismatched COPY records, missing/undefined/local/wrong-type symbols, altered sizes/labels, wrong section/access/bounds, changed SDK/configuration, changed member type/owner/constness/namespace, duplicate declarations, profile mismatches, missing headers and symlink escapes. Existing strict-context regression tests remain passing.
+
+Both previously blocked real-function packets now build completely against the borrowed ELF and pinned SDK in the isolated candidate. A packet-only explicit existing DataGroup default allocator is used for the Equipment packet; it is not published. No game function or fixture is changed or accepted by this tooling update itself.
+
+Stage correctly refuses to validate or publish changed tool implementations; that restriction is retained. The unchanged checker passed 192 hybrid tests both in the isolated integration checkout and independently at root. The 128 offline tests were also rerun successfully at root. Acceptance remains 1315/5247 functions and 935704 original bytes (1255 MATCH plus 60 behavioral); this tooling change adds no accepted function.
