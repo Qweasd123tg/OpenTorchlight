@@ -242,6 +242,7 @@ class ContextIndex:
     }
 
     OGRE_HEADER_SHA256 = {'OgreResourceGroupManager.h': '1ff3bf682e6723128544d4f0d948fc7408b1179cb1bb42961f80e1967b107529', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf'}
+    OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7'}
     OGRE_CONFIG_SHA256 = '0a11e5cd5b3dafe9f832362747afb8147f24f912c88a1e31a303dd466ca47317'
 
     SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
@@ -485,6 +486,62 @@ class ContextIndex:
                 pass  # Retain a gap, never invent an SDK declaration.
         self.cegui_headers[name] = value
         return value
+
+    def _ogre_value_data(self, obj):
+        """Only three reviewed COPY-imported constants in the pinned default ABI."""
+        identities = {
+            "_ZN4Ogre7Vector34ZEROE": ("Ogre::Vector3::ZERO", 12, "OgreVector3.h", "Vector3", "ZERO"),
+            "_ZN4Ogre10Quaternion8IDENTITYE": ("Ogre::Quaternion::IDENTITY", 16, "OgreQuaternion.h", "Quaternion", "IDENTITY"),
+            "_ZN4Ogre10StringUtil5BLANKE": ("Ogre::StringUtil::BLANK", 8, "OgreString.h", "String", "BLANK"),
+        }
+        raw = obj.get("name", "")
+        row = identities.get(raw)
+        if not row:
+            return None
+        label, size, header, typ, member = row
+        if (obj.get("demangled") != label or obj.get("bind") not in ("global", "weak")
+                or obj.get("size") != size):
+            return None
+        base = _address(obj["address"])
+        if (self.copy_data.get(base) != raw or raw not in self.elf_object_names.get((base, raw), ())
+                or self.elf_object_sizes.get((base, raw)) != {size}):
+            return None
+        sec = self.image.section_at(base)
+        if (not sec or sec.type != 8 or sec.flags & 3 != 3 or base + size > sec.addr + sec.size):
+            return None
+        try:
+            if hashlib.sha256((self.root / "decomp/config.json").read_bytes()).hexdigest() != self.OGRE_CONFIG_SHA256:
+                return None
+            cache = Path(os.environ.get("OTL_DECOMP_CACHE", Path.home() / ".cache/opentorchlight/decomp"))
+            sdk = (cache / "gcc447/ogre-1.6.5/ogre/OgreMain/include").resolve()
+            sources = {}
+            for name, expected in self.OGRE_VALUE_HEADER_SHA256.items():
+                path = sdk / name
+                if path.resolve().parent != sdk:
+                    return None
+                value = path.read_bytes()
+                if hashlib.sha256(value).hexdigest() != expected:
+                    return None
+                sources[name] = value.decode("utf-8")
+            prerequisites = _mask(sources["OgrePrerequisites.h"])
+            config = sources["OgreConfig.h"]
+            if (not re.search(r"#\s*define\s+OGRE_DOUBLE_PRECISION\s+0\b", config)
+                    or not re.search(r"typedef\s+float\s+Real\s*;", prerequisites)
+                    or not re.search(r"typedef\s+std::string\s+_StringBase\s*;", prerequisites)
+                    or not re.search(r"typedef\s+_StringBase\s+String\s*;", prerequisites)):
+                return None
+            declarations, _ = _scan(re.sub(r"\b_OgreExport\b", "", sources[header]))
+        except (OSError, UnicodeError, KeyError):
+            return None
+        expected = r"static\s+const\s+" + typ + r"\s+" + member + r"\s*;"
+        matches = [d for d in declarations if d.kind == "data" and d.qualified == label
+                   and re.fullmatch(expected, _mask(d.text).strip())]
+        if len(matches) != 1:
+            return None
+        return ("OGRE1.6.5 SDK declaration " + _mask(matches[0].text).strip()
+                + "; exact ELF object/COPY identity, pinned float/narrow-string profile, "
+                + str(size) + " bytes; six SDK header pins and decomp/config.json SHA256 "
+                + self.OGRE_CONFIG_SHA256 + "; referenced subobject offsets do not imply separate symbols")
 
     def _ogre_data(self, obj):
         """One reviewed OGRE String object under the pinned default build profile."""
@@ -786,7 +843,7 @@ class ContextIndex:
                                  "all references are compiler __cxa_atexit argument triples; "
                                  "no game declaration required or synthesized.")
                     continue
-                library = self._library_data(obj) or self._string_template_data(obj) or self._cegui_data(obj) or self._ogre_data(obj)
+                library = self._library_data(obj) or self._string_template_data(obj) or self._cegui_data(obj) or self._ogre_data(obj) or self._ogre_value_data(obj)
                 if library:
                     notes.append(f"{address:#x}: library-owned ABI data ({library}); "
                                  "no game declaration required or synthesized.")
