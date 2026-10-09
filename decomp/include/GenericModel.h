@@ -13,6 +13,7 @@ class CGenericModel : public CPositionableObject, public iRandomWeight, public i
 friend class CEquipment;
 friend class CStatsMenu;
 friend class CPetMenu;
+friend class CInventoryMenu;
 public:
     void generateExtremes(unsigned long,bool);
     virtual ~CGenericModel();

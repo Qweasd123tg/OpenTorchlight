@@ -780,3 +780,139 @@ __attribute__((flatten)) void CInventoryMenu::createMenus()
     m_pSkillTooltip=new CSkillTooltip(m_pGameUI,root);
     m_pSkillTooltip->load(m_pGameUI,L"media/UI/skilltooltip.layout");
 }
+
+#include "SkillManager.h"
+#include "SoundBank.h"
+#include "UtilitiesMath.h"
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+#include <OgreViewport.h>
+#include <OgreRenderWindow.h>
+namespace inventory_update {
+struct PointerFields { char prefix[0x12d0]; long x,y; };
+}
+__attribute__((flatten)) void CInventoryMenu::update(float elapsed)
+{
+    typedef char parent_offset[__builtin_offsetof(CInventoryMenu,m_pParent)==0x18?1:-1];
+    typedef char closed_offset[__builtin_offsetof(CInventoryMenu,m_bFullyClosed)==0x61?1:-1];
+    typedef char hover_offset[__builtin_offsetof(CInventoryMenu,m_pHoverObject)==0x1020?1:-1];
+    typedef char viewport_offset[__builtin_offsetof(CInventoryMenu,m_pViewport)==0x9158?1:-1];
+    typedef char hovered_offset[__builtin_offsetof(CInventoryMenu,m_bSpellHovered)==0x9161?1:-1];
+    typedef char guid_offset[__builtin_offsetof(CInventoryMenu,m_HoveredSkillGuid)==0x9168?1:-1];
+    typedef char edge_offset[__builtin_offsetof(CInventoryMenu,m_fScreenEdge)==0x9180?1:-1];
+    typedef char panel_offset[__builtin_offsetof(CInventoryMenu,m_fPanelX)==0x9184?1:-1];
+    typedef char sound_offset[__builtin_offsetof(CInventoryMenu,m_pSoundBank)==0x9188?1:-1];
+    typedef char notification_offset[__builtin_offsetof(CInventoryMenu,m_TabNotifications)==0x91a8?1:-1];
+    typedef char phase_offset[__builtin_offsetof(CInventoryMenu,m_fTabPhase)==0x91ac?1:-1];
+    typedef char secondary_offset[__builtin_offsetof(CCharacter,m_bSecondaryWeaponSet)==0x70e?1:-1];
+    typedef char size_check[sizeof(CInventoryMenu)==0x95d0?1:-1];
+    float phase=m_fTabPhase+elapsed;
+    m_fTabPhase=phase;
+    if(phase>=1.0f) {
+        do {phase-=1.0f;} while(phase>=1.0f);
+        m_fTabPhase=phase;
+    }
+    for(unsigned i=0;i<3;++i) {
+        if(!m_TabNotifications[i])continue;
+        CEGUI::Window*& container=i==0?m_pBackpackSlots:i==1?m_pSpellsSlots:m_pFishSlots;
+        CEGUI::Window*& tab=i==0?m_pBackpackTab:i==1?m_pSpellsTab:m_pFishTab;
+        if(container->isVisible(false)) {
+            m_TabNotifications[i]=true;
+            tab->setProperty("UnselectedImage",m_TabUnselectedImages[i]);
+        } else {
+            CEGUI::String& value=m_fTabPhase>0.5f?m_TabSelectedImages[i]:m_TabUnselectedImages[i];
+            if(tab->getProperty("UnselectedImage")!=value)tab->setProperty("UnselectedImage",value);
+        }
+    }
+    int width=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);
+    int height=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+    if(m_pCharacter) {
+        static std::wstring g_GP;
+        if(g_GP.empty())g_GP=CStringTranslate::getSinglton()->getTranslateString(L"GP");
+        std::wstring money=g_GP+L":"+STRINGS::GetValueAsWString(m_pCharacter->m_iGold);
+        CEGUI::String text(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(std::wstring(money.c_str())).c_str()));
+        if(m_pMoneyWindow->getText()!=text)m_pMoneyWindow->setText(text);
+        if(static_cast<CEGUI::Checkbox*>(m_pWeaponSwitchWindow)->isSelected()!=m_pCharacter->m_bSecondaryWeaponSet &&
+           m_pCharacter->alive() && !m_pCharacter->performingAttackLoose() && !m_pCharacter->performingSkillLoose()) {
+            m_pSoundBank->playSample(18,0,0.0f,0.0f,false);
+            m_pCharacter->toggleSecondaryWeaponSet();
+            updateLayout();
+        }
+    }
+    if(m_bRotateLeft) {
+        Ogre::Matrix4 orientation=m_pCharacter->m_pPaperdollModel->getOrientation();
+        Ogre::Matrix4 rotation;MATH::matrixRotationY(rotation,elapsed*-1.7453292608261108f);
+        orientation=orientation*rotation;
+        m_pCharacter->m_pPaperdollModel->setOrientation(orientation,false);
+    } else if(m_bRotateRight) {
+        Ogre::Matrix4 orientation=m_pCharacter->m_pPaperdollModel->getOrientation();
+        Ogre::Matrix4 rotation;MATH::matrixRotationY(rotation,elapsed*1.7453292608261108f);
+        orientation=orientation*rotation;
+        m_pCharacter->m_pPaperdollModel->setOrientation(orientation,false);
+    }
+    if(!m_bOpen) {
+        m_pHoverObject=0;
+        m_pSocketedIconParent->setVisible(false);
+        m_pForeground38->setVisible(false);
+        if(!m_bOpen && m_bFullyClosed) {
+            if(m_pSkillTooltip && m_pSkillTooltip->m_pWindow->getParent())
+                m_pSkillTooltip->m_pWindow->getParent()->removeChildWindow(m_pSkillTooltip->m_pWindow);
+            return;
+        }
+    }
+    m_pInventoryModel->updateAnimation(elapsed,false);
+    m_pInventoryModel->getEntity()->_updateAnimation();
+    Ogre::Bone* top=m_pInventoryModel->m_pSkeleton->getBone("tag_topinventory");
+    Ogre::Vector3 position=m_pInventoryModel->getPosition(false);
+    const Ogre::Vector3& tag=top->_getDerivedPosition();
+    float sumY=tag.y+position.y;
+    float scaledX=m_pGameUI->scaledY(tag.x+position.x);
+    float halfWidth=float(width)*0.5f;
+    float panelY=-(float(height)*-0.5f+m_pGameUI->scaledY(sumY));
+    m_fPanelX=scaledX+halfWidth;
+    m_pPanel->setPosition(CEGUI::UVector2(CEGUI::UDim(0,m_fPanelX),CEGUI::UDim(0,panelY)));
+    Ogre::Bone* bottom=m_pInventoryModel->m_pSkeleton->getBone("tag_bottominventory");
+    position=m_pInventoryModel->getPosition(false);
+    float bottomX=bottom->_getDerivedPosition().x+position.x;
+    float scaledBottom=m_pGameUI->scaledY(bottomX);
+    float bottomScreen=halfWidth+scaledBottom;
+    m_pForeground48->setPosition(CEGUI::UVector2(CEGUI::UDim(0,bottomScreen),CEGUI::UDim(0,panelY)));
+    float edge=m_pGameUI->scaledY(50.0f)+bottomScreen;
+    m_fScreenEdge=edge<float(width)?edge:float(width);
+    if(m_pViewport) {
+        float panelX=m_fPanelX;
+        float left=(panelX+m_pGameUI->scaledY(124.0f))/float(width);
+        float y=m_pGameUI->scaledY(132.0f)/float(height);
+        float span=m_pGameUI->scaledY(166.0f)/float(width);
+        float h=m_pGameUI->scaledY(192.0f)/float(height);
+        if(left+span>1.0f)span=1.0f-left;
+        if(y+h>1.0f)h=1.0f-y;
+        if(left<0.0f)left=0.0f;
+        y=0.0f>y?0.0f:y;
+        float minimum=1.0f/float(width);
+        if(minimum>span){left=1.0f-minimum;span=minimum;}
+        m_pViewport->setDimensions(left,y,span,h);
+        m_pWardrobeCamera->setAspectRatio(float(m_pViewport->getActualWidth())/float(m_pViewport->getActualHeight()));
+    }
+    if(!m_bOpen && !m_bFullyClosed) {
+        if(!m_pInventoryModel->animationPlaying("CLOSE") && !m_pInventoryModel->animationQueued("CLOSE")) {
+            m_pInventoryModel->setVisible(false);
+            m_bFullyClosed=true;
+            m_pRenderWindow->removeViewport(3);
+            m_pParent->removeChildWindow(m_pBackground);
+            m_pViewport=0;
+        }
+    }
+    if(m_bSpellHovered && m_pCharacter) {
+        CSkillManager* manager=m_pCharacter->getSkillManager();
+        long long guid=m_HoveredSkillGuid;
+        if(!manager)return;
+        CSkill* skill=manager->getSkillByGuid(guid);
+        if(!skill)return;
+        inventory_update::PointerFields& mouse=*reinterpret_cast<inventory_update::PointerFields*>(m_pGameUI);
+        m_pSkillTooltip->showTooltip(m_pCharacter,skill,float(mouse.x),float(mouse.y));
+    } else {
+        CEGUI::Window* window=m_pSkillTooltip->m_pWindow;
+        if(window->getParent())window->getParent()->removeChildWindow(window);
+    }
+}
