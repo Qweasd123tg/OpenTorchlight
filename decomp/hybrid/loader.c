@@ -83,13 +83,18 @@ static int comparison_pair(uint64_t original, uint64_t replacement)
 {
     if (!g_test_blob || !original || original == replacement)
         return 0;
-    const Elf64_Shdr *s = find_section(g_test_blob, ".tlhybrid.hooks");
-    if (!s)
-        return 0;
-    const tlhybrid_hook *hooks = (const tlhybrid_hook *)s->sh_addr;
-    for (size_t i = 0; i < s->sh_size / sizeof(*hooks); ++i)
-        if (hooks[i].original == original && hooks[i].replacement == replacement)
-            return 1;
+    /* Comparison-only entries expose emitted library/template bodies without
+       installing a game hook or changing the original side of the oracle. */
+    const char *sections[] = {".tlhybrid.hooks", ".tlhybrid.comparisons"};
+    for (size_t section = 0; section < 2; ++section) {
+        const Elf64_Shdr *s = find_section(g_test_blob, sections[section]);
+        if (!s)
+            continue;
+        const tlhybrid_hook *pairs = (const tlhybrid_hook *)s->sh_addr;
+        for (size_t i = 0; i < s->sh_size / sizeof(*pairs); ++i)
+            if (pairs[i].original == original && pairs[i].replacement == replacement)
+                return 1;
+    }
     return 0;
 }
 

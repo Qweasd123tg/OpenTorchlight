@@ -181,8 +181,7 @@ public:
     int            m_aiSlotData[400];                     // +0x00b0 .. +0x06ef
 
     unsigned char  m_Unrecovered6F0[0x960];               // +0x06f0
-    long long      m_Unknown1050;                          // +0x1050
-    unsigned char  m_Unrecovered1058[0x90];               // +0x1058
+    CEGUI::Window* m_pMainGlowWindows[145]; // +0x1050 full original slot domain
 
     // ===== the five item-socket arrays =====================================
     // Loop: for (i = 1; i < 43; ++i), element i-1.  42 of the 126 slots are
@@ -190,24 +189,17 @@ public:
     // address, +0x14d8.
 
     // image, added to slot->getParent(), muted, copies the slot's rect
-    CEGUI::Window* m_apItemSocketGlowWindows[126];         // +0x10e8
-    long long      m_Unknown14D8;                          // +0x14d8
-    unsigned char  m_Unrecovered14E0[0x90];               // +0x14e0
+    CEGUI::Window* m_pMainUnidentifiedWindows[145]; // +0x14D8 full original slot domain
 
     // image, added to slot->getParent(), then setAlwaysOnTop(true)
-    CEGUI::Window* m_apItemStackWindows[126];              // +0x1570
-    long long      m_Unknown1960;                          // +0x1960
-    unsigned char  m_Unrecovered1968[0x90];               // +0x1968
+    CEGUI::Window* m_pMainSocketGlowWindows[145]; // +0x1960 full original slot domain
 
     // image, added to m_pUnknown38 ("SSocketsO"), muted
-    CEGUI::Window* m_apItemSocketOverlayWindows[126];     // +0x19f8
     // One 145-entry main-slot block; indexed from +0x1de8 by setPetSlotIcon.
     CEGUI::Window* m_pSocketedSizeWindows[145]; // +0x1de8
-    long long      m_Unknown2270;                          // +0x2270
-    unsigned char  m_Unrecovered2278[0x90];               // +0x2278
+    CEGUI::Window* m_pMainStackWindows[145]; // +0x2270 full original slot domain
 
     // GuiLook/StaticText item-count label
-    CEGUI::Window* m_apItemCountWindows[126];              // +0x2308
     // Five complete 82-entry pet blocks. createMenus fills indices19..81;
     // setPetSlotIcon uses the original full-index domain from each true base.
     CEGUI::Window* m_pSlotWindows[82];         // +0x26f8

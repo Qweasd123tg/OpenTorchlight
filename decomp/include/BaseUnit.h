@@ -38,6 +38,7 @@ enum EBASEUNIT_TYPE
 class CBaseUnit : public CPositionableObject
 {
     friend class CEquipment;
+    friend class CEnchantMenu;
 public:
     CBaseUnit(CResourceManager* resourceManager, EBASEUNIT_TYPE type);
     virtual ~CBaseUnit();
@@ -119,6 +120,7 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
+    friend class CGameUI;
     unsigned int m_iUnitLevel;
     TArrayList<CUnitTheme*> m_ThemesToAdd;
     TArrayList<CUnitTheme*> m_ThemesToRemove;

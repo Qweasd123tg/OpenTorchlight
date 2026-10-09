@@ -12,6 +12,20 @@ class AssemblyScans(unittest.TestCase):
         expected = text.replace("value:\n", ".Ltlhybrid_dead_0:\n") + "\t.set\tvalue, 0x4000\n"
         self.assertEqual((expected, ["value"]), hybrid.rewrite_assembly(text, {"value": 0x4000, "function": 8}, True))
 
+    def test_gnu_unique_data_reuses_original_storage_identity(self):
+        # GCC emits this for UTF-16 basic_string's empty representation. A second
+        # blob-owned copy makes the original reserve() free non-heap storage.
+        text = ('.weak empty_rep\n.section .bss.empty_rep,"awG",@nobits,empty_rep,comdat\n'
+                '.type empty_rep, @gnu_unique_object\n.size empty_rep, 32\n'
+                'empty_rep:\n.zero 32\n.text\nmovq $empty_rep+24, %rax\n')
+        expected = text.replace('empty_rep:\n', '.Ltlhybrid_dead_0:\n') + '\t.set\tempty_rep, 0x1426440\n'
+        self.assertEqual((expected, ['empty_rep']), hybrid.rewrite_assembly(
+            text, {'empty_rep': 0x1426440}, False))
+
+    def test_object_type_prefix_is_not_a_data_declaration(self):
+        text = '.type lookalike, @gnu_unique_object_suffix\nlookalike:\n.zero 8\n'
+        self.assertEqual((text, []), hybrid.rewrite_assembly(text, {'lookalike': 16}, False))
+
     def test_common_data_and_prefix_lookalikes(self):
         text = "\t.comm value,8\n\u2003.lcomm local,16\n.commlook value,8\n.typelook ghost, @object\nghost:\n"
         expected = ".commlook value,8\n.typelook ghost, @object\nghost:\n\t.set\tlocal, 0x8000\n\t.set\tvalue, 0x4000\n"

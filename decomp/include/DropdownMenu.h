@@ -60,8 +60,8 @@ public:
     CSoundBank* m_pSoundBank;
     int m_iUnknown88;
     unsigned char m_gap8C[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown90[0x18] __attribute__((aligned(8)));
-    unsigned char m_UnknownA8[0x18] __attribute__((aligned(8)));
+    TArrayList<iMenuListener*> m_menuListeners;
+    TArrayList<iMenuListener*> m_pendingMenuListeners;
 };
 
 #endif

@@ -12,10 +12,12 @@
 #include "iMissile.h"
 
 class CAIManager;
+class CItem;
 class CGenericModel;
 class CCharacterSaveState;
 class CPathController;
 class CSkill;
+class CInventory;
 enum EJournalStatistic { EJournalStatistic_GEN_LAST = 0x7fffffff };
 
 // Partial: AI states of a character (character+0x330). Only the values used by
@@ -39,6 +41,8 @@ class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
+    CSkill* getKnownSpell(unsigned int);
+    std::wstring getSkillTabName(int);
     CEquipment* getWeaponInLeftHand();
     CCharacter(CResourceManager* resourceManager);
     virtual ~CCharacter();
@@ -118,6 +122,9 @@ public:
     int petIndex(CCharacter* pet);
     bool hasPet(CCharacter* pet);
 
+    bool castSkill(long long);
+    void setTargetItem(CItem*);
+    void setRenderBehind(bool);
     bool spendPerkPoint();
     bool spendSkillPoint();
     void spendMeleePoint();
@@ -127,6 +134,14 @@ public:
     float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
     bool isEnemy(CCharacter*);
     bool rollAttack(CLevel&, CCharacter*, CEquipment*, unsigned int, float, float, EDAMAGE_TYPES);
+    int minimumDamageForDisplay(bool,bool,bool);
+    int maximumDamageForDisplay(bool,bool,bool);
+    int getCriticalChance();
+    int getBlockChance();
+    int baseAC();
+    int AC();
+    int minimumAC();
+    int damageDefense(EDAMAGE_TYPES);
     int strength();
     int dexterity();
     int magic();
@@ -158,6 +173,7 @@ public:
     CAIManager* getAIManager() { return m_pAIManager; }
 
 private:
+    friend class CGameUI;
     char m_CharacterData[0x200-0x1e8];
 public:
     CGenericModel* m_pUnitModel;
@@ -189,7 +205,13 @@ private:
     int m_iUnusedStatPoints;
     int m_iUnusedSkillPoints;
     int m_iUnusedPerkPoints;
-    char m_CharacterData468[0x4a0 - 0x468];
+    char m_CharacterData468[0x490 - 0x468];
+    CInventory* m_pInventory;
+    char m_CharacterData498[8];
+    friend class CInventoryMenu;
+    friend class CPetMenu;
+    friend class CEnchantMenu;
+    friend class CCombineMenu;
     bool m_bCharacterFlag4A0;
     char m_CharacterData4A1[0x52e - 0x4a1];
     bool m_bInvulnerable;

@@ -17,6 +17,7 @@ class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
 {
 public:
+    void clearMouseClickUnits();
     void warpLevels(std::wstring dungeon, int delta, int depth, bool waypoint, std::wstring warpName, bool flag);
     virtual ~CGameClient();
     virtual void preRenderTargetUpdate(const Ogre::RenderTargetEvent&);

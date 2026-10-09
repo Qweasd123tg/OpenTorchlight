@@ -17,6 +17,7 @@
 #undef private
 #undef protected
 TL_ORIGINAL(void, originalEquipmentCombatStats, (CEquipment*,bool), "_ZN10CEquipment20calculateCombatStatsEb")
+extern "C" void recoveredEquipmentCombatStats(CEquipment*,bool) __asm__("_ZN10CEquipment20calculateCombatStatsEb");
 TL_FUNCTION(ecIsa,"_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE")
 TL_FUNCTION(ecInt,"_ZN10CDataGroup12GetDataValueERKSbIwSt11char_traitsIwESaIwEEi")
 TL_FUNCTION(ecFloat,"_ZN10CDataGroup12GetDataValueERKSbIwSt11char_traitsIwESaIwEEf")
@@ -117,7 +118,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     detour::Set patches;TL_REDIRECT(patches,ecIsa,&isa);TL_REDIRECT(patches,ecInt,&dataInt);TL_REDIRECT(patches,ecFloat,&dataFloat);TL_REDIRECT(patches,ecText,&dataText);TL_REDIRECT(patches,ecRandomInt,&randomInt);TL_REDIRECT(patches,ecRandomFloat,&randomFloat);TL_REDIRECT(patches,ecGraphManager,&graphManager);TL_REDIRECT(patches,ecGraph,&graph);TL_REDIRECT(patches,ecGraphValue,&graphValue);TL_REDIRECT(patches,ecAddEffect,&addEffect);TL_REDIRECT(patches,ecDestroyText,&destroyText);
     if(patches.failed())_exit(42);
     for(int repeat=0;repeat<2;++repeat){
-        bool skip=(c.seed/22)%2!=0;if(ours)object->calculateCombatStats(skip);else originalEquipmentCombatStats(object,skip);
+        bool skip=(c.seed/22)%2!=0;if(repeat==0){if(ours)autotest::invoke(out,&recoveredEquipmentCombatStats,object,skip);else autotest::invoke(out,&originalEquipmentCombatStats,object,skip);}else{if(ours)object->calculateCombatStats(skip);else originalEquipmentCombatStats(object,skip);}
         number(100+repeat);number(object->m_iMinimumDamage);number(object->m_iMaximumDamage);number(object->m_iUnknown338);number(object->m_iUnknown33C);number(object->m_iUnknown340);number(object->m_iUnknown28C);text(object->m_sUnknown400);real(object->m_fUnknown408);
         number(object->m_ElementalDamageTypes.size());for(unsigned i=0;i<object->m_ElementalDamageTypes.size();++i){number(object->m_ElementalDamageTypes[i]);number(object->m_ElementalDamageBonuses[i]);number(object->m_InherentElementalDamage[i]);}
         attackState(object->m_pAttackDescription);attackState(object->m_pAttackDescriptionOverride);number(effects.size());number(g_iTotalCountOfObjects-beforeCount);
@@ -132,11 +133,15 @@ void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c)
 }
 TL_TEST(equipment_combat_stats_differential){
     int failures=0;
+    autotest::Coverage coverage("equipment_combat_stats_differential",(uint64_t)(uintptr_t)&originalEquipmentCombatStats);
     for(unsigned n=0;n<1122;++n){
         Case c={n<792?n:((n-792)%66)+66,n<792?0u:1+(n-792)/66};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        int observation=coverage.observe(host,a,b);
+        bool ok=observation==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok)host->log("    comparison_kind=%d\n",observation);
         if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    combat %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
         TL_CHECK(failures,ok);
     }
+    coverage.report(host);
     host->log("    equipment combat stats: 1122 cases, two calls per side\n");return failures;
 }

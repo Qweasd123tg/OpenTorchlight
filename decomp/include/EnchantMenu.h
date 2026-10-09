@@ -1,0 +1,60 @@
+#ifndef ENCHANT_MENU_H
+#define ENCHANT_MENU_H
+#include "GameUI.h"
+#include "SubMenu.h"
+#include "iInventoryListener.h"
+class CItem; class CSoundBank;
+class CSettings; class CGenericModel; class CResourceManager;
+namespace Ogre { class SceneManager; class RenderWindow; }
+namespace CEGUI { class Window; class Imageset; }
+// Partial named layout; original allocation is 0x110 bytes.
+class CEnchantMenu : public CSubMenu, public iInventoryListener {
+public:
+ virtual ~CEnchantMenu();
+ void createMenus();
+ void mapEventHandlers(CEGUI::Window*);
+ bool handle_ItemClick(const CEGUI::EventArgs&);
+ bool handle_MouseThrough(const CEGUI::EventArgs&);
+ bool handle_MouseOver(const CEGUI::EventArgs&);
+ bool handle_MouseOut(const CEGUI::EventArgs&);
+ virtual void updateLayout();
+ void performInteraction();
+ void setSlotIcon(CEquipment*, int);
+ CEGUI::Window* m_pParent;
+ CEGUI::Window* m_pBackground;
+ CEGUI::Window* m_pPanel;
+ CEGUI::Window* m_pSocketedIconParent;
+ CEGUI::Window* m_pForeground;
+ CEGUI::Window* m_pTitle;
+ CEGUI::Window* m_pDescription;
+ CEGUI::Window* m_pAccept;
+ char gap58[8];
+ CCharacter* m_pCharacter;
+ CItem* m_pOwnerItem;
+ bool m_bOpen;
+ char gap71;
+ bool m_bInteractionComplete;
+ bool m_bRetirementComplete;
+ char gap74[4];
+ CSettings* m_pSettings;
+ CGameUI* m_pGameUI;
+ Ogre::SceneManager* m_pSceneManager;
+ Ogre::RenderWindow* m_pRenderWindow;
+ char gap98[8];
+ CGenericModel* m_pMenuModel;
+ CResourceManager* m_pResourceManager;
+ char gapB0[8];
+ CSoundBank* m_pSoundBank;
+ int m_aiSlotData[1];
+ int m_aiLocalSlotData[1];
+ CEGUI::Window* m_pMainGlowWindows[1];
+ CEGUI::Window* m_pMainSocketGlowWindows[1];
+ CEGUI::Window* m_pSocketedSizeWindows[1];
+ CEGUI::Window* m_pMainStackWindows[1];
+ char gapE8[0xf8-0xe8];
+ CEGUI::Imageset* m_pImageset;
+ CEGUI::Window* m_pSlotGlow;
+ char gap108[4];
+ int m_iMode;
+};
+#endif

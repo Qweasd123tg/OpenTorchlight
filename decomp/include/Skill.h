@@ -16,6 +16,20 @@ class CSkillManager;
 class CSkill : public CRunicCore, public iUnitObserver
 {
 public:
+    void fillOutStatBonuses(float (&values)[6], bool, unsigned int);
+    const std::wstring& getName();
+    const std::wstring& getSkillUsageDescription();
+    int getSkillLevelCooldown(CBaseUnit*, unsigned int);
+    int getSkillLevelManaCost(CBaseUnit*, unsigned int);
+    int getSkillLevelManaCostOT(CBaseUnit*, unsigned int);
+    std::wstring getSkillLevelDescription(CBaseUnit*, unsigned int);
+    std::wstring getSkillTypeDisplayName();
+    const std::wstring& getSkillIcon();
+    const std::wstring& getSkillIconInactive();
+    const std::wstring& getSkillRequiredForInvestment();
+    const std::wstring& getDisplayName();
+    unsigned int getLevelRequiredForInvestment();
+    void calculateEffectiveSkillLevel();
     CSkill(CResourceManager* resourceManager, CDataGroup* dataGroup);
     virtual ~CSkill();
     void assignSkillAnimations(CBaseUnit* unit);
@@ -37,15 +51,21 @@ private:
     CSkillManager* m_pSkillManager;
     char m_SkillData28[0x30 - 0x28];
     CBaseUnit* m_pOwner;
-    char m_SkillData38[0x6b - 0x38];
+    char m_SkillData38[0x60 - 0x38];
+    ESKILL_ACTIVATION_TYPE m_eActivationType; // 0x60
+    char m_SkillData64[0x6b - 0x64];
     // Set on skills that CExecuteSkillProps adds to a skill manager.
     bool m_bExecutedByProperty;
     char m_SkillData6C;
     bool m_bEnabled;
-    char m_SkillData2[0xd0 - 0x6e];
+    char m_SkillData2[0xa8 - 0x6e];
+    unsigned int m_iSkillLevelCount; // 0xa8
+    char m_SkillDataAC[0xd0 - 0xac];
     std::wstring m_sRequiredSkill;
     unsigned int m_iRequiredLevel;
-    char m_SkillDataDC[0x10c - 0xdc];
+    char m_SkillDataDC[4];
+    unsigned int m_iEffectiveSkillLevel; // 0xe0
+    char m_SkillDataE4[0x10c - 0xe4];
     int m_iColumn;
     int m_iRow;
     int m_iPane;
@@ -57,7 +77,13 @@ private:
     std::wstring m_sAnimationOverrideDW;
     std::wstring m_sLoopAnimationOverride;
     std::wstring m_sLoopAnimationOverrideDW;
-    char m_SkillData148[0x160 - 0x148];
+    char m_SkillData148[8];
+    long long m_Guid;
+    unsigned int m_iDisplayedMaxRank; // 0x158, fallback to level count if zero
+    char m_SkillData15C[4];
+    friend class CInventoryMenu;
+    friend class CPetMenu;
+    friend class CSkillTooltip;
     friend class CBaseUnit;
     friend class CEquipment;
     friend class CExecuteSkillProps;

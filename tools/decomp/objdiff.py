@@ -330,9 +330,56 @@ class Normalizer:
                 return count
         return None
 
+    @classmethod
+    def memory_table_size(cls, k, insns, register):
+        """A dominating unsigned memory guard followed by its immediate load.
+
+        Narrow GCC idiom: cmp[lq] immediate, cell; jbe/jb/ja/jae; then
+        mov the *same cell* into the table index, with only padding before jmp.
+        No intervening writes, calls, base changes or alternative entries.
+        """
+        index = cls.register(register or '')
+        if not index or index[1] != 64:
+            return None
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        for compare in range(k - 1, -1, -1):
+            _, op, operand = insns[compare]
+            match = re.fullmatch(r'\$0x([0-9a-f]+),((?:-?0x[0-9a-f]+)?\(%(?:rdi|rsi|rdx|rcx|rbx|rbp|r8|r9|r10|r11|r12|r13|r14|r15)\))', operand)
+            if not match or op not in ('cmpl', 'cmpq'):
+                continue
+            width = 32 if op == 'cmpl' else 64
+            guard = compare + 1
+            while guard < k and cls.padding(insns[guard][1], insns[guard][2]):
+                guard += 1
+            if guard >= k:
+                continue
+            _, jump, target_operand = insns[guard]
+            if jump not in ('ja', 'jae', 'jbe', 'jb'):
+                continue
+            taken = positions.get(cls.direct_target(target_operand))
+            if taken is None:
+                continue
+            count = int(match[1], 16) + (jump in ('ja', 'jbe'))
+            inside, outside = ((guard + 1, taken) if jump in ('ja', 'jae') else (taken, guard + 1))
+            if (not 0 < count <= 4096 or not inside < k
+                    or cls.reaches_without(0, guard, compare, insns)
+                    or cls.reaches_without(0, k, guard, insns)
+                    or cls.reaches_without(outside, k, guard, insns)):
+                continue
+            path = [(m, p) for _, m, p in insns[inside:k] if not cls.padding(m, p)]
+            if len(path) != 1 or path[0][0] not in ('mov', 'movl', 'movq'):
+                continue
+            source, _, destination = path[0][1].rpartition(',')
+            dest = cls.register(destination)
+            if source == match[2] and dest and dest[0] == index[0] and dest[1] == width:
+                return count
+        return None
+
     def jump_table(self, k, entries, register, start, end, offsets, insns):
         """Compare every entry of a proved range; missing targets forbid MATCH."""
         count = self.table_size(k, insns, register)
+        if count is None:
+            count = self.memory_table_size(k, insns, register)
         if count is None:
             self.unverified.append("jump table index range unverified")
             return f"jmp *[unverified-table:range](,{register},8)"
@@ -616,7 +663,9 @@ def object_functions(obj_path, resolve=None, name_at=None, globalized=()):
             reasons.append(eh)
         result[sym.name] = {"size": sym.size, "bind": bind, "norm": norm,
                             "metadata_reasons": reasons,
-                            "personalities": frames.personalities(sym.value, sym.size, sym.shndx)}
+                            "personalities": frames.personalities(sym.value, sym.size, sym.shndx),
+                            "cleanup_eh": objdiff_eh.cleanup_signature(
+                                obj, frames, sym.value, sym.size, insns, sym.shndx)}
     return result
 
 
@@ -734,6 +783,21 @@ class Original:
             if reason:
                 reasons.append(reason)
             return reasons
+
+    def cleanup_eh(self, f):
+        with self._lock:
+            cache = self.__dict__.setdefault("_cleanup_eh_cache", {})
+            if f["address"] not in cache:
+                start = int(f["address"], 16)
+                if self.frames.reason(start, f["size"]) != "EH LSDA equivalence unverified":
+                    cache[f["address"]] = None
+                else:
+                    end = start + f["size"]
+                    insns = parse_insns(run_objdump([f"--start-address={start:#x}",
+                                                     f"--stop-address={end:#x}", str(self.image.path)]))
+                    cache[f["address"]] = objdiff_eh.cleanup_signature(
+                        self.image, self.frames, start, f["size"], insns)
+            return cache[f["address"]]
 
 
 NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
@@ -853,6 +917,11 @@ def compare_source(source, original, show=None, extra=(), quiet=False, *, scores
         metadata_reasons = list(dict.fromkeys(mine["metadata_reasons"] + original.metadata_reasons(f)))
         if mine["personalities"] != original.frames.personalities(int(f["address"], 16), f["size"]):
             metadata_reasons.append("EH personality differs")
+        cleanup_equal = (mine.get("cleanup_eh") is not None
+                         and mine["cleanup_eh"] == original.cleanup_eh(f))
+        if cleanup_equal:
+            metadata_reasons = [reason for reason in metadata_reasons
+                                if reason != "EH LSDA equivalence unverified"]
         seen.add(f["address"])
         if mine["norm"] == theirs and not metadata_reasons:
             status, score = "MATCH", 1.0
@@ -865,6 +934,8 @@ def compare_source(source, original, show=None, extra=(), quiet=False, *, scores
                "object_digest": object_digest}
         if metadata_reasons:
             row["metadata_reasons"] = metadata_reasons
+        if cleanup_equal:
+            row["eh_verified"] = "gcc447-cleanup-v1"
         if score is not None:
             row["score"] = round(score, 4)
         rows.append(row)

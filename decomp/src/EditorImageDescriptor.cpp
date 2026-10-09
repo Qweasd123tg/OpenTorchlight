@@ -49,3 +49,9 @@ void CEditorImageDescriptor::InputLogicEvent(CEditorBaseObject* param_1, unsigne
         }
     }
 }
+
+void CEditorImageDescriptor::descriptorSceneActivated(CEditorScene* value)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        static_cast<CEditorImage*>(m_Objects[i])->activate();
+}

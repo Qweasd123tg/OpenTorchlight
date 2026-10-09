@@ -21,6 +21,8 @@ public:
     CSkill* addSkill(const std::wstring& name,bool flag);
     CSkill* addSkill(CSkill* skill,bool flag1,bool flag2);
     CSkill* getSkill(const std::wstring& name);
+    float getSkillCoolingTime(CSkill*);
+    CSkill* getSkillByGuid(long long);
     CSkill* getSkill(const std::wstring& name,int level);
     void update(float elapsed);
     void setSkillLevel(CSkill* skill,unsigned int level);

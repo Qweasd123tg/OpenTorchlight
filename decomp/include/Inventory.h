@@ -6,6 +6,7 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include <string>
+#include <vector>
 #include "BaseUnit.h"
 #include "EquipmentRef.h"
 #include "Character.h"
@@ -29,12 +30,12 @@ public:
     void updateBonuses();
     int getPaneIndex(EINVENTORY_PANES);
     int getPaneSize(EINVENTORY_PANES);
-    unsigned int slotIsInPane(unsigned int, int);
+    bool slotIsInPane(unsigned int, int);
     int itemsInPane(EINVENTORY_PANES);
     int getItemPane(unsigned int);
     long long isEquipmentInInventory(CEquipment*);
     long long EquipmentsInSlot(unsigned int);
-    long long getEquipmentInSlot(unsigned int);
+    CEquipment* getEquipmentInSlot(unsigned int);
     long getEquipmentRefInSlot(unsigned int);
     int findEquipmentSlot(CEquipment*);
     long long getEquipmentEquippedAt(EEQUIP_LOCATIONS);
@@ -51,7 +52,7 @@ public:
     int findFreeSlot(CEquipment*);
     bool canPickup(CEquipment*, bool);
     long long canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool);
-    long long canEquip(CEquipment*, bool);
+    bool canEquip(CEquipment*, bool);
     void getComparisonItems(CEquipment*, CEquipment**, CEquipment**);
     int getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
     void executeProcs(EEFFECT_TYPE, CBaseUnit*);
@@ -74,11 +75,11 @@ public:
     long long unequipEquipment(CEquipment*);
     void verifyEquipment();
     CEquipment* pickupEquipment(CEquipment*, int, bool);
-    long long pickupEquipment(CEquipment*, bool);
+    CEquipment* pickupEquipment(CEquipment*, bool);
     long long useEquipment(CEquipment*, CCharacter*);
     long long removeEquipmentByGuid(long long, unsigned int, bool);
     long long equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS);
-    long long equipEquipmentIntoFirstFreeLocation(CEquipment*);
+    bool equipEquipmentIntoFirstFreeLocation(CEquipment*);
     void swapWeaponSet();
     CInventory(CCharacter*, unsigned int);
 
@@ -93,12 +94,9 @@ public:
     unsigned char m_gap2C[0x4] __attribute__((aligned(4)));
     unsigned char m_Unknown30[0x18] __attribute__((aligned(8)));
     unsigned char m_Unknown48[0x18] __attribute__((aligned(8)));
-    long long m_Unknown60;
-    long long m_iUnknown68;
-    void* m_pUnknown70;
-    void* m_pUnknown78;
-    long long m_iUnknown80;
-    void* m_pUnknown88;
+    // Original _M_insert_aux instantiations identify these vectors.
+    std::vector<EINVENTORY_PANES> m_panes;
+    std::vector<unsigned int> m_paneStarts;
     long long m_Unknown90;
     unsigned char m_gap98[0x8] __attribute__((aligned(8)));
     void* m_pUnknownA0;

@@ -46,7 +46,7 @@ CEditorButtonDescriptor::~CEditorButtonDescriptor()
 
 void CEditorButtonDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param)
 {
-    CEditorImage* image = dynamic_cast<CEditorImage*>(object);
+    CEditorButton* image = dynamic_cast<CEditorButton*>(object);
 
     if (image != NULL) {
         switch (event) {
@@ -69,4 +69,10 @@ void CEditorButtonDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigne
 CEditorBaseObject* CEditorButtonDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CEditorButton(scene->getResourceManager());
+}
+
+void CEditorButtonDescriptor::descriptorSceneActivated(CEditorScene* value)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        static_cast<CEditorImage*>(m_Objects[i])->activate();
 }

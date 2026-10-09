@@ -100,3 +100,48 @@ void CCharacter::giveGold(int amount)
 
     pMaster->m_iGold = pMaster->m_iGold < 0 ? 0 : pMaster->m_iGold;
 }
+void CCharacter::openPortal(CLevel& level)
+{
+}
+
+void CCharacter::openMapPortal(std::wstring dungeon, CLevel& level)
+{
+}
+
+void CCharacter::catchFish()
+{
+}
+
+void CCharacter::fishingAI(float elapsed, CLevel& level)
+{
+}
+
+void CCharacter::reactToDamage(CCharacter* attacker, bool critical)
+{
+}
+
+void CCharacter::equipmentDropped(CEquipment* equipment)
+{
+}
+
+void CCharacter::equipmentUsed(CEquipment* equipment)
+{
+}
+
+void CCharacter::missileBeingFired(CMissile* missile)
+{
+}
+
+void CCharacter::missileDieing(CMissile* missile)
+{
+}
+
+bool CCharacter::missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position, float damageScale, float effectScale)
+{
+    return false;
+}
+
+bool CCharacter::getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter* target)
+{
+    return true;
+}

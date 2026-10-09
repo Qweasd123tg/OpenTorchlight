@@ -276,6 +276,11 @@ class Stage:
             units = toolchain.parallel_map(lambda p: objdiff.compare_source(p, original, quiet=True, scores=False), sources)
             if any(unit.get("unknown") for unit in units):
                 raise RuntimeError("final sources contain unknown original signatures")
+            # Reject impossible structural changes before compiling/running the
+            # expensive fixtures. This grants no behavioral coverage: the full
+            # preservation check below still runs with fresh execution evidence.
+            self._preserve(baseline_units, units, set(), final_state,
+                           db=getattr(original, "db", {}), structural_only=True)
             tests = sorted((self.path / "decomp/hybrid/tests").glob("*.cpp"))
             tests += sorted((self.path / "build-decomp/hybrid/autotests").glob("*.cpp"))
             count = len(tests)
@@ -324,7 +329,7 @@ class Stage:
             os.environ.pop("OTL_EXTRA_INCLUDE", None)
             return evidence.input_digest(elfdb.load_db(), root=self.path)
 
-    def _preserve(self, baseline_units, final_units, covered, final_state, baseline_covered=(), db=None):
+    def _preserve(self, baseline_units, final_units, covered, final_state, baseline_covered=(), db=None, structural_only=False):
         db = db or {}
         functions = db.get("functions", {})
         def definitions(units):
@@ -342,19 +347,28 @@ class Stage:
         before, after = definitions(baseline_units), definitions(final_units)
         # An unchanged instruction stream is insufficient for EH and data.
         # Unknown existing definitions are allowed only with the same full object
-        # and environment, or a fresh comparison of this final build.
+        # and runtime/build policy, or a fresh comparison of this final build.
+        # Header/ownership edits are not changes to an already compiled object:
+        # the SHA-256 below covers its complete bytes (code, data, relocations, EH).
+        # Any affected object still changes digest and requires fresh evidence.
+        # This preserves an UNACCEPTED definition; it never accepts one.
         # Tests may be added for a new candidate without changing an unrelated,
         # still unaccepted definition. This is not reuse of a behavioral receipt:
         # previously accepted DIFFs must appear in the new executed comparisons.
         context = lambda state: {key: value for key, value in state.items()
                                  if not key.startswith(("decomp/src/", "decomp/hybrid/tests/"))
-                                 and key != "decomp/autotests.json"}
+                                 and not key.startswith("decomp/include/")
+                                 and key not in ("decomp/autotests.json", "decomp/owners.json")}
         same_context = context(self.baseline) == context(final_state)
         for key, old_rows in before.items():
             if key not in after:
-                # Compiler extras are absent from the hook table and may disappear.
-                if all(row["status"] == "EXTRA" and self._compiler_extra(row.get("name", ""))
-                       for row, _ in old_rows):
+                # An EXTRA without an original symbol is never a game hook.
+                # Inlining an existing SDK helper may remove that out-of-line
+                # definition. The final link above checks remaining references;
+                # dropping it does not accept a replacement or lose a game body.
+                original_names = {n for f in functions.values() for n in f.get("names", [])}
+                if all(row["status"] == "EXTRA" and not row.get("address")
+                       and row.get("name") not in original_names for row, _ in old_rows):
                     continue
                 raise RuntimeError("existing definition disappeared: " + str(key[2] or key[1]))
         for key, rows in after.items():
@@ -374,6 +388,8 @@ class Stage:
                     if invented:
                         raise RuntimeError("invented game definition: " + name)
                     raise RuntimeError("unsupported extra definition: " + name)
+                if structural_only:
+                    continue
                 if row["status"] == "MATCH" or address in covered:
                     continue
                 if not old_rows:
@@ -395,7 +411,11 @@ class Stage:
     def _helper_extra(cls, name):
         # Only pinned standard-library template namespaces and GCC initialization
         # scaffolding. Game helpers are not accepted merely because they are weak.
-        return cls._compiler_extra(name) or bool(re.match(
+        # GCC's Sb substitution encodes std::basic_string, rather than NSt.
+        # This exact UTF-16 allocator cleanup is emitted by the pinned libstdc++
+        # header through Ogre::UTFString. Do not allow arbitrary Sb members.
+        utf16_cleanup = "_ZNSbItSt11char_traitsItESaItEE4_Rep10_M_disposeERKS1_"
+        return name == utf16_cleanup or cls._compiler_extra(name) or bool(re.match(
             r"^_Z(?:St|N[KVR]*(?:St|9__gnu_cxx))\d+[A-Za-z_][A-Za-z_0-9]*I", name))
 
     def rebase(self, validate=False, coverage_provider=None):

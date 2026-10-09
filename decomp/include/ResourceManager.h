@@ -1,3 +1,4 @@
+class CGameUI;
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
@@ -25,12 +26,15 @@ class CMissilePreloader;
 class CResourceManager : public CRunicCore
 {
 public:
+    CGameUI* getGameUI();
     CMissilePreloader* getMissilePreloader();
     CParticle* createParticle(const wchar_t* name);
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();
 
+    CDataGroup* getUnitDataByGuid(long long);
     CBaseUnit* createUnit(long long guid,int level,bool flag1,bool flag2);
+    CBaseUnit* createUnit(CDataGroup*,int,bool,bool);
     void createAffixesForUnit(CBaseUnit* unit,unsigned int level,unsigned int count);
     bool getEditorIsRunning();
     CGenericModel* createGenericModel(Ogre::SceneManager*,const wchar_t*,const wchar_t*,bool,bool,bool);

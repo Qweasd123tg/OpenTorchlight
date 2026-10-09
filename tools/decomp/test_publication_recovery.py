@@ -312,11 +312,11 @@ class Preservation(SyntheticStage):
             stage = publication.Stage(root)
             self.validate(stage, self.comparator(root, old_status="DIFF"))
 
-    def test_equal_unknown_instructions_do_not_preserve_changed_environment(self):
+    def test_equal_object_does_not_preserve_changed_compiler_policy(self):
         with tempfile.TemporaryDirectory() as folder:
             root = fixture(folder)
             stage = publication.Stage(root)
-            (stage.path / "decomp/include/Shared.h").write_text("99")
+            (stage.path / "decomp/config.json").write_text('{"cflags":["-O0"]}')
             with self.assertRaisesRegex(RuntimeError, "existing DIFF changed"):
                 self.validate(stage, self.comparator(root, old_status="DIFF", same_object=True))
 

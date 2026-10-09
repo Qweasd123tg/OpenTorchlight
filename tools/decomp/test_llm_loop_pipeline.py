@@ -358,11 +358,25 @@ class Pipeline(unittest.TestCase):
         self.assertIn("No existing declaration of direct callee", self.result()["blocked"]["0x2"])
         self.model_class.assert_not_called()
 
+    def test_wrong_overload_blocks_preparation_before_model(self):
+        self.context_packet()
+        self.loop.prepare_only = True
+        self.loop.db["tus"].append({"id": 2, "name": "Dependency.cpp", "kind": "game"})
+        callee = dict(function("0x20", "CCallee::value(CDataGroup*)", tu=2),
+                      scope="CCallee", method="value", params="CDataGroup*", cv="")
+        self.loop.db["functions"]["0x20"] = callee
+        (self.root / "decomp/include/Callee.h").write_text("class CCallee { public: int value(long long); };\n")
+        with patch("llm_packet.asm_of", return_value="2: call 20\n7: ret"):
+            self.loop.run()
+        self.assertIn("No existing declaration of direct callee", self.result()["blocked"]["0x2"])
+        self.assertFalse((self.loop.work / "prompts/0x2.md").exists())
+        self.model_class.assert_not_called()
+
     def test_real_packet_automatically_supplies_known_dependency_and_data(self):
         self.context_packet()
         self.loop.prepare_only = True
         self.loop.db["tus"].append({"id": 2, "name": "Dependency.cpp", "kind": "game"})
-        callee = dict(function("0x20", "CCallee::value()", tu=2), scope="CCallee", method="value")
+        callee = dict(function("0x20", "CCallee::value()", tu=2), scope="CCallee", method="value", params="", cv="")
         self.loop.db["functions"]["0x20"] = callee
         self.loop.db["globals"] = [{"address": "0x6000", "name": "gBalance", "size": 4, "bind": "global"}]
         (self.root / "decomp/include/Callee.h").write_text("class CCallee { public: int value(); int balance; };\n")

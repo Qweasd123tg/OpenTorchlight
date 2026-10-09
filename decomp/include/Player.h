@@ -10,6 +10,8 @@ class CPlayer : public CCharacter
 {
 public:
     bool addWaypoint(std::wstring dungeon, int depth);
+    void soldItem(CEquipment*);
+    void incrementJournalStatistic(EJournalStatistic,int);
     void attemptToStopPlayerSkill(bool force);
     virtual ~CPlayer();
     virtual void unitInit(CDataGroup*, bool);

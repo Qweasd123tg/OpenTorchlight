@@ -55,6 +55,7 @@ SECTIONS
   .eh_frame : {{ KEEP(*(.eh_frame)) LONG(0) }}
   .gcc_except_table : {{ *(.gcc_except_table .gcc_except_table.*) }}
   .tlhybrid.hooks : {{ KEEP(*(.tlhybrid.hooks)) }}
+  .tlhybrid.comparisons : {{ KEEP(*(.tlhybrid.comparisons)) }}
   .tlhybrid.tests : {{ KEEP(*(.tlhybrid.tests)) }}
   .tlhybrid.imports : {{ KEEP(*(.tlhybrid.imports)) }}
   .tlhybrid.copies : {{ KEEP(*(.tlhybrid.copies)) }}
@@ -101,7 +102,7 @@ class Context:
 
 
 SECTION_DIRECTIVE = re.compile(r"^\s*\.(text|data|bss|section\s+([^,\s]+).*|previous|pushsection\s+([^,\s]+).*|popsection)\s*$")
-OBJECT_DIRECTIVE = re.compile(r"^\s*\.type\s+([^,\s]+),\s*@object")
+OBJECT_DIRECTIVE = re.compile(r"^\s*\.type\s+([^,\s]+),\s*@(?:gnu_unique_)?object\b")
 COMM_DIRECTIVE = re.compile(r"^\s*\.(?:comm|lcomm)\s+([^,\s]+),")
 ASM_LABEL = re.compile(r"^([^\s:.][^\s:]*):\s*$")
 QUAD_DIRECTIVE = re.compile(r"^\s*\.quad\s")
@@ -236,14 +237,36 @@ def originals_script(ctx, extra_aliases):
     return "\n".join(lines) + "\n", seen
 
 
-def hooks_assembly(hooks):
-    out = ["\t.section .tlhybrid.hooks,\"a\",@progbits", "\t.align 8"]
+def hooks_assembly(hooks, section=".tlhybrid.hooks", prefix="hook"):
+    out = [f"\t.section {section},\"a\",@progbits", "\t.align 8"]
     names = ["\t.section .rodata.tlhybrid_names,\"a\",@progbits"]
     for i, hook in enumerate(hooks):
-        out.append(f"\t.quad {hook['original']:#x}, {hook['symbol']}, .Ltlhybrid_name_{i}")
+        out.append(f"\t.quad {hook['original']:#x}, {hook['symbol']}, .Ltlhybrid_{prefix}_name_{i}")
         out.append("\t.byte " + ", ".join(f"{b:#x}" for b in hook["expected"]))
-        names.append(f".Ltlhybrid_name_{i}:\n\t.string \"{hook['demangled'][:200]}\"")
+        names.append(f".Ltlhybrid_{prefix}_name_{i}:\n\t.string \"{hook['demangled'][:200]}\"")
     return "\n".join(out + names) + "\n"
+
+
+def comparison_entries(ctx, defined, hooks):
+    """Callable emitted definitions outside their historical TU are testable too.
+
+    These entries never patch the original executable. They bind real linked
+    production symbols for execution receipts; test-only definitions are excluded.
+    """
+    by_name = {name: f for f in ctx.functions.values() for name in f["names"]
+               if f["kind"] != "compiler"}
+    hooked = {(h["original"], h["symbol"]) for h in hooks}
+    rows = []
+    for name in sorted(defined):
+        f = by_name.get(name)
+        if not f:
+            continue
+        address = int(f["address"], 16)
+        if (address, name) in hooked:
+            continue
+        rows.append({"original": address, "symbol": name, "demangled": f["demangled"],
+                     "expected": list(ctx.image.read(address, 8))})
+    return rows
 
 
 C_LOCALE = {**os.environ, "LC_ALL": "C"}
@@ -387,7 +410,8 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
             print(f"  {source.relative_to(ROOT)}: {len(redirected)} data symbols redirected, {unit_hooks} hooks")
 
     hooks_s = out / "hooks.s"
-    hooks_s.write_text(hooks_assembly(hooks))
+    comparisons = comparison_entries(ctx, production_defined, hooks)
+    hooks_s.write_text(hooks_assembly(hooks) + hooks_assembly(comparisons, ".tlhybrid.comparisons", "comparison"))
     toolchain.assemble(hooks_s, out / "hooks.o")
     script, provided = originals_script(ctx, [])
     (out / "originals.ld").write_text(script)
@@ -421,6 +445,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
     manifest = {"schema": 1, "original_elf_sha256": ctx.image.sha256, "blob_base": f"{BLOB_BASE:#x}",
                 "hooks": [{k: (f"{v:#x}" if k == "original" else v) for k, v in h.items() if k != "expected"}
                           for h in hooks],
+                "comparison_only": [{"original": f"{h['original']:#x}", "symbol": h["symbol"]} for h in comparisons],
                 "runtime_imports": [n for n in missing if n not in copies],
                 "runtime_copies": sorted(copies), "notes": notes}
     manifest["standalone_residual"] = {
