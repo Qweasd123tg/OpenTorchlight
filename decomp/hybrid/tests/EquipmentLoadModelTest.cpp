@@ -16,6 +16,7 @@
 #include "AutoTest.h"
 #include "Detour.h"
 TL_ORIGINAL(void, originalEquipmentLoadModel, (CEquipment*,std::wstring,std::wstring), "_ZN10CEquipment9loadModelESbIwSt11char_traitsIwESaIwEES3_")
+extern "C" void recoveredEquipmentLoadModel(CEquipment*,std::wstring,std::wstring) __asm__("_ZN10CEquipment9loadModelESbIwSt11char_traitsIwESaIwEES3_");
 TL_FUNCTION(lmUnload,"_ZN10CEquipment11unloadModelEv")
 TL_FUNCTION(lmCreate,"_ZN16CResourceManager18createGenericModelEPN4Ogre12SceneManagerEPKwS4_bbb")
 TL_FUNCTION(lmRim,"_ZN13CGenericModel14setRimLightingESbIwSt11char_traitsIwESaIwEE")
@@ -30,7 +31,7 @@ LM_AT(CLevel,m_pLevelTemplateData,0x1d8);LM_AT(CLevelTemplateData,m_sRimlightTex
 #undef LM_AT
 typedef char template_size[sizeof(CLevelTemplateData)==0x778?1:-1];
 typedef char equipment_size[sizeof(CEquipment)==0x438?1:-1];
-struct Case {unsigned seed,mode;};
+struct Case {unsigned seed,mode,warm;};
 const Case* input;autotest::Capture* capture;CEquipment* object;
 CResourceManager* resources[2];CLevel* levels[2];CDataGroup* groups[2];CGenericModel* models[2];Ogre::Entity* entities[2];Ogre::SceneNode* nodes[5];
 unsigned perCallCreated,totalCreated,singleCalls;int queue[2];bool shadows[2];std::wstring rims[2];
@@ -61,6 +62,12 @@ void populate(CDataGroup& g,unsigned n,bool alternate){
     if(n%4)put(g,L"TEXTURE_OVERRIDE",alternate?L"alt.dds":n%3?L"main.dds":L"");
     for(unsigned i=0;i<(n+(alternate?2:0))%5;++i){CDataGroup* r=g.AddDataGroup(L"TEXTURE_REPLACE");if(i%3)put(*r,L"NAME",i%2?L"mesh_\x416":std::wstring(L"mesh\0ignored",12));if(i%2)put(*r,L"TEXTURE",L"replacement.dds");}
 }
+struct Snapshot {
+ std::vector<unsigned char> bytes;
+ Snapshot(const void* p,size_t n):bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}
+ void pointer(size_t offset,uintptr_t value){if(offset+sizeof(value)>bytes.size())_exit(62);std::memcpy(&bytes[offset],&value,sizeof(value));}
+ void emit(){capture->add(&bytes[0],bytes.size());}
+};
 void side(const Case& c,bool ours,autotest::Capture& out){
     input=&c;capture=&out;perCallCreated=totalCreated=singleCalls=0;queue[0]=queue[1]=-1;shadows[0]=shadows[1]=true;rims[0]=rims[1]=L"old";
     Ogre::LogManager logger;Ogre::Log* log=logger.createLog("equipment-loadmodel-test",true,false,true);Logs listener;log->addListener(&listener);
@@ -83,21 +90,31 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     static const wchar_t* meshes[]={L"",L"media\\raw//model.mesh",L"\x416\U0001f525.mesh",L"no extension",L"plain.mesh",L"last"};std::wstring mesh=meshes[(c.seed/4)%6],second=(c.seed/16)%4==0?L"":(c.seed/16)%4==1?L"override\\raw//part.mesh":(c.seed/16)%4==2?L"short":L"\x416";
     if(c.seed%17==0)mesh=std::wstring(L"model\0ignored",13);if(c.seed%19==0)second=std::wstring(L"part\0ignored",12);
     detour::Set patches;TL_REDIRECT(patches,lmUnload,&unload);TL_REDIRECT(patches,lmCreate,&create);TL_REDIRECT(patches,lmRim,&rim);TL_REDIRECT(patches,lmShadows,&shadow);TL_REDIRECT(patches,lmTexture,&texture);TL_REDIRECT(patches,lmSingle,&single);if(patches.failed())_exit(42);
-    for(unsigned repeat=0;repeat<2;++repeat){
-        if(ours)object->loadModel(mesh,second);else originalEquipmentLoadModel(object,mesh,second);
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){
+        if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentLoadModel,object,mesh,second);else autotest::invoke(out,&originalEquipmentLoadModel,object,mesh,second);}
+        else {if(ours)object->loadModel(mesh,second);else originalEquipmentLoadModel(object,mesh,second);}
         number(100+repeat);number(modelId(object->m_pUnitModel));number(modelId(object->m_pUnitModelSecondary));number(nodeId(primaryNode.getParent()));number(nodeId(secondaryNode.getParent()));number(equipmentNode.numChildren());number(oldParent.numChildren());number(otherParent.numChildren());number(object->m_bRequestedVisible);number(totalCreated);number(singleCalls);
         for(unsigned i=0;i<2;++i){number(queue[i]);number(shadows[i]);text(rims[i]);real(models[i]->m_vPosition.x);real(models[i]->m_vPosition.y);real(models[i]->m_vPosition.z);}
     }
+    Snapshot eq(object,sizeof(*object));eq.pointer(0,*reinterpret_cast<void***>(object)==equipmentVtable?1:2);eq.pointer(0x58,nodeId(object->m_pSceneNode)+1);eq.pointer(0x68,object->m_pResourceManager==resources[0]?1:object->m_pResourceManager==resources[1]?2:object->m_pResourceManager?3:0);eq.pointer(0x1b0,object->m_pDataGroup==groups[0]?1:object->m_pDataGroup==groups[1]?2:3);eq.pointer(0x2b0,modelId(object->m_pUnitModel)+1);eq.pointer(0x2b8,modelId(object->m_pUnitModelSecondary)+1);eq.emit();
+    for(unsigned i=0;i<2;++i){
+        Snapshot m(models[i],sizeof(CGenericModel));m.pointer(0,*reinterpret_cast<void***>(models[i])==modelVtable?1:2);m.pointer(0x58,nodeId(models[i]->m_pSceneNode)+1);m.pointer(0x60,models[i]->m_pEntity==entities[0]?1:models[i]->m_pEntity==entities[1]?2:models[i]->m_pEntity?3:0);m.emit();
+        Snapshot e(entities[i],sizeof(Ogre::Entity));e.pointer(0,*reinterpret_cast<void***>(entities[i])==entityVtable?1:2);e.emit();
+        Snapshot r(resources[i],sizeof(CResourceManager));r.pointer(__builtin_offsetof(CResourceManager,m_pLevel),resources[i]->m_pLevel==levels[0]?1:resources[i]->m_pLevel==levels[1]?2:resources[i]->m_pLevel?3:0);r.emit();
+        Snapshot l(levels[i],sizeof(CLevel));l.pointer(0x1d8,levels[i]->m_pLevelTemplateData==templates[0]?1:levels[i]->m_pLevelTemplateData==templates[1]?2:levels[i]->m_pLevelTemplateData?3:0);l.emit();
+        Snapshot td(templates[i],sizeof(CLevelTemplateData));td.pointer(0x6d8,templates[i]->m_sRimlightTexture.empty()?0:1);td.emit();text(templates[i]->m_sRimlightTexture);
+        std::vector<CDataGroup*> replacements;groups[i]->GetDataGroupsMatchingName(L"TEXTURE_REPLACE",&replacements);number(replacements.size());for(unsigned j=0;j<replacements.size();++j){text(replacements[j]->GetDataValue(L"NAME",L""));text(replacements[j]->GetDataValue(L"TEXTURE",L""));}
+    }
+    for(unsigned i=0;i<5;++i){number(nodeId(nodes[i]->getParent()));number(nodes[i]->numChildren());for(unsigned j=0;j<nodes[i]->numChildren();++j)number(nodeId(nodes[i]->getChild(j)));const Ogre::Vector3& p=nodes[i]->getPosition();real(p.x);real(p.y);real(p.z);}
     patches.restore();for(unsigned i=0;i<2;++i)templates[i]->m_sRimlightTexture.~Text();log->removeListener(&listener);
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
 TL_TEST(equipment_loadmodel_differential){
-    int failures=0;
-    for(unsigned n=0;n<960;++n){Case c={n<576?n:4+(n-576)%64,n<576?0u:1+(n-576)/64};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    loadmodel %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
-        TL_CHECK(failures,ok);if(!ok)return failures;
+    autotest::Coverage coverage("equipment_loadmodel_differential",(uint64_t)(uintptr_t)&originalEquipmentLoadModel);unsigned count=0;
+    for(unsigned n=0;n<960;++n)for(unsigned warm=0;warm<2;++warm){Case c={n<576?n:4+(n-576)%64,n<576?0u:1+(n-576)/64,warm};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+        int pair=coverage.observe(host,a,b);bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    loadmodel %u mode %u warm %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,c.warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);coverage.report(host);return 1;}
     }
-    host->log("    equipment loadModel: 960 cases, two calls per side\n");return failures;
+    coverage.report(host);host->log("    equipment loadModel: %u completed cold/warm cases\n",count);return 0;
 }
