@@ -12,12 +12,15 @@
 #include "AutoTest.h"
 #include "Detour.h"
 TL_ORIGINAL(void,originalEquipmentRequirements,(CEquipment*),"_ZN10CEquipment15setRequirementsEv")
+extern "C" void recoveredEquipmentRequirements(CEquipment*) __asm__("_ZN10CEquipment15setRequirementsEv");
 TL_FUNCTION(erIsa,"_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE")
 TL_FUNCTION(erManager,"_ZN13CGraphManager12getSingletonEv")
 TL_FUNCTION(erGraph,"_ZN13CGraphManager8getGraphERKSbIwSt11char_traitsIwESaIwEE")
 TL_FUNCTION(erValue,"_ZNK6CGraph8getValueEfj")
 namespace {
-struct Case{unsigned seed,mode;};
+struct Case{unsigned seed,mode,warm;};
+struct Snapshot {std::vector<unsigned char> bytes;Snapshot(const void* p,size_t n):bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}void pointer(size_t o,uintptr_t v){if(o+sizeof(v)>bytes.size())_exit(71);std::memcpy(&bytes[o],&v,sizeof(v));}void emit(autotest::Capture& c){c.add(&bytes[0],bytes.size());}};
+
 const Case* input;autotest::Capture* capture;CEquipment* equipment;CDataGroup* alternate;unsigned graphId;int service[6];
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}
 void text(const std::wstring& s){number(s.size());capture->add(s.data(),s.size()*sizeof(wchar_t));}
@@ -36,8 +39,13 @@ void side(const Case& c,bool ours,autotest::Capture& out){input=&c;capture=&out;
     static const wchar_t* keys[]={L"LEVEL_REQUIRED",L"STRENGTH_REQUIRED",L"DEXTERITY_REQUIRED",L"MAGIC_REQUIRED",L"DEFENSE_REQUIRED"};static const int requirements[]={0,1,2,-2,37,100};
     for(unsigned i=0;i<5;++i){unsigned mode=(c.seed/64+i)%6;if(mode)data.AddDataValue(keys[i],static_cast<unsigned int>(requirements[mode]));other.AddDataValue(keys[i],static_cast<unsigned int>(17+i));}
     detour::Set patches;TL_REDIRECT(patches,erIsa,&isa);TL_REDIRECT(patches,erManager,&manager);TL_REDIRECT(patches,erGraph,&graph);TL_REDIRECT(patches,erValue,&value);if(patches.failed())_exit(42);
-    for(unsigned repeat=0;repeat<2;++repeat){if(ours)equipment->setRequirements();else originalEquipmentRequirements(equipment);number(equipment->m_iUnknown274);number(equipment->m_iUnknown278);number(equipment->m_iUnknown27C);number(equipment->m_iUnknown280);number(equipment->m_iUnknown284);number(equipment->m_iUnknown288);number(equipment->m_iUnknown28C);number(equipment->m_pDataGroup==alternate);}
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentRequirements,equipment);else autotest::invoke(out,&originalEquipmentRequirements,equipment);}else{if(ours)equipment->setRequirements();else originalEquipmentRequirements(equipment);}number(equipment->m_iUnknown274);number(equipment->m_iUnknown278);number(equipment->m_iUnknown27C);number(equipment->m_iUnknown280);number(equipment->m_iUnknown284);number(equipment->m_iUnknown288);number(equipment->m_iUnknown28C);number(equipment->m_pDataGroup==alternate);}
+    Snapshot eq(equipment,sizeof(*equipment));eq.pointer(0x1b0,equipment->m_pDataGroup==&data?1:equipment->m_pDataGroup==&other?2:equipment->m_pDataGroup?255:0);eq.emit(out);out.add(service,sizeof(service));number(graphId);
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_requirements_differential){int failures=0;for(unsigned n=0;n<3360;++n){Case c={n<3072?n:n-3072,n<3072?0u:1+(n-3072)/96};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    requirements seed %u mode %u status %d/%d lengths %lu/%lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}host->log("    equipment requirements: 3360 cases, two calls per side\n");return failures;}
+TL_TEST(equipment_requirements_differential){autotest::Coverage coverage("equipment_requirements_differential",(uint64_t)(uintptr_t)&originalEquipmentRequirements);unsigned count=0;
+for(unsigned n=0;n<3360;++n)for(unsigned warm=0;warm<2;++warm){Case c={n<3072?n:n-3072,n<3072?0u:1+(n-3072)/96,warm};  autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+int pair=coverage.observe(host,a,b);bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    details seed %u mode %u warm %u status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,c.warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);coverage.report(host);return 1;}}
+coverage.report(host);host->log("    completed details cases: %u\n",count);return 0;}
