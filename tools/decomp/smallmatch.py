@@ -50,7 +50,9 @@ class Generator:
         self.targets = json.loads((self.kit / "targets.json").read_text())
         self.types = json.loads((self.kit / "reference/types.json").read_text())
         self.db = json.loads((self.kit / "reference/elfdb.json").read_text())
+        self.definition_index = llm_definitions.DefinitionIndex(self.db)
         self.declarations, self.data = defaultdict(list), defaultdict(list)
+        self._source_masks = {}
         for path in sorted((self.root / "decomp/include").glob("*.h")):
             for decl in llm_context._scan(path.read_text())[0]:
                 (self.declarations if decl.kind == "function" else self.data)[decl.qualified].append(
@@ -58,6 +60,18 @@ class Generator:
         self.by_address = self.db["functions"]
         self.globals = {int(g["address"], 16) if isinstance(g["address"], str) else g["address"]: g
                         for g in self.db["globals"]}
+
+    def prior_definition(self, f):
+        prior = self.root / 'decomp/src' / f['tu_name']
+        if not prior.exists():
+            self._source_masks.pop(str(prior), None)
+            return None
+        text = prior.read_text()
+        old = self._source_masks.get(str(prior))
+        if old is None or old[0] != text:
+            old = (text, mutate.mask(text))
+            self._source_masks[str(prior)] = old
+        return mutate.definition(old[0], old[1], f)
 
     def declaration(self, f):
         method = f.get("method") or ""
@@ -141,7 +155,7 @@ class Generator:
         return {"address": f["address"], "name": f["demangled"], "tu": f["tu_name"],
                 "family": family, "header": decl["header"], "source": code,
                 "original_size": f["size"], "status": "UNVERIFIED",
-                "closure": sorted(llm_definitions.closure(f, self.db))}
+                "closure": sorted(self.definition_index.closure(f))}
 
     @staticmethod
     def constant(number, typ):
@@ -168,11 +182,8 @@ class Generator:
             raise Unsupported("only missing ordinary method definitions; ABI thunks are compiler output")
         if not f.get("scope") or f["scope"] not in self.types["classes"]:
             raise Unsupported("namespace/free function requires a separate generator")
-        prior = self.root / 'decomp/src' / f['tu_name']
-        if prior.exists():
-            text = prior.read_text()
-            if mutate.definition(text, mutate.mask(text), f):
-                raise Unsupported('definition already present in the supplied source tree')
+        if self.prior_definition(f):
+            raise Unsupported('definition already present in the supplied source tree')
         decl = self.declaration(f)
         insns = objdiff.parse_insns((self.kit / f["assembly"]).read_text())
         ops = [(m, p.split("#", 1)[0].strip()) for _, m, p in insns
