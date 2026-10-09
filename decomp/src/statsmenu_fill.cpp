@@ -199,3 +199,57 @@ float CStatsMenuFill::getStatBarTotalAmount(ESTATSMENU_STATS which)
  }
  return stats_fill_input_detail::fields(this).statCost->getValue(static_cast<float>(amount)+1.0f,0);
 }
+
+
+int CStatsMenuFill::getStatInvestment(ESTATSMENU_STATS which)
+{
+ if(m_pPlayer){
+  const stats_fill_visual_detail::PlayerFields& p=stats_fill_visual_detail::fields(m_pPlayer);
+  switch(which){case 0:return p.stat0;case 1:return p.stat1;case 2:return p.stat2;case 3:return p.stat3;}
+ }
+ return 0;
+}
+int CStatsMenuFill::getStatBarCurrentAmount(ESTATSMENU_STATS which)
+{
+ if(m_pPlayer){
+  const stats_fill_visual_detail::PlayerFields& p=stats_fill_visual_detail::fields(m_pPlayer);
+  switch(which){case 0:return p.allocated0;case 1:return p.allocated1;case 2:return p.allocated2;case 3:return p.allocated3;}
+ }
+ return 0;
+}
+float CStatsMenuFill::getExperienceToSpend()
+{
+ const stats_fill_visual_detail::PlayerFields& p=stats_fill_visual_detail::fields(m_pPlayer);
+ return static_cast<float>(static_cast<int>(static_cast<unsigned>(p.experience)-static_cast<unsigned>(p.spent)));
+}
+void CStatsMenuFill::addExperienceSpent(int amount)
+{
+ if(m_pPlayer){
+  stats_fill_visual_detail::PlayerFields& p=*reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer);
+  unsigned spent=static_cast<unsigned>(p.spent);
+  if(amount<0){unsigned remove=0u-static_cast<unsigned>(amount);if(remove>spent)p.spent=0;else p.spent=static_cast<int>(spent-remove);}
+  else p.spent=static_cast<int>(spent+static_cast<unsigned>(amount));
+ }
+}
+void CStatsMenuFill::addExperienceToStat(ESTATSMENU_STATS which,int amount)
+{
+ if(m_pPlayer){
+  int value=static_cast<int>(static_cast<unsigned>(getStatBarCurrentAmount(which))+static_cast<unsigned>(amount));
+  stats_fill_visual_detail::PlayerFields& p=*reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer);
+  switch(which){case 0:p.allocated0=value;break;case 1:p.allocated1=value;break;case 2:p.allocated2=value;break;case 3:p.allocated3=value;break;}
+  addExperienceSpent(amount);
+ }
+}
+namespace stats_fill_open_detail {
+struct SoundField {char prefix[0x180];CSoundBank* bank;};
+typedef char sound_offset[__builtin_offsetof(SoundField,bank)==0x180?1:-1];
+inline CSoundBank* sound(CStatsMenuFill* menu){return reinterpret_cast<SoundField*>(menu)->bank;}
+}
+void CStatsMenuFill::setOpen(bool open)
+{
+ updateVisuals();
+ if(!m_bUnknown30){if(open)stats_fill_open_detail::sound(this)->playSample(22,0,0.0f,0.0f,false);}
+ else {if(!open)stats_fill_open_detail::sound(this)->playSample(66,0,0.0f,0.0f,false);}
+ CDropdownMenu::setOpen(open);
+ m_pGameUI->setInteractiveMenuVisible(open);
+}
