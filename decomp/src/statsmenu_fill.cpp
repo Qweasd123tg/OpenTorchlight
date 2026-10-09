@@ -253,3 +253,36 @@ void CStatsMenuFill::setOpen(bool open)
  CDropdownMenu::setOpen(open);
  m_pGameUI->setInteractiveMenuVisible(open);
 }
+
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+
+CStatsMenuFill::CStatsMenuFill(CGameUI& ui, CSettings& settings,
+ Ogre::SceneManager* scene, CEGUI::Window* parent, CResourceManager* resources)
+ : CDropdownMenu(ui,settings,scene,parent,resources,0),
+   m_AddButtons(4),m_RemoveButtons(4),m_Bars(4),m_AmountTexts(4),
+   m_StatSlots(4),m_PercentTexts(10),m_pExperienceText(0),m_pPlayer(0),
+   m_HeldTime(0),m_pPointGraph(0),m_BarCooldown(0),m_pFillSoundBank(0),
+   m_FillSoundInterval(0),m_FillSoundCountdown(0),m_Filling(false)
+{
+ CSoundBankDataInformation* info=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pFillSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* sound=info->getSoundDataObject(L"INVENTORYOPEN");
+ if(sound)m_pFillSoundBank->addSample(22,sound->m_iGuid);
+ sound=info->getSoundDataObject(L"INVENTORYCLOSE");
+ if(sound)m_pFillSoundBank->addSample(66,sound->m_iGuid);
+ sound=info->getSoundDataObject(L"POINTASSIGN");
+ if(sound)m_pFillSoundBank->addSample(27,sound->m_iGuid);
+ sound=info->getSoundDataObject(L"STATFILL");
+ if(sound){m_FillSoundInterval=0.5f;m_pFillSoundBank->addSample(30,sound->m_iGuid);}
+ setTitle(L"Stats");
+ createMenus();
+ m_pPointGraph=resources->getGraph(L"POINTGRAPH");
+}
+
+CStatsMenuFill::~CStatsMenuFill()
+{
+ if(m_pFillSoundBank){delete m_pFillSoundBank;m_pFillSoundBank=0;}
+}
