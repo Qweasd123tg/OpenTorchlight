@@ -179,7 +179,7 @@ def declared_signatures(text, name):
     result = set()
     keywords = {"void", "bool", "char", "short", "int", "long", "float", "double",
                 "signed", "unsigned", "const", "volatile", "wchar_t"}
-    for m in re.finditer(rf"(?P<prefix>[^;{{}}]*?)\b{re.escape(name)}\s*\((?P<params>[^()]*)\)\s*"
+    for m in re.finditer(rf"(?P<prefix>[^;{{}}]*?)(?<![\w~]){re.escape(name)}\s*\((?P<params>[^()]*)\)\s*"
                          r"(?P<cv>(?:(?:const|volatile)\s*)*)\s*(?:;|=)", direct):
         params = []
         for p in ghidra_cpp.split_args(m.group("params")):

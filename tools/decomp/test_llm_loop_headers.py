@@ -87,6 +87,22 @@ class DeclarationReadiness(unittest.TestCase):
             with patch.object(llm_loop, "ROOT", root):
                 return loop.declaration_error({"scope": scope, "method": method, "params": params, "cv": cv})
 
+    def test_destructor_is_recognized_without_becoming_a_default_constructor(self):
+        files = {"Unit.h": "class CUnit\n{\npublic:\n virtual ~CUnit();\n};\n"}
+        self.assertIsNone(self.check(files, "CUnit", "~CUnit", ""))
+        self.assertIsNotNone(self.check(files, "CUnit", "CUnit", ""))
+
+    def test_constructor_and_destructor_signatures_stay_separate(self):
+        files = {"Unit.h": "class CUnit\n{\npublic:\n CUnit(int);\n virtual ~CUnit();\n};\n"}
+        self.assertIsNone(self.check(files, "CUnit", "CUnit", "int"))
+        self.assertIsNotNone(self.check(files, "CUnit", "CUnit", ""))
+        self.assertIsNone(self.check(files, "CUnit", "~CUnit", ""))
+        self.assertIsNotNone(self.check(files, "CUnit", "~CUnit", "int"))
+
+    def test_destructor_does_not_match_identifier_suffix_or_nested_class(self):
+        files = {"Unit.h": "class CUnit\n{\npublic:\n virtual ~OtherCUnit();\n struct Inner { ~CUnit(); };\n};\n"}
+        self.assertIsNotNone(self.check(files, "CUnit", "~CUnit", ""))
+
     def test_reopened_namespace_finds_exact_declaration_in_another_header(self):
         files = {"Globals.h": "namespace STRINGS { extern int counter; }",
                  "Strings.h": "namespace STRINGS { std::string upper(const std::string& text); }"}
