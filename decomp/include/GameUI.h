@@ -12,6 +12,8 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 // onClick's return type is not verified and that method is not used here.
 namespace CEGUI { class Image; class Window; }
 class CGameClient;
+class CSubMenu;
+class CItem;
 namespace Ogre { class RenderWindow; }
 class CTextEvent;
 class CCharacter;
@@ -29,6 +31,11 @@ public:
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
     virtual ~CGameUI();
+    bool menuItemClick(CCharacter*, CSubMenu*, int, bool);
+    void returnDraggedItem();
+    void setCursorState(ECursorState);
+    void setMouseOverItem(CItem*, bool);
+    void updateHardwareCursor();
     virtual long long onClick(ELayoutFunction);
     static CGameUI* getSingleton();
     CCharacter* getCharacter() { return m_pCharacter; }

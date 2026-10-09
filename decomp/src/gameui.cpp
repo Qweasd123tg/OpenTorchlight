@@ -23,7 +23,7 @@ void CGameUI::updateIngameUI(float elapsed,CGameClient* client,Ogre::RenderWindo
 }
 
 #include "GameUIEquipmentTooltip.h"
-static const std::wstring EMPTY_WSTRING;
+#include "EmptyStrings.h"
 extern short tooltipKeyState(unsigned) __asm__("_Z16GetAsyncKeyStatej");
 #define TOOLTIP_TRANSLATION(NAME,TEXT) static std::wstring NAME;if(NAME.empty())NAME=CStringTranslate::getSinglton()->getTranslateString(TEXT)
 __attribute__((flatten))
@@ -366,3 +366,351 @@ setSize(m_pWindow,total);
  skill_tooltip::place(this,mouseX,mouseY);
 }
 #undef SKILL_TRANSLATION
+
+#include "MenuItemClickState.h"
+namespace menu_item_click_detail {
+inline bool is(CBaseUnit* unit, int tag) {
+    return unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(tag));
+}
+inline void sound(UIState& s, int sample) {
+    s.soundBank->playSample(sample,s.player->getSceneNode(),0.0f,0.0f,false);
+}
+inline void error(UIState& s, int voice) {
+    sound(s,24);
+    if(actor(s.player).soundBank)
+        actor(s.player).soundBank->queueGlobalSample(voice,0.0f,0.1f);
+}
+inline void recordPurchase(UIState& s, CCharacter* seller, CEquipment* item) {
+    if(is(seller,UNITTYPES::GAMBLER)) {
+        s.player->incrementJournalStatistic(static_cast<EJournalStatistic>(15),1);
+        if(is(item,UNITTYPES::UNIQUE)) {
+            CAchievement* achievement=CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(5));
+            if(achievement)achievement->forceComplete();
+        }
+    }
+}
+inline void chargeDraggedPurchase(UIState& s) {
+    int price=s.draggedItem.getObject()->buyPrice();
+    if(is(s.dragOwner.getObject(),UNITTYPES::GAMBLER)) {
+        s.player->incrementJournalStatistic(static_cast<EJournalStatistic>(15),1);
+        if(is(s.draggedItem.getObject(),UNITTYPES::UNIQUE)) {
+            CAchievement* achievement=CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(5));
+            if(achievement)achievement->forceComplete();
+        }
+    }
+    s.player->giveGold(-price);
+    sound(s,23);
+}
+inline void removeDragIcon(UIState& s) {
+    if(s.dragWindow==s.draggedItem.getObject()->m_pIconWindow->getParent())
+        s.dragWindow->removeChildWindow(s.draggedItem.getObject()->m_pIconWindow);
+}
+inline void positionDragIcon(CGameUI* ui, UIState& s) {
+    s.dragWindow->addChildWindow(s.draggedItem.getObject()->m_pIconWindow);
+    float y=static_cast<float>(s.mouseY);
+    y-=ui->scaledY(48.0f);
+    float x=static_cast<float>(s.mouseX);
+    x-=ui->scaledY(32.0f);
+    s.draggedItem.getObject()->m_pIconWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,x),CEGUI::UDim(0,y)));
+    float height=ui->scaledY(96.0f);
+    float width=ui->scaledY(64.0f);
+    s.draggedItem.getObject()->m_pIconWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
+}
+inline void putBackOrDrop(UIState& s,CCharacter* owner,CInventory* inventory,CEquipment* item) {
+    if(!inventory->pickupEquipment(item,true)) {
+        Ogre::Vector3 position=owner->getPosition(true);
+        s.level->addItem(item,position,true);
+        item->drop();
+    }
+}
+}
+
+// Full entry candidate; requires original-versus-candidate branch tests before publication.
+__attribute__((flatten))
+bool CGameUI::menuItemClick(CCharacter* owner,CSubMenu* menu,int clickedSlot,bool result) {
+    using namespace menu_item_click_detail;
+    UIState& s=state(this);
+    CInventory* inventory=NULL;
+    if(owner) {
+        if(is(owner,UNITTYPES::SHAREDSTASH))inventory=CSharedStash::getSingleton()->m_pInventory;
+        else inventory=actor(owner).inventory;
+    }
+    bool quickTrade=false,quickTransfer=false;
+    if(!s.draggedItem.getObject() && GetAsyncKeyState(16)<0 && s.merchantMenu->open())quickTrade=true;
+    if(!s.draggedItem.getObject() && GetAsyncKeyState(16)<0 &&
+       (s.petMenu->open() || s.stashMenu->open() || s.enchantMenu->open() || s.combineMenu->open()))quickTransfer=true;
+    if(!quickTrade && !s.draggedItem.getObject() && GetAsyncKeyState(16)<0) {
+        if(!s.merchantMenu->open() && !s.combineMenu->open() && !s.stashMenu->open() && !s.enchantMenu->open()) {
+            if(s.petMenu->open() && !s.inventoryMenu->open()) {
+                closeRight();s.inventoryMenu->setOpen(true);quickTransfer=true;
+            } else if(!s.petMenu->open() && s.inventoryMenu->open() && s.player->getFollowerCount()) {
+                if(actor(s.player->getFollower(0)).aiState!=42) {
+                    closeLeft();s.petMenu->setOpen(true);quickTransfer=true;
+                }
+            }
+        }
+    }
+    CEquipment* initialDragged=s.draggedItem.getObject();
+    CCharacter* merchant=NULL;
+    bool merchantDestination=false;
+    if(s.merchantMenu->open()) {
+        merchant=static_cast<CCharacter*>(s.merchantMenu->getOwner());
+        merchantDestination=owner==merchant;
+    }
+    if(s.stashMenu->open() && s.stashMenu->getOwner()==owner && s.draggedItem.getObject() && is(s.draggedItem.getObject(),UNITTYPES::QUESTITEM)) {
+        error(s,49);return false;
+    }
+    unsigned slot=static_cast<unsigned>(clickedSlot);
+    if(s.draggedItem.getObject()) {
+        if(slot!=static_cast<unsigned>(-1) && owner && slot!=999) {
+            int pane=inventory->getRequiredPane(s.draggedItem.getObject());
+            int currentPane=inventory->getItemPane(slot);
+            if(slot-15>3 && pane!=currentPane) {
+                if(pane>2)pane-=2;
+                if(s.player==owner) { slot=static_cast<unsigned>(-1);s.inventoryMenu->setTab(pane); }
+                else if(s.player->getFollowerCount() && inventory->m_pPositionableObject==s.player->getFollower(0)) {
+                    slot=static_cast<unsigned>(-1);
+                    if(s.stashMenu->open())s.stashMenu->setPetTab(pane);
+                    else if(s.merchantMenu->open())s.merchantMenu->setPetTab(pane);
+                    else s.petMenu->setTab(pane);
+                } else {
+                    slot=static_cast<unsigned>(-1);
+                    if(merchantDestination)s.merchantMenu->setTab(pane);
+                }
+            }
+        }
+        if(s.draggedItem.getObject() && is(s.draggedItem.getObject(),10) && slot<2) {
+            if(is(s.draggedItem.getObject(),38))slot=1;
+            else if(is(s.draggedItem.getObject(),37))slot=0;
+        }
+    }
+    CEquipment* displaced0=NULL;
+    CEquipment* displaced1=NULL;
+    CEquipment* clicked=NULL;
+    if(s.draggedItem.getObject() && slot<2 && is(s.draggedItem.getObject(),10)) {
+        displaced1=inventory->getEquipmentInSlot(1);
+        displaced0=inventory->getEquipmentInSlot(0);
+        clicked=displaced1?displaced1:displaced0;
+    } else clicked=inventory->getEquipmentInSlot(slot);
+    if(clicked) {
+        if(s.selectedSkill!=-1) {
+            s.player->setTargetItem(clicked);
+            s.player->castSkill(s.selectedSkill);
+            s.selectedSkill=-1;
+            setMouseOverItem(NULL,false);clearHover<0x1020>(s.inventoryMenu);
+            setCursorState(static_cast<ECursorState>(0));
+            goto RefreshTargetMenus;
+        }
+        if(s.targetedItem.getObject()) {
+            if(!s.targetedItem.getObject()->canUseOnTarget(s.itemUser.getObject(),clicked)) { error(s,49);return false; }
+            s.targetedItem.getObject()->useOnTarget(s.itemUser.getObject(),clicked);
+            CEquipment* used=s.targetedItem.getObject();
+            if(used->m_iUnknown238<2 && used->m_iUnknown248<1 && used->m_iUnknown248!=-9999 && used->m_pInventory) {
+                used->m_pInventory->removeEquipment(used);
+                if(s.targetedItem.getObject())delete s.targetedItem.getObject();
+            }
+            setMouseOverItem(NULL,false);clearHover<0x1020>(s.inventoryMenu);
+            setCursorState(static_cast<ECursorState>(0));
+            s.targetedItem.setObject(NULL);s.itemUser.setObject(NULL);s.targetCharacter.setObject(NULL);
+            goto RefreshTargetMenus;
+        }
+    }
+    if(quickTransfer && clicked) {
+        CCharacter* destination=s.player;
+        CCharacter* defaultDestination=destination;
+        int oldSlot=inventory->findEquipmentSlot(clicked);
+        int newSlot=-1;
+        bool allowEquip=true;
+        if(s.enchantMenu->open()) { if(oldSlot!=14)newSlot=14; }
+        else if(s.combineMenu->open()) {
+            if(static_cast<unsigned>(oldSlot)-15>=4) {
+                for(unsigned i=15;i<=18;++i)if(!inventory->getEquipmentInSlot(i)){newSlot=i;break;}
+            }
+        } else {
+            if(!s.stashMenu->open() && is(owner,UNITTYPES::PLAYER)) {
+                if(s.player->getFollowerCount()) { destination=s.player->getFollower(0);goto TransferSelected; }
+            } else {
+                destination=s.player;
+                if(destination->getFollowerCount() && owner==destination->getFollower(0))goto TransferSelected;
+            }
+            if(s.stashMenu->open() && s.stashMenu->getOwner()!=owner) {
+                if(is(clicked,UNITTYPES::QUESTITEM)){error(s,49);return false;}
+                destination=static_cast<CCharacter*>(s.stashMenu->getOwner());allowEquip=false;
+            } else destination=defaultDestination;
+        }
+TransferSelected:
+        inventory->removeEquipment(clicked);
+        CInventory* targetInventory=actor(destination).inventory;
+        if(is(destination,UNITTYPES::SHAREDSTASH)){targetInventory=CSharedStash::getSingleton()->m_pInventory;allowEquip=false;}
+        CEquipment* placed=newSlot==-1?targetInventory->pickupEquipment(clicked,allowEquip):targetInventory->pickupEquipment(clicked,newSlot,allowEquip);
+        if(!placed){inventory->pickupEquipment(clicked,oldSlot,true);error(s,47);return result;}
+        placed->playDropSound(s.player->getSceneNode());
+        goto ClearAndRefresh;
+    }
+    if(merchantDestination && s.draggedItem.getObject()) {
+        if(is(s.draggedItem.getObject(),UNITTYPES::QUESTITEM)){error(s,49);return false;}
+        if(merchant!=s.dragOwner.getObject()) {
+            sound(s,23);
+            int price=s.draggedItem.getObject()->sellPrice();
+            s.player->giveGold(price);s.player->soldItem(s.draggedItem.getObject());
+            clearHoverAndTooltips(s);
+        }
+        s.draggedItem.getObject()->playDropSound(s.player->getSceneNode());removeDragIcon(s);
+        CEquipment* placed=inventory->pickupEquipment(s.draggedItem.getObject(),true);
+        if(!placed){if(s.draggedItem.getObject())delete s.draggedItem.getObject();}
+        else {s.draggedItem.setObject(placed);clearHoverAndTooltips(s);}
+        s.draggedItem.setObject(NULL);s.dragOwner.setObject(NULL);s.dragSlot=-1;updateHardwareCursor();return false;
+    }
+    if(quickTrade && clicked && is(owner,UNITTYPES::MERCHANT)) {
+        int price=clicked->buyPrice();
+        if(s.player->getGold()<price){error(s,48);return result;}
+        price=clicked->buyPrice();clearHoverAndTooltips(s);
+        int oldSlot=inventory->findEquipmentSlot(clicked);
+        bool clone=clicked->m_iUnknown238==1 && clicked->m_bUnknown25F;
+        if(clone)clicked=static_cast<CEquipment*>(s.resourceManager->createUnit(clicked->getDataGroup(),0,false,false));
+        else inventory->removeEquipment(clicked);
+        if(!actor(s.player).inventory->pickupEquipment(clicked,true)) {
+            if(clone){if(clicked)delete clicked;}else inventory->pickupEquipment(clicked,oldSlot,true);
+            error(s,47);return result;
+        }
+        recordPurchase(s,owner,clicked);s.player->giveGold(-price);sound(s,23);goto ClearAndRefresh;
+    }
+    if(!s.draggedItem.getObject() || !s.dragOwner.getObject() || owner==s.dragOwner.getObject()) {
+        if(quickTrade && clicked && s.merchantMenu->open() && !is(owner,UNITTYPES::MERCHANT)) {
+            if(is(clicked,UNITTYPES::QUESTITEM)){error(s,49);return false;}
+            sound(s,23);int price=clicked->sellPrice();s.player->giveGold(price);s.player->soldItem(clicked);
+            clearHoverAndTooltips(s);inventory->removeEquipment(clicked);
+            if(!actor(merchant).inventory->pickupEquipment(clicked,true))delete clicked;
+            clicked=NULL;result=false;updateHardwareCursor();
+        }
+    } else if(!is(s.dragOwner.getObject(),UNITTYPES::MERCHANT) && !is(s.dragOwner.getObject(),UNITTYPES::STASH) && !is(s.dragOwner.getObject(),UNITTYPES::SHAREDSTASH))clearHoverAndTooltips(s);
+    else if(!merchantDestination && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT)) {
+        int price=s.draggedItem.getObject()->buyPrice();
+        if(s.player->getGold()<price){error(s,48);return result;}
+    }
+    if(s.draggedItem.getObject() && slot<12 && !s.draggedItem.getObject()->canEquip(owner,true) && !is(s.draggedItem.getObject(),UNITTYPES::SOCKETABLE)) {
+        error(s,49);return result;
+    }
+    if(clicked) {
+        if(!s.draggedItem.getObject()) {
+            s.dragSlot=inventory->findEquipmentSlot(clicked);inventory->removeEquipment(clicked);
+            s.dragOwner.setObject(static_cast<CCharacter*>(menu->getOwner()));s.draggedItem.setObject(clicked);
+            s.draggedItem.getObject()->playTakeSound(s.player->getSceneNode());menu->updateLayout();
+            clearHoverAndTooltips(s);positionDragIcon(this,s);updateHardwareCursor();return false;
+        }
+        bool clone=s.dragOwner.getObject() && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT) && s.draggedItem.getObject()->m_iUnknown238==1 && s.draggedItem.getObject()->m_bUnknown25F;
+        if(is(s.draggedItem.getObject(),UNITTYPES::SOCKETABLE) && clicked->m_bUnknown348 && clicked->m_iSocketCount!=clicked->m_SocketedEquipment.size()) {
+            removeDragIcon(s);s.draggedItem.getObject()->playDropSound(s.player->getSceneNode());
+            clicked->addContainerItem(s.draggedItem.getObject());clicked->createElementalDamages();
+            if(!merchantDestination && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT)){chargeDraggedPurchase(s);s.dragOwner.setObject(NULL);}
+            s.draggedItem.setObject(NULL);inventory->updateBonuses();inventory->calculateEffectValues();inventory->refreshEquipped();
+            s.dragOwner.setObject(NULL);s.dragSlot=-1;updateHardwareCursor();menu->updateLayout();return false;
+        }
+        inventory->findEquipmentSlot(clicked);
+        if(!displaced0 || !displaced1) {
+            inventory->removeEquipment(clicked);
+            if(guid(clicked)==guid(s.draggedItem.getObject()) && clicked->m_iUnknown238<clicked->m_iUnknown23C && s.draggedItem.getObject()->m_iUnknown238<s.draggedItem.getObject()->m_iUnknown23C) {
+                int quantity=clicked->m_iUnknown238, capacity=clicked->m_iUnknown23C;
+                if(capacity<s.draggedItem.getObject()->m_iUnknown238+quantity) {
+                    clicked->incrementStackBy(capacity-quantity);
+                    if(!clone)s.draggedItem.getObject()->incrementStackBy(-(capacity-quantity));
+                } else {
+                    clicked->incrementStackBy(s.draggedItem.getObject()->m_iUnknown238);
+                    if(!clone)s.draggedItem.getObject()->incrementStackBy(-s.draggedItem.getObject()->m_iUnknown238);
+                }
+                if(!merchantDestination && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT))chargeDraggedPurchase(s);
+                inventory->pickupEquipment(clicked,slot,true);
+                if(s.draggedItem.getObject()->m_iUnknown238<1) {
+                    delete s.draggedItem.getObject();s.draggedItem.setObject(NULL);s.dragOwner.setObject(NULL);
+                    setMouseOverItem(NULL,false);s.dragSlot=-1;menu->updateLayout();clicked->playDropSound(s.player->getSceneNode());
+                }
+                updateHardwareCursor();if(clone)returnDraggedItem();goto RestoreDisplaced;
+            }
+        } else {inventory->removeEquipment(displaced1);inventory->removeEquipment(displaced0);}
+        {
+            CEquipment* item=s.draggedItem.getObject();
+            if(clone)item=static_cast<CEquipment*>(s.resourceManager->createUnit(item->getDataGroup(),0,false,false));
+            if(!inventory->pickupEquipment(item,slot,true)) {
+                if(clone && item)delete item;
+                if(!displaced0 || !displaced1)inventory->pickupEquipment(clicked,slot,true);
+                else {inventory->pickupEquipment(displaced1,slot,true);inventory->pickupEquipment(displaced0,slot,true);displaced0=NULL;displaced1=NULL;}
+            } else {
+                clicked->playTakeSound(s.player->getSceneNode());s.draggedItem.getObject()->playDropSound(s.player->getSceneNode());removeDragIcon(s);
+                if(!merchantDestination && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT))chargeDraggedPurchase(s);
+                if(clone)returnDraggedItem();
+                s.draggedItem.setObject(clicked);s.dragOwner.setObject(owner);clearHoverAndTooltips(s);s.dragSlot=-1;menu->updateLayout();
+                if(clicked==displaced1)displaced1=NULL;
+                else if(clicked==displaced0)displaced0=NULL;
+                positionDragIcon(this,s);
+            }
+        }
+        updateHardwareCursor();
+RestoreDisplaced:
+        if(displaced1)putBackOrDrop(s,owner,inventory,displaced1);
+        if(displaced0)putBackOrDrop(s,owner,inventory,displaced0);
+        return false;
+    }
+    if(!s.draggedItem.getObject())return result;
+    if(static_cast<int>(slot)>=0 && static_cast<int>(slot)<12 && !inventory->canEquip(s.draggedItem.getObject(),true))slot=999;
+    {
+        bool clone=s.dragOwner.getObject() && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT) && s.draggedItem.getObject()->m_iUnknown238==1 && s.draggedItem.getObject()->m_bUnknown25F;
+        CDataGroup* data=s.draggedItem.getObject()->getDataGroup();
+        int price=s.draggedItem.getObject()->buyPrice();
+        CEquipment* placed=NULL;
+        if(slot==999){if(inventory->equipEquipmentIntoFirstFreeLocation(s.draggedItem.getObject()))placed=s.draggedItem.getObject();}
+        else if(static_cast<int>(slot)<=82)placed=inventory->pickupEquipment(s.draggedItem.getObject(),slot,true);
+        if(placed) {
+            placed->playDropSound(s.player->getSceneNode());s.rootWindow->removeChildWindow(s.draggedItem.getObject()->m_pIconWindow);
+            s.draggedItem.setObject(NULL);s.dragSlot=-1;goto ChargePlaced;
+        }
+        if(slot>11 && slot!=999)goto ClearAndRefresh;
+        if(inventory->equipEquipmentIntoFirstFreeLocation(s.draggedItem.getObject())) {
+            owner->setRenderBehind(true);s.draggedItem.getObject()->playDropSound(s.player->getSceneNode());removeDragIcon(s);
+            s.draggedItem.setObject(NULL);s.dragSlot=-1;goto ChargePlaced;
+        }
+        if(!s.draggedItem.getObject()->canEquip(owner,true)) {
+            if(s.draggedItem.getObject()){returnDraggedItem();error(s,49);}
+            goto ClearAndRefresh;
+        }
+        {
+            CEquipment* first=NULL;CEquipment* second=NULL;
+            inventory->getComparisonItems(s.draggedItem.getObject(),&first,&second);
+            if(is(s.draggedItem.getObject(),10) && second)inventory->removeEquipment(second);
+            bool equipped=false;
+            if(first) {
+                inventory->removeEquipment(first);
+                if(inventory->equipEquipmentIntoFirstFreeLocation(s.draggedItem.getObject())) {
+                    equipped=true;owner->setRenderBehind(true);s.draggedItem.getObject()->playDropSound(owner->getSceneNode());removeDragIcon(s);
+                }
+                if(!inventory->pickupEquipment(first,true)){Ogre::Vector3 p=owner->getPosition(true);s.level->addItem(first,p,true);first->drop();}
+                else first->playDropSound(owner->getSceneNode());
+            }
+            if(is(s.draggedItem.getObject(),10) && second) {
+                if(!inventory->pickupEquipment(second,true)){Ogre::Vector3 p=owner->getPosition(true);s.level->addItem(second,p,true);second->drop();}
+                else second->playDropSound(owner->getSceneNode());
+            }
+            if(equipped){s.draggedItem.setObject(NULL);s.dragSlot=-1;goto ChargePlaced;}
+            returnDraggedItem();s.dragOwner.setObject(NULL);error(s,49);s.draggedItem.setObject(NULL);s.dragSlot=-1;goto ClearAndRefresh;
+        }
+ChargePlaced:
+        if(!merchantDestination && is(s.dragOwner.getObject(),UNITTYPES::MERCHANT)) {
+            if(clone){CEquipment* copy=static_cast<CEquipment*>(s.resourceManager->createUnit(data,0,false,false));actor(s.dragOwner.getObject()).inventory->pickupEquipment(copy,true);}
+            if(is(s.dragOwner.getObject(),UNITTYPES::GAMBLER)) {
+                s.player->incrementJournalStatistic(static_cast<EJournalStatistic>(15),1);
+                if(initialDragged && is(initialDragged,UNITTYPES::UNIQUE)) {
+                    CAchievement* achievement=CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(5));
+                    if(achievement)achievement->forceComplete();
+                }
+            }
+            s.player->giveGold(-price);sound(s,23);s.dragOwner.setObject(NULL);
+        }
+    }
+ClearAndRefresh:
+    clearHoverAndTooltips(s);updateHardwareCursor();return false;
+RefreshTargetMenus:
+    updateHardwareCursor();s.inventoryMenu->updateLayout();
+    if(s.petMenu->open())s.petMenu->updateLayout();
+    if(s.merchantMenu->open())s.merchantMenu->updateLayout();
+    if(s.stashMenu->open())s.stashMenu->updateLayout();
+    clearHoverAndTooltips(s);CEGUI::System::getSingleton().injectMouseMove(1.0f,0.0f);return false;
+}

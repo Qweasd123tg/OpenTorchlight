@@ -32,6 +32,7 @@ class CInventoryMenu : public CSubMenu, public iInventoryListener
 {
 public:
     virtual ~CInventoryMenu();
+    void setTab(int);
     virtual CBaseUnit* getOwner();
     virtual bool isRight();
     virtual bool open();

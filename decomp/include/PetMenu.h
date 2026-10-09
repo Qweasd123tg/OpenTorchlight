@@ -34,6 +34,7 @@ class CPetMenu : public CSubMenu, public iInventoryListener
 {
 public:
     virtual ~CPetMenu();
+    void setTab(int);
     virtual CBaseUnit* getOwner();
     virtual bool isRight();
     virtual bool open();

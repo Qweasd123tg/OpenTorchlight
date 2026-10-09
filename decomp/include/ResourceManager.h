@@ -33,6 +33,7 @@ public:
     virtual ~CResourceManager();
 
     CBaseUnit* createUnit(long long guid,int level,bool flag1,bool flag2);
+    CBaseUnit* createUnit(CDataGroup*,int,bool,bool);
     void createAffixesForUnit(CBaseUnit* unit,unsigned int level,unsigned int count);
     bool getEditorIsRunning();
     CGenericModel* createGenericModel(Ogre::SceneManager*,const wchar_t*,const wchar_t*,bool,bool,bool);

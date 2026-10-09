@@ -35,7 +35,7 @@ public:
     int getItemPane(unsigned int);
     long long isEquipmentInInventory(CEquipment*);
     long long EquipmentsInSlot(unsigned int);
-    long long getEquipmentInSlot(unsigned int);
+    CEquipment* getEquipmentInSlot(unsigned int);
     long getEquipmentRefInSlot(unsigned int);
     int findEquipmentSlot(CEquipment*);
     long long getEquipmentEquippedAt(EEQUIP_LOCATIONS);
@@ -52,7 +52,7 @@ public:
     int findFreeSlot(CEquipment*);
     bool canPickup(CEquipment*, bool);
     long long canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool);
-    long long canEquip(CEquipment*, bool);
+    bool canEquip(CEquipment*, bool);
     void getComparisonItems(CEquipment*, CEquipment**, CEquipment**);
     int getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
     void executeProcs(EEFFECT_TYPE, CBaseUnit*);
@@ -75,11 +75,11 @@ public:
     long long unequipEquipment(CEquipment*);
     void verifyEquipment();
     CEquipment* pickupEquipment(CEquipment*, int, bool);
-    long long pickupEquipment(CEquipment*, bool);
+    CEquipment* pickupEquipment(CEquipment*, bool);
     long long useEquipment(CEquipment*, CCharacter*);
     long long removeEquipmentByGuid(long long, unsigned int, bool);
     long long equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS);
-    long long equipEquipmentIntoFirstFreeLocation(CEquipment*);
+    bool equipEquipmentIntoFirstFreeLocation(CEquipment*);
     void swapWeaponSet();
     CInventory(CCharacter*, unsigned int);
 

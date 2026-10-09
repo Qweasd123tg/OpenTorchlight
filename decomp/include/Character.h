@@ -12,6 +12,7 @@
 #include "iMissile.h"
 
 class CAIManager;
+class CItem;
 class CGenericModel;
 class CCharacterSaveState;
 class CPathController;
@@ -121,6 +122,9 @@ public:
     int petIndex(CCharacter* pet);
     bool hasPet(CCharacter* pet);
 
+    bool castSkill(long long);
+    void setTargetItem(CItem*);
+    void setRenderBehind(bool);
     bool spendPerkPoint();
     bool spendSkillPoint();
     void spendMeleePoint();
