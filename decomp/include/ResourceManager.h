@@ -3,10 +3,13 @@ class CGameUI;
 #define RESOURCEMANAGER_H
 
 #include "ParticleUniverseConstants.h"
+#include <map>
 #include "RunicCore.h"
 #include "UnitTypes.h"
 #include "TArrayList.h"
 
+class CMissile;
+namespace Ogre { class TextureManager; }
 class CBaseUnit;
 class CGameClient;
 class CParticle;
@@ -23,11 +26,21 @@ namespace Ogre
 // Partial: members are declared as ResourceManager.cpp is recovered. The
 // layout follows the constructor.
 class CMissilePreloader;
+class CDungeonManager;
+class CUnitResourceList;
+class CGameUI;
+class CCameraControl;
 class CResourceManager : public CRunicCore
 {
 public:
     CGameUI* getGameUI();
     CMissilePreloader* getMissilePreloader();
+    CMissile* createMissile(const std::wstring& name);
+    std::map<long long, CDataGroup*>* getGroupByName(const std::wstring& name);
+    Ogre::TextureManager* getTextureManager();
+    CDungeonManager* getDungeonManager();
+    CUnitResourceList* getMasterResourceList();
+    CCameraControl* getCameraControl();
     CParticle* createParticle(const wchar_t* name);
     CResourceManager(Ogre::SceneManager* sceneManager);
     virtual ~CResourceManager();

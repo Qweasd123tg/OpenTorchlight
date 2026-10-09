@@ -18,10 +18,10 @@ public:
 
 	long long GetObjectIDInitiatingLink();
 	unsigned int GetEventIDForOutput();
-	long long GetInputFuncID();
-	long long GetOutputFuncID();
-	long long GetObjectLinkingTo();
-	long long GetObjectInitiatingLink();
+	unsigned int GetInputFuncID();
+	unsigned int GetOutputFuncID();
+	CEditorBaseObject* GetObjectLinkingTo();
+	CEditorBaseObject* GetObjectInitiatingLink();
 
 	CLogicLink(
 		CEditorScene* pEditorScene,

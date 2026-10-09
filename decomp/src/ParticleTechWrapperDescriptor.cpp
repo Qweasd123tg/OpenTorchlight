@@ -22,3 +22,11 @@ CEditorBaseObject* CParticleTechWrapperDescriptor::CreateObject(CEditorScene* sc
 CParticleTechWrapperDescriptor::~CParticleTechWrapperDescriptor()
 {
 }
+
+#include <map>
+#include <string>
+
+void CParticleTechWrapperDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* object)
+{
+    static_cast<CParticleTechWrapper*>(object)->createTextureMaterial();
+}

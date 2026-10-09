@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "RunicCore.h"
+#include "DataValue.h"
 #include "TArrayList.h"
 
 class CDataValue;
@@ -20,7 +21,25 @@ public:
     CDataGroup(const std::wstring& name, CDataGroup* parent, unsigned int valuesGrowBy, unsigned int groupsGrowBy,
                TRepository<std::wstring>* repository);
     virtual ~CDataGroup();
+    void setDirty(bool dirty);
+    bool isDirty();
+    void RemoveDataGroup(CDataGroup* group);
+    CDataValue* AddDataValue(const std::wstring& name, int value);
+    CDataValue* AddDataValue(const std::wstring& name, double value);
+    CDataValue* AddDataValue(const std::wstring& name, const wchar_t* value, bool translate);
+    bool SetDataValue(const std::wstring& name, bool value);
+    bool SetDataValue(const std::wstring& name, long long value);
+    bool SetDataValue(const std::wstring& name, int value);
+    bool SetDataValue(const std::wstring& name, unsigned int value);
+    bool SetDataValue(const std::wstring& name, float value);
+    bool SetDataValue(const std::wstring& name, double value);
+    bool SetDataValue(const std::wstring& name, const wchar_t* value, bool translate);
+    bool SetDataValue(const std::wstring& name, const std::wstring& value, bool translate);
 
+    CDataValue* GetDataValueByName(const std::wstring& name);
+    CDataValue::EDATAVALUETYPES GetDataValueType(const std::wstring& name);
+    double GetDataValue(const std::wstring& name, double defaultValue);
+    unsigned int GetDataValue(const std::wstring& name, unsigned int defaultValue);
     const std::wstring& GetGroupName();
     void SetGroupName(const std::wstring& name);
     CDataGroup* AddDataGroup(const std::wstring& name);
@@ -43,11 +62,11 @@ public:
     CDataGroup* GetDataGroup(unsigned int index) { return m_DataGroups[index]; }
     TRepository<std::wstring>* getRepository() { return m_pRepository; }
 
-    void AddDataValue(const std::wstring& name, const std::wstring& value, bool translate);
-    void AddDataValue(const std::wstring& name, bool value);
-    void AddDataValue(const std::wstring& name, float value);
-    void AddDataValue(const std::wstring& name, unsigned int value);
-    void AddDataValue(const std::wstring& name, long long value);
+    CDataValue* AddDataValue(const std::wstring& name, const std::wstring& value, bool translate);
+    CDataValue* AddDataValue(const std::wstring& name, bool value);
+    CDataValue* AddDataValue(const std::wstring& name, float value);
+    CDataValue* AddDataValue(const std::wstring& name, unsigned int value);
+    CDataValue* AddDataValue(const std::wstring& name, long long value);
     long long GetDataValue(const std::wstring& name, long long defaultValue);
 
     int m_iNameID;

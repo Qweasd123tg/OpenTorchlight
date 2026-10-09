@@ -16,6 +16,7 @@
 #include "iUnitObserver.h"
 
 class CItem;
+class CGameClient;
 class CCharacter;
 class CBaseUnit;
 class CSkill;
@@ -28,6 +29,9 @@ class CLevel : public CRunicCore
 {
 public:
     void addItem(CItem*,const Ogre::Vector3&,bool);
+    // Original removal symbols; used by typed descriptor notifications.
+    bool removeItem(CItem* item, bool deactivate);
+    void removeCharacter(CCharacter* character, bool clearReferences);
     CCharacter* getPlayer();
     Ogre::Vector3 randomOpenItemPosition(const Ogre::Vector3&,float,bool);
     float floorHeight(Ogre::Vector3);
@@ -60,6 +64,7 @@ public:
     TLinkedList<CCharacter*>* getCharacters() { return m_pCharacters; }
 
 private:
+    friend struct SmallmatchPass7Probe;
     TArrayList<CEditorScene*> m_RoomScenes;
     char m_LevelData28[0x98 - 0x28];
     TLinkedList<CCharacter*>* m_pCharacters;
@@ -67,7 +72,9 @@ private:
     int m_iLevelDepth;
     char m_LevelData1A8[0x1d8 - 0x1a8];
     CLevelTemplateData* m_pLevelTemplateData;
-    char m_LevelData1E0[0x280 - 0x1e0];
+    char m_LevelData1E0[0x220 - 0x1e0];
+    CGameClient* m_pGameClient;
+    char m_LevelData228[0x280 - 0x228];
     std::wstring m_sDungeonName;
     char m_LevelData288[0x2f0 - 0x288];
 };

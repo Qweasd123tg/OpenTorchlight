@@ -37,8 +37,12 @@ enum EBASEUNIT_TYPE
 // virtual methods that recovered code does not call are not verified yet.
 class CBaseUnit : public CPositionableObject
 {
+    friend class CLevel;
+    friend struct SmallmatchPass7Probe;
     friend class CEquipment;
     friend class CEnchantMenu;
+    friend class CSkillProperty;
+    friend struct SmallmatchLayoutProbe;
 public:
     CBaseUnit(CResourceManager* resourceManager, EBASEUNIT_TYPE type);
     virtual ~CBaseUnit();

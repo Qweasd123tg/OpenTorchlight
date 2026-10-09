@@ -145,3 +145,13 @@ bool CCharacter::getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter*
 {
     return true;
 }
+
+#include <map>
+#include <string>
+#include "GenericModel.h"
+
+void CCharacter::scaleUpdated(const Ogre::Vector3& scale)
+{
+    if (m_pUnitModel)
+        m_pUnitModel->setPosition(Ogre::Vector3(0.0f, -m_fBaseUnitValue194 / m_vScale.z, 0.0f));
+}
