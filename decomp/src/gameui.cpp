@@ -1028,3 +1028,74 @@ void CSkillFoldout::showFoldout(CBaseUnit* unit,float x,float y,bool includeItem
  if(py-26.0f<0.0f)py=26.0f;
  m_pWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,px),CEGUI::UDim(0,py)));
 }
+
+#include "SkillTooltip.h"
+#include "FileSystem.h"
+#include "StringUtilities.h"
+namespace skill_tooltip_load_detail {
+__attribute__((always_inline)) inline float pixelY(CEGUI::Window* window) {
+    const CEGUI::UDim& y=window->getYPosition();
+    return static_cast<float>(static_cast<int>(y.d_scale+(y.d_scale>0.0f?0.5f:-0.5f)))+y.d_offset;
+}
+}
+__attribute__((flatten))
+void CSkillTooltip::load(CGameUI* ui,std::wstring path) {
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(path,info,false,true,false);
+    m_pWindow=CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(info.m_sResourceName),
+        CEGUI::String(STRINGS::uniqueName(std::string("gui_"))),
+        CEGUI::String(""),0,0);
+    m_pWindow->setAlwaysOnTop(true);
+    m_pWindow->setMutedState(true);
+    m_pWindow->setMousePassThroughEnabled(true);
+    ui->convertToScreenScale(m_pWindow,false);
+    m_pSkillIcon=m_pWindow->recursiveChildSearch("SkillIcon");
+    m_pSkillName=m_pWindow->recursiveChildSearch("SkillName");
+    m_pManaCost=m_pWindow->recursiveChildSearch("ManaCost");
+    m_pCooldown=m_pWindow->recursiveChildSearch("Cooldown");
+    m_pNextManaCost=m_pWindow->recursiveChildSearch("ManaCostNext");
+    m_pNextCooldown=m_pWindow->recursiveChildSearch("CooldownNext");
+    m_pSkillRank=m_pWindow->recursiveChildSearch("SkillRank");
+    m_pSkillType=m_pWindow->recursiveChildSearch("SkillType");
+    m_pDescription=m_pWindow->recursiveChildSearch("Description");
+    m_pEffects=m_pWindow->recursiveChildSearch("Effects");
+    m_pNextLevel=m_pWindow->recursiveChildSearch("Next Level");
+    m_pNextDescription=m_pWindow->recursiveChildSearch("DescriptionNext");
+    m_pNextEffects=m_pWindow->recursiveChildSearch("EffectsNext");
+    m_pLevelRequirement=m_pWindow->recursiveChildSearch("Level Requirement");
+    m_pSkillRequirement=m_pWindow->recursiveChildSearch("Skill Requirement");
+    m_pUsage=m_pWindow->recursiveChildSearch("Usage");
+    const char* iconNames[4]={"Icon1","Icon2","Icon3","Icon4"};
+    const char* textNames[4]={"IconText1","IconText2","IconText3","IconText4"};
+    const char* nextIconNames[4]={"NextIcon1","NextIcon2","NextIcon3","NextIcon4"};
+    const char* nextTextNames[4]={"NextIconText1","NextIconText2","NextIconText3","NextIconText4"};
+    m_pStatIcons[0]=m_pWindow->recursiveChildSearch(iconNames[0]);
+    m_StatOffsets[0]=0.0f;
+    for(unsigned i=1;i<4;++i) {
+        m_pStatIcons[i]=m_pWindow->recursiveChildSearch(iconNames[i]);
+        float y=skill_tooltip_load_detail::pixelY(m_pStatIcons[i]);
+        float base=skill_tooltip_load_detail::pixelY(m_pStatIcons[0]);
+        m_StatOffsets[i]=y-base;
+    }
+    for(unsigned i=0;i<4;++i) {
+        m_pStatLabels[i]=m_pWindow->recursiveChildSearch(textNames[i]);
+        float y=skill_tooltip_load_detail::pixelY(m_pStatLabels[i]);
+        float base=skill_tooltip_load_detail::pixelY(m_pStatIcons[0]);
+        m_StatOffsets[4+i]=y-base;
+    }
+    m_pNextStatIcons[0]=m_pWindow->recursiveChildSearch(nextIconNames[0]);
+    m_NextStatOffsets[0]=0.0f;
+    for(unsigned i=1;i<4;++i) {
+        m_pNextStatIcons[i]=m_pWindow->recursiveChildSearch(nextIconNames[i]);
+        float y=skill_tooltip_load_detail::pixelY(m_pNextStatIcons[i]);
+        float base=skill_tooltip_load_detail::pixelY(m_pNextStatIcons[0]);
+        m_NextStatOffsets[i]=y-base;
+    }
+    for(unsigned i=0;i<4;++i) {
+        m_pNextStatLabels[i]=m_pWindow->recursiveChildSearch(nextTextNames[i]);
+        float y=skill_tooltip_load_detail::pixelY(m_pNextStatLabels[i]);
+        float base=skill_tooltip_load_detail::pixelY(m_pNextStatIcons[0]);
+        m_NextStatOffsets[4+i]=y-base;
+    }
+}
