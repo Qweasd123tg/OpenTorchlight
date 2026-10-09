@@ -5,6 +5,7 @@
 // Bases, virtual order and field offsets are the original ones; names, field types
 // and return types are placeholders until the class's own TU is recovered.
 
+#include <map>
 #include <string>
 #include "GameEnums.h"
 #include "RunicCore.h"
@@ -15,11 +16,11 @@ class CAchievements : public CRunicCore
 public:
     virtual ~CAchievements();
     static CAchievements* getSingleton();
-    long long getAchievement(EACHIEVEMENTS);
+    CAchievement* getAchievement(EACHIEVEMENTS);
     void synchAchievementsComplete();
     void update(float);
     void cheat();
-    long long getAchievement(std::string);
+    CAchievement* getAchievement(std::string);
     CAchievements* getAchievementStatus();
     void setAchievementComplete(CAchievement*);
     CAchievements();
@@ -27,15 +28,11 @@ public:
     // fields
     bool m_bUnknown10;
     unsigned char m_gap11[0x7];
-    unsigned char m_Unknown18[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown30[0x18] __attribute__((aligned(8)));
-    long long m_Unknown48;
-    int m_iUnknown50;
-    unsigned char m_gap54[0x4] __attribute__((aligned(4)));
-    void* m_pUnknown58;
-    long long m_iUnknown60;
-    long long m_iUnknown68;
-    long long m_iUnknown70;
+    // Named container destructors in CAchievements::~CAchievements establish
+    // these member types and offsets (0x18, 0x30 and 0x48).
+    TArrayList<CAchievement*> m_completedAchievements;
+    TArrayList<CAchievement*> m_achievements;
+    std::map<EACHIEVEMENTS, CAchievement*> m_achievementsById;
 };
 
 #endif

@@ -110,6 +110,38 @@ class Definitions(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "previous MATCH lost"):
             self.validate()
 
+    def test_eliminated_unhooked_extra_does_not_remove_original_definition(self):
+        helper = {"name": "_ZN5CEGUI10RefCountedINS_9BoundSlotEED1Ev", "status": "EXTRA", "weak": True}
+        self.before["A.cpp"].append(helper)
+        self.new_object = "inlined-sdk-helper"
+        self.validate()
+        self.assertEqual(set(), self.stage.covered)
+        self.after["A.cpp"] = []
+        with self.assertRaisesRegex(RuntimeError, "definition disappeared"):
+            self.validate()
+
+    def test_retained_changed_sdk_extra_is_not_accepted_by_elimination_rule(self):
+        helper = {"name": "_ZN5CEGUI10RefCountedINS_9BoundSlotEED1Ev", "status": "EXTRA", "weak": True}
+        self.before["A.cpp"].append(helper)
+        self.after["A.cpp"].append(helper)
+        self.new_object = "changed-helper-object"
+        with self.assertRaisesRegex(RuntimeError, "unsupported extra"):
+            self.validate()
+
+    def test_unsupported_extra_stops_before_headless_build(self):
+        self.after["A.cpp"].append({"name": "_ZN5CEGUI10RefCountedINS_9BoundSlotEED1Ev", "status": "EXTRA", "weak": True})
+        with self.assertRaisesRegex(RuntimeError, "unsupported extra"):
+            self.validate()
+        self.assertEqual([], self.built_tests)
+        self.assertIsNone(self.stage.validated)
+
+    def test_structural_pass_cannot_accept_unverified_diff(self):
+        self.after["A.cpp"].append(row("0x200", "DIFF"))
+        with self.assertRaisesRegex(RuntimeError, "new definition lacks MATCH"):
+            self.validate()
+        self.assertTrue(self.built_tests)
+        self.assertIsNone(self.stage.validated)
+
     def test_existing_weak_unknown_diff_requires_unchanged_object(self):
         self.before["A.cpp"] = [row("0x100", "DIFF", weak=True)]
         self.after["A.cpp"] = list(self.before["A.cpp"])
@@ -117,6 +149,44 @@ class Definitions(unittest.TestCase):
         self.new_object = "changed-object"
         with self.assertRaisesRegex(RuntimeError, "existing DIFF changed"):
             self.validate()
+
+    def test_unrelated_header_change_preserves_identical_unaccepted_object(self):
+        self.before["A.cpp"] = [row("0x100", "DIFF")]
+        self.after["A.cpp"] = list(self.before["A.cpp"])
+        (self.stage.path / "decomp/include/New.h").write_text("struct New {};")
+        self.validate()
+        self.assertNotIn("0x100", self.stage.covered)
+        self.new_object = "different-complete-object"
+        with self.assertRaisesRegex(RuntimeError, "existing DIFF changed"):
+            self.validate()
+
+    def test_owner_metadata_change_does_not_accept_old_diff(self):
+        self.before["A.cpp"] = [row("0x100", "DIFF")]
+        self.after["A.cpp"] = list(self.before["A.cpp"])
+        (self.stage.path / "decomp/owners.json").write_text('{"tus":{}}')
+        self.validate()
+        self.assertEqual(set(), self.stage.covered)
+
+    def test_build_policy_change_still_rejects_identical_unaccepted_object(self):
+        self.before["A.cpp"] = [row("0x100", "DIFF")]
+        self.after["A.cpp"] = list(self.before["A.cpp"])
+        (self.stage.path / "decomp/config.json").write_text('{"changed":true}')
+        with self.assertRaisesRegex(RuntimeError, "existing DIFF changed"):
+            self.validate()
+
+    def test_runtime_change_still_rejects_identical_unaccepted_object(self):
+        self.before["A.cpp"] = [row("0x100", "DIFF")]
+        self.after["A.cpp"] = list(self.before["A.cpp"])
+        (self.stage.path / "decomp/hybrid/runtime.h").write_text("changed runtime")
+        with self.assertRaisesRegex(RuntimeError, "existing DIFF changed"):
+            self.validate()
+
+    def test_header_change_never_reuses_prior_behavioral_acceptance(self):
+        self.before["A.cpp"] = [row("0x100", "DIFF")]
+        self.after["A.cpp"] = list(self.before["A.cpp"])
+        (self.stage.path / "decomp/include/New.h").write_text("struct New {};")
+        with self.assertRaisesRegex(RuntimeError, "previous behavioral acceptance lost"):
+            self.stage.validate(baseline_covered={"0x100"})
 
     def test_duplicate_rows_cannot_hide_diff_behind_match(self):
         self.after["B.cpp"] = [row("0x200", "DIFF", True), row("0x200")]
@@ -138,6 +208,7 @@ class Definitions(unittest.TestCase):
     def test_extra_helpers_are_narrowly_allowed(self):
         for name in ("_GLOBAL__I_keep", "__tcf_10",
                      "_Z41__static_initialization_and_destruction_0ii.clone.0",
+                     "_ZNSbItSt11char_traitsItESaItEE4_Rep10_M_disposeERKS1_",
                      "_ZNSt6vectorIiSaIiEE9push_backERKi", "_ZN9__gnu_cxx12__normal_iteratorIPiEppEv"):
             self.after["B.cpp"] = [{"name": name, "status": "EXTRA"}]
             self.validate()
@@ -148,6 +219,14 @@ class Definitions(unittest.TestCase):
                             ("_ZSt8inventedv", "unsupported extra definition")):
             self.after["B.cpp"] = [{"name": name, "status": "EXTRA"}]
             with self.assertRaisesRegex(RuntimeError, error):
+                self.validate()
+
+    def test_utf16_cleanup_exception_does_not_allow_other_string_members(self):
+        for name in ("_ZNSbItSt11char_traitsItESaItEE8inventedEv",
+                     "_ZNSbItSt11char_traitsItESaItEE4_Rep10_M_disposeERK8EvilType",
+                     "_ZN8GameText4_Rep10_M_disposeERKS1_"):
+            self.after["B.cpp"] = [{"name": name, "status": "EXTRA", "weak": True}]
+            with self.assertRaisesRegex(RuntimeError, "unsupported extra"):
                 self.validate()
 
     def test_existing_nonallowlisted_extra_is_preserved_only_with_same_object(self):

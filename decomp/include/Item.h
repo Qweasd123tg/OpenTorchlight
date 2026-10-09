@@ -32,6 +32,7 @@ public:
     bool isUseable() { return ISA(UNITTYPES::CONSUMABLE) || ISA(UNITTYPES::INTERACTABLE); }
 
 protected:
+    friend class CEnchantMenu;
     CSoundBank* m_pSoundBank;
     float m_fForcedActiveTime;
     CEGUI::Window* m_pItemText;

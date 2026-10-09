@@ -18,6 +18,7 @@
 #undef private
 #undef protected
 TL_ORIGINAL(std::wstring, originalEquipmentDescription, (CEquipment*,bool,bool), "_ZN10CEquipment23getEquipmentDescriptionEbb")
+extern "C" std::wstring recoveredEquipmentDescription(CEquipment*,bool,bool) __asm__("_ZN10CEquipment23getEquipmentDescriptionEbb");
 TL_FUNCTION(edIsa,"_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE")
 TL_FUNCTION(edTranslation,"_ZN16CStringTranslate11getSingltonEv")
 TL_FUNCTION(edTranslate,"_ZN16CStringTranslate18getTranslateStringEPKw")
@@ -122,8 +123,10 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
     if(patches.failed())_exit(42);
     for(int repeat=0;repeat<2;++repeat) {
         bool buyFlag=(c.seed&1)!=0,sellFlag=(c.seed&2)!=0;
-        std::wstring result=ours ? object->getEquipmentDescription(buyFlag,sellFlag) : originalEquipmentDescription(object,buyFlag,sellFlag);
-        number(100+repeat);text(result);text(object->m_sPrefix);text(object->m_sSuffix);number(object->m_bUnknown348);number(object->m_iUnknown338);
+        number(100+repeat);
+        if(repeat==0){if(ours)autotest::invoke(out,&recoveredEquipmentDescription,object,buyFlag,sellFlag);else autotest::invoke(out,&originalEquipmentDescription,object,buyFlag,sellFlag);}
+        else {std::wstring result=ours ? object->getEquipmentDescription(buyFlag,sellFlag) : originalEquipmentDescription(object,buyFlag,sellFlag);text(result);}
+        text(object->m_sPrefix);text(object->m_sSuffix);number(object->m_bUnknown348);number(object->m_iUnknown338);
     }
     patches.restore();typedef std::wstring Text;object->m_sPrefix.~Text();object->m_sSuffix.~Text();
     for(int i=0;i<5;++i){CAffix* a=reinterpret_cast<CAffix*>(affixStorage[i]);a->m_sPrefix.~Text();a->m_sSuffix.~Text();}
@@ -134,11 +137,15 @@ void recovered(void* p,autotest::Capture& c) {side(*static_cast<Case*>(p),true,c
 }
 TL_TEST(equipment_description_differential) {
     int failures=0;
+    autotest::Coverage coverage("equipment_description_differential",(uint64_t)(uintptr_t)&originalEquipmentDescription);
     for(unsigned n=0;n<1224;++n) {
         Case c={n<720 ? n : 36+(n-720)%72,n<720 ? 0u : 1+(n-720)/72};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        int observation=coverage.observe(host,a,b);
+        bool ok=observation==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok)host->log("    comparison_kind=%d\n",observation);
         if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    description %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
         TL_CHECK(failures,ok);
     }
+    coverage.report(host);
     host->log("    equipment description: 1224 cases, two calls per side\n");return failures;
 }

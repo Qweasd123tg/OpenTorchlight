@@ -68,6 +68,9 @@ class Frames:
     # (code section index or None for a linked ELF, start, end, reason, personality)
     ranges: tuple
     error: str | None = None
+    # Independently resolved LSDA locations; the ordinary gate stays closed.
+    # (code section, start, end, data section, data offset, resolution error)
+    lsdas: tuple = ()
 
     def __post_init__(self):
         # Parsed metadata is an immutable snapshot; no stale index after mutation.
@@ -86,6 +89,9 @@ class Frames:
                 maximum.append(high)
             index[section] = (tuple(rows), tuple(starts), tuple(maximum))
         object.__setattr__(self, "_index", index)
+        object.__setattr__(self, "lsdas", tuple(self.lsdas))
+        object.__setattr__(self, "_lsda_index", {
+            (row[0], row[1], row[2]): row for row in self.lsdas})
 
     def _overlapping(self, start, size, section):
         rows, starts, maximum = self._index.get(section, ((), (), ()))
@@ -146,6 +152,7 @@ def personality_name(image, field, width, value, encoding, relocatable, relocs):
 
 def inspect(image, relocatable=False):
     ranges = []
+    lsdas = []
     sections = [s for s in image.sections if s.name == ".eh_frame" or s.name.startswith(".eh_frame.")]
     if not sections and any(s.size and s.name in (".gcc_except_table", ".eh_frame_hdr") for s in image.sections):
         return Frames([], "EH sections present without .eh_frame; association unverified")
@@ -248,19 +255,116 @@ def inspect(image, relocatable=False):
                         aug = Reader(data, reader.pos, reader.pos + aug_size)
                         reader.take(aug_size)
                         lsda = False
+                        location = None
                         if lsda_encoding != 255:
                             lsda_field = aug.pos
                             value = aug.encoded(lsda_encoding & ~128, section.addr)
                             # Zero is the absent-LSDA sentinel even for PC-relative encoding.
                             raw_nonzero = any(data[lsda_field:aug.pos])
                             lsda = raw_nonzero or (relocatable and lsda_field in relocs)
+                            if lsda:
+                                try:
+                                    location = lsda_location(image, value, lsda_encoding,
+                                                             aug.pos - lsda_field,
+                                                             relocs.get(lsda_field), relocatable)
+                                except FrameError as exc:
+                                    location = (None, None, str(exc))
                         if aug.pos != aug.end:
                             raise FrameError("unparsed EH FDE augmentation")
                     else:
                         lsda = False
                     reason = "EH LSDA equivalence unverified" if lsda else None
                     ranges.append((code_section, start, start + size, reason, personality))
+                    if lsda:
+                        lsdas.append((code_section, start, start + size, *location))
                 pos = end
-        return Frames(ranges)
+        return Frames(ranges, lsdas=tuple(lsdas))
     except (FrameError, UnicodeError, IndexError, ValueError) as exc:
         return Frames([], f"EH metadata unverified: {exc}")
+
+
+def lsda_location(image, value, encoding, width, relocation, relocatable):
+    """Resolve the FDE's LSDA pointer, without interpreting its contents."""
+    if encoding & 128:
+        raise FrameError("indirect LSDA pointer unsupported")
+    if relocatable:
+        expected = {1: (0, 8), 2: (16, 4), 10: (0, 4), 11: (0, 4)}
+        if relocation is None or expected.get(relocation.type) != (encoding & 112, width):
+            raise FrameError("unresolved LSDA relocation or encoding")
+        symbol = relocation.symbol
+        if not symbol.defined or not 0 < symbol.shndx < len(image.sections):
+            raise FrameError("unresolved LSDA section")
+        section = image.sections[symbol.shndx]
+        offset = symbol.value + relocation.addend
+    else:
+        section = image.section_at(value)
+        offset = value - section.addr if section else -1
+    if (section is None or section.type != 1 or not section.flags & 2
+            or section.flags & 5 or not 0 <= offset < section.size
+            or not section.name.startswith(".gcc_except_table")):
+        raise FrameError("LSDA outside read-only exception section")
+    return section.index, offset, None
+
+
+def cleanup_signature(image, frames, start, size, insns, section=None):
+    """A strict cleanup-only LSDA certificate, or None for unsupported input.
+
+    GCC 4.4.7 eh_personality.cc: omitted LPStart means region start; omitted
+    TType and zero actions admit cleanups only. Preserve *all* call-site rows:
+    a missing row terminates, whereas a zero landing pad continues unwinding.
+    Exact instruction byte offsets and function size are part of the key.
+    No catch, filter, type table or instruction-layout relaxation is supported.
+    This function never changes Frames.reason(): both sides must be compared.
+    """
+    if frames.reason(start, size, section) != "EH LSDA equivalence unverified":
+        return None
+    matches = list(frames._overlapping(start, size, section))
+    if (len(matches) != 1 or matches[0][1:3] != (start, start + size)
+            or matches[0][4] != "__gxx_personality_v0"):
+        return None
+    location = frames._lsda_index.get((section, start, start + size))
+    if location is None or location[5] is not None:
+        return None
+    data_section, offset = image.sections[location[3]], location[4]
+    bound = min((r[4] for r in frames.lsdas
+                 if r[3] == location[3] and r[4] > offset), default=data_section.size)
+    data = image.data[data_section.offset:data_section.offset + data_section.size]
+    if len(data) != data_section.size:
+        return None
+    offsets = tuple(i[0] - start for i in insns)
+    if (not offsets or offsets[0] != 0 or tuple(sorted(set(offsets))) != offsets
+            or offsets[-1] >= size):
+        return None
+    boundaries = set(offsets) | {size}
+    try:
+        reader = Reader(data, offset, bound)
+        if reader.number(1) != 255 or reader.number(1) != 255:
+            return None  # Explicit LPStart, catches and exception specifications.
+        if reader.number(1) != 1:
+            return None  # Only absolute ULEB128 call-site displacements.
+        length = reader.leb()
+        end = reader.pos + length
+        if end > bound:
+            return None
+        reader.end = end
+        rows, previous_end = [], 0
+        while reader.pos < end:
+            begin, count, pad, action = (reader.leb() for _ in range(4))
+            if (action != 0 or count <= 0 or begin < previous_end
+                    or begin not in boundaries or begin + count not in boundaries
+                    or begin + count > size or (pad and pad not in set(offsets))):
+                return None
+            rows.append((begin, count, pad, 0))
+            previous_end = begin + count
+        if not rows:
+            return None
+        # Displacements must be literal bytes, not unmodelled relocations.
+        if section is not None:
+            if any(r.offset < end and r.offset + 8 > offset
+                   for r in image.relocs.get(data_section.index, [])):
+                return None
+        elif any(a < data_section.addr + end and a + 8 > data_section.addr + offset for a in image.relocs):
+            return None
+        return ("gcc447-cleanup-v1", size, offsets, tuple(rows))
+    except (FrameError, ValueError, IndexError):
+        return None

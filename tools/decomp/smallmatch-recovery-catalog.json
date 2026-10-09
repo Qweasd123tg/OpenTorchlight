@@ -1,0 +1,473 @@
+{
+  "schema": 1,
+  "description": "Reviewed assembly recipes. This is explicit reconstruction input, not automatic inference of gameplay behavior. DIFF recipes are kept here for reproducibility, never silently accepted.",
+  "units": [
+    {
+      "tu": "Achievements.cpp",
+      "headers": [
+        "Achievements.h",
+        "Achievement.h"
+      ],
+      "preamble": "CAchievements* m_gAchievementsObject = NULL;\n",
+      "instantiations": "template TArrayList<CAchievement*>::~TArrayList();\n",
+      "candidates": [
+        {
+          "address": "0xebfa20",
+          "name": "CAchievements::getSingleton()",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "singleton_from_original_storage",
+          "source": "CAchievements* CAchievements::getSingleton()\n{\n    return m_gAchievementsObject;\n}\n",
+          "original_size": 8,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xebfa20"
+          ],
+          "assembly_sha256": "239c7c0a34bbd4fc993aaec37bc5dca0e3b4634cbb9635c4566f064e7955217a",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xebfa30",
+          "name": "CAchievements::getAchievement(EACHIEVEMENTS)",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "typed_container_lookup",
+          "source": "CAchievement* CAchievements::getAchievement(EACHIEVEMENTS achievement)\n{\n    std::map<EACHIEVEMENTS, CAchievement*>::iterator found = m_achievementsById.find(achievement);\n    if (found == m_achievementsById.end())\n        return NULL;\n    return found->second;\n}\n",
+          "original_size": 77,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xebfa30"
+          ],
+          "assembly_sha256": "f872bd5fe793f01a6e91aee83ccbe34ab230a5e9405e56c10cd04683b900c59a",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xebfa80",
+          "name": "CAchievements::synchAchievementsComplete()",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "flag_store",
+          "source": "void CAchievements::synchAchievementsComplete()\n{\n    m_bUnknown10 = true;\n}\n",
+          "original_size": 5,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xebfa80"
+          ],
+          "assembly_sha256": "79a6fb1f5c412f218d62520b8f5ae94edb8662aae5079611baf665b875c6dd43",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xebfa90",
+          "name": "CAchievements::update(float)",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "container_clear",
+          "source": "void CAchievements::update(float)\n{\n    m_completedAchievements.clear();\n}\n",
+          "original_size": 42,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xebfa90"
+          ],
+          "assembly_sha256": "73873ec2ed8373b5a4a775e17995150d163b9e79aae9d6e3b82e27be91387d6e",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xebfac0",
+          "name": "CAchievements::cheat()",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "typed_element_loop",
+          "source": "void CAchievements::cheat()\n{\n    for (unsigned int i = 0; i < m_achievements.size(); ++i)\n        m_achievements[i]->cheat();\n}\n",
+          "original_size": 82,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xebfac0"
+          ],
+          "assembly_sha256": "06beaebe9c117a6dcdb36c7d1f2b945cd06d9e9b18d791d455c218414a78019c",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xec65a0",
+          "name": "CAchievements::~CAchievements()",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "reviewed_container_destructor",
+          "source": "CAchievements::~CAchievements()\n{\n    m_achievements.deleteAll();\n    m_gAchievementsObject = NULL;\n}\n",
+          "original_size": 277,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xec65a0",
+            "0xec66c0"
+          ],
+          "assembly_sha256": "b62d78eda44b40918065c4e58000ef9c710e975326f23b5cf3c8273c08689a2b",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xec7090",
+          "name": "CAchievements::getAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "typed_container_lookup",
+          "source": "CAchievement* CAchievements::getAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> > name)\n{\n    for (unsigned int i = 0; i < m_achievements.size(); ++i)\n    {\n        if (std::string(m_achievements[i]->m_strName) == name)\n            return m_achievements[i];\n    }\n    return NULL;\n}\n",
+          "original_size": 305,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xec7090"
+          ],
+          "assembly_sha256": "5530639b36ac687a64a0bde37487eb8d6d5a40d7678c5f01cfdcbd0b50a317e5",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xec7850",
+          "name": "CAchievements::setAchievementComplete(CAchievement*)",
+          "tu": "Achievements.cpp",
+          "header": "Achievements.h",
+          "family": "container_add",
+          "source": "void CAchievements::setAchievementComplete(CAchievement* achievement)\n{\n    m_completedAchievements.add(achievement);\n}\n",
+          "original_size": 237,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xec7850"
+          ],
+          "assembly_sha256": "98fbeb5997414505a86add3bc35ec6fab5413e3fa3a82096c9ee35ec0eaf9c82",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        }
+      ]
+    },
+    {
+      "tu": "dropdownmenu.cpp",
+      "headers": [
+        "DropdownMenu.h",
+        "iMenuListener.h"
+      ],
+      "preamble": "",
+      "instantiations": "template TArrayList<iMenuListener*>::~TArrayList();\n",
+      "candidates": [
+        {
+          "address": "0xb102d0",
+          "name": "CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)",
+          "tu": "dropdownmenu.cpp",
+          "header": "DropdownMenu.h",
+          "family": "listener_broadcast",
+          "source": "void CDropdownMenu::broadcastEvent(EMENU_TYPE type, EMENU_EVENT event)\n{\n    for (unsigned int i = 0; i < m_pendingMenuListeners.size(); ++i)\n        m_menuListeners.remove(m_pendingMenuListeners[i]);\n    m_pendingMenuListeners.clear();\n    for (unsigned int i = 0; i < m_menuListeners.size(); ++i)\n        m_menuListeners[i]->menuEventOccured(this, type, event);\n}\n",
+          "original_size": 348,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xb102d0"
+          ],
+          "assembly_sha256": "4667e741800439f519d4128b37a5fd172b38498826d2b8a811a412d1b4707a9a",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xb10430",
+          "name": "CDropdownMenu::addMenuListener(iMenuListener*)",
+          "tu": "dropdownmenu.cpp",
+          "header": "DropdownMenu.h",
+          "family": "listener_registration",
+          "source": "void CDropdownMenu::addMenuListener(iMenuListener* listener)\n{\n    if (m_menuListeners.find(listener) == -1)\n    {\n        m_pendingMenuListeners.remove(listener);\n        m_menuListeners.add(listener);\n    }\n}\n",
+          "original_size": 444,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xb10430"
+          ],
+          "assembly_sha256": "8f3a69f701a1e55b19d6d50bf2a9bc1c04462376368bab6f95d4c76d8e332784",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xb17140",
+          "name": "CDropdownMenu::~CDropdownMenu()",
+          "tu": "dropdownmenu.cpp",
+          "header": "DropdownMenu.h",
+          "family": "reviewed_container_destructor",
+          "source": "CDropdownMenu::~CDropdownMenu()\n{\n    if (m_pGenericModel)\n    {\n        delete m_pGenericModel;\n        m_pGenericModel = NULL;\n    }\n    if (m_pSoundBank)\n    {\n        delete m_pSoundBank;\n        m_pSoundBank = NULL;\n    }\n    m_menuListeners.clear();\n    m_pendingMenuListeners.clear();\n}\n",
+          "original_size": 254,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xb17140",
+            "0xb17240"
+          ],
+          "assembly_sha256": "7b17e9c028955a30a1d75becc97d43dc1ec3f499e38bb28e67f51f098b118b0e",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xb17260",
+          "name": "CDropdownMenu::removeMenuListener(iMenuListener*)",
+          "tu": "dropdownmenu.cpp",
+          "header": "DropdownMenu.h",
+          "family": "deferred_listener_removal",
+          "source": "void CDropdownMenu::removeMenuListener(iMenuListener* listener)\n{\n    m_pendingMenuListeners.add(listener);\n}\n",
+          "original_size": 273,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xb17260"
+          ],
+          "assembly_sha256": "137207af1959a293cb079e4ab1cde5fc8ba8cc2dfe1f8a980c3bd4961a0fba9c",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        }
+      ]
+    },
+    {
+      "tu": "SpawnClassParser.cpp",
+      "headers": [
+        "SpawnClassParser.h",
+        "StringUtilities.h",
+        "SpawnClass.h",
+        "SpawnClassData.h"
+      ],
+      "preamble": "static CSpawnClassParser* m_gSpawnClassParser = NULL;\n",
+      "instantiations": "\n",
+      "candidates": [
+        {
+          "address": "0xa7e6a0",
+          "name": "CSpawnClassParser::getSingleton()",
+          "tu": "SpawnClassParser.cpp",
+          "header": "SpawnClassParser.h",
+          "family": "singleton_from_original_storage",
+          "source": "CSpawnClassParser* CSpawnClassParser::getSingleton()\n{\n    return m_gSpawnClassParser;\n}\n",
+          "original_size": 8,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xa7e6a0"
+          ],
+          "assembly_sha256": "a2d9f740440acd367df7c197eaf3eddda79e33c2d479dcf19bbe410af0151fad",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xa7ec10",
+          "name": "CSpawnClassParser::clear()",
+          "tu": "SpawnClassParser.cpp",
+          "header": "SpawnClassParser.h",
+          "family": "owning_map_cleanup",
+          "source": "void CSpawnClassParser::clear()\n{\n    for (std::map<std::wstring, CSpawnClassData*>::iterator it = m_spawnClassData.begin();\n         it != m_spawnClassData.end(); ++it)\n    {\n        if (it->second)\n        {\n            delete it->second;\n            it->second = NULL;\n        }\n    }\n    m_spawnClassData.clear();\n    for (std::map<std::wstring, CSpawnClass*>::iterator it = m_spawnClasses.begin();\n         it != m_spawnClasses.end();)\n    {\n        CSpawnClass* spawnClass = it->second;\n        ++it;\n        delete spawnClass;\n    }\n    m_spawnClasses.clear();\n}\n",
+          "original_size": 204,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xa7ec10"
+          ],
+          "assembly_sha256": "1d839a316dc1ea06c566539bd300c7af44572b0f20abea86ba0e982fbab1fc10",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xa7ece0",
+          "name": "CSpawnClassParser::~CSpawnClassParser()",
+          "tu": "SpawnClassParser.cpp",
+          "header": "SpawnClassParser.h",
+          "family": "reviewed_container_destructor",
+          "source": "CSpawnClassParser::~CSpawnClassParser()\n{\n    clear();\n    m_gSpawnClassParser = NULL;\n}\n",
+          "original_size": 148,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xa7ece0",
+            "0xa7ed80"
+          ],
+          "assembly_sha256": "80d92c3f49530e34e12b7125e6175211ebb14e870c78a772c7910319c5e89b91",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xa7eda0",
+          "name": "CSpawnClassParser::getSpawnClassDataByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+          "tu": "SpawnClassParser.cpp",
+          "header": "SpawnClassParser.h",
+          "family": "uppercase_map_lookup",
+          "source": "CSpawnClassData* CSpawnClassParser::getSpawnClassDataByName(const std::wstring& name)\n{\n    std::map<std::wstring, CSpawnClassData*>::iterator found = m_spawnClassData.find(STRINGS::StringUpper(name));\n    if (found == m_spawnClassData.end())\n        return NULL;\n    return found->second;\n}\n",
+          "original_size": 347,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xa7eda0"
+          ],
+          "assembly_sha256": "688e7b6ec839f3d713812ce6f7a6e814927edb41069aef149f72e07ea7fb7f70",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xa7ef00",
+          "name": "CSpawnClassParser::getSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+          "tu": "SpawnClassParser.cpp",
+          "header": "SpawnClassParser.h",
+          "family": "uppercase_map_lookup",
+          "source": "CSpawnClass* CSpawnClassParser::getSpawnClass(const std::wstring& name)\n{\n    std::map<std::wstring, CSpawnClass*>::iterator found = m_spawnClasses.find(STRINGS::StringUpper(name));\n    if (found == m_spawnClasses.end())\n        return NULL;\n    return found->second;\n}\n",
+          "original_size": 347,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xa7ef00"
+          ],
+          "assembly_sha256": "f9e37e34500b5b27ee951ac7c41f39b71718818ff1a704303c6f85ef7aa50896",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        }
+      ]
+    },
+    {
+      "tu": "Inventory.cpp",
+      "headers": [
+        "Inventory.h"
+      ],
+      "preamble": "",
+      "instantiations": "\n",
+      "candidates": [
+        {
+          "address": "0x91b050",
+          "name": "CInventory::getPaneIndex(EINVENTORY_PANES)",
+          "tu": "Inventory.cpp",
+          "header": "Inventory.h",
+          "family": "vector_backward_search",
+          "source": "int CInventory::getPaneIndex(EINVENTORY_PANES pane)\n{\n    for (int i = m_paneStarts.size() - 1; i >= 0; --i)\n    {\n        if (m_panes[i] == pane)\n            return i;\n    }\n    return 0;\n}\n",
+          "original_size": 84,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0x91b050"
+          ],
+          "assembly_sha256": "cec510710348b2212414f11e468256f36b654d868cc2ef1cfa9c667a7e465d1b",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0x91b0b0",
+          "name": "CInventory::getPaneSize(EINVENTORY_PANES)",
+          "tu": "Inventory.cpp",
+          "header": "Inventory.h",
+          "family": "vector_interval_size",
+          "source": "int CInventory::getPaneSize(EINVENTORY_PANES pane)\n{\n    unsigned int index = getPaneIndex(pane);\n    if (index == m_paneStarts.size() - 1)\n        return m_iUnknown28 - m_paneStarts[index];\n    return m_paneStarts[index + 1] - m_paneStarts[index];\n}\n",
+          "original_size": 64,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0x91b0b0"
+          ],
+          "assembly_sha256": "5149367bfbb3e7f48c12ac5c017360895caff61da1b98bd46dc3d0188d92dcae",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0x91b0f0",
+          "name": "CInventory::slotIsInPane(unsigned int, int)",
+          "tu": "Inventory.cpp",
+          "header": "Inventory.h",
+          "family": "signed_interval_membership",
+          "source": "bool CInventory::slotIsInPane(unsigned int pane, int slot)\n{\n    int start = m_paneStarts[pane];\n    int end = m_iUnknown28;\n    if (pane < m_paneStarts.size() - 1)\n        end = m_paneStarts[pane + 1];\n    return slot >= start && slot < end;\n}\n",
+          "original_size": 61,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0x91b0f0"
+          ],
+          "assembly_sha256": "f00c0394f48a582b71f301d12afd995b6f52198fed7f89215f5496564f48c658",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0x91b1c0",
+          "name": "CInventory::getItemPane(unsigned int)",
+          "tu": "Inventory.cpp",
+          "header": "Inventory.h",
+          "family": "vector_interval_search",
+          "source": "int CInventory::getItemPane(unsigned int slot)\n{\n    for (unsigned int i = 0; i < m_paneStarts.size(); ++i)\n    {\n        if (slot >= m_paneStarts[i] &&\n            (i == m_paneStarts.size() - 1 || slot < m_paneStarts[i + 1]))\n            return i;\n    }\n    return 0;\n}\n",
+          "original_size": 81,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0x91b1c0"
+          ],
+          "assembly_sha256": "334a70820980630998dda788ffb546959ae3ed960f72f6a014675e2dc6896c65",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0x9243b0",
+          "name": "CInventory::addSection(EINVENTORY_PANES, unsigned int)",
+          "tu": "Inventory.cpp",
+          "header": "Inventory.h",
+          "family": "parallel_vector_append",
+          "source": "void CInventory::addSection(EINVENTORY_PANES pane, unsigned int size)\n{\n    m_panes.push_back(pane);\n    m_paneStarts.push_back(m_iUnknown28);\n    m_iUnknown28 += size;\n}\n",
+          "original_size": 143,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0x9243b0"
+          ],
+          "assembly_sha256": "f49d383b78fee8c7ec7d18388dbd8005bc561b018c4ab391cc696c85e2e630e0",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        }
+      ]
+    },
+    {
+      "tu": "Console.cpp",
+      "headers": [
+        "EmptyStrings.h",
+        "Console.h",
+        "StringUtilities.h",
+        "CEGUIWindowManager.h"
+      ],
+      "preamble": "",
+      "instantiations": "template TArrayList<std::wstring>::~TArrayList();\n",
+      "candidates": [
+        {
+          "address": "0xae1df0",
+          "name": "CConsole::getVisible()",
+          "tu": "Console.cpp",
+          "header": "Console.h",
+          "family": "nullable_library_method",
+          "source": "bool CConsole::getVisible()\n{\n    return m_window ? m_window->isVisible(false) : false;\n}\n",
+          "original_size": 19,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xae1df0"
+          ],
+          "assembly_sha256": "b8793fe8f0fab3e1b8f8689d5bdc23da418a6516a4e88fd9f01b32d4a5bc66f6",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xaed310",
+          "name": "CConsole::setVisible(bool)",
+          "tu": "Console.cpp",
+          "header": "Console.h",
+          "family": "window_visibility",
+          "source": "void CConsole::setVisible(bool visible)\n{\n    if (m_window)\n    {\n        if (visible)\n        {\n            m_window->setVisible(true);\n            m_window->activate();\n            m_window->moveToFront();\n            m_inputWindow->setText(CEGUI::String());\n        }\n        else\n            m_window->setVisible(false);\n    }\n}\n",
+          "original_size": 447,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xaed310"
+          ],
+          "assembly_sha256": "336e785679fd6c65a6fc6e4c81110725910b054b288f99e6976fbc2f2bb4fb98",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xaed4d0",
+          "name": "CConsole::handleClose(CEGUI::EventArgs const&)",
+          "tu": "Console.cpp",
+          "header": "Console.h",
+          "family": "event_callback",
+          "source": "bool CConsole::handleClose(const CEGUI::EventArgs&)\n{\n    setVisible(false);\n    return true;\n}\n",
+          "original_size": 21,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xaed4d0"
+          ],
+          "assembly_sha256": "3209fd7091a452f755a7709d3aa83b9c965616bb03077427f9be727e25cd61cb",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xaef8b0",
+          "name": "CConsole::getHistoryText()",
+          "tu": "Console.cpp",
+          "header": "Console.h",
+          "family": "typed_history_text",
+          "source": "std::wstring CConsole::getHistoryText()\n{\n    std::wstring text = EMPTY_WSTRING;\n    if (m_historyWindow)\n        text = STRINGS::StringConvertToWide(m_historyWindow->getText().c_str(), 5000);\n    return text;\n}\n",
+          "original_size": 200,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xaef8b0"
+          ],
+          "assembly_sha256": "e619695f3a2da1611998b3be87c6be3d5f70d6655e25059a4d7b4b09c7a20eb6",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        },
+        {
+          "address": "0xaf04d0",
+          "name": "CConsole::~CConsole()",
+          "tu": "Console.cpp",
+          "header": "Console.h",
+          "family": "reviewed_container_destructor",
+          "source": "CConsole::~CConsole()\n{\n    CEGUI::WindowManager::getSingleton().destroyWindow(m_window);\n    m_window = NULL;\n    m_inputWindow = NULL;\n}\n",
+          "original_size": 238,
+          "status": "UNVERIFIED",
+          "closure": [
+            "0xaf04d0",
+            "0xaf05c0"
+          ],
+          "assembly_sha256": "36de72fb3b090d23e634012002fbd992ac293e095a9c41ca762dbbc758cb0bb2",
+          "provenance": "Reviewed original ASM recipe using named containers and actual library declarations; not accepted until the complete emitted TU matches."
+        }
+      ]
+    }
+  ]
+}

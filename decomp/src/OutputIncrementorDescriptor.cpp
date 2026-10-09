@@ -1,3 +1,4 @@
+#include "EditorScene.h"
 #include "EmptyStrings.h"
 #include "OutputIncrementorDescriptor.h"
 #include "GameEnums.h"
@@ -48,4 +49,9 @@ void COutputIncrementorDescriptor::InputLogicEvent(CEditorBaseObject* object, un
             break;
         }
     }
+}
+
+CEditorBaseObject* COutputIncrementorDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new COutputIncrementor(scene->getResourceManager());
 }

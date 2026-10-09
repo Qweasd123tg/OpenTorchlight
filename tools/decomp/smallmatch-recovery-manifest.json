@@ -1,0 +1,371 @@
+{
+  "schema": 1,
+  "base_commit": "824e3d3a33242c9ea775ca8a5ff36e87d6fd23ee",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "headers": [
+    {
+      "path": "Achievements.h",
+      "before_sha256": "10bcc8cc187ee179da49d87751fa51926c6345737cfc999989d85aca504d29db",
+      "after_sha256": "76e6130ed18574bb4860d49d4d5198007cca93e96ea7d76f3144a0ff76d2ba9e"
+    },
+    {
+      "path": "DropdownMenu.h",
+      "before_sha256": "9e5671fef3ab4cdb4de502d99211e630c59dcc45005ab1a7f4f8d38878d1594b",
+      "after_sha256": "60aa735433f76a309b3af781fe87c573ad64290c134bdc68df5fbe8a5b754f1f"
+    },
+    {
+      "path": "SpawnClassParser.h",
+      "before_sha256": null,
+      "after_sha256": "0e0b3583ab5c40956e3deff43df9f639227dfef7572b3d473f25d3b32146e9b9"
+    },
+    {
+      "path": "Inventory.h",
+      "before_sha256": "b4302edf8b058d4c6daa1b400b725ea664883fd3c6455aad7e7cb31af720fd7a",
+      "after_sha256": "a0fb08307eb84648cc840d9b3465f27544b5a036178b127057ad0889934ea990"
+    },
+    {
+      "path": "Console.h",
+      "before_sha256": null,
+      "after_sha256": "54e852a42aec850c8f17d17ba5ff2408b94f53b1bf127d0f86192f648c168e94"
+    }
+  ],
+  "classes": [
+    {
+      "name": "CAchievements",
+      "header": "Achievements.h",
+      "size": 120,
+      "base": "CRunicCore",
+      "base_offset": 0,
+      "members": [
+        {
+          "offset": 24,
+          "name": "m_completedAchievements",
+          "type": "TArrayList<CAchievement*>",
+          "evidence_type": "TArrayList<CAchievement*>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0xec65a0",
+              "call_instruction": "0xec6699",
+              "assembly_sha256": "b62d78eda44b40918065c4e58000ef9c710e975326f23b5cf3c8273c08689a2b"
+            }
+          ]
+        },
+        {
+          "offset": 48,
+          "name": "m_achievements",
+          "type": "TArrayList<CAchievement*>",
+          "evidence_type": "TArrayList<CAchievement*>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0xec65a0",
+              "call_instruction": "0xec6690",
+              "assembly_sha256": "b62d78eda44b40918065c4e58000ef9c710e975326f23b5cf3c8273c08689a2b"
+            }
+          ]
+        },
+        {
+          "offset": 72,
+          "name": "m_achievementsById",
+          "type": "std::map<EACHIEVEMENTS, CAchievement*>",
+          "evidence_type": "std::map<EACHIEVEMENTS, CAchievement*>",
+          "size": 48,
+          "witnesses": [
+            {
+              "function": "0xec65a0",
+              "call_instruction": "0xec6639",
+              "assembly_sha256": "b62d78eda44b40918065c4e58000ef9c710e975326f23b5cf3c8273c08689a2b"
+            },
+            {
+              "function": "0xec65a0",
+              "call_instruction": "0xec6687",
+              "assembly_sha256": "b62d78eda44b40918065c4e58000ef9c710e975326f23b5cf3c8273c08689a2b"
+            }
+          ],
+          "unique_key_evidence": {
+            "callee": "0xece0f0",
+            "symbol": "std::_Rb_tree<EACHIEVEMENTS, std::pair<EACHIEVEMENTS const, CAchievement*>, std::_Select1st<std::pair<EACHIEVEMENTS const, CAchievement*> >, std::less<EACHIEVEMENTS>, std::allocator<std::pair<EACHIEVEMENTS const, CAchievement*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<EACHIEVEMENTS const, CAchievement*> >, std::pair<EACHIEVEMENTS const, CAchievement*> const&)",
+            "receiver_review": "Original ctor 0xec7940 is read only as layout context: the member address this+0x48 is saved on its stack and passed to unique insertion at 0xecafd9. No large-function implementation is proposed."
+          }
+        }
+      ],
+      "boundary_fields": [
+        {
+          "offset": 16,
+          "name": "m_bUnknown10"
+        }
+      ],
+      "new_header": false,
+      "provenance": "Original RTTI and vtable; named container call receivers. Field names are descriptive recovered names, not asserted to be the original spelling."
+    },
+    {
+      "name": "CDropdownMenu",
+      "header": "DropdownMenu.h",
+      "size": 192,
+      "base": "CRunicCore",
+      "base_offset": 0,
+      "members": [
+        {
+          "offset": 144,
+          "name": "m_menuListeners",
+          "type": "TArrayList<iMenuListener*>",
+          "evidence_type": "TArrayList<iMenuListener*>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0xb17140",
+              "call_instruction": "0xb17224",
+              "assembly_sha256": "7b17e9c028955a30a1d75becc97d43dc1ec3f499e38bb28e67f51f098b118b0e"
+            },
+            {
+              "function": "0xb1b6f0",
+              "call_instruction": "0xb1b95a",
+              "assembly_sha256": "5e17c0d50b6e156bf06f2559387151bc4bcbccfe7f370de0ecb80df5ae69b1ae"
+            }
+          ]
+        },
+        {
+          "offset": 168,
+          "name": "m_pendingMenuListeners",
+          "type": "TArrayList<iMenuListener*>",
+          "evidence_type": "TArrayList<iMenuListener*>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0xb17140",
+              "call_instruction": "0xb17218",
+              "assembly_sha256": "7b17e9c028955a30a1d75becc97d43dc1ec3f499e38bb28e67f51f098b118b0e"
+            },
+            {
+              "function": "0xb1b6f0",
+              "call_instruction": "0xb1b94e",
+              "assembly_sha256": "5e17c0d50b6e156bf06f2559387151bc4bcbccfe7f370de0ecb80df5ae69b1ae"
+            }
+          ]
+        }
+      ],
+      "boundary_fields": [
+        {
+          "offset": 112,
+          "name": "m_pGenericModel"
+        },
+        {
+          "offset": 128,
+          "name": "m_pSoundBank"
+        }
+      ],
+      "new_header": false,
+      "provenance": "Original RTTI and vtable; named container call receivers. Field names are descriptive recovered names, not asserted to be the original spelling."
+    },
+    {
+      "name": "CSpawnClassParser",
+      "header": "SpawnClassParser.h",
+      "size": 112,
+      "base": "CRunicCore",
+      "base_offset": 0,
+      "members": [
+        {
+          "offset": 16,
+          "name": "m_spawnClasses",
+          "type": "std::map<std::wstring, CSpawnClass*>",
+          "evidence_type": "std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSpawnClass*>",
+          "size": 48,
+          "witnesses": [
+            {
+              "function": "0xa7ec10",
+              "call_instruction": "0xa7ecb4",
+              "assembly_sha256": "1d839a316dc1ea06c566539bd300c7af44572b0f20abea86ba0e982fbab1fc10"
+            },
+            {
+              "function": "0xa7ece0",
+              "call_instruction": "0xa7ed1d",
+              "assembly_sha256": "80d92c3f49530e34e12b7125e6175211ebb14e870c78a772c7910319c5e89b91"
+            },
+            {
+              "function": "0xa7ece0",
+              "call_instruction": "0xa7ed50",
+              "assembly_sha256": "80d92c3f49530e34e12b7125e6175211ebb14e870c78a772c7910319c5e89b91"
+            },
+            {
+              "function": "0xa7f060",
+              "call_instruction": "0xa7f34b",
+              "assembly_sha256": "7efa9e899b7f7e8ffd0f374b6fd5cecc0f987ab883720c96212ccaba6c8d165c"
+            },
+            {
+              "function": "0xa81b90",
+              "call_instruction": "0xa81c1e",
+              "assembly_sha256": "3add5044e31440a8fba497d186a7e9183616315807108fc2f218eb560172a8b4"
+            }
+          ],
+          "unique_key_evidence": {
+            "callee": "0xa826b0",
+            "symbol": "std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> const&)",
+            "receiver_review": "0xa7f060:0xa7f34b uses unique insertion on this+0x10; reproduced by the receiver scanner."
+          }
+        },
+        {
+          "offset": 64,
+          "name": "m_spawnClassData",
+          "type": "std::map<std::wstring, CSpawnClassData*>",
+          "evidence_type": "std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSpawnClassData*>",
+          "size": 48,
+          "witnesses": [
+            {
+              "function": "0xa7ec10",
+              "call_instruction": "0xa7ec5f",
+              "assembly_sha256": "1d839a316dc1ea06c566539bd300c7af44572b0f20abea86ba0e982fbab1fc10"
+            },
+            {
+              "function": "0xa7ece0",
+              "call_instruction": "0xa7ed10",
+              "assembly_sha256": "80d92c3f49530e34e12b7125e6175211ebb14e870c78a772c7910319c5e89b91"
+            },
+            {
+              "function": "0xa7ece0",
+              "call_instruction": "0xa7ed43",
+              "assembly_sha256": "80d92c3f49530e34e12b7125e6175211ebb14e870c78a772c7910319c5e89b91"
+            },
+            {
+              "function": "0xa81b90",
+              "call_instruction": "0xa81c11",
+              "assembly_sha256": "3add5044e31440a8fba497d186a7e9183616315807108fc2f218eb560172a8b4"
+            }
+          ],
+          "unique_key_evidence": {
+            "callee": "0xa820b0",
+            "symbol": "std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> const&)",
+            "receiver_review": "0xa80ca0:0xa80ef9 calls unique insertion on the data map; this+0x40 receiver reviewed in the original ASM. The original also emits std::map<wstring,CSpawnClassData*>::operator[] at 0xa822e0."
+          }
+        }
+      ],
+      "boundary_fields": [],
+      "new_header": true,
+      "provenance": "Original RTTI and vtable; named container call receivers. Field names are descriptive recovered names, not asserted to be the original spelling."
+    },
+    {
+      "name": "CInventory",
+      "header": "Inventory.h",
+      "size": 528,
+      "base": "CRunicCore",
+      "base_offset": 0,
+      "members": [
+        {
+          "offset": 96,
+          "name": "m_panes",
+          "type": "std::vector<EINVENTORY_PANES>",
+          "evidence_type": "std::vector<EINVENTORY_PANES>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0x926000",
+              "call_instruction": "0x9261b8",
+              "assembly_sha256": "8b065ad79a23cf549c7a1ca25477b8daa66484734cc571fd897e48d76575c7de"
+            }
+          ]
+        },
+        {
+          "offset": 120,
+          "name": "m_paneStarts",
+          "type": "std::vector<unsigned int>",
+          "evidence_type": "std::vector<unsigned int>",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0x9243b0",
+              "call_instruction": "0x924438",
+              "assembly_sha256": "f49d383b78fee8c7ec7d18388dbd8005bc561b018c4ab391cc696c85e2e630e0"
+            },
+            {
+              "function": "0x926000",
+              "call_instruction": "0x9261cb",
+              "assembly_sha256": "8b065ad79a23cf549c7a1ca25477b8daa66484734cc571fd897e48d76575c7de"
+            }
+          ]
+        }
+      ],
+      "boundary_fields": [
+        {
+          "offset": 40,
+          "name": "m_iUnknown28"
+        },
+        {
+          "offset": 144,
+          "name": "m_Unknown90"
+        }
+      ],
+      "new_header": false,
+      "provenance": "Original RTTI and vtable; named container call receivers. Field names are descriptive recovered names, not asserted to be the original spelling."
+    },
+    {
+      "name": "CConsole",
+      "header": "Console.h",
+      "size": 112,
+      "base": "CRunicCore",
+      "base_offset": 0,
+      "members": [
+        {
+          "offset": 56,
+          "name": "m_history",
+          "type": "TArrayList<std::wstring>",
+          "evidence_type": "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >",
+          "size": 24,
+          "witnesses": [
+            {
+              "function": "0xaf04d0",
+              "call_instruction": "0xaf05a9",
+              "assembly_sha256": "36de72fb3b090d23e634012002fbd992ac293e095a9c41ca762dbbc758cb0bb2"
+            }
+          ]
+        }
+      ],
+      "boundary_fields": [
+        {
+          "offset": 24,
+          "name": "m_window"
+        },
+        {
+          "offset": 32,
+          "name": "m_inputWindow"
+        },
+        {
+          "offset": 40,
+          "name": "m_historyWindow"
+        },
+        {
+          "offset": 80,
+          "name": "m_unknown50"
+        }
+      ],
+      "new_header": true,
+      "provenance": "Original RTTI and vtable; named container call receivers. Field names are descriptive recovered names, not asserted to be the original spelling."
+    }
+  ],
+  "prototype_changes": [
+    {
+      "header": "Achievements.h",
+      "method": "getAchievement(EACHIEVEMENTS)",
+      "before": "long long",
+      "after": "CAchievement*",
+      "evidence": "0xebfa30 returns the second member of the named EACHIEVEMENTS/CAchievement* map node, or NULL; candidate MATCH."
+    },
+    {
+      "header": "Achievements.h",
+      "method": "getAchievement(std::string)",
+      "before": "long long",
+      "after": "CAchievement*",
+      "evidence": "0xec7090 returns an element from the named TArrayList<CAchievement*>; body remains DIFF and is excluded."
+    },
+    {
+      "header": "Inventory.h",
+      "method": "slotIsInPane(unsigned int, int)",
+      "before": "unsigned int",
+      "after": "bool",
+      "evidence": "0x91b0f0 returns conjunction in the low result byte without extending it to a full unsigned int; signed slot comparisons and bool candidate MATCH."
+    }
+  ],
+  "new_header_notes": {
+    "Console.h": "Only known virtual destructor slots are declared virtual. Window pointer receivers are established by getVisible, setVisible, getHistoryText. Other layout regions stay opaque. Size 0x70 is recorded at allocation 0xaa3db4 in elfdb.json.",
+    "SpawnClassParser.h": "Original vtable has only D1/D0. Two maps cover all 0x60 bytes after CRunicCore. Size 0x70 is recorded at allocation 0xa5e511. Constructor is declared but its unresolved wide-literal comparison prevents implementation acceptance."
+  }
+}

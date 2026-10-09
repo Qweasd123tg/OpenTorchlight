@@ -35,6 +35,7 @@ public:
     void updateAffixes(float elapsed);
     void calculateEffectValues();
     void clearOutAffixEffects();
+    void clearEffects(bool);
     void addAffixEffectsBackIn();
     const std::wstring& getVisualDescription(EEFFECT_ACTIVATION,unsigned int,bool,bool);
     unsigned int createEffects(CDataGroup* data,bool flag);

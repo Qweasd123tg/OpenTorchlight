@@ -222,15 +222,11 @@ public:
     // CEGUI::Window* for consistency with the 126 half, which the listing
     // does write with recursiveChildSearch results.
     // ------------------------------------------------------------------
-    CEGUI::Window* m_pUnknown1050[19];                     // +0x1050  [C] element, [B] extent
-    CEGUI::Window* m_pUnknown10E8[126];                    // +0x10e8  [A] overlay C (always-on-top)
-    CEGUI::Window* m_pUnknown14D8[19];                     // +0x14d8  [C] element, [B] extent
-    CEGUI::Window* m_pUnknown1570[126];                    // +0x1570  [A] overlay A (slot's parent)
-    CEGUI::Window* m_pUnknown1960[19];                     // +0x1960  [C] element, [B] extent
-    CEGUI::Window* m_pUnknown19F8[126];                    // +0x19f8  [A] overlay B (child of MSocketsO)
+    CEGUI::Window* m_pUnknown1050[145];                     // +0x1050  [C] element, [B] extent
+    CEGUI::Window* m_pUnknown14D8[145];                     // +0x14d8  [C] element, [B] extent
+    CEGUI::Window* m_pUnknown1960[145];                     // +0x1960  [C] element, [B] extent
     CEGUI::Window* m_pSocketedSizeWindows[145];            // +0x1de8  [B] 19-pointer socket block
-    CEGUI::Window* m_pUnknown2270[19];                     // +0x2270  [C] element, [B] extent
-    CEGUI::Window* m_pUnknown2308[126];                    // +0x2308  [A] item-name StaticText
+    CEGUI::Window* m_pUnknown2270[145];                     // +0x2270  [C] element, [B] extent
 
     // ------------------------------------------------------------------
     // Five 82-entry blocks, 0x290 == 82*8 exactly.  The pet-slot loop writes

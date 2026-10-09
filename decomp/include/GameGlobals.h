@@ -21,6 +21,7 @@ public:
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:
     friend class CEquipment;
+    friend class CEnchantMenu;
     unsigned char m_GlobalsData10[0x24-0x10];
     float m_fRandomEnchantChance;
     float m_fRandomSocketChance;
@@ -31,9 +32,21 @@ private:
     int m_iMaxMagicItemSlots;
     int m_iMinUniqueItemSlots;
     int m_iMaxUniqueItemSlots;
-    unsigned char m_GlobalsData48[0x6c-0x48];
+    unsigned char m_GlobalsData48[0x64-0x48];
+    float m_fEnchanterSocketChance;
+    float m_fEnchanterEnchantChance;
     float m_fEnchanterPricePerEnchant; // ENCHANTER_PRICE_PER_ENCHANT
-    unsigned char m_GlobalsData70[0xa8-0x70];
+    float m_fEnchanterDisenchantBase;
+    float m_fEnchanterDisenchantMax;
+    float m_fShrineSocketChance;
+    float m_fShrineEnchantChance;
+    float m_fShrineDisenchantBase;
+    float m_fShrineDisenchantMax;
+    int m_iEnchanterMaxEnchantments;
+    float m_fEnchanterDisenchantPerEnchant;
+    int m_iShrineMaxEnchantments;
+    float m_fShrineDisenchantPerEnchant;
+    unsigned char m_GlobalsData98[0x10];
     float m_fUnitShadowRange;
     float m_fUnitNearRange;
     float m_fTriggerNearRange;

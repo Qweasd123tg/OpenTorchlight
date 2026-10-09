@@ -9,6 +9,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 import re
+import hashlib
+
+import headers as declaration_headers
+import ghidra_cpp
 
 
 class ContextError(ValueError):
@@ -80,14 +84,28 @@ def _scan(text):
         if token == "{":
             ns = re.fullmatch(r"namespace\s+(\w+)", head)
             cls = re.fullmatch(r"(?:class|struct)\s+(\w+)\s*(?::[^{};]*)?", head)
+            array = re.fullmatch(r"(?:static\s+)?const\s+std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
-                          ("class", cls[1]) if cls else ("body", ""))
+                          ("class", cls[1]) if cls else
+                          ("string_array", array[1]) if array else ("body", ""))
             scopes = tuple((k, n) for k, n, *_ in stack)
             stack.append((kind, name, start, i, scopes))
             start = i + 1
         elif token == "}":
             if stack:
                 kind, name, beginning, opening, scopes = stack.pop()
+                if kind == "string_array" and all(k == "namespace" for k, _ in scopes):
+                    # Only literal-only std::string/wstring arrays already in a
+                    # header. Retain the complete initializer; never infer bytes
+                    # or accept calls/macros/nested initializer expressions.
+                    literal = r'(?:L)?"(?:\\.|[^"\\])*"'
+                    values = text[opening + 1:i]
+                    tail = re.match(r"\s*;", masked[i + 1:])
+                    if tail and re.fullmatch(r"\s*" + literal + r"(?:\s*,\s*" + literal + r")*\s*,?\s*", values):
+                        first = re.search(r"\S", masked[beginning:opening])
+                        declaration = text[beginning + first.start():i + 1 + tail.end()].strip()
+                        qualified = "::".join([n for _, n in scopes] + [name])
+                        declarations.append(Declaration(qualified, "data", declaration, scopes, 0))
                 if kind == "class":
                     end = i + 1
                     semicolon = re.match(r"\s*;", masked[end:])
@@ -125,6 +143,28 @@ def _scan(text):
                 declarations.append(Declaration(qualified, kind, original, scopes, width))
             start = i + 1
     return declarations, types
+
+
+def _declares_callee(declaration, callee):
+    """Match parameter and member-cv identity, never a name-only overload.
+
+    Reuse the existing conservative declaration parser. Return type and static
+    status are not encoded by ordinary Itanium names and are deliberately not
+    inferred here. Unsupported declarators / unresolved typedefs remain gaps.
+    """
+    if "params" not in callee or "cv" not in callee:
+        return False
+    method = callee.get("method", "")
+    if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
+        return False
+    text = declaration.text
+    # The shared parser's word boundary is before an identifier, not '~'.
+    if method.startswith("~"):
+        text = re.sub(r"~\s*" + re.escape(method[1:]) + r"(?=\s*\()", method[1:], text)
+        method = method[1:]
+    expected = ghidra_cpp.signature_key(callee)[1:3]
+    declared = declaration_headers.declared_signatures(text, method)
+    return any((params, cv) == expected for params, cv, _static in declared)
 
 
 def _instructions(f, asm):
@@ -174,6 +214,18 @@ def _references(f, asm):
 class ContextIndex:
     """Reusable source/DB index. The image is borrowed, never reopened or modified."""
 
+    # Reviewed SDK files for the pinned x86-64 profile; changed/unlisted inputs
+    # remain gaps until explicitly reviewed. These are not namespace exemptions.
+    CEGUI_HEADER_SHA256 = {
+        'CEGUIWindow.h': '37f12e0e538df1cb67271ced354dae55d2be7a1d35830f00d77bae819d09b792',
+        'CEGUIString.h': '0f6b99906ae55d7d8f35e4a50e249d76baaa7ec21d5ecd3b068822364429e6fe',
+        'CEGUISingleton.h': 'ad721b29935815b6e943f1963732b63e62440760eea8e1f60a80f602fa942319',
+        'CEGUIImagesetManager.h': 'bbe90f6bbe3918154df40927df1855a9bba5a13e5d4412b584217f565b5718a4',
+        'CEGUIWindowManager.h': '3a89509c2f777e572723dd0161f5623a6850703ac43ffc26d4c6e4a630a70f31',
+    }
+
+    SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
+
     DIAGNOSTIC_BYTES = 32
     STRING_SCAN_LIMIT = 8192
     LIBRARY_SCOPES = {"std", "__gnu_cxx", "__cxxabiv1", "Ogre", "CEGUI", "ParticleUniverse", "FMOD", "boost"}
@@ -189,9 +241,16 @@ class ContextIndex:
                               key=lambda g: (_address(g["address"]), g.get("name", ""), g.get("file") or ""))
         # Narrow imported libstdc++ data evidence from the borrowed ELF. A DB
         # label/namespace or version-looking game name alone must not suppress gaps.
+        self.elf_weak_functions = set()
         self.elf_object_names = {}
+        self.elf_object_sizes = {}
+        self.cegui_headers = {}
+        self.header_classes = {}
         self.local_object_names = set()
         for symbol in [*getattr(image, "symbols", ()), *getattr(image, "dynsyms", ())]:
+            if (symbol.type == 2 and symbol.bind == 2 and symbol.defined
+                    and symbol.value and symbol.name and getattr(symbol, "size", 0) > 0):
+                self.elf_weak_functions.add((symbol.value, symbol.name, symbol.size))
             if (symbol.type == 1 and symbol.bind == 0 and symbol.defined and symbol.value
                     and getattr(symbol, "size", 0) > 0 and getattr(symbol, "file", None)):
                 self.local_object_names.add((symbol.value, symbol.name, symbol.size, symbol.file))
@@ -199,6 +258,7 @@ class ContextIndex:
                     and symbol.value and symbol.name):  # STT_OBJECT, GLOBAL/WEAK
                 key = (symbol.value, symbol.name.split("@", 1)[0])
                 self.elf_object_names.setdefault(key, set()).add(symbol.name)
+                self.elf_object_sizes.setdefault(key, set()).add(getattr(symbol, "size", 0))
         self.copy_data = {address: reloc.symbol.split("@", 1)[0]
                           for address, reloc in getattr(image, "relocs", {}).items()
                           if reloc.type == 5 and reloc.offset == address}  # R_X86_64_COPY
@@ -207,7 +267,8 @@ class ContextIndex:
         base = self._path("include", "probe.h").parent
         for path in sorted(base.glob("*.h")):
             text = self._read("include", path.name)
-            decls, _ = _scan(text)
+            decls, classes = _scan(text)
+            self.header_classes[path.name] = {c.name for c in classes if c.reason != "non-top-level/anonymous scope"}
             self.sources[path.name] = text
             self.declarations[path.name] = decls
 
@@ -266,6 +327,185 @@ class ContextIndex:
             if version:
                 return f"{owner}; borrowed ELF STT_OBJECT + {version[1]} + matching R_X86_64_COPY"
         return None
+
+    def _dso_registration_handle(self, obj, f, asm):
+        """Recognize only the pinned compiler's immediate __cxa_atexit triple.
+
+        __dso_handle belongs to the linked image, not the last STT_FILE group.
+        Require original ELF identity and every occurrence to be an immediate
+        third argument of the actual imported __cxa_atexit. No name-only or
+        generic __cxa exemption, and no inferred C++ data declaration.
+        ABI: https://itanium-cxx-abi.github.io/cxx-abi/abi.html#dso-dtor
+        """
+        if (obj.get("name") != "__dso_handle" or obj.get("demangled") != "__dso_handle"
+                or obj.get("bind") != "local" or obj.get("size") != 0):
+            return False
+        base = _address(obj["address"])
+        matches = [s for s in getattr(self.image, "symbols", ())
+                   if s.name == "__dso_handle"]
+        if (len(matches) != 1 or not matches[0].defined or matches[0].type != 1
+                or matches[0].bind != 0 or matches[0].value != base
+                or matches[0].size != 0):
+            return False
+        section = self.image.section_at(base)
+        if not section or section.type != 1 or not section.flags & 2 or section.flags & (1 | 4):
+            return False
+        insns = _instructions(f, asm)
+        occurrences = 0
+        for i, (_, mnemonic, operands) in enumerate(insns):
+            code = operands.split("#", 1)[0].split(";", 1)[0].strip()
+            # Count numeric references conservatively, including RIP annotations.
+            if base not in _references(dict(f, address=hex(insns[i][0]), size=1),
+                                       f"{insns[i][0]:x}: {mnemonic} {operands}")[1]:
+                continue
+            occurrences += 1
+            if mnemonic != "mov" or not re.fullmatch(r"\$0x0*" + f"{base:x}" + r",%edx", code):
+                return False
+            if i + 3 >= len(insns):
+                return False
+            for (address, op, args), register in zip(insns[i + 1:i + 3], ("esi", "edi")):
+                args = args.split("#", 1)[0].split(";", 1)[0].strip()
+                if op != "mov" or not re.fullmatch(r"\$0x[0-9a-f]+,%" + register, args):
+                    return False
+            _, op, args = insns[i + 3]
+            target = re.match(r"^(?:0x)?([0-9a-fA-F]+)(?:\s|$)", args)
+            if (op not in ("call", "callq") or not target
+                    or getattr(self.image, "plt", {}).get(int(target[1], 16)) != "__cxa_atexit"):
+                return False
+        return occurrences > 0
+
+    def _cegui_header(self, name):
+        """Borrow a named pinned SDK header; no compiler, ELF or DB reload."""
+        if name in self.cegui_headers:
+            return self.cegui_headers[name]
+        sdk = (self.root / "third_party/cegui-0.6.2/include").resolve()
+        path = sdk / _basename(name)
+        value = None
+        if (name in self.CEGUI_HEADER_SHA256 and path.resolve().parent == sdk
+                and path.is_file()):
+            try:
+                raw_source = path.read_bytes()
+                source = raw_source.decode("utf-8")
+                digest = hashlib.sha256(raw_source).hexdigest()
+                if digest != self.CEGUI_HEADER_SHA256[name]:
+                    self.cegui_headers[name] = None
+                    return None
+                parsed = re.sub(r"\bCEGUIEXPORT\b", "", source)
+                declarations, _ = _scan(parsed)
+                value = (declarations, _mask(parsed), digest)
+            except (OSError, UnicodeError):
+                pass  # Retain a gap, never invent an SDK declaration.
+        self.cegui_headers[name] = value
+        return value
+
+    def _cegui_data(self, obj):
+        """Exact COPY-imported SDK declarations for the pinned x86-64 ABI.
+
+        Scope/name alone is insufficient. CEGUI::String is 176 bytes and
+        pointer/size_type objects are 8 in this project's pinned GCC 4.4.7 SDK
+        layout. Unknown SDK objects, changed declarations and other ABIs stay
+        unresolved. This supplies declaration context, not behavior acceptance.
+        """
+        raw = obj.get("name", "")
+        label = obj.get("demangled", "")
+        if obj.get("bind") not in ("global", "weak") or "@" in raw:
+            return None
+        base = _address(obj["address"])
+        if (self.copy_data.get(base) != raw or raw not in self.elf_object_names.get((base, raw), ())
+                or self.elf_object_sizes.get((base, raw)) != {obj.get("size")}):
+            return None
+        sec = self.image.section_at(base)
+        if (not sec or sec.type != 8 or not sec.flags & 2 or not sec.flags & 1
+                or obj.get("size", 0) <= 0 or base + obj["size"] > sec.addr + sec.size):
+            return None
+        event = re.fullmatch(r"CEGUI::Window::(Event\w+)", label)
+        if event:
+            name = event[1]
+            if raw != f"_ZN5CEGUI6Window{len(name)}{name}E" or obj["size"] != 176:
+                return None
+            header = "CEGUIWindow.h"
+            expected = r"static\s+const\s+String\s+" + re.escape(name) + r"\s*;"
+        elif label == "CEGUI::String::npos":
+            if raw != "_ZN5CEGUI6String4nposE" or obj["size"] != 8:
+                return None
+            header, expected = "CEGUIString.h", r"static\s+const\s+size_type\s+npos\s*;"
+        else:
+            singleton = re.fullmatch(r"CEGUI::Singleton<CEGUI::([A-Za-z_]\w*)>::ms_Singleton", label)
+            if not singleton or obj["size"] != 8:
+                return None
+            manager = singleton[1]
+            if raw != f"_ZN5CEGUI9SingletonINS_{len(manager)}{manager}EE12ms_SingletonE":
+                return None
+            base_header = self._cegui_header("CEGUISingleton.h")
+            owner_header = self._cegui_header("CEGUI" + manager + ".h")
+            if not base_header or not owner_header:
+                return None
+            if (not re.search(r"namespace\s+CEGUI\s*\{", base_header[1])
+                    or not re.search(r"template\s*<\s*(?:class|typename)\s+T\s*>\s*class\s+Singleton\b", base_header[1])
+                    or not re.search(r"static\s+T\s*\*\s*ms_Singleton\s*;", base_header[1])
+                    or not re.search(r"namespace\s+CEGUI\s*\{", owner_header[1])
+                    or not re.search(r"class\s+" + re.escape(manager) + r"\s*:\s*public\s+Singleton\s*<\s*" + re.escape(manager) + r"\s*>", owner_header[1])):
+                return None
+            return (f"CEGUI0.6.2 SDK singleton declaration + exact ELF object/COPY identity; "
+                    f"CEGUISingleton.h SHA256 {base_header[2]}, CEGUI{manager}.h SHA256 {owner_header[2]}")
+        evidence = self._cegui_header(header)
+        if not evidence:
+            return None
+        matches = [d for d in evidence[0] if d.kind == "data" and d.qualified == label
+                   and re.fullmatch(expected, d.text)]
+        if len(matches) != 1:
+            return None
+        return (f"CEGUI0.6.2 SDK declaration {matches[0].text} + exact ELF object/COPY identity; "
+                f"{header} SHA256 {evidence[2]}")
+
+    def _safe_pointer_headers(self, callee, scope):
+        """Existing reviewed template body, not a synthesized specialization.
+
+        Deliberately limited to weak TSafePointer<flat-class>::setObject(T*).
+        Exact DB/ELF identity, unchanged source and a unique complete pointee
+        declaration are required. Other templates/methods remain strict gaps.
+        """
+        match = re.fullmatch(r"TSafePointer<([A-Za-z_]\w*)>", scope)
+        if (not match or callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or callee.get("method") != "setObject" or callee.get("cv", "")):
+            return set()
+        pointee = match[1]
+        symbol = f"_ZN12TSafePointerI{len(pointee)}{pointee}E9setObjectEPS0_"
+        if (callee.get("qualified") != scope + "::setObject"
+                or re.sub(r"\s+", "", callee.get("params", "")) != pointee + "*"
+                or callee.get("mangled") != symbol or set(callee.get("names", ())) != {symbol}
+                or (_address(callee["address"]), symbol, callee.get("size")) not in self.elf_weak_functions):
+            return set()
+        if "SafePointer.h" not in self.sources:
+            return set()
+        raw = self._path("include", "SafePointer.h").read_bytes()
+        if (hashlib.sha256(raw).hexdigest() != self.SAFE_POINTER_HEADER_SHA256
+                or raw.decode("utf-8") != self.sources["SafePointer.h"]):
+            return set()
+        headers = {h for h in self._mapped(pointee)
+                   if pointee in self.header_classes.get(h, ())}
+        if len(headers) != 1:
+            return set()
+        return headers | {"SafePointer.h"}
+
+    def _implicit_destructor_headers(self, callee, scope, candidates):
+        """C++98 implicitly declares complete/base D1/D2 destructors.
+
+        Only weak compiler-generated, unqualified top-level class identities;
+        a forward declaration, wrong class, ordinary function or D0 is not enough.
+        Include the real whole header rather than synthesizing a declaration.
+        """
+        if (not scope or "::" in scope or callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or callee.get("method") != "~" + scope or callee.get("params") != ""):
+            return set()
+        names = set(callee.get("names", ()))
+        allowed = {f"_ZN{len(scope)}{scope}D1Ev", f"_ZN{len(scope)}{scope}D2Ev"}
+        if not names or not names <= allowed:
+            return set()
+        found = {h for h in candidates if scope in self.header_classes.get(h, ())}
+        return found if len(found) == 1 else set()
 
     def _available(self, address, objects):
         section = self.image.section_at(address)
@@ -345,7 +585,7 @@ class ContextIndex:
             if tu not in self.local_cache:
                 path = self._path("src", tu)
                 local_decls, local_defs = _scan(self._read("src", tu)) if path.exists() else ([], [])
-                self.local_declarations[tu] = {d.qualified for d in local_decls if d.kind == "function"}
+                self.local_declarations[tu] = tuple(d for d in local_decls if d.kind == "function")
                 self.local_cache[tu] = local_defs
             local_types = {t.name: t for t in self.local_cache[tu]}
             duplicated_local_names = {name for name in local_types
@@ -369,12 +609,24 @@ class ContextIndex:
             facts.append(f"Direct game call/tail-call {address:#x}: {label}; return/static not encoded by symbol.")
             candidates = self._mapped(scope) if scope else []
             matches = self._matching(qualified, "function")
-            matched_headers = {name for name, _ in matches if not candidates or name in candidates}
+            matched_headers = {name for name, decl in matches
+                               if (not candidates or name in candidates) and _declares_callee(decl, callee)}
+            implicit_headers = self._implicit_destructor_headers(callee, scope, candidates)
+            template_headers = self._safe_pointer_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers)
+            elif implicit_headers:
+                wanted.update(implicit_headers)
+                notes.append(f"{address:#x}: weak D1/D2 destructor implicitly declared by the existing complete class header; no guessed return type.")
+            elif template_headers:
+                wanted.update(template_headers)
+                notes.append(f"{address:#x}: existing pinned TSafePointer setObject template body; "
+                             f"weak ELF/DB identity and complete pointee header; SafePointer.h SHA256 {self.SAFE_POINTER_HEADER_SHA256}. "
+                             "No specialization or prototype synthesized.")
             elif scope in local_types and self._tu(callee, None) == tu:
                 local_names.add(scope)
-                if qualified not in self.local_declarations[tu]:
+                if not any(d.qualified == qualified and _declares_callee(d, callee)
+                           for d in self.local_declarations[tu]):
                     gaps.append(f"No declaration of direct callee {label} in its existing TU-local type")
             else:
                 # Include known class headers even if the method was not restored yet,
@@ -396,7 +648,12 @@ class ContextIndex:
                 if obj.get("name", "").startswith(("_ZTV", "_ZTT", "_ZTI", "_ZTS", "_ZGV")):
                     notes.append(f"{address:#x}: compiler/ABI metadata; no C++ data declaration synthesized.")
                     continue
-                library = self._library_data(obj)
+                if self._dso_registration_handle(obj, f, asm):
+                    notes.append(f"{address:#x}: ELF-proven DSO destruction registration handle; "
+                                 "all references are compiler __cxa_atexit argument triples; "
+                                 "no game declaration required or synthesized.")
+                    continue
+                library = self._library_data(obj) or self._cegui_data(obj)
                 if library:
                     notes.append(f"{address:#x}: library-owned ABI data ({library}); "
                                  "no game declaration required or synthesized.")

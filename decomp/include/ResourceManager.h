@@ -1,3 +1,4 @@
+class CGameUI;
 #ifndef RESOURCEMANAGER_H
 #define RESOURCEMANAGER_H
 
@@ -25,6 +26,7 @@ class CMissilePreloader;
 class CResourceManager : public CRunicCore
 {
 public:
+    CGameUI* getGameUI();
     CMissilePreloader* getMissilePreloader();
     CParticle* createParticle(const wchar_t* name);
     CResourceManager(Ogre::SceneManager* sceneManager);

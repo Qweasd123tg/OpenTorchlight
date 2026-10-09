@@ -19,6 +19,8 @@ public:
     virtual ~CMasterResourceManager();
 
     static CMasterResourceManager* getSingleton();
+    int experienceGate(int);
+    int fameGate(int);
     void removeCollisionModel(CCollisionModel* model);
 
 private:

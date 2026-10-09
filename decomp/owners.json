@@ -224,6 +224,15 @@
   "path.cpp": "opencode",
   "pov.cpp": "opencode",
   "soundbank.cpp": "opencode",
-  "utf8Input.c": "opencode"
+  "utf8Input.c": "opencode",
+  "gameui.cpp": "dot",
+  "inventorymenu.cpp": "dot",
+  "combinemenu.cpp": "dot",
+  "enchantmenu.cpp": "dot",
+  "statsmenu_fill.cpp": "dot",
+  "skillmenu.cpp": "dot",
+  "statsmenu.cpp": "dot",
+  "journalmenu.cpp": "dot",
+  "petmenu.cpp": "dot"
  }
 }

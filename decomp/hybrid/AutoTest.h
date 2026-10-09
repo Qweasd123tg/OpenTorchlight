@@ -176,6 +176,14 @@ struct Capture
         long long used = info.uordblks;
         add(&used, sizeof(used));
     }
+    void addText(const std::string& s)
+    {
+        if (issue != Complete) return;
+        size_t n = s.size();
+        add(&n, sizeof(n));
+        if (n > kSize) { issue = Overflow; return; }
+        add(s.data(), n);
+    }
     void addText(const std::wstring& s)
     {
         if (issue != Complete)
@@ -216,6 +224,10 @@ template <class T>
 void record(Capture& out, const Value<T*>& v)
 {
     out.addPointer(v.value);
+}
+inline void record(Capture& out, const Value<std::string>& v)
+{
+    out.addText(v.value);
 }
 inline void record(Capture& out, const Value<std::wstring>& v)
 {
@@ -360,6 +372,10 @@ template <class T> void observeReturn(Capture& out, const T& value)
 template <class T> void observeReturn(Capture& out, T* const& value)
 {
     out.addPointer(value);
+}
+inline void observeReturn(Capture& out, const std::string& value)
+{
+    out.addText(value);
 }
 inline void observeReturn(Capture& out, const std::wstring& value)
 {

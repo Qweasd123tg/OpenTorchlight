@@ -15,6 +15,7 @@
 #include "QuestDefines.h"
 #include "iUnitObserver.h"
 
+class CItem;
 class CCharacter;
 class CBaseUnit;
 class CSkill;
@@ -26,6 +27,7 @@ class CLevelTemplateData;
 class CLevel : public CRunicCore
 {
 public:
+    void addItem(CItem*,const Ogre::Vector3&,bool);
     CCharacter* getPlayer();
     Ogre::Vector3 randomOpenItemPosition(const Ogre::Vector3&,float,bool);
     float floorHeight(Ogre::Vector3);

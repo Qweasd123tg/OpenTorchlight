@@ -14,7 +14,8 @@ public:
 
     // fields
     void* m_pUnknown10;
-    unsigned char m_gap18[0x10] __attribute__((aligned(8)));
+    int m_iSlot;
+    unsigned char m_gap1C[0xc];
 };
 
 #endif

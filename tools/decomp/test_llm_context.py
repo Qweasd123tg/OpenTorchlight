@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 from types import SimpleNamespace, ModuleType
 from unittest import TestCase, main, mock
 import copy
+import hashlib
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -41,7 +42,9 @@ class FakeImage:
 
 def function(address, scope, method, *, tu=0, size=0x80, **extra):
     qualified = (scope + "::" if scope else "") + method
-    return dict(address=hex(address), size=size, scope=scope, method=method,
+    params = extra.pop("params", {"getStatInt": "int", "getStatFloat": "int", "GetInt": "wchar_t const*", "gameFree": "int"}.get(method, ""))
+    cv = extra.pop("cv", "")
+    return dict(params=params, cv=cv, address=hex(address), size=size, scope=scope, method=method,
                 qualified=qualified, demangled=qualified + "()", mangled="_fake_" + method,
                 tu=tu, **extra)
 
@@ -52,6 +55,9 @@ def object_symbol(address, name, *, size=32, bind="global", file=None):
 
 class PacketContextTests(TestCase):
     def setUp(self):
+        self.sdk_pins = mock.patch.dict(ContextIndex.CEGUI_HEADER_SHA256, {}, clear=True)
+        self.sdk_pins.start()
+        self.addCleanup(self.sdk_pins.stop)
         self.tmp = TemporaryDirectory(prefix="test-", dir=HERE)
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
@@ -87,6 +93,72 @@ class PacketContextTests(TestCase):
     def index(self, **kwargs):
         return ContextIndex(root=self.root, db=kwargs.get("db", self.db),
                             image=kwargs.get("image", self.image), headers=kwargs.get("headers", self.mapping))
+
+    def overload_case(self, declaration, params, cv="", *, scope="CResourceManager", method="createUnit"):
+        self.write_header("ResourceManager.h", "class " + scope + " { public: " + declaration + " };\n")
+        self.mapping[scope] = "ResourceManager.h"
+        self.add_function(function(0x2000, scope, method, tu=1, params=params, cv=cv))
+        return self.index().build(self.target, "1000: call 2000")
+
+    def test_overload_pointer_not_integer_same_name_and_arity(self):
+        result = self.overload_case("CBaseUnit* createUnit(long long guid, int level, bool a, bool b);", "CDataGroup*, int, bool, bool")
+        self.assertTrue(result.gaps)
+        self.assertIn("ResourceManager.h", result.headers)
+        self.assertNotIn("createUnit(CDataGroup*", result.text)
+
+    def test_overload_exact_named_parameters(self):
+        result = self.overload_case("CBaseUnit* createUnit(CDataGroup* group, int level, bool first, bool second);", "CDataGroup*, int, bool, bool")
+        self.assertFalse(result.gaps)
+
+    def test_overload_multiple_declarations_select_exact_one(self):
+        result = self.overload_case("CBaseUnit* createUnit(long long, int, bool, bool); CBaseUnit* createUnit(CDataGroup*, int, bool, bool);", "CDataGroup*, int, bool, bool")
+        self.assertFalse(result.gaps)
+
+    def test_overload_wrong_arity(self):
+        self.assertTrue(self.overload_case("void createUnit(CDataGroup*);", "CDataGroup*, int").gaps)
+
+    def test_overload_pointer_reference_mismatch(self):
+        self.assertTrue(self.overload_case("void createUnit(CDataGroup&);", "CDataGroup*").gaps)
+
+    def test_overload_pointee_cv_mismatch(self):
+        self.assertTrue(self.overload_case("void createUnit(const CDataGroup*);", "CDataGroup*").gaps)
+
+    def test_overload_const_spelling_normalized(self):
+        self.assertFalse(self.overload_case("void createUnit(const CDataGroup* group);", "CDataGroup const*").gaps)
+
+    def test_overload_member_cv_mismatch(self):
+        self.assertTrue(self.overload_case("void createUnit(int);", "int", "const").gaps)
+        self.assertTrue(self.overload_case("void createUnit(int) const;", "int").gaps)
+
+    def test_overload_member_cv_exact(self):
+        self.assertFalse(self.overload_case("void createUnit(int) const volatile;", "int", "volatile const").gaps)
+
+    def test_overload_default_value_and_pure_virtual(self):
+        self.assertFalse(self.overload_case("virtual void createUnit(int level = 0, bool active = true) = 0;", "int, bool").gaps)
+        self.assertTrue(self.overload_case("void createUnit(int level = 0);", "").gaps)
+
+    def test_overload_unknown_typedef_not_assumed_equivalent(self):
+        self.assertTrue(self.overload_case("void createUnit(MyInteger);", "int").gaps)
+
+    def test_overload_function_pointer_is_unresolved(self):
+        self.assertTrue(self.overload_case("void createUnit(void (*callback)(int));", "void (*)(int)").gaps)
+
+    def test_overload_static_and_return_not_guessed_from_symbol(self):
+        self.assertFalse(self.overload_case("static double createUnit(int);", "int").gaps)
+
+    def test_overload_destructor_declaration(self):
+        self.assertFalse(self.overload_case("virtual ~CResourceManager();", "", method="~CResourceManager").gaps)
+
+    def test_overload_missing_parameter_metadata_is_unresolved(self):
+        self.overload_case("void createUnit();", "")
+        del self.db["functions"]["0x2000"]["params"]
+        self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+
+    def test_overload_tu_local_wrong_parameters(self):
+        self.write_header("Achievement.h", "class CAchievement { void update(); }; class CLocal;\n")
+        (self.src / "Achievement.cpp").write_text("class CLocal { public: void load(int); };\n")
+        self.add_function(function(0x2000, "CLocal", "load", params="CDataGroup*"))
+        self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
 
     def test_direct_callee_header_whole_not_transitive_or_all_mapped(self):
         self.add_function(function(0x2000, "CSteamStats", "getStatInt", tu=1))
@@ -312,6 +384,340 @@ class PacketContextTests(TestCase):
         self.assertEqual(result.text.count("Named data 0x6004"), 1)
         self.assertEqual(result.text.count("static unsigned char g_strStatDefines[744];"), 1)
 
+    def dso_handle(self):
+        self.db["globals"] = [object_symbol(0x5000, "__dso_handle", size=0,
+                                             bind="local", file="Other.cpp")]
+        self.image.symbols = [SimpleNamespace(name="__dso_handle", value=0x5000,
+                                              type=1, bind=0, defined=True, size=0)]
+        self.image.plt = {0x3000: "__cxa_atexit"}
+        return ("1000: mov $0x5000,%edx\n1005: mov $0x7010,%esi\n"
+                "100a: mov $0x3100,%edi\n100f: call 3000 <untrusted_label>\n1014: ret")
+
+    def test_dso_registration_handle_uses_elf_and_plt_not_stt_file_or_annotation(self):
+        asm = self.dso_handle()
+        result = self.index().build(self.target, asm).require_complete()
+        self.assertIn("ELF-proven DSO destruction registration handle", result.text)
+        self.assertNotIn("Referenced data declaration", result.text)
+        self.assertEqual(result.headers, ())
+
+    def test_dso_registration_handle_repeated_registrations(self):
+        asm = self.dso_handle().replace("1014: ret", "1014: mov $0x5000,%edx\n"
+               "1019: mov $0x7020,%esi\n101e: mov $0x3200,%edi\n1023: call 3000")
+        self.index().build(self.target, asm).require_complete()
+
+    def test_dso_handle_does_not_exempt_additional_nonregistration_reference(self):
+        asm = self.dso_handle() + "\n1015: mov $0x5000,%eax"
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, asm).require_complete()
+
+    def test_dso_registration_handle_requires_actual_elf_identity(self):
+        for change in ("missing", "duplicate", "wrong_name", "wrong_address", "wrong_type",
+                       "wrong_bind", "undefined", "nonzero_size", "writable", "executable",
+                       "db_name", "db_demangled", "db_bind", "db_size"):
+            with self.subTest(change=change):
+                asm = self.dso_handle()
+                self.image.sections[0].flags = 2
+                symbol = self.image.symbols[0]
+                if change == "missing": self.image.symbols = []
+                elif change == "duplicate": self.image.symbols.append(copy.copy(symbol))
+                elif change == "wrong_name": symbol.name = "game_handle"
+                elif change == "wrong_address": symbol.value += 8
+                elif change == "wrong_type": symbol.type = 2
+                elif change == "wrong_bind": symbol.bind = 1
+                elif change == "undefined": symbol.defined = False
+                elif change == "nonzero_size": symbol.size = 8
+                elif change == "writable": self.image.sections[0].flags = 3
+                elif change == "executable": self.image.sections[0].flags = 6
+                elif change == "db_name": self.db["globals"][0]["name"] = "game_handle"
+                elif change == "db_demangled": self.db["globals"][0]["demangled"] = "game_handle"
+                elif change == "db_bind": self.db["globals"][0]["bind"] = "global"
+                elif change == "db_size": self.db["globals"][0]["size"] = 8
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, asm).require_complete()
+
+    def test_dso_registration_handle_requires_exact_argument_and_import_sequence(self):
+        for change in ("wrong_register", "wrong_second", "clobber", "indirect", "wrong_call",
+                       "missing_plt", "wrong_plt", "truncated", "memory_load"):
+            with self.subTest(change=change):
+                asm = self.dso_handle()
+                if change == "wrong_register": asm = asm.replace("%edx", "%esi")
+                elif change == "wrong_second": asm = asm.replace("%esi", "%ecx")
+                elif change == "clobber": asm = asm.replace("mov $0x7010,%esi", "xor %edx,%edx")
+                elif change == "indirect": asm = asm.replace("call 3000 <untrusted_label>", "call *%rax <__cxa_atexit>")
+                elif change == "wrong_call": asm = asm.replace("call 3000", "call 3100")
+                elif change == "missing_plt": self.image.plt = {}
+                elif change == "wrong_plt": self.image.plt[0x3000] = "game_exit"
+                elif change == "truncated": asm = asm.split("100a:")[0]
+                elif change == "memory_load": asm = asm.replace("$0x5000", "0x5000")
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, asm).require_complete()
+
+    def test_dso_registration_handle_does_not_hide_ordinary_missing_data(self):
+        asm = self.dso_handle() + "\n1015: mov $0x6000,%eax"
+        self.db["globals"].append(object_symbol(0x6000, "gMissing"))
+        result = self.index().build(self.target, asm)
+        self.assertIn("ELF-proven DSO destruction registration handle", result.text)
+        self.assertEqual(len(result.gaps), 1)
+        self.assertIn("gMissing", result.gaps[0])
+
+    def test_literal_initialized_string_array_keeps_complete_existing_declaration(self):
+        declaration = 'static const std::string icons[] = {"melee", "ranged", "magic"};'
+        self.write_header("Icons.h", declaration)
+        self.db["globals"] = [object_symbol(0x6000, "icons", size=24, bind="local", file="Achievement.cpp")]
+        result = self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertNotIn("NUL-terminated", result.text)
+        self.assertEqual(self.image.reads, [])
+
+    def test_literal_initialized_wstring_array_in_namespace(self):
+        declaration = 'const std::wstring labels[2] = {L"one", L"two",};'
+        self.write_header("Labels.h", 'namespace LABELS { ' + declaration + ' }')
+        self.db["globals"] = [object_symbol(0x6000, "LABELS::labels", size=16)]
+        result = self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertIn("namespace LABELS", result.text)
+
+    def test_initialized_string_array_does_not_infer_nonliteral_expressions(self):
+        for initializer in ('makeName()', 'SOME_MACRO', '"one" + suffix',
+                            '{"nested"}', '"one", call()', '"adjacent" "literal"', ''):
+            with self.subTest(initializer=initializer):
+                self.write_header("Icons.h", 'static const std::string icons[] = {' + initializer + '};')
+                self.db["globals"] = [object_symbol(0x6000, "icons", size=24)]
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
+
+    def test_initialized_string_array_inside_function_is_not_global(self):
+        self.write_header("Icons.h", 'void hidden() { static const std::string icons[] = {"one"}; }')
+        self.db["globals"] = [object_symbol(0x6000, "icons", size=8)]
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
+
+    def test_initialized_string_array_preserves_local_owner_guard(self):
+        self.write_header("Icons.h", 'static const std::string icons[] = {"one"};')
+        self.db["globals"] = [object_symbol(0x6000, "icons", size=8, bind="local", file="Other.cpp")]
+        result = self.index().build(self.target, "1000: mov $0x6000,%rax")
+        self.assertIn("no same-name declaration substituted", result.text)
+        with self.assertRaises(ContextError): result.require_complete()
+
+    def test_initialized_string_array_retains_ordinary_following_declarations(self):
+        self.write_header("Icons.h", 'static const std::string icons[] = {"one"}; extern int other;')
+        self.db["globals"] = [object_symbol(0x6000, "other", size=4)]
+        result = self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
+        self.assertIn("extern int other;", result.text)
+        self.assertNotIn('icons[]', result.text)
+
+    def sdk_header(self, name, source):
+        directory = self.root / "third_party/cegui-0.6.2/include"
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / name).write_text(source)
+        ContextIndex.CEGUI_HEADER_SHA256.setdefault(name, hashlib.sha256(source.encode()).hexdigest())
+
+    def sdk_object(self, label, raw, size):
+        self.db["globals"] = [dict(object_symbol(0x7000, raw, size=size), demangled=label)]
+        self.image.sections[-1].size = 512
+        self.image.symbols = [SimpleNamespace(name=raw, value=0x7000, size=size,
+                                              bind=1, type=1, defined=True)]
+        self.image.relocs = {0x7000: SimpleNamespace(type=5, offset=0x7000, symbol=raw)}
+
+    def sdk_event(self):
+        label, raw = "CEGUI::Window::EventMouseMove", "_ZN5CEGUI6Window14EventMouseMoveE"
+        self.sdk_object(label, raw, 176)
+        self.sdk_header("CEGUIWindow.h", "namespace CEGUI { class CEGUIEXPORT Window { public: static const String EventMouseMove; }; }")
+
+    def test_sdk_event_requires_real_declaration_and_copy_identity(self):
+        self.sdk_event()
+        result = self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.assertIn("CEGUI0.6.2 SDK declaration static const String EventMouseMove;", result.text)
+        self.assertIn("CEGUIWindow.h SHA256", result.text)
+        self.assertNotIn("Referenced data declaration", result.text)
+
+    def test_sdk_npos_has_its_own_exact_declaration_and_size(self):
+        self.sdk_object("CEGUI::String::npos", "_ZN5CEGUI6String4nposE", 8)
+        self.sdk_header("CEGUIString.h", "namespace CEGUI { class CEGUIEXPORT String { public: static const size_type npos; }; }")
+        self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.db["globals"][0]["size"] = self.image.symbols[0].size = 4
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_singleton_requires_template_and_actual_owner_inheritance(self):
+        self.sdk_object("CEGUI::Singleton<CEGUI::ImagesetManager>::ms_Singleton",
+                        "_ZN5CEGUI9SingletonINS_15ImagesetManagerEE12ms_SingletonE", 8)
+        self.sdk_header("CEGUISingleton.h", "namespace CEGUI { template<typename T> class Singleton { protected: static T* ms_Singleton; }; }")
+        self.sdk_header("CEGUIImagesetManager.h", "namespace CEGUI { class CEGUIEXPORT ImagesetManager : public Singleton<ImagesetManager> {}; }")
+        self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.sdk_header("CEGUIImagesetManager.h", "namespace CEGUI { class ImagesetManager : public Singleton<OtherManager> {}; }")
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_event_rejects_identity_and_abi_mismatches(self):
+        for change in ("no_copy", "wrong_copy", "no_symbol", "undefined", "local_symbol",
+                       "wrong_symbol_type", "wrong_symbol_size", "wrong_both_sizes", "db_local",
+                       "db_raw", "db_label", "wrong_section", "readonly", "short_section"):
+            with self.subTest(change=change):
+                self.sdk_event();self.image.sections[-1].type = 8;self.image.sections[-1].flags = 3
+                obj, symbol = self.db["globals"][0], self.image.symbols[0]
+                if change == "no_copy": self.image.relocs = {}
+                elif change == "wrong_copy": self.image.relocs[0x7000].symbol = "gameObject"
+                elif change == "no_symbol": self.image.symbols = []
+                elif change == "undefined": symbol.defined = False
+                elif change == "local_symbol": symbol.bind = 0
+                elif change == "wrong_symbol_type": symbol.type = 2
+                elif change == "wrong_symbol_size": symbol.size = 8
+                elif change == "wrong_both_sizes": symbol.size = obj["size"] = 8
+                elif change == "db_local": obj.update(bind="local", file="Other.cpp")
+                elif change == "db_raw": obj["name"] = "gameObject"
+                elif change == "db_label": obj["demangled"] = "CEGUI::Window::OtherEvent"
+                elif change == "wrong_section": self.image.sections[-1].type = 1
+                elif change == "readonly": self.image.sections[-1].flags = 2
+                elif change == "short_section": self.image.sections[-1].size = 8
+                with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_event_rejects_missing_or_changed_declaration(self):
+        for source in ("", "namespace OTHER { class Window { static const String EventMouseMove; }; }",
+                       "namespace CEGUI { class Window { static const int EventMouseMove; }; }",
+                       "namespace CEGUI { class Window { const String EventMouseMove; }; }",
+                       "namespace CEGUI { class Window { static String EventMouseMove; }; }",
+                       "// namespace CEGUI { class Window { static const String EventMouseMove; }; }"):
+            with self.subTest(source=source):
+                self.sdk_event();self.sdk_header("CEGUIWindow.h", source)
+                with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_named_game_object_is_not_blanket_exempt(self):
+        self.sdk_object("CEGUI::GameStat::counter", "_ZN5CEGUI8GameStat7counterE", 8)
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def safe_pointer(self, pointee="CNode"):
+        body = "template<class T> class TSafePointer { public: void setObject(T* p) { value=p; } private: T* value; };\n"
+        self.write_header("SafePointer.h", body)
+        pin = mock.patch.object(ContextIndex, "SAFE_POINTER_HEADER_SHA256", hashlib.sha256(body.encode()).hexdigest())
+        pin.start(); self.addCleanup(pin.stop)
+        self.write_header("Node.h", "class " + pointee + " { public: int value; };\n")
+        self.mapping[pointee] = ["Node.h"]
+        scope = "TSafePointer<" + pointee + ">"
+        symbol = f"_ZN12TSafePointerI{len(pointee)}{pointee}E9setObjectEPS0_"
+        f = function(0x2000, scope, "setObject", tu=1, kind="inline_or_template",
+                     bind=["weak"], names=[symbol], params=pointee+"*", cv="")
+        f["mangled"] = symbol
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True, value=0x2000, name=symbol, size=f["size"])]
+        return f
+
+    def test_safe_pointer_existing_template_supplies_whole_headers(self):
+        self.safe_pointer()
+        result = self.index().build(self.target, "1000: call 2000").require_complete()
+        self.assertEqual(result.headers, ("Node.h", "SafePointer.h"))
+        self.assertIn((self.include/"SafePointer.h").read_text(), result.text)
+        self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_safe_pointer_equipment_and_character_instantiations(self):
+        for cls in ("CEquipment", "CCharacter"):
+            with self.subTest(cls=cls):
+                self.safe_pointer(cls)
+                self.index().build(self.target, "1000: call 2000").require_complete()
+
+    def test_safe_pointer_rejects_wrong_db_identity(self):
+        for change in ("strong", "ordinary", "method", "params", "cv", "mangled", "names", "qualified", "size"):
+            with self.subTest(change=change):
+                f=self.safe_pointer()
+                if change=="strong": f["bind"]=["global"]
+                elif change=="ordinary": f["kind"]="function"
+                elif change=="method": f["method"]="setOther"
+                elif change=="params": f["params"]="const CNode*"
+                elif change=="cv": f["cv"]="const"
+                elif change=="mangled": f["mangled"]="_fake"
+                elif change=="names": f["names"].append("_fake")
+                elif change=="qualified": f["qualified"]="Unrelated::setObject"
+                elif change=="size": f["size"]+=1
+                self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_safe_pointer_requires_actual_weak_elf_function(self):
+        for change in ("absent", "name", "size", "address", "binding", "type", "undefined"):
+            with self.subTest(change=change):
+                self.safe_pointer();symbol=self.image.symbols[0]
+                if change=="absent": self.image.symbols=[]
+                elif change=="name": symbol.name="_fake"
+                elif change=="size": symbol.size+=1
+                elif change=="address": symbol.value+=1
+                elif change=="binding": symbol.bind=1
+                elif change=="type": symbol.type=1
+                elif change=="undefined": symbol.defined=False
+                self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_safe_pointer_changed_header_remains_gap(self):
+        self.safe_pointer()
+        with (self.include/"SafePointer.h").open("a") as stream: stream.write("// changed\n")
+        self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_safe_pointer_requires_unique_complete_pointee(self):
+        for change in ("unmapped", "forward", "ambiguous"):
+            with self.subTest(change=change):
+                self.safe_pointer()
+                if change=="unmapped": self.mapping.pop("CNode")
+                elif change=="forward": self.write_header("Node.h","class CNode;\n")
+                else:
+                    self.write_header("OtherNode.h","class CNode { int other; };\n")
+                    self.mapping["CNode"].append("OtherNode.h")
+                self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_safe_pointer_does_not_hide_an_unrelated_missing_callee(self):
+        self.safe_pointer();self.add_function(function(0x3000,"CUnrelated","missing",tu=2))
+        result=self.index().build(self.target,"1000: call 2000\n1005: call 3000")
+        self.assertEqual(len(result.gaps),1)
+        self.assertIn("CUnrelated::missing",result.gaps[0])
+
+    def implicit_destructor(self):
+        self.write_header("FileInfo.h", "class CFileInfo { public: CFileInfo() {} int value; };\n")
+        self.mapping["CFileInfo"] = ["FileInfo.h"]
+        f = function(0x2000, "CFileInfo", "~CFileInfo", tu=1,
+                     names=["_ZN9CFileInfoD1Ev", "_ZN9CFileInfoD2Ev"], kind="inline_or_template", bind=["weak"], params="")
+        self.add_function(f)
+        return f
+
+    def test_implicit_destructor_includes_whole_existing_class_header(self):
+        self.implicit_destructor()
+        result = self.index().build(self.target, "1000: call 2000").require_complete()
+        self.assertEqual(result.headers, ("FileInfo.h",))
+        self.assertIn("implicitly declared", result.text)
+        self.assertIn("CFileInfo() {} int value;", result.text)
+        self.assertNotIn("void ~CFileInfo", result.text)
+
+    def test_implicit_destructor_rejects_unproven_forms(self):
+        for change in ("strong", "ordinary", "deleting", "wrong_name", "missing_names", "parameters", "forward", "wrong_class"):
+            with self.subTest(change=change):
+                f = self.implicit_destructor()
+                if change == "strong": f["bind"] = ["global"]
+                elif change == "ordinary": f["kind"] = "function"
+                elif change == "deleting": f["names"] = ["_ZN9CFileInfoD0Ev"]
+                elif change == "wrong_name": f["names"] = ["_ZN9OtherInfoD1Ev"]
+                elif change == "missing_names": f["names"] = []
+                elif change == "parameters": f["params"] = "int"
+                elif change == "forward": self.write_header("FileInfo.h", "class CFileInfo;\n")
+                elif change == "wrong_class": self.write_header("FileInfo.h", "class OtherInfo { int value; };\n")
+                with self.assertRaises(ContextError): self.index().build(self.target, "1000: call 2000").require_complete()
+
+    def test_sdk_exemption_preserves_unrelated_game_data_gap(self):
+        self.sdk_event();self.db["globals"].append(object_symbol(0x6000, "gMissingGame"))
+        result = self.index().build(self.target, "1000: mov $0x7000,%rax\n1005: mov $0x6000,%rax")
+        self.assertIn("SDK declaration", result.text)
+        self.assertEqual(len(result.gaps), 1)
+        self.assertIn("gMissingGame", result.gaps[0])
+
+    def test_sdk_header_content_pin_mismatch_remains_gap(self):
+        self.sdk_event()
+        ContextIndex.CEGUI_HEADER_SHA256["CEGUIWindow.h"] = "0" * 64
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_header_symlink_outside_sdk_is_not_read(self):
+        self.sdk_event()
+        p = self.root / "third_party/cegui-0.6.2/include/CEGUIWindow.h"
+        outside = self.root / "outside.h";outside.write_bytes(p.read_bytes())
+        p.unlink();p.symlink_to(outside)
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_implicit_destructor_ambiguous_complete_class_remains_gap(self):
+        self.implicit_destructor()
+        self.write_header("OtherFileInfo.h", "class CFileInfo { int other; };\n")
+        self.mapping["CFileInfo"].append("OtherFileInfo.h")
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: call 2000").require_complete()
+
     def test_local_data_same_name_owner_is_not_substituted(self):
         self.write_header("Locals.h", "static int localCounter;\n")
         self.db["globals"] = [object_symbol(0x6000, "localCounter", size=8, bind="local", file="Other.cpp"),
@@ -375,7 +781,7 @@ class PacketContextTests(TestCase):
             "    std::wstring m_sName;\n    std::wstring m_sText;\n    void load(CDataGroup*);\n};\n"
             "void CCinematic::load(CDataGroup* d) { FOREIGN_BODY(); }\n"
             "class UnusedLocal { int sentinel; };\n")
-        self.add_function(function(0x2000, "CCinematic", "load", tu=0))
+        self.add_function(function(0x2000, "CCinematic", "load", tu=0, params="CDataGroup*"))
         result = self.index().build(target, "1000: call 2000 <CCinematic::load()>\n1005: retq",
                                     already_shown=["Cinematics.h"])
         self.assertIn("class CCinematic\n{\npublic:", result.text)

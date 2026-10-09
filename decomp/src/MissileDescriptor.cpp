@@ -1,3 +1,5 @@
+#include "EditorScene.h"
+#include "Missile.h"
 #include "EmptyStrings.h"
 #include "MissileDescriptor.h"
 #include "GameEnums.h"
@@ -49,4 +51,9 @@ CMissileDescriptor::~CMissileDescriptor()
 
 void CMissileDescriptor::update(float)
 {
+}
+
+CEditorBaseObject* CMissileDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CMissile(scene->getResourceManager());
 }

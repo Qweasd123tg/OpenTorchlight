@@ -11,13 +11,21 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
 namespace CEGUI { class Image; class Window; }
+class CGameClient;
+namespace Ogre { class RenderWindow; }
 class CTextEvent;
 class CCharacter;
+class CEquipment;
+class CEquipmentTooltip;
 class iMenuListener;
 
 class CGameUI : public CRunicCore
 {
 public:
+    void showEquipmentTooltip(CCharacter*,CEquipment*,CEquipmentTooltip*,CEquipmentTooltip*,CEquipmentTooltip*);
+    float getWindowWidth();
+    float getWindowHeight();
+    void updateIngameUI(float, CGameClient*, Ogre::RenderWindow*);
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
     virtual ~CGameUI();
@@ -27,6 +35,8 @@ public:
     void queueTip(EContextTip tip);
     float scaledY(float value);
     const CEGUI::Image* getImageFromImageSet(const unsigned char* name);
+    void clearMenuMouseOvers();
+    void openModalDialog(std::wstring,std::wstring,bool);
     void closeLeft();
     void closeRight();
     void closeMenus();

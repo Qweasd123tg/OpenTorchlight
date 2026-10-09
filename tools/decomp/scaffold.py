@@ -21,6 +21,7 @@ import shutil
 from collections import defaultdict
 from pathlib import Path
 import re
+import struct
 import subprocess
 import sys
 
@@ -69,16 +70,37 @@ def disassemble(elf, f):
 
 
 def annotate(asm, image):
-    """Append literal contents for immediates and RIP targets pointing into .rodata."""
+    """Append literals, scalar SSE constants, and exact local-static identities."""
+    local_symbols = defaultdict(set)
+    for symbol in image.symbols:
+        if symbol.defined and symbol.type == elfimage.STT_OBJECT and symbol.name.startswith(("_ZZ", "_ZGVZ")):
+            local_symbols[symbol.value].add(symbol.name)
     out = []
     for line in asm.splitlines():
-        targets = [int(m, 16) for m in re.findall(r"#\s*([0-9a-f]+)\b", line)]
+        rip_targets = [int(m, 16) for m in re.findall(r"#\s*([0-9a-f]+)\b", line)]
+        targets = list(rip_targets)
+        instruction = re.match(r"\s*[0-9a-f]+:\s+(\w+)\b", line)
+        mnemonic = instruction.group(1) if instruction else ""
+        single = {"movss", "addss", "subss", "mulss", "divss", "minss", "maxss", "comiss", "ucomiss", "sqrtss", "cvtss2sd"}
+        double = {"movsd", "addsd", "subsd", "mulsd", "divsd", "minsd", "maxsd", "comisd", "ucomisd", "sqrtsd", "cvtsd2ss"}
+        scalar_size = 4 if mnemonic in single else 8 if mnemonic in double else 0
         targets += [int(m, 16) for m in re.findall(r"\$0x([0-9a-f]+)", line)]
         notes = []
-        for address in targets:
+        for address in dict.fromkeys(targets):
+            if address in local_symbols:
+                notes.append("symbols " + ",".join(sorted(local_symbols[address])))
             section = image.section_at(address)
             if not section or not section.name.startswith(".rodata"):
                 continue
+            if scalar_size and address in rip_targets:
+                try:
+                    raw = image.read(address, scalar_size)
+                    value = struct.unpack("<f" if scalar_size == 4 else "<d", raw)[0]
+                    bits = int.from_bytes(raw, "little")
+                    notes.append(f"f{scalar_size * 8} {value!r} (0x{bits:0{scalar_size * 2}x})")
+                    continue
+                except (ValueError, struct.error):
+                    pass
             try:
                 raw = image.read(address, 512)
             except ValueError:

@@ -24,6 +24,7 @@
 #undef private
 #undef protected
 TL_ORIGINAL(void, originalEquipmentInit, (CEquipment*,CDataGroup*,bool), "_ZN10CEquipment8unitInitEP10CDataGroupb")
+extern "C" void recoveredEquipmentInit(CEquipment*,CDataGroup*,bool) __asm__("_ZN10CEquipment8unitInitEP10CDataGroupb");
 TL_FUNCTION(eiParent,"_ZN5CItem8unitInitEP10CDataGroupb")
 TL_FUNCTION(eiLoad,"_ZN10CEquipment9loadModelESbIwSt11char_traitsIwESaIwEES3_")
 TL_FUNCTION(eiCombat,"_ZN10CEquipment20calculateCombatStatsEb")
@@ -110,7 +111,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     detour::Set patches;TL_REDIRECT(patches,eiParent,&parent);TL_REDIRECT(patches,eiLoad,&load);TL_REDIRECT(patches,eiCombat,&combat);TL_REDIRECT(patches,eiRequirements,&requirements);TL_REDIRECT(patches,eiEnchant,&enchant);TL_REDIRECT(patches,eiElemental,&elemental);TL_REDIRECT(patches,eiPrice,&price);TL_REDIRECT(patches,eiEffectValues,&effectValues);TL_REDIRECT(patches,eiIsa,&isa);TL_REDIRECT(patches,eiMaster,&master);TL_REDIRECT(patches,eiSound,&sound);TL_REDIRECT(patches,eiSample,&sample);TL_REDIRECT(patches,eiAddEffect,&addEffect);TL_REDIRECT(patches,eiRandomFloat,&randomFloat);
     if(patches.failed())_exit(42);
     for(int repeat=0;repeat<2;++repeat){
-        CDataGroup* arg=c.mode==1?0:&data;bool skip=(c.seed/2)%2!=0;if(ours)object->CEquipment::unitInit(arg,skip);else originalEquipmentInit(object,arg,skip);
+        CDataGroup* arg=c.mode==1?0:&data;bool skip=(c.seed/2)%2!=0;if(repeat==0){if(ours)autotest::invoke(out,&recoveredEquipmentInit,object,arg,skip);else autotest::invoke(out,&originalEquipmentInit,object,arg,skip);}else{if(ours)object->CEquipment::unitInit(arg,skip);else originalEquipmentInit(object,arg,skip);}
         number(100+repeat);text(object->m_sUnidentifiedName);text(object->m_sDisplayName);text(object->m_sUnknown3D8);number(object->m_iUnknown248);number(object->m_iUnknown260);number(object->m_bUnknown25F);number(object->m_iUnknown23C);number(object->m_iUnknown274);number(object->m_iSocketCount);number(object->m_bUnknown348);number(object->m_bUnknown430);number(object->m_iMinimumDamage);number(object->m_iMaximumDamage);number(object->m_iUnknown278);number(object->m_iUnknown264);
         number(object->m_pSoundBank!=0);if(object->m_pSoundBank){const char* b=reinterpret_cast<const char*>(object->m_pSoundBank);number(*reinterpret_cast<CSoundManager*const*>(b+0x10)==masterObject->m_pSoundManager);number(b[0xb4]);}number(owned.size());number(g_iTotalCountOfObjects-beforeCount);
     }
@@ -122,10 +123,14 @@ void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c)
 }
 TL_TEST(equipment_init_differential){
     int failures=0;
+    autotest::Coverage coverage("equipment_init_differential",(uint64_t)(uintptr_t)&originalEquipmentInit);
     for(unsigned n=0;n<1140;++n){Case c={n<480?n:n<560?n-480:n<1060?80+(n-560)%100:n-1060,n<480?0u:n<560?1u:n<1060?2+(n-560)/100:7u};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        int observation=coverage.observe(host,a,b);
+        bool ok=observation==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok)host->log("    comparison_kind=%d\n",observation);
         if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    init %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
         TL_CHECK(failures,ok);
     }
+    coverage.report(host);
     host->log("    equipment init: 1140 cases, two calls per side\n");return failures;
 }
