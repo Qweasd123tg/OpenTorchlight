@@ -144,3 +144,58 @@ void CStatsMenuFill::updateVisuals()
     m_pExperienceText->setText(CEGUI::String((const unsigned char*)STRINGS::StringConvertToUTF8(text).c_str()));
     calculateMouseOver();
 }
+
+void CStatsMenuFill::calculateMouseOver()
+{
+    for(unsigned i=0;i<4;++i) {
+        CEGUI::Window* window=m_StatSlots[i];
+        std::wstring text=L"";
+        int next=1;
+        if(m_pPlayer)next=stats_fill_visual_detail::stat(m_pPlayer,i)+1;
+        std::wstring value=STRINGS::GetValueAsWString(next);
+        switch(i) {
+        case 1:text=L"Increase Ranged Damage\n\nNext Point Gives:\n"+value+L"% ranged damage increase";break;
+        case 2:text=L"Increase Magic and Skill Damage\n\nNext Point Gives:\n"+value+L"% increase magic damage";break;
+        case 3:text=L"Increase Defense Against Damage\n\nNext Point Gives:\n"+value+L"% defense increase";break;
+        default:text=L"Increase Melee Damage\n\nNext point gives:\n"+value+L"% melee damage increase";break;
+        }
+        window->setTooltipText(CEGUI::String(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToUTF8(text).c_str())));
+    }
+}
+
+#include "Graph.h"
+namespace stats_fill_input_detail {
+struct Fields {char prefix[0x168];float heldElapsed;char gap16c[4];CGraph* statCost;char gap178[0x190-0x178];bool flag190;};
+typedef char check_elapsed[__builtin_offsetof(Fields,heldElapsed)==0x168?1:-1];
+typedef char check_graph[__builtin_offsetof(Fields,statCost)==0x170?1:-1];
+typedef char check_flag[__builtin_offsetof(Fields,flag190)==0x190?1:-1];
+inline Fields& fields(CStatsMenuFill* p){return *reinterpret_cast<Fields*>(p);}
+}
+bool CStatsMenuFill::handle_onMouseUp(const CEGUI::EventArgs&)
+{
+ stats_fill_input_detail::fields(this).flag190=false;
+ stats_fill_input_detail::fields(this).heldElapsed=0.0f;
+ for(unsigned i=0;i<4;++i){m_AddHeld[i]=false;m_RemoveHeld[i]=false;}
+ return true;
+}
+bool CStatsMenuFill::handle_AddToStat(const CEGUI::EventArgs& args)
+{
+ unsigned int index=m_AddButtons.find(static_cast<const CEGUI::WindowEventArgs&>(args).window);
+ if(index!=-1)m_AddHeld[index]=true;
+ return true;
+}
+bool CStatsMenuFill::handle_RemoveFromStat(const CEGUI::EventArgs& args)
+{
+ unsigned int index=m_RemoveButtons.find(static_cast<const CEGUI::WindowEventArgs&>(args).window);
+ if(index!=-1)m_RemoveHeld[index]=true;
+ return true;
+}
+float CStatsMenuFill::getStatBarTotalAmount(ESTATSMENU_STATS which)
+{
+ int amount=0;
+ if(m_pPlayer){
+  const stats_fill_visual_detail::PlayerFields& p=stats_fill_visual_detail::fields(m_pPlayer);
+  switch(which){case 0:amount=p.stat0;break;case 1:amount=p.stat1;break;case 2:amount=p.stat2;break;case 3:amount=p.stat3;break;default:break;}
+ }
+ return stats_fill_input_detail::fields(this).statCost->getValue(static_cast<float>(amount)+1.0f,0);
+}
