@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 import elfimage  # noqa: E402
 import objdiff_eh  # noqa: E402
+import objdiff_disasm  # noqa: E402
 import toolchain  # noqa: E402
 
 ROOT = elfdb.ROOT
@@ -712,6 +713,31 @@ class Original:
             for name in f["names"]:
                 self.by_name.setdefault(name, []).append(f)
 
+    def _prepare_indexes(self):
+        if "_global_data" in self.__dict__:
+            return
+        global_data, local_data = {}, {}
+        for g in self.db["globals"]:
+            address = int(g["address"], 16)
+            if g["bind"] != "local":
+                global_data.setdefault(g["name"], address)
+            else:
+                local_data.setdefault(g["file"], {})[g["name"]] = address
+        imports = {n.split("@")[0]: a for a, n in self.image.plt.items()}
+        for symbol in self.image.dynsyms:
+            if symbol.defined and symbol.value and symbol.name:
+                imports.setdefault(symbol.name.split("@")[0], symbol.value)
+        disassembly = objdiff_disasm.OriginalInstructions(
+            self.db, self.image, run_objdump, parse_insns,
+            mode=os.environ.get("OTL_ORIGINAL_DISASM", "function"))
+        self._local_data, self._imports = local_data, imports
+        self._disassembly = disassembly
+        self._global_data = global_data  # Publish the ready marker last.
+
+    def _instructions(self, f):
+        self._prepare_indexes()
+        return self._disassembly.instructions(f)
+
     def symbol_names(self):
         with self._lock:
             if not hasattr(self, "_names"):
@@ -726,20 +752,17 @@ class Original:
         return known_overloads(self.db, mangled)
 
     def resolver(self, tu):
-        data = {}
-        for g in self.db["globals"]:
-            if g["bind"] != "local":
-                data.setdefault(g["name"], int(g["address"], 16))
-        if tu:
-            for g in self.db["globals"]:
-                if g["bind"] == "local" and g["file"] == tu["name"]:
-                    data[g["name"]] = int(g["address"], 16)
-        imports = {n.split("@")[0]: a for a, n in self.image.plt.items()}
-        for s in self.image.dynsyms:
-            if s.defined and s.value and s.name:
-                imports.setdefault(s.name.split("@")[0], s.value)
+        # Original/db are immutable for this comparison session. Preserve the
+        # old local-over-global and first-global-wins precedence without copying
+        # the entire global table into every TU.
+        with self._lock:
+            self._prepare_indexes()
+        local_data = self._local_data.get(tu["name"], {}) if tu else {}
+        data, imports = self._global_data, self._imports
 
         def resolve(name):
+            if name in local_data:
+                return local_data[name]
             if name in data:
                 return data[name]
             f = self.function(name, False, tu)
@@ -750,6 +773,7 @@ class Original:
                 return int(f["address"], 16)
             return imports.get(name)
         return resolve
+
 
     def function(self, name, local=False, tu=None):
         found = self.by_name.get(name) or []
@@ -768,8 +792,7 @@ class Original:
             if key not in cache:
                 start = int(f["address"], 16)
                 end = start + f["size"]
-                insns = parse_insns(run_objdump([f"--start-address={start:#x}", f"--stop-address={end:#x}",
-                                                 str(self.image.path)]))
+                insns = self._instructions(f)
                 norm = self.side.normalize(insns, start, end)
                 cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified))}
                 _NORM_DIRTY.add(key)
@@ -786,18 +809,24 @@ class Original:
 
     def cleanup_eh(self, f):
         with self._lock:
-            cache = self.__dict__.setdefault("_cleanup_eh_cache", {})
-            if f["address"] not in cache:
+            # The original's cleanup metadata is immutable just like its code.
+            # Store the fully checked signature (including an unsupported None)
+            # in the same ELF/parser-bound cache, not in a per-process-only dict.
+            self.normalized(f)
+            key = self.image.sha256 + ":" + f["address"]
+            entry = self._norm_cache[key]
+            if "cleanup_eh" not in entry:
                 start = int(f["address"], 16)
                 if self.frames.reason(start, f["size"]) != "EH LSDA equivalence unverified":
-                    cache[f["address"]] = None
+                    signature = None
                 else:
-                    end = start + f["size"]
-                    insns = parse_insns(run_objdump([f"--start-address={start:#x}",
-                                                     f"--stop-address={end:#x}", str(self.image.path)]))
-                    cache[f["address"]] = objdiff_eh.cleanup_signature(
+                    insns = self._instructions(f)
+                    signature = objdiff_eh.cleanup_signature(
                         self.image, self.frames, start, f["size"], insns)
-            return cache[f["address"]]
+                entry["cleanup_eh"] = signature
+                _NORM_DIRTY.add(key)
+            return entry["cleanup_eh"]
+
 
 
 NORM_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "db" / "orig-normalized.pickle"
@@ -809,7 +838,7 @@ def _norm_key():
     # Normalization depends on this file, the database and the ELF image reader.
     here = Path(__file__).resolve().parent
     return [NORMALIZER_VERSION] + [hashlib.sha256(p.read_bytes()).hexdigest()
-                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py",
+                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 

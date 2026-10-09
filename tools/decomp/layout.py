@@ -20,6 +20,8 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 import pickle
+import os
+import tempfile
 import re
 import subprocess
 import sys
@@ -90,28 +92,50 @@ def split_params(text):
 def load_insns(db, elf=None):
     """address -> [(addr, mnemonic, operands-without-comment)] for every function."""
     if CACHE.exists() and CACHE.stat().st_mtime >= (elfdb.DEFAULT_OUT / "elfdb.json").stat().st_mtime:
-        return pickle.loads(CACHE.read_bytes())
+        with CACHE.open("rb") as stream:
+            return pickle.load(stream)
     elf = elf or elfdb.default_elf()
-    text = subprocess.run(["objdump", "-d", "--no-show-raw-insn", "-w", "-j", ".text", str(elf)],
-                          capture_output=True, text=True, check=True, env={"LC_ALL": "C", "PATH": "/usr/bin:/bin"}).stdout
     starts = sorted(int(a, 16) for a in db["functions"])
     sizes = {int(a, 16): f["size"] for a, f in db["functions"].items()}
     result = defaultdict(list)
     import bisect
-    for line in text.splitlines():
-        m = re.match(r"^\s+([0-9a-f]+):\t(\S+)\s*(.*)$", line)
-        if not m:
-            continue
-        addr = int(m.group(1), 16)
-        i = bisect.bisect_right(starts, addr) - 1
-        if i < 0 or addr >= starts[i] + sizes[starts[i]]:
-            continue
-        ops = m.group(3).split("#")[0].split("<")[0].strip() if m.group(2).startswith(("call", "j")) \
-            else m.group(3).split("#")[0].strip()
-        target = re.search(r"<([^>+]+)", m.group(3))
-        result[f"{starts[i]:#x}"].append((addr, m.group(2), ops, target.group(1) if target else ""))
+    # Stream the large disassembly instead of retaining stdout and splitlines
+    # at once. Parse identically; never publish an incomplete cache on failure.
+    with tempfile.TemporaryFile(mode="w+") as errors:
+        proc = subprocess.Popen(["objdump", "-d", "--no-show-raw-insn", "-w", "-j", ".text", str(elf)],
+                                stdout=subprocess.PIPE, stderr=errors, text=True,
+                                env={"LC_ALL": "C", "PATH": "/usr/bin:/bin"})
+        try:
+            for line in proc.stdout:
+                m = re.match(r"^\s+([0-9a-f]+):\t(\S+)\s*(.*)$", line)
+                if not m:
+                    continue
+                addr = int(m.group(1), 16)
+                i = bisect.bisect_right(starts, addr) - 1
+                if i < 0 or addr >= starts[i] + sizes[starts[i]]:
+                    continue
+                ops = m.group(3).split("#")[0].split("<")[0].strip() if m.group(2).startswith(("call", "j")) \
+                    else m.group(3).split("#")[0].strip()
+                target = re.search(r"<([^>+]+)", m.group(3))
+                result[f"{starts[i]:#x}"].append((addr, m.group(2), ops, target.group(1) if target else ""))
+            if proc.wait():
+                errors.seek(0)
+                raise subprocess.CalledProcessError(proc.returncode, proc.args, stderr=errors.read())
+        finally:
+            if proc.poll() is None:
+                proc.kill()
+            proc.wait()
+            if proc.stdout:
+                proc.stdout.close()
     result = dict(result)
-    CACHE.write_bytes(pickle.dumps(result))
+    CACHE.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix="insns-", dir=CACHE.parent)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            pickle.dump(result, stream)
+        os.replace(temporary, CACHE)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
     return result
 
 
