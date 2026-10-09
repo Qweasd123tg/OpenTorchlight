@@ -873,3 +873,158 @@ bool CGameUI::processIngameInput(void* window,float elapsed,bool enabled)
     processSkillKeys(this);
     return finish(this,result);
 }
+
+#include "SkillFoldout.h"
+#include "SkillManager.h"
+#include "Skill.h"
+#include "Inventory.h"
+#include "EquipmentRef.h"
+#include "MasterResourceManager.h"
+#include "Settings.h"
+#include "DataGroup.h"
+#include "StringTranslate.h"
+#include "StringUtilities.h"
+#include "EmptyStrings.h"
+#include "GameUIData.h"
+#include <vector>
+#include <cmath>
+
+namespace foldout_show_detail {
+struct OwnerFields {
+ char prefix[0x1c8]; CSkillManager* manager;
+ char gap1d0[0x490-0x1d0]; CInventory* inventory;
+ char gap498[0x950-0x498]; long long primary[12],secondary[12];
+};
+struct ManagerFields { char prefix[0x60]; TArrayList<CSkill*> skills; };
+struct InventoryFields { char prefix[0x30]; TArrayList<CEquipmentRef*> items; };
+struct ItemFields { char prefix[0x1a0]; long long guid; };
+struct SkillFields {
+ char prefix[0x60]; int activation; char gap64[7]; unsigned char blocked;
+ char gap6c; unsigned char assignable; char gap6e; unsigned char leftAllowed;
+ char gap70[0xd8-0x70]; unsigned int requiredLevel; char gapdc[4]; unsigned int effectiveLevel;
+ char gape4[0x150-0xe4]; long long guid;
+};
+inline __attribute__((always_inline)) OwnerFields& owner(CBaseUnit* p){return *reinterpret_cast<OwnerFields*>(p);}
+inline __attribute__((always_inline)) SkillFields& skill(CSkill* p){return *reinterpret_cast<SkillFields*>(p);}
+inline __attribute__((always_inline)) CEGUI::String utf8(const char* p){return CEGUI::String(reinterpret_cast<const unsigned char*>(p));}
+inline __attribute__((always_inline)) void position(CSkillFoldout* p,int column,int row,bool label,float x,float y){
+ float sy=p->m_pGameUI->scaledY(y);float sx=p->m_pGameUI->scaledY(x);
+ (label?p->m_Hotkeys[column][row]:p->m_Icons[column][row])->setPosition(CEGUI::UVector2(CEGUI::UDim(0,sx),CEGUI::UDim(0,sy)));
+}
+inline __attribute__((always_inline)) void size(CSkillFoldout* p,int column,int row,bool label,float x,float y){
+ float sy=p->m_pGameUI->scaledY(y);float sx=p->m_pGameUI->scaledY(x);
+ (label?p->m_Hotkeys[column][row]:p->m_Icons[column][row])->setSize(CEGUI::UVector2(CEGUI::UDim(0,sx),CEGUI::UDim(0,sy)));
+}
+inline __attribute__((always_inline)) void hotkey(CSkillFoldout* p,int column,int row,int index,float x,float y){
+ p->m_Hotkeys[column][row]->setVisible(true);p->m_Hotkeys[column][row]->setEnabled(true);
+ position(p,column,row,true,x,y);
+ p->m_Hotkeys[column][row]->setText(utf8(("F"+STRINGS::GetValueAsString(index+1)).c_str()));
+ size(p,column,row,true,36.0f,14.0f);
+}
+}
+
+__attribute__((flatten))
+void CSkillFoldout::showFoldout(CBaseUnit* unit,float x,float y,bool includeItems,bool left)
+{
+ using namespace foldout_show_detail;
+ m_bIncludeItems=includeItems;m_bFlagCB1=left;
+ if(m_pWindow->getParent() || !unit)return;
+ CSkillManager* manager=owner(unit).manager;if(!manager)return;
+ m_pParent->addChildWindow(m_pWindow);m_pWindow->moveToFront();
+ m_pGameUI->scaledY(160.0f);m_pGameUI->scaledY(100.0f);
+ for(int column=0;column<10;++column)for(int row=0;row<10;++row){
+  m_Icons[column][row]->setVisible(false);m_Icons[column][row]->setEnabled(false);
+  m_Hotkeys[column][row]->setVisible(false);m_Hotkeys[column][row]->setEnabled(false);
+ }
+ float maxWidth=0.0f,maxHeight=0.0f;int maxColumns=0;
+ if(left){
+  m_Icons[0][0]->setVisible(true);m_Icons[0][0]->moveToFront();m_Icons[0][0]->setEnabled(true);
+  position(this,0,0,false,4,4);
+  m_Icons[0][0]->setProperty("Image",CEGUI::PropertyHelper::imageToString(m_pGameUI->getImageFromImageSet(reinterpret_cast<const unsigned char*>("skill_attack"))));
+  size(this,0,0,false,48,48);
+  static std::wstring g_WeaponAttack;
+  if(g_WeaponAttack.empty())g_WeaponAttack=CStringTranslate::getSinglton()->getTranslateString(L"Assign weapon attack");
+  m_Icons[0][0]->setTooltipText(utf8(STRINGS::StringConvertToUTF8(std::wstring(g_WeaponAttack.c_str())).c_str()));
+  m_SkillIndices[95]=-999;m_Icons[0][0]->setUserData(&m_SkillIndices[95]);m_Icons[0][0]->setID(95);
+  int index=0;while(index<12 && owner(unit).secondary[index]!=-999)++index;
+  // A miss exits the scan directly without creating a hotkey label.
+  if(index<12)hotkey(this,0,0,index,4,4);
+  maxWidth=48;maxHeight=50;maxColumns=1;
+ }
+ float rowY=0.0f;int lastRow=0,nextColumn=0;
+ for(int row=0;row<100;++row){
+  int column=left?1:0;
+  for(int i=0;i<manager->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0));++i){
+   TArrayList<CSkill*>& skills=reinterpret_cast<ManagerFields*>(manager)->skills;
+   CSkill* current=i<static_cast<int>(skills.size())?skills[i]:0;
+   int tier=static_cast<int>(::floorf(static_cast<float>(skill(current).requiredLevel)/5.0f));
+   if(tier>10)tier=10;if(tier!=row)continue;
+   current->calculateEffectiveSkillLevel();
+   if(!skill(current).effectiveLevel || !((skill(current).blocked^1)&skill(current).assignable))continue;
+   if(left&&!skill(current).leftAllowed)continue;
+   if(skill(current).activation==4 || row>9 || column>9)continue;
+   m_Icons[column][row]->setVisible(true);m_Icons[column][row]->moveToFront();m_Icons[column][row]->setEnabled(true);
+   float columnX=static_cast<float>(column)*50.0f;
+   position(this,column,row,false,columnX+4.0f,rowY+4.0f);
+   m_Icons[column][row]->setProperty("Image",CEGUI::PropertyHelper::imageToString(m_pGameUI->getImageFromImageSet(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToNarrow(current->getSkillIcon().c_str()).c_str()))));
+   size(this,column,row,false,48,48);
+   m_SkillIndices[i]=skill(current).guid;m_Icons[column][row]->setUserData(&m_SkillIndices[i]);m_Icons[column][row]->setID(i);
+   m_Icons[column][row]->setTooltipText(utf8(""));
+   int index=0;while(index<12 && (left?owner(unit).secondary[index]:owner(unit).primary[index])!=skill(current).guid)++index;
+   if(index<12)hotkey(this,column,row,index,columnX+4.0f,rowY+4.0f);
+   ++column;if(column>maxColumns)maxColumns=column;
+   float width=columnX+48.0f;maxWidth=width>maxWidth?width:maxWidth;
+   float height=rowY+50.0f;maxHeight=height>maxHeight?height:maxHeight;
+   lastRow=row;nextColumn=column;
+  }
+  if(column!=0)rowY+=50.0f;
+ }
+ if(lastRow<9){++lastRow;nextColumn=0;}
+ if(includeItems){
+  CInventory* inventory=owner(unit).inventory;
+  TArrayList<CEquipmentRef*>& items=reinterpret_cast<InventoryFields*>(inventory)->items;
+  std::vector<long long> shown;
+  for(unsigned int i=0;i<items.size();++i){
+   CBaseUnit* item=static_cast<CBaseUnit*>(items[i]->m_pUnknown10);
+   if(!item->ISA(static_cast<UNITTYPES::EUNITTYPES>(1)) || item->ISA(static_cast<UNITTYPES::EUNITTYPES>(129)))continue;
+   long long guid=reinterpret_cast<ItemFields*>(item)->guid;bool duplicate=false;
+   for(unsigned int j=0;j<shown.size();++j)if(shown[j]==guid)duplicate=true;
+   if(duplicate)continue;shown.push_back(guid);
+   if(nextColumn>9||lastRow>9)continue;
+   m_Icons[nextColumn][lastRow]->setVisible(true);m_Icons[nextColumn][lastRow]->moveToFront();m_Icons[nextColumn][lastRow]->setEnabled(true);
+   const CEGUI::Image* image=m_pGameUI->getImageFromImageSet(reinterpret_cast<const unsigned char*>(STRINGS::StringConvertToNarrow(item->getDataGroup()->GetDataValue(L"ICON",EMPTY_WSTRING).c_str()).c_str()));
+   if(!image)return;
+   unsigned int widthRatioKey=KSETTINGS_YRATIO;
+   float width=image->getWidth();
+   width/=CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(widthRatioKey);
+   float height=image->getHeight();
+   unsigned int heightRatioKey=KSETTINGS_YRATIO;
+   height/=CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(heightRatioKey);
+   float factor=48.0f/height;width*=factor;height*=factor;
+   float columnX=static_cast<float>(nextColumn)*50.0f;
+   position(this,nextColumn,lastRow,false,columnX+4.0f+(48.0f-width)*0.5f,rowY+4.0f);
+   m_Icons[nextColumn][lastRow]->setProperty("Image",CEGUI::PropertyHelper::imageToString(image));
+   size(this,nextColumn,lastRow,false,width,height);m_Icons[nextColumn][lastRow]->setTooltipText(utf8(""));
+   m_ItemGuids[nextColumn][lastRow]=reinterpret_cast<ItemFields*>(item)->guid;m_Icons[nextColumn][lastRow]->setUserData(&m_ItemGuids[nextColumn][lastRow]);m_Icons[nextColumn][lastRow]->setID(1000);
+   ++nextColumn;
+   float right=columnX+48.0f;maxWidth=right>maxWidth?right:maxWidth;
+   float bottom=rowY+50.0f;maxHeight=bottom>maxHeight?bottom:maxHeight;
+   if(nextColumn>(maxColumns>4?maxColumns:4)&&lastRow!=9){++lastRow;rowY=bottom;nextColumn=0;}
+  }
+ }
+ float height=m_pGameUI->scaledY(maxHeight+5.0f)+0.0f;
+ float width=m_pGameUI->scaledY(maxWidth)+0.0f;
+ m_pWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
+ float screenWidth=g_pGameUI->getWindowWidth();float screenHeight=g_pGameUI->getWindowHeight();
+ CEGUI::UDim w=m_pWindow->getWidth();CEGUI::UDim h=m_pWindow->getHeight();
+ if(x==-1.0f&&y==-1.0f)return;
+ float pixelWidth=static_cast<float>(static_cast<int>(w.d_scale+(w.d_scale>0.0f?0.5f:-0.5f)))+w.d_offset;
+ float pixelHeight=static_cast<float>(static_cast<int>(h.d_scale+(h.d_scale>0.0f?0.5f:-0.5f)))+h.d_offset;
+ float screenX=static_cast<float>(static_cast<unsigned int>(screenWidth));float screenY=static_cast<float>(static_cast<unsigned int>(screenHeight));
+ float px=x+16.0f+26.0f,py=y-pixelHeight-26.0f;
+ if(px+pixelWidth+26.0f>screenX)px=screenX-(pixelWidth+26.0f);
+ if(py+pixelHeight+26.0f>screenY)py=screenY-(pixelHeight+26.0f);
+ if(0.0f>px-26.0f)px=x+26.0f;
+ if(py-26.0f<0.0f)py=26.0f;
+ m_pWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,px),CEGUI::UDim(0,py)));
+}

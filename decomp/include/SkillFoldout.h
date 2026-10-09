@@ -17,7 +17,11 @@ public:
     long long m_SkillIndices[100];
     CGameUI* m_pGameUI;
     CEGUI::Window* m_pParent;
-    char m_Unrecovered348[0xcb1-0x348];
+    CEGUI::Window* m_pWindow;
+    CEGUI::Window* m_Icons[10][10];
+    CEGUI::Window* m_Hotkeys[10][10];
+    long long m_ItemGuids[10][10];
+    bool m_bIncludeItems;
     bool m_bFlagCB1;
     char m_TailCB2[6];
 };
