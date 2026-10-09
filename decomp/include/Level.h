@@ -47,6 +47,9 @@ public:
     void unitBroadcastMessage(CBaseUnit* unit, EUNIT_STATES state);
     void questEventFire(EQUEST_EVENTS event, CCharacter* character, CBaseUnit* target);
     int getRoomIndexThatPositionIsIn(const Ogre::Vector3& position);
+    CEditorScene* getRoomThatPositionIsIn(const Ogre::Vector3& position);
+    void toggleAutomap();
+    void zoomAutomap(float);
     Ogre::Vector3 randomOpenPosition(const Ogre::Vector3& position, float radius, bool flag);
     bool rayCollision(const Ogre::Vector3& start, const Ogre::Vector3& end, Ogre::Vector3& hit,
                       Ogre::Vector3& normal, unsigned int& type, Ogre::Vector3& extra, bool flag);

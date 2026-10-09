@@ -6,6 +6,11 @@
 
 #include <string>
 
+// One-byte TU-local switches from the original gameui.cpp BSS symbols.
+static bool gToggleInventory;
+static bool gTogglePet;
+static bool gToggleStats;
+
 extern int KSETTINGS_KEYMAP_CLOSEALL;
 extern int KSETTINGS_KEYMAP_PAUSE;
 extern int KSETTINGS_KEYMAP_ZOOMIN;
