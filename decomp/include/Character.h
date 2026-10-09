@@ -41,6 +41,8 @@ class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
+    bool performingAttackLoose();
+    void toggleSecondaryWeaponSet();
     CSkill* getKnownSpell(unsigned int);
     std::wstring getSkillTabName(int);
     CEquipment* getWeaponInLeftHand();
@@ -222,7 +224,9 @@ private:
     char m_CharacterData620[0x640 - 0x620];
     CCharacter* m_pMaster;
     std::vector<CCharacter*> m_Followers;
-    char m_CharacterData660[0x718 - 0x660];
+    char m_CharacterData660[0x70e - 0x660];
+    bool m_bSecondaryWeaponSet;
+    char m_CharacterData70f[0x718 - 0x70f];
     CAIManager* m_pAIManager;
 };
 

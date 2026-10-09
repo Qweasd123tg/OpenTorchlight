@@ -8,9 +8,12 @@
 // The RTTI base and two destructor vtable slots are present in the original.
 // Unrecovered regions remain opaque; container/window types below are named
 // by calls in CConsole's original functions.
+class CGameUI; class CResourceManager;
 class CConsole : public CRunicCore
 {
 public:
+    CConsole(CGameUI*, CResourceManager*, CEGUI::Window*);
+
     virtual ~CConsole();
     bool getVisible();
     void setVisible(bool);

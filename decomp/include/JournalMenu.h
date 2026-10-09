@@ -4,8 +4,12 @@
 #include "TArrayList.h"
 namespace CEGUI {class Window;}
 class CGameUI;class CResourceManager;
+class CSettings;
+namespace Ogre { class RenderWindow; class SceneManager; }
 class CJournalMenu : public CSubMenu {
 public:
+    CJournalMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
+
  virtual ~CJournalMenu();
  virtual CBaseUnit* getOwner();
  virtual bool isRight();

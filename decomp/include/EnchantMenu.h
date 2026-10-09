@@ -10,7 +10,26 @@ namespace CEGUI { class Window; class Imageset; }
 // Partial named layout; original allocation is 0x110 bytes.
 class CEnchantMenu : public CSubMenu, public iInventoryListener {
 public:
+    CEnchantMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
+
  virtual ~CEnchantMenu();
+ // Original override symbols; return declarations follow the existing base ABI.
+ // create does not invoke these methods. Bodies remain external and untouched.
+ virtual CBaseUnit* getOwner();
+ virtual bool isRight();
+ virtual bool open();
+ virtual bool openPartial();
+ virtual float screenEdge();
+ virtual void setOwner(CCharacter*);
+ virtual void setOpen(bool);
+ virtual void update(float);
+ virtual void equipmentPickedUp(CEquipment*);
+ virtual void equipmentDropped(CEquipment*);
+ virtual void equipmentEquipped(CEquipment*);
+ virtual void equipmentUnequipped(CEquipment*);
+ virtual void equipmentUsed(CEquipment*);
+ virtual void inventoryDestroyed();
+
  void createMenus();
  void mapEventHandlers(CEGUI::Window*);
  bool handle_ItemClick(const CEGUI::EventArgs&);

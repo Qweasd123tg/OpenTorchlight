@@ -12,10 +12,12 @@ class CDynamicPropertyFile;
 class CGenericModel;
 class CSkillTooltip;
 class CSettings;
+class CSoundBank;
 
 namespace Ogre
 {
 class Camera;
+class Viewport;
 class RenderWindow;
 class SceneManager;
 }
@@ -72,7 +74,7 @@ public:
     bool handle_SetSpell(const CEGUI::EventArgs&);
     void setSlotIcon(CEquipment*, int, int);
 private:
-    char m_InventoryData18[8];
+    CEGUI::Window* m_pParent;
     CEGUI::Window* m_pBackground;
     CEGUI::Window* m_pPanel;
     CEGUI::Window* m_pSocketedIconParent;
@@ -82,12 +84,13 @@ private:
     CCharacter* m_pCharacter;
     char m_InventoryData58[8];
     bool m_bOpen;
-    char m_InventoryData61[0x68 - 0x61];
+    bool m_bFullyClosed;
+    char m_InventoryData62[0x68 - 0x62];
     CDynamicPropertyFile* m_pDynamicPropertyFile;
     CGameUI* m_pGameUI;
     char m_InventoryData78[8];
     int m_aiSlotData[1000];
-    char m_InventoryData1020[8];
+    CEquipment* m_pHoverObject;
     CEGUI::Window* m_pSocketedSizeWindows[82];
     CEGUI::Window* m_pMainGlowWindows[82];
     CEGUI::Window* m_pMainSocketGlowWindows[82];
@@ -109,17 +112,25 @@ private:
     Ogre::SceneManager* m_pInventorySceneManager;
     Ogre::SceneManager* m_pWardrobeSceneManager;
     Ogre::Camera* m_pWardrobeCamera;
-    char m_InventoryData9150[0x9162-0x9150];
+    Ogre::RenderWindow* m_pRenderWindow;
+    Ogre::Viewport* m_pViewport;
+    char m_InventoryData9160;
+    bool m_bSpellHovered;
     bool m_bRotateLeft;
     bool m_bRotateRight;
-    char m_InventoryData9164[0x9170-0x9164];
+    char m_InventoryData9164[4];
+    long long m_HoveredSkillGuid;
     CGenericModel* m_pInventoryModel;
     CResourceManager* m_pResourceManager;
-    char m_InventoryData9180[0x9190-0x9180];
+    float m_fScreenEdge;
+    float m_fPanelX;
+    CSoundBank* m_pSoundBank;
     CEGUI::Window* m_pMoneyWindow;
     CEGUI::Window* m_pWeaponSwitchWindow;
     CSkillTooltip* m_pSkillTooltip;
-    char m_InventoryData91a8[8];
+    bool m_TabNotifications[3];
+    char m_InventoryData91ab;
+    float m_fTabPhase;
     CEGUI::String m_TabUnselectedImages[3];
     CEGUI::String m_TabSelectedImages[3];
 };

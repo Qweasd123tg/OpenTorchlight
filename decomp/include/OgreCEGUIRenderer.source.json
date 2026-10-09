@@ -1,0 +1,5 @@
+{
+  "original_header_sha256": "06573c13edc20143a1c7abc2931d7d5c4ce484d1149c77b02e528d3a37cdd152",
+  "adapted_header_sha256": "a618019e39c10281e9cd2788e51dc1de6662601d0558875476f3c3e540fc4bac",
+  "adaptation": "Remove CEGUI/ prefix from three include paths only"
+}
