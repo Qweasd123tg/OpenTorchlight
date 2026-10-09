@@ -1,0 +1,11 @@
+# Equipment model-loading evidence upgrade, 2026-10-09
+
+CEquipment::loadModel(std::wstring,std::wstring), original 0x887b30, 3558 bytes. The production implementation is retained unchanged. Strict context packet and assembly control flow, service calls, arguments, data keys and path construction were reviewed. Candidate 3564 bytes, normalized DIFF, no unknown original references; exception LSDA and byte identity are not claimed.
+
+1920 completed original/candidate cold/warm comparisons, zero differences or incomplete observations. The former 960 two-call scenarios now independently identify the exact original/replacement invocation and require complete per-function reports. Matching crashes and incomplete captures cannot accept the function.
+
+Behavior includes missing resources, unloading, primary/secondary creation flags, detachment from prior parents, fallback/custom rim texture, disabled shadows, primary parenting, requested visibility, zeroed positions, render queue 50, missing-primary-entity logging, secondary explicit/data-derived paths, path cleanup, texture overrides and the initially gathered replacement-group list. Callbacks mutate resource/level/data pointers, clear the primary entity or append a replacement group.
+
+The fixture retains real headless Ogre nodes, DataGroups, strings and path cleanup, with controlled model/resource/render collaborators. It compares ordered calls/arguments, full initialized fake equipment/model/entity/resource/level/template buffers with narrow known-pointer canonicalization, template rim strings, all node parent/ordered-child identities and positions, replacement-group text, returned void completion and existing render/shadow/rim counters. Unicode, embedded NUL and repeated invocation are covered. This is bounded collaborator evidence, not a full renderer, exhaustive DataGroup/Ogre internal state, allocation-state or universal exception proof.
+
+All sixteen independently compiled deliberate faults were rejected by completed differences, with zero incomplete observations. Strict full Stage and independent root validation each passed all 192 tests. Root acceptance is 1315/5247 functions, 935704 original bytes, including 1255 MATCH and 60 behavioral acceptances.
