@@ -21,6 +21,12 @@ def digest(path):
     return h.hexdigest()
 
 
+def _file_identity(st):
+    """Changes relevant to file identity/content, excluding read-induced atime."""
+    return (st.st_dev, st.st_ino, st.st_mode, st.st_nlink, st.st_uid, st.st_gid,
+            st.st_size, st.st_mtime_ns, st.st_ctime_ns)
+
+
 class StaticInputs:
     """Rehash static compiler inputs, including directory additions/deletions.
 
@@ -67,20 +73,22 @@ class StaticInputs:
                                if '__pycache__' not in p.parts and p.is_file())
                 listings.append((tree, found))
                 files.update(found)
-            h = hashlib.sha256(b'smallmatch-selection-inputs-v1\0')
+            h = hashlib.sha256(b'smallmatch-selection-inputs-v2\0')
             # No raw environment data are exposed in reports.
             h.update(json.dumps(dict(os.environ), sort_keys=True).encode())
             for path in sorted(files):
                 before = path.stat()
+                resolved_before = path.resolve(strict=True)
                 if path.suffix.lower() in {'.h', '.hpp', '.hxx', '.c', '.cc', '.cpp', '.cxx', '.inc', '.tcc'}:
                     raw = path.read_bytes()
                     if any(token in raw for token in (b'__DATE__', b'__TIME__', b'__TIMESTAMP__')):
                         self.reason = 'Clock-dependent source/header macro disables reuse.'
                         return None
-                h.update(str(path).encode() + b'\0' + digest(path).encode())
+                h.update(str(path).encode() + b'\0' + str(resolved_before).encode() + b'\0' + digest(path).encode())
                 # __TIMESTAMP__ and symlink/include-path changes are inputs too.
                 h.update(str(before.st_mtime_ns).encode() + b'\0')
-                if before != path.stat():
+                if (_file_identity(before) != _file_identity(path.stat())
+                        or resolved_before != path.resolve(strict=True)):
                     self.reason = 'An input changed while being fingerprinted.'
                     return None
             for tree, found in listings:

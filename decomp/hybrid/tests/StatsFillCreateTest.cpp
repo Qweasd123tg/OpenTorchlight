@@ -14,6 +14,9 @@
 #include "Detour.h"
 TL_ORIGINAL(void,oldCreate,(CStatsMenuFill*),"_ZN14CStatsMenuFill11createMenusEv")
 extern "C" void newCreate(CStatsMenuFill*) __asm__("_ZN14CStatsMenuFill11createMenusEv");
+TL_FUNCTION(mouseUpHandler,"_ZN14CStatsMenuFill16handle_onMouseUpERKN5CEGUI9EventArgsE")
+TL_FUNCTION(addHandler,"_ZN14CStatsMenuFill16handle_AddToStatERKN5CEGUI9EventArgsE")
+TL_FUNCTION(removeHandler,"_ZN14CStatsMenuFill21handle_RemoveFromStatERKN5CEGUI9EventArgsE")
 TL_FUNCTION(scaledFn,"_ZN7CGameUI7scaledYEf")
 TL_FUNCTION(uniqueFn,"_ZN7STRINGS10uniqueNameERKSs")
 TL_FUNCTION(convertFn,"_ZN7STRINGS19StringConvertToUTF8ERKSbIwSt11char_traitsIwESaIwEE")
@@ -64,7 +67,12 @@ void multi(CEGUI::Window* p,bool b){n(16);n(id(p));n(b);p->d_wantsMultiClicks=b;
 std::string convert(const std::wstring& s){n(17);cap->addText(s);return input->labels==2?"converted \xce\xa9":"converted label";}
 Ogre::LogManager& logger(){n(18);return *(Ogre::LogManager*)logManager;}
 void log(Ogre::LogManager* p,const std::string& s,Ogre::LogMessageLevel level,bool b){n(19);n(p==logManager);cap->addText(s);n(level);n(b);}
-CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber subscriber){n(20);n(id(static_cast<CEGUI::Window*>(p)));str(name);CEGUI::MemberFunctionSlot<CStatsMenuFill>* slot=static_cast<CEGUI::MemberFunctionSlot<CStatsMenuFill>*>(subscriber.d_functor_impl);cap->add(&slot->d_function,sizeof(slot->d_function));n(slot->d_object==menu);if(connections==64)_exit(42);unsigned active=0;for(unsigned i=0;i<connections;++i)active+=refs[i]-1;n(active);unsigned k=connections++;refs[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)bound[k];result.d_count=&refs[k];return result;}
+CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber subscriber){n(20);n(id(static_cast<CEGUI::Window*>(p)));str(name);CEGUI::MemberFunctionSlot<CStatsMenuFill>* slot=static_cast<CEGUI::MemberFunctionSlot<CStatsMenuFill>*>(subscriber.d_functor_impl);intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];std::memcpy(words,&slot->d_function,sizeof(words));
+// Canonicalize only the corresponding recovered address; retain this-adjustment.
+if(words[0]==reinterpret_cast<intptr_t>(mouseUpHandler_linked))words[0]=reinterpret_cast<intptr_t>(mouseUpHandler_original);
+if(words[0]==reinterpret_cast<intptr_t>(addHandler_linked))words[0]=reinterpret_cast<intptr_t>(addHandler_original);
+if(words[0]==reinterpret_cast<intptr_t>(removeHandler_linked))words[0]=reinterpret_cast<intptr_t>(removeHandler_original);
+cap->add(words,sizeof(words));n(slot->d_object==menu);if(connections==64)_exit(42);unsigned active=0;for(unsigned i=0;i<connections;++i)active+=refs[i]-1;n(active);unsigned k=connections++;refs[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)bound[k];result.d_count=&refs[k];return result;}
 void side(const Case& c,bool ours,autotest::Capture& out){
  cap=&out;input=&c;windowCount=uniqueCount=scaleCount=connections=imageCount=0;memset(windowMemory,0,sizeof(windowMemory));
  unsigned long long mm[64]={0},um[2][16]={0},setMemory[2][16]={0},manager[32]={0};menu=(CStatsMenuFill*)mm;ui[0]=(CGameUI*)um[0];ui[1]=(CGameUI*)um[1];sets[0]=(CEGUI::Imageset*)setMemory[0];sets[1]=(CEGUI::Imageset*)setMemory[1];logManager=manager;
@@ -94,6 +102,6 @@ TL_TEST(stats_fill_create_differential){
   if(missing&&(scale||count||extra||grow||labels||mutate))continue;
   Case c={missing,scale,counts[count],extra*3,grow,flags,labels,mutate};autotest::Outcome x,y;autotest::runChild(a,&c,x);autotest::runChild(b,&c,y);int pair=coverage.observe(host,x,y);++total;
   bool ok=pair==0&&!autotest::incomplete(x)&&!autotest::incomplete(y)&&x.reportValid&&y.reportValid&&x.childStatus==0&&y.childStatus==0&&x.capture.length==y.capture.length&&!memcmp(x.capture.data,y.capture.data,x.capture.length);
-  if(!ok){size_t first=0;while(first<x.capture.length&&first<y.capture.length&&x.capture.data[first]==y.capture.data[first])++first;host->log("    missing %u scale %u count %u extra %u grow %u flags %u labels %u mutate %u: status %d/%d bytes %lu/%lu first %lu\n",missing,scale,c.existing,c.extra,grow,flags,labels,mutate,x.childStatus,y.childStatus,(unsigned long)x.capture.length,(unsigned long)y.capture.length,(unsigned long)first);for(size_t i=first>40?first-40:0;i<first+60&&i+4<=x.capture.length&&i+4<=y.capture.length;i+=4){int u,v;memcpy(&u,x.capture.data+i,4);memcpy(&v,y.capture.data+i,4);host->log("      %lu %d/%d\n",(unsigned long)i,u,v);}return 1;}
+  if(!ok){coverage.report(host);size_t first=0;while(first<x.capture.length&&first<y.capture.length&&x.capture.data[first]==y.capture.data[first])++first;host->log("    missing %u scale %u count %u extra %u grow %u flags %u labels %u mutate %u: status %d/%d bytes %lu/%lu first %lu\n",missing,scale,c.existing,c.extra,grow,flags,labels,mutate,x.childStatus,y.childStatus,(unsigned long)x.capture.length,(unsigned long)y.capture.length,(unsigned long)first);for(size_t i=first>40?first-40:0;i<first+60&&i+4<=x.capture.length&&i+4<=y.capture.length;i+=4){int u,v;memcpy(&u,x.capture.data+i,4);memcpy(&v,y.capture.data+i,4);host->log("      %lu %d/%d\n",(unsigned long)i,u,v);}return 1;}
  }coverage.report(host);host->log("    stats fill create: %u cases\n",total);return 0;
 }
