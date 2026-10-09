@@ -18,6 +18,7 @@
 #include "AutoTest.h"
 #include "Detour.h"
 TL_ORIGINAL(void, originalEquipmentAttach, (CEquipment*,CCharacter*,EEQUIP_LOCATIONS), "_ZN10CEquipment21attachToGivenLocationEP10CCharacter16EEQUIP_LOCATIONS")
+extern "C" void recoveredEquipmentAttach(CEquipment*,CCharacter*,EEQUIP_LOCATIONS) __asm__("_ZN10CEquipment21attachToGivenLocationEP10CCharacter16EEQUIP_LOCATIONS");
 TL_FUNCTION(atDetach,"_ZN10CEquipment18detachFromLocationEv")
 TL_FUNCTION(atParticles,"_ZN10CEquipment15createParticlesEv")
 TL_FUNCTION(atIsa,"_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE")
@@ -40,7 +41,7 @@ AT_OFF(CCharacter,m_pLeftShoulderNode,0x308);AT_OFF(CCharacter,m_pRightShoulderN
 AT_OFF(CCharacter,m_iGold,0x444);AT_OFF(CMasterResourceManager,m_pSceneManager,0xd0);AT_OFF(CMasterResourceManager,m_pSoundBankDataInformation,0x100);
 #undef AT_OFF
 typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
-struct Case{unsigned seed,mode;};
+struct Case{unsigned seed,mode,warm;};
 struct World;
 World* world;autotest::Capture* capture;const Case* input;
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}
@@ -120,31 +121,57 @@ void initialize(World& w,const Case& c){
     if(gate==1){CDataGroup* g=w.equipmentData.AddDataGroup(L"WARDROBE");g->AddDataValue(L"CLASS",std::wstring(L"Actor"),false);g->AddDataValue(L"MESH",std::wstring(L"body"),false);}
     if(gate==2)actor()->m_pUnitModel=0;if(gate==3)w.model[2].get()->m_pEntity=0;if(gate==4)object()->m_pUnitModel=0;if(gate==5)w.model[0].get()->m_pEntity=0;
 }
+struct Snapshot {
+ const char* original;std::vector<unsigned char> bytes;
+ Snapshot(const void* p,size_t n):original(static_cast<const char*>(p)),bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}
+ void pointer(const void* field,uintptr_t value){size_t offset=static_cast<const char*>(field)-original;if(offset+sizeof(value)>bytes.size())_exit(72);std::memcpy(&bytes[offset],&value,sizeof(value));}
+ void emit(){capture->add(&bytes[0],bytes.size());}
+};
+unsigned modelId(const CPositionableObject* p){int i=world->modelId(p);return i>=0?i+1:p?255:0;}
+unsigned nodeId(const Ogre::Node* p){int i=world->nodeId(p);return i>=0?i+1:p?255:0;}
+unsigned entityId(const Ogre::Entity* p){int i=world->entityId(p);return i>=0?i+1:p?255:0;}
+unsigned particleId(const CParticle* p){return p==world->particle[0].get()?1:p==world->particle[1].get()?2:p?255:0;}
+void snapshot(World& w){
+ CEquipment* e=object();Snapshot eq(e,sizeof(*e));eq.pointer(e,*reinterpret_cast<void***>(e)==w.equipmentVtable?1:255);
+ eq.pointer(&e->m_pDataGroup,e->m_pDataGroup==&w.equipmentData?1:e->m_pDataGroup?255:0);
+ eq.pointer(&e->m_pEquippedTo,e->m_pEquippedTo==actor()?1:e->m_pEquippedTo?255:0);
+ eq.pointer(&e->m_pPositionableObject,modelId(e->m_pPositionableObject));eq.pointer(&e->m_pUnitModel,modelId(e->m_pUnitModel));eq.pointer(&e->m_pUnitModelSecondary,modelId(e->m_pUnitModelSecondary));eq.pointer(&e->m_pParticle,particleId(e->m_pParticle));eq.pointer(&e->m_pParticle_3D0,particleId(e->m_pParticle_3D0));eq.emit();
+ CCharacter* a=actor();Snapshot ac(a,sizeof(*a));ac.pointer(a,*reinterpret_cast<void***>(a)==w.actorVtable?1:255);ac.pointer(&a->m_sName,a->m_sName.empty()?0:1);number(a->m_sName.size());capture->add(a->m_sName.data(),a->m_sName.size()*sizeof(wchar_t));ac.pointer(&a->m_pDataGroup,a->m_pDataGroup==&w.actorData?1:a->m_pDataGroup?255:0);ac.pointer(&a->m_pUnitModel,modelId(a->m_pUnitModel));ac.pointer(&a->m_pPaperdollModel,modelId(a->m_pPaperdollModel));
+ ac.pointer(&a->m_pRightHandNode,nodeId(a->m_pRightHandNode));ac.pointer(&a->m_pLeftHandNode,nodeId(a->m_pLeftHandNode));ac.pointer(&a->m_pShieldNode,nodeId(a->m_pShieldNode));ac.pointer(&a->m_pLeftShoulderNode,nodeId(a->m_pLeftShoulderNode));ac.pointer(&a->m_pRightShoulderNode,nodeId(a->m_pRightShoulderNode));ac.pointer(&a->m_pHeadNode,nodeId(a->m_pHeadNode));ac.emit();
+ for(unsigned i=0;i<5;++i){CGenericModel* m=w.model[i].get();Snapshot ms(m,sizeof(*m));ms.pointer(m,*reinterpret_cast<void***>(m)==w.modelVtable?1:255);ms.pointer(&m->m_pSceneNode,nodeId(m->m_pSceneNode));ms.pointer(&m->m_pEntity,entityId(m->m_pEntity));ms.emit();}
+ for(unsigned i=0;i<2;++i){CParticle* p=w.particle[i].get();Snapshot ps(p,sizeof(*p));ps.pointer(&p->m_pSceneNode,nodeId(p->m_pSceneNode));ps.emit();}
+ Snapshot master(w.master.get(),sizeof(CMasterResourceManager));master.pointer(&w.master.get()->m_pSceneManager,w.master.get()->m_pSceneManager==w.manager()?1:255);master.emit();Snapshot manager(w.managerStorage,sizeof(w.managerStorage));manager.pointer(w.managerStorage,*reinterpret_cast<void***>(w.managerStorage)==w.managerVtable?1:255);manager.emit();
+ for(unsigned i=0;i<7;++i){Snapshot es(w.entity[i].get(),sizeof(Ogre::Entity));es.pointer(w.entity[i].get(),*reinterpret_cast<void***>(w.entity[i].get())==w.entityVtable?1:255);es.emit();number(w.subCounts[i]);number(w.meshes[i].isNull());if(!w.meshes[i].isNull()){narrow(w.meshes[i]->getName());number(w.meshes[i].useCount());}
+  for(unsigned j=0;j<3;++j){Snapshot ss(w.sub[i][j].get(),sizeof(Ogre::SubEntity));ss.pointer(w.sub[i][j].get(),*reinterpret_cast<void***>(w.sub[i][j].get())==w.subVtable?1:255);ss.emit();number(w.materials[i][j].isNull());if(!w.materials[i][j].isNull()){narrow(w.materials[i][j]->getName());number(w.materials[i][j].useCount());}}
+ }
+ for(unsigned i=0;i<14;++i){Ogre::SceneNode* n=w.nodes[i];number(nodeId(n->getParent()));number(n->numChildren());for(unsigned j=0;j<n->numChildren();++j)number(nodeId(n->getChild(j)));vector(n->getPosition());vector(n->getScale());const Ogre::Quaternion& q=n->getOrientation();real(q.w);real(q.x);real(q.y);real(q.z);}
+ for(unsigned i=0;i<4;++i){vector(w.tags[i]->getPosition());vector(w.tags[i]->getScale());const Ogre::Quaternion& q=w.tags[i]->getOrientation();real(q.w);real(q.x);real(q.y);real(q.z);}
+ number(w.unique);number(w.meshRole);
+}
 void side(const Case& c,bool ours,autotest::Capture& out){
     input=&c;capture=&out;World w;world=&w;initialize(w,c);
     detour::Set patches;TL_REDIRECT(patches,atDetach,&detach);TL_REDIRECT(patches,atParticles,&particles);TL_REDIRECT(patches,atIsa,&isa);TL_REDIRECT(patches,atStop,&stop);TL_REDIRECT(patches,atStart,&start);TL_REDIRECT(patches,atMaster,&master);TL_REDIRECT(patches,atUnique,&unique);TL_REDIRECT(patches,atPaper,&paper);TL_REDIRECT(patches,atPaperSecond,&paperSecond);
     patches.redirect(atMesh,atMesh,&mesh);patches.redirect(atCount,atCount,&subCount);patches.redirect(atSub,atSub,&sub);patches.redirect(atSetMaterial,atSetMaterial,&setMaterial);patches.redirect(atBone,atBone,&bone);if(patches.failed())_exit(42);
-    for(unsigned repeat=0;repeat<2;++repeat){
-        EEQUIP_LOCATIONS slot=static_cast<EEQUIP_LOCATIONS>(c.seed%12);if(ours)object()->attachToGivenLocation(actor(),slot);else originalEquipmentAttach(object(),actor(),slot);
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){
+        EEQUIP_LOCATIONS slot=static_cast<EEQUIP_LOCATIONS>(c.seed%12);if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentAttach,object(),actor(),slot);else autotest::invoke(out,&originalEquipmentAttach,object(),actor(),slot);}else{if(ours)object()->attachToGivenLocation(actor(),slot);else originalEquipmentAttach(object(),actor(),slot);}
         number(100+repeat);number(object()->m_pEquippedTo==actor());number(object()->m_iUnknown298);number(w.created);number(w.getModelCalls);number(w.starts);number(w.stops);number(w.boneCalls);number(w.visualVisible);number(w.paper[0]);number(w.paper[1]);
         for(unsigned i=0;i<2;++i){long long v=w.model[i].get()->m_iParentGuid;capture->add(&v,sizeof(v));number(w.meshes[i].useCount());}
         for(unsigned i=0;i<14;++i){number(w.nodeId(w.nodes[i]->getParent()));vector(w.nodes[i]->getScale());}
         for(unsigned i=0;i<4;++i)vector(w.tags[i]->getScale());
         for(unsigned i=2;i<6;++i)for(unsigned j=0;j<3;++j){number(w.materials[i][j].isNull());if(!w.materials[i][j].isNull())narrow(w.materials[i][j]->getName());}
     }
-    patches.restore();
+    snapshot(w);patches.restore();
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
 TL_TEST(equipment_attach_differential){
-    int failures=0;
+    autotest::Coverage coverage("equipment_attach_differential",(uint64_t)(uintptr_t)&originalEquipmentAttach);unsigned count=0;
     try {
         Ogre::Root root("","","/tmp/otl-equipment-attach-test.log");Ogre::DefaultHardwareBufferManager buffers;
-        for(unsigned n=0;n<1728;++n){Case c={n<1344?n:720+(n-1344)%96,n<576?0u:n<1344?1u:2+(n-1344)/96};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-            bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-            if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    attach seed %u mode %u status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
-            TL_CHECK(failures,ok);if(!ok)return failures;
+        for(unsigned n=0;n<1728;++n)for(unsigned warm=0;warm<2;++warm){Case c={n<1344?n:720+(n-1344)%96,n<576?0u:n<1344?1u:2+(n-1344)/96,warm};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+            int pair=coverage.observe(host,a,b);bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+            if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    attach seed %u mode %u warm %u status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);coverage.report(host);return 1;}
         }
-    } catch(const Ogre::Exception& e){host->log("    attach setup: %s\n",e.getFullDescription().c_str());return 1;}
-    host->log("    equipment attach: 1728 cases, two calls per side\n");return failures;
+    }catch(const Ogre::Exception& e){host->log("    attach setup: %s\n",e.getFullDescription().c_str());return 1;}
+    coverage.report(host);host->log("    equipment attach: %u completed cold/warm cases\n",count);return 0;
 }

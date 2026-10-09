@@ -1,0 +1,11 @@
+# Equipment attachment evidence upgrade, 2026-10-09
+
+CEquipment::attachToGivenLocation(CCharacter*,EEQUIP_LOCATIONS), original 0x886d40, 3402 bytes. Existing production body retained unchanged; candidate 3346 bytes, normalized DIFF, no unknown original references. The strict context packet uses the pinned OGRE constant recognition. Original entry gates, field writes and collaborator-call order were reviewed; byte identity, jump-table metadata equivalence and exhaustive unwind verification are not claimed.
+
+3456 completed original/candidate cold/warm comparisons, zero differences or incomplete observations. The former 1728 two-call fixture now records independent exact-invocation evidence for both calls and requires complete reports. Live initialized characters and equipment slots 0 through 11 are the input domain; a null character is not claimed safe because original name access precedes the null check.
+
+Cases cover wardrobe/model/entity gates, parent GUIDs and layout reset, detachment/equipped-slot state, particle stop/create/start, shield anchor override, existing/missing scene anchors, primary and secondary meshes, paperdoll availability, subentity-count mismatches, null/non-null target materials, weapon/shield/default scales and null/non-null returned tag points. Real headless Ogre nodes, tag points, meshes, material shared pointers, DataGroups and string services are retained; rendering/entities/model services are controlled collaborators.
+
+The fixture observes ordered calls and exact arguments; all initialized fake equipment/character/model/particle/entity/subentity/master buffers with narrow known-pointer canonicalization; actor name; all observed mesh/material names and reference counts; node parents/ordered children/position/scale/orientation and tag-point transforms; and creation/particle/paperdoll counters. This does not assert exhaustive Ogre/DataGroup internals, arbitrary callbacks, allocation-state or universal exception equivalence.
+
+All sixteen independently compiled deliberate faults were rejected by completed differences with zero incomplete observations. Strict full Stage and independent root validation each passed all 192 tests. Root acceptance is 1317/5247 functions, 941951 original bytes, including 1255 MATCH and 62 behavioral acceptances.
