@@ -29,7 +29,7 @@ public:
     void showItemText();
     void updateOpacity(float elapsed, bool force);
     void destroyItemText();
-    bool isUseable() { return ISA(UNITTYPES::CONSUMABLE) || ISA(UNITTYPES::INTERACTABLE); }
+    bool isUseable();
 
 protected:
     friend class CEnchantMenu;
@@ -51,4 +51,6 @@ protected:
     // Equipment has its secondary iMissile base at 0x230 (original RTTI).
     unsigned char m_ItemData219[0x22c-0x219];
 };
+inline bool CItem::isUseable() { return ISA(UNITTYPES::CONSUMABLE) || ISA(UNITTYPES::INTERACTABLE); }
+
 #endif

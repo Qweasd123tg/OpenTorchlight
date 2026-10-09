@@ -42,7 +42,7 @@ public:
     int getEquipmentsEquippedLocation(CEquipment*);
     long long isEquipmentEquipped(CEquipment*);
     int getEquipmentCountOfGuid(long long);
-    void getEquipmentOfGuid(long long);
+    CEquipmentRef* getEquipmentOfGuid(long long);
     int getStackSizeOfEquipment(CEquipment*);
     int getMaxStackSizeOfEquipment(CEquipment*);
     void forceRecalculationOfEquipmentStats();

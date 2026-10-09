@@ -12,6 +12,7 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 // onClick's return type is not verified and that method is not used here.
 namespace CEGUI { class Image; class Window; class EventArgs; }
 class CGameClient;
+class CLevel;
 class CSubMenu;
 class CItem;
 namespace Ogre { class RenderWindow; }
@@ -24,6 +25,15 @@ class iMenuListener;
 class CGameUI : public CRunicCore
 {
 public:
+    bool processIngameInput(void*,float,bool);
+    bool bothCoveredPartial();
+    bool eitherCoveredPartial();
+    bool modalDialogOpenPartial();
+    void captureProcessInput();
+    void handleKeyPresses();
+    void togglePause();
+    void unPause();
+    void useItem(CLevel&,CEquipment*);
     void showEquipmentTooltip(CCharacter*,CEquipment*,CEquipmentTooltip*,CEquipmentTooltip*,CEquipmentTooltip*);
     float getWindowWidth();
     float getWindowHeight();

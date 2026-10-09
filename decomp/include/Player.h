@@ -9,6 +9,8 @@
 class CPlayer : public CCharacter
 {
 public:
+    void setLeftMappedFunctionSkill(unsigned int,long long);
+    void setMappedFunctionSkill(unsigned int,long long);
     bool addWaypoint(std::wstring dungeon, int depth);
     void soldItem(CEquipment*);
     void incrementJournalStatistic(EJournalStatistic,int);
