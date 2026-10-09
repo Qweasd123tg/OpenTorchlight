@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 import hashlib
+import os
 
 import headers as declaration_headers
 import ghidra_cpp
@@ -236,7 +237,12 @@ class ContextIndex:
         'CEGUISingleton.h': 'ad721b29935815b6e943f1963732b63e62440760eea8e1f60a80f602fa942319',
         'CEGUIImagesetManager.h': 'bbe90f6bbe3918154df40927df1855a9bba5a13e5d4412b584217f565b5718a4',
         'CEGUIWindowManager.h': '3a89509c2f777e572723dd0161f5623a6850703ac43ffc26d4c6e4a630a70f31',
+        'CEGUIFontManager.h': 'abe0d240dfee54a6f153bc6ab457726829f39ba85b9e24bd00dbeac4db95aec4',
+        'CEGUISchemeManager.h': '9312ad97c424bfe9ea5e244bd4f8265c1880d293b8af33bfe0088ae9f4552136',
     }
+
+    OGRE_HEADER_SHA256 = {'OgreResourceGroupManager.h': '1ff3bf682e6723128544d4f0d948fc7408b1179cb1bb42961f80e1967b107529', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf'}
+    OGRE_CONFIG_SHA256 = '0a11e5cd5b3dafe9f832362747afb8147f24f912c88a1e31a303dd466ca47317'
 
     SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
 
@@ -428,6 +434,51 @@ class ContextIndex:
                 pass  # Retain a gap, never invent an SDK declaration.
         self.cegui_headers[name] = value
         return value
+
+    def _ogre_data(self, obj):
+        """One reviewed OGRE String object under the pinned default build profile."""
+        raw = "_ZN4Ogre20ResourceGroupManager27DEFAULT_RESOURCE_GROUP_NAMEE"
+        label = "Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME"
+        if (obj.get("name") != raw or obj.get("demangled") != label
+                or obj.get("bind") not in ("global", "weak") or obj.get("size") != 8):
+            return None
+        base = _address(obj["address"])
+        if (self.copy_data.get(base) != raw or raw not in self.elf_object_names.get((base, raw), ())
+                or self.elf_object_sizes.get((base, raw)) != {8}):
+            return None
+        sec = self.image.section_at(base)
+        if (not sec or sec.type != 8 or sec.flags & 3 != 3 or base + 8 > sec.addr + sec.size):
+            return None
+        try:
+            configuration = (self.root / "decomp/config.json").read_bytes()
+            if hashlib.sha256(configuration).hexdigest() != self.OGRE_CONFIG_SHA256:
+                return None
+            cache = Path(os.environ.get("OTL_DECOMP_CACHE", Path.home() / ".cache/opentorchlight/decomp"))
+            sdk = (cache / "gcc447/ogre-1.6.5/ogre/OgreMain/include").resolve()
+            sources = {}
+            for name, expected in self.OGRE_HEADER_SHA256.items():
+                path = sdk / name
+                if path.resolve().parent != sdk:
+                    return None
+                raw_source = path.read_bytes()
+                if hashlib.sha256(raw_source).hexdigest() != expected:
+                    return None
+                sources[name] = raw_source.decode("utf-8")
+        except (OSError, UnicodeError):
+            return None
+        prerequisites = _mask(sources["OgrePrerequisites.h"])
+        if (not re.search(r"typedef\s+std::string\s+_StringBase\s*;", prerequisites)
+                or not re.search(r"typedef\s+_StringBase\s+String\s*;", prerequisites)):
+            return None
+        owner = re.sub(r"\b(?:_OgreExport|OGRE_AUTO_MUTEX)\b", "", sources["OgreResourceGroupManager.h"])
+        declarations, _ = _scan(owner)
+        matches = [d for d in declarations if d.kind == "data" and d.qualified == label
+                   and re.fullmatch(r"static\s+String\s+DEFAULT_RESOURCE_GROUP_NAME\s*;", _mask(d.text).strip())]
+        if len(matches) != 1:
+            return None
+        return ("OGRE1.6.5 SDK declaration static String DEFAULT_RESOURCE_GROUP_NAME; "
+                "exact ELF object/COPY identity, eight-byte default narrow-string profile; "
+                "four SDK header pins and decomp/config.json SHA256 " + self.OGRE_CONFIG_SHA256)
 
     def _cegui_data(self, obj):
         """Exact COPY-imported SDK declarations for the pinned x86-64 ABI.
@@ -684,7 +735,7 @@ class ContextIndex:
                                  "all references are compiler __cxa_atexit argument triples; "
                                  "no game declaration required or synthesized.")
                     continue
-                library = self._library_data(obj) or self._cegui_data(obj)
+                library = self._library_data(obj) or self._cegui_data(obj) or self._ogre_data(obj)
                 if library:
                     notes.append(f"{address:#x}: library-owned ABI data ({library}); "
                                  "no game declaration required or synthesized.")

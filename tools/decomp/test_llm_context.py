@@ -7,6 +7,7 @@ from types import SimpleNamespace, ModuleType
 from unittest import TestCase, main, mock
 import copy
 import hashlib
+import os
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -606,6 +607,91 @@ class PacketContextTests(TestCase):
         self.sdk_header("CEGUIImagesetManager.h", "namespace CEGUI { class CEGUIEXPORT ImagesetManager : public Singleton<ImagesetManager> {}; }")
         self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
         self.sdk_header("CEGUIImagesetManager.h", "namespace CEGUI { class ImagesetManager : public Singleton<OtherManager> {}; }")
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_sdk_font_and_scheme_singletons_require_pinned_owner_and_copy(self):
+        for owner in ("FontManager", "SchemeManager"):
+            with self.subTest(owner=owner):
+                self.sdk_object("CEGUI::Singleton<CEGUI::" + owner + ">::ms_Singleton",
+                                "_ZN5CEGUI9SingletonINS_" + str(len(owner)) + owner + "EE12ms_SingletonE", 8)
+                self.sdk_header("CEGUISingleton.h", "namespace CEGUI { template<typename T> class Singleton { protected: static T* ms_Singleton; }; }")
+                name = "CEGUI" + owner + ".h"
+                self.sdk_header(name, "namespace CEGUI { class CEGUIEXPORT " + owner + " : public Singleton<" + owner + "> {}; }")
+                self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+                self.image.relocs = {}
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def ogre_data_setup(self):
+        raw = "_ZN4Ogre20ResourceGroupManager27DEFAULT_RESOURCE_GROUP_NAMEE"
+        self.sdk_object("Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME", raw, 8)
+        cache = self.root / "cache"
+        sdk = cache / "gcc447/ogre-1.6.5/ogre/OgreMain/include"
+        sdk.mkdir(parents=True, exist_ok=True)
+        sources = {
+            "OgreResourceGroupManager.h": "namespace Ogre { class _OgreExport ResourceGroupManager { OGRE_AUTO_MUTEX public: static String DEFAULT_RESOURCE_GROUP_NAME; }; }",
+            "OgrePrerequisites.h": "namespace Ogre { typedef std::string _StringBase; typedef _StringBase String; }",
+            "OgrePlatform.h": "// reviewed platform input\n",
+            "OgreConfig.h": "// reviewed default configuration\n",
+        }
+        for name, value in sources.items():
+            (sdk / name).write_text(value)
+        configuration = self.root / "decomp/config.json"
+        configuration.write_text('{"cflags":["-O2"]}')
+        pins = {name: hashlib.sha256(value.encode()).hexdigest() for name, value in sources.items()}
+        for patch in (mock.patch.dict(ContextIndex.OGRE_HEADER_SHA256, pins, clear=True),
+                      mock.patch.object(ContextIndex, "OGRE_CONFIG_SHA256", hashlib.sha256(configuration.read_bytes()).hexdigest()),
+                      mock.patch.dict(os.environ, {"OTL_DECOMP_CACHE": str(cache)})):
+            patch.start(); self.addCleanup(patch.stop)
+        return sdk, configuration
+
+    def test_ogre_default_group_uses_exact_sdk_declaration_and_copy(self):
+        self.ogre_data_setup()
+        result = self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.assertIn("OGRE1.6.5 SDK declaration static String DEFAULT_RESOURCE_GROUP_NAME", result.text)
+        self.assertNotIn("Referenced data declaration", result.text)
+
+    def test_ogre_default_group_rejects_copy_identity_and_size_changes(self):
+        self.ogre_data_setup()
+        self.image.relocs = {}
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.image.relocs = {0x7000: SimpleNamespace(type=5, offset=0x7000, symbol="different")}
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.image.relocs[0x7000].symbol = self.db["globals"][0]["name"]
+        self.image.symbols[0].size = self.db["globals"][0]["size"] = 4
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_default_group_rejects_unreviewed_configuration(self):
+        sdk, configuration = self.ogre_data_setup()
+        configuration.write_text('{"cflags":["-DOGRE_WCHAR_T_STRINGS=1"]}')
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_default_group_rejects_changed_header_pin(self):
+        sdk, _ = self.ogre_data_setup()
+        (sdk / "OgreConfig.h").write_text("#define HAVE_CONFIG_H 1\n")
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_default_group_rejects_wrong_declaration_owner_and_type(self):
+        sdk, _ = self.ogre_data_setup()
+        for value in ("namespace Ogre { class Other { public: static String DEFAULT_RESOURCE_GROUP_NAME; }; }",
+                      "namespace Other { class ResourceGroupManager { public: static String DEFAULT_RESOURCE_GROUP_NAME; }; }",
+                      "namespace Ogre { class ResourceGroupManager { public: static int DEFAULT_RESOURCE_GROUP_NAME; }; }"):
+            (sdk / "OgreResourceGroupManager.h").write_text(value)
+            ContextIndex.OGRE_HEADER_SHA256["OgreResourceGroupManager.h"] = hashlib.sha256(value.encode()).hexdigest()
+            with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_default_group_rejects_non_bss_and_readonly_objects(self):
+        self.ogre_data_setup()
+        self.image.sections[-1].type = 1
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+        self.image.sections[-1].type = 8; self.image.sections[-1].flags = 2
+        with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
+
+    def test_ogre_default_group_rejects_sdk_symlink_escape(self):
+        sdk, _ = self.ogre_data_setup()
+        path = sdk / "OgreResourceGroupManager.h"
+        outside = self.root / "outside-ogre.h"
+        outside.write_bytes(path.read_bytes());path.unlink();path.symlink_to(outside)
         with self.assertRaises(ContextError): self.index().build(self.target, "1000: mov $0x7000,%rax").require_complete()
 
     def test_sdk_event_rejects_identity_and_abi_mismatches(self):
