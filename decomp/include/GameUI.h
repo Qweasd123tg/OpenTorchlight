@@ -44,6 +44,9 @@ public:
     bool create();
     bool handle_MouseThrough(const CEGUI::EventArgs&);
     bool handle_ClickThrough(const CEGUI::EventArgs&);
+    bool handle_SkillSelectMouseOver(const CEGUI::EventArgs&);
+    bool handle_SkillSelectMouseOut(const CEGUI::EventArgs&);
+    bool handle_SkillSelectClick(const CEGUI::EventArgs&);
     bool handle_SkillMouseOver(const CEGUI::EventArgs&);
     bool handle_SkillMouseOut(const CEGUI::EventArgs&);
     bool handle_SkillClick(const CEGUI::EventArgs&);
