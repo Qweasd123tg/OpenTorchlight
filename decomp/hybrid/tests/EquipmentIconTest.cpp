@@ -16,7 +16,8 @@
 #undef protected
 #include "AutoTest.h"
 #include "Detour.h"
-TL_ORIGINAL(void, originalEquipmentIcon, (CEquipment*,CGameUI&,bool), "_ZN10CEquipment10createIconER7CGameUIb")
+TL_ORIGINAL(void, originalEquipmentIcon, (CEquipment*,CGameUI*,bool), "_ZN10CEquipment10createIconER7CGameUIb")
+extern "C" void recoveredEquipmentIcon(CEquipment*,CGameUI*,bool) __asm__("_ZN10CEquipment10createIconER7CGameUIb");
 TL_FUNCTION(icIsa,"_ZN9CBaseUnit3ISAEN9UNITTYPES10EUNITTYPESE")
 TL_FUNCTION(icScaled,"_ZN7CGameUI7scaledYEf")
 TL_FUNCTION(icImage,"_ZN7CGameUI20getImageFromImageSetEPKh")
@@ -37,7 +38,7 @@ IC_AT(CEGUI::Window,d_children,0x78);IC_AT(CEGUI::Window,d_mousePassThroughEnabl
 IC_AT(CEGUI::Image,d_scaledWidth,0x20);IC_AT(CEGUI::Image,d_scaledHeight,0x24);
 #undef IC_AT
 typedef char icon_equipment_size[sizeof(CEquipment)==0x438?1:-1];
-struct Case{unsigned seed,mode;};
+struct Case{unsigned seed,mode,warm;};
 const Case* input;autotest::Capture* capture;CEquipment* object;CGameUI* ui;CBaseUnit* owner;
 CEGUI::Window* windows[2];CEGUI::Image* imageObject;CEGUI::WindowManager* manager;
 CMasterResourceManager* masterObject;CSettings* settings;CDataGroup* replacement;
@@ -61,6 +62,16 @@ CEGUI::String imageString(const CEGUI::Image* p){number(10);number(p==imageObjec
 void property(CEGUI::PropertySet* p,const CEGUI::String& key,const CEGUI::String& value){number(11);number(p==static_cast<CEGUI::PropertySet*>(windows[1]));cegui(key);cegui(value);}
 void add(CEGUI::Window* p,CEGUI::Window* child){number(12);number(windowId(p));number(windowId(child));p->d_children.push_back(child);}
 void put(CDataGroup& g,const wchar_t* key,const std::wstring& value){g.AddDataValue(key,value,false);}
+void newIcon(CEquipment* p,CGameUI* u,bool force){p->createIcon(*u,force);}
+void oldIcon(CEquipment* p,CGameUI* u,bool force){originalEquipmentIcon(p,u,force);}
+// Capture every initialized fixture byte, canonicalizing only named pointer fields.
+struct Snapshot {
+ std::vector<unsigned char> bytes;
+ Snapshot(const void* p,size_t n):bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}
+ void pointer(size_t offset,uintptr_t value){if(offset+sizeof(value)>bytes.size())_exit(62);std::memcpy(&bytes[offset],&value,sizeof(value));}
+ void emit(){capture->add(&bytes[0],bytes.size());}
+};
+void wide(const std::wstring& value){number(value.size());capture->add(value.data(),value.size()*sizeof(wchar_t));int refs;std::memcpy(&refs,reinterpret_cast<const char*>(value.data())-8,4);number(refs);}
 void side(const Case& c,bool ours,autotest::Capture& out){
     input=&c;capture=&out;created=imageCalls=ratioCalls=uniqueCalls=0;
     Ogre::LogManager logger;Ogre::Log* log=logger.createLog("equipment-icon-test",true,false,true);Logs listener;log->addListener(&listener);
@@ -86,21 +97,35 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     if(patches.failed())_exit(42);
     // Missing-image creation deliberately leaves the parent without a child;
     // do not fabricate an original precondition for a forced second call.
-    for(unsigned repeat=0;repeat<2;++repeat){
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){
         bool force=(c.seed&1)!=0;if(repeat&&object->m_pIconWindow&&windows[0]->d_children.empty())force=false;
-        if(ours)object->createIcon(*ui,force);else originalEquipmentIcon(object,*ui,force);
+        if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentIcon,object,ui,force);else autotest::invoke(out,&originalEquipmentIcon,object,ui,force);}
+        else {if(ours)newIcon(object,ui,force);else oldIcon(object,ui,force);}
         number(100+repeat);number(object->m_bGamblerIcon);number(windowId(object->m_pIconWindow));number(windows[0]->d_children.size());number(windows[1]->d_mousePassThroughEnabled);number(windows[1]->d_muted);number(created);number(imageCalls);number(ratioCalls);
     }
+    wide(object->m_sName);wide(character->m_sName);
+    Snapshot e(object,sizeof(*object));
+    e.pointer(__builtin_offsetof(CEquipment,m_sName),1);
+    e.pointer(__builtin_offsetof(CEquipment,m_pDataGroup),object->m_pDataGroup==&data?1:object->m_pDataGroup==&other?2:object->m_pDataGroup?3:0);
+    e.pointer(__builtin_offsetof(CEquipment,m_pInventory),object->m_pInventory==inventory?1:object->m_pInventory?2:0);
+    e.pointer(__builtin_offsetof(CEquipment,m_pIconWindow),windowId(object->m_pIconWindow)+2);e.emit();
+    Snapshot u(ui,sizeof(*ui));u.pointer(__builtin_offsetof(CGameUI,m_pCharacter),ui->m_pCharacter==character?1:ui->m_pCharacter?2:0);u.emit();
+    Snapshot ch(character,sizeof(*character));ch.pointer(__builtin_offsetof(CCharacter,m_sName),1);ch.emit();
+    Snapshot inv(inventory,sizeof(*inventory));inv.pointer(__builtin_offsetof(CInventory,m_pPositionableObject),inventory->m_pPositionableObject==owner?1:inventory->m_pPositionableObject?2:0);inv.emit();
+    Snapshot im(imageObject,sizeof(*imageObject));im.emit();
+    Snapshot mr(masterObject,sizeof(*masterObject));mr.pointer(__builtin_offsetof(CMasterResourceManager,m_pSettings),masterObject->m_pSettings==settings?1:masterObject->m_pSettings?2:0);mr.emit();
+    for(unsigned i=0;i<2;++i){Snapshot win(windows[i],sizeof(CEGUI::Window));size_t offset=__builtin_offsetof(CEGUI::Window,d_children);win.pointer(offset,0);win.pointer(offset+8,windows[i]->d_children.size());win.pointer(offset+16,windows[i]->d_children.capacity());win.emit();for(size_t j=0;j<windows[i]->d_children.size();++j)number(windowId(windows[i]->d_children[j]));}
     patches.restore();CEGUI::WindowManager::ms_Singleton=oldManager;object->m_sName.~Text();character->m_sName.~Text();for(unsigned i=0;i<2;++i)windows[i]->d_children.~Children();log->removeListener(&listener);
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
 TL_TEST(equipment_icon_differential){
-    int failures=0;
-    for(unsigned n=0;n<1280;++n){Case c={n<896?n:1+(n-896)%64,n<896?0u:1+(n-896)/64};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    icon %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
-        TL_CHECK(failures,ok);if(!ok)return failures;
+    autotest::Coverage coverage("equipment_icon_differential",(uint64_t)(uintptr_t)&originalEquipmentIcon);
+    unsigned count=0;
+    for(unsigned n=0;n<1280;++n)for(unsigned warm=0;warm<2;++warm){Case c={n<896?n:1+(n-896)%64,n<896?0u:1+(n-896)/64,warm};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+        int pair=coverage.observe(host,a,b);
+        bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    icon %u mode %u warm %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,c.warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);coverage.report(host);return 1;}
     }
-    host->log("    equipment icon: 1280 cases, two calls per side\n");return failures;
+    coverage.report(host);host->log("    equipment icon: %u completed cold/warm cases\n",count);return 0;
 }
