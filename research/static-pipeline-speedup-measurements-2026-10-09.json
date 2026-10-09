@@ -1,0 +1,65 @@
+{
+  "reports_exactly_equal": 8,
+  "gameplay_delta": 0,
+  "game_executions_in_benchmark": 0,
+  "cold": {
+    "baseline": {
+      "wall": 149.74830613499944,
+      "cpu": 236.525378,
+      "objdump": 5050
+    },
+    "optimized": {
+      "wall": 100.50706304900086,
+      "cpu": 172.477914,
+      "objdump": 579
+    },
+    "wall_reduction_percent": 32.88267116798447
+  },
+  "warm": {
+    "baseline": {
+      "wall": 31.86857696300285,
+      "cpu": 44.18913,
+      "objdump": [
+        802,
+        802,
+        802
+      ]
+    },
+    "optimized": {
+      "wall": 19.239479693998874,
+      "cpu": 28.463037,
+      "objdump": [
+        243,
+        243,
+        243
+      ]
+    },
+    "wall_reduction_percent": 39.62868277320779
+  },
+  "caveats": [
+    "Cold pair: one run each; OS page cache not dropped.",
+    "Warm: median of three each, alternating order.",
+    "Static pipeline only; not total reverse engineering speed.",
+    "Supplied full report differs in FileSystem.cpp object hash and two Ogre any_cast code fingerprints; all local before/after reports are exactly equal."
+  ],
+  "report_sha256": {
+    "optimized-warm2": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "baseline-warm1": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "baseline-warm2": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "optimized-cold": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "baseline-warm3": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "optimized-warm1": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "baseline-cold": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59",
+    "optimized-warm3": "1a9431bced868c6a4d01b02c5c77267cbd7733e5e271f1a7850bd00e33af6e59"
+  },
+  "current_port_checks": {
+    "python_ran": 624,
+    "python_skipped": 1,
+    "isolated_headless_passed": 202,
+    "integrated_headless_passed": 202,
+    "accepted": 1347,
+    "matched": 1270,
+    "original_normalizations_equal": 4260,
+    "original_eh_equal": 589
+  }
+}

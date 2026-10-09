@@ -181,7 +181,7 @@ def main():
                'existing_tus': len(phases['existing']), 'candidate_tus': len(phases['candidate']),
                'game_executions': 0, 'model_calls': 0, 'published': False,
                'tool_sha256': {p.name: digest(p) for p in (root / 'tools/decomp').glob('*.py')
-                               if p.name in ('objdiff.py', 'objdiff_eh.py', 'elfimage.py', 'toolchain.py',
+                               if p.name in ('objdiff.py', 'objdiff_eh.py', 'objdiff_disasm.py', 'elfimage.py', 'toolchain.py',
                                              'smallmatch.py', 'smallmatch_verify.py',
                                              'smallmatch_families.py', 'smallmatch_sweep.py',
                                              'smallmatch_layouts.py', 'smallmatch_recovery.py', 'smallmatch_vtables.py')}}
