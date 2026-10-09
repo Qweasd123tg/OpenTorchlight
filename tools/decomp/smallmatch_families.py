@@ -49,7 +49,7 @@ def special_member(g, f, insns):
                     if re.search(re.escape(f['method']) + r'\s*\(\s*\)', d)]
     if len(declarations) != 1 or f.get('params'):
         raise Unsupported('special member needs one existing no-argument declaration')
-    closure = llm_definitions.closure(f, g.db)
+    closure = g.definition_index.closure(f)
     if any(g.by_address[a]['size'] >= 1000 for a in closure):
         raise Unsupported('special-member closure includes an excluded large function')
     body = []
@@ -114,8 +114,7 @@ def generate(g, f):
         raise Unsupported('additional families apply to missing C++ definitions only')
     if g.types['classes'].get(f['scope'], {}).get('source') != 'header':
         raise Unsupported('additional family requires a header-derived class')
-    prior = g.root / 'decomp/src' / f['tu_name']
-    if prior.exists() and mutate.definition(prior.read_text(), mutate.mask(prior.read_text()), f):
+    if g.prior_definition(f):
         raise Unsupported('prior definition is preserved')
     insns = instructions(g, f)
     if f['kind'] in ('ctor', 'dtor'):

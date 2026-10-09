@@ -149,10 +149,11 @@ def main():
         import smallmatch_vtables
         vtable_report = smallmatch_vtables.verify(original, json.loads(args.recovery_manifest.read_text()), candidates, out / 'vtables')
     verdicts = []
+    definition_index = llm_definitions.DefinitionIndex(db)
     for candidate in generation['candidates']:
         f = targets[candidate['address']]
         unit = phases['candidate'].get(candidate['tu'], {'functions': []})
-        status, reason = llm_definitions.verdict(f, unit, db)
+        status, reason = definition_index.verdict(f, unit)
         verdicts.append({**candidate, 'status': status, 'reason': reason})
     newly_verified = sorted(set(targets) & set(after))
     existing_verified = sorted(set(targets) & set(before))

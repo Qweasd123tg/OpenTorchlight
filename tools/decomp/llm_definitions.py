@@ -1,5 +1,7 @@
 """Fail-closed boundaries for a model's one-definition response."""
 import re
+from collections import defaultdict
+from types import MappingProxyType
 
 import ghidra_cpp
 import mutate
@@ -60,3 +62,56 @@ def verdict(f, unit, db):
         return "DIFF", "Emitted ABI variants differ: " + ", ".join(
             row["address"] for row in failed)
     return "MATCH", ""
+
+
+class DefinitionIndex:
+    """Explicit immutable index of one ELF symbol snapshot; no process-global cache.
+
+    Construct again after loading a different database. Only the closure lookup
+    is optimized: no statuses or MATCH receipts are cached here. The caller's
+    dictionaries are not retained or modified. Passing a newly built index is
+    therefore safe across worktrees and repeated restoration attempts.
+    """
+    def __init__(self, db):
+        groups = defaultdict(set)
+        for address, other in db["functions"].items():
+            if other.get("kind") != "compiler":
+                groups[(other.get("tu"), identity(other))].add(address)
+        self._groups = MappingProxyType({key: frozenset(value)
+                                         for key, value in groups.items()})
+        self.function_count = len(db["functions"])
+
+    def closure(self, f):
+        # A fresh set preserves the public closure() API and prevents mutation
+        # of the shared snapshot by downstream set operations.
+        return set(self._groups.get((f.get("tu"), identity(f)), ()))
+
+    def verdict(self, f, unit):
+        return self.verdicts([f], unit)[0]
+
+    def verdicts(self, functions, unit):
+        """Same order, duplicates, weak-symbol and ABI rules as verdict()."""
+        functions = list(functions)
+        closures = [self.closure(f) for f in functions]
+        relevant = set().union(*closures) if closures else set()
+        positions = defaultdict(list)
+        for number, row in enumerate(unit["functions"]):
+            if row.get("address") in relevant and row["status"] not in ("MISSING", "EXTRA"):
+                positions[row.get("address")].append((number, row))
+        answers = []
+        for f, addresses in zip(functions, closures):
+            emitted = [item for address in addresses
+                       for item in positions.get(address, ())]
+            # Reasons retain the original object-report order, not hash order.
+            emitted.sort(key=lambda item: item[0])
+            rows = [item[1] for item in emitted]
+            target = [r for r in rows if r["address"] == f["address"] and not r.get("weak")]
+            if not target:
+                answers.append(("compile-error", "The requested definition was not emitted as a strong original symbol."))
+                continue
+            failed = [r for r in rows if r["status"] != "MATCH"]
+            if failed:
+                answers.append(("DIFF", "Emitted ABI variants differ: " + ", ".join(r["address"] for r in failed)))
+            else:
+                answers.append(("MATCH", ""))
+        return answers
