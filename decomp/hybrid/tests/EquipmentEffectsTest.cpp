@@ -6,11 +6,12 @@
 #include "Equipment.h"
 #include "StringUtilities.h"
 TL_ORIGINAL(std::wstring, originalEquipmentEffects, (CEquipment*), "_ZN10CEquipment19getEquipmentEffectsEv")
+extern "C" std::wstring recoveredEquipmentEffects(CEquipment*) __asm__("_ZN10CEquipment19getEquipmentEffectsEv");
 TL_ORIGINAL(std::wstring, originalTrimEquipmentText, (const std::wstring&), "_Z16removeWhiteSpaceRKSbIwSt11char_traitsIwESaIwEE")
 TL_FUNCTION(egLeaf,"_ZN10CEquipment18effectsDescriptionE18EEFFECT_ACTIVATIONbb")
 TL_FUNCTION(egSkill,"_ZN10CEquipment16skillDescriptionEv")
 namespace {
-struct Case{unsigned seed,mode;};
+struct Case{unsigned seed,mode,warm;};
 const Case* input;autotest::Capture* capture;CEquipment* object;unsigned leafCalls,skillCalls;
 void number(int n){capture->add(&n,sizeof(n));}
 void text(const std::wstring& s){number(s.size());capture->add(s.data(),s.size()*sizeof(wchar_t));}
@@ -33,26 +34,26 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     BeginCount begin=reinterpret_cast<BeginCount>(dlsym(RTLD_DEFAULT,"otl_begin_alloc_count"));
     EndCount end=reinterpret_cast<EndCount>(dlsym(RTLD_DEFAULT,"otl_end_alloc_count"));
     if((begin==0)!=(end==0) || (std::getenv("OTL_ALLOC_REQUIRED") && !begin))_exit(64);
-    for(int repeat=0;repeat<2;++repeat){
+    for(unsigned repeat=0;repeat<=c.warm;++repeat){
         bool wasIdentified=object->m_bUnknown348;
         if(begin)begin();
-        std::wstring result=ours?object->getEquipmentEffects():originalEquipmentEffects(object);
+        if(repeat==c.warm){if(ours)autotest::invoke(out,&recoveredEquipmentEffects,object);else autotest::invoke(out,&originalEquipmentEffects,object);}
+        else {std::wstring result=ours?object->getEquipmentEffects():originalEquipmentEffects(object);text(result);}
         unsigned long long allocations=end?end():0;
         if(begin && wasIdentified && allocations==0)_exit(65);
-        number(100+repeat);text(result);number(object->m_bUnknown348);number(leafCalls);number(skillCalls);capture->add(&allocations,sizeof(allocations));
+        number(100+repeat);number(object->m_bUnknown348);number(leafCalls);number(skillCalls);capture->add(&allocations,sizeof(allocations));capture->add(object,sizeof(*object));
     }
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}
 void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
 TL_TEST(equipment_effects_differential){
-    int failures=0;
-    for(unsigned n=0;n<384;++n){Case c={n<192?n:(n-192)%64,n<192?0u:1+(n-192)/64};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
-        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    effects %u mode %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);}
-        TL_CHECK(failures,ok);
+    autotest::Coverage coverage("equipment_effects_differential",(uint64_t)(uintptr_t)&originalEquipmentEffects);unsigned count=0;
+    for(unsigned n=0;n<384;++n)for(unsigned warm=0;warm<2;++warm){Case c={n<192?n:(n-192)%64,n<192?0u:1+(n-192)/64,warm};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);++count;
+        int pair=coverage.observe(host,a,b);bool ok=!pair&&!autotest::incomplete(a)&&!autotest::incomplete(b)&&a.reportValid&&b.reportValid&&!a.childStatus&&!b.childStatus&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        if(!ok){size_t i=0;while(i<a.capture.length&&i<b.capture.length&&a.capture.data[i]==b.capture.data[i])++i;host->log("    effects %u mode %u warm %u: status %d/%d bytes %lu/%lu first %lu\n",c.seed,c.mode,c.warm,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length,(unsigned long)i);coverage.report(host);return 1;}
     }
-    host->log("    equipment effects: 384 cases, two calls per side, malloc counter %s\n",dlsym(RTLD_DEFAULT,"otl_begin_alloc_count")?"active":"not loaded");return failures;
+    coverage.report(host);host->log("    equipment effects: %u completed cold/warm cases; malloc counter %s\n",count,dlsym(RTLD_DEFAULT,"otl_begin_alloc_count")?"active":"not loaded");return 0;
 }
 TL_TEST(equipment_effects_trim_helper){
     int failures=0;std::wstring samples[]={L"",L"\n",L"\n\n",L"x",L"\nx\n",L"\n\nx\n\n",L" x ",L"\t\r\n",L"\n \n",L"\r\n",L"\n\r",L"\x416\U0001f525\n",std::wstring(L"\nA\0B\n",5),std::wstring(L"\0\n",2)};
