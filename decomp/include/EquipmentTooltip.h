@@ -8,6 +8,7 @@ namespace CEGUI {class Window;}
 class CEquipmentTooltip : public CRunicCore {
 public:
  virtual ~CEquipmentTooltip();
+ CEquipmentTooltip(CEGUI::Window*);
  void load(CGameUI*,std::wstring);
  long long m_iCachedItemGuid;
  CEGUI::Window* m_pParent;

@@ -10,7 +10,7 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
-namespace CEGUI { class Image; class Window; }
+namespace CEGUI { class Image; class Window; class EventArgs; }
 class CGameClient;
 class CSubMenu;
 class CItem;
@@ -31,6 +31,15 @@ public:
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
     virtual ~CGameUI();
+    bool create();
+    bool handle_MouseThrough(const CEGUI::EventArgs&);
+    bool handle_ClickThrough(const CEGUI::EventArgs&);
+    bool handle_SkillMouseOver(const CEGUI::EventArgs&);
+    bool handle_SkillMouseOut(const CEGUI::EventArgs&);
+    bool handle_SkillClick(const CEGUI::EventArgs&);
+    float getAspectRatio();
+    void mapEventHandlers(CEGUI::Window*);
+    void toggleFPS();
     void updateSlots();
     bool menuItemClick(CCharacter*, CSubMenu*, int, bool);
     void returnDraggedItem();

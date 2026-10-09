@@ -6,8 +6,12 @@
 namespace CEGUI { class Window; class Imageset; }
 class CGameUI; class CResourceManager; class CDynamicPropertyFile; class CSkillTooltip;
 // Partial data declaration through fields used by updateLayout.
+class CSettings;
+namespace Ogre { class RenderWindow; class SceneManager; }
 class CSkillMenu : public CSubMenu {
 public:
+    CSkillMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
+
  virtual ~CSkillMenu();
  virtual CBaseUnit* getOwner();
  virtual bool isRight();

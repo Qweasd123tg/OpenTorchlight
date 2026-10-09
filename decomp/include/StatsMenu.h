@@ -7,8 +7,11 @@ namespace CEGUI { class Window; }
 class CGameUI;class CResourceManager;class CDynamicPropertyFile;class CGenericModel;
 namespace Ogre {class SceneManager;class RenderWindow;}
 // Partial through the fields used by update(float); allocation size not asserted.
+class CSettings;
 class CStatsMenu : public CSubMenu {
 public:
+    CStatsMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
+
  virtual ~CStatsMenu();
  virtual CBaseUnit* getOwner();
  virtual bool isRight();

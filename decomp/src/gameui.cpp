@@ -813,3 +813,38 @@ void CGameUI::updateSlots() {
         }
     }
 }
+
+// Filled from KSETTINGS_KEYMAP_1..9,0 by the original constructor before create.
+#include "GameUIStartupData.h"
+
+// Full startup entry. The phases retain original construction and event order.
+#include "GameUIStartup/startup_finalize.h"
+bool CGameUI::create() {
+    using namespace gameui_create_detail;
+    PrefixState& ui=*reinterpret_cast<PrefixState*>(this);
+    SceneState& scenes=*reinterpret_cast<SceneState*>(this);
+    SheetState& sheets=*reinterpret_cast<SheetState*>(this);
+    ImagesetState& images=*reinterpret_cast<ImagesetState*>(this);
+    HUDState& hud=*reinterpret_cast<HUDState*>(this);
+    HUDGeometry& geom=*reinterpret_cast<HUDGeometry*>(this);
+    SkillStartupState& slots=*reinterpret_cast<SkillStartupState*>(this);
+    MenuState& menus=*reinterpret_cast<MenuState*>(this);
+    FinalState& finalState=*reinterpret_cast<FinalState*>(this);
+    createCursors(ui);
+    const float initialAspect=logDisplay(this);
+    createSounds(ui);
+    createRenderer(ui);
+    std::wstring logPath=FILESYSTEM::GetAppDataPath()+L"CEGUI.log";
+    createSystem(ui,logPath);
+    CFileInfo info;
+    loadSchemes(info);
+    configureFontMarkup(ui);
+    const float nativeWidth=configureTooltipAndFontSizes(ui,initialAspect);
+    createSheets(this,ui,sheets,info);
+    loadImagesets(images,nativeWidth);
+    createHUD(this,ui,sheets,hud,geom,info);
+    createSkillWidgets(this,ui,hud,images,slots);
+    createMenus(this,ui,scenes,sheets,menus);
+    finalize(this,ui,scenes,sheets,menus,finalState);
+    return true;
+}
