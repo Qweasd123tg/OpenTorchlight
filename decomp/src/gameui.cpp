@@ -1099,3 +1099,32 @@ void CSkillTooltip::load(CGameUI* ui,std::wstring path) {
         m_NextStatOffsets[4+i]=y-base;
     }
 }
+
+#include "SkillFoldout.h"
+#include "FileSystem.h"
+#include "StringUtilities.h"
+#include <CEGUIMemberFunctionSlot.h>
+__attribute__((flatten))
+void CSkillFoldout::load(CGameUI* ui,std::wstring path) {
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(path,info,false,true,false);
+    m_pWindow=CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(info.m_sResourceName),
+        CEGUI::String(STRINGS::uniqueName(std::string("gui_"))),
+        CEGUI::String(""),0,0);
+    m_pWindow->setAlwaysOnTop(true);
+    m_pWindow->setMousePassThroughEnabled(false);
+    ui->convertToScreenScale(m_pWindow,false);
+    for(int column=0;column<10;++column)for(int row=0;row<10;++row) {
+        m_Icons[column][row]=m_pWindow->recursiveChildSearch(CEGUI::String(
+            "SkillIcon"+STRINGS::GetValueAsString(column+1)+STRINGS::GetValueAsString(row+1)));
+        m_Icons[column][row]->subscribeEvent(CEGUI::Window::EventMouseMove,
+            CEGUI::Event::Subscriber(&CGameUI::handle_SkillSelectMouseOver,m_pGameUI));
+        m_Icons[column][row]->subscribeEvent(CEGUI::Window::EventMouseLeaves,
+            CEGUI::Event::Subscriber(&CGameUI::handle_SkillSelectMouseOut,m_pGameUI));
+        m_Icons[column][row]->subscribeEvent(CEGUI::Window::EventMouseButtonDown,
+            CEGUI::Event::Subscriber(&CGameUI::handle_SkillSelectClick,m_pGameUI));
+        m_Hotkeys[column][row]=m_pWindow->recursiveChildSearch(CEGUI::String(
+            "SkillHotkey"+STRINGS::GetValueAsString(column+1)+STRINGS::GetValueAsString(row+1)));
+    }
+}
