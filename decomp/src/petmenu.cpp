@@ -810,3 +810,198 @@ void CPetMenu::updateLayout()
     m_pSocketedIconParent->moveToFront();
     m_pSocketOverlay->moveToFront();
 }
+
+#include "PetMenu.h"
+#include "Equipment.h"
+#include "Character.h"
+#include "StringUtilities.h"
+#include <CEGUI.h>
+
+void CPetMenu::setSlotIcon(CEquipment* pItem, int iSlotIndex, int iDataIndex)
+{
+
+
+    unsigned int uiIconY = (unsigned int)(m_pSocketedSizeWindows[iSlotIndex]->getPosition().d_y.asAbsolute(0.0f));
+    unsigned int uiIconX = (unsigned int)(m_pSocketedSizeWindows[iSlotIndex]->getPosition().d_x.asAbsolute(0.0f));
+
+    CEGUI::Window* pIcon = pItem->m_pIconWindow;
+
+    if (pIcon == 0)
+    {
+        pItem->createIcon(*m_pGameUI, false);
+
+        pIcon = pItem->m_pIconWindow;
+
+        if (pIcon != 0)
+        {
+            pIcon->setMutedState(true);
+            pIcon->setMousePassThroughEnabled(true);
+        }
+    }
+
+    if (pIcon != 0)
+    {
+        CEGUI::Window* pOldParent = pIcon->getParent();
+        if (pOldParent != 0)
+        {
+            pOldParent->removeChildWindow(pIcon);
+        }
+
+        m_pSocketedSizeWindows[iSlotIndex]->addChildWindow(pIcon);
+
+        pIcon->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.0f, 1.0f)));
+        pIcon->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0.0f), CEGUI::UDim(0.0f, 0.0f)));
+
+        pIcon->setSize(m_pSocketedSizeWindows[iSlotIndex]->getSize());
+        pIcon->moveToFront();
+
+        pIcon->setUserData(&m_aiSlotData[iDataIndex]);
+    }
+
+
+
+    if (!pItem->m_bUnknown348 || pItem->m_iSocketCount == 0)
+    {
+        m_pMainSocketGlowWindows[iSlotIndex]->setProperty("Image", "");
+    }
+    else
+    {
+        if (pItem->m_iSocketCount == 1)
+        {
+            m_pMainSocketGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("onesocketglow")));
+        }
+        else
+        {
+            m_pMainSocketGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("twosocketglow")));
+        }
+
+        m_pMainSocketGlowWindows[iSlotIndex]->moveToFront();
+    }
+
+    if (pItem->m_bUnknown348)
+    {
+        m_pMainUnidentifiedWindows[iSlotIndex]->setProperty("Image", "");
+    }
+    else
+    {
+        m_pMainUnidentifiedWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+            &m_pImageset->getImage("unidentified")));
+    }
+
+    if (pItem->m_iSocketCount > 1)
+    {
+        uiIconY = (unsigned int)((float)uiIconY +
+            m_pSocketedSizeWindows[iSlotIndex]->getSize().d_y.asAbsolute(0.0f) * -0.19f);
+    }
+
+    if (pItem->m_SocketedEquipment.size() != 0)
+    {
+
+
+        for (unsigned int iSocket = 0; iSocket < pItem->m_SocketedEquipment.size(); iSocket++)
+        {
+            CEquipment* pSocketedItem = pItem->m_SocketedEquipment[iSocket];
+
+            CEGUI::Window* pSocketedIcon = pSocketedItem->m_pIconWindow;
+
+            if (pSocketedIcon == 0)
+            {
+                pSocketedItem->createIcon(*m_pGameUI, false);
+
+                pSocketedIcon = pSocketedItem->m_pIconWindow;
+
+                if (pSocketedIcon != 0)
+                {
+                    pSocketedIcon->setMutedState(true);
+                    pSocketedIcon->setMousePassThroughEnabled(true);
+                }
+            }
+
+            if (pSocketedIcon != 0)
+            {
+                CEGUI::Window* pOldParent = pSocketedIcon->getParent();
+                if (pOldParent != 0)
+                {
+                    pOldParent->removeChildWindow(pSocketedIcon);
+                }
+
+                m_pSocketedIconParent->addChildWindow(pSocketedIcon);
+
+                pSocketedIcon->setPosition(
+                    CEGUI::UVector2(CEGUI::UDim(0.0f, (float)uiIconX),
+                                    CEGUI::UDim(0.0f, (float)uiIconY)));
+
+                pSocketedIcon->setSize(m_pSocketedSizeWindows[iSlotIndex]->getSize());
+                pSocketedIcon->moveToFront();
+
+                pSocketedIcon->setMousePassThroughEnabled(true);
+            }
+
+            uiIconY = (unsigned int)((float)uiIconY +
+                m_pSocketedSizeWindows[iSlotIndex]->getSize().d_y.asAbsolute(0.0f) * 0.4f);
+        }
+    }
+
+
+
+    const UNITTYPES::EUNITTYPES kIsaSlotGold = static_cast<UNITTYPES::EUNITTYPES>(0x36);
+    const UNITTYPES::EUNITTYPES kIsaSlotBlue = static_cast<UNITTYPES::EUNITTYPES>(0x37);
+
+    if (!pItem->canEquip(m_pCharacter->m_pMaster, false))
+    {
+        if (pItem->isMagical())
+        {
+            m_pMainGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("blueredslotglow")));
+        }
+        else
+        {
+            m_pMainGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("redslotglow")));
+        }
+    }
+    else if (pItem->ISA(kIsaSlotGold))
+    {
+        m_pMainGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+            &m_pImageset->getImage("goldslotglow")));
+    }
+    else if (pItem->isMagical())
+    {
+        if (pItem->ISA(kIsaSlotBlue))
+        {
+            m_pMainGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("blueslotglow")));
+        }
+        else
+        {
+            m_pMainGlowWindows[iSlotIndex]->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+                &m_pImageset->getImage("greenslotglow")));
+        }
+    }
+    else
+    {
+        m_pMainGlowWindows[iSlotIndex]->setProperty("Image", "");
+    }
+
+
+
+    if (m_pMainStackWindows[iSlotIndex] != 0)
+    {
+        if (pItem->m_iUnknown238 <= 1)
+        {
+            m_pMainStackWindows[iSlotIndex]->setVisible(false);
+        }
+        else
+        {
+            m_pMainStackWindows[iSlotIndex]->setVisible(true);
+
+            std::string sCount = "x" + STRINGS::GetValueAsString(pItem->m_iUnknown238);
+
+            CEGUI::String sText((const unsigned char*)sCount.c_str());
+
+            m_pMainStackWindows[iSlotIndex]->setText(sText);
+        }
+    }
+}
