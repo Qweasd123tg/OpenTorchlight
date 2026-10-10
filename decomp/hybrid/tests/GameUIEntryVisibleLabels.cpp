@@ -419,6 +419,8 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     for(unsigned i=0;i<8;++i)world->children[i][0]=reinterpret_cast<unsigned long long>(i<4?world->vt:world->dropdownVT);
     for(unsigned family=0;family<2;++family){unsigned base=family?0x1948:0x1930;for(unsigned i=0;i<4;++i){world->lists[family][i]=world->children[family*4+i];world->alternate[family][i]=world->children[family*4+3-i];}at<void**>(world->ui,base)=world->lists[family];at<void**>(world->ui,base+8)=world->lists[family]+(family?c.dropCount:c.subCount);}
     detour::Set patches;
+    // A recovered text-event collaborator has both original and linked patch sites.
+    detour::Set textEventPatches;
     TL_REDIRECT(patches,settingsGet,&setting);TL_REDIRECT(patches,mousePressed,&pressed);TL_REDIRECT(patches,mouseHeld,&pressed);
     TL_REDIRECT(patches,updateSlots,&unused);TL_REDIRECT(patches,editorSingleton,&editor);TL_REDIRECT(patches,modalPartial,&modal);
     TL_REDIRECT(patches,characterHP,&hp);TL_REDIRECT(patches,characterMaxHP,&maxhp);
@@ -432,7 +434,7 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     patches.redirect(reinterpret_cast<char*>(0x555c08),reinterpret_cast<char*>(&gameui_detail::service::native_text),&text);
     patches.redirect(reinterpret_cast<char*>(0x5532d8),reinterpret_cast<char*>(&gameui_detail::service::native_property),&property);
     TL_REDIRECT(patches,uiHeight,&heightRead);TL_REDIRECT(patches,rightEdge,&rightRead);TL_REDIRECT(patches,leftEdge,&leftRead);TL_REDIRECT(patches,settingsFloat,&settingFloat);
-    TL_REDIRECT(patches,textEvents,&events);TL_REDIRECT(patches,hideItem,&itemHidden);TL_REDIRECT(patches,hideCharacter,&characterHidden);
+    TL_REDIRECT(textEventPatches,textEvents,&events);TL_REDIRECT(patches,hideItem,&itemHidden);TL_REDIRECT(patches,hideCharacter,&characterHidden);
     TL_REDIRECT(patches,consoleVisible,&consoleIsVisible);TL_REDIRECT(patches,consoleUpdate,&consoleTick);TL_REDIRECT(patches,finalMenuUpdate,&finalTick);
     patches.redirect(reinterpret_cast<char*>(0x554d48),reinterpret_cast<char*>(&gameui_detail::service::native_cameraOrientation),&cameraOrientation);
     patches.redirect(reinterpret_cast<char*>(0x5545c8),reinterpret_cast<char*>(&gameui_detail::service::native_cameraPosition),&cameraPosition);
@@ -444,7 +446,7 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     TL_REDIRECT(patches,entryDep_a82f40,&screenPosition);
     TL_REDIRECT(patches,entryDep_8b60b0,&itemShown);
     TL_REDIRECT(patches,entryDep_816e20,&characterShown);
-    if(patches.failed()) _exit(42);
+    if(patches.failed()||textEventPatches.failed()) _exit(42);
     for(unsigned repeat=0;repeat<2;++repeat){
         reachedBoundary=false;world->managerCalls=world->gateCalls=world->modalCalls=world->orientationCalls=0;world->changed[0]=world->changed[1]=false;
         try { if(expected)if(repeat==0){autotest::invoke(capture,&restoredUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{restoredUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);}else if(repeat==0){autotest::invoke(capture,&originalUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{originalUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);} }
