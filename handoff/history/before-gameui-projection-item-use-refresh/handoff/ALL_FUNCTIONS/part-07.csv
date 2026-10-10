@@ -1,0 +1,751 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0xa834d0,gameui.cpp,CGameUI::refreshQuestMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa834d0.cpp,False
+0xa83520,gameui.cpp,CGameUI::isCinematicMenuOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83520.cpp,False
+0xa83550,gameui.cpp,CGameUI::closeCinematicMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83550.cpp,False
+0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),MISSING,False,False,,False
+0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MISSING,False,False,,False
+0xa83670,gameui.cpp,CGameUI::clickLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83670.cpp,False
+0xa83680,gameui.cpp,CGameUI::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83680.cpp,False
+0xa83690,gameui.cpp,CGameUI::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xa836c0,gameui.cpp,CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa836c0.cpp,False
+0xa83700,gameui.cpp,CGameUI::handle_SkillSelectMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83700.cpp,False
+0xa83740,gameui.cpp,"CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",MISSING,False,False,,False
+0xa83790,gameui.cpp,"CGameUI::removeMenuListener(EMENU_TYPE, iMenuListener*)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83790.cpp,False
+0xa837e0,gameui.cpp,CGameUI::getQuestDialogNPC(),MISSING,False,False,,False
+0xa83800,gameui.cpp,CGameUI::getQuestDialogCameraOffset(),MISSING,False,False,,False
+0xa83820,gameui.cpp,CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa838e0,gameui.cpp,CGameUI::getWindowHeight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa838e0.cpp,False
+0xa83900,gameui.cpp,CGameUI::getWindowWidth(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83900.cpp,False
+0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",MISSING,False,False,,False
+0xa83ad0,gameui.cpp,CGameUI::getAspectRatio(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ad0.cpp,False
+0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),MISSING,False,False,,False
+0xa83bc0,gameui.cpp,CGameUI::toggleFPS(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83bc0.cpp,False
+0xa83c30,gameui.cpp,CGameUI::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xa83cf0,gameui.cpp,"CGameUI::activateItemSlot(int, bool)",MISSING,False,False,,False
+0xa83d60,gameui.cpp,CGameUI::updateHardwareCursor(),MISSING,False,False,,False
+0xa83e00,gameui.cpp,CGameUI::setCursorState(ECursorState),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e00.cpp,False
+0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa83e70,gameui.cpp,CGameUI::scaledY(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e70.cpp,False
+0xa83ea0,gameui.cpp,CGameUI::scaledX(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ea0.cpp,False
+0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MISSING,False,False,,False
+0xa84050,gameui.cpp,CGameUI::notifyOfDeletion(CItem*),MISSING,False,False,,False
+0xa84140,gameui.cpp,CGameUI::getConsoleIsOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84140.cpp,False
+0xa84160,gameui.cpp,"CGameUI::processMenuInput(void*, float, bool)",MISSING,False,False,,False
+0xa84230,gameui.cpp,CGameUI::captureProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84230.cpp,False
+0xa84250,gameui.cpp,CGameUI::setRightButtonPressed(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84250.cpp,False
+0xa84270,gameui.cpp,CGameUI::flushInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84270.cpp,False
+0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MISSING,False,False,,False
+0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MISSING,False,False,,False
+0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),MISSING,False,False,,False
+0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MISSING,False,False,,False
+0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),MISSING,False,False,,False
+0xa84c00,gameui.cpp,CGameUI::hideUI(),MISSING,False,False,,False
+0xa84c10,gameui.cpp,CGameUI::showUI(),MISSING,False,False,,False
+0xa84c20,gameui.cpp,CGameUI::closeMenus(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c20.cpp,False
+0xa84c80,gameui.cpp,CGameUI::setActiveMenu(EMenu),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c80.cpp,False
+0xa84ca0,gameui.cpp,CGameUI::setWindowActive(bool),MISSING,False,False,,False
+0xa84d20,gameui.cpp,CGameUI::canLoad(),MISSING,False,False,,False
+0xa84d30,gameui.cpp,CGameUI::canContinue(),MISSING,False,False,,False
+0xa84d40,gameui.cpp,CGameUI::reloadMenuCharacters(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84d40.cpp,False
+0xa84d50,gameui.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xa8dd00,gameui.cpp,"CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
+0xa8de80,gameui.cpp,"CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
+0xa8e010,gameui.cpp,CGameUI::handle_TogglePet(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e010.cpp,False
+0xa8e050,gameui.cpp,CGameUI::handle_ToggleStats(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e050.cpp,False
+0xa8e090,gameui.cpp,CGameUI::handle_ClickThrough(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e090.cpp,False
+0xa8e0d0,gameui.cpp,CGameUI::closeAll(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e0d0.cpp,False
+0xa8e140,gameui.cpp,"CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",MISSING,False,False,,False
+0xa8e2d0,gameui.cpp,CGameUI::togglePause(),MISSING,False,False,,False
+0xa8e440,gameui.cpp,CGameUI::unPause(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e440.cpp,False
+0xa8e460,gameui.cpp,CGameUI::handle_ToggleOptions(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e460.cpp,False
+0xa8e4b0,gameui.cpp,CGameUI::toggleSettings(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e4b0.cpp,False
+0xa8e510,gameui.cpp,CGameUI::handle_ToggleMap(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e510.cpp,False
+0xa8e560,gameui.cpp,CGameUI::toggleConsole(),MISSING,False,False,,False
+0xa8e5f0,gameui.cpp,CGameUI::togglePet(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e5f0.cpp,False
+0xa8e6a0,gameui.cpp,CGameUI::toggleStats(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e6a0.cpp,False
+0xa8e750,gameui.cpp,CGameUI::toggleQuest(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e750.cpp,False
+0xa8e800,gameui.cpp,CGameUI::handle_ToggleQuest(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e800.cpp,False
+0xa8e840,gameui.cpp,CGameUI::toggleJournal(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e840.cpp,False
+0xa8e8f0,gameui.cpp,CGameUI::handle_ToggleJournal(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e8f0.cpp,False
+0xa8e930,gameui.cpp,CGameUI::toggleSkill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e930.cpp,False
+0xa8e9e0,gameui.cpp,CGameUI::handle_ToggleSkill(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e9e0.cpp,False
+0xa8ea20,gameui.cpp,CGameUI::toggleInventory(),MISSING,False,False,,False
+0xa8eb50,gameui.cpp,CGameUI::handle_ToggleInventory(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb50.cpp,False
+0xa8eb90,gameui.cpp,CGameUI::toggleOptions(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb90.cpp,False
+0xa8ec10,gameui.cpp,CGameUI::toggleDeath(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ec10.cpp,False
+0xa8ec90,gameui.cpp,"CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
+0xa8ed60,gameui.cpp,CGameUI::toggleDialog(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ed60.cpp,False
+0xa8edc0,gameui.cpp,CGameUI::toggleWaypointMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8edc0.cpp,False
+0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),DIFF,True,False,,False
+0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),DIFF,True,False,,False
+0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",DIFF,True,False,,False
+0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MISSING,False,False,,False
+0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MISSING,False,False,,False
+0xa8f4e0,gameui.cpp,CGameUI::returnDraggedItem(),MISSING,False,False,,False
+0xa8f780,gameui.cpp,"CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",DIFF,True,False,,False
+0xa92080,gameui.cpp,"CGameUI::performItemUse(CLevel&, CEquipment*, CCharacter*, CCharacter*, CCharacter*)",MISSING,False,False,,False
+0xa92320,gameui.cpp,"CGameUI::useItem(CLevel&, CEquipment*)",MISSING,False,False,,False
+0xa924c0,gameui.cpp,CGameUI::onClick(ELayoutFunction),DIFF,True,False,,False
+0xa92c00,gameui.cpp,CGameUI::notifyOfDeletion(CCharacter*),MISSING,False,False,,False
+0xa92dd0,gameui.cpp,__tcf_26,DIFF,False,False,,False
+0xa92e60,gameui.cpp,__tcf_25,DIFF,False,False,,False
+0xa92ef0,gameui.cpp,__tcf_24,DIFF,False,False,,False
+0xa92f70,gameui.cpp,__tcf_23,DIFF,False,False,,False
+0xa92ff0,gameui.cpp,__tcf_22,DIFF,False,False,,False
+0xa93060,gameui.cpp,__tcf_21,DIFF,False,False,,False
+0xa930d0,gameui.cpp,__tcf_20,DIFF,False,False,,False
+0xa93160,gameui.cpp,__tcf_19,DIFF,False,False,,False
+0xa931f0,gameui.cpp,__tcf_14,DIFF,False,False,,False
+0xa93280,gameui.cpp,__tcf_13,DIFF,False,False,,False
+0xa93310,gameui.cpp,__tcf_12,DIFF,False,False,,False
+0xa933a0,gameui.cpp,__tcf_11,DIFF,False,False,,False
+0xa93430,gameui.cpp,__tcf_10,DIFF,False,False,,False
+0xa934a0,gameui.cpp,__tcf_9,DIFF,False,False,,False
+0xa93510,gameui.cpp,__tcf_8,DIFF,False,False,,False
+0xa93580,gameui.cpp,__tcf_6,DIFF,False,False,,False
+0xa93610,gameui.cpp,__tcf_5,DIFF,False,False,,False
+0xa936a0,gameui.cpp,__tcf_4,DIFF,False,False,,False
+0xa93730,gameui.cpp,__tcf_3,DIFF,False,False,,False
+0xa937a0,gameui.cpp,__tcf_1,DIFF,False,False,,False
+0xa93830,gameui.cpp,__tcf_0,DIFF,False,False,,False
+0xa94120,gameui.cpp,__tcf_27,DIFF,False,False,,False
+0xa941b0,gameui.cpp,__tcf_7,DIFF,False,False,,False
+0xa94240,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
+0xa94c60,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
+0xa94c80,gameui.cpp,"CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa94d30,gameui.cpp,CGameUI::handle_SkillSelectMouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa94e60,gameui.cpp,CGameUI::handle_SkillSelectClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa951e0,gameui.cpp,__tcf_18,DIFF,False,False,,False
+0xa95250,gameui.cpp,__tcf_17,DIFF,False,False,,False
+0xa952c0,gameui.cpp,__tcf_16,DIFF,False,False,,False
+0xa95330,gameui.cpp,__tcf_15,DIFF,False,False,,False
+0xa954c0,gameui.cpp,__tcf_2,DIFF,False,False,,False
+0xa95530,gameui.cpp,"CSkillFoldout::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xa96270,gameui.cpp,"CSkillTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xa976a0,gameui.cpp,"CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa97e00,gameui.cpp,CGameUI::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
+0xa980e0,gameui.cpp,CGameUI::mapToFunctions(CEGUI::Window*),MISSING,False,False,,False
+0xa98460,gameui.cpp,CGameUI::getImageSetForIcon(unsigned char const*),MISSING,False,False,,False
+0xa98630,gameui.cpp,CGameUI::getImageFromImageSet(unsigned char const*),MISSING,False,False,,False
+0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),MISSING,False,False,,False
+0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
+0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),MISSING,False,False,,False
+0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",DIFF,True,False,,False
+0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MATCH,True,False,,False
+0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
+0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
+0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa9e4a0,gameui.cpp,CGameUI::create(),DIFF,True,False,,False
+0xaa6380,gameui.cpp,"CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",MISSING,False,False,,False
+0xaa6bf0,gameui.cpp,"CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)",DIFF,True,False,,False
+0xaaeeb0,gameui.cpp,"CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)",DIFF,True,False,,False
+0xab4f80,gameui.cpp,CGameUI::handleKeyPresses(),DIFF,True,False,,False
+0xab6080,gameui.cpp,"CGameUI::processIngameInput(void*, float, bool)",DIFF,True,False,,False
+0xab80c0,gameui.cpp,"CGameUI::processInput(CGameClient*, void*, float, bool)",MISSING,False,False,,False
+0xab8100,gameui.cpp,"CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)",DIFF,True,False,,False
+0xacbb40,gameui.cpp,"CGameUI::update(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xacbb90,merchantmenu.cpp,CEGUI::SlotFunctorBase::~SlotFunctorBase(),MATCH,False,False,,False
+0xacbba0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xacbbb0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xacbbe0,gameui.cpp,CItem::isUseable(),MATCH,False,False,,False
+0xacbc10,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xacbc20,merchantmenu.cpp,CEGUI::SlotFunctorBase::~SlotFunctorBase(),MATCH,False,False,,False
+0xacbc30,gameui.cpp,TSafePointer<CEquipment>::setObject(CEquipment*),MATCH,False,False,,False
+0xacbef0,gameui.cpp,CEGUI::GenericException::~GenericException(),MATCH,False,False,,False
+0xacbf40,gameui.cpp,CEGUI::GenericException::~GenericException(),MATCH,False,False,,False
+0xacbfb0,gameui.cpp,"std::vector<SDL_Cursor*, std::allocator<SDL_Cursor*> >::_M_fill_insert(__gnu_cxx::__normal_iterator<SDL_Cursor**, std::vector<SDL_Cursor*, std::allocator<SDL_Cursor*> > >, unsigned long, SDL_Cursor* const&)",MATCH,False,False,,False
+0xacc5b0,gameui.cpp,"std::vector<CSubMenu*, std::allocator<CSubMenu*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CSubMenu**, std::vector<CSubMenu*, std::allocator<CSubMenu*> > >, CSubMenu* const&)",MATCH,False,False,,False
+0xacc740,gameui.cpp,"std::vector<CDropdownMenu*, std::allocator<CDropdownMenu*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CDropdownMenu**, std::vector<CDropdownMenu*, std::allocator<CDropdownMenu*> > >, CDropdownMenu* const&)",MATCH,False,False,,False
+0xacc9e0,gameui.cpp,CEGUI::GenericException::GenericException(CEGUI::GenericException const&),MATCH,False,False,,False
+0xacd2c0,combinemenu.cpp,CCombineMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xacd2d0,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xacd2e0,combinemenu.cpp,CCombineMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xacd2f0,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xacd300,combinemenu.cpp,CCombineMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xacd310,combinemenu.cpp,non-virtual thunk to CCombineMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xacd320,combinemenu.cpp,CCombineMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xacd330,combinemenu.cpp,CCombineMenu::handle_ItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xacd390,combinemenu.cpp,CCombineMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xacd3a0,combinemenu.cpp,CCombineMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xacd3d0,combinemenu.cpp,CCombineMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xacd460,combinemenu.cpp,CCombineMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xacd700,combinemenu.cpp,"CCombineMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xacd8d0,combinemenu.cpp,"CCombineMenu::itemUpdatedInMenu(CEquipment*, bool)",DIFF,True,False,,False
+0xacda00,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xacda10,combinemenu.cpp,CCombineMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xacda30,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xacda40,combinemenu.cpp,CCombineMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xacda60,combinemenu.cpp,CCombineMenu::setPlayer(CCharacter*),MATCH,True,False,,False
+0xacdad0,combinemenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xad47b0,combinemenu.cpp,CCombineMenu::~CCombineMenu(),DIFF,True,False,,False
+0xad48b0,combinemenu.cpp,non-virtual thunk to CCombineMenu::~CCombineMenu(),MATCH,True,False,,False
+0xad48c0,combinemenu.cpp,non-virtual thunk to CCombineMenu::~CCombineMenu(),MATCH,True,False,,False
+0xad48d0,combinemenu.cpp,CCombineMenu::~CCombineMenu(),MATCH,True,False,,False
+0xad48f0,combinemenu.cpp,CCombineMenu::returnItemsToCorrectLocation(CEquipment*),DIFF,True,False,,False
+0xad4b80,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xad4b90,combinemenu.cpp,CCombineMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xad4bb0,combinemenu.cpp,CCombineMenu::handle_CloseButton(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xad4cc0,combinemenu.cpp,__tcf_16,DIFF,False,False,,False
+0xad4d30,combinemenu.cpp,__tcf_15,DIFF,False,False,,False
+0xad4da0,combinemenu.cpp,__tcf_14,DIFF,False,False,,False
+0xad4e10,combinemenu.cpp,__tcf_13,DIFF,False,False,,False
+0xad4ea0,combinemenu.cpp,__tcf_0,DIFF,False,False,,False
+0xad4f10,combinemenu.cpp,CCombineMenu::update(float),DIFF,True,False,,False
+0xad52e0,combinemenu.cpp,CCombineMenu::setOpen(bool),MATCH,True,False,,False
+0xad5d10,combinemenu.cpp,__tcf_17,DIFF,False,False,,False
+0xad5da0,combinemenu.cpp,__tcf_12,DIFF,False,False,,False
+0xad5e30,combinemenu.cpp,__tcf_11,DIFF,False,False,,False
+0xad5ec0,combinemenu.cpp,__tcf_10,DIFF,False,False,,False
+0xad5f50,combinemenu.cpp,__tcf_9,DIFF,False,False,,False
+0xad5fe0,combinemenu.cpp,__tcf_8,DIFF,False,False,,False
+0xad6050,combinemenu.cpp,__tcf_7,DIFF,False,False,,False
+0xad60c0,combinemenu.cpp,__tcf_6,DIFF,False,False,,False
+0xad6130,combinemenu.cpp,__tcf_4,DIFF,False,False,,False
+0xad61c0,combinemenu.cpp,__tcf_3,DIFF,False,False,,False
+0xad6250,combinemenu.cpp,__tcf_2,DIFF,False,False,,False
+0xad62e0,combinemenu.cpp,__tcf_1,DIFF,False,False,,False
+0xad63e0,combinemenu.cpp,__tcf_5,DIFF,False,False,,False
+0xad6470,combinemenu.cpp,CCombineMenu::performInteraction(),DIFF,True,False,,False
+0xad7560,combinemenu.cpp,CCombineMenu::onClick(ELayoutFunction),DIFF,True,False,,False
+0xad7690,combinemenu.cpp,CCombineMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xad7a50,combinemenu.cpp,CCombineMenu::createMenus(),DIFF,True,False,,False
+0xadd8a0,combinemenu.cpp,"CCombineMenu::CCombineMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xadde00,combinemenu.cpp,CCombineMenu::updateLayout(),DIFF,True,False,,False
+0xadfda0,combinemenu.cpp,"CCombineMenu::setSlotIcon(CEquipment*, int)",DIFF,True,False,,False
+0xae1650,combinemenu.cpp,CEGUI::MemberFunctionSlot<CCombineMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xae1660,combinemenu.cpp,CEGUI::MemberFunctionSlot<CCombineMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xae1690,combinemenu.cpp,CEGUI::MemberFunctionSlot<CCombineMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xae16a0,combinemenu.cpp,"std::_Rb_tree<CEquipment*, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> >, std::_Select1st<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >, std::less<CEquipment*>, std::allocator<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > > >::_M_erase(std::_Rb_tree_node<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >*)",MATCH,False,False,,False
+0xae16e0,combinemenu.cpp,"std::_Rb_tree<CEquipment*, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> >, std::_Select1st<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >, std::less<CEquipment*>, std::allocator<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > const&)",MATCH,False,False,,False
+0xae17a0,combinemenu.cpp,"std::_Rb_tree<CEquipment*, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> >, std::_Select1st<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >, std::less<CEquipment*>, std::allocator<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > > >::_M_insert_unique(std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > const&)",MATCH,False,False,,False
+0xae1850,combinemenu.cpp,"std::_Rb_tree<CEquipment*, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> >, std::_Select1st<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >, std::less<CEquipment*>, std::allocator<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > >, std::pair<CEquipment* const, std::pair<CInventory*, EEQUIP_LOCATIONS> > const&)",MATCH,False,False,,False
+0xae19d0,Console.cpp,"CConsole::keyEvent(unsigned int, unsigned int, long)",MATCH,True,False,,False
+0xae19e0,Console.cpp,"CConsole::spawnUnit(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xae1df0,Console.cpp,CConsole::getVisible(),MATCH,True,False,,False
+0xaec8a0,Console.cpp,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::assign(wchar_t const*) [clone .clone.1]",MISSING,False,False,,False
+0xaec8c0,Console.cpp,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::find(wchar_t const*, unsigned long) const [clone .clone.3]",MISSING,False,False,,False
+0xaec900,Console.cpp,"SetPetsEnabled(CCharacter*, bool)",MISSING,False,False,,False
+0xaecce0,Console.cpp,CConsole::update(float),MISSING,False,False,,False
+0xaed310,Console.cpp,CConsole::setVisible(bool),MISSING,False,False,,False
+0xaed4d0,Console.cpp,CConsole::handleClose(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xaee5e0,Console.cpp,"CConsole::spawnMonster(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, int)",MISSING,False,False,,False
+0xaeed30,Console.cpp,fixRoomPieces(CDataGroup*),MISSING,False,False,,False
+0xaef6b0,Console.cpp,"CConsole::cameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaef8b0,Console.cpp,CConsole::getHistoryText(),MATCH,True,False,,False
+0xaef980,Console.cpp,"CConsole::spawnClassCreate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaefbb0,Console.cpp,CConsole::handleKeyDown(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xaf04d0,Console.cpp,CConsole::~CConsole(),MATCH,True,False,,False
+0xaf05c0,Console.cpp,CConsole::~CConsole(),MATCH,True,False,,False
+0xaf05e0,Console.cpp,"CConsole::addTextNoHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaf15c0,Console.cpp,"CConsole::equipSkillToPlayer(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaf16f0,Console.cpp,CConsole::addSpeedToPlayer(),MISSING,False,False,,False
+0xaf1950,Console.cpp,"CConsole::createObjectByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaf2060,Console.cpp,"CConsole::spawnItem(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, long long, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xaf2540,Console.cpp,"CConsole::executeCommandLine(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xafa8e0,Console.cpp,"CConsole::addText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xafbb70,Console.cpp,CConsole::handleSubmit(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xafbee0,Console.cpp,"CConsole::CConsole(CGameUI*, CResourceManager*, CEGUI::Window*)",MISSING,False,False,,False
+0xafc9b0,StringTranslate.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, unsigned short>, std::_Select1st<std::pair<unsigned int const, unsigned short> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned short> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, unsigned short> >*)",MATCH,False,False,,False
+0xafcce0,dialogmenu.cpp,CDialogMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xafcd10,dialogmenu.cpp,"CDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xafce10,dialogmenu.cpp,CDialogMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xafce80,dialogmenu.cpp,CDialogMenu::update(float),MATCH,True,False,,False
+0xafcec0,dialogmenu.cpp,CDialogMenu::setOpen(bool),MATCH,True,False,,False
+0xafcf10,dialogmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb03b80,dialogmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb03bf0,dialogmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb03c60,dialogmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb03cd0,dialogmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb03d60,dialogmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb04280,dialogmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb04310,dialogmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb043a0,dialogmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb04430,dialogmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb044c0,dialogmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb04550,dialogmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb045c0,dialogmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb04630,dialogmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb046a0,dialogmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb04730,dialogmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb047c0,dialogmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb04850,dialogmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb04950,dialogmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb04b00,dialogmenu.cpp,CDialogMenu::setNPC(CCharacter*),MISSING,False,False,,False
+0xb05390,dialogmenu.cpp,CDialogMenu::createMenus(),MISSING,False,False,,False
+0xb05cf0,dialogmenu.cpp,"CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xb102a0,dropdownmenu.cpp,"CDropdownMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xb102d0,dropdownmenu.cpp,"CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)",MISSING,False,False,,False
+0xb10430,dropdownmenu.cpp,CDropdownMenu::addMenuListener(iMenuListener*),MISSING,False,False,,False
+0xb17140,dropdownmenu.cpp,CDropdownMenu::~CDropdownMenu(),MATCH,True,False,,False
+0xb17240,dropdownmenu.cpp,CDropdownMenu::~CDropdownMenu(),MATCH,True,False,,False
+0xb17260,dropdownmenu.cpp,CDropdownMenu::removeMenuListener(iMenuListener*),MISSING,False,False,,False
+0xb17380,dropdownmenu.cpp,CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb176b0,dropdownmenu.cpp,CDropdownMenu::update(float),MISSING,False,False,,False
+0xb179e0,dropdownmenu.cpp,CDropdownMenu::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
+0xb17e70,dropdownmenu.cpp,"CDropdownMenu::setTitle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xb18e50,dropdownmenu.cpp,CDropdownMenu::setOpen(bool),MISSING,False,False,,False
+0xb192e0,dropdownmenu.cpp,CDropdownMenu::handle_onDoubleClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb194e0,dropdownmenu.cpp,CDropdownMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb196f0,dropdownmenu.cpp,CDropdownMenu::createMenus(),MISSING,False,False,,False
+0xb1b6f0,dropdownmenu.cpp,"CDropdownMenu::CDropdownMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*, unsigned int)",MISSING,False,False,,False
+0xb1ba10,dropdownmenu.cpp,TArrayList<iMenuListener*>::~TArrayList(),MATCH,False,False,,False
+0xb1ba30,enchantmenu.cpp,CEnchantMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xb1ba40,enchantmenu.cpp,CEnchantMenu::setOwnerItem(CItem*),MATCH,True,False,,False
+0xb1ba50,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb1ba60,enchantmenu.cpp,CEnchantMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb1ba70,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb1ba80,enchantmenu.cpp,CEnchantMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb1ba90,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb1baa0,enchantmenu.cpp,CEnchantMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb1bab0,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb1bac0,enchantmenu.cpp,CEnchantMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb1bad0,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb1bae0,enchantmenu.cpp,CEnchantMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb1baf0,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb1bb00,enchantmenu.cpp,CEnchantMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb1bb10,enchantmenu.cpp,CEnchantMenu::handle_ItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb1bb70,enchantmenu.cpp,CEnchantMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb1bb80,enchantmenu.cpp,CEnchantMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb1bbb0,enchantmenu.cpp,CEnchantMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb1bc40,enchantmenu.cpp,CEnchantMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb1bee0,enchantmenu.cpp,"CEnchantMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xb1c0c0,enchantmenu.cpp,CEnchantMenu::setPlayer(CCharacter*),MATCH,True,False,,False
+0xb1c130,enchantmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb23ac0,enchantmenu.cpp,CEnchantMenu::~CEnchantMenu(),DIFF,True,False,,False
+0xb23b60,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::~CEnchantMenu(),MATCH,True,False,,False
+0xb23b70,enchantmenu.cpp,non-virtual thunk to CEnchantMenu::~CEnchantMenu(),MATCH,True,False,,False
+0xb23b80,enchantmenu.cpp,CEnchantMenu::~CEnchantMenu(),MATCH,True,False,,False
+0xb23ba0,enchantmenu.cpp,CEnchantMenu::handle_CloseButton(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb23d80,enchantmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb23df0,enchantmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb23e60,enchantmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb23ed0,enchantmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb23f60,enchantmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb23fd0,enchantmenu.cpp,CEnchantMenu::update(float),DIFF,True,False,,False
+0xb243c0,enchantmenu.cpp,"CEnchantMenu::setOpen(bool, EAIState)",DIFF,True,False,,False
+0xb252c0,enchantmenu.cpp,CEnchantMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xb25aa0,enchantmenu.cpp,__tcf_18,DIFF,False,False,,False
+0xb25b30,enchantmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb25bc0,enchantmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb25c50,enchantmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb25ce0,enchantmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb25d70,enchantmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb25e00,enchantmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb25e70,enchantmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb25ee0,enchantmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb25f50,enchantmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb25fe0,enchantmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb26070,enchantmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb26100,enchantmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb26170,enchantmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb26290,enchantmenu.cpp,CEnchantMenu::performInteraction(),DIFF,True,False,,False
+0xb29650,enchantmenu.cpp,CEnchantMenu::onClick(ELayoutFunction),DIFF,True,False,,False
+0xb29780,enchantmenu.cpp,"CEnchantMenu::setSlotIcon(CEquipment*, int)",DIFF,True,False,,False
+0xb2af60,enchantmenu.cpp,CEnchantMenu::updateLayout(),DIFF,True,False,,False
+0xb2e0a0,enchantmenu.cpp,CEnchantMenu::createMenus(),DIFF,True,False,,False
+0xb33d30,enchantmenu.cpp,"CEnchantMenu::CEnchantMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xb342a0,enchantmenu.cpp,CEGUI::MemberFunctionSlot<CEnchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb342b0,enchantmenu.cpp,CEGUI::MemberFunctionSlot<CEnchantMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xb342e0,enchantmenu.cpp,CEGUI::MemberFunctionSlot<CEnchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb343b0,fishingmenu.cpp,"CFishingMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xb343d0,fishingmenu.cpp,CFishingMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb34400,fishingmenu.cpp,CFishingMenu::onClick(ELayoutFunction),MISSING,False,False,,False
+0xb34470,fishingmenu.cpp,CFishingMenu::setVisible(bool),MATCH,True,False,,False
+0xb344d0,fishingmenu.cpp,CFishingMenu::~CFishingMenu(),MATCH,True,False,,False
+0xb344e0,fishingmenu.cpp,CFishingMenu::~CFishingMenu(),MATCH,True,False,,False
+0xb34500,fishingmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb3b050,fishingmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb3b0c0,fishingmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb3b130,fishingmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb3b1c0,fishingmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb3b230,fishingmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb3b750,fishingmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb3b7e0,fishingmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb3b870,fishingmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb3b900,fishingmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb3b990,fishingmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb3ba20,fishingmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb3ba90,fishingmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb3bb00,fishingmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb3bb70,fishingmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb3bc00,fishingmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb3bc90,fishingmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb3bd20,fishingmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb3be20,fishingmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb3beb0,fishingmenu.cpp,CFishingMenu::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
+0xb3c270,fishingmenu.cpp,CFishingMenu::createMenus(),MISSING,False,False,,False
+0xb3c830,fishingmenu.cpp,"CFishingMenu::CFishingMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MATCH,True,False,,False
+0xb3c8b0,fishingmenu.cpp,CFishingMenu::update(float),MISSING,False,False,,False
+0xb3d200,interactiveMenu.cpp,CInteractiveMenu::setVisible(bool),MISSING,False,False,,False
+0xb3d2f0,interactiveMenu.cpp,CInteractiveMenu::update(float),MISSING,False,False,,False
+0xb3d460,interactiveMenu.cpp,CInteractiveMenu::~CInteractiveMenu(),MATCH,True,False,,False
+0xb3d470,interactiveMenu.cpp,CInteractiveMenu::~CInteractiveMenu(),MATCH,True,False,,False
+0xb3d490,interactiveMenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb44170,interactiveMenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb44200,interactiveMenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb444c0,interactiveMenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb44550,interactiveMenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb445e0,interactiveMenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb44670,interactiveMenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb44700,interactiveMenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb44770,interactiveMenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb447e0,interactiveMenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb44850,interactiveMenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb448e0,interactiveMenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb44970,interactiveMenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb44a00,interactiveMenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb44f60,interactiveMenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb45080,interactiveMenu.cpp,CInteractiveMenu::createMenus(),MISSING,False,False,,False
+0xb45710,interactiveMenu.cpp,"CInteractiveMenu::CInteractiveMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MATCH,True,False,,False
+0xb45790,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb457a0,inventorymenu.cpp,CInventoryMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb457b0,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb457c0,inventorymenu.cpp,CInventoryMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb457d0,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb457e0,inventorymenu.cpp,CInventoryMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb457f0,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb45800,inventorymenu.cpp,CInventoryMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb45810,inventorymenu.cpp,CInventoryMenu::handle_ItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45860,inventorymenu.cpp,CInventoryMenu::handle_RotateLeft(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45870,inventorymenu.cpp,CInventoryMenu::handle_EndRotateLeft(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45880,inventorymenu.cpp,CInventoryMenu::handle_RotateRight(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45890,inventorymenu.cpp,CInventoryMenu::handle_EndRotateRight(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb458a0,inventorymenu.cpp,CInventoryMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb458c0,inventorymenu.cpp,CInventoryMenu::setTab(int),MATCH,True,False,,False
+0xb458d0,inventorymenu.cpp,CInventoryMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb45900,inventorymenu.cpp,CInventoryMenu::handle_SpellMouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45930,inventorymenu.cpp,CInventoryMenu::handle_SpellMouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb45940,inventorymenu.cpp,CInventoryMenu::handle_SetSpell(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb45b50,inventorymenu.cpp,"CInventoryMenu::processInput(void*, float, bool)",DIFF,True,False,,False
+0xb45d30,inventorymenu.cpp,CInventoryMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb45dc0,inventorymenu.cpp,CInventoryMenu::setOwner(CCharacter*),DIFF,True,False,,False
+0xb45e90,inventorymenu.cpp,CInventoryMenu::toggleWeaponSet(),MATCH,True,False,,False
+0xb45f00,inventorymenu.cpp,CInventoryMenu::checkForUpdate(CEquipment*),DIFF,True,False,,False
+0xb45fe0,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb45ff0,inventorymenu.cpp,CInventoryMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb46010,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb46020,inventorymenu.cpp,CInventoryMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb46040,inventorymenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb4d340,inventorymenu.cpp,CInventoryMenu::~CInventoryMenu(),DIFF,True,False,,False
+0xb4d550,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::~CInventoryMenu(),MATCH,True,False,,False
+0xb4d560,inventorymenu.cpp,non-virtual thunk to CInventoryMenu::~CInventoryMenu(),MATCH,True,False,,False
+0xb4d570,inventorymenu.cpp,CInventoryMenu::~CInventoryMenu(),MATCH,True,False,,False
+0xb4d590,inventorymenu.cpp,CInventoryMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb4d920,inventorymenu.cpp,CInventoryMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb4da10,inventorymenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb4daa0,inventorymenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb4db10,inventorymenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb4db80,inventorymenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb4dbf0,inventorymenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb4dcd0,inventorymenu.cpp,__tcf_23,DIFF,False,False,,False
+0xb4dd60,inventorymenu.cpp,__tcf_22,DIFF,False,False,,False
+0xb4ddf0,inventorymenu.cpp,__tcf_20,DIFF,False,False,,False
+0xb4de80,inventorymenu.cpp,__tcf_19,DIFF,False,False,,False
+0xb4df10,inventorymenu.cpp,__tcf_18,DIFF,False,False,,False
+0xb4dfa0,inventorymenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb4e030,inventorymenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb4e0a0,inventorymenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb4e130,inventorymenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb4e1c0,inventorymenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb4e250,inventorymenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb4e2e0,inventorymenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb4e350,inventorymenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb4e3c0,inventorymenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb4e450,inventorymenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb4e4e0,inventorymenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb4e570,inventorymenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb4ea50,inventorymenu.cpp,__tcf_21,DIFF,False,False,,False
+0xb4eae0,inventorymenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb4eb70,inventorymenu.cpp,CInventoryMenu::setOpen(bool),DIFF,True,False,,False
+0xb4f1b0,inventorymenu.cpp,CInventoryMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xb4f570,inventorymenu.cpp,CInventoryMenu::onClick(ELayoutFunction),MATCH,True,False,,False
+0xb4f9d0,inventorymenu.cpp,CInventoryMenu::update(float),DIFF,True,False,,False
+0xb51bf0,inventorymenu.cpp,"CInventoryMenu::setSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False
+0xb53430,inventorymenu.cpp,CInventoryMenu::updateLayout(),DIFF,True,False,,False
+0xb569e0,inventorymenu.cpp,CInventoryMenu::createMenus(),DIFF,True,False,,False
+0xb60770,inventorymenu.cpp,"CInventoryMenu::CInventoryMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xb60f30,inventorymenu.cpp,CEGUI::MemberFunctionSlot<CInventoryMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb60f40,inventorymenu.cpp,CEGUI::MemberFunctionSlot<CInventoryMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xb60f70,inventorymenu.cpp,CEGUI::MemberFunctionSlot<CInventoryMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb60f80,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb60f90,merchantmenu.cpp,CMerchantMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb60fa0,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb60fb0,merchantmenu.cpp,CMerchantMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb60fc0,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb60fd0,merchantmenu.cpp,CMerchantMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb60fe0,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb60ff0,merchantmenu.cpp,CMerchantMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb61000,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb61010,merchantmenu.cpp,CMerchantMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb61020,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb61030,merchantmenu.cpp,CMerchantMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb61040,merchantmenu.cpp,CMerchantMenu::handle_ItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb61090,merchantmenu.cpp,CMerchantMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb610a0,merchantmenu.cpp,CMerchantMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb610d0,merchantmenu.cpp,CMerchantMenu::setTab(int),MATCH,True,False,,False
+0xb610e0,merchantmenu.cpp,CMerchantMenu::setPetTab(int),MATCH,True,False,,False
+0xb610f0,merchantmenu.cpp,CMerchantMenu::handle_PetItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb61140,merchantmenu.cpp,CMerchantMenu::handle_PetMouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb611f0,merchantmenu.cpp,CMerchantMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb61280,merchantmenu.cpp,CMerchantMenu::onClick(ELayoutFunction),DIFF,True,False,,False
+0xb61530,merchantmenu.cpp,"CMerchantMenu::processInput(void*, float, bool)",DIFF,True,False,,False
+0xb61740,merchantmenu.cpp,CMerchantMenu::setPlayer(CCharacter*),MATCH,True,False,,False
+0xb617e0,merchantmenu.cpp,CMerchantMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xb618c0,merchantmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb68410,merchantmenu.cpp,CMerchantMenu::~CMerchantMenu(),DIFF,True,False,,False
+0xb684f0,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::~CMerchantMenu(),MATCH,True,False,,False
+0xb68500,merchantmenu.cpp,non-virtual thunk to CMerchantMenu::~CMerchantMenu(),MATCH,True,False,,False
+0xb68510,merchantmenu.cpp,CMerchantMenu::~CMerchantMenu(),MATCH,True,False,,False
+0xb68530,merchantmenu.cpp,CMerchantMenu::handle_PetMouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb688e0,merchantmenu.cpp,CMerchantMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb68ca0,merchantmenu.cpp,CMerchantMenu::handle_CloseButton(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb69250,merchantmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb692e0,merchantmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb69370,merchantmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb69400,merchantmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb69490,merchantmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb69520,merchantmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb69590,merchantmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb69600,merchantmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb69670,merchantmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb69700,merchantmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb69790,merchantmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb69820,merchantmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb69890,merchantmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb699b0,merchantmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb69a20,merchantmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb69a90,merchantmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb69b00,merchantmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb69b90,merchantmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb69c00,merchantmenu.cpp,CMerchantMenu::update(float),DIFF,True,False,,False
+0xb6a220,merchantmenu.cpp,CMerchantMenu::setOpen(bool),DIFF,True,False,,False
+0xb6a790,merchantmenu.cpp,CMerchantMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xb6ab50,merchantmenu.cpp,"CMerchantMenu::setPetSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False
+0xb6c3b0,merchantmenu.cpp,"CMerchantMenu::setSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False
+0xb6dc70,merchantmenu.cpp,CMerchantMenu::updateLayout(),DIFF,True,False,,False
+0xb6ed20,merchantmenu.cpp,CMerchantMenu::createMenus(),DIFF,True,False,,False
+0xb772a0,merchantmenu.cpp,"CMerchantMenu::CMerchantMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xb775e0,merchantmenu.cpp,CEGUI::MemberFunctionSlot<CMerchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb775f0,merchantmenu.cpp,CEGUI::MemberFunctionSlot<CMerchantMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xb77620,merchantmenu.cpp,CEGUI::MemberFunctionSlot<CMerchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xb77630,modalmenu.cpp,CModalMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb77660,modalmenu.cpp,"CModalMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xb776f0,modalmenu.cpp,CModalMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb77760,modalmenu.cpp,CModalMenu::update(float),MATCH,True,False,,False
+0xb77770,modalmenu.cpp,CModalMenu::setOpen(bool),MATCH,True,False,,False
+0xb77780,modalmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb7e2d0,modalmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb7e340,modalmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb7e3b0,modalmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb7e420,modalmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb7e4b0,modalmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb7e520,modalmenu.cpp,"CModalMenu::setContents(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, bool, bool (*)(CBaseUnit*, CBaseUnit*), bool (*)(CBaseUnit*, CBaseUnit*))",MISSING,False,False,,False
+0xb7e970,modalmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb7ee90,modalmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb7ef20,modalmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb7efb0,modalmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb7f040,modalmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb7f0d0,modalmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb7f160,modalmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb7f1d0,modalmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb7f240,modalmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb7f2b0,modalmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb7f340,modalmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb7f3d0,modalmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb7f4f0,modalmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb7f580,modalmenu.cpp,CModalMenu::createMenus(),MISSING,False,False,,False
+0xb7fef0,modalmenu.cpp,"CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xb800a0,optionsmenu.cpp,"COptionsMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xb80100,optionsmenu.cpp,COptionsMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb80130,optionsmenu.cpp,COptionsMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb80140,optionsmenu.cpp,COptionsMenu::update(float),MATCH,True,False,,False
+0xb801b0,optionsmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb86d00,optionsmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xb86d70,optionsmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xb86de0,optionsmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xb86e70,optionsmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb86ee0,optionsmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb86f50,optionsmenu.cpp,COptionsMenu::setOpen(bool),MISSING,False,False,,False
+0xb87890,optionsmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb87920,optionsmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb879b0,optionsmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb87a40,optionsmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb87ad0,optionsmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb87b60,optionsmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb87bd0,optionsmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb87c40,optionsmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb87cb0,optionsmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb87d40,optionsmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb87dd0,optionsmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb87e60,optionsmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb87f60,optionsmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb87ff0,optionsmenu.cpp,COptionsMenu::createMenus(),MISSING,False,False,,False
+0xb885b0,optionsmenu.cpp,"COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xb88720,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb88730,petmenu.cpp,CPetMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
+0xb88740,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb88750,petmenu.cpp,CPetMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xb88760,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb88770,petmenu.cpp,CPetMenu::equipmentUsed(CEquipment*),MATCH,True,False,,False
+0xb88780,petmenu.cpp,non-virtual thunk to CPetMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb88790,petmenu.cpp,CPetMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xb887a0,petmenu.cpp,CPetMenu::handle_ItemClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb887f0,petmenu.cpp,CPetMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88810,petmenu.cpp,CPetMenu::handle_RotateLeft(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88820,petmenu.cpp,CPetMenu::handle_EndRotateLeft(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88830,petmenu.cpp,CPetMenu::handle_RotateRight(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88840,petmenu.cpp,CPetMenu::handle_EndRotateRight(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88850,petmenu.cpp,CPetMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb88870,petmenu.cpp,CPetMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb888a0,petmenu.cpp,CPetMenu::setTab(int),MATCH,True,False,,False
+0xb888b0,petmenu.cpp,CPetMenu::handle_SpellMouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb888e0,petmenu.cpp,CPetMenu::handle_SpellMouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb888f0,petmenu.cpp,CPetMenu::onClick(ELayoutFunction),DIFF,True,False,,False
+0xb88b60,petmenu.cpp,"CPetMenu::processInput(void*, float, bool)",DIFF,True,False,,False
+0xb88d40,petmenu.cpp,CPetMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb88dd0,petmenu.cpp,CPetMenu::handle_SetSpell(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb88f70,petmenu.cpp,CPetMenu::setOwner(CCharacter*),DIFF,True,False,,False
+0xb89020,petmenu.cpp,CPetMenu::checkForUpdate(CEquipment*),DIFF,True,False,,False
+0xb89100,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb89110,petmenu.cpp,CPetMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xb89130,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb89140,petmenu.cpp,CPetMenu::equipmentPickedUp(CEquipment*),MATCH,True,False,,False
+0xb89160,petmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xb91250,petmenu.cpp,CPetMenu::~CPetMenu(),DIFF,True,False,,False
+0xb91490,petmenu.cpp,non-virtual thunk to CPetMenu::~CPetMenu(),MATCH,True,False,,False
+0xb914a0,petmenu.cpp,non-virtual thunk to CPetMenu::~CPetMenu(),MATCH,True,False,,False
+0xb914b0,petmenu.cpp,CPetMenu::~CPetMenu(),MATCH,True,False,,False
+0xb914d0,petmenu.cpp,CPetMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb91860,petmenu.cpp,__tcf_18,DIFF,False,False,,False
+0xb918f0,petmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xb91980,petmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xb919f0,petmenu.cpp,__tcf_14,MATCH,False,False,,False
+0xb91a80,petmenu.cpp,__tcf_13,MATCH,False,False,,False
+0xb91b10,petmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xb91ba0,petmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xb91c30,petmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xb91ca0,petmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xb91d10,petmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xb91da0,petmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xb91e30,petmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xb91ec0,petmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xb92010,petmenu.cpp,__tcf_24,DIFF,False,False,,False
+0xb92080,petmenu.cpp,__tcf_23,DIFF,False,False,,False
+0xb92110,petmenu.cpp,__tcf_22,DIFF,False,False,,False
+0xb921a0,petmenu.cpp,__tcf_20,DIFF,False,False,,False
+0xb92230,petmenu.cpp,__tcf_19,DIFF,False,False,,False
+0xb92650,petmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xb926e0,petmenu.cpp,__tcf_21,DIFF,False,False,,False
+0xb927e0,petmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xb92850,petmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xb92930,petmenu.cpp,__tcf_15,MATCH,False,False,,False
+0xb929c0,petmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xb92a30,petmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xb92aa0,petmenu.cpp,CPetMenu::setOpen(bool),MATCH,True,False,,False
+0xb93070,petmenu.cpp,CPetMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xb93350,petmenu.cpp,CPetMenu::createMenus(),DIFF,True,False,,False
+0xb9aa70,petmenu.cpp,"CPetMenu::CPetMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xb9b0d0,petmenu.cpp,CPetMenu::update(float),DIFF,True,False,,False
+0xba16b0,petmenu.cpp,"CPetMenu::setSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False
+0xba26b0,petmenu.cpp,CPetMenu::updateLayout(),DIFF,True,False,,False
+0xba51e0,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xba51f0,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xba5220,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xba5230,questdialogmenu.cpp,"CQuestDialogMenu::broadcastAcceptedOrDeclined(bool, CBaseUnit*)",MISSING,False,False,,False
+0xba52b0,questdialogmenu.cpp,CQuestDialogMenu::getCameraOffset(),MATCH,True,False,,False
+0xba52d0,questdialogmenu.cpp,CQuestDialogMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xba52e0,questdialogmenu.cpp,CQuestDialogMenu::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xba5370,questdialogmenu.cpp,CQuestDialogMenu::handle_MouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xba5400,questdialogmenu.cpp,CQuestDialogMenu::acceptQuest(CBaseUnit*),MATCH,True,False,,False
+0xba5490,questdialogmenu.cpp,CQuestDialogMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xba5510,questdialogmenu.cpp,CQuestDialogMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xba55b0,questdialogmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xbae150,questdialogmenu.cpp,CQuestDialogMenu::setOpen(bool),MISSING,False,False,,False
+0xbae3b0,questdialogmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xbae420,questdialogmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xbae490,questdialogmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xbae500,questdialogmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xbae590,questdialogmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xbae600,questdialogmenu.cpp,CQuestDialogMenu::~CQuestDialogMenu(),MATCH,True,False,,False
+0xbae6d0,questdialogmenu.cpp,CQuestDialogMenu::~CQuestDialogMenu(),MATCH,True,False,,False
+0xbae6f0,questdialogmenu.cpp,CQuestDialogMenu::updateTextDisplay(float),MISSING,False,False,,False
+0xbaf230,questdialogmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xbaf2c0,questdialogmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xbaf350,questdialogmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xbaf3e0,questdialogmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xbaf470,questdialogmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xbaf500,questdialogmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xbaf570,questdialogmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xbaf5e0,questdialogmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xbaf650,questdialogmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xbaf6e0,questdialogmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xbaf770,questdialogmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xbaf800,questdialogmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xbaf870,questdialogmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xbafab0,questdialogmenu.cpp,"CQuestDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xbb0140,questdialogmenu.cpp,CQuestDialogMenu::update(float),MISSING,False,False,,False
+0xbb04c0,questdialogmenu.cpp,CQuestDialogMenu::updateDialogTags(),MISSING,False,False,,False
+0xbb08f0,questdialogmenu.cpp,CQuestDialogMenu::createMenus(),MISSING,False,False,,False
+0xbb5480,questdialogmenu.cpp,"CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xbb56d0,questdialogmenu.cpp,"CQuestDialogMenu::setSlotIcon(int, CEquipment*)",MISSING,False,False,,False
+0xbb70b0,questdialogmenu.cpp,"CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)",MISSING,False,False,,False
+0xbba030,questmenu.cpp,CQuestMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xbba040,questmenu.cpp,CQuestMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbba060,questmenu.cpp,CQuestMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbba070,questmenu.cpp,CQuestMenu::handle_QuestClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbba0a0,questmenu.cpp,"CQuestMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xbba0f0,questmenu.cpp,CQuestMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xbba120,questmenu.cpp,CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xbba1e0,questmenu.cpp,CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xbba2a0,questmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xbc0ea0,questmenu.cpp,CQuestMenu::~CQuestMenu(),MISSING,False,False,,False
+0xbc0f50,questmenu.cpp,CQuestMenu::~CQuestMenu(),MISSING,False,False,,False
+0xbc0f70,questmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xbc1000,questmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xbc1070,questmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xbc10e0,questmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xbc1150,questmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xbc1670,questmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xbc1700,questmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xbc1770,questmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xbc1800,questmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xbc1890,questmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xbc1920,questmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xbc19b0,questmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xbc1a20,questmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xbc1a90,questmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xbc1b20,questmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xbc1bb0,questmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xbc1c40,questmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xbc1cb0,questmenu.cpp,CQuestMenu::abandonQuest(),MISSING,False,False,,False
+0xbc1e40,questmenu.cpp,CQuestMenu::onClick(ELayoutFunction),MATCH,True,False,,False
+0xbc1f00,questmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xbc2020,questmenu.cpp,CQuestMenu::update(float),MISSING,False,False,,False
+0xbc2550,questmenu.cpp,CQuestMenu::setOpen(bool),MISSING,False,False,,False
+0xbc28c0,questmenu.cpp,CQuestMenu::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
+0xbc2d50,questmenu.cpp,"CQuestMenu::setSlotIcon(int, CEquipment*)",MISSING,False,False,,False
+0xbc4430,questmenu.cpp,CQuestMenu::updateLayout(),MISSING,False,False,,False
+0xbc6b90,questmenu.cpp,CQuestMenu::createMenus(),MISSING,False,False,,False
+0xbcc6d0,questmenu.cpp,"CQuestMenu::CQuestMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xbccb20,settingsmenu.cpp,"CSettingsMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xbd47e0,settingsmenu.cpp,CSettingsMenu::update(float),MISSING,False,False,,False
+0xbd5560,settingsmenu.cpp,CSettingsMenu::setOpen(bool),MISSING,False,False,,False
+0xbd6ea0,settingsmenu.cpp,CSettingsMenu::createMenus(),MISSING,False,False,,False
+0xbd8650,settingsmenu.cpp,"CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xbd87c0,skillmenu.cpp,CSkillMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xbd87d0,skillmenu.cpp,CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbd87f0,skillmenu.cpp,CSkillMenu::clearSkillTooltip(),MATCH,True,False,,False
+0xbd8800,skillmenu.cpp,CSkillMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbd8810,skillmenu.cpp,"CSkillMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xbd8840,skillmenu.cpp,CSkillMenu::handle_MouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbd8870,skillmenu.cpp,CSkillMenu::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbd8880,skillmenu.cpp,CSkillMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xbd88b0,skillmenu.cpp,CSkillMenu::onClick(ELayoutFunction),DIFF,True,False,,False
+0xbd8a30,skillmenu.cpp,CSkillMenu::handle_SpendSkill(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xbd8ae0,skillmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xbdfde0,skillmenu.cpp,CSkillMenu::~CSkillMenu(),DIFF,True,False,,False
+0xbdfeb0,skillmenu.cpp,CSkillMenu::~CSkillMenu(),MATCH,True,False,,False
+0xbe03b0,skillmenu.cpp,__tcf_23,DIFF,False,False,,False
+0xbe0440,skillmenu.cpp,__tcf_22,DIFF,False,False,,False

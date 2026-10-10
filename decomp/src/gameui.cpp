@@ -2171,7 +2171,7 @@ void CGameUI::returnTextEventObject(CTextEvent* event)
     lists.freeEvents->prepend(event);
 }
 
-void CGameUI::updateTextEvents(float elapsed, Ogre::Vector3& cameraPosition,
+void CGameUI::updateTextEvents(float elapsed, Ogre::Vector3& cameraUpOffset,
     Ogre::Matrix4& matrix, bool showEvents)
 {
     using namespace gameui_create_detail;
@@ -2207,7 +2207,7 @@ void CGameUI::updateTextEvents(float elapsed, Ogre::Vector3& cameraPosition,
         } else {
             const Ogre::Vector3 position = getScreenPosition(
                 reinterpret_cast<const Ogre::Vector3*>(&event->m_Value10),
-                &cameraPosition, matrix);
+                &cameraUpOffset, matrix);
             event->m_pWindow->setPosition(CEGUI::UVector2(
                 CEGUI::UDim(0.f, -0.5f * event->m_Unrecovered6C + position.x),
                 CEGUI::UDim(0.f, position.y)));
@@ -2226,4 +2226,124 @@ void CGameUI::addTextEvent(const Ogre::Vector3& position,
     if (!scenes.camera->isVisible(Ogre::Sphere(position, 0.5f), NULL)) return;
     gameui_text_event_detail::getTextEventObject(this, position, text,
         scale, duration, first, second, true);
+}
+
+Ogre::Vector3 CGameUI::getScreenPosition(const Ogre::Vector3* position,
+    const Ogre::Vector3* cameraUpOffset, Ogre::Matrix4 matrix)
+{
+    Ogre::Vector3 projected = matrix * (*position + *cameraUpOffset);
+    projected /= projected.z;
+
+    const float halfWidth = m_cachedWindowWidth * 0.5f;
+    const float height = m_cachedWindowHeight;
+    projected.x = (projected.x * halfWidth + halfWidth) * m_usableWidthRatio;
+    if (leftCovered()) {
+        const float widthBeforeEdge = m_cachedWindowWidth;
+        const float edge = leftScreenEdge();
+        const float widthAfterEdge = m_cachedWindowWidth;
+        projected.x += (1.0f - (widthBeforeEdge - edge) / widthAfterEdge)
+            * widthAfterEdge;
+    }
+    projected.y = -(0.5f * height * projected.y + height * -0.5f);
+    return projected;
+}
+
+// Keep the item-use entries out of line for the existing flattened UI phases.
+__attribute__((noinline))
+void CGameUI::returnDraggedItem()
+{
+    using namespace menu_item_click_detail;
+    UIState& ui = state(this);
+    if (!ui.draggedItem.getObject()) return;
+
+    ui.draggedItem.getObject()->playDropSound(m_pCharacter->getSceneNode());
+    if (ui.draggedItem.getObject()->m_pIconWindow->getParent() == ui.dragWindow)
+        ui.dragWindow->removeChildWindow(ui.draggedItem.getObject()->m_pIconWindow);
+
+    CInventory* inventory;
+    if (ui.dragOwner.getObject()->ISA(UNITTYPES::SHAREDSTASH))
+        inventory = CSharedStash::getSingleton()->m_pInventory;
+    else
+        inventory = ui.dragOwner.getObject()->m_pInventory;
+    if (!inventory->pickupEquipment(ui.draggedItem.getObject(), ui.dragSlot, true) &&
+        !inventory->pickupEquipment(ui.draggedItem.getObject(), true)) {
+        if (ui.dragOwner.getObject()->ISA(UNITTYPES::MERCHANT) ||
+            ui.dragOwner.getObject()->ISA(UNITTYPES::STASH) ||
+            ui.dragOwner.getObject()->ISA(UNITTYPES::SHAREDSTASH)) {
+            delete ui.draggedItem.getObject();
+        } else {
+            Ogre::Vector3 position = m_pCharacter->getPosition(true);
+            m_level->addItem(ui.draggedItem.getObject(), position, true);
+        }
+    }
+    ui.draggedItem.setObject(NULL);
+    ui.dragOwner.setObject(NULL);
+    ui.dragSlot = -1;
+    m_rightSlot = -1;
+    m_pendingRightSlot = -1;
+    updateHardwareCursor();
+    clearHoverAndTooltips(ui);
+}
+
+__attribute__((noinline))
+void CGameUI::performItemUse(CLevel& level, CEquipment* item,
+    CCharacter* owner, CCharacter* user, CCharacter* target)
+{
+    using namespace menu_item_click_detail;
+    UIState& ui = state(this);
+    if (!item->canUseOnTarget(user, target)) {
+        ui.soundBank->playSample(24, m_pCharacter->getSceneNode(), 0.f, 0.f, false);
+        return;
+    }
+    switch (item->m_iUnknown260) {
+    case 0:
+        item->useOnTarget(user, target);
+        if (item->m_iUnknown238 <= 1 && item->m_iUnknown248 <= 0 &&
+            item->m_iUnknown248 != -9999) {
+            if (item->m_pInventory) item->m_pInventory->removeEquipment(item);
+            if (ui.draggedItem.getObject() == item) {
+                ui.draggedItem.setObject(NULL);
+                ui.dragOwner.setObject(NULL);
+                ui.dragSlot = -1;
+                updateHardwareCursor();
+            }
+            setMouseOverItem(NULL, false);
+            clearHover<0x1020>(ui.inventoryMenu);
+            clearHover<0x1370>(ui.petMenu);
+            delete item;
+        }
+        ui.inventoryMenu->updateLayout();
+        gameuiBoundaryCursor(this, static_cast<ECursorState>(0));
+        break;
+    case 1:
+        ui.targetedItem.setObject(item);
+        ui.targetCharacter.setObject(owner);
+        ui.itemUser.setObject(user);
+        gameuiBoundaryCursor(this, static_cast<ECursorState>(3));
+        break;
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::useItem(CLevel& level, CEquipment* item)
+{
+    if (!m_pCharacter->alive()) return;
+    if (!item->ISA(UNITTYPES::CONSUMABLE) && !item->ISA(UNITTYPES::INTERACTABLE)) return;
+
+    if ((item->ISA(UNITTYPES::PETONLY) || GetAsyncKeyState(16) < 0) &&
+        m_pCharacter->getFollowerCount()) {
+        if (m_pCharacter->getFollower(0)->m_eAIState != 42 &&
+            m_pCharacter->getFollower(0)->m_eAIState != 41) {
+            gameui_click_detail::performItemUse(this, level, item,
+                m_pCharacter, m_pCharacter, m_pCharacter->getFollower(0));
+        } else {
+            menu_item_click_detail::state(this).soundBank->playSample(
+                24, m_pCharacter->getSceneNode(), 0.f, 0.f, false);
+            CSoundBank* sound = m_pCharacter->m_levelSound;
+            if (sound) sound->queueGlobalSample(49, 0.f, 0.1f);
+        }
+    } else {
+        gameui_click_detail::performItemUse(this, level, item,
+            m_pCharacter, m_pCharacter, m_pCharacter);
+    }
 }

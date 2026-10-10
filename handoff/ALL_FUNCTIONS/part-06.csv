@@ -742,7 +742,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa82e60,gameui.cpp,CGameUI::rightScreenEdge(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82e60.cpp,False
 0xa82f10,gameui.cpp,CGameUI::toggleStatFill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82f10.cpp,False
 0xa82f20,gameui.cpp,CGameUI::setLevel(CLevel*),MISSING,False,False,,False
-0xa82f40,gameui.cpp,"CGameUI::getScreenPosition(Ogre::Vector3 const*, Ogre::Vector3 const*, Ogre::Matrix4)",MISSING,False,False,,False
+0xa82f40,gameui.cpp,"CGameUI::getScreenPosition(Ogre::Vector3 const*, Ogre::Vector3 const*, Ogre::Matrix4)",MATCH,True,False,,False
 0xa83250,gameui.cpp,CountChildren(Ogre::SceneNode*),MISSING,False,False,,False
 0xa832f0,gameui.cpp,CGameUI::getMouseOverItem(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa832f0.cpp,False
 0xa83300,gameui.cpp,CGameUI::clearMenuMouseOvers(),MISSING,False,False,,False
