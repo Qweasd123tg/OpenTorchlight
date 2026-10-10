@@ -2845,3 +2845,100 @@ void CGameUI::toggleInventory()
         m_topWindow->moveToFront();
     }
 }
+
+#include "GameUIWindowBindings.h"
+#include <OgreException.h>
+#include <OgreLogManager.h>
+
+__attribute__((noinline))
+void CGameUI::mapEventHandlers(CEGUI::Window* window)
+{
+    int childCount = static_cast<int>(window->getChildCount());
+    for (int i = 0; i < childCount; ++i)
+        mapEventHandlers(window->getChildAtIdx(i));
+
+    try {
+        if (window->isPropertyPresent("onClick") &&
+            !window->getProperty("onClick").empty())
+            window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,
+                CEGUI::Event::Subscriber(&CGameUI::handle_onClick, this));
+    } catch (Ogre::Exception error) {
+        Ogre::LogManager::getSingleton().logMessage(
+            error.getDescription().c_str(), Ogre::LML_CRITICAL, false);
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::mapToFunctions(CEGUI::Window* window)
+{
+    int childCount = static_cast<int>(window->getChildCount());
+    for (int i = 0; i < childCount; ++i)
+        mapToFunctions(window->getChildAtIdx(i));
+
+    gameui_window_bindings_detail::LayoutFunctions& functions =
+        *reinterpret_cast<gameui_window_bindings_detail::LayoutFunctions*>(this);
+    try {
+        if (window->isPropertyPresent("onClick") &&
+            !window->getProperty("onClick").empty()) {
+            std::string name = STRINGS::StringUpper(
+                window->getProperty("onClick").c_str());
+            for (int i = 0; i < 97; ++i) {
+                if (KLayoutFunctionNames[i] == name)
+                    window->setUserData(&functions.values[i]);
+            }
+        } else {
+            window->setUserData(&functions.values[96]);
+        }
+    } catch (...) {
+        window->setUserData(&functions.values[96]);
+    }
+}
+
+#include "JournalMenu.h"
+#include "QuestMenu.h"
+void CGameUI::setPlayer(CCharacter* character)
+{
+    gameui_slots_detail::UIState& ui = gameui_slots_detail::state(this);
+    if (m_pCharacter != character) {
+        for (int i = 0; i < 10; ++i) {
+            ui.itemGuids[i] = -1;
+            ui.skillGuids[i] = -1;
+            ui.leftCooldown->setText(reinterpret_cast<const unsigned char*>(""));
+            ui.rightCooldown->setText(reinterpret_cast<const unsigned char*>(""));
+            ui.attackCooldown->setText(reinterpret_cast<const unsigned char*>(""));
+            if (ui.buttons[i]) {
+                ui.labels[i]->setText(reinterpret_cast<const unsigned char*>(""));
+                static std::string g_LeftClickAssign = STRINGS::StringConvertToUTF8(
+                    CStringTranslate::getSinglton()->getTranslateString(L"Left-Click to assign Skills or Items"));
+                ui.buttons[i]->setTooltipText(reinterpret_cast<const unsigned char*>(g_LeftClickAssign.c_str()));
+                ui.buttons[i]->setID(0);
+                ui.icons[i]->setProperty("Image", "");
+                ui.icons[i]->getParent()->setUserData(&ui.emptyGuid);
+            }
+        }
+    }
+    menu_item_click_detail::UIState& menus = menu_item_click_detail::state(this);
+    menu_item_click_detail::clearHoverAndTooltips(menus);
+    ui.leftGuid = -1;
+    ui.rightGuid = -1;
+    ui.attackGuid = -1;
+    ui.leftIcon->setProperty("Image", "");
+    ui.rightIcon->setProperty("Image", "");
+    ui.attackIcon->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+        getImageFromImageSet(reinterpret_cast<const unsigned char*>("skill_attack"))));
+    m_pCharacter = dynamic_cast<CPlayer*>(character);
+    m_statsMenu->setOwner(m_pCharacter);
+    m_skillsMenu->setOwner(m_pCharacter);
+    m_journalMenu->setOwner(m_pCharacter);
+    m_questMenu->setOwner(m_pCharacter);
+    m_characterStatsMenu->setOwner(m_pCharacter);
+    menus.combineMenu->setPlayer(m_pCharacter);
+    menus.enchantMenu->setPlayer(m_pCharacter);
+    // The quest menu is rebound twice in the original, with the current owner reloaded.
+    m_questMenu->setOwner(m_pCharacter);
+    if (m_pCharacter && m_pCharacter->getFollowerCount())
+        m_inventoryMenu->setOwner(m_pCharacter->getFollower(0));
+    else
+        m_inventoryMenu->setOwner(NULL);
+    gameui_detail::service::slots(this);
+}

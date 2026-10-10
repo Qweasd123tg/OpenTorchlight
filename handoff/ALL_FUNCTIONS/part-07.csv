@@ -125,13 +125,13 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa95530,gameui.cpp,"CSkillFoldout::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xa96270,gameui.cpp,"CSkillTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xa976a0,gameui.cpp,"CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
-0xa97e00,gameui.cpp,CGameUI::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
-0xa980e0,gameui.cpp,CGameUI::mapToFunctions(CEGUI::Window*),MISSING,False,False,,False
+0xa97e00,gameui.cpp,CGameUI::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
+0xa980e0,gameui.cpp,CGameUI::mapToFunctions(CEGUI::Window*),DIFF,True,False,,False
 0xa98460,gameui.cpp,CGameUI::getImageSetForIcon(unsigned char const*),MISSING,False,False,,False
 0xa98630,gameui.cpp,CGameUI::getImageFromImageSet(unsigned char const*),MISSING,False,False,,False
 0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),MISSING,False,False,,False
 0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
-0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),MISSING,False,False,,False
+0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),DIFF,True,False,,False
 0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",DIFF,True,False,,False
 0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MATCH,True,False,,False
 0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False

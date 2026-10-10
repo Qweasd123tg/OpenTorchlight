@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "snapshot_main": "d5c1071dada56c15d9ae1f98d71a5bfa8cf79169",
+  "status": "active-restoration",
+  "assigned_to": "dot",
+  "purpose": "Avoid duplicate work with the Pro small-function batch.",
+  "groups": [
+    {
+      "name": "recursive-window-bindings",
+      "addresses": [
+        "0xa97e00",
+        "0xa980e0"
+      ]
+    },
+    {
+      "name": "player-menu-rebinding",
+      "addresses": [
+        "0xa9b420"
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "address": "0xa97e00",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::mapEventHandlers(CEGUI::Window*)",
+      "original_bytes": 732,
+      "status": "preparing"
+    },
+    {
+      "address": "0xa980e0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::mapToFunctions(CEGUI::Window*)",
+      "original_bytes": 884,
+      "status": "preparing"
+    },
+    {
+      "address": "0xa9b420",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setPlayer(CCharacter*)",
+      "original_bytes": 1593,
+      "status": "preparing"
+    }
+  ],
+  "next_gate": "Fresh prepared packages, original-versus-candidate comparison, combined full acceptance, then independent root check.",
+  "notice": "These three functions are reserved work, not accepted implementations. All previously accepted findings remain available in the function index."
+}
