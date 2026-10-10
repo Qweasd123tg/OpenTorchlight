@@ -7,11 +7,13 @@ namespace CEGUI { class Window; class Imageset; class RadioButton; }
 class CGameUI; class CResourceManager; class CDynamicPropertyFile; class CSkillTooltip;
 // Partial data declaration through fields used by updateLayout.
 class CGenericModel;
+class CSoundBank;
 class CSettings;
 namespace Ogre { class RenderWindow; class SceneManager; }
 class CSkillMenu : public CSubMenu {
 public:
     void createMenus();
+    void clearSkillTooltip();
     void mapEventHandlers(CEGUI::Window*);
     bool handle_MouseThrough(const CEGUI::EventArgs&);
     bool handle_CloseButton(const CEGUI::EventArgs&);
@@ -29,7 +31,7 @@ public:
  virtual void update(float);
  virtual bool handle_onClick(const CEGUI::EventArgs&);
  virtual bool processInput(void*,float,bool);
- virtual void onClick(ELayoutFunction);
+ virtual bool onClick(ELayoutFunction);
  bool handle_SetSkill(const CEGUI::EventArgs&);
  bool handle_SpendSkill(const CEGUI::EventArgs&);
  bool handle_MouseOver(const CEGUI::EventArgs&);
@@ -59,7 +61,8 @@ public:
  CEGUI::RadioButton* m_Tabs[3];
  CEGUI::Window* m_TabLabels[3];
  int m_iPane;
- char m_DataE4[12];
+ char m_DataE4[4];
+ CSoundBank* m_pSoundBank;
  long long m_SkillGuids[100];
  long long m_SpellGuids[100];
  int m_iCachedSkillPoints;
