@@ -1,0 +1,59 @@
+{
+  "format": "CSV parts with identical headers",
+  "total_rows": 7114,
+  "unique_addresses": 7114,
+  "parts": [
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-01.csv",
+      "rows": 750,
+      "sha256": "f4aeb943c89d35bce9a0f3f283e47f4122f2b73a90244110c07c1235bee61392"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-02.csv",
+      "rows": 750,
+      "sha256": "07456c4e7c95025b0a479e30d8b1647e7af44c6c116fbba674eefaa8f57b60fd"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-03.csv",
+      "rows": 750,
+      "sha256": "449ed9214e33bbde5645c05216567ea161279f270ca99a0c26d2904840f3b895"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-04.csv",
+      "rows": 750,
+      "sha256": "7066c2bf3a20db4d0c6f846c7626eeab00009f1dbaad505637d047e592a6f300"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-05.csv",
+      "rows": 750,
+      "sha256": "ed86e24e0fb088cffc5f1960be61788f77d85729a790d3c674907602457a7cf7"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-06.csv",
+      "rows": 750,
+      "sha256": "ece35f9ac083669c4671c66ea85e45341ba56f6d04bf5e812ea7dfff4df7df10"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-07.csv",
+      "rows": 750,
+      "sha256": "84eda144f76bc2da4431c7542d927dbb8bc26549f420fc6ac6a62a91502408e9"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-08.csv",
+      "rows": 750,
+      "sha256": "d6e1cc1d12101b75418277e468be93e2abadc42c5e462529d63f6687d0c74f1c"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-09.csv",
+      "rows": 750,
+      "sha256": "132e57010f8daea549da9bdabec88957ace0381743a74d98b2a2c343760dae6c"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-10.csv",
+      "rows": 364,
+      "sha256": "8af6e3a13a8731bbe3dd12dc37f06695951c25d55daf5eb58f1f4f9cf858e467"
+    }
+  ],
+  "current_state": "../CURRENT_STATE.json",
+  "historical_index": "../SMALL_FUNCTIONS.csv"
+}

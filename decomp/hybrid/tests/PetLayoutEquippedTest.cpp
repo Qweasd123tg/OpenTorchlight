@@ -83,7 +83,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  for(int i=0;i<3;++i){item[i]->m_pIconWindow=c.create?0:win[416+i];win[416+i]->d_parent=win[419];}
  for(int i=0;i<82;++i)win[i]->d_parent=win[415];
  pos=CEGUI::UVector2(CEGUI::UDim(0.25f,-11.75f),CEGUI::UDim(0.5f,-17.25f));
- TArrayList<CEquipmentRef*>& equipmentRefs=*reinterpret_cast<TArrayList<CEquipmentRef*>*>(inventory->m_Unknown30);equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
+ TArrayList<CEquipmentRef*>& equipmentRefs=inventory->m_equipmentRefs;equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
  detour::Set d;d.redirect(childFn,childFn,&child);TL_REDIRECT(d,queryFn,&query);TL_REDIRECT(d,slotFn,&slot);
  d.redirect(getSizeFn,getSizeFn,&size);d.redirect(setSizeFn,setSizeFn,&setSize);d.redirect(removeFn,removeFn,&remove);d.redirect(frontFn,frontFn,&front);d.redirect(backFn,backFn,&back);d.redirect(propertyFn,propertyFn,&property);d.redirect(textFn,textFn,&setText);d.redirect(tooltipFn,tooltipFn,&tooltip);
  TL_REDIRECT(d,isaFn,&isa);TL_REDIRECT(d,createFn,&create);

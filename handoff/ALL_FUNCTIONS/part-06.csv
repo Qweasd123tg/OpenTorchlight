@@ -1,0 +1,751 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0xa14510,UnitSpawner.cpp,"CUnitSpawner::unitStateChange(CBaseUnit*, EUNIT_STATES)",MISSING,False,False,,False
+0xa147f0,UnitSpawner.cpp,CUnitSpawner::destroyUnits(),MISSING,False,False,,False
+0xa15c60,UnitSpawner.cpp,__tcf_0,DIFF,False,False,,False
+0xa15cd0,UnitSpawner.cpp,__tcf_2,DIFF,False,False,,False
+0xa15d60,UnitSpawner.cpp,__tcf_1,DIFF,False,False,,False
+0xa15f10,UnitSpawner.cpp,CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa16390,UnitSpawner.cpp,non-virtual thunk to CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa163a0,UnitSpawner.cpp,non-virtual thunk to CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa163b0,UnitSpawner.cpp,non-virtual thunk to CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa163c0,UnitSpawner.cpp,non-virtual thunk to CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa163d0,UnitSpawner.cpp,CUnitSpawner::~CUnitSpawner(),MISSING,False,False,,False
+0xa163f0,UnitSpawner.cpp,"CUnitSpawner::setResourceSpawn(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa167a0,UnitSpawner.cpp,CUnitSpawner::spawnUnitByIndex(unsigned int),MISSING,False,False,,False
+0xa17780,UnitSpawner.cpp,CUnitSpawner::spawn(),MISSING,False,False,,False
+0xa17830,UnitSpawner.cpp,CUnitSpawner::update(float),MISSING,False,False,,False
+0xa17dc0,AffectorWrapper.cpp,CAffectorWrapper::enablePositioning(bool),MATCH,True,False,,False
+0xa17e00,AffectorWrapper.cpp,CAffectorWrapper::positionUpdated(Ogre::Vector3 const&),DIFF,False,False,,False
+0xa17ec0,AffectorWrapper.cpp,CAffectorWrapper::setParentTechniqueWrapper(CParticleTechWrapper*),MATCH,True,False,,False
+0xa17f30,AffectorWrapper.cpp,CAffectorWrapper::setParentGuid(long long),MISSING,False,False,,False
+0xa18020,AffectorWrapper.cpp,CAffectorWrapper::destroyAffector(),MISSING,False,False,,False
+0xa180a0,AffectorWrapper.cpp,CAffectorWrapper::~CAffectorWrapper(),DIFF,False,False,,False
+0xa18100,AffectorWrapper.cpp,non-virtual thunk to CAffectorWrapper::~CAffectorWrapper(),MATCH,True,False,,False
+0xa18110,AffectorWrapper.cpp,non-virtual thunk to CAffectorWrapper::~CAffectorWrapper(),MATCH,True,False,,False
+0xa18120,AffectorWrapper.cpp,CAffectorWrapper::~CAffectorWrapper(),MATCH,True,False,,False
+0xa18140,AffectorWrapper.cpp,"CAffectorWrapper::CAffectorWrapper(CResourceManager*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MISSING,False,False,,False
+0xa191e0,AffectorWrapper.cpp,__tcf_11,DIFF,False,False,,False
+0xa19270,AffectorWrapper.cpp,__tcf_10,DIFF,False,False,,False
+0xa19300,AffectorWrapper.cpp,__tcf_9,DIFF,False,False,,False
+0xa19370,AffectorWrapper.cpp,__tcf_8,DIFF,False,False,,False
+0xa193e0,AffectorWrapper.cpp,__tcf_7,DIFF,False,False,,False
+0xa19470,AffectorWrapper.cpp,__tcf_6,DIFF,False,False,,False
+0xa19500,AffectorWrapper.cpp,__tcf_5,DIFF,False,False,,False
+0xa19570,AffectorWrapper.cpp,__tcf_4,DIFF,False,False,,False
+0xa19600,AffectorWrapper.cpp,__tcf_3,DIFF,False,False,,False
+0xa19690,AffectorWrapper.cpp,__tcf_0,DIFF,False,False,,False
+0xa19700,AffectorWrapper.cpp,__tcf_2,DIFF,False,False,,False
+0xa19790,AffectorWrapper.cpp,__tcf_1,DIFF,False,False,,False
+0xa19880,AlignWrapper.cpp,CAlignWrapper::~CAlignWrapper(),MATCH,True,False,,False
+0xa198a0,AlignWrapper.cpp,non-virtual thunk to CAlignWrapper::~CAlignWrapper(),MATCH,True,False,,False
+0xa198b0,AlignWrapper.cpp,non-virtual thunk to CAlignWrapper::~CAlignWrapper(),MATCH,True,False,,False
+0xa198c0,AlignWrapper.cpp,CAlignWrapper::~CAlignWrapper(),MATCH,True,False,,False
+0xa1a090,AlignWrapper.cpp,CAlignWrapper::CAlignWrapper(CResourceManager*),MATCH,True,False,,False
+0xa1a590,BoxColliderWrapper.cpp,CBoxColliderWrapper::updateAlignedBox(),MATCH,True,False,,False
+0xa1a5a0,BoxColliderWrapper.cpp,CBoxColliderWrapper::positionUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
+0xa1a5b0,BoxColliderWrapper.cpp,CBoxColliderWrapper::~CBoxColliderWrapper(),MATCH,True,False,,False
+0xa1a5d0,BoxColliderWrapper.cpp,non-virtual thunk to CBoxColliderWrapper::~CBoxColliderWrapper(),MATCH,True,False,,False
+0xa1a5e0,BoxColliderWrapper.cpp,non-virtual thunk to CBoxColliderWrapper::~CBoxColliderWrapper(),MATCH,True,False,,False
+0xa1a5f0,BoxColliderWrapper.cpp,CBoxColliderWrapper::~CBoxColliderWrapper(),MATCH,True,False,,False
+0xa1b0c0,BoxColliderWrapper.cpp,CBoxColliderWrapper::CBoxColliderWrapper(CResourceManager*),MISSING,False,False,,False
+0xa1b1d0,BoxColliderWrapper.cpp,__tcf_8,DIFF,False,False,,False
+0xa1b260,BoxColliderWrapper.cpp,__tcf_7,DIFF,False,False,,False
+0xa1b2f0,BoxColliderWrapper.cpp,__tcf_6,DIFF,False,False,,False
+0xa1b380,BoxColliderWrapper.cpp,__tcf_5,DIFF,False,False,,False
+0xa1b3f0,BoxColliderWrapper.cpp,__tcf_4,DIFF,False,False,,False
+0xa1b480,BoxColliderWrapper.cpp,__tcf_3,DIFF,False,False,,False
+0xa1b510,BoxColliderWrapper.cpp,__tcf_0,DIFF,False,False,,False
+0xa1b580,BoxColliderWrapper.cpp,__tcf_2,DIFF,False,False,,False
+0xa1b610,BoxColliderWrapper.cpp,__tcf_1,DIFF,False,False,,False
+0xa1b6a0,ColliderWrapper.cpp,CColliderWrapper::~CColliderWrapper(),MATCH,True,False,,False
+0xa1b6c0,ColliderWrapper.cpp,non-virtual thunk to CColliderWrapper::~CColliderWrapper(),MATCH,True,False,,False
+0xa1b6d0,ColliderWrapper.cpp,non-virtual thunk to CColliderWrapper::~CColliderWrapper(),MATCH,True,False,,False
+0xa1b6e0,ColliderWrapper.cpp,CColliderWrapper::~CColliderWrapper(),MATCH,True,False,,False
+0xa1beb0,ColliderWrapper.cpp,"CColliderWrapper::CColliderWrapper(CResourceManager*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MATCH,True,False,,False
+0xa1c3a0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::updateCircle(),MISSING,False,False,,False
+0xa1c3b0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::positionUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
+0xa1c3c0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
+0xa1c3e0,CollisionAvoiderWrapper.cpp,non-virtual thunk to CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
+0xa1c3f0,CollisionAvoiderWrapper.cpp,non-virtual thunk to CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
+0xa1c400,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
+0xa1ced0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager*),MISSING,False,False,,False
+0xa1d480,ColorWrapper.cpp,"CColorWrapper::setColors(float*, unsigned int)",MISSING,False,False,,False
+0xa1d520,ColorWrapper.cpp,CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
+0xa1d560,ColorWrapper.cpp,non-virtual thunk to CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
+0xa1d570,ColorWrapper.cpp,non-virtual thunk to CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
+0xa1d580,ColorWrapper.cpp,CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
+0xa1dd50,ColorWrapper.cpp,CColorWrapper::CColorWrapper(CResourceManager*),MISSING,False,False,,False
+0xa1e2e0,ColorWrapper.cpp,CColorWrapper::getColors(unsigned int&),MISSING,False,False,,False
+0xa1e8a0,ForceWrapper.cpp,CForceWrapper::~CForceWrapper(),MATCH,True,False,,False
+0xa1e8c0,ForceWrapper.cpp,non-virtual thunk to CForceWrapper::~CForceWrapper(),MATCH,True,False,,False
+0xa1e8d0,ForceWrapper.cpp,non-virtual thunk to CForceWrapper::~CForceWrapper(),MATCH,True,False,,False
+0xa1e8e0,ForceWrapper.cpp,CForceWrapper::~CForceWrapper(),MATCH,True,False,,False
+0xa1f0b0,ForceWrapper.cpp,"CForceWrapper::CForceWrapper(CResourceManager*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MISSING,False,False,,False
+0xa1f600,GeometryRotateWrapper.cpp,"CGeometryRotateWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)",MISSING,False,False,,False
+0xa1f620,GeometryRotateWrapper.cpp,CGeometryRotateWrapper::getDynamicPropRotationSpeed(unsigned int&),MISSING,False,False,,False
+0xa1f640,GeometryRotateWrapper.cpp,CGeometryRotateWrapper::~CGeometryRotateWrapper(),MATCH,True,False,,False
+0xa1f660,GeometryRotateWrapper.cpp,non-virtual thunk to CGeometryRotateWrapper::~CGeometryRotateWrapper(),MATCH,True,False,,False
+0xa1f670,GeometryRotateWrapper.cpp,non-virtual thunk to CGeometryRotateWrapper::~CGeometryRotateWrapper(),MATCH,True,False,,False
+0xa1f680,GeometryRotateWrapper.cpp,CGeometryRotateWrapper::~CGeometryRotateWrapper(),MATCH,True,False,,False
+0xa1fe50,GeometryRotateWrapper.cpp,CGeometryRotateWrapper::CGeometryRotateWrapper(CResourceManager*),MATCH,True,False,,False
+0xa20350,GravityWrapper.cpp,CGravityWrapper::~CGravityWrapper(),MATCH,True,False,,False
+0xa20370,GravityWrapper.cpp,non-virtual thunk to CGravityWrapper::~CGravityWrapper(),MATCH,True,False,,False
+0xa20380,GravityWrapper.cpp,non-virtual thunk to CGravityWrapper::~CGravityWrapper(),MATCH,True,False,,False
+0xa20390,GravityWrapper.cpp,CGravityWrapper::~CGravityWrapper(),MATCH,True,False,,False
+0xa20b60,GravityWrapper.cpp,CGravityWrapper::CGravityWrapper(CResourceManager*),MATCH,True,False,,False
+0xa21060,JetWrapper.cpp,"CJetWrapper::setDynamicPropAcceleration(float const*, unsigned int)",MISSING,False,False,,False
+0xa21080,JetWrapper.cpp,CJetWrapper::getDynamicPropAcceleration(unsigned int&),MATCH,True,False,,False
+0xa210a0,JetWrapper.cpp,CJetWrapper::~CJetWrapper(),MATCH,True,False,,False
+0xa210c0,JetWrapper.cpp,non-virtual thunk to CJetWrapper::~CJetWrapper(),MATCH,True,False,,False
+0xa210d0,JetWrapper.cpp,non-virtual thunk to CJetWrapper::~CJetWrapper(),MATCH,True,False,,False
+0xa210e0,JetWrapper.cpp,CJetWrapper::~CJetWrapper(),MATCH,True,False,,False
+0xa218b0,JetWrapper.cpp,CJetWrapper::CJetWrapper(CResourceManager*),MATCH,True,False,,False
+0xa21db0,LinearForceWrapper.cpp,CLinearForceWrapper::~CLinearForceWrapper(),MATCH,True,False,,False
+0xa21dd0,LinearForceWrapper.cpp,non-virtual thunk to CLinearForceWrapper::~CLinearForceWrapper(),MATCH,True,False,,False
+0xa21de0,LinearForceWrapper.cpp,non-virtual thunk to CLinearForceWrapper::~CLinearForceWrapper(),MATCH,True,False,,False
+0xa21df0,LinearForceWrapper.cpp,CLinearForceWrapper::~CLinearForceWrapper(),MATCH,True,False,,False
+0xa225c0,LinearForceWrapper.cpp,CLinearForceWrapper::CLinearForceWrapper(CResourceManager*),MATCH,True,False,,False
+0xa22ac0,LineWrapper.cpp,CLineWrapper::~CLineWrapper(),MATCH,True,False,,False
+0xa22ae0,LineWrapper.cpp,non-virtual thunk to CLineWrapper::~CLineWrapper(),MATCH,True,False,,False
+0xa22af0,LineWrapper.cpp,non-virtual thunk to CLineWrapper::~CLineWrapper(),MATCH,True,False,,False
+0xa22b00,LineWrapper.cpp,CLineWrapper::~CLineWrapper(),MATCH,True,False,,False
+0xa232d0,LineWrapper.cpp,CLineWrapper::CLineWrapper(CResourceManager*),MATCH,True,False,,False
+0xa237e0,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::orientationUpdated(Ogre::Matrix4 const&),MATCH,True,False,,False
+0xa237f0,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::updatePlane(),MISSING,False,False,,False
+0xa23810,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::positionUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
+0xa23830,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::~CPlaneColliderWrapper(),MATCH,True,False,,False
+0xa23850,PlaneColliderWrapper.cpp,non-virtual thunk to CPlaneColliderWrapper::~CPlaneColliderWrapper(),MATCH,True,False,,False
+0xa23860,PlaneColliderWrapper.cpp,non-virtual thunk to CPlaneColliderWrapper::~CPlaneColliderWrapper(),MATCH,True,False,,False
+0xa23870,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::~CPlaneColliderWrapper(),MATCH,True,False,,False
+0xa24340,PlaneColliderWrapper.cpp,CPlaneColliderWrapper::CPlaneColliderWrapper(CResourceManager*),MISSING,False,False,,False
+0xa24450,PlaneColliderWrapper.cpp,__tcf_8,DIFF,False,False,,False
+0xa244e0,PlaneColliderWrapper.cpp,__tcf_7,DIFF,False,False,,False
+0xa24570,PlaneColliderWrapper.cpp,__tcf_6,DIFF,False,False,,False
+0xa24600,PlaneColliderWrapper.cpp,__tcf_5,DIFF,False,False,,False
+0xa24670,PlaneColliderWrapper.cpp,__tcf_4,DIFF,False,False,,False
+0xa24700,PlaneColliderWrapper.cpp,__tcf_3,DIFF,False,False,,False
+0xa24790,PlaneColliderWrapper.cpp,__tcf_0,DIFF,False,False,,False
+0xa24800,PlaneColliderWrapper.cpp,__tcf_2,DIFF,False,False,,False
+0xa24890,PlaneColliderWrapper.cpp,__tcf_1,DIFF,False,False,,False
+0xa24920,ScaleWrapper.cpp,"CScaleWrapper::setDynamicPropZScale(float const*, unsigned int)",MISSING,False,False,,False
+0xa24940,ScaleWrapper.cpp,CScaleWrapper::getDynamicPropZScale(unsigned int&),MISSING,False,False,,False
+0xa24960,ScaleWrapper.cpp,CScaleWrapper::getDynamicPropYScale(unsigned int&),MATCH,True,False,,False
+0xa24980,ScaleWrapper.cpp,CScaleWrapper::getDynamicPropXScale(unsigned int&),MISSING,False,False,,False
+0xa249a0,ScaleWrapper.cpp,"CScaleWrapper::setDynamicPropYScale(float const*, unsigned int)",MATCH,True,False,,False
+0xa249c0,ScaleWrapper.cpp,"CScaleWrapper::setDynamicPropXScale(float const*, unsigned int)",MISSING,False,False,,False
+0xa249e0,ScaleWrapper.cpp,CScaleWrapper::~CScaleWrapper(),MATCH,True,False,,False
+0xa24a00,ScaleWrapper.cpp,non-virtual thunk to CScaleWrapper::~CScaleWrapper(),MATCH,True,False,,False
+0xa24a10,ScaleWrapper.cpp,non-virtual thunk to CScaleWrapper::~CScaleWrapper(),MATCH,True,False,,False
+0xa24a20,ScaleWrapper.cpp,CScaleWrapper::~CScaleWrapper(),MATCH,True,False,,False
+0xa251f0,ScaleWrapper.cpp,CScaleWrapper::CScaleWrapper(CResourceManager*),MATCH,True,False,,False
+0xa25740,SineForceWrapper.cpp,CSineForceWrapper::~CSineForceWrapper(),MATCH,True,False,,False
+0xa25760,SineForceWrapper.cpp,non-virtual thunk to CSineForceWrapper::~CSineForceWrapper(),MATCH,True,False,,False
+0xa25770,SineForceWrapper.cpp,non-virtual thunk to CSineForceWrapper::~CSineForceWrapper(),MATCH,True,False,,False
+0xa25780,SineForceWrapper.cpp,CSineForceWrapper::~CSineForceWrapper(),MATCH,True,False,,False
+0xa25f50,SineForceWrapper.cpp,CSineForceWrapper::CSineForceWrapper(CResourceManager*),MATCH,True,False,,False
+0xa26450,SphereColliderWrapper.cpp,CSphereColliderWrapper::updateCircle(),MATCH,True,False,,False
+0xa26460,SphereColliderWrapper.cpp,CSphereColliderWrapper::positionUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
+0xa26470,SphereColliderWrapper.cpp,CSphereColliderWrapper::~CSphereColliderWrapper(),MATCH,True,False,,False
+0xa26490,SphereColliderWrapper.cpp,non-virtual thunk to CSphereColliderWrapper::~CSphereColliderWrapper(),MATCH,True,False,,False
+0xa264a0,SphereColliderWrapper.cpp,non-virtual thunk to CSphereColliderWrapper::~CSphereColliderWrapper(),MATCH,True,False,,False
+0xa264b0,SphereColliderWrapper.cpp,CSphereColliderWrapper::~CSphereColliderWrapper(),MATCH,True,False,,False
+0xa26f80,SphereColliderWrapper.cpp,CSphereColliderWrapper::CSphereColliderWrapper(CResourceManager*),MATCH,True,False,,False
+0xa27040,SphereColliderWrapper.cpp,__tcf_8,DIFF,False,False,,False
+0xa270d0,SphereColliderWrapper.cpp,__tcf_7,DIFF,False,False,,False
+0xa27160,SphereColliderWrapper.cpp,__tcf_6,DIFF,False,False,,False
+0xa271f0,SphereColliderWrapper.cpp,__tcf_5,DIFF,False,False,,False
+0xa27260,SphereColliderWrapper.cpp,__tcf_4,DIFF,False,False,,False
+0xa272f0,SphereColliderWrapper.cpp,__tcf_3,DIFF,False,False,,False
+0xa27380,SphereColliderWrapper.cpp,__tcf_0,DIFF,False,False,,False
+0xa273f0,SphereColliderWrapper.cpp,__tcf_2,DIFF,False,False,,False
+0xa27480,SphereColliderWrapper.cpp,__tcf_1,DIFF,False,False,,False
+0xa27510,TextureAnimateWrapper.cpp,"CTextureAnimateWrapper::setDynamicPropAnimationSpeed(float const*, unsigned int)",MATCH,True,False,,False
+0xa27530,TextureAnimateWrapper.cpp,CTextureAnimateWrapper::getDynamicPropAnimationSpeed(unsigned int&),MISSING,False,False,,False
+0xa27550,TextureAnimateWrapper.cpp,CTextureAnimateWrapper::~CTextureAnimateWrapper(),MATCH,True,False,,False
+0xa27570,TextureAnimateWrapper.cpp,non-virtual thunk to CTextureAnimateWrapper::~CTextureAnimateWrapper(),MATCH,True,False,,False
+0xa27580,TextureAnimateWrapper.cpp,non-virtual thunk to CTextureAnimateWrapper::~CTextureAnimateWrapper(),MATCH,True,False,,False
+0xa27590,TextureAnimateWrapper.cpp,CTextureAnimateWrapper::~CTextureAnimateWrapper(),MATCH,True,False,,False
+0xa27d60,TextureAnimateWrapper.cpp,CTextureAnimateWrapper::CTextureAnimateWrapper(CResourceManager*),MATCH,True,False,,False
+0xa28260,TextureRotateWrapper.cpp,"CTextureRotateWrapper::setDynamicPropRotation(float const*, unsigned int)",MISSING,False,False,,False
+0xa28280,TextureRotateWrapper.cpp,CTextureRotateWrapper::getDynamicPropRotation(unsigned int&),MISSING,False,False,,False
+0xa282a0,TextureRotateWrapper.cpp,"CTextureRotateWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)",MISSING,False,False,,False
+0xa282c0,TextureRotateWrapper.cpp,CTextureRotateWrapper::getDynamicPropRotationSpeed(unsigned int&),MISSING,False,False,,False
+0xa282e0,TextureRotateWrapper.cpp,CTextureRotateWrapper::~CTextureRotateWrapper(),MATCH,True,False,,False
+0xa28300,TextureRotateWrapper.cpp,non-virtual thunk to CTextureRotateWrapper::~CTextureRotateWrapper(),MATCH,True,False,,False
+0xa28310,TextureRotateWrapper.cpp,non-virtual thunk to CTextureRotateWrapper::~CTextureRotateWrapper(),MATCH,True,False,,False
+0xa28320,TextureRotateWrapper.cpp,CTextureRotateWrapper::~CTextureRotateWrapper(),MATCH,True,False,,False
+0xa28af0,TextureRotateWrapper.cpp,CTextureRotateWrapper::CTextureRotateWrapper(CResourceManager*),MATCH,True,False,,False
+0xa28ff0,VortexWrapper.cpp,"CVortexWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)",MISSING,False,False,,False
+0xa29010,VortexWrapper.cpp,CVortexWrapper::getDynamicPropRotationSpeed(unsigned int&),MISSING,False,False,,False
+0xa29030,VortexWrapper.cpp,CVortexWrapper::~CVortexWrapper(),MATCH,True,False,,False
+0xa29050,VortexWrapper.cpp,non-virtual thunk to CVortexWrapper::~CVortexWrapper(),MATCH,True,False,,False
+0xa29060,VortexWrapper.cpp,non-virtual thunk to CVortexWrapper::~CVortexWrapper(),MATCH,True,False,,False
+0xa29070,VortexWrapper.cpp,CVortexWrapper::~CVortexWrapper(),MATCH,True,False,,False
+0xa29840,VortexWrapper.cpp,CVortexWrapper::CVortexWrapper(CResourceManager*),MISSING,False,False,,False
+0xa29d70,Particle.cpp,"CParticle::SetParticleDirection(Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xa29d80,Particle.cpp,CParticle::forceParticleUpdate(float),MISSING,False,False,,False
+0xa29e40,Particle.cpp,CParticle::getAllEmitters(TArrayList<ParticleUniverse::ParticleEmitter*>&),MISSING,False,False,,False
+0xa2a060,Particle.cpp,CParticle::Resume(),MISSING,False,False,,False
+0xa2a0d0,Particle.cpp,CParticle::Pause(),MISSING,False,False,,False
+0xa2a140,Particle.cpp,CParticle::looping(),MISSING,False,False,,False
+0xa2a290,Particle.cpp,CParticle::Stop(bool),MISSING,False,False,,False
+0xa2a620,Particle.cpp,CParticle::Start(),MISSING,False,False,,False
+0xa2ab30,Particle.cpp,CParticle::getNumberOfParticlesUpdating(bool),MISSING,False,False,,False
+0xa2ac40,Particle.cpp,"non-virtual thunk to CParticle::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xa2ac50,Particle.cpp,"CParticle::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",DIFF,False,False,,False
+0xa2acc0,Particle.cpp,"CParticle::CParticle(CParticlePreloader*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CResourceManager*)",MISSING,False,False,,False
+0xa2ad90,Particle.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xa301f0,Particle.cpp,__tcf_1,DIFF,False,False,,False
+0xa302f0,Particle.cpp,__tcf_11,DIFF,False,False,,False
+0xa30360,Particle.cpp,__tcf_10,DIFF,False,False,,False
+0xa303f0,Particle.cpp,__tcf_9,DIFF,False,False,,False
+0xa30480,Particle.cpp,__tcf_8,DIFF,False,False,,False
+0xa304f0,Particle.cpp,__tcf_7,DIFF,False,False,,False
+0xa30780,Particle.cpp,__tcf_5,DIFF,False,False,,False
+0xa30810,Particle.cpp,__tcf_4,DIFF,False,False,,False
+0xa308a0,Particle.cpp,__tcf_3,DIFF,False,False,,False
+0xa30930,Particle.cpp,__tcf_2,DIFF,False,False,,False
+0xa309a0,Particle.cpp,__tcf_0,DIFF,False,False,,False
+0xa30a30,Particle.cpp,__tcf_6,DIFF,False,False,,False
+0xa30ac0,Particle.cpp,__tcf_13,DIFF,False,False,,False
+0xa30b50,Particle.cpp,__tcf_12,DIFF,False,False,,False
+0xa30be0,Particle.cpp,CParticle::~CParticle(),DIFF,False,False,,False
+0xa30d60,Particle.cpp,non-virtual thunk to CParticle::~CParticle(),MATCH,True,False,,False
+0xa30d70,Particle.cpp,non-virtual thunk to CParticle::~CParticle(),MATCH,True,False,,False
+0xa30d80,Particle.cpp,CParticle::~CParticle(),MATCH,True,False,,False
+0xa30da0,Particle.cpp,"getDynPropFromArray(float const*, unsigned int)",MISSING,False,False,,False
+0xa32880,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::getIsDoneEmitting(),MISSING,False,False,,False
+0xa328b0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::starting(),MATCH,True,False,,False
+0xa328c0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::positionUpdated(Ogre::Vector3 const&),MISSING,False,False,,False
+0xa328e0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setBoxDepth(float),MATCH,True,False,,False
+0xa32910,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setBoxHeight(float),MATCH,True,False,,False
+0xa32940,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setBoxWidth(float),MISSING,False,False,,False
+0xa32970,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setPositionEnd(Ogre::Vector3 const&),MISSING,False,False,,False
+0xa329c0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setMaxLineDeviation(float),MISSING,False,False,,False
+0xa329f0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setMaxLineIncrement(float),MISSING,False,False,,False
+0xa32a20,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setMinLineIncrement(float),DIFF,False,False,,False
+0xa32a50,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setParentTechniqueWrapper(CParticleTechWrapper*),MISSING,False,False,,False
+0xa32ae0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setParentGuid(long long),MISSING,False,False,,False
+0xa32b90,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::destroyEmitter(),MISSING,False,False,,False
+0xa32c10,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setKeepLocal(bool),MISSING,False,False,,False
+0xa32c70,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setRadius(float),MATCH,True,False,,False
+0xa32ca0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setCircleFixedSize(bool),MISSING,False,False,,False
+0xa32cd0,ParticleEmitterWrapper.cpp,"CParticleEmitterWrapper::setCircleStep(float const*, unsigned int)",MISSING,False,False,,False
+0xa32d70,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::getCircleStep(unsigned int&),MISSING,False,False,,False
+0xa32d80,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::getCircleDegrees(unsigned int&),MISSING,False,False,,False
+0xa32d90,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::getMaxRadius(unsigned int&),MISSING,False,False,,False
+0xa32da0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::getMinRadius(unsigned int&),MISSING,False,False,,False
+0xa32db0,ParticleEmitterWrapper.cpp,"CParticleEmitterWrapper::setCircleDegrees(float const*, unsigned int)",MISSING,False,False,,False
+0xa32e50,ParticleEmitterWrapper.cpp,"CParticleEmitterWrapper::setMaxRadius(float const*, unsigned int)",MISSING,False,False,,False
+0xa32ef0,ParticleEmitterWrapper.cpp,"CParticleEmitterWrapper::setMinRadius(float const*, unsigned int)",MISSING,False,False,,False
+0xa32f90,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::~CParticleEmitterWrapper(),DIFF,False,False,,False
+0xa33070,ParticleEmitterWrapper.cpp,non-virtual thunk to CParticleEmitterWrapper::~CParticleEmitterWrapper(),MATCH,True,False,,False
+0xa33080,ParticleEmitterWrapper.cpp,non-virtual thunk to CParticleEmitterWrapper::~CParticleEmitterWrapper(),MATCH,True,False,,False
+0xa33090,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::~CParticleEmitterWrapper(),MATCH,True,False,,False
+0xa340b0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::CParticleEmitterWrapper(CResourceManager*),MISSING,False,False,,False
+0xa344d0,ParticleEmitterWrapper.cpp,CParticleEmitterWrapper::setEmitterType(int),MISSING,False,False,,False
+0xa34e60,ParticlePreloader.cpp,CParticlePreloader::getSingleton(),MATCH,True,True,handoff/recovered-pass10/snippets/ParticlePreloader.cpp/0xa34e60.cpp,False
+0xa34e70,ParticlePreloader.cpp,CParticlePreloader::ReloadEditorParticles(),MATCH,True,True,handoff/recovered-pass10/snippets/ParticlePreloader.cpp/0xa34e70.cpp,False
+0xa34e80,ParticlePreloader.cpp,CParticlePreloader::getParticleCacheCount(),MISSING,False,False,,False
+0xa34ec0,ParticlePreloader.cpp,CParticlePreloader::aggressiveUnloadParticles(),MATCH,True,True,handoff/recovered-pass10/snippets/ParticlePreloader.cpp/0xa34ec0.cpp,False
+0xa34f50,ParticlePreloader.cpp,CParticlePreloader::unloadParticlesOnLevelUnload(),MATCH,True,True,handoff/recovered-pass10/snippets/ParticlePreloader.cpp/0xa34f50.cpp,False
+0xa36100,ParticlePreloader.cpp,CParticlePreloader::returnParticleCache(CParticleCache*),MISSING,False,False,,False
+0xa36220,ParticlePreloader.cpp,"CParticlePreloader::createParticleCache(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa37b80,ParticlePreloader.cpp,"CParticlePreloader::getFileNames(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False
+0xa37d70,ParticlePreloader.cpp,"CParticlePreloader::getParticleNameByFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa37f50,ParticlePreloader.cpp,"CParticlePreloader::GetParticle(CResourceManager*, wchar_t const*)",MISSING,False,False,,False
+0xa38040,ParticlePreloader.cpp,"CParticlePreloader::getParticleCache(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa383a0,ParticlePreloader.cpp,CParticlePreloader::clean(),MISSING,False,False,,False
+0xa38680,ParticlePreloader.cpp,CParticlePreloader::~CParticlePreloader(),MISSING,False,False,,False
+0xa38770,ParticlePreloader.cpp,CParticlePreloader::~CParticlePreloader(),MISSING,False,False,,False
+0xa38790,ParticlePreloader.cpp,CParticlePreloader::CParticlePreloader(CResourceSettings*),MISSING,False,False,,False
+0xa389d0,ParticlePreloader.cpp,"CParticlePreloader::LoadParticle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa3acc0,ParticlePreloader.cpp,CParticlePreloader::LoadParticle(CDataGroup*),MISSING,False,False,,False
+0xa3b1f0,ParticlePreloader.cpp,CParticlePreloader::ReloadParticles(),MISSING,False,False,,False
+0xa3b3a0,ParticlePreloader.cpp,"CParticlePreloader::LoadParticle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa3c080,StringTranslate.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&)",DIFF,False,False,,False
+0xa3c1c0,StringTranslate.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&)",MATCH,False,False,,False
+0xa3c300,StringTranslate.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&)",MATCH,False,False,,False
+0xa3c530,Mod.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*)",MATCH,False,False,,False
+0xa3c600,ParticleTechWrapper.cpp,CParticleTechWrapper::setParentGuid(long long),MATCH,True,False,,False
+0xa3c610,ParticleTechWrapper.cpp,CParticleTechWrapper::setEnabled(bool),MATCH,True,False,,False
+0xa3c620,ParticleTechWrapper.cpp,CParticleTechWrapper::setBillboardOrigin(unsigned int),MISSING,False,False,,False
+0xa3c650,ParticleTechWrapper.cpp,CParticleTechWrapper::isPlaying(),MISSING,False,False,,False
+0xa3c7b0,ParticleTechWrapper.cpp,CParticleTechWrapper::removeAffector(CAffectorWrapper*),MISSING,False,False,,False
+0xa3c8d0,ParticleTechWrapper.cpp,CParticleTechWrapper::addAffector(CAffectorWrapper*),MISSING,False,False,,False
+0xa3cab0,ParticleTechWrapper.cpp,CParticleTechWrapper::removeEmitter(CParticleEmitterWrapper*),MISSING,False,False,,False
+0xa3cbd0,ParticleTechWrapper.cpp,CParticleTechWrapper::addEmitter(CParticleEmitterWrapper*),MISSING,False,False,,False
+0xa3cdc0,ParticleTechWrapper.cpp,CParticleTechWrapper::setFlipbookHeight(int),MISSING,False,False,,False
+0xa3cde0,ParticleTechWrapper.cpp,CParticleTechWrapper::setFlipbookWidth(int),MISSING,False,False,,False
+0xa3ce00,ParticleTechWrapper.cpp,CParticleTechWrapper::setRibbonLocalTrail(bool),MISSING,False,False,,False
+0xa3ce30,ParticleTechWrapper.cpp,CParticleTechWrapper::setRibbonEndFade(bool),MISSING,False,False,,False
+0xa3cf20,ParticleTechWrapper.cpp,CParticleTechWrapper::setRibbonMaxChains(unsigned int),MISSING,False,False,,False
+0xa3cf50,ParticleTechWrapper.cpp,CParticleTechWrapper::setRibbonLength(float),MISSING,False,False,,False
+0xa3cf80,ParticleTechWrapper.cpp,CParticleTechWrapper::setRibbonWidth(float),MISSING,False,False,,False
+0xa3cfb0,ParticleTechWrapper.cpp,CParticleTechWrapper::setBillboardRotationType(unsigned int),MISSING,False,False,,False
+0xa3cfe0,ParticleTechWrapper.cpp,CParticleTechWrapper::setRenderQueue(unsigned int),MISSING,False,False,,False
+0xa3d040,ParticleTechWrapper.cpp,CParticleTechWrapper::setSortIndex(unsigned int),MISSING,False,False,,False
+0xa3d070,ParticleTechWrapper.cpp,CParticleTechWrapper::setAsLight(bool),MATCH,True,False,,False
+0xa3d0a0,ParticleTechWrapper.cpp,CParticleTechWrapper::setSorts(bool),MISSING,False,False,,False
+0xa3d110,ParticleTechWrapper.cpp,CParticleTechWrapper::start(),MISSING,False,False,,False
+0xa3d230,ParticleTechWrapper.cpp,CParticleTechWrapper::forceStop(),MATCH,True,False,,False
+0xa3d240,ParticleTechWrapper.cpp,CParticleTechWrapper::stop(),MISSING,False,False,,False
+0xa3d360,ParticleTechWrapper.cpp,"non-virtual thunk to CParticleTechWrapper::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xa3d370,ParticleTechWrapper.cpp,"CParticleTechWrapper::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",DIFF,False,False,,False
+0xa3d3c0,ParticleTechWrapper.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xa43230,ParticleTechWrapper.cpp,__tcf_13,DIFF,False,False,,False
+0xa435c0,ParticleTechWrapper.cpp,__tcf_12,DIFF,False,False,,False
+0xa43630,ParticleTechWrapper.cpp,__tcf_11,DIFF,False,False,,False
+0xa436c0,ParticleTechWrapper.cpp,__tcf_10,DIFF,False,False,,False
+0xa43750,ParticleTechWrapper.cpp,__tcf_9,DIFF,False,False,,False
+0xa437c0,ParticleTechWrapper.cpp,__tcf_8,DIFF,False,False,,False
+0xa43830,ParticleTechWrapper.cpp,__tcf_7,DIFF,False,False,,False
+0xa438c0,ParticleTechWrapper.cpp,__tcf_6,DIFF,False,False,,False
+0xa43950,ParticleTechWrapper.cpp,__tcf_5,DIFF,False,False,,False
+0xa439c0,ParticleTechWrapper.cpp,__tcf_4,DIFF,False,False,,False
+0xa43a50,ParticleTechWrapper.cpp,__tcf_3,DIFF,False,False,,False
+0xa43ae0,ParticleTechWrapper.cpp,__tcf_0,DIFF,False,False,,False
+0xa43ce0,ParticleTechWrapper.cpp,__tcf_2,DIFF,False,False,,False
+0xa43d70,ParticleTechWrapper.cpp,__tcf_1,DIFF,False,False,,False
+0xa43e00,ParticleTechWrapper.cpp,CParticleTechWrapper::~CParticleTechWrapper(),DIFF,False,False,,False
+0xa44170,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa44180,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa44190,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441a0,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441b0,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441c0,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441d0,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441e0,ParticleTechWrapper.cpp,non-virtual thunk to CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa441f0,ParticleTechWrapper.cpp,CParticleTechWrapper::~CParticleTechWrapper(),MATCH,True,False,,False
+0xa44210,ParticleTechWrapper.cpp,CParticleTechWrapper::createTextureMaterial(),MISSING,False,False,,False
+0xa45110,ParticleTechWrapper.cpp,CParticleTechWrapper::setActivated(bool),MATCH,True,False,,False
+0xa451a0,ParticleTechWrapper.cpp,CParticleTechWrapper::setDepthCheck(bool),MATCH,True,False,,False
+0xa451d0,ParticleTechWrapper.cpp,CParticleTechWrapper::setParticleRenderStyle(unsigned int),MATCH,True,False,,False
+0xa45200,ParticleTechWrapper.cpp,"CParticleTechWrapper::setTexturePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa454a0,ParticleTechWrapper.cpp,CParticleTechWrapper::setVScroll(float),MATCH,True,False,,False
+0xa454f0,ParticleTechWrapper.cpp,CParticleTechWrapper::setUScroll(float),MATCH,True,False,,False
+0xa45540,ParticleTechWrapper.cpp,"CParticleTechWrapper::setRenderType(unsigned int, bool)",MISSING,False,False,,False
+0xa460e0,ParticleTechWrapper.cpp,"CParticleTechWrapper::setModelPath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa46260,ParticleTechWrapper.cpp,CParticleTechWrapper::CParticleTechWrapper(CResourceManager*),MISSING,False,False,,False
+0xa465c0,ParticleTechWrapper.cpp,CParticleTechWrapper::setDepthBias(float),MATCH,True,False,,False
+0xa466c0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::free(),MATCH,True,False,,False
+0xa466d0,ParticleWrapper.cpp,CParticleWrapper::free(),MATCH,True,False,,False
+0xa466e0,ParticleWrapper.cpp,CParticleWrapper::stop(),MATCH,True,False,,False
+0xa46730,ParticleWrapper.cpp,CParticleWrapper::hideVisualSphereMesh(),MATCH,True,False,,False
+0xa46780,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::resourceFreeing(),MATCH,True,False,,False
+0xa46790,ParticleWrapper.cpp,CParticleWrapper::resourceFreeing(),DIFF,False,False,,False
+0xa468f0,ParticleWrapper.cpp,"non-virtual thunk to CParticleWrapper::resourceInit(CResourceManager*, CDataGroup*)",MATCH,True,False,,False
+0xa46900,ParticleWrapper.cpp,"CParticleWrapper::resourceInit(CResourceManager*, CDataGroup*)",DIFF,False,False,,False
+0xa46910,ParticleWrapper.cpp,CParticleWrapper::isPlaying(),MISSING,False,False,,False
+0xa46990,ParticleWrapper.cpp,CParticleWrapper::updateParticleSystem(float),MISSING,False,False,,False
+0xa469f0,ParticleWrapper.cpp,CParticleWrapper::~CParticleWrapper(),DIFF,False,False,,False
+0xa46a90,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46aa0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46ab0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46ac0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46ad0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46ae0,ParticleWrapper.cpp,non-virtual thunk to CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa46af0,ParticleWrapper.cpp,CParticleWrapper::~CParticleWrapper(),MATCH,True,False,,False
+0xa490b0,ParticleWrapper.cpp,CParticleWrapper::start(),MISSING,False,False,,False
+0xa497f0,ParticleWrapper.cpp,CParticleWrapper::showVisualSphereMesh(),MISSING,False,False,,False
+0xa499f0,ParticleWrapper.cpp,CParticleWrapper::createParticleSystem(),MISSING,False,False,,False
+0xa49cf0,ParticleWrapper.cpp,CParticleWrapper::CParticleWrapper(CResourceManager*),MISSING,False,False,,False
+0xa49ef0,WeaponTrail.cpp,CWeaponTrail::clear(),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49ef0.cpp,False
+0xa49f00,WeaponTrail.cpp,CWeaponTrail::setVisible(bool),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49f00.cpp,False
+0xa49f70,WeaponTrail.cpp,CWeaponTrail::setWeaponEntity(Ogre::Entity*),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49f70.cpp,False
+0xa49fb0,WeaponTrail.cpp,CWeaponTrail::setWeaponNode(Ogre::Node*),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49fb0.cpp,False
+0xa49fc0,WeaponTrail.cpp,CWeaponTrail::setSegmentStartInitialColourValue(Ogre::ColourValue const&),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49fc0.cpp,False
+0xa49fd0,WeaponTrail.cpp,CWeaponTrail::getSegmentStartInitialColourValue() const,MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49fd0.cpp,False
+0xa49fe0,WeaponTrail.cpp,CWeaponTrail::setSegmentEndInitialColourValue(Ogre::ColourValue const&),MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49fe0.cpp,False
+0xa49ff0,WeaponTrail.cpp,CWeaponTrail::getSegmentEndInitialColourValue() const,MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa49ff0.cpp,False
+0xa4a000,WeaponTrail.cpp,CWeaponTrail::isActive() const,MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa4a000.cpp,False
+0xa4a010,WeaponTrail.cpp,CWeaponTrail::isVisible() const,MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa4a010.cpp,False
+0xa4a020,WeaponTrail.cpp,CWeaponTrail::setActive(bool),MISSING,False,False,,False
+0xa4a090,WeaponTrail.cpp,"CWeaponTrail::setMaterialName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/WeaponTrail.cpp/0xa4a090.cpp,False
+0xa4a0f0,WeaponTrail.cpp,"CWeaponTrail::fadeOut(float, bool)",MISSING,False,False,,False
+0xa4a470,WeaponTrail.cpp,"CWeaponTrail::update(float, Ogre::Vector3*, Ogre::Vector3*, bool, CSceneNodeObject*)",MISSING,False,False,,False
+0xa4aed0,WeaponTrail.cpp,CWeaponTrail::uninit(),MISSING,False,False,,False
+0xa4c900,WeaponTrail.cpp,CWeaponTrail::init(),MISSING,False,False,,False
+0xa4cb20,WeaponTrail.cpp,"CWeaponTrail::CWeaponTrail(Ogre::SceneManager*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int, float)",MISSING,False,False,,False
+0xa4cc90,WeaponTrail.cpp,CWeaponTrail::~CWeaponTrail(),MISSING,False,False,,False
+0xa4cdb0,WeaponTrail.cpp,CWeaponTrail::~CWeaponTrail(),MISSING,False,False,,False
+0xa4cdd0,WeaponTrail.cpp,"CWeaponTrail::CWeaponTrail(Ogre::SceneManager*, CDataGroup*)",MISSING,False,False,,False
+0xa4d5d0,AnimationSet.cpp,CAnimationSet::CAnimationSet(),MATCH,True,False,,False
+0xa4d640,AnimationSet.cpp,global constructors keyed to CAnimationSet::CAnimationSet(),DIFF,False,False,,False
+0xa4db50,AnimationSet.cpp,CAnimationSet::clear(),MATCH,True,True,handoff/recovered-pass10/snippets/AnimationSet.cpp/0xa4db50.cpp,False
+0xa4dd50,AnimationSet.cpp,CAnimationSet::~CAnimationSet(),MISSING,False,False,,False
+0xa4e140,AnimationSet.cpp,CAnimationSet::~CAnimationSet(),MISSING,False,False,,False
+0xa51d40,GraphManager.cpp,CGraphManager::getSingleton(),MATCH,True,False,,False
+0xa51d50,GraphManager.cpp,"global constructors keyed to CGraphManager::CGraphManager(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa51e00,GraphManager.cpp,CGraphManager::clear(),MATCH,True,False,,False
+0xa51ea0,GraphManager.cpp,"CGraphManager::getGraphByFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xa51fa0,GraphManager.cpp,"CGraphManager::getGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xa520a0,GraphManager.cpp,"CGraphManager::loadGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
+0xa52480,GraphManager.cpp,CGraphManager::reload(),DIFF,False,False,,False
+0xa52720,GraphManager.cpp,"CGraphManager::CGraphManager(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xa52920,GraphManager.cpp,CGraphManager::~CGraphManager(),MATCH,True,False,,False
+0xa52a90,GraphManager.cpp,CGraphManager::~CGraphManager(),MATCH,True,False,,False
+0xa52ab0,GraphManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >*)",MATCH,False,False,,False
+0xa52b50,GraphManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> const&)",DIFF,False,False,,False
+0xa52c70,GraphManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> const&)",MATCH,False,False,,False
+0xa52db0,GraphManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> const&)",MATCH,False,False,,False
+0xa52fe0,GraphManager.cpp,"std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CGraph*, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CGraph*> > >::operator[](std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,False,False,,False
+0xa54460,MasterResourceManager.cpp,CMasterResourceManager::destroyStash(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54460.cpp,False
+0xa54490,MasterResourceManager.cpp,CMasterResourceManager::getSingleton(),MATCH,True,False,,False
+0xa544a0,MasterResourceManager.cpp,CMasterResourceManager::getCollisionModel(CCollisionModel*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa544a0.cpp,False
+0xa544f0,MasterResourceManager.cpp,CMasterResourceManager::removeCollisionModel(CCollisionModel*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa544f0.cpp,False
+0xa54500,MasterResourceManager.cpp,CMasterResourceManager::getBatchModel(CGenericModel*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54500.cpp,False
+0xa54550,MasterResourceManager.cpp,CMasterResourceManager::removeBatchModel(CGenericModel*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54550.cpp,False
+0xa54560,MasterResourceManager.cpp,CMasterResourceManager::getAnimationSet(CAnimationSet*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54560.cpp,False
+0xa545b0,MasterResourceManager.cpp,CMasterResourceManager::removeAnimationSet(CAnimationSet*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa545b0.cpp,False
+0xa545c0,MasterResourceManager.cpp,CMasterResourceManager::removeUnused(),MISSING,False,False,,False
+0xa54790,MasterResourceManager.cpp,CMasterResourceManager::removeAll(),MISSING,False,False,,False
+0xa548f0,MasterResourceManager.cpp,CMasterResourceManager::reloadSoundBankData(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa548f0.cpp,False
+0xa54930,MasterResourceManager.cpp,CMasterResourceManager::getMaxFameLevel(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54930.cpp,False
+0xa54940,MasterResourceManager.cpp,CMasterResourceManager::fameGate(int),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa54940.cpp,False
+0xa549c0,MasterResourceManager.cpp,CMasterResourceManager::getMaxLevel(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa549c0.cpp,False
+0xa549d0,MasterResourceManager.cpp,CMasterResourceManager::experienceGate(int),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa549d0.cpp,False
+0xa54a50,MasterResourceManager.cpp,BatchModelRef::BatchModelRef(),MATCH,True,False,,False
+0xa54a80,MasterResourceManager.cpp,CollisionModelRef::CollisionModelRef(),MATCH,True,False,,False
+0xa5c700,MasterResourceManager.cpp,"CMasterResourceManager::getCollisionModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5c700.cpp,False
+0xa5c780,MasterResourceManager.cpp,"CMasterResourceManager::getAnimationSet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5c780.cpp,False
+0xa5c800,MasterResourceManager.cpp,"CMasterResourceManager::getBatchModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5c800.cpp,False
+0xa5c880,MasterResourceManager.cpp,CMasterResourceManager::createParticleReloader(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5c880.cpp,False
+0xa5c900,MasterResourceManager.cpp,CMasterResourceManager::loadParticles(),MISSING,False,False,,False
+0xa5cc80,MasterResourceManager.cpp,CMasterResourceManager::addAnimationSet(CAnimationSet*),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5cc80.cpp,False
+0xa5dba0,MasterResourceManager.cpp,CMasterResourceManager::reloadResources(),MISSING,False,False,,False
+0xa5dd10,MasterResourceManager.cpp,BatchModelRef::~BatchModelRef(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5dd10.cpp,False
+0xa5ddb0,MasterResourceManager.cpp,BatchModelRef::~BatchModelRef(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5dd10.cpp,False
+0xa5ddd0,MasterResourceManager.cpp,CollisionModelRef::~CollisionModelRef(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5ddd0.cpp,False
+0xa5de70,MasterResourceManager.cpp,CollisionModelRef::~CollisionModelRef(),MATCH,True,True,handoff/recovered-pass10/snippets/MasterResourceManager.cpp/0xa5ddd0.cpp,False
+0xa5de90,MasterResourceManager.cpp,CMasterResourceManager::CMasterResourceManager(CSettings*),MISSING,False,False,,False
+0xa5eb40,MasterResourceManager.cpp,CMasterResourceManager::~CMasterResourceManager(),MISSING,False,False,,False
+0xa5f0c0,MasterResourceManager.cpp,CMasterResourceManager::~CMasterResourceManager(),MISSING,False,False,,False
+0xa5f0e0,MasterResourceManager.cpp,"CMasterResourceManager::addResourceLocation(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool)",MISSING,False,False,,False
+0xa5f410,MasterResourceManager.cpp,"CMasterResourceManager::addBatchModel(CResourceManager*, Ogre::SceneManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool&)",MISSING,False,False,,False
+0xa5f850,MasterResourceManager.cpp,"CMasterResourceManager::addCollisionModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa5fdd0,MasterResourceManager.cpp,"std::vector<CAnimationSet*, std::allocator<CAnimationSet*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CAnimationSet**, std::vector<CAnimationSet*, std::allocator<CAnimationSet*> > >, CAnimationSet* const&)",MATCH,False,False,,False
+0xa600f0,ResourceSettings.cpp,global constructors keyed to KRESOURCESETTING_S_MASTERRESOURCEFILE,MATCH,False,False,,False
+0xa60160,ResourceSettings.cpp,CResourceSettings::~CResourceSettings(),MATCH,True,False,,False
+0xa60170,ResourceSettings.cpp,CResourceSettings::~CResourceSettings(),MATCH,True,False,,False
+0xa60190,ResourceSettings.cpp,CResourceSettings::CResourceSettings(),DIFF,False,False,,False
+0xa60e90,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::getSingleton(),MATCH,True,False,,False
+0xa60ea0,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuid(long long),DIFF,False,False,,False
+0xa60f00,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::getDefaultGuid(),MATCH,True,False,,False
+0xa60f30,RoomPieceDataInformation.cpp,"CRoomPieceDataInformation::getRoomPieceCoreDataByTileset(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CRoomPieceDataInformation::CRoomPieceCoreData*>&)",MATCH,True,False,,False
+0xa60f40,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuidByClosestGuid(long long),MISSING,False,False,,False
+0xa61000,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::DestroyRoomData(),MATCH,True,False,,False
+0xa61070,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::~CRoomPieceDataInformation(),MATCH,True,False,,False
+0xa610f0,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::~CRoomPieceDataInformation(),MATCH,True,False,,False
+0xa61570,RoomPieceDataInformation.cpp,"CRoomPieceDataInformation::ParseRoomPieceData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, int)",DIFF,False,False,,False
+0xa61f90,RoomPieceDataInformation.cpp,"CRoomPieceDataInformation::LoadSpecificLevelTileSet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False
+0xa62320,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::LoadRoomData(),MISSING,False,False,,False
+0xa62560,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::CRoomPieceDataInformation(CResourceSettings*),DIFF,False,False,,False
+0xa62660,RoomPieceDataInformation.cpp,"std::_Rb_tree<long long, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*>, std::_Select1st<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >, std::less<long long>, std::allocator<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> const&)",MATCH,False,False,,False
+0xa62720,RoomPieceDataInformation.cpp,"std::_Rb_tree<long long, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*>, std::_Select1st<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >, std::less<long long>, std::allocator<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> > >::_M_erase(std::_Rb_tree_node<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >*)",MATCH,False,False,,False
+0xa62760,RoomPieceDataInformation.cpp,"std::_Rb_tree<long long, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*>, std::_Select1st<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >, std::less<long long>, std::allocator<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> > >::_M_insert_unique(std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> const&)",MATCH,False,False,,False
+0xa62810,RoomPieceDataInformation.cpp,"std::_Rb_tree<long long, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*>, std::_Select1st<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >, std::less<long long>, std::allocator<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> >, std::pair<long long const, CRoomPieceDataInformation::CRoomPieceCoreData*> const&)",MATCH,False,False,,False
+0xa62fe0,SoundBankDataInformation.cpp,CSoundBankDataInformation::getSoundDataObjectByGuid(long long),MATCH,True,False,,False
+0xa630a0,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundIndexInCategoryByName(unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa63140,SoundBankDataInformation.cpp,CSoundBankDataInformation::getSoundDataObjectByGuidThatIsClosest(long long),MATCH,True,False,,False
+0xa63200,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundNameByCategoryIndex(unsigned int, unsigned int)",DIFF,False,False,,False
+0xa632d0,SoundBankDataInformation.cpp,CSoundBankDataInformation::getCategoryNameByID(unsigned int),DIFF,False,False,,False
+0xa63330,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundDataObject(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa634b0,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getCategoryID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa63560,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundDataObject(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa63740,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False
+0xa63c00,SoundBankDataInformation.cpp,"CSoundBankDataInformation::getSoundNamesByCatgoryName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False
+0xa640f0,SoundBankDataInformation.cpp,CSoundBankDataInformation::createSoundData(CDataGroup*),MISSING,False,False,,False
+0xa64820,SoundBankDataInformation.cpp,CSoundBankDataInformation::~CSoundBankDataInformation(),MISSING,False,False,,False
+0xa649f0,SoundBankDataInformation.cpp,CSoundBankDataInformation::~CSoundBankDataInformation(),MISSING,False,False,,False
+0xa64a10,SoundBankDataInformation.cpp,"CSoundBankDataInformation::parseSoundData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xa65740,SoundBankDataInformation.cpp,CSoundBankDataInformation::reload(CResourceSettings*),DIFF,False,False,,False
+0xa65930,SoundBankDataInformation.cpp,CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*),DIFF,False,False,,False
+0xa65b20,SoundBankDataInformation.cpp,"std::_Rb_tree<long long, std::pair<long long const, CSoundData*>, std::_Select1st<std::pair<long long const, CSoundData*> >, std::less<long long>, std::allocator<std::pair<long long const, CSoundData*> > >::_M_erase(std::_Rb_tree_node<std::pair<long long const, CSoundData*> >*)",MATCH,False,False,,False
+0xa661f0,SoundBankDataInformation.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> >*)",MATCH,False,False,,False
+0xa66710,SoundBankDataInformation.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSoundData*, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> > > >, std::_Select1st<std::pair<unsigned int const, std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSoundData*, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> > > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSoundData*, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> > > > > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, std::map<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSoundData*, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSoundData*> > > > >*)",MATCH,False,False,,False
+0xa66a70,UnitThemes.cpp,CUnitThemes::getSingleton(),MATCH,True,False,,False
+0xa67550,UnitThemes.cpp,CUnitThemes::~CUnitThemes(),DIFF,False,False,,False
+0xa67670,UnitThemes.cpp,CUnitThemes::~CUnitThemes(),MATCH,True,False,,False
+0xa67690,UnitThemes.cpp,CUnitThemeParticle::load(CDataGroup*),MISSING,False,False,,False
+0xa67a00,UnitThemes.cpp,CUnitThemes::reload(),MISSING,False,False,,False
+0xa68370,UnitThemes.cpp,CUnitThemes::CUnitThemes(wchar_t const*),DIFF,False,False,,False
+0xa6ae80,SoundManager.cpp,"CSoundManager::fmodFileReadCallback(void*, void*, unsigned int, unsigned int*, void*)",MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6ae80.cpp,False
+0xa6aea0,SoundManager.cpp,"CSoundManager::fmodFileSeekCallback(void*, unsigned int, void*)",MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6aea0.cpp,False
+0xa6aee0,SoundManager.cpp,CSoundManager::releaseSound(CSoundInstance*),MISSING,False,False,,False
+0xa6af80,SoundManager.cpp,CSoundManager::getNumberOfChannelsPlaying(),MATCH,True,False,,False
+0xa6af90,SoundManager.cpp,CSoundManager::incrementSoundBank(),MATCH,True,False,,False
+0xa6afa0,SoundManager.cpp,"CSoundManager::fmodFileCloseCallback(void*, void*)",MATCH,True,False,,False
+0xa6aff0,SoundManager.cpp,CSoundManager::soundLoops(CSoundInstance*),MATCH,True,False,,False
+0xa6b030,SoundManager.cpp,"CSoundManager::findSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, SOUND_TYPE, bool, float, float)",MISSING,False,False,,False
+0xa6b1c0,SoundManager.cpp,CSoundManager::stopSound(int),MISSING,False,False,,False
+0xa6b240,SoundManager.cpp,CSoundManager::stopMusic(),MATCH,True,False,,False
+0xa6b280,SoundManager.cpp,CSoundManager::stopAllSounds(),MISSING,False,False,,False
+0xa6b300,SoundManager.cpp,"CSoundManager::set3DMinMaxDistance(int, float, float)",MISSING,False,False,,False
+0xa6b350,SoundManager.cpp,CSoundManager::isChannelPlaying(int),MISSING,False,False,,False
+0xa6b3a0,SoundManager.cpp,"CSoundManager::setSoundVolume(int, float)",MISSING,False,False,,False
+0xa6b3e0,SoundManager.cpp,"CSoundManager::setPauseSound(int, bool)",MISSING,False,False,,False
+0xa6b430,SoundManager.cpp,CSoundManager::getMusicFilePlaying(),MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6b430.cpp,False
+0xa6b460,SoundManager.cpp,CSoundManager::CSoundManager(bool),MATCH,True,False,,False
+0xa6b6e0,SoundManager.cpp,"CSoundManager::createSoundGroup(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6b6e0.cpp,False
+0xa6b710,SoundManager.cpp,CSoundManager::getMemoryInUse(),MATCH,True,False,,False
+0xa6b750,SoundManager.cpp,"CSoundManager::updateAudioLevels(float, float, bool, bool)",MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6b750.cpp,False
+0xa6bb10,SoundManager.cpp,CSoundInstance::clear(),MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6bb10.cpp,False
+0xa6bb90,SoundManager.cpp,CSoundManager::~CSoundManager(),MISSING,False,False,,False
+0xa6be70,SoundManager.cpp,CSoundManager::~CSoundManager(),MISSING,False,False,,False
+0xa6be90,SoundManager.cpp,CSoundInstance::~CSoundInstance(),MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6be90.cpp,False
+0xa6bf60,SoundManager.cpp,CSoundInstance::~CSoundInstance(),MATCH,True,True,handoff/recovered-pass10/snippets/SoundManager.cpp/0xa6be90.cpp,False
+0xa6bf80,SoundManager.cpp,"CSoundManager::queueSound(int, CSoundInstance*, float, float)",MISSING,False,False,,False
+0xa6c100,SoundManager.cpp,"CSoundManager::fmodFileOpenCallback(char const*, int, unsigned int*, void**, void**)",MISSING,False,False,,False
+0xa6c650,SoundManager.cpp,CSoundManager::releaseUnusedSounds(),MISSING,False,False,,False
+0xa6c880,SoundManager.cpp,CSoundManager::getSoundLength(CSoundInstance*),MISSING,False,False,,False
+0xa6ca20,SoundManager.cpp,"CSoundManager::playSound(CSoundInstance*, Ogre::SceneNode*, int, float)",MISSING,False,False,,False
+0xa6d270,SoundManager.cpp,"CSoundManager::update(Ogre::SceneNode*, Ogre::Vector3 const&, float)",MISSING,False,False,,False
+0xa6d4b0,SoundManager.cpp,"CSoundManager::createSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, SOUND_TYPE, bool, float, float)",MISSING,False,False,,False
+0xa6dc50,SoundManager.cpp,"CSoundManager::playMusic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, bool)",MISSING,False,False,,False
+0xa6e180,SoundManager.cpp,CSoundManager::dumpSounds(),MISSING,False,False,,False
+0xa6e820,SoundManager.cpp,CSoundManager::initialize(CSettings*),MISSING,False,False,,False
+0xa6eec0,FileReader.cpp,Ogre::SharedPtr<Ogre::DataStream>::~SharedPtr(),MATCH,False,False,,False
+0xa6eef0,FileReader.cpp,Ogre::SharedPtr<Ogre::DataStream>::swap(Ogre::SharedPtr<Ogre::DataStream>&),MATCH,False,False,,False
+0xa6ef40,FileReader.cpp,Ogre::SharedPtr<Ogre::DataStream>::destroy(),MATCH,False,False,,False
+0xa6efe0,FileReader.cpp,Ogre::SharedPtr<Ogre::DataStream>::~SharedPtr(),MATCH,False,False,,False
+0xa76860,SpawnClassData.cpp,CSpawnClassData::addSpawnClass(CSpawnClass*),MATCH,True,False,,False
+0xa76890,SpawnClassData.cpp,CSpawnClassData::getUnitObjectCount(),MISSING,False,False,,False
+0xa768c0,SpawnClassData.cpp,CSpawnClassData::addUnitDataObject(CDataGroup*),DIFF,False,False,,False
+0xa76900,SpawnClassData.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xa7c4b0,SpawnClassData.cpp,__tcf_15,MATCH,False,False,,False
+0xa7c520,SpawnClassData.cpp,__tcf_14,MATCH,False,False,,False
+0xa7c590,SpawnClassData.cpp,__tcf_13,MATCH,False,False,,False
+0xa7c600,SpawnClassData.cpp,__tcf_12,MATCH,False,False,,False
+0xa7c690,SpawnClassData.cpp,__tcf_2,MATCH,False,False,,False
+0xa7c700,SpawnClassData.cpp,CSpawnClassData::addUnitDataObjects(TArrayList<CDataGroup*>&),MISSING,False,False,,False
+0xa7c8e0,SpawnClassData.cpp,__tcf_17,MATCH,False,False,,False
+0xa7c970,SpawnClassData.cpp,__tcf_16,MATCH,False,False,,False
+0xa7ca00,SpawnClassData.cpp,__tcf_11,MATCH,False,False,,False
+0xa7ca90,SpawnClassData.cpp,__tcf_10,MATCH,False,False,,False
+0xa7cb20,SpawnClassData.cpp,__tcf_9,MATCH,False,False,,False
+0xa7cb90,SpawnClassData.cpp,__tcf_8,MATCH,False,False,,False
+0xa7cc00,SpawnClassData.cpp,__tcf_6,MATCH,False,False,,False
+0xa7cc90,SpawnClassData.cpp,__tcf_5,MATCH,False,False,,False
+0xa7cd20,SpawnClassData.cpp,__tcf_4,MATCH,False,False,,False
+0xa7cdb0,SpawnClassData.cpp,__tcf_3,MATCH,False,False,,False
+0xa7ce20,SpawnClassData.cpp,__tcf_1,MATCH,False,False,,False
+0xa7ceb0,SpawnClassData.cpp,__tcf_0,MATCH,False,False,,False
+0xa7cf40,SpawnClassData.cpp,"CSpawnClassData::fillRandomizer(CCharacter*, int, int, int, int)",MISSING,False,False,,False
+0xa7dc30,SpawnClassData.cpp,"CSpawnClassData::calculateChoices(CCharacter*, int, int, int, int)",MISSING,False,False,,False
+0xa7dd60,SpawnClassData.cpp,__tcf_7,MATCH,False,False,,False
+0xa7ddf0,SpawnClassData.cpp,"CSpawnClassData::CSpawnClassData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xa7e000,SpawnClassData.cpp,CSpawnClassData::~CSpawnClassData(),MATCH,True,False,,False
+0xa7e150,SpawnClassData.cpp,CSpawnClassData::~CSpawnClassData(),MATCH,True,False,,False
+0xa7e170,SpawnClassData.cpp,"CSpawnClassData::rollSpawnClassData(TArrayList<CDataGroup*>&, TArrayList<bool>*, CCharacter*, CCharacter*, int, int, int, int, int)",MISSING,False,False,,False
+0xa7e6a0,SpawnClassParser.cpp,CSpawnClassParser::getSingleton(),MATCH,True,False,,False
+0xa7eaf0,SpawnClassParser.cpp,__tcf_1,DIFF,False,False,,False
+0xa7eb80,SpawnClassParser.cpp,__tcf_0,DIFF,False,False,,False
+0xa7ec10,SpawnClassParser.cpp,CSpawnClassParser::clear(),MATCH,True,False,,False
+0xa7ece0,SpawnClassParser.cpp,CSpawnClassParser::~CSpawnClassParser(),MATCH,True,False,,False
+0xa7ed80,SpawnClassParser.cpp,CSpawnClassParser::~CSpawnClassParser(),MATCH,True,False,,False
+0xa7eda0,SpawnClassParser.cpp,"CSpawnClassParser::getSpawnClassDataByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xa7ef00,SpawnClassParser.cpp,"CSpawnClassParser::getSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xa7f060,SpawnClassParser.cpp,CSpawnClassParser::createEmptySpawnClass(CDataGroup*),MISSING,False,False,,False
+0xa7f410,SpawnClassParser.cpp,"CSpawnClassParser::createSpawnClassDataByUnitType(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False
+0xa80060,SpawnClassParser.cpp,"CSpawnClassParser::createSpawnClassDataRefSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False
+0xa80ca0,SpawnClassParser.cpp,"CSpawnClassParser::createSpawnClassDataWithUnit(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False
+0xa81000,SpawnClassParser.cpp,CSpawnClassParser::createSpawnClassData(CDataGroup*),MISSING,False,False,,False
+0xa814b0,SpawnClassParser.cpp,CSpawnClassParser::fillEmptySpawnClass(CDataGroup*),MISSING,False,False,,False
+0xa816c0,SpawnClassParser.cpp,CSpawnClassParser::reloadFromDirectory(wchar_t const*),MISSING,False,False,,False
+0xa81b90,SpawnClassParser.cpp,CSpawnClassParser::CSpawnClassParser(),MISSING,False,False,,False
+0xa81c40,SpawnClassParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >*)",MATCH,False,False,,False
+0xa81ce0,SpawnClassParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >*)",MATCH,False,False,,False
+0xa828e0,gameui.cpp,CGameUI::getSingleton(),MISSING,False,False,,False
+0xa828f0,gameui.cpp,"CGameUI::requestSetGameState(EGameState, EMenu)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa828f0.cpp,False
+0xa82900,gameui.cpp,CGameUI::clearGameStateRequest(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82900.cpp,False
+0xa82920,gameui.cpp,CGameUI::statsChanged(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82920.cpp,False
+0xa82950,gameui.cpp,CGameUI::getDieMenuIsOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82950.cpp,False
+0xa82980,gameui.cpp,CGameUI::hideModalDialogs(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82980.cpp,False
+0xa829d0,gameui.cpp,CGameUI::tipMenuOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa829d0.cpp,False
+0xa829f0,gameui.cpp,CGameUI::modalDialogOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa829f0.cpp,False
+0xa82a50,gameui.cpp,CGameUI::questDialogOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82a50.cpp,False
+0xa82a80,gameui.cpp,CGameUI::modalDialogOpenPartial(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82a80.cpp,False
+0xa82ae0,gameui.cpp,CGameUI::bothCoveredPartial(),MISSING,False,False,,False
+0xa82c00,gameui.cpp,CGameUI::eitherCoveredPartial(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82c00.cpp,False
+0xa82c80,gameui.cpp,CGameUI::leftCovered(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82c80.cpp,False
+0xa82d10,gameui.cpp,CGameUI::rightCovered(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82d10.cpp,False
+0xa82da0,gameui.cpp,CGameUI::bothCovered(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82da0.cpp,False
+0xa82dc0,gameui.cpp,CGameUI::leftScreenEdge(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82dc0.cpp,False
+0xa82e60,gameui.cpp,CGameUI::rightScreenEdge(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82e60.cpp,False
+0xa82f10,gameui.cpp,CGameUI::toggleStatFill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82f10.cpp,False
+0xa82f20,gameui.cpp,CGameUI::setLevel(CLevel*),MISSING,False,False,,False
+0xa82f40,gameui.cpp,"CGameUI::getScreenPosition(Ogre::Vector3 const*, Ogre::Vector3 const*, Ogre::Matrix4)",MISSING,False,False,,False
+0xa83250,gameui.cpp,CountChildren(Ogre::SceneNode*),MISSING,False,False,,False
+0xa832f0,gameui.cpp,CGameUI::getMouseOverItem(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa832f0.cpp,False
+0xa83300,gameui.cpp,CGameUI::clearMenuMouseOvers(),MISSING,False,False,,False
+0xa833a0,gameui.cpp,CGameUI::flushProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa833a0.cpp,False
+0xa833d0,gameui.cpp,CGameUI::closeLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa833d0.cpp,False
+0xa83450,gameui.cpp,CGameUI::closeRight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83450.cpp,False
+0xa834d0,gameui.cpp,CGameUI::refreshQuestMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa834d0.cpp,False
+0xa83520,gameui.cpp,CGameUI::isCinematicMenuOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83520.cpp,False
+0xa83550,gameui.cpp,CGameUI::closeCinematicMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83550.cpp,False
+0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),MISSING,False,False,,False
+0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MISSING,False,False,,False
+0xa83670,gameui.cpp,CGameUI::clickLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83670.cpp,False
+0xa83680,gameui.cpp,CGameUI::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83680.cpp,False
+0xa83690,gameui.cpp,CGameUI::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa836c0,gameui.cpp,CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa836c0.cpp,False
+0xa83700,gameui.cpp,CGameUI::handle_SkillSelectMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83700.cpp,False
+0xa83740,gameui.cpp,"CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",MISSING,False,False,,False
+0xa83790,gameui.cpp,"CGameUI::removeMenuListener(EMENU_TYPE, iMenuListener*)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83790.cpp,False
+0xa837e0,gameui.cpp,CGameUI::getQuestDialogNPC(),MISSING,False,False,,False
+0xa83800,gameui.cpp,CGameUI::getQuestDialogCameraOffset(),MISSING,False,False,,False
+0xa83820,gameui.cpp,CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa838e0,gameui.cpp,CGameUI::getWindowHeight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa838e0.cpp,False
+0xa83900,gameui.cpp,CGameUI::getWindowWidth(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83900.cpp,False
+0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",MISSING,False,False,,False
+0xa83ad0,gameui.cpp,CGameUI::getAspectRatio(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ad0.cpp,False
+0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),MISSING,False,False,,False
+0xa83bc0,gameui.cpp,CGameUI::toggleFPS(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83bc0.cpp,False
+0xa83c30,gameui.cpp,CGameUI::handle_MouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa83cf0,gameui.cpp,"CGameUI::activateItemSlot(int, bool)",MISSING,False,False,,False
+0xa83d60,gameui.cpp,CGameUI::updateHardwareCursor(),MISSING,False,False,,False
+0xa83e00,gameui.cpp,CGameUI::setCursorState(ECursorState),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e00.cpp,False
+0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa83e70,gameui.cpp,CGameUI::scaledY(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e70.cpp,False
+0xa83ea0,gameui.cpp,CGameUI::scaledX(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ea0.cpp,False
+0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MISSING,False,False,,False
+0xa84050,gameui.cpp,CGameUI::notifyOfDeletion(CItem*),MISSING,False,False,,False
+0xa84140,gameui.cpp,CGameUI::getConsoleIsOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84140.cpp,False
+0xa84160,gameui.cpp,"CGameUI::processMenuInput(void*, float, bool)",MISSING,False,False,,False
+0xa84230,gameui.cpp,CGameUI::captureProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84230.cpp,False
+0xa84250,gameui.cpp,CGameUI::setRightButtonPressed(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84250.cpp,False
+0xa84270,gameui.cpp,CGameUI::flushInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84270.cpp,False
+0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MISSING,False,False,,False
+0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MISSING,False,False,,False
+0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),MISSING,False,False,,False
+0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MISSING,False,False,,False
+0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),MISSING,False,False,,False
+0xa84c00,gameui.cpp,CGameUI::hideUI(),MISSING,False,False,,False
+0xa84c10,gameui.cpp,CGameUI::showUI(),MISSING,False,False,,False
+0xa84c20,gameui.cpp,CGameUI::closeMenus(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c20.cpp,False
+0xa84c80,gameui.cpp,CGameUI::setActiveMenu(EMenu),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c80.cpp,False
+0xa84ca0,gameui.cpp,CGameUI::setWindowActive(bool),MISSING,False,False,,False
+0xa84d20,gameui.cpp,CGameUI::canLoad(),MISSING,False,False,,False
+0xa84d30,gameui.cpp,CGameUI::canContinue(),MISSING,False,False,,False
+0xa84d40,gameui.cpp,CGameUI::reloadMenuCharacters(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84d40.cpp,False
+0xa84d50,gameui.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xa8dd00,gameui.cpp,"CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
+0xa8de80,gameui.cpp,"CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
+0xa8e010,gameui.cpp,CGameUI::handle_TogglePet(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e010.cpp,False
+0xa8e050,gameui.cpp,CGameUI::handle_ToggleStats(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e050.cpp,False
+0xa8e090,gameui.cpp,CGameUI::handle_ClickThrough(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e090.cpp,False
+0xa8e0d0,gameui.cpp,CGameUI::closeAll(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e0d0.cpp,False
+0xa8e140,gameui.cpp,"CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",MISSING,False,False,,False
+0xa8e2d0,gameui.cpp,CGameUI::togglePause(),MISSING,False,False,,False
+0xa8e440,gameui.cpp,CGameUI::unPause(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e440.cpp,False
+0xa8e460,gameui.cpp,CGameUI::handle_ToggleOptions(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e460.cpp,False
+0xa8e4b0,gameui.cpp,CGameUI::toggleSettings(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e4b0.cpp,False
+0xa8e510,gameui.cpp,CGameUI::handle_ToggleMap(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e510.cpp,False
+0xa8e560,gameui.cpp,CGameUI::toggleConsole(),MISSING,False,False,,False
+0xa8e5f0,gameui.cpp,CGameUI::togglePet(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e5f0.cpp,False
+0xa8e6a0,gameui.cpp,CGameUI::toggleStats(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e6a0.cpp,False
+0xa8e750,gameui.cpp,CGameUI::toggleQuest(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e750.cpp,False
+0xa8e800,gameui.cpp,CGameUI::handle_ToggleQuest(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e800.cpp,False
+0xa8e840,gameui.cpp,CGameUI::toggleJournal(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e840.cpp,False
+0xa8e8f0,gameui.cpp,CGameUI::handle_ToggleJournal(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e8f0.cpp,False
+0xa8e930,gameui.cpp,CGameUI::toggleSkill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e930.cpp,False
+0xa8e9e0,gameui.cpp,CGameUI::handle_ToggleSkill(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e9e0.cpp,False
+0xa8ea20,gameui.cpp,CGameUI::toggleInventory(),MISSING,False,False,,False
+0xa8eb50,gameui.cpp,CGameUI::handle_ToggleInventory(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb50.cpp,False
+0xa8eb90,gameui.cpp,CGameUI::toggleOptions(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb90.cpp,False
+0xa8ec10,gameui.cpp,CGameUI::toggleDeath(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ec10.cpp,False
+0xa8ec90,gameui.cpp,"CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
+0xa8ed60,gameui.cpp,CGameUI::toggleDialog(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ed60.cpp,False
+0xa8edc0,gameui.cpp,CGameUI::toggleWaypointMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8edc0.cpp,False
+0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),MISSING,False,False,,False
+0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),MISSING,False,False,,False
+0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",MISSING,False,False,,False
+0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MISSING,False,False,,False
+0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MISSING,False,False,,False
+0xa8f4e0,gameui.cpp,CGameUI::returnDraggedItem(),MISSING,False,False,,False
+0xa8f780,gameui.cpp,"CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",DIFF,True,False,,False
+0xa92080,gameui.cpp,"CGameUI::performItemUse(CLevel&, CEquipment*, CCharacter*, CCharacter*, CCharacter*)",MISSING,False,False,,False
+0xa92320,gameui.cpp,"CGameUI::useItem(CLevel&, CEquipment*)",MISSING,False,False,,False
+0xa924c0,gameui.cpp,CGameUI::onClick(ELayoutFunction),MISSING,False,False,,False
+0xa92c00,gameui.cpp,CGameUI::notifyOfDeletion(CCharacter*),MISSING,False,False,,False
+0xa92dd0,gameui.cpp,__tcf_26,DIFF,False,False,,False
+0xa92e60,gameui.cpp,__tcf_25,DIFF,False,False,,False
+0xa92ef0,gameui.cpp,__tcf_24,DIFF,False,False,,False
+0xa92f70,gameui.cpp,__tcf_23,DIFF,False,False,,False
+0xa92ff0,gameui.cpp,__tcf_22,DIFF,False,False,,False
+0xa93060,gameui.cpp,__tcf_21,DIFF,False,False,,False
+0xa930d0,gameui.cpp,__tcf_20,DIFF,False,False,,False
+0xa93160,gameui.cpp,__tcf_19,DIFF,False,False,,False
+0xa931f0,gameui.cpp,__tcf_14,DIFF,False,False,,False
+0xa93280,gameui.cpp,__tcf_13,DIFF,False,False,,False
+0xa93310,gameui.cpp,__tcf_12,DIFF,False,False,,False
+0xa933a0,gameui.cpp,__tcf_11,DIFF,False,False,,False
+0xa93430,gameui.cpp,__tcf_10,DIFF,False,False,,False
+0xa934a0,gameui.cpp,__tcf_9,DIFF,False,False,,False
+0xa93510,gameui.cpp,__tcf_8,DIFF,False,False,,False
+0xa93580,gameui.cpp,__tcf_6,DIFF,False,False,,False
+0xa93610,gameui.cpp,__tcf_5,DIFF,False,False,,False
+0xa936a0,gameui.cpp,__tcf_4,DIFF,False,False,,False
+0xa93730,gameui.cpp,__tcf_3,DIFF,False,False,,False
+0xa937a0,gameui.cpp,__tcf_1,DIFF,False,False,,False
+0xa93830,gameui.cpp,__tcf_0,DIFF,False,False,,False
+0xa94120,gameui.cpp,__tcf_27,DIFF,False,False,,False
+0xa941b0,gameui.cpp,__tcf_7,DIFF,False,False,,False
+0xa94240,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
+0xa94c60,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
+0xa94c80,gameui.cpp,"CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa94d30,gameui.cpp,CGameUI::handle_SkillSelectMouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa94e60,gameui.cpp,CGameUI::handle_SkillSelectClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa951e0,gameui.cpp,__tcf_18,DIFF,False,False,,False
+0xa95250,gameui.cpp,__tcf_17,DIFF,False,False,,False
+0xa952c0,gameui.cpp,__tcf_16,DIFF,False,False,,False
+0xa95330,gameui.cpp,__tcf_15,DIFF,False,False,,False
+0xa954c0,gameui.cpp,__tcf_2,DIFF,False,False,,False
+0xa95530,gameui.cpp,"CSkillFoldout::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xa96270,gameui.cpp,"CSkillTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xa976a0,gameui.cpp,"CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa97e00,gameui.cpp,CGameUI::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
+0xa980e0,gameui.cpp,CGameUI::mapToFunctions(CEGUI::Window*),MISSING,False,False,,False
+0xa98460,gameui.cpp,CGameUI::getImageSetForIcon(unsigned char const*),MISSING,False,False,,False
+0xa98630,gameui.cpp,CGameUI::getImageFromImageSet(unsigned char const*),MISSING,False,False,,False
+0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),MISSING,False,False,,False
+0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
+0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),MISSING,False,False,,False
+0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",MISSING,False,False,,True
+0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MISSING,False,False,,False
+0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
+0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
+0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa9e4a0,gameui.cpp,CGameUI::create(),DIFF,True,False,,False
+0xaa6380,gameui.cpp,"CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",MISSING,False,False,,False
+0xaa6bf0,gameui.cpp,"CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)",DIFF,True,False,,False
+0xaaeeb0,gameui.cpp,"CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)",DIFF,True,False,,False
+0xab4f80,gameui.cpp,CGameUI::handleKeyPresses(),DIFF,True,False,,False
+0xab6080,gameui.cpp,"CGameUI::processIngameInput(void*, float, bool)",DIFF,True,False,,False
+0xab80c0,gameui.cpp,"CGameUI::processInput(CGameClient*, void*, float, bool)",MISSING,False,False,,False
+0xab8100,gameui.cpp,"CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)",DIFF,True,False,,False
+0xacbb40,gameui.cpp,"CGameUI::update(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xacbb90,merchantmenu.cpp,CEGUI::SlotFunctorBase::~SlotFunctorBase(),MATCH,False,False,,False
+0xacbba0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xacbbb0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xacbbe0,gameui.cpp,CItem::isUseable(),MATCH,False,False,,False
+0xacbc10,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xacbc20,merchantmenu.cpp,CEGUI::SlotFunctorBase::~SlotFunctorBase(),MATCH,False,False,,False
+0xacbc30,gameui.cpp,TSafePointer<CEquipment>::setObject(CEquipment*),MATCH,False,False,,False
+0xacbef0,gameui.cpp,CEGUI::GenericException::~GenericException(),MATCH,False,False,,False
+0xacbf40,gameui.cpp,CEGUI::GenericException::~GenericException(),MATCH,False,False,,False
+0xacbfb0,gameui.cpp,"std::vector<SDL_Cursor*, std::allocator<SDL_Cursor*> >::_M_fill_insert(__gnu_cxx::__normal_iterator<SDL_Cursor**, std::vector<SDL_Cursor*, std::allocator<SDL_Cursor*> > >, unsigned long, SDL_Cursor* const&)",MATCH,False,False,,False
+0xacc5b0,gameui.cpp,"std::vector<CSubMenu*, std::allocator<CSubMenu*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CSubMenu**, std::vector<CSubMenu*, std::allocator<CSubMenu*> > >, CSubMenu* const&)",MATCH,False,False,,False
+0xacc740,gameui.cpp,"std::vector<CDropdownMenu*, std::allocator<CDropdownMenu*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CDropdownMenu**, std::vector<CDropdownMenu*, std::allocator<CDropdownMenu*> > >, CDropdownMenu* const&)",MATCH,False,False,,False
+0xacc9e0,gameui.cpp,CEGUI::GenericException::GenericException(CEGUI::GenericException const&),MATCH,False,False,,False
+0xacd2c0,combinemenu.cpp,CCombineMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xacd2d0,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xacd2e0,combinemenu.cpp,CCombineMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
+0xacd2f0,combinemenu.cpp,non-virtual thunk to CCombineMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xacd300,combinemenu.cpp,CCombineMenu::equipmentUnequipped(CEquipment*),MATCH,True,False,,False
+0xacd310,combinemenu.cpp,non-virtual thunk to CCombineMenu::inventoryDestroyed(),MATCH,True,False,,False
+0xacd320,combinemenu.cpp,CCombineMenu::inventoryDestroyed(),MATCH,True,False,,False

@@ -1,3 +1,7 @@
+#include <cstdlib>
+#include <cwchar>
+#include <cstring>
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "GameVariables.h"
 #include "GameNamespaces.h"
@@ -238,4 +242,51 @@ unsigned int STRINGS::getStringIndex(const std::basic_string<wchar_t, std::char_
     }
 
     return defaultIndex;
+}
+
+
+// Imported source candidates; historical status is not fresh acceptance.
+unsigned int STRINGS::StringCopyCharArray(char* out, unsigned int capacity, const char* text)
+{
+    if(!text || !out)return 0;
+    memset(out,0,capacity);
+    unsigned int length=0,remaining=10000;
+    while(text[length] && remaining){++length;--remaining;}
+    ++length;
+    if(length>capacity)return 0;
+    for(unsigned int i=0;i<length;++i)out[i]=text[i];
+    return length;
+}
+
+std::wstring STRINGS::GetValueAsWString(bool value)
+{
+    if(value)return std::wstring(L"true");
+    return std::wstring(L"false");
+}
+
+float STRINGS::GetFloat(const std::string& text)
+{
+    return static_cast<float>(strtod(text.c_str(),NULL));
+}
+
+float STRINGS::GetFloat(const std::wstring& text)
+{
+    wchar_t* end=NULL;
+    return static_cast<float>(wcstod(text.c_str(),&end));
+}
+
+std::string STRINGS::replaceString(std::string text, const std::string& find, const std::string& replacement)
+{
+    std::string::size_type length=find.size();
+    std::string::size_type pos;
+    while((pos=text.find(find))!=std::string::npos)text.replace(pos,length,replacement);
+    return text;
+}
+
+std::wstring STRINGS::replaceWString(std::wstring text, const std::wstring& find, const std::wstring& replacement)
+{
+    std::wstring::size_type length=find.size();
+    std::wstring::size_type pos;
+    while((pos=text.find(find))!=std::wstring::npos)text.replace(pos,length,replacement);
+    return text;
 }

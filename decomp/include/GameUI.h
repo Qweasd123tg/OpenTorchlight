@@ -1,6 +1,27 @@
 #ifndef GAMEUI_H
 #define GAMEUI_H
 #include <string>
+#include <vector>
+class CCinematicMenu;
+class CConsole;
+class CDialogMenu;
+class CDieMenu;
+class CDropdownMenu;
+class CDynamicPropertyFile;
+class CInventoryMenu;
+class CJournalMenu;
+class CMenuManager;
+class CModalMenu;
+class COptionsMenu;
+class CPetMenu;
+class CQuestDialogMenu;
+class CQuestMenu;
+class CSettingsMenu;
+class CSkillFoldout;
+class CSkillMenu;
+class CStatsMenu;
+class CTipMenu;
+class CWaypointMenu;
 
 #include "GameEnums.h"
 #include "RunicCore.h"
@@ -25,6 +46,52 @@ class iMenuListener;
 class CGameUI : public CRunicCore
 {
 public:
+    bool processInput(CGameClient*,void*,float,bool);
+    void notifyOfDeletion(CItem*);
+    void notifyOfDeletion(CCharacter*);
+    void mouseEvent(unsigned int,unsigned int);
+    void keyEvent(unsigned int,unsigned int,long);
+    void setWindowActive(bool);
+
+    void clearGameStateRequest();
+    bool getDieMenuIsOpen();
+    bool questDialogOpen();
+    bool isCinematicMenuOpen();
+    void hideModalDialogs();
+    bool tipMenuOpen();
+    bool modalDialogOpen();
+    bool leftCovered();
+    bool rightCovered();
+    bool bothCovered();
+    void toggleStatFill();
+    CEquipment* getMouseOverItem();
+    void flushProcessInput();
+    void refreshQuestMenu();
+    void closeCinematicMenu();
+    void clickLeft();
+    bool handle_MouseOut(const CEGUI::EventArgs& event);
+    void removeMenuListener(EMENU_TYPE type, iMenuListener* listener);
+    float scaledX(float value);
+    bool getConsoleIsOpen();
+    void setRightButtonPressed();
+    void flushInput();
+    void setActiveMenu(EMenu menu);
+    void reloadMenuCharacters();
+    bool handle_ToggleOptions(const CEGUI::EventArgs& event);
+    void toggleSettings();
+    bool handle_ToggleQuest(const CEGUI::EventArgs& event);
+    bool handle_ToggleJournal(const CEGUI::EventArgs& event);
+    bool handle_ToggleSkill(const CEGUI::EventArgs& event);
+    bool handle_ToggleInventory(const CEGUI::EventArgs& event);
+    void toggleOptions();
+    void toggleDeath();
+    void toggleWaypointMenu();
+    void toggleDialog();
+    float leftScreenEdge();
+    float rightScreenEdge();
+    bool handle_TogglePet(const CEGUI::EventArgs& event);
+    bool handle_ToggleStats(const CEGUI::EventArgs& event);
+    bool handle_ToggleMap(const CEGUI::EventArgs& event);
     void requestSetGameState(EGameState, EMenu);
     bool processIngameInput(void*,float,bool);
     bool bothCoveredPartial();
@@ -88,8 +155,68 @@ public:
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
     void setCinematicOpen(std::wstring cinematic);
 private:
-    unsigned char m_GameUIData10[0x38 - 0x10];
+    unsigned char m_gap10[0x28];
     CCharacter* m_pCharacter;
-    unsigned char m_GameUIData40[0x1a08 - 0x40];
+    CLevel* m_level;
+    unsigned char m_gap48[0x20];
+    CEquipment* m_mouseOverItem;
+    unsigned char m_gap70[0x8];
+    CDynamicPropertyFile* m_settings;
+    unsigned char m_gap80[0x60];
+    CEGUI::Window* m_statsWindow;
+    unsigned char m_gapE8[0x50];
+    CEGUI::Window* m_topWindow;
+    unsigned char m_gap140[0x330];
+    CEGUI::Window* m_rootWindow;
+    unsigned char m_gap478[0x48];
+    CSkillFoldout* m_foldout;
+    unsigned char m_gap4C8[0x10];
+    CInventoryMenu* m_statsMenu;
+    CStatsMenu* m_characterStatsMenu;
+    CPetMenu* m_inventoryMenu;
+    unsigned char m_gap4F0[0x20];
+    COptionsMenu* m_optionsMenu;
+    CSettingsMenu* m_dialogMenu;
+    CDieMenu* m_dieMenu;
+    CWaypointMenu* m_waypointMenu;
+    CDialogMenu* m_dropdown530;
+    CQuestDialogMenu* m_questDialogMenu;
+    CCinematicMenu* m_cinematicMenu;
+    CModalMenu* m_dropdown548;
+    CTipMenu* m_tipMenu;
+    CSkillMenu* m_skillsMenu;
+    CJournalMenu* m_journalMenu;
+    CQuestMenu* m_questMenu;
+    unsigned char m_gap570[0x18];
+    CMenuManager* m_menuManager;
+    unsigned char m_gap590[0xd68];
+    bool m_displayStats;
+    unsigned char m_gap12F9[0x2];
+    bool m_mouseThrough;
+    ECursorState m_cursorState;
+    unsigned char m_gap1300[0x341];
+    bool m_itemHovered;
+    bool m_foldoutItemHovered;
+    bool m_skillHovered;
+    unsigned char m_gap1644[0x14];
+    long long m_foldoutItemGuid;
+    bool m_foldoutSkillHovered;
+    unsigned char m_gap1661[0x7];
+    long long m_foldoutSkillGuid;
+    unsigned char m_gap1670[0x4];
+    int m_leftSlot;
+    int m_rightSlot;
+    int m_pendingRightSlot;
+    unsigned char m_gap1680[0x10];
+    CConsole* m_console;
+    unsigned char m_gap1698[0x27c];
+    EGameState m_requestedGameState;
+    EMenu m_requestedMenu;
+    unsigned char m_gap191C[0x14];
+    std::vector<CSubMenu*> m_submenus;
+    std::vector<CDropdownMenu*> m_dropdowns;
+    unsigned char m_gap1960[0x39];
+    bool m_paused;
+    unsigned char m_gap199A[0x6e];
 };
 #endif

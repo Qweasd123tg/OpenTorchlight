@@ -11,6 +11,7 @@
 #include "iInventoryListener.h"
 #include "iMissile.h"
 
+namespace CEGUI { class Window; }
 class CAIManager;
 class CItem;
 class CGenericModel;
@@ -18,6 +19,7 @@ class CCharacterSaveState;
 class CPathController;
 class CSkill;
 class CInventory;
+class CWardrobe;
 enum EJournalStatistic { EJournalStatistic_GEN_LAST = 0x7fffffff };
 
 // Partial: AI states of a character (character+0x330). Only the values used by
@@ -40,7 +42,63 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+friend class CPlayer;
+friend class CGameClient;
 public:
+    void destroyCharacterText();
+    EAlignment alignment();
+    void displayDamageAbsorbed(float);
+    void getBones();
+    bool facingTarget(CCharacter*,CItem*);
+
+    int naturalArmor();
+    float HPFloat();
+    float manaFloat();
+    void giveUnusedPerkPoints(int amount);
+    void giveUnusedStatPoints(int amount);
+    void giveUnusedSkillPoints(int amount);
+    void addFame(unsigned int amount);
+    void setAllowJumpDown(bool allow);
+    unsigned int getAnimationPlaying();
+    float getAnimationSpeed();
+    bool getAnimationLoop();
+    void setModelPathDummy(std::wstring path);
+    float followRange();
+    float getBravery();
+    CEquipment* getWeaponInRightHand();
+    void queueBlendAnimation(const std::string& animation, bool loop, float blend, float speed);
+    bool animationExists(const std::string& animation) const;
+    bool animationQueued(const std::string& animation) const;
+    bool animationPlaying(const std::string& animation) const;
+    bool isImmobile();
+    void forceDisplayOfDamageAbsorbed();
+    void updateSkill(float elapsed);
+    void destroyIcons();
+    float getEffectValueWithoutInventory(EEFFECT_TYPE type, EDAMAGE_TYPES damage);
+    void clearAllUnitReferences();
+    bool facingTarget();
+    void hideCharacterText();
+    void showCharacterText();
+    std::wstring getWardrobeChestMesh();
+    void setWardrobeChestMesh(std::wstring value);
+    std::wstring getWardrobeChestTexture();
+    void setWardrobeChestTexture(std::wstring value);
+    std::wstring getWardrobeGlovesMesh();
+    void setWardrobeGlovesMesh(std::wstring value);
+    std::wstring getWardrobeGlovesTexture();
+    void setWardrobeGlovesTexture(std::wstring value);
+    std::wstring getWardrobeBootsMesh();
+    void setWardrobeBootsMesh(std::wstring value);
+    std::wstring getWardrobeBootsTexture();
+    void setWardrobeBootsTexture(std::wstring value);
+    std::wstring getWardrobeHelmMesh();
+    void setWardrobeHelmMesh(std::wstring value);
+    std::wstring getWardrobeHelmTexture();
+    void setWardrobeHelmTexture(std::wstring value);
+    std::wstring getWardrobeShoulderMesh();
+    void setWardrobeShoulderMesh(std::wstring value);
+    std::wstring getModelPath();
+
     int getDefaultMerchantTab();
     void setActiveSkill(CSkill*,bool);
     void unLearnSpell(int);
@@ -197,7 +255,17 @@ public:
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pPaperdollModel;
 private:
-    char m_CharacterData210[0x2e8-0x210];
+    char m_CharacterData210[0x21c-0x210];
+    Ogre::Vector3 m_pathDestination;
+    char m_CharacterData228[0x258-0x228];
+    float m_moveSpeed;
+    char m_CharacterData25C[0x264-0x25c];
+    bool m_isPathing;
+    char m_CharacterData265[1];
+    bool m_moveInputHeld;
+    char m_CharacterData267[0x278-0x267];
+    float m_pathGraceTime;
+    char m_CharacterData27C[0x2e8-0x27c];
 public:
     Ogre::SceneNode* m_pRightHandNode;
 private:
@@ -211,19 +279,36 @@ public:
 private:
     char m_CharacterData320[0x330 - 0x320];
     EAIState m_eAIState;
-    char m_CharacterData334[0x414 - 0x334];
+    char m_CharacterData334[0x340-0x334];
+    CCharacter* m_targetCharacter;
+    char m_CharacterData348[8];
+    CItem* m_targetItem;
+    char m_CharacterData358[0x370-0x358];
+    float m_followRange;
+    char m_CharacterData374[0x414-0x374];
     float m_fHPFloat;
-    char m_CharacterData418[0x42c - 0x418];
+    int m_maxHPBase;
+    char m_CharacterData41c[8];
+    int m_naturalArmor;
+    int m_rangedStat;
     int m_iMeleeStat;
-    char m_CharacterData430[0x438 - 0x430];
+    int m_defenseStat;
+    int m_magicStat;
     float m_fManaFloat;
-    char m_CharacterData43c[0x444 - 0x43c];
+    int m_maxManaBase;
+    char m_CharacterData440[4];
     int m_iGold;
-    char m_CharacterData448[0x45c - 0x448];
+    unsigned int m_experience;
+    unsigned int m_fame;
+    char m_CharacterData450[0x45c-0x450];
     int m_iUnusedStatPoints;
     int m_iUnusedSkillPoints;
     int m_iUnusedPerkPoints;
-    char m_CharacterData468[0x490 - 0x468];
+    char m_CharacterData468[0x478-0x468];
+    CEGUI::Window* m_characterText;
+    CEGUI::Window* m_characterTextParent;
+    bool m_characterTextVisible;
+    char m_CharacterData489[0x490-0x489];
     CInventory* m_pInventory;
     char m_CharacterData498[8];
     friend class CInventoryMenu;
@@ -234,7 +319,11 @@ private:
     friend class CStashMenu;
     friend class CMerchantMenu;
     bool m_bCharacterFlag4A0;
-    char m_CharacterData4A1[0x52e - 0x4a1];
+    char m_CharacterData4A1[0x4e8-0x4a1];
+    CWardrobe* m_wardrobe;
+    char m_CharacterData4F0[0x52c-0x4f0];
+    bool m_characterVisible;
+    char m_CharacterData52D;
     bool m_bInvulnerable;
     friend class CEquipment;
     char m_CharacterData52F[0x560 - 0x52f];
@@ -243,7 +332,12 @@ private:
     char m_CharacterData620[0x640 - 0x620];
     CCharacter* m_pMaster;
     std::vector<CCharacter*> m_Followers;
-    char m_CharacterData660[0x70e - 0x660];
+    char m_CharacterData660[8];
+    float m_bravery;
+    char m_CharacterData66C[0x682-0x66c];
+    bool m_allowJumpDown;
+    char m_CharacterData683[0x70d-0x683];
+    bool m_forcedHidden;
     bool m_bSecondaryWeaponSet;
     char m_CharacterData70f[0x718 - 0x70f];
     CAIManager* m_pAIManager;

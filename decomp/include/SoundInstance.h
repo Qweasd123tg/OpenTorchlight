@@ -4,6 +4,8 @@
 #include "RunicCore.h"
 
 #include <string>
+#include <OgreDataStream.h>
+#include "GameEnums.h"
 
 class SoundData;
 class SoundObject;
@@ -21,14 +23,11 @@ public:
     void clear();
 
     std::wstring m_soundName;
-    SoundObject* m_pSoundObject;
-    int m_iSoundObjectRefCount;
-    int* m_pSoundObjectRefCount;
-    unsigned char m_gap30[0x8] __attribute__((aligned(8)));
-    bool m_bLooping;
+    Ogre::DataStreamPtr m_stream;
+    SOUND_TYPE m_soundType;
     FMOD::Sound* m_pSound;
-    bool m_bPlaying;
-    unsigned char m_gap4C[0xC] __attribute__((aligned(4)));
+    unsigned int m_referenceCount;
+    unsigned char m_gap4c[12];
     SoundData* m_pSoundData;
 };
 

@@ -2,6 +2,8 @@
 #define ANIMATIONSET_H
 
 #include <string>
+#include <vector>
+class CKeyframe;
 
 #include "RunicCore.h"
 #include "TArrayList.h"
@@ -20,9 +22,9 @@ public:
     std::wstring m_wsName;
     int m_nUnknown;
     unsigned char m_alignment24[4] __attribute__((aligned(4)));
-    TArrayList<CAnimation *> m_lUnknown28;
-    TArrayList<CAnimation *> m_lUnknown40;
-    TArrayList<TArrayList<CAnimation *> > m_lAnimationGroups;
+    std::vector<std::string> m_lUnknown28;
+    std::vector<std::wstring> m_lUnknown40;
+    std::vector<std::vector<CKeyframe*> > m_lAnimationGroups;
 };
 
 #endif

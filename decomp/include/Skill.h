@@ -10,12 +10,38 @@ class CDataGroup;
 class CCharacter;
 class CResourceManager;
 class CSkillManager;
+class CSkillProperty;
 
 // Partial: members used by recovered TUs; unnamed regions are padding until
 // Skill.cpp is recovered.
 class CSkill : public CRunicCore, public iUnitObserver
 {
 public:
+    bool getCanStop();
+    bool getIsExclusive();
+    bool getCanBeInterrupted();
+    unsigned int getManaCost();
+    unsigned int getManaCostOT();
+    bool getRequiresPathable();
+    unsigned int getAnimationIndex();
+    unsigned int getAnimationIndexDW();
+    unsigned int getAnimationIndexLoopInto();
+    unsigned int getAnimationIndexLoopEnd();
+    unsigned int getAnimationIndexDWLoopInto();
+    unsigned int getChanceToCast();
+    float getAnimationSpeedMult();
+    float getRangeMin();
+    float getRandomRange();
+    float getRandomRangeMin();
+    float getMinimumTime();
+    CBaseUnit* getMasterOwner();
+    CCharacter* getOwnerCharacter();
+    float getCoolDown();
+    int getMaximumDamage();
+    int getMinimumDamage();
+    bool rollCancelChance();
+    bool rollCastChance();
+
     void fillOutStatBonuses(float (&values)[6], bool, unsigned int);
     const std::wstring& getName();
     const std::wstring& getSkillUsageDescription();
@@ -47,25 +73,37 @@ public:
     void setEnabled(bool enabled) { m_bEnabled = enabled; }
 
 private:
-    char m_SkillData[0x20 - 0x18];
+    CResourceManager* m_resources;
     CSkillManager* m_pSkillManager;
     char m_SkillData28[0x30 - 0x28];
     CBaseUnit* m_pOwner;
     char m_SkillData38[0x60 - 0x38];
     ESKILL_ACTIVATION_TYPE m_eActivationType; // 0x60
-    char m_SkillData64[0x6b - 0x64];
+    char m_SkillData64[0x6a-0x64];
+    bool m_requiresPathable;
     // Set on skills that CExecuteSkillProps adds to a skill manager.
     bool m_bExecutedByProperty;
     char m_SkillData6C;
     bool m_bEnabled;
-    char m_SkillData2[0xa8 - 0x6e];
+    char m_SkillData6E[0x90-0x6e];
+    CSkillProperty* m_property;
+    char m_SkillData98[8];
+    CSkillProperty** m_levelPropertyData;
     unsigned int m_iSkillLevelCount; // 0xa8
-    char m_SkillDataAC[0xd0 - 0xac];
+    unsigned int m_levelPropertyCapacity;
+    unsigned int m_levelPropertyGrow;
+    char m_SkillDataB4[0xd0-0xb4];
     std::wstring m_sRequiredSkill;
     unsigned int m_iRequiredLevel;
     char m_SkillDataDC[4];
     unsigned int m_iEffectiveSkillLevel; // 0xe0
-    char m_SkillDataE4[0x10c - 0xe4];
+    unsigned int m_animationIndex;
+    unsigned int m_animationIndexDW;
+    unsigned int m_animationIndexLoopInto;
+    unsigned int m_animationIndexDWLoopInto;
+    unsigned int m_animationIndexLoopEnd;
+    char m_SkillDataF8[0x108-0xf8];
+    float m_elapsedSkillTime;
     int m_iColumn;
     int m_iRow;
     int m_iPane;

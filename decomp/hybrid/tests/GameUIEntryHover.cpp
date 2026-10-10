@@ -421,7 +421,7 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     at<void*>(world->ui,0x58)=c.hoverMode?world->hover[0]:NULL;
     for(unsigned i=0;i<2;++i){at<void*>(world->actors[i],0x340)=c.hoverMode==7?world->hover[1]:NULL;at<unsigned>(world->hover[i],0x100)=12+i;new(reinterpret_cast<char*>(world->hover[i])+0x4c0)std::wstring(c.label==1?L"Зверь":c.label==2?L"野兽":L"Beast");at<unsigned char>(world->hover[i],0x702)=c.hoverHealth%2;}
     at<void*>(world->ui,0x48)=c.hoverCache==1?world->hover[0]:c.hoverCache==2?world->hover[1]:NULL;at<unsigned>(world->ui,0x50)=19;
-    detour::Set patches;
+    detour::Set patches; detour::Set extraPatches;
     TL_REDIRECT(patches,settingsGet,&setting);TL_REDIRECT(patches,mousePressed,&pressed);TL_REDIRECT(patches,mouseHeld,&pressed);
     TL_REDIRECT(patches,updateSlots,&unused);TL_REDIRECT(patches,editorSingleton,&editor);TL_REDIRECT(patches,modalPartial,&modal);
     TL_REDIRECT(patches,characterHP,&hp);TL_REDIRECT(patches,characterMaxHP,&maxhp);
@@ -434,15 +434,15 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     patches.redirect(reinterpret_cast<char*>(0x554dc8),reinterpret_cast<char*>(&gameui_detail::service::native_select),&select);
     patches.redirect(reinterpret_cast<char*>(0x555c08),reinterpret_cast<char*>(&gameui_detail::service::native_text),&text);
     patches.redirect(reinterpret_cast<char*>(0x5532d8),reinterpret_cast<char*>(&gameui_detail::service::native_property),&property);
-    TL_REDIRECT(patches,uiHeight,&heightRead);TL_REDIRECT(patches,rightEdge,&rightRead);TL_REDIRECT(patches,leftEdge,&leftRead);TL_REDIRECT(patches,settingsFloat,&settingFloat);
-    TL_REDIRECT(patches,textEvents,&events);TL_REDIRECT(patches,hideItem,&itemHidden);TL_REDIRECT(patches,hideCharacter,&characterHidden);
-    TL_REDIRECT(patches,consoleVisible,&consoleIsVisible);TL_REDIRECT(patches,consoleUpdate,&consoleTick);TL_REDIRECT(patches,finalMenuUpdate,&finalTick);
+    TL_REDIRECT(patches,uiHeight,&heightRead);TL_REDIRECT(extraPatches,rightEdge,&rightRead);TL_REDIRECT(extraPatches,leftEdge,&leftRead);TL_REDIRECT(extraPatches,settingsFloat,&settingFloat);
+    TL_REDIRECT(extraPatches,textEvents,&events);TL_REDIRECT(extraPatches,hideItem,&itemHidden);TL_REDIRECT(extraPatches,hideCharacter,&characterHidden);
+    TL_REDIRECT(extraPatches,consoleVisible,&consoleIsVisible);TL_REDIRECT(extraPatches,consoleUpdate,&consoleTick);TL_REDIRECT(extraPatches,finalMenuUpdate,&finalTick);
     patches.redirect(reinterpret_cast<char*>(0x554d48),reinterpret_cast<char*>(&gameui_detail::service::native_cameraOrientation),&cameraOrientation);
     patches.redirect(reinterpret_cast<char*>(0x5545c8),reinterpret_cast<char*>(&gameui_detail::service::native_cameraPosition),&cameraPosition);
 
-    TL_REDIRECT(patches,hBoth,&hoverBoth);TL_REDIRECT(patches,hISA,&hoverISA);TL_REDIRECT(patches,hTheme,&hoverTheme);TL_REDIRECT(patches,hAdd,&hoverAdd);TL_REDIRECT(patches,hRemove,&hoverRemove);TL_REDIRECT(patches,hTranslator,&hoverTranslator);TL_REDIRECT(patches,hTranslate,&hoverTranslate);TL_REDIRECT(patches,hDescription,&hoverDescription);
+    TL_REDIRECT(extraPatches,hBoth,&hoverBoth);TL_REDIRECT(extraPatches,hISA,&hoverISA);TL_REDIRECT(extraPatches,hTheme,&hoverTheme);TL_REDIRECT(extraPatches,hAdd,&hoverAdd);TL_REDIRECT(extraPatches,hRemove,&hoverRemove);TL_REDIRECT(extraPatches,hTranslator,&hoverTranslator);TL_REDIRECT(extraPatches,hTranslate,&hoverTranslate);TL_REDIRECT(extraPatches,hDescription,&hoverDescription);
     patches.redirect(reinterpret_cast<char*>(0x5561d8),reinterpret_cast<char*>(&gameui_detail::service::native_isVisible),&hoverVisible);
-    if(patches.failed()) _exit(42);
+    if(patches.failed() || extraPatches.failed()) _exit(42);
     for(unsigned repeat=0;repeat<2;++repeat){
         reachedBoundary=false;world->managerCalls=world->gateCalls=world->modalCalls=world->orientationCalls=0;world->changed[0]=world->changed[1]=false;
         try { if(expected)if(repeat==0){autotest::invoke(capture,&restoredUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{restoredUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);}else if(repeat==0){autotest::invoke(capture,&originalUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{originalUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);} }

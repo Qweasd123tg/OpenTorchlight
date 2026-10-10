@@ -66,13 +66,13 @@ public:
 
     int m_eTargetType;
     int m_eTargetUnitType;
-    int m_iManaCost;
-    int m_iManaCostOverTime;
+    float m_iManaCost;
+    float m_iManaCostOverTime;
 
     float m_fRange;
-    int m_iMinimumRange;
+    float m_iMinimumRange;
     float m_fRandomRange;
-    int m_iRandomRangeMinimum;
+    float m_iRandomRangeMinimum;
     float m_fFindTargetAngle;
     float m_fSpeed;
     float m_fCoolDown;

@@ -2,9 +2,19 @@
 #define MASTERRESOURCEMANAGER_H
 
 #include "RunicCore.h"
+#include <vector>
+#include <string>
+class CAnimationSet;
+class CGenericModel;
+class BatchModelRef;
+class CollisionModelRef;
+class CResourceSettings;
+class CGraph;
+class CSharedStash;
 
 namespace Ogre { class SceneManager; }
 class CHierarchy;
+class CEffectGroupManager;
 class CCollisionModel;
 class CParticlePreloader;
 class CSettings;
@@ -16,6 +26,20 @@ class CSoundBankDataInformation;
 class CMasterResourceManager : public CRunicCore
 {
 public:
+    void destroyStash();
+    CollisionModelRef* getCollisionModel(CCollisionModel* model);
+    BatchModelRef* getBatchModel(CGenericModel* model);
+    void removeBatchModel(CGenericModel* model);
+    CAnimationSet* getAnimationSet(CAnimationSet* model);
+    void removeAnimationSet(CAnimationSet* model);
+    void reloadSoundBankData();
+    int getMaxFameLevel();
+    int getMaxLevel();
+    CollisionModelRef* getCollisionModel(std::wstring name);
+    BatchModelRef* getBatchModel(std::wstring name);
+    void createParticleReloader();
+    void addAnimationSet(CAnimationSet* animations);
+    CAnimationSet* getAnimationSet(std::wstring name);
     virtual ~CMasterResourceManager();
 
     static CMasterResourceManager* getSingleton();
@@ -24,7 +48,13 @@ public:
     void removeCollisionModel(CCollisionModel* model);
 
 private:
-    unsigned char m_Unrecovered10[0x70];
+    unsigned char m_Unrecovered10[0x58-0x10];
+public:
+    CEffectGroupManager* m_effectGroups;
+private:
+    unsigned char m_Unrecovered60[8];
+    CResourceSettings* m_resourceSettings;
+    unsigned char m_Unrecovered70[0x10];
 
 public:
     CHierarchy* m_pHierarchy;
@@ -45,6 +75,15 @@ public:
     CParticlePreloader* m_pParticlePreloader;
 public:
     CSoundBankDataInformation* m_pSoundBankDataInformation;
+private:
+    unsigned char m_gap108[0x18];
+    std::vector<CollisionModelRef*> m_collisionModels;
+    std::vector<BatchModelRef*> m_batchModels;
+    std::vector<CAnimationSet*> m_animationSets;
+    CGraph* m_experienceGraph;
+    CGraph* m_fameGraph;
+    CSharedStash* m_stash;
+    unsigned char m_gap180[0x10];
 };
 
 #endif

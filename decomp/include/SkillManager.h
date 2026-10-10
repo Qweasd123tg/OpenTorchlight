@@ -13,6 +13,8 @@ class CResourceManager;
 // Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
+    friend class CSkill;
+
 friend class CEquipment;
 public:
     static void globallyDisableSkills(bool disabled);

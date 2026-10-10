@@ -1,0 +1,751 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0xc73f70,FileUtilities.cpp,"FILESYSTEM::ReadString(_IO_FILE*, unsigned int)",MISSING,False,False,,False
+0xc74060,FileUtilities.cpp,FILESYSTEM::ReadString(_IO_FILE*),MISSING,False,False,,False
+0xc74150,FileUtilities.cpp,"FILESYSTEM::GetFileData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc741e0,FileUtilities.cpp,FILESYSTEM::FileExists(wchar_t const*),MISSING,False,False,,False
+0xc742d0,FileUtilities.cpp,"FILESYSTEM::FileExists(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc74320,FileUtilities.cpp,"FILESYSTEM::FileExists(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc74320.cpp,False
+0xc74330,FileUtilities.cpp,"FILESYSTEM::FileIsOlder(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc74490,FileUtilities.cpp,"FILESYSTEM::setFileTime(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long, long long, long long)",MISSING,False,False,,False
+0xc74db0,FileUtilities.cpp,"FILESYSTEM::AssembleAbsolutePath(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc74eb0,FileUtilities.cpp,"FILESYSTEM::RemoveFileName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc75030,FileUtilities.cpp,"FILESYSTEM::GetFileName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc751f0,FileUtilities.cpp,"FILESYSTEM::ReadWString(_IO_FILE*, unsigned int)",MISSING,False,False,,False
+0xc752e0,FileUtilities.cpp,"FILESYSTEM::CreateLocalDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc75430,FileUtilities.cpp,FILESYSTEM::ReadWString(_IO_FILE*),MISSING,False,False,,False
+0xc75520,FileUtilities.cpp,"FILESYSTEM::GetFileList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc75a20,FileUtilities.cpp,"FILESYSTEM::GetDirectoryList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",MISSING,False,False,,False
+0xc75c70,FileUtilities.cpp,"FILESYSTEM::FindFullDirectoryName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc75ec0,FileUtilities.cpp,"FILESYSTEM::GetFileListRecursive(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc76190,FileUtilities.cpp,"FILESYSTEM::FindFullFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc764a0,FileUtilities.cpp,FILESYSTEM::GetAppDataPath(),DIFF,True,False,,False
+0xc76560,FileUtilities.cpp,"FILESYSTEM::GetDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc76730,FileUtilities.cpp,FILESYSTEM::GetSaveDataPath(),MISSING,False,False,,False
+0xc76860,FileUtilities.cpp,"FILESYSTEM::CreateAppDataDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc77410,FileUtilities.cpp,FILESYSTEM::GetFileCreationTime(wchar_t const*),MISSING,False,False,,False
+0xc77530,FileUtilities.cpp,FILESYSTEM::GetFileTime(wchar_t const*),MISSING,False,False,,False
+0xc77650,FileUtilities.cpp,"FILESYSTEM::GetFileListSorted(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc77c20,GameSpeed.cpp,CGameSpeed::getSingleton(),MATCH,True,False,,False
+0xc77c30,GameSpeed.cpp,CGameSpeed::getGameSpeed(),MISSING,False,False,,False
+0xc77d10,GameSpeed.cpp,CGameSpeed::calculateGameSpeed(float),MISSING,False,False,,False
+0xc77ea0,GameSpeed.cpp,"CGameSpeed::addSpeedModifier(EGAMESPEED_TYPE, float, float)",MISSING,False,False,,False
+0xc78030,GameSpeed.cpp,CGameSpeed::clear(),DIFF,False,False,,False
+0xc780c0,GameSpeed.cpp,"CGameSpeed::CGameSpeed(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xc781d0,GameSpeed.cpp,CGameSpeed::~CGameSpeed(),MISSING,False,False,,False
+0xc782c0,GameSpeed.cpp,CGameSpeed::~CGameSpeed(),MISSING,False,False,,False
+0xc78310,Graph.cpp,"CGraph::getValue(float, unsigned int) const",DIFF,False,False,,False
+0xc783d0,Graph.cpp,"global constructors keyed to CGraph::CGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xc78480,Graph.cpp,CGraph::processPoints(),DIFF,False,False,,False
+0xc784e0,Graph.cpp,CGraph::getControlPoints(),DIFF,False,False,,False
+0xc78540,Graph.cpp,CGraph::clear(unsigned int),DIFF,True,True,handoff/recovered-pass10/snippets/Graph.cpp/0xc78540.cpp,False
+0xc785a0,Graph.cpp,CGraph::~CGraph(),DIFF,False,False,,False
+0xc786c0,Graph.cpp,CGraph::~CGraph(),MATCH,True,False,,False
+0xc786e0,Graph.cpp,CGraph::addGraphLine(EGRAPH_TYPES),DIFF,False,False,,False
+0xc78880,Graph.cpp,"CGraph::addValue(float, float, unsigned int)",DIFF,False,False,,False
+0xc78930,Graph.cpp,CGraph::loadGraphLine(CDataGroup*),DIFF,False,False,,False
+0xc78da0,Graph.cpp,CGraph::loadGraph(wchar_t const*),DIFF,False,False,,False
+0xc791f0,Graph.cpp,"CGraph::CGraph(EGRAPH_TYPES, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",MATCH,True,False,,False
+0xc792d0,Graph.cpp,"CGraph::CGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xc793e0,MouseHandler.cpp,global constructors keyed to CMouseHandler::CMouseHandler(void*),MATCH,False,False,,False
+0xc79450,MouseHandler.cpp,CMouseHandler::MousePosition(),MATCH,True,False,,False
+0xc79470,MouseHandler.cpp,CMouseHandler::MouseIsInWindow(),MATCH,True,False,,False
+0xc79490,MouseHandler.cpp,CMouseHandler::MouseCenterButtonDown(),MATCH,True,False,,False
+0xc794b0,MouseHandler.cpp,CMouseHandler::MouseRightButtonDown(),MATCH,True,False,,False
+0xc794d0,MouseHandler.cpp,CMouseHandler::MouseLeftButtonDown(),MATCH,True,False,,False
+0xc794f0,MouseHandler.cpp,CMouseHandler::~CMouseHandler(),MATCH,True,False,,False
+0xc79500,MouseHandler.cpp,CMouseHandler::~CMouseHandler(),MATCH,True,False,,False
+0xc79520,MouseHandler.cpp,CMouseHandler::CMouseHandler(void*),MATCH,True,False,,False
+0xc79560,UtilitiesMath.cpp,MATH::vectorToRGB(Ogre::Vector3 const&),MATCH,True,False,,False
+0xc79650,UtilitiesMath.cpp,"MATH::boundsContains(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xc796a0,UtilitiesMath.cpp,"MATH::boundsIntersect(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xc796f0,UtilitiesMath.cpp,"MATH::boundsContainsXY(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xc79730,UtilitiesMath.cpp,"MATH::boundsIntersectXY(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xc79770,UtilitiesMath.cpp,"MATH::boundsContains(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False
+0xc797e0,UtilitiesMath.cpp,"MATH::boundsIntersect(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False
+0xc79850,UtilitiesMath.cpp,"MATH::expandBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False
+0xc798b0,UtilitiesMath.cpp,"MATH::expandCubicBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False
+0xc79960,UtilitiesMath.cpp,"MATH::expandHorizontalCubicBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False
+0xc79a00,UtilitiesMath.cpp,"MATH::worldToLocalPerspective(Ogre::Vector3&, Ogre::Vector3 const&, Ogre::Matrix4 const&)",DIFF,False,False,,False
+0xc79ab0,UtilitiesMath.cpp,"MATH::worldToLocal(Ogre::Vector3&, Ogre::Vector3 const&, Ogre::Matrix4 const&)",DIFF,True,True,handoff/recovered-pass10/snippets/UtilitiesMath.cpp/0xc79ab0.cpp,False
+0xc79b40,UtilitiesMath.cpp,"MATH::closestPointOnLine(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False
+0xc79c30,UtilitiesMath.cpp,"MATH::closestPointOnTriangle(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",DIFF,False,False,,False
+0xc79dd0,UtilitiesMath.cpp,"MATH::classifyPoint(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",DIFF,False,False,,False
+0xc79e20,UtilitiesMath.cpp,"MATH::classifyPointForSphere(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",DIFF,False,False,,False
+0xc79e80,UtilitiesMath.cpp,"MATH::getLinePlaneIntersection(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False
+0xc79fc0,UtilitiesMath.cpp,"MATH::getSpherePlaneIntersection(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False
+0xc7a0e0,UtilitiesMath.cpp,"MATH::distanceToPlane(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False
+0xc7a150,UtilitiesMath.cpp,"MATH::matrixRotationZ(Ogre::Matrix4&, float)",MATCH,True,False,,False
+0xc7a1f0,UtilitiesMath.cpp,"MATH::matrixRotationX(Ogre::Matrix4&, float)",DIFF,False,False,,False
+0xc7a2a0,UtilitiesMath.cpp,"MATH::matrixRotationY(Ogre::Matrix4&, float)",DIFF,False,False,,False
+0xc7a340,UtilitiesMath.cpp,"MATH::rotateZ(Ogre::Vector3*, float)",MATCH,True,False,,False
+0xc7a3a0,UtilitiesMath.cpp,"MATH::rotateX(Ogre::Vector3*, float)",DIFF,False,False,,False
+0xc7a400,UtilitiesMath.cpp,"MATH::rotateY(Ogre::Vector3*, float)",DIFF,False,False,,False
+0xc7a460,UtilitiesMath.cpp,"MATH::angleBetween(Ogre::Vector3, Ogre::Vector3)",MATCH,True,False,,False
+0xc7a4b0,UtilitiesMath.cpp,"MATH::screenToWorldRay(Ogre::Camera*, float, float, float, float)",DIFF,False,False,,False
+0xc7a8a0,UtilitiesMath.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xc7f2b0,UtilitiesMath.cpp,global constructors keyed to Percentage,MATCH,False,False,,False
+0xc7f2c0,UtilitiesMath.cpp,__tcf_0,MATCH,False,False,,False
+0xc7f330,UtilitiesMath.cpp,__tcf_9,MATCH,False,False,,False
+0xc7f3c0,UtilitiesMath.cpp,__tcf_8,MATCH,False,False,,False
+0xc7f450,UtilitiesMath.cpp,__tcf_7,MATCH,False,False,,False
+0xc7f4c0,UtilitiesMath.cpp,__tcf_6,MATCH,False,False,,False
+0xc7f530,UtilitiesMath.cpp,__tcf_4,MATCH,False,False,,False
+0xc7f5c0,UtilitiesMath.cpp,__tcf_3,MATCH,False,False,,False
+0xc7f650,UtilitiesMath.cpp,__tcf_2,MATCH,False,False,,False
+0xc7f6e0,UtilitiesMath.cpp,__tcf_1,MATCH,False,False,,False
+0xc7f750,UtilitiesMath.cpp,__tcf_5,MATCH,False,False,,False
+0xc7f7e0,UtilitiesMath.cpp,"MATH::setMeshInformation(Ogre::Mesh*, unsigned long, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long, unsigned long*&, unsigned long, unsigned long, unsigned int*&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long, Ogre::VertexBoneAssignment_s*&)",MISSING,False,False,,False
+0xc7fea0,UtilitiesMath.cpp,"MATH::getSubMeshInformation(Ogre::SubMesh const*, bool, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, Ogre::VertexBoneAssignment_s*&, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xc808a0,UtilitiesMath.cpp,"MATH::getMeshInformation(Ogre::Mesh const*, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, unsigned int*&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, Ogre::VertexBoneAssignment_s*&, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xc816a0,Mod.cpp,"CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc817a0,Mod.cpp,"CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc818a0,Mod.cpp,CMod::~CMod(),MATCH,True,False,,False
+0xc81ab0,Mod.cpp,CMod::~CMod(),MATCH,True,False,,False
+0xc81ad0,Mod.cpp,CMod::reloadModFiles(),MISSING,False,False,,False
+0xc82880,Mod.cpp,"CMod::CMod(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MISSING,False,False,,False
+0xc83970,ModFileFilter.cpp,CModFileFilter::getSingleton(),MISSING,False,False,,False
+0xc83980,ModFileFilter.cpp,CModFileFilter::getNumberOfEnabledMods(),MISSING,False,False,,False
+0xc839d0,ModFileFilter.cpp,CModFileFilter::getNumberOfActiveMods(),DIFF,False,False,,False
+0xc83ab0,ModFileFilter.cpp,"CModFileFilter::refreshMod(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc83b40,ModFileFilter.cpp,"CModFileFilter::addNewMod(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc83c80,ModFileFilter.cpp,CModFileFilter::saveModFile(bool),MISSING,False,False,,False
+0xc84440,ModFileFilter.cpp,CModFileFilter::refreshAllMods(),MISSING,False,False,,False
+0xc844a0,ModFileFilter.cpp,CModFileFilter::~CModFileFilter(),MISSING,False,False,,False
+0xc845c0,ModFileFilter.cpp,CModFileFilter::~CModFileFilter(),MISSING,False,False,,False
+0xc845e0,ModFileFilter.cpp,"CModFileFilter::getFilePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, CFileInfo&)",MISSING,False,False,,False
+0xc847e0,ModFileFilter.cpp,CModFileFilter::CModFileFilter(),MISSING,False,False,,False
+0xc85ec0,ModFileFilter.cpp,"CModFileFilter::getEnabledModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False
+0xc86140,ModFileFilter.cpp,"CModFileFilter::getModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False
+0xc86410,ModFileFilter.cpp,"CModFileFilter::getFiles(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
+0xc86b50,OgreUtilities.cpp,"OGRE_UTILITIES::attachEntityToSceneNode(Ogre::Entity*, Ogre::SceneNode*)",MATCH,True,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86b50.cpp,False
+0xc86bd0,OgreUtilities.cpp,OGRE_UTILITIES::detachEntityFromParent(Ogre::Entity*),MATCH,True,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86bd0.cpp,False
+0xc86c20,OgreUtilities.cpp,OGRE_UTILITIES::removeChildFromParentNode(Ogre::SceneNode*),MATCH,True,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86c20.cpp,False
+0xc86c60,OgreUtilities.cpp,"OGRE_UTILITIES::addChildSceneNode(Ogre::SceneNode*, Ogre::SceneNode*)",MATCH,True,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86c60.cpp,False
+0xc86e40,OgreUtilities.cpp,__tcf_0,MATCH,False,False,,False
+0xc86ed0,OgreUtilities.cpp,"OGRE_UTILITIES::createEntity(Ogre::SceneManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, OGRE_UTILITIES::EQUERYMASK, char const*)",MISSING,False,False,,False
+0xc87330,OgreUtilities.cpp,"OGRE_UTILITIES::createEntity(Ogre::SceneManager*, OGRE_UTILITIES::EPRIMITIVES, OGRE_UTILITIES::EQUERYMASK, char const*)",MISSING,False,False,,False
+0xc875c0,path.cpp,CPath::Clear(),DIFF,False,False,,False
+0xc87600,path.cpp,CPath::GetPoint(unsigned int),MISSING,False,False,,False
+0xc87680,path.cpp,CPath::GetPointDistance(unsigned int),MISSING,False,False,,False
+0xc876b0,path.cpp,CPath::GetSegmentAngle(unsigned int),MISSING,False,False,,False
+0xc876e0,path.cpp,CPath::GetRadiusLeft(unsigned int),MISSING,False,False,,False
+0xc87730,path.cpp,CPath::GetRadiusRight(unsigned int),MISSING,False,False,,False
+0xc87780,path.cpp,"CPath::SetRadiusLeft(unsigned int, float)",DIFF,False,False,,False
+0xc877a0,path.cpp,"CPath::SetRadiusRight(unsigned int, float)",DIFF,False,False,,False
+0xc877c0,path.cpp,CPath::GetTweenedRadiusRight(float),MISSING,False,False,,False
+0xc878d0,path.cpp,CPath::GetTweenedRadiusLeft(float),MISSING,False,False,,False
+0xc879e0,path.cpp,CPath::GetSplinePositionAtDistance(float),MISSING,False,False,,False
+0xc87e30,path.cpp,"CPath::GetAngleOverDistance(float, float)",MISSING,False,False,,False
+0xc87f60,path.cpp,CPath::GetPathSegment(unsigned int),MISSING,False,False,,False
+0xc88060,path.cpp,CPath::GetPositionAtDistance(float),MISSING,False,False,,False
+0xc88250,path.cpp,CPath::ClosePath(),DIFF,False,False,,False
+0xc88300,path.cpp,"CPath::FindNearestPoint(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, float&, float)",MISSING,False,False,,False
+0xc88880,path.cpp,CPath::~CPath(),DIFF,False,False,,False
+0xc88970,path.cpp,CPath::~CPath(),MATCH,True,False,,False
+0xc88990,path.cpp,"CPath::CalculatePathWidth(CPath&, CPath&)",DIFF,False,False,,False
+0xc88c90,path.cpp,CPath::GetSegmentPerpendicularY(unsigned int),MISSING,False,False,,False
+0xc88d90,path.cpp,"CPath::AddPoint(Ogre::Vector3 const&, float, float)",DIFF,False,False,,False
+0xc893b0,path.cpp,CPath::Reverse(),DIFF,False,False,,False
+0xc89550,path.cpp,"CPath::CPath(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xc896b0,path.cpp,CPath::Resize(unsigned int),DIFF,False,False,,False
+0xc89880,path.cpp,CPath::CPath(CPath&),DIFF,False,False,,False
+0xc8a210,randomizer.cpp,CRandomizer::getOdds(int),MATCH,True,False,,False
+0xc8a240,randomizer.cpp,"CRandomizer::setChoiceOdds(int, int)",MATCH,True,False,,False
+0xc8a2c0,randomizer.cpp,CRandomizer::removeChoice(unsigned int),DIFF,False,False,,False
+0xc8a370,randomizer.cpp,global constructors keyed to CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,False,False,,False
+0xc8a3e0,randomizer.cpp,CRandomizer::setRandomSeed(unsigned int),MATCH,True,False,,False
+0xc8a3f0,randomizer.cpp,CRandomizer::clear(),MATCH,True,False,,False
+0xc8a470,randomizer.cpp,"CRandomizer::addChoice(int, int)",MATCH,True,False,,False
+0xc8a600,randomizer.cpp,CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,True,False,,False
+0xc8a6a0,randomizer.cpp,CRandomizer::computeOdds(),MATCH,True,False,,False
+0xc8a890,randomizer.cpp,CRandomizer::setRandomizerToNormal(float),MATCH,True,False,,False
+0xc8a8f0,randomizer.cpp,CRandomizer::getRandom(int&),DIFF,False,False,,False
+0xc8aa10,randomizer.cpp,CRandomizer::getRandom(),DIFF,False,False,,False
+0xc8ab10,randomizer.cpp,CRandomizer::hasValidChoices(),MATCH,True,False,,False
+0xc8abf0,CmdLineParser.cpp,"CCmdLineParser::HasCommand(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc8acf0,CmdLineParser.cpp,"CCmdLineParser::GetStringParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc8ae40,CmdLineParser.cpp,"CCmdLineParser::GetIntParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MISSING,False,False,,False
+0xc8af80,CmdLineParser.cpp,"CCmdLineParser::GetFloatParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",MISSING,False,False,,False
+0xc8b0c0,CmdLineParser.cpp,CCmdLineParser::~CCmdLineParser(),DIFF,False,False,,False
+0xc8b160,CmdLineParser.cpp,CCmdLineParser::~CCmdLineParser(),MATCH,True,False,,False
+0xc8b180,CmdLineParser.cpp,"CCmdLineParser::CCmdLineParser(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc8d4f0,CmdLineParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > >*)",MATCH,False,False,,False
+0xc8d5f0,StringUtilities.cpp,"STRINGS::firstXCharactersMatch(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MISSING,False,False,,False
+0xc8d650,StringUtilities.cpp,"STRINGS::firstXCharactersMatch(wchar_t const*, unsigned int, wchar_t const*, unsigned int)",MATCH,True,False,,False
+0xc8d6a0,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, wchar_t const*)",MATCH,True,False,,False
+0xc8d720,StringUtilities.cpp,"STRINGS::StringSizeOfWCharArray(wchar_t const*, unsigned int)",MISSING,False,False,,False
+0xc8d760,StringUtilities.cpp,"STRINGS::StringSizeOfCharArray(char const*, unsigned int)",MISSING,False,False,,False
+0xc8d800,StringUtilities.cpp,"STRINGS::StringIsLower(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc8d860,StringUtilities.cpp,"STRINGS::StringIsLower(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8d8c0,StringUtilities.cpp,"STRINGS::StringIsUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc8d920,StringUtilities.cpp,"STRINGS::StringIsUpper(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8d980,StringUtilities.cpp,"STRINGS::StringConvertToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, wchar_t*, int)",MISSING,False,False,,False
+0xc8da10,StringUtilities.cpp,"STRINGS::StringCopyCharArray(char*, unsigned int, char const*)",MATCH,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8da10.cpp,False
+0xc8daa0,StringUtilities.cpp,STRINGS::GetValueAsString(bool),MATCH,True,False,,False
+0xc8daf0,StringUtilities.cpp,"STRINGS::StringConvertToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc8dc80,StringUtilities.cpp,"STRINGS::StringConvertUTF8ToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8dc90,StringUtilities.cpp,"STRINGS::StringConvertToUTF8(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc8dca0,StringUtilities.cpp,STRINGS::GetValueAsWString(bool),DIFF,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8dca0.cpp,False
+0xc8dcf0,StringUtilities.cpp,"STRINGS::GetBool(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
+0xc8dd30,StringUtilities.cpp,"STRINGS::GetBool(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8dd70,StringUtilities.cpp,"STRINGS::GetInt64(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8dd90,StringUtilities.cpp,"STRINGS::GetFloat(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8dd90.cpp,False
+0xc8ddb0,StringUtilities.cpp,"STRINGS::GetFloat64(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8ddc0,StringUtilities.cpp,"STRINGS::GetInt64(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
+0xc8ddf0,StringUtilities.cpp,"STRINGS::GetInt(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc8de20,StringUtilities.cpp,"STRINGS::GetInt(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
+0xc8de40,StringUtilities.cpp,"STRINGS::GetFloat(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8de40.cpp,False
+0xc8de70,StringUtilities.cpp,"STRINGS::GetFloat64(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xc8de90,StringUtilities.cpp,"std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.0]",MISSING,False,False,,False
+0xc8def0,StringUtilities.cpp,"STRINGS::replaceString(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8def0.cpp,False
+0xc8df60,StringUtilities.cpp,"STRINGS::replaceWString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8df60.cpp,False
+0xc8dfd0,StringUtilities.cpp,"std::basic_iostream<wchar_t, std::char_traits<wchar_t> >::~basic_iostream() [clone .clone.8]",MISSING,False,False,,False
+0xc8e030,StringUtilities.cpp,"STRINGS::StringLower(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc8e0e0,StringUtilities.cpp,"STRINGS::StringUpper(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc8e190,StringUtilities.cpp,"STRINGS::StringUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc8e230,StringUtilities.cpp,"STRINGS::StringLower(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xc8e2e0,StringUtilities.cpp,STRINGS::GetApplicationPath(),MISSING,False,False,,False
+0xc8e350,StringUtilities.cpp,STRINGS::StringConvertToNarrow(wchar_t const*),MISSING,False,False,,False
+0xc8e4b0,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const*, char)",MATCH,True,False,,False
+0xc8e660,StringUtilities.cpp,"STRINGS::StringConvertToWide(char const*, unsigned int)",MATCH,True,False,,False
+0xc8e700,StringUtilities.cpp,"STRINGS::StringConvertToNarrow(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",MATCH,True,False,,False
+0xc8e810,StringUtilities.cpp,STRINGS::GetValueAsString(int),MISSING,False,False,,False
+0xc8ea50,StringUtilities.cpp,"STRINGS::uniqueName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
+0xc8ebb0,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",MISSING,False,False,,False
+0xc8ef50,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, char const*)",MISSING,False,False,,False
+0xc8f040,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MATCH,True,False,,False
+0xc8f060,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)",MISSING,False,False,,False
+0xc8f400,StringUtilities.cpp,"STRINGS::getStringIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const*, unsigned int, unsigned int, bool)",MATCH,True,False,,False
+0xc8f600,StringUtilities.cpp,"STRINGS::GetArrayValueFloat(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float*, unsigned int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MISSING,False,False,,False
+0xc90060,StringUtilities.cpp,"STRINGS::GetArrayValueFloat(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float*, unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc90a30,StringUtilities.cpp,STRINGS::GetValueAsString(float),MISSING,False,False,,False
+0xc90c50,StringUtilities.cpp,STRINGS::GetValueAsString(double),MISSING,False,False,,False
+0xc90e70,StringUtilities.cpp,STRINGS::GetValueAsString(long long),MISSING,False,False,,False
+0xc910b0,StringUtilities.cpp,STRINGS::GetValueAsWString(unsigned int),MISSING,False,False,,False
+0xc913a0,StringUtilities.cpp,STRINGS::GetValueAsWString(int),MISSING,False,False,,False
+0xc91690,StringUtilities.cpp,STRINGS::GetValueAsWString(long long),MISSING,False,False,,False
+0xc91980,StringUtilities.cpp,STRINGS::GetValueAsWString(double),MISSING,False,False,,False
+0xc91c70,StringUtilities.cpp,STRINGS::GetValueAsWString(float),MISSING,False,False,,False
+0xc91f60,StringUtilities.cpp,STRINGS::GetValueAsString(unsigned int),MISSING,False,False,,False
+0xc92490,StringUtilities.cpp,"std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_reallocate_map(unsigned long, bool)",MATCH,False,False,,False
+0xc92630,StringUtilities.cpp,"std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_push_back_aux(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",DIFF,False,False,,False
+0xc92a50,utilities.cpp,UTILITIES::GetDesktopBPP(void*),MATCH,True,False,,False
+0xc92a60,utilities.cpp,UTILITIES::getRandState(),MATCH,True,False,,False
+0xc92a70,utilities.cpp,"UTILITIES::randomBetween(float, float)",MATCH,True,False,,False
+0xc92b10,utilities.cpp,"UTILITIES::randomIntegerBetween(int, int)",MATCH,True,False,,False
+0xc92b50,utilities.cpp,"UTILITIES::randomBetweenVolatile(float, float)",MATCH,True,False,,False
+0xc92bf0,utilities.cpp,"UTILITIES::randomIntegerBetweenVolatile(int, int)",MATCH,True,False,,False
+0xc92c30,utilities.cpp,UTILITIES::setSeedVolatile(int),MATCH,True,False,,False
+0xc92c70,utilities.cpp,UTILITIES::setSeed(int),MATCH,True,False,,False
+0xc92cb0,utilities.cpp,UTILITIES::getAvailableRAM(),MATCH,True,False,,False
+0xc92cc0,utilities.cpp,UTILITIES::getProcessorSpeed(),MATCH,True,False,,False
+0xc92cd0,utilities.cpp,"UTILITIES::GetEnvironmentVar(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
+0xc92d30,utilities.cpp,UTILITIES::doubleRand(),MATCH,True,False,,False
+0xc92d90,utilities.cpp,"UTILITIES::VerifyDouble(double, double)",MATCH,True,False,,False
+0xc92dd0,utilities.cpp,"UTILITIES::VerifyFloat(float, float)",MATCH,True,False,,False
+0xc92e10,utilities.cpp,"UTILITIES::DecompressNormal(int, int, unsigned int)",MATCH,True,False,,False
+0xc92eb0,utilities.cpp,global constructors keyed to UTILITIES::createUniqueGuid(),MATCH,False,False,,False
+0xc93080,utilities.cpp,"UTILITIES::SetClipBoardText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xc93100,utilities.cpp,"UTILITIES::ClearQueue(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >&)",MATCH,True,False,,False
+0xc93210,utilities.cpp,"UTILITIES::ClearQueue(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&)",MATCH,True,False,,False
+0xc93320,utilities.cpp,UTILITIES::createUniqueGuid(),MATCH,True,False,,False
+0xc937f0,utilities.cpp,MTRand::reload(),MATCH,False,False,,False
+0xc938e0,ExecuteSkillProps.cpp,"CExecuteSkillProps::executeSkill(CBaseUnit*, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*, int)",DIFF,False,False,,False
+0xc93b10,ExecuteSkillProps.cpp,"CExecuteSkillProps::getSkillStats(CBaseUnit*, int)",DIFF,False,False,,False
+0xc93bd0,ExecuteSkillProps.cpp,"CExecuteSkillProps::getSkillDescription(CBaseUnit*, int)",DIFF,False,False,,False
+0xc93c90,ExecuteSkillProps.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xc9b510,ExecuteSkillProps.cpp,__tcf_16,MATCH,False,False,,False
+0xc9b5a0,ExecuteSkillProps.cpp,__tcf_0,MATCH,False,False,,False
+0xc9bd40,ExecuteSkillProps.cpp,__tcf_26,DIFF,False,False,,False
+0xc9bdb0,ExecuteSkillProps.cpp,__tcf_25,DIFF,False,False,,False
+0xc9be40,ExecuteSkillProps.cpp,__tcf_24,DIFF,False,False,,False
+0xc9bf60,ExecuteSkillProps.cpp,__tcf_21,DIFF,False,False,,False
+0xc9bfd0,ExecuteSkillProps.cpp,__tcf_20,DIFF,False,False,,False
+0xc9c060,ExecuteSkillProps.cpp,__tcf_19,MATCH,False,False,,False
+0xc9c0f0,ExecuteSkillProps.cpp,__tcf_18,MATCH,False,False,,False
+0xc9c160,ExecuteSkillProps.cpp,__tcf_17,MATCH,False,False,,False
+0xc9c1d0,ExecuteSkillProps.cpp,__tcf_15,MATCH,False,False,,False
+0xc9c260,ExecuteSkillProps.cpp,__tcf_14,MATCH,False,False,,False
+0xc9c2f0,ExecuteSkillProps.cpp,__tcf_13,MATCH,False,False,,False
+0xc9c360,ExecuteSkillProps.cpp,__tcf_12,MATCH,False,False,,False
+0xc9c3f0,ExecuteSkillProps.cpp,__tcf_11,MATCH,False,False,,False
+0xc9c480,ExecuteSkillProps.cpp,__tcf_10,MATCH,False,False,,False
+0xc9c510,ExecuteSkillProps.cpp,__tcf_9,MATCH,False,False,,False
+0xc9c580,ExecuteSkillProps.cpp,__tcf_8,MATCH,False,False,,False
+0xc9c5f0,ExecuteSkillProps.cpp,__tcf_7,MATCH,False,False,,False
+0xc9c660,ExecuteSkillProps.cpp,__tcf_6,MATCH,False,False,,False
+0xc9c6d0,ExecuteSkillProps.cpp,__tcf_4,MATCH,False,False,,False
+0xc9c760,ExecuteSkillProps.cpp,__tcf_3,MATCH,False,False,,False
+0xc9c7f0,ExecuteSkillProps.cpp,__tcf_2,MATCH,False,False,,False
+0xc9c880,ExecuteSkillProps.cpp,__tcf_1,MATCH,False,False,,False
+0xc9c8f0,ExecuteSkillProps.cpp,__tcf_22,DIFF,False,False,,False
+0xc9c980,ExecuteSkillProps.cpp,__tcf_5,MATCH,False,False,,False
+0xc9ca10,ExecuteSkillProps.cpp,__tcf_23,DIFF,False,False,,False
+0xc9caa0,ExecuteSkillProps.cpp,CExecuteSkillProps::~CExecuteSkillProps(),MATCH,True,False,,False
+0xc9cb10,ExecuteSkillProps.cpp,CExecuteSkillProps::~CExecuteSkillProps(),MATCH,True,False,,False
+0xc9cb30,ExecuteSkillProps.cpp,"CExecuteSkillProps::CExecuteSkillProps(CSkill*, CSkillEvent*, CDataGroup*)",DIFF,False,False,,False
+0xc9cc30,Skill.cpp,CSkill::getSkillRequiredForInvestment(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cc30.cpp,False
+0xc9cc40,Skill.cpp,CSkill::getLevelRequiredForInvestment(),MISSING,False,False,,False
+0xc9ccf0,Skill.cpp,CSkill::hasEvent(ESKILL_EVENT_TYPE),MISSING,False,False,,False
+0xc9cd40,Skill.cpp,CSkill::getCanStop(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd40.cpp,False
+0xc9cd70,Skill.cpp,CSkill::getIsExclusive(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd70.cpp,False
+0xc9cd90,Skill.cpp,CSkill::getManaCost(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd90.cpp,False
+0xc9cdb0,Skill.cpp,CSkill::getRequiresPathable(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdb0.cpp,False
+0xc9cdd0,Skill.cpp,CSkill::getCanBeInterrupted(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdd0.cpp,False
+0xc9cdf0,Skill.cpp,CSkill::getManaCostOT(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdf0.cpp,False
+0xc9ce10,Skill.cpp,CSkill::getSkillIcon(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce10.cpp,False
+0xc9ce30,Skill.cpp,CSkill::getSkillIconInactive(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce30.cpp,False
+0xc9ce50,Skill.cpp,CSkill::getName(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce50.cpp,False
+0xc9ce70,Skill.cpp,CSkill::getSkillUsageDescription(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce70.cpp,False
+0xc9ce90,Skill.cpp,CSkill::getDisplayName(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce90.cpp,False
+0xc9ceb0,Skill.cpp,CSkill::getAnimationIndex(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ceb0.cpp,False
+0xc9ced0,Skill.cpp,CSkill::getAnimationIndexDW(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ced0.cpp,False
+0xc9cef0,Skill.cpp,CSkill::getAnimationIndexLoopInto(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cef0.cpp,False
+0xc9cf10,Skill.cpp,CSkill::getAnimationIndexLoopEnd(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf10.cpp,False
+0xc9cf30,Skill.cpp,CSkill::getChanceToCast(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf30.cpp,False
+0xc9cf50,Skill.cpp,CSkill::getAnimationIndexDWLoopInto(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf50.cpp,False
+0xc9cf70,Skill.cpp,CSkill::getAnimationSpeedMult(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf70.cpp,False
+0xc9cfa0,Skill.cpp,CSkill::getFindTargetAngle(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cfa0.cpp,False
+0xc9cfc0,Skill.cpp,CSkill::getRange(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cfc0.cpp,False
+0xc9cff0,Skill.cpp,CSkill::getRangeMin(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cff0.cpp,False
+0xc9d010,Skill.cpp,CSkill::getRandomRange(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d010.cpp,False
+0xc9d040,Skill.cpp,CSkill::getRandomRangeMin(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d040.cpp,False
+0xc9d060,Skill.cpp,CSkill::getMinimumTime(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d060.cpp,False
+0xc9d090,Skill.cpp,CSkill::getTargetType(),MISSING,False,False,,False
+0xc9d0b0,Skill.cpp,CSkill::getUnitTypeToTarget(),MISSING,False,False,,False
+0xc9d0d0,Skill.cpp,CSkill::getMasterOwner(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d0d0.cpp,False
+0xc9d0f0,Skill.cpp,"CSkill::fillOutStatBonuses(float (&) [6], bool, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d0f0.cpp,False
+0xc9d160,Skill.cpp,CSkill::getOwnerCharacter(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d160.cpp,False
+0xc9d190,Skill.cpp,"CSkill::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d190.cpp,False
+0xc9d1e0,Skill.cpp,CSkill::getMasterOwnerCharacter(),MISSING,False,False,,False
+0xc9d220,Skill.cpp,CSkill::getCoolDown(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d220.cpp,False
+0xc9d250,Skill.cpp,"CSkill::getIsInRange(Ogre::Vector3 const&, Ogre::Vector3 const&, CBaseUnit*, CBaseUnit*)",MISSING,False,False,,False
+0xc9d3c0,Skill.cpp,CSkill::getMaximumDamage(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d3c0.cpp,False
+0xc9d420,Skill.cpp,CSkill::getMinimumDamage(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d420.cpp,False
+0xc9d480,Skill.cpp,"CSkill::getTargetIsValid(CCharacter*, CCharacter*, Ogre::Vector3 const*, bool)",MISSING,False,False,,False
+0xc9d610,Skill.cpp,CSkill::attemptToStopSkill(),MISSING,False,False,,False
+0xc9d6a0,Skill.cpp,CSkill::weaponRequirementsMet(CCharacter*),MISSING,False,False,,False
+0xc9d7f0,Skill.cpp,"CSkill::requirementsMet(CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const*, CBaseUnit*, bool)",MISSING,False,False,,False
+0xc9db10,Skill.cpp,CSkill::rollCancelChance(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9db10.cpp,False
+0xc9db40,Skill.cpp,CSkill::rollCastChance(),MATCH,True,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9db40.cpp,False
+0xc9db70,Skill.cpp,CSkill::rollSkillChance(),MISSING,False,False,,False
+0xc9dbc0,Skill.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xca4900,Skill.cpp,__tcf_16,DIFF,False,False,,False
+0xca4990,Skill.cpp,__tcf_0,DIFF,False,False,,False
+0xca4a00,Skill.cpp,CSkill::assignSkillAnimations(CBaseUnit*),MISSING,False,False,,False
+0xca52b0,Skill.cpp,"CSkill::getSkillLevelDescription(CBaseUnit*, unsigned int)",MISSING,False,False,,False
+0xca5420,Skill.cpp,"CSkill::getSkillLevelStats(CBaseUnit*, unsigned int)",MISSING,False,False,,False
+0xca5590,Skill.cpp,"CSkill::getSkillLevelManaCostOT(CBaseUnit*, unsigned int)",MISSING,False,False,,False
+0xca56d0,Skill.cpp,"CSkill::getSkillLevelManaCost(CBaseUnit*, unsigned int)",MISSING,False,False,,False
+0xca5810,Skill.cpp,"CSkill::getSkillLevelCooldown(CBaseUnit*, unsigned int)",MISSING,False,False,,False
+0xca5950,Skill.cpp,"CSkill::triggerEvent(ESKILL_EVENT_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, CBaseUnit*, Ogre::Vector3 const*)",MISSING,False,False,,False
+0xca5e40,Skill.cpp,"non-virtual thunk to CSkill::unitStateChange(CBaseUnit*, EUNIT_STATES)",MISSING,False,False,,False
+0xca5e50,Skill.cpp,"CSkill::unitStateChange(CBaseUnit*, EUNIT_STATES)",MISSING,False,False,,False
+0xca5f80,Skill.cpp,CSkill::stopSkill(),MISSING,False,False,,False
+0xca6160,Skill.cpp,CSkill::updateSkill(float),MISSING,False,False,,False
+0xca66b0,Skill.cpp,__tcf_23,DIFF,False,False,,False
+0xca6740,Skill.cpp,__tcf_22,DIFF,False,False,,False
+0xca67d0,Skill.cpp,__tcf_21,DIFF,False,False,,False
+0xca6860,Skill.cpp,__tcf_20,DIFF,False,False,,False
+0xca68f0,Skill.cpp,__tcf_19,DIFF,False,False,,False
+0xca6980,Skill.cpp,__tcf_18,DIFF,False,False,,False
+0xca69f0,Skill.cpp,__tcf_17,DIFF,False,False,,False
+0xca6a60,Skill.cpp,__tcf_15,DIFF,False,False,,False
+0xca6af0,Skill.cpp,__tcf_14,DIFF,False,False,,False
+0xca6b80,Skill.cpp,__tcf_13,DIFF,False,False,,False
+0xca6bf0,Skill.cpp,__tcf_12,DIFF,False,False,,False
+0xca6c80,Skill.cpp,__tcf_11,DIFF,False,False,,False
+0xca6d10,Skill.cpp,__tcf_10,DIFF,False,False,,False
+0xca6da0,Skill.cpp,__tcf_9,DIFF,False,False,,False
+0xca6e10,Skill.cpp,__tcf_8,DIFF,False,False,,False
+0xca6e80,Skill.cpp,__tcf_7,DIFF,False,False,,False
+0xca6ef0,Skill.cpp,__tcf_6,DIFF,False,False,,False
+0xca6f60,Skill.cpp,__tcf_4,DIFF,False,False,,False
+0xca6ff0,Skill.cpp,__tcf_3,DIFF,False,False,,False
+0xca7080,Skill.cpp,__tcf_2,DIFF,False,False,,False
+0xca7110,Skill.cpp,__tcf_1,DIFF,False,False,,False
+0xca7180,Skill.cpp,__tcf_5,DIFF,False,False,,False
+0xca7210,Skill.cpp,CSkill::~CSkill(),MISSING,False,False,,False
+0xca7700,Skill.cpp,non-virtual thunk to CSkill::~CSkill(),MISSING,False,False,,False
+0xca7710,Skill.cpp,non-virtual thunk to CSkill::~CSkill(),MISSING,False,False,,False
+0xca7720,Skill.cpp,CSkill::~CSkill(),MISSING,False,False,,False
+0xca7740,Skill.cpp,CSkill::calculateEffectiveSkillLevel(),MISSING,False,False,,False
+0xca7a20,Skill.cpp,CSkill::_setLevelOfSkillFromSkillManager(unsigned int),MISSING,False,False,,False
+0xca7b10,Skill.cpp,"CSkill::CSkill(CResourceManager*, CDataGroup*)",MISSING,False,False,,False
+0xca9150,Skill.cpp,"CSkill::startSkill(CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*)",MISSING,False,False,,False
+0xca92e0,Skill.cpp,"CSkill::getDescription(CBaseUnit*, unsigned int, bool)",MISSING,False,False,,False
+0xca9bd0,Skill.cpp,CSkill::getDescriptionRequirments(CBaseUnit*),MISSING,False,False,,False
+0xcaabe0,Skill.cpp,CSkill::getSkillTypeDisplayName(),MISSING,False,False,,False
+0xcd5cf0,SkillParser.cpp,CSkillParser::getSingleton(),MATCH,True,False,,False
+0xcdb650,SkillParser.cpp,__tcf_5,MATCH,False,False,,False
+0xcdb6c0,SkillParser.cpp,__tcf_4,MATCH,False,False,,False
+0xcdb750,SkillParser.cpp,__tcf_3,MATCH,False,False,,False
+0xcdb7e0,SkillParser.cpp,__tcf_2,MATCH,False,False,,False
+0xcdb870,SkillParser.cpp,__tcf_1,MATCH,False,False,,False
+0xcdb8e0,SkillParser.cpp,__tcf_0,MATCH,False,False,,False
+0xcdb950,SkillParser.cpp,CSkillParser::clearSkills(),MATCH,True,False,,False
+0xcdb9c0,SkillParser.cpp,CSkillParser::~CSkillParser(),MATCH,True,False,,False
+0xcdba40,SkillParser.cpp,CSkillParser::~CSkillParser(),MATCH,True,False,,False
+0xcdba60,SkillParser.cpp,"CSkillParser::getSkillNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False
+0xcdbd20,SkillParser.cpp,"CSkillParser::getSkillData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xcdbeb0,SkillParser.cpp,"CSkillParser::getSkill(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xcdc070,SkillParser.cpp,"CSkillParser::parseSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xcdc590,SkillParser.cpp,CSkillParser::parseSkills(),DIFF,False,False,,False
+0xcdc840,SkillParser.cpp,CSkillParser::reloadSkills(),DIFF,False,False,,False
+0xcdc860,SkillParser.cpp,CSkillParser::CSkillParser(CResourceSettings*),MATCH,True,False,,False
+0xcdc8f0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >*)",MATCH,False,False,,False
+0xcdc990,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",DIFF,False,False,,False
+0xcdcab0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",MATCH,False,False,,False
+0xcdcbf0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",MATCH,False,False,,False
+0xce9ea0,CameraControl.cpp,CCameraControl::getMaxDistanceToDolly(),MATCH,True,False,,False
+0xce9ec0,CameraControl.cpp,CCameraControl::getDefaultDistanceToDolly(),MATCH,True,False,,False
+0xce9ee0,CameraControl.cpp,CCameraControl::getSingleton(),MATCH,True,False,,False
+0xce9ef0,CameraControl.cpp,"CCameraControl::setAspectRatio(ECAMERAS, float, float)",MISSING,False,False,,False
+0xce9fd0,CameraControl.cpp,CCameraControl::setCinematicMode(bool),DIFF,False,False,,False
+0xcea050,CameraControl.cpp,"CCameraControl::updateGameCamera(float, CResourceManager*, Ogre::Vector3, ECAMERA_STATES)",MISSING,False,False,,False
+0xceb230,CameraControl.cpp,"CCameraControl::processInput(void*, CSettings*, CKeyManager*, CMouseManager*, float, bool)",MATCH,True,False,,False
+0xceb380,CameraControl.cpp,CCameraControl::clearCameraShakes(),MISSING,False,False,,False
+0xceb4d0,CameraControl.cpp,"CCameraControl::CCameraControl(Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*)",MATCH,True,False,,False
+0xceb5d0,CameraControl.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xcf14c0,CameraControl.cpp,__tcf_1,DIFF,False,False,,False
+0xcf1650,CameraControl.cpp,__tcf_13,DIFF,False,False,,False
+0xcf16e0,CameraControl.cpp,__tcf_12,DIFF,False,False,,False
+0xcf1770,CameraControl.cpp,__tcf_11,DIFF,False,False,,False
+0xcf1800,CameraControl.cpp,__tcf_10,DIFF,False,False,,False
+0xcf1890,CameraControl.cpp,__tcf_9,DIFF,False,False,,False
+0xcf1900,CameraControl.cpp,__tcf_8,DIFF,False,False,,False
+0xcf1970,CameraControl.cpp,__tcf_7,DIFF,False,False,,False
+0xcf19e0,CameraControl.cpp,__tcf_5,DIFF,False,False,,False
+0xcf1a70,CameraControl.cpp,__tcf_4,DIFF,False,False,,False
+0xcf1b00,CameraControl.cpp,__tcf_3,DIFF,False,False,,False
+0xcf1b90,CameraControl.cpp,__tcf_2,DIFF,False,False,,False
+0xcf1c00,CameraControl.cpp,__tcf_6,DIFF,False,False,,False
+0xcf1c90,CameraControl.cpp,__tcf_0,DIFF,False,False,,False
+0xcf1db0,CameraControl.cpp,CCameraControl::~CCameraControl(),MISSING,False,False,,False
+0xcf1e60,CameraControl.cpp,CCameraControl::~CCameraControl(),MISSING,False,False,,False
+0xcf1e80,CameraShake.cpp,"CCameraShake::update(float, Ogre::Vector3&, Ogre::Vector3&, bool)",DIFF,False,False,,False
+0xcf2120,CameraShake.cpp,CCameraShake::CCameraShake(),DIFF,False,False,,False
+0xcf21e0,CameraShake.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xcf7ff0,CameraShake.cpp,__tcf_1,DIFF,False,False,,False
+0xcf8180,CameraShake.cpp,__tcf_13,DIFF,False,False,,False
+0xcf8210,CameraShake.cpp,__tcf_12,DIFF,False,False,,False
+0xcf82a0,CameraShake.cpp,__tcf_11,DIFF,False,False,,False
+0xcf8330,CameraShake.cpp,__tcf_10,DIFF,False,False,,False
+0xcf83c0,CameraShake.cpp,__tcf_9,DIFF,False,False,,False
+0xcf8430,CameraShake.cpp,__tcf_8,DIFF,False,False,,False
+0xcf84a0,CameraShake.cpp,__tcf_7,DIFF,False,False,,False
+0xcf8510,CameraShake.cpp,__tcf_5,DIFF,False,False,,False
+0xcf85a0,CameraShake.cpp,__tcf_4,DIFF,False,False,,False
+0xcf8630,CameraShake.cpp,__tcf_3,DIFF,False,False,,False
+0xcf86c0,CameraShake.cpp,__tcf_2,DIFF,False,False,,False
+0xcf8730,CameraShake.cpp,__tcf_6,DIFF,False,False,,False
+0xcf87c0,CameraShake.cpp,__tcf_0,DIFF,False,False,,False
+0xcf8850,CameraShake.cpp,"CCameraShake::setCameraShakeName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xcf8940,CameraShake.cpp,CCameraShake::clone(CCameraShake*),DIFF,False,False,,False
+0xcf89f0,CameraShake.cpp,"CCameraShake::CCameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3, float)",MISSING,False,False,,False
+0xcf8b10,CameraShake.cpp,CCameraShake::~CCameraShake(),MISSING,False,False,,False
+0xcf8c20,CameraShake.cpp,CCameraShake::~CCameraShake(),MISSING,False,False,,False
+0xcf8c40,CameraShake.cpp,"CCameraShake::startCameraShake(Ogre::Vector3 const&, bool)",MISSING,False,False,,False
+0xcf8ea0,Missile.cpp,CMissile::getCollisionSphereVisible(),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ea0.cpp,False
+0xcf8eb0,Missile.cpp,CMissile::setCollisionSphereVisible(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8eb0.cpp,False
+0xcf8ec0,Missile.cpp,CMissile::getAOESphereVisible(),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ec0.cpp,False
+0xcf8ed0,Missile.cpp,CMissile::setAOESphereVisible(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ed0.cpp,False
+0xcf8ee0,Missile.cpp,CMissile::getRateOFire(),MISSING,False,False,,False
+0xcf8ef0,Missile.cpp,CMissile::setRateOFire(float),MISSING,False,False,,False
+0xcf8f00,Missile.cpp,CMissile::resetMissile(),MISSING,False,False,,False
+0xcf8f70,Missile.cpp,CMissile::setRadiusOfMissile(float),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8f70.cpp,False
+0xcf8f80,Missile.cpp,CMissile::setAOERadius(float),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8f80.cpp,False
+0xcf8f90,Missile.cpp,CMissile::placeSphere(),MISSING,False,False,,False
+0xcf91e0,Missile.cpp,"CMissile::getClosestTarget(Ogre::Quaternion const&, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xcf9350,Missile.cpp,CMissile::removeArchFromMissile(float),MISSING,False,False,,False
+0xcf9450,Missile.cpp,CMissile::addArchFromMissile(float),MISSING,False,False,,False
+0xcf9620,Missile.cpp,"CMissile::doDamageToCharacter(CCharacter*, Ogre::Vector3 const&, float, float)",MISSING,False,False,,False
+0xcf9840,Missile.cpp,CMissile::handleDeathOfMissile(float),MISSING,False,False,,False
+0xcf99a0,Missile.cpp,CMissile::getParticleFile(EMISSILE_PARTICLES),MATCH,True,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf99a0.cpp,False
+0xcf99e0,Missile.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd00580,Missile.cpp,CMissile::setTarget(CPositionableObject*),MISSING,False,False,,False
+0xd00650,Missile.cpp,CMissile::initialize(),MISSING,False,False,,False
+0xd00a90,Missile.cpp,__tcf_17,DIFF,False,False,,False
+0xd00b20,Missile.cpp,__tcf_5,DIFF,False,False,,False
+0xd00b90,Missile.cpp,__tcf_0,DIFF,False,False,,False
+0xd00c20,Missile.cpp,CMissile::doAOEDamage(CBaseUnit*),MISSING,False,False,,False
+0xd01090,Missile.cpp,"CMissile::calculateLaunchOrientation(Ogre::Vector3 const&, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xd014a0,Missile.cpp,CMissile::killMissile(),MISSING,False,False,,False
+0xd01580,Missile.cpp,"CMissile::ricochetMissile(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xd01e30,Missile.cpp,__tcf_16,DIFF,False,False,,False
+0xd01ec0,Missile.cpp,__tcf_15,DIFF,False,False,,False
+0xd01f50,Missile.cpp,__tcf_14,DIFF,False,False,,False
+0xd01fe0,Missile.cpp,__tcf_13,DIFF,False,False,,False
+0xd02070,Missile.cpp,__tcf_12,DIFF,False,False,,False
+0xd020e0,Missile.cpp,__tcf_11,DIFF,False,False,,False
+0xd02150,Missile.cpp,__tcf_9,DIFF,False,False,,False
+0xd021e0,Missile.cpp,__tcf_8,DIFF,False,False,,False
+0xd02270,Missile.cpp,__tcf_7,DIFF,False,False,,False
+0xd02300,Missile.cpp,__tcf_6,DIFF,False,False,,False
+0xd02370,Missile.cpp,__tcf_4,DIFF,False,False,,False
+0xd02400,Missile.cpp,__tcf_3,DIFF,False,False,,False
+0xd02490,Missile.cpp,__tcf_2,DIFF,False,False,,False
+0xd02500,Missile.cpp,__tcf_1,DIFF,False,False,,False
+0xd02570,Missile.cpp,__tcf_10,DIFF,False,False,,False
+0xd02720,Missile.cpp,CMissile::updatePositionByVelocity(float),MISSING,False,False,,False
+0xd032b0,Missile.cpp,"CMissile::setParticleFile(EMISSILE_PARTICLES, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xd034c0,Missile.cpp,"CMissile::handleMissileHitUnit(CBaseUnit*, Ogre::Vector3)",MISSING,False,False,,False
+0xd038a0,Missile.cpp,"CMissile::checkCollision(Ogre::Vector3, Ogre::Vector3, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, CBaseUnit**)",MISSING,False,False,,False
+0xd04120,Missile.cpp,CMissile::update(float),MISSING,False,False,,False
+0xd04610,Missile.cpp,"CMissile::fireMissile(CBaseUnit*, Ogre::Vector3, Ogre::Quaternion const&, CPositionableObject*, Ogre::Vector3)",MISSING,False,False,,False
+0xd05ad0,Missile.cpp,CMissile::~CMissile(),MISSING,False,False,,False
+0xd05f90,Missile.cpp,CMissile::~CMissile(),MISSING,False,False,,False
+0xd05fb0,Missile.cpp,CMissile::CMissile(CResourceManager*),MISSING,False,False,,False
+0xd06250,Missile.cpp,"CMissile::CMissile(CResourceManager*, CMissile const*)",MISSING,False,False,,False
+0xd067c0,MissilePreloader.cpp,CMissilePreloader::getSinglelton(),MATCH,True,False,,False
+0xd067d0,MissilePreloader.cpp,"CMissilePreloader::notifyOfDeletion(iMissile*, CPositionableObject*)",DIFF,False,False,,False
+0xd068c0,MissilePreloader.cpp,CMissilePreloader::CMissilePreloader(CResourceSettings*),MATCH,True,False,,False
+0xd06970,MissilePreloader.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd09950,MissilePreloader.cpp,__tcf_4,DIFF,False,False,,False
+0xd099e0,MissilePreloader.cpp,__tcf_3,DIFF,False,False,,False
+0xd09a70,MissilePreloader.cpp,__tcf_2,DIFF,False,False,,False
+0xd09b00,MissilePreloader.cpp,__tcf_1,DIFF,False,False,,False
+0xd09b70,MissilePreloader.cpp,__tcf_0,DIFF,False,False,,False
+0xd09be0,MissilePreloader.cpp,CMissilePreloader::clearCachedMissiles(),MISSING,False,False,,False
+0xd09db0,MissilePreloader.cpp,CMissilePreloader::clear(),MATCH,True,False,,False
+0xd09e30,MissilePreloader.cpp,CMissilePreloader::~CMissilePreloader(),MATCH,True,False,,False
+0xd09f10,MissilePreloader.cpp,CMissilePreloader::~CMissilePreloader(),MATCH,True,False,,False
+0xd09f30,MissilePreloader.cpp,"CMissilePreloader::getMissileNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False
+0xd0a160,MissilePreloader.cpp,__tcf_7,DIFF,False,False,,False
+0xd0a1d0,MissilePreloader.cpp,__tcf_6,DIFF,False,False,,False
+0xd0a240,MissilePreloader.cpp,__tcf_5,DIFF,False,False,,False
+0xd0a2b0,MissilePreloader.cpp,"CMissilePreloader::getMissileRef(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xd0a440,MissilePreloader.cpp,"CMissilePreloader::loadMissile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd0ae50,MissilePreloader.cpp,CMissilePreloader::reloadMissiles(),MISSING,False,False,,False
+0xd0b0d0,MissilePreloader.cpp,"CMissilePreloader::createNewMissileRef(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd0b710,MissilePreloader.cpp,CMissilePreloader::cacheMissile(CMissile*),MISSING,False,False,,False
+0xd0bbd0,MissilePreloader.cpp,CMissilePreloader::updateMissiles(float),DIFF,False,False,,False
+0xd0bca0,MissilePreloader.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> >*)",MATCH,False,False,,False
+0xd0bd40,MissilePreloader.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> >*)",MATCH,False,False,,False
+0xd0c700,Quest.cpp,CQuest::getPlayer(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c700.cpp,False
+0xd0c720,Quest.cpp,CQuest::setQuestAcceptDialogInteracted(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c720.cpp,False
+0xd0c770,Quest.cpp,CQuest::caculateRewards(CDataGroup*),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c770.cpp,False
+0xd0c780,Quest.cpp,CQuest::getDungeonMaxFloor(),MISSING,False,False,,False
+0xd0c910,Quest.cpp,CQuest::getQuestHasRandomPieces(),MISSING,False,False,,False
+0xd0cab0,Quest.cpp,CQuest::getQuestRewardFame(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cab0.cpp,False
+0xd0cae0,Quest.cpp,CQuest::getQuestRewardXP(),MISSING,False,False,,False
+0xd0cb10,Quest.cpp,CQuest::getQuestRewardGold(),MISSING,False,False,,False
+0xd0cb40,Quest.cpp,CQuest::getQuestRewardString(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cb40.cpp,False
+0xd0cb70,Quest.cpp,CQuest::setQuestAccepted(bool),MISSING,False,False,,False
+0xd0cbe0,Quest.cpp,CQuest::setIsComplete(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cbe0.cpp,False
+0xd0cc10,Quest.cpp,CQuest::isComplete(bool),MISSING,False,False,,False
+0xd0ce90,Quest.cpp,"CQuest::questEventUpdate(EQUEST_EVENTS, CBaseUnit*, CBaseUnit*)",MISSING,False,False,,False
+0xd0d7b0,Quest.cpp,CQuest::cleanUpDialog(TArrayList<CQuestDialog*>&),MISSING,False,False,,False
+0xd0d810,Quest.cpp,CQuest::destroyIcons(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0d810.cpp,False
+0xd0d830,Quest.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd14510,Quest.cpp,CQuest::populate(CLevel*),MISSING,False,False,,False
+0xd14860,Quest.cpp,CQuest::addQuestControllerListerner(CQuestController*),MISSING,False,False,,False
+0xd14b30,Quest.cpp,CQuest::removeQuestControllerListerner(CQuestController*),MISSING,False,False,,False
+0xd14df0,Quest.cpp,__tcf_17,DIFF,False,False,,False
+0xd14e60,Quest.cpp,__tcf_16,DIFF,False,False,,False
+0xd14ef0,Quest.cpp,__tcf_6,DIFF,False,False,,False
+0xd14f60,Quest.cpp,CQuest::getQuestDialog(CBaseUnit*),MISSING,False,False,,False
+0xd15180,Quest.cpp,CQuest::getQuestIsValidForNPC(CBaseUnit*),MISSING,False,False,,False
+0xd15210,Quest.cpp,CQuest::getAllNPCUnitDataInvolvedInQuest(TArrayList<CDataGroup*>&),MISSING,False,False,,False
+0xd15c20,Quest.cpp,__tcf_15,DIFF,False,False,,False
+0xd15cb0,Quest.cpp,__tcf_14,DIFF,False,False,,False
+0xd15d40,Quest.cpp,__tcf_13,DIFF,False,False,,False
+0xd15db0,Quest.cpp,__tcf_12,DIFF,False,False,,False
+0xd15e20,Quest.cpp,__tcf_10,DIFF,False,False,,False
+0xd15eb0,Quest.cpp,__tcf_9,DIFF,False,False,,False
+0xd15f40,Quest.cpp,__tcf_8,DIFF,False,False,,False
+0xd15fd0,Quest.cpp,__tcf_7,DIFF,False,False,,False
+0xd16040,Quest.cpp,__tcf_5,DIFF,False,False,,False
+0xd160d0,Quest.cpp,__tcf_4,DIFF,False,False,,False
+0xd16160,Quest.cpp,__tcf_1,MATCH,False,False,,False
+0xd161f0,Quest.cpp,__tcf_0,MATCH,False,False,,False
+0xd16280,Quest.cpp,"CQuest::CQuest(CResourceManager*, CQuestManager*)",MISSING,False,False,,False
+0xd167a0,Quest.cpp,"CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",MISSING,False,False,,False
+0xd16a00,Quest.cpp,__tcf_3,DIFF,False,False,,False
+0xd16a90,Quest.cpp,__tcf_2,DIFF,False,False,,False
+0xd16b20,Quest.cpp,__tcf_11,DIFF,False,False,,False
+0xd16bb0,Quest.cpp,CQuest::save(_IO_FILE*),MISSING,False,False,,False
+0xd17200,Quest.cpp,"CQuest::reinitializeQuest(bool, bool)",MISSING,False,False,,False
+0xd17b20,Quest.cpp,"CQuest::load(_IO_FILE*, CResourceManager*, unsigned int)",MISSING,False,False,,False
+0xd181a0,Quest.cpp,"CQuest::replaceStringTags(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd19710,Quest.cpp,CQuest::getQuestDetails(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd19710.cpp,False
+0xd197d0,Quest.cpp,CQuest::initializeQuestWithNPC(CBaseUnit*),MISSING,False,False,,False
+0xd19a10,Quest.cpp,"CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",MISSING,False,False,,False
+0xd1a390,Quest.cpp,CQuest::~CQuest(),MISSING,False,False,,False
+0xd1b5c0,Quest.cpp,CQuest::~CQuest(),MISSING,False,False,,False
+0xd1b5e0,Quest.cpp,"CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd1cf40,Quest.cpp,CQuest::cleanUp(bool),MISSING,False,False,,False
+0xd1d270,Quest.cpp,CQuest::giveRewardForQuest(),MISSING,False,False,,False
+0xd1de30,QuestDialog.cpp,CQuestDialog::dialogIsForNPC(CBaseUnit*),MISSING,False,False,,False
+0xd1de80,QuestDialog.cpp,CQuestDialog::reinitialize(),MATCH,True,False,,False
+0xd1de90,QuestDialog.cpp,CQuestDialog::load(_IO_FILE*),MATCH,True,False,,False
+0xd1df00,QuestDialog.cpp,CQuestDialog::save(_IO_FILE*),MATCH,True,False,,False
+0xd1df70,QuestDialog.cpp,CQuestDialog::getDialog(bool),MISSING,False,False,,False
+0xd1e050,QuestDialog.cpp,CQuestDialog::giveOrRemoveItems(CBaseUnit*),MISSING,False,False,,False
+0xd1e170,QuestDialog.cpp,CQuestDialog::cleanUp(),MISSING,False,False,,False
+0xd1e2a0,QuestDialog.cpp,CQuestDialog::stopDialogSound(),MATCH,True,False,,False
+0xd1e2d0,QuestDialog.cpp,CQuestDialog::populate(),MATCH,True,False,,False
+0xd1e300,QuestDialog.cpp,CQuestDialog::playDialogSound(),MISSING,False,False,,False
+0xd1e420,QuestDialog.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd24390,QuestDialog.cpp,__tcf_6,DIFF,False,False,,False
+0xd244e0,QuestDialog.cpp,__tcf_10,DIFF,False,False,,False
+0xd24570,QuestDialog.cpp,__tcf_9,DIFF,False,False,,False
+0xd24600,QuestDialog.cpp,__tcf_8,DIFF,False,False,,False
+0xd24690,QuestDialog.cpp,__tcf_7,DIFF,False,False,,False
+0xd24700,QuestDialog.cpp,__tcf_5,DIFF,False,False,,False
+0xd24790,QuestDialog.cpp,__tcf_4,DIFF,False,False,,False
+0xd24820,QuestDialog.cpp,__tcf_1,MATCH,False,False,,False
+0xd248b0,QuestDialog.cpp,__tcf_0,MATCH,False,False,,False
+0xd24940,QuestDialog.cpp,CQuestDialog::CQuestDialog(CQuest*),MISSING,False,False,,False
+0xd24d90,QuestDialog.cpp,__tcf_12,DIFF,False,False,,False
+0xd24e00,QuestDialog.cpp,__tcf_11,DIFF,False,False,,False
+0xd24e90,QuestDialog.cpp,__tcf_3,DIFF,False,False,,False
+0xd24f20,QuestDialog.cpp,__tcf_2,DIFF,False,False,,False
+0xd24fb0,QuestDialog.cpp,"CQuestDialog::parseDialogTag(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False
+0xd26120,QuestDialog.cpp,CQuestDialog::~CQuestDialog(),MISSING,False,False,,False
+0xd26460,QuestDialog.cpp,CQuestDialog::~CQuestDialog(),MISSING,False,False,,False
+0xd264a0,QuestManager.cpp,CQuestManager::getSingleton(),MATCH,True,False,,False
+0xd264b0,QuestManager.cpp,CQuestManager::setPlayer(CPlayer*),MATCH,True,False,,False
+0xd264c0,QuestManager.cpp,CQuestManager::update(float),MATCH,True,False,,False
+0xd264d0,QuestManager.cpp,CQuestManager::getPlayerHasQuest(CQuest*),DIFF,False,False,,False
+0xd26520,QuestManager.cpp,CQuestManager::destroyIcons(),MATCH,True,False,,False
+0xd26560,QuestManager.cpp,CQuestManager::resetQuestManager(bool),MISSING,False,False,,False
+0xd265f0,QuestManager.cpp,CQuestManager::getDetailsForQuest(CQuest*),MISSING,False,False,,False
+0xd26620,QuestManager.cpp,CQuestManager::giveRewardForQuest(CQuest*),MATCH,True,False,,False
+0xd26640,QuestManager.cpp,CQuestManager::populate(CLevel*),MATCH,True,False,,False
+0xd26680,QuestManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd2d8e0,QuestManager.cpp,"CQuestManager::getQuestIsActive(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd2d970,QuestManager.cpp,__tcf_15,DIFF,False,False,,False
+0xd2d9e0,QuestManager.cpp,__tcf_14,DIFF,False,False,,False
+0xd2da70,QuestManager.cpp,__tcf_4,DIFF,False,False,,False
+0xd2dbc0,QuestManager.cpp,__tcf_17,DIFF,False,False,,False
+0xd2dc30,QuestManager.cpp,__tcf_16,DIFF,False,False,,False
+0xd2dca0,QuestManager.cpp,"CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xd2dda0,QuestManager.cpp,"CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xd2df30,QuestManager.cpp,__tcf_13,DIFF,False,False,,False
+0xd2dfc0,QuestManager.cpp,__tcf_12,DIFF,False,False,,False
+0xd2e050,QuestManager.cpp,__tcf_11,DIFF,False,False,,False
+0xd2e0c0,QuestManager.cpp,__tcf_10,DIFF,False,False,,False
+0xd2e130,QuestManager.cpp,__tcf_8,DIFF,False,False,,False
+0xd2e1c0,QuestManager.cpp,__tcf_7,DIFF,False,False,,False
+0xd2e4e0,QuestManager.cpp,__tcf_6,DIFF,False,False,,False
+0xd2e570,QuestManager.cpp,__tcf_5,DIFF,False,False,,False
+0xd2e5e0,QuestManager.cpp,__tcf_1,MATCH,False,False,,False
+0xd2e670,QuestManager.cpp,__tcf_0,MATCH,False,False,,False
+0xd2e700,QuestManager.cpp,"CQuestManager::getQuestNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False
+0xd2e930,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False
+0xd2ebf0,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False
+0xd2ec10,QuestManager.cpp,CQuestManager::save(_IO_FILE*),MISSING,False,False,,False
+0xd2f020,QuestManager.cpp,"CQuestManager::removeQuest(CQuest*, bool)",MISSING,False,False,,False
+0xd2f2c0,QuestManager.cpp,__tcf_3,DIFF,False,False,,False
+0xd2f350,QuestManager.cpp,__tcf_2,DIFF,False,False,,False
+0xd2f3e0,QuestManager.cpp,__tcf_9,DIFF,False,False,,False
+0xd2f470,QuestManager.cpp,"CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",MISSING,False,False,,False
+0xd2f8a0,QuestManager.cpp,"CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",MISSING,False,False,,False
+0xd300e0,QuestManager.cpp,CQuestManager::getQuestForNPC(CBaseUnit*),MISSING,False,False,,False
+0xd30830,QuestManager.cpp,CQuestManager::getNPCIcon(CCharacter*),DIFF,False,False,,False
+0xd30900,QuestManager.cpp,CQuestManager::calculateNPCIcon(CCharacter*),DIFF,False,False,,False
+0xd31140,QuestManager.cpp,"CQuestManager::getDialogsForNPC(TArrayList<CQuestDialog*>&, CBaseUnit*, bool)",MISSING,False,False,,False
+0xd31410,QuestManager.cpp,CQuestManager::loadQuests(),MISSING,False,False,,False
+0xd321f0,QuestManager.cpp,CQuestManager::reloadQuests(),MISSING,False,False,,False
+0xd32300,QuestManager.cpp,CQuestManager::CQuestManager(CResourceManager*),MISSING,False,False,,False
+0xd32600,QuestManager.cpp,CQuestManager::completeQuest(CQuest*),MISSING,False,False,,False
+0xd33150,QuestManager.cpp,"CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)",MISSING,False,False,,False
+0xd339d0,QuestManager.cpp,CQuestManager::resetQuest(CQuest*),DIFF,False,False,,False
+0xd344d0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",DIFF,False,False,,False
+0xd345f0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False
+0xd34730,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False
+0xd34aa0,QuestRewards.cpp,CQuestRewards::destroyIcons(),DIFF,False,False,,False
+0xd34b30,QuestRewards.cpp,CQuestRewards::rewardPlayer(),MISSING,False,False,,False
+0xd34f10,QuestRewards.cpp,CQuestRewards::CQuestRewards(CQuest*),MISSING,False,False,,False
+0xd34fa0,QuestRewards.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd3b180,QuestRewards.cpp,__tcf_16,DIFF,False,False,,False
+0xd3b1f0,QuestRewards.cpp,__tcf_15,DIFF,False,False,,False
+0xd3b280,QuestRewards.cpp,__tcf_5,DIFF,False,False,,False
+0xd3b360,QuestRewards.cpp,__tcf_17,DIFF,False,False,,False
+0xd3b3d0,QuestRewards.cpp,CQuestRewards::~CQuestRewards(),MISSING,False,False,,False
+0xd3b550,QuestRewards.cpp,CQuestRewards::~CQuestRewards(),MISSING,False,False,,False
+0xd3b8b0,QuestRewards.cpp,__tcf_14,DIFF,False,False,,False
+0xd3b940,QuestRewards.cpp,__tcf_13,DIFF,False,False,,False
+0xd3b9d0,QuestRewards.cpp,__tcf_12,DIFF,False,False,,False
+0xd3ba40,QuestRewards.cpp,__tcf_11,DIFF,False,False,,False
+0xd3bab0,QuestRewards.cpp,__tcf_9,DIFF,False,False,,False
+0xd3bb40,QuestRewards.cpp,__tcf_8,DIFF,False,False,,False
+0xd3bbd0,QuestRewards.cpp,__tcf_7,DIFF,False,False,,False
+0xd3bc60,QuestRewards.cpp,__tcf_6,DIFF,False,False,,False
+0xd3bcd0,QuestRewards.cpp,__tcf_4,DIFF,False,False,,False
+0xd3bd60,QuestRewards.cpp,__tcf_3,DIFF,False,False,,False
+0xd3bdf0,QuestRewards.cpp,__tcf_1,MATCH,False,False,,False
+0xd3be80,QuestRewards.cpp,__tcf_0,MATCH,False,False,,False
+0xd3bfa0,QuestRewards.cpp,__tcf_10,DIFF,False,False,,False
+0xd3c030,QuestRewards.cpp,__tcf_2,DIFF,False,False,,False
+0xd3c0c0,QuestRewards.cpp,CQuestRewards::parseRewardTag(CDataGroup*),MISSING,False,False,,False
+0xd3caf0,QuestRewards.cpp,CQuestRewards::calculateRewards(),MISSING,False,False,,False
+0xd3d590,QuestRewards.cpp,CQuestRewards::getRewardItems(),MATCH,True,False,,False
+0xd3d5a0,QuestRewards.cpp,CQuestRewards::getRewardString(),MISSING,False,False,,False
+0xd3db90,QuestRewards.cpp,CQuestRewards::reInitializeRewards(),MISSING,False,False,,False
+0xd3dc60,QuestUnitData.cpp,CQuestUnitData::getDungeonFloorActiveOn(),MISSING,False,False,,False
+0xd3dca0,QuestUnitData.cpp,CQuestUnitData::getDeepestFloor(),MISSING,False,False,,False
+0xd3dd20,QuestUnitData.cpp,CQuestUnitData::isComplete(bool),DIFF,False,False,,False
+0xd3dda0,QuestUnitData.cpp,CQuestUnitData::save(_IO_FILE*),DIFF,False,False,,False
+0xd3ded0,QuestUnitData.cpp,"CQuestUnitData::spawnUnit(CResourceManager*, Ogre::Vector3 const&)",MISSING,False,False,,False
+0xd3e050,QuestUnitData.cpp,"CQuestUnitData::spawnChildrenUnits(CResourceManager*, Ogre::Vector3 const&)",DIFF,False,False,,False
+0xd3e160,QuestUnitData.cpp,CQuestUnitData::createUnit(CLevel*),MISSING,False,False,,False
+0xd3e610,QuestUnitData.cpp,CQuestUnitData::CQuestUnitData(CQuest*),MATCH,True,False,,False
+0xd3e780,QuestUnitData.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd458e0,QuestUnitData.cpp,__tcf_18,DIFF,False,False,,False
+0xd45950,QuestUnitData.cpp,__tcf_17,DIFF,False,False,,False
+0xd459c0,QuestUnitData.cpp,__tcf_16,DIFF,False,False,,False
+0xd45a50,QuestUnitData.cpp,__tcf_6,DIFF,False,False,,False
+0xd45ac0,QuestUnitData.cpp,CQuestUnitData::getIsRandom(),DIFF,False,False,,False
+0xd45fc0,QuestUnitData.cpp,__tcf_15,DIFF,False,False,,False
+0xd46050,QuestUnitData.cpp,__tcf_14,DIFF,False,False,,False
+0xd460e0,QuestUnitData.cpp,__tcf_13,DIFF,False,False,,False
+0xd46150,QuestUnitData.cpp,__tcf_12,DIFF,False,False,,False
+0xd461c0,QuestUnitData.cpp,__tcf_10,DIFF,False,False,,False
+0xd46250,QuestUnitData.cpp,__tcf_9,DIFF,False,False,,False
+0xd462e0,QuestUnitData.cpp,__tcf_8,DIFF,False,False,,False
+0xd46370,QuestUnitData.cpp,__tcf_7,DIFF,False,False,,False
+0xd463e0,QuestUnitData.cpp,__tcf_5,DIFF,False,False,,False
+0xd46470,QuestUnitData.cpp,__tcf_4,DIFF,False,False,,False
+0xd46500,QuestUnitData.cpp,__tcf_2,DIFF,False,False,,False
+0xd46590,QuestUnitData.cpp,__tcf_1,MATCH,False,False,,False
+0xd46620,QuestUnitData.cpp,__tcf_0,MATCH,False,False,,False
+0xd466b0,QuestUnitData.cpp,__tcf_11,DIFF,False,False,,False
+0xd46740,QuestUnitData.cpp,__tcf_3,DIFF,False,False,,False
+0xd467d0,QuestUnitData.cpp,CQuestUnitData::~CQuestUnitData(),MISSING,False,False,,False
+0xd46b50,QuestUnitData.cpp,CQuestUnitData::~CQuestUnitData(),MISSING,False,False,,False
+0xd46b70,QuestUnitData.cpp,"CQuestUnitData::parseDataGroup(CDataGroup*, CDataGroup*)",DIFF,False,False,,False
+0xd47530,QuestUnitData.cpp,CQuestUnitData::cleanUpForQuestRemoveall(bool),MISSING,False,False,,False
+0xd476b0,QuestUnitData.cpp,CQuestUnitData::getSpawnClassUnitDataLookingFor(),MISSING,False,False,,False
+0xd47de0,QuestUnitData.cpp,CQuestUnitData::getBaseUnitDataGroup(),MISSING,False,False,,False
+0xd48140,QuestUnitData.cpp,CQuestUnitData::unitPickedUp(CBaseUnit*),MISSING,False,False,,False
+0xd48800,QuestUnitData.cpp,CQuestUnitData::unitDropped(CBaseUnit*),MISSING,False,False,,False
+0xd488f0,QuestUnitData.cpp,CQuestUnitData::unitDefeated(CBaseUnit*),MISSING,False,False,,False
+0xd48d00,QuestUnitData.cpp,CQuestUnitData::unitInteracted(CBaseUnit*),DIFF,False,False,,False
+0xd48ea0,QuestUnitData.cpp,CQuestUnitData::populate(CLevel*),MISSING,False,False,,False
+0xd493d0,QuestUnitData.cpp,CQuestUnitData::reinitialize(bool),MISSING,False,False,,False
+0xd494d0,QuestUnitData.cpp,"CQuestUnitData::load(_IO_FILE*, int)",MISSING,False,False,,False
+0xd49670,QuestUnitData.cpp,CQuestUnitData::getUnitName(),DIFF,False,False,,False
+0xd49960,AIFlag.cpp,CAIFlag::update(float),MATCH,True,False,,False
+0xd49980,AIFlag.cpp,CAIFlag::~CAIFlag(),MATCH,True,False,,False
+0xd49990,AIFlag.cpp,CAIFlag::~CAIFlag(),MATCH,True,False,,False
+0xd499b0,AIFlag.cpp,"CAIFlag::CAIFlag(EAIFLAG_TYPES, CAIFlagManager*)",MATCH,True,False,,False
+0xd49a00,AIFlag.cpp,"global constructors keyed to CAIFlag::CAIFlag(EAIFLAG_TYPES, CAIFlagManager*)",DIFF,False,False,,False
+0xd49de0,AIFlag.cpp,__tcf_2,MATCH,False,False,,False
+0xd49e70,AIFlag.cpp,__tcf_3,MATCH,False,False,,False
+0xd49f00,AIFlag.cpp,__tcf_1,MATCH,False,False,,False
+0xd49f90,AIFlag.cpp,__tcf_0,MATCH,False,False,,False
+0xd4a020,AIFlagManager.cpp,CAIFlagManager::hasAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False
+0xd4a050,AIFlagManager.cpp,"CAIFlagManager::updateAIFlag(EAIFLAG_TYPES, float)",MATCH,True,False,,False
+0xd4a060,AIFlagManager.cpp,CAIFlagManager::flagRemoved(EAIFLAG_TYPES),MATCH,True,False,,False
+0xd4a090,AIFlagManager.cpp,CAIFlagManager::removeAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False
+0xd4a0f0,AIFlagManager.cpp,CAIFlagManager::flagSet(EAIFLAG_TYPES),MATCH,True,False,,False
+0xd4a1d0,AIFlagManager.cpp,"CAIFlagManager::addAIFlag(EAIFLAG_TYPES, float)",MATCH,True,False,,False
+0xd4a280,AIFlagManager.cpp,CAIFlagManager::updateAIFlags(float),MATCH,True,False,,False
+0xd4a340,AIFlagManager.cpp,CAIFlagManager::~CAIFlagManager(),MATCH,True,False,,False
+0xd4a410,AIFlagManager.cpp,CAIFlagManager::~CAIFlagManager(),MATCH,True,False,,False
+0xd4a430,AIFlagManager.cpp,"CAIFlagManager::CAIFlagManager(CAIManager*, CCharacter*)",MATCH,True,False,,False
+0xd4a590,AIFlagManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xd4ff90,AIFlagManager.cpp,"global constructors keyed to CAIFlagManager::CAIFlagManager(CAIManager*, CCharacter*)",MATCH,False,False,,False
+0xd4ffa0,AIFlagManager.cpp,__tcf_19,MATCH,False,False,,False

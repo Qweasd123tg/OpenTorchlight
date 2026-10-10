@@ -7,6 +7,7 @@
 #include <string>
 class CBaseUnit;
 class CAffix;
+class CCharacter;
 class CEffect;
 class CResourceManager;
 class CDataGroup;
@@ -15,6 +16,9 @@ class CUnitTheme;
 class CEffectManager : public CRunicCore
 {
 public:
+    void notifyOfDeletion(CCharacter* character);
+    void clearAllUnitReferences();
+    CAffix* cloneAffix(CAffix* affix, unsigned int level, CBaseUnit* source, float scale);
     CEffectManager(CBaseUnit* owner);
     virtual ~CEffectManager();
     CAffix* addAffix(CAffix* affix,unsigned int level,CBaseUnit* source,float scale);

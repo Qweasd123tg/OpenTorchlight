@@ -36,7 +36,7 @@ public:
     bool isEquipmentInInventory(CEquipment*);
     long long EquipmentsInSlot(unsigned int);
     CEquipment* getEquipmentInSlot(unsigned int);
-    long getEquipmentRefInSlot(unsigned int);
+    CEquipmentRef* getEquipmentRefInSlot(unsigned int);
     int findEquipmentSlot(CEquipment*);
     CEquipment* getEquipmentEquippedAt(EEQUIP_LOCATIONS);
     int getEquipmentsEquippedLocation(CEquipment*);
@@ -46,7 +46,7 @@ public:
     int getStackSizeOfEquipment(CEquipment*);
     int getMaxStackSizeOfEquipment(CEquipment*);
     void forceRecalculationOfEquipmentStats();
-    long long canUseEquipment(CEquipment*, CCharacter*);
+    bool canUseEquipment(CEquipment*, CCharacter*);
     void addListener(iInventoryListener*);
     int getRequiredPane(CEquipment*);
     int findFreeSlot(CEquipment*);
@@ -89,11 +89,11 @@ public:
     bool m_bUnknown15;
     unsigned char m_gap16[0x2];
     CEffectManager* m_pEffectManager;
-    CPositionableObject* m_pPositionableObject;
+    CCharacter* m_pPositionableObject;
     unsigned int m_iUnknown28;
     unsigned char m_gap2C[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown30[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown48[0x18] __attribute__((aligned(8)));
+    TArrayList<CEquipmentRef*> m_equipmentRefs;
+    TArrayList<iInventoryListener*> m_listeners;
     // Original _M_insert_aux instantiations identify these vectors.
     std::vector<EINVENTORY_PANES> m_panes;
     std::vector<unsigned int> m_paneStarts;

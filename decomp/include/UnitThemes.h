@@ -7,6 +7,7 @@
 class CUnitThemes : public CRunicCore
 {
 public:
+    void reload();
     CUnitThemes(const wchar_t* filename);
     virtual ~CUnitThemes();
     static CUnitThemes* getSingleton();

@@ -9,6 +9,8 @@
 #include "TArrayList.h"
 
 class CDataGroup;
+class CResourceManager;
+class CDescriptorSaveConfiguration;
 class CDescriptor;
 class CDescriptorManager;
 class CDynamicPropertyFile;
@@ -20,6 +22,20 @@ class CTimerStatics;
 class CEditorScene : public CPositionableObject
 {
 public:
+    void clearObjectIndex();
+    unsigned int GetNumberOfObjectsInScene(bool includeOwner);
+    TArrayList<CEditorBaseObject*>* GetObjectsCreatedByADescriptor(CDescriptor* descriptor);
+    bool canObjectBeSaved(CResourceManager* manager, CEditorBaseObject* object);
+    CEditorBaseObject* CreateObjectByDescriptor(const std::wstring& name, bool load);
+    CDescriptor* GetDescriptorInSceneByName(const wchar_t* name, bool create);
+    void setChildrenVisible(long long parent, bool visible);
+    CEditorBaseObject* CreateObjectByDescriptor(unsigned int index, CEditorBaseObject* parent, CEditorBaseObject* owner, bool load);
+    void AddDescriptor(CDescriptor* descriptor);
+    void InitScene(CResourceManager* manager, unsigned int flags);
+    void deleteUnusedDescriptors();
+    void setFileLoaded(const std::wstring& path);
+    unsigned int saveObjectsHavingParent(long long parent, CDataGroup* group, CDescriptorSaveConfiguration* configuration);
+    unsigned int saveObjectAndChildren(CEditorBaseObject*,CDataGroup*,CDescriptorSaveConfiguration*);
     void RemoveObjectInScene(CEditorBaseObject* object);
     CEditorScene(const wchar_t* name);
     virtual ~CEditorScene();

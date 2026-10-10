@@ -4,7 +4,7 @@
 #include <string>
 #include "RunicCore.h"
 
-class BatchModel;
+class CGenericModel;
 
 class BatchModelRef : public CRunicCore
 {
@@ -12,8 +12,9 @@ public:
     virtual ~BatchModelRef();
     BatchModelRef();
 
-    BatchModel* m_pBatchModel;
-    unsigned char m_gap18[0x8] __attribute__((aligned(8)));
+    CGenericModel* m_pBatchModel;
+    int m_referenceCount;
+    unsigned char m_gap1c[4];
     std::wstring m_sBatchModelName;
 };
 
