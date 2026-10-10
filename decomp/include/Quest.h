@@ -63,7 +63,9 @@ public:
     // fields
     unsigned char m_Unknown10[0x14] __attribute__((aligned(8)));
     bool m_complete;
-    unsigned char m_gap25[3];
+    unsigned char m_gap25;
+    bool m_questAccepted;
+    unsigned char m_gap27;
     bool m_bUnknown28;
     bool m_bUnknown29;
     bool m_bUnknown2A;

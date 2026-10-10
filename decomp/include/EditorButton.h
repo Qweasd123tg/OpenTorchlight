@@ -14,7 +14,7 @@ class CEditorButton : public CEditorImage
 {
 public:
     virtual ~CEditorButton();
-    long long handle_Click(const CEGUI::EventArgs&);
+    bool handle_Click(const CEGUI::EventArgs&);
     void setRolloverImage(const std::wstring&);
     void setNormalImage(const std::wstring&);
     void setDisabledImage(const std::wstring&);

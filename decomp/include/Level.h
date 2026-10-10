@@ -59,6 +59,8 @@ public:
     bool sphereCollision(const Ogre::Vector3&,const Ogre::Vector3&,float,Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned int&,Ogre::Vector3&);
     void updateAutomapIcons();
 
+    int getDungeonDepth() const { return m_dungeonDepth; }
+    void notifyOfDeletion(CItem* item);
     void addItem(CItem*,const Ogre::Vector3&,bool);
     // Original removal symbols; used by typed descriptor notifications.
     bool removeItem(CItem* item, bool deactivate);
@@ -112,7 +114,8 @@ private:
     TLinkedList<CItem*>* m_items;
     char m_LevelDataA8[0x1a4-0xa8];
     int m_iLevelDepth;
-    char m_LevelData1A8[0x1d8 - 0x1a8];
+    int m_dungeonDepth; // +0x1a8
+    char m_LevelData1AC[0x1d8 - 0x1ac];
     CLevelTemplateData* m_pLevelTemplateData;
     CAutomap* m_automap;
     char m_LevelData1E8[0x220-0x1e8];

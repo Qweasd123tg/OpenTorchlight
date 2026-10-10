@@ -1,3 +1,4 @@
+#include "algorithm"
 #include "EmptyStrings.h"
 #include "Graph.h"
 #include "DataGroup.h"
@@ -60,9 +61,10 @@ int CGraph::getControlPoints()
 
 void CGraph::clear(unsigned int line)
 {
-    if (line < m_iLineCount && m_Lines[line] != NULL)
-        m_Lines[line]->removeAllControlPoints();
+    if (line >= m_iLineCount) return;
+    if (m_Lines[line]) m_Lines[line]->removeAllControlPoints();
 }
+
 
 void CGraph::addGraphLine(EGRAPH_TYPES type)
 {
@@ -139,3 +141,4 @@ bool CGraph::loadGraph(const wchar_t* filename)
     m_bNeedsProcessing = false;
     return true;
 }
+

@@ -11,6 +11,10 @@ class CDescriptorProp;
 class CDescriptorController
 {
 public:
+    static CDescriptor* getNewDescriptorByName(const std::wstring& name);
+
+    static unsigned int getDescriptionVersion();
+
     static CDescriptorProp* getDescriptorPropertyByName(CDescriptor* descriptor, const std::wstring& name,
                                                         bool defaults);
     static void addDescriptorProperty(CDescriptor* descriptor, CDescriptorProp* property, bool defaults);

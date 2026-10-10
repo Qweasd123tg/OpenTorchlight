@@ -10,6 +10,7 @@ class CWeaponTrail : public CRunicCore {
 public:
     virtual ~CWeaponTrail();
     void clear();
+    void setActive(bool active);
     void setVisible(bool visible);
     void setWeaponEntity(Ogre::Entity* entity);
     void setWeaponNode(Ogre::Node* node);

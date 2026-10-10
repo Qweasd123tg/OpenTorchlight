@@ -18,6 +18,8 @@ class CEffectGroupManager;
 class CCollisionModel;
 class CParticlePreloader;
 class CSettings;
+class CEffectGroupManager;
+class CGraphManager;
 class CSoundManager;
 class CSoundBankDataInformation;
 
@@ -48,7 +50,11 @@ public:
     void removeCollisionModel(CCollisionModel* model);
 
 private:
-    unsigned char m_Unrecovered10[0x58-0x10];
+    unsigned char m_Unrecovered10[0x48-0x10];
+public:
+    CGraphManager* m_pGraphManager;
+private:
+    unsigned char m_Unrecovered50[8];
 public:
     CEffectGroupManager* m_effectGroups;
 private:

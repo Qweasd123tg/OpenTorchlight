@@ -32,7 +32,7 @@ private:
     EDAMAGE_TYPES m_eDamageType;
     unsigned char m_EffectData18[4];
     EEFFECT_TYPE m_eType;
-    unsigned char m_EffectData20[4];
+    EEFFECT_ACTIVATION m_activation; // +0x20
     float m_fValue24;
     unsigned char m_EffectData28[0x48-0x28];
     TSafePointer<CBaseUnit> m_Owner;
@@ -45,8 +45,11 @@ private:
     float m_fValueC0;
     float m_fValueC4;
     float m_fValueC8;
-    unsigned char m_EffectDataCC[0x138-0xcc];
+    float m_reflectionMinimum; // +0xcc
+    float m_reflectionMaximum; // +0xd0
+    unsigned char m_EffectDataD4[0x138-0xd4];
     friend class CBaseUnit;
+    friend class CCharacter;
     friend class CEquipment;
 };
 #endif

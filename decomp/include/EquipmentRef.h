@@ -6,6 +6,7 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include "RunicCore.h"
+class CEquipment;
 
 class CEquipment;
 class CEquipmentRef : public CRunicCore
@@ -14,9 +15,11 @@ public:
     virtual ~CEquipmentRef();
 
     // fields
-    union { void* m_pUnknown10; CEquipment* m_pEquipment; };
+    union { CEquipment* m_pUnknown10; CEquipment* m_pEquipment; };
     union { int m_iSlot; unsigned int m_slot; };
-    unsigned char m_gap1C[0xc];
+    unsigned char m_gap1C[5];
+    bool m_effectsEnabled; // +0x21
+    unsigned char m_gap22[6];
 };
 
 #endif

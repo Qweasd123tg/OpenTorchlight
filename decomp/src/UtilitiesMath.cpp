@@ -131,11 +131,12 @@ void worldToLocalPerspective(Ogre::Vector3& result, const Ogre::Vector3& point, 
 
 void worldToLocal(Ogre::Vector3& result, const Ogre::Vector3& point, const Ogre::Matrix4& matrix)
 {
-    Ogre::Vector3 local = point;
-    result.x = local.x * matrix[0][0] + local.y * matrix[1][0] + local.z * matrix[2][0];
-    result.y = local.x * matrix[0][1] + local.y * matrix[1][1] + local.z * matrix[2][1];
-    result.z = local.x * matrix[0][2] + local.y * matrix[1][2] + local.z * matrix[2][2];
+    float x=point.x,y=point.y,z=point.z;
+    result.x=x*matrix[0][0]+y*matrix[1][0]+z*matrix[2][0];
+    result.y=x*matrix[0][1]+y*matrix[1][1]+z*matrix[2][1];
+    result.z=x*matrix[0][2]+y*matrix[1][2]+z*matrix[2][2];
 }
+
 
 void closestPointOnLine(const Ogre::Vector3& start, const Ogre::Vector3& end, const Ogre::Vector3& point,
                         Ogre::Vector3& result)
@@ -151,13 +152,12 @@ void closestPointOnLine(const Ogre::Vector3& start, const Ogre::Vector3& end, co
 }
 
 void closestPointOnTriangle(const Ogre::Vector3& a, const Ogre::Vector3& b, const Ogre::Vector3& c,
-                            const Ogre::Vector3& point, Ogre::Vector3& result)
+                                            const Ogre::Vector3& point, Ogre::Vector3& result)
 {
     Ogre::Vector3 closest;
     closestPointOnLine(a, b, point, closest);
-    result = closest;
     float best = (closest - point).squaredLength();
-
+    result = closest;
     closestPointOnLine(b, c, point, closest);
     float distance = (closest - point).squaredLength();
     if (distance < best)
@@ -165,15 +165,14 @@ void closestPointOnTriangle(const Ogre::Vector3& a, const Ogre::Vector3& b, cons
         result = closest;
         best = distance;
     }
-
     closestPointOnLine(c, a, point, closest);
     distance = (closest - point).squaredLength();
     if (distance < best)
         result = closest;
 }
 
-unsigned char classifyPoint(const Ogre::Vector3& point, const Ogre::Vector3& planePoint,
-                            const Ogre::Vector3& planeNormal)
+
+EPLANE_SIDE classifyPoint(const Ogre::Vector3& point, const Ogre::Vector3& planePoint, const Ogre::Vector3& planeNormal)
 {
     float distance = (planePoint - point).dotProduct(planeNormal);
     if (distance < -kPlaneEpsilon)
@@ -183,16 +182,18 @@ unsigned char classifyPoint(const Ogre::Vector3& point, const Ogre::Vector3& pla
     return PLANE_SIDE_ON;
 }
 
-unsigned char classifyPointForSphere(const Ogre::Vector3& center, const Ogre::Vector3& planePoint,
-                                     const Ogre::Vector3& planeNormal, float radius)
+
+EPLANE_SIDE classifyPointForSphere(const Ogre::Vector3& center, const Ogre::Vector3& planePoint,
+                                                     const Ogre::Vector3& planeNormal, float radius)
 {
-    float distance = (planePoint - center).dotProduct(planeNormal) + radius;
+    float distance = (planePoint.x - center.x) * planeNormal.x + (planePoint.y - center.y) * planeNormal.y + (planePoint.z - center.z) * planeNormal.z + radius;
     if (distance < -kPlaneEpsilon)
         return PLANE_SIDE_FRONT;
     if (distance > kPlaneEpsilon)
         return PLANE_SIDE_BACK;
     return PLANE_SIDE_ON;
 }
+
 
 bool getLinePlaneIntersection(const Ogre::Vector3& start, const Ogre::Vector3& end, const Ogre::Vector3& planePoint,
                               const Ogre::Vector3& planeNormal, Ogre::Vector3& result)
@@ -262,25 +263,26 @@ void matrixRotationZ(Ogre::Matrix4& matrix, float angle)
 
 void matrixRotationX(Ogre::Matrix4& matrix, float angle)
 {
-    float cosine = cosf(angle);
     float sine = sinf(angle);
+    float cosine = cosf(angle);
     matrix = Ogre::Matrix4::IDENTITY;
     matrix[1][1] = cosine;
-    matrix[1][2] = -sine;
     matrix[2][1] = sine;
+    matrix[1][2] = -sine;
     matrix[2][2] = cosine;
 }
 
 void matrixRotationY(Ogre::Matrix4& matrix, float angle)
 {
-    float cosine = cosf(angle);
     float sine = sinf(angle);
+    float cosine = cosf(angle);
     matrix = Ogre::Matrix4::IDENTITY;
+    matrix[2][0] = -sine;
     matrix[0][0] = cosine;
     matrix[0][2] = sine;
-    matrix[2][0] = -sine;
     matrix[2][2] = cosine;
 }
+
 
 void rotateZ(Ogre::Vector3* vector, float angle)
 {
@@ -346,3 +348,4 @@ Ogre::Vector3 screenToWorldRay(Ogre::Camera* camera, float x, float y, float wid
 }
 
 }
+

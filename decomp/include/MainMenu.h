@@ -18,11 +18,12 @@ class CGameUI;
 class CMainMenu : public CDropdownMenu
 {
 public:
+
     virtual ~CMainMenu();
     virtual void update(float);
-    virtual void onClick(ELayoutFunction, std::wstring);
-    long long handle_ExitButton(const CEGUI::EventArgs&);
-    long long handle_CloseButton(const CEGUI::EventArgs&);
+    virtual bool onClick(ELayoutFunction, std::wstring);
+    bool handle_ExitButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     void createMenus();
     CMainMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
 

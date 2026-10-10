@@ -19,3 +19,13 @@ CDropdownMenu::~CDropdownMenu()
 }
 
 template TArrayList<iMenuListener*>::~TArrayList();
+
+bool CDropdownMenu::processInput(void*, float, bool capture)
+{
+    if (capture && m_bUnknown32) {
+        setOpen(false);
+        m_bUnknown32 = false;
+        return false;
+    }
+    return true;
+}

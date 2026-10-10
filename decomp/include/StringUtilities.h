@@ -6,6 +6,7 @@
 // Partial: declarations from StringUtilities.cpp used by recovered TUs.
 namespace STRINGS
 {
+    unsigned int StringCopyWCharArray(wchar_t* destination, unsigned int capacity, const wchar_t* source);
     int GetInt(const std::wstring& text);
     std::string uniqueName(const std::string& prefix);
     std::wstring GetValueAsWString(int value);

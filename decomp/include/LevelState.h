@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
 
 #include "Character.h"
 #include "Item.h"
@@ -38,13 +39,13 @@ public:
     unsigned char m_gap14[0x4] __attribute__((aligned(4)));
 
     std::wstring m_sLevelName;
-    TArrayList<CCharacterSaveState *> m_lCharacters;
-    TArrayList<CItemSaveState *> m_lItems;
-    TArrayList<CLogicNodeState *> m_lLogicStates;
-    TArrayList<std::wstring> m_lLevelStrings;
+    std::vector<CCharacterSaveState *> m_lCharacters;
+    std::vector<CItemSaveState *> m_lItems;
+    std::vector<CLogicNodeState *> m_lLogicStates;
+    std::vector<std::wstring> m_lLevelStrings;
     TArrayList<CFormationNodeSaveAndLoad *> m_lFormations;
 
-    int m_iStateVersion;
+    float m_iStateVersion; // +0x98: history timestamp; cleared to -1.0f by CPlayer.
     int m_iAutomapWidth;
     int m_iAutomapHeight;
     unsigned char m_gapA4[0x4] __attribute__((aligned(4)));

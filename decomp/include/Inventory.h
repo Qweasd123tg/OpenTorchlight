@@ -6,6 +6,7 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include <string>
+#include <map>
 #include <vector>
 #include "BaseUnit.h"
 #include "EquipmentRef.h"
@@ -24,6 +25,8 @@ class CSet;
 class CInventory : public CRunicCore
 {
 public:
+    unsigned int getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CEquipmentRef*>& output);
+
     virtual ~CInventory();
     void refreshEquipped();
     void removeListener(iInventoryListener*);
@@ -34,13 +37,13 @@ public:
     int itemsInPane(EINVENTORY_PANES);
     int getItemPane(unsigned int);
     bool isEquipmentInInventory(CEquipment*);
-    long long EquipmentsInSlot(unsigned int);
+    bool EquipmentsInSlot(unsigned int);
     CEquipment* getEquipmentInSlot(unsigned int);
     CEquipmentRef* getEquipmentRefInSlot(unsigned int);
     int findEquipmentSlot(CEquipment*);
     CEquipment* getEquipmentEquippedAt(EEQUIP_LOCATIONS);
     int getEquipmentsEquippedLocation(CEquipment*);
-    long long isEquipmentEquipped(CEquipment*);
+    bool isEquipmentEquipped(CEquipment*);
     int getEquipmentCountOfGuid(long long);
     CEquipmentRef* getEquipmentOfGuid(long long);
     int getStackSizeOfEquipment(CEquipment*);
@@ -51,10 +54,10 @@ public:
     int getRequiredPane(CEquipment*);
     int findFreeSlot(CEquipment*);
     bool canPickup(CEquipment*, bool);
-    long long canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool);
+    bool canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool);
     bool canEquip(CEquipment*, bool);
     void getComparisonItems(CEquipment*, CEquipment**, CEquipment**);
-    int getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
+    float getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES);
     void executeProcs(EEFFECT_TYPE, CBaseUnit*);
     void updateSkillManagers(float);
     float getEffectValue(EEFFECT_TYPE, float, const std::wstring&);
@@ -72,12 +75,12 @@ public:
     void addSection(EINVENTORY_PANES, unsigned int);
     void calculateEffectValues();
     long long removeEquipment(CEquipment*);
-    long long unequipEquipment(CEquipment*);
+    bool unequipEquipment(CEquipment*);
     void verifyEquipment();
     CEquipment* pickupEquipment(CEquipment*, int, bool);
     CEquipment* pickupEquipment(CEquipment*, bool);
-    long long useEquipment(CEquipment*, CCharacter*);
-    long long removeEquipmentByGuid(long long, unsigned int, bool);
+    bool useEquipment(CEquipment*, CCharacter*);
+    bool removeEquipmentByGuid(long long, unsigned int, bool);
     bool equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS);
     bool equipEquipmentIntoFirstFreeLocation(CEquipment*);
     void swapWeaponSet();
@@ -97,13 +100,8 @@ public:
     // Original _M_insert_aux instantiations identify these vectors.
     std::vector<EINVENTORY_PANES> m_panes;
     std::vector<unsigned int> m_paneStarts;
-    long long m_Unknown90;
-    unsigned char m_gap98[0x8] __attribute__((aligned(8)));
-    void* m_pUnknownA0;
-    long long m_iUnknownA8;
-    long long m_iUnknownB0;
-    long long m_iUnknownB8;
-    unsigned char m_gapC0[0x150] __attribute__((aligned(8)));
+    std::map<EEFFECT_TYPE, float> m_effectValues[8]; // +0x90
+
 };
 
 #endif

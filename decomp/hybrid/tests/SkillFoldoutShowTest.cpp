@@ -12,6 +12,7 @@
 #include "SkillManager.h"
 #include "Inventory.h"
 #include "EquipmentRef.h"
+#include "Equipment.h"
 #include "StringTranslate.h"
 #include "MasterResourceManager.h"
 #include "Settings.h"
@@ -54,7 +55,7 @@ IMP(getHeightFn,"_ZNK5CEGUI6Window9getHeightEv");
 #undef IMP
 namespace {
 struct Case {unsigned mode,scale,flags,mutate,placement;};
-autotest::Capture* cap;const Case* input;CSkillFoldout* fold;CGameUI* ui[2];CSkill* skills[24];CBaseUnit* owner;CSkillManager* manager;CStringTranslate* translator;CBaseUnit* items[24];CDataGroup* data[24];CMasterResourceManager* masters[2];CSettings* settings[2];
+autotest::Capture* cap;const Case* input;CSkillFoldout* fold;CGameUI* ui[2];CSkill* skills[24];CBaseUnit* owner;CSkillManager* manager;CStringTranslate* translator;CEquipment* items[24];CDataGroup* data[24];CMasterResourceManager* masters[2];CSettings* settings[2];
 CEGUI::Window* windows[204];unsigned long long wm[204][(sizeof(CEGUI::Window)+7)/8];CEGUI::UVector2 positions[204],sizes[204];std::wstring icons[24],itemIcons[24];CEGUI::Image* images[32];unsigned long long im[32][32];unsigned knownCalls,scaleCalls,imageCount,ratioCalls,masterCalls,effectiveCalls[24];unsigned long long branches;
 template<class T>T& at(void* p,size_t offset){return *(T*)((char*)p+offset);}
 void n(int x){cap->add(&x,4);}void f(float x){cap->add(&x,4);}void str(const CEGUI::String& s){n(s.length());for(size_t i=0;i<s.length();++i)n(s[i]);}
@@ -95,7 +96,7 @@ CEGUI::UDim getHeight(const CEGUI::Window* p){n(29);n(wid(p));CEGUI::UDim v=size
 void canon(unsigned char* snapshot,unsigned offset,uintptr_t value){memcpy(snapshot+offset,&value,sizeof(value));}
 void side(const Case& c,bool ours,autotest::Capture& out){
  cap=&out;input=&c;knownCalls=scaleCalls=imageCount=ratioCalls=masterCalls=0;branches=0;memset(wm,0,sizeof(wm));memset(positions,0,sizeof(positions));memset(sizes,0,sizeof(sizes));memset(im,0,sizeof(im));memset(images,0,sizeof(images));memset(effectiveCalls,0,sizeof(effectiveCalls));
- unsigned long long fm[(sizeof(CSkillFoldout)+7)/8]={0},om[384]={0},sm[24][64]={{0}},mgr[32]={0},um[2][16]={{0}},trm[16]={0},inv[80]={0},refmem[24][8]={{0}},itemmem[24][64]={{0}},datamem[24][32]={{0}},mastermem[2][64]={{0}},settingmem[2][32]={{0}};
+ unsigned long long fm[(sizeof(CSkillFoldout)+7)/8]={0},om[384]={0},sm[24][64]={{0}},mgr[32]={0},um[2][16]={{0}},trm[16]={0},inv[80]={0},refmem[24][8]={{0}},itemmem[24][(sizeof(CEquipment)+7)/8]={{0}},datamem[24][32]={{0}},mastermem[2][64]={{0}},settingmem[2][32]={{0}};
  fold=(CSkillFoldout*)fm;owner=(CBaseUnit*)om;manager=(CSkillManager*)mgr;translator=(CStringTranslate*)trm;
  for(unsigned i=0;i<2;++i){ui[i]=(CGameUI*)um[i];masters[i]=(CMasterResourceManager*)mastermem[i];settings[i]=(CSettings*)settingmem[i];masters[i]->m_pSettings=settings[i];}
  for(unsigned i=0;i<204;++i){windows[i]=(CEGUI::Window*)wm[i];new(&windows[i]->d_text)CEGUI::String("before");new(&windows[i]->d_tooltipText)CEGUI::String("tip");windows[i]->d_visible=windows[i]->d_enabled=true;windows[i]->d_ID=9000+i;}
@@ -115,7 +116,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  if(c.mode==16){at<long long>(owner,0x950)=at<long long>(skills[0],0x150);at<long long>(owner,0x9b0+11*8)=at<long long>(skills[1],0x150);at<long long>(owner,0x9b0+2*8)=-999;}
  TArrayList<CEquipmentRef*>* inventory=(TArrayList<CEquipmentRef*>*)((char*)inv+0x30);new(inventory)TArrayList<CEquipmentRef*>(24);
  unsigned itemCount=c.mode>=11?(c.mode==12?24:8):0;
- for(unsigned i=0;i<24;++i){CEquipmentRef* ref=(CEquipmentRef*)refmem[i];items[i]=(CBaseUnit*)itemmem[i];data[i]=(CDataGroup*)datamem[i];items[i]->m_pDataGroup=data[i];items[i]->m_iUnitValue1A0=0x2345678900000000LL+(c.mode==12?i/2:i);ref->m_pUnknown10=items[i];itemIcons[i]=L"item";if(i<itemCount)inventory->add(ref);}
+ for(unsigned i=0;i<24;++i){CEquipmentRef* ref=(CEquipmentRef*)refmem[i];items[i]=(CEquipment*)itemmem[i];data[i]=(CDataGroup*)datamem[i];items[i]->m_pDataGroup=data[i];items[i]->m_iUnitValue1A0=0x2345678900000000LL+(c.mode==12?i/2:i);ref->m_pUnknown10=items[i];itemIcons[i]=L"item";if(i<itemCount)inventory->add(ref);}
  if(c.mode==20)inventory->m_nCapacity=1;
  *(CGameUI**)0x14b9c68=ui[0];new((void*)0x14b7d08)std::wstring();
  if(c.mode==21){new((void*)0x14b9c78)std::wstring(L"cached weapon");*(unsigned long long*)0x14b9c70=1;}else{memset((void*)0x14b9c78,0,sizeof(std::wstring));*(unsigned long long*)0x14b9c70=0;}

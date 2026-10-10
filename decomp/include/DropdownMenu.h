@@ -24,14 +24,14 @@ class CDropdownMenu : public CRunicCore
 {
 public:
     virtual ~CDropdownMenu();
-    virtual long long processInput(void*, float, bool);
+    virtual bool processInput(void*, float, bool);
     virtual void update(float);
     virtual void updateLayout();
     virtual void addMenuListener(iMenuListener*);
     virtual void removeMenuListener(iMenuListener*);
     virtual void setOpen(bool);
-    virtual void onClick(ELayoutFunction, std::wstring);
-    virtual void onDoubleClick(ELayoutFunction, std::wstring);
+    virtual bool onClick(ELayoutFunction, std::wstring);
+    virtual bool onDoubleClick(ELayoutFunction, std::wstring);
     void broadcastEvent(EMENU_TYPE, EMENU_EVENT);
     bool handle_CloseButton(const CEGUI::EventArgs&);
     void mapEventHandlers(CEGUI::Window*);

@@ -9,6 +9,7 @@ class CKeyframe;
 #include "TArrayList.h"
 
 class CAnimation;
+class CKeyframe;
 
 class CAnimationSet : public CRunicCore
 {

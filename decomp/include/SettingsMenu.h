@@ -9,8 +9,13 @@ namespace CEGUI { class Window; }
 class CSettingsMenu : public CDropdownMenu {
 public:
     virtual ~CSettingsMenu();
+    virtual bool onClick(ELayoutFunction function,std::wstring text);
+    virtual void update(float elapsed);
+    virtual void setOpen(bool open);
     CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
-    char m_Unrecoveredc0[0x90];
+    unsigned char m_PaddingC0[0x1];
+    bool m_applyChanges; // +0xc1
+    unsigned char m_PaddingC2[0x8e];
 };
 typedef char check_CSettingsMenu_size[sizeof(CSettingsMenu)==0x150?1:-1];
 #endif

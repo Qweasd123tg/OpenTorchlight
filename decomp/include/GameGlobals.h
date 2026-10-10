@@ -2,10 +2,17 @@
 #define GAMEGLOBALS_H
 #include "RunicCore.h"
 #include <string>
+#include <vector>
+#include "Randomizer.h"
+#include "GameEnums.h"
+
 // Partial: colour names follow the original reload() configuration keys.
 class CGameGlobals : public CRunicCore
 {
 public:
+    const std::wstring& getContextTip(EContextTip tip);
+    const std::wstring& getRandomTip();
+
     virtual ~CGameGlobals();
     static CGameGlobals* getSingleton();
     float getUnitShadowRange() const { return m_fUnitShadowRange; }
@@ -21,6 +28,7 @@ public:
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:
     friend class CEquipment;
+    friend class CCharacter;
     friend class CEnchantMenu;
     unsigned char m_GlobalsData10[0x24-0x10];
     float m_fRandomEnchantChance;
@@ -32,7 +40,8 @@ private:
     int m_iMaxMagicItemSlots;
     int m_iMinUniqueItemSlots;
     int m_iMaxUniqueItemSlots;
-    unsigned char m_GlobalsData48[0x64-0x48];
+    unsigned char m_Padding48[0x18];
+    float m_manaRegeneration; // +0x60
     float m_fEnchanterSocketChance;
     float m_fEnchanterEnchantChance;
     float m_fEnchanterPricePerEnchant; // ENCHANTER_PRICE_PER_ENCHANT
@@ -52,7 +61,10 @@ private:
     float m_fTriggerNearRange;
     float m_fIndoorUnitActiveRange;
     float m_fOutdoorUnitActiveRange;
-    unsigned char m_GlobalsDataBC[0x268-0xbc];
+    unsigned char m_PaddingBC[0x1c];
+    std::vector<std::wstring> m_tips; // +0xd8
+    std::wstring m_contextTips[34]; // +0xf0
+    CRandomizer m_tipRandomizer; // +0x200
     std::wstring m_sRandomEnchantColor;
     std::wstring m_sRareColor;
     std::wstring m_sUniqueColor;

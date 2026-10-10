@@ -55,7 +55,7 @@ public:
     virtual bool missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&);
     virtual void* getUnitModelSecondary();
     virtual bool canEquip(CCharacter*, bool);
-    virtual long long canPickup(CCharacter*);
+    virtual bool canPickup(CCharacter*);
     virtual long long canDrop(CCharacter*);
     virtual void addedToInventory(CInventory*, CCharacter*);
     virtual void removedFromInventory(CInventory*, CCharacter*);

@@ -12,3 +12,7 @@ void CCollisionAvoiderWrapper::positionUpdated(const Ogre::Vector3& position)
 {
     CAffectorWrapper::positionUpdated(position);
 }
+
+void CCollisionAvoiderWrapper::updateCircle()
+{
+}

@@ -90,12 +90,13 @@ float CTimeline::GetPropertyPointTimePercent(long long objectID, int propertyID,
     return 0.0f;
 }
 
-void CTimeline::GetPropertyPointValue(long long objectID, int propertyID, int pointID,
+void* CTimeline::GetPropertyPointValue(long long objectID, int propertyID, int pointID,
                                       unsigned int& value)
 {
     CTimelineProperty* property = GetProperty(objectID, propertyID, false);
     if (property != NULL)
-        property->GetValueAtPoint(pointID, value);
+        return property->GetValueAtPoint(pointID, value);
+    return property;
 }
 
 void CTimeline::SetPropertyPointTimePercent(long long objectID, int propertyID,
