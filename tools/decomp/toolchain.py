@@ -276,6 +276,39 @@ def _shared_preprocess(cmd, source, root, tmp):
     return prefix + text, result.stderr
 
 
+def _store_shared_output(staged, cached):
+    """Deduplicate bytes only; each semantic key still owns a verified manifest.
+
+    Lock order is always semantic key, then content digest. Caller outputs are
+    copied, never linked, so changing them cannot mutate this immutable store.
+    """
+    digest = sha256(staged)
+    objects = Path(SHARED_CC_CACHE) / "objects" / digest[:2]
+    objects.mkdir(parents=True, exist_ok=True)
+    blob = objects / digest
+    suffix = str(os.getpid()) + "-" + str(threading.get_ident())
+    pending_blob = objects / (".blob-" + suffix)
+    pending_output = cached.parent / (".output-" + suffix)
+    with (objects / (digest + ".lock")).open("a+") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            if not blob.is_file() or sha256(blob) != digest:
+                shutil.copyfile(staged, pending_blob)
+                os.replace(pending_blob, blob)
+            # A stale temporary name may survive an interrupted earlier write.
+            pending_output.unlink(missing_ok=True)
+            try:
+                os.link(blob, pending_output)
+            except OSError:
+                # Cache directories may cross filesystems or disallow links.
+                shutil.copyfile(blob, pending_output)
+            os.replace(pending_output, cached)
+        finally:
+            pending_blob.unlink(missing_ok=True)
+            pending_output.unlink(missing_ok=True)
+    return digest
+
+
 def _shared_compile(cmd, source, output, root, flags, assembly, quiet, tmp):
     if SHARED_CC_CACHE is None:
         return None
@@ -313,7 +346,9 @@ def _shared_compile(cmd, source, output, root, flags, assembly, quiet, tmp):
             _shared_count("hit")
         else:
             _shared_count("miss")
-            source_path = folder / "input.ii"
+            # Expanded inputs are transient; cache hits need only the verified output.
+            # Keep the input basename and the preprocessed #line prefix unchanged.
+            source_path = Path(tmp) / "input.ii"
             source_path.write_bytes(preprocessed)
             staged = Path(tmp) / cached.name
             base = [cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")]]
@@ -329,11 +364,9 @@ def _shared_compile(cmd, source, output, root, flags, assembly, quiet, tmp):
             if _compiler_identity(cmd, root) != identity:
                 _shared_count("fallback")
                 return _SHARED_BYPASS
-            temporary = folder / (".output-" + str(os.getpid()) + "-" + str(threading.get_ident()))
-            shutil.copyfile(staged, temporary)
-            os.replace(temporary, cached)
+            output_digest = _store_shared_output(staged, cached)
             partial = folder / (".result-" + str(os.getpid()) + "-" + str(threading.get_ident()))
-            partial.write_text(json.dumps({"schema": 1, "output_sha256": sha256(cached)}))
+            partial.write_text(json.dumps({"schema": 1, "output_sha256": output_digest}))
             os.replace(partial, manifest)
         output = Path(output)
         output.parent.mkdir(parents=True, exist_ok=True)
