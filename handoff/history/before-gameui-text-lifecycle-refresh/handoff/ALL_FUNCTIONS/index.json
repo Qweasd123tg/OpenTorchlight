@@ -36,7 +36,7 @@
     {
       "path": "handoff/ALL_FUNCTIONS/part-07.csv",
       "rows": 750,
-      "sha256": "8002e245218bda9db48ee4768b4ebc89da10126712a2d789cf89ddd83681c864"
+      "sha256": "c7ae3eee1a28bf92c9e1a9630fba7f510f68f744802e8b14f7e87c583d730045"
     },
     {
       "path": "handoff/ALL_FUNCTIONS/part-08.csv",
@@ -61,6 +61,6 @@
   ],
   "current_state": "../CURRENT_STATE.json",
   "historical_index": "../SMALL_FUNCTIONS.csv",
-  "current_main_commit": "347640edaa4cfc30fd8e83bf930d5d5841096e56",
-  "current_main_tree": "0582c5cb5acd03b803da729590854afc568cbde7"
+  "current_main_commit": "5784644f7236d3a9f1dbac18477b98859cb041a7",
+  "current_main_tree": "0e403fc816d6b0d5fe687d7186dada16bc7c1874"
 }

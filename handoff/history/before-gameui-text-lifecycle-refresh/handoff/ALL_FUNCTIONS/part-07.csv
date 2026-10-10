@@ -78,9 +78,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8ec90,gameui.cpp,"CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
 0xa8ed60,gameui.cpp,CGameUI::toggleDialog(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ed60.cpp,False
 0xa8edc0,gameui.cpp,CGameUI::toggleWaypointMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8edc0.cpp,False
-0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),DIFF,True,False,,False
-0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),DIFF,True,False,,False
-0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",DIFF,True,False,,False
+0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),MISSING,False,False,,False
+0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),MISSING,False,False,,False
+0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",MISSING,False,False,,False
 0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MISSING,False,False,,False
 0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MISSING,False,False,,False
 0xa8f4e0,gameui.cpp,CGameUI::returnDraggedItem(),MISSING,False,False,,False
@@ -133,7 +133,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
 0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),MISSING,False,False,,False
 0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",DIFF,True,False,,False
-0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MATCH,True,False,,False
+0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MISSING,False,False,,False
 0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
 0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
 0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),MISSING,False,False,,False

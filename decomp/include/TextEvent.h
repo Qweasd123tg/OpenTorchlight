@@ -11,6 +11,7 @@ public:
     virtual ~CTextEvent();
     CTextEvent(const std::string&,const CEGUI::colour&,const CEGUI::colour&);
     void createText(CGameUI*,CEGUI::Window*);
+    void update(CEGUI::Window*, float);
     float m_Value10,m_Value14,m_Value18;
     char m_Padding1C[4];
     std::string m_Text;
