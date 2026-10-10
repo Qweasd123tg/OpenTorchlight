@@ -607,3 +607,79 @@ void CCombineMenu::performInteraction(){
     }
     m_pCharacter->incrementJournalStatistic(static_cast<EJournalStatistic>(16),1);
 }
+
+namespace combine_controls {
+struct UIFields {char prefix[0xb8];CEquipment* dragged;};
+struct ClientFields {char prefix[0x1c8];TSafePointer<CRunicCore> first,second,third,fourth;};
+struct ClientUI {char prefix[0x1920];ClientFields* client;};
+inline __attribute__((always_inline,flatten)) void clearMouseClicks(CGameUI* ui) {
+ ClientFields* c=reinterpret_cast<ClientUI*>(ui)->client;
+ c->fourth.setObject(0);c->third.setObject(0);c->first.setObject(0);c->second.setObject(0);
+}
+}
+void CCombineMenu::setOwner(CCharacter* owner){m_pOwner=owner;}
+void CCombineMenu::equipmentEquipped(CEquipment*){updateLayout();}
+void CCombineMenu::equipmentUnequipped(CEquipment*){updateLayout();}
+void CCombineMenu::inventoryDestroyed(){}
+bool CCombineMenu::handle_ItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_ClickedSlot=m_aiSlotData[slot];
+  else if(mouse.button==CEGUI::RightButton)m_RightClickedSlot=m_aiSlotData[slot];
+ }
+ return true;
+}
+bool CCombineMenu::handle_MouseThrough(const CEGUI::EventArgs&){m_bHover=false;return true;}
+bool CCombineMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.button==CEGUI::LeftButton&&mouse.window)return onClick(*static_cast<ELayoutFunction*>(mouse.window->getUserData()));
+ return true;
+}
+void CCombineMenu::equipmentDropped(CEquipment* item){itemUpdatedInMenu(item,false);updateLayout();}
+void CCombineMenu::equipmentPickedUp(CEquipment* item){itemUpdatedInMenu(item,true);updateLayout();}
+void CCombineMenu::setPlayer(CCharacter* player) {
+ if(player!=m_pCharacter)inventoryDestroyed();
+ if(m_pCharacter)m_pCharacter->m_pInventory->removeListener(this);
+ m_pCharacter=player;
+ if(player)player->m_pInventory->addListener(this);
+}
+bool CCombineMenu::handle_MouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(m_aiSlotData[slot]);
+  if(item==m_pHoverObject) {
+   m_pHoverObject=0;
+   CEquipment* dragged=reinterpret_cast<combine_controls::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);
+   }
+  }
+ }
+ return true;
+}
+bool CCombineMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) {
+  m_bCloseRequested=true;m_pGameUI->getCharacter()->setTarget(0);
+  combine_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+ }
+ return true;
+}
+bool CCombineMenu::onClick(ELayoutFunction action) {
+ if(m_bOpen) {
+  if(static_cast<int>(action)==8) {
+   m_bCloseRequested=true;m_pGameUI->getCharacter()->setTarget(0);
+   combine_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+  }else if(static_cast<int>(action)==9)performInteraction();
+ }
+ return true;
+}
+void CCombineMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick")&&!window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CCombineMenu::handle_onClick,this));
+ }catch(...) {}
+}

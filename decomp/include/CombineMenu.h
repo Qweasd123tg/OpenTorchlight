@@ -1,8 +1,12 @@
 #ifndef COMBINE_MENU_H
 #define COMBINE_MENU_H
+#include <map>
+#include <utility>
 #include "GameUI.h"
 #include "SubMenu.h"
 #include "iInventoryListener.h"
+extern bool g_bDontTrackItemEquipAndUnEquip;
+class CInventory;
 class CSettings;
 class CSoundBank;
 class CGenericModel;
@@ -25,13 +29,19 @@ public:
  virtual void setOwner(CCharacter*);
  virtual void setOpen(bool);
  virtual void update(float);
+ virtual bool handle_onClick(const CEGUI::EventArgs&);
+ virtual bool processInput(void*, float, bool);
  virtual void equipmentPickedUp(CEquipment*);
  virtual void equipmentDropped(CEquipment*);
  virtual void equipmentEquipped(CEquipment*);
  virtual void equipmentUnequipped(CEquipment*);
  virtual void equipmentUsed(CEquipment*);
  virtual void inventoryDestroyed();
+ virtual bool onClick(ELayoutFunction);
 
+ void setPlayer(CCharacter*);
+ void returnItemsToCorrectLocation(CEquipment*);
+ bool handle_CloseButton(const CEGUI::EventArgs&);
  void performInteraction();
  void itemUpdatedInMenu(CEquipment*,bool);
  void createMenus();
@@ -42,7 +52,7 @@ public:
  bool handle_MouseOut(const CEGUI::EventArgs&);
  void setSlotIcon(CEquipment*, int);
  virtual void updateLayout();
-char gap18[0x48-0x18];
+std::map<CEquipment*, std::pair<CInventory*, EEQUIP_LOCATIONS> > m_OriginalItemLocations;
  CEGUI::Window* m_pParent;
  CEGUI::Window* m_pBackground;
  CEGUI::Window* m_pPanel;
@@ -51,10 +61,12 @@ char gap18[0x48-0x18];
  CEGUI::Window* m_pTitle;
  CEGUI::Window* m_pDialog;
  CEGUI::Window* m_pAccept;
- char gap88[8];
+ CCharacter* m_pOwner;
  CCharacter* m_pCharacter;
  bool m_bOpen;
- char gap99[0xa0-0x99];
+ bool m_bFullyClosed;
+ bool m_bCloseRequested;
+ char gap9B[5];
  CSettings* m_pSettings;
  CGameUI* m_pGameUI;
  Ogre::SceneManager* m_pSceneManager;
@@ -70,9 +82,13 @@ char gap18[0x48-0x18];
  CEGUI::Window* m_pMainSocketGlowWindows[4];
  CEGUI::Window* m_pSocketedSizeWindows[4];
  CEGUI::Window* m_pMainStackWindows[4];
- char gap188[0x198-0x188];
+ int m_ClickedSlot;
+ int m_RightClickedSlot;
+ CEquipment* m_pHoverObject;
  CEGUI::Imageset* m_pImageset;
  CEGUI::Window* m_pSlotGlow;
- char gap1A8[8];
+ bool m_bHover;
+ char gap1A9[3];
+ float m_fScreenEdge;
 };
 #endif
