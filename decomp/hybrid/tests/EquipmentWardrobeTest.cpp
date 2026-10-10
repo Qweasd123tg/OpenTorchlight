@@ -5,6 +5,7 @@
 #include "DataGroup.h"
 #undef protected
 TL_ORIGINAL(bool, originalEquipmentWardrobe, (CEquipment*,std::wstring), "_ZN10CEquipment11isWardrobedESbIwSt11char_traitsIwESaIwEE")
+extern "C" bool tracedoriginalEquipmentWardrobe(CEquipment*,std::wstring) __asm__("_ZN10CEquipment11isWardrobedESbIwSt11char_traitsIwESaIwEE");
 namespace {
 struct Case{unsigned seed,mode;};
 void text(autotest::Capture& c,const std::wstring& s){unsigned n=s.size();c.add(&n,sizeof(n));c.add(s.data(),n*sizeof(wchar_t));}
@@ -25,16 +26,18 @@ void side(const Case& c,bool ours,autotest::Capture& out){
         g->AddDataValue(L"ICON",std::wstring(L"icon"),false);g->AddDataValue(L"ITEM_MESH",std::wstring(L"item.mesh"),false);
     }
     std::wstring query=classes[c.seed%7];if(c.mode==4)query=std::wstring(L"\0ignored",8);
-    for(unsigned repeat=0;repeat<2;++repeat){bool result=ours?object->isWardrobed(query):originalEquipmentWardrobe(object,query);out.add(&result,sizeof(result));text(out,query);}
+    for(unsigned repeat=0;repeat<2;++repeat){if(repeat==0){autotest::invoke(out,ours?&tracedoriginalEquipmentWardrobe:&originalEquipmentWardrobe,object,query);}else{bool result=ours?object->isWardrobed(query):originalEquipmentWardrobe(object,query);out.add(&result,sizeof(result));}text(out,query);}
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}
 }
 TL_TEST(equipment_wardrobe_differential){
+autotest::Coverage coverage0("equipment_wardrobe_differential",(uint64_t)(uintptr_t)&originalEquipmentWardrobe);
+
     int failures=0;
     for(unsigned n=0;n<1540;++n){Case c={n<840?n:(n-840)%175,n<840?0u:1+(n-840)/175};autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-        bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+        int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
         if(!ok)host->log("    wardrobe seed %u mode %u status %d/%d lengths %lu/%lu\n",c.seed,c.mode,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);
-        TL_CHECK(failures,ok);if(!ok)return failures;
+        TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}
     }
-    host->log("    equipment wardrobe: 1540 cases, two calls per side\n");return failures;
+    host->log("    equipment wardrobe: 1540 cases, two calls per side\n");{coverage0.report(host);return failures;}
 }

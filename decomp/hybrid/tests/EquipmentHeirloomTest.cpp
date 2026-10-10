@@ -17,6 +17,7 @@ TL_FUNCTION(heRequirements,"_ZN10CEquipment15setRequirementsEv")
 TL_FUNCTION(heClear,"_ZN14CEffectManager20clearOutDescriptionsEv")
 TL_FUNCTION(heBase,"_ZN7CEffect18calculateBaseValueENS_15ECALCULATETYPESE")
 TL_FUNCTION(heValue,"_ZN7CEffect5valueE14EEFFECT_VALUES")
+extern "C" void tracedoriginalHeirloom(CEquipment*) __asm__("_ZN10CEquipment15improveHeirloomEv");
 namespace {
 typedef char effect_size[sizeof(CEffect)==0x138?1:-1];
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
@@ -49,9 +50,11 @@ void base(CEffect*p,CEffect::ECALCULATETYPES t){number(14);number(world->id(p));
 void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;World w;world=&w;CEquipment*p=w.item.get();p->m_iUnknown28C=c.rank;p->m_pEffectManager=c.n%11?w.managers[0].get():NULL;
  if(c.mode==8)for(unsigned a=0;a<3;++a)if(list(w.managers[0].get(),a).size()>1)list(w.managers[0].get(),a).m_nCapacity=1;
  detour::Set patches,values;valuePatch=&values;TL_REDIRECT(patches,heCombat,&combat);TL_REDIRECT(patches,heRequirements,&requirements);TL_REDIRECT(patches,heClear,&clear);TL_REDIRECT(patches,heBase,&base);TL_REDIRECT(values,heValue,&value);if(patches.failed()||values.failed())_exit(42);
- for(unsigned repeat=0;repeat<2;++repeat){if(ours)p->improveHeirloom();else originalHeirloom(p);number(p->m_iUnknown28C);number(w.valueCalls);number(w.baseCalls);for(unsigned i=0;i<9;++i){real(w.effects[i].get()->m_fValueC0);real(w.effects[i].get()->m_fValueC4);real(w.effects[i].get()->m_fValueC8);}for(unsigned m=0;m<2;++m)for(unsigned a=0;a<3;++a)number(list(w.managers[m].get(),a).size());}
+ for(unsigned repeat=0;repeat<2;++repeat){if(repeat==0){autotest::invoke(out,ours?&tracedoriginalHeirloom:&originalHeirloom,p);}else{if(ours)p->improveHeirloom();else originalHeirloom(p);}number(p->m_iUnknown28C);number(w.valueCalls);number(w.baseCalls);for(unsigned i=0;i<9;++i){real(w.effects[i].get()->m_fValueC0);real(w.effects[i].get()->m_fValueC4);real(w.effects[i].get()->m_fValueC8);}for(unsigned m=0;m<2;++m)for(unsigned a=0;a<3;++a)number(list(w.managers[m].get(),a).size());}
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}void recovered(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_heirloom_differential){int failures=0;for(unsigned n=0;n<4608;++n){static const int ranks[]={-2,0,8,9,10,11};Case c={n,0,n%64,1,ranks[(n/64)%6]};if(n>=2304){unsigned q=n-2304;c.mode=1+(q/256)%8;c.rank=9;c.trigger=1+(q/64)%4;c.count=1+(q%63);}
- autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    heirloom case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}host->log("    heirloom: 4608 cases, two calls per side\n");return failures;}
+TL_TEST(equipment_heirloom_differential){
+autotest::Coverage coverage0("equipment_heirloom_differential",(uint64_t)(uintptr_t)&originalHeirloom);
+int failures=0;for(unsigned n=0;n<4608;++n){static const int ranks[]={-2,0,8,9,10,11};Case c={n,0,n%64,1,ranks[(n/64)%6]};if(n>=2304){unsigned q=n-2304;c.mode=1+(q/256)%8;c.rank=9;c.trigger=1+(q/64)%4;c.count=1+(q%63);}
+ autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    heirloom case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}}host->log("    heirloom: 4608 cases, two calls per side\n");{coverage0.report(host);return failures;}}

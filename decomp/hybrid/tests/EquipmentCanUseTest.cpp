@@ -20,6 +20,7 @@ TL_FUNCTION(cuBusy,"_ZN10CCharacter20performingSkillLooseEv")
 TL_FUNCTION(cuSkill,"_ZN6CSkill35canAffixesAndEffectsBeAppliedToUnitEP9CBaseUnitP10CCharacter")
 extern "C" void* canUseEquipmentTable[] __asm__("_ZTV10CEquipment");
 extern "C" void* canUseCharacterTable[] __asm__("_ZTV10CCharacter");
+extern "C" bool tracedoriginalCanUse(CEquipment*,CCharacter*,CBaseUnit*) __asm__("_ZN10CEquipment14canUseOnTargetEP10CCharacterP9CBaseUnit");
 namespace {
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,flags,effects,skills,results,mode,target;int charges,level,requirement;};
@@ -65,13 +66,15 @@ void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;Wo
  if(c.mode==12&&c.effects>1)effects(w.managers[0].get()).m_nCapacity=1;
  if(c.mode==13&&c.skills>1)w.skills[0].get()->m_OtherSkills.m_nCapacity=1;
  detour::Set patches;TL_REDIRECT(patches,cuIsa,&isa);TL_REDIRECT(patches,cuLevel,&level);TL_REDIRECT(patches,cuBusy,&busy);TL_REDIRECT(patches,cuSkill,&skill);if(patches.failed())_exit(42);
- for(unsigned repeat=0;repeat<2;++repeat){bool result=ours?p->canUseOnTarget(w.actor.get(),w.selected):originalCanUse(p,w.actor.get(),w.selected);number(result);number(w.validCalls);number(w.skillCalls);number(w.target.get()->m_pMaster!=NULL);number(effects(w.managers[0].get()).size());number(w.skills[0].get()->m_OtherSkills.size());}
+ for(unsigned repeat=0;repeat<2;++repeat){if(repeat==0){autotest::invoke(out,ours?&tracedoriginalCanUse:&originalCanUse,p,w.actor.get(),w.selected);}else{bool result=ours?p->canUseOnTarget(w.actor.get(),w.selected):originalCanUse(p,w.actor.get(),w.selected);number(result);}number(w.validCalls);number(w.skillCalls);number(w.target.get()->m_pMaster!=NULL);number(effects(w.managers[0].get()).size());number(w.skills[0].get()->m_OtherSkills.size());}
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}void recovered(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_canuse_differential){int failures=0;for(unsigned n=0;n<8192;++n){Case c={n,n%64,(n/64)%4,(n/256)%4,(n*73)%256,0,(n/1024)%3,1,10,10};if(c.target==2)c.effects=0;
+TL_TEST(equipment_canuse_differential){
+autotest::Coverage coverage0("equipment_canuse_differential",(uint64_t)(uintptr_t)&originalCanUse);
+int failures=0;for(unsigned n=0;n<8192;++n){Case c={n,n%64,(n/64)%4,(n/256)%4,(n*73)%256,0,(n/1024)%3,1,10,10};if(c.target==2)c.effects=0;
  if(n>=3072){unsigned q=n-3072;c.flags=q%64;c.mode=1+(q/64)%13;c.effects=1+(q/832)%3;c.skills=1+(q/2496)%3;c.results=255;c.target=(q/32)%2;}
  static const int charges[]={-9999,-1,0,1,4};c.charges=charges[(n/7)%5];
  if(n>=7168){unsigned q=n-7168;c.flags=q%64;c.mode=q%2?6:0;c.effects=0;c.skills=0;c.target=(q/64)%3;static const int levels[]={INT_MIN,-1,0,9,10,11,INT_MAX-1};c.level=levels[(q/3)%7];c.requirement=levels[(q/21)%7];c.charges=1;}
- autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    canUse case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}
- host->log("    canUse: 8192 cases, two calls per side\n");return failures;}
+ autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    canUse case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}}
+ host->log("    canUse: 8192 cases, two calls per side\n");{coverage0.report(host);return failures;}}

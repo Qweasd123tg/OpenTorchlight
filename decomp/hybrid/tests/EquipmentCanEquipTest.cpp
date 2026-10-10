@@ -20,6 +20,7 @@ TL_FUNCTION(ceStrengthReq,"_ZN10CEquipment22getStrengthRequirementEP10CCharacter
 TL_FUNCTION(ceDexterityReq,"_ZN10CEquipment23getDexterityRequirementEP10CCharacter")
 TL_FUNCTION(ceMagicReq,"_ZN10CEquipment19getMagicRequirementEP10CCharacter")
 TL_FUNCTION(ceDefenseReq,"_ZN10CEquipment21getDefenseRequirementEP10CCharacter")
+extern "C" bool tracedoriginalCanEquip(CEquipment*, CCharacter*, bool) __asm__("_ZN10CEquipment8canEquipEP10CCharacterb");
 namespace {
 typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
 typedef char flag_offset[__builtin_offsetof(CCharacter,m_bCharacterFlag4A0)==0x4a0?1:-1];
@@ -63,8 +64,8 @@ void side(const Case& c,bool ours,autotest::Capture& out) {
  TL_REDIRECT(patches,ceStrengthReq,&strengthReq);TL_REDIRECT(patches,ceDexterityReq,&dexterityReq);TL_REDIRECT(patches,ceMagicReq,&magicReq);TL_REDIRECT(patches,ceDefenseReq,&defenseReq);
  if(patches.failed())_exit(42);
  for(unsigned repeat=0;repeat<2;++repeat) {
-  bool result=ours?item->CEquipment::canEquip(actor,(c.flags&64)!=0):originalCanEquip(item,actor,(c.flags&64)!=0);
-  number(result);number(actor->m_bCharacterFlag4A0);number(actor->m_iUnitLevel);number(item->m_bUnknown348);number(levelCalls);
+  if(repeat==0){autotest::invoke(out,ours?&tracedoriginalCanEquip:&originalCanEquip,item,actor,(c.flags&64)!=0);}else{bool result=ours?item->CEquipment::canEquip(actor,(c.flags&64)!=0):originalCanEquip(item,actor,(c.flags&64)!=0);
+  number(result);}number(actor->m_bCharacterFlag4A0);number(actor->m_iUnitLevel);number(item->m_bUnknown348);number(levelCalls);
  }
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}
@@ -83,12 +84,14 @@ Case make(unsigned n) {
 }
 }
 TL_TEST(equipment_canequip_differential) {
+autotest::Coverage coverage0("equipment_canequip_differential",(uint64_t)(uintptr_t)&originalCanEquip);
+
  int failures=0;
  for(unsigned n=0;n<6939;++n) {
   Case c=make(n);autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);
-  bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
+  int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;
   if(!ok)host->log("    canEquip case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);
-  TL_CHECK(failures,ok);if(!ok)return failures;
+  TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}
  }
- host->log("    canEquip: 6939 cases, two calls per side\n");return failures;
+ host->log("    canEquip: 6939 cases, two calls per side\n");{coverage0.report(host);return failures;}
 }
