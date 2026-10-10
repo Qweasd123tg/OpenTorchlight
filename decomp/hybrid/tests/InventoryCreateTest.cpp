@@ -71,6 +71,9 @@ TL_FUNCTION(extraCallback1Fn,"_ZN14CInventoryMenu19handle_MouseThroughERKN5CEGUI
 TL_FUNCTION(extraCallback2Fn,"_ZN14CInventoryMenu21handle_SpellMouseOverERKN5CEGUI9EventArgsE")
 TL_FUNCTION(extraCallback3Fn,"_ZN14CInventoryMenu20handle_SpellMouseOutERKN5CEGUI9EventArgsE")
 TL_FUNCTION(extraCallback4Fn,"_ZN14CInventoryMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
+TL_FUNCTION(extraCallback5Fn,"_ZN14CInventoryMenu16handle_MouseOverERKN5CEGUI9EventArgsE")
+TL_FUNCTION(extraCallback6Fn,"_ZN14CInventoryMenu18handle_CloseButtonERKN5CEGUI9EventArgsE")
+TL_FUNCTION(extraCallback7Fn,"_ZN14CInventoryMenu15handle_SetSpellERKN5CEGUI9EventArgsE")
 namespace {
 struct Stop {};
 struct Case { int width,height; bool replace; float ratio;unsigned faultSubscription;unsigned iconPattern; };
@@ -102,7 +105,7 @@ void zWindow(CEGUI::Window* p,bool x){number(13);number(wid(p));number(x);p->d_z
 void captureCallback(const CEGUI::MemberFunctionSlot<CInventoryMenu>* slot){
  intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
  std::memcpy(words,&slot->d_function,sizeof(words));
- char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{extraCallback0Fn_original,extraCallback0Fn_linked},{extraCallback1Fn_original,extraCallback1Fn_linked},{extraCallback2Fn_original,extraCallback2Fn_linked},{extraCallback3Fn_original,extraCallback3Fn_linked},{extraCallback4Fn_original,extraCallback4Fn_linked}};
+ char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{extraCallback0Fn_original,extraCallback0Fn_linked},{extraCallback1Fn_original,extraCallback1Fn_linked},{extraCallback2Fn_original,extraCallback2Fn_linked},{extraCallback3Fn_original,extraCallback3Fn_linked},{extraCallback4Fn_original,extraCallback4Fn_linked},{extraCallback5Fn_original,extraCallback5Fn_linked},{extraCallback6Fn_original,extraCallback6Fn_linked},{extraCallback7Fn_original,extraCallback7Fn_linked}};
  for(unsigned i=0;i<sizeof(pairs)/sizeof(pairs[0]);++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
  cap->add(words,sizeof(words));
 }

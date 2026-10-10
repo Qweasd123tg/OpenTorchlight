@@ -1060,3 +1060,90 @@ bool CInventoryMenu::onClick(ELayoutFunction action) {
  }
  return true;
 }
+
+bool CInventoryMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(slot);
+  if(item) {
+   m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pForeground38->setVisible(true);m_pForeground38->moveToFront();
+    m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+   }else {m_pSocketedIconParent->setVisible(false);m_pForeground38->setVisible(false);}
+  }
+  CEGUI::Window* panel=m_pPanel;
+  float x=m_pSocketedSizeWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSocketedSizeWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!panel->isChild(m_pSlotGlow))panel->addChildWindow(m_pSlotGlow);
+  m_pSlotGlow->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pSlotGlow->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pSlotGlow->moveToBack();m_InventoryData9160=1;
+ }
+ return true;
+}
+
+void CInventoryMenu::toggleWeaponSet() {
+ if(m_pCharacter&&m_pCharacter->alive()&&!m_pCharacter->performingAttackLoose()&&!m_pCharacter->performingSkillLoose()) {
+  CEGUI::Checkbox* checkbox=static_cast<CEGUI::Checkbox*>(m_pWeaponSwitchWindow);
+  checkbox->setSelected(!checkbox->isSelected());
+ }else m_pSoundBank->playSample(24,0,0.0f,0.0f,false);
+}
+namespace inventory_close {
+struct ClientFields {
+ char prefix[0x1c8];
+ TSafePointer<CRunicCore> first;
+ TSafePointer<CRunicCore> second;
+ TSafePointer<CRunicCore> third;
+ TSafePointer<CRunicCore> fourth;
+};
+struct UIFields {char prefix[0x1920];ClientFields* client;};
+}
+bool CInventoryMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) {
+  inventory_close::ClientFields* client=reinterpret_cast<inventory_close::UIFields*>(m_pGameUI)->client;
+  client->fourth.setObject(0);client->third.setObject(0);
+  client->first.setObject(0);client->second.setObject(0);
+  m_bCloseRequested=true;
+ }
+ return true;
+}
+
+#include "KeyManager.h"
+#include "Skill.h"
+#include "SkillManager.h"
+namespace inventory_spell {
+struct UIFields {char prefix[0xb8];CEquipment* item;char gapc0[8];CCharacter* owner;char gapd0[0x590-0xd0];CKeyManager keys;};
+struct ActorFields {char prefix[0x1c8];CSkillManager* manager;};
+inline __attribute__((always_inline)) UIFields& ui(CGameUI* p){return *reinterpret_cast<UIFields*>(p);}
+}
+bool CInventoryMenu::handle_SetSpell(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(window) {
+  CCharacter* dragOwner=inventory_spell::ui(m_pGameUI).owner;
+  bool restricted=dragOwner&&dragOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(41));
+  CEquipment* item=inventory_spell::ui(m_pGameUI).item;
+  if(item&&item->ISA(static_cast<UNITTYPES::EUNITTYPES>(129))&&!restricted) {
+   CCharacter* owner=m_pCharacter;
+   if(owner->m_eAIState==static_cast<EAIState>(42)||owner->m_eAIState==static_cast<EAIState>(41))
+    m_pSoundBank->playSample(24,0,0.0f,0.0f,false);
+   else m_pGameUI->performItemUse(*owner->getLevel(),inventory_spell::ui(m_pGameUI).item,owner,owner,owner);
+  }else if(inventory_spell::ui(m_pGameUI).keys.keyHeld(17)) {
+   m_pCharacter->unLearnSpell(window->getID());updateLayout();m_pSoundBank->playSample(30,0,0.0f,0.0f,false);
+  }else {
+   long long guid=*static_cast<long long*>(window->getUserData());
+   CSkill* skill=reinterpret_cast<inventory_spell::ActorFields*>(m_pCharacter)->manager->getSkillByGuid(guid);
+   if(skill) {
+    skill->calculateEffectiveSkillLevel();
+    if(skill->m_iEffectiveSkillLevel&&!skill->m_bExecutedByProperty&&skill->m_bEnabled) {
+     m_pCharacter->setActiveSkillByName(skill->getName());m_pSoundBank->playSample(30,0,0.0f,0.0f,false);
+    }
+   }
+  }
+ }
+ return true;
+}
