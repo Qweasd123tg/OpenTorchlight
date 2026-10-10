@@ -286,3 +286,110 @@ CStatsMenuFill::~CStatsMenuFill()
 {
  if(m_pFillSoundBank){delete m_pFillSoundBank;m_pFillSoundBank=0;}
 }
+
+
+#include "Character.h"
+#include <cmath>
+#include <fenv.h>
+bool CStatsMenuFill::handle_ExitButton(const CEGUI::EventArgs&)
+{
+ m_bUnknown32=true;
+ m_pGameUI->getCharacter()->setAIState(static_cast<EAIState>(2));
+ return true;
+}
+bool CStatsMenuFill::handle_CloseButton(const CEGUI::EventArgs& args)
+{
+ m_bUnknown32=true;
+ m_pGameUI->getCharacter()->setAIState(static_cast<EAIState>(2));
+ m_Filling=false;m_HeldTime=0;
+ for(unsigned i=0;i<4;++i){m_AddHeld[i]=false;m_RemoveHeld[i]=false;}
+ return CDropdownMenu::handle_CloseButton(args);
+}
+float CStatsMenuFill::getExperienceBarTotalAmount()
+{
+ float maximum=0;
+ for(unsigned i=0;i<4;++i)maximum=std::max(maximum,getStatBarTotalAmount(static_cast<ESTATSMENU_STATS>(i)));
+ return maximum;
+}
+float CStatsMenuFill::getAmountOfXPToAdd(ESTATSMENU_STATS which,float elapsed)
+{
+ if(!m_pPlayer)return 0;
+ float factor=std::max(0.25f,std::min(1.0f,m_HeldTime*0.5f));
+ float maximum=getExperienceBarTotalAmount();
+ float total=getStatBarTotalAmount(which);
+ float amount=total*(factor*3.0f*elapsed);
+ float remaining=getExperienceToSpend();
+ amount=amount<remaining?amount:remaining;
+ return maximum<=amount?maximum:amount;
+}
+float CStatsMenuFill::getAmountOfXPToRemove(ESTATSMENU_STATS which,float elapsed)
+{
+ if(!m_pPlayer)return 0;
+ float factor=std::max(0.25f,std::min(1.0f,m_HeldTime*0.5f));
+ float maximum=getExperienceBarTotalAmount();
+ float total=getStatBarTotalAmount(which);
+ float amount=total*(factor*3.0f*elapsed);
+ return maximum<=amount?maximum:amount;
+}
+namespace stats_fill_bar_detail {
+// CVTTSS2SI in the original yields INT_MIN for NaN or out-of-range floats.
+inline int integer(float value){
+ if(value>=-2147483648.0f&&value<2147483648.0f)return static_cast<int>(value);
+ ::feraiseexcept(FE_INVALID);
+ return (-2147483647-1);
+}
+}
+void CStatsMenuFill::fillIntoBar(ESTATSMENU_STATS which,float elapsed)
+{
+ float amount=getAmountOfXPToAdd(which,elapsed);
+ if(!m_Filling){m_pFillSoundBank->playSample(27,0,0,0,false);m_Filling=true;}
+ if(amount<1.0f){
+  m_Filling=false;m_HeldTime=0;
+  for(unsigned i=0;i<4;++i){m_AddHeld[i]=false;m_RemoveHeld[i]=false;}
+  return;
+ }
+ float current=static_cast<float>(getStatBarCurrentAmount(which));
+ float total=getStatBarTotalAmount(which);
+ if(current+amount>=total){
+  m_BarCooldown=0.2f;
+  stats_fill_visual_detail::PlayerFields* p=reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer);
+  switch(which){
+   case 0:p->stat0=static_cast<int>(static_cast<unsigned>(p->stat0)+1u);reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer)->allocated0=0;break;
+   case 1:p->stat1=static_cast<int>(static_cast<unsigned>(p->stat1)+1u);reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer)->allocated1=0;break;
+   case 2:p->stat2=static_cast<int>(static_cast<unsigned>(p->stat2)+1u);reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer)->allocated2=0;break;
+   case 3:p->stat3=static_cast<int>(static_cast<unsigned>(p->stat3)+1u);reinterpret_cast<stats_fill_visual_detail::PlayerFields*>(m_pPlayer)->allocated3=0;break;
+  }
+  addExperienceSpent(stats_fill_bar_detail::integer(::floorf(total-current)));
+ }else addExperienceToStat(which,stats_fill_bar_detail::integer(::floorf(amount)));
+ updateVisuals();
+}
+void CStatsMenuFill::removeFromBar(ESTATSMENU_STATS which,float elapsed)
+{
+ float amount=getAmountOfXPToRemove(which,elapsed);
+ if(!m_Filling){m_pFillSoundBank->playSample(27,0,0,0,false);m_Filling=true;}
+ if(amount<1.0f){
+  m_Filling=false;m_HeldTime=0;
+  for(unsigned i=0;i<4;++i){m_AddHeld[i]=false;m_RemoveHeld[i]=false;}
+  return;
+ }
+ float current=static_cast<float>(getStatBarCurrentAmount(which));
+ if(current-amount<0)amount=current;
+ int remove=stats_fill_bar_detail::integer(::floorf(amount));
+ addExperienceToStat(which,static_cast<int>(0u-static_cast<unsigned>(remove)));
+ updateVisuals();
+}
+void CStatsMenuFill::update(float elapsed)
+{
+ CDropdownMenu::update(elapsed);
+ m_FillSoundCountdown-=elapsed;m_BarCooldown-=elapsed;
+ if(m_BarCooldown>0)return;
+ for(unsigned i=0;i<4;++i){
+  if(m_AddHeld[i])fillIntoBar(static_cast<ESTATSMENU_STATS>(i),elapsed);
+  else if(m_RemoveHeld[i])removeFromBar(static_cast<ESTATSMENU_STATS>(i),elapsed);
+  else continue;
+  m_HeldTime+=elapsed;
+  if(m_FillSoundCountdown<=0){m_pFillSoundBank->playSample(30,0,0,0,false);m_FillSoundCountdown=m_FillSoundInterval+0.1f;}
+  return;
+ }
+ if(m_FillSoundCountdown>=0&&m_FillSoundCountdown<m_FillSoundInterval*0.5f)m_pFillSoundBank->stop(30);
+}
