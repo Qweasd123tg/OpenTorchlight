@@ -610,6 +610,7 @@ void CCombineMenu::performInteraction(){
 
 namespace combine_controls {
 struct UIFields {char prefix[0xb8];CEquipment* dragged;};
+struct HoverState {char prefix[0x198];bool flag198;};
 struct ClientFields {char prefix[0x1c8];TSafePointer<CRunicCore> first,second,third,fourth;};
 struct ClientUI {char prefix[0x1920];ClientFields* client;};
 inline __attribute__((always_inline,flatten)) void clearMouseClicks(CGameUI* ui) {
@@ -682,6 +683,121 @@ void CCombineMenu::mapEventHandlers(CEGUI::Window* window) {
   if(window->isPropertyPresent("onClick")&&!window->getProperty("onClick").empty())
    window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CCombineMenu::handle_onClick,this));
  }catch(...) {}
+}
+
+bool CCombineMenu::processInput(void*,float,bool active) {
+ if(!active) {
+  m_pHoverObject=0;m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);
+  if(m_pSlotGlow->getParent()&&m_pSlotGlow->getParent()->isChild(m_pSlotGlow))m_pSlotGlow->getParent()->removeChildWindow(m_pSlotGlow);
+  return true;
+ }
+ bool result=true;
+ if(m_bCloseRequested){setOpen(false);m_bCloseRequested=false;result=false;}
+ CEquipment* dragged=m_pCharacter?reinterpret_cast<combine_controls::UIFields*>(m_pGameUI)->dragged:0;
+ if(dragged&&dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+  m_pForeground->setVisible(true);m_pForeground->moveToFront();
+  m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+ }else {
+  if(m_pHoverObject&&reinterpret_cast<combine_controls::HoverState*>(m_pHoverObject)->flag198)m_pHoverObject=0;
+  if(!m_pHoverObject){m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+ }
+ if(!m_bHover) {
+  if(m_pSlotGlow->getParent()&&m_pSlotGlow->getParent()->isChild(m_pSlotGlow))m_pSlotGlow->getParent()->removeChildWindow(m_pSlotGlow);
+  m_pHoverObject=0;
+ }
+ m_ClickedSlot=-1;m_RightClickedSlot=-1;return result;
+}
+
+bool CCombineMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(m_aiSlotData[slot]);
+  if(item) {
+   m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pForeground->setVisible(true);m_pForeground->moveToFront();
+    m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+   }else {m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+  }
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!m_pSocketedSizeWindows[slot]->isChild(m_pSlotGlow))m_pSocketedSizeWindows[slot]->addChildWindow(m_pSlotGlow);
+  m_pSlotGlow->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,0.0f),CEGUI::UDim(0.0f,0.0f)));
+  m_pSlotGlow->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pSlotGlow->moveToBack();m_bHover=true;
+ }
+ return true;
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CCombineMenu::CCombineMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pParent(parent),m_pOwner(0),m_pCharacter(0),m_bOpen(false),m_bFullyClosed(true),m_bCloseRequested(false),
+ m_pSettings(&settings),m_pGameUI(&ui),m_pSceneManager(scene),m_pRenderWindow(render),m_pMenuModel(0),
+ m_pResourceManager(resources),m_fPanelX(0.0f),m_pSoundBank(0),m_ClickedSlot(-1),m_RightClickedSlot(-1),m_pHoverObject(0),m_bHover(false)
+{
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"STATSOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"STATSCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* error=sounds->getSoundDataObject(L"ERROR");if(error)m_pSoundBank->addSample(24,error->m_iGuid);
+ CSoundData* mana=sounds->getSoundDataObject(L"LOWMANA");if(mana)m_pSoundBank->addSample(35,mana->m_iGuid);
+ CSoundData* reveal=sounds->getSoundDataObject(L"REVEAL");if(reveal)m_pSoundBank->addSample(36,reveal->m_iGuid);
+ CSoundData* buy=sounds->getSoundDataObject(L"GOLDBUY");if(buy)m_pSoundBank->addSample(23,buy->m_iGuid);
+ createMenus();
+}
+CCombineMenu::~CCombineMenu() {
+ m_OriginalItemLocations.clear();setPlayer(0);
+ if(m_pMenuModel){delete m_pMenuModel;m_pMenuModel=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
+
+void CCombineMenu::setOpen(bool open) {
+ if(!m_bOpen&&open) {
+  m_OriginalItemLocations.clear();
+  m_pSettings->GetInt(KSETTINGS_RES_WIDTH);m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);m_pMenuModel->setVisible(true);
+  if(m_pMenuModel->animationPlaying("CLOSE"))m_pMenuModel->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pMenuModel->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pMenuModel->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pParent->addChildWindow(m_pBackground);m_pBackground->moveToBack();m_pGameUI->queueTip(static_cast<EContextTip>(14));
+ }else if(m_bOpen&&!open) {
+  if(m_pCharacter)for(unsigned i=0;i<4;++i) {
+   CEquipment* item=m_pCharacter->m_pInventory->getEquipmentInSlot(m_aiSlotData[i]);
+   if(item){g_bDontTrackItemEquipAndUnEquip=true;m_pCharacter->m_pInventory->removeEquipment(item);returnItemsToCorrectLocation(item);g_bDontTrackItemEquipAndUnEquip=false;}
+  }
+  m_OriginalItemLocations.clear();m_pSoundBank->playSample(66,0,0.0f,0.0f,false);
+  m_pMenuModel->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);m_bFullyClosed=false;
+ }
+ m_bOpen=open;if(open)updateLayout();
+}
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+namespace combine_animation {
+struct ModelFields {char prefix[0x60];Ogre::Entity* entity;char gap68[0x130-0x68];Ogre::SkeletonInstance* skeleton;};
+inline __attribute__((always_inline)) ModelFields& model(CGenericModel* p){return *reinterpret_cast<ModelFields*>(p);}
+}
+void CCombineMenu::update(float elapsed) {
+ int width=m_pSettings->GetInt(KSETTINGS_RES_WIDTH);int height=m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+ if(!m_bOpen){m_pHoverObject=0;m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+ if(m_bOpen||!m_bFullyClosed) {
+  if(m_pMenuModel) {
+   m_pMenuModel->updateAnimation(elapsed,false);combine_animation::model(m_pMenuModel).entity->_updateAnimation();
+   Ogre::Bone* bone=combine_animation::model(m_pMenuModel).skeleton->getBone("tag_dropdowntop");
+   Ogre::Vector3 position=m_pMenuModel->getPosition(false);
+   const Ogre::Vector3& offset=bone->_getDerivedPosition();
+   float x=position.x+offset.x;float y=position.y+offset.y;
+   x=m_pGameUI->scaledY(x);y=m_pGameUI->scaledY(y);
+   m_pPanel->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,float(width)*0.5f+x),CEGUI::UDim(0.0f,-(y+float(height)*-0.5f))));
+  }
+  if(!m_bOpen&&!m_bFullyClosed&&!m_pMenuModel->animationPlaying("CLOSE")&&!m_pMenuModel->animationQueued("CLOSE")) {
+   m_pMenuModel->setVisible(false);m_pParent->removeChildWindow(m_pBackground);m_bFullyClosed=true;
+  }
+ }
 }
 
 #include "Level.h"

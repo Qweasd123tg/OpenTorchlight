@@ -5,6 +5,8 @@
 #include "GameUI.h"
 #include "SubMenu.h"
 #include "iInventoryListener.h"
+extern bool g_bDontTrackItemEquipAndUnEquip;
+// Original TU-local ELF name; the plain declaration also exposes the type to context indexing.
 extern bool g_bDontTrackItemEquipAndUnEquip __asm__("_ZL31g_bDontTrackItemEquipAndUnEquip");
 class CInventory;
 class CSettings;
@@ -74,7 +76,8 @@ std::map<CEquipment*, std::pair<CInventory*, EEQUIP_LOCATIONS> > m_OriginalItemL
  char gapC0[8];
  CGenericModel* m_pMenuModel;
  CResourceManager* m_pResourceManager;
- char gapD8[8];
+ float m_fPanelX;
+ char gapDC[4];
  CSoundBank* m_pSoundBank;
  int m_aiSlotData[4];
  int m_aiLocalSlotData[4];
