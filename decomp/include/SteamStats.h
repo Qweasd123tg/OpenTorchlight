@@ -21,7 +21,7 @@ public:
 		UNIONDATA32BIT value;
 	};
 
-	typedef std::map<ESTATS, TArrayList<iStatListener*> > TStatListenerMap;
+	typedef std::map<ESTATS, TArrayList<iStatListener*>* > TStatListenerMap;
 
 	virtual ~CSteamStats();
 

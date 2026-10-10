@@ -52,7 +52,7 @@ void CSteamStats::addStatListener(ESTATS stat, iStatListener* listener)
 {
     TStatListenerMap::iterator i = m_statListeners.find(stat);
     if (i != m_statListeners.end())
-        i->second.add(listener);
+        i->second->add(listener);
 }
 
 void CSteamStats::reloadPlayerData(CPlayer* player)
