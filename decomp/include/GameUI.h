@@ -46,6 +46,9 @@ class CGameUI : public CRunicCore
 {
 public:
     bool processInput(CGameClient*,void*,float,bool);
+    bool processMenuInput(void*, float, bool);
+    void updateMenuUI(float, CGameClient*, Ogre::RenderWindow*);
+    void update(float, CGameClient*, Ogre::RenderWindow*);
     void notifyOfDeletion(CItem*);
     void notifyOfDeletion(CCharacter*);
     void mouseEvent(unsigned int,unsigned int);
@@ -154,6 +157,7 @@ public:
     void closeMenus();
     void closeAll();
     void setInteractiveMenuVisible(bool visible);
+    void setIngameUIVisible(bool visible);
     int getUIIsInCinematic();
     void returnTextEventObject(CTextEvent* event);
     Ogre::Vector3 getScreenPosition(const Ogre::Vector3*, const Ogre::Vector3*, Ogre::Matrix4);

@@ -13,6 +13,9 @@ struct POINT
 unsigned int GetTickCount();
 int GetCursorPos(POINT* point);
 short GetAsyncKeyState(unsigned int key);
+// Original 0xf632a0 returns 32 bits consumed by CEGUI as an unsigned scan code.
+// The original return type spelling/signedness is not encoded by its symbol.
+unsigned int LinuxMapVirtual2Scancode(unsigned int key);
 
 namespace LinuxUtils
 {

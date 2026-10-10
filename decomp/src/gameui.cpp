@@ -2502,3 +2502,346 @@ bool CGameUI::handle_SkillClick(const CEGUI::EventArgs& event)
     gameui_input_detail::input(this).inputCaptured = true;
     return true;
 }
+
+namespace gameui_item_hover_detail {
+// The three adjacent weak references keep their original registration indices.
+struct WeakReferences {
+    char prefix[0x48];
+    TSafePointer<CCharacter> hoveredCharacter;
+    TSafePointer<CCharacter> selectedCharacter;
+    TSafePointer<CItem> hoveredItem;
+};
+typedef char check_hoveredCharacter[__builtin_offsetof(WeakReferences,hoveredCharacter)==0x48?1:-1];
+typedef char check_selectedCharacter[__builtin_offsetof(WeakReferences,selectedCharacter)==0x58?1:-1];
+typedef char check_hoveredItem[__builtin_offsetof(WeakReferences,hoveredItem)==0x68?1:-1];
+inline WeakReferences& references(CGameUI* ui) {
+    return *reinterpret_cast<WeakReferences*>(ui);
+}
+}
+
+// Existing callers retain their original out-of-line boundaries.
+__attribute__((noinline))
+void CGameUI::clearMenuMouseOvers()
+{
+    menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+}
+
+__attribute__((noinline))
+void CGameUI::activateItemSlot(int slot, bool pending)
+{
+    const long long guid = gameui_slots_detail::actor(m_pCharacter).hotkeyItems[static_cast<unsigned>(slot)];
+    if (guid != -1) {
+        CEquipmentRef* equipment = m_pCharacter->m_pInventory->getEquipmentOfGuid(guid);
+        if (equipment) {
+            if (pending)
+                m_pendingRightSlot = equipment->m_iSlot;
+            else
+                m_rightSlot = equipment->m_iSlot;
+        }
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::updateHardwareCursor()
+{
+    if (menu_item_click_detail::state(this).draggedItem.getObject()) {
+        SDL_ShowCursor(0);
+    } else {
+        SDL_ShowCursor(1);
+        gameui_create_detail::PrefixState& ui =
+            *reinterpret_cast<gameui_create_detail::PrefixState*>(this);
+        switch (m_cursorState) {
+        case 0: SDL_SetCursor(ui.cursors[0]); break;
+        case 1: SDL_SetCursor(ui.cursors[1]); break;
+        case 2: SDL_SetCursor(ui.cursors[2]); break;
+        case 3:
+        case 4: SDL_SetCursor(ui.cursors[m_cursorState]); break;
+        default: SDL_SetCursor(ui.cursors[0]); break;
+        }
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::notifyOfDeletion(CItem* item)
+{
+    gameui_item_hover_detail::WeakReferences& refs = gameui_item_hover_detail::references(this);
+    if (refs.hoveredItem.getObject() == item)
+        refs.hoveredItem.setObject(NULL);
+    menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+    CEquipment*& inventoryHover = reinterpret_cast<menu_item_click_detail::HoverState<0x1020>*>(ui.inventoryMenu)->equipment;
+    if (inventoryHover) inventoryHover = NULL;
+    if (ui.merchantMenu->m_pHoveredEquipment) ui.merchantMenu->m_pHoveredEquipment = NULL;
+    if (ui.enchantMenu->m_pHoverObject) ui.enchantMenu->m_pHoverObject = NULL;
+    if (ui.combineMenu->m_pHoverObject) ui.combineMenu->m_pHoverObject = NULL;
+    if (ui.stashMenu->m_pHoverObject) ui.stashMenu->m_pHoverObject = NULL;
+    CEquipment*& petHover = reinterpret_cast<menu_item_click_detail::HoverState<0x1370>*>(ui.petMenu)->equipment;
+    if (petHover) petHover = NULL;
+}
+
+__attribute__((noinline))
+void CGameUI::setMouseOverItem(CItem* item, bool clearTooltips)
+{
+    gameui_item_hover_detail::references(this).hoveredItem.setObject(item);
+    if (!item && clearTooltips) {
+        menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+        ui.tooltip->m_iCachedItemGuid = -1;
+        ui.comparisonTooltip1->m_iCachedItemGuid = -1;
+        ui.comparisonTooltip2->m_iCachedItemGuid = -1;
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::notifyOfDeletion(CCharacter* character)
+{
+    menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+    if (ui.merchantMenu->getOwner() == character) ui.merchantMenu->setOwner(NULL);
+    if (ui.enchantMenu->getOwner() == character) ui.enchantMenu->setOwner(NULL);
+    if (character == ui.enchantMenu->m_pCharacter) ui.enchantMenu->setPlayer(NULL);
+    if (ui.combineMenu->getOwner() == character) ui.combineMenu->setOwner(NULL);
+    if (character == ui.combineMenu->m_pCharacter) ui.combineMenu->setPlayer(NULL);
+    if (ui.petMenu->getOwner() == character) ui.petMenu->setOwner(NULL);
+    if (ui.inventoryMenu->getOwner() == character) ui.inventoryMenu->setOwner(NULL);
+    if (ui.stashMenu->getOwner() == character) ui.stashMenu->setOwner(NULL);
+    if (character == ui.stashMenu->m_pCharacter) ui.stashMenu->setPlayer(NULL);
+    gameui_item_hover_detail::WeakReferences& refs = gameui_item_hover_detail::references(this);
+    if (refs.selectedCharacter.getObject() == character) refs.selectedCharacter.setObject(NULL);
+    if (refs.hoveredCharacter.getObject() == character) refs.hoveredCharacter.setObject(NULL);
+}
+
+// Keep the original dispatcher calls out of line.
+__attribute__((noinline))
+bool CGameUI::processMenuInput(void* window, float elapsed, bool enabled)
+{
+    gameui_input_detail::mouse(this).update(window);
+    menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+    const float mouseY = static_cast<float>(ui.mouseY);
+    const float mouseX = static_cast<float>(ui.mouseX);
+    CEGUI::System::getSingleton().injectMousePosition(mouseX, mouseY);
+    CEGUI::System::getSingleton().injectTimePulse(elapsed);
+    if (m_menuManager)
+        return m_menuManager->processInput(window, elapsed, enabled);
+    return true;
+}
+
+void CGameUI::mouseEvent(unsigned int event, unsigned int value)
+{
+    if (event == 0x201)
+        CEGUI::System::getSingleton().injectMouseButtonDown(CEGUI::LeftButton);
+    else if (event == 0x202)
+        CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::LeftButton);
+    else if (event == 0x204)
+        CEGUI::System::getSingleton().injectMouseButtonDown(CEGUI::RightButton);
+    else if (event == 0x205)
+        CEGUI::System::getSingleton().injectMouseButtonUp(CEGUI::RightButton);
+    gameui_input_detail::mouse(this).mouseEvent(event, value);
+}
+
+void CGameUI::keyEvent(unsigned int event, unsigned int key, long text)
+{
+    gameui_input_detail::keys(this).keyEvent(event, key);
+    if (m_console)
+        m_console->keyEvent(event, key, text);
+    switch (event)
+    {
+    case 0x100:
+    case 0x104:
+    {
+        unsigned int scanCode = LinuxMapVirtual2Scancode(key);
+        CEGUI::System::getSingleton().injectKeyDown(scanCode);
+        break;
+    }
+    case 0x101:
+    case 0x105:
+    {
+        unsigned int scanCode = LinuxMapVirtual2Scancode(key);
+        CEGUI::System::getSingleton().injectKeyUp(scanCode);
+        break;
+    }
+    case 0x102:
+        if (GetAsyncKeyState(0x10) < 0)
+        {
+            if (key == 0x7e) return;
+        }
+        CEGUI::System::getSingleton().injectChar(key);
+        break;
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::updateMenuUI(float elapsed, CGameClient* client, Ogre::RenderWindow* renderWindow)
+{
+    if (m_dialogMenu->m_bUnknown30 || !m_dialogMenu->m_bUnknown31)
+    {
+        m_dialogMenu->update(elapsed);
+        return;
+    }
+    CMouseManager& mouse = gameui_input_detail::mouse(this);
+    if (!mouse.buttonPressed(MOUSE_RIGHT) && !mouse.buttonPressed(MOUSE_LEFT) &&
+        !mouse.buttonHeld(MOUSE_RIGHT) && !mouse.buttonHeld(MOUSE_LEFT))
+    {
+        gameui_create_detail::PrefixState& prefix =
+            *reinterpret_cast<gameui_create_detail::PrefixState*>(this);
+        CEGUI::Window* tooltip = prefix.system->getDefaultTooltip();
+        if (tooltip->isVisible(false))
+        {
+            const float availableWidth = gameuiBoundaryWidth(this);
+            gameuiBoundaryHeight(this);
+            const float tooltipWidth = tooltip->getWidth().asAbsolute(1.0f);
+            const float tooltipHeight = tooltip->getHeight().asAbsolute(1.0f);
+            menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+            float mouseY = static_cast<float>(ui.mouseY);
+            float mouseX = static_cast<float>(ui.mouseX);
+            if (mouseX + tooltipWidth + 26.0f > availableWidth)
+                mouseX = availableWidth - (tooltipWidth + 26.0f);
+            const float topBoundary = tooltipHeight + 26.0f;
+            if (mouseY - topBoundary < 0.0f)
+                mouseY = topBoundary;
+            tooltip->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, mouseX),
+                                                CEGUI::UDim(0.0f, mouseY)));
+        }
+    }
+    m_menuManager->update(elapsed, client, renderWindow);
+}
+
+bool CGameUI::processInput(CGameClient* client, void* window, float elapsed, bool enabled)
+{
+    switch (client->getGameState())
+    {
+    case 0:
+        return processMenuInput(window, elapsed, enabled);
+    case 1:
+        return processIngameInput(window, elapsed, enabled);
+    default:
+        return true;
+    }
+}
+
+void CGameUI::update(float elapsed, CGameClient* client, Ogre::RenderWindow* renderWindow)
+{
+    gameui_input_detail::input(this).inputCaptured = false;
+    switch (client->getGameState())
+    {
+    case 0:
+        updateMenuUI(elapsed, client, renderWindow);
+        break;
+    case 1:
+        updateIngameUI(elapsed, client, renderWindow);
+        break;
+    }
+    CEGUI::WindowManager::getSingleton().cleanDeadPool();
+}
+
+namespace gameui_visibility_detail {
+// Private view of the three UI members not yet named in CGameUI's partial layout.
+struct State {
+    unsigned char prefix[0x130];
+    CEGUI::Window* pauseWindow;
+    unsigned char gap138[0x570 - 0x138];
+    CInteractiveMenu* interactiveMenu;
+    unsigned char gap578[0x178c - 0x578];
+    int interactiveMenuUsers;
+};
+inline State& state(CGameUI* ui) { return *reinterpret_cast<State*>(ui); }
+typedef char check_pause_window[__builtin_offsetof(State, pauseWindow) == 0x130 ? 1 : -1];
+typedef char check_interactive_menu[__builtin_offsetof(State, interactiveMenu) == 0x570 ? 1 : -1];
+typedef char check_interactive_users[__builtin_offsetof(State, interactiveMenuUsers) == 0x178c ? 1 : -1];
+}
+
+// Keep these original entries out of line in the previously recovered callers.
+__attribute__((noinline))
+bool CGameUI::bothCoveredPartial()
+{
+    bool left = false;
+    bool right = false;
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (!m_submenus[i]->isRight() && m_submenus[i]->openPartial()) left = true;
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (m_submenus[i]->isRight() && m_submenus[i]->openPartial()) right = true;
+    return left && right;
+}
+
+__attribute__((noinline))
+void CGameUI::setInteractiveMenuVisible(bool visible)
+{
+    gameui_visibility_detail::State& ui = gameui_visibility_detail::state(this);
+    ui.interactiveMenuUsers += visible ? 1 : -1;
+    if (ui.interactiveMenuUsers < 0) {
+        ui.interactiveMenuUsers = 0;
+    } else if (ui.interactiveMenuUsers == 1 && !ui.interactiveMenu->m_bVisible) {
+        ui.interactiveMenu->setVisible(true);
+        if (m_level) m_level->setAutomapVisible(false);
+    } else if (ui.interactiveMenuUsers == 0 && ui.interactiveMenu->m_bVisible) {
+        ui.interactiveMenu->setVisible(false);
+        if (m_level) m_level->setAutomapVisible(true);
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::setIngameUIVisible(bool visible)
+{
+    menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+    if (visible) {
+        if (!m_rootWindow->isChild(ui.rootWindow)) {
+            m_rootWindow->addChildWindow(ui.rootWindow);
+            m_rootWindow->addChildWindow(ui.dragWindow);
+            ui.dragWindow->moveToFront();
+            ui.dragWindow->setAlwaysOnTop(true);
+        }
+    } else if (m_rootWindow->isChild(ui.rootWindow)) {
+        menu_item_click_detail::clearHoverAndTooltips(ui);
+        m_rootWindow->removeChildWindow(ui.rootWindow);
+        m_rootWindow->removeChildWindow(ui.dragWindow);
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::togglePause()
+{
+    closeAll();
+    menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+    m_paused = !m_paused;
+    gameui_visibility_detail::State& ui = gameui_visibility_detail::state(this);
+    if (m_paused) {
+        if (m_level) m_level->setAutomapVisible(false);
+        setIngameUIVisible(false);
+        ui.pauseWindow->setVisible(true);
+        if (!m_rootWindow->isChild(ui.pauseWindow))
+            m_rootWindow->addChildWindow(ui.pauseWindow);
+    } else {
+        if (m_level) m_level->setAutomapVisible(true);
+        setIngameUIVisible(true);
+        if (m_rootWindow->isChild(ui.pauseWindow))
+            m_rootWindow->removeChildWindow(ui.pauseWindow);
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::toggleConsole()
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_console) {
+        if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_ALLOW_CONSOLE))
+            m_console->setVisible(!m_console->getVisible());
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::toggleInventory()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+    if (ui.inventoryMenu->openPartial() || !modalDialogOpen()) {
+        if (ui.inventoryMenu->open()) {
+            ui.merchantMenu->setOpen(false);
+            ui.enchantMenu->setOpen(false);
+            ui.combineMenu->setOpen(false);
+        }
+        if (ui.stashMenu->open()) ui.stashMenu->setOpen(false);
+        if (!ui.inventoryMenu->openPartial()) closeRight();
+        ui.inventoryMenu->setOpen(!ui.inventoryMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
