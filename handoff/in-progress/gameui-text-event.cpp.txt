@@ -1,0 +1,83 @@
+// Unvalidated candidate, not part of accepted build. Address 0xa9ba60. Owner dot.
+// Pooled text events retain their previous update flags until the initial update.
+__attribute__((flatten))
+CTextEvent* CGameUI::getTextEventObject(const Ogre::Vector3& position,
+    const std::string& text,float scale,float duration,
+    CEGUI::colour first,CEGUI::colour second,bool animate)
+{
+    using namespace gameui_create_detail;
+    FinalState& lists=*reinterpret_cast<FinalState*>(this);
+    SheetState& sheets=*reinterpret_cast<SheetState*>(this);
+    MenuState& menus=*reinterpret_cast<MenuState*>(this);
+    CTextEvent* event;
+    TextEventList* freeList=lists.freeEvents;
+    TLinkedListNode<CTextEvent*>* node=freeList->head;
+    if(node) {
+        event=node->m_Data;
+        if(node->m_pNext)node->m_pNext->m_pPrevious=NULL;
+        if(node->m_pNext) {
+            freeList->head=node->m_pNext;
+            node->m_pNext->m_pPrevious=NULL;
+        } else freeList->head=NULL;
+        node->m_pNext=NULL;
+        node->m_pPrevious=NULL;
+        delete node;
+    } else {
+        {
+            std::string empty("");
+            CEGUI::colour whiteFirst(1.f,1.f,1.f,1.f);
+            CEGUI::colour whiteSecond(1.f,1.f,1.f,1.f);
+            event=new CTextEvent(empty,whiteFirst,whiteSecond);
+        }
+        event->createText(this,sheets.ingame);
+    }
+    lists.activeEvents->prepend(event);
+    CEGUI::colour secondCopy(second);
+    CEGUI::colour firstCopy(first);
+    event->m_Value10=position.x;
+    event->m_Value14=position.y;
+    event->m_Value18=position.z;
+    event->m_Text=text;
+    event->m_Value64=scale;
+    event->m_Colour28=firstCopy;
+    event->m_Colour40=secondCopy;
+    event->m_Value70=0.1f;
+    event->m_Value60=1.f;
+    event->m_Value68=duration;
+    event->m_Text=text;
+    event->m_pWindow->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(event->m_Text.c_str())));
+    CEGUI::Font* font=event->m_pWindow->getFont(true);
+    event->m_Unrecovered6C=font->getTextExtent(CEGUI::String(event->m_Text),1.f)+4.f;
+    event->m_Unrecovered6C*=event->m_Value64;
+    event->m_pWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0.f,event->m_Unrecovered6C),
+        CEGUI::UDim(0.f,(font->getFontHeight()+2.f)*event->m_Value64)));
+    event->m_pWindow->setProperty("TextColour",CEGUI::PropertyHelper::colourToString(
+        CEGUI::colour(event->m_Colour28.getRed(),event->m_Colour28.getGreen(),event->m_Colour28.getBlue(),duration/255.f)));
+    if(menus.resources->getEditorIsRunning())sheets.sheet->addChildWindow(event->m_pWindow);
+    else sheets.ingame->addChildWindow(event->m_pWindow);
+    const float elapsed=0.f*event->m_Value60;
+    CEGUI::Window* parent=sheets.ingame;
+    bool removed=false;
+    if(event->m_Flag80) {
+        const float previous=event->m_Value68;
+        event->m_Value68=previous+elapsed*(-200.f);
+        if(event->m_Value68<=0.f) {
+            event->m_Value68=0.f;
+            parent->removeChildWindow(event->m_pWindow);
+            removed=true;
+        } else if(static_cast<int>(previous)!=static_cast<int>(event->m_Value68)) {
+            const float scaled=event->m_Value68*4.f;
+            const float alpha=(scaled<255.f?scaled:255.f)/255.f;
+            event->m_pWindow->setProperty("TextColour",CEGUI::PropertyHelper::colourToString(
+                CEGUI::colour(event->m_Colour28.getRed(),event->m_Colour28.getGreen(),event->m_Colour28.getBlue(),alpha)));
+            event->m_pWindow->setProperty("DropTextColour",CEGUI::PropertyHelper::colourToString(CEGUI::colour(0.f,0.f,0.f,alpha)));
+        }
+    }
+    if(!removed&&event->m_Flag81) {
+        event->m_Value14+=elapsed*event->m_Value70;
+        event->m_Value70+=elapsed;
+    }
+    event->m_Flag80=animate;
+    event->m_Flag81=animate;
+    return event;
+}

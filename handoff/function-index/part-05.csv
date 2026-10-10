@@ -1,0 +1,501 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending,instruction
+0x87de00,Equipment.cpp,CEquipment::~CEquipment(),MATCH,True,False,,False,already accepted; do not redo
+0x87de20,Equipment.cpp,"CEquipment::convertEquipment(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False,already accepted; do not redo
+0x87df10,Equipment.cpp,"CEquipment::createNewEquipment(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False,already accepted; do not redo
+0x87dfa0,Equipment.cpp,CEquipment::setGraphDamage(unsigned int),DIFF,True,False,,False,already accepted; do not redo
+0x87e0c0,Equipment.cpp,CEquipment::setGraphAC(unsigned int),DIFF,True,False,,False,already accepted; do not redo
+0x87e1d0,Equipment.cpp,CEquipment::enchantPrice(),DIFF,True,False,,False,already accepted; do not redo
+0x87e2c0,Equipment.cpp,"CEquipment::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False,already accepted; do not redo
+0x87e640,Equipment.cpp,CEquipment::skillDescription(),DIFF,True,False,,False,already accepted; do not redo
+0x87f120,Equipment.cpp,"CEquipment::fireMissiles(CCharacter*, CCharacter*)",DIFF,True,False,,False,already accepted; do not redo
+0x87f880,Equipment.cpp,CEquipment::getMaxSockets(),DIFF,True,False,,False,already accepted; do not redo
+0x87f960,Equipment.cpp,CEquipment::addSockets(),DIFF,True,False,,False,already accepted; do not redo
+0x87fa70,Equipment.cpp,"CEquipment::isWardrobed(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False,already accepted; do not redo
+0x880030,Equipment.cpp,CEquipment::setRequirements(),DIFF,True,False,,False,already accepted; do not redo
+0x880950,Equipment.cpp,CEquipment::calculateCombatStats(bool),DIFF,True,False,,False,already accepted; do not redo
+0x882330,Equipment.cpp,CEquipment::improveHeirloom(),DIFF,True,False,,False,already accepted; do not redo
+0x8824f0,Equipment.cpp,CEquipment::setItemTextHighlighted(bool),DIFF,True,False,,False,already accepted; do not redo
+0x882e30,Equipment.cpp,"CEquipment::createIcon(CGameUI&, bool)",DIFF,True,False,,False,already accepted; do not redo
+0x883e20,Equipment.cpp,CEquipment::recalculatePrice(),DIFF,True,False,,False,already accepted; do not redo
+0x8845c0,Equipment.cpp,CEquipment::enchant(bool),DIFF,True,False,,False,already accepted; do not redo
+0x884a20,Equipment.cpp,"CEquipment::addedToInventory(CInventory*, CCharacter*)",DIFF,True,False,,False,already accepted; do not redo
+0x884ba0,Equipment.cpp,CEquipment::getFullItemName(bool),DIFF,True,False,,False,already accepted; do not redo
+0x885a70,Equipment.cpp,CEquipment::createParticles(),DIFF,True,False,,False,already accepted; do not redo
+0x886100,Equipment.cpp,CEquipment::setActiveInLevel(bool),DIFF,True,False,,False,already accepted; do not redo
+0x886240,Equipment.cpp,CEquipment::createElementalDamages(),DIFF,True,False,,False,already accepted; do not redo
+0x886370,Equipment.cpp,CEquipment::clearDamageBonuses(),MATCH,True,False,,False,already accepted; do not redo
+0x8863b0,Equipment.cpp,CEquipment::applySaveState(CItemSaveState&),MATCH,True,False,,False,already accepted; do not redo
+0x8866e0,Equipment.cpp,"CEquipment::addEnchant(int, int, int)",MATCH,True,False,,False,already accepted; do not redo
+0x8867c0,Equipment.cpp,"CEquipment::fillSaveState(CItemSaveState&, int, bool)",DIFF,True,False,,False,already accepted; do not redo
+0x886d40,Equipment.cpp,"CEquipment::attachToGivenLocation(CCharacter*, EEQUIP_LOCATIONS)",DIFF,True,False,,False,already accepted; do not redo
+0x887a90,Equipment.cpp,"CEquipment::equipped(CInventory*, CCharacter*, EEQUIP_LOCATIONS)",MATCH,True,False,,False,already accepted; do not redo
+0x887b30,Equipment.cpp,"CEquipment::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False,already accepted; do not redo
+0x888920,Equipment.cpp,"CEquipment::reskinByClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False,already accepted; do not redo
+0x889110,Equipment.cpp,"CEquipment::unitInit(CDataGroup*, bool)",DIFF,True,False,,False,already accepted; do not redo
+0x88b180,Equipment.cpp,"CEquipment::effectsDescription(EEFFECT_ACTIVATION, bool, bool)",DIFF,True,False,,False,already accepted; do not redo
+0x88c150,Equipment.cpp,CEquipment::getEquipmentEffects(),DIFF,True,False,,False,already accepted; do not redo
+0x88d040,Equipment.cpp,CEquipment::getEquipmentType(bool),DIFF,True,False,,False,already accepted; do not redo
+0x88f420,Equipment.cpp,"CEquipment::getEquipmentDescription(bool, bool)",DIFF,True,False,,False,already accepted; do not redo
+0x893660,Equipment.cpp,CEquipment::getEquipmentStats(),DIFF,True,False,,False,already accepted; do not redo
+0x899520,Equipment.cpp,CEquipment::getUnitModel(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899530,Equipment.cpp,CEquipment::getUnitModelSecondary(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899540,Equipment.cpp,CEquipment::getUnitCollisionModel(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899550,Equipment.cpp,CEquipment::getEquippedTo(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899560,Equipment.cpp,"CEGUI::String::String(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899620,Equipment.cpp,CEGUI::String::String(char const*),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8997e0,Equipment.cpp,"std::vector<EDAMAGE_TYPES, std::allocator<EDAMAGE_TYPES> >::_M_insert_aux(__gnu_cxx::__normal_iterator<EDAMAGE_TYPES*, std::vector<EDAMAGE_TYPES, std::allocator<EDAMAGE_TYPES> > >, EDAMAGE_TYPES const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x899960,enchantmenu.cpp,CEGUI::String::String(unsigned char const*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x899c60,Equipment.cpp,"removeWhiteSpace(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x899e50,genericmodel.cpp,"CGenericModel::findKey(int, CKeyframe*)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899e50.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899eb0,genericmodel.cpp,"CGenericModel::getValueIndexes(int, CKeyframe*)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899eb0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899f00,genericmodel.cpp,CGenericModel::getAnimationCount() const,NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899f00.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899f20,genericmodel.cpp,CGenericModel::getAnimationName(unsigned int) const,NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899f20.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899f40,genericmodel.cpp,CGenericModel::getKeyCount(unsigned int),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899f40.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899f90,genericmodel.cpp,"CGenericModel::getKeyFrame(unsigned int, unsigned int)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x899f90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x899ff0,genericmodel.cpp,CGenericModel::setHighlighted(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89a000.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x89a000,genericmodel.cpp,CGenericModel::setHighlighted(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89a000.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x89a0e0,genericmodel.cpp,CGenericModel::getName(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89a0e0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x89a1d0,genericmodel.cpp,CGenericModel::setRenderBehind(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89a1d0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x89abb0,genericmodel.cpp,CGenericModel::getAnimationLength(int) const,NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89abb0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x89aef0,genericmodel.cpp,CGenericModel::setAmbient(Ogre::ColourValue&),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x89aef0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8a15b0,genericmodel.cpp,CGenericModel::activeAnimations() const,NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x8a15b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8a42c0,genericmodel.cpp,"CGenericModel::queueBlendAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x8a42c0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8a5530,genericmodel.cpp,"CGenericModel::animationQueued(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x8a5530.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8a7860,genericmodel.cpp,"CGenericModel::animationPlaying(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/genericmodel.cpp/0x8a7860.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8b1340,FileSystem.cpp,"std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::_M_copy(unsigned short*, unsigned short const*, unsigned long)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8b22d0,FileSystem.cpp,Ogre::UTFString::UTFString(Ogre::UTFString const&),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8b4a40,FileSystem.cpp,"std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~vector()",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8b59a0,Item.cpp,CItem::setVisible(bool),MATCH,True,False,,False,already accepted; do not redo
+0x8b59b0,Item.cpp,"CItem::fillSaveState(CItemSaveState&, int, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x8b5be0,Item.cpp,CItem::calculateActiveRange(Ogre::Vector3 const&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8b5e40,Item.cpp,CItem::snapToGround(),MATCH,True,False,,False,already accepted; do not redo
+0x8b6070,Item.cpp,CItem::hideItemText(),MATCH,True,False,,False,already accepted; do not redo
+0x8b60b0,Item.cpp,CItem::showItemText(),MATCH,True,False,,False,already accepted; do not redo
+0x8b60f0,Item.cpp,CItem::setHighlighted(bool),MATCH,True,False,,False,already accepted; do not redo
+0x8b6150,Item.cpp,CItem::updateAnimation(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8b62a0,Item.cpp,"CItem::updateOpacity(float, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8b6430,Item.cpp,"CItem::update(Ogre::Camera*, Ogre::Vector3 const&, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8b66c0,Item.cpp,"CItem::setVisible(bool, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x8b6740,Item.cpp,CItem::interact(CCharacter*),MATCH,True,False,,False,already accepted; do not redo
+0x8b67a0,Item.cpp,CItem::destroyItemText(),MATCH,True,False,,False,already accepted; do not redo
+0x8b67e0,Item.cpp,CItem::CItem(CResourceManager*),MATCH,True,False,,False,already accepted; do not redo
+0x8b6880,Item.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8bff50,Item.cpp,global constructors keyed to CItem::CItem(CResourceManager*),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c00b0,Item.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c0140,Item.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c01b0,Item.cpp,CItem::setItemTextHighlighted(bool),DIFF,True,False,,False,already accepted; do not redo
+0x8c1410,Item.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c1480,Item.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c14f0,Item.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c1560,Item.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c15f0,Item.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1680,Item.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1710,Item.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1780,Item.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c17f0,Item.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1880,Item.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1910,Item.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c19a0,Item.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1a10,Item.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1aa0,Item.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1b30,Item.cpp,CItem::applySaveState(CItemSaveState&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c1e70,Item.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x8c1f90,Item.cpp,CItem::~CItem(),MATCH,True,False,,False,already accepted; do not redo
+0x8c2040,Item.cpp,CItem::~CItem(),MATCH,True,False,,False,already accepted; do not redo
+0x8c2060,Item.cpp,"CItem::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8c2250,Item.cpp,"CItem::unitInit(CDataGroup*, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8e3e70,player.cpp,CPlayer::clearSkillMap(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3e70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3ea0,player.cpp,CPlayer::clearSkillFunctionMap(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3ea0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3ed0,player.cpp,"CPlayer::setMappedFunctionSkill(unsigned int, long long)",MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3ed0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3f20,player.cpp,"CPlayer::setLeftMappedFunctionSkill(unsigned int, long long)",MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f20.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3f70,player.cpp,CPlayer::clearItemLinkMap(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3f90,player.cpp,CPlayer::resetLevel(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e3ff0,player.cpp,CPlayer::setAIState(EAIState),MISSING,False,False,,False,candidate only; check current owner first
+0x8e4060,player.cpp,CPlayer::removeLevelSavedState(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4060.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4110,player.cpp,CPlayer::clearLevelHistory(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4110.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4190,player.cpp,"CPlayer::setJournalStatistic(EJournalStatistic, int)",MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4190.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e41a0,player.cpp,CPlayer::soldItem(CEquipment*),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e41a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e41c0,player.cpp,"CPlayer::incrementJournalStatistic(EJournalStatistic, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8e43a0,player.cpp,CDungeonTracker::save(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0x8e4490,player.cpp,CPlayer::createPortals(CLevel&),MISSING,False,False,,False,candidate only; check current owner first
+0x8e46e0,player.cpp,CPlayer::openPortal(CLevel&),MISSING,False,False,,False,candidate only; check current owner first
+0x8e47d0,player.cpp,"CPlayer::die(CCharacter*, Ogre::Vector3 const*, float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x8e48a0,player.cpp,"CPlayer::update(Ogre::Camera*, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x8e4d00,player.cpp,CPlayer::startFishing(),MISSING,False,False,,False,candidate only; check current owner first
+0x8e4d60,player.cpp,CPlayer::calculateMaxMana(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4d60.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4e00,player.cpp,CPlayer::getSkillPointsAwardedForFameLevel(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4e00.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4e80,player.cpp,CPlayer::getSkillPointsAwardedForLevel(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4e80.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4f00,player.cpp,CPlayer::getStatsPointsAwardedForLevel(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4f00.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e4f80,player.cpp,CPlayer::calculateMaxHP(),MISSING,False,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4f80.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x8e5020,player.cpp,CPlayer::firstTimeSetup(),MISSING,False,False,,False,candidate only; check current owner first
+0x8e51d0,player.cpp,CPlayer::levelLoaded(CLevel*),MATCH,True,False,,False,already accepted; do not redo
+0x8e51e0,player.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8ef520,player.cpp,"CPlayer::getDungeonRank(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x8ef600,player.cpp,"CPlayer::getLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8ef6c0,player.cpp,"CPlayer::hasLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8ef820,player.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8ef890,player.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8ef900,player.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8ef970,player.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8efa00,player.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8efa70,player.cpp,"CPlayer::addWaypoint(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8efbc0,player.cpp,CPlayer::updateFishingLine(float),MISSING,False,False,,False,candidate only; check current owner first
+0x8f0a50,player.cpp,CPlayer::catchFish(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f0bd0,player.cpp,CPlayer::attemptToStopPlayerSkill(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x8f0d10,player.cpp,CPlayer::updateAnimation(float),MISSING,False,False,,False,candidate only; check current owner first
+0x8f0f60,player.cpp,"CPlayer::fishingAI(float, CLevel&)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f1380,player.cpp,"CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long, bool, bool, UNITTYPES::EUNITTYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f16e0,player.cpp,"CPlayer::removeQuestItemFromInventoryOrPetsInventoryByGuid(long long, long long, bool, bool, UNITTYPES::EUNITTYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f2df0,player.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f2e80,player.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f2f10,player.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f2f80,player.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f2ff0,player.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f3080,player.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f3110,player.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f31a0,player.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f3210,player.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f32a0,player.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f3330,player.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f33c0,player.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f3450,player.cpp,CPlayer::CPlayer(CResourceManager*),MISSING,False,False,,False,candidate only; check current owner first
+0x8f3ba0,player.cpp,CPlayer::updateStoredLevels(CLevel&),MISSING,False,False,,False,candidate only; check current owner first
+0x8f4540,player.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x8f4780,player.cpp,"CPlayer::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f4ad0,player.cpp,"CDungeonTracker::load(_IO_FILE*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f4c60,player.cpp,"CPlayer::clearDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f4d90,player.cpp,"CPlayer::getMaxDepth(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f4ee0,player.cpp,"CPlayer::hasDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f4fd0,player.cpp,CPlayer::resetStatPoints(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f52a0,player.cpp,CPlayer::getPlayerClassName(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f5380,player.cpp,CPlayer::resetSkills(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f5670,player.cpp,"CPlayer::openMapPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CLevel&)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f5810,player.cpp,CPlayer::levelResetting(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f5c50,player.cpp,"CPlayer::updateDungeonTracking(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f6080,player.cpp,CPlayer::storeLevelSavedState(CLevel&),MISSING,False,False,,False,candidate only; check current owner first
+0x8f8260,player.cpp,CPlayer::setQuestManager(CQuestManager*),MISSING,False,False,,False,candidate only; check current owner first
+0x8f8510,player.cpp,CPlayer::calculateNaturalArmor(),MISSING,False,False,,False,candidate only; check current owner first
+0x8f8680,player.cpp,CPlayer::applySaveState(CCharacterSaveState&),MISSING,False,False,,False,candidate only; check current owner first
+0x8f8a50,player.cpp,"CPlayer::unitInit(CDataGroup*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x8f9ad0,player.cpp,CPlayer::levelUp(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fa300,player.cpp,"CPlayer::fishingAICatch(float, CLevel&)",MISSING,False,False,,False,candidate only; check current owner first
+0x8fb050,player.cpp,CPlayer::applyAchievementsForKilledCharacter(CCharacter*),MISSING,False,False,,False,candidate only; check current owner first
+0x8fb700,player.cpp,CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf00,player.cpp,non-virtual thunk to CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf10,player.cpp,non-virtual thunk to CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf20,player.cpp,non-virtual thunk to CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf30,player.cpp,non-virtual thunk to CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf40,player.cpp,CPlayer::~CPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0x8fbf60,player.cpp,CPlayer::fillSaveState(CCharacterSaveState&),MISSING,False,False,,False,candidate only; check current owner first
+0x91a670,keymanager.cpp,CKeyManager::keyPressed(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x91a680,keymanager.cpp,CKeyManager::keyHeld(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x91a6a0,keymanager.cpp,CKeyManager::keyReleased(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x91a6b0,keymanager.cpp,"CKeyManager::shiftCharacter(int, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x91a980,keymanager.cpp,CKeyManager::capture(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x91aaa0,keymanager.cpp,CKeyManager::flushAll(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x91ab30,keymanager.cpp,CKeyManager::flush(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x91ab90,keymanager.cpp,"CKeyManager::keyEvent(unsigned int, unsigned int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x91ac10,keymanager.cpp,CKeyManager::~CKeyManager(),MATCH,True,False,,False,already accepted; do not redo
+0x91ac20,keymanager.cpp,CKeyManager::~CKeyManager(),MATCH,True,False,,False,already accepted; do not redo
+0x91ac40,keymanager.cpp,CKeyManager::CKeyManager(),MISSING,False,False,,False,candidate only; check current owner first
+0x91ac90,mousemanager.cpp,"CMouseManager::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x91ad20,mousemanager.cpp,CMouseManager::buttonPressed(EMouseButton),MATCH,True,False,,False,already accepted; do not redo
+0x91ad30,mousemanager.cpp,CMouseManager::buttonHeld(EMouseButton),MATCH,True,False,,False,already accepted; do not redo
+0x91ad50,mousemanager.cpp,CMouseManager::buttonDoubleClick(EMouseButton),MATCH,True,False,,False,already accepted; do not redo
+0x91ad60,mousemanager.cpp,"CMouseManager::virtualMousePosition(float, float, float, float)",MATCH,True,False,,False,already accepted; do not redo
+0x91ada0,mousemanager.cpp,global constructors keyed to CMouseManager::CMouseManager(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x91ae10,mousemanager.cpp,CMouseManager::capture(),MATCH,True,False,,False,already accepted; do not redo
+0x91ae70,mousemanager.cpp,CMouseManager::flushAll(),MATCH,True,False,,False,already accepted; do not redo
+0x91aea0,mousemanager.cpp,CMouseManager::flush(),MATCH,True,False,,False,already accepted; do not redo
+0x91aec0,mousemanager.cpp,CMouseManager::update(void*),MATCH,True,False,,False,already accepted; do not redo
+0x91aed0,mousemanager.cpp,CMouseManager::~CMouseManager(),MATCH,True,False,,False,already accepted; do not redo
+0x91aee0,mousemanager.cpp,CMouseManager::~CMouseManager(),MATCH,True,False,,False,already accepted; do not redo
+0x91af00,mousemanager.cpp,CMouseManager::CMouseManager(),MATCH,True,False,,False,already accepted; do not redo
+0x91af30,Inventory.cpp,CInventory::refreshEquipped(),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af30.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91af80,Inventory.cpp,CInventory::removeListener(iInventoryListener*),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af80.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91afe0,Inventory.cpp,CInventory::updateBonuses(),MISSING,False,False,,False,candidate only; check current owner first
+0x91b050,Inventory.cpp,CInventory::getPaneIndex(EINVENTORY_PANES),MISSING,False,False,,False,candidate only; check current owner first
+0x91b0b0,Inventory.cpp,CInventory::getPaneSize(EINVENTORY_PANES),MATCH,True,False,,False,already accepted; do not redo
+0x91b0f0,Inventory.cpp,"CInventory::slotIsInPane(unsigned int, int)",MATCH,True,False,,False,already accepted; do not redo
+0x91b130,Inventory.cpp,CInventory::itemsInPane(EINVENTORY_PANES),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b130.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b1c0,Inventory.cpp,CInventory::getItemPane(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0x91b220,Inventory.cpp,CInventory::isEquipmentInInventory(CEquipment*),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b220.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b280,Inventory.cpp,CInventory::EquipmentsInSlot(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x91b340,Inventory.cpp,CInventory::getEquipmentInSlot(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b340.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b3a0,Inventory.cpp,CInventory::getEquipmentRefInSlot(unsigned int),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b3a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b3f0,Inventory.cpp,CInventory::findEquipmentSlot(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x91b460,Inventory.cpp,CInventory::getEquipmentEquippedAt(EEQUIP_LOCATIONS),MISSING,False,False,,False,candidate only; check current owner first
+0x91b4c0,Inventory.cpp,CInventory::getEquipmentsEquippedLocation(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x91b540,Inventory.cpp,CInventory::isEquipmentEquipped(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x91b5b0,Inventory.cpp,CInventory::getEquipmentCountOfGuid(long long),MISSING,False,False,,False,candidate only; check current owner first
+0x91b680,Inventory.cpp,CInventory::getEquipmentOfGuid(long long),MISSING,False,False,,False,candidate only; check current owner first
+0x91b780,Inventory.cpp,CInventory::getStackSizeOfEquipment(CEquipment*),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b780.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b790,Inventory.cpp,CInventory::getMaxStackSizeOfEquipment(CEquipment*),MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b790.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b7a0,Inventory.cpp,CInventory::forceRecalculationOfEquipmentStats(),MISSING,False,False,,False,candidate only; check current owner first
+0x91b850,Inventory.cpp,"CInventory::canUseEquipment(CEquipment*, CCharacter*)",MISSING,False,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b850.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x91b890,Inventory.cpp,CInventory::addListener(iInventoryListener*),MISSING,False,False,,False,candidate only; check current owner first
+0x91b9c0,Inventory.cpp,CInventory::getRequiredPane(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x91ba50,Inventory.cpp,CInventory::findFreeSlot(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x91bc50,Inventory.cpp,"CInventory::canPickup(CEquipment*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x91bd10,Inventory.cpp,"CInventory::canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x91bdc0,Inventory.cpp,"CInventory::canEquip(CEquipment*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x91c2a0,Inventory.cpp,"CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)",MISSING,False,False,,False,candidate only; check current owner first
+0x91c640,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x91c720,Inventory.cpp,"CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)",MISSING,False,False,,False,candidate only; check current owner first
+0x91c9d0,Inventory.cpp,CInventory::updateSkillManagers(float),MISSING,False,False,,False,candidate only; check current owner first
+0x91ca60,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x91cbb0,Inventory.cpp,"CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x91ccd0,Inventory.cpp,"CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x91cd60,Inventory.cpp,"CInventory::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MISSING,False,False,,False,candidate only; check current owner first
+0x91ce00,Inventory.cpp,"CInventory::calculateEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0x91cf50,Inventory.cpp,CInventory::identifyAll(),MISSING,False,False,,False,candidate only; check current owner first
+0x91cfe0,Inventory.cpp,CInventory::freeInventory(),MISSING,False,False,,False,candidate only; check current owner first
+0x91d180,Inventory.cpp,CInventory::~CInventory(),MISSING,False,False,,False,candidate only; check current owner first
+0x91d2e0,Inventory.cpp,CInventory::~CInventory(),MISSING,False,False,,False,candidate only; check current owner first
+0x91d300,Inventory.cpp,CInventory::destroyIcons(),MISSING,False,False,,False,candidate only; check current owner first
+0x91d3a0,Inventory.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9231c0,Inventory.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923250,Inventory.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9232c0,Inventory.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923330,Inventory.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9233a0,Inventory.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923410,Inventory.cpp,"CInventory::getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x9235a0,Inventory.cpp,"CInventory::getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x923730,Inventory.cpp,"CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x923ba0,Inventory.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x923c30,Inventory.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x923cc0,Inventory.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923d50,Inventory.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923de0,Inventory.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923e50,Inventory.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923ec0,Inventory.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923f50,Inventory.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x923fe0,Inventory.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x924070,Inventory.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9240e0,Inventory.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x924170,Inventory.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x924200,Inventory.cpp,CInventory::getSetCount(CSet*),MISSING,False,False,,False,candidate only; check current owner first
+0x924320,Inventory.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9243b0,Inventory.cpp,"CInventory::addSection(EINVENTORY_PANES, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x924440,Inventory.cpp,CInventory::calculateEffectValues(),MISSING,False,False,,False,candidate only; check current owner first
+0x924810,Inventory.cpp,CInventory::removeEquipment(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x9249b0,Inventory.cpp,CInventory::unequipEquipment(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x924ab0,Inventory.cpp,CInventory::verifyEquipment(),MISSING,False,False,,False,candidate only; check current owner first
+0x924bd0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, int, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9251b0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9254b0,Inventory.cpp,"CInventory::useEquipment(CEquipment*, CCharacter*)",MISSING,False,False,,False,candidate only; check current owner first
+0x925580,Inventory.cpp,"CInventory::removeEquipmentByGuid(long long, unsigned int, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9256a0,Inventory.cpp,"CInventory::equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS)",MISSING,False,False,,False,candidate only; check current owner first
+0x925970,Inventory.cpp,CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*),MISSING,False,False,,False,candidate only; check current owner first
+0x925d30,Inventory.cpp,CInventory::swapWeaponSet(),MISSING,False,False,,False,candidate only; check current owner first
+0x926000,Inventory.cpp,"CInventory::CInventory(CCharacter*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x9266a0,Inventory.cpp,"std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> >::_M_insert_aux(__gnu_cxx::__normal_iterator<EINVENTORY_PANES*, std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> > >, EINVENTORY_PANES const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x9269b0,automap.cpp,CAutomap::clear(),MATCH,True,False,,False,already accepted; do not redo
+0x926a00,automap.cpp,"CAutomap::setRevealed(int, int, float)",MATCH,True,False,,False,already accepted; do not redo
+0x926a40,automap.cpp,"CAutomap::getRevealed(int, int)",MATCH,True,False,,False,already accepted; do not redo
+0x926a80,automap.cpp,CAutomap::clearNPCIcons(),MISSING,False,False,,False,candidate only; check current owner first
+0x926b40,automap.cpp,"CAutomap::setNPCBillboardVisible(Ogre::Billboard*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x926cf0,automap.cpp,CAutomap::finalize(),MISSING,False,False,,False,candidate only; check current owner first
+0x926f30,automap.cpp,CAutomap::setPetPosition(Ogre::Vector3 const&),MATCH,True,False,,False,already accepted; do not redo
+0x926f40,automap.cpp,CAutomap::setPlayerPosition(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x9270e0,automap.cpp,CAutomap::setPetVisible(bool),MATCH,True,False,,False,already accepted; do not redo
+0x927110,automap.cpp,"CAutomap::update(Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x927820,automap.cpp,CAutomap::zoom(float),MISSING,False,False,,False,candidate only; check current owner first
+0x927910,automap.cpp,CAutomap::setVisible(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x927bd0,automap.cpp,CAutomap::setFullscreen(bool),MATCH,True,False,,False,already accepted; do not redo
+0x928560,automap.cpp,CAutomap::~CAutomap(),MISSING,False,False,,False,candidate only; check current owner first
+0x9287f0,automap.cpp,CAutomap::~CAutomap(),MISSING,False,False,,False,candidate only; check current owner first
+0x928910,automap.cpp,"CAutomap::addTile(int, Ogre::Vector3 const&, Ogre::Vector3 const&, bool, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x928d20,automap.cpp,"CAutomap::CAutomap(CResourceManager*, Ogre::SceneManager*)",MISSING,False,False,,False,candidate only; check current owner first
+0x92b4b0,automap.cpp,"CAutomap::setFullMap(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float, float, Ogre::Vector3&, Ogre::Vector3&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x92c0c0,dungeon.cpp,CDungeon::CDungeon(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x932ce0,dungeon.cpp,global constructors keyed to CDungeon::CDungeon(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9337f0,dungeon.cpp,CDungeon::getStrataTemplate(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x933fe0,dungeon.cpp,CDungeon::getRandomLevelTemplateData(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x9340a0,dungeon.cpp,"CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x934190,dungeon.cpp,CDungeon::~CDungeon(),MISSING,False,False,,False,candidate only; check current owner first
+0x934700,dungeon.cpp,CDungeon::~CDungeon(),MISSING,False,False,,False,candidate only; check current owner first
+0x934720,dungeon.cpp,CDungeon::loadDungeon(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0x935e60,level.cpp,CLevel::setNonLightStaticGeometryVisible(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x935ee0,level.cpp,CLevel::setLightStaticGeometryVisible(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x935f10,level.cpp,CLevel::getBaseUnitByDataGroup(CDataGroup*),MISSING,False,False,,False,candidate only; check current owner first
+0x935f80,level.cpp,CLevel::getCharacterByGuid(long long),MISSING,False,False,,False,candidate only; check current owner first
+0x935fe0,level.cpp,"CLevel::removeListenerFromUnit(long long, iUnitObserver*)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x935fe0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936090,level.cpp,"CLevel::removeListenerFromUnit(CBaseUnit*, iUnitObserver*)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936090.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9360b0,level.cpp,CLevel::getAutomapVisible(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x9360b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9360e0,level.cpp,CLevel::removeUpdateObject(iLevelUpdate*),MISSING,False,False,,False,candidate only; check current owner first
+0x936150,level.cpp,CLevel::getCurrentLevelSeed(),MISSING,False,False,,False,candidate only; check current owner first
+0x936180,level.cpp,CLevel::clearPassabilityData(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936180.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9361e0,level.cpp,CLevel::topLeftX(),MISSING,False,False,,False,candidate only; check current owner first
+0x936200,level.cpp,CLevel::topLeftY(),MISSING,False,False,,False,candidate only; check current owner first
+0x936220,level.cpp,"CLevel::positionPassable(int, int)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936220.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936270,level.cpp,"CLevel::mapPassable(int, int)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936270.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9362b0,level.cpp,"CLevel::getItemByGuid(long long, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x936300,level.cpp,CLevel::restartLevel(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936300.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936330,level.cpp,CLevel::updateLayouts(float),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936330.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9363b0,level.cpp,"CLevel::updateLevelUpdateObjects(Ogre::Camera*, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x9364a0,level.cpp,"CLevel::updateCharacterAnimation(float, float, CPlayer*)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x9364a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936550,level.cpp,CLevel::getPlayer(),MATCH,True,False,,False,already accepted; do not redo
+0x936570,level.cpp,CLevel::isDormant(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936570.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936590,level.cpp,"CLevel::setNPCAutomapBillboardVisible(Ogre::Billboard*, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936590.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9365c0,level.cpp,"CLevel::makeQuestUnitsUncool(long long, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x936630,level.cpp,CLevel::populateNewMerchantsInventory(),MISSING,False,False,,False,candidate only; check current owner first
+0x9366f0,level.cpp,CLevel::getLevelChampionSpawnClass(),MISSING,False,False,,False,candidate only; check current owner first
+0x936740,level.cpp,CLevel::getLevelMonsterSpawnClass(),MISSING,False,False,,False,candidate only; check current owner first
+0x936790,level.cpp,CLevel::addUpdateObject(iLevelUpdate*),MISSING,False,False,,False,candidate only; check current owner first
+0x9368e0,level.cpp,CLevel::removeCharacterUpdateListener(iLevelUpdatedCharacter*),MISSING,False,False,,False,candidate only; check current owner first
+0x936a60,level.cpp,"CLevel::questEventFire(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",MATCH,True,False,,False,already accepted; do not redo
+0x936a80,level.cpp,CLevel::flushCharacterUpdateListeners(),MISSING,False,False,,False,candidate only; check current owner first
+0x936b90,level.cpp,CLevel::getRandomMonster(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936b90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936bf0,level.cpp,CLevel::killAll(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936bf0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936c80,level.cpp,CLevel::updateDroppingItems(float),MISSING,False,False,,False,candidate only; check current owner first
+0x936cf0,level.cpp,"CLevel::reactToAreaDamage(CCharacter*, CCharacter*)",MISSING,False,False,,False,candidate only; check current owner first
+0x936d70,level.cpp,CLevel::notifyOfDeletion(CItem*),MISSING,False,False,,False,candidate only; check current owner first
+0x936e70,level.cpp,CLevel::removeListenerFromUnits(iUnitObserver*),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x936e70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x936f20,level.cpp,CLevel::notifyOfDeletion(CCharacter*),MISSING,False,False,,False,candidate only; check current owner first
+0x937020,level.cpp,CLevel::destroyIcons(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x937020.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9370c0,level.cpp,CLevel::updateAutomapIcons(),MISSING,False,False,,False,candidate only; check current owner first
+0x9377f0,level.cpp,CLevel::deleteOpenPortals(),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x9377f0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x937860,level.cpp,CLevel::decrementMapPassability(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x937950,level.cpp,CLevel::incrementMapPassability(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x937a40,level.cpp,"CLevel::incrementObjectPassability(Ogre::AxisAlignedBox const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x937c10,level.cpp,"CLevel::decrementMapPassabilityCollision(Ogre::AxisAlignedBox const&, CBaseUnit*)",MISSING,False,False,,False,candidate only; check current owner first
+0x937ee0,level.cpp,"CLevel::incrementMapPassabilityCollision(Ogre::AxisAlignedBox const&, CBaseUnit*)",MISSING,False,False,,False,candidate only; check current owner first
+0x9381b0,level.cpp,CLevel::decrementObjectPassability(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x9382a0,level.cpp,CLevel::incrementObjectPassability(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x938390,level.cpp,CLevel::mapPassable(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x938480,level.cpp,CLevel::positionPassable(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x938590,level.cpp,CLevel::setAutomapVisible(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x9385f0,level.cpp,CLevel::addRoomPieceToAutomap(CRoomPiece*),MISSING,False,False,,False,candidate only; check current owner first
+0x938810,level.cpp,CLevel::zoomAutomap(float),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x938810.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x938830,level.cpp,CLevel::toggleAutomap(),MISSING,False,False,,False,candidate only; check current owner first
+0x938940,level.cpp,"CLevel::unitBroadcastMessage(CBaseUnit*, EUNIT_STATES)",MISSING,False,False,,False,candidate only; check current owner first
+0x938a50,level.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x944e30,level.cpp,CLevel::getRoomIndexThatPositionIsIn(Ogre::Vector3 const&),MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x944e30.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x944ed0,level.cpp,"CLevel::getCharacterByOriginalGuid(long long, long long, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x944fe0,level.cpp,"CLevel::getItemByOriginalGuid(long long, long long, int, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x945110,level.cpp,CLevel::getRoomThatPositionIsIn(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x9451d0,level.cpp,CLevel::updateNearUnitList(Ogre::Vector3 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x9453f0,level.cpp,"CLevel::isInNoSpawnRegion(Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x9455e0,level.cpp,"CLevel::randomOpenItemPositionRange(Ogre::Vector3 const&, float, float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x945740,level.cpp,"CLevel::randomOpenItemPosition(Ogre::Vector3 const&, float, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x945740.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x945770,level.cpp,"CLevel::randomOpenPositionRange(Ogre::Vector3 const&, float, float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9459a0,level.cpp,"CLevel::randomOpenPosition(Ogre::Vector3 const&, float, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x9459a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x9459d0,level.cpp,"CLevel::incrementObjectPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x945ce0,level.cpp,"CLevel::decrementObjectPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x945ff0,level.cpp,"CLevel::decrementObjectPassability(Ogre::AxisAlignedBox const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x946300,level.cpp,"CLevel::objectRayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, CBaseUnit**, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9465b0,level.cpp,"CLevel::objectSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, CBaseUnit**, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x9468b0,level.cpp,"CLevel::incrementMapPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x946bc0,level.cpp,"CLevel::decrementMapPassability(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x946ed0,level.cpp,"CLevel::decrementMapPassability(Ogre::AxisAlignedBox const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x9471e0,level.cpp,"CLevel::incrementMapPassability(Ogre::AxisAlignedBox const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x9474f0,level.cpp,"CLevel::updateVisibleParticles(Ogre::Camera*, Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x948240,level.cpp,"CLevel::passableBetween(Ogre::Vector3, Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x948430,level.cpp,"CLevel::getActiveUnitsAtPosition(Ogre::Vector3 const&, float, TArrayList<CCharacter*>&, TArrayList<CItem*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x948720,level.cpp,"CLevel::preSortedSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x948b40,level.cpp,"CLevel::preSortedSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, CBaseUnit**, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x948f60,level.cpp,"CLevel::preSortedRayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x949230,level.cpp,"CLevel::getActiveCharactersAtPosition(Ogre::Vector3 const&, UNITTYPES::EUNITTYPES, EAlignment, float, bool, bool, TArrayList<CCharacter*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x949430,level.cpp,CLevel::addCharacterUpdateListener(iLevelUpdatedCharacter*),MISSING,False,False,,False,candidate only; check current owner first
+0x949540,level.cpp,"CLevel::getUnitsByUnitType(UNITTYPES::EUNITTYPES, TArrayList<CBaseUnit*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x949770,level.cpp,"CLevel::removeCharacter(CCharacter*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x949a10,level.cpp,CLevel::deleteCharacter(CCharacter*),MISSING,False,False,,False,candidate only; check current owner first
+0x949c90,level.cpp,"CLevel::updateCharacters(Ogre::Camera*, Ogre::Vector3 const&, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x949f10,level.cpp,CLevel::deleteItem(CItem*),MISSING,False,False,,False,candidate only; check current owner first
+0x94a1a0,level.cpp,"CLevel::updateItems(Ogre::Camera*, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x94a2a0,level.cpp,"CLevel::removeItem(CItem*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x94a530,level.cpp,"CLevel::removeUnit(CBaseUnit*, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x94a570,level.cpp,CLevel::pushTime(),MISSING,False,False,,False,candidate only; check current owner first
+0x94a660,level.cpp,"CLevel::getBaseUnitsByDataGroup(CDataGroup*, TArrayList<CBaseUnit*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x94a8b0,level.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94a920,level.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94a990,level.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94aa00,level.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94aa90,level.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94ab00,level.cpp,"CLevel::CLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CSettings*, CGameClient*, CResourceManager*, Ogre::SceneManager*, CSoundManager*, int, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x94b130,level.cpp,"CLevel::addListenerToUnit(long long, iUnitObserver*)",MISSING,False,False,,False,candidate only; check current owner first
+0x94b420,level.cpp,"CLevel::addListenerToUnit(CBaseUnit*, iUnitObserver*)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x94b420.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x94b440,level.cpp,"CLevel::findCharacterAtScreenCoordinates(Ogre::Matrix4 const&, Ogre::Matrix4 const&, float, float, CCharacter*)",MISSING,False,False,,False,candidate only; check current owner first
+0x94c730,level.cpp,"CLevel::findItemAtScreenCoordinates(Ogre::Matrix4 const&, Ogre::Matrix4 const&, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x94da90,level.cpp,"CLevel::sortForCollisionByPoints(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x94dec0,level.cpp,"CLevel::sortForCollision(Ogre::Vector3 const&, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x94e250,level.cpp,"CLevel::rayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x94e8a0,level.cpp,"CLevel::snapToValidGround(Ogre::Vector3&, float)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x94e8a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x94e970,level.cpp,CLevel::floorHeight(Ogre::Vector3),MISSING,False,False,,False,candidate only; check current owner first
+0x94e9f0,level.cpp,"CLevel::sightUnobstructed(Ogre::Vector3 const&, Ogre::Vector3 const&, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x94e9f0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x94ea30,level.cpp,"CLevel::findItemWithinView(Ogre::Matrix4 const&, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x94ed80,level.cpp,"CLevel::rayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x94ed80.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x94edb0,level.cpp,"CLevel::sphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&)",MISSING,False,False,,False,candidate only; check current owner first
+0x94f330,level.cpp,"CLevel::sphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",MISSING,False,True,handoff/recovered-pass10/snippets/level.cpp/0x94f330.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x94f360,level.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94f3f0,level.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94f480,level.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x94f4f0,level.cpp,"parseDataGroupForRoomPiece(CDataGroup*, _IO_FILE*)",MISSING,False,False,,False,candidate only; check current owner first
+0x94f730,level.cpp,CLevel::findItemsOnscreen(Ogre::Camera*),MISSING,False,False,,False,candidate only; check current owner first
+0x950660,level.cpp,CLevel::findParticles(),MISSING,False,False,,False,candidate only; check current owner first
+0x950a40,level.cpp,CLevel::updateMaterialAmbient(),MISSING,False,False,,False,candidate only; check current owner first
+0x951f50,level.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x951fe0,level.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952070,level.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952100,level.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952170,level.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952200,level.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952290,level.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952300,level.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952370,level.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x952400,level.cpp,"CLevel::findCharacterWithinView(Ogre::Matrix4 const&, EAlignment, float, float, float, bool, CCharacter*, CSkill*)",MISSING,False,False,,False,candidate only; check current owner first
+0x952af0,level.cpp,"CLevel::deleteTemporaryDungeonPortals(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x952e50,level.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x953000,level.cpp,"CLevel::placePlayerAtWarpToDungeonFloor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int, bool, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x953730,level.cpp,CLevel::~CLevel(),MISSING,False,False,,False,candidate only; check current owner first
+0x954560,level.cpp,CLevel::~CLevel(),MISSING,False,False,,False,candidate only; check current owner first
+0x954580,level.cpp,"CLevel::calculatePassability(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x955210,level.cpp,CLevel::bakeCollision(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x957f00,level.cpp,CLevel::bake(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x95a0f0,level.cpp,CLevel::clearOutRoomPieces(),MISSING,False,False,,False,candidate only; check current owner first
+0x95a5d0,level.cpp,CLevel::activate(),MISSING,False,False,,False,candidate only; check current owner first
+0x95a6d0,level.cpp,"getStringFromDataGroup(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x95a790,level.cpp,CLevel::getName(),MISSING,False,False,,False,candidate only; check current owner first
+0x95abb0,level.cpp,"CLevel::findTemporaryDungeonPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x95aeb0,level.cpp,"CLevel::addCharacter(CCharacter*, Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x95b100,level.cpp,"CLevel::clearProjectorPass(CGenericModel*, CGenericModel*)",MISSING,False,False,,False,candidate only; check current owner first
+0x95b420,level.cpp,"CLevel::setProjectorPass(Ogre::Frustum*, Ogre::Frustum*, CGenericModel*, CGenericModel*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x95c3d0,level.cpp,CLevel::updateNPCIcons(),MISSING,False,False,,False,candidate only; check current owner first
+0x95c7f0,level.cpp,"CLevel::update(Ogre::Camera*, Ogre::Vector3 const&, float, float, CPlayer*)",MISSING,False,False,,False,candidate only; check current owner first
+0x95c970,level.cpp,"CLevel::addItem(CItem*, Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x95cdb0,level.cpp,"CLevel::addUnit(CBaseUnit*, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x95ce70,level.cpp,"CLevel::rollMoney(CCharacter*, CCharacter*, Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x95d0b0,level.cpp,"CLevel::rollTreasure(CCharacter*, CCharacter*, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x95d220,level.cpp,"CLevel::populateSectionOfLevel(Ogre::Vector3 const&, Ogre::Vector3 const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x95dc40,level.cpp,"CLevel::populateFormations(CRandomizer&, TArrayList<Ogre::AxisAlignedBox>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x95e8b0,level.cpp,CLevel::setInited(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x95e980,level.cpp,"CLevel::mergeLayoutsForRoomPiece(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CLayout*)",MISSING,False,False,,False,candidate only; check current owner first
+0x95ee30,level.cpp,CLevel::popTime(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0x95f150,level.cpp,"CLevel::loadRoomLayout(CLevelTemplateData*, bool, ELevelEntryType, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x9622f0,level.cpp,"CLevel::loadRoomLayout(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, ELevelEntryType, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0x962630,level.cpp,CLevel::populate(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x965f00,level.cpp,"CLevel::saveRoomLayoutForQuickLoad(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x968d40,level.cpp,CLogicNodeState::save(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0x968ef0,levelstate.cpp,CLevelState::CLevelState(int),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x969000,levelstate.cpp,CLevelState::restoreAutomap(CAutomap*),MATCH,True,False,,False,already accepted; do not redo
+0x969050,levelstate.cpp,CLevelState::addAutomap(CAutomap*),MISSING,False,False,,False,candidate only; check current owner first
+0x9690d0,levelstate.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96f2a0,levelstate.cpp,global constructors keyed to CLevelState::CLevelState(int),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96f2b0,levelstate.cpp,"CLevelState::addFormations(TArrayList<CFormationNode*>*, CLevel&)",MISSING,False,False,,False,candidate only; check current owner first
+0x96f440,levelstate.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96f4b0,levelstate.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96f520,levelstate.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96f590,levelstate.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96f620,levelstate.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96f690,levelstate.cpp,CLevelState::save(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0x96fb70,levelstate.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96fc00,levelstate.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96fc90,levelstate.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96fd20,levelstate.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x96fdb0,levelstate.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96fe40,levelstate.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96fed0,levelstate.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96ff40,levelstate.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x96ffb0,levelstate.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x970040,levelstate.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting

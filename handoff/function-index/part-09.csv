@@ -1,0 +1,501 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending,instruction
+0xbf6510,stashmenu.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf65a0,stashmenu.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6630,stashmenu.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf66a0,stashmenu.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6710,stashmenu.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6780,stashmenu.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6810,stashmenu.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf68a0,stashmenu.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6930,stashmenu.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6c10,stashmenu.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6ca0,stashmenu.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6d10,stashmenu.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6d80,stashmenu.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6df0,stashmenu.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6e80,stashmenu.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xbf6ef0,stashmenu.cpp,CStashMenu::update(float),DIFF,True,False,,False,already accepted; do not redo
+0xbf7510,stashmenu.cpp,CStashMenu::setOpen(bool),DIFF,True,False,,False,already accepted; do not redo
+0xbf7900,stashmenu.cpp,CStashMenu::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False,already accepted; do not redo
+0xbf7cc0,stashmenu.cpp,"CStashMenu::setPetSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False,already accepted; do not redo
+0xbf9520,stashmenu.cpp,"CStashMenu::setSlotIcon(CEquipment*, int, int)",DIFF,True,False,,False,already accepted; do not redo
+0xbfad60,stashmenu.cpp,CStashMenu::updateLayout(),DIFF,True,False,,False,already accepted; do not redo
+0xbfbe20,stashmenu.cpp,CStashMenu::createMenus(),DIFF,True,False,,False,already accepted; do not redo
+0xc03f40,stashmenu.cpp,"CStashMenu::CStashMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False,already accepted; do not redo
+0xc04260,stashmenu.cpp,CEGUI::MemberFunctionSlot<CStashMenu>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc04270,stashmenu.cpp,CEGUI::MemberFunctionSlot<CStashMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc042a0,stashmenu.cpp,CEGUI::MemberFunctionSlot<CStashMenu>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc042b0,statsmenu.cpp,CStatsMenu::setOwner(CCharacter*),MATCH,True,False,,False,already accepted; do not redo
+0xc042c0,statsmenu.cpp,CStatsMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc042e0,statsmenu.cpp,"CStatsMenu::processInput(void*, float, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xc04310,statsmenu.cpp,CStatsMenu::handle_ReclaimMagic(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc04370,statsmenu.cpp,CStatsMenu::handle_ReclaimDefense(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc043d0,statsmenu.cpp,CStatsMenu::handle_ReclaimRanged(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc04430,statsmenu.cpp,CStatsMenu::handle_ReclaimMelee(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc04490,statsmenu.cpp,CStatsMenu::handle_SpendMagic(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc044e0,statsmenu.cpp,CStatsMenu::handle_SpendDefense(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc04530,statsmenu.cpp,CStatsMenu::handle_SpendRanged(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc04580,statsmenu.cpp,CStatsMenu::handle_SpendMelee(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc045d0,statsmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b120,statsmenu.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b190,statsmenu.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b200,statsmenu.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b270,statsmenu.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b300,statsmenu.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0b370,statsmenu.cpp,CStatsMenu::setOpen(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc0ba20,statsmenu.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bab0,statsmenu.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bb40,statsmenu.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bbd0,statsmenu.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bc60,statsmenu.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bcf0,statsmenu.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bd60,statsmenu.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bdd0,statsmenu.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0be40,statsmenu.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bed0,statsmenu.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bf60,statsmenu.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0bff0,statsmenu.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0c260,statsmenu.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc0c2f0,statsmenu.cpp,CStatsMenu::~CStatsMenu(),DIFF,True,False,,False,already accepted; do not redo
+0xc0c4c0,statsmenu.cpp,CStatsMenu::~CStatsMenu(),MATCH,True,False,,False,already accepted; do not redo
+0xc0c4e0,statsmenu.cpp,CStatsMenu::update(float),DIFF,True,False,,False,already accepted; do not redo
+0xc14860,statsmenu.cpp,CStatsMenu::createMenus(),DIFF,True,False,,False,already accepted; do not redo
+0xc18470,statsmenu.cpp,"CStatsMenu::CStatsMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False,already accepted; do not redo
+0xc18840,statsmenu.cpp,CEGUI::MemberFunctionSlot<CStatsMenu>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc18850,statsmenu.cpp,CEGUI::MemberFunctionSlot<CStatsMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc18880,statsmenu.cpp,CEGUI::MemberFunctionSlot<CStatsMenu>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc18890,statsmenu_fill.cpp,CStatsMenuFill::handle_onMouseUp(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc188e0,statsmenu_fill.cpp,CStatsMenuFill::getStatInvestment(ESTATSMENU_STATS),MATCH,True,False,,False,already accepted; do not redo
+0xc18940,statsmenu_fill.cpp,CStatsMenuFill::getStatBarCurrentAmount(ESTATSMENU_STATS),MATCH,True,False,,False,already accepted; do not redo
+0xc189a0,statsmenu_fill.cpp,CStatsMenuFill::getExperienceToSpend(),MATCH,True,False,,False,already accepted; do not redo
+0xc189c0,statsmenu_fill.cpp,"CStatsMenuFill::addExperienceToStat(ESTATSMENU_STATS, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc18b00,statsmenu_fill.cpp,CStatsMenuFill::addExperienceSpent(int),DIFF,True,False,,False,already accepted; do not redo
+0xc18b50,statsmenu_fill.cpp,CStatsMenuFill::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc18b80,statsmenu_fill.cpp,CStatsMenuFill::handle_AddToStat(CEGUI::EventArgs const&),DIFF,True,False,,False,already accepted; do not redo
+0xc18be0,statsmenu_fill.cpp,CStatsMenuFill::handle_RemoveFromStat(CEGUI::EventArgs const&),DIFF,True,False,,False,already accepted; do not redo
+0xc18c40,statsmenu_fill.cpp,CStatsMenuFill::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False,already accepted; do not redo
+0xc18cc0,statsmenu_fill.cpp,CStatsMenuFill::getStatBarTotalAmount(ESTATSMENU_STATS),MATCH,True,False,,False,already accepted; do not redo
+0xc18d40,statsmenu_fill.cpp,CStatsMenuFill::getExperienceBarTotalAmount(),MATCH,True,False,,False,already accepted; do not redo
+0xc18d80,statsmenu_fill.cpp,"CStatsMenuFill::getAmountOfXPToAdd(ESTATSMENU_STATS, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc18e50,statsmenu_fill.cpp,"CStatsMenuFill::getAmountOfXPToRemove(ESTATSMENU_STATS, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc18f10,statsmenu_fill.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc1fc40,statsmenu_fill.cpp,CStatsMenuFill::~CStatsMenuFill(),MATCH,True,False,,False,already accepted; do not redo
+0xc1fd90,statsmenu_fill.cpp,CStatsMenuFill::~CStatsMenuFill(),MATCH,True,False,,False,already accepted; do not redo
+0xc1fdb0,statsmenu_fill.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc1fe20,statsmenu_fill.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc1fe90,statsmenu_fill.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc1ff00,statsmenu_fill.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc1ff90,statsmenu_fill.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc204b0,statsmenu_fill.cpp,__tcf_18,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc20540,statsmenu_fill.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc205d0,statsmenu_fill.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc20660,statsmenu_fill.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc206f0,statsmenu_fill.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20780,statsmenu_fill.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20810,statsmenu_fill.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20880,statsmenu_fill.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc208f0,statsmenu_fill.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20960,statsmenu_fill.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc209f0,statsmenu_fill.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20a80,statsmenu_fill.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20b10,statsmenu_fill.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20c10,statsmenu_fill.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc20dc0,statsmenu_fill.cpp,CStatsMenuFill::calculateMouseOver(),DIFF,True,False,,False,already accepted; do not redo
+0xc21540,statsmenu_fill.cpp,CStatsMenuFill::updateVisuals(),DIFF,True,False,,False,already accepted; do not redo
+0xc21f30,statsmenu_fill.cpp,"CStatsMenuFill::fillIntoBar(ESTATSMENU_STATS, float)",DIFF,True,False,,False,already accepted; do not redo
+0xc22200,statsmenu_fill.cpp,"CStatsMenuFill::removeFromBar(ESTATSMENU_STATS, float)",DIFF,True,False,,False,already accepted; do not redo
+0xc22380,statsmenu_fill.cpp,CStatsMenuFill::update(float),DIFF,True,False,,False,already accepted; do not redo
+0xc224e0,statsmenu_fill.cpp,CStatsMenuFill::setOpen(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc22580,statsmenu_fill.cpp,CStatsMenuFill::createMenus(),DIFF,True,False,,False,already accepted; do not redo
+0xc2b080,statsmenu_fill.cpp,"CStatsMenuFill::CStatsMenuFill(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False,already accepted; do not redo
+0xc2b680,statsmenu_fill.cpp,CEGUI::MemberFunctionSlot<CStatsMenuFill>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc2b690,statsmenu_fill.cpp,CEGUI::MemberFunctionSlot<CStatsMenuFill>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc2b6c0,statsmenu_fill.cpp,CEGUI::MemberFunctionSlot<CStatsMenuFill>::~MemberFunctionSlot(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc2b6d0,statsmenu_fill.cpp,TArrayList<CEGUI::Window*>::~TArrayList(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc2b700,menumanager.cpp,CMenuManager::canLoad(),MISSING,False,False,,False,candidate only; check current owner first
+0xc2b720,menumanager.cpp,CMenuManager::closeMenus(),MATCH,True,False,,False,already accepted; do not redo
+0xc2b770,menumanager.cpp,"CMenuManager::update(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc2b830,menumanager.cpp,CMenuManager::flushProcessInput(),MATCH,True,False,,False,already accepted; do not redo
+0xc2b840,menumanager.cpp,"CMenuManager::processInput(void*, float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc2b980,menumanager.cpp,CMenuManager::captureProcessInput(),MATCH,True,False,,False,already accepted; do not redo
+0xc2b9a0,menumanager.cpp,"CMenuManager::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc2b9b0,menumanager.cpp,"CMenuManager::keyEvent(unsigned int, unsigned int, long)",MATCH,True,False,,False,already accepted; do not redo
+0xc2b9c0,menumanager.cpp,CMenuManager::canContinue(),MATCH,True,False,,False,already accepted; do not redo
+0xc2b9d0,menumanager.cpp,CMenuManager::setActiveMenu(EMenu),MISSING,False,False,,False,candidate only; check current owner first
+0xc2bb80,menumanager.cpp,CMenuManager::reloadMenuCharacters(),MATCH,True,False,,False,already accepted; do not redo
+0xc2bbb0,menumanager.cpp,CMenuManager::create(),MATCH,True,False,,False,already accepted; do not redo
+0xc2bd10,menumanager.cpp,CMenuManager::setWindowActive(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc2bd40,menumanager.cpp,CMenuManager::~CMenuManager(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc2be20,menumanager.cpp,CMenuManager::~CMenuManager(),MATCH,True,False,,False,already accepted; do not redo
+0xc2be40,menumanager.cpp,"CMenuManager::CMenuManager(CGameUI&, CSettings&, Ogre::Camera*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc2bf80,menumanager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc32610,menumanager.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc32b10,menumanager.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc32ba0,menumanager.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc32c30,menumanager.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc32cc0,menumanager.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc32d50,menumanager.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc32dc0,menumanager.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc32e30,menumanager.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc32ec0,menumanager.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc32f50,menumanager.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc331e0,menumanager.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc33250,menumanager.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc332e0,menumanager.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc33370,menumanager.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5e490,StringRepository.cpp,CStringRepository::GetString(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0xc5e4f0,StringRepository.cpp,global constructors keyed to CStringRepository::CStringRepository(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5e560,StringRepository.cpp,CStringRepository::~CStringRepository(),MATCH,True,False,,False,already accepted; do not redo
+0xc5e600,StringRepository.cpp,CStringRepository::CStringRepository(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc5e6b0,StringRepository.cpp,"CStringRepository::GetStringID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc5e7b0,StringRepository.cpp,"CStringRepository::AddString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc5eaa0,StringRepository.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >, std::_Select1st<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5eb60,StringRepository.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >, std::_Select1st<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5eba0,StringRepository.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >, std::_Select1st<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > > >::_M_insert_unique(std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5ec40,StringRepository.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >, std::_Select1st<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > >, std::pair<unsigned int const, std::_Rb_tree_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > > const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc5ed90,DataGroup.cpp,CDataGroup::stringRepository(),MISSING,False,False,,False,candidate only; check current owner first
+0xc5eda0,DataGroup.cpp,CDataGroup::RemoveDataGroup(CDataGroup*),MATCH,True,False,,False,already accepted; do not redo
+0xc5ee20,DataGroup.cpp,CDataGroup::GetGroupName(),MISSING,False,False,,False,candidate only; check current owner first
+0xc5ee90,DataGroup.cpp,CDataGroup::setDirty(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc5eef0,DataGroup.cpp,"CDataGroup::SaveToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, iDataFileSaveAndLoad*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5ef30,DataGroup.cpp,CDataGroup::isDirty(),MATCH,True,False,,False,already accepted; do not redo
+0xc5efa0,DataGroup.cpp,CDataGroup::getStringRepositorySizeInMemory(),MISSING,False,False,,False,candidate only; check current owner first
+0xc5efe0,DataGroup.cpp,"CDataGroup::CopyDataValue(CDataValue*, TArrayList<CDataValue*>*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5f1c0,DataGroup.cpp,"CDataGroup::GetDataValueByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5f250,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, double)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f280,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f2b0,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f2e0,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f310,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f340,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f370,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f3a0,DataGroup.cpp,"CDataGroup::GetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f3e0,DataGroup.cpp,"CDataGroup::GetDataValueType(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc5f5e0,DataGroup.cpp,CDataGroup::SetGroupNameID(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc5f820,DataGroup.cpp,"CDataGroup::GetDataValuesMatchingName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<CDataValue*, std::allocator<CDataValue*> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5f910,DataGroup.cpp,"CDataGroup::GetDataGroupsMatchingName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<CDataGroup*, std::allocator<CDataGroup*> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5fa00,DataGroup.cpp,"CDataGroup::AddDataValue(unsigned int, UNIONDATA64BIT, CDataValue::EDATAVALUETYPES)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5fb30,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5fc80,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xc5fd50,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5fde0,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5fe70,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc5ff80,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xc5fff0,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0xc600f0,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long)",MATCH,True,False,,False,already accepted; do not redo
+0xc60160,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc60260,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc602d0,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc603e0,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, double)",MISSING,False,False,,False,candidate only; check current owner first
+0xc604f0,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, double)",MATCH,True,False,,False,already accepted; do not redo
+0xc60560,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xc60670,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc606e0,DataGroup.cpp,"CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc607f0,DataGroup.cpp,"CDataGroup::SetDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc60860,DataGroup.cpp,"CDataGroup::SaveToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc60ab0,DataGroup.cpp,"CDataGroup::SetGroupName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc614e0,DataGroup.cpp,"CDataGroup::LoadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, iDataFileSaveAndLoad*, CTimerStatics*)",MATCH,True,False,,False,already accepted; do not redo
+0xc61550,DataGroup.cpp,CDataGroup::~CDataGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0xc61ab0,DataGroup.cpp,CDataGroup::~CDataGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0xc61ad0,DataGroup.cpp,"CDataGroup::CDataGroup(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, unsigned int, unsigned int, TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc61c00,DataGroup.cpp,"CDataGroup::AddDataGroup(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc61d30,DataGroup.cpp,"CDataGroup::GetDataGroupByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc61e00,DataGroup.cpp,"CDataGroup::CopyDataGroup(CDataGroup*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc62090,DataGroup.cpp,"CDataGroup::LoadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc62dd0,DataValue.cpp,CDataValue::GetDataValueName(),MISSING,False,False,,False,candidate only; check current owner first
+0xc62e40,DataValue.cpp,CDataValue::GetValueBool(),MATCH,True,False,,False,already accepted; do not redo
+0xc62e50,DataValue.cpp,CDataValue::GetValueInt64(),MATCH,True,False,,False,already accepted; do not redo
+0xc62e60,DataValue.cpp,CDataValue::GetValueInt32(),MATCH,True,False,,False,already accepted; do not redo
+0xc62e70,DataValue.cpp,CDataValue::GetValueUInt32(),MATCH,True,False,,False,already accepted; do not redo
+0xc62e80,DataValue.cpp,CDataValue::GetValueFloat32(),MATCH,True,False,,False,already accepted; do not redo
+0xc62e90,DataValue.cpp,CDataValue::GetValueFloat64(),MATCH,True,False,,False,already accepted; do not redo
+0xc62ea0,DataValue.cpp,CDataValue::SetValueBool(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc62eb0,DataValue.cpp,CDataValue::SetValueInt64(long long),MATCH,True,False,,False,already accepted; do not redo
+0xc62ec0,DataValue.cpp,CDataValue::SetValueInt32(int),MATCH,True,False,,False,already accepted; do not redo
+0xc62ed0,DataValue.cpp,CDataValue::SetValueUInt32(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0xc62ee0,DataValue.cpp,CDataValue::SetValueFloat32(float),MATCH,True,False,,False,already accepted; do not redo
+0xc62ef0,DataValue.cpp,CDataValue::SetValueFloat64(double),MATCH,True,False,,False,already accepted; do not redo
+0xc62f00,DataValue.cpp,CDataValue::SetValueIsTranslate(),MATCH,True,False,,False,already accepted; do not redo
+0xc62f90,DataValue.cpp,CDataValue::GetValueTypeAsString(),MISSING,False,False,,False,candidate only; check current owner first
+0xc63100,DataValue.cpp,CDataValue::GetValueString(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xc63280,DataValue.cpp,CDataValue::GetValueAsString(),MISSING,False,False,,False,candidate only; check current owner first
+0xc63380,DataValue.cpp,"CDataValue::CDataValue(unsigned int, UNIONDATA64BIT, CDataValue::EDATAVALUETYPES, TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc63820,DataValue.cpp,CDataValue::~CDataValue(),MISSING,False,False,,False,candidate only; check current owner first
+0xc63fc0,DataValue.cpp,CDataValue::~CDataValue(),MISSING,False,False,,False,candidate only; check current owner first
+0xc63fe0,DataValue.cpp,"CDataValue::SetDataValueName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc643a0,DataValue.cpp,"CDataValue::CDataValue(wchar_t const*, TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc64480,DataValue.cpp,CDataValue::SetValueString(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xc64910,DataValue.cpp,"CDataValue::SetValueByString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc64ad0,DataValue.cpp,CDataValue::SetValueTranslate(wchar_t const*),MATCH,True,False,,False,already accepted; do not redo
+0xc64ae0,DataValue.cpp,"CDataValue::Copy(CDataValue*, TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc64b70,DataValue.cpp,"CDataValue::CDataValue(CDataValue*, TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65180,BinaryStyle.cpp,CBinaryStyle::CBinaryStyle(),MATCH,True,False,,False,already accepted; do not redo
+0xc65190,BinaryStyle.cpp,CBinaryStyle::~CBinaryStyle(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc651a0,BinaryStyle.cpp,global constructors keyed to CBinaryStyle::CBinaryStyle(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc65210,BinaryStyle.cpp,"CBinaryStyle::Save64BitDataValue(std::basic_ofstream<char, std::char_traits<char> >&, UNIONDATA64BIT const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65220,BinaryStyle.cpp,"CBinaryStyle::SaveUInt32BitDataValue(std::basic_ofstream<char, std::char_traits<char> >&, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65240,BinaryStyle.cpp,"CBinaryStyle::SaveDataValues(std::basic_ofstream<char, std::char_traits<char> >&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65370,BinaryStyle.cpp,"CBinaryStyle::Save(std::basic_ofstream<char, std::char_traits<char> >&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65410,BinaryStyle.cpp,CBinaryStyle::~CBinaryStyle(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc65420,BinaryStyle.cpp,"CBinaryStyle::Get32BitData(std::basic_ifstream<char, std::char_traits<char> >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65450,BinaryStyle.cpp,"CBinaryStyle::Get64BitData(std::basic_ifstream<char, std::char_traits<char> >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65480,BinaryStyle.cpp,"CBinaryStyle::getStringIndexs(CDataGroup*, std::map<unsigned int, bool, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, bool> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc656d0,BinaryStyle.cpp,"CBinaryStyle::SaveStringData(std::basic_ofstream<char, std::char_traits<char> >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65790,BinaryStyle.cpp,"CBinaryStyle::GetWChar16ArrayAsString(std::basic_ifstream<char, std::char_traits<char> >&, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65910,BinaryStyle.cpp,"CBinaryStyle::SaveDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc65fd0,BinaryStyle.cpp,"CBinaryStyle::LoadDataValues(std::basic_ifstream<char, std::char_traits<char> >&, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc664f0,BinaryStyle.cpp,"CBinaryStyle::Load(std::basic_ifstream<char, std::char_traits<char> >&, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc669f0,BinaryStyle.cpp,"CBinaryStyle::LoadDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc68700,OgreResourceFile.cpp,COgreResourceFile::COgreResourceFile(),MATCH,True,False,,False,already accepted; do not redo
+0xc68710,OgreResourceFile.cpp,COgreResourceFile::~COgreResourceFile(),MISSING,False,False,,False,candidate only; check current owner first
+0xc68720,OgreResourceFile.cpp,global constructors keyed to COgreResourceFile::COgreResourceFile(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc68790,OgreResourceFile.cpp,COgreResourceFile::Get32BitData(COgreReader*),MATCH,True,False,,False,already accepted; do not redo
+0xc687c0,OgreResourceFile.cpp,COgreResourceFile::Get64BitData(COgreReader*),MISSING,False,False,,False,candidate only; check current owner first
+0xc687f0,OgreResourceFile.cpp,"COgreResourceFile::GetWChar16ArrayAsString(COgreReader*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc68890,OgreResourceFile.cpp,COgreResourceFile::~COgreResourceFile(),MISSING,False,False,,False,candidate only; check current owner first
+0xc688a0,OgreResourceFile.cpp,"COgreResourceFile::getStringIndexs(CDataGroup*, std::map<unsigned int, bool, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, bool> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc68af0,OgreResourceFile.cpp,"COgreResourceFile::SaveDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc68b90,OgreResourceFile.cpp,"COgreResourceFile::LoadDataValues(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc690d0,OgreResourceFile.cpp,"COgreResourceFile::Load(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc695e0,OgreResourceFile.cpp,"COgreResourceFile::LoadDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc6ada0,PairStyle.cpp,CPairStyle::CPairStyle(),MATCH,True,False,,False,already accepted; do not redo
+0xc6adb0,PairStyle.cpp,CPairStyle::~CPairStyle(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc6adc0,PairStyle.cpp,global constructors keyed to CPairStyle::CPairStyle(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc6ae30,PairStyle.cpp,CPairStyle::~CPairStyle(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc6ae40,PairStyle.cpp,"CPairStyle::SaveDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc6b4c0,PairStyle.cpp,"CPairStyle::ParseSubGroups(CFileReader*, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc6c950,PairStyle.cpp,"CPairStyle::LoadDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc72890,FileReader.cpp,CFileReader::GetBuffer(),MATCH,True,False,,False,already accepted; do not redo
+0xc728a0,FileReader.cpp,CFileReader::ReadWChar(),MATCH,True,False,,False,already accepted; do not redo
+0xc728d0,FileReader.cpp,CFileReader::ResetFile(),MATCH,True,False,,False,already accepted; do not redo
+0xc728e0,FileReader.cpp,CFileReader::EndOfFile(),MATCH,True,False,,False,already accepted; do not redo
+0xc728f0,FileReader.cpp,global constructors keyed to CFileReader::CFileReader(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc72960,FileReader.cpp,CFileReader::ReadLine(wchar_t),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc72a90,FileReader.cpp,CFileReader::ReadFile(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xc72b70,FileReader.cpp,CFileReader::CFileReader(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc72bc0,FileReader.cpp,CFileReader::~CFileReader(),MATCH,True,False,,False,already accepted; do not redo
+0xc72c40,FileReader.cpp,"CFileReader::ReadLineTokenize(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, wchar_t const*, wchar_t)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc72e80,FileReader.cpp,"CFileReader::ConvertFileToUnicode(_IO_FILE*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc731f0,FileReader.cpp,"CFileReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc738b0,FileUtilities.cpp,FILESYSTEM::ReadByte(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0xc738e0,FileUtilities.cpp,FILESYSTEM::ReadFloat(_IO_FILE*),MISSING,False,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc738e0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc73910,FileUtilities.cpp,FILESYSTEM::ReadShort(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xc73940,FileUtilities.cpp,FILESYSTEM::ReadInt(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xc73970,FileUtilities.cpp,FILESYSTEM::ReadBool(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xc739b0,FileUtilities.cpp,FILESYSTEM::GetWindowsTempPath(),MISSING,False,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc739b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc739c0,FileUtilities.cpp,FILESYSTEM::GetLocalPath(),MISSING,False,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc739c0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc739d0,FileUtilities.cpp,FILESYSTEM::GetApplicationPath(),MISSING,False,False,,False,candidate only; check current owner first
+0xc73aa0,FileUtilities.cpp,"FILESYSTEM::AssembleAbsolutePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc73b60,FileUtilities.cpp,"FILESYSTEM::CleanPath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc73c60,FileUtilities.cpp,"FILESYSTEM::CleanPath(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc73d30,FileUtilities.cpp,"FILESYSTEM::GetFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc73e50,FileUtilities.cpp,"FILESYSTEM::RemoveFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc73f70,FileUtilities.cpp,"FILESYSTEM::ReadString(_IO_FILE*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc74060,FileUtilities.cpp,FILESYSTEM::ReadString(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0xc74150,FileUtilities.cpp,"FILESYSTEM::GetFileData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc741e0,FileUtilities.cpp,FILESYSTEM::FileExists(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xc742d0,FileUtilities.cpp,"FILESYSTEM::FileExists(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc74320,FileUtilities.cpp,"FILESYSTEM::FileExists(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc74320.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc74330,FileUtilities.cpp,"FILESYSTEM::FileIsOlder(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc74490,FileUtilities.cpp,"FILESYSTEM::setFileTime(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long, long long, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0xc74db0,FileUtilities.cpp,"FILESYSTEM::AssembleAbsolutePath(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc74eb0,FileUtilities.cpp,"FILESYSTEM::RemoveFileName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc75030,FileUtilities.cpp,"FILESYSTEM::GetFileName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc751f0,FileUtilities.cpp,"FILESYSTEM::ReadWString(_IO_FILE*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc752e0,FileUtilities.cpp,"FILESYSTEM::CreateLocalDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc75430,FileUtilities.cpp,FILESYSTEM::ReadWString(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0xc75520,FileUtilities.cpp,"FILESYSTEM::GetFileList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc75a20,FileUtilities.cpp,"FILESYSTEM::GetDirectoryList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc75c70,FileUtilities.cpp,"FILESYSTEM::FindFullDirectoryName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc75ec0,FileUtilities.cpp,"FILESYSTEM::GetFileListRecursive(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc76190,FileUtilities.cpp,"FILESYSTEM::FindFullFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc764a0,FileUtilities.cpp,FILESYSTEM::GetAppDataPath(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc76560,FileUtilities.cpp,"FILESYSTEM::GetDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc76730,FileUtilities.cpp,FILESYSTEM::GetSaveDataPath(),MISSING,False,False,,False,candidate only; check current owner first
+0xc76860,FileUtilities.cpp,"FILESYSTEM::CreateAppDataDirectory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc77410,FileUtilities.cpp,FILESYSTEM::GetFileCreationTime(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xc77530,FileUtilities.cpp,FILESYSTEM::GetFileTime(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xc77650,FileUtilities.cpp,"FILESYSTEM::GetFileListSorted(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc77c20,GameSpeed.cpp,CGameSpeed::getSingleton(),MATCH,True,False,,False,already accepted; do not redo
+0xc77c30,GameSpeed.cpp,CGameSpeed::getGameSpeed(),MISSING,False,False,,False,candidate only; check current owner first
+0xc77d10,GameSpeed.cpp,CGameSpeed::calculateGameSpeed(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc77ea0,GameSpeed.cpp,"CGameSpeed::addSpeedModifier(EGAMESPEED_TYPE, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xc78030,GameSpeed.cpp,CGameSpeed::clear(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc780c0,GameSpeed.cpp,"CGameSpeed::CGameSpeed(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False,already accepted; do not redo
+0xc781d0,GameSpeed.cpp,CGameSpeed::~CGameSpeed(),MISSING,False,False,,False,candidate only; check current owner first
+0xc782c0,GameSpeed.cpp,CGameSpeed::~CGameSpeed(),MISSING,False,False,,False,candidate only; check current owner first
+0xc78310,Graph.cpp,"CGraph::getValue(float, unsigned int) const",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc783d0,Graph.cpp,"global constructors keyed to CGraph::CGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc78480,Graph.cpp,CGraph::processPoints(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc784e0,Graph.cpp,CGraph::getControlPoints(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc78540,Graph.cpp,CGraph::clear(unsigned int),DIFF,False,True,handoff/recovered-pass10/snippets/Graph.cpp/0xc78540.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc785a0,Graph.cpp,CGraph::~CGraph(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc786c0,Graph.cpp,CGraph::~CGraph(),MATCH,True,False,,False,already accepted; do not redo
+0xc786e0,Graph.cpp,CGraph::addGraphLine(EGRAPH_TYPES),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc78880,Graph.cpp,"CGraph::addValue(float, float, unsigned int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc78930,Graph.cpp,CGraph::loadGraphLine(CDataGroup*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc78da0,Graph.cpp,CGraph::loadGraph(wchar_t const*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc791f0,Graph.cpp,"CGraph::CGraph(EGRAPH_TYPES, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc792d0,Graph.cpp,"CGraph::CGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc793e0,MouseHandler.cpp,global constructors keyed to CMouseHandler::CMouseHandler(void*),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc79450,MouseHandler.cpp,CMouseHandler::MousePosition(),MATCH,True,False,,False,already accepted; do not redo
+0xc79470,MouseHandler.cpp,CMouseHandler::MouseIsInWindow(),MATCH,True,False,,False,already accepted; do not redo
+0xc79490,MouseHandler.cpp,CMouseHandler::MouseCenterButtonDown(),MATCH,True,False,,False,already accepted; do not redo
+0xc794b0,MouseHandler.cpp,CMouseHandler::MouseRightButtonDown(),MATCH,True,False,,False,already accepted; do not redo
+0xc794d0,MouseHandler.cpp,CMouseHandler::MouseLeftButtonDown(),MATCH,True,False,,False,already accepted; do not redo
+0xc794f0,MouseHandler.cpp,CMouseHandler::~CMouseHandler(),MATCH,True,False,,False,already accepted; do not redo
+0xc79500,MouseHandler.cpp,CMouseHandler::~CMouseHandler(),MATCH,True,False,,False,already accepted; do not redo
+0xc79520,MouseHandler.cpp,CMouseHandler::CMouseHandler(void*),MATCH,True,False,,False,already accepted; do not redo
+0xc79560,UtilitiesMath.cpp,MATH::vectorToRGB(Ogre::Vector3 const&),MATCH,True,False,,False,already accepted; do not redo
+0xc79650,UtilitiesMath.cpp,"MATH::boundsContains(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc796a0,UtilitiesMath.cpp,"MATH::boundsIntersect(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc796f0,UtilitiesMath.cpp,"MATH::boundsContainsXY(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc79730,UtilitiesMath.cpp,"MATH::boundsIntersectXY(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc79770,UtilitiesMath.cpp,"MATH::boundsContains(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc797e0,UtilitiesMath.cpp,"MATH::boundsIntersect(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc79850,UtilitiesMath.cpp,"MATH::expandBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False,already accepted; do not redo
+0xc798b0,UtilitiesMath.cpp,"MATH::expandCubicBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False,already accepted; do not redo
+0xc79960,UtilitiesMath.cpp,"MATH::expandHorizontalCubicBounds(Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3)",MATCH,True,False,,False,already accepted; do not redo
+0xc79a00,UtilitiesMath.cpp,"MATH::worldToLocalPerspective(Ogre::Vector3&, Ogre::Vector3 const&, Ogre::Matrix4 const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc79ab0,UtilitiesMath.cpp,"MATH::worldToLocal(Ogre::Vector3&, Ogre::Vector3 const&, Ogre::Matrix4 const&)",DIFF,False,True,handoff/recovered-pass10/snippets/UtilitiesMath.cpp/0xc79ab0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc79b40,UtilitiesMath.cpp,"MATH::closestPointOnLine(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False,already accepted; do not redo
+0xc79c30,UtilitiesMath.cpp,"MATH::closestPointOnTriangle(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc79dd0,UtilitiesMath.cpp,"MATH::classifyPoint(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc79e20,UtilitiesMath.cpp,"MATH::classifyPointForSphere(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc79e80,UtilitiesMath.cpp,"MATH::getLinePlaneIntersection(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False,already accepted; do not redo
+0xc79fc0,UtilitiesMath.cpp,"MATH::getSpherePlaneIntersection(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&)",MATCH,True,False,,False,already accepted; do not redo
+0xc7a0e0,UtilitiesMath.cpp,"MATH::distanceToPlane(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3 const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc7a150,UtilitiesMath.cpp,"MATH::matrixRotationZ(Ogre::Matrix4&, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc7a1f0,UtilitiesMath.cpp,"MATH::matrixRotationX(Ogre::Matrix4&, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7a2a0,UtilitiesMath.cpp,"MATH::matrixRotationY(Ogre::Matrix4&, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7a340,UtilitiesMath.cpp,"MATH::rotateZ(Ogre::Vector3*, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc7a3a0,UtilitiesMath.cpp,"MATH::rotateX(Ogre::Vector3*, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7a400,UtilitiesMath.cpp,"MATH::rotateY(Ogre::Vector3*, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7a460,UtilitiesMath.cpp,"MATH::angleBetween(Ogre::Vector3, Ogre::Vector3)",MATCH,True,False,,False,already accepted; do not redo
+0xc7a4b0,UtilitiesMath.cpp,"MATH::screenToWorldRay(Ogre::Camera*, float, float, float, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7a8a0,UtilitiesMath.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc7f2b0,UtilitiesMath.cpp,global constructors keyed to Percentage,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f2c0,UtilitiesMath.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f330,UtilitiesMath.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f3c0,UtilitiesMath.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f450,UtilitiesMath.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f4c0,UtilitiesMath.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f530,UtilitiesMath.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f5c0,UtilitiesMath.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f650,UtilitiesMath.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f6e0,UtilitiesMath.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f750,UtilitiesMath.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc7f7e0,UtilitiesMath.cpp,"MATH::setMeshInformation(Ogre::Mesh*, unsigned long, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long, unsigned long*&, unsigned long, unsigned long, unsigned int*&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long, Ogre::VertexBoneAssignment_s*&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc7fea0,UtilitiesMath.cpp,"MATH::getSubMeshInformation(Ogre::SubMesh const*, bool, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, Ogre::VertexBoneAssignment_s*&, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc808a0,UtilitiesMath.cpp,"MATH::getMeshInformation(Ogre::Mesh const*, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, unsigned int*&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&, unsigned long&, Ogre::VertexBoneAssignment_s*&, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc816a0,Mod.cpp,"CMod::getModFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc817a0,Mod.cpp,"CMod::getModFileAbsolute(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc818a0,Mod.cpp,CMod::~CMod(),MATCH,True,False,,False,already accepted; do not redo
+0xc81ab0,Mod.cpp,CMod::~CMod(),MATCH,True,False,,False,already accepted; do not redo
+0xc81ad0,Mod.cpp,CMod::reloadModFiles(),MISSING,False,False,,False,candidate only; check current owner first
+0xc82880,Mod.cpp,"CMod::CMod(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc83970,ModFileFilter.cpp,CModFileFilter::getSingleton(),MISSING,False,False,,False,candidate only; check current owner first
+0xc83980,ModFileFilter.cpp,CModFileFilter::getNumberOfEnabledMods(),MISSING,False,False,,False,candidate only; check current owner first
+0xc839d0,ModFileFilter.cpp,CModFileFilter::getNumberOfActiveMods(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc83ab0,ModFileFilter.cpp,"CModFileFilter::refreshMod(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc83b40,ModFileFilter.cpp,"CModFileFilter::addNewMod(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc83c80,ModFileFilter.cpp,CModFileFilter::saveModFile(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xc84440,ModFileFilter.cpp,CModFileFilter::refreshAllMods(),MISSING,False,False,,False,candidate only; check current owner first
+0xc844a0,ModFileFilter.cpp,CModFileFilter::~CModFileFilter(),MISSING,False,False,,False,candidate only; check current owner first
+0xc845c0,ModFileFilter.cpp,CModFileFilter::~CModFileFilter(),MISSING,False,False,,False,candidate only; check current owner first
+0xc845e0,ModFileFilter.cpp,"CModFileFilter::getFilePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, CFileInfo&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc847e0,ModFileFilter.cpp,CModFileFilter::CModFileFilter(),MISSING,False,False,,False,candidate only; check current owner first
+0xc85ec0,ModFileFilter.cpp,"CModFileFilter::getEnabledModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc86140,ModFileFilter.cpp,"CModFileFilter::getModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc86410,ModFileFilter.cpp,"CModFileFilter::getFiles(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xc86b50,OgreUtilities.cpp,"OGRE_UTILITIES::attachEntityToSceneNode(Ogre::Entity*, Ogre::SceneNode*)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86b50.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc86bd0,OgreUtilities.cpp,OGRE_UTILITIES::detachEntityFromParent(Ogre::Entity*),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86bd0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc86c20,OgreUtilities.cpp,OGRE_UTILITIES::removeChildFromParentNode(Ogre::SceneNode*),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86c20.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc86c60,OgreUtilities.cpp,"OGRE_UTILITIES::addChildSceneNode(Ogre::SceneNode*, Ogre::SceneNode*)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/OgreUtilities.cpp/0xc86c60.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc875c0,path.cpp,CPath::Clear(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc87600,path.cpp,CPath::GetPoint(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc87680,path.cpp,CPath::GetPointDistance(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc876b0,path.cpp,CPath::GetSegmentAngle(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc876e0,path.cpp,CPath::GetRadiusLeft(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc87730,path.cpp,CPath::GetRadiusRight(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc87780,path.cpp,"CPath::SetRadiusLeft(unsigned int, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc877a0,path.cpp,"CPath::SetRadiusRight(unsigned int, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc877c0,path.cpp,CPath::GetTweenedRadiusRight(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc878d0,path.cpp,CPath::GetTweenedRadiusLeft(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc879e0,path.cpp,CPath::GetSplinePositionAtDistance(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc87e30,path.cpp,"CPath::GetAngleOverDistance(float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xc87f60,path.cpp,CPath::GetPathSegment(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc88060,path.cpp,CPath::GetPositionAtDistance(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc88250,path.cpp,CPath::ClosePath(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc88300,path.cpp,"CPath::FindNearestPoint(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, float&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xc88880,path.cpp,CPath::~CPath(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc88970,path.cpp,CPath::~CPath(),MATCH,True,False,,False,already accepted; do not redo
+0xc88990,path.cpp,"CPath::CalculatePathWidth(CPath&, CPath&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc88c90,path.cpp,CPath::GetSegmentPerpendicularY(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc88d90,path.cpp,"CPath::AddPoint(Ogre::Vector3 const&, float, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc893b0,path.cpp,CPath::Reverse(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc89550,path.cpp,"CPath::CPath(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, bool, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc896b0,path.cpp,CPath::Resize(unsigned int),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc89880,path.cpp,CPath::CPath(CPath&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8a210,randomizer.cpp,CRandomizer::getOdds(int),MATCH,True,False,,False,already accepted; do not redo
+0xc8a240,randomizer.cpp,"CRandomizer::setChoiceOdds(int, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc8a2c0,randomizer.cpp,CRandomizer::removeChoice(unsigned int),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8a370,randomizer.cpp,global constructors keyed to CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc8a3e0,randomizer.cpp,CRandomizer::setRandomSeed(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0xc8a3f0,randomizer.cpp,CRandomizer::clear(),MATCH,True,False,,False,already accepted; do not redo
+0xc8a470,randomizer.cpp,"CRandomizer::addChoice(int, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc8a600,randomizer.cpp,CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,True,False,,False,already accepted; do not redo
+0xc8a6a0,randomizer.cpp,CRandomizer::computeOdds(),MATCH,True,False,,False,already accepted; do not redo
+0xc8a890,randomizer.cpp,CRandomizer::setRandomizerToNormal(float),MATCH,True,False,,False,already accepted; do not redo
+0xc8a8f0,randomizer.cpp,CRandomizer::getRandom(int&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8aa10,randomizer.cpp,CRandomizer::getRandom(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8ab10,randomizer.cpp,CRandomizer::hasValidChoices(),MATCH,True,False,,False,already accepted; do not redo
+0xc8abf0,CmdLineParser.cpp,"CCmdLineParser::HasCommand(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8acf0,CmdLineParser.cpp,"CCmdLineParser::GetStringParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8ae40,CmdLineParser.cpp,"CCmdLineParser::GetIntParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8af80,CmdLineParser.cpp,"CCmdLineParser::GetFloatParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8b0c0,CmdLineParser.cpp,CCmdLineParser::~CCmdLineParser(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8b160,CmdLineParser.cpp,CCmdLineParser::~CCmdLineParser(),MATCH,True,False,,False,already accepted; do not redo
+0xc8b180,CmdLineParser.cpp,"CCmdLineParser::CCmdLineParser(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8d4f0,CmdLineParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > > >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc8d5f0,StringUtilities.cpp,"STRINGS::firstXCharactersMatch(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8d650,StringUtilities.cpp,"STRINGS::firstXCharactersMatch(wchar_t const*, unsigned int, wchar_t const*, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d6a0,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, wchar_t const*)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d720,StringUtilities.cpp,"STRINGS::StringSizeOfWCharArray(wchar_t const*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8d760,StringUtilities.cpp,"STRINGS::StringSizeOfCharArray(char const*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8d800,StringUtilities.cpp,"STRINGS::StringIsLower(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d860,StringUtilities.cpp,"STRINGS::StringIsLower(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d8c0,StringUtilities.cpp,"STRINGS::StringIsUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d920,StringUtilities.cpp,"STRINGS::StringIsUpper(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8d980,StringUtilities.cpp,"STRINGS::StringConvertToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, wchar_t*, int)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8da10,StringUtilities.cpp,"STRINGS::StringCopyCharArray(char*, unsigned int, char const*)",MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8da10.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8daa0,StringUtilities.cpp,STRINGS::GetValueAsString(bool),MATCH,True,False,,False,already accepted; do not redo
+0xc8daf0,StringUtilities.cpp,"STRINGS::StringConvertToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8dc80,StringUtilities.cpp,"STRINGS::StringConvertUTF8ToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8dc90,StringUtilities.cpp,"STRINGS::StringConvertToUTF8(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8dca0,StringUtilities.cpp,STRINGS::GetValueAsWString(bool),MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8dca0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8dcf0,StringUtilities.cpp,"STRINGS::GetBool(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8dd30,StringUtilities.cpp,"STRINGS::GetBool(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8dd70,StringUtilities.cpp,"STRINGS::GetInt64(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8dd90,StringUtilities.cpp,"STRINGS::GetFloat(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8dd90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8ddb0,StringUtilities.cpp,"STRINGS::GetFloat64(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8ddc0,StringUtilities.cpp,"STRINGS::GetInt64(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc8ddf0,StringUtilities.cpp,"STRINGS::GetInt(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8de20,StringUtilities.cpp,"STRINGS::GetInt(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8de40,StringUtilities.cpp,"STRINGS::GetFloat(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8de40.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8de70,StringUtilities.cpp,"STRINGS::GetFloat64(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8de90,StringUtilities.cpp,"std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.0]",MISSING,False,False,,False,candidate only; check current owner first
+0xc8def0,StringUtilities.cpp,"STRINGS::replaceString(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8def0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8df60,StringUtilities.cpp,"STRINGS::replaceWString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/StringUtilities.cpp/0xc8df60.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc8dfd0,StringUtilities.cpp,"std::basic_iostream<wchar_t, std::char_traits<wchar_t> >::~basic_iostream() [clone .clone.8]",MISSING,False,False,,False,candidate only; check current owner first
+0xc8e030,StringUtilities.cpp,"STRINGS::StringLower(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8e0e0,StringUtilities.cpp,"STRINGS::StringUpper(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8e190,StringUtilities.cpp,"STRINGS::StringUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8e230,StringUtilities.cpp,"STRINGS::StringLower(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8e2e0,StringUtilities.cpp,STRINGS::GetApplicationPath(),MISSING,False,False,,False,candidate only; check current owner first
+0xc8e350,StringUtilities.cpp,STRINGS::StringConvertToNarrow(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xc8e4b0,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >*, std::basic_string<char, std::char_traits<char>, std::allocator<char> >, char const*, char)",MATCH,True,False,,False,already accepted; do not redo
+0xc8e660,StringUtilities.cpp,"STRINGS::StringConvertToWide(char const*, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc8e700,StringUtilities.cpp,"STRINGS::StringConvertToNarrow(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",MATCH,True,False,,False,already accepted; do not redo
+0xc8e810,StringUtilities.cpp,STRINGS::GetValueAsString(int),MISSING,False,False,,False,candidate only; check current owner first
+0xc8ea50,StringUtilities.cpp,"STRINGS::uniqueName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False,candidate only; check current owner first

@@ -1,0 +1,501 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending,instruction
+0xc8ebb0,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8ef50,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, char const*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8f040,StringUtilities.cpp,"STRINGS::StringCopyWCharArray(wchar_t*, unsigned int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MATCH,True,False,,False,already accepted; do not redo
+0xc8f060,StringUtilities.cpp,"STRINGS::TokenizeString(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >*, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, char const*)",MISSING,False,False,,False,candidate only; check current owner first
+0xc8f400,StringUtilities.cpp,"STRINGS::getStringIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const*, unsigned int, unsigned int, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xc8f600,StringUtilities.cpp,"STRINGS::GetArrayValueFloat(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float*, unsigned int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc90060,StringUtilities.cpp,"STRINGS::GetArrayValueFloat(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float*, unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False,candidate only; check current owner first
+0xc90a30,StringUtilities.cpp,STRINGS::GetValueAsString(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc90c50,StringUtilities.cpp,STRINGS::GetValueAsString(double),MISSING,False,False,,False,candidate only; check current owner first
+0xc90e70,StringUtilities.cpp,STRINGS::GetValueAsString(long long),MISSING,False,False,,False,candidate only; check current owner first
+0xc910b0,StringUtilities.cpp,STRINGS::GetValueAsWString(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc913a0,StringUtilities.cpp,STRINGS::GetValueAsWString(int),MISSING,False,False,,False,candidate only; check current owner first
+0xc91690,StringUtilities.cpp,STRINGS::GetValueAsWString(long long),MISSING,False,False,,False,candidate only; check current owner first
+0xc91980,StringUtilities.cpp,STRINGS::GetValueAsWString(double),MISSING,False,False,,False,candidate only; check current owner first
+0xc91c70,StringUtilities.cpp,STRINGS::GetValueAsWString(float),MISSING,False,False,,False,candidate only; check current owner first
+0xc91f60,StringUtilities.cpp,STRINGS::GetValueAsString(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0xc92490,StringUtilities.cpp,"std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_reallocate_map(unsigned long, bool)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc92630,StringUtilities.cpp,"std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::_M_push_back_aux(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc92a50,utilities.cpp,UTILITIES::GetDesktopBPP(void*),MATCH,True,False,,False,already accepted; do not redo
+0xc92a60,utilities.cpp,UTILITIES::getRandState(),MATCH,True,False,,False,already accepted; do not redo
+0xc92a70,utilities.cpp,"UTILITIES::randomBetween(float, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc92b10,utilities.cpp,"UTILITIES::randomIntegerBetween(int, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc92b50,utilities.cpp,"UTILITIES::randomBetweenVolatile(float, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc92bf0,utilities.cpp,"UTILITIES::randomIntegerBetweenVolatile(int, int)",MATCH,True,False,,False,already accepted; do not redo
+0xc92c30,utilities.cpp,UTILITIES::setSeedVolatile(int),MATCH,True,False,,False,already accepted; do not redo
+0xc92c70,utilities.cpp,UTILITIES::setSeed(int),MATCH,True,False,,False,already accepted; do not redo
+0xc92cb0,utilities.cpp,UTILITIES::getAvailableRAM(),MATCH,True,False,,False,already accepted; do not redo
+0xc92cc0,utilities.cpp,UTILITIES::getProcessorSpeed(),MATCH,True,False,,False,already accepted; do not redo
+0xc92cd0,utilities.cpp,"UTILITIES::GetEnvironmentVar(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc92d30,utilities.cpp,UTILITIES::doubleRand(),MATCH,True,False,,False,already accepted; do not redo
+0xc92d90,utilities.cpp,"UTILITIES::VerifyDouble(double, double)",MATCH,True,False,,False,already accepted; do not redo
+0xc92dd0,utilities.cpp,"UTILITIES::VerifyFloat(float, float)",MATCH,True,False,,False,already accepted; do not redo
+0xc92e10,utilities.cpp,"UTILITIES::DecompressNormal(int, int, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0xc92eb0,utilities.cpp,global constructors keyed to UTILITIES::createUniqueGuid(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc93080,utilities.cpp,"UTILITIES::SetClipBoardText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False,already accepted; do not redo
+0xc93100,utilities.cpp,"UTILITIES::ClearQueue(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >&)",MATCH,True,False,,False,already accepted; do not redo
+0xc93210,utilities.cpp,"UTILITIES::ClearQueue(std::queue<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::deque<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&)",MATCH,True,False,,False,already accepted; do not redo
+0xc93320,utilities.cpp,UTILITIES::createUniqueGuid(),MATCH,True,False,,False,already accepted; do not redo
+0xc937f0,utilities.cpp,MTRand::reload(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc938e0,ExecuteSkillProps.cpp,"CExecuteSkillProps::executeSkill(CBaseUnit*, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*, int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc93b10,ExecuteSkillProps.cpp,"CExecuteSkillProps::getSkillStats(CBaseUnit*, int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc93bd0,ExecuteSkillProps.cpp,"CExecuteSkillProps::getSkillDescription(CBaseUnit*, int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc93c90,ExecuteSkillProps.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9b510,ExecuteSkillProps.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9b5a0,ExecuteSkillProps.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9bd40,ExecuteSkillProps.cpp,__tcf_26,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9bdb0,ExecuteSkillProps.cpp,__tcf_25,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9be40,ExecuteSkillProps.cpp,__tcf_24,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9bf60,ExecuteSkillProps.cpp,__tcf_21,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9bfd0,ExecuteSkillProps.cpp,__tcf_20,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9c060,ExecuteSkillProps.cpp,__tcf_19,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c0f0,ExecuteSkillProps.cpp,__tcf_18,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c160,ExecuteSkillProps.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c1d0,ExecuteSkillProps.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c260,ExecuteSkillProps.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c2f0,ExecuteSkillProps.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c360,ExecuteSkillProps.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c3f0,ExecuteSkillProps.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c480,ExecuteSkillProps.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c510,ExecuteSkillProps.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c580,ExecuteSkillProps.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c5f0,ExecuteSkillProps.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c660,ExecuteSkillProps.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c6d0,ExecuteSkillProps.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c760,ExecuteSkillProps.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c7f0,ExecuteSkillProps.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c880,ExecuteSkillProps.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9c8f0,ExecuteSkillProps.cpp,__tcf_22,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9c980,ExecuteSkillProps.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xc9ca10,ExecuteSkillProps.cpp,__tcf_23,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9caa0,ExecuteSkillProps.cpp,CExecuteSkillProps::~CExecuteSkillProps(),MATCH,True,False,,False,already accepted; do not redo
+0xc9cb10,ExecuteSkillProps.cpp,CExecuteSkillProps::~CExecuteSkillProps(),MATCH,True,False,,False,already accepted; do not redo
+0xc9cb30,ExecuteSkillProps.cpp,"CExecuteSkillProps::CExecuteSkillProps(CSkill*, CSkillEvent*, CDataGroup*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xc9cc30,Skill.cpp,CSkill::getSkillRequiredForInvestment(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cc30.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cd40,Skill.cpp,CSkill::getCanStop(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd40.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cd70,Skill.cpp,CSkill::getIsExclusive(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cd90,Skill.cpp,CSkill::getManaCost(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cd90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cdb0,Skill.cpp,CSkill::getRequiresPathable(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdb0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cdd0,Skill.cpp,CSkill::getCanBeInterrupted(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdd0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cdf0,Skill.cpp,CSkill::getManaCostOT(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cdf0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ce10,Skill.cpp,CSkill::getSkillIcon(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce10.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ce30,Skill.cpp,CSkill::getSkillIconInactive(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce30.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ce50,Skill.cpp,CSkill::getName(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce50.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ce70,Skill.cpp,CSkill::getSkillUsageDescription(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ce90,Skill.cpp,CSkill::getDisplayName(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ce90.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ceb0,Skill.cpp,CSkill::getAnimationIndex(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ceb0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9ced0,Skill.cpp,CSkill::getAnimationIndexDW(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9ced0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cef0,Skill.cpp,CSkill::getAnimationIndexLoopInto(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cef0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cf10,Skill.cpp,CSkill::getAnimationIndexLoopEnd(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf10.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cf30,Skill.cpp,CSkill::getChanceToCast(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf30.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cf50,Skill.cpp,CSkill::getAnimationIndexDWLoopInto(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf50.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cf70,Skill.cpp,CSkill::getAnimationSpeedMult(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cf70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cfa0,Skill.cpp,CSkill::getFindTargetAngle(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cfa0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cfc0,Skill.cpp,CSkill::getRange(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cfc0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9cff0,Skill.cpp,CSkill::getRangeMin(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9cff0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d010,Skill.cpp,CSkill::getRandomRange(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d010.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d040,Skill.cpp,CSkill::getRandomRangeMin(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d040.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d060,Skill.cpp,CSkill::getMinimumTime(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d060.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d0d0,Skill.cpp,CSkill::getMasterOwner(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d0d0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d0f0,Skill.cpp,"CSkill::fillOutStatBonuses(float (&) [6], bool, unsigned int)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d0f0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d160,Skill.cpp,CSkill::getOwnerCharacter(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d160.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d190,Skill.cpp,"CSkill::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d190.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d220,Skill.cpp,CSkill::getCoolDown(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d220.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d3c0,Skill.cpp,CSkill::getMaximumDamage(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d3c0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9d420,Skill.cpp,CSkill::getMinimumDamage(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9d420.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9db10,Skill.cpp,CSkill::rollCancelChance(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9db10.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xc9db40,Skill.cpp,CSkill::rollCastChance(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Skill.cpp/0xc9db40.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcd5cf0,SkillParser.cpp,CSkillParser::getSingleton(),MATCH,True,False,,False,already accepted; do not redo
+0xcdb650,SkillParser.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb6c0,SkillParser.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb750,SkillParser.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb7e0,SkillParser.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb870,SkillParser.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb8e0,SkillParser.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdb950,SkillParser.cpp,CSkillParser::clearSkills(),MATCH,True,False,,False,already accepted; do not redo
+0xcdb9c0,SkillParser.cpp,CSkillParser::~CSkillParser(),MATCH,True,False,,False,already accepted; do not redo
+0xcdba40,SkillParser.cpp,CSkillParser::~CSkillParser(),MATCH,True,False,,False,already accepted; do not redo
+0xcdba60,SkillParser.cpp,"CSkillParser::getSkillNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xcdbd20,SkillParser.cpp,"CSkillParser::getSkillData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcdbeb0,SkillParser.cpp,"CSkillParser::getSkill(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcdc070,SkillParser.cpp,"CSkillParser::parseSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xcdc590,SkillParser.cpp,CSkillParser::parseSkills(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcdc840,SkillParser.cpp,CSkillParser::reloadSkills(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcdc860,SkillParser.cpp,CSkillParser::CSkillParser(CResourceSettings*),MATCH,True,False,,False,already accepted; do not redo
+0xcdc8f0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdc990,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcdcab0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xcdcbf0,FileSystem.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CDataGroup*> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xce9ea0,CameraControl.cpp,CCameraControl::getMaxDistanceToDolly(),MATCH,True,False,,False,already accepted; do not redo
+0xce9ec0,CameraControl.cpp,CCameraControl::getDefaultDistanceToDolly(),MATCH,True,False,,False,already accepted; do not redo
+0xce9ee0,CameraControl.cpp,CCameraControl::getSingleton(),MATCH,True,False,,False,already accepted; do not redo
+0xce9ef0,CameraControl.cpp,"CCameraControl::setAspectRatio(ECAMERAS, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xce9fd0,CameraControl.cpp,CCameraControl::setCinematicMode(bool),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcea050,CameraControl.cpp,"CCameraControl::updateGameCamera(float, CResourceManager*, Ogre::Vector3, ECAMERA_STATES)",MISSING,False,False,,False,candidate only; check current owner first
+0xceb230,CameraControl.cpp,"CCameraControl::processInput(void*, CSettings*, CKeyManager*, CMouseManager*, float, bool)",MATCH,True,False,,False,already accepted; do not redo
+0xceb380,CameraControl.cpp,CCameraControl::clearCameraShakes(),MISSING,False,False,,False,candidate only; check current owner first
+0xceb4d0,CameraControl.cpp,"CCameraControl::CCameraControl(Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*)",MATCH,True,False,,False,already accepted; do not redo
+0xceb5d0,CameraControl.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf14c0,CameraControl.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1650,CameraControl.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf16e0,CameraControl.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1770,CameraControl.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1800,CameraControl.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1890,CameraControl.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1900,CameraControl.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1970,CameraControl.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf19e0,CameraControl.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1a70,CameraControl.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1b00,CameraControl.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1b90,CameraControl.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1c00,CameraControl.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1c90,CameraControl.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf1db0,CameraControl.cpp,CCameraControl::~CCameraControl(),MISSING,False,False,,False,candidate only; check current owner first
+0xcf1e60,CameraControl.cpp,CCameraControl::~CCameraControl(),MISSING,False,False,,False,candidate only; check current owner first
+0xcf1e80,CameraShake.cpp,"CCameraShake::update(float, Ogre::Vector3&, Ogre::Vector3&, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf2120,CameraShake.cpp,CCameraShake::CCameraShake(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf21e0,CameraShake.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf7ff0,CameraShake.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8180,CameraShake.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8210,CameraShake.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf82a0,CameraShake.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8330,CameraShake.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf83c0,CameraShake.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8430,CameraShake.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf84a0,CameraShake.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8510,CameraShake.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf85a0,CameraShake.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8630,CameraShake.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf86c0,CameraShake.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8730,CameraShake.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf87c0,CameraShake.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf8850,CameraShake.cpp,"CCameraShake::setCameraShakeName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xcf8940,CameraShake.cpp,CCameraShake::clone(CCameraShake*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xcf89f0,CameraShake.cpp,"CCameraShake::CCameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3, float)",MISSING,False,False,,False,candidate only; check current owner first
+0xcf8b10,CameraShake.cpp,CCameraShake::~CCameraShake(),MISSING,False,False,,False,candidate only; check current owner first
+0xcf8c20,CameraShake.cpp,CCameraShake::~CCameraShake(),MISSING,False,False,,False,candidate only; check current owner first
+0xcf8c40,CameraShake.cpp,"CCameraShake::startCameraShake(Ogre::Vector3 const&, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xcf8ea0,Missile.cpp,CMissile::getCollisionSphereVisible(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ea0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf8eb0,Missile.cpp,CMissile::setCollisionSphereVisible(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8eb0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf8ec0,Missile.cpp,CMissile::getAOESphereVisible(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ec0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf8ed0,Missile.cpp,CMissile::setAOESphereVisible(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8ed0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf8f70,Missile.cpp,CMissile::setRadiusOfMissile(float),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8f70.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf8f80,Missile.cpp,CMissile::setAOERadius(float),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf8f80.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xcf99a0,Missile.cpp,CMissile::getParticleFile(EMISSILE_PARTICLES),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Missile.cpp/0xcf99a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd067c0,MissilePreloader.cpp,CMissilePreloader::getSinglelton(),MATCH,True,False,,False,already accepted; do not redo
+0xd067d0,MissilePreloader.cpp,"CMissilePreloader::notifyOfDeletion(iMissile*, CPositionableObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd068c0,MissilePreloader.cpp,CMissilePreloader::CMissilePreloader(CResourceSettings*),MATCH,True,False,,False,already accepted; do not redo
+0xd06970,MissilePreloader.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd09950,MissilePreloader.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd099e0,MissilePreloader.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd09a70,MissilePreloader.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd09b00,MissilePreloader.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd09b70,MissilePreloader.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd09be0,MissilePreloader.cpp,CMissilePreloader::clearCachedMissiles(),MISSING,False,False,,False,candidate only; check current owner first
+0xd09db0,MissilePreloader.cpp,CMissilePreloader::clear(),MATCH,True,False,,False,already accepted; do not redo
+0xd09e30,MissilePreloader.cpp,CMissilePreloader::~CMissilePreloader(),MATCH,True,False,,False,already accepted; do not redo
+0xd09f10,MissilePreloader.cpp,CMissilePreloader::~CMissilePreloader(),MATCH,True,False,,False,already accepted; do not redo
+0xd09f30,MissilePreloader.cpp,"CMissilePreloader::getMissileNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd0a160,MissilePreloader.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd0a1d0,MissilePreloader.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd0a240,MissilePreloader.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd0a2b0,MissilePreloader.cpp,"CMissilePreloader::getMissileRef(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd0a440,MissilePreloader.cpp,"CMissilePreloader::loadMissile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd0ae50,MissilePreloader.cpp,CMissilePreloader::reloadMissiles(),MISSING,False,False,,False,candidate only; check current owner first
+0xd0b0d0,MissilePreloader.cpp,"CMissilePreloader::createNewMissileRef(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd0b710,MissilePreloader.cpp,CMissilePreloader::cacheMissile(CMissile*),MISSING,False,False,,False,candidate only; check current owner first
+0xd0bbd0,MissilePreloader.cpp,CMissilePreloader::updateMissiles(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd0bca0,MissilePreloader.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CMissile*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd0bd40,MissilePreloader.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, TArrayList<CMissile*>*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd0c700,Quest.cpp,CQuest::getPlayer(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c700.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0c720,Quest.cpp,CQuest::setQuestAcceptDialogInteracted(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c720.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0c770,Quest.cpp,CQuest::caculateRewards(CDataGroup*),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0c770.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0cab0,Quest.cpp,CQuest::getQuestRewardFame(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cab0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0cb40,Quest.cpp,CQuest::getQuestRewardString(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cb40.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0cbe0,Quest.cpp,CQuest::setIsComplete(bool),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0cbe0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd0d810,Quest.cpp,CQuest::destroyIcons(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0d810.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd19710,Quest.cpp,CQuest::getQuestDetails(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd19710.cpp,False,existing Pro source; reconcile and validate before new recovery
+0xd1de30,QuestDialog.cpp,CQuestDialog::dialogIsForNPC(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd1de80,QuestDialog.cpp,CQuestDialog::reinitialize(),MATCH,True,False,,False,already accepted; do not redo
+0xd1de90,QuestDialog.cpp,CQuestDialog::load(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xd1df00,QuestDialog.cpp,CQuestDialog::save(_IO_FILE*),MATCH,True,False,,False,already accepted; do not redo
+0xd1df70,QuestDialog.cpp,CQuestDialog::getDialog(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xd1e050,QuestDialog.cpp,CQuestDialog::giveOrRemoveItems(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd1e170,QuestDialog.cpp,CQuestDialog::cleanUp(),MISSING,False,False,,False,candidate only; check current owner first
+0xd1e2a0,QuestDialog.cpp,CQuestDialog::stopDialogSound(),MATCH,True,False,,False,already accepted; do not redo
+0xd1e2d0,QuestDialog.cpp,CQuestDialog::populate(),MATCH,True,False,,False,already accepted; do not redo
+0xd1e300,QuestDialog.cpp,CQuestDialog::playDialogSound(),MISSING,False,False,,False,candidate only; check current owner first
+0xd1e420,QuestDialog.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24390,QuestDialog.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd244e0,QuestDialog.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24570,QuestDialog.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24600,QuestDialog.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24690,QuestDialog.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24700,QuestDialog.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24790,QuestDialog.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24820,QuestDialog.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd248b0,QuestDialog.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd24940,QuestDialog.cpp,CQuestDialog::CQuestDialog(CQuest*),MISSING,False,False,,False,candidate only; check current owner first
+0xd24d90,QuestDialog.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24e00,QuestDialog.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24e90,QuestDialog.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24f20,QuestDialog.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd24fb0,QuestDialog.cpp,"CQuestDialog::parseDialogTag(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0xd26120,QuestDialog.cpp,CQuestDialog::~CQuestDialog(),MISSING,False,False,,False,candidate only; check current owner first
+0xd26460,QuestDialog.cpp,CQuestDialog::~CQuestDialog(),MISSING,False,False,,False,candidate only; check current owner first
+0xd264a0,QuestManager.cpp,CQuestManager::getSingleton(),MATCH,True,False,,False,already accepted; do not redo
+0xd264b0,QuestManager.cpp,CQuestManager::setPlayer(CPlayer*),MATCH,True,False,,False,already accepted; do not redo
+0xd264c0,QuestManager.cpp,CQuestManager::update(float),MATCH,True,False,,False,already accepted; do not redo
+0xd264d0,QuestManager.cpp,CQuestManager::getPlayerHasQuest(CQuest*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd26520,QuestManager.cpp,CQuestManager::destroyIcons(),MATCH,True,False,,False,already accepted; do not redo
+0xd26560,QuestManager.cpp,CQuestManager::resetQuestManager(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xd265f0,QuestManager.cpp,CQuestManager::getDetailsForQuest(CQuest*),MISSING,False,False,,False,candidate only; check current owner first
+0xd26620,QuestManager.cpp,CQuestManager::giveRewardForQuest(CQuest*),MATCH,True,False,,False,already accepted; do not redo
+0xd26640,QuestManager.cpp,CQuestManager::populate(CLevel*),MATCH,True,False,,False,already accepted; do not redo
+0xd26680,QuestManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2d8e0,QuestManager.cpp,"CQuestManager::getQuestIsActive(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd2d970,QuestManager.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2d9e0,QuestManager.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2da70,QuestManager.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2dbc0,QuestManager.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2dc30,QuestManager.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2dca0,QuestManager.cpp,"CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2dda0,QuestManager.cpp,"CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2df30,QuestManager.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2dfc0,QuestManager.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e050,QuestManager.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e0c0,QuestManager.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e130,QuestManager.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e1c0,QuestManager.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e4e0,QuestManager.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e570,QuestManager.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2e5e0,QuestManager.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd2e670,QuestManager.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd2e700,QuestManager.cpp,"CQuestManager::getQuestNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd2e930,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False,candidate only; check current owner first
+0xd2ebf0,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False,candidate only; check current owner first
+0xd2ec10,QuestManager.cpp,CQuestManager::save(_IO_FILE*),MISSING,False,False,,False,candidate only; check current owner first
+0xd2f020,QuestManager.cpp,"CQuestManager::removeQuest(CQuest*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xd2f2c0,QuestManager.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2f350,QuestManager.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2f3e0,QuestManager.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd2f470,QuestManager.cpp,"CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",MISSING,False,False,,False,candidate only; check current owner first
+0xd2f8a0,QuestManager.cpp,"CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",MISSING,False,False,,False,candidate only; check current owner first
+0xd300e0,QuestManager.cpp,CQuestManager::getQuestForNPC(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd30830,QuestManager.cpp,CQuestManager::getNPCIcon(CCharacter*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd30900,QuestManager.cpp,CQuestManager::calculateNPCIcon(CCharacter*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd31140,QuestManager.cpp,"CQuestManager::getDialogsForNPC(TArrayList<CQuestDialog*>&, CBaseUnit*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xd31410,QuestManager.cpp,CQuestManager::loadQuests(),MISSING,False,False,,False,candidate only; check current owner first
+0xd321f0,QuestManager.cpp,CQuestManager::reloadQuests(),MISSING,False,False,,False,candidate only; check current owner first
+0xd32300,QuestManager.cpp,CQuestManager::CQuestManager(CResourceManager*),MISSING,False,False,,False,candidate only; check current owner first
+0xd32600,QuestManager.cpp,CQuestManager::completeQuest(CQuest*),MISSING,False,False,,False,candidate only; check current owner first
+0xd33150,QuestManager.cpp,"CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0xd339d0,QuestManager.cpp,CQuestManager::resetQuest(CQuest*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd344d0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd345f0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd34730,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd34aa0,QuestRewards.cpp,CQuestRewards::destroyIcons(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd34b30,QuestRewards.cpp,CQuestRewards::rewardPlayer(),MISSING,False,False,,False,candidate only; check current owner first
+0xd34f10,QuestRewards.cpp,CQuestRewards::CQuestRewards(CQuest*),MISSING,False,False,,False,candidate only; check current owner first
+0xd34fa0,QuestRewards.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b180,QuestRewards.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b1f0,QuestRewards.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b280,QuestRewards.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b360,QuestRewards.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b3d0,QuestRewards.cpp,CQuestRewards::~CQuestRewards(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3b550,QuestRewards.cpp,CQuestRewards::~CQuestRewards(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3b8b0,QuestRewards.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b940,QuestRewards.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3b9d0,QuestRewards.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3ba40,QuestRewards.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bab0,QuestRewards.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bb40,QuestRewards.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bbd0,QuestRewards.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bc60,QuestRewards.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bcd0,QuestRewards.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bd60,QuestRewards.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3bdf0,QuestRewards.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd3be80,QuestRewards.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd3bfa0,QuestRewards.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3c030,QuestRewards.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3c0c0,QuestRewards.cpp,CQuestRewards::parseRewardTag(CDataGroup*),MISSING,False,False,,False,candidate only; check current owner first
+0xd3caf0,QuestRewards.cpp,CQuestRewards::calculateRewards(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3d590,QuestRewards.cpp,CQuestRewards::getRewardItems(),MATCH,True,False,,False,already accepted; do not redo
+0xd3d5a0,QuestRewards.cpp,CQuestRewards::getRewardString(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3db90,QuestRewards.cpp,CQuestRewards::reInitializeRewards(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3dc60,QuestUnitData.cpp,CQuestUnitData::getDungeonFloorActiveOn(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3dca0,QuestUnitData.cpp,CQuestUnitData::getDeepestFloor(),MISSING,False,False,,False,candidate only; check current owner first
+0xd3dd20,QuestUnitData.cpp,CQuestUnitData::isComplete(bool),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3dda0,QuestUnitData.cpp,CQuestUnitData::save(_IO_FILE*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3ded0,QuestUnitData.cpp,"CQuestUnitData::spawnUnit(CResourceManager*, Ogre::Vector3 const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd3e050,QuestUnitData.cpp,"CQuestUnitData::spawnChildrenUnits(CResourceManager*, Ogre::Vector3 const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd3e160,QuestUnitData.cpp,CQuestUnitData::createUnit(CLevel*),MISSING,False,False,,False,candidate only; check current owner first
+0xd3e610,QuestUnitData.cpp,CQuestUnitData::CQuestUnitData(CQuest*),MATCH,True,False,,False,already accepted; do not redo
+0xd3e780,QuestUnitData.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd458e0,QuestUnitData.cpp,__tcf_18,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd45950,QuestUnitData.cpp,__tcf_17,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd459c0,QuestUnitData.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd45a50,QuestUnitData.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd45ac0,QuestUnitData.cpp,CQuestUnitData::getIsRandom(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd45fc0,QuestUnitData.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46050,QuestUnitData.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd460e0,QuestUnitData.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46150,QuestUnitData.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd461c0,QuestUnitData.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46250,QuestUnitData.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd462e0,QuestUnitData.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46370,QuestUnitData.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd463e0,QuestUnitData.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46470,QuestUnitData.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46500,QuestUnitData.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46590,QuestUnitData.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd46620,QuestUnitData.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd466b0,QuestUnitData.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd46740,QuestUnitData.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd467d0,QuestUnitData.cpp,CQuestUnitData::~CQuestUnitData(),MISSING,False,False,,False,candidate only; check current owner first
+0xd46b50,QuestUnitData.cpp,CQuestUnitData::~CQuestUnitData(),MISSING,False,False,,False,candidate only; check current owner first
+0xd46b70,QuestUnitData.cpp,"CQuestUnitData::parseDataGroup(CDataGroup*, CDataGroup*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd47530,QuestUnitData.cpp,CQuestUnitData::cleanUpForQuestRemoveall(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xd476b0,QuestUnitData.cpp,CQuestUnitData::getSpawnClassUnitDataLookingFor(),MISSING,False,False,,False,candidate only; check current owner first
+0xd47de0,QuestUnitData.cpp,CQuestUnitData::getBaseUnitDataGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0xd48140,QuestUnitData.cpp,CQuestUnitData::unitPickedUp(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd48800,QuestUnitData.cpp,CQuestUnitData::unitDropped(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd488f0,QuestUnitData.cpp,CQuestUnitData::unitDefeated(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0xd48d00,QuestUnitData.cpp,CQuestUnitData::unitInteracted(CBaseUnit*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd48ea0,QuestUnitData.cpp,CQuestUnitData::populate(CLevel*),MISSING,False,False,,False,candidate only; check current owner first
+0xd493d0,QuestUnitData.cpp,CQuestUnitData::reinitialize(bool),MISSING,False,False,,False,candidate only; check current owner first
+0xd494d0,QuestUnitData.cpp,"CQuestUnitData::load(_IO_FILE*, int)",MISSING,False,False,,False,candidate only; check current owner first
+0xd49670,QuestUnitData.cpp,CQuestUnitData::getUnitName(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd49960,AIFlag.cpp,CAIFlag::update(float),MATCH,True,False,,False,already accepted; do not redo
+0xd49980,AIFlag.cpp,CAIFlag::~CAIFlag(),MATCH,True,False,,False,already accepted; do not redo
+0xd49990,AIFlag.cpp,CAIFlag::~CAIFlag(),MATCH,True,False,,False,already accepted; do not redo
+0xd499b0,AIFlag.cpp,"CAIFlag::CAIFlag(EAIFLAG_TYPES, CAIFlagManager*)",MATCH,True,False,,False,already accepted; do not redo
+0xd49a00,AIFlag.cpp,"global constructors keyed to CAIFlag::CAIFlag(EAIFLAG_TYPES, CAIFlagManager*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd49de0,AIFlag.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd49e70,AIFlag.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd49f00,AIFlag.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd49f90,AIFlag.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd4a020,AIFlagManager.cpp,CAIFlagManager::hasAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd4a050,AIFlagManager.cpp,"CAIFlagManager::updateAIFlag(EAIFLAG_TYPES, float)",MATCH,True,False,,False,already accepted; do not redo
+0xd4a060,AIFlagManager.cpp,CAIFlagManager::flagRemoved(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd4a090,AIFlagManager.cpp,CAIFlagManager::removeAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd4a0f0,AIFlagManager.cpp,CAIFlagManager::flagSet(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd4a1d0,AIFlagManager.cpp,"CAIFlagManager::addAIFlag(EAIFLAG_TYPES, float)",MATCH,True,False,,False,already accepted; do not redo
+0xd4a280,AIFlagManager.cpp,CAIFlagManager::updateAIFlags(float),MATCH,True,False,,False,already accepted; do not redo
+0xd4a340,AIFlagManager.cpp,CAIFlagManager::~CAIFlagManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd4a410,AIFlagManager.cpp,CAIFlagManager::~CAIFlagManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd4a430,AIFlagManager.cpp,"CAIFlagManager::CAIFlagManager(CAIManager*, CCharacter*)",MATCH,True,False,,False,already accepted; do not redo
+0xd4a590,AIFlagManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd4ff90,AIFlagManager.cpp,"global constructors keyed to CAIFlagManager::CAIFlagManager(CAIManager*, CCharacter*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd4ffa0,AIFlagManager.cpp,__tcf_19,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50010,AIFlagManager.cpp,__tcf_18,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50080,AIFlagManager.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd500f0,AIFlagManager.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50180,AIFlagManager.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd501f0,AIFlagManager.cpp,__tcf_21,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50280,AIFlagManager.cpp,__tcf_20,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50310,AIFlagManager.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd503a0,AIFlagManager.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50430,AIFlagManager.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd504a0,AIFlagManager.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50510,AIFlagManager.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd505a0,AIFlagManager.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50630,AIFlagManager.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd506c0,AIFlagManager.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50730,AIFlagManager.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd507c0,AIFlagManager.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50850,AIFlagManager.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd508e0,AIFlagManager.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50970,AIFlagManager.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50a00,AIFlagManager.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50a90,AIFlagManager.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd50b20,AIManager.cpp,CAIManager::getResourceManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd50b30,AIManager.cpp,CAIManager::getLevel(),MATCH,True,False,,False,already accepted; do not redo
+0xd50b50,AIManager.cpp,CAIManager::addFormationUnit(CBaseUnit*),MATCH,True,False,,False,already accepted; do not redo
+0xd50c10,AIManager.cpp,"CAIManager::addAIFlag(EAIFLAG_TYPES, float)",MATCH,True,False,,False,already accepted; do not redo
+0xd50c20,AIManager.cpp,"CAIManager::addAISkill(CAISkill*, float)",MATCH,True,False,,False,already accepted; do not redo
+0xd50c30,AIManager.cpp,CAIManager::hasAISkill(CAISkill*),MATCH,True,False,,False,already accepted; do not redo
+0xd50c40,AIManager.cpp,CAIManager::hasAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd50c50,AIManager.cpp,CAIManager::removeAISkill(CAISkill*),MATCH,True,False,,False,already accepted; do not redo
+0xd50c60,AIManager.cpp,CAIManager::removeAIFlag(EAIFLAG_TYPES),MATCH,True,False,,False,already accepted; do not redo
+0xd50c70,AIManager.cpp,CAIManager::update(float),MATCH,True,False,,False,already accepted; do not redo
+0xd50ce0,AIManager.cpp,CAIManager::~CAIManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd50e30,AIManager.cpp,CAIManager::~CAIManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd50e50,AIManager.cpp,CAIManager::CAIManager(CCharacter*),MATCH,True,False,,False,already accepted; do not redo
+0xd50f70,AIManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd56960,AIManager.cpp,global constructors keyed to CAIManager::CAIManager(CCharacter*),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56970,AIManager.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd569e0,AIManager.cpp,__tcf_19,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56a50,AIManager.cpp,__tcf_18,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56ac0,AIManager.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56b30,AIManager.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56bc0,AIManager.cpp,__tcf_21,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56c50,AIManager.cpp,__tcf_20,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56ce0,AIManager.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56d70,AIManager.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56e00,AIManager.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56e90,AIManager.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56f20,AIManager.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd56f90,AIManager.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57000,AIManager.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57090,AIManager.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57120,AIManager.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd571b0,AIManager.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57220,AIManager.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd572b0,AIManager.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57340,AIManager.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd573d0,AIManager.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd57460,AIManager.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd574f0,AIManager.cpp,CAIManager::initalize(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd57790,AIStatWatcher.cpp,CAIStatWatcher::removeSkill(),MATCH,True,False,,False,already accepted; do not redo
+0xd577f0,AIStatWatcher.cpp,CAIStatWatcher::removeFlag(),MATCH,True,False,,False,already accepted; do not redo
+0xd578c0,AIStatWatcher.cpp,CAIStatWatcher::addSkill(),MATCH,True,False,,False,already accepted; do not redo
+0xd579b0,AIStatWatcher.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd5d970,AIStatWatcher.cpp,"global constructors keyed to CAIStatWatcher::CAIStatWatcher(CDataGroup*, CAIManager*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5d980,AIStatWatcher.cpp,__tcf_19,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5d9f0,AIStatWatcher.cpp,__tcf_18,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5da60,AIStatWatcher.cpp,__tcf_17,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5dad0,AIStatWatcher.cpp,__tcf_16,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5db60,AIStatWatcher.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5dbd0,AIStatWatcher.cpp,CAIStatWatcher::~CAIStatWatcher(),MATCH,True,False,,False,already accepted; do not redo
+0xd5dd70,AIStatWatcher.cpp,CAIStatWatcher::~CAIStatWatcher(),MATCH,True,False,,False,already accepted; do not redo
+0xd5dd90,AIStatWatcher.cpp,__tcf_23,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5de00,AIStatWatcher.cpp,__tcf_22,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5de90,AIStatWatcher.cpp,__tcf_21,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5df20,AIStatWatcher.cpp,__tcf_20,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5dfb0,AIStatWatcher.cpp,__tcf_15,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e040,AIStatWatcher.cpp,__tcf_14,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e0d0,AIStatWatcher.cpp,__tcf_13,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e160,AIStatWatcher.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e1f0,AIStatWatcher.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e260,AIStatWatcher.cpp,__tcf_10,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e2d0,AIStatWatcher.cpp,__tcf_8,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e360,AIStatWatcher.cpp,__tcf_7,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e3f0,AIStatWatcher.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e480,AIStatWatcher.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e4f0,AIStatWatcher.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e580,AIStatWatcher.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e610,AIStatWatcher.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e6a0,AIStatWatcher.cpp,__tcf_9,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e730,AIStatWatcher.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd5e7c0,AIStatWatcher.cpp,"CAIStatWatcher::CAIStatWatcher(CDataGroup*, CAIManager*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd5f920,AIStatWatcher.cpp,CAIStatWatcher::getTargets(TArrayList<CCharacter*>&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd5fde0,AIStatWatcher.cpp,CAIStatWatcher::addFlag(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd600f0,AIStatWatcher.cpp,CAIStatWatcher::update(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0xd603d0,AIStatWatcher.cpp,TArrayList<long long>::~TArrayList(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0xd608f0,EffectsHeader.cpp,parseEffects(),MISSING,False,False,,False,candidate only; check current owner first
+0xd619d0,EffectsHeader.cpp,CheckProcessWasRestarted(),MATCH,True,False,,False,already accepted; do not redo
+0xd619e0,EffectsHeader.cpp,compressAllFiles(),MATCH,True,False,,False,already accepted; do not redo
+0xd619f0,EffectsHeader.cpp,DoRestartProcessFinish(bool),MATCH,True,False,,False,already accepted; do not redo
+0xd61a40,EffectsHeader.cpp,"createSettings(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd6f4e0,ResourceManager.cpp,CResourceManager::getEditorIsRunning(),MISSING,False,False,,False,candidate only; check current owner first
+0xd6f500,ResourceManager.cpp,CResourceManager::getDungeonManager(),MATCH,True,False,,False,already accepted; do not redo
+0xd6f510,ResourceManager.cpp,CResourceManager::getMissilePreloader(),MATCH,True,False,,False,already accepted; do not redo
+0xd6f520,ResourceManager.cpp,"CResourceManager::createMissile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xd6f560,ResourceManager.cpp,CResourceManager::createParticle(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0xd6f5d0,ResourceManager.cpp,CResourceManager::getUnitDataByGuid(long long),MISSING,False,False,,False,candidate only; check current owner first
+0xd6f5f0,ResourceManager.cpp,CResourceManager::getMasterResourceList(),MATCH,True,False,,False,already accepted; do not redo
+0xd6f600,ResourceManager.cpp,"CResourceManager::getGroupByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0xd6f630,ResourceManager.cpp,"CResourceManager::getUnitGuidByDataGroup(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0xd6f670,ResourceManager.cpp,"CResourceManager::ISA(UNITTYPES::EUNITTYPES, UNITTYPES::EUNITTYPES)",MATCH,True,False,,False,already accepted; do not redo

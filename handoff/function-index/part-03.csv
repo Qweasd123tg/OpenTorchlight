@@ -1,0 +1,501 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending,instruction
+0x73fd20,EditorObjectManager.cpp,CEditorObjectManager::EditorSnapObjectsToGround(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x73fd50,EditorObjectManager.cpp,CEditorObjectManager::EditorResetOrientation(),MISSING,False,False,,False,candidate only; check current owner first
+0x73fd70,EditorObjectManager.cpp,CEditorObjectManager::EditorResetScale(),MISSING,False,False,,False,candidate only; check current owner first
+0x73fd90,EditorObjectManager.cpp,CEditorObjectManager::EditorApplyRotationNoise(float),MISSING,False,False,,False,candidate only; check current owner first
+0x73fdb0,EditorObjectManager.cpp,CEditorObjectManager::EditorApplyNormalNoise(float),MISSING,False,False,,False,candidate only; check current owner first
+0x73fdd0,EditorObjectManager.cpp,"CEditorObjectManager::EditorApplyScaleNoise(float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x73fe00,EditorObjectManager.cpp,CEditorObjectManager::EditorUpdate(float),MISSING,False,False,,False,candidate only; check current owner first
+0x73fe50,EditorObjectManager.cpp,CEditorObjectManager::CEditorObjectManager(CResourceManager*),MISSING,False,False,,False,candidate only; check current owner first
+0x740780,EditorObjectManager.cpp,CEditorObjectManager::~CEditorObjectManager(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x740830,EditorObjectManager.cpp,CEditorObjectManager::~CEditorObjectManager(),MATCH,True,False,,False,already accepted; do not redo
+0x740850,EditorObjectManager.cpp,CEditorObjectManager::EditorDeleteAllObjectsInScene(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x740a40,EditorObjectManager.cpp,CEditorObjectManager::EditorObjectCreated(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x740bb0,EditorObjectManager.cpp,"std::_Rb_tree<long long, std::pair<long long const, CEditorBaseObject*>, std::_Select1st<std::pair<long long const, CEditorBaseObject*> >, std::less<long long>, std::allocator<std::pair<long long const, CEditorBaseObject*> > >::_M_erase(std::_Rb_tree_node<std::pair<long long const, CEditorBaseObject*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7411b0,EditorScene.cpp,CEditorScene::clearObjectIndex(),MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x7411b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7411c0,EditorScene.cpp,"CEditorScene::fireEvent(EEDITOR_EVENTS, long long)",MATCH,True,False,,False,already accepted; do not redo
+0x7411d0,EditorScene.cpp,CEditorScene::setEnabled(bool),MATCH,True,False,,False,already accepted; do not redo
+0x741220,EditorScene.cpp,CEditorScene::GetObjectInScene(long long),MATCH,True,False,,False,already accepted; do not redo
+0x741280,EditorScene.cpp,CEditorScene::GetNumberOfObjectsInScene(bool),MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741280.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7412b0,EditorScene.cpp,CEditorScene::GetObjectsCreatedByADescriptor(CDescriptor*),MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x7412b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7412d0,EditorScene.cpp,"saveBinaryGroup(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x741390,EditorScene.cpp,"CEditorScene::canObjectBeSaved(CResourceManager*, CEditorBaseObject*)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741390.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741450,EditorScene.cpp,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x741490,EditorScene.cpp,"CEditorScene::CreateObjectByDescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741490.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741510,EditorScene.cpp,"CEditorScene::GetDescriptorInSceneByName(wchar_t const*, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741510.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741530,EditorScene.cpp,CEditorScene::getNumberOfParticlesUpdating(),MISSING,False,False,,False,candidate only; check current owner first
+0x741620,EditorScene.cpp,CEditorScene::getNumberOfTimelinesUpdating(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x7416b0,EditorScene.cpp,CEditorScene::getNumberOfTimelinesThatDoLoop(),MISSING,False,False,,False,candidate only; check current owner first
+0x741730,EditorScene.cpp,"CEditorScene::setChildrenVisible(long long, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741730.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7417b0,EditorScene.cpp,"CEditorScene::CreateObjectByDescriptor(unsigned int, CEditorBaseObject*, CEditorBaseObject*, bool)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x7417b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741850,EditorScene.cpp,CEditorScene::AddDescriptor(CDescriptor*),MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741850.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741880,EditorScene.cpp,CEditorScene::setActivated(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x741910,EditorScene.cpp,CEditorScene::update(float),MATCH,True,False,,False,already accepted; do not redo
+0x741960,EditorScene.cpp,"CEditorScene::InitScene(CResourceManager*, unsigned int)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741960.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7419e0,EditorScene.cpp,CEditorScene::deleteUnusedDescriptors(),MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x7419e0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x741a00,EditorScene.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74aed0,EditorScene.cpp,"std::basic_ofstream<char, std::char_traits<char> >::basic_ofstream(char const*, std::_Ios_Openmode) [clone .clone.2]",MISSING,False,False,,False,candidate only; check current owner first
+0x74b040,EditorScene.cpp,"CEditorScene::EditorBaseObjectChangedID(CEditorBaseObject*, long long, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x74b130,EditorScene.cpp,CEditorScene::DeleteAllObjectsFromScene(),MISSING,False,False,,False,candidate only; check current owner first
+0x74b2c0,EditorScene.cpp,"rollGroup(CRandomGroup*, TArrayList<CEditorBaseObject*>&, TArrayList<CRandomGroup*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x74b640,EditorScene.cpp,CEditorScene::RemoveObjectInScene(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x74b7d0,EditorScene.cpp,"CEditorScene::getChildren(long long, TArrayList<CEditorBaseObject*>&, CDescriptor*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74b930,EditorScene.cpp,"saveBinaryObjects(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, TArrayList<CEditorBaseObject*>&, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74ba50,EditorScene.cpp,"saveBinaryGroupChildren(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74bbf0,EditorScene.cpp,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CEditorBaseObject*>*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74c110,EditorScene.cpp,"CEditorScene::CreateObjectByDescriptor(CDescriptor*, CEditorBaseObject*, CEditorBaseObject*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x74c3b0,EditorScene.cpp,CEditorScene::DeleteObjectInScene(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x74c660,EditorScene.cpp,"loadObjectByCompressedFile(CEditorScene*, CDescriptorLoadConfiguration&, COgreReader&, CEditorBaseObject*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x74c900,EditorScene.cpp,"rollRandomGroups(CDescriptor*, TArrayList<CEditorBaseObject*>&, bool, CDescriptorLoadConfiguration&)",MISSING,False,False,,False,candidate only; check current owner first
+0x74ce10,EditorScene.cpp,"CEditorScene::loadCompressedLayout(CFileInfo&, TArrayList<CEditorBaseObject*>*, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x74e260,EditorScene.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e2d0,EditorScene.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e340,EditorScene.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e3d0,EditorScene.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e440,EditorScene.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e4b0,EditorScene.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x74e6f0,EditorScene.cpp,"CEditorScene::SaveDescriptionOfSceneAndDescriptors(CDataGroup*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x74e960,EditorScene.cpp,CEditorScene::~CEditorScene(),MISSING,False,False,,False,candidate only; check current owner first
+0x74ead0,EditorScene.cpp,CEditorScene::~CEditorScene(),MISSING,False,False,,False,candidate only; check current owner first
+0x74eaf0,EditorScene.cpp,"CEditorScene::configureGroupsToParse(CEditorBaseObject*, CDataGroup&, TArrayList<CDataGroup*>&, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74eca0,EditorScene.cpp,"CEditorScene::setFileLoaded(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x74eca0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x74ed30,EditorScene.cpp,CEditorScene::CEditorScene(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0x74ef60,EditorScene.cpp,"CEditorScene::merge(CEditorScene*, TArrayList<CEditorBaseObject*>*, long long, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74f100,EditorScene.cpp,"CEditorScene::saveObjectAndChildren(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74f2b0,EditorScene.cpp,"CEditorScene::saveObjectsHavingParent(long long, CDataGroup*, CDescriptorSaveConfiguration*)",MISSING,False,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x74f2b0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x74f340,EditorScene.cpp,CEditorScene::AddDescriptor(wchar_t const*),MISSING,False,False,,False,candidate only; check current owner first
+0x74f420,EditorScene.cpp,"CEditorScene::loadObject(CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74f880,EditorScene.cpp,"CEditorScene::loadObjects(CEditorBaseObject*, CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x74f960,EditorScene.cpp,"CEditorScene::cloneLayout(CEditorScene*, TArrayList<CEditorBaseObject*>*, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0x750180,EditorScene.cpp,"CEditorScene::clone(CEditorScene*, TArrayList<CEditorBaseObject*>*, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7502c0,EditorScene.cpp,"CEditorScene::loadScene(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, TArrayList<CEditorBaseObject*>*, long long, bool, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0x751270,EditorScene.cpp,"CEditorScene::saveCompressedLayout(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x752c70,EditorScene.cpp,"CEditorScene::saveScene(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, TArrayList<CEditorBaseObject*>*)",MISSING,False,False,,False,candidate only; check current owner first
+0x753220,EditorScene.cpp,"CEditorScene::loadScene(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CDataGroup&, TArrayList<CEditorBaseObject*>*, long long, CTimerStatics*)",MISSING,False,False,,False,candidate only; check current owner first
+0x753c70,AllDescriptorsScene.cpp,CPositionableObject::positionUpdated(Ogre::Vector3 const&),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x754520,Equipment.cpp,"Ogre::UTFString::UTFString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7549b0,AllDescriptorsScene.cpp,CAllDescriptorsScene::createDescriptors(),MISSING,False,False,,False,candidate only; check current owner first
+0x754ab0,AllDescriptorsScene.cpp,CAllDescriptorsScene::~CAllDescriptorsScene(),MATCH,True,False,,False,already accepted; do not redo
+0x754ac0,AllDescriptorsScene.cpp,CAllDescriptorsScene::~CAllDescriptorsScene(),MATCH,True,False,,False,already accepted; do not redo
+0x754ae0,AllDescriptorsScene.cpp,CAllDescriptorsScene::CAllDescriptorsScene(),MATCH,True,False,,False,already accepted; do not redo
+0x75e860,AllDescriptorsScene.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x75e8f0,AllDescriptorsScene.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x75e960,AllDescriptorsScene.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x75ec10,LayoutScene.cpp,"CLayoutScene::fireEvent(EEDITOR_EVENTS, long long)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x75ecc0,LayoutScene.cpp,CLayoutScene::createDescriptors(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x75ef00,LayoutScene.cpp,CLayoutScene::~CLayoutScene(),MATCH,True,False,,False,already accepted; do not redo
+0x75ef10,LayoutScene.cpp,CLayoutScene::~CLayoutScene(),MATCH,True,False,,False,already accepted; do not redo
+0x75ef30,LayoutScene.cpp,CLayoutScene::CLayoutScene(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x75ef50,LayoutScene.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7690f0,LayoutScene.cpp,global constructors keyed to CLayoutScene::CLayoutScene(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a600,LayoutScene.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a670,LayoutScene.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a6e0,LayoutScene.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a750,LayoutScene.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a7e0,LayoutScene.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76a850,LayoutScene.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76acb0,ModelViewerScene.cpp,CModelViewerScene::createDescriptors(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x76acf0,ModelViewerScene.cpp,CModelViewerScene::~CModelViewerScene(),MATCH,True,False,,False,already accepted; do not redo
+0x76ad00,ModelViewerScene.cpp,CModelViewerScene::~CModelViewerScene(),MATCH,True,False,,False,already accepted; do not redo
+0x76ad20,ModelViewerScene.cpp,CModelViewerScene::CModelViewerScene(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x76ec60,ModelViewerScene.cpp,global constructors keyed to CModelViewerScene::CModelViewerScene(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x76f370,ModelViewerScene.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76f400,ModelViewerScene.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76f470,ModelViewerScene.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x76f690,ParticleScene.cpp,"CParticleScene::fireEvent(EEDITOR_EVENTS, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x76f7a0,ParticleScene.cpp,CParticleScene::createDescriptors(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x76f8e0,ParticleScene.cpp,CParticleScene::~CParticleScene(),MATCH,True,False,,False,already accepted; do not redo
+0x76f8f0,ParticleScene.cpp,CParticleScene::~CParticleScene(),MATCH,True,False,,False,already accepted; do not redo
+0x76f910,ParticleScene.cpp,CParticleScene::CParticleScene(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x773f60,ParticleScene.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x773ff0,ParticleScene.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x774060,ParticleScene.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7885d0,pov.cpp,CPOV::ExtractOrientationVectors(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x788690,pov.cpp,CPOV::DampContactVelocity(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x788730,pov.cpp,CPOV::DampLateralVelocity(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7887d0,pov.cpp,CPOV::AccelerateUpDown(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x788830,pov.cpp,CPOV::Accelerate(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x788890,pov.cpp,CPOV::AccelerateX(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7888f0,pov.cpp,"CPOV::FlyTo(Ogre::Vector3, Ogre::Vector3)",MATCH,True,False,,False,already accepted; do not redo
+0x7889e0,pov.cpp,CPOV::UpdateFlyingTo(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x788ab0,pov.cpp,CPOV::CapContactVelocity(float),MISSING,False,False,,False,candidate only; check current owner first
+0x788c30,pov.cpp,CPOV::DeactivateMouse(),MATCH,True,False,,False,already accepted; do not redo
+0x788c70,pov.cpp,"CPOV::UpdateMouseInput(void*, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x788f30,pov.cpp,CPOV::~CPOV(),MATCH,True,False,,False,already accepted; do not redo
+0x788f40,pov.cpp,CPOV::~CPOV(),MATCH,True,False,,False,already accepted; do not redo
+0x788f60,pov.cpp,CPOV::CPOV(CSettings&),MATCH,True,False,,False,already accepted; do not redo
+0x789120,pov.cpp,CPOV::UpdateInputs(float),MISSING,False,False,,False,candidate only; check current owner first
+0x789cb0,pov.cpp,"CPOV::Update(float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x789e00,pov.cpp,"CPOV::ResetPOV(bool, float, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x78a2f0,pov.cpp,CPOV::SetOrientation(Ogre::Matrix4 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x78a3b0,pov.cpp,CPOV::SetViewOrientation(Ogre::Matrix4 const&),MISSING,False,False,,False,candidate only; check current owner first
+0x78a500,RefManagerInterpreterFunc.cpp,"CRefManagerInterpreterFunc::GetModelResourceStringByID(CEditorScene*, unsigned int, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x78a580,RefManagerInterpreterFunc.cpp,CRefManagerInterpreterFunc::~CRefManagerInterpreterFunc(),MATCH,True,False,,False,already accepted; do not redo
+0x78a590,RefManagerInterpreterFunc.cpp,CRefManagerInterpreterFunc::~CRefManagerInterpreterFunc(),MATCH,True,False,,False,already accepted; do not redo
+0x78a5b0,RefManagerInterpreterFunc.cpp,CRefManagerInterpreterFunc::CRefManagerInterpreterFunc(),MATCH,True,False,,False,already accepted; do not redo
+0x78ae90,RefManagerInterpreterFunc.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x78af00,RefManagerInterpreterFunc.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x78af90,RefManagerInterpreterFunc.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x78b000,RefManagerInterpreterFunc.cpp,"CRefManagerInterpreterFunc::GetModelResourceIDByString(CEditorScene*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x78b910,StringTranslate.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::_Select1st<std::pair<unsigned int const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x78b9f0,Undo.cpp,CUndo::CUndoData::~CUndoData(),MISSING,False,False,,False,candidate only; check current owner first
+0x78ba50,Undo.cpp,CUndo::CUndoData::~CUndoData(),MISSING,False,False,,False,candidate only; check current owner first
+0x78ba70,Undo.cpp,CUndo::CUndo(),MATCH,True,False,,False,already accepted; do not redo
+0x78baa0,Undo.cpp,"CUndo::AddUndoProperty(CEditorBaseObject*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x78bca0,Undo.cpp,CUndo::~CUndo(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x78bd70,Undo.cpp,CUndo::~CUndo(),MATCH,True,False,,False,already accepted; do not redo
+0x78bd90,Undo.cpp,"CUndo::CUndo(CEditorBaseObject*, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x78be20,Undo.cpp,"CUndo::DoUndoOnProperty(CUndo::CUndoData*, CUndo*)",MISSING,False,False,,False,candidate only; check current owner first
+0x794750,Undo.cpp,global constructors keyed to CUndo::CUndo(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7953d0,Undo.cpp,CUndo::AddNewObject(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x795550,Undo.cpp,"CUndo::DoUndoUndelete(CUndo::CUndoData*, CUndo*)",MISSING,False,False,,False,candidate only; check current owner first
+0x795600,Undo.cpp,CUndo::AddObjectDeleted(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x7957d0,Undo.cpp,"CUndo::DoUndoCreate(CUndo::CUndoData*, CUndo*)",MISSING,False,False,,False,candidate only; check current owner first
+0x795890,Undo.cpp,CUndo::resetPropertiesOnObject(CUndo*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x795970,Undo.cpp,CUndo::DoAsRedo(),MISSING,False,False,,False,candidate only; check current owner first
+0x795a30,Undo.cpp,CUndo::DoAsUndo(),MISSING,False,False,,False,candidate only; check current owner first
+0x795ae0,Undo.cpp,"CUndo::AddUndoProperty(CEditorBaseObject*, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0x795bb0,LogicGroup.cpp,CLogicGroup::GetLogicObjectByIndex(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0x795be0,LogicGroup.cpp,CLogicGroup::GetLogicObjectIndex(CLogicObject*),MATCH,True,False,,False,already accepted; do not redo
+0x795bf0,LogicGroup.cpp,CLogicGroup::AddLogicObject(CLogicObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x795cb0,LogicGroup.cpp,CLogicGroup::AddLogicObject(long long),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x795d60,LogicGroup.cpp,"CLogicGroup::RemoveLogicObjectsLink(unsigned int, unsigned int)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x795db0,LogicGroup.cpp,CLogicGroup::RemoveLogicObjectByIndex(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x795f10,LogicGroup.cpp,CLogicGroup::RemoveLogicObjectsRefingObjectID(long long),MISSING,False,False,,False,candidate only; check current owner first
+0x795fe0,LogicGroup.cpp,CLogicGroup::~CLogicGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0x7960b0,LogicGroup.cpp,CLogicGroup::~CLogicGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0x7960d0,LogicGroup.cpp,CLogicGroup::CLogicGroup(CResourceManager*),MATCH,True,False,,False,already accepted; do not redo
+0x796940,LogicGroup.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7969d0,LogicGroup.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x796a40,LogicGroup.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x796ab0,LogicGroup.cpp,"CLogicGroup::saveLogicGroupToDataGroup(CDataGroup*, std::basic_ofstream<char, std::char_traits<char> >*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x796f30,LogicGroup.cpp,"CLogicGroup::loadLogicGroupToDataGroup(CDataGroup*, COgreReader*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x797b00,LogicGroupDescriptor.cpp,"CLogicGroupDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x797c00,LogicGroupDescriptor.cpp,"CLogicGroupDescriptor::loadAdditionalInfo(CEditorBaseObject*, COgreReader*, CDataGroup*, CDescriptorLoadConfiguration*)",MATCH,True,False,,False,already accepted; do not redo
+0x797c70,LogicGroupDescriptor.cpp,"CLogicGroupDescriptor::saveAdditionalInfo(CEditorBaseObject*, std::basic_ofstream<char, std::char_traits<char> >*, CDataGroup*, CDescriptorSaveConfiguration*)",MATCH,True,False,,False,already accepted; do not redo
+0x797ce0,LogicGroupDescriptor.cpp,CLogicGroupDescriptor::levelActivated(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x797d50,LogicGroupDescriptor.cpp,CLogicGroupDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x797db0,LogicGroupDescriptor.cpp,CLogicGroupDescriptor::~CLogicGroupDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x797dc0,LogicGroupDescriptor.cpp,CLogicGroupDescriptor::~CLogicGroupDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x797de0,LogicGroupDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x79ac20,LogicGroupDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79ac90,LogicGroupDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79ad00,LogicGroupDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79ad70,LogicGroupDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79ae00,LogicGroupDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79ae70,LogicGroupDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x79aee0,LogicGroupDescriptor.cpp,"CLogicGroupDescriptor::CLogicGroupDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0x79b180,LogicLink.cpp,CLogicLink::GetObjectIDInitiatingLink(),MATCH,True,False,,False,already accepted; do not redo
+0x79b1a0,LogicLink.cpp,CLogicLink::GetEventIDForOutput(),MATCH,True,False,,False,already accepted; do not redo
+0x79b1c0,LogicLink.cpp,CLogicLink::GetInputFuncID(),MATCH,True,False,,False,already accepted; do not redo
+0x79b1f0,LogicLink.cpp,CLogicLink::GetOutputFuncID(),MATCH,True,False,,False,already accepted; do not redo
+0x79b220,LogicLink.cpp,CLogicLink::GetObjectLinkingTo(),MATCH,True,False,,False,already accepted; do not redo
+0x79b240,LogicLink.cpp,CLogicLink::GetObjectInitiatingLink(),MATCH,True,False,,False,already accepted; do not redo
+0x79b260,LogicLink.cpp,CLogicLink::~CLogicLink(),MATCH,True,False,,False,already accepted; do not redo
+0x79b2a0,LogicLink.cpp,CLogicLink::~CLogicLink(),MATCH,True,False,,False,already accepted; do not redo
+0x79b2c0,LogicLink.cpp,"CLogicLink::CLogicLink(CEditorScene*, CLogicObject*, CLogicWrapper*, CLogicObject*, CLogicWrapper*)",MATCH,True,False,,False,already accepted; do not redo
+0x79b390,LogicLink.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7a3c20,LogicLink.cpp,"CLogicLink::saveLogicLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a4430,LogicLink.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a44a0,LogicLink.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a4510,LogicLink.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a4580,LogicLink.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a4610,LogicLink.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a4680,LogicLink.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a4ae0,LogicLink.cpp,CLogicLink::saveLogicLinksToDataGroup(CDataGroup*),MISSING,False,False,,False,candidate only; check current owner first
+0x7a4d40,LogicLink.cpp,"CLogicLink::InitiateInputEvent(unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a7610,FileSystem.cpp,Ogre::UTFString::_cleanBuffer() const,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7a7c10,LogicObject.cpp,CLogicObject::GetLogicLinkByIndex(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0x7a7c50,LogicObject.cpp,CLogicObject::RemoveLinkByIndex(unsigned int),MATCH,True,False,,False,already accepted; do not redo
+0x7a7d40,LogicObject.cpp,CLogicObject::RemoveLinksToLogicObject(CLogicObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x7a7e00,LogicObject.cpp,CLogicObject::RemoveLogicLinksRefingObjectID(long long),MISSING,False,False,,False,candidate only; check current owner first
+0x7a7ec0,LogicObject.cpp,CLogicObject::SetXPosition(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7a7ee0,LogicObject.cpp,CLogicObject::SetYPosition(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7a7f00,LogicObject.cpp,"CLogicObject::SetPosition(int, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a7f70,LogicObject.cpp,"CLogicObject::SetSize(int, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a7fa0,LogicObject.cpp,"CLogicObject::saveLogicObjectLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a80a0,LogicObject.cpp,"CLogicObject::AddLogicLink(CLogicWrapper*, CLogicObject*, CLogicWrapper*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a8230,LogicObject.cpp,"CLogicObject::AddLogicLink(unsigned int, CLogicObject*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a82e0,LogicObject.cpp,CLogicObject::GetObject(),MATCH,True,False,,False,already accepted; do not redo
+0x7a8300,LogicObject.cpp,"CLogicObject::saveLogicObjectToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a8380,LogicObject.cpp,CLogicObject::setObjectID(long long),MATCH,True,False,,False,already accepted; do not redo
+0x7a83c0,LogicObject.cpp,"CLogicObject::loadLogicObjectByBinaryFile(CLogicGroup*, COgreReader*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7a8500,LogicObject.cpp,CLogicObject::~CLogicObject(),MISSING,False,False,,False,candidate only; check current owner first
+0x7a8620,LogicObject.cpp,CLogicObject::~CLogicObject(),MISSING,False,False,,False,candidate only; check current owner first
+0x7a8640,LogicObject.cpp,"CLogicObject::CLogicObject(CEditorScene*, long long, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x7a8730,LogicObject.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b18e0,LogicObject.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b1950,LogicObject.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b19c0,LogicObject.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b1a30,LogicObject.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b1ac0,LogicObject.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b1b30,LogicObject.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7b1ba0,LogicObject.cpp,"CLogicObject::loadAndRelinkObjectInFromBinaryFile(CLogicGroup*, COgreReader*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7b20e0,LogicObject.cpp,CLogicObject::saveLogicObjectToDataGroup(CDataGroup*),MISSING,False,False,,False,candidate only; check current owner first
+0x7b2440,LogicObject.cpp,"CLogicObject::loadLogicObjectByDataGroup(CLogicGroup*, CDataGroup*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7b2c70,LogicObject.cpp,CLogicObject::Invoke(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x7b3350,LogicWrapper.cpp,"CLogicWrapper::CLogicWrapper(CDescriptor*, unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MATCH,True,False,,False,already accepted; do not redo
+0x7b61f0,LogicWrapper.cpp,"global constructors keyed to CLogicWrapper::CLogicWrapper(CDescriptor*, unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b64c0,LogicWrapper.cpp,CLogicWrapper::~CLogicWrapper(),MATCH,True,False,,False,already accepted; do not redo
+0x7b6520,LogicWrapper.cpp,CLogicWrapper::~CLogicWrapper(),MATCH,True,False,,False,already accepted; do not redo
+0x7b6540,Timeline.cpp,CTimeline::setDurationModificationTime(float),MATCH,True,False,,False,already accepted; do not redo
+0x7b6580,Timeline.cpp,CTimeline::Pause(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b65b0,Timeline.cpp,"CTimeline::GetProperty(long long, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6680,Timeline.cpp,CTimeline::GetNumberOfPropertiesForObjectInTimeline(long long),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b66e0,Timeline.cpp,"CTimeline::GetNumberOfPointsForAProperty(long long, int, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7b6720,Timeline.cpp,CTimeline::SetEnabled(bool),MATCH,True,False,,False,already accepted; do not redo
+0x7b6730,Timeline.cpp,"CTimeline::GetPropertyPointInterpolationType(long long, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7b6780,Timeline.cpp,"CTimeline::SetPropertyPointValue(long long, int, int, void*, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x7b67f0,Timeline.cpp,"CTimeline::GetPropertyPointTimePercent(long long, int, int, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x7b6820,Timeline.cpp,"CTimeline::GetPropertyPointValue(long long, int, int, unsigned int&)",MATCH,True,False,,False,already accepted; do not redo
+0x7b6870,Timeline.cpp,"CTimeline::SetPropertyPointTimePercent(long long, int, int, float, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x7b68b0,Timeline.cpp,"CTimeline::SetPropertyPointValueByString(long long, int, int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MATCH,True,False,,False,already accepted; do not redo
+0x7b6900,Timeline.cpp,"CTimeline::SetPropertyPointInterpolationType(long long, int, ETIMELINE_INTERP_TYPES)",MATCH,True,False,,False,already accepted; do not redo
+0x7b6930,Timeline.cpp,"CTimeline::RemovePointFromProperty(long long, int, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6960,Timeline.cpp,"CTimeline::AddPointToProperty(long long, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6990,Timeline.cpp,"CTimeline::RemoveProperty(long long, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6a90,Timeline.cpp,CTimeline::RemoveObjectByID(long long),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6bc0,Timeline.cpp,"CTimeline::GetPropertyIDForObjectInTimelineByIndex(long long, int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7b6c70,Timeline.cpp,CTimeline::GetObjectIDInTimelineByIndex(int),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6cd0,Timeline.cpp,CTimeline::resetPropertiesToPercent(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7b6d50,Timeline.cpp,"CTimeline::GetPointIDInTimelinePropertyByIndex(long long, int, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b6d90,Timeline.cpp,"CTimeline::AddProperty(CEditorScene*, long long, int, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b7110,Timeline.cpp,"CTimeline::loadTimelineFromBinaryFile(CEditorScene*, COgreReader*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7b7420,Timeline.cpp,CTimeline::UpdateTimeline(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7b77a0,Timeline.cpp,CTimeline::~CTimeline(),MISSING,False,False,,False,candidate only; check current owner first
+0x7b78c0,Timeline.cpp,CTimeline::~CTimeline(),MISSING,False,False,,False,candidate only; check current owner first
+0x7b78e0,Timeline.cpp,CTimeline::CTimeline(),MATCH,True,False,,False,already accepted; do not redo
+0x7b7990,Timeline.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7baa30,Timeline.cpp,"CTimeline::saveTimelineToBinaryFile(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7baef0,Timeline.cpp,CTimeline::SetTimelinePercentDone(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7bb000,Timeline.cpp,CTimeline::Play_Backwards(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb070,Timeline.cpp,CTimeline::Play(bool),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb0f0,Timeline.cpp,CTimeline::StopToBeginning(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb150,Timeline.cpp,CTimeline::StopToEnd(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb1b0,Timeline.cpp,CTimeline::Stop(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb200,Timeline.cpp,CTimeline::rewindToStart(),MATCH,True,False,,False,already accepted; do not redo
+0x7bb250,Timeline.cpp,CTimeline::fastFowardToEnd(),MATCH,True,False,,False,already accepted; do not redo
+0x7bb2a0,Timeline.cpp,CTimeline::Reset_To_Beginning(),MATCH,True,False,,False,already accepted; do not redo
+0x7bb300,Timeline.cpp,CTimeline::Reset_To_End(),MATCH,True,False,,False,already accepted; do not redo
+0x7bb3d0,Timeline.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb460,Timeline.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb4d0,Timeline.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb5b0,Timeline.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb640,Timeline.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb6b0,Timeline.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bb720,Timeline.cpp,"CTimeline::saveTimelineToDataGroup(CEditorScene*, CDataGroup*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bc0d0,Timeline.cpp,"CTimeline::loadTimelineFromDataGroup(CEditorScene*, CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7bcbd0,Timeline.cpp,"std::_Rb_tree<std::pair<int, bool>, std::pair<std::pair<int, bool> const, CTimelineProperty*>, std::_Select1st<std::pair<std::pair<int, bool> const, CTimelineProperty*> >, std::less<std::pair<int, bool> >, std::allocator<std::pair<std::pair<int, bool> const, CTimelineProperty*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::pair<int, bool> const, CTimelineProperty*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7bcd10,Timeline.cpp,"std::_Rb_tree<std::pair<int, bool>, std::pair<std::pair<int, bool> const, CTimelineProperty*>, std::_Select1st<std::pair<std::pair<int, bool> const, CTimelineProperty*> >, std::less<std::pair<int, bool> >, std::allocator<std::pair<std::pair<int, bool> const, CTimelineProperty*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::pair<int, bool> const, CTimelineProperty*> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7bcfe0,Timeline.cpp,"std::_Rb_tree<std::pair<int, bool>, std::pair<std::pair<int, bool> const, CTimelineProperty*>, std::_Select1st<std::pair<std::pair<int, bool> const, CTimelineProperty*> >, std::less<std::pair<int, bool> >, std::allocator<std::pair<std::pair<int, bool> const, CTimelineProperty*> > >::_M_insert_unique(std::pair<std::pair<int, bool> const, CTimelineProperty*> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7bd090,Timeline.cpp,"std::_Rb_tree<std::pair<int, bool>, std::pair<std::pair<int, bool> const, CTimelineProperty*>, std::_Select1st<std::pair<std::pair<int, bool> const, CTimelineProperty*> >, std::less<std::pair<int, bool> >, std::allocator<std::pair<std::pair<int, bool> const, CTimelineProperty*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::pair<int, bool> const, CTimelineProperty*> >, std::pair<std::pair<int, bool> const, CTimelineProperty*> const&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7bd2a0,TimelineDescriptor.cpp,"CTimelineDescriptor::GetTimelineInterpolationStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd2d0,TimelineDescriptor.cpp,"CTimelineDescriptor::GetTimelineModStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd300,TimelineDescriptor.cpp,"CTimelineDescriptor::GetTimelineInterpolationIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd380,TimelineDescriptor.cpp,"CTimelineDescriptor::GetTimelineModIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd400,TimelineDescriptor.cpp,"CTimelineDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x7bd4f0,TimelineDescriptor.cpp,CTimelineDescriptor::descriptorSceneDeactivated(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x7bd570,TimelineDescriptor.cpp,CTimelineDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x7bd610,TimelineDescriptor.cpp,CTimelineDescriptor::update(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7bd690,TimelineDescriptor.cpp,"CTimelineDescriptor::loadAdditionalInfo(CEditorBaseObject*, COgreReader*, CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd780,TimelineDescriptor.cpp,"CTimelineDescriptor::saveAdditionalInfo(CEditorBaseObject*, std::basic_ofstream<char, std::char_traits<char> >*, CDataGroup*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7bd820,TimelineDescriptor.cpp,CTimelineDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x7bd870,TimelineDescriptor.cpp,CTimelineDescriptor::~CTimelineDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x7bd880,TimelineDescriptor.cpp,CTimelineDescriptor::~CTimelineDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x7bd8a0,TimelineDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7c6af0,TimelineDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c6b60,TimelineDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c6bd0,TimelineDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c6c40,TimelineDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c6cd0,TimelineDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c6d40,TimelineDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7c7080,TimelineDescriptor.cpp,"CTimelineDescriptor::CTimelineDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c82a0,TimelineProperty.cpp,CTimelineProperty::GetFreeIDForPoint(),MISSING,False,False,,False,candidate only; check current owner first
+0x7c82e0,TimelineProperty.cpp,CTimelineProperty::GetTimelinePointIDByIndex(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c8320,TimelineProperty.cpp,CTimelineProperty::GetTimelinePoint(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c8360,TimelineProperty.cpp,CTimelineProperty::GetTimePercentAtPoint(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c83a0,TimelineProperty.cpp,"CTimelineProperty::SetTimePercentAtPoint(int, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c85e0,TimelineProperty.cpp,"CTimelineProperty::DoQuaternion(CTimeline*, float)",MATCH,True,False,,False,already accepted; do not redo
+0x7c85f0,TimelineProperty.cpp,CTimelineProperty::triggerEvent(CTimeline*),MISSING,False,False,,False,candidate only; check current owner first
+0x7c86e0,TimelineProperty.cpp,CTimelineProperty::GetBaseTypeValueAsString(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c8730,TimelineProperty.cpp,"CTimelineProperty::getValueOfLinearPropertyByPercent(unsigned int, double, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c8880,TimelineProperty.cpp,"CTimelineProperty::GetValueAtPoint(int, unsigned int&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c88d0,TimelineProperty.cpp,CTimelineProperty::fillSplineWithData(),MISSING,False,False,,False,candidate only; check current owner first
+0x7c8a10,TimelineProperty.cpp,CTimelineProperty::SetInterpolationType(ETIMELINE_INTERP_TYPES),MISSING,False,False,,False,candidate only; check current owner first
+0x7c8ae0,TimelineProperty.cpp,"CTimelineProperty::SetValueAtPoint(int, void*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c8b30,TimelineProperty.cpp,CTimelineProperty::SetValueOnObject(CTimelineProperty::CTimelinePoint*),MATCH,True,False,,False,already accepted; do not redo
+0x7c8bb0,TimelineProperty.cpp,"CTimelineProperty::SetValueOnObject(void*, unsigned int)",MATCH,True,False,,False,already accepted; do not redo
+0x7c8c40,TimelineProperty.cpp,"CTimelineProperty::DoLinearInterpolation(CTimeline*, float, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c9170,TimelineProperty.cpp,"CTimelineProperty::DoSplineInterpolation(CTimeline*, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c9270,TimelineProperty.cpp,"CTimelineProperty::Update(float, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c95b0,TimelineProperty.cpp,CTimelineProperty::GetValueAtPointAsString(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c9610,TimelineProperty.cpp,CTimelineProperty::RemovePoint(int),MISSING,False,False,,False,candidate only; check current owner first
+0x7c9700,TimelineProperty.cpp,"CTimelineProperty::CTimelineProperty(CTimeline*, CEditorScene*, CDescriptor*, unsigned int, bool, long long)",MATCH,True,False,,False,already accepted; do not redo
+0x7c97c0,TimelineProperty.cpp,CTimelineProperty::AddPoint(),MISSING,False,False,,False,candidate only; check current owner first
+0x7c9960,TimelineProperty.cpp,"CTimelineProperty::CTimelineProperty(CTimeline*, CEditorScene*, CDescriptor*, CDescriptorProp*, long long)",MISSING,False,False,,False,candidate only; check current owner first
+0x7c9a40,TimelineProperty.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ccae0,TimelineProperty.cpp,CTimelineProperty::~CTimelineProperty(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ccb90,TimelineProperty.cpp,CTimelineProperty::~CTimelineProperty(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ccbb0,TimelineProperty.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ccd00,TimelineProperty.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ccd90,TimelineProperty.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7cce00,TimelineProperty.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7cce70,TimelineProperty.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ccf00,TimelineProperty.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ccf70,TimelineProperty.cpp,"CTimelineProperty::SetValueAtPointByString(int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7cd0f0,affix.cpp,"CAffix::fillOutStatBonuses(float (&) [6], bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7cd2b0,affix.cpp,CAffix::setSaves(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd300,affix.cpp,CAffix::setDirection(Ogre::Vector3 const*),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd3d0,affix.cpp,CAffix::effectDeleted(CEffect*),MATCH,True,False,,False,already accepted; do not redo
+0x7cd430,affix.cpp,CAffix::updateAffixDuration(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd470,affix.cpp,CAffix::effectHasDuration(EEFFECT_TYPE),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd500,affix.cpp,CAffix::effectExists(EEFFECT_TYPE),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd570,affix.cpp,CAffix::canBeAppliedToUnitType(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd600,affix.cpp,CAffix::setPercent(char),MISSING,False,False,,False,candidate only; check current owner first
+0x7cd810,affix.cpp,CAffix::setLevel(unsigned int),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7cd890,affix.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d36e0,affix.cpp,CAffix::setOwner(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0x7d3780,affix.cpp,CAffix::setSkillOwner(CSkill*),MISSING,False,False,,False,candidate only; check current owner first
+0x7d3840,affix.cpp,CAffix::clearEffectsFromOwner(),MISSING,False,False,,False,candidate only; check current owner first
+0x7d3970,affix.cpp,CAffix::addEffectsToEffectManager(CEffectManager*),MISSING,False,False,,False,candidate only; check current owner first
+0x7d3bb0,affix.cpp,CAffix::clone(CAffix const*),MISSING,False,False,,False,candidate only; check current owner first
+0x7d4190,affix.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4220,affix.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d47d0,affix.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4860,affix.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d48f0,affix.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4960,affix.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d49d0,affix.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4a60,affix.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4af0,affix.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4b80,affix.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4bf0,affix.cpp,CAffix::getDisplayStats(unsigned int),MISSING,False,False,,False,candidate only; check current owner first
+0x7d4d90,affix.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7d4e20,affix.cpp,CAffix::parseAffixGroup(),MISSING,False,False,,False,candidate only; check current owner first
+0x7d5870,affix.cpp,"CAffix::CAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7d5a80,affix.cpp,CAffix::~CAffix(),MISSING,False,False,,False,candidate only; check current owner first
+0x7d5dd0,affix.cpp,CAffix::~CAffix(),MISSING,False,False,,False,candidate only; check current owner first
+0x7d5df0,affix.cpp,"CAffix::CAffix(CAffix*, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7d64a0,effect.cpp,CEffect::fxShouldPlay(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/effect.cpp/0x7d64a0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7d6570,effect.cpp,"CEffect::playFX(CResourceManager*, Ogre::Vector3 const&)",NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/effect.cpp/0x7d6570.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7dd020,effect.cpp,CEffect::getMaxCaculatedValue(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/effect.cpp/0x7dd020.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7dd030,effect.cpp,CEffect::getMinCaculatedValue(),NOT_IN_CURRENT_REPORT,False,True,handoff/recovered-pass10/snippets/effect.cpp/0x7dd030.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7e95c0,EffectGroupManager.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7e99e0,EffectGroupManager.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7e9a70,EffectGroupManager.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7e9ae0,EffectGroupManager.cpp,"CEffectGroupManager::getAffixNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7e9d10,EffectGroupManager.cpp,CEffectGroupManager::clean(),MATCH,True,False,,False,already accepted; do not redo
+0x7e9ea0,EffectGroupManager.cpp,CEffectGroupManager::~CEffectGroupManager(),MATCH,True,False,,False,already accepted; do not redo
+0x7e9f70,EffectGroupManager.cpp,CEffectGroupManager::~CEffectGroupManager(),MATCH,True,False,,False,already accepted; do not redo
+0x7e9f90,EffectGroupManager.cpp,"CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ea100,EffectGroupManager.cpp,"CEffectGroupManager::rollAndCreateRandomAffixes(unsigned int, unsigned int, unsigned int, TArrayList<CAffix*>&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7ea5f0,EffectGroupManager.cpp,CEffectGroupManager::reload(),MISSING,False,False,,False,candidate only; check current owner first
+0x7eaaf0,EffectGroupManager.cpp,CEffectGroupManager::CEffectGroupManager(wchar_t const*),MATCH,True,False,,False,already accepted; do not redo
+0x7eaca0,EffectGroupManager.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, TArrayList<CAffix*>*>, std::_Select1st<std::pair<unsigned int const, TArrayList<CAffix*>*> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, TArrayList<CAffix*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, TArrayList<CAffix*>*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7eaed0,BaseUnit.cpp,CRandomizer::~CRandomizer(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7eaf30,EffectGroupManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> >*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7eafd0,BaseUnit.cpp,CRandomizer::~CRandomizer(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7eb4c0,EffectManager.cpp,CEffectManager::notifyOfDeletion(CCharacter*),MISSING,False,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7eb4c0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7eb4d0,EffectManager.cpp,CEffectManager::clearAllUnitReferences(),MISSING,False,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7eb4d0.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7eb4e0,EffectManager.cpp,CEffectManager::getEffect(EEFFECT_TYPE),MISSING,False,False,,False,candidate only; check current owner first
+0x7eb580,EffectManager.cpp,CEffectManager::hasEffect(EEFFECT_TYPE),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7eb5f0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7eb7c0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_ACTIVATION, EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7eb9c0,EffectManager.cpp,CEffectManager::hasEffectFromSkill(CSkill const*),MISSING,False,False,,False,candidate only; check current owner first
+0x7eba30,EffectManager.cpp,CEffectManager::clearOutDescriptions(),MISSING,False,False,,False,candidate only; check current owner first
+0x7eba70,EffectManager.cpp,"CEffectManager::removeEffect(CEffect*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7ebbc0,EffectManager.cpp,CEffectManager::recalculateEffects(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ebc60,EffectManager.cpp,CEffectManager::clearOutAffixEffects(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ebcc0,EffectManager.cpp,CEffectManager::addAffixEffectsBackIn(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ebd40,EffectManager.cpp,CEffectManager::clearEffects(bool),MISSING,False,False,,False,candidate only; check current owner first
+0x7ebf30,EffectManager.cpp,CEffectManager::calculateEffectValues(),MISSING,False,False,,False,candidate only; check current owner first
+0x7ec320,EffectManager.cpp,CEffectManager::updateAffixes(float),MISSING,False,False,,False,candidate only; check current owner first
+0x7ec450,EffectManager.cpp,CEffectManager::deleteAffix(CAffix*),MISSING,False,False,,False,candidate only; check current owner first
+0x7ec4f0,EffectManager.cpp,"CEffectManager::addAffix(CAffix*, unsigned int, CBaseUnit*, float)",MISSING,False,False,,False,candidate only; check current owner first
+0x7ec630,EffectManager.cpp,"CEffectManager::cloneAffix(CAffix*, unsigned int, CBaseUnit*, float)",MISSING,False,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7ec630.cpp,False,existing Pro source; reconcile and validate before new recovery
+0x7ec720,EffectManager.cpp,"CEffectManager::addAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int, CBaseUnit*, CResourceManager*, float)",MATCH,True,False,,False,already accepted; do not redo
+0x7ec7a0,EffectManager.cpp,"CEffectManager::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MISSING,False,False,,False,candidate only; check current owner first
+0x7ec990,EffectManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f2930,EffectManager.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f29c0,EffectManager.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f2a30,EffectManager.cpp,CEffectManager::getEffects(TArrayList<CEffect*>*),MISSING,False,False,,False,candidate only; check current owner first
+0x7f2b70,EffectManager.cpp,"CEffectManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f2c30,EffectManager.cpp,"CEffectManager::removeEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f2da0,EffectManager.cpp,"CEffectManager::deleteAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f2f10,EffectManager.cpp,CEffectManager::addNewEffect(CEffect*),MISSING,False,False,,False,candidate only; check current owner first
+0x7f31a0,EffectManager.cpp,"CEffectManager::cloneEffect(CBaseUnit*, CEffect*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f3270,EffectManager.cpp,"CEffectManager::cloneEffects(CBaseUnit*, TArrayList<CEffect*>*)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f32f0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_TYPE, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f34f0,EffectManager.cpp,"CEffectManager::hasEffect(EEFFECT_TYPE, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f35e0,EffectManager.cpp,"CEffectManager::hasEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f36c0,EffectManager.cpp,"CEffectManager::getEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f37f0,EffectManager.cpp,CEffectManager::deleteDeadEffects(),MISSING,False,False,,False,candidate only; check current owner first
+0x7f3b50,EffectManager.cpp,CEffectManager::removeNonSavedEffects(),MISSING,False,False,,False,candidate only; check current owner first
+0x7f4010,EffectManager.cpp,__tcf_12,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7f40a0,EffectManager.cpp,__tcf_11,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x7f4130,EffectManager.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f41c0,EffectManager.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f4250,EffectManager.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f42c0,EffectManager.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f4330,EffectManager.cpp,__tcf_4,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f43c0,EffectManager.cpp,__tcf_3,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f4450,EffectManager.cpp,__tcf_2,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f44e0,EffectManager.cpp,__tcf_1,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f4550,EffectManager.cpp,CEffectManager::~CEffectManager(),MISSING,False,False,,False,candidate only; check current owner first
+0x7f4760,EffectManager.cpp,CEffectManager::~CEffectManager(),MISSING,False,False,,False,candidate only; check current owner first
+0x7f4780,EffectManager.cpp,__tcf_5,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f4810,EffectManager.cpp,"CEffectManager::getVisualDescription(EEFFECT_ACTIVATION, unsigned int, bool, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f58f0,EffectManager.cpp,"CEffectManager::createEffect(CDataGroup*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f5bd0,EffectManager.cpp,"CEffectManager::createEffects(CDataGroup*, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x7f5d50,EffectManager.cpp,CEffectManager::CEffectManager(CBaseUnit*),MISSING,False,False,,False,candidate only; check current owner first
+0x7f5f40,BaseUnit.cpp,CBaseUnit::hasUnitTheme(CUnitTheme*),MATCH,True,False,,False,already accepted; do not redo
+0x7f5fd0,BaseUnit.cpp,CBaseUnit::setSpawnerGuid(long long),MATCH,True,False,,False,already accepted; do not redo
+0x7f5fe0,BaseUnit.cpp,CBaseUnit::getCastsShadows(),MATCH,True,False,,False,already accepted; do not redo
+0x7f5ff0,BaseUnit.cpp,CBaseUnit::getMinBounds(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6010,BaseUnit.cpp,CBaseUnit::getMaxBounds(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6030,BaseUnit.cpp,CBaseUnit::getLocalMinBounds(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6050,BaseUnit.cpp,CBaseUnit::getLocalMaxBounds(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6070,BaseUnit.cpp,CBaseUnit::deactivateUnitInLevel(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6090,BaseUnit.cpp,CBaseUnit::setHighlighted(bool),MATCH,True,False,,False,already accepted; do not redo
+0x7f60e0,BaseUnit.cpp,CBaseUnit::hasUnitTheme(long long),MATCH,True,False,,False,already accepted; do not redo
+0x7f6190,BaseUnit.cpp,"CBaseUnit::removeEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7f61c0,BaseUnit.cpp,"CBaseUnit::hasEffect(EEFFECT_TYPE, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7f61e0,BaseUnit.cpp,CBaseUnit::hasEffect(EEFFECT_TYPE),MATCH,True,False,,False,already accepted; do not redo
+0x7f6200,BaseUnit.cpp,"CBaseUnit::hasEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7f6220,BaseUnit.cpp,"CBaseUnit::getEffectValue(EEFFECT_TYPE, float, EDAMAGE_TYPES)",MATCH,True,False,,False,already accepted; do not redo
+0x7f6240,BaseUnit.cpp,"CBaseUnit::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7f6260,BaseUnit.cpp,"CBaseUnit::getEffectValue(EEFFECT_ACTIVATION, EEFFECT_TYPE, float, EDAMAGE_TYPES)",MATCH,True,False,,False,already accepted; do not redo
+0x7f6280,BaseUnit.cpp,"CBaseUnit::removeAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7f62a0,BaseUnit.cpp,CBaseUnit::ISA(UNITTYPES::EUNITTYPES),MATCH,True,False,,False,already accepted; do not redo
+0x7f62d0,BaseUnit.cpp,CBaseUnit::getIsQuestUnit(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6300,BaseUnit.cpp,CBaseUnit::addToAvoidanceMap(CLevel&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f65b0,BaseUnit.cpp,CBaseUnit::removeFromAvoidanceMap(CLevel&),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f6850,BaseUnit.cpp,"CBaseUnit::broadcastHPThreshholdEvents(float, float, float, float)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7f6970,BaseUnit.cpp,CBaseUnit::broadcastAlerted(),MATCH,True,False,,False,already accepted; do not redo
+0x7f69a0,BaseUnit.cpp,CBaseUnit::broadcastKilled(),MATCH,True,False,,False,already accepted; do not redo
+0x7f69d0,BaseUnit.cpp,CBaseUnit::setCastsShadows(bool),MATCH,True,False,,False,already accepted; do not redo
+0x7f6a40,BaseUnit.cpp,CBaseUnit::activateUnitInLevel(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6a80,BaseUnit.cpp,CBaseUnit::broadcastUnitState(EUNIT_STATES),MATCH,True,False,,False,already accepted; do not redo
+0x7f6ab0,BaseUnit.cpp,"CBaseUnit::questEventFire(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",MATCH,True,False,,False,already accepted; do not redo
+0x7f6ae0,BaseUnit.cpp,CBaseUnit::levelResetting(),MATCH,True,False,,False,already accepted; do not redo
+0x7f6b10,BaseUnit.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7fea30,BaseUnit.cpp,"CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7fecf0,BaseUnit.cpp,"CBaseUnit::addAffix(CAffix*, unsigned int, CBaseUnit*, float)",MATCH,True,False,,False,already accepted; do not redo
+0x7fedb0,BaseUnit.cpp,"CBaseUnit::addAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int, CBaseUnit*, float)",MATCH,True,False,,False,already accepted; do not redo
+0x7fee70,BaseUnit.cpp,CBaseUnit::~CBaseUnit(),MATCH,True,False,,False,already accepted; do not redo
+0x7feff0,BaseUnit.cpp,CBaseUnit::~CBaseUnit(),MATCH,True,False,,False,already accepted; do not redo
+0x7ff010,BaseUnit.cpp,"CBaseUnit::addSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MATCH,True,False,,False,already accepted; do not redo
+0x7ff0d0,BaseUnit.cpp,CBaseUnit::addNewEffect(CEffect*),MATCH,True,False,,False,already accepted; do not redo
+0x7ff190,BaseUnit.cpp,"CBaseUnit::copyEffect(CBaseUnit*, CEffect*)",MATCH,True,False,,False,already accepted; do not redo
+0x7ff260,BaseUnit.cpp,"CBaseUnit::copyEffects(CBaseUnit*, TArrayList<CEffect*> const*)",MATCH,True,False,,False,already accepted; do not redo
+0x7ff2d0,BaseUnit.cpp,CBaseUnit::cloneSkill(CSkill*),MATCH,True,False,,False,already accepted; do not redo
+0x7ff390,BaseUnit.cpp,"CBaseUnit::hasUnitTheme(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7ff5d0,BaseUnit.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ff660,BaseUnit.cpp,__tcf_0,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x7ff6d0,BaseUnit.cpp,"CBaseUnit::update(Ogre::Camera*, Ogre::Vector3 const&, float)",MATCH,True,False,,False,already accepted; do not redo
+0x7ffb70,BaseUnit.cpp,CBaseUnit::removeUnitTheme(CUnitTheme*),MATCH,True,False,,False,already accepted; do not redo
+0x7ffd60,BaseUnit.cpp,"CBaseUnit::removeUnitTheme(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False,already accepted; do not redo
+0x7ffe50,BaseUnit.cpp,CBaseUnit::removeUnitTheme(long long),MATCH,True,False,,False,already accepted; do not redo
+0x7fff00,BaseUnit.cpp,CBaseUnit::updateCullingBounds(),DIFF,True,False,,False,already accepted; do not redo
+0x800a20,BaseUnit.cpp,CBaseUnit::addUnitTheme(CUnitTheme*),MATCH,True,False,,False,already accepted; do not redo
+0x800ca0,BaseUnit.cpp,CBaseUnit::setEditorThemeID(unsigned int),MATCH,True,False,,False,already accepted; do not redo

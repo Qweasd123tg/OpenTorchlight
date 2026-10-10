@@ -1,0 +1,501 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending,instruction
+0x613810,MonsterDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x613880,MonsterDescriptor.cpp,"CMonsterDescriptor::getMonsterIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x613ae0,MonsterDescriptor.cpp,CMonsterDescriptor::ReloadMonsters(),MISSING,False,False,,False,candidate only; check current owner first
+0x614920,MonsterDescriptor.cpp,"CMonsterDescriptor::CMonsterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x617830,MonsterDescriptor.cpp,"CMonsterDescriptor::getPathStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x617970,MonsterDescriptor.cpp,"CMonsterDescriptor::getPathIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x617ae0,MonsterDescriptor.cpp,"CMonsterDescriptor::getMonsterStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x619250,PathControllerDescriptor.cpp,"CPathControllerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x619260,PathControllerDescriptor.cpp,"CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6192c0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x619330,PathControllerDescriptor.cpp,CPathControllerDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6193e0,PathControllerDescriptor.cpp,CPathControllerDescriptor::DescriptorObjectCreatedInEditor(CEditorBaseObject*),MATCH,True,False,,False,already accepted; do not redo
+0x619420,PathControllerDescriptor.cpp,CPathControllerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x619480,PathControllerDescriptor.cpp,CPathControllerDescriptor::~CPathControllerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x619490,PathControllerDescriptor.cpp,CPathControllerDescriptor::~CPathControllerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6194b0,PathControllerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x61c590,PathControllerDescriptor.cpp,"global constructors keyed to CPathControllerDescriptor::CPathControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c5a0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x61c5e0,PathControllerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c650,PathControllerDescriptor.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x61c6e0,PathControllerDescriptor.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x61c770,PathControllerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c7e0,PathControllerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c850,PathControllerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c8c0,PathControllerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c950,PathControllerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61c9c0,PathControllerDescriptor.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x61ca50,PathControllerDescriptor.cpp,"CPathControllerDescriptor::CPathControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x61dc10,PathControllerDescriptor.cpp,"CPathControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x61df60,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setVisible(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61df80,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61dfa0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setEnableUnitOnStart(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61dfb0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setUnitRunsOnPath(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61dfc0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setWalkToPlayer(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e050,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Get_getWalkToPlayer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e080,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Get_getUnitRunsOnPath(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e0b0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e0e0,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Get_getEnableUnitOnStart(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e140,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Get_getNumberOfPathPoints(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e160,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setNumberOfPathPoints(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e460,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setUnitInteractWith(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e500,PathControllerDescriptor.cpp,"CPathControllerDescriptor::Set_setPathName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x61e5a0,PathNodeDescriptor.cpp,CPathNodeDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x61e600,PathNodeDescriptor.cpp,CPathNodeDescriptor::~CPathNodeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x61e610,PathNodeDescriptor.cpp,CPathNodeDescriptor::~CPathNodeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x61e630,PathNodeDescriptor.cpp,"CPathNodeDescriptor::CPathNodeDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,True,False,,False,already accepted; do not redo
+0x61e680,PathNodeDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x621530,PathNodeDescriptor.cpp,"global constructors keyed to CPathNodeDescriptor::CPathNodeDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621540,PathNodeDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6215b0,PathNodeDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621620,PathNodeDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621690,PathNodeDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621720,PathNodeDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621790,PathNodeDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x621890,PositionableObjectDescriptor.cpp,CPositionableObjectDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x6218a0,PositionableObjectDescriptor.cpp,"CPositionableObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x621900,PositionableObjectDescriptor.cpp,"CPositionableObjectDescriptor::loadAdditionalInfo(CEditorBaseObject*, COgreReader*, CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x621990,PositionableObjectDescriptor.cpp,CPositionableObjectDescriptor::~CPositionableObjectDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6219a0,PositionableObjectDescriptor.cpp,CPositionableObjectDescriptor::~CPositionableObjectDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6219c0,PositionableObjectDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x624880,PositionableObjectDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6248f0,PositionableObjectDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x624960,PositionableObjectDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6249f0,PositionableObjectDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x624a60,PositionableObjectDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x624ad0,PositionableObjectDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x624bd0,PositionableObjectDescriptor.cpp,"CPositionableObjectDescriptor::CPositionableObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*, bool, bool, bool, bool, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x6257a0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::getPropertyNodeTypeString(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x6257d0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::getPropertyNodeTypeByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x625840,PropertyNodeDescriptor.cpp,CPropertyNodeDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x6258a0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x625910,PropertyNodeDescriptor.cpp,CPropertyNodeDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x625990,PropertyNodeDescriptor.cpp,CPropertyNodeDescriptor::~CPropertyNodeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6259a0,PropertyNodeDescriptor.cpp,CPropertyNodeDescriptor::~CPropertyNodeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6259c0,PropertyNodeDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d480,PropertyNodeDescriptor.cpp,global constructors keyed to CPropertyNodeDescriptor::CPropertyNodeDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62d490,PropertyNodeDescriptor.cpp,__tcf_7,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d500,PropertyNodeDescriptor.cpp,__tcf_16,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d570,PropertyNodeDescriptor.cpp,__tcf_15,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d600,PropertyNodeDescriptor.cpp,__tcf_14,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d670,PropertyNodeDescriptor.cpp,__tcf_13,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d6e0,PropertyNodeDescriptor.cpp,__tcf_11,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d770,PropertyNodeDescriptor.cpp,__tcf_10,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d800,PropertyNodeDescriptor.cpp,__tcf_9,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d890,PropertyNodeDescriptor.cpp,__tcf_8,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62d900,PropertyNodeDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62d970,PropertyNodeDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62d9e0,PropertyNodeDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62da50,PropertyNodeDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62dae0,PropertyNodeDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62db50,PropertyNodeDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62dbc0,PropertyNodeDescriptor.cpp,__tcf_6,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62dc50,PropertyNodeDescriptor.cpp,__tcf_12,DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62dce0,PropertyNodeDescriptor.cpp,CPropertyNodeDescriptor::CPropertyNodeDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62e5a0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Set_setScaleX(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e5c0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Set_setScaleZ(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e5e0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Set_setRadius(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e600,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e620,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e650,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Get_getScaleZ(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e680,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Get_getScaleX(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e6b0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Get_getRadius(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e6e0,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Get_getPropertyNodeType(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e700,PropertyNodeDescriptor.cpp,"CPropertyNodeDescriptor::Set_setPropertyNodeType(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x62e720,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getDungeonIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x62e730,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getDungeonStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x62e7b0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::setDifficultyStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62e870,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::GetRandomGroupTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x62e8a0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getDifficultyIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x62e920,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getPlayerClassStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x62e990,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x62ea50,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62eab0,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x62eb50,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::descriptorSceneLoaded(CEditorScene*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x62ec00,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x62ec60,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::~CRandomGroupDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x62ec70,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::~CRandomGroupDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x62ec90,RandomGroupDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x636870,RandomGroupDescriptor.cpp,global constructors keyed to CRandomGroupDescriptor::CRandomGroupDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x636880,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::GetRandomGroupTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x636f40,RandomGroupDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x636fb0,RandomGroupDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x637020,RandomGroupDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x637090,RandomGroupDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x637120,RandomGroupDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x637190,RandomGroupDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6373b0,RandomGroupDescriptor.cpp,CRandomGroupDescriptor::CRandomGroupDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x638ac0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x638bb0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::getPlayerClassIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x638d40,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setVisible(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638d60,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setIsDynamicGroup(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638d70,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_SetRandomWeight(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638d90,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_SetNumberOfPicks(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638da0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setDifficulty(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638db0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_getDifficulty(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638dd0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_GetRandomType(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638df0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_GetNumberOfPicks(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638e10,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_GetRandomWeight(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638e40,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_getIsDynamicGroup(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638e70,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_getVisible(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638ea0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_SetRandomType(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638ec0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_getPlayerClassName(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x638f40,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Get_getDungeonForGroup(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6393d0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setQuestHasToBeActive(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x639470,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setQuestNotComplete(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x639510,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setQuestHasToBeComplete(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6395b0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setQuestHasToBeActiveOrComplete(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x639650,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setQuestCannotBeActiveOrComplete(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6396f0,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setPlayerClassName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x639790,RandomGroupDescriptor.cpp,"CRandomGroupDescriptor::Set_setDungeonForGroup(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x639830,RoomDescriptor.cpp,CRoomDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x639890,RoomDescriptor.cpp,CRoomDescriptor::~CRoomDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6398a0,RoomDescriptor.cpp,CRoomDescriptor::~CRoomDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6398c0,RoomDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x63c6f0,RoomDescriptor.cpp,global constructors keyed to CRoomDescriptor::CRoomDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c700,RoomDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c770,RoomDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c7e0,RoomDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c850,RoomDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c8e0,RoomDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c950,RoomDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63c9c0,RoomDescriptor.cpp,CRoomDescriptor::CRoomDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x63cd70,RoomDescriptor.cpp,"CRoomDescriptor::saveObject(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False,candidate only; check current owner first
+0x63d020,RoomDescriptor.cpp,"CRoomDescriptor::Get_getMeshFileCreatedDynamically(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63d0a0,RoomDescriptor.cpp,"CRoomDescriptor::Get_getSceneOverrideFile(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63d120,RoomDescriptor.cpp,"CRoomDescriptor::Set_setMeshFileCreatedDynamically(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63d1c0,RoomDescriptor.cpp,"CRoomDescriptor::Set_setSceneOverrideFile(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x63d260,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MATCH,True,False,,False,already accepted; do not redo
+0x63d270,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::GetRoomPieceVisualIndexStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x63d310,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::GetRoomPieceVisualIndexIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x63d380,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::update(float),MISSING,False,False,,False,candidate only; check current owner first
+0x63d3f0,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x63d400,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x63d460,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::~CRoomPieceDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x63d470,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::~CRoomPieceDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x63d490,RoomPieceDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x645eb0,RoomPieceDescriptor.cpp,global constructors keyed to CRoomPieceDescriptor::CRoomPieceDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x646870,RoomPieceDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6468e0,RoomPieceDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x646950,RoomPieceDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6469c0,RoomPieceDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x646a50,RoomPieceDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x646ac0,RoomPieceDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x646c50,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::CRoomPieceDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x647d70,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setCollisionEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647d80,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setVisibleOnMap(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647d90,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScale(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647db0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleX(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647dd0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleY(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647df0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleZ(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647e10,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleZ(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647e40,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleY(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647e70,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleX(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647ed0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getVisualIndex(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647ef0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getVisibleOnMap(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x647f20,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getCollisionEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x648300,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnDirectionStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x648330,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnShapeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x648360,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnOrderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x648390,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnOrderIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x648410,ShapeDescriptor.cpp,CShapeDescriptor::~CShapeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x648420,ShapeDescriptor.cpp,CShapeDescriptor::~CShapeDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x648440,ShapeDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x64c050,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnDirectionIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x64c0d0,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnShapeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x64c2e0,ShapeDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64c350,ShapeDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64c3c0,ShapeDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64c430,ShapeDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64c4c0,ShapeDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64c530,ShapeDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x64cc40,ShapeDescriptor.cpp,"CShapeDescriptor::CShapeDescriptor(wchar_t const*, wchar_t const*, wchar_t const*, bool, bool, bool)",MISSING,False,False,,False,candidate only; check current owner first
+0x64df70,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::descriptorSceneDeactivated(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x64dff0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundDataStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x64e070,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundDataIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x64e0d0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundCategoryIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x64e100,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::update(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x64e180,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x64e1e0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x64e290,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x64e3a0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::~CSoundObjectDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x64e3b0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::~CSoundObjectDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x64e3d0,SoundObjectDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x651280,SoundObjectDescriptor.cpp,global constructors keyed to CSoundObjectDescriptor::CSoundObjectDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x651290,SoundObjectDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x651300,SoundObjectDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x651390,SoundObjectDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x651400,SoundObjectDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x651470,SoundObjectDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6514e0,SoundObjectDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6515e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundCategoryStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x6516b0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::CSoundObjectDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6523e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Set_setSoundBankCategory(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6523f0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundBankNameIndex(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x652410,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundBankCategory(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6524b0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getEnvironmental(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6524e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundStartsOnActivated(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x652510,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Set_setSoundBankNameIndex(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x652700,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::descriptorSceneLoaded(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x652710,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x652740,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x652790,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::update(float),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x652810,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x652850,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6528f0,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::CreateObject(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x652950,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::~CUnitSpawnerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x652960,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::~CUnitSpawnerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x652980,UnitSpawnerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x65b0b0,UnitSpawnerDescriptor.cpp,global constructors keyed to CUnitSpawnerDescriptor::CUnitSpawnerDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65b0c0,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x65b8c0,UnitSpawnerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65b930,UnitSpawnerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65b9a0,UnitSpawnerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65ba10,UnitSpawnerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65baa0,UnitSpawnerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65bb10,UnitSpawnerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x65bb80,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x65c410,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::CUnitSpawnerDescriptor(),DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x65e3e0,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x65f220,CounterDescriptor.cpp,"CCounterDescriptor::GetCounterTypeTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x65f250,CounterDescriptor.cpp,"CCounterDescriptor::GetCounterTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x65f2d0,CounterDescriptor.cpp,"CCounterDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x65f360,CounterDescriptor.cpp,CCounterDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x65f3b0,CounterDescriptor.cpp,CCounterDescriptor::~CCounterDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x65f3c0,CounterDescriptor.cpp,CCounterDescriptor::~CCounterDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x65f3e0,CounterDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x662330,CounterDescriptor.cpp,"global constructors keyed to CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662340,CounterDescriptor.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6623d0,CounterDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662440,CounterDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6624b0,CounterDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662520,CounterDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6625b0,CounterDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662620,CounterDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662690,CounterDescriptor.cpp,"CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x662dc0,CounterDescriptor.cpp,"CCounterDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662dd0,CounterDescriptor.cpp,"CCounterDescriptor::Set_setCount(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662e10,CounterDescriptor.cpp,"CCounterDescriptor::Get_getStartingValue(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662e30,CounterDescriptor.cpp,"CCounterDescriptor::Get_getCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662e50,CounterDescriptor.cpp,"CCounterDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x662e90,InteractiveDescriptor.cpp,"CInteractiveDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x662ea0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x662eb0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x662f00,InteractiveDescriptor.cpp,"CInteractiveDescriptor::getTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x662f30,InteractiveDescriptor.cpp,"CInteractiveDescriptor::getTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False,already accepted; do not redo
+0x662f50,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x662f70,InteractiveDescriptor.cpp,CInteractiveDescriptor::update(float),MATCH,True,False,,False,already accepted; do not redo
+0x662ff0,InteractiveDescriptor.cpp,CInteractiveDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x663050,InteractiveDescriptor.cpp,CInteractiveDescriptor::~CInteractiveDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x663060,InteractiveDescriptor.cpp,CInteractiveDescriptor::~CInteractiveDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x663080,InteractiveDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x666190,InteractiveDescriptor.cpp,"global constructors keyed to CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x666350,InteractiveDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6663c0,InteractiveDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x666430,InteractiveDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6664a0,InteractiveDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x666530,InteractiveDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6665a0,InteractiveDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x666610,InteractiveDescriptor.cpp,"CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6670a0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x667690,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::update(float),MATCH,True,False,,False,already accepted; do not redo
+0x667710,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x6677b0,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x667810,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::~CLogicTimerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x667820,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::~CLogicTimerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x667840,LogicTimerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x66a670,LogicTimerDescriptor.cpp,"global constructors keyed to CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a680,LogicTimerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a6f0,LogicTimerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a760,LogicTimerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a7d0,LogicTimerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a840,LogicTimerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a8b0,LogicTimerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66a940,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x66b1e0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Set_setLoopForever(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b1f0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b250,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getLoopForever(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b270,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getLoopCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b290,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getMaxTimer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b2b0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getTimer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b2d0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66b2f0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x66b360,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x66b3c0,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::~COutputIncrementorDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x66b3d0,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::~COutputIncrementorDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x66b3f0,OutputIncrementorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x66e220,OutputIncrementorDescriptor.cpp,"global constructors keyed to COutputIncrementorDescriptor::COutputIncrementorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e230,OutputIncrementorDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e2a0,OutputIncrementorDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e330,OutputIncrementorDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e3a0,OutputIncrementorDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e410,OutputIncrementorDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e480,OutputIncrementorDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66e4f0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::COutputIncrementorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,True,False,,False,already accepted; do not redo
+0x66ec50,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Set_setLoopForever(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66ec60,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66ec80,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getLoopForever(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66eca0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getLoopCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66ecc0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getMaxIncrement(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66ece0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x66ed00,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x66ee20,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x66ee80,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::~CPuzzleRandomizerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x66ee90,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::~CPuzzleRandomizerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x66eeb0,PuzzleRandomizerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x671ce0,PuzzleRandomizerDescriptor.cpp,"global constructors keyed to CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671cf0,PuzzleRandomizerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671d60,PuzzleRandomizerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671df0,PuzzleRandomizerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671e60,PuzzleRandomizerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671ed0,PuzzleRandomizerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671f40,PuzzleRandomizerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x671fb0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6723a0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6723b0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Set_setActiveInputs(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6723d0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Get_getActiveInputs(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6723f0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x672410,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::GetChoiceTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x672450,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::GetChoiceTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x6724e0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x672520,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x672570,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::~CRandomChoiceDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x672580,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::~CRandomChoiceDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6725a0,RandomChoiceDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x675450,RandomChoiceDescriptor.cpp,"global constructors keyed to CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x675460,RandomChoiceDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6754d0,RandomChoiceDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x675540,RandomChoiceDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6755b0,RandomChoiceDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x675640,RandomChoiceDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6756b0,RandomChoiceDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x675720,RandomChoiceDescriptor.cpp,__tcf_6,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6757b0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x676550,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x676690,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Get_getCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6766d0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x676700,TeleportDescriptor.cpp,"CTeleportDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x676830,TeleportDescriptor.cpp,CTeleportDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x676890,TeleportDescriptor.cpp,CTeleportDescriptor::~CTeleportDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6768a0,TeleportDescriptor.cpp,CTeleportDescriptor::~CTeleportDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6768c0,TeleportDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x679a80,TeleportDescriptor.cpp,"global constructors keyed to CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679a90,TeleportDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679b00,TeleportDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679b70,TeleportDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679be0,TeleportDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679c70,TeleportDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679ce0,TeleportDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x679f90,TeleportDescriptor.cpp,"CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x67a1c0,TeleportDescriptor.cpp,"CTeleportDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67a1e0,TeleportDescriptor.cpp,"CTeleportDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67a210,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x67a270,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::~CTriggerBoxDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x67a280,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::~CTriggerBoxDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x67a2a0,TriggerBoxDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x67d150,TriggerBoxDescriptor.cpp,"global constructors keyed to CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d160,TriggerBoxDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d1d0,TriggerBoxDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d240,TriggerBoxDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d2d0,TriggerBoxDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d340,TriggerBoxDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d3b0,TriggerBoxDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x67d4b0,TriggerBoxDescriptor.cpp,"CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x67d6e0,TriggerDescriptor.cpp,CTriggerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x67d6f0,TriggerDescriptor.cpp,"CTriggerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x67d770,TriggerDescriptor.cpp,CTriggerDescriptor::update(float),MISSING,False,False,,False,candidate only; check current owner first
+0x67d800,TriggerDescriptor.cpp,CTriggerDescriptor::~CTriggerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x67d810,TriggerDescriptor.cpp,CTriggerDescriptor::~CTriggerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x67d830,TriggerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x6806e0,TriggerDescriptor.cpp,"global constructors keyed to CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6806f0,TriggerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x680760,TriggerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6807d0,TriggerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x680860,TriggerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6808d0,TriggerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x680940,TriggerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x680a40,TriggerDescriptor.cpp,"CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x680cf0,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x680d50,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::~CTriggerSphereDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x680d60,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::~CTriggerSphereDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x680d80,TriggerSphereDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x683c30,TriggerSphereDescriptor.cpp,"global constructors keyed to CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683c40,TriggerSphereDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683cb0,TriggerSphereDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683d20,TriggerSphereDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683db0,TriggerSphereDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683e20,TriggerSphereDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683e90,TriggerSphereDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x683f90,TriggerSphereDescriptor.cpp,"CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x684180,TriggerSphereDescriptor.cpp,"CTriggerSphereDescriptor::Get_getRadius(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6841a0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::update(float),MATCH,True,False,,False,already accepted; do not redo
+0x6841b0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetLoopTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x6841e0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x684270,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False,candidate only; check current owner first
+0x6843c0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x684450,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MISSING,False,False,,False,candidate only; check current owner first
+0x6844a0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::CreateObject(CEditorScene*),MISSING,False,False,,False,candidate only; check current owner first
+0x684500,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::~CUnitTriggerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x684510,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::~CUnitTriggerDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x684530,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::AddInputsAndOutputs(CDescriptor*),MISSING,False,False,,False,candidate only; check current owner first
+0x6845d0,UnitTriggerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x68c5f0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetLoopTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68cef0,UnitTriggerDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68cf60,UnitTriggerDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68cfd0,UnitTriggerDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68d040,UnitTriggerDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68d0d0,UnitTriggerDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68d140,UnitTriggerDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x68d1b0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getItemIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68d550,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68d630,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::CUnitTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68e280,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetTriggerModelIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68e500,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getItemStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68e740,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetTriggerModelStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False,candidate only; check current owner first
+0x68ef20,WarperDescriptor.cpp,"CWarperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x68ef90,WarperDescriptor.cpp,CWarperDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x68eff0,WarperDescriptor.cpp,CWarperDescriptor::~CWarperDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x68f000,WarperDescriptor.cpp,CWarperDescriptor::~CWarperDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x68f020,WarperDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x691ed0,WarperDescriptor.cpp,"global constructors keyed to CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x691ee0,WarperDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x691f50,WarperDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x691fc0,WarperDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692030,WarperDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x6920c0,WarperDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692130,WarperDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692230,WarperDescriptor.cpp,"CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x692c60,WarperDescriptor.cpp,"CWarperDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692c80,WarperDescriptor.cpp,"CWarperDescriptor::Set_setLevelDelta(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692c90,WarperDescriptor.cpp,"CWarperDescriptor::Set_setLevelDepth(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692ca0,WarperDescriptor.cpp,"CWarperDescriptor::Set_setWaypoint(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692cb0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getWaypoint(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692ce0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getWarpName(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692d60,WarperDescriptor.cpp,"CWarperDescriptor::Get_getDungeon(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692de0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getLevelDepth(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692e00,WarperDescriptor.cpp,"CWarperDescriptor::Get_getLevelDelta(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692e20,WarperDescriptor.cpp,"CWarperDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692e50,WarperDescriptor.cpp,"CWarperDescriptor::Set_setWarpName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692ef0,WarperDescriptor.cpp,"CWarperDescriptor::Set_setDungeon(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x692f90,AffectorDescriptor.cpp,CAffectorDescriptor::deleteNotification(),MATCH,True,False,,False,already accepted; do not redo
+0x693000,AffectorDescriptor.cpp,"CAffectorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False,already accepted; do not redo
+0x6930c0,AffectorDescriptor.cpp,CAffectorDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MATCH,True,False,,False,already accepted; do not redo
+0x6930e0,AffectorDescriptor.cpp,CAffectorDescriptor::~CAffectorDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6930f0,AffectorDescriptor.cpp,CAffectorDescriptor::~CAffectorDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x693110,AffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x696a00,AffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696a70,AffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696ae0,AffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696b50,AffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696be0,AffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696c50,AffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x696f70,AffectorDescriptor.cpp,"CAffectorDescriptor::CAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False,candidate only; check current owner first
+0x697780,AlignDescriptor.cpp,CAlignDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False,already accepted; do not redo
+0x6977e0,AlignDescriptor.cpp,CAlignDescriptor::~CAlignDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x6977f0,AlignDescriptor.cpp,CAlignDescriptor::~CAlignDescriptor(),MATCH,True,False,,False,already accepted; do not redo
+0x697810,AlignDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False,existing implementation; inspect before rewriting
+0x69aed0,AlignDescriptor.cpp,global constructors keyed to CAlignDescriptor::CAlignDescriptor(),MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x69afe0,AlignDescriptor.cpp,__tcf_5,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x69b050,AlignDescriptor.cpp,__tcf_4,MATCH,False,False,,False,existing MATCH outside game counter; do not redo
+0x69b0c0,AlignDescriptor.cpp,__tcf_3,MATCH,False,False,,False,existing MATCH outside game counter; do not redo

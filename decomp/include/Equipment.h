@@ -82,7 +82,7 @@ public:
     int getDexterityRequirement(CCharacter*);
     int getStrengthRequirement(CCharacter*);
     int getLevelRequirement(CCharacter*);
-    long long canEnchant();
+    bool canEnchant();
     void removeAffixesThatDontSupportUnitType(UNITTYPES::EUNITTYPES);
     void addContainerItem(CEquipment*);
     bool canUseOnTarget(CCharacter*, CBaseUnit*);
