@@ -354,3 +354,66 @@ __attribute__((flatten)) void CSkillMenu::update(float elapsed)
         if(window->getParent())window->getParent()->removeChildWindow(window);
     }
 }
+
+#include "SoundBank.h"
+void CSkillMenu::setOwner(CCharacter* owner) { m_pOwner=owner; }
+bool CSkillMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) m_Data3A=1;
+ return true;
+}
+void CSkillMenu::clearSkillTooltip() { m_bSkillHovered=false; m_HoveredSkillGuid=-1; }
+bool CSkillMenu::handle_MouseThrough(const CEGUI::EventArgs&) {
+ m_bSkillHovered=false; m_HoveredSkillGuid=-1; return false;
+}
+bool CSkillMenu::processInput(void*,float,bool active) {
+ if(active && m_Data3A) {setOpen(false);m_Data3A=0;return false;}
+ return true;
+}
+bool CSkillMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* w=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(w) {long long guid=*static_cast<long long*>(w->getUserData());m_bSkillHovered=true;m_HoveredSkillGuid=guid;}
+ return true;
+}
+bool CSkillMenu::handle_MouseOut(const CEGUI::EventArgs&) {return true;}
+bool CSkillMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ CEGUI::Window* w=mouse.window;
+ if(mouse.button==CEGUI::LeftButton && w) return onClick(*static_cast<ELayoutFunction*>(w->getUserData()));
+ return true;
+}
+bool CSkillMenu::onClick(ELayoutFunction action) {
+ if(m_bOpenPartial) {
+  switch(action) {
+  case static_cast<ELayoutFunction>(65): {
+   m_iPane=1;m_Panes[0]->setVisible(false);m_Panes[1]->setVisible(true);m_Panes[2]->setVisible(false);
+   m_Tabs[0]->setSelected(false);m_Tabs[1]->setSelected(true);m_Tabs[2]->setSelected(false);updateLayout();
+   break;
+  }
+  case static_cast<ELayoutFunction>(66): {
+   m_iPane=2;m_Panes[0]->setVisible(false);m_Panes[1]->setVisible(false);m_Panes[2]->setVisible(true);
+   m_Tabs[0]->setSelected(false);m_Tabs[1]->setSelected(false);m_Tabs[2]->setSelected(true);updateLayout();
+   break;
+  }
+  case static_cast<ELayoutFunction>(64): {
+   m_iPane=0;m_Panes[0]->setVisible(true);m_Panes[1]->setVisible(false);m_Panes[2]->setVisible(false);
+   m_Tabs[0]->setSelected(true);m_Tabs[1]->setSelected(false);m_Tabs[2]->setSelected(false);updateLayout();
+   break;
+  }
+  default: break;
+  }
+ }
+ return true;
+}
+bool CSkillMenu::handle_SpendSkill(const CEGUI::EventArgs& event) {
+ CEGUI::Window* w=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(w) {
+  CSkillManager* manager=skill_layout::actor(m_pOwner).manager;
+  CSkill* skill=manager->getSkillByGuid(*static_cast<long long*>(w->getUserData()));
+  if(skill && m_pOwner->spendSkillPoint()) {
+   manager->setSkillLevel(skill,skill_layout::fields(skill).baseLevel+1);
+   m_pSoundBank->playSample(27,0,0.0f,0.0f,false);
+  }
+  m_HoveredSkillGuid=-1;
+ }
+ return true;
+}

@@ -62,6 +62,9 @@ extern "C" char backFn[] __asm__("_ZN5CEGUI6Window10moveToBackEv");
 extern "C" char removeFn[] __asm__("_ZN5CEGUI6Window17removeChildWindowEPS0_");
 extern "C" char destroyFn[] __asm__("_ZN5CEGUI13WindowManager13destroyWindowEPNS_6WindowE");
 extern "C" char clipFn[] __asm__("_ZN5CEGUI6Window18setClippedByParentEb");
+TL_FUNCTION(callbackOverFn,"_ZN10CSkillMenu16handle_MouseOverERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callbackOutFn,"_ZN10CSkillMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callbackSpendFn,"_ZN10CSkillMenu17handle_SpendSkillERKN5CEGUI9EventArgsE")
 namespace {
 struct Case {unsigned mode,scale,flags,mutate,existing;};
 autotest::Capture* cap;const Case* input;CSkillMenu* menu;CGameUI* ui[2];CSkill* skill[8];CCharacter* owner;CSkillManager* manager;CStringTranslate* translator;
@@ -88,7 +91,15 @@ void tooltip(CEGUI::Window* p,const CEGUI::String& s){n(13);n(id(p));str(s);}
 void text(CEGUI::Window* p,const CEGUI::String& s){n(14);n(id(p));str(s);}
 void multi(CEGUI::Window* p,bool b){n(16);n(id(p));n(b);p->d_wantsMultiClicks=b;}
 std::string convert(const std::wstring& s){n(17);cap->addText(s);return input->mode==15?"converted \xce\xa9":"converted label";}
-CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber subscriber){n(20);n(id(static_cast<CEGUI::Window*>(p)));str(name);CEGUI::MemberFunctionSlot<CSkillMenu>* slot=static_cast<CEGUI::MemberFunctionSlot<CSkillMenu>*>(subscriber.d_functor_impl);cap->add(&slot->d_function,sizeof(slot->d_function));n(slot->d_object==menu);if(connections==128)_exit(42);unsigned active=0;for(unsigned i=0;i<connections;++i)active+=refs[i]-1;n(active);unsigned k=connections++;refs[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)bound[k];result.d_count=&refs[k];return result;}
+// Only translate known original/replacement callback identities; retain this-adjustment.
+void captureCallback(const CEGUI::MemberFunctionSlot<CSkillMenu>* slot){
+ intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
+ std::memcpy(words,&slot->d_function,sizeof(words));
+ char* pairs[][2]={{callbackOverFn_original,callbackOverFn_linked},{callbackOutFn_original,callbackOutFn_linked},{callbackSpendFn_original,callbackSpendFn_linked}};
+ for(unsigned i=0;i<3;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
+ cap->add(words,sizeof(words));
+}
+CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber subscriber){n(20);n(id(static_cast<CEGUI::Window*>(p)));str(name);CEGUI::MemberFunctionSlot<CSkillMenu>* slot=static_cast<CEGUI::MemberFunctionSlot<CSkillMenu>*>(subscriber.d_functor_impl);captureCallback(slot);n(slot->d_object==menu);if(connections==128)_exit(42);unsigned active=0;for(unsigned i=0;i<connections;++i)active+=refs[i]-1;n(active);unsigned k=connections++;refs[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)bound[k];result.d_count=&refs[k];return result;}
 void back(CEGUI::Window* p){n(21);n(id(p));}
 void remove(CEGUI::Window* p,CEGUI::Window* q){n(22);n(id(p));n(id(q));q->d_parent=0;}
 void destroy(CEGUI::WindowManager*,CEGUI::Window* p){n(23);n(id(p));}
@@ -163,6 +174,6 @@ TL_TEST(skill_layout_differential){
  for(unsigned mode=0;mode<32;++mode)for(unsigned scale=0;scale<8;++scale)for(unsigned flags=0;flags<2;++flags)for(unsigned mutate=0;mutate<2;++mutate)for(unsigned existing=0;existing<2;++existing){
  Case c={mode,scale,flags,mutate,existing*2};autotest::Outcome x,y;autotest::runChild(a,&c,x);autotest::runChild(b,&c,y);int pair=coverage.observe(host,x,y);++total;
  bool ok=pair==0&&!autotest::incomplete(x)&&!autotest::incomplete(y)&&x.reportValid&&y.reportValid&&x.childStatus==0&&y.childStatus==0&&x.capture.length==y.capture.length&&!memcmp(x.capture.data,y.capture.data,x.capture.length);
- if(!ok){size_t first=0;while(first<x.capture.length&&first<y.capture.length&&x.capture.data[first]==y.capture.data[first])++first;host->log("    mode %u scale %u flags %u mutate %u existing %u: status %d/%d bytes %lu/%lu first %lu\n",mode,scale,flags,mutate,c.existing,x.childStatus,y.childStatus,(unsigned long)x.capture.length,(unsigned long)y.capture.length,(unsigned long)first);for(size_t i=first>40?first-40:0;i<first+80&&i+4<=x.capture.length&&i+4<=y.capture.length;i+=4){int u,v;memcpy(&u,x.capture.data+i,4);memcpy(&v,y.capture.data+i,4);host->log("      %lu %d/%d\n",(unsigned long)i,u,v);}return 1;}
+ if(!ok){size_t first=0;while(first<x.capture.length&&first<y.capture.length&&x.capture.data[first]==y.capture.data[first])++first;host->log("    mode %u scale %u flags %u mutate %u existing %u: status %d/%d bytes %lu/%lu first %lu\n",mode,scale,flags,mutate,c.existing,x.childStatus,y.childStatus,(unsigned long)x.capture.length,(unsigned long)y.capture.length,(unsigned long)first);for(size_t i=first>40?first-40:0;i<first+80&&i+4<=x.capture.length&&i+4<=y.capture.length;i+=4){int u,v;memcpy(&u,x.capture.data+i,4);memcpy(&v,y.capture.data+i,4);host->log("      %lu %d/%d\n",(unsigned long)i,u,v);}coverage.report(host);return 1;}
  }coverage.report(host);host->log("    skill layout: %u cases\n",total);return 0;
 }
