@@ -64,6 +64,7 @@ extern "C" char destroyFn[] __asm__("_ZN5CEGUI13WindowManager13destroyWindowEPNS
 extern "C" char clipFn[] __asm__("_ZN5CEGUI6Window18setClippedByParentEb");
 TL_FUNCTION(callbackOverFn,"_ZN10CSkillMenu16handle_MouseOverERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callbackOutFn,"_ZN10CSkillMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callbackSetFn,"_ZN10CSkillMenu15handle_SetSkillERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callbackSpendFn,"_ZN10CSkillMenu17handle_SpendSkillERKN5CEGUI9EventArgsE")
 namespace {
 struct Case {unsigned mode,scale,flags,mutate,existing;};
@@ -95,8 +96,8 @@ std::string convert(const std::wstring& s){n(17);cap->addText(s);return input->m
 void captureCallback(const CEGUI::MemberFunctionSlot<CSkillMenu>* slot){
  intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
  std::memcpy(words,&slot->d_function,sizeof(words));
- char* pairs[][2]={{callbackOverFn_original,callbackOverFn_linked},{callbackOutFn_original,callbackOutFn_linked},{callbackSpendFn_original,callbackSpendFn_linked}};
- for(unsigned i=0;i<3;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
+ char* pairs[][2]={{callbackOverFn_original,callbackOverFn_linked},{callbackOutFn_original,callbackOutFn_linked},{callbackSpendFn_original,callbackSpendFn_linked},{callbackSetFn_original,callbackSetFn_linked}};
+ for(unsigned i=0;i<4;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
  cap->add(words,sizeof(words));
 }
 CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber subscriber){n(20);n(id(static_cast<CEGUI::Window*>(p)));str(name);CEGUI::MemberFunctionSlot<CSkillMenu>* slot=static_cast<CEGUI::MemberFunctionSlot<CSkillMenu>*>(subscriber.d_functor_impl);captureCallback(slot);n(slot->d_object==menu);if(connections==128)_exit(42);unsigned active=0;for(unsigned i=0;i<connections;++i)active+=refs[i]-1;n(active);unsigned k=connections++;refs[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)bound[k];result.d_count=&refs[k];return result;}

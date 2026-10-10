@@ -42,6 +42,7 @@ class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
     void setActiveSkill(CSkill*,bool);
+    void setActiveSkillByName(std::wstring);
     void setLeftSkillByName(std::wstring);
     bool performingAttackLoose();
     void toggleSecondaryWeaponSet();
