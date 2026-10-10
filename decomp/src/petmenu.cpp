@@ -1145,3 +1145,49 @@ bool CPetMenu::onClick(ELayoutFunction action) {
  }
  return true;
 }
+
+#include "SoundBank.h"
+void CPetMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick") && !window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CPetMenu::handle_onClick,this));
+ }catch(...) {}
+}
+void CPetMenu::setOpen(bool open) {
+ if(open&&m_pCharacter&&(pet_update::actor(m_pCharacter).category==41||pet_update::actor(m_pCharacter).category==42))return;
+ if(!m_bOpenPartial&&open) {
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);
+  float width=static_cast<float>(m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH));
+  float height=static_cast<float>(m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT));
+  m_pPetModel->setVisible(true);
+  if(m_pPetModel->animationPlaying("CLOSE"))m_pPetModel->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pPetModel->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pPetModel->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pParent->addChildWindow(m_pBackground);m_pBackground->moveToBack();
+  static_cast<CEGUI::RadioButton*>(m_pBackpackTab)->setSelected(true);
+  static_cast<CEGUI::RadioButton*>(m_pSpellsTab)->setSelected(false);
+  static_cast<CEGUI::RadioButton*>(m_pFishTab)->setSelected(false);
+  m_pBackpackSlots->setVisible(true);m_pSpellsSlots->setVisible(false);m_pFishSlots->setVisible(false);
+  m_iCurrentTab=0;m_pBackground->moveToBack();m_pForeground48->moveToFront();m_pPanel->moveToFront();
+  if(!m_pViewport) {
+   Ogre::Viewport* viewport=m_pRenderWindow->addViewport(m_pWardrobeCamera,4,0.0f,0.0f,1.0f,1.0f);m_pViewport=viewport;
+   float left=(m_fPanelX+m_pGameUI->scaledY(97.0f))/width;
+   float span=m_pGameUI->scaledY(166.0f)/width;
+   if(left<0.0f){span=pet_update::maxSecond(span+left,1.0f/width+0.0f);left=0.0f;}
+   float h=m_pGameUI->scaledY(135.0f);float top=m_pGameUI->scaledY(169.0f);
+   m_pViewport->setDimensions(left,top/height,span,h/height);
+   m_pViewport->setBackgroundColour(Ogre::ColourValue(0.0f,0.0f,0.0f,1.0f));
+   m_pViewport->setClearEveryFrame(true,3);
+   m_pWardrobeCamera->setAspectRatio(static_cast<float>(viewport->getActualWidth())/static_cast<float>(viewport->getActualHeight()));
+   viewport->setCamera(m_pWardrobeCamera);
+  }
+  m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(15));
+ }else if(m_bOpenPartial&&!open) {
+  if(m_pSkillTooltip&&m_pSkillTooltip->m_pWindow->getParent())m_pSkillTooltip->m_pWindow->getParent()->removeChildWindow(m_pSkillTooltip->m_pWindow);
+  m_pSoundBank->playSample(66,0,0.0f,0.0f,false);
+  m_pPetModel->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);m_bFullyClosed=false;
+ }
+ m_bOpenPartial=open;if(open)updateLayout();
+}
