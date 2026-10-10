@@ -53,6 +53,7 @@
 #include "iInventoryListener.h"
 #include "GameUI.h"
 #include "EmptyStrings.h"
+#include "TArrayList.h"
 
 // Collaborators used only by pointer in this class.
 class CBaseUnit;
@@ -264,7 +265,10 @@ public:
     int m_iUnknown3454;                                   // +0x3454  [B]
     int m_iUnknown3458;                                   // +0x3458  [B]
     unsigned char m_Gap345C[0x04];                        // +0x345c  [B]
-    unsigned char m_Gap3460[0x18];                        // +0x3460 .. end 0x3478  [B]
+    // +0x3460: ctor initializes data/count/capacity and grow-by 10;
+    // D1 and constructor unwind delete[] the data. The element type remains
+    // unknown; byte storage represents only this proven ownership/layout.
+    TArrayList<unsigned char> m_UnknownList3460;
 };
 
 // ----------------------------------------------------------------------------
