@@ -916,3 +916,147 @@ __attribute__((flatten)) void CInventoryMenu::update(float elapsed)
         if(window->getParent())window->getParent()->removeChildWindow(window);
     }
 }
+
+#include "Character.h"
+#include "Inventory.h"
+namespace inventory_controls {
+struct UIFocus {char prefix[0xb8];CBaseUnit* unit;};
+struct HoverState {char prefix[0x198];bool flag198;};
+struct ActorFields {char prefix[0x70e];bool secondary;};
+inline __attribute__((always_inline)) CBaseUnit* focused(CGameUI* ui){return reinterpret_cast<UIFocus*>(ui)->unit;}
+inline __attribute__((always_inline)) bool secondary(CCharacter* p){return reinterpret_cast<ActorFields*>(p)->secondary;}
+}
+void CInventoryMenu::inventoryDestroyed() {}
+
+bool CInventoryMenu::handle_ItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window) {
+  int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_ClickedSlot=slot;
+  else if(mouse.button==CEGUI::RightButton)m_RightClickedSlot=slot;
+ }
+ return true;
+}
+
+bool CInventoryMenu::handle_MouseThrough(const CEGUI::EventArgs&) {m_InventoryData9160=0;m_bSpellHovered=false;return true;}
+
+bool CInventoryMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ CEGUI::Window* w=mouse.window;
+ if(mouse.button==CEGUI::LeftButton&&w)return onClick(*static_cast<ELayoutFunction*>(w->getUserData()));
+ return true;
+}
+
+void CInventoryMenu::setTab(int tab) {onClick(static_cast<ELayoutFunction>(static_cast<unsigned>(tab)+14u));}
+
+bool CInventoryMenu::handle_SpellMouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* w=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(w){long long guid=*static_cast<long long*>(w->getUserData());m_bSpellHovered=true;m_HoveredSkillGuid=guid;}
+ return true;
+}
+
+bool CInventoryMenu::handle_SpellMouseOut(const CEGUI::EventArgs&) {return true;}
+
+void CInventoryMenu::setOwner(CCharacter* owner) {
+ bool changed=owner!=m_pCharacter;
+ if(changed)inventoryDestroyed();
+ if(m_pCharacter&&m_pCharacter->m_pInventory)m_pCharacter->m_pInventory->removeListener(this);
+ m_pCharacter=owner;
+ if(owner&&owner->m_pInventory)owner->m_pInventory->addListener(this);
+ if(m_pCharacter)static_cast<CEGUI::Checkbox*>(m_pWeaponSwitchWindow)->setSelected(inventory_controls::secondary(m_pCharacter));
+ if(changed)updateLayout();
+ m_TabNotifications[0]=false;m_TabNotifications[1]=false;m_TabNotifications[2]=false;
+}
+
+void CInventoryMenu::checkForUpdate(CEquipment* item) {
+ if(item&&m_pCharacter->m_pInventory) {
+  int pane=m_pCharacter->m_pInventory->getRequiredPane(item);
+  int slot=m_pCharacter->m_pInventory->findEquipmentSlot(item);
+  if(slot>18)switch(pane) {
+   case 0:if(!m_pBackpackSlots->isVisible(false))m_TabNotifications[0]=true;break;
+   case 1:if(!m_pSpellsSlots->isVisible(false))m_TabNotifications[1]=true;break;
+   case 2:if(!m_pFishSlots->isVisible(false))m_TabNotifications[2]=true;break;
+  }
+ }
+}
+
+void CInventoryMenu::equipmentUnequipped(CEquipment* item) {checkForUpdate(item);updateLayout();}
+
+void CInventoryMenu::equipmentPickedUp(CEquipment* item) {checkForUpdate(item);updateLayout();}
+
+bool CInventoryMenu::handle_MouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* w=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(w&&owner) {
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(*static_cast<unsigned*>(w->getUserData()));
+  if(item==m_pHoverObject) {
+   m_pHoverObject=0;
+   CBaseUnit* focused=inventory_controls::focused(m_pGameUI);
+   if(!focused || !focused->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pSocketedIconParent->setVisible(false);m_pForeground38->setVisible(false);
+   }
+  }
+ }
+ return true;
+}
+
+bool CInventoryMenu::processInput(void*,float,bool active) {
+ bool result=true;
+ if(active) {
+  if(m_bCloseRequested){setOpen(false);m_bCloseRequested=0;result=false;}
+  CBaseUnit* focused=inventory_controls::focused(m_pGameUI);
+  if(focused && focused->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+   m_pForeground38->setVisible(true);m_pForeground38->moveToFront();
+   m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+  }else {
+   if(m_pHoverObject&&reinterpret_cast<inventory_controls::HoverState*>(m_pHoverObject)->flag198)m_pHoverObject=0;
+   if(!m_pHoverObject){m_pSocketedIconParent->setVisible(false);m_pForeground38->setVisible(false);}
+  }
+  if(!m_InventoryData9160) {
+   if(m_pPanel->isChild(m_pSlotGlow))m_pPanel->removeChildWindow(m_pSlotGlow);
+   else if(m_pForeground48->isChild(m_pSlotGlow))m_pForeground48->removeChildWindow(m_pSlotGlow);
+  }
+  m_ClickedSlot=-1;m_RightClickedSlot=-1;
+ }else {
+  m_pHoverObject=0;m_pForeground38->setVisible(false);m_pSocketedIconParent->setVisible(false);
+  if(m_pPanel->isChild(m_pSlotGlow))m_pPanel->removeChildWindow(m_pSlotGlow);
+  else if(m_pForeground48->isChild(m_pSlotGlow))m_pForeground48->removeChildWindow(m_pSlotGlow);
+ }
+ return result;
+}
+
+bool CInventoryMenu::onClick(ELayoutFunction action) {
+ if(m_bOpen) {
+  switch(action) {
+  case static_cast<ELayoutFunction>(14):
+   static_cast<CEGUI::RadioButton*>(m_pBackpackTab)->setSelected(true);
+   static_cast<CEGUI::RadioButton*>(m_pSpellsTab)->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pFishTab)->setSelected(false);
+   m_pBackpackSlots->setVisible(true);
+   m_pSpellsSlots->setVisible(false);
+   m_pFishSlots->setVisible(false);
+   m_TabNotifications[0]=false;
+   m_pBackpackTab->setProperty("UnselectedImage",m_TabUnselectedImages[0]);updateLayout();break;
+  case static_cast<ELayoutFunction>(15):
+   static_cast<CEGUI::RadioButton*>(m_pBackpackTab)->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pSpellsTab)->setSelected(true);
+   static_cast<CEGUI::RadioButton*>(m_pFishTab)->setSelected(false);
+   m_pBackpackSlots->setVisible(false);
+   m_pSpellsSlots->setVisible(true);
+   m_pFishSlots->setVisible(false);
+   m_TabNotifications[1]=false;
+   m_pSpellsTab->setProperty("UnselectedImage",m_TabUnselectedImages[1]);updateLayout();break;
+  case static_cast<ELayoutFunction>(16):
+   static_cast<CEGUI::RadioButton*>(m_pBackpackTab)->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pSpellsTab)->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pFishTab)->setSelected(true);
+   m_pBackpackSlots->setVisible(false);
+   m_pSpellsSlots->setVisible(false);
+   m_pFishSlots->setVisible(true);
+   m_TabNotifications[2]=false;
+   m_pFishTab->setProperty("UnselectedImage",m_TabUnselectedImages[2]);updateLayout();break;
+  default:break;
+  }
+ }
+ return true;
+}
