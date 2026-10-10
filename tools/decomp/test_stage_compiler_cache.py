@@ -71,7 +71,93 @@ class SharedCompilerCache(unittest.TestCase):
         self.assertEqual({"hit": 2, "miss": 2, "fallback": 0}, toolchain.shared_cache_stats())
         self.assertIn(b'.file\t"Probe.cpp"', outputs[0][1])
         self.assertEqual("11", self.execute(self.root / "1.o"))
-        self.assertEqual(2, len(list((project / "build-decomp/shared-cc-cache").glob("*/input.ii"))))
+        self.assertEqual([], list((project / "build-decomp/shared-cc-cache").glob("*/input.ii")))
+
+    def test_backend_input_location_does_not_change_object_or_assembly(self):
+        source = self.source(text="static int local;\n"
+                             'extern "C" int result(){return ++local + __LINE__;}\n'
+                             'extern "C" const char* file(){return __FILE__;}\n'
+                             'extern "C" const char* base(){return __BASE_FILE__;}\n')
+        legacy = self.root / "legacy-key"
+        legacy.mkdir()
+        real_run = toolchain.run_compiler
+        def old_location(command, *args, **kwargs):
+            command = list(command)
+            for index, item in enumerate(command):
+                if str(item).endswith("/input.ii"):
+                    old = legacy / "input.ii"
+                    shutil.copyfile(item, old)
+                    command[index] = str(old)
+            return real_run(command, *args, **kwargs)
+        for assembly in (False, True):
+            suffix = ".s" if assembly else ".o"
+            with patch.object(toolchain, "run_compiler", side_effect=old_location):
+                old = self.compile(source, "old" + suffix, assembly=assembly)
+            # Force a fresh backend execution, not a hit on the existing key.
+            with patch.object(toolchain, "SHARED_CC_CACHE", self.root / ("fresh" + suffix)):
+                current = self.compile(source, "current" + suffix, assembly=assembly)
+            cold = self.compile(source, "cold" + suffix, assembly=assembly, cache=False)
+            self.assertEqual(old.read_bytes(), current.read_bytes())
+            self.assertEqual(cold.read_bytes(), current.read_bytes())
+
+    def test_header_revisions_with_identical_output_share_storage_not_keys(self):
+        source = self.source(text='#include "Value.h"\nextern "C" int result(){return 11;}\n')
+        header = source.parent / "Value.h"
+        header.write_text("struct Unused { int value; };\n")
+        first = self.compile(source, "first.s", assembly=True)
+        header.write_text("struct Unused { long long value; };\n")
+        second = self.compile(source, "second.s", assembly=True)
+        self.assertEqual(first.read_bytes(), second.read_bytes())
+        self.assertEqual({"hit": 0, "miss": 2, "fallback": 0}, toolchain.shared_cache_stats())
+        cached = list(self.shared.glob("*/output.s"))
+        self.assertEqual(2, len(cached))
+        self.assertEqual(cached[0].stat().st_ino, cached[1].stat().st_ino)
+        self.assertEqual([], list(self.shared.glob("*/input.ii")))
+        first.write_bytes(b"caller changed its own output")
+        third = self.compile(source, "third.s", assembly=True)
+        self.assertEqual(second.read_bytes(), third.read_bytes())
+        self.assertEqual(1, toolchain.shared_cache_stats()["hit"])
+
+    def test_failed_backend_does_not_retain_expanded_input(self):
+        source = self.source(text='extern "C" int result(){ return unknown_name; }\n')
+        with self.assertRaises(SystemExit):
+            self.compile(source, "failed.o")
+        self.assertEqual([], list(self.shared.glob("*/input.ii")))
+        self.assertEqual([], list(self.shared.glob("*/result.json")))
+
+    def test_hardlink_unavailable_preserves_real_compiler_bytes(self):
+        source = self.source()
+        with patch.object(toolchain.os, "link", side_effect=OSError("simulated unsupported hardlink")):
+            first = self.compile(source, "copy-first.o", ["-DUNUSED_REVISION=1"])
+            second = self.compile(source, "copy-second.o", ["-DUNUSED_REVISION=2"])
+        cold = self.compile(source, "copy-cold.o", cache=False)
+        self.assertEqual(cold.read_bytes(), first.read_bytes())
+        self.assertEqual(cold.read_bytes(), second.read_bytes())
+        cached = list(self.shared.glob("*/output.o"))
+        self.assertEqual(2, len(cached))
+        self.assertNotEqual(cached[0].stat().st_ino, cached[1].stat().st_ino)
+        self.assertEqual({"hit": 0, "miss": 2, "fallback": 0}, toolchain.shared_cache_stats())
+
+    def test_corrupt_blob_repairs_each_real_semantic_key(self):
+        source = self.source()
+        flags = [["-DUNUSED_REVISION=1"], ["-DUNUSED_REVISION=2"]]
+        first = self.compile(source, "alias-first.o", flags[0])
+        second = self.compile(source, "alias-second.o", flags[1])
+        self.assertEqual(first.read_bytes(), second.read_bytes())
+        cached = list(self.shared.glob("*/output.o"))
+        self.assertEqual(2, len(cached))
+        self.assertEqual(cached[0].stat().st_ino, cached[1].stat().st_ino)
+        blob = next(p for p in self.shared.glob("objects/*/*") if len(p.name) == 64)
+        old_inode = blob.stat().st_ino
+        blob.write_bytes(b"corrupt linked compiler output")
+        repaired = self.compile(source, "alias-repaired-first.o", flags[0])
+        self.assertEqual(first.read_bytes(), repaired.read_bytes())
+        self.assertNotEqual(old_inode, blob.stat().st_ino)
+        self.assertEqual(1, sum(p.stat().st_ino == old_inode for p in cached))
+        repaired = self.compile(source, "alias-repaired-second.o", flags[1])
+        self.assertEqual(first.read_bytes(), repaired.read_bytes())
+        self.assertTrue(all(p.stat().st_ino == blob.stat().st_ino for p in cached))
+        self.assertEqual({"hit": 0, "miss": 4, "fallback": 0}, toolchain.shared_cache_stats())
 
     def test_real_file_base_file_line_and_timestamp_values_are_preserved(self):
         text = '''extern "C" const char* file(){return __FILE__;}
