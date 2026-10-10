@@ -1147,3 +1147,83 @@ bool CInventoryMenu::handle_SetSpell(const CEGUI::EventArgs& event) {
  }
  return true;
 }
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CInventoryMenu::CInventoryMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,Ogre::SceneManager* wardrobe,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pParent(parent),m_pCharacter(0),m_bOpen(false),m_bFullyClosed(true),m_bCloseRequested(false),
+ m_pDynamicPropertyFile(&settings),m_pGameUI(&ui),m_ClickedSlot(-1),m_RightClickedSlot(-1),m_pHoverObject(0),
+ m_pInventorySceneManager(scene),m_pWardrobeSceneManager(wardrobe),m_pRenderWindow(render),m_pViewport(0),
+ m_InventoryData9160(0),m_bSpellHovered(false),m_bRotateLeft(false),m_bRotateRight(false),m_HoveredSkillGuid(-1),
+ m_pInventoryModel(0),m_pResourceManager(resources),m_fPanelX(5000.0f),m_pSoundBank(0),m_pSkillTooltip(0),m_fTabPhase(0.0f)
+{
+ std::memset(m_InventoryData58,0,sizeof(m_InventoryData58));
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"INVENTORYOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"INVENTORYCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* assign=sounds->getSoundDataObject(L"ASSIGNSKILL");if(assign)m_pSoundBank->addSample(30,assign->m_iGuid);
+ CSoundData* error=sounds->getSoundDataObject(L"ERROR");if(error)m_pSoundBank->addSample(24,error->m_iGuid);
+ CSoundData* swap=sounds->getSoundDataObject(L"WEAPONSWAP");if(swap)m_pSoundBank->addSample(18,swap->m_iGuid);
+ float width=static_cast<float>(m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH));m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+ m_fScreenEdge=width;m_TabNotifications[0]=false;m_TabNotifications[1]=false;m_TabNotifications[2]=false;createMenus();
+}
+CInventoryMenu::~CInventoryMenu() {
+ setOwner(0);
+ if(m_pWardrobeCamera)m_pWardrobeSceneManager->destroyCamera(m_pWardrobeCamera);
+ m_pWardrobeCamera=0;
+ if(m_pSkillTooltip){delete m_pSkillTooltip;m_pSkillTooltip=0;}
+ if(m_pInventoryModel){delete m_pInventoryModel;m_pInventoryModel=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
+
+void CInventoryMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick") && !window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CInventoryMenu::handle_onClick,this));
+ }catch(...) {}
+}
+void CInventoryMenu::setOpen(bool open) {
+ if(!m_bOpen&&open) {
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);
+  float width=static_cast<float>(m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH));
+  float height=static_cast<float>(m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT));
+  m_pInventoryModel->setVisible(true);
+  if(m_pInventoryModel->animationPlaying("CLOSE"))m_pInventoryModel->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pInventoryModel->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pInventoryModel->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pParent->addChildWindow(m_pBackground);m_pBackground->moveToBack();
+  static_cast<CEGUI::RadioButton*>(m_pBackpackTab)->setSelected(true);
+  static_cast<CEGUI::RadioButton*>(m_pSpellsTab)->setSelected(false);
+  static_cast<CEGUI::RadioButton*>(m_pFishTab)->setSelected(false);
+  m_pBackpackSlots->setVisible(true);m_pSpellsSlots->setVisible(false);m_pFishSlots->setVisible(false);
+  if(!m_pViewport) {
+   Ogre::Viewport* viewport=m_pRenderWindow->addViewport(m_pWardrobeCamera,3,0.0f,0.0f,1.0f,1.0f);m_pViewport=viewport;
+   float left=(m_fPanelX+m_pGameUI->scaledY(124.0f))/width;
+   float top=m_pGameUI->scaledY(132.0f)/height;
+   float span=m_pGameUI->scaledY(166.0f)/width;
+   float h=m_pGameUI->scaledY(192.0f)/height;
+   if(left+span>1.0f)span=1.0f-left;
+   if(top+h>1.0f)h=1.0f-top;
+   if(left<0.0f)left=0.0f;
+   top=0.0f>top?0.0f:top;
+   float minimum=1.0f/width;
+   if(minimum>span){left=1.0f-minimum;span=minimum;}
+   m_pViewport->setDimensions(left,top,span,h);
+   m_pViewport->setBackgroundColour(Ogre::ColourValue(0.0f,0.0f,0.0f,1.0f));
+   m_pViewport->setClearEveryFrame(true,3);
+   m_pWardrobeCamera->setAspectRatio(static_cast<float>(viewport->getActualWidth())/static_cast<float>(viewport->getActualHeight()));
+   viewport->setCamera(m_pWardrobeCamera);
+  }
+  m_pGameUI->queueTip(static_cast<EContextTip>(0));
+ }else if(m_bOpen&&!open) {
+  if(m_pSkillTooltip&&m_pSkillTooltip->m_pWindow->getParent())m_pSkillTooltip->m_pWindow->getParent()->removeChildWindow(m_pSkillTooltip->m_pWindow);
+  m_pSoundBank->playSample(66,0,0.0f,0.0f,false);
+  m_pInventoryModel->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);m_bFullyClosed=false;
+ }
+ m_bOpen=open;if(open)updateLayout();
+}
