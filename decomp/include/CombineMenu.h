@@ -5,7 +5,7 @@
 #include "GameUI.h"
 #include "SubMenu.h"
 #include "iInventoryListener.h"
-extern bool g_bDontTrackItemEquipAndUnEquip;
+extern bool g_bDontTrackItemEquipAndUnEquip __asm__("_ZL31g_bDontTrackItemEquipAndUnEquip");
 class CInventory;
 class CSettings;
 class CSoundBank;
