@@ -15,6 +15,7 @@ friend class CStatsMenu;
 friend class CPetMenu;
 friend class CInventoryMenu;
 friend class CSkillMenu;
+friend class CJournalMenu;
 public:
     void generateExtremes(unsigned long,bool);
     virtual ~CGenericModel();
