@@ -1377,3 +1377,88 @@ void CMerchantMenu::setSlotIcon(CEquipment* pItem, int iSlotIndex, int iDataInde
 
 // Keep this original shared instantiation emitted after flattening createMenus.
 template std::basic_string<char> std::operator+<char, std::char_traits<char>, std::allocator<char> >(const std::basic_string<char>&, const std::basic_string<char>&);
+
+#include "Character.h"
+#include <CEGUI.h>
+namespace merchant_controls {
+struct ClientFields {char prefix[0x1c8];TSafePointer<CRunicCore> first,second,third,fourth;};
+struct ClientUI {char prefix[0x1920];ClientFields* client;};
+inline __attribute__((always_inline,flatten)) void clearMouseClicks(CGameUI* ui) {
+ ClientFields* c=reinterpret_cast<ClientUI*>(ui)->client;
+ c->fourth.setObject(0);c->third.setObject(0);c->first.setObject(0);c->second.setObject(0);
+}
+}
+void CMerchantMenu::equipmentPickedUp(CEquipment*){updateLayout();}
+void CMerchantMenu::equipmentDropped(CEquipment*){updateLayout();}
+void CMerchantMenu::equipmentEquipped(CEquipment*){updateLayout();}
+void CMerchantMenu::equipmentUnequipped(CEquipment*){updateLayout();}
+void CMerchantMenu::equipmentUsed(CEquipment*){updateLayout();}
+void CMerchantMenu::inventoryDestroyed(){}
+bool CMerchantMenu::handle_ItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window&&m_bOpenPartial){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_iItemSlotIndexA=slot;
+  else if(mouse.button==CEGUI::RightButton)m_iItemSlotIndexB=slot;
+ }return true;
+}
+bool CMerchantMenu::handle_PetItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_iPetSlotIndexA=slot;
+  else if(mouse.button==CEGUI::RightButton)m_iPetSlotIndexB=slot;
+ }return true;
+}
+bool CMerchantMenu::handle_MouseThrough(const CEGUI::EventArgs&){m_bUnknown3450=false;return true;}
+void CMerchantMenu::setTab(int tab){onClick(static_cast<ELayoutFunction>(tab+64));}
+void CMerchantMenu::setPetTab(int tab){onClick(static_cast<ELayoutFunction>(tab+14));}
+bool CMerchantMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.button==CEGUI::LeftButton&&mouse.window)return onClick(*static_cast<ELayoutFunction*>(mouse.window->getUserData()));
+ return true;
+}
+bool CMerchantMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) {
+  m_bUnknown62=true;m_pGameUI->getCharacter()->setTarget(0);
+  merchant_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+ }return true;
+}
+bool CMerchantMenu::onClick(ELayoutFunction action) {
+ if(m_bOpenPartial){int a=static_cast<int>(action);
+  if(a>=14&&a<=16){int tab=a-14;m_iUnknown3458=tab;
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[3])->setSelected(tab==0);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[4])->setSelected(tab==1);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[5])->setSelected(tab==2);
+   m_pUnknown33C8[0]->setVisible(tab==0);m_pUnknown33C8[1]->setVisible(tab==1);m_pUnknown33C8[2]->setVisible(tab==2);updateLayout();
+  }else if(a>=64&&a<=66){int tab=a-64;m_iUnknown3454=tab;
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[11])->setSelected(tab==0);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[9])->setSelected(tab==1);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[10])->setSelected(tab==2);
+   m_pUnknown33C8[8]->setVisible(tab==0);m_pUnknown33C8[6]->setVisible(tab==1);m_pUnknown33C8[7]->setVisible(tab==2);updateLayout();
+  }
+ }return true;
+}
+void CMerchantMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick")&&!window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CMerchantMenu::handle_onClick,this));
+ }catch(...) {}
+}
+
+#include "Inventory.h"
+void CMerchantMenu::setPlayer(CCharacter* player) {
+ if(m_pCanEquipCharacter&&m_pCanEquipCharacter->getFollower(0))m_pCanEquipCharacter->getFollower(0)->m_pInventory->removeListener(this);
+ m_pCanEquipCharacter=player;
+ if(player&&player->getFollower(0))player->getFollower(0)->m_pInventory->addListener(this);
+}
+void CMerchantMenu::setOwner(CCharacter* owner) {
+ if(owner!=m_pOwner)inventoryDestroyed();
+ if(m_pOwner)static_cast<CCharacter*>(m_pOwner)->m_pInventory->removeListener(this);
+ m_pOwner=owner;
+ if(owner)owner->m_pInventory->addListener(this);
+ if(m_pCanEquipCharacter&&m_pCanEquipCharacter->getFollower(0)){
+  m_pCanEquipCharacter->getFollower(0)->m_pInventory->removeListener(this);
+  m_pCanEquipCharacter->getFollower(0)->m_pInventory->addListener(this);
+ }
+}
