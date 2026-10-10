@@ -1999,3 +1999,94 @@ bool CGameUI::onClick(ELayoutFunction function)
     }
     return true;
 }
+
+
+bool CGameUI::handle_onClick(const CEGUI::EventArgs& event)
+{
+    const CEGUI::MouseEventArgs& mouse =
+        static_cast<const CEGUI::MouseEventArgs&>(event);
+    if (mouse.button != CEGUI::LeftButton || !mouse.window)
+        return true;
+
+    return onClick(*static_cast<ELayoutFunction*>(mouse.window->getUserData()));
+}
+
+bool CGameUI::handle_SkillMouseOver(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window =
+        static_cast<const CEGUI::WindowEventArgs&>(event).window;
+    if (!window)
+        return true;
+
+    gameui_input_detail::InputState& state = gameui_input_detail::input(this);
+    if (window->getID() != 1000)
+    {
+        const long long guid = *static_cast<const long long*>(window->getUserData());
+        state.skillHovered = true;
+        state.itemHovered = false;
+        state.foldoutItemHovered = false;
+        state.foldoutSkillHovered = false;
+        state.hoveredSkillGuid = guid;
+    }
+    else
+    {
+        CCharacter* character = m_pCharacter;
+        if (!character)
+            return true;
+
+        const long long guid = *static_cast<const long long*>(window->getUserData());
+        if (character->getResourceManager()->getUnitDataByGuid(guid))
+        {
+            state.itemHovered = true;
+            state.hoveredItemGuid = guid;
+        }
+        state.foldoutItemHovered = false;
+        state.skillHovered = false;
+        state.foldoutSkillHovered = false;
+    }
+    return true;
+}
+
+bool CGameUI::handle_ToggleItemNames(const CEGUI::EventArgs&)
+{
+    const int previous = m_settings->GetInt(KSETTINGS_TOGGLE_ITEM_NAME);
+    m_settings->SetInt(KSETTINGS_TOGGLE_ITEM_NAME, previous == 0);
+    return true;
+}
+
+bool CGameUI::handle_MouseOver(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window =
+        static_cast<const CEGUI::WindowEventArgs&>(event).window;
+    if (!window)
+        return true;
+
+    gameui_input_detail::InputState& state = gameui_input_detail::input(this);
+    CEGUI::Window* parent = window->getParent();
+    if (!parent->isChild(state.hoveredLabel))
+        parent->addChildWindow(state.hoveredLabel);
+
+    // UI callbacks can replace the glow; retain only the event window and parent.
+    const CEGUI::UVector2& position = window->getPosition();
+    state.hoveredLabel->setPosition(position);
+    const CEGUI::UVector2 size = window->getSize();
+    state.hoveredLabel->setSize(size);
+    state.hoveredLabel->moveToBack();
+    state.labelHovered = true;
+    return true;
+}
+
+bool CGameUI::handle_MouseThrough(const CEGUI::EventArgs&)
+{
+    gameui_input_detail::InputState& state = gameui_input_detail::input(this);
+    state.labelHovered = false;
+    state.skillHovered = false;
+    state.foldoutSkillHovered = false;
+    state.itemHovered = false;
+    state.foldoutItemHovered = false;
+
+    CSkillMenu* menu = m_skillsMenu;
+    if (menu)
+        menu->clearSkillTooltip();
+    return true;
+}
