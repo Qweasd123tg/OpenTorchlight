@@ -204,7 +204,7 @@ class Preservation(SyntheticStage):
     def validate(self, stage, compare, covered=(), selftest=None):
         with patch.object(objdiff, "Original", return_value=SimpleNamespace(db=FIXTURE_DB)), \
                 patch.object(objdiff, "compare_source", side_effect=compare), \
-                patch.object(toolchain, "parallel_map", side_effect=lambda fn, items: [fn(item) for item in items]), \
+                patch.object(toolchain, "parallel_map", side_effect=lambda fn, items, **kwargs: [fn(item) for item in items]), \
                 patch.object(hybrid, "build", return_value=(Path("blob"), Path("loader"))), \
                 patch.object(hybrid, "selftest", side_effect=selftest,
                              return_value=(0, ["tlhybrid: control PASS (0)"])):
@@ -402,7 +402,7 @@ class PublishedObjects(SyntheticStage):
             with patch.object(objdiff, "Original", return_value=SimpleNamespace(db=FIXTURE_DB)), \
                     patch.object(objdiff, "compare_source", side_effect=compare), \
                     patch.object(objdiff, "compiled_identity", side_effect=compare), \
-                    patch.object(toolchain, "parallel_map", side_effect=lambda fn, items: [fn(item) for item in items]), \
+                    patch.object(toolchain, "parallel_map", side_effect=lambda fn, items, **kwargs: [fn(item) for item in items]), \
                     patch.object(hybrid, "build", return_value=(Path("blob"), Path("loader"))), \
                     patch.object(hybrid, "selftest", return_value=(0, ["tlhybrid: control PASS (0)"])), \
                     patch.object(stage, "_verify_published_objects", side_effect=lambda: _REAL_VERIFY_PUBLISHED(stage)):

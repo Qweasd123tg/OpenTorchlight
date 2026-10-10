@@ -61,7 +61,7 @@ class ProcessGate(unittest.TestCase):
             environments.append(kwargs["env"])
             return results[len(environments) - 1]
         with patch.object(hybrid, "game_env", side_effect=environment), \
-                patch.object(hybrid.toolchain, "parallel_map", side_effect=lambda fn, rows: [fn(row) for row in rows]), \
+                patch.object(hybrid.toolchain, "parallel_map", side_effect=lambda fn, rows, **kwargs: [fn(row) for row in rows]), \
                 patch.object(hybrid.subprocess, "run", side_effect=run):
             outcome = hybrid.selftest(None, None, only=only, shards=len(results))
         return outcome, environments

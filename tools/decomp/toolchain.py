@@ -391,13 +391,35 @@ def jobs():
     return max(1, min(5, (os.cpu_count() or 2) - 1))
 
 
-def parallel_map(fn, items):
-    """[fn(x) for x in items] on jobs() threads (the work is in compiler subprocesses), in order;
+PHASE_JOB_ENV = {"compare": "OTL_COMPARE_JOBS", "build": "OTL_BUILD_JOBS",
+                 "selftest": "OTL_SELFTEST_JOBS"}
+
+
+def phase_jobs(phase):
+    """Optional phase override; OTL_JOBS remains the unchanged fallback.
+
+    Worker counts do not expand host-wide resource_slots capacities. A larger
+    pool must still be configured while idle through resource_slots.configure.
+    """
+    if phase not in PHASE_JOB_ENV:
+        raise ValueError("unknown parallel phase: " + str(phase))
+    value = os.environ.get(PHASE_JOB_ENV[phase])
+    if not value:
+        return jobs()
+    count = int(value)
+    if count < 1:
+        raise ValueError(PHASE_JOB_ENV[phase] + " must be a positive integer")
+    return count
+
+
+def parallel_map(fn, items, *, phase=None):
+    """[fn(x) for x in items] on the selected worker pool (the work is in compiler subprocesses), in order;
     the first exception, SystemExit included, is raised after the others finish."""
     items = list(items)
-    if jobs() == 1 or len(items) < 2:
+    workers = jobs() if phase is None else phase_jobs(phase)
+    if workers == 1 or len(items) < 2:
         return [fn(x) for x in items]
-    with ThreadPoolExecutor(max_workers=jobs()) as pool:
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = [pool.submit(fn, x) for x in items]
     return [f.result() for f in futures]
 

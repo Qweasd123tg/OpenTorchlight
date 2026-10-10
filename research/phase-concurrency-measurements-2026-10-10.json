@@ -1,0 +1,226 @@
+{
+  "manifest": {
+    "decomp/src/Equipment.cpp": "36f24de30b44e779a30d1a43605a3f651a7535db37fe8e3a022eb0beed79beaa",
+    "decomp/src/gameui.cpp": "489e5850147308d9dae956238d92e194744598f1c4c1ff4fb617d299f0f5d563",
+    "decomp/src/MerchantMenu.cpp": "a6d44d7a359bcc3f8846331f60c27dbfa4faf7d88a115de744bf21312acc379a",
+    "decomp/src/petmenu.cpp": "32d35eda3e12c4fb4c52a801bb1f903c513713f5984877ecf9953067766f7d06",
+    "decomp/src/enchantmenu.cpp": "a65e33e2ac026ab8d09e7e1036ab265542a0ed94319956378e1a215bf8eba473",
+    "decomp/src/StashMenu.cpp": "4e0efb535628dd0d6c3970f202061a9b67121d2434d4a539c9dc48f366ec766c",
+    "decomp/src/inventorymenu.cpp": "ccecef7b64c0ea206bb6370ef5384b54e8e004c27849df7bd2d94c40b714eeeb",
+    "decomp/src/statsmenu.cpp": "8ab3472e1745263c9426ba1ece1125c4fa9dc9ee728db0ca3fdebc6c3dab8dae",
+    "decomp/src/combinemenu.cpp": "d9cc79b16f9fb713befa8b54d3283e6ba6c79abbf7b71641fff6526540994732",
+    "decomp/src/FileSystem.cpp": "b3d59e9eb9e4aa84c43c71001afa8ebabe3bc5d2e56aad1546329a400ab44a99",
+    "decomp/src/BaseUnit.cpp": "77a96ceb1788805ba3b4a90fa57b877c28a0ed5d24201f2e340440f01de4607e",
+    "decomp/src/Descriptor.cpp": "25dbb070cb701cbd54628689a523c17dedd83bed02a7b992885ade6858eaabbb",
+    "decomp/src/path.cpp": "583347401e204a2dfc5a1a86b6e522a0e49b7648cda9efa7aa6a87959a1100a1",
+    "decomp/src/skillmenu.cpp": "eb8b6ed333d62eb219bf71a5347168f1476bfe83d47c5bf601388d737ec4a6a1",
+    "decomp/src/Timeline.cpp": "4480e9780b2b48d16eddbea75e857785db57dd5e747eea615968a848ae524cf7",
+    "decomp/src/astarpathfinder.cpp": "3f09e87cc332cbed4d89760760281d5c0f6923c4adc8ac46d5dcf478f0931b2b",
+    "decomp/hybrid/tests/DescriptorTest.cpp": "056b3be1e0a1329d8d5d94a6ffd49837645e4494b847b1e6a8176834061ad918",
+    "decomp/hybrid/tests/GameUICreateTest.cpp": "2dbb3525c6e48afc0b3ab01223472edc9603eef1e4705ae8ea0de47cd87d7abe",
+    "decomp/hybrid/tests/GameUIEntryLabelCreation.cpp": "82cde5b67269e49693e15124101b2750115a7d968a77f4c5a520946b30c86caf",
+    "decomp/hybrid/tests/GameUIEntryHover.cpp": "e19b43c8982e5b8653dbdfab8f2cc53b961264e4cb2153cdb9940c3167b75c84",
+    "decomp/hybrid/tests/GameUIEntryVisibleLabels.cpp": "50b094e7712ab9e82df9be07cc43d167a62f6d92e413342ec4a657f3a204df71",
+    "decomp/hybrid/tests/GameUIEntryContextTips.cpp": "3117a362776c350a4fdd88758ee62e353f2c4d1edc10f400ba0c706b8bcc864a",
+    "decomp/hybrid/tests/GameUIEntryActiveFrame.cpp": "84df926d9a0008447ebb1553e694225edc26faaa396cb31616e143854277f87b",
+    "decomp/hybrid/tests/FileSystemTest.cpp": "72bcbbcb82f111fceec6ee8b990b174930d8ec93dce7993cd3a31d1bb0d49608"
+  },
+  "rows": [
+    {
+      "phase": "uncached_compile",
+      "jobs": 4,
+      "seconds": 15.464614285003336,
+      "child_cpu_seconds": 54.924938,
+      "rss": 1397088256,
+      "children": 8,
+      "available_min": 7691182080,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 6,
+      "seconds": 13.37440606400196,
+      "child_cpu_seconds": 51.090845,
+      "rss": 1836740608,
+      "children": 12,
+      "available_min": 7128076288,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 8,
+      "seconds": 14.837693873996614,
+      "child_cpu_seconds": 57.129373999999984,
+      "rss": 2295173120,
+      "children": 16,
+      "available_min": 6613704704,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 8,
+      "seconds": 13.982593852997525,
+      "child_cpu_seconds": 51.90352200000003,
+      "rss": 2243129344,
+      "children": 16,
+      "available_min": 6727159808,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 4,
+      "seconds": 14.818481501999486,
+      "child_cpu_seconds": 51.98331399999999,
+      "rss": 1372971008,
+      "children": 8,
+      "available_min": 7509966848,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 6,
+      "seconds": 13.70704960400326,
+      "child_cpu_seconds": 50.244616000000015,
+      "rss": 1881899008,
+      "children": 12,
+      "available_min": 7119941632,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 6,
+      "seconds": 14.142090323002776,
+      "child_cpu_seconds": 51.17572799999998,
+      "rss": 1917964288,
+      "children": 12,
+      "available_min": 7014957056,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 8,
+      "seconds": 13.921251724001195,
+      "child_cpu_seconds": 54.732635000000016,
+      "rss": 2189885440,
+      "children": 16,
+      "available_min": 6770769920,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "uncached_compile",
+      "jobs": 4,
+      "seconds": 14.018715104000876,
+      "child_cpu_seconds": 50.761555,
+      "rss": 1391140864,
+      "children": 8,
+      "available_min": 7557984256,
+      "units": 24,
+      "assembly_hashes_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 4,
+      "seconds": 18.83865479600354,
+      "child_cpu_seconds": 33.79871300000001,
+      "rss": 385740800,
+      "children": 9,
+      "available_min": 8476778496,
+      "matched": 1277,
+      "report_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 6,
+      "seconds": 21.80612272000144,
+      "child_cpu_seconds": 40.34962500000001,
+      "rss": 398630912,
+      "children": 13,
+      "available_min": 8635670528,
+      "matched": 1277,
+      "report_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 8,
+      "seconds": 23.29331240800093,
+      "child_cpu_seconds": 43.63420799999996,
+      "rss": 413614080,
+      "children": 10,
+      "available_min": 8638742528,
+      "matched": 1277,
+      "report_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 8,
+      "seconds": 22.950248884000757,
+      "child_cpu_seconds": 43.02285200000003,
+      "rss": 412323840,
+      "children": 17,
+      "available_min": 8638230528,
+      "matched": 1277,
+      "report_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 6,
+      "seconds": 22.054896028996154,
+      "child_cpu_seconds": 41.05637200000005,
+      "rss": 406970368,
+      "children": 13,
+      "available_min": 8655728640,
+      "matched": 1277,
+      "report_equal": true
+    },
+    {
+      "phase": "warm_static",
+      "jobs": 4,
+      "seconds": 19.40035717599676,
+      "child_cpu_seconds": 34.78477400000001,
+      "rss": 398602240,
+      "children": 9,
+      "available_min": 8658632704,
+      "matched": 1277,
+      "report_equal": true
+    }
+  ],
+  "selftests": [
+    {
+      "phase": "headless_tests",
+      "jobs": 4,
+      "seconds": 287.476603350995,
+      "child_cpu_seconds": 992.326703,
+      "tests_passed": 205,
+      "max_child_rss_kib_cumulative": 73200
+    },
+    {
+      "phase": "headless_tests",
+      "jobs": 6,
+      "seconds": 225.4423433550037,
+      "child_cpu_seconds": 1095.008004,
+      "tests_passed": 205,
+      "max_child_rss_kib_cumulative": 73356
+    },
+    {
+      "phase": "headless_tests",
+      "jobs": 8,
+      "seconds": 209.29124721900007,
+      "child_cpu_seconds": 1248.3779320000003,
+      "tests_passed": 205,
+      "max_child_rss_kib_cumulative": 73356
+    }
+  ],
+  "selected": {
+    "compare": 4,
+    "build": 6,
+    "selftest": 8
+  }
+}

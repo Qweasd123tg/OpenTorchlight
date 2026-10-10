@@ -364,7 +364,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
         source, is_test = unit
         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
         toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
-    toolchain.parallel_map(compile_unit, units)
+    toolchain.parallel_map(compile_unit, units, phase="build")
     for source, is_test in units:
         tu = None if is_test else objdiff.tu_for_source(ctx.db, source)
         if not is_test and tu is None:
@@ -565,7 +565,7 @@ def selftest(blob, loader, only=None, shards=None):
             return SimpleNamespace(returncode=2, stderr=partial +
                                    f"\nselftest: shard {index}/{shards} timeout after {error.timeout} seconds\n")
     code, report, ran, failed = 0, [], 0, 0
-    for result in toolchain.parallel_map(run, range(shards)):
+    for result in toolchain.parallel_map(run, range(shards), phase="selftest"):
         # Loader lines plus the indented details tests log under a failure.
         lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "selftest:", "    "))]
         summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
