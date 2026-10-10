@@ -25,12 +25,18 @@ public:
  virtual void setOpen(bool);
  void setOpen(bool, EAIState);
  virtual void update(float);
+ virtual bool handle_onClick(const CEGUI::EventArgs&);
+ virtual bool processInput(void*,float,bool);
  virtual void equipmentPickedUp(CEquipment*);
  virtual void equipmentDropped(CEquipment*);
  virtual void equipmentEquipped(CEquipment*);
  virtual void equipmentUnequipped(CEquipment*);
  virtual void equipmentUsed(CEquipment*);
  virtual void inventoryDestroyed();
+ virtual bool onClick(ELayoutFunction);
+ void setPlayer(CCharacter*);
+ void setOwnerItem(CItem*);
+ bool handle_CloseButton(const CEGUI::EventArgs&);
 
  void createMenus();
  void mapEventHandlers(CEGUI::Window*);
@@ -49,11 +55,11 @@ public:
  CEGUI::Window* m_pTitle;
  CEGUI::Window* m_pDescription;
  CEGUI::Window* m_pAccept;
- char gap58[8];
+ CCharacter* m_pOwner;
  CCharacter* m_pCharacter;
  CItem* m_pOwnerItem;
  bool m_bOpen;
- char gap71;
+ bool m_bFullyClosed;
  bool m_bInteractionComplete;
  bool m_bRetirementComplete;
  char gap74[4];
@@ -72,10 +78,13 @@ public:
  CEGUI::Window* m_pMainSocketGlowWindows[1];
  CEGUI::Window* m_pSocketedSizeWindows[1];
  CEGUI::Window* m_pMainStackWindows[1];
- char gapE8[0xf8-0xe8];
+ int m_ClickedSlot;
+ int m_RightClickedSlot;
+ CEquipment* m_pHoverObject;
  CEGUI::Imageset* m_pImageset;
  CEGUI::Window* m_pSlotGlow;
- char gap108[4];
+ bool m_bHover;
+ char gap109[3];
  int m_iMode;
 };
 #endif

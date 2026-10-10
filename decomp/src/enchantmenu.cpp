@@ -870,7 +870,7 @@ void CEnchantMenu::setOpen(bool open, EAIState state)
         }
         m_pSoundBank->playSample(66, 0, 0.0f, 0.0f, false);
         m_pMenuModel->blendAnimation("CLOSE", false, 0.1f, 2.0f, -1.0f);
-        gap71 = 0;
+        m_bFullyClosed = 0;
         m_bOpen = false;
         return;
     }
@@ -919,4 +919,130 @@ void CEnchantMenu::setOpen(bool open, EAIState state)
     m_pGameUI->queueTip(static_cast<EContextTip>(13));
     m_bOpen = open;
     updateLayout();
+}
+
+namespace enchant_controls {
+struct UIFields {char prefix[0xb8];CEquipment* dragged;};
+struct HoverState {char prefix[0x198];bool flag198;};
+struct ClientFields {char prefix[0x1c8];TSafePointer<CRunicCore> first,second,third,fourth;};
+struct ClientUI {char prefix[0x1920];ClientFields* client;};
+inline __attribute__((always_inline,flatten)) void clearMouseClicks(CGameUI* ui) {
+ ClientFields* c=reinterpret_cast<ClientUI*>(ui)->client;
+ c->fourth.setObject(0);c->third.setObject(0);c->first.setObject(0);c->second.setObject(0);
+}
+}
+void CEnchantMenu::setOwner(CCharacter* owner){m_pOwner=owner;m_pOwnerItem=0;}
+void CEnchantMenu::setOwnerItem(CItem* item){m_pOwner=0;m_pOwnerItem=item;}
+void CEnchantMenu::equipmentEquipped(CEquipment*){updateLayout();}
+void CEnchantMenu::equipmentUnequipped(CEquipment*){updateLayout();}
+void CEnchantMenu::inventoryDestroyed(){}
+bool CEnchantMenu::handle_ItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_ClickedSlot=m_aiSlotData[slot];
+  else if(mouse.button==CEGUI::RightButton)m_RightClickedSlot=m_aiSlotData[slot];
+ }
+ return true;
+}
+bool CEnchantMenu::handle_MouseThrough(const CEGUI::EventArgs&){m_bHover=false;return true;}
+bool CEnchantMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.button==CEGUI::LeftButton&&mouse.window)return onClick(*static_cast<ELayoutFunction*>(mouse.window->getUserData()));
+ return true;
+}
+void CEnchantMenu::equipmentDropped(CEquipment*){updateLayout();}
+void CEnchantMenu::equipmentPickedUp(CEquipment*){updateLayout();}
+void CEnchantMenu::equipmentUsed(CEquipment*){updateLayout();}
+void CEnchantMenu::setPlayer(CCharacter* player) {
+ if(player!=m_pCharacter)inventoryDestroyed();
+ if(m_pCharacter)m_pCharacter->m_pInventory->removeListener(this);
+ m_pCharacter=player;
+ if(player)player->m_pInventory->addListener(this);
+}
+bool CEnchantMenu::handle_MouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(m_aiSlotData[slot]);
+  if(item==m_pHoverObject) {
+   m_pHoverObject=0;
+   CEquipment* dragged=reinterpret_cast<enchant_controls::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);
+   }
+  }
+ }
+ return true;
+}
+bool CEnchantMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) {
+  m_bInteractionComplete=true;m_pGameUI->getCharacter()->setTarget(0);
+  enchant_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+ }
+ return true;
+}
+bool CEnchantMenu::onClick(ELayoutFunction action) {
+ if(m_bOpen) {
+  if(static_cast<int>(action)==8) {
+   m_bInteractionComplete=true;m_pGameUI->getCharacter()->setTarget(0);
+   enchant_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+  }else if(static_cast<int>(action)==9)performInteraction();
+ }
+ return true;
+}
+void CEnchantMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick")&&!window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CEnchantMenu::handle_onClick,this));
+ }catch(...) {}
+}
+
+
+bool CEnchantMenu::processInput(void*,float,bool active) {
+ if(!active) {
+  m_pHoverObject=0;m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);
+  if(m_pSlotGlow->getParent()&&m_pSlotGlow->getParent()->isChild(m_pSlotGlow))m_pSlotGlow->getParent()->removeChildWindow(m_pSlotGlow);
+  return true;
+ }
+ bool result=true;
+ if(m_bInteractionComplete){setOpen(false);m_bInteractionComplete=false;result=false;}
+ CEquipment* dragged=m_pCharacter?reinterpret_cast<enchant_controls::UIFields*>(m_pGameUI)->dragged:0;
+ if(dragged&&dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+  m_pForeground->setVisible(true);m_pForeground->moveToFront();
+  m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+ }else {
+  if(!m_pHoverObject){m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+  else if(reinterpret_cast<enchant_controls::HoverState*>(m_pHoverObject)->flag198){m_pHoverObject=0;m_pForeground->setVisible(false);m_pSocketedIconParent->setVisible(false);}
+ }
+ if(!m_bHover) {
+  if(m_pSlotGlow->getParent()&&m_pSlotGlow->getParent()->isChild(m_pSlotGlow))m_pSlotGlow->getParent()->removeChildWindow(m_pSlotGlow);
+  m_pHoverObject=0;
+ }
+ m_ClickedSlot=-1;m_RightClickedSlot=-1;return result;
+}
+
+bool CEnchantMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(m_aiSlotData[slot]);
+  if(item) {
+   m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pForeground->setVisible(true);m_pForeground->moveToFront();
+    m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+   }else {m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+  }
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!m_pSocketedSizeWindows[slot]->isChild(m_pSlotGlow))m_pSocketedSizeWindows[slot]->addChildWindow(m_pSlotGlow);
+  m_pSlotGlow->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,0.0f),CEGUI::UDim(0.0f,0.0f)));
+  m_pSlotGlow->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pSlotGlow->moveToBack();m_bHover=true;
+ }
+ return true;
 }
