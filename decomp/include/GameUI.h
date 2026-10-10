@@ -139,6 +139,7 @@ public:
     void mapEventHandlers(CEGUI::Window*);
     void toggleFPS();
     void updateSlots();
+    void setPlayer(CCharacter*);
     bool menuItemClick(CCharacter*, CSubMenu*, int, bool);
     void returnDraggedItem();
     void setCursorState(ECursorState);
