@@ -1614,3 +1614,53 @@ void CMerchantMenu::setOpen(bool open) {
  m_bOpenPartial=open;updateLayout();
 }
 
+
+namespace merchant_layout {
+inline __attribute__((always_inline)) TArrayList<CEquipmentRef*>& equipment(CInventory* p){return *reinterpret_cast<TArrayList<CEquipmentRef*>*>(p->m_Unknown30);}
+}
+void CMerchantMenu::updateLayout(){
+ if(!m_bOpenPartial||!m_pOwner)return;
+ CInventory* inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;
+ if(!inventory)return;
+ while(m_pSocketedIconParent->getChildCount())m_pSocketedIconParent->removeChildWindow(m_pSocketedIconParent->getChildAtIdx(0));
+ for(int slot=19;slot<145;++slot){
+  if(m_pSocketedSizeWindows[slot]->getChildCount())m_pSocketedSizeWindows[slot]->removeChildWindow(m_pSocketedSizeWindows[slot]->getChildAtIdx(0));
+  m_pUnknown14D8[slot]->setProperty("Image","");m_pUnknown1960[slot]->setProperty("Image","");m_pUnknown1050[slot]->setProperty("Image","");
+  if(m_pUnknown2270[slot])m_pUnknown2270[slot]->setText("");
+ }
+ TArrayList<CEquipmentRef*>& items=merchant_layout::equipment(inventory);
+ for(unsigned i=0;i<items.size();++i){CEquipmentRef* ref=items[i];CEquipment* item=static_cast<CEquipment*>(ref->m_pUnknown10);if(ref->m_iSlot>18&&inventory->getItemPane(items[i]->m_iSlot)==m_iUnknown3454){int slot=items[i]->m_iSlot;setSlotIcon(item,slot,slot);}}
+ CCharacter* pet=m_pCanEquipCharacter->getFollower(0);
+ if(pet&&(inventory=pet->m_pInventory)){
+  for(int slot=19;slot<82;++slot){
+   if(m_pSlotWindows[slot]->getChildCount())m_pSlotWindows[slot]->removeChildWindow(m_pSlotWindows[slot]->getChildAtIdx(0));
+   m_pSlotGlowWindows[slot]->setProperty("Image","");m_pSocketGlowWindows[slot]->setProperty("Image","");m_pUnidentifiedWindows[slot]->setProperty("Image","");
+   if(m_pStackWindows[slot])m_pStackWindows[slot]->setText("");
+  }
+  TArrayList<CEquipmentRef*>& petItems=merchant_layout::equipment(inventory);
+  for(unsigned i=0;i<petItems.size();++i){CEquipmentRef* ref=petItems[i];CEquipment* item=static_cast<CEquipment*>(ref->m_pUnknown10);if(ref->m_iSlot>18&&inventory->getItemPane(petItems[i]->m_iSlot)==m_iUnknown3458){int slot=petItems[i]->m_iSlot;setPetSlotIcon(item,slot,slot);}}
+ }
+ m_pUnknown20->moveToBack();m_pUnknown40->moveToFront();m_pUnknown28->moveToFront();m_pUnknown38->moveToFront();m_pSocketedIconParent->moveToFront();
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CMerchantMenu::CMerchantMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pUnknown18(parent),m_pOwner(0),m_pCanEquipCharacter(0),m_bOpenPartial(false),m_bUnknown61(true),m_bUnknown62(false),
+ m_pDynamicPropertyFile(&settings),m_pGameUI(&ui),m_pUnknown78(scene),m_pUnknown80(render),m_pPositionableObject(0),
+ m_pResourceManager(resources),m_fScreenEdge(0.0f),m_pSoundBank(0),m_iPetSlotIndexA(-1),m_iPetSlotIndexB(-1),
+ m_iItemSlotIndexA(-1),m_iItemSlotIndexB(-1),m_pHoveredEquipment(0),m_bUnknown3450(false),m_iUnknown3454(0),m_iUnknown3458(0),m_UnknownList3460(10)
+{
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"STATSOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"STATSCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ createMenus();
+}
+CMerchantMenu::~CMerchantMenu() {
+ setOwner(0);setPlayer(0);
+ if(m_pPositionableObject){delete m_pPositionableObject;m_pPositionableObject=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
