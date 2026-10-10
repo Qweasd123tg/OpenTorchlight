@@ -20,7 +20,8 @@ struct ActorFields {
 };
 struct SkillFields {
  char prefix[0x60]; int activation;
- char gap64[0xa8-0x64]; unsigned int levelCount;
+ char gap64[0x6b-0x64]; bool executedByProperty; char gap6c; bool enabled;
+ char gap6e[0xa8-0x6e]; unsigned int levelCount;
  char gapac[0xdc-0xac]; unsigned int baseLevel; unsigned int effectiveLevel;
  char gape4[0x10c-0xe4]; int column,row,pane;
  char gap118[0x150-0x118]; long long guid; unsigned int maxLevel;
@@ -414,6 +415,98 @@ bool CSkillMenu::handle_SpendSkill(const CEGUI::EventArgs& event) {
    m_pSoundBank->playSample(27,0,0.0f,0.0f,false);
   }
   m_HoveredSkillGuid=-1;
+ }
+ return true;
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+#include "SkillTooltip.h"
+#include "Settings.h"
+#include "GameVariables.h"
+CSkillMenu::~CSkillMenu() {
+ if(m_pTooltip){delete m_pTooltip;m_pTooltip=0;}
+ if(m_pModel){delete m_pModel;m_pModel=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
+CSkillMenu::CSkillMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow*,
+ Ogre::SceneManager* scene,Ogre::SceneManager*,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pRoot(parent),m_pOwner(0),m_bOpenPartial(false),m_bClosed(true),m_Data3A(0),m_bSkillHovered(false),m_HoveredSkillGuid(-1),
+ m_pProperties(&settings),m_pGameUI(&ui),m_pSceneManager(scene),m_pModel(0),m_pResourceManager(resources),
+ m_fTopX(5000.0f),m_iPane(0),m_pSoundBank(0),m_iCachedSkillPoints(0),m_Children(10),m_pTooltip(0)
+{
+ for(int i=0;i<100;++i){m_SkillGuids[i]=i;m_SpellGuids[i]=i;}
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"INVENTORYOPEN");
+ if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"INVENTORYCLOSE");
+ if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* assign=sounds->getSoundDataObject(L"POINTASSIGN");
+ if(assign)m_pSoundBank->addSample(27,assign->m_iGuid);
+ CSoundData* skill=sounds->getSoundDataObject(L"ASSIGNSKILL");
+ if(skill)m_pSoundBank->addSample(30,skill->m_iGuid);
+ float width=static_cast<float>(m_pProperties->GetInt(KSETTINGS_RES_WIDTH));
+ m_pProperties->GetInt(KSETTINGS_RES_HEIGHT);
+ m_fScreenEdge=width;
+ createMenus();
+}
+
+void CSkillMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick") && !window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CSkillMenu::handle_onClick,this));
+ }catch(...) {}
+}
+void CSkillMenu::setOpen(bool open) {
+ if(!m_bOpenPartial&&open) {
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);
+  m_pProperties->GetInt(KSETTINGS_RES_WIDTH);
+  m_pProperties->GetInt(KSETTINGS_RES_HEIGHT);
+  m_pModel->setVisible(true);
+  if(m_pModel->animationPlaying("CLOSE"))m_pModel->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pModel->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pModel->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pRoot->addChildWindow(m_pBackground);
+  m_pBackground->moveToBack();
+  switch(m_iPane) {
+  case 0:
+   m_iPane=0;m_Panes[0]->setVisible(true);m_Panes[1]->setVisible(false);m_Panes[2]->setVisible(false);
+   m_Tabs[0]->setSelected(true);m_Tabs[1]->setSelected(false);m_Tabs[2]->setSelected(false);break;
+  case 1:
+   m_iPane=1;m_Panes[0]->setVisible(false);m_Panes[1]->setVisible(true);m_Panes[2]->setVisible(false);
+   m_Tabs[0]->setSelected(false);m_Tabs[1]->setSelected(true);m_Tabs[2]->setSelected(false);break;
+  case 2:
+   m_iPane=2;m_Panes[0]->setVisible(false);m_Panes[1]->setVisible(false);m_Panes[2]->setVisible(true);
+   m_Tabs[0]->setSelected(false);m_Tabs[1]->setSelected(false);m_Tabs[2]->setSelected(true);break;
+  }
+  updateLayout();
+  m_pBackground->moveToBack();m_pTopFrame->moveToFront();m_pBottomFrame->moveToFront();
+ }else if(m_bOpenPartial&&!open) {
+  if(m_pTooltip && m_pTooltip->m_pWindow->getParent())m_pTooltip->m_pWindow->getParent()->removeChildWindow(m_pTooltip->m_pWindow);
+  m_pSoundBank->playSample(66,0,0.0f,0.0f,false);
+  m_pModel->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);
+  m_bClosed=false;
+ }
+ m_bOpenPartial=open;
+}
+
+bool CSkillMenu::handle_SetSkill(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(window) {
+  long long guid=*static_cast<long long*>(window->getUserData());
+  CSkill* skill=skill_layout::actor(m_pOwner).manager->getSkillByGuid(guid);
+  if(skill) {
+   skill->calculateEffectiveSkillLevel();
+   if(skill_layout::fields(skill).effectiveLevel && skill_layout::fields(skill).activation!=4 &&
+      !skill_layout::fields(skill).executedByProperty && skill_layout::fields(skill).enabled) {
+    m_pOwner->setActiveSkillByName(skill->getName());
+    m_pSoundBank->playSample(30,0,0.0f,0.0f,false);
+   }
+  }
  }
  return true;
 }

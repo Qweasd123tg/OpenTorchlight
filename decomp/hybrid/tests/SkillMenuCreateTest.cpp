@@ -49,7 +49,7 @@ extern "C" char mutedSet[] __asm__("_ZN5CEGUI8EventSet13setMutedStateEb");
 extern "C" char visibleSet[] __asm__("_ZN5CEGUI6Window10setVisibleEb");
 TL_FUNCTION(convertScale,"_ZN7CGameUI20convertToScreenScaleEPN5CEGUI6WindowEb")
 TL_FUNCTION(mapFuncs,"_ZN7CGameUI14mapToFunctionsEPN5CEGUI6WindowE")
-TL_FUNCTION(mapHandlers,"_ZN10CSkillMenu16mapEventHandlersEPN5CEGUI6WindowE")
+extern "C" char propertyPresentFn[] __asm__("_ZNK5CEGUI11PropertySet17isPropertyPresentERKNS_6StringE");
 TL_FUNCTION(uniqueNames,"_ZN7STRINGS10uniqueNameERKSs")
 extern "C" char positionGet[] __asm__("_ZNK5CEGUI6Window11getPositionEv");
 extern "C" char fontSet[] __asm__("_ZN5CEGUI6Window7setFontERKNS_6StringE");
@@ -71,7 +71,7 @@ autotest::Capture* cap; CSkillMenu* menu; const Case* cs; std::string* resourceV
 unsigned long long pool[1200][(sizeof(CEGUI::Window)+7)/8];unsigned poolCount;void* eventVtable[8];std::map<std::string,CEGUI::Window*> names;CEGUI::UVector2 sizes[1200],positions[1200];unsigned uniqueCount;bool initialFlags;Ogre::Camera* camera;CEGUI::String* tooltipValue;CEGUI::Window* externalRoot;unsigned connectionCount;unsigned refCounts[1200];unsigned long long connectionObjects[1200][4];
 int wid(const CEGUI::Window* p){for(unsigned i=0;i<poolCount;++i)if(p==(CEGUI::Window*)pool[i])return i+1;return p?999:-1;}
 std::string key(const CEGUI::String& s){std::string k;for(unsigned i=0;i<s.length();++i)k+=char(s[i]);return k;}
-CEGUI::Window* window(const std::string& name,CEGUI::Window* parent){std::map<std::string,CEGUI::Window*>::iterator i=names.find(name);if(i!=names.end())return i->second;if(poolCount==1200)_exit(43);CEGUI::Window* w=(CEGUI::Window*)pool[poolCount++];w->d_parent=parent;*(void***)(static_cast<CEGUI::EventSet*>(w))=eventVtable;names[name]=w;w->d_riseOnClick=initialFlags;w->d_mousePassThroughEnabled=initialFlags;w->d_wantsMultiClicks=initialFlags;w->d_muted=initialFlags;w->d_alwaysOnTop=initialFlags;w->d_zOrderingEnabled=initialFlags;sizes[poolCount-1]=CEGUI::UVector2(CEGUI::UDim(0.25f,40+poolCount),CEGUI::UDim(0.5f,50+poolCount));positions[poolCount-1]=CEGUI::UVector2(CEGUI::UDim(0,(initialFlags?-1.0f:1.0f)*(3+poolCount)),CEGUI::UDim(0,(initialFlags?-1.0f:1.0f)*(7+poolCount)));return w;}
+CEGUI::Window* window(const std::string& name,CEGUI::Window* parent){std::map<std::string,CEGUI::Window*>::iterator i=names.find(name);if(i!=names.end())return i->second;if(poolCount==1200)_exit(43);CEGUI::Window* w=(CEGUI::Window*)pool[poolCount++];new(&w->d_children) std::vector<CEGUI::Window*>;w->d_parent=parent;*(void***)(static_cast<CEGUI::EventSet*>(w))=eventVtable;names[name]=w;w->d_riseOnClick=initialFlags;w->d_mousePassThroughEnabled=initialFlags;w->d_wantsMultiClicks=initialFlags;w->d_muted=initialFlags;w->d_alwaysOnTop=initialFlags;w->d_zOrderingEnabled=initialFlags;sizes[poolCount-1]=CEGUI::UVector2(CEGUI::UDim(0.25f,40+poolCount),CEGUI::UDim(0.5f,50+poolCount));positions[poolCount-1]=CEGUI::UVector2(CEGUI::UDim(0,(initialFlags?-1.0f:1.0f)*(3+poolCount)),CEGUI::UDim(0,(initialFlags?-1.0f:1.0f)*(7+poolCount)));return w;}
 CEGUI::Window* sheet; CEGUI::Imageset* imageSet; CFileSystem* fs;
 Ogre::MeshPtr* meshRef; CGenericModel* model; Ogre::Entity* entity; Ogre::Mesh* mesh;
 CDynamicPropertyFile* first; CDynamicPropertyFile* second; unsigned calls;
@@ -113,7 +113,10 @@ void mute(CEGUI::EventSet* p,bool b){number(24);number(wid(static_cast<CEGUI::Wi
 void visibleWindow(CEGUI::Window* p,bool b){number(25);number(wid(p));number(b);}
 void convert(CGameUI* p,CEGUI::Window* w,bool b){number(26);number(p==menu->m_pGameUI);number(wid(w));number(b);}
 void mapping(CGameUI* p,CEGUI::Window* w){number(27);number(p==menu->m_pGameUI);number(wid(w));}
-void handlers(CSkillMenu* p,CEGUI::Window* w){number(28);number(p==menu);number(wid(w));}
+// Exercise the real recursive mapper in both builds. The controlled layout
+// has no onClick properties; populated trees and subscriptions are covered by
+// SkillMenuMapTest. This remains valid when createMenus flattens the mapper.
+bool propertyPresent(const CEGUI::PropertySet* p,const CEGUI::String& key){number(28);number(wid(static_cast<const CEGUI::Window*>(p)));text(key);return false;}
 std::string unique(const std::string& s){number(29);number(s.size());cap->add(s.data(),s.size());char buf[32];std::sprintf(buf,"%u",++uniqueCount);return s+buf;}
 const CEGUI::UVector2& positionWindow(const CEGUI::Window* p){number(30);number(wid(p));return positions[wid(p)-1];}
 void font(CEGUI::Window* p,const CEGUI::String& value){number(31);number(wid(p));text(value);}
@@ -159,7 +162,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  redirects.redirect(loadLayout,loadLayout,&load);redirects.redirect(searchChild,searchChild,&search);redirects.redirect(removeChild,removeChild,&remove);redirects.redirect(addChild,addChild,&add);
  redirects.redirect(moveFront,moveFront,&front);redirects.redirect(moveBack,moveBack,&back);redirects.redirect(visibleSet,visibleSet,&showWindow);
  redirects.redirect(radioSelected,radioSelected,&selectRadio);
- TL_REDIRECT(redirects,convertScale,&convert);TL_REDIRECT(redirects,mapFuncs,&mapping);TL_REDIRECT(redirects,mapHandlers,&handlers);
+ TL_REDIRECT(redirects,convertScale,&convert);TL_REDIRECT(redirects,mapFuncs,&mapping);redirects.redirect(propertyPresentFn,propertyPresentFn,&propertyPresent);
  TL_REDIRECT(redirects,extremesFn,&extremes);TL_REDIRECT(redirects,tooltipLoadFn,&tooltipLoad);
  if(redirects.failed())_exit(42);
  bool threw=false;try{if(ours)autotest::invoke(out,&candidateCreate,menu);else autotest::invoke(out,&originalCreate,menu);}catch(const Stop&){threw=true;}catch(...){_exit(55);}
