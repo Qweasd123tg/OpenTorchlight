@@ -8,6 +8,7 @@ class CGameUI;
 #include "UnitTypes.h"
 #include "TArrayList.h"
 
+class CGraph;
 class CMissile;
 class CEquipment;
 class CSpawnClass;
@@ -35,6 +36,7 @@ class CCameraControl;
 class CResourceManager : public CRunicCore
 {
 public:
+    CGraph* getGraph(const std::wstring&);
     CGameUI* getGameUI();
     CEquipment* createEquipment(const wchar_t*,bool,bool);
     CSpawnClass* getSpawnClassByName(const std::wstring&);

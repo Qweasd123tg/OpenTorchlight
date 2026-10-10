@@ -682,6 +682,38 @@ class ContextIndex:
             return set()
         return headers | {"SafePointer.h"}
 
+    WINDOW_ARRAY_HEADER_SHA256 = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+
+    def _window_array_headers(self, callee, scope):
+        """Pinned existing pointer-array destructor, without an invented prototype.
+
+        Only the exact weak Window* D1/D2 specialization is recognized. The
+        array elements are pointers; this body does not destroy the Windows.
+        """
+        if (scope != "TArrayList<CEGUI::Window*>"
+                or callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or callee.get("method") != "~TArrayList"
+                or callee.get("qualified") != scope + "::~TArrayList"
+                or callee.get("params") != "" or callee.get("cv", "")):
+            return set()
+        names = {"_ZN10TArrayListIPN5CEGUI6WindowEED1Ev",
+                 "_ZN10TArrayListIPN5CEGUI6WindowEED2Ev"}
+        if (set(callee.get("names", ())) != names or callee.get("mangled") not in names
+                or any((_address(callee["address"]), name, callee.get("size"))
+                       not in self.elf_weak_functions for name in names)):
+            return set()
+        header = "TArrayList.h"
+        # The shallow class scanner intentionally omits class templates.
+        # The exact reviewed template source is authenticated below instead.
+        if header not in self.sources:
+            return set()
+        raw = self._path("include", header).read_bytes()
+        if (hashlib.sha256(raw).hexdigest() != self.WINDOW_ARRAY_HEADER_SHA256
+                or raw.decode("utf-8") != self.sources[header]):
+            return set()
+        return {header}
+
     def _implicit_destructor_headers(self, callee, scope, candidates):
         """C++98 implicitly declares complete/base D1/D2 destructors.
 
@@ -806,6 +838,7 @@ class ContextIndex:
                                if (not candidates or name in candidates) and _declares_callee(decl, callee)}
             implicit_headers = self._implicit_destructor_headers(callee, scope, candidates)
             template_headers = self._safe_pointer_headers(callee, scope)
+            window_array_headers = self._window_array_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers)
             elif implicit_headers:
@@ -815,6 +848,11 @@ class ContextIndex:
                 wanted.update(template_headers)
                 notes.append(f"{address:#x}: existing pinned TSafePointer setObject template body; "
                              f"weak ELF/DB identity and complete pointee header; SafePointer.h SHA256 {self.SAFE_POINTER_HEADER_SHA256}. "
+                             "No specialization or prototype synthesized.")
+            elif window_array_headers:
+                wanted.update(window_array_headers)
+                notes.append(f"{address:#x}: existing pinned TArrayList<CEGUI::Window*> D1/D2 destructor body; "
+                             f"both weak ELF/DB identities; TArrayList.h SHA256 {self.WINDOW_ARRAY_HEADER_SHA256}. "
                              "No specialization or prototype synthesized.")
             elif scope in local_types and self._tu(callee, None) == tu:
                 local_names.add(scope)

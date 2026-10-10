@@ -1023,6 +1023,64 @@ class PacketContextTests(TestCase):
         self.assertEqual(len(result.gaps),1)
         self.assertIn("CUnrelated::missing",result.gaps[0])
 
+    def window_array(self):
+        body = "template<class T> class TArrayList { public: ~TArrayList() { if (data) delete[] data; } T* data; };\n"
+        self.write_header("TArrayList.h", body)
+        pin = mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", hashlib.sha256(body.encode()).hexdigest())
+        pin.start(); self.addCleanup(pin.stop)
+        scope = "TArrayList<CEGUI::Window*>"
+        names = ["_ZN10TArrayListIPN5CEGUI6WindowEED1Ev", "_ZN10TArrayListIPN5CEGUI6WindowEED2Ev"]
+        f = function(0x2000, scope, "~TArrayList", tu=1, kind="inline_or_template", bind=["weak", "weak"], names=names, params="", cv="")
+        f["mangled"] = names[0]
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True, value=0x2000, name=n, size=f["size"]) for n in names]
+        return f
+
+    def test_window_array_existing_destructor_body_is_context(self):
+        self.window_array()
+        result = self.index().build(self.target, "1000: call 2000").require_complete()
+        self.assertEqual(result.headers, ("TArrayList.h",))
+        self.assertIn((self.include/"TArrayList.h").read_text(), result.text)
+        self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_window_array_rejects_wrong_db_identity(self):
+        for change in ("strong", "ordinary", "method", "params", "cv", "mangled", "names", "qualified", "size", "scope"):
+            with self.subTest(change=change):
+                f = self.window_array()
+                if change == "strong": f["bind"] = ["global", "global"]
+                elif change == "ordinary": f["kind"] = "function"
+                elif change == "method": f["method"] = "clear"
+                elif change == "params": f["params"] = "int"
+                elif change == "cv": f["cv"] = "const"
+                elif change == "mangled": f["mangled"] = "_fake"
+                elif change == "names": f["names"] = ["_ZN10TArrayListIPN5CEGUI6WindowEED0Ev"]
+                elif change == "qualified": f["qualified"] = "Unrelated::~Unrelated"
+                elif change == "size": f["size"] += 1
+                elif change == "scope": f["scope"] = "TArrayList<CNode*>"
+                self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_window_array_requires_both_actual_weak_elf_functions(self):
+        for change in ("absent", "name", "size", "address", "binding", "type", "undefined"):
+            with self.subTest(change=change):
+                self.window_array(); symbol = self.image.symbols[1]
+                if change == "absent": self.image.symbols.pop()
+                elif change == "name": symbol.name = "_fake"
+                elif change == "size": symbol.size += 1
+                elif change == "address": symbol.value += 1
+                elif change == "binding": symbol.bind = 1
+                elif change == "type": symbol.type = 1
+                elif change == "undefined": symbol.defined = False
+                self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_window_array_changed_header_remains_gap(self):
+        self.window_array()
+        with (self.include/"TArrayList.h").open("a") as out: out.write("// changed\n")
+        self.assertTrue(self.index().build(self.target,"1000: call 2000").gaps)
+
+    def test_window_array_does_not_hide_unrelated_callee(self):
+        self.window_array(); self.add_function(function(0x3000,"CUnrelated","missing",tu=2))
+        self.assertTrue(self.index().build(self.target,"1000: call 2000\n1005: call 3000").gaps)
+
     def implicit_destructor(self):
         self.write_header("FileInfo.h", "class CFileInfo { public: CFileInfo() {} int value; };\n")
         self.mapping["CFileInfo"] = ["FileInfo.h"]

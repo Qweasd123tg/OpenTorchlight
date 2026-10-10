@@ -3,11 +3,13 @@
 #include "DropdownMenu.h"
 #include "TArrayList.h"
 class CPlayer;
+class CGraph;
 namespace STRINGS { std::wstring GetValueAsWString(float); }
 enum ESTATSMENU_STATS { STATSMENU_STATS_FIRST = 0 };
-// Partial through the creation fields. Unused trailing state is unrecovered.
+// Layout through 0x190, recovered from the constructor and update.
 class CStatsMenuFill : public CDropdownMenu {
 public:
+ CStatsMenuFill(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
  virtual ~CStatsMenuFill();
  virtual void update(float);
  virtual void setOpen(bool);
@@ -34,5 +36,12 @@ public:
  bool m_AddHeld[4];
  bool m_RemoveHeld[4];
  CPlayer* m_pPlayer;
+ float m_HeldTime;
+ CGraph* m_pPointGraph;
+ float m_BarCooldown;
+ CSoundBank* m_pFillSoundBank;
+ float m_FillSoundInterval;
+ float m_FillSoundCountdown;
+ bool m_Filling;
 };
 #endif
