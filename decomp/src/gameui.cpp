@@ -2347,3 +2347,158 @@ void CGameUI::useItem(CLevel& level, CEquipment* item)
             m_pCharacter, m_pCharacter, m_pCharacter);
     }
 }
+
+bool CGameUI::handle_SkillSelectMouseOver(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window =
+        static_cast<const CEGUI::WindowEventArgs&>(event).window;
+    if (window) {
+        if (window->getID() == 1000) {
+            const long long guid = *static_cast<const long long*>(window->getUserData());
+            CDataGroup* data = m_pCharacter->getResourceManager()->getUnitDataByGuid(guid);
+            if (data) {
+                m_foldoutItemHovered = true;
+                m_foldoutItemGuid = menu_item_click_detail::state(this).resourceManager
+                    ->getUnitGuidByDataGroup(data, L"UNIT_GUID");
+            }
+            m_foldoutSkillHovered = false;
+        } else {
+            const long long guid = *static_cast<const long long*>(window->getUserData());
+            m_foldoutSkillHovered = true;
+            m_foldoutItemHovered = false;
+            m_foldoutSkillGuid = guid;
+        }
+    }
+    m_itemHovered = false;
+    m_skillHovered = false;
+    return true;
+}
+
+bool CGameUI::handle_SkillSelectClick(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window =
+        static_cast<const CEGUI::WindowEventArgs&>(event).window;
+    if (!window) return true;
+
+    if (window->getID() == 1000) {
+        const long long guid = *static_cast<const long long*>(window->getUserData());
+        CDataGroup* data = m_pCharacter->getResourceManager()->getUnitDataByGuid(guid);
+        const unsigned slot = m_foldout->m_iSelection;
+        CCharacter* character = m_pCharacter;
+        if (data && character) {
+            gameui_slots_detail::ActorState& slots = gameui_slots_detail::actor(character);
+            slots.hotkeyItems[slot] = guid;
+            if (guid != -1)
+                slots.hotkeySkills[slot] = -1;
+        }
+    } else {
+        const long long guid = *static_cast<const long long*>(window->getUserData());
+        const unsigned slot = m_foldout->m_iSelection;
+        if (m_pCharacter && gameui_input_detail::skills(m_pCharacter)) {
+            if (guid == -999) {
+                m_pCharacter->setLeftSkillByName(EMPTY_WSTRING);
+                menu_item_click_detail::state(this).soundBank->playSample(
+                    30, NULL, 0.f, 0.f, false);
+            } else {
+                CSkill* skill = gameui_input_detail::skills(m_pCharacter)->getSkillByGuid(guid);
+                if (skill) {
+                    skill->calculateEffectiveSkillLevel();
+                    gameui_input_detail::SkillEligibility& eligibility =
+                        *reinterpret_cast<gameui_input_detail::SkillEligibility*>(skill);
+                    if (eligibility.effectiveLevel &&
+                        (!eligibility.executedByProperty & eligibility.enabled)) {
+                        if (slot == 100)
+                            m_pCharacter->setLeftSkillByName(skill->getName());
+                        else if (slot == 102)
+                            m_pCharacter->setAltSkillByName(skill->getName());
+                        else if (slot == 101)
+                            m_pCharacter->setActiveSkillByName(skill->getName());
+                        else if (gameui_input_detail::skills(m_pCharacter)) {
+                            const long long skillGuid = foldout_show_detail::skill(skill).guid;
+                            gameui_slots_detail::ActorState& slots =
+                                gameui_slots_detail::actor(m_pCharacter);
+                            slots.hotkeySkills[slot] = skillGuid;
+                            if (skillGuid != -1)
+                                slots.hotkeyItems[slot] = -1;
+                        }
+                        menu_item_click_detail::state(this).soundBank->playSample(
+                            30, NULL, 0.f, 0.f, false);
+                    }
+                }
+            }
+        }
+    }
+    gameui_input_detail::input(this).inputCaptured = true;
+    gameui_input_detail::detachFromActualParent(m_foldout->m_pWindow);
+    return true;
+}
+
+bool CGameUI::handle_SkillClick(const CEGUI::EventArgs& event)
+{
+    const CEGUI::MouseEventArgs& mouse = static_cast<const CEGUI::MouseEventArgs&>(event);
+    CEGUI::Window* window = mouse.window;
+    unsigned slot = window->getID();
+    if (slot != 100 && slot != 101 && slot != 102) {
+        for (unsigned i = 0; i < 10; ++i) {
+            if (gameui_slots_detail::state(this).buttons[i] == window) {
+                slot = i;
+                break;
+            }
+        }
+    }
+
+    if (mouse.button == CEGUI::RightButton && slot != 100 && slot != 101 && slot != 102) {
+        if (gameui_slots_detail::actor(m_pCharacter).hotkeyItems[slot] != -1) {
+            activateItemSlot(slot, false);
+        } else {
+            const long long guid = gameui_slots_detail::actor(m_pCharacter).hotkeySkills[slot];
+            if (guid != -1) {
+                CSkill* skill = gameui_input_detail::skills(m_pCharacter)->getSkillByGuid(guid);
+                if (skill && (skill->getTargetType() == 3 || skill->getTargetType() == 10 ||
+                              skill->getTargetType() == 9 || skill->getTargetType() == 7 ||
+                              skill->getTargetType() == 8 || skill->getTargetType() == 4)) {
+                    const bool direct = skill->getTargetType() != 7 && skill->getTargetType() != 8;
+                    m_gameClient->clickRight(
+                        gameui_slots_detail::actor(m_pCharacter).hotkeySkills[slot], direct, false);
+                }
+            }
+        }
+    } else if (gameui_input_detail::keys(this).keyHeld(0x11) &&
+               slot != 102 && slot != 101 && slot != 100) {
+        gameui_input_detail::detachFromActualParent(m_foldout->m_pWindow);
+        gameui_slots_detail::actor(m_pCharacter).hotkeyItems[slot] = -1;
+        gameui_slots_detail::actor(m_pCharacter).hotkeySkills[slot] = -1;
+        updateSlots();
+    } else {
+        if (slot == static_cast<unsigned>(m_foldout->m_iSelection) &&
+            m_foldout->m_pWindow->getParent()) {
+            gameui_input_detail::detachFromActualParent(m_foldout->m_pWindow);
+        } else {
+            gameui_input_detail::detachFromActualParent(m_foldout->m_pWindow);
+            menu_item_click_detail::UIState& ui = menu_item_click_detail::state(this);
+            CEquipment* item = ui.draggedItem.getObject();
+            if (item) {
+                if (item->ISA(UNITTYPES::CONSUMABLE) && !item->ISA(UNITTYPES::SPELL) &&
+                    slot != 102 && slot != 101 && slot != 100 &&
+                    (ui.dragOwner.getObject() == m_pCharacter ||
+                     ui.dragOwner.getObject() == m_pCharacter->getFollower(0)) && m_pCharacter) {
+                    const long long guid = menu_item_click_detail::guid(ui.draggedItem.getObject());
+                    gameui_slots_detail::actor(m_pCharacter).hotkeyItems[slot] = guid;
+                    if (guid != -1)
+                        gameui_slots_detail::actor(m_pCharacter).hotkeySkills[slot] = -1;
+                }
+                returnDraggedItem();
+            } else {
+                m_foldout->m_iSelection = slot;
+                const unsigned id = window->getID();
+                const bool includeItems = id != 101 && id != 102 && id != 100;
+                const float top = window->getPixelRect().d_top;
+                const float left = window->getPixelRect().d_left;
+                const float width = window->getPixelRect().getWidth();
+                m_foldout->showFoldout(m_pCharacter, width + left, top, includeItems, id == 100);
+            }
+        }
+    }
+    gameui_input_detail::input(this).inputCaptured = true;
+    return true;
+}
