@@ -66,6 +66,12 @@ TL_FUNCTION(callback0Fn,"_ZN8CPetMenu17handle_RotateLeftERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback1Fn,"_ZN8CPetMenu20handle_EndRotateLeftERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback2Fn,"_ZN8CPetMenu18handle_RotateRightERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback3Fn,"_ZN8CPetMenu21handle_EndRotateRightERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback4Fn,"_ZN8CPetMenu19handle_MouseThroughERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback5Fn,"_ZN8CPetMenu18handle_CloseButtonERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback6Fn,"_ZN8CPetMenu16handle_ItemClickERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback7Fn,"_ZN8CPetMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback8Fn,"_ZN8CPetMenu21handle_SpellMouseOverERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback9Fn,"_ZN8CPetMenu20handle_SpellMouseOutERKN5CEGUI9EventArgsE")
 namespace {
 struct Stop {};
 struct Case { int width,height; bool replace; float ratio;unsigned faultSubscription;unsigned iconPattern; };
@@ -97,8 +103,8 @@ void zWindow(CEGUI::Window* p,bool x){number(13);number(wid(p));number(x);p->d_z
 void captureCallback(const CEGUI::MemberFunctionSlot<CPetMenu>* slot){
  intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
  std::memcpy(words,&slot->d_function,sizeof(words));
- char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked}};
- for(unsigned i=0;i<4;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
+ char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{callback4Fn_original,callback4Fn_linked},{callback5Fn_original,callback5Fn_linked},{callback6Fn_original,callback6Fn_linked},{callback7Fn_original,callback7Fn_linked},{callback8Fn_original,callback8Fn_linked},{callback9Fn_original,callback9Fn_linked}};
+ for(unsigned i=0;i<10;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
  cap->add(words,sizeof(words));
 }
 CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber sub){number(14);number(wid(static_cast<CEGUI::Window*>(p)));text(name);CEGUI::MemberFunctionSlot<CPetMenu>* f=static_cast<CEGUI::MemberFunctionSlot<CPetMenu>*>(sub.d_functor_impl);captureCallback(f);number(f->d_object==menu);if(cs->faultSubscription==connectionCount+1)throw Stop();number(34);unsigned outstanding=0;for(unsigned i=0;i<connectionCount;++i)outstanding+=refCounts[i]-1;number(outstanding);number(connectionCount?refCounts[connectionCount-1]:0);if(connectionCount==1200)_exit(44);unsigned k=connectionCount++;refCounts[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)connectionObjects[k];result.d_count=&refCounts[k];return result;}
@@ -171,6 +177,6 @@ void a(void* p,autotest::Capture& out){side(*(Case*)p,false,out);}void b(void* p
 TL_TEST(pet_create_menus_differential){
  int bad=0;unsigned total=0;autotest::Coverage coverage("pet_create_menus_differential",(uint64_t)(uintptr_t)&originalCreate);const int values[]={0,1,1920,1080,-1,2147483647,(-2147483647-1)};
  const float ratios[]={0.0f,0.75f,1.0f,-1.0f,-0.0f,std::numeric_limits<float>::infinity(),-std::numeric_limits<float>::infinity(),std::numeric_limits<float>::quiet_NaN()};
- for(unsigned q=0;q<8;++q)for(unsigned x=0;x<7;++x)for(unsigned y=0;y<7;++y)for(unsigned change=0;change<2;++change)for(unsigned pattern=0;pattern<6;++pattern){Case c={values[x],values[y],bool(change),ratios[q],0,pattern};autotest::Outcome u,v;autotest::runChild(a,&c,u);autotest::runChild(b,&c,v);int pair=coverage.observe(host,u,v);++total;bool ok=pair==0&&u.capture.callStarted&&v.capture.callStarted&&u.capture.callCompleted&&v.capture.callCompleted&&u.reportValid&&v.reportValid&&u.childStatus==0&&v.childStatus==0&&u.capture.issue==0&&v.capture.issue==0&&u.capture.length>100&&u.capture.length==v.capture.length&&!std::memcmp(u.capture.data,v.capture.data,u.capture.length);if(!ok){++bad;if(bad==1){size_t f=0;while(f<u.capture.length&&f<v.capture.length&&u.capture.data[f]==v.capture.data[f])++f;host->log("    FIRST BYTE DIFFERENCE %lu\n",(unsigned long)f);for(size_t k=f/4>12?f/4-12:0;k<f/4+30;++k){unsigned ua=0,va=0;if(k*4+4<=u.capture.length)std::memcpy(&ua,u.capture.data+k*4,4);if(k*4+4<=v.capture.length)std::memcpy(&va,v.capture.data+k*4,4);host->log("    word %lu: %u / %u\n",(unsigned long)k,ua,va);}}host->log("    prefix %u/%u/%u exits %d/%d lengths %lu/%lu\n",x,y,change,u.childStatus,v.childStatus,(unsigned long)u.capture.length,(unsigned long)v.capture.length);return 1;}}
+ for(unsigned q=0;q<8;++q)for(unsigned x=0;x<7;++x)for(unsigned y=0;y<7;++y)for(unsigned change=0;change<2;++change)for(unsigned pattern=0;pattern<6;++pattern){Case c={values[x],values[y],bool(change),ratios[q],0,pattern};autotest::Outcome u,v;autotest::runChild(a,&c,u);autotest::runChild(b,&c,v);int pair=coverage.observe(host,u,v);++total;bool ok=pair==0&&u.capture.callStarted&&v.capture.callStarted&&u.capture.callCompleted&&v.capture.callCompleted&&u.reportValid&&v.reportValid&&u.childStatus==0&&v.childStatus==0&&u.capture.issue==0&&v.capture.issue==0&&u.capture.length>100&&u.capture.length==v.capture.length&&!std::memcmp(u.capture.data,v.capture.data,u.capture.length);if(!ok){++bad;if(bad==1){size_t f=0;while(f<u.capture.length&&f<v.capture.length&&u.capture.data[f]==v.capture.data[f])++f;host->log("    FIRST BYTE DIFFERENCE %lu\n",(unsigned long)f);for(size_t k=f/4>12?f/4-12:0;k<f/4+30;++k){unsigned ua=0,va=0;if(k*4+4<=u.capture.length)std::memcpy(&ua,u.capture.data+k*4,4);if(k*4+4<=v.capture.length)std::memcpy(&va,v.capture.data+k*4,4);host->log("    word %lu: %u / %u\n",(unsigned long)k,ua,va);}}host->log("    prefix %u/%u/%u exits %d/%d lengths %lu/%lu\n",x,y,change,u.childStatus,v.childStatus,(unsigned long)u.capture.length,(unsigned long)v.capture.length);coverage.report(host);return 1;}}
  coverage.report(host);host->log("    FULL BODY COMPARISON: %u cases, %d differences; bounded UI spies with connection lifetime observation; controlled collaborators\n",total,bad);return bad;
 }
