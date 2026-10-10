@@ -36,6 +36,7 @@ public:
     void toggleWeaponSet();
     virtual ~CInventoryMenu();
     void setTab(int);
+    void checkForUpdate(CEquipment*);
     virtual CBaseUnit* getOwner();
     virtual bool isRight();
     virtual bool open();
@@ -86,10 +87,12 @@ private:
     char m_InventoryData58[8];
     bool m_bOpen;
     bool m_bFullyClosed;
-    char m_InventoryData62[0x68 - 0x62];
+    bool m_bCloseRequested;
+    char m_InventoryData63[0x68 - 0x63];
     CDynamicPropertyFile* m_pDynamicPropertyFile;
     CGameUI* m_pGameUI;
-    char m_InventoryData78[8];
+    int m_ClickedSlot;
+    int m_RightClickedSlot;
     int m_aiSlotData[1000];
     CEquipment* m_pHoverObject;
     CEGUI::Window* m_pSocketedSizeWindows[82];
