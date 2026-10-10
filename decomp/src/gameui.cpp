@@ -1811,3 +1811,191 @@ CTextEvent* CGameUI::getTextEventObject(const Ogre::Vector3& position,
     return event;
 }
 
+
+#include "LevelTemplateData.h"
+#include "StatsMenu.h"
+#include "SkillMenu.h"
+#include "StringTranslate.h"
+
+namespace gameui_click_detail {
+// Preserve the original calls, including the inline CItem method and methods
+// already recovered in this translation unit.
+extern bool isUseable(CItem*) __asm__("_ZN5CItem9isUseableEv");
+extern void togglePause(CGameUI*) __asm__("_ZN7CGameUI11togglePauseEv");
+extern void togglePet(CGameUI*) __asm__("_ZN7CGameUI9togglePetEv");
+extern void toggleInventory(CGameUI*) __asm__("_ZN7CGameUI15toggleInventoryEv");
+extern void toggleQuest(CGameUI*) __asm__("_ZN7CGameUI11toggleQuestEv");
+extern void toggleStats(CGameUI*) __asm__("_ZN7CGameUI11toggleStatsEv");
+extern void toggleSkill(CGameUI*) __asm__("_ZN7CGameUI11toggleSkillEv");
+extern void toggleJournal(CGameUI*) __asm__("_ZN7CGameUI13toggleJournalEv");
+extern void toggleOptions(CGameUI*) __asm__("_ZN7CGameUI13toggleOptionsEv");
+extern bool modalDialogOpenPartial(CGameUI*) __asm__("_ZN7CGameUI22modalDialogOpenPartialEv");
+extern void performItemUse(CGameUI*,CLevel&,CEquipment*,CCharacter*,CCharacter*,CCharacter*)
+    __asm__("_ZN7CGameUI14performItemUseER6CLevelP10CEquipmentP10CCharacterS5_S5_");
+extern void returnDraggedItem(CGameUI*) __asm__("_ZN7CGameUI17returnDraggedItemEv");
+extern void openModalDialog(CGameUI*,std::wstring,std::wstring,bool)
+    __asm__("_ZN7CGameUI15openModalDialogESbIwSt11char_traitsIwESaIwEES3_b");
+}
+
+bool CGameUI::onClick(ELayoutFunction function)
+{
+    typedef char check_ui_actor[__builtin_offsetof(CGameUI,m_pCharacter)==0x38?1:-1];
+    typedef char check_ui_level[__builtin_offsetof(CGameUI,m_level)==0x40?1:-1];
+    typedef char check_ui_settings[__builtin_offsetof(CGameUI,m_settings)==0x78?1:-1];
+    typedef char check_ui_stats[__builtin_offsetof(CGameUI,m_characterStatsMenu)==0x4e0?1:-1];
+    typedef char check_ui_skills[__builtin_offsetof(CGameUI,m_skillsMenu)==0x558?1:-1];
+    typedef char check_ui_pet_mode[__builtin_offsetof(CGameUI,m_cachedPetMode)==0x16c8?1:-1];
+    typedef char check_ui_paused[__builtin_offsetof(CGameUI,m_paused)==0x1999?1:-1];
+    typedef char check_actor_sound[__builtin_offsetof(CCharacter,m_levelSound)==0x298?1:-1];
+    typedef char check_actor_state[__builtin_offsetof(CCharacter,m_eAIState)==0x330?1:-1];
+    typedef char check_actor_stat_points[__builtin_offsetof(CCharacter,m_iUnusedStatPoints)==0x45c?1:-1];
+    typedef char check_actor_skill_points[__builtin_offsetof(CCharacter,m_iUnusedSkillPoints)==0x460?1:-1];
+    typedef char check_actor_followers[__builtin_offsetof(CCharacter,m_Followers)==0x648?1:-1];
+    typedef char check_actor_pet_mode[__builtin_offsetof(CCharacter,m_petMode)==0x710?1:-1];
+    typedef char check_template_pet_departure[__builtin_offsetof(CLevelTemplateData,m_permitsPetDeparture)==0x85?1:-1];
+    typedef char check_equipment_icon[__builtin_offsetof(CEquipment,m_pIconWindow)==0x2c8?1:-1];
+    typedef char check_ui_size[sizeof(CGameUI)==0x1a08?1:-1];
+    typedef char check_character_size[sizeof(CCharacter)==0x778?1:-1];
+    typedef char check_template_size[sizeof(CLevelTemplateData)==0x778?1:-1];
+
+    menu_item_click_detail::UIState& ui=menu_item_click_detail::state(this);
+    gameui_input_detail::InputState& input=gameui_input_detail::input(this);
+    CCharacter* pet=NULL;
+    if(m_pCharacter->getFollowerCount())pet=m_pCharacter->getFollower(0);
+
+    switch(function) {
+    case 11:
+        gameui_click_detail::togglePause(this);
+        break;
+    case 68:
+        input.consumeNextInput=true;
+        if(!ui.draggedItem.getObject()) {
+            gameui_click_detail::togglePet(this);
+        } else if(gameui_click_detail::isUseable(ui.draggedItem.getObject()) &&
+                  pet->m_eAIState!=42 && pet->m_eAIState!=41) {
+            // Eligibility uses the entry pet, but the use target is reloaded
+            // after isUseable, which can change the actor and its followers.
+            CCharacter* actor=m_pCharacter;
+            if(actor->getFollowerCount()) {
+                CCharacter* recipient=actor->getFollower(0);
+                gameui_click_detail::performItemUse(this,*m_level,ui.draggedItem.getObject(),
+                    actor,actor,recipient);
+                if(!ui.draggedItem.getObject())return true;
+                gameui_click_detail::returnDraggedItem(this);
+            }
+        } else if(!ui.draggedItem.getObject()) {
+            gameui_click_detail::togglePet(this);
+        } else {
+            ui.soundBank->playSample(24,m_pCharacter->getSceneNode(),0.f,0.f,false);
+            CSoundBank* sound=m_pCharacter->m_levelSound;
+            if(sound)sound->queueGlobalSample(49,0.f,0.1f);
+        }
+        if(ui.draggedItem.getObject())ui.draggedItem.getObject()->m_pIconWindow->moveToFront();
+        break;
+    case 69:
+    case 70:
+    case 71:
+        input.consumeNextInput=true;
+        if(pet) {
+            const int mode=static_cast<int>(function)-69;
+            m_cachedPetMode=mode;
+            pet->m_petMode=mode;
+            pet->setTarget(NULL);
+        }
+        break;
+    case 72:
+        gameui_click_detail::toggleInventory(this);
+        break;
+    case 73:
+        gameui_click_detail::toggleQuest(this);
+        break;
+    case 74:
+        gameui_click_detail::toggleStats(this);
+        break;
+    case 75:
+        gameui_click_detail::toggleSkill(this);
+        break;
+    case 77:
+        gameui_click_detail::toggleJournal(this);
+        break;
+    case 78:
+        gameui_click_detail::togglePet(this);
+        break;
+    case 79:
+        if(m_level&&!m_paused)m_level->toggleAutomap();
+        break;
+    case 80:
+        gameui_click_detail::toggleOptions(this);
+        break;
+    case 81: {
+        const int previous=m_settings->GetInt(KSETTINGS_TOGGLE_ITEM_NAME);
+        m_settings->SetInt(KSETTINGS_TOGGLE_ITEM_NAME,previous==0);
+        break;
+    }
+    case 82:
+        input.consumeNextInput=true;
+        if(m_level&&!m_paused)m_level->zoomAutomap(-5.f);
+        break;
+    case 83:
+        input.consumeNextInput=true;
+        if(m_level&&!m_paused)m_level->zoomAutomap(5.f);
+        break;
+    case 84:
+        input.consumeNextInput=true;
+        if(!gameui_click_detail::modalDialogOpenPartial(this)) {
+            if(!m_characterStatsMenu->openPartial()) {
+                gameuiBoundaryCloseLeft(this);
+                m_characterStatsMenu->setOpen(true);
+            }
+            if(!m_skillsMenu->openPartial()) {
+                gameuiBoundaryCloseRight(this);
+                m_skillsMenu->setOpen(true);
+            }
+        }
+        break;
+    case 85:
+        input.consumeNextInput=true;
+        if(!gameui_click_detail::modalDialogOpenPartial(this) &&
+           !m_characterStatsMenu->openPartial()) {
+            gameuiBoundaryCloseLeft(this);
+            m_characterStatsMenu->setOpen(true);
+            if(m_pCharacter->m_iUnusedSkillPoints>0 && !m_skillsMenu->openPartial()) {
+                gameuiBoundaryCloseRight(this);
+                m_skillsMenu->setOpen(true);
+            }
+        }
+        break;
+    case 86:
+        input.consumeNextInput=true;
+        if(!gameui_click_detail::modalDialogOpenPartial(this) &&
+           !m_skillsMenu->openPartial()) {
+            gameuiBoundaryCloseRight(this);
+            m_skillsMenu->setOpen(true);
+            if(m_pCharacter->m_iUnusedStatPoints>0 && !m_characterStatsMenu->openPartial()) {
+                gameuiBoundaryCloseLeft(this);
+                m_characterStatsMenu->setOpen(true);
+            }
+        }
+        break;
+    case 95:
+        input.consumeNextInput=true;
+        if(!pet)break;
+        if(!m_level->getLevelTemplateData()->m_permitsPetDeparture) {
+            static std::wstring g_Pet;
+            if(g_Pet.empty())g_Pet=CStringTranslate::getSinglton()->getTranslateString(L"Pet");
+            static std::wstring g_PetCannotDepart;
+            if(g_PetCannotDepart.empty())g_PetCannotDepart=CStringTranslate::getSinglton()->getTranslateString(
+                L"Your pet cannot depart from here!");
+            gameui_click_detail::openModalDialog(this,g_Pet,g_PetCannotDepart,false);
+        } else if(!pet->isPetNearDeath() && pet->alive() &&
+                  pet->m_eAIState!=42 && pet->m_eAIState!=41) {
+            CSoundBank* sound=m_pCharacter->m_levelSound;
+            if(sound)sound->queueGlobalSample(43,0.f,0.1f);
+            pet->sendToTown(*m_level);
+        }
+        break;
+    default:
+        break;
+    }
+    return true;
+}
