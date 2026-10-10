@@ -21,17 +21,21 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import ExitStack, contextmanager
+from functools import wraps
 import fcntl
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import subprocess
 import sys
 import tarfile
 import tempfile
 import threading
+import time
 import urllib.request
 
 import resource_slots
@@ -156,10 +160,67 @@ def driver_env(root):
     return env
 
 
+# Process-local additive monotonic measurements, protected across worker threads.
+# Durations include scheduling and may overlap: do not sum nested phase totals or
+# interpret concurrent wall nanoseconds as CPU time. Reset only at an idle boundary.
+_COMPILER_STATS = {}
+_COMPILER_STATS_LOCK = threading.Lock()
+
+
+def compiler_stats(reset=False):
+    """Return phase *_calls/*_ns and identity byte/path counters (zero if absent).
+
+    No paths, source text or environment values are retained. The independent
+    shared_cache_stats() API and its hit/miss/fallback shape remain unchanged.
+    """
+    with _COMPILER_STATS_LOCK:
+        result = dict(_COMPILER_STATS)
+        if reset:
+            _COMPILER_STATS.clear()
+        return result
+
+
+def _compiler_count(**values):
+    with _COMPILER_STATS_LOCK:
+        for name, value in values.items():
+            _COMPILER_STATS[name] = _COMPILER_STATS.get(name, 0) + value
+
+
+@contextmanager
+def _compiler_phase(name):
+    started = time.monotonic_ns()
+    try:
+        yield
+    finally:
+        _compiler_count(**{name + "_calls": 1, name + "_ns": time.monotonic_ns() - started})
+
+
+def _measure_compiler_phase(name):
+    def decorate(function):
+        @wraps(function)
+        def measured(*args, **kwargs):
+            with _compiler_phase(name):
+                return function(*args, **kwargs)
+        return measured
+    return decorate
+
+
 def run_compiler(cmd, **kwargs):
-    """Bound backend and preprocessor subprocesses across independent worktrees."""
-    with resource_slots.slot("compiler"):
-        return subprocess.run(cmd, **kwargs)
+    """Bound compiler children; separately measure slot waiting and execution."""
+    phase = ("preprocess_run" if "-E" in cmd else
+             "assembly_run" if Path(cmd[0]).name == "as" else "backend_run")
+    waiting = time.monotonic_ns()
+    try:
+        with resource_slots.slot("compiler"):
+            _compiler_count(compiler_slot_wait_calls=1,
+                            compiler_slot_wait_ns=time.monotonic_ns() - waiting)
+            waiting = None
+            with _compiler_phase(phase):
+                return subprocess.run(cmd, **kwargs)
+    finally:
+        if waiting is not None:
+            _compiler_count(compiler_slot_wait_calls=1, compiler_slot_wait_failures=1,
+                            compiler_slot_wait_ns=time.monotonic_ns() - waiting)
 
 
 CC_CACHE = Path(__file__).resolve().parents[2] / "build-decomp" / "cc-cache"
@@ -216,24 +277,85 @@ def _shared_flags(flags):
     return semantic
 
 
-def _compiler_identity(cmd, root):
-    digest = hashlib.sha256()
-    for path in (Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
-                 root / "usr/bin/as"):
-        digest.update(sha256(path).encode())
-    # cc1plus also uses the pinned GMP/MPFR and C++ runtime. Header contents
-    # already participate via fresh preprocessing; these affect the backend.
+def _identity_stat(value):
+    # ctime detects writes even when a caller restores the original size/mtime.
+    # This token only guards one scan; it is never a cross-call content identity.
+    return (value.st_dev, value.st_ino, value.st_mode, value.st_size,
+            value.st_mtime_ns, value.st_ctime_ns)
+
+
+def _identity_paths(cmd, root):
     libraries = root / "usr/lib64"
-    for path in sorted(libraries.rglob("*")):
-        if path.is_file():
-            digest.update(path.relative_to(libraries).as_posix().encode() + b"\0")
-            digest.update(sha256(path).encode())
-    specs = subprocess.run([cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")], "-dumpspecs"],
-                           env=driver_env(root), capture_output=True)
-    if specs.returncode:
+    tools = [Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
+             root / "usr/bin/as"]
+    return tools + [path for path in sorted(libraries.rglob("*")) if path.is_file()]
+
+
+@_measure_compiler_phase("identity")
+def _compiler_identity(cmd, root):
+    """Fresh content identity; reuse a digest only for aliases within this scan.
+
+    Keep each distinct inode open until validation, and check descriptor/path
+    metadata before and after hashing and dumpspecs. This bounds reuse to one
+    stable scan, detects alias replacement and ordinary concurrent mutations,
+    and still rereads all distinct contents on every call. A mutable toolchain
+    is not an atomic filesystem snapshot; no persistent stat-based memo is safe.
+    The digest byte stream is identical to the previous implementation.
+    """
+    try:
+        paths = _identity_paths(cmd, root)
+        libraries = root / "usr/lib64"
+        digest, seen, entries = hashlib.sha256(), {}, []
+        env = driver_env(root)
+        with ExitStack() as stack:
+            for index, path in enumerate(paths):
+                before, link = _identity_stat(path.stat()), _identity_stat(path.lstat())
+                if not stat.S_ISREG(before[2]):
+                    return None
+                inode = before[:2]
+                _compiler_count(identity_paths=1, identity_logical_bytes=before[3])
+                if inode in seen:
+                    stream, previous, content = seen[inode]
+                    if previous != before or _identity_stat(os.fstat(stream.fileno())) != before:
+                        return None
+                    _compiler_count(identity_aliases=1, identity_reused_bytes=before[3])
+                else:
+                    stream = stack.enter_context(path.open("rb"))
+                    if _identity_stat(os.fstat(stream.fileno())) != before:
+                        return None
+                    hashed, byte_count = hashlib.sha256(), 0
+                    with _compiler_phase("identity_hash"):
+                        for chunk in iter(lambda: stream.read(1 << 20), b""):
+                            hashed.update(chunk)
+                            byte_count += len(chunk)
+                    _compiler_count(identity_unique_files=1, identity_hashed_bytes=byte_count)
+                    if (byte_count != before[3]
+                            or _identity_stat(os.fstat(stream.fileno())) != before):
+                        return None
+                    content = hashed.hexdigest()
+                    seen[inode] = stream, before, content
+                entries.append((path, before, link))
+                if index >= 3:
+                    digest.update(path.relative_to(libraries).as_posix().encode() + b"\0")
+                digest.update(content.encode())
+            # Do not memoize specs: their output can depend on fresh driver files
+            # and environment even when the already hashed executables match.
+            with _compiler_phase("identity_specs"):
+                specs = subprocess.run([cmd[0], *[arg for arg in cmd[1:] if arg.startswith("-B")],
+                                        "-dumpspecs"], env=env, capture_output=True)
+            if specs.returncode or driver_env(root) != env or _identity_paths(cmd, root) != paths:
+                return None
+            for path, before, link in entries:
+                if _identity_stat(path.stat()) != before or _identity_stat(path.lstat()) != link:
+                    return None
+            for stream, before, _ in seen.values():
+                if _identity_stat(os.fstat(stream.fileno())) != before:
+                    return None
+            digest.update(specs.stdout)
+            return digest.hexdigest()
+    except OSError:
+        # A disappearing/replaced identity input must never become a cache hit.
         return None
-    digest.update(specs.stdout)
-    return digest.hexdigest()
 
 
 def _dependency_paths(path):
@@ -243,6 +365,7 @@ def _dependency_paths(path):
     return [Path(item.replace("\0", " ")) for item in body.split()]
 
 
+@_measure_compiler_phase("shared_preprocess")
 def _shared_preprocess(cmd, source, root, tmp):
     """Exact expanded bytes at stable paths, never a rewritten arbitrary command."""
     depfile = Path(tmp) / "shared.d"
@@ -261,6 +384,7 @@ def _shared_preprocess(cmd, source, root, tmp):
             return None
     import re
     text = result.stdout
+    _compiler_count(shared_preprocessed_bytes=len(text))
     if (re.search(rb"\.(?:incbin|include|file|loc)\b", text)
             or re.search(rb"__builtin_(?:FILE|LINE|FUNCTION|source_location)\b", text)):
         return None
@@ -386,12 +510,14 @@ def _digest(cmd, source, deps, preprocessed=None):
     return h.hexdigest()
 
 
+@_measure_compiler_phase("local_preprocess")
 def _preprocessed_digest(cmd, source, root):
     """Resolve includes anew: adding a shadow header must invalidate an old hit."""
     args = [a for a in cmd if a not in ("-c", "-S")]
     result = run_compiler(args + ["-E", str(source)], env=driver_env(root), capture_output=True)
     if result.returncode:
         return None
+    _compiler_count(local_preprocessed_bytes=len(result.stdout))
     h = hashlib.sha256(result.stdout)
     # Both the driver and cc1 can change without a command-line change.
     for path in (Path(cmd[0]), root / "usr/libexec/gcc" / GCC_TRIPLE / GCC_VERSION / "cc1plus",
@@ -457,6 +583,7 @@ def parallel_map(fn, items, *, phase=None):
     return [f.result() for f in futures]
 
 
+@_measure_compiler_phase("compile_source")
 def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=False, cache=True):
     """Compile with GCC 4.4.7-3.el6 and binutils 2.20.51; returns the output path.
 
@@ -465,7 +592,8 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
     as dumps are not cached). When SHARED_CC_CACHE is set, understood release
     builds share compilation of freshly expanded inputs at stable content paths.
     Unsupported modes use the original compilation without object-only caching.
-    shared_cache_stats() reports actual shared hits, misses and fallbacks."""
+    shared_cache_stats() reports actual shared hits, misses and fallbacks.
+    compiler_stats() separately reports monotonic phase and identity costs."""
     root = cache_dir() / "gcc447"
     if not (root / ".complete.json").exists():
         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
@@ -531,11 +659,12 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
     return output
 
 
-def assemble(source, output):
+def assemble(source, output, *, capture_output=False):
+    """Assemble normally; optionally return captured diagnostics for ordered replay."""
     root = cache_dir() / "gcc447"
-    run_compiler([str(root / "usr" / "bin" / "as"), "--64", "-o", str(output), str(source)],
-                    env=driver_env(root), check=True)
-    return output
+    result = run_compiler([str(root / "usr" / "bin" / "as"), "--64", "-o", str(output), str(source)],
+                    env=driver_env(root), check=True, capture_output=capture_output)
+    return result if capture_output else output
 
 
 def main():

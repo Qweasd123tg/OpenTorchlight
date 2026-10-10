@@ -79,7 +79,7 @@ class PhaseWorkers(unittest.TestCase):
         self.assertEqual(sorted(completed), list(range(1,8)))
 
     def test_all_core_call_sites_are_routed(self):
-        expected = {"standalone.py":["build"], "check.py":["compare"], "hybrid.py":["build","selftest"],
+        expected = {"standalone.py":["build"], "check.py":["compare"], "hybrid.py":["build","build","selftest"],
                     "publication.py":["compare","compare","compare"]}
         for name, phases in expected.items():
             tree=ast.parse(Path(toolchain.__file__).with_name(name).read_text())

@@ -17,15 +17,18 @@ original ones through 5-byte jumps installed by decomp/hybrid/loader.c.
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import hashlib
 import json
 import os
 from pathlib import Path
 import re
+import resource
 import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
@@ -33,6 +36,7 @@ import elfimage  # noqa: E402
 import objdiff  # noqa: E402
 import toolchain  # noqa: E402
 import resource_slots  # noqa: E402
+import selftest_schedule  # noqa: E402
 
 ROOT = elfdb.ROOT
 SRC = ROOT / "decomp" / "src"
@@ -175,6 +179,81 @@ def undefined_symbols(obj_path):
 def defined_symbols(obj_path):
     obj = elfimage.load_object(obj_path)
     return {s.name for s in obj.symbols if s.defined and s.name and s.bind != elfimage.STB_LOCAL}
+
+
+@dataclass(frozen=True)
+class ObjectSymbols:
+    """Build-local immutable snapshot; never cache metadata by mutable path."""
+    functions: tuple
+    defined: frozenset
+    undefined: frozenset
+
+
+def object_symbols(obj_path):
+    obj = elfimage.load_object(obj_path)
+    return ObjectSymbols(
+        tuple((s.name, s.bind) for s in obj.symbols if s.type == elfimage.STT_FUNC and s.defined),
+        frozenset(s.name for s in obj.symbols if s.defined and s.name and s.bind != elfimage.STB_LOCAL),
+        frozenset(s.name for s in obj.symbols if not s.defined and s.name))
+
+
+def _replay_assembly_diagnostics(result):
+    # Capture in workers and replay in input order, including the first failure.
+    # Preserve bytes on ordinary streams; StringIO is useful to callers/tests.
+    for stream, data in ((sys.stdout, result.stdout), (sys.stderr, result.stderr)):
+        if data:
+            stream.flush()
+            if hasattr(stream, "buffer"):
+                stream.buffer.write(data)
+                stream.buffer.flush()
+            else:
+                stream.write(data.decode(errors="replace"))
+
+
+class _BuildTimings:
+    """Non-overlapping monotonic phases with measured process/child CPU.
+
+    CPU counters are process-wide (including worker threads and reaped children),
+    not sums of concurrent task wall times. Compiler slot waits remain included
+    in phase wall time; they cannot be attributed from these counters alone.
+    """
+    def __init__(self):
+        self.rows = []
+        self.current = None
+        self.started = self.sample()
+        self.previous = self.started
+
+    @staticmethod
+    def sample():
+        children = resource.getrusage(resource.RUSAGE_CHILDREN)
+        return (time.monotonic(), time.process_time(), children.ru_utime + children.ru_stime)
+
+    def phase(self, name):
+        now = self.sample()
+        if self.current is not None:
+            self.rows.append(dict(name=self.current, **self.delta(self.previous, now)))
+        self.current, self.previous = name, now
+
+    @staticmethod
+    def delta(start, end):
+        return dict(wall_seconds=end[0] - start[0], process_cpu_seconds=end[1] - start[1],
+                    children_cpu_seconds=end[2] - start[2])
+
+    def write(self, out, status):
+        self.phase(None)
+        report = dict(schema=1, status=status, phases=self.rows,
+                      total=self.delta(self.started, self.previous),
+                      compiler_slot_wait_seconds=None,
+                      note="CPU is process-wide; phase wall time includes unseparated compiler slot waits.")
+        out.mkdir(parents=True, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=".build-timings-", dir=out)
+        try:
+            with os.fdopen(fd, "w") as stream:
+                json.dump(report, stream, indent=1)
+                stream.write("\n")
+            os.replace(temporary, out / "build-timings.json")
+        finally:
+            Path(temporary).unlink(missing_ok=True)
 
 
 def patch_window_ok(ctx, address):
@@ -344,10 +423,49 @@ def build(out=OUT, verbose=True, src=SRC, tests=None):
         return _build(out, verbose, src, tests)
 
 
+def _write_build_timings(timing, out, status):
+    # Observational instrumentation must not replace success or the real error,
+    # including when disk space or the diagnostic stream is exhausted.
+    try:
+        timing.write(out, status)
+    except Exception as error:
+        try:
+            print(f"could not write hybrid build timings: {error}", file=sys.stderr)
+        except Exception:
+            pass
+
+
+def _independent_unit_outputs(out, stems):
+    output_stems = [*stems, "hooks", "imports"]
+    if len(set(output_stems)) != len(output_stems):
+        return False
+    for stem in output_stems:
+        for suffix in (".s", ".hybrid.s", ".o"):
+            path = out / (stem + suffix)
+            try:
+                if path.is_symlink() or (path.exists() and path.stat().st_nlink != 1):
+                    return False
+            except OSError:
+                return False
+    return True
+
+
 def _build(out=OUT, verbose=True, src=SRC, tests=None):
+    timing = _BuildTimings()
+    try:
+        result = _build_impl(out, verbose, src, tests, timing)
+    except BaseException:
+        _write_build_timings(timing, out, "failed")
+        raise
+    _write_build_timings(timing, out, "completed")
+    return result
+
+
+def _build_impl(out, verbose, src, tests, timing):
     """src: decompiled sources (a mutated copy for tools/decomp/mutate.py);
     tests: test sources, by default decomp/hybrid/tests plus generated
     autotests when OTL_AUTOTEST=1."""
+    timing.phase("context")
     ctx = Context()
     out.mkdir(parents=True, exist_ok=True)
     objects, hooks, notes = [], [], []
@@ -364,8 +482,20 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
         source, is_test = unit
         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
         toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
+    timing.phase("compile")
     toolchain.parallel_map(compile_unit, units, phase="build")
-    for source, is_test in units:
+    timing.phase("rewrite_assemble_metadata")
+
+    def prepare_unit(unit):
+        # Workers never mutate shared reductions. Return failures so diagnostics
+        # and the first exception can be replayed in the original source order.
+        try:
+            return prepare_one(unit)
+        except (Exception, SystemExit) as error:
+            return {"error": error}
+
+    def prepare_one(unit):
+        source, is_test = unit
         tu = None if is_test else objdiff.tu_for_source(ctx.db, source)
         if not is_test and tu is None:
             raise SystemExit(f"{source}: no unique original TU named {source.name}")
@@ -375,24 +505,57 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
         if tu:
             redirect.update(ctx.local_data.get(tu["name"], {}))
         text, redirected = rewrite_assembly(asm.read_text(), redirect, drop_ctors=not is_test)
+        source_sha256 = None
+        omitted = []
         if not is_test:
-            relative = str(source.relative_to(ROOT))
-            source_versions[relative] = hashlib.sha256(source.read_bytes()).hexdigest()
-            data_redirects[relative] = sorted(redirected)
-            omitted_initializers[relative] = sorted(set(re.findall(
+            source_sha256 = hashlib.sha256(source.read_bytes()).hexdigest()
+            omitted = sorted(set(re.findall(
                 r"\.type\s+([^,\s]*(?:_GLOBAL__I_|__static_initialization)[^,\s]*),\s*@function", asm.read_text())))
         patched = out / f"{stem}.hybrid.s"
         patched.write_text(text)
         obj = out / f"{stem}.o"
-        toolchain.assemble(patched, obj)
+        diagnostics = toolchain.assemble(patched, obj, capture_output=True)
+        try:
+            symbols = object_symbols(obj)
+        except (Exception, SystemExit) as error:
+            return {"error": error, "diagnostics": diagnostics}
+        return dict(tu=tu, obj=obj, symbols=symbols, redirected=redirected,
+                    source_sha256=source_sha256, omitted=omitted, diagnostics=diagnostics)
+
+    stems = [("test_" if is_test else "") + source.stem for source, is_test in units]
+    independent_outputs = _independent_unit_outputs(out, stems)
+    if independent_outputs:
+        prepared = toolchain.parallel_map(prepare_unit, units, phase="build")
+    else:
+        # Legacy layouts or pre-existing links can alias an output path. Keep
+        # serial writes and refresh final summaries after all such writes.
+        prepared = [prepare_unit(unit) for unit in units]
+    timing.phase("hook_reduction")
+    final_symbols = {}
+    for (source, is_test), result in zip(units, prepared):
+        error = result.get("error")
+        diagnostics = result.get("diagnostics")
+        if diagnostics is not None:
+            _replay_assembly_diagnostics(diagnostics)
+        if error is not None:
+            if isinstance(error, subprocess.CalledProcessError):
+                _replay_assembly_diagnostics(error)
+            raise error
+        tu, obj, symbols = result["tu"], result["obj"], result["symbols"]
+        redirected = result["redirected"]
         objects.append(obj)
+        final_symbols[obj] = symbols
         if not is_test:
-            production_defined |= defined_symbols(obj)
-            production_undefined |= undefined_symbols(obj)
+            relative = str(source.relative_to(ROOT))
+            source_versions[relative] = result["source_sha256"]
+            data_redirects[relative] = sorted(redirected)
+            omitted_initializers[relative] = result["omitted"]
+            production_defined |= symbols.defined
+            production_undefined |= symbols.undefined
         unit_hooks = 0
         if tu:
             owned = ctx.tu_functions(tu)
-            for name, bind in defined_functions(obj):
+            for name, bind in symbols.functions:
                 f = owned.get(name)
                 if not f or f["kind"] == "compiler":
                     continue
@@ -409,6 +572,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
         if verbose:
             print(f"  {source.relative_to(ROOT)}: {len(redirected)} data symbols redirected, {unit_hooks} hooks")
 
+    timing.phase("hooks_imports")
     hooks_s = out / "hooks.s"
     comparisons = comparison_entries(ctx, production_defined, hooks)
     hooks_s.write_text(hooks_assembly(hooks) + hooks_assembly(comparisons, ".tlhybrid.comparisons", "comparison"))
@@ -417,9 +581,13 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
     (out / "originals.ld").write_text(script)
     defined = set()
     undefined = set()
+    if not independent_outputs:
+        final_symbols = {obj: object_symbols(obj) for obj in dict.fromkeys(objects)}
+    final_symbols[out / "hooks.o"] = object_symbols(out / "hooks.o")
     for obj in objects + [out / "hooks.o"]:
-        defined |= defined_symbols(obj)
-        undefined |= undefined_symbols(obj)
+        symbols = final_symbols[obj]
+        defined |= symbols.defined
+        undefined |= symbols.undefined
     missing = sorted(n for n in undefined - defined - provided - LINKER_DEFINED if not n.startswith(".L"))
     absent = objdiff.unknown_members(ctx.db, objdiff.image_symbol_names(ctx.image), missing)
     if absent:
@@ -435,13 +603,16 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
     imports_s.write_text(imports_assembly(missing, copies))
     toolchain.assemble(imports_s, out / "imports.o")
     (out / "hybrid.ld").write_text(LINKER_SCRIPT.format(base=BLOB_BASE))
+    timing.phase("link")
     blob = out / "tlhybrid-blob.elf"
     subprocess.run(["ld", "-nostdlib", "-static", "-e", "0", "--build-id=none", "-z", "noexecstack",
                     "-z", "max-page-size=4096", "--no-warn-rwx-segments", "-T", "hybrid.ld", "-o", blob.name,
                     *[o.name for o in objects], "hooks.o", "imports.o"], cwd=out, check=True)
+    timing.phase("loader")
     loader = out / "libtlhybrid.so"
     toolchain.run_compiler(["cc", "-O2", "-Wall", "-Wextra", "-fPIC", "-shared", "-I", str(HYBRID), "-o", str(loader),
                     str(HYBRID / "loader.c"), "-ldl"], check=True)
+    timing.phase("manifest")
     manifest = {"schema": 1, "original_elf_sha256": ctx.image.sha256, "blob_base": f"{BLOB_BASE:#x}",
                 "hooks": [{k: (f"{v:#x}" if k == "original" else v) for k, v in h.items() if k != "expected"}
                           for h in hooks],
@@ -459,6 +630,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
         "standalone_link_closed": False,
         "reason": "hybrid resolves original ELF addresses and omits original entrypoint/initialization; this is not a standalone game"}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
+    selftest_schedule.write_inputs(blob, [obj for (_, is_test), obj in zip(units, objects) if is_test])
     if verbose:
         print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing) - len(copies)} runtime imports, "
               f"{len(copies)} copied library objects")
@@ -542,6 +714,19 @@ def selftest(blob, loader, only=None, shards=None):
     shards = shards or int(os.environ.get("OTL_SELFTEST_SHARDS", "0")) or min(4, toolchain.jobs())
     if shards < 1:
         raise ValueError("selftest needs at least one shard")
+    started = time.monotonic()
+    evidence = {"schema": 1, "clock": "time.monotonic", "started": started,
+                "shard_count": shards, "phases": {}, "shards": []}
+    try:
+        return _selftest(blob, loader, only, shards, evidence)
+    finally:
+        evidence["ended"] = time.monotonic()
+        evidence["elapsed"] = evidence["ended"] - started
+        selftest_schedule.write_timing(blob, evidence)
+
+
+def _selftest(blob, loader, only, shards, evidence):
+    phase = time.monotonic()
     extra = {"TLHYBRID_SELFTEST": "1"}
     if only:
         extra["TLHYBRID_FILTER"] = only
@@ -549,23 +734,88 @@ def selftest(blob, loader, only=None, shards=None):
     game, env = game_env(blob, loader, extra, headless=True)  # stages the runtime once for all
     if not only:
         env.pop("TLHYBRID_FILTER", None)
+    evidence["phases"]["environment"] = time.monotonic() - phase
+    phase = time.monotonic()
+    schedule = selftest_schedule.plan(blob, ROOT, only, shards)
+    order = schedule["order"]
+    if sorted(order) != list(range(shards)):
+        raise ValueError("selftest schedule must execute every shard exactly once")
+    evidence["schedule"] = schedule
+    evidence["phases"]["schedule"] = time.monotonic() - phase
+    # Enqueue timestamps precede submission. Workers timestamp actual dispatch
+    # separately so executor queue wait and shared-slot wait remain distinguishable.
+    timings = [{"index": index, "enqueued": None, "dispatched": None, "slot_acquired": None,
+                "process_started": None, "ended": None, "elapsed": None, "returncode": None}
+               for index in range(shards)]
+    evidence["shards"] = timings
+    def queued_indices():
+        for index in order:
+            timings[index]["enqueued"] = time.monotonic()
+            yield index
 
     def run(index):
+        row = timings[index]
+        row["dispatched"] = time.monotonic()
         try:
             with resource_slots.slot("selftest"):
-                return subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
-                                      env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
-                                      capture_output=True, text=True,
-                                      timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
-        except subprocess.TimeoutExpired as error:
-            from types import SimpleNamespace
-            partial = error.stderr or ""
-            if isinstance(partial, bytes):
-                partial = partial.decode(errors="replace")
-            return SimpleNamespace(returncode=2, stderr=partial +
-                                   f"\nselftest: shard {index}/{shards} timeout after {error.timeout} seconds\n")
+                row["slot_acquired"] = time.monotonic()
+                row["process_started"] = time.monotonic()
+                try:
+                    result = subprocess.run([str(game / "Torchlight.bin.x86_64")], cwd=game,
+                                            env={**env, "TLHYBRID_SHARD": f"{index}/{shards}"},
+                                            capture_output=True, text=True,
+                                            timeout=int(os.environ.get("OTL_SELFTEST_TIMEOUT", "120")))
+                except subprocess.TimeoutExpired as error:
+                    from types import SimpleNamespace
+                    partial = error.stderr or ""
+                    if isinstance(partial, bytes):
+                        partial = partial.decode(errors="replace")
+                    result = SimpleNamespace(returncode=2, stderr=partial +
+                                             f"\nselftest: shard {index}/{shards} timeout after {error.timeout} seconds\n")
+                    row["timeout"] = error.timeout
+                row["returncode"] = result.returncode
+                return index, result
+        except BaseException as error:
+            row["error"] = type(error).__name__ + ": " + str(error)
+            raise
+        finally:
+            row["ended"] = time.monotonic()
+            if row["process_started"] is not None:
+                row["elapsed"] = row["ended"] - row["process_started"]
+            row["queue_elapsed"] = row["dispatched"] - row["enqueued"]
+            row["slot_wait_elapsed"] = ((row["slot_acquired"] or row["ended"]) - row["dispatched"])
+
+    phase = time.monotonic()
+    try:
+        rows = toolchain.parallel_map(run, queued_indices(), phase="selftest")
+        results = selftest_schedule.ordered_results(rows, shards)
+    except ValueError as error:
+        evidence["error"] = str(error)
+        return 2, ["selftest: " + str(error)]
+    finally:
+        evidence["phases"]["execute"] = time.monotonic() - phase
+    phase = time.monotonic()
+    try:
+        selftest_schedule.validate_inventory(results, schedule["selected"])
+        code, report = _selftest_report(results)
+        evidence["returncode"] = code
+        if code in (0, 1):
+            try:
+                selftest_schedule.save_costs(schedule, results)
+            except (OSError, ValueError) as error:
+                evidence["timing_hint_error"] = str(error)
+        return code, report
+    except ValueError as error:
+        evidence["error"] = str(error)
+        # Keep the complete fresh process diagnostics on rejected inventories.
+        return 2, [result.stderr for result in results] + ["selftest: " + str(error)]
+    finally:
+        evidence["phases"]["parse"] = time.monotonic() - phase
+
+
+def _selftest_report(results):
     code, report, ran, failed = 0, [], 0, 0
-    for result in toolchain.parallel_map(run, range(shards), phase="selftest"):
+    for result in results:
         # Loader lines plus the indented details tests log under a failure.
         lines = [line for line in result.stderr.splitlines() if line.startswith(("tlhybrid:", "selftest:", "    "))]
         summary = next((re.match(r"tlhybrid: (\d+) tests, (\d+) failed", l) for l in lines if " tests, " in l), None)
