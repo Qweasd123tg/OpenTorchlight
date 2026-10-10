@@ -9,7 +9,7 @@
   "pro_overlap_accepted": 405,
   "total_indexed_addresses": 7663,
   "all_current_tests": 411,
-  "base_local_commit": "572a343509f505a4204b18d36c7329e7540011d8",
+  "base_local_commit": "5784644f7236d3a9f1dbac18477b98859cb041a7",
   "pending_large_function": null,
   "accepted_bytes": 1140362,
   "game_functions": 5247,
@@ -17,9 +17,9 @@
   "matched_bytes": 168865,
   "matched_static_init": 824,
   "matched_static_init_bytes": 89156,
-  "verified_main_commit": "572a343509f505a4204b18d36c7329e7540011d8",
-  "verified_main_tree": "94cc73751964c506a92578cc8129ea513ca3da34",
-  "refresh": "gameui-event-callbacks",
+  "verified_main_commit": "5784644f7236d3a9f1dbac18477b98859cb041a7",
+  "verified_main_tree": "0e403fc816d6b0d5fe687d7186dada16bc7c1874",
+  "refresh": "compiler-cache-storage",
   "pass11_net_accepted": 269,
   "pass11_integrated_files": 128,
   "index_status_counts": {
@@ -28,16 +28,15 @@
     "MISSING": 2013
   },
   "validation_input_sha256": {
-    "gameui-click-final-receipt.json": "fe70bd5a719891cb4e4665ae9524d4547dfa3e1f775cf6d926324ead2d595de1",
-    "gameui-event-callbacks-root.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
-    "gameui-event-callbacks-root.json": "85f27523db97c1f03fbeaca793becf8a1d75abd258e50a70599f90ea2953c588",
-    "gameui-event-callbacks-root.log": "ad6011a78d99c70d74e7cea97b41a39d9e2e22779fd3e229100fa65bd9751928",
-    "gameui-event-callbacks-stage-validation.json": "99c77f3d8545bb5843c64f8e9b85812e9639a9d5e8a8ecab608553814f0c88c5",
-    "gameui-event-callbacks-integrated.json": "7e38f57d4b597af01a2828eb068802691a576ca9ff6468233e37579305cc43d9",
-    "gameui-click-root.json": "eaca0359de80c23ad1463d38f48acc8a4d946935dd18503a4fd1824bd0bab064"
+    "cache-storage-stage-check.json": "94e58b5d6b4a281d20bbe85312bd4943117279d3cbde0505eb6be6eb7daa2956",
+    "cache-storage-root.json": "dad1357c5e234cef257cdfa9793fdd5b289f4b335461ff81e04f6d81221b044b",
+    "cache-storage-adopted.json": "1ca4ea890bf0179918c0125a47a8174f1e34a3af945af484e0f9ef0ac7c72b70"
   },
   "gameui_click_net_accepted": 1,
   "gameui_click_integrated_files": 5,
   "gameui_event_callbacks_net_accepted": 5,
-  "gameui_event_callbacks_integrated_files": 3
+  "gameui_event_callbacks_integrated_files": 3,
+  "cache_storage_unit_controls": 108,
+  "cache_storage_full_tests": 411,
+  "cache_storage_object_digests_equal": 278
 }
