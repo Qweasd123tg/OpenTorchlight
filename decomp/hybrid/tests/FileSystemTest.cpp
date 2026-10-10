@@ -386,16 +386,55 @@ struct FakeObject
     int id;
 };
 
-int g_deleted[32];
-int g_deletedCount;
+struct DeletionLog
+{
+    enum { kCapacity = 32 };
+    int ids[kCapacity];
+    size_t total;
+    unsigned int stored;
+    bool overflow;
+
+    DeletionLog() { reset(); }
+    void reset()
+    {
+        total = stored = 0;
+        overflow = false;
+        std::memset(ids, 0, sizeof(ids));
+    }
+    void add(int id)
+    {
+        // Keep diagnostics bounded too, even for a repeatedly deleting candidate.
+        if (total != static_cast<size_t>(-1))
+            ++total;
+        else
+            overflow = true;
+        if (stored >= kCapacity)
+        {
+            overflow = true;
+            return;
+        }
+        ids[stored++] = id;
+    }
+    bool complete() const
+    {
+        return !overflow && stored <= kCapacity && total == stored;
+    }
+};
+
+bool sameDeletionLog(const DeletionLog& a, const DeletionLog& b)
+{
+    // Reject unobserved tails before choosing any byte count for memcmp.
+    return a.complete() && b.complete() && a.total == b.total &&
+           std::memcmp(a.ids, b.ids, a.stored * sizeof(a.ids[0])) == 0;
+}
+
+DeletionLog g_deleted;
 
 void fakeDestroy(FakeObject*) {}
 
 void fakeDelete(FakeObject* self)
 {
-    if (g_deletedCount < 32)
-        g_deleted[g_deletedCount] = self->id;
-    g_deletedCount++;
+    g_deleted.add(self->id);
 }
 
 void* g_fakeVtable[4] = {reinterpret_cast<void*>(&fakeDestroy), reinterpret_cast<void*>(&fakeDelete), NULL, NULL};
@@ -444,8 +483,7 @@ TL_TEST(FileSystem_destructor_shadow)
     CFileSystem* savedSingleton = g_pFileSystem;
     for (int variant = 0; variant < 16; variant++)
     {
-        int logs[2][32];
-        int counts[2];
+        DeletionLog logs[2];
         FakeObject objects[2][8];
         unsigned char after[2][0xc0];
         for (int side = 0; side < 2; side++)
@@ -476,18 +514,19 @@ TL_TEST(FileSystem_destructor_shadow)
             for (int i = 0; i < variant % 5; i++)
                 fs->ownedObjects.add(i == 2 ? NULL : &objects[side][4 + (i % 3)]);
             g_pFileSystem = reinterpret_cast<CFileSystem*>(fs);
-            g_deletedCount = 0;
+            g_deleted.reset();
             if (side == 0)
                 originalDestroy(fs);
             else
                 reinterpret_cast<CFileSystem*>(fs)->CFileSystem::~CFileSystem();
-            counts[side] = g_deletedCount;
-            std::memcpy(logs[side], g_deleted, sizeof(g_deleted));
+            logs[side] = g_deleted;
             std::memcpy(after[side], buffer, sizeof(buffer));
             TL_CHECK(failures, g_pFileSystem == NULL);
         }
-        TL_CHECK(failures, counts[0] == counts[1]);
-        TL_CHECK(failures, std::memcmp(logs[0], logs[1], counts[0] * sizeof(int)) == 0);
+        TL_CHECK(failures, logs[0].total == logs[1].total);
+        TL_CHECK(failures, logs[0].complete());
+        TL_CHECK(failures, logs[1].complete());
+        TL_CHECK(failures, sameDeletionLog(logs[0], logs[1]));
         // Pointer fields the destructor clears (the deleted objects differ per side).
         const size_t cleared[] = {0x18, 0x60, 0x98, 0xa0, 0xa8};
         for (unsigned int i = 0; i < sizeof(cleared) / sizeof(cleared[0]); i++)
@@ -495,7 +534,10 @@ TL_TEST(FileSystem_destructor_shadow)
         TL_CHECK(failures, std::memcmp(after[0] + 0xb0, after[1] + 0xb0, 0xc) == 0);
         if (failures)
         {
-            host->log("    variant %d: deleted %d vs %d\n", variant, counts[0], counts[1]);
+            host->log("    variant %d: deleted %lu/%u vs %lu/%u (overflow %d/%d)\n",
+                      variant, (unsigned long)logs[0].total, logs[0].stored,
+                      (unsigned long)logs[1].total, logs[1].stored,
+                      logs[0].overflow, logs[1].overflow);
             break;
         }
     }

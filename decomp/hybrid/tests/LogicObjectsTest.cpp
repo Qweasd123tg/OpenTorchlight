@@ -33,6 +33,13 @@ struct EventLog
     const void* object;
     unsigned int events[kMaxEvents];
     int count;
+    bool overflow;
+
+    void clear()
+    {
+        count = 0;
+        overflow = false;
+    }
 };
 
 EventLog g_logs[2];
@@ -41,8 +48,13 @@ void recordEvent(void* self, unsigned int event)
 {
     for (int i = 0; i < 2; i++)
     {
-        if (g_logs[i].object == self && g_logs[i].count < kMaxEvents)
-            g_logs[i].events[g_logs[i].count++] = event;
+        if (g_logs[i].object == self)
+        {
+            if (g_logs[i].count < kMaxEvents)
+                g_logs[i].events[g_logs[i].count++] = event;
+            else
+                g_logs[i].overflow = true;
+        }
     }
 }
 
@@ -72,7 +84,7 @@ void installRecorder(void* object)
 
 bool sameLogs()
 {
-    if (g_logs[0].count != g_logs[1].count)
+    if (g_logs[0].overflow || g_logs[1].overflow || g_logs[0].count != g_logs[1].count)
         return false;
     return std::memcmp(g_logs[0].events, g_logs[1].events, g_logs[0].count * sizeof(unsigned int)) == 0;
 }
@@ -128,7 +140,8 @@ TL_TEST(LogicTimer_shadow)
         std::memcpy(a + 0x58, fields, sizeof(fields));
         std::memcpy(b + 0x58, fields, sizeof(fields));
 
-        g_logs[0].count = g_logs[1].count = 0;
+        g_logs[0].clear();
+        g_logs[1].clear();
         if (nextRandom() % 3 == 0)
         {
             bool enabled = nextRandom() % 2;
@@ -194,7 +207,8 @@ TL_TEST(OutputIncrementor_shadow)
         std::memcpy(a + 0x58, fields, sizeof(fields));
         std::memcpy(b + 0x58, fields, sizeof(fields));
 
-        g_logs[0].count = g_logs[1].count = 0;
+        g_logs[0].clear();
+        g_logs[1].clear();
         if (nextRandom() % 4 == 0)
         {
             bool enabled = nextRandom() % 2;

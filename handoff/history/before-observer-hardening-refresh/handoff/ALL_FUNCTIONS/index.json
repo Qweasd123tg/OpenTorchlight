@@ -61,6 +61,6 @@
   ],
   "current_state": "../CURRENT_STATE.json",
   "historical_index": "../SMALL_FUNCTIONS.csv",
-  "current_main_commit": "7c4a0a6545a83ea663fe5e861e899ad0682bb9ea",
-  "current_main_tree": "ded70eb62229ccf4a0bdff8278963a1e5386c7a0"
+  "current_main_commit": "347640edaa4cfc30fd8e83bf930d5d5841096e56",
+  "current_main_tree": "0582c5cb5acd03b803da729590854afc568cbde7"
 }

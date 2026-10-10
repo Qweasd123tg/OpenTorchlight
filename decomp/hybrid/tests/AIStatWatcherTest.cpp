@@ -180,7 +180,7 @@ struct Log
 
 bool sameLogs(const Log& a, const Log& b)
 {
-    if (a.count != b.count || a.overflow != b.overflow)
+    if (a.overflow || b.overflow || a.count != b.count)
         return false;
     for (int i = 0; i < a.count; i++)
     {
@@ -910,6 +910,8 @@ TL_TEST(AIStatWatcher_behaviour_shadow)
             TL_CHECK(failures, sameLogs(logs[0], logs[1]));
             TL_CHECK(failures, std::memcmp(&effects[0], &effects[1], sizeof(Effects)) == 0);
             TL_CHECK(failures, targetCount[0] == targetCount[1]);
+            TL_CHECK(failures, targetCount[0] <= kUnits * 4);
+            TL_CHECK(failures, targetCount[1] <= kUnits * 4);
             if (targetCount[0] == targetCount[1] && targetCount[0] <= kUnits * 4)
                 TL_CHECK(failures, std::memcmp(targets[0], targets[1], targetCount[0] * sizeof(void*)) == 0);
             failures += compareWatchers(host, images[0], images[1], false);
