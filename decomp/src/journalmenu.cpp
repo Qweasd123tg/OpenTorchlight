@@ -147,3 +147,126 @@ void CJournalMenu::createMenus()
     m_pTopFrame->moveToFront();
     m_pTopFrame->setZOrderingEnabled(false);
 }
+
+
+#include "GenericModel.h"
+#include "SoundBank.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+#include "MasterResourceManager.h"
+#include "Settings.h"
+#include "GameVariables.h"
+#include <OgreEntity.h>
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+#include <fenv.h>
+namespace journal_lifetime_layout {
+typedef char parent[__builtin_offsetof(CJournalMenu,m_pParentWindow)==0x10?1:-1];
+typedef char opened[__builtin_offsetof(CJournalMenu,m_bOpen)==0x38?1:-1];
+typedef char closed[__builtin_offsetof(CJournalMenu,m_bClosed)==0x39?1:-1];
+typedef char pending[__builtin_offsetof(CJournalMenu,m_bCloseRequested)==0x3a?1:-1];
+typedef char edge[__builtin_offsetof(CJournalMenu,m_ScreenEdge)==0x70?1:-1];
+typedef char top[__builtin_offsetof(CJournalMenu,m_TopEdge)==0x74?1:-1];
+typedef char bank[__builtin_offsetof(CJournalMenu,m_pSoundBank)==0x80?1:-1];
+typedef char seconds[__builtin_offsetof(CJournalMenu,m_LastPlayedSeconds)==0x88?1:-1];
+typedef char size[sizeof(CJournalMenu)==0xa8?1:-1];
+// The original converts ceilf to signed 64 bits, then keeps its low 32 bits.
+inline int playedSeconds(float value) {
+ if(value>=-9223372036854775808.0f && value<9223372036854775808.0f)
+  return static_cast<int>(static_cast<unsigned>(static_cast<long long>(value)));
+ ::feraiseexcept(FE_INVALID);
+ return 0;
+}
+}
+void CJournalMenu::setOwner(CCharacter* owner) { m_pOwner=owner; }
+bool CJournalMenu::handle_CloseButton(const CEGUI::EventArgs& args) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(args).button==CEGUI::LeftButton)m_bCloseRequested=true;
+ return true;
+}
+bool CJournalMenu::handle_MouseThrough(const CEGUI::EventArgs&) { return true; }
+bool CJournalMenu::processInput(void*,float,bool active) {
+ if(active&&m_bCloseRequested){setOpen(false);m_bCloseRequested=false;return false;}
+ return true;
+}
+CJournalMenu::~CJournalMenu() {
+ if(m_pModel){delete m_pModel;m_pModel=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
+CJournalMenu::CJournalMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow*,
+ Ogre::SceneManager* scene,Ogre::SceneManager*,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pParentWindow(parent),m_pOwner(0),m_bOpen(false),m_bClosed(true),m_bCloseRequested(false),
+ m_pSettings(&settings),m_pGameUI(&ui),m_pSceneManager(scene),m_pModel(0),m_pResourceManager(resources),
+ m_TopEdge(5000.0f),m_pSoundBank(0),m_LastPlayedSeconds(0),m_Children(10)
+{
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"INVENTORYOPEN");
+ if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"INVENTORYCLOSE");
+ if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* assign=sounds->getSoundDataObject(L"POINTASSIGN");
+ if(assign)m_pSoundBank->addSample(27,assign->m_iGuid);
+ CSoundData* skill=sounds->getSoundDataObject(L"ASSIGNSKILL");
+ if(skill)m_pSoundBank->addSample(30,skill->m_iGuid);
+ float width=static_cast<float>(m_pSettings->GetInt(KSETTINGS_RES_WIDTH));
+ m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+ m_ScreenEdge=width;
+ createMenus();
+}
+void CJournalMenu::setOpen(bool open) {
+ if(!m_bOpen&&open){
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);
+  m_pSettings->GetInt(KSETTINGS_RES_WIDTH);
+  m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+  m_pModel->setVisible(true);
+  if(m_pModel->animationPlaying("CLOSE"))m_pModel->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pModel->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pModel->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pParentWindow->addChildWindow(m_pRoot);
+  m_pRoot->moveToBack();
+  updateLayout();
+  m_pRoot->moveToBack();
+  m_pTopFrame->moveToFront();
+  m_pBottomFrame->moveToFront();
+ }else if(m_bOpen&&!open){
+  m_pSoundBank->playSample(66,0,0.0f,0.0f,false);
+  m_pModel->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);
+  m_bClosed=false;
+ }
+ m_bOpen=open;
+}
+void CJournalMenu::update(float elapsed) {
+ int width=m_pSettings->GetInt(KSETTINGS_RES_WIDTH);
+ int height=m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+ if(!m_bOpen&&m_bClosed)return;
+ m_pModel->updateAnimation(elapsed,false);
+ m_pModel->getEntity()->_updateAnimation();
+ Ogre::Bone* top=m_pModel->m_pSkeleton->getBone("tag_topskill");
+ Ogre::Vector3 position=m_pModel->getPosition(false);
+ const Ogre::Vector3& tag=top->_getDerivedPosition();
+ float sumY=tag.y+position.y;
+ float scaledX=m_pGameUI->scaledY(tag.x+position.x);
+ float halfWidth=float(width)*0.5f;
+ float topX=scaledX+halfWidth;
+ float panelY=-(m_pGameUI->scaledY(sumY)+float(height)*-0.5f);
+ m_TopEdge=topX;
+ m_pTopFrame->setPosition(CEGUI::UVector2(CEGUI::UDim(0,topX),CEGUI::UDim(0,panelY)));
+ Ogre::Bone* bottom=m_pModel->m_pSkeleton->getBone("tag_bottomskill");
+ position=m_pModel->getPosition(false);
+ float bottomX=bottom->_getDerivedPosition().x+position.x;
+ float bottomScreen=halfWidth+m_pGameUI->scaledY(bottomX);
+ m_pBottomFrame->setPosition(CEGUI::UVector2(CEGUI::UDim(0,bottomScreen),CEGUI::UDim(0,panelY)));
+ float edge=m_pGameUI->scaledY(50.0f)+bottomScreen;
+ m_ScreenEdge=edge<float(width)?edge:float(width);
+ if(m_bOpen){
+  int seconds=journal_lifetime_layout::playedSeconds(::ceilf(journal_layout::player(m_pOwner).timePlayed));
+  if(m_LastPlayedSeconds==seconds)return;
+  updateLayout();
+  m_LastPlayedSeconds=seconds;
+ }
+ if(!m_bOpen&&!m_bClosed){
+  if(!m_pModel->animationPlaying("CLOSE")&&!m_pModel->animationQueued("CLOSE")){
+   m_pModel->setVisible(false);m_bClosed=true;m_pParentWindow->removeChildWindow(m_pRoot);
+  }
+ }
+}
