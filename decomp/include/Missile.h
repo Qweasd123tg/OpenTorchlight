@@ -23,9 +23,9 @@ class CMissile : public CPositionableObject
 public:
     virtual ~CMissile();
     virtual long long update(float);
-    long long getCollisionSphereVisible();
+    bool getCollisionSphereVisible();
     void setCollisionSphereVisible(bool);
-    long long getAOESphereVisible();
+    bool getAOESphereVisible();
     void setAOESphereVisible(bool);
     int getRateOFire();
     void setRateOFire(float);
@@ -38,7 +38,7 @@ public:
     void addArchFromMissile(float);
     long long doDamageToCharacter(CCharacter*, const Ogre::Vector3&, float, float);
     long long handleDeathOfMissile(float);
-    CMissile* getParticleFile(EMISSILE_PARTICLES);
+    std::wstring getParticleFile(EMISSILE_PARTICLES);
     void setTarget(CPositionableObject*);
     void initialize();
     void doAOEDamage(CBaseUnit*);
@@ -54,12 +54,11 @@ public:
     CMissile(CResourceManager*, const CMissile*);
 
     // fields
-    CPositionableObject* m_pPositionableObject;
-    CParticle* m_pParticle;
-    CPositionableObject* m_pPositionableObject_110;
-    CPositionableObject* m_pPositionableObject_118;
-    long long m_Unknown120;
-    unsigned char m_gap128[0x18] __attribute__((aligned(8)));
+    union {
+        struct { CPositionableObject* m_pPositionableObject; CParticle* m_pParticle; CPositionableObject* m_pPositionableObject_110; CPositionableObject* m_pPositionableObject_118; };
+        CPositionableObject* m_particles[4];
+    };
+    std::wstring m_particleFiles[4];
     bool m_bStartAtFullVelocity;
     bool m_bUnknown141;
     bool m_bPiercing;

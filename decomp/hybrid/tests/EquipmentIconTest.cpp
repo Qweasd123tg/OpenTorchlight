@@ -85,7 +85,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
     std::memset(equipmentStorage,0,sizeof(equipmentStorage));std::memset(uiStorage,0,sizeof(uiStorage));std::memset(characterStorage,0,sizeof(characterStorage));std::memset(inventoryStorage,0,sizeof(inventoryStorage));std::memset(imageStorage,0,sizeof(imageStorage));std::memset(masterStorage,0,sizeof(masterStorage));std::memset(windowStorage,0,sizeof(windowStorage));
     object=reinterpret_cast<CEquipment*>(equipmentStorage);ui=reinterpret_cast<CGameUI*>(uiStorage);CCharacter* character=reinterpret_cast<CCharacter*>(characterStorage);CInventory* inventory=reinterpret_cast<CInventory*>(inventoryStorage);imageObject=reinterpret_cast<CEGUI::Image*>(imageStorage);masterObject=reinterpret_cast<CMasterResourceManager*>(masterStorage);
     typedef std::wstring Text;new(&object->m_sName)Text(L"ICON TEST");new(&character->m_sName)Text(classes[(c.seed/16)%5]);ui->m_pCharacter=c.seed%11?character:0;
-    owner=character;unsigned chain=(c.seed/4)%4;object->m_pInventory=chain?inventory:0;inventory->m_pPositionableObject=chain>=2?owner:0;object->m_pDataGroup=c.seed%13?&data:0;object->m_bGamblerIcon=(c.seed&32)!=0;
+    owner=character;unsigned chain=(c.seed/4)%4;object->m_pInventory=chain?inventory:0;inventory->m_pPositionableObject=chain>=2?reinterpret_cast<CCharacter*>(owner):0;object->m_pDataGroup=c.seed%13?&data:0;object->m_bGamblerIcon=(c.seed&32)!=0;
     typedef std::vector<CEGUI::Window*> Children;
     for(unsigned i=0;i<2;++i){windows[i]=reinterpret_cast<CEGUI::Window*>(windowStorage[i]);new(&windows[i]->d_children)Children();}
     object->m_pIconWindow=(c.seed&2)?windows[0]:0;if(object->m_pIconWindow)windows[0]->d_children.push_back(windows[1]);

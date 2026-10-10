@@ -1,3 +1,5 @@
+#include "FileUtilities.h"
+#include "LinuxUtils.h"
 #include "EmptyStrings.h"
 #include "GameVariables.h"
 #include "GameNamespaces.h"
@@ -72,4 +74,28 @@ std::string FILESYSTEM::RemoveFileName(const std::string& path)
 std::wstring FILESYSTEM::GetAppDataPath()
 {
     return LinuxUtils::GetHomeDir() + L".runicgames/Torchlight/";
+}
+
+
+// Imported source candidates; historical status is not fresh acceptance.
+float FILESYSTEM::ReadFloat(FILE* file)
+{
+    float value;
+    if(fread(&value,sizeof(value),1,file)==1)return value;
+    return 0.0f;
+}
+
+std::wstring FILESYSTEM::GetWindowsTempPath()
+{
+    return LinuxUtils::GetTempDir();
+}
+
+std::wstring FILESYSTEM::GetLocalPath()
+{
+    return LinuxUtils::GetAppDir();
+}
+
+bool FILESYSTEM::FileExists(const std::wstring& path)
+{
+    return FileExists(path.c_str());
 }

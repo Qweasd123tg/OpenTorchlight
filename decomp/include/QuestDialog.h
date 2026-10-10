@@ -22,7 +22,7 @@ public:
     void reinitialize();
     void load(_IO_FILE* pFile);
     void save(_IO_FILE* pFile);
-    CQuestDialog* getDialog(bool bRandom);
+    std::wstring getDialog(bool bRandom);
     void giveOrRemoveItems(CBaseUnit* pUnit);
     void cleanUp();
     void stopDialogSound();

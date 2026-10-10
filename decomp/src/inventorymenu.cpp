@@ -374,7 +374,7 @@ void CInventoryMenu::updateLayout()
     // Typed view of the established +0x30 list; keep the shared partial
     // Inventory declaration unchanged until its own constructor is recovered.
     const TArrayList<CEquipmentRef*>& equipmentRefs =
-        *reinterpret_cast<const TArrayList<CEquipmentRef*>*>(inventory->m_Unknown30);
+        inventory->m_equipmentRefs;
     for (unsigned i = 0; i < equipmentRefs.size(); ++i)
     {
         CEquipmentRef* ref = equipmentRefs[i];

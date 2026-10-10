@@ -1,3 +1,8 @@
+#include "Affix.h"
+#include "BaseUnit.h"
+#include "Effect.h"
+#include "EffectManager.h"
+#include "EmptyStrings.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
@@ -97,7 +102,7 @@ float CEffectManager::getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE
     for (unsigned int i = 0; i < effects.size(); ++i) {
         CEffect* effect = effects[i];
         const CEffectDataView* effectData =
-            *reinterpret_cast<CEffectDataView *const *>(effect);
+            reinterpret_cast<const CEffectDataView *>(effect);
         int effectType = effectData->m_Type;
 
         if (effectType != type)
@@ -158,8 +163,10 @@ bool CEffectManager::removeEffect(const std::wstring& name, bool flag)
                     reinterpret_cast<const unsigned char*>(effect) + 0x80);
 
             if (effectName == name) {
-                if (flag && effect != NULL)
+                if (flag && effect != NULL) {
                     delete effect;
+                    effects[index] = NULL;
+                }
 
                 effects.removeAt(index);
                 removed = true;
@@ -185,7 +192,7 @@ float CEffectManager::getEffectValue(EEFFECT_TYPE type, const std::wstring& name
         float adjustment;
         unsigned char unknown28[0x58];
         std::wstring effectName;
-        unsigned char unknownb0[0x10];
+        unsigned char unknown88[0xc0-0x88];
         float value;
     };
 
@@ -205,11 +212,11 @@ float CEffectManager::getEffectValue(EEFFECT_TYPE type, const std::wstring& name
                 if (effect->effectType == type && effect->effectName == name) {
                     float value = effect->value;
 
-                    if (effect->adjustment != -14700.0f &&
-                        effect->adjustment != -100000.0f) {
+                    if (effect->adjustment != -900.0f &&
+                        effect->adjustment != -1000.0f) {
                         if (type == 7 || type == 6 ||
                             type == 124 || type == 123) {
-                            value *= 0.01f;
+                            value *= 0.016f;
                         }
                     }
 
@@ -240,4 +247,29 @@ bool CEffectManager::hasEffect(const std::wstring& name)
         }
     }
     return false;
+}
+
+
+// Imported source candidates; historical status is not fresh acceptance.
+void CEffectManager::notifyOfDeletion(CCharacter* character)
+{
+}
+
+void CEffectManager::clearAllUnitReferences()
+{
+}
+
+CAffix* CEffectManager::cloneAffix(CAffix* affix, unsigned int level, CBaseUnit* source, float scale)
+{
+    CAffix* result=NULL;
+    if (affix) {
+        result=new CAffix(affix, level);
+        if (result) {
+            result->addEffectsToEffectManager(this);
+            if (scale>0.0f) result->m_fDuration=scale;
+            addAffix(result,level,source,scale);
+            clearOutDescriptions();
+        }
+    }
+    return result;
 }

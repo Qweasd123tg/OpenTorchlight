@@ -7,14 +7,15 @@
 
 #include "RunicCore.h"
 
+class CEquipment;
 class CEquipmentRef : public CRunicCore
 {
 public:
     virtual ~CEquipmentRef();
 
     // fields
-    void* m_pUnknown10;
-    int m_iSlot;
+    union { void* m_pUnknown10; CEquipment* m_pEquipment; };
+    union { int m_iSlot; unsigned int m_slot; };
     unsigned char m_gap1C[0xc];
 };
 

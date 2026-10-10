@@ -1,4 +1,7 @@
 #include "EmptyStrings.h"
+#include "SoundInstance.h"
+#include "SoundManager.h"
+#include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
 #include "SoundInstance.h"
@@ -40,15 +43,6 @@ long long CSoundManager::fmodFileCloseCallback(void*, void*)
     return 0;
 }
 
-namespace FMOD
-{
-    class Sound
-    {
-    public:
-        int getMode(unsigned int* mode);
-    };
-}
-
 unsigned int CSoundManager::soundLoops(CSoundInstance* sound)
 {
     unsigned int mode;
@@ -72,51 +66,17 @@ void CSoundManager::stopMusic()
 }
 
 CSoundManager::CSoundManager(bool b)
-    : CRunicCore(),
+    : CRunicCore(), m_iUnknown10(0), m_iUnknown14(0), m_fileField2C(-1),
+      m_pendingSounds(25), m_bUnknown6A8(false), m_bUnknown6A9(false),
+      m_pDynamicPropertyFile(NULL), m_iUnknown6B8(0), m_iUnknown6C0(0),
+      m_bUnknown6C8(b), m_iUnknown6D0(NULL), m_iUnknown6F0(-1), m_iUnknown6F4(0),
       m_sUnknown6F8()
 {
-    m_iUnknown10 = 0;
-    m_iUnknown14 = 0;
-
-    m_pUnknown30 = NULL;
-    m_iUnknown38 = 0;
-    m_pUnknown40 = NULL;
-    m_pUnknown48 = NULL;
-    m_iUnknown50 = 0;
-    m_pUnknown58 = NULL;
-    m_iUnknown60 = 0;
-    m_iUnknown68 = 0;
-    m_pUnknown70 = NULL;
-    m_pUnknown78 = NULL;
-    m_iUnknown80 = 0;
-    m_pUnknown88 = NULL;
-
-    for (unsigned int i = 0; i < sizeof(m_Unknown90); ++i)
-        m_Unknown90[i] = 0;
-    *reinterpret_cast<int *>(reinterpret_cast<char *>(m_Unknown90) + 0x10) = 25;
-
-    for (int i = 0; i < 64; ++i)
-    {
-        new (reinterpret_cast<void *>(
-            reinterpret_cast<char *>(&m_UnknownA8) + i * sizeof(CChannelInstance)))
-            CChannelInstance();
-    }
-
-    m_bUnknown6A8 = false;
-    m_bUnknown6A9 = false;
-    m_pDynamicPropertyFile = NULL;
-    m_iUnknown6B8 = 0;
-    m_iUnknown6C0 = 0;
-    m_bUnknown6C8 = b;
-    m_iUnknown6D0 = 0;
-    m_iUnknown6F0 = -1;
-    m_iUnknown6F4 = 0;
-
-    m_iUnknown18 = 0;
-    m_pUnknown20 = NULL;
-    m_pUnknown28 = NULL;
-    *reinterpret_cast<int *>(
-        reinterpret_cast<char *>(&m_pUnknown28) + 4) = -1;
+    m_iUnknown18 = NULL;
+    m_fileField20 = 0;
+    m_fileField24 = 0;
+    m_fileField28 = 0;
+    for (unsigned int i=0; i<64; ++i) m_channels[i].m_iUnknown10=0;
 }
 
 extern "C" int FMOD_Memory_GetStats(int *currentAllocated, int *maxAllocated, bool blocking);
@@ -130,4 +90,68 @@ int CSoundManager::getMemoryInUse()
         FMOD_Memory_GetStats(&currentAllocated, &maxAllocated, true);
 
     return currentAllocated;
+}
+
+
+// Imported source candidates; historical status is not fresh acceptance.
+FMOD_RESULT CSoundManager::fmodFileReadCallback(void* handle, void* buffer, unsigned int length, unsigned int* bytesRead, void* userData)
+{
+    *bytesRead = static_cast<CSoundInstance*>(handle)->m_stream->read(buffer, length);
+    return *bytesRead ? FMOD_OK : static_cast<FMOD_RESULT>(22);
+}
+
+FMOD_RESULT CSoundManager::fmodFileSeekCallback(void* handle, unsigned int position, void* userData)
+{
+    if (handle && !static_cast<CSoundInstance*>(handle)->m_stream.isNull()) {
+        static_cast<CSoundInstance*>(handle)->m_stream->seek(position);
+        return FMOD_OK;
+    }
+    return static_cast<FMOD_RESULT>(20);
+}
+
+std::wstring CSoundManager::getMusicFilePlaying()
+{
+    if (m_iUnknown6D0) return m_iUnknown6D0->m_soundName;
+    return EMPTY_WSTRING;
+}
+
+FMOD::SoundGroup* CSoundManager::createSoundGroup(std::string name)
+{
+    if (!m_iUnknown18) return NULL;
+    FMOD::SoundGroup* group;
+    m_iUnknown18->createSoundGroup(name.c_str(), &group);
+    return group;
+}
+
+void CSoundManager::updateAudioLevels(float soundVolume, float musicVolume, bool soundMute, bool musicMute)
+{
+    if (!m_bUnknown6A8) return;
+    FMOD::SoundGroup* sounds;
+    if (m_iUnknown18->getMasterSoundGroup(&sounds) == FMOD_OK) sounds->setVolume(soundVolume);
+    FMOD::ChannelGroup* channels;
+    if (m_iUnknown18->getMasterChannelGroup(&channels) == FMOD_OK) { channels->setVolume(soundVolume); channels->setMute(soundMute); }
+    if (m_iUnknown6D0) {
+        m_iUnknown6E0->setVolume(musicVolume);
+        if (m_iUnknown6D8) {
+            FMOD::Channel* channel;
+            m_iUnknown18->getChannel(m_iUnknown6D8, &channel);
+            channel->setMute(musicMute);
+        }
+    }
+}
+
+void CSoundInstance::clear()
+{
+    m_soundName.clear();
+    m_stream.setNull();
+    m_pSound->release();
+    m_pSound = NULL;
+    m_soundType = static_cast<SOUND_TYPE>(0);
+    m_referenceCount = 0;
+    m_pSoundData = NULL;
+}
+
+ CSoundInstance::~CSoundInstance()
+{
+    if (m_pSound) { m_pSound->release(); m_pSound = NULL; }
 }

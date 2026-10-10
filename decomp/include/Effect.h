@@ -6,12 +6,19 @@
 #include "EffectDefines.h"
 #include "Constants.h"
 class CBaseUnit;
+class CResourceManager;
+class CParticle;
+#include <OgreVector3.h>
 class CSkill;
 enum EEFFECT_VALUES {};
 // Partial: full 0x138 allocation, original destructor slots and accessed fields.
 class CEffect : public CRunicCore
 {
 public:
+    void getMaxCaculatedValue();
+    void getMinCaculatedValue();
+    void playFX(CResourceManager* manager, const Ogre::Vector3& position);
+    bool fxShouldPlay();
     enum ECALCULATETYPES {};
     CEffect(EEFFECT_TYPE,bool,EEFFECT_ACTIVATION,float,float,float,bool);
     CEffect(const CEffect* source);
@@ -31,7 +38,10 @@ private:
     TSafePointer<CBaseUnit> m_Owner;
     unsigned char m_EffectData58[0x80-0x58];
     std::wstring m_sName;
-    unsigned char m_EffectData88[0xc0-0x88];
+    unsigned char m_EffectData88[0xa8-0x88];
+    CParticle* m_particle;
+    std::wstring m_particleName;
+    unsigned char m_EffectDataB8[8];
     float m_fValueC0;
     float m_fValueC4;
     float m_fValueC8;

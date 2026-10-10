@@ -7,6 +7,7 @@
 #include "TArrayList.h"
 
 class CEditorBaseObject;
+class CEditorScene;
 class CObjectControl3D;
 class CResourceManager;
 
@@ -15,6 +16,12 @@ class CResourceManager;
 class CEditorObjectManager : public CRunicCore
 {
 public:
+    void keyEvent(unsigned int,unsigned int);
+    void mouseEvent(unsigned int,unsigned int);
+    void EditorSetChunkTemplateExits(int);
+    void EditorSetChunkTemplateExit(int,float,float,float);
+    void EditorDeleteAllObjectsInScene(CEditorScene*);
+
     typedef std::map<long long, CEditorBaseObject*> ObjectMap;
 
     CEditorObjectManager(CResourceManager* resourceManager);

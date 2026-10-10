@@ -71,7 +71,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  unsigned long long uiMem[(sizeof(CGameUI)+7)/8]={0},imageMem[(sizeof(CEGUI::Image)+7)/8]={0},skillMem[4][(sizeof(CSkill)+7)/8]={0};
  image=(CEGUI::Image*)imageMem;menu->m_pGameUI=(CGameUI*)uiMem;
  std::wstring iconNames[4];for(int i=0;i<2;++i){skills[i]=(CSkill*)skillMem[i];skills[i]->m_Guid=0x112233440000LL+i;icons[i]=&iconNames[i];if(c.mode!=1&&!(c.mode==3&&i==2))iconNames[i]=L"skill_icon";menu->m_pSpellWindows[i]=(c.mask&(1u<<i))?win[424+i]:0;menu->m_SpellGuids[i]=-10-i;}for(int i=0;i<3;++i)translates[i]=0;
- TArrayList<CEquipmentRef*>& equipmentRefs=*reinterpret_cast<TArrayList<CEquipmentRef*>*>(inventory->m_Unknown30);equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
+ TArrayList<CEquipmentRef*>& equipmentRefs=inventory->m_equipmentRefs;equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
  detour::Set d;TL_REDIRECT(d,queryFn,&query);TL_REDIRECT(d,slotFn,&slot);
  d.redirect(getSizeFn,getSizeFn,&size);d.redirect(setSizeFn,setSizeFn,&setSize);d.redirect(removeFn,removeFn,&remove);d.redirect(frontFn,frontFn,&front);d.redirect(backFn,backFn,&back);d.redirect(propertyFn,propertyFn,&property);d.redirect(textFn,textFn,&setText);d.redirect(tooltipFn,tooltipFn,&tooltip);
  TL_REDIRECT(d,knownFn,&known);TL_REDIRECT(d,iconFn,&icon);TL_REDIRECT(d,uiImageFn,&uiImage);TL_REDIRECT(d,translateSingletonFn,&singleton);TL_REDIRECT(d,translateFn,&translate);d.redirect(imageStringFn,imageStringFn,&imageString);

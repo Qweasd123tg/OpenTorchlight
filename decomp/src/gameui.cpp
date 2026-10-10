@@ -1,3 +1,19 @@
+#include "GameUICallBoundaries.h"
+#include "GameUIOgreUTFString.h"
+extern unsigned int KSETTINGS_XRATIO;
+#include <CEGUIWindow.h>
+#include "Console.h"
+#include "DropdownMenu.h"
+#include "DynamicPropertyFile.h"
+#include "GameUI.h"
+#include "GameVariables.h"
+#include "InteractiveMenu.h"
+#include "Level.h"
+#include "MenuManager.h"
+#include "Settings.h"
+#include "SkillFoldout.h"
+#include "SubMenu.h"
+#include <algorithm>
 #include "GameUI.h"
 #include "GameUIUpdate.h"
 // Keep recovered private phases inside the original single public entry.
@@ -56,7 +72,7 @@ void CGameUI::showEquipmentTooltip(CCharacter* owner,CEquipment* item,CEquipment
  if(tip->m_iCachedItemGuid!=item->getGuid()){
   tip->m_iCachedItemGuid=item->getGuid();
   bool gamble=owner!=m_pCharacter&&owner->ISA(UNITTYPES::GAMBLER);
-  float minimumWidth=scaledY(160.0f);float minimumHeight=scaledY(100.0f);
+  float minimumWidth=gameuiBoundaryScaledY(this,160.0f);float minimumHeight=gameuiBoundaryScaledY(this,100.0f);
   value=gamble?L"???":item->getFullItemName(false);
   std::string bytes=STRINGS::StringConvertToUTF8(value);
   Size titleSize=measure(tip->m_pItemName->getFont(true),bytes,1000.0f,2);size(tip->m_pItemName,titleSize);text(tip->m_pItemName,bytes);
@@ -117,7 +133,7 @@ void CGameUI::showEquipmentTooltip(CCharacter* owner,CEquipment* item,CEquipment
    if(priceKind==1){if(amount>m_pCharacter->getGold())tip->m_pPrice->setProperty("TextColour",CEGUI::PropertyHelper::colourToString(CEGUI::colour(1.0f,.5f,.5f,1.0f)));else tip->m_pPrice->setProperty("TextColour","FFffeb9a");}
    Size p=measure(font,bytes,1000.0f,2);if(priceKind==2)tip->m_pPrice->setProperty("TextColour","FFffeb9a");size(tip->m_pPrice,p);text(tip->m_pPrice,bytes);moveY(tip->m_pPrice,y);width=maxSecond(p.width+40.0f,width);y=(p.height+4.0f)+y;
   }else tip->m_pPrice->setVisible(false);
-  float height=maxSecond(minimumHeight,y);float borderWidth=scaledY(52.0f)-52.0f;float borderHeight=scaledY(52.0f)-52.0f;
+  float height=maxSecond(minimumHeight,y);float borderWidth=gameuiBoundaryScaledY(this,52.0f)-52.0f;float borderHeight=gameuiBoundaryScaledY(this,52.0f)-52.0f;
   borderWidth=borderWidth>0.0f?borderWidth:0.0f;borderHeight=maxSecond(borderHeight,0.0f);
   tip->m_pRoot->setSize(CEGUI::UVector2(CEGUI::UDim(0,borderWidth+width),CEGUI::UDim(0,borderHeight+height)));
  }
@@ -177,8 +193,8 @@ void CSkillTooltip::showTooltip(CBaseUnit* owner,CSkill* skill,float mouseX,floa
 m_sText=skill->getName();
 skill->calculateEffectiveSkillLevel();
 m_iIndex=skill->m_iEffectiveSkillLevel;
-float minimumWidth=m_pGameUI->scaledY(160.0f);
-float minimumHeight=m_pGameUI->scaledY(100.0f);
+float minimumWidth=gameuiBoundaryScaledY(m_pGameUI,160.0f);
+float minimumHeight=gameuiBoundaryScaledY(m_pGameUI,100.0f);
 float bonuses[6]={0,0,0,0,0,0};
 skill->calculateEffectiveSkillLevel();
 unsigned bonusLevel=skill->m_iEffectiveSkillLevel&&!skill->m_bExecutedByProperty&&skill->m_bEnabled?~0u:1u;
@@ -215,7 +231,7 @@ skill->calculateEffectiveSkillLevel();
 bytes=STRINGS::StringConvertToUTF8(skill->getSkillLevelDescription(owner,skill->m_iEffectiveSkillLevel));
 m_pDescription->setVisible(true);
 font=m_pDescription->getFont(true);lineHeight=font->getFontHeight()+2.0f;
-float descriptionBound=m_pGameUI->scaledY(300.0f);
+float descriptionBound=gameuiBoundaryScaledY(m_pGameUI,300.0f);
 Size description=measureLinesFirst(font,bytes,descriptionBound,4,lineHeight);
 setSize(m_pDescription,description);setText(m_pDescription,bytes);setY(m_pDescription,y);
 width=maxSecond(description.width+40.0f,width);
@@ -291,7 +307,7 @@ if(showNext){
   skill->calculateEffectiveSkillLevel();
   bytes=STRINGS::StringConvertToUTF8(skill->getSkillLevelDescription(owner,nextIndex(skill->m_iEffectiveSkillLevel)));
   m_pNextDescription->setVisible(true);font=m_pNextDescription->getFont(true);lineHeight=font->getFontHeight()+2.0f;
-  float bound=m_pGameUI->scaledY(300.0f);
+  float bound=gameuiBoundaryScaledY(m_pGameUI,300.0f);
   Size nextDescriptionSize=measureLinesFirst(font,bytes,bound,4,lineHeight);
   setSize(m_pNextDescription,nextDescriptionSize);setText(m_pNextDescription,bytes);setY(m_pNextDescription,y);
   width=maxSecond(nextDescriptionSize.width+40.0f,width);y=(nextDescriptionSize.height+4.0f)+y;
@@ -357,8 +373,8 @@ if(required){
  m_pSkillRequirement->setVisible(true);
 }else m_pSkillRequirement->setVisible(false);
 float height=maxSecond(minimumHeight,y);
-float extraWidth=g_pGameUI->scaledY(52.0f)-52.0f;
-float extraHeight=g_pGameUI->scaledY(52.0f)-52.0f;
+float extraWidth=gameuiBoundaryScaledY(g_pGameUI,52.0f)-52.0f;
+float extraHeight=gameuiBoundaryScaledY(g_pGameUI,52.0f)-52.0f;
 Size total={width+(0.0f<extraWidth?extraWidth:0.0f),(0.0f<extraHeight?extraHeight:0.0f)+height};
 setSize(m_pWindow,total);
 
@@ -408,12 +424,12 @@ inline void removeDragIcon(UIState& s) {
 inline void positionDragIcon(CGameUI* ui, UIState& s) {
     s.dragWindow->addChildWindow(s.draggedItem.getObject()->m_pIconWindow);
     float y=static_cast<float>(s.mouseY);
-    y-=ui->scaledY(48.0f);
+    y-=gameuiBoundaryScaledY(ui,48.0f);
     float x=static_cast<float>(s.mouseX);
-    x-=ui->scaledY(32.0f);
+    x-=gameuiBoundaryScaledY(ui,32.0f);
     s.draggedItem.getObject()->m_pIconWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,x),CEGUI::UDim(0,y)));
-    float height=ui->scaledY(96.0f);
-    float width=ui->scaledY(64.0f);
+    float height=gameuiBoundaryScaledY(ui,96.0f);
+    float width=gameuiBoundaryScaledY(ui,64.0f);
     s.draggedItem.getObject()->m_pIconWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
 }
 inline void putBackOrDrop(UIState& s,CCharacter* owner,CInventory* inventory,CEquipment* item) {
@@ -442,10 +458,10 @@ bool CGameUI::menuItemClick(CCharacter* owner,CSubMenu* menu,int clickedSlot,boo
     if(!quickTrade && !s.draggedItem.getObject() && GetAsyncKeyState(16)<0) {
         if(!s.merchantMenu->open() && !s.combineMenu->open() && !s.stashMenu->open() && !s.enchantMenu->open()) {
             if(s.petMenu->open() && !s.inventoryMenu->open()) {
-                closeRight();s.inventoryMenu->setOpen(true);quickTransfer=true;
+                gameuiBoundaryCloseRight(this);s.inventoryMenu->setOpen(true);quickTransfer=true;
             } else if(!s.petMenu->open() && s.inventoryMenu->open() && s.player->getFollowerCount()) {
                 if(actor(s.player->getFollower(0)).aiState!=42) {
-                    closeLeft();s.petMenu->setOpen(true);quickTransfer=true;
+                    gameuiBoundaryCloseLeft(this);s.petMenu->setOpen(true);quickTransfer=true;
                 }
             }
         }
@@ -498,7 +514,7 @@ bool CGameUI::menuItemClick(CCharacter* owner,CSubMenu* menu,int clickedSlot,boo
             s.player->castSkill(s.selectedSkill);
             s.selectedSkill=-1;
             setMouseOverItem(NULL,false);clearHover<0x1020>(s.inventoryMenu);
-            setCursorState(static_cast<ECursorState>(0));
+            gameuiBoundaryCursor(this,static_cast<ECursorState>(0));
             goto RefreshTargetMenus;
         }
         if(s.targetedItem.getObject()) {
@@ -510,7 +526,7 @@ bool CGameUI::menuItemClick(CCharacter* owner,CSubMenu* menu,int clickedSlot,boo
                 if(s.targetedItem.getObject())delete s.targetedItem.getObject();
             }
             setMouseOverItem(NULL,false);clearHover<0x1020>(s.inventoryMenu);
-            setCursorState(static_cast<ECursorState>(0));
+            gameuiBoundaryCursor(this,static_cast<ECursorState>(0));
             s.targetedItem.setObject(NULL);s.itemUser.setObject(NULL);s.targetCharacter.setObject(NULL);
             goto RefreshTargetMenus;
         }
@@ -767,10 +783,10 @@ void CGameUI::updateSlots() {
                         if(!itemImage)return;
                         float width=itemImage->getWidth();
                         unsigned ratioKey=KSETTINGS_YRATIO;
-                        width=scaledY(width/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
+                        width=gameuiBoundaryScaledY(this,width/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
                         float height=itemImage->getHeight();
                         ratioKey=KSETTINGS_YRATIO;
-                        height=scaledY(height/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
+                        height=gameuiBoundaryScaledY(this,height/CMasterResourceManager::getSingleton()->m_pSettings->GetFloat(ratioKey));
                         float scale=ui.slotWidth/height;
                         width*=scale; height*=scale;
                         ui.icons[i]->setPosition(CEGUI::UVector2(CEGUI::UDim(0,(ui.slotWidth-width)*0.5f),CEGUI::UDim(0,0)));
@@ -908,11 +924,11 @@ inline __attribute__((always_inline)) OwnerFields& owner(CBaseUnit* p){return *r
 inline __attribute__((always_inline)) SkillFields& skill(CSkill* p){return *reinterpret_cast<SkillFields*>(p);}
 inline __attribute__((always_inline)) CEGUI::String utf8(const char* p){return CEGUI::String(reinterpret_cast<const unsigned char*>(p));}
 inline __attribute__((always_inline)) void position(CSkillFoldout* p,int column,int row,bool label,float x,float y){
- float sy=p->m_pGameUI->scaledY(y);float sx=p->m_pGameUI->scaledY(x);
+ float sy=gameuiBoundaryScaledY(p->m_pGameUI,y);float sx=gameuiBoundaryScaledY(p->m_pGameUI,x);
  (label?p->m_Hotkeys[column][row]:p->m_Icons[column][row])->setPosition(CEGUI::UVector2(CEGUI::UDim(0,sx),CEGUI::UDim(0,sy)));
 }
 inline __attribute__((always_inline)) void size(CSkillFoldout* p,int column,int row,bool label,float x,float y){
- float sy=p->m_pGameUI->scaledY(y);float sx=p->m_pGameUI->scaledY(x);
+ float sy=gameuiBoundaryScaledY(p->m_pGameUI,y);float sx=gameuiBoundaryScaledY(p->m_pGameUI,x);
  (label?p->m_Hotkeys[column][row]:p->m_Icons[column][row])->setSize(CEGUI::UVector2(CEGUI::UDim(0,sx),CEGUI::UDim(0,sy)));
 }
 inline __attribute__((always_inline)) void hotkey(CSkillFoldout* p,int column,int row,int index,float x,float y){
@@ -931,7 +947,7 @@ void CSkillFoldout::showFoldout(CBaseUnit* unit,float x,float y,bool includeItem
  if(m_pWindow->getParent() || !unit)return;
  CSkillManager* manager=owner(unit).manager;if(!manager)return;
  m_pParent->addChildWindow(m_pWindow);m_pWindow->moveToFront();
- m_pGameUI->scaledY(160.0f);m_pGameUI->scaledY(100.0f);
+ gameuiBoundaryScaledY(m_pGameUI,160.0f);gameuiBoundaryScaledY(m_pGameUI,100.0f);
  for(int column=0;column<10;++column)for(int row=0;row<10;++row){
   m_Icons[column][row]->setVisible(false);m_Icons[column][row]->setEnabled(false);
   m_Hotkeys[column][row]->setVisible(false);m_Hotkeys[column][row]->setEnabled(false);
@@ -1012,10 +1028,10 @@ void CSkillFoldout::showFoldout(CBaseUnit* unit,float x,float y,bool includeItem
    if(nextColumn>(maxColumns>4?maxColumns:4)&&lastRow!=9){++lastRow;rowY=bottom;nextColumn=0;}
   }
  }
- float height=m_pGameUI->scaledY(maxHeight+5.0f)+0.0f;
- float width=m_pGameUI->scaledY(maxWidth)+0.0f;
+ float height=gameuiBoundaryScaledY(m_pGameUI,maxHeight+5.0f)+0.0f;
+ float width=gameuiBoundaryScaledY(m_pGameUI,maxWidth)+0.0f;
  m_pWindow->setSize(CEGUI::UVector2(CEGUI::UDim(0,width),CEGUI::UDim(0,height)));
- float screenWidth=g_pGameUI->getWindowWidth();float screenHeight=g_pGameUI->getWindowHeight();
+ float screenWidth=gameuiBoundaryWidth(g_pGameUI);float screenHeight=gameuiBoundaryHeight(g_pGameUI);
  CEGUI::UDim w=m_pWindow->getWidth();CEGUI::UDim h=m_pWindow->getHeight();
  if(x==-1.0f&&y==-1.0f)return;
  float pixelWidth=static_cast<float>(static_cast<int>(w.d_scale+(w.d_scale>0.0f?0.5f:-0.5f)))+w.d_offset;
@@ -1215,4 +1231,497 @@ void CGameUI::handleKeyPresses()
         ui.soundBank->playSample(30,reinterpret_cast<ActorFields*>(ui.player)->node,0.0f,0.0f,false);
         ui.player->cycleSkill(1);
     }
+}
+
+
+// Imported source candidates; historical status is not fresh acceptance.
+void CGameUI::requestSetGameState(EGameState state, EMenu menu)
+{
+    m_requestedGameState = state;
+    m_requestedMenu = menu;
+}
+
+void CGameUI::clearGameStateRequest()
+{
+    m_requestedGameState = static_cast<EGameState>(6);
+    m_requestedMenu = static_cast<EMenu>(6);
+}
+
+void CGameUI::statsChanged()
+{
+    m_statsMenu->updateLayout();
+    m_inventoryMenu->updateLayout();
+}
+
+bool CGameUI::getDieMenuIsOpen()
+{
+    return m_dieMenu ? (m_dieMenu->m_bUnknown30 || !m_dieMenu->m_bUnknown31) : false;
+}
+
+bool CGameUI::questDialogOpen()
+{
+    return m_questDialogMenu ? (m_questDialogMenu->m_bUnknown30 || !m_questDialogMenu->m_bUnknown31) : false;
+}
+
+bool CGameUI::isCinematicMenuOpen()
+{
+    return m_cinematicMenu ? (m_cinematicMenu->m_bUnknown30 || !m_cinematicMenu->m_bUnknown31) : false;
+}
+
+void CGameUI::hideModalDialogs()
+{
+    m_optionsMenu->setOpen(false);
+    m_dialogMenu->setOpen(false);
+    m_dropdown548->setOpen(false);
+    m_tipMenu->setOpen(false);
+}
+
+bool CGameUI::tipMenuOpen()
+{
+    return m_tipMenu->m_bUnknown30 || !m_tipMenu->m_bUnknown31;
+}
+
+bool CGameUI::modalDialogOpen()
+{
+    for (unsigned int i = 0; i < m_dropdowns.size(); ++i)
+        if (m_dropdowns[i]->m_bUnknown30 || !m_dropdowns[i]->m_bUnknown31) return true;
+    return false;
+}
+
+bool CGameUI::modalDialogOpenPartial()
+{
+    for (unsigned int i = 0; i < m_dropdowns.size(); ++i)
+        if (m_dropdowns[i]->m_bUnknown30) return true;
+    return false;
+}
+
+bool CGameUI::eitherCoveredPartial()
+{
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (m_submenus[i]->openPartial()) return true;
+    return false;
+}
+
+bool CGameUI::leftCovered()
+{
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (!m_submenus[i]->isRight() && m_submenus[i]->open()) return true;
+    return false;
+}
+
+bool CGameUI::rightCovered()
+{
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (m_submenus[i]->isRight() && m_submenus[i]->open()) return true;
+    return false;
+}
+
+bool CGameUI::bothCovered()
+{
+    return leftCovered() && rightCovered();
+}
+
+void CGameUI::toggleStatFill()
+{
+}
+
+CEquipment* CGameUI::getMouseOverItem()
+{
+    return m_mouseOverItem;
+}
+
+void CGameUI::flushProcessInput()
+{
+    m_mouseThrough = false;
+    m_leftSlot = -1;
+    m_rightSlot = -1;
+    m_pendingRightSlot = -1;
+}
+
+void CGameUI::closeLeft()
+{
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (!m_submenus[i]->isRight()) m_submenus[i]->setOpen(false);
+}
+
+void CGameUI::closeRight()
+{
+    for (unsigned int i = 0; i < m_submenus.size(); ++i)
+        if (m_submenus[i]->isRight()) m_submenus[i]->setOpen(false);
+}
+
+void CGameUI::refreshQuestMenu()
+{
+    if (m_questMenu->open() || m_questMenu->openPartial()) m_questMenu->updateLayout();
+}
+
+void CGameUI::closeCinematicMenu()
+{
+    if (m_cinematicMenu) m_cinematicMenu->setOpen(false);
+}
+
+void CGameUI::clickLeft()
+{
+}
+
+bool CGameUI::handle_MouseOut(const CEGUI::EventArgs& event)
+{
+    return true;
+}
+
+void CGameUI::removeMenuListener(EMENU_TYPE type, iMenuListener* listener)
+{
+    if (type == 0)
+    {
+        if (m_questDialogMenu) m_questDialogMenu->removeMenuListener(listener);
+    }
+    else if (type == 1)
+    {
+        if (m_cinematicMenu) m_cinematicMenu->removeMenuListener(listener);
+    }
+}
+
+float CGameUI::getWindowHeight()
+{
+    return static_cast<float>(m_settings->GetInt(KSETTINGS_RES_HEIGHT));
+}
+
+float CGameUI::getWindowWidth()
+{
+    return static_cast<float>(m_settings->GetInt(KSETTINGS_RES_WIDTH));
+}
+
+float CGameUI::getAspectRatio()
+{
+    float width = getWindowWidth();
+    return width / getWindowHeight();
+}
+
+void CGameUI::setCursorState(ECursorState state)
+{
+    if (m_cursorState != state)
+    {
+        m_cursorState = state;
+        updateHardwareCursor();
+    }
+}
+
+float CGameUI::scaledY(float value)
+{
+    return m_settings->GetFloat(KSETTINGS_YRATIO) * value;
+}
+
+float CGameUI::scaledX(float value)
+{
+    return m_settings->GetFloat(KSETTINGS_XRATIO) * value;
+}
+
+bool CGameUI::getConsoleIsOpen()
+{
+    return m_console ? m_console->getVisible() : false;
+}
+
+void CGameUI::captureProcessInput()
+{
+    gameui_input_detail::mouse(this).capture();
+    gameui_input_detail::keys(this).capture();
+}
+
+void CGameUI::setRightButtonPressed()
+{
+    gameui_input_detail::mouse(this).mouseEvent(0x204, 0);
+    gameui_input_detail::mouse(this).capture();
+}
+
+void CGameUI::flushInput()
+{
+    m_mouseThrough = false;
+    m_leftSlot = -1;
+    m_rightSlot = -1;
+    m_pendingRightSlot = -1;
+    gameui_input_detail::keys(this).flushAll();
+    gameui_input_detail::mouse(this).flushAll();
+}
+
+void CGameUI::setActiveMenu(EMenu menu)
+{
+    if (m_menuManager) m_menuManager->setActiveMenu(menu);
+}
+
+void CGameUI::reloadMenuCharacters()
+{
+    m_menuManager->reloadMenuCharacters();
+}
+
+void CGameUI::closeMenus()
+{
+    if (m_menuManager) m_menuManager->closeMenus();
+    m_mouseThrough = false;
+    m_leftSlot = -1;
+    m_rightSlot = -1;
+    m_pendingRightSlot = -1;
+    gameui_input_detail::keys(this).flushAll();
+    gameui_input_detail::mouse(this).flushAll();
+}
+
+void CGameUI::unPause()
+{
+    if (m_paused) togglePause();
+}
+
+bool CGameUI::handle_SkillMouseOut(const CEGUI::EventArgs& event)
+{
+    const CEGUI::WindowEventArgs& e = static_cast<const CEGUI::WindowEventArgs&>(event);
+    if (e.window)
+    {
+        if (e.window->getID() == 1000) m_itemHovered = false;
+        else m_skillHovered = false;
+    }
+    return true;
+}
+
+bool CGameUI::handle_SkillSelectMouseOut(const CEGUI::EventArgs& event)
+{
+    const CEGUI::WindowEventArgs& e = static_cast<const CEGUI::WindowEventArgs&>(event);
+    if (e.window)
+    {
+        m_foldoutSkillHovered = false;
+        m_foldoutItemHovered = false;
+        m_foldoutItemGuid = -1;
+        m_foldoutSkillGuid = -1;
+    }
+    m_skillHovered = false;
+    m_itemHovered = false;
+    return true;
+}
+
+bool CGameUI::handle_ClickThrough(const CEGUI::EventArgs& event)
+{
+    m_mouseThrough = true;
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    return true;
+}
+
+void CGameUI::closeAll()
+{
+    closeLeft();
+    closeRight();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    m_questDialogMenu->setOpen(false);
+    m_dropdown530->setOpen(false);
+    m_dropdown548->setOpen(false);
+    m_tipMenu->setOpen(false);
+}
+
+bool CGameUI::handle_ToggleOptions(const CEGUI::EventArgs& event)
+{
+    closeAll();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    m_optionsMenu->setOpen(true);
+    return true;
+}
+
+void CGameUI::toggleSettings()
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    m_optionsMenu->setOpen(false);
+    if (m_dialogMenu) m_dialogMenu->setOpen(!m_dialogMenu->m_bUnknown30);
+}
+
+void CGameUI::togglePet()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_inventoryMenu->openPartial() || !modalDialogOpen()) {
+        if (!m_inventoryMenu->openPartial()) closeLeft();
+        m_inventoryMenu->setOpen(!m_inventoryMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
+
+void CGameUI::toggleQuest()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_questMenu->openPartial() || !modalDialogOpen()) {
+        if (!m_questMenu->openPartial()) closeRight();
+        m_questMenu->setOpen(!m_questMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
+
+void CGameUI::toggleJournal()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_journalMenu->openPartial() || !modalDialogOpen()) {
+        if (!m_journalMenu->openPartial()) closeRight();
+        m_journalMenu->setOpen(!m_journalMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
+
+bool CGameUI::handle_ToggleQuest(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    toggleQuest();
+    return true;
+}
+
+bool CGameUI::handle_ToggleJournal(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    toggleJournal();
+    return true;
+}
+
+bool CGameUI::handle_ToggleSkill(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    toggleSkill();
+    return true;
+}
+
+bool CGameUI::handle_ToggleInventory(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    toggleInventory();
+    return true;
+}
+
+void CGameUI::toggleOptions()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (!m_optionsMenu->m_bUnknown30) closeAll();
+    if (m_optionsMenu) {
+        m_dialogMenu->setOpen(false);
+        m_optionsMenu->setOpen(!m_optionsMenu->m_bUnknown30);
+    }
+}
+
+void CGameUI::toggleDeath()
+{
+    if (m_dieMenu) {
+        unPause();
+        closeAll();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+        m_optionsMenu->setOpen(false);
+        m_dialogMenu->setOpen(false);
+        m_dieMenu->setOpen(!m_dieMenu->m_bUnknown30);
+    }
+}
+
+void CGameUI::toggleWaypointMenu()
+{
+    if (m_waypointMenu) {
+        unPause();
+        closeAll();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+        m_optionsMenu->setOpen(false);
+        m_dialogMenu->setOpen(false);
+        m_waypointMenu->setOpen(!m_waypointMenu->m_bUnknown30);
+    }
+}
+
+void CGameUI::toggleDialog()
+{
+    if (m_dropdown530) {
+        unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+        m_dropdown530->setOpen(!m_dropdown530->m_bUnknown30);
+    }
+}
+
+float CGameUI::leftScreenEdge()
+{
+    float edge = 0.0f;
+    for (unsigned int i=0; i<m_submenus.size(); ++i) {
+        if (!m_submenus[i]->isRight()) edge = std::max(edge, m_submenus[i]->screenEdge());
+    }
+    return edge;
+}
+
+float CGameUI::rightScreenEdge()
+{
+    float edge = 10000.0f;
+    for (unsigned int i=0; i<m_submenus.size(); ++i) {
+        if (m_submenus[i]->isRight()) edge = std::min(edge, m_submenus[i]->screenEdge());
+    }
+    return edge;
+}
+
+bool CGameUI::handle_TogglePet(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    gTogglePet = true;
+    return true;
+}
+
+bool CGameUI::handle_ToggleStats(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    gToggleStats = true;
+    return true;
+}
+
+bool CGameUI::handle_ToggleMap(const CEGUI::EventArgs& event)
+{
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_level && !m_paused) m_level->toggleAutomap();
+    return true;
+}
+
+void CGameUI::toggleStats()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_characterStatsMenu->openPartial() || !modalDialogOpen()) {
+        if (!m_characterStatsMenu->openPartial()) closeLeft();
+        m_characterStatsMenu->setOpen(!m_characterStatsMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
+
+void CGameUI::toggleSkill()
+{
+    unPause();
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    if (window->getParent()) window->getParent()->removeChildWindow(window);
+    if (m_skillsMenu->openPartial() || !modalDialogOpen()) {
+        if (!m_skillsMenu->openPartial()) closeRight();
+        m_skillsMenu->setOpen(!m_skillsMenu->openPartial());
+        m_topWindow->moveToFront();
+    }
+}
+
+void CGameUI::toggleFPS()
+{
+    if (!m_displayStats) {
+        m_settings->SetInt(KSETTINGS_DISPLAY_STATS, 1);
+        m_rootWindow->addChildWindow(m_statsWindow);
+    } else {
+        m_settings->SetInt(KSETTINGS_DISPLAY_STATS, 0);
+        m_rootWindow->removeChildWindow(m_statsWindow);
+    }
+    m_displayStats = !m_displayStats;
 }

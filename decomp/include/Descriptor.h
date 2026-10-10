@@ -24,6 +24,7 @@ class COgreReader;
 // inputs and outputs, the objects created from it and their save/load.
 class CDescriptor : public CEditorBaseObject
 {
+friend class CEditorScene;
 public:
     // m_iFlags bits; names are ours (the serialized ones from SerializeDescriptor).
     enum

@@ -35,4 +35,15 @@ inline std::wstring removeWhiteSpace(const std::wstring& text)
     return result;
 }
 
+
+// Signatures retained from the supplied pass10 source, verified against the original at import.
+namespace STRINGS {
+unsigned int StringCopyCharArray(char* out, unsigned int capacity, const char* text);
+std::wstring GetValueAsWString(bool value);
+float GetFloat(const std::string& text);
+float GetFloat(const std::wstring& text);
+std::string replaceString(std::string text, const std::string& find, const std::string& replacement);
+std::wstring replaceWString(std::wstring text, const std::wstring& find, const std::wstring& replacement);
+}
+
 #endif
