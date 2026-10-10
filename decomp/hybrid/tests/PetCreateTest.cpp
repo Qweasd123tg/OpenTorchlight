@@ -72,6 +72,8 @@ TL_FUNCTION(callback6Fn,"_ZN8CPetMenu16handle_ItemClickERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback7Fn,"_ZN8CPetMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback8Fn,"_ZN8CPetMenu21handle_SpellMouseOverERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback9Fn,"_ZN8CPetMenu20handle_SpellMouseOutERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback10Fn,"_ZN8CPetMenu16handle_MouseOverERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback11Fn,"_ZN8CPetMenu15handle_SetSpellERKN5CEGUI9EventArgsE")
 namespace {
 struct Stop {};
 struct Case { int width,height; bool replace; float ratio;unsigned faultSubscription;unsigned iconPattern; };
@@ -103,8 +105,8 @@ void zWindow(CEGUI::Window* p,bool x){number(13);number(wid(p));number(x);p->d_z
 void captureCallback(const CEGUI::MemberFunctionSlot<CPetMenu>* slot){
  intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
  std::memcpy(words,&slot->d_function,sizeof(words));
- char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{callback4Fn_original,callback4Fn_linked},{callback5Fn_original,callback5Fn_linked},{callback6Fn_original,callback6Fn_linked},{callback7Fn_original,callback7Fn_linked},{callback8Fn_original,callback8Fn_linked},{callback9Fn_original,callback9Fn_linked}};
- for(unsigned i=0;i<10;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
+ char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{callback4Fn_original,callback4Fn_linked},{callback5Fn_original,callback5Fn_linked},{callback6Fn_original,callback6Fn_linked},{callback7Fn_original,callback7Fn_linked},{callback8Fn_original,callback8Fn_linked},{callback9Fn_original,callback9Fn_linked},{callback10Fn_original,callback10Fn_linked},{callback11Fn_original,callback11Fn_linked}};
+ for(unsigned i=0;i<12;++i)if(words[0]==(intptr_t)pairs[i][0]||words[0]==(intptr_t)pairs[i][1]){words[0]=(intptr_t)pairs[i][0];break;}
  cap->add(words,sizeof(words));
 }
 CEGUI::Event::Connection subscribe(CEGUI::EventSet* p,const CEGUI::String& name,CEGUI::Event::Subscriber sub){number(14);number(wid(static_cast<CEGUI::Window*>(p)));text(name);CEGUI::MemberFunctionSlot<CPetMenu>* f=static_cast<CEGUI::MemberFunctionSlot<CPetMenu>*>(sub.d_functor_impl);captureCallback(f);number(f->d_object==menu);if(cs->faultSubscription==connectionCount+1)throw Stop();number(34);unsigned outstanding=0;for(unsigned i=0;i<connectionCount;++i)outstanding+=refCounts[i]-1;number(outstanding);number(connectionCount?refCounts[connectionCount-1]:0);if(connectionCount==1200)_exit(44);unsigned k=connectionCount++;refCounts[k]=2;CEGUI::Event::Connection result;result.d_object=(CEGUI::BoundSlot*)connectionObjects[k];result.d_count=&refCounts[k];return result;}
