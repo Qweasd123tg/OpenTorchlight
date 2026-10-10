@@ -224,7 +224,10 @@ private:
     int m_leftSlot;
     int m_rightSlot;
     int m_pendingRightSlot;
-    unsigned char m_gap1680[0x10];
+    float m_usableWidthRatio; // +0x1680
+    float m_cachedWindowWidth; // +0x1684
+    float m_cachedWindowHeight; // +0x1688
+    unsigned char m_gap168C[4];
     CConsole* m_console;
     unsigned char m_gap1698[0x30];
     int m_cachedPetMode; // +0x16c8
