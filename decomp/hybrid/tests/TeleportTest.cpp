@@ -99,7 +99,7 @@ unsigned int gGrowthOps;
 unsigned int gAppendOps;
 unsigned int gSwapOps;
 unsigned int gDropOps;
-int gTraceOverflow;
+unsigned int gTraceOverflow;
 
 std::vector<CCharacter *> *gFollowerLists[kPlayers];
 TArrayList<CGameClient *> *gGameClientLists[2];
@@ -156,7 +156,8 @@ void record(unsigned int op, void *receiver, unsigned int a = 0, unsigned int b 
 {
     if (trace.size() + 6 > 4096)
     {
-        ++gTraceOverflow;
+        if (gTraceOverflow != std::numeric_limits<unsigned int>::max())
+            ++gTraceOverflow;
         return;
     }
     trace.push_back(op);
@@ -165,6 +166,24 @@ void record(unsigned int op, void *receiver, unsigned int a = 0, unsigned int b 
     trace.push_back(b);
     trace.push_back(c);
     trace.push_back(e);
+}
+
+void resetTrace()
+{
+    gTraceOverflow = 0;
+    trace.clear();
+}
+
+void captureTrace(autotest::Capture& out)
+{
+    size_t n = trace.size();
+    out.add(&n, sizeof(n));
+    for (size_t i = 0; i < n; ++i)
+        out.add(&trace[i], 4);
+    out.add(&gTraceOverflow, sizeof(gTraceOverflow));
+    // Equal discarded counts cannot establish equality of the missing events.
+    if (gTraceOverflow && out.issue == autotest::Capture::Complete)
+        out.issue = autotest::Capture::Overflow;
 }
 
 unsigned int playerIndex(void *p)
@@ -298,8 +317,7 @@ void side(const Case &c, bool ours, autotest::Capture &out)
     gAppendOps = 0;
     gSwapOps = 0;
     gDropOps = 0;
-    gTraceOverflow = 0;
-    trace.clear();
+    resetTrace();
 
     for (unsigned int r = 0; r < 2; ++r)
     {
@@ -380,11 +398,7 @@ void side(const Case &c, bool ours, autotest::Capture &out)
     else
         originalActivate(object, position, direction);
 
-    size_t n = trace.size();
-    out.add(&n, sizeof(n));
-    for (size_t i = 0; i < n; ++i)
-        out.add(&trace[i], 4);
-    out.add(&gTraceOverflow, sizeof(gTraceOverflow));
+    captureTrace(out);
     // Object state after the call.
     out.add(&self[0x100], 1);
     unsigned int resourceId = who(pointerGet(self, 0x108));
@@ -585,6 +599,17 @@ void describe(const Case &c, char *buffer, size_t size)
                   (double)c.d[2]);
 }
 
+bool sameTraceObservation(const autotest::Outcome& a, const autotest::Outcome& b)
+{
+    return a.reportValid && b.reportValid &&
+           !autotest::incomplete(a) && !autotest::incomplete(b) &&
+           WIFEXITED(a.status) && WEXITSTATUS(a.status) == 0 &&
+           WIFEXITED(b.status) && WEXITSTATUS(b.status) == 0 &&
+           a.capture.length == b.capture.length &&
+           a.capture.length < autotest::Capture::kSize &&
+           std::memcmp(a.capture.data, b.capture.data, a.capture.length) == 0;
+}
+
 int run(const tlhybrid_host *host)
 {
     std::vector<Case> cases;
@@ -596,18 +621,15 @@ int run(const tlhybrid_host *host)
         autotest::Outcome a, b;
         autotest::runChild(original, &cases[i], a);
         autotest::runChild(recovered, &cases[i], b);
-        bool ok = WIFEXITED(a.status) && WEXITSTATUS(a.status) == 0 &&
-                  WIFEXITED(b.status) && WEXITSTATUS(b.status) == 0 &&
-                  a.capture.length == b.capture.length &&
-                  a.capture.length < autotest::Capture::kSize &&
-                  std::memcmp(a.capture.data, b.capture.data, a.capture.length) == 0;
+        bool ok = sameTraceObservation(a, b);
         if (!ok)
         {
             char text[512];
             describe(cases[i], text, sizeof(text));
             host->log("    teleport case %lu: %s\n", (unsigned long)i, text);
-            host->log("    statuses %d/%d bytes %lu/%lu\n", a.status, b.status,
-                      (unsigned long)a.capture.length, (unsigned long)b.capture.length);
+            host->log("    statuses %d/%d bytes %lu/%lu issues %u/%u\n", a.status, b.status,
+                      (unsigned long)a.capture.length, (unsigned long)b.capture.length,
+                      a.capture.issue, b.capture.issue);
             if (WIFEXITED(a.status) && WIFEXITED(b.status) &&
                 a.capture.length == b.capture.length &&
                 a.capture.length < autotest::Capture::kSize)

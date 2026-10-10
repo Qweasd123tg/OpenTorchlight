@@ -88,7 +88,27 @@ Ogre::MeshPtr* meshRef; CGenericModel* model; Ogre::Entity* entity; Ogre::Mesh* 
 CDynamicPropertyFile* first; CDynamicPropertyFile* second; unsigned calls;
 void number(int x){cap->add(&x,sizeof(x));}
 int getInt(CDynamicPropertyFile* p,unsigned key){number(1);number(p==first?1:p==second?2:99);number(key);++calls;if(calls==1&&cs->replace)menu->m_pDynamicPropertyFile=second;return calls==1?cs->width:cs->height;}
-CGenericModel* create(CResourceManager* r,Ogre::SceneManager* s,const wchar_t* a,const wchar_t* b,bool x,bool y,bool z){number(2);number(r==menu->m_pResourceManager);number(s==menu->m_pInventorySceneManager);for(unsigned i=0;i<1024;++i){number(a[i]);if(!a[i])break;}number(-7);for(unsigned i=0;i<1024;++i){number(b[i]);if(!b[i])break;}number(x);number(y);number(z);return model;}
+// Preserve the existing read budget; no terminator means incomplete evidence.
+void modelText(const wchar_t* value)
+{
+    if (cap->issue != autotest::Capture::Complete)
+        return;
+    if (!value)
+    {
+        cap->issue = autotest::Capture::UnsupportedPointer;
+        return;
+    }
+    for (unsigned i = 0; i < 1024; ++i)
+    {
+        int character = value[i];
+        number(character);
+        if (!character || cap->issue != autotest::Capture::Complete)
+            return;
+    }
+    // Do not read value[1024] or silently emit an ordinary terminated argument.
+    cap->issue = autotest::Capture::Overflow;
+}
+CGenericModel* create(CResourceManager* r,Ogre::SceneManager* s,const wchar_t* a,const wchar_t* b,bool x,bool y,bool z){number(2);number(r==menu->m_pResourceManager);number(s==menu->m_pInventorySceneManager);modelText(a);number(-7);modelText(b);number(x);number(y);number(z);return model;}
 float getFloat(CDynamicPropertyFile* p,unsigned key){number(3);number(p==first?1:p==second?2:99);number(key);return cs->ratio;}
 const Ogre::MeshPtr& getMesh(const Ogre::Entity* p){number(4);number(p==entity);return *meshRef;}
 void bounds(Ogre::Mesh* p,const Ogre::AxisAlignedBox& b,bool pad){number(5);number(p==mesh);cap->add(&b.getMinimum(),sizeof(Ogre::Vector3));cap->add(&b.getMaximum(),sizeof(Ogre::Vector3));number(b.isNull());number(b.isInfinite());number(pad);}

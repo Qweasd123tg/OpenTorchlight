@@ -355,6 +355,7 @@ static void snapshot(){
  for(unsigned off=0x1698;off<=0x16a0;off+=8){void* list=field<void*>(game,off);n(list!=NULL);if(!list){cap->issue=autotest::Capture::UnsupportedPointer;return;}
   TLinkedListNode<CTextEvent*>* p=field<TLinkedListNode<CTextEvent*>*>(list,0);TLinkedListNode<CTextEvent*>* previous=NULL;unsigned count=0;
   while(p&&count<=100){n(p->m_pPrevious==previous);ptr(p->m_Data);ptr(p->m_Data->m_pWindow);previous=p;p=p->m_pNext;++count;}n(count);n(p==NULL);
+  if(p)cap->issue=autotest::Capture::Overflow;
  }
 }
 static void side(const Case& c,bool ours,autotest::Capture& out){setup(c,out);detour::Set patches0,patches1,patches2,patches3;

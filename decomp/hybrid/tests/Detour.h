@@ -7,6 +7,7 @@
 #define DETOUR_H
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <link.h>
 #include <stdint.h>
@@ -36,35 +37,118 @@ struct Patch
 class Set
 {
 public:
-    Set() : m_count(0), m_failed(false) {}
+    enum Failure
+    {
+        NoFailure,
+        StorageFailure,
+        JumpRangeFailure,
+        ProtectionFailure,
+        StorageReleaseFailure
+    };
+
+    Set() : m_last(&m_inline), m_failure(NoFailure), m_failureSite(0)
+    {
+        m_inline.previous = 0;
+        m_inline.count = 0;
+    }
+
     ~Set() { restore(); }
 
     template <class F>
     void redirect(char* original, char* linked, F fake)
     {
+        if (failed())
+            return;
         void* target = reinterpret_cast<void*>(fake);
         patch(reinterpret_cast<unsigned char*>(original), target);
-        if (linked != original)
+        if (!failed() && linked != original)
             patch(reinterpret_cast<unsigned char*>(linked), target);
     }
 
-    bool failed() const { return m_failed; }
+    bool failed() const { return m_failure != NoFailure; }
+    Failure failure() const { return m_failure; }
+    const unsigned char* failureSite() const { return m_failureSite; }
 
     void restore()
     {
-        while (m_count > 0)
+        for (;;)
         {
-            Patch& p = m_patches[--m_count];
-            if (writable(p.at, p.protection | PROT_WRITE))
+            while (m_last->count != 0)
             {
+                Patch& p = m_last->patches[m_last->count - 1];
+                if (!writable(p.at, p.protection | PROT_WRITE))
+                {
+                    // Existing callers invoke restore() before calling original
+                    // code and do not check a result: continuing would be unsafe.
+                    fail(ProtectionFailure, p.at);
+                    std::abort();
+                }
                 std::memcpy(p.at, p.saved, sizeof(p.saved));
-                writable(p.at, p.protection);
+                if (!writable(p.at, p.protection))
+                {
+                    // Existing callers invoke restore() before calling original
+                    // code and do not check a result: continuing would be unsafe.
+                    fail(ProtectionFailure, p.at);
+                    std::abort();
+                }
+                // A backup stays live until both bytes and permissions are back.
+                --m_last->count;
             }
+            if (m_last == &m_inline)
+                return;
+            Block* previous = m_last->previous;
+            if (munmap(m_last, sizeof(Block)) != 0)
+            {
+                // This empty mapping contains no live backups. A release
+                // failure may leak storage, but must not block earlier patches.
+                fail(StorageReleaseFailure, 0);
+            }
+            m_last = previous;
         }
     }
 
 private:
-    static const int kMaxPatches = 64;
+    // Preserve the allocation-free common case. This is a chunk size, not a
+    // total limit: more blocks are mapped as necessary, without new/malloc or
+    // reallocating backups while application allocators may be detoured.
+    static const size_t kPatchesPerBlock = 64;
+    struct Block
+    {
+        Block* previous;
+        size_t count;
+        Patch patches[kPatchesPerBlock];
+    };
+
+    Set(const Set&);
+    Set& operator=(const Set&);
+
+    void fail(Failure reason, const unsigned char* at)
+    {
+        if (!failed())
+        {
+            m_failure = reason;
+            m_failureSite = at;
+        }
+    }
+
+    Patch* nextPatch(unsigned char* at)
+    {
+        if (m_last->count == kPatchesPerBlock)
+        {
+            void* memory = mmap(0, sizeof(Block), PROT_READ | PROT_WRITE,
+                                MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+            if (memory == MAP_FAILED)
+            {
+                fail(StorageFailure, at);
+                return 0;
+            }
+            Block* block = static_cast<Block*>(memory);
+            block->previous = m_last;
+            block->count = 0;
+            m_last = block;
+        }
+        return &m_last->patches[m_last->count];
+    }
 
     struct Segment
     {
@@ -128,36 +212,43 @@ private:
 
     void patch(unsigned char* at, void* target)
     {
-        for (int i = 0; i < m_count; i++)
+        for (Block* block = m_last; block; block = block->previous)
         {
-            if (m_patches[i].at == at)
-                return;
+            for (size_t i = 0; i < block->count; ++i)
+            {
+                if (block->patches[i].at == at)
+                    return;
+            }
         }
         int64_t rel = (int64_t)(uintptr_t)target - (int64_t)((uintptr_t)at + 5);
-        if (m_count == kMaxPatches || rel < -0x80000000LL || rel > 0x7fffffffLL)
+        if (rel < -0x80000000LL || rel > 0x7fffffffLL)
         {
-            m_failed = true;
+            fail(JumpRangeFailure, at);
             return;
         }
-        Patch& p = m_patches[m_count];
-        p.at = at;
-        p.protection = protection(at);
-        std::memcpy(p.saved, at, sizeof(p.saved));
-        if (!writable(at, p.protection | PROT_WRITE))
+        Patch* p = nextPatch(at);
+        if (!p)
+            return;
+        p->at = at;
+        p->protection = protection(at);
+        std::memcpy(p->saved, at, sizeof(p->saved));
+        if (!writable(at, p->protection | PROT_WRITE))
         {
-            m_failed = true;
+            fail(ProtectionFailure, at);
             return;
         }
         int32_t rel32 = (int32_t)rel;
         at[0] = 0xE9;
         std::memcpy(at + 1, &rel32, sizeof(rel32));
-        writable(at, p.protection);
-        m_count++;
+        ++m_last->count; // An installed jump must have a live backup on failure.
+        if (!writable(at, p->protection))
+            fail(ProtectionFailure, at);
     }
 
-    Patch m_patches[kMaxPatches];
-    int m_count;
-    bool m_failed;
+    Block m_inline;
+    Block* m_last;
+    Failure m_failure;
+    const unsigned char* m_failureSite;
 };
 
 } // namespace detour
