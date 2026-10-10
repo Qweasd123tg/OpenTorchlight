@@ -41,6 +41,7 @@ class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
 public:
+    int getDefaultMerchantTab();
     void setActiveSkill(CSkill*,bool);
     void unLearnSpell(int);
     void setActiveSkillByName(std::wstring);
@@ -231,6 +232,7 @@ private:
     friend class CEnchantMenu;
     friend class CCombineMenu;
     friend class CStashMenu;
+    friend class CMerchantMenu;
     bool m_bCharacterFlag4A0;
     char m_CharacterData4A1[0x52e - 0x4a1];
     bool m_bInvulnerable;
