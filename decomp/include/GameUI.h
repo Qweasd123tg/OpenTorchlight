@@ -25,6 +25,7 @@ class iMenuListener;
 class CGameUI : public CRunicCore
 {
 public:
+    void requestSetGameState(EGameState, EMenu);
     bool processIngameInput(void*,float,bool);
     bool bothCoveredPartial();
     bool eitherCoveredPartial();
