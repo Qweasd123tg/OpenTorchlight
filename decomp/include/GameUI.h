@@ -28,8 +28,8 @@ class CWaypointMenu;
 
 enum ELayoutFunction { LAYOUT_FUNCTION_EXIT_GAME = 0 };
 
-// Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
-// onClick's return type is not verified and that method is not used here.
+// Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape.
+// onClick returns bool through the original CEGUI callback (consumed as AL).
 namespace CEGUI { class Image; class Window; class EventArgs; class colour; }
 class CGameClient;
 class CLevel;
@@ -137,7 +137,7 @@ public:
     void setCursorState(ECursorState);
     void setMouseOverItem(CItem*, bool);
     void updateHardwareCursor();
-    virtual long long onClick(ELayoutFunction);
+    virtual bool onClick(ELayoutFunction);
     static CGameUI* getSingleton();
     CCharacter* getCharacter() { return m_pCharacter; }
     void queueTip(EContextTip tip);
@@ -219,7 +219,9 @@ private:
     int m_pendingRightSlot;
     unsigned char m_gap1680[0x10];
     CConsole* m_console;
-    unsigned char m_gap1698[0x27c];
+    unsigned char m_gap1698[0x30];
+    int m_cachedPetMode; // +0x16c8
+    unsigned char m_gap16CC[0x1914-0x16cc];
     EGameState m_requestedGameState;
     EMenu m_requestedMenu;
     unsigned char m_gap191C[4];

@@ -539,7 +539,9 @@ private:
     unsigned char m_Padding706[0x7];
     bool m_forcedHidden; // +0x70d
     bool m_bSecondaryWeaponSet;
-    char m_CharacterData70f[0x718 - 0x70f];
+    char m_CharacterData70f;
+    int m_petMode; // +0x710
+    char m_CharacterData714[4];
     CAIManager* m_pAIManager;
     float m_CharacterValue720;
     unsigned char m_Padding724[4];
