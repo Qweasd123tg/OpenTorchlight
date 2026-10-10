@@ -15,6 +15,11 @@ public:
  void createMenus();
  void updateVisuals();
  void calculateMouseOver();
+ int getStatInvestment(ESTATSMENU_STATS);
+ int getStatBarCurrentAmount(ESTATSMENU_STATS);
+ float getExperienceToSpend();
+ void addExperienceToStat(ESTATSMENU_STATS,int);
+ void addExperienceSpent(int);
  float getStatBarTotalAmount(ESTATSMENU_STATS);
  bool handle_onMouseUp(const CEGUI::EventArgs&);
  bool handle_AddToStat(const CEGUI::EventArgs&);
