@@ -23,6 +23,7 @@ public:
     unsigned int getManaCost();
     unsigned int getManaCostOT();
     bool getRequiresPathable();
+    int getTargetType();
     int getAnimationIndex();
     unsigned int getAnimationIndexDW();
     unsigned int getAnimationIndexLoopInto();

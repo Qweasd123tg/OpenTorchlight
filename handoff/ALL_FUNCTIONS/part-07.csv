@@ -115,8 +115,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa94240,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
 0xa94c60,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
 0xa94c80,gameui.cpp,"CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
-0xa94d30,gameui.cpp,CGameUI::handle_SkillSelectMouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
-0xa94e60,gameui.cpp,CGameUI::handle_SkillSelectClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa94d30,gameui.cpp,CGameUI::handle_SkillSelectMouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xa94e60,gameui.cpp,CGameUI::handle_SkillSelectClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa951e0,gameui.cpp,__tcf_18,DIFF,False,False,,False
 0xa95250,gameui.cpp,__tcf_17,DIFF,False,False,,False
 0xa952c0,gameui.cpp,__tcf_16,DIFF,False,False,,False
@@ -136,7 +136,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MATCH,True,False,,False
 0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
 0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
-0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa9e4a0,gameui.cpp,CGameUI::create(),DIFF,True,False,,False
 0xaa6380,gameui.cpp,"CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",MISSING,False,False,,False
 0xaa6bf0,gameui.cpp,"CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)",DIFF,True,False,,False

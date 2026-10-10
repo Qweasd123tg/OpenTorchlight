@@ -1,0 +1,66 @@
+{
+  "format": "CSV parts with identical headers",
+  "total_rows": 7663,
+  "unique_addresses": 7663,
+  "parts": [
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-01.csv",
+      "rows": 750,
+      "sha256": "f4aeb943c89d35bce9a0f3f283e47f4122f2b73a90244110c07c1235bee61392"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-02.csv",
+      "rows": 750,
+      "sha256": "91820dd93169361c12b96bdd3cf3f2336e0921e4d02b33346d8de407e3588d2d"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-03.csv",
+      "rows": 750,
+      "sha256": "0323b21387a876aa7ea51b2c112428b013817d7772186a2908a0265921500c81"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-04.csv",
+      "rows": 750,
+      "sha256": "1981a3178e4a7714539b088ecc7d5bacf3e2cb24eb4ec59dc73eb6129470cabc"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-05.csv",
+      "rows": 750,
+      "sha256": "7ccce7d57d0095a7b10d71679dbb69253992de141c4e6acc75f831896b0aeb75"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-06.csv",
+      "rows": 750,
+      "sha256": "faae2edc45e42ef4809dc6a358215e24ee6b108e776f4fec7bf5b5afcd40e1b2"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-07.csv",
+      "rows": 750,
+      "sha256": "2eb7294f0b1f5815bb0a6b1615554ecd96a51b90b6c0eeb140b8dad970c7cb13"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-08.csv",
+      "rows": 750,
+      "sha256": "7e8c0fe3ba8f8de5440b1a7253f553b43ea968a904a236e8d1bc4e42a6abbb4f"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-09.csv",
+      "rows": 750,
+      "sha256": "b47212e2ab27776cb3010522b73fbb453ebdbc6040352950f34c3acf22d8c8b0"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-10.csv",
+      "rows": 750,
+      "sha256": "14e8b24eb6c6204100e6c37f545c1b6df638424d95f5f6adaab61447c2a8381a"
+    },
+    {
+      "path": "handoff/ALL_FUNCTIONS/part-11.csv",
+      "rows": 163,
+      "sha256": "6075852d6aeecf43f6912d61fb76a5b37608a8a4e439bef07d887b08e750cb13"
+    }
+  ],
+  "current_state": "../CURRENT_STATE.json",
+  "historical_index": "../SMALL_FUNCTIONS.csv",
+  "current_main_commit": "44aaf02fe255b44c1aa1cd38fcc63ad4c9897ff5",
+  "current_main_tree": "4bec795f56dd4a1db0976ce16195062b4575fefb"
+}
