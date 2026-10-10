@@ -19,27 +19,27 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",MISSING,False,False,,False
 0xa83ad0,gameui.cpp,CGameUI::getAspectRatio(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ad0.cpp,False
 0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MATCH,True,False,,False
-0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),MISSING,False,False,,False
+0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),DIFF,True,False,,False
 0xa83bc0,gameui.cpp,CGameUI::toggleFPS(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83bc0.cpp,False
 0xa83c30,gameui.cpp,CGameUI::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
-0xa83cf0,gameui.cpp,"CGameUI::activateItemSlot(int, bool)",MISSING,False,False,,False
-0xa83d60,gameui.cpp,CGameUI::updateHardwareCursor(),MISSING,False,False,,False
+0xa83cf0,gameui.cpp,"CGameUI::activateItemSlot(int, bool)",MATCH,True,False,,False
+0xa83d60,gameui.cpp,CGameUI::updateHardwareCursor(),DIFF,True,False,,False
 0xa83e00,gameui.cpp,CGameUI::setCursorState(ECursorState),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e00.cpp,False
 0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xa83e70,gameui.cpp,CGameUI::scaledY(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e70.cpp,False
 0xa83ea0,gameui.cpp,CGameUI::scaledX(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ea0.cpp,False
 0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MISSING,False,False,,False
-0xa84050,gameui.cpp,CGameUI::notifyOfDeletion(CItem*),MISSING,False,False,,False
+0xa84050,gameui.cpp,CGameUI::notifyOfDeletion(CItem*),MATCH,True,False,,False
 0xa84140,gameui.cpp,CGameUI::getConsoleIsOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84140.cpp,False
-0xa84160,gameui.cpp,"CGameUI::processMenuInput(void*, float, bool)",MISSING,False,False,,False
+0xa84160,gameui.cpp,"CGameUI::processMenuInput(void*, float, bool)",MATCH,True,False,,False
 0xa84230,gameui.cpp,CGameUI::captureProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84230.cpp,False
 0xa84250,gameui.cpp,CGameUI::setRightButtonPressed(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84250.cpp,False
 0xa84270,gameui.cpp,CGameUI::flushInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84270.cpp,False
-0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MISSING,False,False,,False
-0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MISSING,False,False,,False
-0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False
+0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MATCH,True,False,,False
+0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MATCH,True,False,,False
 0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),MISSING,False,False,,False
-0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MISSING,False,False,,False
+0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MATCH,True,False,,False
 0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),MISSING,False,False,,False
 0xa84c00,gameui.cpp,CGameUI::hideUI(),MISSING,False,False,,False
 0xa84c10,gameui.cpp,CGameUI::showUI(),MISSING,False,False,,False
@@ -57,12 +57,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8e090,gameui.cpp,CGameUI::handle_ClickThrough(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e090.cpp,False
 0xa8e0d0,gameui.cpp,CGameUI::closeAll(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e0d0.cpp,False
 0xa8e140,gameui.cpp,"CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",MISSING,False,False,,False
-0xa8e2d0,gameui.cpp,CGameUI::togglePause(),MISSING,False,False,,False
+0xa8e2d0,gameui.cpp,CGameUI::togglePause(),MATCH,True,False,,False
 0xa8e440,gameui.cpp,CGameUI::unPause(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e440.cpp,False
 0xa8e460,gameui.cpp,CGameUI::handle_ToggleOptions(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e460.cpp,False
 0xa8e4b0,gameui.cpp,CGameUI::toggleSettings(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e4b0.cpp,False
 0xa8e510,gameui.cpp,CGameUI::handle_ToggleMap(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e510.cpp,False
-0xa8e560,gameui.cpp,CGameUI::toggleConsole(),MISSING,False,False,,False
+0xa8e560,gameui.cpp,CGameUI::toggleConsole(),MATCH,True,False,,False
 0xa8e5f0,gameui.cpp,CGameUI::togglePet(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e5f0.cpp,False
 0xa8e6a0,gameui.cpp,CGameUI::toggleStats(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e6a0.cpp,False
 0xa8e750,gameui.cpp,CGameUI::toggleQuest(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e750.cpp,False
@@ -71,7 +71,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8e8f0,gameui.cpp,CGameUI::handle_ToggleJournal(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e8f0.cpp,False
 0xa8e930,gameui.cpp,CGameUI::toggleSkill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e930.cpp,False
 0xa8e9e0,gameui.cpp,CGameUI::handle_ToggleSkill(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e9e0.cpp,False
-0xa8ea20,gameui.cpp,CGameUI::toggleInventory(),MISSING,False,False,,False
+0xa8ea20,gameui.cpp,CGameUI::toggleInventory(),DIFF,True,False,,False
 0xa8eb50,gameui.cpp,CGameUI::handle_ToggleInventory(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb50.cpp,False
 0xa8eb90,gameui.cpp,CGameUI::toggleOptions(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb90.cpp,False
 0xa8ec10,gameui.cpp,CGameUI::toggleDeath(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ec10.cpp,False
@@ -81,14 +81,14 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),DIFF,True,False,,False
 0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),DIFF,True,False,,False
 0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",DIFF,True,False,,False
-0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MISSING,False,False,,False
+0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MATCH,True,False,,False
 0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MISSING,False,False,,False
 0xa8f4e0,gameui.cpp,CGameUI::returnDraggedItem(),MATCH,True,False,,False
 0xa8f780,gameui.cpp,"CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",DIFF,True,False,,False
 0xa92080,gameui.cpp,"CGameUI::performItemUse(CLevel&, CEquipment*, CCharacter*, CCharacter*, CCharacter*)",MATCH,True,False,,False
 0xa92320,gameui.cpp,"CGameUI::useItem(CLevel&, CEquipment*)",DIFF,True,False,,False
 0xa924c0,gameui.cpp,CGameUI::onClick(ELayoutFunction),DIFF,True,False,,False
-0xa92c00,gameui.cpp,CGameUI::notifyOfDeletion(CCharacter*),MISSING,False,False,,False
+0xa92c00,gameui.cpp,CGameUI::notifyOfDeletion(CCharacter*),DIFF,True,False,,False
 0xa92dd0,gameui.cpp,__tcf_26,DIFF,False,False,,False
 0xa92e60,gameui.cpp,__tcf_25,DIFF,False,False,,False
 0xa92ef0,gameui.cpp,__tcf_24,DIFF,False,False,,False
@@ -143,9 +143,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xaaeeb0,gameui.cpp,"CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)",DIFF,True,False,,False
 0xab4f80,gameui.cpp,CGameUI::handleKeyPresses(),DIFF,True,False,,False
 0xab6080,gameui.cpp,"CGameUI::processIngameInput(void*, float, bool)",DIFF,True,False,,False
-0xab80c0,gameui.cpp,"CGameUI::processInput(CGameClient*, void*, float, bool)",MISSING,False,False,,False
+0xab80c0,gameui.cpp,"CGameUI::processInput(CGameClient*, void*, float, bool)",MATCH,True,False,,False
 0xab8100,gameui.cpp,"CGameUI::updateIngameUI(float, CGameClient*, Ogre::RenderWindow*)",DIFF,True,False,,False
-0xacbb40,gameui.cpp,"CGameUI::update(float, CGameClient*, Ogre::RenderWindow*)",MISSING,False,False,,False
+0xacbb40,gameui.cpp,"CGameUI::update(float, CGameClient*, Ogre::RenderWindow*)",MATCH,True,False,,False
 0xacbb90,merchantmenu.cpp,CEGUI::SlotFunctorBase::~SlotFunctorBase(),MATCH,False,False,,False
 0xacbba0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::~MemberFunctionSlot(),MATCH,False,False,,False
 0xacbbb0,gameui.cpp,CEGUI::MemberFunctionSlot<CGameUI>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False

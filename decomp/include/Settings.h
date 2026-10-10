@@ -35,6 +35,7 @@ extern unsigned int KSETTINGS_KEYMAP_SHOWITEMS;
 extern unsigned int KSETTINGS_KEYMAP_SWAPSKILLS;
 extern unsigned int KSETTINGS_TOGGLE_ITEM_NAME;
 extern unsigned int KSETTINGS_FLOATY_NUMBERS;
+extern unsigned int KSETTINGS_ALLOW_CONSOLE;
 
 // The empty user destructor retains the array cookie observed in CSettings::~CSettings.
 struct CSettingsResolution

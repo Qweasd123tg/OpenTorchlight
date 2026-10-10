@@ -733,7 +733,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa829f0,gameui.cpp,CGameUI::modalDialogOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa829f0.cpp,False
 0xa82a50,gameui.cpp,CGameUI::questDialogOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82a50.cpp,False
 0xa82a80,gameui.cpp,CGameUI::modalDialogOpenPartial(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82a80.cpp,False
-0xa82ae0,gameui.cpp,CGameUI::bothCoveredPartial(),MISSING,False,False,,False
+0xa82ae0,gameui.cpp,CGameUI::bothCoveredPartial(),MATCH,True,False,,False
 0xa82c00,gameui.cpp,CGameUI::eitherCoveredPartial(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82c00.cpp,False
 0xa82c80,gameui.cpp,CGameUI::leftCovered(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82c80.cpp,False
 0xa82d10,gameui.cpp,CGameUI::rightCovered(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82d10.cpp,False
@@ -745,7 +745,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa82f40,gameui.cpp,"CGameUI::getScreenPosition(Ogre::Vector3 const*, Ogre::Vector3 const*, Ogre::Matrix4)",MATCH,True,False,,False
 0xa83250,gameui.cpp,CountChildren(Ogre::SceneNode*),MISSING,False,False,,False
 0xa832f0,gameui.cpp,CGameUI::getMouseOverItem(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa832f0.cpp,False
-0xa83300,gameui.cpp,CGameUI::clearMenuMouseOvers(),MISSING,False,False,,False
+0xa83300,gameui.cpp,CGameUI::clearMenuMouseOvers(),MATCH,True,False,,False
 0xa833a0,gameui.cpp,CGameUI::flushProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa833a0.cpp,False
 0xa833d0,gameui.cpp,CGameUI::closeLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa833d0.cpp,False
 0xa83450,gameui.cpp,CGameUI::closeRight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83450.cpp,False
