@@ -5,6 +5,7 @@
 #include "GameUI.h"
 #include <CEGUIString.h>
 #include "SubMenu.h"
+#include "TArrayList.h"
 #include "iInventoryListener.h"
 
 class CSoundBank;
@@ -89,7 +90,9 @@ private:
     bool m_bFullyClosed;
     char m_Data6a[2];
     int m_iCurrentTab;
-    char m_Data70[0x88-0x70];
+    // Empty grow-by-10 POD buffer at +0x70; element type is unresolved.
+    // Only initialization and untyped delete[] are observed in this class.
+    TArrayList<unsigned char> m_UnknownList70;
     CDynamicPropertyFile* m_pDynamicPropertyFile;
     CGameUI* m_pGameUI;
     int m_ClickedSlot;

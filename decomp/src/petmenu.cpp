@@ -1191,3 +1191,89 @@ void CPetMenu::setOpen(bool open) {
  }
  m_bOpenPartial=open;if(open)updateLayout();
 }
+
+bool CPetMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ CCharacter* owner=m_pCharacter;
+ if(window&&owner) {
+  int slot=*static_cast<int*>(window->getUserData());
+  CEquipment* item=owner->m_pInventory->getEquipmentInSlot(slot);
+  if(item) {
+   m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+    m_pSocketOverlay->setVisible(true);m_pSocketOverlay->moveToFront();
+    m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+   }else {m_pSocketedIconParent->setVisible(false);m_pSocketOverlay->setVisible(false);}
+  }
+  CEGUI::Window* panel=m_pPanel;
+  float x=m_pSocketedSizeWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSocketedSizeWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!panel->isChild(m_pSlotGlow))panel->addChildWindow(m_pSlotGlow);
+  m_pSlotGlow->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pSlotGlow->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pSlotGlow->moveToBack();m_Data9188=1;
+ }
+ return true;
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CPetMenu::CPetMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,Ogre::SceneManager* wardrobe,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pParent(parent),m_pCharacter(0),m_bOpenPartial(false),m_bFullyClosed(true),m_iCurrentTab(0),m_UnknownList70(10),
+ m_pDynamicPropertyFile(&settings),m_pGameUI(&ui),m_ClickedSlot(-1),m_RightClickedSlot(-1),m_pHoverObject(0),
+ m_pPetSceneManager(scene),m_pWardrobeSceneManager(wardrobe),m_pRenderWindow(render),m_pViewport(0),m_Data9188(0),
+ m_bSpellHovered(false),m_HoveredSkillGuid(-1),m_bRotateLeft(false),m_bRotateRight(false),m_pPetModel(0),
+ m_pResourceManager(resources),m_fScreenEdge(0.0f),m_fPanelX(-5000.0f),m_pSoundBank(0),m_pSkillTooltip(0),m_fTabPhase(0.0f)
+{
+ std::memset(m_Data60,0,sizeof(m_Data60));m_Data6a[0]=0;
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"STATSOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"STATSCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* error=sounds->getSoundDataObject(L"ERROR");if(error)m_pSoundBank->addSample(24,error->m_iGuid);
+ m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+ m_fScreenEdge=0.0f;createMenus();m_TabNotifications[0]=false;m_TabNotifications[1]=false;m_TabNotifications[2]=false;
+}
+CPetMenu::~CPetMenu() {
+ setOwner(0);
+ if(m_pWardrobeCamera)m_pWardrobeSceneManager->destroyCamera(m_pWardrobeCamera);
+ m_pWardrobeCamera=0;
+ if(m_pPetModel){delete m_pPetModel;m_pPetModel=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+ if(m_pSkillTooltip){delete m_pSkillTooltip;m_pSkillTooltip=0;}
+}
+
+#include "KeyManager.h"
+#include "Achievements.h"
+#include "Achievement.h"
+namespace pet_spell {
+struct UIFields {char prefix[0xb8];CEquipment* item;char gapc0[8];CCharacter* owner;char gapd0[0x590-0xd0];CKeyManager keys;};
+struct OwnerFields {char prefix[0x640];CCharacter* master;};
+inline __attribute__((always_inline)) UIFields& ui(CGameUI* p){return *reinterpret_cast<UIFields*>(p);}
+inline __attribute__((always_inline)) CCharacter* master(CCharacter* p){return reinterpret_cast<OwnerFields*>(p)->master;}
+}
+bool CPetMenu::handle_SetSpell(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;
+ if(window) {
+  CCharacter* dragOwner=pet_spell::ui(m_pGameUI).owner;
+  bool restricted=dragOwner&&dragOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(41));
+  CEquipment* item=pet_spell::ui(m_pGameUI).item;
+  if(item&&item->ISA(static_cast<UNITTYPES::EUNITTYPES>(129))&&!restricted) {
+   CCharacter* owner=m_pCharacter;
+   if(pet_update::actor(owner).category==42||pet_update::actor(owner).category==41)
+    m_pSoundBank->playSample(24,0,0.0f,0.0f,false);
+   else {
+    CCharacter* master=pet_spell::master(owner);
+    m_pGameUI->performItemUse(*owner->getLevel(),pet_spell::ui(m_pGameUI).item,master,master,owner);
+    updateLayout();CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(31))->forceComplete();
+   }
+  }else if(pet_spell::ui(m_pGameUI).keys.keyHeld(17)) {
+   m_pCharacter->unLearnSpell(window->getID());updateLayout();m_pSoundBank->playSample(30,0,0.0f,0.0f,false);
+  }
+ }
+ return true;
+}

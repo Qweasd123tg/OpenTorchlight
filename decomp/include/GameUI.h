@@ -42,6 +42,7 @@ public:
     void togglePause();
     void unPause();
     void useItem(CLevel&,CEquipment*);
+    void performItemUse(CLevel&,CEquipment*,CCharacter*,CCharacter*,CCharacter*);
     void showEquipmentTooltip(CCharacter*,CEquipment*,CEquipmentTooltip*,CEquipmentTooltip*,CEquipmentTooltip*);
     float getWindowWidth();
     float getWindowHeight();

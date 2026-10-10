@@ -1,0 +1,14 @@
+// Compare the actual linked UTF-16 append helper, including aliasing and COW.
+#include <string>
+#include <cstring>
+#include "AutoTest.h"
+typedef std::basic_string<unsigned short> Text;
+TL_ORIGINAL(Text*,originalAppend,(Text*,const unsigned short*,size_t),"_ZNSbItSt11char_traitsItESaItEE6appendEPKtm")
+extern "C" Text* candidateAppend(Text*,const unsigned short*,size_t) __asm__("_ZNSbItSt11char_traitsItESaItEE6appendEPKtm");
+namespace {
+struct Case {unsigned length,capacity,request,source,shared,pattern;};
+void record(autotest::Capture& out,const Text& s){size_t n=s.size(),c=s.capacity();out.add(&n,sizeof(n));out.add(&c,sizeof(c));out.add(s.data(),(n+1)*sizeof(unsigned short));int refs;std::memcpy(&refs,reinterpret_cast<const char*>(s.data())-8,4);out.add(&refs,4);}
+void side(void* p,autotest::Capture& out,bool ours){Case c=*(Case*)p;Text s;unsigned short external[513];for(unsigned i=0;i<513;++i)external[i]=c.pattern?static_cast<unsigned short>(i*257u):static_cast<unsigned short>(i%3?65:0);for(unsigned i=0;i<c.length;++i)s.push_back(external[i]);s.reserve(c.capacity);Text copy;if(c.shared)copy=s;const unsigned short* data=external;size_t count=c.request;if(c.source){size_t offset=c.source==1?0:s.size()/2;data=s.data()+offset;if(count>s.size()-offset)count=s.size()-offset;}record(out,s);record(out,copy);out.add(&count,sizeof(count));Text*(*fn)(Text*,const unsigned short*,size_t)=ours?candidateAppend:originalAppend;if(!autotest::beginInvocation(out,fn))return;Text* result=fn(&s,data,count);out.callCompleted=1;bool self=result==&s;out.add(&self,sizeof(self));record(out,s);record(out,copy);bool same=s.data()==copy.data();out.add(&same,sizeof(same));if(!s.empty())s[0]=0x1234;record(out,s);record(out,copy);}
+void a(void* p,autotest::Capture& out){side(p,out,false);}void b(void* p,autotest::Capture& out){side(p,out,true);}
+}
+TL_TEST(utf16_append_differential){autotest::Coverage coverage("utf16_append_differential",(uint64_t)(uintptr_t)&originalAppend);const unsigned lengths[]={0,1,2,15,16,31,64,255},capacities[]={0,1,16,64,256},requests[]={0,1,16,512};for(unsigned l=0;l<8;++l)for(unsigned c=0;c<5;++c)for(unsigned r=0;r<4;++r)for(unsigned source=0;source<3;++source)for(unsigned share=0;share<2;++share)for(unsigned pattern=0;pattern<2;++pattern){Case x={lengths[l],capacities[c],requests[r],source,share,pattern};autotest::Outcome u,v;autotest::runChild(a,&x,u);autotest::runChild(b,&x,v);int pair=coverage.observe(host,u,v);if(pair||autotest::incomplete(u)||autotest::incomplete(v)||u.childStatus||v.childStatus||u.capture.length!=v.capture.length||std::memcmp(u.capture.data,v.capture.data,u.capture.length)){host->log("    append mismatch %u/%u/%u/%u/%u/%u exits %d/%d\n",l,c,r,source,share,pattern,u.childStatus,v.childStatus);coverage.report(host);return 1;}}coverage.report(host);return 0;}
