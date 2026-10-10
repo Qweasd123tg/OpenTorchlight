@@ -18,7 +18,7 @@ public:
 
     static CSkillParser* getSingleton();
     void clearSkills();
-    void getSkillNames(TArrayList<std::wstring>& skillNames);
+    static void getSkillNames(TArrayList<std::wstring>& skillNames);
     CDataGroup* getSkillData(const std::wstring& skillName);
     CSkill* getSkill(CResourceManager* resourceManager, const std::wstring& skillName);
     void parseSkill(const std::wstring& fileName);
