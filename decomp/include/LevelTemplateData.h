@@ -31,11 +31,12 @@ public:
     virtual ~CLevelTemplateData();
     bool getUnitLightFade() const { return m_bUnitLightFade; }
 private:
+    friend class CGameUI;
     unsigned char m_Padding10[0x18];
     TArrayList<CChunk*> m_chunks; // +0x28
     unsigned char m_Padding40[0x44];
     bool m_permitsPortal; // +0x84
-    unsigned char m_Padding85;
+    bool m_permitsPetDeparture; // +0x85, checked by CGameUI::onClick
     bool m_isTown; // +0x86
     unsigned char m_Padding87[0x11];
     float m_sightRangeModifier; // +0x98

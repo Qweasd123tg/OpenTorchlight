@@ -87,7 +87,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8f780,gameui.cpp,"CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",DIFF,True,False,,False
 0xa92080,gameui.cpp,"CGameUI::performItemUse(CLevel&, CEquipment*, CCharacter*, CCharacter*, CCharacter*)",MISSING,False,False,,False
 0xa92320,gameui.cpp,"CGameUI::useItem(CLevel&, CEquipment*)",MISSING,False,False,,False
-0xa924c0,gameui.cpp,CGameUI::onClick(ELayoutFunction),DIFF,True,False,,False
+0xa924c0,gameui.cpp,CGameUI::onClick(ELayoutFunction),MISSING,False,False,,False
 0xa92c00,gameui.cpp,CGameUI::notifyOfDeletion(CCharacter*),MISSING,False,False,,False
 0xa92dd0,gameui.cpp,__tcf_26,DIFF,False,False,,False
 0xa92e60,gameui.cpp,__tcf_25,DIFF,False,False,,False
