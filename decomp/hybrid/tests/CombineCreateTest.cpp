@@ -59,6 +59,7 @@ TL_FUNCTION(callback0Fn,"_ZN12CCombineMenu16handle_ItemClickERKN5CEGUI9EventArgs
 TL_FUNCTION(callback1Fn,"_ZN12CCombineMenu19handle_MouseThroughERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback2Fn,"_ZN12CCombineMenu15handle_MouseOutERKN5CEGUI9EventArgsE")
 TL_FUNCTION(callback3Fn,"_ZN12CCombineMenu18handle_CloseButtonERKN5CEGUI9EventArgsE")
+TL_FUNCTION(callback4Fn,"_ZN12CCombineMenu16handle_MouseOverERKN5CEGUI9EventArgsE")
 extern "C" char propertyPresentFn[] __asm__("_ZNK5CEGUI11PropertySet17isPropertyPresentERKNS_6StringE");
 namespace {
 TL_FUNCTION(scaledYFn,"_ZN7CGameUI7scaledYEf")
@@ -94,7 +95,7 @@ void zWindow(CEGUI::Window* p,bool x){number(13);number(wid(p));number(x);p->d_z
 void captureCallback(const CEGUI::MemberFunctionSlot<CCombineMenu>* slot){
  intptr_t words[2];typedef char check_member_pointer[sizeof(slot->d_function)==sizeof(words)?1:-1];
  std::memcpy(words,&slot->d_function,sizeof(words));
- char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked}};
+ char* pairs[][2]={{callback0Fn_original,callback0Fn_linked},{callback1Fn_original,callback1Fn_linked},{callback2Fn_original,callback2Fn_linked},{callback3Fn_original,callback3Fn_linked},{callback4Fn_original,callback4Fn_linked}};
  for(unsigned i=0;i<sizeof(pairs)/sizeof(pairs[0]);++i)if(words[0]==reinterpret_cast<intptr_t>(pairs[i][0])||words[0]==reinterpret_cast<intptr_t>(pairs[i][1])){words[0]=reinterpret_cast<intptr_t>(pairs[i][0]);break;}
  cap->add(words,sizeof(words));
 }
