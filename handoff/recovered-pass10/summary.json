@@ -1,0 +1,10 @@
+{
+  "definitions_with_source": 401,
+  "unique_primary_addresses": 401,
+  "historical_new_addresses": 403,
+  "historical_emitted_addresses": 405,
+  "tus": 29,
+  "fresh_matches_claimed": 0,
+  "headers_in_original_snapshot": "filenames only, not modified header bodies",
+  "source_state_sha256": "c675003159b8dcecc86c322db74dd8444ca0182bf59f4d31c2ef4d18a25d17df"
+}

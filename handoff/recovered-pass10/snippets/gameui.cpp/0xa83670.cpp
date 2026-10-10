@@ -1,0 +1,3 @@
+void CGameUI::clickLeft()
+{
+}

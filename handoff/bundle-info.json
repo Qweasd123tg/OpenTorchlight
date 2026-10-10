@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-10T07:35:00Z",
+  "repository": "Qweasd123tg/OpenTorchlight",
+  "local_commit": "38e250b35b0008e146308fbb7ec64aba1cde619c",
+  "remote_commit_same_tree": "cb71dd36718de4567796c4882c07903aea3fcf90",
+  "tree": "edeb03b0b8dd36766581693401f3d1a8106dafe4",
+  "scope": "static compiler/source handoff; no game runtime; no pending Equipment changes",
+  "small_unowned_candidates": 409,
+  "static_check_exit": 0,
+  "static_matched_functions": 1421,
+  "recovered_pass10_definitions": 401,
+  "recovered_pass10_historical_new_addresses": 403,
+  "recovered_pass10_tus": 29
+}

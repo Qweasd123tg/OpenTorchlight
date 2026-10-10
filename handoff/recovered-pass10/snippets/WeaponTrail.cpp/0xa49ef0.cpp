@@ -1,0 +1,3 @@
+void CWeaponTrail::clear()
+{
+}

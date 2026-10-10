@@ -1,0 +1,410 @@
+tu,address,original_bytes,function
+CollisionAvoiderWrapper.cpp,0xa1c3a0,2,CCollisionAvoiderWrapper::updateCircle()
+CollisionAvoiderWrapper.cpp,0xa1ced0,221,CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager*)
+Console.cpp,0xae19d0,2,"CConsole::keyEvent(unsigned int, unsigned int, long)"
+Console.cpp,0xaec8a0,31,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::assign(wchar_t const*) [clone .clone.1]"
+Console.cpp,0xaec8c0,58,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >::find(wchar_t const*, unsigned long) const [clone .clone.3]"
+Console.cpp,0xaec900,167,"SetPetsEnabled(CCharacter*, bool)"
+Console.cpp,0xaf15c0,298,"CConsole::equipSkillToPlayer(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+Console.cpp,0xaed310,447,CConsole::setVisible(bool)
+Console.cpp,0xaef6b0,506,"CConsole::cameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+Console.cpp,0xaef980,558,"CConsole::spawnClassCreate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+Console.cpp,0xaf16f0,598,CConsole::addSpeedToPlayer()
+Console.cpp,0xafbb70,873,CConsole::handleSubmit(CEGUI::EventArgs const&)
+EditorScene.cpp,0x7411b0,11,CEditorScene::clearObjectIndex()
+EditorScene.cpp,0x7412b0,17,CEditorScene::GetObjectsCreatedByADescriptor(CDescriptor*)
+EditorScene.cpp,0x74ead0,18,CEditorScene::~CEditorScene()
+EditorScene.cpp,0x7419e0,26,CEditorScene::deleteUnusedDescriptors()
+EditorScene.cpp,0x741510,27,"CEditorScene::GetDescriptorInSceneByName(wchar_t const*, bool)"
+EditorScene.cpp,0x741850,34,CEditorScene::AddDescriptor(CDescriptor*)
+EditorScene.cpp,0x741280,48,CEditorScene::GetNumberOfObjectsInScene(bool)
+EditorScene.cpp,0x741450,58,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+EditorScene.cpp,0x7416b0,119,CEditorScene::getNumberOfTimelinesThatDoLoop()
+EditorScene.cpp,0x741960,119,"CEditorScene::InitScene(CResourceManager*, unsigned int)"
+EditorScene.cpp,0x741490,125,"CEditorScene::CreateObjectByDescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)"
+EditorScene.cpp,0x741730,126,"CEditorScene::setChildrenVisible(long long, bool)"
+EditorScene.cpp,0x741880,130,CEditorScene::setActivated(bool)
+EditorScene.cpp,0x74eca0,136,"CEditorScene::setFileLoaded(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+EditorScene.cpp,0x741620,139,CEditorScene::getNumberOfTimelinesUpdating(bool)
+EditorScene.cpp,0x74f2b0,142,"CEditorScene::saveObjectsHavingParent(long long, CDataGroup*, CDescriptorSaveConfiguration*)"
+EditorScene.cpp,0x7417b0,159,"CEditorScene::CreateObjectByDescriptor(unsigned int, CEditorBaseObject*, CEditorBaseObject*, bool)"
+EditorScene.cpp,0x741390,181,"CEditorScene::canObjectBeSaved(CResourceManager*, CEditorBaseObject*)"
+EditorScene.cpp,0x7412d0,187,"saveBinaryGroup(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)"
+EditorScene.cpp,0x74f340,211,CEditorScene::AddDescriptor(wchar_t const*)
+EditorScene.cpp,0x74f880,216,"CEditorScene::loadObjects(CEditorBaseObject*, CDataGroup*, CDescriptorLoadConfiguration*)"
+EditorScene.cpp,0x74b040,230,"CEditorScene::EditorBaseObjectChangedID(CEditorBaseObject*, long long, long long)"
+EditorScene.cpp,0x741530,232,CEditorScene::getNumberOfParticlesUpdating()
+EditorScene.cpp,0x74b930,274,"saveBinaryObjects(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, TArrayList<CEditorBaseObject*>&, CDescriptorSaveConfiguration*)"
+EditorScene.cpp,0x750180,308,"CEditorScene::clone(CEditorScene*, TArrayList<CEditorBaseObject*>*, CTimerStatics*)"
+EditorScene.cpp,0x74b7d0,337,"CEditorScene::getChildren(long long, TArrayList<CEditorBaseObject*>&, CDescriptor*)"
+EditorScene.cpp,0x74aed0,367,"std::basic_ofstream<char, std::char_traits<char> >::basic_ofstream(char const*, std::_Ios_Openmode) [clone .clone.2]"
+EditorScene.cpp,0x74e960,368,CEditorScene::~CEditorScene()
+EditorScene.cpp,0x74b640,391,CEditorScene::RemoveObjectInScene(CEditorBaseObject*)
+EditorScene.cpp,0x74b130,395,CEditorScene::DeleteAllObjectsFromScene()
+EditorScene.cpp,0x74ef60,401,"CEditorScene::merge(CEditorScene*, TArrayList<CEditorBaseObject*>*, long long, CTimerStatics*)"
+EditorScene.cpp,0x74ba50,403,"saveBinaryGroupChildren(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)"
+EditorScene.cpp,0x74eaf0,429,"CEditorScene::configureGroupsToParse(CEditorBaseObject*, CDataGroup&, TArrayList<CDataGroup*>&, CDescriptorLoadConfiguration*)"
+EditorScene.cpp,0x74f100,431,"CEditorScene::saveObjectAndChildren(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)"
+EditorScene.cpp,0x74ed30,549,CEditorScene::CEditorScene(wchar_t const*)
+EditorScene.cpp,0x74e6f0,617,"CEditorScene::SaveDescriptionOfSceneAndDescriptors(CDataGroup*, unsigned int)"
+EditorScene.cpp,0x74c110,658,"CEditorScene::CreateObjectByDescriptor(CDescriptor*, CEditorBaseObject*, CEditorBaseObject*, bool)"
+EditorScene.cpp,0x74c660,662,"loadObjectByCompressedFile(CEditorScene*, CDescriptorLoadConfiguration&, COgreReader&, CEditorBaseObject*, bool)"
+EditorScene.cpp,0x74c3b0,674,CEditorScene::DeleteObjectInScene(CEditorBaseObject*)
+EditorScene.cpp,0x74bbf0,708,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CEditorBaseObject*>*)"
+EditorScene.cpp,0x74b2c0,884,"rollGroup(CRandomGroup*, TArrayList<CEditorBaseObject*>&, TArrayList<CRandomGroup*>&)"
+Inventory.cpp,0x91b780,15,CInventory::getStackSizeOfEquipment(CEquipment*)
+Inventory.cpp,0x91b790,15,CInventory::getMaxStackSizeOfEquipment(CEquipment*)
+Inventory.cpp,0x91d2e0,18,CInventory::~CInventory()
+Inventory.cpp,0x91b850,51,"CInventory::canUseEquipment(CEquipment*, CCharacter*)"
+Inventory.cpp,0x91af30,71,CInventory::refreshEquipped()
+Inventory.cpp,0x91b3a0,76,CInventory::getEquipmentRefInSlot(unsigned int)
+Inventory.cpp,0x91af80,84,CInventory::removeListener(iInventoryListener*)
+Inventory.cpp,0x91b050,84,CInventory::getPaneIndex(EINVENTORY_PANES)
+Inventory.cpp,0x91b340,85,CInventory::getEquipmentInSlot(unsigned int)
+Inventory.cpp,0x91b460,85,CInventory::getEquipmentEquippedAt(EEQUIP_LOCATIONS)
+Inventory.cpp,0x91b220,86,CInventory::isEquipmentInInventory(CEquipment*)
+Inventory.cpp,0x91b540,105,CInventory::isEquipmentEquipped(CEquipment*)
+Inventory.cpp,0x91afe0,108,CInventory::updateBonuses()
+Inventory.cpp,0x91b3f0,109,CInventory::findEquipmentSlot(CEquipment*)
+Inventory.cpp,0x91b4c0,125,CInventory::getEquipmentsEquippedLocation(CEquipment*)
+Inventory.cpp,0x91ccd0,131,"CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)"
+Inventory.cpp,0x91cf50,132,CInventory::identifyAll()
+Inventory.cpp,0x91b9c0,138,CInventory::getRequiredPane(CEquipment*)
+Inventory.cpp,0x91b130,141,CInventory::itemsInPane(EINVENTORY_PANES)
+Inventory.cpp,0x91c9d0,143,CInventory::updateSkillManagers(float)
+Inventory.cpp,0x91cd60,148,"CInventory::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)"
+Inventory.cpp,0x91d300,151,CInventory::destroyIcons()
+Inventory.cpp,0x91bd10,161,"CInventory::canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool)"
+Inventory.cpp,0x91b7a0,167,CInventory::forceRecalculationOfEquipmentStats()
+Inventory.cpp,0x91bc50,186,"CInventory::canPickup(CEquipment*, bool)"
+Inventory.cpp,0x91b280,190,CInventory::EquipmentsInSlot(unsigned int)
+Inventory.cpp,0x9254b0,201,"CInventory::useEquipment(CEquipment*, CCharacter*)"
+Inventory.cpp,0x91b5b0,208,CInventory::getEquipmentCountOfGuid(long long)
+Inventory.cpp,0x91c640,217,"CInventory::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)"
+Inventory.cpp,0x9249b0,245,CInventory::unequipEquipment(CEquipment*)
+Inventory.cpp,0x91b680,249,CInventory::getEquipmentOfGuid(long long)
+Inventory.cpp,0x924ab0,275,CInventory::verifyEquipment()
+Inventory.cpp,0x925580,278,"CInventory::removeEquipmentByGuid(long long, unsigned int, bool)"
+Inventory.cpp,0x91cbb0,282,"CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)"
+Inventory.cpp,0x924200,284,CInventory::getSetCount(CSet*)
+Inventory.cpp,0x91b890,290,CInventory::addListener(iInventoryListener*)
+Inventory.cpp,0x91ce00,325,"CInventory::calculateEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)"
+Inventory.cpp,0x91ca60,334,"CInventory::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+Inventory.cpp,0x91d180,338,CInventory::~CInventory()
+Inventory.cpp,0x923730,355,"CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)"
+Inventory.cpp,0x923410,392,"CInventory::getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&)"
+Inventory.cpp,0x9235a0,392,"CInventory::getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&)"
+Inventory.cpp,0x924810,401,CInventory::removeEquipment(CEquipment*)
+Inventory.cpp,0x91cfe0,407,CInventory::freeInventory()
+Inventory.cpp,0x91ba50,506,CInventory::findFreeSlot(CEquipment*)
+Inventory.cpp,0x926000,604,"CInventory::CInventory(CCharacter*, unsigned int)"
+Inventory.cpp,0x91c720,688,"CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)"
+Inventory.cpp,0x925d30,710,CInventory::swapWeaponSet()
+Inventory.cpp,0x9256a0,715,"CInventory::equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS)"
+Inventory.cpp,0x9251b0,766,"CInventory::pickupEquipment(CEquipment*, bool)"
+Inventory.cpp,0x91c2a0,924,"CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)"
+Inventory.cpp,0x925970,951,CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*)
+Inventory.cpp,0x924440,970,CInventory::calculateEffectValues()
+ShellUtils.cpp,0xf633c0,31,lodepng_read32bitInt(unsigned char const*)
+character.cpp,0x80ee80,2,"CCharacter::setModelPathDummy(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x80ea10,3,CCharacter::characterDamage()
+character.cpp,0x80ea30,7,CCharacter::naturalArmor()
+character.cpp,0x80ea60,7,CCharacter::giveUnusedPerkPoints(int)
+character.cpp,0x80ea70,7,CCharacter::giveUnusedStatPoints(int)
+character.cpp,0x80ea80,7,CCharacter::giveUnusedSkillPoints(int)
+character.cpp,0x80edd0,7,CCharacter::addFame(unsigned int)
+character.cpp,0x825f70,7,CCharacter::clearAllUnitReferences()
+character.cpp,0x80ea40,9,CCharacter::HPFloat()
+character.cpp,0x80ea50,9,CCharacter::manaFloat()
+character.cpp,0x822f00,9,non-virtual thunk to CCharacter::equipmentPickedUp(CEquipment*)
+character.cpp,0x850560,9,non-virtual thunk to CCharacter::equipmentUnequipped(CEquipment*)
+character.cpp,0x850ce0,9,non-virtual thunk to CCharacter::equipmentEquipped(CEquipment*)
+character.cpp,0x8562d0,9,non-virtual thunk to CCharacter::~CCharacter()
+character.cpp,0x8562e0,9,non-virtual thunk to CCharacter::~CCharacter()
+character.cpp,0x8562b0,12,non-virtual thunk to CCharacter::~CCharacter()
+character.cpp,0x8562c0,12,non-virtual thunk to CCharacter::~CCharacter()
+character.cpp,0x810720,13,CCharacter::forceDisplayOfDamageAbsorbed()
+character.cpp,0x80e890,17,CCharacter::setMaximumTreeDepth(unsigned int)
+character.cpp,0x82a730,18,CCharacter::CParticleAnimationTrigger::~CParticleAnimationTrigger()
+character.cpp,0x8562f0,18,CCharacter::~CCharacter()
+character.cpp,0x80ee10,22,CCharacter::getAnimationPlaying()
+character.cpp,0x80e870,23,CCharacter::setVisible(bool)
+character.cpp,0x80ee60,23,CCharacter::getAnimationLoop()
+character.cpp,0x825f80,23,CCharacter::notifyOfDeletion(CCharacter*)
+character.cpp,0x80eb50,25,CCharacter::reclaimMeleePoint()
+character.cpp,0x80eb70,25,CCharacter::reclaimRangedPoint()
+character.cpp,0x80eb90,25,CCharacter::reclaimDefensePoint()
+character.cpp,0x80ebb0,25,CCharacter::reclaimMagicPoint()
+character.cpp,0x8133f0,25,CCharacter::toggleSecondaryWeaponSet()
+character.cpp,0x80fd80,26,"CCharacter::queueBlendAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float)"
+character.cpp,0x811af0,26,CCharacter::updateSkill(float)
+character.cpp,0x817500,26,CCharacter::destroyIcons()
+character.cpp,0x80fc50,27,CCharacter::getWeaponInRightHand()
+character.cpp,0x80fe90,27,"CCharacter::animationExists(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const"
+character.cpp,0x811630,27,"CCharacter::animationQueued(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const"
+character.cpp,0x812930,27,"CCharacter::animationPlaying(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const"
+character.cpp,0x80eaf0,28,CCharacter::spendRangedPoint()
+character.cpp,0x80eb10,28,CCharacter::spendDefensePoint()
+character.cpp,0x80eb30,28,CCharacter::spendMagicPoint()
+character.cpp,0x8136f0,28,"CCharacter::getEffectValueWithoutInventory(EEFFECT_TYPE, EDAMAGE_TYPES)"
+character.cpp,0x80e8f0,32,CCharacter::performingAttack()
+character.cpp,0x80e910,32,CCharacter::performingAttackLoose()
+character.cpp,0x80ee30,33,CCharacter::getAnimationSpeed()
+character.cpp,0x80fc20,35,CCharacter::getWeaponInLeftHand()
+character.cpp,0x8146e0,35,CCharacter::minimumAC()
+character.cpp,0x80ede0,42,CCharacter::setAllowJumpDown(bool)
+character.cpp,0x816330,44,CCharacter::blocked()
+character.cpp,0x8100e0,45,CCharacter::isImmobile()
+character.cpp,0x80e980,46,CCharacter::skillAllowsTurning()
+character.cpp,0x8276f0,47,CCharacter::facingTarget()
+character.cpp,0x816de0,50,CCharacter::hideCharacterText()
+character.cpp,0x816e20,50,CCharacter::showCharacterText()
+character.cpp,0x816360,52,CCharacter::getCriticalChance()
+character.cpp,0x80efb0,55,CCharacter::getWardrobeHelmTexture()
+character.cpp,0x80eff0,55,CCharacter::getWardrobeBootsTexture()
+character.cpp,0x80f030,55,CCharacter::getWardrobeGlovesTexture()
+character.cpp,0x80f070,55,CCharacter::getWardrobeChestTexture()
+character.cpp,0x80f0b0,55,CCharacter::getWardrobeShoulderMesh()
+character.cpp,0x80f0f0,55,CCharacter::getWardrobeHelmMesh()
+character.cpp,0x80f130,55,CCharacter::getWardrobeBootsMesh()
+character.cpp,0x80f170,55,CCharacter::getWardrobeGlovesMesh()
+character.cpp,0x80f1b0,55,CCharacter::getWardrobeChestMesh()
+character.cpp,0x80f1f0,55,CCharacter::getModelPath()
+character.cpp,0x80fd00,55,CCharacter::maximumSkillDamageForDisplay()
+character.cpp,0x80fd40,55,CCharacter::minimumSkillDamageForDisplay()
+character.cpp,0x824a10,55,CCharacter::notifyOfDeletion(CItem*)
+character.cpp,0x826100,55,CCharacter::levelResetting()
+character.cpp,0x80f390,58,CCharacter::followRange()
+character.cpp,0x80f3d0,58,CCharacter::getBravery()
+character.cpp,0x816e60,58,CCharacter::destroyCharacterText()
+character.cpp,0x80e9b0,60,CCharacter::performingSkillLoose()
+character.cpp,0x8101c0,62,CCharacter::getTargetAlignment()
+character.cpp,0x80e8b0,63,CCharacter::stopPathing()
+character.cpp,0x80e930,65,CCharacter::performingSkill()
+character.cpp,0x8158c0,65,CCharacter::damageDefensePercent(EDAMAGE_TYPES)
+character.cpp,0x810170,71,CCharacter::alignment()
+character.cpp,0x834a80,79,CCharacter::baseAC()
+character.cpp,0x80eef0,81,CCharacter::getArmorAndTrinketLevelCanEquip(bool)
+character.cpp,0x80ef50,81,CCharacter::getWeaponLevelCanEquip(bool)
+character.cpp,0x824e00,81,CCharacter::inStrikeRange()
+character.cpp,0x80f6b0,82,CCharacter::swapSkills()
+character.cpp,0x810110,82,CCharacter::immobileAI(float)
+character.cpp,0x813a90,82,CCharacter::calculateMaxMana()
+character.cpp,0x8162d0,85,CCharacter::getBlockChance()
+character.cpp,0x817520,88,CCharacter::levelLoaded(CLevel*)
+character.cpp,0x8126e0,89,CCharacter::setToward(Ogre::Vector3 const&)
+character.cpp,0x813410,90,CCharacter::hasWeaponsInOffSet()
+character.cpp,0x814670,97,CCharacter::AC()
+character.cpp,0x80fda0,98,"CCharacter::returnToTownAI(float, CLevel&)"
+character.cpp,0x8139a0,103,CCharacter::dexterity()
+character.cpp,0x8144c0,103,CCharacter::magic()
+character.cpp,0x816d70,111,CCharacter::getEffectValuesOfDamage()
+character.cpp,0x8110b0,115,CCharacter::animationPlayAI(float)
+character.cpp,0x80fe10,116,CCharacter::characterShouldFadeOut()
+character.cpp,0x813270,117,"CCharacter::setMeshVisible(bool, bool)"
+character.cpp,0x80fba0,119,CCharacter::isDualWielding()
+character.cpp,0x825290,122,CCharacter::setAnimationSpeed(float)
+character.cpp,0x814440,124,CCharacter::isPetNearDeath()
+character.cpp,0x80f800,127,CCharacter::getKnownSpell(unsigned int)
+character.cpp,0x813a10,127,CCharacter::maxMana()
+character.cpp,0x825200,130,CCharacter::setAnimationLoop(bool)
+character.cpp,0x8119e0,131,"CCharacter::incrementJournalStatistic(EJournalStatistic, int)"
+character.cpp,0x826070,132,CCharacter::removePets()
+character.cpp,0x814530,133,CCharacter::defense()
+character.cpp,0x815830,133,"CCharacter::minimumDamageForDisplay(bool, bool, bool)"
+character.cpp,0x80fc70,140,CCharacter::setHighlighted(bool)
+character.cpp,0x8138a0,142,CCharacter::viewAngle()
+character.cpp,0x822f10,148,CCharacter::equipmentPickedUp(CEquipment*)
+character.cpp,0x8102d0,152,CCharacter::isFriend(CCharacter*)
+character.cpp,0x850150,159,"CCharacter::setWardrobeChestTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x8290e0,161,"CCharacter::performSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+character.cpp,0x84ff40,162,"CCharacter::setWardrobeHelmTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x84fff0,162,"CCharacter::setWardrobeBootsTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x8500a0,162,"CCharacter::setWardrobeGlovesTexture(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x8501f0,164,"CCharacter::setWardrobeShoulderMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x8502a0,164,"CCharacter::setWardrobeHelmMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x850350,164,"CCharacter::setWardrobeBootsMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x850400,164,"CCharacter::setWardrobeGlovesMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x8504b0,164,"CCharacter::setWardrobeChestMesh(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x80f2e0,165,CCharacter::stopParticles(bool)
+character.cpp,0x80f710,165,CCharacter::setAIState(EAIState)
+character.cpp,0x813af0,166,CCharacter::modifyMana(float)
+character.cpp,0x815a20,166,CCharacter::walkingSpeed()
+character.cpp,0x815ad0,166,CCharacter::runningSpeed()
+character.cpp,0x8347c0,167,CCharacter::getDefaultMerchantTab()
+character.cpp,0x8326a0,168,CCharacter::diesOnWarp()
+character.cpp,0x832750,168,CCharacter::getSpawnInvisible()
+character.cpp,0x832800,168,CCharacter::getDestroyOnDeath()
+character.cpp,0x8328b0,168,CCharacter::attachesToMaster()
+character.cpp,0x831ee0,170,CCharacter::getMaximumPetInstances()
+character.cpp,0x834b90,170,CCharacter::playerLevelForMerchantInventory()
+character.cpp,0x80f880,172,"CCharacter::canLearnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+character.cpp,0x823b40,172,"CCharacter::transferEffect(CCharacter*, CBaseUnit*, CEffect*)"
+character.cpp,0x811b10,174,CCharacter::canAttackWithCurrentWeapon()
+character.cpp,0x8145c0,174,CCharacter::armorBonus()
+character.cpp,0x80f230,175,CCharacter::setAnimationPlaying(unsigned int)
+character.cpp,0x815c90,175,CCharacter::updateMana(float)
+character.cpp,0x823ee0,175,CCharacter::inDamageReactRange(CCharacter*)
+character.cpp,0x814380,179,CCharacter::calculateMaxHP()
+character.cpp,0x813e60,180,CCharacter::maxHP()
+character.cpp,0x8137e0,184,"CCharacter::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)"
+character.cpp,0x82a4e0,184,"CCharacter::interruptAI(float, CLevel&)"
+character.cpp,0x8325e0,184,CCharacter::getDescription()
+character.cpp,0x834700,184,CCharacter::getMimicName()
+character.cpp,0x834ad0,184,CCharacter::getIntroCinematic()
+character.cpp,0x82a5a0,187,"CCharacter::fishingAICast(float, CLevel&)"
+character.cpp,0x835ba0,191,"CCharacter::setAltSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x835c60,191,"CCharacter::setActiveSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x813630,192,"CCharacter::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+character.cpp,0x83c670,192,CCharacter::handInteractiveSequence(float)
+character.cpp,0x810200,196,CCharacter::isEnemy(CCharacter*)
+character.cpp,0x823a70,196,CCharacter::setPathToFollow(CPathController*)
+character.cpp,0x826f40,198,"CCharacter::turnTowardPosition(Ogre::Vector3 const&, float)"
+character.cpp,0x82a660,198,CCharacter::CParticleAnimationTrigger::~CParticleAnimationTrigger()
+character.cpp,0x825fa0,199,CCharacter::setMaster(CCharacter*)
+character.cpp,0x813710,207,"CCharacter::getEffectValue(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)"
+character.cpp,0x80ec70,210,CCharacter::removePet(CCharacter*)
+character.cpp,0x813470,212,"CCharacter::setPaperdollItemSecondary(EEQUIP_LOCATIONS, Ogre::Entity*)"
+character.cpp,0x813550,212,"CCharacter::setPaperdollItem(EEQUIP_LOCATIONS, Ogre::Entity*)"
+character.cpp,0x848790,215,CCharacter::updateAttack(CLevel&)
+character.cpp,0x83dc70,220,CCharacter::unLearnSpell(int)
+character.cpp,0x827230,223,"CCharacter::setTargetDirection(float, float)"
+character.cpp,0x812740,225,CCharacter::canPathTo(Ogre::Vector3)
+character.cpp,0x834990,228,CCharacter::baseArmorBonus()
+character.cpp,0x824920,229,CCharacter::setTargetItem(CItem*)
+character.cpp,0x80f410,236,"CCharacter::setActiveSkill(CSkill*, bool)"
+character.cpp,0x822e10,237,CCharacter::levelUp()
+character.cpp,0x823f90,240,"CCharacter::updateCameraOpacity(Ogre::Camera*, float)"
+character.cpp,0x813170,241,CCharacter::setActiveInLevel(bool)
+character.cpp,0x811130,244,"CCharacter::blendAnimation(int, bool, float, float, float)"
+character.cpp,0x812830,244,"CCharacter::blendAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float, float)"
+character.cpp,0x823de0,247,CCharacter::updateVisualEquippedItems(float)
+character.cpp,0x8132f0,253,"createEquipmentAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS, bool)"
+character.cpp,0x837b00,256,"CCharacter::setLeftSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x815b80,257,CCharacter::sightRange()
+character.cpp,0x815910,265,CCharacter::damageDefense(EDAMAGE_TYPES)
+character.cpp,0x812360,268,CCharacter::rangedRange()
+character.cpp,0x812470,268,CCharacter::meleeRange()
+character.cpp,0x80fa90,271,CCharacter::setRenderBehind(bool)
+character.cpp,0x834870,278,CCharacter::getSkillTabName(int)
+character.cpp,0x8244a0,282,CCharacter::inInteractionRange()
+character.cpp,0x832960,288,CCharacter::completeDeath(CLevel&)
+character.cpp,0x822ce0,303,CCharacter::addToAvoidanceMap(CLevel&)
+character.cpp,0x82c900,313,"CCharacter::followCharacter(CCharacter*, CLevel&)"
+character.cpp,0x80f930,342,"CCharacter::learnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+character.cpp,0x829190,347,CCharacter::performUnknownSkill(CSkill*)
+character.cpp,0x812580,348,CCharacter::attackRange()
+character.cpp,0x827720,357,"CCharacter::playStrikeParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float, bool, bool)"
+character.cpp,0x83c4f0,375,CCharacter::attemptStopOfActiveSkill()
+character.cpp,0x83e570,375,"CCharacter::createNewCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x822b50,387,CCharacter::removeFromAvoidanceMap(CLevel&)
+character.cpp,0x82c770,398,CCharacter::sendToTown(CLevel&)
+character.cpp,0x8163a0,405,CCharacter::getDmgToReflectFromMissile()
+character.cpp,0x825310,408,CCharacter::setTarget(CCharacter*)
+character.cpp,0x80f500,424,CCharacter::cycleSkill(int)
+character.cpp,0x83e6f0,424,"loadAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS)"
+character.cpp,0x835520,436,"CCharacter::removePet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+character.cpp,0x837060,449,CCharacter::deactivateEffect(CEffect*)
+character.cpp,0x827310,461,"CCharacter::playHitParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float)"
+character.cpp,0x823bf0,482,"CCharacter::unLearnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+character.cpp,0x82a750,484,CCharacter::fishingSplash()
+character.cpp,0x8274e0,524,"CCharacter::facingTarget(CCharacter*, CItem*)"
+character.cpp,0x827010,540,"CCharacter::doWeaponProcs(CEquipment*, CBaseUnit*)"
+character.cpp,0x832a80,540,"CCharacter::dyingAI(float, CLevel&)"
+character.cpp,0x83e8a0,546,CCharacter::createDefaultEquipment()
+character.cpp,0x825d40,548,"CCharacter::updateAI(float, bool)"
+character.cpp,0x836a80,549,"CCharacter::setPathToFollowByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+character.cpp,0x80feb0,554,"CCharacter::dropToGround(CLevel&, float, bool)"
+character.cpp,0x829f60,584,"CCharacter::moveToPosition(Ogre::Vector3 const&, bool, bool)"
+character.cpp,0x82e750,589,"CCharacter::setAIPlayAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float)"
+character.cpp,0x836820,607,"CCharacter::spawningAI(float, CLevel&)"
+character.cpp,0x83c730,641,CCharacter::performingSkillAI(float)
+character.cpp,0x827890,650,CCharacter::teleportToMaster(float)
+character.cpp,0x82e210,670,"CCharacter::configureParticleTrigger(CCharacter::CParticleAnimationTrigger*, unsigned int)"
+character.cpp,0x82e4b0,670,CCharacter::startFishing()
+character.cpp,0x813ba0,693,CCharacter::updateActiveSkill(float)
+character.cpp,0x831f90,708,CCharacter::addPet(CCharacter*)
+character.cpp,0x82a940,737,CCharacter::displayPath()
+character.cpp,0x812e70,756,"CCharacter::updateOpacity(float, bool)"
+character.cpp,0x822850,764,"CCharacter::awardExperience(CLevel&, CCharacter*, int, bool)"
+character.cpp,0x826140,813,CCharacter::inAttackRange(EATTACK_RANGE_TYPE)
+character.cpp,0x83d930,819,"CCharacter::updateHP(CLevel&, float)"
+character.cpp,0x842150,844,"CCharacter::transformCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)"
+character.cpp,0x8245c0,852,CCharacter::doWeaponSkill(CEquipment*)
+character.cpp,0x826470,872,"CCharacter::inSkillRange(long long, bool)"
+character.cpp,0x832260,885,CCharacter::createPathfinder(CLevel&)
+character.cpp,0x811650,905,CCharacter::updateSkillKeys(float)
+character.cpp,0x827b20,908,CCharacter::performSkill()
+character.cpp,0x824e60,927,"CCharacter::validLineOfSight(CLevel&, bool)"
+character.cpp,0x824a50,934,"CCharacter::inStrikeRange(CCharacter*, CItem*, CEquipment*)"
+character.cpp,0x810370,938,CCharacter::displayDamageAbsorbed(float)
+character.cpp,0x836cb0,940,CCharacter::generateMerchantInventory()
+character.cpp,0x83c140,943,"CCharacter::fishingAICatch(float, CLevel&)"
+character.cpp,0x8254b0,1005,"CCharacter::approachAI(float, CLevel&)"
+character.cpp,0x811230,1010,CCharacter::interrupt(bool)
+character.cpp,0x837230,1019,"CCharacter::calculateTargetInSight(EAlignment, bool)"
+character.cpp,0x810730,1020,"CCharacter::executeProcs(EEFFECT_TYPE, CBaseUnit*)"
+dropdownmenu.cpp,0xb102a0,40,"CDropdownMenu::processInput(void*, float, bool)"
+dropdownmenu.cpp,0xb17380,214,CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&)
+dropdownmenu.cpp,0xb17260,273,CDropdownMenu::removeMenuListener(iMenuListener*)
+dropdownmenu.cpp,0xb102d0,348,"CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)"
+dropdownmenu.cpp,0xb10430,444,CDropdownMenu::addMenuListener(iMenuListener*)
+dropdownmenu.cpp,0xb192e0,503,CDropdownMenu::handle_onDoubleClick(CEGUI::EventArgs const&)
+dropdownmenu.cpp,0xb194e0,526,CDropdownMenu::handle_onClick(CEGUI::EventArgs const&)
+dropdownmenu.cpp,0xb1b6f0,693,"CDropdownMenu::CDropdownMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*, unsigned int)"
+dropdownmenu.cpp,0xb176b0,811,CDropdownMenu::update(float)
+dropdownmenu.cpp,0xb17e70,967,"CDropdownMenu::setTitle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+editorbutton.cpp,0xe20f60,34,CEditorButton::handle_Click(CEGUI::EventArgs const&)
+editorbutton.cpp,0xe20f90,128,"CEditorButton::setRolloverImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+editorbutton.cpp,0xe281a0,128,"CEditorButton::setNormalImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+editorbutton.cpp,0xe28220,128,"CEditorButton::setDisabledImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+editorbutton.cpp,0xe282a0,128,"CEditorButton::setClickedImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)"
+player.cpp,0x8fbf20,9,non-virtual thunk to CPlayer::~CPlayer()
+player.cpp,0x8fbf30,9,non-virtual thunk to CPlayer::~CPlayer()
+player.cpp,0x8e4190,11,"CPlayer::setJournalStatistic(EJournalStatistic, int)"
+player.cpp,0x8fbf00,12,non-virtual thunk to CPlayer::~CPlayer()
+player.cpp,0x8fbf10,12,non-virtual thunk to CPlayer::~CPlayer()
+player.cpp,0x8fbf40,18,CPlayer::~CPlayer()
+player.cpp,0x8e3f70,22,CPlayer::clearItemLinkMap()
+player.cpp,0x8e41a0,31,CPlayer::soldItem(CEquipment*)
+player.cpp,0x8e3e70,44,CPlayer::clearSkillMap()
+player.cpp,0x8e3ea0,44,CPlayer::clearSkillFunctionMap()
+player.cpp,0x8e3ed0,80,"CPlayer::setMappedFunctionSkill(unsigned int, long long)"
+player.cpp,0x8e3f20,80,"CPlayer::setLeftMappedFunctionSkill(unsigned int, long long)"
+player.cpp,0x8e4d00,86,CPlayer::startFishing()
+player.cpp,0x8e3f90,89,CPlayer::resetLevel()
+player.cpp,0x8e3ff0,112,CPlayer::setAIState(EAIState)
+player.cpp,0x8e4110,119,CPlayer::clearLevelHistory()
+player.cpp,0x8e4e00,122,CPlayer::getSkillPointsAwardedForFameLevel(unsigned int)
+player.cpp,0x8e4e80,122,CPlayer::getSkillPointsAwardedForLevel(unsigned int)
+player.cpp,0x8e4f00,122,CPlayer::getStatsPointsAwardedForLevel(unsigned int)
+player.cpp,0x8ef6c0,123,"CPlayer::hasLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+player.cpp,0x8e4d60,151,CPlayer::calculateMaxMana()
+player.cpp,0x8e4f80,151,CPlayer::calculateMaxHP()
+player.cpp,0x8e4060,164,CPlayer::removeLevelSavedState(unsigned int)
+player.cpp,0x8ef600,184,"CPlayer::getLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+player.cpp,0x8e47d0,204,"CPlayer::die(CCharacter*, Ogre::Vector3 const*, float, bool)"
+player.cpp,0x8f52a0,209,CPlayer::getPlayerClassName()
+player.cpp,0x8ef520,215,"CPlayer::getDungeonRank(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+player.cpp,0x8e43a0,230,CDungeonTracker::save(_IO_FILE*)
+player.cpp,0x8e46e0,232,CPlayer::openPortal(CLevel&)
+player.cpp,0x8f4ee0,233,"CPlayer::hasDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+player.cpp,0x8f4c60,294,"CPlayer::clearDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+player.cpp,0x8f0bd0,313,CPlayer::attemptToStopPlayerSkill(bool)
+player.cpp,0x8efa70,326,"CPlayer::addWaypoint(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)"
+player.cpp,0x8f4d90,334,"CPlayer::getMaxDepth(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+player.cpp,0x8f8510,364,CPlayer::calculateNaturalArmor()
+player.cpp,0x8f0a50,381,CPlayer::catchFish()
+player.cpp,0x8f4ad0,395,"CDungeonTracker::load(_IO_FILE*, unsigned int)"
+player.cpp,0x8f5670,416,"CPlayer::openMapPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CLevel&)"
+player.cpp,0x8e5020,418,CPlayer::firstTimeSetup()
+player.cpp,0x8e41c0,466,"CPlayer::incrementJournalStatistic(EJournalStatistic, int)"
+player.cpp,0x8e4490,581,CPlayer::createPortals(CLevel&)
+player.cpp,0x8f0d10,585,CPlayer::updateAnimation(float)
+player.cpp,0x8f8260,684,CPlayer::setQuestManager(CQuestManager*)
+player.cpp,0x8f4fd0,716,CPlayer::resetStatPoints()
+player.cpp,0x8f5380,741,CPlayer::resetSkills()
+player.cpp,0x8f4780,842,"CPlayer::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)"
+player.cpp,0x8f1380,850,"CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long, bool, bool, UNITTYPES::EUNITTYPES)"
+player.cpp,0x8fbf60,926,CPlayer::fillSaveState(CCharacterSaveState&)
+player.cpp,0x8f8680,969,CPlayer::applySaveState(CCharacterSaveState&)
