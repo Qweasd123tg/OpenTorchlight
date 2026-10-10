@@ -227,7 +227,7 @@ public:
     int            m_iUnknown33FC;                         // +0x33fc
     int            m_iUnknown3400;                         // +0x3400
     int            m_iUnknown3404;                         // +0x3404
-    long long      m_iUnknown3408;                         // +0x3408
+    CEquipment*    m_pHoverObject;                         // +0x3408
 
     // [A] the "UIIcons" imageset.  See correction 2.
     CEGUI::Imageset* m_pUnknown3410;                       // +0x3410
