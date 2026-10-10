@@ -715,7 +715,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),MISSING,False,False,,False
 0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
 0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),MISSING,False,False,,False
-0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",MISSING,False,False,,True
+0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",DIFF,True,False,,False
 0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MISSING,False,False,,False
 0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
 0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
