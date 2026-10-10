@@ -24,6 +24,7 @@ struct Log
 {
     Call calls[kMaxCalls];
     int count;
+    bool overflow;
 
     void clear()
     {
@@ -32,7 +33,9 @@ struct Log
 
     bool operator==(const Log& other) const
     {
-        return count == other.count && std::memcmp(calls, other.calls, count * sizeof(Call)) == 0;
+        // Matching bounded prefixes cannot establish equality of lost tails.
+        return !overflow && !other.overflow && count == other.count &&
+            std::memcmp(calls, other.calls, count * sizeof(Call)) == 0;
     }
 };
 
@@ -67,6 +70,8 @@ template <int N>
 void* slotThunk(Object* self, unsigned long a1, unsigned long a2)
 {
     Log* log = currentLog();
+    if (log && log->count == kMaxCalls)
+        log->overflow = true;
     if (log && log->count < kMaxCalls)
     {
         Call& call = log->calls[log->count++];

@@ -96,6 +96,9 @@ void capture(Context& c, Snapshot& out)
         entry = entry->m_pNext;
         ++stackCount;
     }
+    // The remaining stack was not observed, even if both prefixes match.
+    if (entry)
+        _exit(6);
     out.integer(-2);
     for (int i = 0; i < map.count; ++i)
     {
