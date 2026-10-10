@@ -9,13 +9,17 @@
 #include <OgreVector3.h>
 
 #include "RunicCore.h"
+#include "EditorDefines.h"
 #include "TArrayList.h"
 
 class CEditorObjectManager;
 class CEditorScene;
 class CResourceManager;
+class CSettings;
+namespace Ogre { class Camera; }
 class CUndo;
 class CPOV;
+class CGameClient;
 class iEditorResourceManager;
 
 // Partial: layout from CEditor::CEditor (504 bytes). Members of Editor.cpp are
@@ -23,6 +27,35 @@ class iEditorResourceManager;
 class CEditor : public CRunicCore
 {
 public:
+    TArrayList<CEditorScene*>& getEditorScenes() { return m_EditorScenes; }
+
+    CResourceManager* getResourceManager() { return m_pUnknown128; }
+
+    void addUndo(CUndo* undo, bool clearRedo);
+    void addRedo(CUndo* redo);
+    CEditorScene* GetEditorScene(std::wstring name);
+    Ogre::Timer* getTimer() { return &m_Timer; }
+
+    Ogre::Camera* getCamera();
+    void setAmbientColor(int red,int green,int blue);
+    void setMaterialAmbientColor(int red,int green,int blue);
+    void setDirectionalColor(int red,int green,int blue);
+    void setDirectionalIntensity(float intensity);
+    CSettings* getSettings() { return m_pSettings; }
+
+    CGameClient* getGameClient();
+    void setCompletedQuests(const std::wstring& quests);
+    void setActiveQuests(const std::wstring& quests);
+
+    bool isDisabled() const { return m_bDisabled; }
+    iEditorResourceManager* getEditorResourceManager() const { return m_pEditorResourceManager; }
+
+    void setFlag(EEDITOR_FLAGS flag);
+    void removeFlag(EEDITOR_FLAGS flag);
+    void SetBackgroundColor(float red, float green, float blue);
+    void flushKeyManager();
+    unsigned int GetEditorSceneIDByName(const wchar_t* name);
+
     void SetMouseWheelDelta(int delta);
     void SetPovVelocityMult(float multiplier);
     void SetRenderWindowHasFocus(bool focused);
@@ -35,9 +68,9 @@ public:
     void FlyToPositionLookingAtPos(Ogre::Vector3 position, Ogre::Vector3 target);
     void keyEvent(unsigned int event, unsigned int code);
     void mouseEvent(unsigned int event, unsigned int code);
-    void ResetCamera(Ogre::Vector3);
-    friend void EditorSetMonsterAutoSpawn(wchar_t*);
+    void ResetCamera(Ogre::Vector3 position);
 
+    friend void EditorSetMonsterAutoSpawn(wchar_t*);
     CEditor();
     static CEditor* getSingleton();
     virtual ~CEditor();
@@ -65,20 +98,26 @@ public:
     }
 
 private:
+    friend void EditorSetMonsterAutoSpawn(wchar_t* name);
+    friend void EditorSetEditorMonsterSpawnclass(wchar_t* name);
+    friend void EditorSetEditorPlayerFile(wchar_t* name);
+    friend void EditorSetCommandAutoRun(wchar_t* name);
+    friend bool EditorGetMuted();
+    friend void EditorSetMuted(bool muted);
     char m_Unknown10[0x38];
     bool m_bRenderWindowHasFocus;
     // Checked by the editor API, never set in the shipped build.
     bool m_bDisabled;
     bool m_bUnknown4A;
     bool m_bUnknown4B;
-    CResourceManager* m_pResourceManager;
+    CSettings* m_pSettings;
     iEditorResourceManager* m_pEditorResourceManager;
     float m_fUnknown60;
     int m_iFlags;
     int m_iUnknown68;
     CPOV* m_pCameraController;
     int m_iUnknown78[3];
-    void* m_pUnknown88;
+    Ogre::Camera* m_pUnknown88;
     void* m_pUnknown90;
     int m_iUnknown98[6];
     void* m_pUnknownB0;
@@ -87,12 +126,12 @@ private:
     std::map<std::wstring, unsigned int> m_EditorSceneIDs;
     Ogre::Timer m_Timer;
     CEditorObjectManager* m_pObjectManager;
-    void* m_pUnknown128;
+    CResourceManager* m_pUnknown128;
     void* m_pUnknown130;
     void* m_pUnknown138;
     std::list<CUndo*> m_Undos;
     std::list<CUndo*> m_Redos;
-    int m_iMaxUndos;
+    unsigned int m_iMaxUndos;
     bool m_bUnknown164;
     void* m_pUnknown168;
     int m_iCharacterLevel;

@@ -13,6 +13,9 @@ class CMod;
 class CModFileFilter : public CRunicCore
 {
 public:
+    static CModFileFilter* getSingleton();
+    void addNewMod(const std::wstring& name);
+
     CModFileFilter();
     virtual ~CModFileFilter();
 
@@ -25,6 +28,7 @@ public:
                   bool bRecursive);
 
 private:
+    friend void SetModEnabled(const wchar_t*, bool);
     std::wstring m_sModsFile;
     TArrayList<CMod*> m_Mods;
     bool m_b30;

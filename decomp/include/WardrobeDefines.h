@@ -3,6 +3,11 @@
 
 #include <string>
 
+enum EWardrobeSlot
+{
+    WARDROBE_CHEST, WARDROBE_GLOVES, WARDROBE_BOOTS, WARDROBE_HELMET, WARDROBE_SHOULDERS
+};
+
 // Wardrobe slot names. Internal linkage: every including TU constructs its
 // own copy.
 

@@ -1,12 +1,145 @@
 address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0x8aa4b0,genericmodel.cpp,"CGenericModel::updateAnimation(float, bool)",MISSING,False,False,,False
+0x8ac190,genericmodel.cpp,"CGenericModel::reInitialize(Ogre::Entity*, bool)",MISSING,False,False,,False
+0x8aecd0,genericmodel.cpp,"CGenericModel::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, bool, bool)",MISSING,False,False,,False
+0x8b07a0,genericmodel.cpp,CGenericModel::reloadAnimations(),MISSING,False,False,,False
+0x8b0b30,genericmodel.cpp,"CGenericModel::CGenericModel(CResourceManager*, Ogre::SceneManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
+0x8b1340,FileSystem.cpp,"std::basic_string<unsigned short, std::char_traits<unsigned short>, std::allocator<unsigned short> >::_M_copy(unsigned short*, unsigned short const*, unsigned long)",MATCH,False,False,,False
+0x8b22d0,FileSystem.cpp,Ogre::UTFString::UTFString(Ogre::UTFString const&),MATCH,False,False,,False
+0x8b4a40,FileSystem.cpp,"std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::~vector()",MATCH,False,False,,False
+0x8b59a0,Item.cpp,CItem::setVisible(bool),MATCH,True,False,,False
+0x8b59b0,Item.cpp,"CItem::fillSaveState(CItemSaveState&, int, bool)",MATCH,True,False,,False
+0x8b5be0,Item.cpp,CItem::calculateActiveRange(Ogre::Vector3 const&),DIFF,False,False,,False
+0x8b5e40,Item.cpp,CItem::snapToGround(),MATCH,True,False,,False
+0x8b6070,Item.cpp,CItem::hideItemText(),MATCH,True,False,,False
+0x8b60b0,Item.cpp,CItem::showItemText(),MATCH,True,False,,False
+0x8b60f0,Item.cpp,CItem::setHighlighted(bool),MATCH,True,False,,False
+0x8b6150,Item.cpp,CItem::updateAnimation(float),DIFF,False,False,,False
+0x8b62a0,Item.cpp,"CItem::updateOpacity(float, bool)",DIFF,False,False,,False
+0x8b6430,Item.cpp,"CItem::update(Ogre::Camera*, Ogre::Vector3 const&, float)",DIFF,False,False,,False
+0x8b66c0,Item.cpp,"CItem::setVisible(bool, bool)",MATCH,True,False,,False
+0x8b6740,Item.cpp,CItem::interact(CCharacter*),MATCH,True,False,,False
+0x8b67a0,Item.cpp,CItem::destroyItemText(),MATCH,True,False,,False
+0x8b67e0,Item.cpp,CItem::CItem(CResourceManager*),MATCH,True,False,,False
+0x8b6880,Item.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x8bff50,Item.cpp,global constructors keyed to CItem::CItem(CResourceManager*),MATCH,False,False,,False
+0x8c00b0,Item.cpp,__tcf_12,MATCH,False,False,,False
+0x8c0140,Item.cpp,__tcf_2,MATCH,False,False,,False
+0x8c01b0,Item.cpp,CItem::setItemTextHighlighted(bool),DIFF,True,False,,False
+0x8c1410,Item.cpp,__tcf_16,DIFF,False,False,,False
+0x8c1480,Item.cpp,__tcf_15,DIFF,False,False,,False
+0x8c14f0,Item.cpp,__tcf_14,DIFF,False,False,,False
+0x8c1560,Item.cpp,__tcf_13,DIFF,False,False,,False
+0x8c15f0,Item.cpp,__tcf_11,MATCH,False,False,,False
+0x8c1680,Item.cpp,__tcf_10,MATCH,False,False,,False
+0x8c1710,Item.cpp,__tcf_9,MATCH,False,False,,False
+0x8c1780,Item.cpp,__tcf_8,MATCH,False,False,,False
+0x8c17f0,Item.cpp,__tcf_6,MATCH,False,False,,False
+0x8c1880,Item.cpp,__tcf_5,MATCH,False,False,,False
+0x8c1910,Item.cpp,__tcf_4,MATCH,False,False,,False
+0x8c19a0,Item.cpp,__tcf_3,MATCH,False,False,,False
+0x8c1a10,Item.cpp,__tcf_1,MATCH,False,False,,False
+0x8c1aa0,Item.cpp,__tcf_0,MATCH,False,False,,False
+0x8c1b30,Item.cpp,CItem::applySaveState(CItemSaveState&),DIFF,False,False,,False
+0x8c1e70,Item.cpp,__tcf_7,MATCH,False,False,,False
+0x8c1f90,Item.cpp,CItem::~CItem(),MATCH,True,False,,False
+0x8c2040,Item.cpp,CItem::~CItem(),MATCH,True,False,,False
+0x8c2060,Item.cpp,"CItem::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
+0x8c2250,Item.cpp,"CItem::unitInit(CDataGroup*, bool)",DIFF,False,False,,False
+0x8c25e0,itemgold.cpp,CItemGold::unloadModel(),MATCH,True,False,,False
+0x8c2610,itemgold.cpp,"CItemGold::fillSaveState(CItemSaveState&, int, bool)",MATCH,True,False,,False
+0x8c2700,itemgold.cpp,CItemGold::playDropSound(Ogre::SceneNode*),MATCH,True,False,,False
+0x8c2730,itemgold.cpp,CItemGold::playTakeSound(Ogre::SceneNode*),MATCH,True,False,,False
+0x8c2760,itemgold.cpp,"CItemGold::update(Ogre::Camera*, Ogre::Vector3 const&, float)",MISSING,False,False,,False
+0x8c2860,itemgold.cpp,CItemGold::setActiveInLevel(bool),MATCH,True,False,,False
+0x8c28f0,itemgold.cpp,"CItemGold::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0x8c29f0,itemgold.cpp,CItemGold::~CItemGold(),MATCH,True,False,,False
+0x8c2a80,itemgold.cpp,CItemGold::~CItemGold(),MATCH,True,False,,False
+0x8c2aa0,itemgold.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x8c9320,itemgold.cpp,__tcf_12,MATCH,False,False,,False
+0x8c93b0,itemgold.cpp,__tcf_2,MATCH,False,False,,False
+0x8c9820,itemgold.cpp,__tcf_11,MATCH,False,False,,False
+0x8c98b0,itemgold.cpp,__tcf_10,MATCH,False,False,,False
+0x8c9940,itemgold.cpp,__tcf_9,MATCH,False,False,,False
+0x8c99b0,itemgold.cpp,__tcf_8,MATCH,False,False,,False
+0x8c9a20,itemgold.cpp,__tcf_6,MATCH,False,False,,False
+0x8c9ab0,itemgold.cpp,__tcf_5,MATCH,False,False,,False
+0x8c9b40,itemgold.cpp,__tcf_4,MATCH,False,False,,False
+0x8c9bd0,itemgold.cpp,__tcf_3,MATCH,False,False,,False
+0x8c9c40,itemgold.cpp,__tcf_1,MATCH,False,False,,False
+0x8c9cd0,itemgold.cpp,__tcf_0,MATCH,False,False,,False
+0x8c9d60,itemgold.cpp,__tcf_7,MATCH,False,False,,False
+0x8c9df0,itemgold.cpp,CItemGold::applySaveState(CItemSaveState&),MATCH,True,False,,False
+0x8c9ec0,itemgold.cpp,"CItemGold::CItemGold(CResourceManager*, int)",MISSING,False,False,,False
+0x8ca940,itemgold.cpp,"CItemGold::unitInit(CDataGroup*, bool)",MISSING,False,False,,False
+0x8d4ba0,monster.cpp,"CMonster::getRangeAI(float, CLevel&)",MATCH,True,False,,False
+0x8d4bf0,monster.cpp,CMonster::hasOffensiveSkill(),MISSING,False,False,,False
+0x8d4d60,monster.cpp,CMonster::hasDefensiveSkill(),MISSING,False,False,,False
+0x8d4f60,monster.cpp,CMonster::selectOffensiveSkill(bool),MISSING,False,False,,False
+0x8d51d0,monster.cpp,CMonster::notifyAISkillComplete(),MATCH,True,False,,False
+0x8d51e0,monster.cpp,CMonster::selectDefensiveSkill(),MISSING,False,False,,False
+0x8d5470,monster.cpp,"CMonster::reactToDamage(CCharacter*, bool)",MISSING,False,False,,False
+0x8d59a0,monster.cpp,"CMonster::fleeAI(float, CLevel&)",MISSING,False,False,,False
+0x8d5c40,monster.cpp,CMonster::setPathToFollow(CPathController*),MATCH,True,False,,False
+0x8d5c50,monster.cpp,"CMonster::approachAI(float, CLevel&)",MATCH,True,False,,False
+0x8d5c60,monster.cpp,CMonster::canAttackWithCurrentWeapon(),MATCH,True,False,,False
+0x8d5c80,monster.cpp,"CMonster::CMonster(CResourceManager*, int)",MATCH,True,False,,False
+0x8d5d20,monster.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x8df370,monster.cpp,"CMonster::huntAI(float, CLevel&)",MISSING,False,False,,False
+0x8dfd80,monster.cpp,"CMonster::attackAI(float, CLevel&)",MISSING,False,False,,False
+0x8e02b0,monster.cpp,"CMonster::idleAINormal(float, CLevel&, bool)",MISSING,False,False,,False
+0x8e06c0,monster.cpp,"CMonster::idleAIResurrecter(float, CLevel&, bool)",MATCH,True,False,,False
+0x8e06d0,monster.cpp,"CMonster::idleAIDefender(float, CLevel&, bool)",MATCH,True,False,,False
+0x8e06e0,monster.cpp,"CMonster::idleAICircler(float, CLevel&, bool)",MISSING,False,False,,False
+0x8e0b90,monster.cpp,"CMonster::idleAIRangedCaster(float, CLevel&, bool)",MISSING,False,False,,False
+0x8e0eb0,monster.cpp,"CMonster::idleAIRangedDefender(float, CLevel&, bool)",MISSING,False,False,,False
+0x8e1140,monster.cpp,__tcf_17,DIFF,False,False,,False
+0x8e11b0,monster.cpp,__tcf_16,DIFF,False,False,,False
+0x8e1220,monster.cpp,__tcf_15,DIFF,False,False,,False
+0x8e1290,monster.cpp,__tcf_14,DIFF,False,False,,False
+0x8e1320,monster.cpp,__tcf_4,DIFF,False,False,,False
+0x8e1390,monster.cpp,"CMonster::fidgetAI(float, CLevel&)",MISSING,False,False,,False
+0x8e1580,monster.cpp,"CMonster::jumpDownAI(float, CLevel&)",MISSING,False,False,,False
+0x8e2380,monster.cpp,__tcf_13,DIFF,False,False,,False
+0x8e2410,monster.cpp,__tcf_12,DIFF,False,False,,False
+0x8e24a0,monster.cpp,__tcf_11,DIFF,False,False,,False
+0x8e2510,monster.cpp,__tcf_10,DIFF,False,False,,False
+0x8e2580,monster.cpp,__tcf_8,DIFF,False,False,,False
+0x8e2610,monster.cpp,__tcf_7,DIFF,False,False,,False
+0x8e26a0,monster.cpp,__tcf_6,DIFF,False,False,,False
+0x8e2730,monster.cpp,__tcf_5,DIFF,False,False,,False
+0x8e27a0,monster.cpp,__tcf_3,DIFF,False,False,,False
+0x8e2830,monster.cpp,__tcf_2,DIFF,False,False,,False
+0x8e28c0,monster.cpp,__tcf_1,DIFF,False,False,,False
+0x8e2930,monster.cpp,__tcf_0,DIFF,False,False,,False
+0x8e2a50,monster.cpp,__tcf_9,DIFF,False,False,,False
+0x8e2ae0,monster.cpp,"CMonster::unitInit(CDataGroup*, bool)",MISSING,False,False,,False
+0x8e2bc0,monster.cpp,CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2cd0,monster.cpp,non-virtual thunk to CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2ce0,monster.cpp,non-virtual thunk to CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2cf0,monster.cpp,non-virtual thunk to CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2d00,monster.cpp,non-virtual thunk to CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2d10,monster.cpp,CMonster::~CMonster(),MATCH,True,False,,False
+0x8e2d30,monster.cpp,"CMonster::idleAI(float, CLevel&, bool)",MISSING,False,False,,False
+0x8e3a40,monster.cpp,"CMonster::updateAI(float, bool)",MISSING,False,False,,False
+0x8e3e70,player.cpp,CPlayer::clearSkillMap(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3e70.cpp,False
+0x8e3ea0,player.cpp,CPlayer::clearSkillFunctionMap(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3ea0.cpp,False
+0x8e3ed0,player.cpp,"CPlayer::setMappedFunctionSkill(unsigned int, long long)",MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3ed0.cpp,False
+0x8e3f20,player.cpp,"CPlayer::setLeftMappedFunctionSkill(unsigned int, long long)",MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f20.cpp,False
+0x8e3f70,player.cpp,CPlayer::clearItemLinkMap(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f70.cpp,False
+0x8e3f90,player.cpp,CPlayer::resetLevel(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e3f90.cpp,False
+0x8e3ff0,player.cpp,CPlayer::setAIState(EAIState),MISSING,False,False,,False
+0x8e4060,player.cpp,CPlayer::removeLevelSavedState(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4060.cpp,False
+0x8e4110,player.cpp,CPlayer::clearLevelHistory(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4110.cpp,False
+0x8e4190,player.cpp,"CPlayer::setJournalStatistic(EJournalStatistic, int)",MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4190.cpp,False
 0x8e41a0,player.cpp,CPlayer::soldItem(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e41a0.cpp,False
 0x8e41c0,player.cpp,"CPlayer::incrementJournalStatistic(EJournalStatistic, int)",MISSING,False,False,,False
 0x8e43a0,player.cpp,CDungeonTracker::save(_IO_FILE*),MISSING,False,False,,False
 0x8e4490,player.cpp,CPlayer::createPortals(CLevel&),MISSING,False,False,,False
-0x8e46e0,player.cpp,CPlayer::openPortal(CLevel&),MISSING,False,False,,False
+0x8e46e0,player.cpp,CPlayer::openPortal(CLevel&),MATCH,True,False,,False
 0x8e47d0,player.cpp,"CPlayer::die(CCharacter*, Ogre::Vector3 const*, float, bool)",MISSING,False,False,,False
 0x8e48a0,player.cpp,"CPlayer::update(Ogre::Camera*, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0x8e4d00,player.cpp,CPlayer::startFishing(),MISSING,False,False,,False
+0x8e4d00,player.cpp,CPlayer::startFishing(),MATCH,True,False,,False
 0x8e4d60,player.cpp,CPlayer::calculateMaxMana(),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4d60.cpp,False
 0x8e4e00,player.cpp,CPlayer::getSkillPointsAwardedForFameLevel(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4e00.cpp,False
 0x8e4e80,player.cpp,CPlayer::getSkillPointsAwardedForLevel(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/player.cpp/0x8e4e80.cpp,False
@@ -15,7 +148,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x8e5020,player.cpp,CPlayer::firstTimeSetup(),MISSING,False,False,,False
 0x8e51d0,player.cpp,CPlayer::levelLoaded(CLevel*),MATCH,True,False,,False
 0x8e51e0,player.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0x8ef520,player.cpp,"CPlayer::getDungeonRank(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0x8ef520,player.cpp,"CPlayer::getDungeonRank(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x8ef600,player.cpp,"CPlayer::getLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False
 0x8ef6c0,player.cpp,"CPlayer::hasLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False
 0x8ef820,player.cpp,__tcf_17,DIFF,False,False,,False
@@ -25,12 +158,17 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x8efa00,player.cpp,__tcf_4,DIFF,False,False,,False
 0x8efa70,player.cpp,"CPlayer::addWaypoint(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",MISSING,False,False,,False
 0x8efbc0,player.cpp,CPlayer::updateFishingLine(float),MISSING,False,False,,False
-0x8f0a50,player.cpp,CPlayer::catchFish(),MISSING,False,False,,False
-0x8f0bd0,player.cpp,CPlayer::attemptToStopPlayerSkill(bool),MISSING,False,False,,False
+0x8f0a50,player.cpp,CPlayer::catchFish(),MATCH,True,False,,False
+0x8f0bd0,player.cpp,CPlayer::attemptToStopPlayerSkill(bool),MATCH,True,False,,False
 0x8f0d10,player.cpp,CPlayer::updateAnimation(float),MISSING,False,False,,False
 0x8f0f60,player.cpp,"CPlayer::fishingAI(float, CLevel&)",MISSING,False,False,,False
 0x8f1380,player.cpp,"CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long, bool, bool, UNITTYPES::EUNITTYPES)",MISSING,False,False,,False
 0x8f16e0,player.cpp,"CPlayer::removeQuestItemFromInventoryOrPetsInventoryByGuid(long long, long long, bool, bool, UNITTYPES::EUNITTYPES)",MISSING,False,False,,False
+0x8f2ad0,player.cpp,__tcf_24,DIFF,False,False,,False
+0x8f2b60,player.cpp,__tcf_22,DIFF,False,False,,False
+0x8f2bd0,player.cpp,__tcf_21,DIFF,False,False,,False
+0x8f2c40,player.cpp,__tcf_20,DIFF,False,False,,False
+0x8f2cd0,player.cpp,__tcf_19,DIFF,False,False,,False
 0x8f2d60,player.cpp,__tcf_18,DIFF,False,False,,False
 0x8f2df0,player.cpp,__tcf_13,DIFF,False,False,,False
 0x8f2e80,player.cpp,__tcf_12,DIFF,False,False,,False
@@ -47,11 +185,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x8f3450,player.cpp,CPlayer::CPlayer(CResourceManager*),MISSING,False,False,,False
 0x8f3ba0,player.cpp,CPlayer::updateStoredLevels(CLevel&),MISSING,False,False,,False
 0x8f4540,player.cpp,__tcf_9,DIFF,False,False,,False
+0x8f4660,player.cpp,__tcf_23,DIFF,False,False,,False
 0x8f4780,player.cpp,"CPlayer::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
 0x8f4ad0,player.cpp,"CDungeonTracker::load(_IO_FILE*, unsigned int)",MISSING,False,False,,False
-0x8f4c60,player.cpp,"CPlayer::clearDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0x8f4c60,player.cpp,"CPlayer::clearDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x8f4d90,player.cpp,"CPlayer::getMaxDepth(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
-0x8f4ee0,player.cpp,"CPlayer::hasDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0x8f4ee0,player.cpp,"CPlayer::hasDungeonHistory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x8f4fd0,player.cpp,CPlayer::resetStatPoints(),MISSING,False,False,,False
 0x8f52a0,player.cpp,CPlayer::getPlayerClassName(),MISSING,False,False,,False
 0x8f5380,player.cpp,CPlayer::resetSkills(),MISSING,False,False,,False
@@ -99,20 +238,20 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x91af00,mousemanager.cpp,CMouseManager::CMouseManager(),MATCH,True,False,,False
 0x91af30,Inventory.cpp,CInventory::refreshEquipped(),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af30.cpp,False
 0x91af80,Inventory.cpp,CInventory::removeListener(iInventoryListener*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af80.cpp,False
-0x91afe0,Inventory.cpp,CInventory::updateBonuses(),MISSING,False,False,,False
+0x91afe0,Inventory.cpp,CInventory::updateBonuses(),MATCH,True,False,,False
 0x91b050,Inventory.cpp,CInventory::getPaneIndex(EINVENTORY_PANES),MISSING,False,False,,False
-0x91b0b0,Inventory.cpp,CInventory::getPaneSize(EINVENTORY_PANES),DIFF,True,False,,False
+0x91b0b0,Inventory.cpp,CInventory::getPaneSize(EINVENTORY_PANES),MATCH,True,False,,False
 0x91b0f0,Inventory.cpp,"CInventory::slotIsInPane(unsigned int, int)",MATCH,True,False,,False
-0x91b130,Inventory.cpp,CInventory::itemsInPane(EINVENTORY_PANES),DIFF,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b130.cpp,False
+0x91b130,Inventory.cpp,CInventory::itemsInPane(EINVENTORY_PANES),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b130.cpp,False
 0x91b1c0,Inventory.cpp,CInventory::getItemPane(unsigned int),MATCH,True,False,,False
 0x91b220,Inventory.cpp,CInventory::isEquipmentInInventory(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b220.cpp,False
 0x91b280,Inventory.cpp,CInventory::EquipmentsInSlot(unsigned int),MISSING,False,False,,False
 0x91b340,Inventory.cpp,CInventory::getEquipmentInSlot(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b340.cpp,False
 0x91b3a0,Inventory.cpp,CInventory::getEquipmentRefInSlot(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b3a0.cpp,False
 0x91b3f0,Inventory.cpp,CInventory::findEquipmentSlot(CEquipment*),MISSING,False,False,,False
-0x91b460,Inventory.cpp,CInventory::getEquipmentEquippedAt(EEQUIP_LOCATIONS),MISSING,False,False,,False
+0x91b460,Inventory.cpp,CInventory::getEquipmentEquippedAt(EEQUIP_LOCATIONS),MATCH,True,False,,False
 0x91b4c0,Inventory.cpp,CInventory::getEquipmentsEquippedLocation(CEquipment*),MISSING,False,False,,False
-0x91b540,Inventory.cpp,CInventory::isEquipmentEquipped(CEquipment*),MISSING,False,False,,False
+0x91b540,Inventory.cpp,CInventory::isEquipmentEquipped(CEquipment*),MATCH,True,False,,False
 0x91b5b0,Inventory.cpp,CInventory::getEquipmentCountOfGuid(long long),MISSING,False,False,,False
 0x91b680,Inventory.cpp,CInventory::getEquipmentOfGuid(long long),MISSING,False,False,,False
 0x91b780,Inventory.cpp,CInventory::getStackSizeOfEquipment(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b780.cpp,False
@@ -120,24 +259,24 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x91b7a0,Inventory.cpp,CInventory::forceRecalculationOfEquipmentStats(),MISSING,False,False,,False
 0x91b850,Inventory.cpp,"CInventory::canUseEquipment(CEquipment*, CCharacter*)",MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b850.cpp,False
 0x91b890,Inventory.cpp,CInventory::addListener(iInventoryListener*),MISSING,False,False,,False
-0x91b9c0,Inventory.cpp,CInventory::getRequiredPane(CEquipment*),MISSING,False,False,,False
+0x91b9c0,Inventory.cpp,CInventory::getRequiredPane(CEquipment*),MATCH,True,False,,False
 0x91ba50,Inventory.cpp,CInventory::findFreeSlot(CEquipment*),MISSING,False,False,,False
 0x91bc50,Inventory.cpp,"CInventory::canPickup(CEquipment*, bool)",MISSING,False,False,,False
-0x91bd10,Inventory.cpp,"CInventory::canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool)",MISSING,False,False,,False
+0x91bd10,Inventory.cpp,"CInventory::canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool)",MATCH,True,False,,False
 0x91bdc0,Inventory.cpp,"CInventory::canEquip(CEquipment*, bool)",MISSING,False,False,,False
 0x91c2a0,Inventory.cpp,"CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)",MISSING,False,False,,False
 0x91c640,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False
 0x91c720,Inventory.cpp,"CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)",MISSING,False,False,,False
-0x91c9d0,Inventory.cpp,CInventory::updateSkillManagers(float),MISSING,False,False,,False
+0x91c9d0,Inventory.cpp,CInventory::updateSkillManagers(float),MATCH,True,False,,False
 0x91ca60,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0x91cbb0,Inventory.cpp,"CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False
 0x91ccd0,Inventory.cpp,"CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False
-0x91cd60,Inventory.cpp,"CInventory::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MISSING,False,False,,False
+0x91cd60,Inventory.cpp,"CInventory::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MATCH,True,False,,False
 0x91ce00,Inventory.cpp,"CInventory::calculateEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False
 0x91cf50,Inventory.cpp,CInventory::identifyAll(),MISSING,False,False,,False
 0x91cfe0,Inventory.cpp,CInventory::freeInventory(),MISSING,False,False,,False
-0x91d180,Inventory.cpp,CInventory::~CInventory(),MISSING,False,False,,False
-0x91d2e0,Inventory.cpp,CInventory::~CInventory(),MISSING,False,False,,False
+0x91d180,Inventory.cpp,CInventory::~CInventory(),MATCH,True,False,,False
+0x91d2e0,Inventory.cpp,CInventory::~CInventory(),MATCH,True,False,,False
 0x91d300,Inventory.cpp,CInventory::destroyIcons(),MISSING,False,False,,False
 0x91d3a0,Inventory.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0x9231c0,Inventory.cpp,__tcf_15,DIFF,False,False,,False
@@ -148,6 +287,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x923410,Inventory.cpp,"CInventory::getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
 0x9235a0,Inventory.cpp,"CInventory::getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
 0x923730,Inventory.cpp,"CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
+0x9238a0,Inventory.cpp,__tcf_23,MATCH,False,False,,False
+0x923910,Inventory.cpp,__tcf_22,MATCH,False,False,,False
+0x9239a0,Inventory.cpp,__tcf_21,MATCH,False,False,,False
+0x923a30,Inventory.cpp,__tcf_20,MATCH,False,False,,False
+0x923ac0,Inventory.cpp,__tcf_19,MATCH,False,False,,False
+0x923b30,Inventory.cpp,__tcf_18,MATCH,False,False,,False
 0x923ba0,Inventory.cpp,__tcf_17,MATCH,False,False,,False
 0x923c30,Inventory.cpp,__tcf_16,MATCH,False,False,,False
 0x923cc0,Inventory.cpp,__tcf_14,DIFF,False,False,,False
@@ -160,12 +305,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x924070,Inventory.cpp,__tcf_6,DIFF,False,False,,False
 0x9240e0,Inventory.cpp,__tcf_4,DIFF,False,False,,False
 0x924170,Inventory.cpp,__tcf_3,DIFF,False,False,,False
-0x924200,Inventory.cpp,CInventory::getSetCount(CSet*),MISSING,False,False,,False
+0x924200,Inventory.cpp,CInventory::getSetCount(CSet*),MATCH,True,False,,False
 0x924320,Inventory.cpp,__tcf_10,DIFF,False,False,,False
 0x9243b0,Inventory.cpp,"CInventory::addSection(EINVENTORY_PANES, unsigned int)",MATCH,True,False,,False
 0x924440,Inventory.cpp,CInventory::calculateEffectValues(),MISSING,False,False,,False
 0x924810,Inventory.cpp,CInventory::removeEquipment(CEquipment*),MISSING,False,False,,False
-0x9249b0,Inventory.cpp,CInventory::unequipEquipment(CEquipment*),MISSING,False,False,,False
+0x9249b0,Inventory.cpp,CInventory::unequipEquipment(CEquipment*),MATCH,True,False,,False
 0x924ab0,Inventory.cpp,CInventory::verifyEquipment(),MISSING,False,False,,False
 0x924bd0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, int, bool)",MISSING,False,False,,False
 0x9251b0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, bool)",MISSING,False,False,,False
@@ -175,6 +320,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x925970,Inventory.cpp,CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*),MISSING,False,False,,False
 0x925d30,Inventory.cpp,CInventory::swapWeaponSet(),MISSING,False,False,,False
 0x926000,Inventory.cpp,"CInventory::CInventory(CCharacter*, unsigned int)",MISSING,False,False,,False
+0x926370,Inventory.cpp,"std::_Rb_tree<EEFFECT_TYPE, std::pair<EEFFECT_TYPE const, float>, std::_Select1st<std::pair<EEFFECT_TYPE const, float> >, std::less<EEFFECT_TYPE>, std::allocator<std::pair<EEFFECT_TYPE const, float> > >::_M_erase(std::_Rb_tree_node<std::pair<EEFFECT_TYPE const, float> >*)",MATCH,False,False,,False
 0x9266a0,Inventory.cpp,"std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> >::_M_insert_aux(__gnu_cxx::__normal_iterator<EINVENTORY_PANES*, std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> > >, EINVENTORY_PANES const&)",MATCH,False,False,,False
 0x9269b0,automap.cpp,CAutomap::clear(),MATCH,True,False,,False
 0x926a00,automap.cpp,"CAutomap::setRevealed(int, int, float)",MATCH,True,False,,False
@@ -369,7 +515,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x962630,level.cpp,CLevel::populate(bool),MISSING,False,False,,False
 0x965f00,level.cpp,"CLevel::saveRoomLayoutForQuickLoad(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0x968d40,level.cpp,CLogicNodeState::save(_IO_FILE*),MISSING,False,False,,False
-0x968ef0,levelstate.cpp,CLevelState::CLevelState(int),DIFF,False,False,,False
+0x968ef0,levelstate.cpp,CLevelState::CLevelState(int),MATCH,True,False,,False
 0x969000,levelstate.cpp,CLevelState::restoreAutomap(CAutomap*),MATCH,True,False,,False
 0x969050,levelstate.cpp,CLevelState::addAutomap(CAutomap*),MISSING,False,False,,False
 0x9690d0,levelstate.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
@@ -402,6 +548,20 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x970dd0,levelstate.cpp,CLevelState::~CLevelState(),MISSING,False,False,,False
 0x9711b0,levelstate.cpp,CLevelState::~CLevelState(),MISSING,False,False,,False
 0x9711d0,levelstate.cpp,"std::vector<CLogicNodeState*, std::allocator<CLogicNodeState*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CLogicNodeState**, std::vector<CLogicNodeState*, std::allocator<CLogicNodeState*> > >, CLogicNodeState* const&)",MATCH,False,False,,False
+0x971360,leveltemplatedata.cpp,CLevelTemplateData::getRandomChunk(unsigned int),MATCH,True,False,,False
+0x9713c0,leveltemplatedata.cpp,CLevelTemplateData::getRandomLayout(),MISSING,False,False,,False
+0x971410,leveltemplatedata.cpp,CLevelTemplateData::resetOdds(),MISSING,False,False,,False
+0x971530,leveltemplatedata.cpp,"CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",MISSING,False,False,,False
+0x9725d0,leveltemplatedata.cpp,"CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",MISSING,False,False,,False
+0x972980,leveltemplatedata.cpp,"CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",MISSING,False,False,,False
+0x972b80,leveltemplatedata.cpp,CLevelTemplateData::deleteLayouts(),MISSING,False,False,,False
+0x972e90,leveltemplatedata.cpp,"CLevelTemplateData::matchExits(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",MISSING,False,False,,False
+0x973370,leveltemplatedata.cpp,CLevelTemplateData::createRandomLayout(int),MISSING,False,False,,False
+0x974f80,leveltemplatedata.cpp,CLevelTemplateData::chooseUnitSpawners(CResourceManager*),MISSING,False,False,,False
+0x975370,leveltemplatedata.cpp,CLevelTemplateData::~CLevelTemplateData(),MISSING,False,False,,False
+0x9762d0,leveltemplatedata.cpp,CLevelTemplateData::~CLevelTemplateData(),MISSING,False,False,,False
+0x9762f0,leveltemplatedata.cpp,CLevelTemplateData::load(wchar_t const*),MISSING,False,False,,False
+0x97bfa0,leveltemplatedata.cpp,CLevelTemplateData::CLevelTemplateData(wchar_t const*),MISSING,False,False,,False
 0x97de60,Counter.cpp,CCounter::reset(),MATCH,True,False,,False
 0x97de70,Counter.cpp,CCounter::updateCounter(),MATCH,True,False,,False
 0x97df00,Counter.cpp,CCounter::subtract(int),MATCH,True,False,,False
@@ -457,7 +617,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x99b950,RandomChoice.cpp,__tcf_1,MATCH,False,False,,False
 0x99b9e0,RandomChoice.cpp,__tcf_0,MATCH,False,False,,False
 0x99ba50,RandomChoice.cpp,CRandomChoice::roll(),MATCH,True,False,,False
-0x99bbb0,Teleport.cpp,"CTeleport::activate(Ogre::Vector3, Ogre::Vector3)",DIFF,False,False,,False
+0x99bbb0,Teleport.cpp,"CTeleport::activate(Ogre::Vector3, Ogre::Vector3)",MATCH,True,False,,False
 0x99bd20,Teleport.cpp,CTeleport::~CTeleport(),MATCH,True,False,,False
 0x99bd30,Teleport.cpp,CTeleport::~CTeleport(),MATCH,True,False,,False
 0x99bd50,Teleport.cpp,CTeleport::CTeleport(CResourceManager*),MATCH,True,False,,False
@@ -589,163 +749,3 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x9d3b50,Layout.cpp,CLayout::update(float),MATCH,True,False,,False
 0x9d3ba0,Layout.cpp,"CLayout::processInputs(unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
 0x9d3cd0,Layout.cpp,CLayout::editorObjectsAboutToBeDelete(),MATCH,True,False,,False
-0x9d3d10,Layout.cpp,CLayout::setDurationModification(float),DIFF,False,False,,False
-0x9d3dc0,Layout.cpp,"CLayout::eventFiredByDescriptor(unsigned int, CDescriptor*, CEditorBaseObject*)",DIFF,False,False,,False
-0x9d3df0,Layout.cpp,non-virtual thunk to CLayout::setHighlighted(bool),MATCH,True,False,,False
-0x9d3e00,Layout.cpp,CLayout::setHighlighted(bool),DIFF,False,False,,False
-0x9d3e70,Layout.cpp,CLayout::getNumberOfParticlesUpdating(),MISSING,False,False,,False
-0x9d3ea0,Layout.cpp,CLayout::setVisible(bool),MISSING,False,False,,False
-0x9d3f40,Layout.cpp,"CLayout::CLayout(CResourceManager*, ELAYOUT_TYPES)",MISSING,False,False,,False
-0x9d4080,Layout.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0x9dd740,Layout.cpp,global constructors keyed to CLayout::setCacheingParticlesForLevel(bool),MATCH,False,False,,False
-0x9dd9a0,Layout.cpp,CLayout::SetSceneOwner(CEditorScene*),MISSING,False,False,,False
-0x9ddb00,Layout.cpp,"CLayout::getLayoutToClone(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
-0x9ddc00,Layout.cpp,"CLayout::callFunctionOnObjects(CLayout::ELAYOUT_FUNCTION_TYPES, bool)",MISSING,False,False,,False
-0x9de280,Layout.cpp,CLayout::resume(),MATCH,True,False,,False
-0x9de290,Layout.cpp,CLayout::pause(),MATCH,True,False,,False
-0x9de2a0,Layout.cpp,CLayout::stop(bool),MATCH,True,False,,False
-0x9de2b0,Layout.cpp,CLayout::startBackwards(),MATCH,True,False,,False
-0x9de2c0,Layout.cpp,CLayout::start(),MATCH,True,False,,False
-0x9de2d0,Layout.cpp,CLayout::setStartOnLoad(bool),MISSING,False,False,,False
-0x9de390,Layout.cpp,"CLayout::addLayoutForCloningAndControlling(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
-0x9df200,Layout.cpp,__tcf_5,DIFF,False,False,,False
-0x9df290,Layout.cpp,__tcf_4,MATCH,False,False,,False
-0x9df300,Layout.cpp,__tcf_3,DIFF,False,False,,False
-0x9df390,Layout.cpp,__tcf_2,MATCH,False,False,,False
-0x9df420,Layout.cpp,__tcf_1,MATCH,False,False,,False
-0x9df490,Layout.cpp,__tcf_0,MATCH,False,False,,False
-0x9df7d0,Layout.cpp,CLayout::removeAllCloneableObjects(),MATCH,True,False,,False
-0x9df820,Layout.cpp,CLayout::editorObjectCreated(CEditorBaseObject*),MISSING,False,False,,False
-0x9dfa60,Layout.cpp,CLayout::initOnLoad(),MISSING,False,False,,False
-0x9dfb50,Layout.cpp,CLayout::~CLayout(),DIFF,False,False,,False
-0x9dfe10,Layout.cpp,non-virtual thunk to CLayout::~CLayout(),MATCH,True,False,,False
-0x9dfe20,Layout.cpp,non-virtual thunk to CLayout::~CLayout(),MATCH,True,False,,False
-0x9dfe30,Layout.cpp,non-virtual thunk to CLayout::~CLayout(),MATCH,True,False,,False
-0x9dfe40,Layout.cpp,non-virtual thunk to CLayout::~CLayout(),MATCH,True,False,,False
-0x9dfe50,Layout.cpp,CLayout::~CLayout(),MATCH,True,False,,False
-0x9dfe70,Layout.cpp,"CLayout::loadLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, CTimerStatics*, bool, bool, unsigned int)",MISSING,False,False,,False
-0x9e0af0,Layout.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> const&)",DIFF,False,False,,False
-0x9e0f80,Layout.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CLayout*> >*)",MATCH,False,False,,False
-0x9e7080,PositionableObject.cpp,CPositionableObject::getPosition(bool),MATCH,True,False,,False
-0x9e70e0,PositionableObject.cpp,CPositionableObject::setPosition(Ogre::Vector3 const&),MATCH,True,False,,False
-0x9e7140,PositionableObject.cpp,CPositionableObject::updateOrientation(),MATCH,True,False,,False
-0x9e7160,PositionableObject.cpp,CPositionableObject::~CPositionableObject(),MATCH,True,False,,False
-0x9e7170,PositionableObject.cpp,CPositionableObject::~CPositionableObject(),MATCH,True,False,,False
-0x9e7190,PositionableObject.cpp,"global constructors keyed to CPositionableObject::CPositionableObject(CResourceManager*, Ogre::SceneManager*)",DIFF,False,False,,False
-0x9e7a50,PositionableObject.cpp,"CPositionableObject::CPositionableObject(CResourceManager*, Ogre::SceneManager*)",MATCH,True,False,,False
-0x9e7bb0,PositionableObject.cpp,__tcf_1,MATCH,False,False,,False
-0x9e7c20,PositionableObject.cpp,__tcf_3,MATCH,False,False,,False
-0x9e7cb0,PositionableObject.cpp,__tcf_2,MATCH,False,False,,False
-0x9e7d20,PositionableObject.cpp,__tcf_0,MATCH,False,False,,False
-0x9f1a60,RandomGroup.cpp,CRandomGroup::SetRandomType(unsigned int),MATCH,True,False,,False
-0x9f1a70,RandomGroup.cpp,CRandomGroup::canGroupBeCreatedBasedOffOfPlayerClass(),MISSING,False,False,,False
-0x9f1b40,RandomGroup.cpp,CRandomGroup::canGroupBeCreatedBasedOffOfQuests(),MISSING,False,False,,False
-0x9f1ca0,RandomGroup.cpp,CRandomGroup::canGroupBeCreatedBasedOffOfDifficulty(),MISSING,False,False,,False
-0x9f1d00,RandomGroup.cpp,CRandomGroup::canGroupBeCreatedBasedOffOfDungeon(),MATCH,True,False,,False
-0x9f1d70,RandomGroup.cpp,CRandomGroup::getGroupCanBeCreated(),MATCH,True,False,,False
-0x9f1dd0,RandomGroup.cpp,CRandomGroup::setVisible(bool),MISSING,False,False,,False
-0x9f1e40,RandomGroup.cpp,CRandomGroup::calculateChildren(),MISSING,False,False,,False
-0x9f2340,RandomGroup.cpp,CRandomGroup::positionUpdated(Ogre::Vector3 const&),MISSING,False,False,,False
-0x9f26e0,RandomGroup.cpp,CRandomGroup::CRandomGroup(CResourceManager*),DIFF,False,False,,False
-0x9f9950,RandomGroup.cpp,CRandomGroup::~CRandomGroup(),DIFF,False,False,,False
-0x9f9bc0,RandomGroup.cpp,non-virtual thunk to CRandomGroup::~CRandomGroup(),MATCH,True,False,,False
-0x9f9bd0,RandomGroup.cpp,non-virtual thunk to CRandomGroup::~CRandomGroup(),MATCH,True,False,,False
-0x9f9be0,RandomGroup.cpp,CRandomGroup::~CRandomGroup(),MATCH,True,False,,False
-0x9f9c00,RandomGroup.cpp,"CRandomGroup::chooseChildrenByRandomChoice(TArrayList<CRandomGroup*>&, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
-0x9fa120,RandomGroup.cpp,non-virtual thunk to CRandomGroup::GetRandomWeight(),MATCH,False,False,,False
-0x9fa130,RandomGroup.cpp,CRandomGroup::GetRandomWeight(),MATCH,False,False,,False
-0x9fa140,RandomGroup.cpp,non-virtual thunk to CRandomGroup::SetRandomWeight(unsigned int),MATCH,False,False,,False
-0x9fa150,RandomGroup.cpp,CRandomGroup::SetRandomWeight(unsigned int),MATCH,False,False,,False
-0x9fa160,Room.cpp,global constructors keyed to CRoom::CRoom(CResourceManager*),MATCH,False,False,,False
-0x9fa1d0,Room.cpp,CRoom::CRoom(CResourceManager*),MATCH,True,False,,False
-0x9fa200,Room.cpp,CRoom::~CRoom(),MATCH,True,False,,False
-0x9fa2a0,Room.cpp,CRoom::~CRoom(),MATCH,True,False,,False
-0xa01ac0,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeDestroyEntity(),MATCH,True,False,,False
-0xa01af0,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeDetachEntity(),MATCH,True,False,,False
-0xa01b20,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeAttachEntity(Ogre::Entity*),MATCH,True,False,,False
-0xa01bc0,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeAddChild(Ogre::SceneNode*),MATCH,True,False,,False
-0xa01c20,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeDestroy(),MATCH,True,False,,False
-0xa01c90,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeRemoveFromParent(),MATCH,True,False,,False
-0xa01cb0,SceneNodeObject.cpp,CSceneNodeObject::setVisible(bool),MATCH,True,False,,False
-0xa01d40,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeCreate(),MATCH,True,False,,False
-0xa01d90,SceneNodeObject.cpp,CSceneNodeObject::setResourceManager(CResourceManager*),DIFF,False,False,,False
-0xa01e10,SceneNodeObject.cpp,"CSceneNodeObject::sceneNodeSetParent(Ogre::SceneNode*, bool)",MATCH,True,False,,False
-0xa01eb0,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeAddChild(CSceneNodeObject*),MATCH,True,False,,False
-0xa01ee0,SceneNodeObject.cpp,CSceneNodeObject::SetSceneOwner(CEditorScene*),MATCH,True,False,,False
-0xa01f30,SceneNodeObject.cpp,CSceneNodeObject::setParentPositionableObject(CPositionableObject*),DIFF,False,False,,False
-0xa01f50,SceneNodeObject.cpp,CSceneNodeObject::~CSceneNodeObject(),MATCH,True,False,,False
-0xa01fa0,SceneNodeObject.cpp,CSceneNodeObject::~CSceneNodeObject(),MATCH,True,False,,False
-0xa01fc0,SceneNodeObject.cpp,"CSceneNodeObject::CSceneNodeObject(CResourceManager*, Ogre::SceneManager*)",MATCH,True,False,,False
-0xa02080,SceneNodeObject.cpp,"global constructors keyed to CSceneNodeObject::CSceneNodeObject(CResourceManager*, Ogre::SceneManager*)",DIFF,False,False,,False
-0xa029b0,SceneNodeObject.cpp,__tcf_0,MATCH,False,False,,False
-0xa02a40,SceneNodeObject.cpp,__tcf_3,MATCH,False,False,,False
-0xa02ad0,SceneNodeObject.cpp,__tcf_2,MATCH,False,False,,False
-0xa02b40,SceneNodeObject.cpp,__tcf_1,MATCH,False,False,,False
-0xa02bb0,Shape.cpp,CShape::getMaxRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02bb0.cpp,False
-0xa02bf0,Shape.cpp,CShape::getMinRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02bf0.cpp,False
-0xa02c30,Shape.cpp,CShape::getAngleOfReleaseAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02c30.cpp,False
-0xa02c60,Shape.cpp,CShape::getAngleOffsetAtPercent(float),MISSING,False,False,,False
-0xa02ce0,Shape.cpp,CShape::setShape(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02ce0.cpp,False
-0xa02cf0,Shape.cpp,"CShape::setAngleOffset(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02cf0.cpp,False
-0xa02d50,Shape.cpp,"CShape::setAngleOfRelease(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02d50.cpp,False
-0xa02db0,Shape.cpp,"CShape::setMinRadius(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02db0.cpp,False
-0xa02e10,Shape.cpp,"CShape::setMaxRadius(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02e10.cpp,False
-0xa02e70,Shape.cpp,CShape::getAngleOffset(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02e70.cpp,False
-0xa02e80,Shape.cpp,CShape::getAngleOfRelease(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02e80.cpp,False
-0xa02e90,Shape.cpp,CShape::getMinRadius(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02e90.cpp,False
-0xa02ea0,Shape.cpp,CShape::getMaxRadius(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02ea0.cpp,False
-0xa02eb0,Shape.cpp,CShape::getRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02eb0.cpp,False
-0xa02f10,Shape.cpp,"CShape::calculatePositionOnSphere(float, float)",MISSING,False,False,,False
-0xa030e0,Shape.cpp,CShape::~CShape(),MISSING,False,False,,False
-0xa03200,Shape.cpp,CShape::~CShape(),MISSING,False,False,,False
-0xa03220,Shape.cpp,CShape::CShape(CResourceManager*),MISSING,False,False,,False
-0xa04a20,Shape.cpp,"CShape::positionWithRadiusIntersectsBox(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa04c70,Shape.cpp,"CShape::calculatePositionBetweenAnglesAndRadius(float, float)",MISSING,False,False,,False
-0xa04e50,Shape.cpp,"CShape::calculateLineSequment(float, Ogre::Vector3&, Ogre::Vector3&)",MISSING,False,False,,False
-0xa05110,Shape.cpp,"CShape::calculatePositionOnLineBetweenAngles(float, float)",MISSING,False,False,,False
-0xa05260,Shape.cpp,"CShape::lineIntersectsPosition(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa05330,Shape.cpp,"CShape::calculatePositionOnBox(float, float)",MISSING,False,False,,False
-0xa055d0,Shape.cpp,"CShape::calculatePositionFromPercent(float, float)",MISSING,False,False,,False
-0xa056b0,Shape.cpp,"CShape::positionIntersectsAngle(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa05cc0,Shape.cpp,"CShape::getPositionIsInShapeAtPercent(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa06700,Shape.cpp,"CShape::calculateOrientation(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",MISSING,False,False,,False
-0xa06a30,Shape.cpp,"CShape::updatePositionAndOrientation(Ogre::Vector3&, Ogre::Quaternion&, float, float)",MISSING,False,False,,False
-0xa06b30,Shape.cpp,"CShape::updateVisual(bool, float)",MISSING,False,False,,False
-0xa07e20,SoundObject.cpp,CSoundObject::positionUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
-0xa07e40,SoundObject.cpp,CSoundObject::isLooping(),MATCH,True,False,,False
-0xa07e60,SoundObject.cpp,CSoundObject::stop(),MATCH,True,False,,False
-0xa07e90,SoundObject.cpp,CSoundObject::resume(),MATCH,True,False,,False
-0xa07ec0,SoundObject.cpp,CSoundObject::pause(),MATCH,True,False,,False
-0xa07ee0,SoundObject.cpp,CSoundObject::setVisible(bool),MATCH,True,False,,False
-0xa07f10,SoundObject.cpp,CSoundObject::play(),MISSING,False,False,,False
-0xa08030,SoundObject.cpp,CSoundObject::setEnabled(bool),MATCH,True,False,,False
-0xa08070,SoundObject.cpp,CSoundObject::reset(),MISSING,False,False,,False
-0xa08090,SoundObject.cpp,CSoundObject::updateSounds(float),DIFF,False,False,,False
-0xa08140,SoundObject.cpp,CSoundObject::setSoundBankGuid(long long),MISSING,False,False,,False
-0xa081c0,SoundObject.cpp,non-virtual thunk to CSoundObject::editorSelectionChanged(bool),MATCH,True,False,,False
-0xa081d0,SoundObject.cpp,CSoundObject::editorSelectionChanged(bool),DIFF,False,False,,False
-0xa08240,SoundObject.cpp,CSoundObject::~CSoundObject(),DIFF,False,False,,False
-0xa082c0,SoundObject.cpp,non-virtual thunk to CSoundObject::~CSoundObject(),MATCH,True,False,,False
-0xa082d0,SoundObject.cpp,non-virtual thunk to CSoundObject::~CSoundObject(),MATCH,True,False,,False
-0xa082e0,SoundObject.cpp,CSoundObject::~CSoundObject(),MATCH,True,False,,False
-0xa08300,SoundObject.cpp,CSoundObject::CSoundObject(CResourceManager*),MISSING,False,False,,False
-0xa0a1b0,SoundObject.cpp,__tcf_2,DIFF,False,False,,False
-0xa0a220,SoundObject.cpp,__tcf_1,DIFF,False,False,,False
-0xa0a290,SoundObject.cpp,__tcf_0,DIFF,False,False,,False
-0xa0a320,SoundObject.cpp,__tcf_4,DIFF,False,False,,False
-0xa0a3b0,SoundObject.cpp,__tcf_3,DIFF,False,False,,False
-0xa0a420,SoundObject.cpp,CSoundObject::setSoundBankNameIndex(unsigned int),MISSING,False,False,,False
-0xa0a5a0,AffectorWrapper.cpp,iSelected::~iSelected(),MATCH,False,False,,False
-0xa0a5b0,AffectorWrapper.cpp,iSelected::~iSelected(),MATCH,False,False,,False
-0xa0a5c0,UnitSpawner.cpp,CUnitSpawner::stop(),MATCH,True,True,handoff/recovered-pass10/snippets/UnitSpawner.cpp/0xa0a5c0.cpp,False
-0xa0a5d0,UnitSpawner.cpp,CUnitSpawner::getParticlesStillVisible(),MATCH,True,True,handoff/recovered-pass10/snippets/UnitSpawner.cpp/0xa0a5d0.cpp,False
-0xa0a660,UnitSpawner.cpp,CUnitSpawner::createUnitsInMemory(),MISSING,False,False,,False
-0xa0a6c0,UnitSpawner.cpp,CUnitSpawner::stopAllParticles(),MISSING,False,False,,False
-0xa0a720,UnitSpawner.cpp,CUnitSpawner::reset(),MISSING,False,False,,False
-0xa0a7d0,UnitSpawner.cpp,CUnitSpawner::clear(),MISSING,False,False,,False
-0xa0a860,UnitSpawner.cpp,CUnitSpawner::addSpawnedUnit(CBaseUnit*),MISSING,False,False,,False
-0xa0ab40,UnitSpawner.cpp,"CUnitSpawner::createParticleSystemAt(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3 const&, Ogre::Quaternion const&, unsigned int)",MISSING,False,False,,False
-0xa0adc0,UnitSpawner.cpp,"CUnitSpawner::createAndFireMissile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3 const&, Ogre::Quaternion const&)",MISSING,False,False,,False
-0xa0aeb0,UnitSpawner.cpp,CUnitSpawner::hideAndDisableUnits(bool),MISSING,False,False,,False
-0xa0b050,UnitSpawner.cpp,CUnitSpawner::CUnitSpawner(CResourceManager*),MISSING,False,False,,False
-0xa14500,UnitSpawner.cpp,"non-virtual thunk to CUnitSpawner::unitStateChange(CBaseUnit*, EUNIT_STATES)",MISSING,False,False,,False

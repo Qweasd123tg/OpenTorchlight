@@ -10,7 +10,7 @@
 #undef protected
 typedef char size_money[sizeof(CMoneyTaker)==0x68?1:-1];
 typedef char size_client[sizeof(CGameClient)==0x3910?1:-1];
-typedef char size_character[sizeof(CCharacter)==0x720?1:-1];
+typedef char size_character[sizeof(CCharacter)==0x778?1:-1];
 typedef char size_player[sizeof(CPlayer)==0xa70?1:-1];
 typedef char offset_player[__builtin_offsetof(CGameClient,m_pPlayer)==0x58?1:-1];
 typedef char offset_gold[__builtin_offsetof(CCharacter,m_iGold)==0x444?1:-1];

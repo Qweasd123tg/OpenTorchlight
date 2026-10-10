@@ -15,10 +15,10 @@ CLevelState::CLevelState(int iLevelId)
     : CRunicCore(),
       m_iLevelId(iLevelId),
       m_sLevelName(EMPTY_WSTRING),
-      m_lCharacters(0),
-      m_lItems(0),
-      m_lLogicStates(0),
-      m_lLevelStrings(0),
+      m_lCharacters(),
+      m_lItems(),
+      m_lLogicStates(),
+      m_lLevelStrings(),
       m_lFormations(10),
       m_iStateVersion(0),
       m_iAutomapWidth(0),
@@ -41,11 +41,5 @@ void CLevelState::restoreAutomap(CAutomap *pAutomap)
 
 void CLevelState::addLogicState(CLogicNodeState *pLogicState, CLevel &Level)
 {
-    struct CLevelStateLayout
-    {
-        char m_gap[0x50];
-        std::vector<CLogicNodeState *> m_lLogicStates;
-    };
-
-    reinterpret_cast<CLevelStateLayout *>(this)->m_lLogicStates.push_back(pLogicState);
+    m_lLogicStates.push_back(pLogicState);
 }

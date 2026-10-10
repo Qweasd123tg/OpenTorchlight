@@ -16,7 +16,7 @@ namespace Ogre
     struct VertexBoneAssignment_s;
 }
 
-// Results of classifyPoint and classifyPointForSphere (returned as a byte).
+// Results of classifyPoint and classifyPointForSphere (returned in EAX).
 // Enumerator names are ours: the distance along the plane normal from the
 // point to the plane is below -epsilon, above +epsilon, or within it.
 enum EPLANE_SIDE
@@ -64,9 +64,9 @@ namespace MATH
                             Ogre::Vector3& result);
     void closestPointOnTriangle(const Ogre::Vector3& a, const Ogre::Vector3& b, const Ogre::Vector3& c,
                                 const Ogre::Vector3& point, Ogre::Vector3& result);
-    unsigned char classifyPoint(const Ogre::Vector3& point, const Ogre::Vector3& planePoint,
+    EPLANE_SIDE classifyPoint(const Ogre::Vector3& point, const Ogre::Vector3& planePoint,
                                 const Ogre::Vector3& planeNormal);
-    unsigned char classifyPointForSphere(const Ogre::Vector3& center, const Ogre::Vector3& planePoint,
+    EPLANE_SIDE classifyPointForSphere(const Ogre::Vector3& center, const Ogre::Vector3& planePoint,
                                          const Ogre::Vector3& planeNormal, float radius);
     bool getLinePlaneIntersection(const Ogre::Vector3& start, const Ogre::Vector3& end,
                                   const Ogre::Vector3& planePoint, const Ogre::Vector3& planeNormal,

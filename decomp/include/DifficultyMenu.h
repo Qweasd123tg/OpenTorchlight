@@ -7,6 +7,7 @@
 
 #include <CEGUIEventArgs.h>
 #include <CEGUIWindow.h>
+#include <elements/CEGUICheckbox.h>
 #include <OgreSceneManager.h>
 #include <string>
 #include "DropdownMenu.h"
@@ -18,12 +19,13 @@ class CGameUI;
 class CDifficultyMenu : public CDropdownMenu
 {
 public:
+
     virtual ~CDifficultyMenu();
     virtual void update(float);
     virtual void setOpen(bool);
-    virtual void onClick(ELayoutFunction, std::wstring);
-    long long handle_ExitButton(const CEGUI::EventArgs&);
-    long long handle_CloseButton(const CEGUI::EventArgs&);
+    virtual bool onClick(ELayoutFunction, std::wstring);
+    bool handle_ExitButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     void createMenus();
     CDifficultyMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
 
@@ -31,7 +33,7 @@ public:
     bool m_bUnknownC0;
     bool m_bUnknownC1;
     unsigned char m_gapC2[0x6];
-    long long m_iUnknownC8;
+    CEGUI::Checkbox* m_hardcoreCheckbox;
     bool m_bUnknownD0;
 };
 

@@ -14,6 +14,7 @@ class CSet;
 class CSets : public CRunicCore
 {
 public:
+
     virtual ~CSets();
 
     CSet* getSet(unsigned int index);

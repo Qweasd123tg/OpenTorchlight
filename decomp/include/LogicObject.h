@@ -12,6 +12,11 @@ class CLogicLink;
 class CLogicObject : public CEditorBaseObject
 {
 public:
+    unsigned int AddLogicLink(unsigned int output, CLogicObject* input, unsigned int function);
+
+    void SetXPosition(int position);
+    void SetYPosition(int position);
+
     CLogicObject(CEditorScene* scene, long long objectID, unsigned int id);
     virtual ~CLogicObject();
 
@@ -24,6 +29,9 @@ public:
     bool RemoveLinkByIndex(unsigned int linkIndex);
 
 private:
+    friend int EditorGetCountOfLogicLinksInLogicObject(long long, unsigned int);
+    friend long long EditorGetObjectIDRefedInLogicObject(long long, unsigned int);
+    friend void EditorGetLogicObjectPosition(long long, unsigned int, int&, int&);
     friend class CLogicLink;
     friend struct SmallmatchPass7Probe;
     unsigned int m_iID;

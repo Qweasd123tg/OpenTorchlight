@@ -18,15 +18,16 @@ class CGameUI;
 class CNewGameMenu : public CDropdownMenu
 {
 public:
+
     virtual ~CNewGameMenu();
     virtual void update(float);
     virtual void setOpen(bool);
-    virtual void onClick(ELayoutFunction, std::wstring);
-    long long handle_Submit(const CEGUI::EventArgs&);
-    long long handle_ExitButton(const CEGUI::EventArgs&);
-    long long handle_CloseButton(const CEGUI::EventArgs&);
+    virtual bool onClick(ELayoutFunction, std::wstring);
+    bool handle_Submit(const CEGUI::EventArgs&);
+    bool handle_ExitButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     CNewGameMenu* getEmptySave(std::wstring);
-    long long handle_SubmitPet(const CEGUI::EventArgs&);
+    bool handle_SubmitPet(const CEGUI::EventArgs&);
     void createMenus();
     CNewGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
 
@@ -35,8 +36,8 @@ public:
     bool m_bUnknownC1;
     unsigned char m_gapC2[0x6];
     long long m_iUnknownC8;
-    void* m_pUnknownD0;
-    void* m_pUnknownD8;
+    CEGUI::Window* m_pUnknownD0;
+    CEGUI::Window* m_pUnknownD8;
     long long m_iUnknownE0;
     long long m_iUnknownE8;
     long long m_iUnknownF0;

@@ -22,7 +22,7 @@ public:
     CQuestRewards(CQuest *pQuest);
     long long parseRewardTag(CDataGroup *pDataGroup);
     void calculateRewards();
-    TArrayList<CBaseUnit> *getRewardItems();
+    TArrayList<CBaseUnit*> *getRewardItems();
     std::wstring getRewardString();
     void reInitializeRewards();
 
@@ -39,7 +39,7 @@ public:
     float m_fGoldMaxPercent;
     float m_fFameMinPercent;
     float m_fFameMaxPercent;
-    TArrayList<CBaseUnit> m_rewardItems;
+    TArrayList<CBaseUnit*> m_rewardItems;
 };
 
 #endif

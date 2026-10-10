@@ -2,6 +2,7 @@
 #define OGREUTILITIES_H
 
 #include <string>
+#include "OgreUtilityEnums.h"
 
 namespace Ogre
 {
@@ -12,18 +13,6 @@ namespace Ogre
 // Partial: declarations from OgreUtilities.cpp used by recovered TUs.
 namespace OGRE_UTILITIES
 {
-    // Enumerator names are ours; values follow gPRIMITIVE_NAMES.
-    enum EPRIMITIVES
-    {
-        PRIMITIVE_SPHERE,
-        PRIMITIVE_BOX,
-        PRIMITIVE_PLANE,
-        PRIMITIVE_CYLINDER,
-        PRIMITIVE_CONE,
-        PRIMITIVE_ARROW,
-        PRIMITIVE_COUNT
-    };
-
     static const std::wstring gPRIMITIVE_NAMES[] =
     {
         L"SPHERE",

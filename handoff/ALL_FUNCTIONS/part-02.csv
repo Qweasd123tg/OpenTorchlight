@@ -721,7 +721,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x70d4d0,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::CDescriptorSaveConfiguration(),MATCH,True,False,,False
 0x70d500,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::~CDescriptorSaveConfiguration(),MATCH,True,False,,False
 0x70d5a0,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::~CDescriptorSaveConfiguration(),MATCH,True,False,,False
-0x70d5c0,Editor.cpp,CEditor::getGameClient(),MISSING,False,False,,False
+0x70d5c0,Editor.cpp,CEditor::getGameClient(),MATCH,True,False,,False
 0x70d5d0,Editor.cpp,CEditor::SetMouseWheelDelta(int),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d5d0.cpp,False
 0x70d5e0,Editor.cpp,CEditor::SetPovVelocityMult(float),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d5e0.cpp,False
 0x70d600,Editor.cpp,CEditor::SetRenderWindowHasFocus(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d600.cpp,False
@@ -740,12 +740,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x70de50,Editor.cpp,"CEditor::setAmbientColor(int, int, int)",MISSING,False,False,,False
 0x70def0,Editor.cpp,"CEditor::mouseEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70def0.cpp,False
 0x70df10,Editor.cpp,"CEditor::keyEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70df10.cpp,False
-0x70df30,Editor.cpp,"CEditor::SetBackgroundColor(float, float, float)",MISSING,False,False,,False
+0x70df30,Editor.cpp,"CEditor::SetBackgroundColor(float, float, float)",MATCH,True,False,,False
 0x70dfb0,Editor.cpp,CEditor::setDirectionalIntensity(float),MISSING,False,False,,False
-0x70dff0,Editor.cpp,CEditor::flushKeyManager(),MISSING,False,False,,False
+0x70dff0,Editor.cpp,CEditor::flushKeyManager(),MATCH,True,False,,False
 0x714ff0,Editor.cpp,"std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.2]",MISSING,False,False,,False
 0x715050,Editor.cpp,CEditor::addRedo(CUndo*),MISSING,False,False,,False
+0x7156b0,Editor.cpp,__tcf_2,MATCH,False,False,,False
+0x715740,Editor.cpp,__tcf_1,MATCH,False,False,,False
+0x7157b0,Editor.cpp,__tcf_0,MATCH,False,False,,False
 0x715820,Editor.cpp,CEditor::releaseResources(),MISSING,False,False,,False
-0x7163a0,Editor.cpp,"CEditor::EditorDumpDescriptionOfObjectsToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
-0x716cb0,Editor.cpp,CEditor::reinitScene(),MISSING,False,False,,False
-0x716e30,Editor.cpp,CEditor::GetEditorSceneIDByName(wchar_t const*),MISSING,False,False,,False

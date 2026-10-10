@@ -33,7 +33,7 @@ public:
                                void* value, unsigned int valueSize);
     float GetPropertyPointTimePercent(long long objectID, int propertyID,
                                       int pointID, bool isEvent);
-    void GetPropertyPointValue(long long objectID, int propertyID, int pointID,
+    void* GetPropertyPointValue(long long objectID, int propertyID, int pointID,
                                unsigned int& value);
     void SetPropertyPointTimePercent(long long objectID, int propertyID,
                                       int pointID, float timePercent, bool isEvent);
@@ -48,7 +48,7 @@ public:
     long long RemoveProperty(long long objectID, int propertyID, bool isEvent);
     long long RemoveObjectByID(long long objectID);
 
-    long long GetPropertyIDForObjectInTimelineByIndex(long long objectID, int index);
+    std::pair<int, bool> GetPropertyIDForObjectInTimelineByIndex(long long objectID, int index);
     long long GetObjectIDInTimelineByIndex(int index);
     void resetPropertiesToPercent(float timePercent);
     long long GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,

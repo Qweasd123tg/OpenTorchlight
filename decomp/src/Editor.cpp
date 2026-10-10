@@ -1,10 +1,15 @@
+#include <OgreRenderWindow.h>
+#include <OgreViewport.h>
 #include "Editor.h"
+#include "EditorDLL.h"
 #include "EditorObjectManager.h"
+#include "GameClient.h"
 #include "POV.h"
+#include "ResourceManager.h"
+#include "Settings.h"
 #include "Undo.h"
+#include "iEditorResourceManager.h"
 
-
-// Imported source candidates; historical status is not fresh acceptance.
 void CEditor::SetMouseWheelDelta(int delta)
 {
     m_iMouseWheelDelta = delta;
@@ -80,4 +85,28 @@ void CEditor::keyEvent(unsigned int event, unsigned int code)
 void CEditor::mouseEvent(unsigned int event, unsigned int code)
 {
     if (m_pObjectManager) m_pObjectManager->mouseEvent(event, code);
+}
+
+CGameClient* CEditor::getGameClient()
+{
+    return m_pEditorResourceManager->getGameClient();
+}
+
+void CEditor::SetBackgroundColor(float red,float green,float blue)
+{
+    if (m_pEditorResourceManager) {
+        Ogre::Viewport* viewport = m_pEditorResourceManager->getRenderWindow()->getViewport(0);
+        if (viewport) viewport->setBackgroundColour(Ogre::ColourValue(red, green, blue));
+    }
+}
+
+void CEditor::flushKeyManager()
+{
+    if (getGameClient()) getGameClient()->getKeyManager()->flushAll();
+    if (m_pObjectManager) m_pObjectManager->flushKeyManager();
+}
+
+CEditorScene* CEditor::GetEditorScene(std::wstring name)
+{
+    return GetEditorScene(GetEditorSceneIDByName(name.c_str()));
 }

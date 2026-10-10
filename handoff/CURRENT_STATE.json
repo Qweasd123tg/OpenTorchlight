@@ -1,14 +1,39 @@
 {
-  "accepted_current": 2073,
-  "matched_game": 1847,
-  "behavioral_game": 226,
+  "accepted_current": 2342,
+  "matched_game": 2113,
+  "behavioral_game": 229,
   "pro_definitions": 401,
   "pro_primary_match": 396,
   "pro_primary_behavioral": 5,
   "pro_addresses": 405,
   "pro_overlap_accepted": 405,
-  "total_indexed_addresses": 7114,
-  "all_current_tests": 386,
-  "base_local_commit": "507820cfcc9e3f9b930ab90a00401d7a3d30517d",
-  "pending_large_function": null
+  "total_indexed_addresses": 7663,
+  "all_current_tests": 404,
+  "base_local_commit": "32632318245922fa345a33c24b95890d3078b8e7",
+  "pending_large_function": null,
+  "accepted_bytes": 1137990,
+  "game_functions": 5247,
+  "game_bytes": 3702188,
+  "matched_bytes": 168566,
+  "matched_static_init": 824,
+  "matched_static_init_bytes": 89156,
+  "verified_main_commit": "32632318245922fa345a33c24b95890d3078b8e7",
+  "verified_main_tree": "9e9d4673cc41c0cc2e7c95ecf368721104e0ac23",
+  "refresh": "pass11",
+  "pass11_net_accepted": 269,
+  "pass11_integrated_files": 128,
+  "index_status_counts": {
+    "MATCH": 3494,
+    "DIFF": 2150,
+    "MISSING": 2019
+  },
+  "validation_input_sha256": {
+    "text-event-final-receipt.json": "f8bd5eead0c34f58a925aee598a26971fd9c4b249db61386a0f01a2677f059c7",
+    "pass11-root.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "pass11-root.json": "fe92c105482bc26e9b1891867e00afc96854c2f901a428858847ba4275f62475",
+    "pass11-root.log": "aff74196a242e137d3db50a29f7e6da550db76a885883da79d1f6d005351963b",
+    "pass11-stage-validation.json": "795ae465ce87bfec9461a1d68f7a7123dc4514ae5ea9610094690e1667b42217",
+    "pass11-integrated.json": "d5206c40c11e2ba5a6febd99e6f3a2c52de0e28a6302233cfdf42e2bb5c23e39",
+    "gameui-text-event-after-import-root.json": "138873acedc68e6b131bbe3584028f5e837c99335e04e4403da54f8e9eab01ff"
+  }
 }

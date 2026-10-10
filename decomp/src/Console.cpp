@@ -31,3 +31,7 @@ CConsole::~CConsole()
 }
 
 template TArrayList<std::wstring>::~TArrayList();
+
+void CConsole::keyEvent(unsigned int, unsigned int, long)
+{
+}

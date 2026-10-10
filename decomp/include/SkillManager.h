@@ -16,7 +16,21 @@ class CSkillManager : public CRunicCore
     friend class CSkill;
 
 friend class CEquipment;
+friend class CCharacter;
 public:
+    void deleteSpecificSkill(CSkill* skill);
+    CSkill* getSkillByIndex(int index)
+    {
+        if (index < static_cast<int>(m_OtherSkills.size()))
+        {
+            if (index != -1)
+                return m_OtherSkills[index];
+        }
+        return NULL;
+    }
+
+    bool getAnySkillsCoolingByActivationType(ESKILL_ACTIVATION_TYPE activation);
+
     static void globallyDisableSkills(bool disabled);
     CSkillManager(CResourceManager* resources,CBaseUnit* owner);
     virtual ~CSkillManager();

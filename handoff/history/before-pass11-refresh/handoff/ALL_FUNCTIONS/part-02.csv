@@ -1,0 +1,751 @@
+address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0x6469c0,RoomPieceDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x646a50,RoomPieceDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x646ac0,RoomPieceDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x646c50,RoomPieceDescriptor.cpp,CRoomPieceDescriptor::CRoomPieceDescriptor(),DIFF,False,False,,False
+0x647d70,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setCollisionEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647d80,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setVisibleOnMap(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647d90,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScale(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647db0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleX(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647dd0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleY(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647df0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Set_setScaleZ(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x647e10,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleZ(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x647e40,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleY(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x647e70,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getScaleX(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x647ed0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getVisualIndex(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x647ef0,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getVisibleOnMap(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x647f20,RoomPieceDescriptor.cpp,"CRoomPieceDescriptor::Get_getCollisionEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x648300,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnDirectionStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x648330,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnShapeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x648360,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnOrderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x648390,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnOrderIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x648410,ShapeDescriptor.cpp,CShapeDescriptor::~CShapeDescriptor(),MATCH,True,False,,False
+0x648420,ShapeDescriptor.cpp,CShapeDescriptor::~CShapeDescriptor(),MATCH,True,False,,False
+0x648440,ShapeDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x64c050,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnDirectionIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x64c0d0,ShapeDescriptor.cpp,"CShapeDescriptor::GetSpawnShapeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x64c2e0,ShapeDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x64c350,ShapeDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x64c3c0,ShapeDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x64c430,ShapeDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x64c4c0,ShapeDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x64c530,ShapeDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x64cc40,ShapeDescriptor.cpp,"CShapeDescriptor::CShapeDescriptor(wchar_t const*, wchar_t const*, wchar_t const*, bool, bool, bool)",MISSING,False,False,,False
+0x64df70,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::descriptorSceneDeactivated(CEditorScene*),MATCH,True,False,,False
+0x64dff0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundDataStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x64e070,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundDataIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x64e0d0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundCategoryIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x64e100,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::update(float),DIFF,False,False,,False
+0x64e180,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x64e1e0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False
+0x64e290,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
+0x64e3a0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::~CSoundObjectDescriptor(),MATCH,True,False,,False
+0x64e3b0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::~CSoundObjectDescriptor(),MATCH,True,False,,False
+0x64e3d0,SoundObjectDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x651280,SoundObjectDescriptor.cpp,global constructors keyed to CSoundObjectDescriptor::CSoundObjectDescriptor(),MATCH,False,False,,False
+0x651290,SoundObjectDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x651300,SoundObjectDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x651390,SoundObjectDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x651400,SoundObjectDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x651470,SoundObjectDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6514e0,SoundObjectDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6515e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::GetSoundCategoryStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6516b0,SoundObjectDescriptor.cpp,CSoundObjectDescriptor::CSoundObjectDescriptor(),DIFF,False,False,,False
+0x6523e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Set_setSoundBankCategory(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x6523f0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundBankNameIndex(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x652410,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundBankCategory(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6524b0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getEnvironmental(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6524e0,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Get_getSoundStartsOnActivated(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x652510,SoundObjectDescriptor.cpp,"CSoundObjectDescriptor::Set_setSoundBankNameIndex(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x652700,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::descriptorSceneLoaded(CEditorScene*),MATCH,True,False,,False
+0x652710,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x652740,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x652790,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::update(float),DIFF,False,False,,False
+0x652810,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*),MISSING,False,False,,False
+0x652850,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
+0x6528f0,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::CreateObject(CEditorScene*),MISSING,False,False,,False
+0x652950,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::~CUnitSpawnerDescriptor(),MATCH,True,False,,False
+0x652960,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::~CUnitSpawnerDescriptor(),MATCH,True,False,,False
+0x652980,UnitSpawnerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x65b0b0,UnitSpawnerDescriptor.cpp,global constructors keyed to CUnitSpawnerDescriptor::CUnitSpawnerDescriptor(),MATCH,False,False,,False
+0x65b0c0,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x65b8c0,UnitSpawnerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x65b930,UnitSpawnerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x65b9a0,UnitSpawnerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x65ba10,UnitSpawnerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x65baa0,UnitSpawnerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x65bb10,UnitSpawnerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x65bb80,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False
+0x65c410,UnitSpawnerDescriptor.cpp,CUnitSpawnerDescriptor::CUnitSpawnerDescriptor(),DIFF,False,False,,False
+0x65e3e0,UnitSpawnerDescriptor.cpp,"CUnitSpawnerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x65f220,CounterDescriptor.cpp,"CCounterDescriptor::GetCounterTypeTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x65f250,CounterDescriptor.cpp,"CCounterDescriptor::GetCounterTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0x65f2d0,CounterDescriptor.cpp,"CCounterDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x65f360,CounterDescriptor.cpp,CCounterDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x65f3b0,CounterDescriptor.cpp,CCounterDescriptor::~CCounterDescriptor(),MATCH,True,False,,False
+0x65f3c0,CounterDescriptor.cpp,CCounterDescriptor::~CCounterDescriptor(),MATCH,True,False,,False
+0x65f3e0,CounterDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x662330,CounterDescriptor.cpp,"global constructors keyed to CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x662340,CounterDescriptor.cpp,__tcf_6,MATCH,False,False,,False
+0x6623d0,CounterDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x662440,CounterDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6624b0,CounterDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x662520,CounterDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6625b0,CounterDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x662620,CounterDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x662690,CounterDescriptor.cpp,"CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x662dc0,CounterDescriptor.cpp,"CCounterDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x662dd0,CounterDescriptor.cpp,"CCounterDescriptor::Set_setCount(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x662e10,CounterDescriptor.cpp,"CCounterDescriptor::Get_getStartingValue(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x662e30,CounterDescriptor.cpp,"CCounterDescriptor::Get_getCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x662e50,CounterDescriptor.cpp,"CCounterDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x662e90,InteractiveDescriptor.cpp,"CInteractiveDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x662ea0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0x662eb0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",DIFF,False,False,,False
+0x662f00,InteractiveDescriptor.cpp,"CInteractiveDescriptor::getTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x662f30,InteractiveDescriptor.cpp,"CInteractiveDescriptor::getTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0x662f50,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x662f70,InteractiveDescriptor.cpp,CInteractiveDescriptor::update(float),MATCH,True,False,,False
+0x662ff0,InteractiveDescriptor.cpp,CInteractiveDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x663050,InteractiveDescriptor.cpp,CInteractiveDescriptor::~CInteractiveDescriptor(),MATCH,True,False,,False
+0x663060,InteractiveDescriptor.cpp,CInteractiveDescriptor::~CInteractiveDescriptor(),MATCH,True,False,,False
+0x663080,InteractiveDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x666190,InteractiveDescriptor.cpp,"global constructors keyed to CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x666350,InteractiveDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6663c0,InteractiveDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x666430,InteractiveDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6664a0,InteractiveDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x666530,InteractiveDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6665a0,InteractiveDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x666610,InteractiveDescriptor.cpp,"CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x6670a0,InteractiveDescriptor.cpp,"CInteractiveDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x667690,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::update(float),MATCH,True,False,,False
+0x667710,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x6677b0,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x667810,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::~CLogicTimerDescriptor(),MATCH,True,False,,False
+0x667820,LogicTimerDescriptor.cpp,CLogicTimerDescriptor::~CLogicTimerDescriptor(),MATCH,True,False,,False
+0x667840,LogicTimerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x66a670,LogicTimerDescriptor.cpp,"global constructors keyed to CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x66a680,LogicTimerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x66a6f0,LogicTimerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x66a760,LogicTimerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x66a7d0,LogicTimerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x66a840,LogicTimerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x66a8b0,LogicTimerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x66a940,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x66b1e0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Set_setLoopForever(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x66b1f0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x66b250,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getLoopForever(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66b270,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getLoopCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66b290,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getMaxTimer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66b2b0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getTimer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66b2d0,LogicTimerDescriptor.cpp,"CLogicTimerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66b2f0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x66b360,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x66b3c0,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::~COutputIncrementorDescriptor(),MATCH,True,False,,False
+0x66b3d0,OutputIncrementorDescriptor.cpp,COutputIncrementorDescriptor::~COutputIncrementorDescriptor(),MATCH,True,False,,False
+0x66b3f0,OutputIncrementorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x66e220,OutputIncrementorDescriptor.cpp,"global constructors keyed to COutputIncrementorDescriptor::COutputIncrementorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x66e230,OutputIncrementorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x66e2a0,OutputIncrementorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x66e330,OutputIncrementorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x66e3a0,OutputIncrementorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x66e410,OutputIncrementorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x66e480,OutputIncrementorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x66e4f0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::COutputIncrementorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,True,False,,False
+0x66ec50,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Set_setLoopForever(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x66ec60,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x66ec80,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getLoopForever(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66eca0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getLoopCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66ecc0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getMaxIncrement(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66ece0,OutputIncrementorDescriptor.cpp,"COutputIncrementorDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x66ed00,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x66ee20,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x66ee80,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::~CPuzzleRandomizerDescriptor(),MATCH,True,False,,False
+0x66ee90,PuzzleRandomizerDescriptor.cpp,CPuzzleRandomizerDescriptor::~CPuzzleRandomizerDescriptor(),MATCH,True,False,,False
+0x66eeb0,PuzzleRandomizerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x671ce0,PuzzleRandomizerDescriptor.cpp,"global constructors keyed to CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x671cf0,PuzzleRandomizerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x671d60,PuzzleRandomizerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x671df0,PuzzleRandomizerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x671e60,PuzzleRandomizerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x671ed0,PuzzleRandomizerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x671f40,PuzzleRandomizerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x671fb0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x6723a0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x6723b0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Set_setActiveInputs(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x6723d0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Get_getActiveInputs(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6723f0,PuzzleRandomizerDescriptor.cpp,"CPuzzleRandomizerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x672410,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::GetChoiceTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x672450,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::GetChoiceTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6724e0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
+0x672520,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x672570,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::~CRandomChoiceDescriptor(),MATCH,True,False,,False
+0x672580,RandomChoiceDescriptor.cpp,CRandomChoiceDescriptor::~CRandomChoiceDescriptor(),MATCH,True,False,,False
+0x6725a0,RandomChoiceDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x675450,RandomChoiceDescriptor.cpp,"global constructors keyed to CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x675460,RandomChoiceDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6754d0,RandomChoiceDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x675540,RandomChoiceDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6755b0,RandomChoiceDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x675640,RandomChoiceDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6756b0,RandomChoiceDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x675720,RandomChoiceDescriptor.cpp,__tcf_6,MATCH,False,False,,False
+0x6757b0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x676550,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x676690,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Get_getCount(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6766d0,RandomChoiceDescriptor.cpp,"CRandomChoiceDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x676700,TeleportDescriptor.cpp,"CTeleportDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x676830,TeleportDescriptor.cpp,CTeleportDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x676890,TeleportDescriptor.cpp,CTeleportDescriptor::~CTeleportDescriptor(),MATCH,True,False,,False
+0x6768a0,TeleportDescriptor.cpp,CTeleportDescriptor::~CTeleportDescriptor(),MATCH,True,False,,False
+0x6768c0,TeleportDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x679a80,TeleportDescriptor.cpp,"global constructors keyed to CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x679a90,TeleportDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x679b00,TeleportDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x679b70,TeleportDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x679be0,TeleportDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x679c70,TeleportDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x679ce0,TeleportDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x679f90,TeleportDescriptor.cpp,"CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x67a1c0,TeleportDescriptor.cpp,"CTeleportDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x67a1e0,TeleportDescriptor.cpp,"CTeleportDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x67a210,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x67a270,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::~CTriggerBoxDescriptor(),MATCH,True,False,,False
+0x67a280,TriggerBoxDescriptor.cpp,CTriggerBoxDescriptor::~CTriggerBoxDescriptor(),MATCH,True,False,,False
+0x67a2a0,TriggerBoxDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x67d150,TriggerBoxDescriptor.cpp,"global constructors keyed to CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x67d160,TriggerBoxDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x67d1d0,TriggerBoxDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x67d240,TriggerBoxDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x67d2d0,TriggerBoxDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x67d340,TriggerBoxDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x67d3b0,TriggerBoxDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x67d4b0,TriggerBoxDescriptor.cpp,"CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x67d6e0,TriggerDescriptor.cpp,CTriggerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x67d6f0,TriggerDescriptor.cpp,"CTriggerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x67d770,TriggerDescriptor.cpp,CTriggerDescriptor::update(float),MISSING,False,False,,False
+0x67d800,TriggerDescriptor.cpp,CTriggerDescriptor::~CTriggerDescriptor(),MATCH,True,False,,False
+0x67d810,TriggerDescriptor.cpp,CTriggerDescriptor::~CTriggerDescriptor(),MATCH,True,False,,False
+0x67d830,TriggerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6806e0,TriggerDescriptor.cpp,"global constructors keyed to CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x6806f0,TriggerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x680760,TriggerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6807d0,TriggerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x680860,TriggerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6808d0,TriggerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x680940,TriggerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x680a40,TriggerDescriptor.cpp,"CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x680cf0,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x680d50,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::~CTriggerSphereDescriptor(),MATCH,True,False,,False
+0x680d60,TriggerSphereDescriptor.cpp,CTriggerSphereDescriptor::~CTriggerSphereDescriptor(),MATCH,True,False,,False
+0x680d80,TriggerSphereDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x683c30,TriggerSphereDescriptor.cpp,"global constructors keyed to CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x683c40,TriggerSphereDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x683cb0,TriggerSphereDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x683d20,TriggerSphereDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x683db0,TriggerSphereDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x683e20,TriggerSphereDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x683e90,TriggerSphereDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x683f90,TriggerSphereDescriptor.cpp,"CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x684180,TriggerSphereDescriptor.cpp,"CTriggerSphereDescriptor::Get_getRadius(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6841a0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::update(float),MATCH,True,False,,False
+0x6841b0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetLoopTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6841e0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x684270,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x6843c0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False
+0x684450,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MISSING,False,False,,False
+0x6844a0,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::CreateObject(CEditorScene*),MISSING,False,False,,False
+0x684500,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::~CUnitTriggerDescriptor(),MATCH,True,False,,False
+0x684510,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::~CUnitTriggerDescriptor(),MATCH,True,False,,False
+0x684530,UnitTriggerDescriptor.cpp,CUnitTriggerDescriptor::AddInputsAndOutputs(CDescriptor*),MISSING,False,False,,False
+0x6845d0,UnitTriggerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x68c5f0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetLoopTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x68cef0,UnitTriggerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x68cf60,UnitTriggerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x68cfd0,UnitTriggerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x68d040,UnitTriggerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x68d0d0,UnitTriggerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x68d140,UnitTriggerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x68d1b0,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getItemIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x68d550,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x68d630,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::CUnitTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False
+0x68e280,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetTriggerModelIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x68e500,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::getItemStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x68e740,UnitTriggerDescriptor.cpp,"CUnitTriggerDescriptor::GetTriggerModelStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x68ef20,WarperDescriptor.cpp,"CWarperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
+0x68ef90,WarperDescriptor.cpp,CWarperDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x68eff0,WarperDescriptor.cpp,CWarperDescriptor::~CWarperDescriptor(),MATCH,True,False,,False
+0x68f000,WarperDescriptor.cpp,CWarperDescriptor::~CWarperDescriptor(),MATCH,True,False,,False
+0x68f020,WarperDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x691ed0,WarperDescriptor.cpp,"global constructors keyed to CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x691ee0,WarperDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x691f50,WarperDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x691fc0,WarperDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x692030,WarperDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6920c0,WarperDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x692130,WarperDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x692230,WarperDescriptor.cpp,"CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x692c60,WarperDescriptor.cpp,"CWarperDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x692c80,WarperDescriptor.cpp,"CWarperDescriptor::Set_setLevelDelta(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x692c90,WarperDescriptor.cpp,"CWarperDescriptor::Set_setLevelDepth(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x692ca0,WarperDescriptor.cpp,"CWarperDescriptor::Set_setWaypoint(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x692cb0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getWaypoint(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692ce0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getWarpName(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692d60,WarperDescriptor.cpp,"CWarperDescriptor::Get_getDungeon(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692de0,WarperDescriptor.cpp,"CWarperDescriptor::Get_getLevelDepth(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692e00,WarperDescriptor.cpp,"CWarperDescriptor::Get_getLevelDelta(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692e20,WarperDescriptor.cpp,"CWarperDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x692e50,WarperDescriptor.cpp,"CWarperDescriptor::Set_setWarpName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0x692ef0,WarperDescriptor.cpp,"CWarperDescriptor::Set_setDungeon(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0x692f90,AffectorDescriptor.cpp,CAffectorDescriptor::deleteNotification(),MATCH,True,False,,False
+0x693000,AffectorDescriptor.cpp,"CAffectorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x6930c0,AffectorDescriptor.cpp,CAffectorDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MATCH,True,False,,False
+0x6930e0,AffectorDescriptor.cpp,CAffectorDescriptor::~CAffectorDescriptor(),MATCH,True,False,,False
+0x6930f0,AffectorDescriptor.cpp,CAffectorDescriptor::~CAffectorDescriptor(),MATCH,True,False,,False
+0x693110,AffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x696a00,AffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x696a70,AffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x696ae0,AffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x696b50,AffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x696be0,AffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x696c50,AffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x696f70,AffectorDescriptor.cpp,"CAffectorDescriptor::CAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MISSING,False,False,,False
+0x697780,AlignDescriptor.cpp,CAlignDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6977e0,AlignDescriptor.cpp,CAlignDescriptor::~CAlignDescriptor(),MATCH,True,False,,False
+0x6977f0,AlignDescriptor.cpp,CAlignDescriptor::~CAlignDescriptor(),MATCH,True,False,,False
+0x697810,AlignDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x69aed0,AlignDescriptor.cpp,global constructors keyed to CAlignDescriptor::CAlignDescriptor(),MATCH,False,False,,False
+0x69afe0,AlignDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x69b050,AlignDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x69b0c0,AlignDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x69b350,AlignDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x69b3e0,AlignDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x69b450,AlignDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x69b670,AlignDescriptor.cpp,CAlignDescriptor::CAlignDescriptor(),DIFF,False,False,,False
+0x69baa0,BoxColliderDescriptor.cpp,CBoxColliderDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x69bb00,BoxColliderDescriptor.cpp,CBoxColliderDescriptor::~CBoxColliderDescriptor(),MATCH,True,False,,False
+0x69bb10,BoxColliderDescriptor.cpp,CBoxColliderDescriptor::~CBoxColliderDescriptor(),MATCH,True,False,,False
+0x69bb30,BoxColliderDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x69f1f0,BoxColliderDescriptor.cpp,global constructors keyed to CBoxColliderDescriptor::CBoxColliderDescriptor(),MATCH,False,False,,False
+0x69f200,BoxColliderDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x69f270,BoxColliderDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x69f2e0,BoxColliderDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x69f350,BoxColliderDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x69f3e0,BoxColliderDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x69f450,BoxColliderDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x69f990,BoxColliderDescriptor.cpp,CBoxColliderDescriptor::CBoxColliderDescriptor(),DIFF,False,False,,False
+0x6a0180,ColliderDescriptor.cpp,CColliderDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6a0190,ColliderDescriptor.cpp,"CColliderDescriptor::GetParticleIntersectionTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MATCH,True,False,,False
+0x6a01d0,ColliderDescriptor.cpp,"CColliderDescriptor::GetParticleCollisionTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6a0200,ColliderDescriptor.cpp,"CColliderDescriptor::GetParticleIntersectionTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6a0290,ColliderDescriptor.cpp,"CColliderDescriptor::GetParticleCollisionTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0x6a0310,ColliderDescriptor.cpp,CColliderDescriptor::~CColliderDescriptor(),MATCH,True,False,,False
+0x6a0320,ColliderDescriptor.cpp,CColliderDescriptor::~CColliderDescriptor(),MATCH,True,False,,False
+0x6a0340,ColliderDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6a3a00,ColliderDescriptor.cpp,global constructors keyed to CColliderDescriptor::CColliderDescriptor(wchar_t const*),MATCH,False,False,,False
+0x6a3a10,ColliderDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6a3a80,ColliderDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6a3af0,ColliderDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6a3b60,ColliderDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6a3bf0,ColliderDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6a3c60,ColliderDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6a41a0,ColliderDescriptor.cpp,CColliderDescriptor::CColliderDescriptor(wchar_t const*),DIFF,False,False,,False
+0x6a49d0,CollisionAvoiderDescriptor.cpp,CCollisionAvoiderDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6a4a30,CollisionAvoiderDescriptor.cpp,CCollisionAvoiderDescriptor::~CCollisionAvoiderDescriptor(),MATCH,True,False,,False
+0x6a4a40,CollisionAvoiderDescriptor.cpp,CCollisionAvoiderDescriptor::~CCollisionAvoiderDescriptor(),MATCH,True,False,,False
+0x6a4a60,CollisionAvoiderDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6a8120,CollisionAvoiderDescriptor.cpp,global constructors keyed to CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor(),MATCH,False,False,,False
+0x6a8230,CollisionAvoiderDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6a82a0,CollisionAvoiderDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6a8310,CollisionAvoiderDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6a85a0,CollisionAvoiderDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6a8630,CollisionAvoiderDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6a86a0,CollisionAvoiderDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6a88c0,CollisionAvoiderDescriptor.cpp,CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor(),DIFF,False,False,,False
+0x6a8cf0,ColorAffectorDescriptor.cpp,CColorAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6a8d50,ColorAffectorDescriptor.cpp,CColorAffectorDescriptor::~CColorAffectorDescriptor(),MATCH,True,False,,False
+0x6a8d60,ColorAffectorDescriptor.cpp,CColorAffectorDescriptor::~CColorAffectorDescriptor(),MATCH,True,False,,False
+0x6a8d80,ColorAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6ac440,ColorAffectorDescriptor.cpp,global constructors keyed to CColorAffectorDescriptor::CColorAffectorDescriptor(),MATCH,False,False,,False
+0x6ac770,ColorAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6ac7e0,ColorAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6ac850,ColorAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6ac8c0,ColorAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6ac950,ColorAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6ac9c0,ColorAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6acbe0,ColorAffectorDescriptor.cpp,CColorAffectorDescriptor::CColorAffectorDescriptor(),DIFF,False,False,,False
+0x6ace50,ForceAffectorDescriptor.cpp,"CForceAffectorDescriptor::GetForceApplicationStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MATCH,True,False,,False
+0x6ace90,ForceAffectorDescriptor.cpp,"CForceAffectorDescriptor::GetForceApplicationIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6acf20,ForceAffectorDescriptor.cpp,CForceAffectorDescriptor::~CForceAffectorDescriptor(),MATCH,True,False,,False
+0x6acf30,ForceAffectorDescriptor.cpp,CForceAffectorDescriptor::~CForceAffectorDescriptor(),MATCH,True,False,,False
+0x6acf50,ForceAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6b0610,ForceAffectorDescriptor.cpp,"global constructors keyed to CForceAffectorDescriptor::CForceAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0x6b0720,ForceAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6b0790,ForceAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6b0800,ForceAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6b0a90,ForceAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6b0b20,ForceAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6b0b90,ForceAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6b0db0,ForceAffectorDescriptor.cpp,"CForceAffectorDescriptor::CForceAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0x6b1220,GeometryRotateDescriptor.cpp,CGeometryRotateDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6b1280,GeometryRotateDescriptor.cpp,CGeometryRotateDescriptor::~CGeometryRotateDescriptor(),MATCH,True,False,,False
+0x6b1290,GeometryRotateDescriptor.cpp,CGeometryRotateDescriptor::~CGeometryRotateDescriptor(),MATCH,True,False,,False
+0x6b12b0,GeometryRotateDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6b4970,GeometryRotateDescriptor.cpp,global constructors keyed to CGeometryRotateDescriptor::CGeometryRotateDescriptor(),MATCH,False,False,,False
+0x6b4b80,GeometryRotateDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6b4bf0,GeometryRotateDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6b4c60,GeometryRotateDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6b4cd0,GeometryRotateDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6b4d60,GeometryRotateDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6b4dd0,GeometryRotateDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6b5110,GeometryRotateDescriptor.cpp,CGeometryRotateDescriptor::CGeometryRotateDescriptor(),DIFF,False,False,,False
+0x6b5760,GravityAffectorDescriptor.cpp,CGravityAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6b57c0,GravityAffectorDescriptor.cpp,CGravityAffectorDescriptor::~CGravityAffectorDescriptor(),MATCH,True,False,,False
+0x6b57d0,GravityAffectorDescriptor.cpp,CGravityAffectorDescriptor::~CGravityAffectorDescriptor(),MATCH,True,False,,False
+0x6b57f0,GravityAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6b8eb0,GravityAffectorDescriptor.cpp,global constructors keyed to CGravityAffectorDescriptor::CGravityAffectorDescriptor(),MATCH,False,False,,False
+0x6b91e0,GravityAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6b9250,GravityAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6b92c0,GravityAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6b9330,GravityAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6b93c0,GravityAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6b9430,GravityAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6b9650,GravityAffectorDescriptor.cpp,CGravityAffectorDescriptor::CGravityAffectorDescriptor(),DIFF,False,False,,False
+0x6b9870,JetAffectorDescriptor.cpp,CJetAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6b98d0,JetAffectorDescriptor.cpp,CJetAffectorDescriptor::~CJetAffectorDescriptor(),MATCH,True,False,,False
+0x6b98e0,JetAffectorDescriptor.cpp,CJetAffectorDescriptor::~CJetAffectorDescriptor(),MATCH,True,False,,False
+0x6b9900,JetAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6bcfc0,JetAffectorDescriptor.cpp,global constructors keyed to CJetAffectorDescriptor::CJetAffectorDescriptor(),MATCH,False,False,,False
+0x6bd2f0,JetAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6bd360,JetAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6bd3d0,JetAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6bd440,JetAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6bd4d0,JetAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6bd540,JetAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6bd760,JetAffectorDescriptor.cpp,CJetAffectorDescriptor::CJetAffectorDescriptor(),DIFF,False,False,,False
+0x6bd9d0,LineAffectorDescriptor.cpp,CLineAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6bda30,LineAffectorDescriptor.cpp,CLineAffectorDescriptor::~CLineAffectorDescriptor(),MATCH,True,False,,False
+0x6bda40,LineAffectorDescriptor.cpp,CLineAffectorDescriptor::~CLineAffectorDescriptor(),MATCH,True,False,,False
+0x6bda60,LineAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6c1120,LineAffectorDescriptor.cpp,global constructors keyed to CLineAffectorDescriptor::CLineAffectorDescriptor(),MATCH,False,False,,False
+0x6c1130,LineAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6c11a0,LineAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6c1210,LineAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6c1280,LineAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6c1310,LineAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6c1380,LineAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6c18c0,LineAffectorDescriptor.cpp,CLineAffectorDescriptor::CLineAffectorDescriptor(),DIFF,False,False,,False
+0x6c20a0,LinearForceAffectorDescriptor.cpp,CLinearForceAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6c2100,LinearForceAffectorDescriptor.cpp,CLinearForceAffectorDescriptor::~CLinearForceAffectorDescriptor(),MATCH,True,False,,False
+0x6c2110,LinearForceAffectorDescriptor.cpp,CLinearForceAffectorDescriptor::~CLinearForceAffectorDescriptor(),MATCH,True,False,,False
+0x6c2130,LinearForceAffectorDescriptor.cpp,CLinearForceAffectorDescriptor::CLinearForceAffectorDescriptor(),DIFF,False,False,,False
+0x6c2160,LinearForceAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6c5820,LinearForceAffectorDescriptor.cpp,global constructors keyed to CLinearForceAffectorDescriptor::CLinearForceAffectorDescriptor(),MATCH,False,False,,False
+0x6c5b50,LinearForceAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6c5bc0,LinearForceAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6c5c30,LinearForceAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6c5ca0,LinearForceAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6c5d30,LinearForceAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6c5da0,LinearForceAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6c5fc0,PlaneColliderDescriptor.cpp,CPlaneColliderDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6c6020,PlaneColliderDescriptor.cpp,CPlaneColliderDescriptor::~CPlaneColliderDescriptor(),MATCH,True,False,,False
+0x6c6030,PlaneColliderDescriptor.cpp,CPlaneColliderDescriptor::~CPlaneColliderDescriptor(),MATCH,True,False,,False
+0x6c6050,PlaneColliderDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6c9710,PlaneColliderDescriptor.cpp,global constructors keyed to CPlaneColliderDescriptor::CPlaneColliderDescriptor(),MATCH,False,False,,False
+0x6c9820,PlaneColliderDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6c9890,PlaneColliderDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6c9900,PlaneColliderDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6c9b90,PlaneColliderDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6c9c20,PlaneColliderDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6c9c90,PlaneColliderDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6c9eb0,PlaneColliderDescriptor.cpp,CPlaneColliderDescriptor::CPlaneColliderDescriptor(),DIFF,False,False,,False
+0x6ca2e0,ScaleAffectorDescriptor.cpp,CScaleAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6ca340,ScaleAffectorDescriptor.cpp,CScaleAffectorDescriptor::~CScaleAffectorDescriptor(),MATCH,True,False,,False
+0x6ca350,ScaleAffectorDescriptor.cpp,CScaleAffectorDescriptor::~CScaleAffectorDescriptor(),MATCH,True,False,,False
+0x6ca370,ScaleAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6cda30,ScaleAffectorDescriptor.cpp,global constructors keyed to CScaleAffectorDescriptor::CScaleAffectorDescriptor(),MATCH,False,False,,False
+0x6cda40,ScaleAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6cdab0,ScaleAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6cdb20,ScaleAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6cdb90,ScaleAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6cdc20,ScaleAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6cdc90,ScaleAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6ce1d0,ScaleAffectorDescriptor.cpp,CScaleAffectorDescriptor::CScaleAffectorDescriptor(),DIFF,False,False,,False
+0x6cea90,SineForceAffectorDescriptor.cpp,CSineForceAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6ceaf0,SineForceAffectorDescriptor.cpp,CSineForceAffectorDescriptor::~CSineForceAffectorDescriptor(),MATCH,True,False,,False
+0x6ceb00,SineForceAffectorDescriptor.cpp,CSineForceAffectorDescriptor::~CSineForceAffectorDescriptor(),MATCH,True,False,,False
+0x6ceb20,SineForceAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6d21e0,SineForceAffectorDescriptor.cpp,global constructors keyed to CSineForceAffectorDescriptor::CSineForceAffectorDescriptor(),MATCH,False,False,,False
+0x6d22f0,SineForceAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6d2360,SineForceAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6d23d0,SineForceAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6d2660,SineForceAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6d26f0,SineForceAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6d2760,SineForceAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6d2980,SineForceAffectorDescriptor.cpp,CSineForceAffectorDescriptor::CSineForceAffectorDescriptor(),DIFF,False,False,,False
+0x6d2db0,SphereColliderDescriptor.cpp,CSphereColliderDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6d2e10,SphereColliderDescriptor.cpp,CSphereColliderDescriptor::~CSphereColliderDescriptor(),MATCH,True,False,,False
+0x6d2e20,SphereColliderDescriptor.cpp,CSphereColliderDescriptor::~CSphereColliderDescriptor(),MATCH,True,False,,False
+0x6d2e40,SphereColliderDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6d6500,SphereColliderDescriptor.cpp,global constructors keyed to CSphereColliderDescriptor::CSphereColliderDescriptor(),MATCH,False,False,,False
+0x6d6610,SphereColliderDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6d6680,SphereColliderDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6d66f0,SphereColliderDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6d6980,SphereColliderDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6d6a10,SphereColliderDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6d6a80,SphereColliderDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6d6ca0,SphereColliderDescriptor.cpp,CSphereColliderDescriptor::CSphereColliderDescriptor(),DIFF,False,False,,False
+0x6d70d0,TextureAnimateDescriptor.cpp,CTextureAnimateDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6d7130,TextureAnimateDescriptor.cpp,CTextureAnimateDescriptor::~CTextureAnimateDescriptor(),MATCH,True,False,,False
+0x6d7140,TextureAnimateDescriptor.cpp,CTextureAnimateDescriptor::~CTextureAnimateDescriptor(),MATCH,True,False,,False
+0x6d7160,TextureAnimateDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6da820,TextureAnimateDescriptor.cpp,global constructors keyed to CTextureAnimateDescriptor::CTextureAnimateDescriptor(),MATCH,False,False,,False
+0x6daa30,TextureAnimateDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6daaa0,TextureAnimateDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6dab10,TextureAnimateDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6dab80,TextureAnimateDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6dac10,TextureAnimateDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6dac80,TextureAnimateDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6dafc0,TextureAnimateDescriptor.cpp,CTextureAnimateDescriptor::CTextureAnimateDescriptor(),DIFF,False,False,,False
+0x6db600,TextureRotateDescriptor.cpp,CTextureRotateDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6db660,TextureRotateDescriptor.cpp,CTextureRotateDescriptor::~CTextureRotateDescriptor(),MATCH,True,False,,False
+0x6db670,TextureRotateDescriptor.cpp,CTextureRotateDescriptor::~CTextureRotateDescriptor(),MATCH,True,False,,False
+0x6db690,TextureRotateDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6ded50,TextureRotateDescriptor.cpp,global constructors keyed to CTextureRotateDescriptor::CTextureRotateDescriptor(),MATCH,False,False,,False
+0x6def60,TextureRotateDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6defd0,TextureRotateDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6df040,TextureRotateDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6df0b0,TextureRotateDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6df140,TextureRotateDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6df1b0,TextureRotateDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6df4f0,TextureRotateDescriptor.cpp,CTextureRotateDescriptor::CTextureRotateDescriptor(),DIFF,False,False,,False
+0x6dfb80,VortexAffectorDescriptor.cpp,CVortexAffectorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6dfbe0,VortexAffectorDescriptor.cpp,CVortexAffectorDescriptor::~CVortexAffectorDescriptor(),MATCH,True,False,,False
+0x6dfbf0,VortexAffectorDescriptor.cpp,CVortexAffectorDescriptor::~CVortexAffectorDescriptor(),MATCH,True,False,,False
+0x6dfc10,VortexAffectorDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6e32d0,VortexAffectorDescriptor.cpp,global constructors keyed to CVortexAffectorDescriptor::CVortexAffectorDescriptor(),MATCH,False,False,,False
+0x6e33e0,VortexAffectorDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6e3450,VortexAffectorDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6e34c0,VortexAffectorDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6e3750,VortexAffectorDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6e37e0,VortexAffectorDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6e3850,VortexAffectorDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6e3a70,VortexAffectorDescriptor.cpp,CVortexAffectorDescriptor::CVortexAffectorDescriptor(),DIFF,False,False,,False
+0x6e3f00,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::deleteNotification(),MATCH,True,False,,False
+0x6e3f70,ParticleEmitterWrapperDescriptor.cpp,"CParticleEmitterWrapperDescriptor::GetEmitterTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6e3fa0,ParticleEmitterWrapperDescriptor.cpp,"CParticleEmitterWrapperDescriptor::GetEmitterTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6e4020,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*),MATCH,True,False,,False
+0x6e4040,ParticleEmitterWrapperDescriptor.cpp,"CParticleEmitterWrapperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0x6e4120,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::CreateObject(CEditorScene*),MISSING,False,False,,False
+0x6e4180,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::~CParticleEmitterWrapperDescriptor(),MATCH,True,False,,False
+0x6e4190,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::~CParticleEmitterWrapperDescriptor(),MATCH,True,False,,False
+0x6e41b0,ParticleEmitterWrapperDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6e7b10,ParticleEmitterWrapperDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6e7c10,ParticleEmitterWrapperDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6e7c80,ParticleEmitterWrapperDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6e7cf0,ParticleEmitterWrapperDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6e7d80,ParticleEmitterWrapperDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6e7df0,ParticleEmitterWrapperDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6e8010,ParticleEmitterWrapperDescriptor.cpp,CParticleEmitterWrapperDescriptor::CParticleEmitterWrapperDescriptor(),MISSING,False,False,,False
+0x6ec660,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::update(float),MATCH,True,False,,False
+0x6ec670,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::descriptorSceneActivated(CEditorScene*),MATCH,True,False,,False
+0x6ec680,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::descriptorSceneDeactivated(CEditorScene*),MATCH,True,False,,False
+0x6ec690,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetParticleRenderStyleStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6ec6c0,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetBillboardOriginTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6ec6f0,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetBillboardRotationTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6ec730,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetParticleRenderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6ec760,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetBillboardRotationTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6ec7e0,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetSortIndexStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0x6ec800,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetSortIndexIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6ec820,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*),MATCH,True,False,,False
+0x6ec830,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x6ec950,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6ec9b0,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::~CParticleTechWrapperDescriptor(),MATCH,True,False,,False
+0x6ec9c0,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::~CParticleTechWrapperDescriptor(),MATCH,True,False,,False
+0x6ec9e0,ParticleTechWrapperDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6f00b0,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetParticleRenderStyleIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6f0130,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetBillboardOriginTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6f01a0,ParticleTechWrapperDescriptor.cpp,"CParticleTechWrapperDescriptor::GetParticleRenderIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0x6f03a0,ParticleTechWrapperDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6f0410,ParticleTechWrapperDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6f0480,ParticleTechWrapperDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6f04f0,ParticleTechWrapperDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6f0580,ParticleTechWrapperDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6f05f0,ParticleTechWrapperDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6f09a0,ParticleTechWrapperDescriptor.cpp,CParticleTechWrapperDescriptor::CParticleTechWrapperDescriptor(),MISSING,False,False,,False
+0x6f4740,ParticleWrapperDescriptor.cpp,CParticleWrapperDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0x6f47a0,ParticleWrapperDescriptor.cpp,CParticleWrapperDescriptor::~CParticleWrapperDescriptor(),MATCH,True,False,,False
+0x6f47b0,ParticleWrapperDescriptor.cpp,CParticleWrapperDescriptor::~CParticleWrapperDescriptor(),MATCH,True,False,,False
+0x6f47d0,ParticleWrapperDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6f7e90,ParticleWrapperDescriptor.cpp,global constructors keyed to CParticleWrapperDescriptor::CParticleWrapperDescriptor(),MATCH,False,False,,False
+0x6f80a0,ParticleWrapperDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6f8110,ParticleWrapperDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6f8180,ParticleWrapperDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6f81f0,ParticleWrapperDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6f8280,ParticleWrapperDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6f82f0,ParticleWrapperDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6f8630,ParticleWrapperDescriptor.cpp,CParticleWrapperDescriptor::CParticleWrapperDescriptor(),DIFF,False,False,,False
+0x6f8e80,ParticleWrapperDescriptor.cpp,"CParticleWrapperDescriptor::Set_setVisible(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0x6f8ea0,ParticleWrapperDescriptor.cpp,"CParticleWrapperDescriptor::Get_getVisible(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0x6f90a0,Descriptor.cpp,CDescriptor::GetInputLogicWrapper(unsigned int),MATCH,True,False,,False
+0x6f90e0,Descriptor.cpp,CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,False,False,,False
+0x6f9150,Descriptor.cpp,CDescriptor::GetOutputLogicWrapper(unsigned int),MATCH,True,False,,False
+0x6f9190,Descriptor.cpp,CDescriptor::GetOutputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,False,False,,False
+0x6f9200,Descriptor.cpp,CDescriptor::GetPropertyByIndex(unsigned int),MATCH,True,False,,False
+0x6f9240,Descriptor.cpp,CDescriptor::GetProperty(unsigned int),MATCH,True,False,,False
+0x6f9280,Descriptor.cpp,CDescriptor::deleteAllObjects(),DIFF,False,False,,False
+0x6f92c0,Descriptor.cpp,"CDescriptor::LinkProperty(unsigned int, unsigned int)",DIFF,False,False,,False
+0x6f9420,Descriptor.cpp,CDescriptor::EditorSceneCreatedObject(CEditorBaseObject*),MATCH,True,False,,False
+0x6f9540,Descriptor.cpp,"CDescriptor::SetProperty(CEditorBaseObject*, unsigned int, void const*, unsigned int)",DIFF,False,False,,False
+0x6f95a0,Descriptor.cpp,"CDescriptor::GetPropertyValue(CEditorBaseObject*, unsigned int, unsigned int&)",MATCH,True,False,,False
+0x6f95f0,Descriptor.cpp,"CDescriptor::loadObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
+0x6f98a0,Descriptor.cpp,"CDescriptor::loadObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
+0x6f9960,Descriptor.cpp,"CDescriptor::saveObjects(CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
+0x6f9a20,Descriptor.cpp,CDescriptor::EditorSceneRemovingObject(CEditorBaseObject*),MATCH,True,False,,False
+0x6f9b20,Descriptor.cpp,CDescriptor::cleanForQuickShutDown(),MATCH,True,False,,False
+0x6f9c10,Descriptor.cpp,"CDescriptor::AddInputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",DIFF,False,False,,False
+0x6f9d70,Descriptor.cpp,CDescriptor::getUniqueNumericValueRepresentation(),DIFF,False,False,,False
+0x6f9e70,Descriptor.cpp,CDescriptor::CDescriptor(int),DIFF,False,False,,False
+0x6fa080,Descriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x6fceb0,Descriptor.cpp,global constructors keyed to CDescriptor::CDescriptor(int),MATCH,False,False,,False
+0x6fcec0,Descriptor.cpp,"CDescriptor::GetOutputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0x6fcf70,Descriptor.cpp,"CDescriptor::GetInputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0x6fd020,Descriptor.cpp,"CDescriptor::OutputLogicObjectRemove(CEditorBaseObject*, CLogicObject*)",MATCH,True,False,,False
+0x6fd150,Descriptor.cpp,"CDescriptor::Clone(CEditorBaseObject*, CEditorBaseObject*, CEditorBaseObject*)",DIFF,False,False,,False
+0x6fd280,Descriptor.cpp,CDescriptor::calculateDefaultValues(CEditorBaseObject*),DIFF,False,False,,False
+0x6fd480,Descriptor.cpp,"CDescriptor::AddOutputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",MATCH,True,False,,False
+0x6fd5e0,Descriptor.cpp,"CDescriptor::GetPropertyID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0x6fd6f0,Descriptor.cpp,"CDescriptor::GetPropertyByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0x6fd830,Descriptor.cpp,"CDescriptor::HasProperty(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0x6fd930,Descriptor.cpp,__tcf_5,MATCH,False,False,,False
+0x6fd9a0,Descriptor.cpp,__tcf_4,MATCH,False,False,,False
+0x6fda10,Descriptor.cpp,__tcf_3,MATCH,False,False,,False
+0x6fda80,Descriptor.cpp,__tcf_2,MATCH,False,False,,False
+0x6fdb10,Descriptor.cpp,__tcf_1,MATCH,False,False,,False
+0x6fdb80,Descriptor.cpp,__tcf_0,MATCH,False,False,,False
+0x6fdbf0,Descriptor.cpp,CDescriptor::~CDescriptor(),MATCH,True,False,,False
+0x6fe200,Descriptor.cpp,CDescriptor::~CDescriptor(),MATCH,True,False,,False
+0x6fe220,Descriptor.cpp,CDescriptor::AddOutputLogic(EOUTPUT_EVENTS),MATCH,True,False,,False
+0x6fe2d0,Descriptor.cpp,CDescriptor::AddInputLogic(EINPUT_EVENTS),MATCH,True,False,,False
+0x6fe380,Descriptor.cpp,"CDescriptor::postProcessObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
+0x6fe530,Descriptor.cpp,"CDescriptor::postProcessObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
+0x6fe5c0,Descriptor.cpp,"CDescriptor::saveObjectInBinaryFile(std::basic_ofstream<char, std::char_traits<char> >&, CEditorBaseObject*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
+0x6fe870,Descriptor.cpp,"CDescriptor::AddProperty(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, EVARIABLE_TYPES, int)",DIFF,False,False,,False
+0x6fede0,Descriptor.cpp,"CDescriptor::AddPropertyWithInterpreterFunctions(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*, EVARIABLE_TYPES, int)",DIFF,False,False,,False
+0x6ff040,Descriptor.cpp,"CDescriptor::loadObjectFromBinaryFile(COgreReader&, CEditorBaseObject*, CDescriptorLoadConfiguration&)",DIFF,False,False,,False
+0x6ff300,Descriptor.cpp,"CDescriptor::SerializeDescriptor(CDataGroup*, unsigned int)",DIFF,False,False,,False
+0x700110,Descriptor.cpp,"CDescriptor::GetPropertyListOfValues(CEditorBaseObject*, unsigned int, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",DIFF,False,False,,False
+0x700410,Descriptor.cpp,"CDescriptor::BroadcastEventFromObject(CEditorBaseObject*, unsigned int)",DIFF,False,False,,False
+0x700c40,Descriptor.cpp,"CDescriptor::saveObject(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
+0x701140,Descriptor.cpp,"CDescriptor::OutputLogicObjectAdd(CEditorBaseObject*, CLogicObject*)",MATCH,True,False,,False
+0x701470,Descriptor.cpp,"std::_Rb_tree<CEditorBaseObject*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*>, std::_Select1st<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::less<CEditorBaseObject*>, std::allocator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >*)",MATCH,False,False,,False
+0x7014b0,Descriptor.cpp,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",MATCH,False,False,,False
+0x701510,Descriptor.cpp,"std::_Rb_tree<CEditorBaseObject*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*>, std::_Select1st<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::less<CEditorBaseObject*>, std::allocator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> const&)",MATCH,False,False,,False
+0x7015d0,Descriptor.cpp,"std::_Rb_tree<CEditorBaseObject*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*>, std::_Select1st<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::less<CEditorBaseObject*>, std::allocator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> > >::_M_insert_unique(std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> const&)",MATCH,False,False,,False
+0x701680,Descriptor.cpp,"std::_Rb_tree<CEditorBaseObject*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*>, std::_Select1st<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::less<CEditorBaseObject*>, std::allocator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> const&)",MATCH,False,False,,False
+0x7017d0,Descriptor.cpp,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,False,False,,False
+0x701820,Descriptor.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> const&)",DIFF,False,False,,False
+0x701940,Descriptor.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> const&)",MATCH,False,False,,False
+0x701a80,Descriptor.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> const&)",MATCH,False,False,,False
+0x701cb0,Cinematics.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, unsigned int> >*)",MATCH,False,False,,False
+0x701d50,DescriptorLoadConfiguration.cpp,CDescriptorLoadConfiguration::getRemappedID(long long),DIFF,False,False,,False
+0x701e20,DescriptorLoadConfiguration.cpp,CDescriptorLoadConfiguration::CDescriptorLoadConfiguration(),MATCH,True,False,,False
+0x701e90,DescriptorLoadConfiguration.cpp,CDescriptorLoadConfiguration::~CDescriptorLoadConfiguration(),MATCH,True,False,,False
+0x701f70,DescriptorLoadConfiguration.cpp,CDescriptorLoadConfiguration::~CDescriptorLoadConfiguration(),MATCH,True,False,,False
+0x701f90,DescriptorLoadConfiguration.cpp,"CDescriptorLoadConfiguration::addRemap(long long, long long)",MISSING,False,False,,False
+0x702250,DescriptorLoadConfiguration.cpp,"std::_Rb_tree<long long, std::pair<long long const, long long>, std::_Select1st<std::pair<long long const, long long> >, std::less<long long>, std::allocator<std::pair<long long const, long long> > >::_M_erase(std::_Rb_tree_node<std::pair<long long const, long long> >*)",MATCH,False,False,,False
+0x702490,DescriptorManager.cpp,CDescriptorManager::update(float),DIFF,False,False,,False
+0x7024f0,DescriptorManager.cpp,CDescriptorManager::GetDescriptor(unsigned int),MISSING,False,False,,False
+0x702510,DescriptorManager.cpp,CDescriptorManager::notifyDescriptorsSceneLoaded(CEditorScene*),MISSING,False,False,,False
+0x702570,DescriptorManager.cpp,CDescriptorManager::deactivateDescriptors(CEditorScene*),MISSING,False,False,,False
+0x7025d0,DescriptorManager.cpp,CDescriptorManager::activateDescriptors(CEditorScene*),MISSING,False,False,,False
+0x7026d0,DescriptorManager.cpp,"CDescriptorManager::postProcessDescriptorObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
+0x702740,DescriptorManager.cpp,"CDescriptorManager::loadDescriptorObjects(CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False
+0x7027c0,DescriptorManager.cpp,CDescriptorManager::CDescriptorManager(CEditorScene*),DIFF,False,False,,False
+0x702830,DescriptorManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x705670,DescriptorManager.cpp,__tcf_5,MATCH,False,False,,False
+0x7056e0,DescriptorManager.cpp,__tcf_4,MATCH,False,False,,False
+0x705750,DescriptorManager.cpp,__tcf_3,MATCH,False,False,,False
+0x7057c0,DescriptorManager.cpp,__tcf_2,MATCH,False,False,,False
+0x705850,DescriptorManager.cpp,__tcf_1,MATCH,False,False,,False
+0x7058c0,DescriptorManager.cpp,__tcf_0,MATCH,False,False,,False
+0x705930,DescriptorManager.cpp,CDescriptorManager::~CDescriptorManager(),MISSING,False,False,,False
+0x705a60,DescriptorManager.cpp,CDescriptorManager::~CDescriptorManager(),MISSING,False,False,,False
+0x705a80,DescriptorManager.cpp,CDescriptorManager::SerializeDescriptors(CDataGroup*),MISSING,False,False,,False
+0x705b60,DescriptorManager.cpp,CDescriptorManager::AddDescriptor(CDescriptor*),DIFF,False,False,,False
+0x705d80,DescriptorManager.cpp,"CDescriptorManager::GetDescriptor(wchar_t const*, bool)",MISSING,False,False,,False
+0x705f80,DescriptorManager.cpp,"CDescriptorManager::GetDescriptorByCreated(unsigned int, bool)",MISSING,False,False,,False
+0x705ff0,DescriptorManager.cpp,CDescriptorManager::deleteUnusedDescriptors(),MISSING,False,False,,False
+0x706580,DescriptorProp.cpp,CDescriptorProp::getVariableType(),MATCH,True,False,,False
+0x7065a0,DescriptorProp.cpp,CDescriptorProp::getElementSize(),MISSING,False,False,,False
+0x706600,DescriptorProp.cpp,"CDescriptorProp::getListValueByIndex(CEditorScene*, CEditorBaseObject*, unsigned int)",MISSING,False,False,,False
+0x706630,DescriptorProp.cpp,"CDescriptorProp::convertDataTo32bit(UNIONDATA8BIT const*, unsigned int, unsigned int&)",MISSING,False,False,,False
+0x706700,DescriptorProp.cpp,"CDescriptorProp::setPropertyInterpreterFunctions(unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*)",MISSING,False,False,,False
+0x7067f0,DescriptorProp.cpp,CDescriptorProp::setPropertyInterpreter(CDescriptorPropertyInterpreter*),MISSING,False,False,,False
+0x706820,DescriptorProp.cpp,"CDescriptorProp::CDescriptorProp(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, EVARIABLE_TYPES, int)",MATCH,True,False,,False
+0x706940,DescriptorProp.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0x709750,DescriptorProp.cpp,__tcf_5,DIFF,False,False,,False
+0x7097c0,DescriptorProp.cpp,__tcf_2,DIFF,False,False,,False
+0x709830,DescriptorProp.cpp,__tcf_1,DIFF,False,False,,False
+0x7098a0,DescriptorProp.cpp,__tcf_0,MATCH,False,False,,False
+0x709910,DescriptorProp.cpp,__tcf_4,DIFF,False,False,,False
+0x709980,DescriptorProp.cpp,__tcf_3,DIFF,False,False,,False
+0x709a10,DescriptorProp.cpp,CDescriptorProp::~CDescriptorProp(),DIFF,False,False,,False
+0x709ba0,DescriptorProp.cpp,CDescriptorProp::~CDescriptorProp(),MATCH,True,False,,False
+0x709bc0,DescriptorProp.cpp,"CDescriptorProp::setDataOnObject(CEditorBaseObject*, UNIONDATA32BIT const*, unsigned int)",MISSING,False,False,,False
+0x709ca0,DescriptorProp.cpp,"CDescriptorProp::getDataFromObject(CEditorBaseObject*, unsigned int&)",MISSING,False,False,,False
+0x709dd0,DescriptorProp.cpp,"CDescriptorProp::getData(unsigned int&, CEditorBaseObject*)",MISSING,False,False,,False
+0x709e10,DescriptorProp.cpp,CDescriptorProp::getPropertyValueAsString(CEditorBaseObject*),MISSING,False,False,,False
+0x70a170,DescriptorProp.cpp,"CDescriptorProp::setData(UNIONDATA32BIT const*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a390,DescriptorProp.cpp,"CDescriptorProp::setData(UNIONDATA8BIT const*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a3e0,DescriptorProp.cpp,"CDescriptorProp::setData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a400,DescriptorProp.cpp,"CDescriptorProp::setData(UNIONDATA16BIT const*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a450,DescriptorProp.cpp,"CDescriptorProp::cloneValue(CEditorBaseObject*, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a500,DescriptorProp.cpp,"CDescriptorProp::copy(CDescriptorProp&, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a5c0,DescriptorProp.cpp,"CDescriptorProp::CDescriptorProp(CDescriptorProp*, CEditorBaseObject*)",MISSING,False,False,,False
+0x70a730,DescriptorProp.cpp,"CDescriptorProp::saveProperty(CEditorBaseObject*, CDataGroup*)",MISSING,False,False,,False
+0x70ac40,DescriptorProp.cpp,"CDescriptorProp::serializeProperty(CDataGroup*, unsigned int)",MISSING,False,False,,False
+0x70b6d0,DescriptorProp.cpp,"CDescriptorProp::setPropertyValueByString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CEditorBaseObject*)",MISSING,False,False,,False
+0x70c3b0,DescriptorProp.cpp,"CDescriptorProp::loadProperty(CEditorBaseObject*, CDataGroup*, unsigned int)",MISSING,False,False,,False
+0x70cbf0,FileReader.cpp,"std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >::_M_reallocate_map(unsigned long, bool)",MATCH,False,False,,False
+0x70cd90,FileReader.cpp,"std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >::_M_push_back_aux(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0x70d0d0,DescriptorPropertyInterpreter.cpp,"CDescriptorPropertyInterpreter::SetInterpreterFunctions(unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*)",MATCH,True,False,,False
+0x70d0f0,DescriptorPropertyInterpreter.cpp,"CDescriptorPropertyInterpreter::GetValue(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0x70d120,DescriptorPropertyInterpreter.cpp,"CDescriptorPropertyInterpreter::GetValue(CEditorScene*, CEditorBaseObject*, unsigned int)",MATCH,True,False,,False
+0x70d170,DescriptorPropertyInterpreter.cpp,CDescriptorPropertyInterpreter::~CDescriptorPropertyInterpreter(),MATCH,True,False,,False
+0x70d180,DescriptorPropertyInterpreter.cpp,CDescriptorPropertyInterpreter::~CDescriptorPropertyInterpreter(),MATCH,True,False,,False
+0x70d1a0,DescriptorPropertyInterpreter.cpp,"CDescriptorPropertyInterpreter::CDescriptorPropertyInterpreter(unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*)",MATCH,True,False,,False
+0x70d200,DescriptorPropertyInterpreter.cpp,"global constructors keyed to CDescriptorPropertyInterpreter::CDescriptorPropertyInterpreter(unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*)",DIFF,False,False,,False
+0x70d460,DescriptorSaveConfiguration.cpp,global constructors keyed to CDescriptorSaveConfiguration::CDescriptorSaveConfiguration(),MATCH,False,False,,False
+0x70d4d0,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::CDescriptorSaveConfiguration(),MATCH,True,False,,False
+0x70d500,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::~CDescriptorSaveConfiguration(),MATCH,True,False,,False
+0x70d5a0,DescriptorSaveConfiguration.cpp,CDescriptorSaveConfiguration::~CDescriptorSaveConfiguration(),MATCH,True,False,,False
+0x70d5c0,Editor.cpp,CEditor::getGameClient(),MISSING,False,False,,False
+0x70d5d0,Editor.cpp,CEditor::SetMouseWheelDelta(int),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d5d0.cpp,False
+0x70d5e0,Editor.cpp,CEditor::SetPovVelocityMult(float),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d5e0.cpp,False
+0x70d600,Editor.cpp,CEditor::SetRenderWindowHasFocus(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d600.cpp,False
+0x70d620,Editor.cpp,CEditor::GetEditorScene(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d620.cpp,False
+0x70d660,Editor.cpp,CEditor::getCamera(),MISSING,False,False,,False
+0x70d690,Editor.cpp,CEditor::getUndoSize(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d690.cpp,False
+0x70d6c0,Editor.cpp,CEditor::getRedoSize(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d6c0.cpp,False
+0x70d6f0,Editor.cpp,CEditor::deleteAllUndos(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d6f0.cpp,False
+0x70d770,Editor.cpp,CEditor::doRedo(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d770.cpp,False
+0x70d7e0,Editor.cpp,CEditor::doUndo(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d7e0.cpp,False
+0x70d850,Editor.cpp,"CEditor::addUndo(CUndo*, bool)",MISSING,False,False,,False
+0x70d940,Editor.cpp,"CEditor::FlyToPositionLookingAtPos(Ogre::Vector3, Ogre::Vector3)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d940.cpp,False
+0x70d980,Editor.cpp,CEditor::UpdatePlayerInput(float),MISSING,False,False,,False
+0x70dd10,Editor.cpp,"CEditor::setDirectionalColor(int, int, int)",MISSING,False,False,,False
+0x70ddb0,Editor.cpp,"CEditor::setMaterialAmbientColor(int, int, int)",MISSING,False,False,,False
+0x70de50,Editor.cpp,"CEditor::setAmbientColor(int, int, int)",MISSING,False,False,,False
+0x70def0,Editor.cpp,"CEditor::mouseEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70def0.cpp,False
+0x70df10,Editor.cpp,"CEditor::keyEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70df10.cpp,False
+0x70df30,Editor.cpp,"CEditor::SetBackgroundColor(float, float, float)",MISSING,False,False,,False
+0x70dfb0,Editor.cpp,CEditor::setDirectionalIntensity(float),MISSING,False,False,,False
+0x70dff0,Editor.cpp,CEditor::flushKeyManager(),MISSING,False,False,,False
+0x714ff0,Editor.cpp,"std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.2]",MISSING,False,False,,False
+0x715050,Editor.cpp,CEditor::addRedo(CUndo*),MISSING,False,False,,False
+0x715820,Editor.cpp,CEditor::releaseResources(),MISSING,False,False,,False
+0x7163a0,Editor.cpp,"CEditor::EditorDumpDescriptionOfObjectsToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0x716cb0,Editor.cpp,CEditor::reinitScene(),MISSING,False,False,,False
+0x716e30,Editor.cpp,CEditor::GetEditorSceneIDByName(wchar_t const*),MISSING,False,False,,False

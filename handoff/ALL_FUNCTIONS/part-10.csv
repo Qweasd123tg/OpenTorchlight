@@ -1,4 +1,513 @@
 address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
+0xda23d0,EditorImageDescriptor.cpp,"CEditorImageDescriptor::Set_setImageFileName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xda2470,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xda2480,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MATCH,True,False,,False
+0xda24c0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
+0xda2580,AnimationPlayerDescriptor.cpp,CAnimationPlayerDescriptor::descriptorSceneActivated(CEditorScene*),MISSING,False,False,,False
+0xda2630,AnimationPlayerDescriptor.cpp,CAnimationPlayerDescriptor::update(float),DIFF,False,False,,False
+0xda26b0,AnimationPlayerDescriptor.cpp,CAnimationPlayerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xda2710,AnimationPlayerDescriptor.cpp,CAnimationPlayerDescriptor::~CAnimationPlayerDescriptor(),MATCH,True,False,,False
+0xda2720,AnimationPlayerDescriptor.cpp,CAnimationPlayerDescriptor::~CAnimationPlayerDescriptor(),MATCH,True,False,,False
+0xda2740,AnimationPlayerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xda59d0,AnimationPlayerDescriptor.cpp,"global constructors keyed to CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xda59e0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xda5ca0,AnimationPlayerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xda5d10,AnimationPlayerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xda5d80,AnimationPlayerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xda5df0,AnimationPlayerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xda5e80,AnimationPlayerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xda5ef0,AnimationPlayerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xda5ff0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xda6e20,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xda7100,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setStartOnLoad(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xda7110,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setBlendTime(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xda7120,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setBlendOutTime(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xda7130,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setForceDuration(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xda7140,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setPlayIdle(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xda7150,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getPlayIdle(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda7180,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getForceDuration(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda71a0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getBlendOutTime(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda71c0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getBlendTime(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda71e0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getStartOnLoad(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda7210,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Get_getCategory(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xda7430,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setUnitString(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xda74d0,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setCategory(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xda7570,AnimationPlayerDescriptor.cpp,"CAnimationPlayerDescriptor::Set_setAnimationName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xda7610,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xda7620,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",DIFF,False,False,,False
+0xda7670,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::getTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xda76b0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::getTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xda76d0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",DIFF,False,False,,False
+0xda76f0,CameraControllerDescriptor.cpp,CCameraControllerDescriptor::update(float),MATCH,True,False,,False
+0xda7770,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0xda77e0,CameraControllerDescriptor.cpp,CCameraControllerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xda7840,CameraControllerDescriptor.cpp,CCameraControllerDescriptor::~CCameraControllerDescriptor(),MATCH,True,False,,False
+0xda7850,CameraControllerDescriptor.cpp,CCameraControllerDescriptor::~CCameraControllerDescriptor(),MATCH,True,False,,False
+0xda7870,CameraControllerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdaa9d0,CameraControllerDescriptor.cpp,"global constructors keyed to CCameraControllerDescriptor::CCameraControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xdaa9e0,CameraControllerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xdaaa50,CameraControllerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xdaabe0,CameraControllerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xdaac50,CameraControllerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xdaacc0,CameraControllerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xdaad30,CameraControllerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xdaaee0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::CCameraControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xdabed0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdac190,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setCameraPanTime(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdac200,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setCameraType(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdac210,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setCameraPauseTimer(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdac220,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setRestoreCameraStateAfterMoving(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdac230,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setFollowUnit(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdac240,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getCameraType(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac260,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getFollowUnit(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac290,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getRestoreCameraStateAfterMoving(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac2c0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getCameraPauseTimer(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac2e0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getCameraEaseInPCT(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac300,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getCameraEaseInDistancePCT(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac320,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Get_getCameraPanTime(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdac4e0,CameraControllerDescriptor.cpp,"CCameraControllerDescriptor::Set_setUnitInteractWith(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdac620,CutsceneDescriptor.cpp,CSkipCutsceneDescriptor::update(float),DIFF,False,False,,False
+0xdac690,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0xdac6f0,CutsceneDescriptor.cpp,CSkipCutsceneDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xdac750,CutsceneDescriptor.cpp,CSkipCutsceneDescriptor::~CSkipCutsceneDescriptor(),MATCH,True,False,,False
+0xdac760,CutsceneDescriptor.cpp,CSkipCutsceneDescriptor::~CSkipCutsceneDescriptor(),MATCH,True,False,,False
+0xdac780,CutsceneDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdaf5b0,CutsceneDescriptor.cpp,"global constructors keyed to CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xdaf5c0,CutsceneDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xdaf630,CutsceneDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xdaf6c0,CutsceneDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xdaf730,CutsceneDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xdaf7a0,CutsceneDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xdaf810,CutsceneDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xdaf880,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xdafc10,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::Set_setSkillsDisabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdafc20,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::Set_setEnabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdafc40,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::Get_getSkillsDisabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdafc60,CutsceneDescriptor.cpp,"CSkipCutsceneDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdafc80,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::getTipStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdafcb0,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::getGameStateStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdafce0,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::getTipIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xdafd50,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::getGameStateIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xdafdd0,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MISSING,False,False,,False
+0xdaff00,GameStateControllerDescriptor.cpp,CGameStateControllerDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False
+0xdaffb0,GameStateControllerDescriptor.cpp,CGameStateControllerDescriptor::update(float),DIFF,False,False,,False
+0xdb0030,GameStateControllerDescriptor.cpp,CGameStateControllerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xdb0090,GameStateControllerDescriptor.cpp,CGameStateControllerDescriptor::~CGameStateControllerDescriptor(),MATCH,True,False,,False
+0xdb00a0,GameStateControllerDescriptor.cpp,CGameStateControllerDescriptor::~CGameStateControllerDescriptor(),MATCH,True,False,,False
+0xdb00c0,GameStateControllerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdb8a50,GameStateControllerDescriptor.cpp,"global constructors keyed to CGameStateControllerDescriptor::CGameStateControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xdb9410,GameStateControllerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xdb9480,GameStateControllerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xdb94f0,GameStateControllerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xdb9560,GameStateControllerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xdb95f0,GameStateControllerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xdb9660,GameStateControllerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xdb9760,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::CGameStateControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xdb9f00,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Set_setPlayerInvulnerable(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdb9f10,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Set_setGameState(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdb9f20,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Set_setHelpTip(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdb9f50,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Get_getHelpTip(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdb9f70,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Get_getGameState(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdb9f90,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Get_getPlayerInvulnerable(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdb9fb0,GameStateControllerDescriptor.cpp,"CGameStateControllerDescriptor::Get_getEnabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdb9fd0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xdb9fe0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdba020,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdba0b0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0xdba140,QuestControllerDescriptor.cpp,CQuestControllerDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False
+0xdba1f0,QuestControllerDescriptor.cpp,CQuestControllerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xdba250,QuestControllerDescriptor.cpp,CQuestControllerDescriptor::~CQuestControllerDescriptor(),MATCH,True,False,,False
+0xdba260,QuestControllerDescriptor.cpp,CQuestControllerDescriptor::~CQuestControllerDescriptor(),MATCH,True,False,,False
+0xdba280,QuestControllerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdbd540,QuestControllerDescriptor.cpp,"global constructors keyed to CQuestControllerDescriptor::CQuestControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xdbd550,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xdbd810,QuestControllerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xdbd880,QuestControllerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xdbd8f0,QuestControllerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xdbd960,QuestControllerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xdbd9f0,QuestControllerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xdbda60,QuestControllerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xdbdb60,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xdbdc40,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::CQuestControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xdbe5c0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdbe950,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Set_setPlayerGetsDisabled(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdbe960,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Set_setBroadcastEventsOnLoad(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdbe970,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Get_getBroadcastEventsOnLoad(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdbe9a0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Get_getPlayerGetsDisabled(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdbe9d0,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Set_setQuest(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdbed80,QuestControllerDescriptor.cpp,"CQuestControllerDescriptor::Set_setCategory(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdbee20,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MATCH,True,False,,False
+0xdbee30,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::getSkillStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdbeed0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdbef10,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",MATCH,True,False,,False
+0xdbef90,SkillControllerDescriptor.cpp,CSkillControllerDescriptor::descriptorSceneActivated(CEditorScene*),DIFF,False,False,,False
+0xdbf040,SkillControllerDescriptor.cpp,CSkillControllerDescriptor::update(float),DIFF,False,False,,False
+0xdbf0e0,SkillControllerDescriptor.cpp,CSkillControllerDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
+0xdbf140,SkillControllerDescriptor.cpp,CSkillControllerDescriptor::~CSkillControllerDescriptor(),MATCH,True,False,,False
+0xdbf150,SkillControllerDescriptor.cpp,CSkillControllerDescriptor::~CSkillControllerDescriptor(),MATCH,True,False,,False
+0xdbf170,SkillControllerDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdc74a0,SkillControllerDescriptor.cpp,"global constructors keyed to CSkillControllerDescriptor::CSkillControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
+0xdc74b0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::getSkillIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xdc7570,SkillControllerDescriptor.cpp,__tcf_15,DIFF,False,False,,False
+0xdc75e0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",MISSING,False,False,,False
+0xdc7780,SkillControllerDescriptor.cpp,__tcf_23,DIFF,False,False,,False
+0xdc7810,SkillControllerDescriptor.cpp,__tcf_22,DIFF,False,False,,False
+0xdc7880,SkillControllerDescriptor.cpp,__tcf_21,DIFF,False,False,,False
+0xdc78f0,SkillControllerDescriptor.cpp,__tcf_19,DIFF,False,False,,False
+0xdc7980,SkillControllerDescriptor.cpp,__tcf_18,DIFF,False,False,,False
+0xdc7a10,SkillControllerDescriptor.cpp,__tcf_17,DIFF,False,False,,False
+0xdc7aa0,SkillControllerDescriptor.cpp,__tcf_16,DIFF,False,False,,False
+0xdc7b10,SkillControllerDescriptor.cpp,__tcf_14,DIFF,False,False,,False
+0xdc7b80,SkillControllerDescriptor.cpp,__tcf_13,DIFF,False,False,,False
+0xdc7c10,SkillControllerDescriptor.cpp,__tcf_12,DIFF,False,False,,False
+0xdc7ca0,SkillControllerDescriptor.cpp,__tcf_11,DIFF,False,False,,False
+0xdc7d30,SkillControllerDescriptor.cpp,__tcf_10,DIFF,False,False,,False
+0xdc7da0,SkillControllerDescriptor.cpp,__tcf_9,DIFF,False,False,,False
+0xdc7e10,SkillControllerDescriptor.cpp,__tcf_8,DIFF,False,False,,False
+0xdc7ea0,SkillControllerDescriptor.cpp,__tcf_7,DIFF,False,False,,False
+0xdc7f30,SkillControllerDescriptor.cpp,__tcf_5,MATCH,False,False,,False
+0xdc7fa0,SkillControllerDescriptor.cpp,__tcf_4,MATCH,False,False,,False
+0xdc8010,SkillControllerDescriptor.cpp,__tcf_3,MATCH,False,False,,False
+0xdc8080,SkillControllerDescriptor.cpp,__tcf_2,MATCH,False,False,,False
+0xdc8110,SkillControllerDescriptor.cpp,__tcf_1,MATCH,False,False,,False
+0xdc8180,SkillControllerDescriptor.cpp,__tcf_0,MATCH,False,False,,False
+0xdc81f0,SkillControllerDescriptor.cpp,__tcf_6,DIFF,False,False,,False
+0xdc8280,SkillControllerDescriptor.cpp,__tcf_20,DIFF,False,False,,False
+0xdc8310,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::CSkillControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
+0xdc9320,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",MISSING,False,False,,False
+0xdc96b0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setSkillLearnOnStart(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc96c0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setSkillUnlearnOnStop(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc96d0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setForceStop(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc96e0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setUseUnitTarget(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc96f0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setPlayerAsTarget(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc9700,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setLevelOfSkill(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
+0xdc9710,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getLevelOfSkill(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc9730,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getUseUnitTarget(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc9760,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getPlayerAsTarget(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc9790,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getForceStop(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc97c0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getSkillUnlearnOnStop(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc97f0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Get_getSkillLearnOnStart(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
+0xdc9a90,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setUnitInteractWith(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdc9b30,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setSkillName(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdc9bd0,SkillControllerDescriptor.cpp,"CSkillControllerDescriptor::Set_setCategory(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
+0xdc9c70,AnimationPlayer.cpp,CAnimationPlayer::setAnimationDuration(float),MISSING,False,False,,False
+0xdc9d50,AnimationPlayer.cpp,CAnimationPlayer::CAnimationPlayer(CResourceManager*),DIFF,False,False,,False
+0xdd17d0,AnimationPlayer.cpp,global constructors keyed to CAnimationPlayer::CAnimationPlayer(CResourceManager*),DIFF,False,False,,False
+0xdd1a30,AnimationPlayer.cpp,CAnimationPlayer::stopAnimation(bool),MISSING,False,False,,False
+0xdd2aa0,AnimationPlayer.cpp,CAnimationPlayer::~CAnimationPlayer(),MISSING,False,False,,False
+0xdd2cb0,AnimationPlayer.cpp,CAnimationPlayer::~CAnimationPlayer(),MISSING,False,False,,False
+0xdd2cd0,AnimationPlayer.cpp,CAnimationPlayer::playAnimation(bool),MISSING,False,False,,False
+0xdd3470,AnimationPlayer.cpp,CAnimationPlayer::playAnimation(),MISSING,False,False,,False
+0xdd3ac0,AnimationPlayer.cpp,CAnimationPlayer::update(float),MATCH,True,False,,False
+0xdd3b40,GameStateController.cpp,"CGameStateController::broadcastPlayerHPThreshholdEvents(float, float, float)",DIFF,False,False,,False
+0xdd3c10,GameStateController.cpp,CGameStateController::showHelp(),MATCH,True,False,,False
+0xdd3c40,GameStateController.cpp,CGameStateController::healPlayer(),MATCH,True,False,,False
+0xdd3ca0,GameStateController.cpp,CGameStateController::doActualGameState(bool),DIFF,False,False,,False
+0xdd3ed0,GameStateController.cpp,CGameStateController::performStateControl(),MATCH,True,False,,False
+0xdd3fa0,GameStateController.cpp,CGameStateController::setInitialized(),MATCH,True,False,,False
+0xdd3fc0,GameStateController.cpp,CGameStateController::update(float),DIFF,False,False,,False
+0xdd4070,GameStateController.cpp,CGameStateController::~CGameStateController(),MATCH,True,False,,False
+0xdd40c0,GameStateController.cpp,CGameStateController::~CGameStateController(),MATCH,True,False,,False
+0xdd40e0,GameStateController.cpp,CGameStateController::CGameStateController(CResourceManager*),MATCH,True,False,,False
+0xdd4130,GameStateController.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xddbb60,GameStateController.cpp,__tcf_2,DIFF,False,False,,False
+0xddbbd0,GameStateController.cpp,__tcf_18,DIFF,False,False,,False
+0xddbc40,GameStateController.cpp,__tcf_17,DIFF,False,False,,False
+0xddbcb0,GameStateController.cpp,__tcf_16,DIFF,False,False,,False
+0xddbd20,GameStateController.cpp,__tcf_15,DIFF,False,False,,False
+0xddbdb0,GameStateController.cpp,__tcf_22,DIFF,False,False,,False
+0xddbe20,GameStateController.cpp,__tcf_21,DIFF,False,False,,False
+0xddbe90,GameStateController.cpp,__tcf_20,DIFF,False,False,,False
+0xddbf20,GameStateController.cpp,__tcf_19,DIFF,False,False,,False
+0xddbfb0,GameStateController.cpp,__tcf_14,DIFF,False,False,,False
+0xddc040,GameStateController.cpp,__tcf_13,DIFF,False,False,,False
+0xddc0d0,GameStateController.cpp,__tcf_12,DIFF,False,False,,False
+0xddc160,GameStateController.cpp,__tcf_11,DIFF,False,False,,False
+0xddc1f0,GameStateController.cpp,__tcf_10,DIFF,False,False,,False
+0xddc260,GameStateController.cpp,__tcf_9,DIFF,False,False,,False
+0xddc2d0,GameStateController.cpp,__tcf_8,DIFF,False,False,,False
+0xddc340,GameStateController.cpp,__tcf_6,DIFF,False,False,,False
+0xddc3d0,GameStateController.cpp,__tcf_5,DIFF,False,False,,False
+0xddc460,GameStateController.cpp,__tcf_4,DIFF,False,False,,False
+0xddc4f0,GameStateController.cpp,__tcf_3,DIFF,False,False,,False
+0xddc660,GameStateController.cpp,__tcf_24,DIFF,False,False,,False
+0xddc6f0,GameStateController.cpp,__tcf_23,DIFF,False,False,,False
+0xddc780,GameStateController.cpp,__tcf_1,DIFF,False,False,,False
+0xddc7f0,GameStateController.cpp,__tcf_0,DIFF,False,False,,False
+0xddc880,GameStateController.cpp,__tcf_7,DIFF,False,False,,False
+0xddc910,SkipCutscene.cpp,CSkipCutscene::setEnabled(bool),MATCH,True,False,,False
+0xddc950,SkipCutscene.cpp,CSkipCutscene::~CSkipCutscene(),MATCH,True,False,,False
+0xddc960,SkipCutscene.cpp,CSkipCutscene::~CSkipCutscene(),MATCH,True,False,,False
+0xddc980,SkipCutscene.cpp,CSkipCutscene::CSkipCutscene(CResourceManager*),MATCH,True,False,,False
+0xde5980,SkipCutscene.cpp,CSkipCutscene::update(float),MISSING,False,False,,False
+0xde5e60,ParticleCache.cpp,CParticleCache::playCameraShakes(Ogre::Vector3 const&),MATCH,True,False,,False
+0xde5ed0,ParticleCache.cpp,CParticleCache::playSounds(Ogre::SceneNode*),MISSING,False,False,,False
+0xde5f60,ParticleCache.cpp,"CParticleCache::CParticleCache(Ogre::SceneManager*, CSoundBank*)",MATCH,True,False,,False
+0xde6550,ParticleCache.cpp,__tcf_1,DIFF,False,False,,False
+0xde65e0,ParticleCache.cpp,__tcf_0,DIFF,False,False,,False
+0xde6670,ParticleCache.cpp,CParticleCache::~CParticleCache(),MISSING,False,False,,False
+0xde6a90,ParticleCache.cpp,CParticleCache::~CParticleCache(),MISSING,False,False,,False
+0xde6ab0,QuestController.cpp,CQuestController::questHasBeenAccepted(bool),MATCH,True,False,,False
+0xde6ae0,QuestController.cpp,CQuestController::questHasBeenAbandoned(),MATCH,True,False,,False
+0xde6af0,QuestController.cpp,CQuestController::questHasBeenCompleted(bool),DIFF,False,False,,False
+0xde6b20,QuestController.cpp,CQuestController::setQuestComplete(bool),MISSING,False,False,,False
+0xde6c00,QuestController.cpp,CQuestController::setQuestAccepted(bool),DIFF,False,False,,False
+0xde6cb0,QuestController.cpp,"non-virtual thunk to CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",MATCH,True,False,,False
+0xde6cc0,QuestController.cpp,"CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",DIFF,False,False,,False
+0xde6d40,QuestController.cpp,CQuestController::interactWithUnit(),MISSING,False,False,,False
+0xde6eb0,QuestController.cpp,"non-virtual thunk to CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",MATCH,True,False,,False
+0xde6ec0,QuestController.cpp,"CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",DIFF,False,False,,False
+0xde6f90,QuestController.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdee380,QuestController.cpp,CQuestController::initQuestController(),MISSING,False,False,,False
+0xdee460,QuestController.cpp,__tcf_17,DIFF,False,False,,False
+0xdee4d0,QuestController.cpp,__tcf_16,DIFF,False,False,,False
+0xdee540,QuestController.cpp,__tcf_15,DIFF,False,False,,False
+0xdee5b0,QuestController.cpp,__tcf_14,DIFF,False,False,,False
+0xdee640,QuestController.cpp,__tcf_1,DIFF,False,False,,False
+0xdee6b0,QuestController.cpp,"CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xdee8d0,QuestController.cpp,__tcf_18,DIFF,False,False,,False
+0xdee960,QuestController.cpp,__tcf_13,DIFF,False,False,,False
+0xdee9f0,QuestController.cpp,__tcf_12,DIFF,False,False,,False
+0xdeea80,QuestController.cpp,__tcf_11,DIFF,False,False,,False
+0xdeeb10,QuestController.cpp,__tcf_10,DIFF,False,False,,False
+0xdeeba0,QuestController.cpp,__tcf_9,DIFF,False,False,,False
+0xdeec10,QuestController.cpp,__tcf_8,DIFF,False,False,,False
+0xdeec80,QuestController.cpp,__tcf_7,DIFF,False,False,,False
+0xdeecf0,QuestController.cpp,__tcf_5,DIFF,False,False,,False
+0xdeed80,QuestController.cpp,__tcf_4,DIFF,False,False,,False
+0xdeee10,QuestController.cpp,__tcf_3,DIFF,False,False,,False
+0xdeeea0,QuestController.cpp,__tcf_2,DIFF,False,False,,False
+0xdeef10,QuestController.cpp,__tcf_0,DIFF,False,False,,False
+0xdeef80,QuestController.cpp,__tcf_6,DIFF,False,False,,False
+0xdef0a0,QuestController.cpp,CQuestController::CQuestController(CResourceManager*),DIFF,False,False,,False
+0xdef220,QuestController.cpp,CQuestController::~CQuestController(),DIFF,False,False,,False
+0xdef4d0,QuestController.cpp,non-virtual thunk to CQuestController::~CQuestController(),MATCH,True,False,,False
+0xdef4e0,QuestController.cpp,non-virtual thunk to CQuestController::~CQuestController(),MATCH,True,False,,False
+0xdef4f0,QuestController.cpp,non-virtual thunk to CQuestController::~CQuestController(),MATCH,True,False,,False
+0xdef500,QuestController.cpp,non-virtual thunk to CQuestController::~CQuestController(),MATCH,True,False,,False
+0xdef510,QuestController.cpp,CQuestController::~CQuestController(),MATCH,True,False,,False
+0xdef530,QuestDialogItem.cpp,CQuestDialogItem::~CQuestDialogItem(),MATCH,True,False,,False
+0xdef550,QuestDialogItem.cpp,CQuestDialogItem::~CQuestDialogItem(),MATCH,True,False,,False
+0xdef570,QuestDialogItem.cpp,CQuestDialogItem::CQuestDialogItem(CQuestDialog*),MATCH,True,False,,False
+0xdef5c0,QuestDialogItem.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xdf56e0,QuestDialogItem.cpp,__tcf_3,DIFF,False,False,,False
+0xdf5a00,QuestDialogItem.cpp,__tcf_12,DIFF,False,False,,False
+0xdf5a90,QuestDialogItem.cpp,__tcf_11,DIFF,False,False,,False
+0xdf5b20,QuestDialogItem.cpp,__tcf_10,DIFF,False,False,,False
+0xdf5b90,QuestDialogItem.cpp,__tcf_9,DIFF,False,False,,False
+0xdf5c00,QuestDialogItem.cpp,__tcf_7,DIFF,False,False,,False
+0xdf5c90,QuestDialogItem.cpp,__tcf_6,DIFF,False,False,,False
+0xdf5d20,QuestDialogItem.cpp,__tcf_5,DIFF,False,False,,False
+0xdf5db0,QuestDialogItem.cpp,__tcf_4,DIFF,False,False,,False
+0xdf5e20,QuestDialogItem.cpp,__tcf_2,DIFF,False,False,,False
+0xdf5eb0,QuestDialogItem.cpp,__tcf_1,MATCH,False,False,,False
+0xdf5f40,QuestDialogItem.cpp,__tcf_0,MATCH,False,False,,False
+0xdf5fd0,QuestDialogItem.cpp,CQuestDialogItem::dialogComplete(CPlayer*),MISSING,False,False,,False
+0xdf6420,QuestDialogItem.cpp,__tcf_8,DIFF,False,False,,False
+0xdf6540,QuestDialogItem.cpp,"CQuestDialogItem::parseDialogItemGroup(CDataGroup*, bool)",MISSING,False,False,,False
+0xdf6750,QuestRequirements.cpp,CQuestRequirements::CQuestRequirements(CQuest*),MISSING,False,False,,False
+0xdfe3e0,QuestRequirements.cpp,CQuestRequirements::~CQuestRequirements(),MISSING,False,False,,False
+0xdfe5b0,QuestRequirements.cpp,CQuestRequirements::~CQuestRequirements(),MISSING,False,False,,False
+0xdfe5d0,QuestRequirements.cpp,CQuestRequirements::parseRequirementTag(CDataGroup*),DIFF,False,False,,False
+0xdfec90,QuestRequirements.cpp,CQuestRequirements::questRequirmentsHaveBeenMet(),MISSING,False,False,,False
+0xdff070,DungeonManager.cpp,CDungeonManager::getSingleton(),MATCH,True,False,,False
+0xdff080,DungeonManager.cpp,CDungeonManager::clear(),MISSING,False,False,,False
+0xe03cb0,DungeonManager.cpp,CDungeonManager::reload(),MISSING,False,False,,False
+0xe03fe0,DungeonManager.cpp,"CDungeonManager::getDungeonByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xe04130,DungeonManager.cpp,CDungeonManager::~CDungeonManager(),MATCH,True,False,,False
+0xe04200,DungeonManager.cpp,CDungeonManager::~CDungeonManager(),MATCH,True,False,,False
+0xe04220,DungeonManager.cpp,"CDungeonManager::CDungeonManager(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xe043b0,RandomNames.cpp,CRandomNames::getSingleton(),MATCH,True,False,,False
+0xe04e90,RandomNames.cpp,CRandomNames::load(wchar_t const*),MISSING,False,False,,False
+0xe061d0,RandomNames.cpp,CRandomNames::CRandomNames(wchar_t const*),MATCH,True,False,,False
+0xe062a0,RandomNames.cpp,CRandomNames::generateName(bool),MISSING,False,False,,False
+0xe066e0,RandomNames.cpp,CRandomNames::~CRandomNames(),MISSING,False,False,,False
+0xe06ae0,Recipes.cpp,CRecipes::getSingleton(),MATCH,True,False,,False
+0xe075c0,Recipes.cpp,CRecipes::~CRecipes(),MISSING,False,False,,False
+0xe079a0,Recipes.cpp,CRecipes::~CRecipes(),MISSING,False,False,,False
+0xe079c0,Recipes.cpp,CRecipe::load(CDataGroup*),MISSING,False,False,,False
+0xe08280,Recipes.cpp,CRecipes::reload(),MISSING,False,False,,False
+0xe08960,Recipes.cpp,CRecipes::CRecipes(wchar_t const*),MATCH,True,False,,False
+0xe08a20,Sets.cpp,CSets::getSet(unsigned int),MATCH,True,False,,False
+0xe08a50,Sets.cpp,CSets::getSingleton(),MATCH,True,False,,False
+0xe0de50,Sets.cpp,__tcf_0,DIFF,False,False,,False
+0xe0e3e0,Sets.cpp,__tcf_2,DIFF,False,False,,False
+0xe0e470,Sets.cpp,__tcf_1,DIFF,False,False,,False
+0xe0e4e0,Sets.cpp,"CSets::getSetNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",MISSING,False,False,,False
+0xe0e7a0,Sets.cpp,"CSet::load(CDataGroup*, CEffectGroupManager*)",MISSING,False,False,,False
+0xe0ed80,Sets.cpp,CSets::getSet(wchar_t const*),MATCH,True,False,,False
+0xe0ef30,Sets.cpp,CSets::~CSets(),MISSING,False,False,,False
+0xe0f300,Sets.cpp,CSets::~CSets(),MISSING,False,False,,False
+0xe0f320,Sets.cpp,CSets::reload(CEffectGroupManager*),MISSING,False,False,,False
+0xe0fb10,Sets.cpp,"CSets::CSets(wchar_t const*, CEffectGroupManager*)",MATCH,True,False,,False
+0xe0fc20,SharedStash.cpp,CSharedStash::getSingleton(),MATCH,True,False,,False
+0xe0fc30,SharedStash.cpp,"CSharedStash::CSharedStash(wchar_t const*, wchar_t const*)",MATCH,True,False,,False
+0xe0fd30,SharedStash.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe15970,SharedStash.cpp,__tcf_0,DIFF,False,False,,False
+0xe159e0,SharedStash.cpp,__tcf_15,DIFF,False,False,,False
+0xe15a70,SharedStash.cpp,__tcf_5,DIFF,False,False,,False
+0xe15ae0,SharedStash.cpp,__tcf_2,DIFF,False,False,,False
+0xe15b50,SharedStash.cpp,__tcf_1,DIFF,False,False,,False
+0xe15c30,SharedStash.cpp,__tcf_17,MATCH,False,False,,False
+0xe15cc0,SharedStash.cpp,__tcf_16,MATCH,False,False,,False
+0xe15d50,SharedStash.cpp,__tcf_14,DIFF,False,False,,False
+0xe15de0,SharedStash.cpp,__tcf_13,DIFF,False,False,,False
+0xe15e70,SharedStash.cpp,__tcf_12,DIFF,False,False,,False
+0xe15ee0,SharedStash.cpp,__tcf_11,DIFF,False,False,,False
+0xe15f50,SharedStash.cpp,__tcf_9,DIFF,False,False,,False
+0xe15fe0,SharedStash.cpp,__tcf_8,DIFF,False,False,,False
+0xe16070,SharedStash.cpp,__tcf_7,DIFF,False,False,,False
+0xe16100,SharedStash.cpp,__tcf_6,DIFF,False,False,,False
+0xe16170,SharedStash.cpp,__tcf_4,DIFF,False,False,,False
+0xe16200,SharedStash.cpp,__tcf_3,DIFF,False,False,,False
+0xe16290,SharedStash.cpp,__tcf_10,DIFF,False,False,,False
+0xe16320,SharedStash.cpp,CSharedStash::~CSharedStash(),MATCH,True,False,,False
+0xe16410,SharedStash.cpp,CSharedStash::~CSharedStash(),MATCH,True,False,,False
+0xe16430,SharedStash.cpp,"CSharedStash::loadSharedStash(CResourceManager*, CCharacter*)",MISSING,False,False,,False
+0xe16880,SharedStash.cpp,CSharedStash::setPlayer(CPlayer*),MISSING,False,False,,False
+0xe16990,SharedStash.cpp,CSharedStash::saveSharedStash(),MISSING,False,False,,False
+0xe16d60,StringTranslate.cpp,CStringTranslate::getSinglton(),MATCH,True,False,,False
+0xe16d80,StringTranslate.cpp,global constructors keyed to m_gStringTranslate,MATCH,False,False,,False
+0xe16df0,StringTranslate.cpp,"CStringTranslate::getTranslateString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe16ef0,StringTranslate.cpp,CStringTranslate::getTranslateString(wchar_t const*),MATCH,True,False,,False
+0xe16fa0,StringTranslate.cpp,CStringTranslate::~CStringTranslate(),MATCH,True,False,,False
+0xe17090,StringTranslate.cpp,CStringTranslate::~CStringTranslate(),MATCH,True,False,,False
+0xe170b0,StringTranslate.cpp,CStringTranslate::reload(),DIFF,False,False,,False
+0xe17850,StringTranslate.cpp,"CStringTranslate::CStringTranslate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe17910,SkillController.cpp,CSkillController::getSkillTarget(),DIFF,False,False,,False
+0xe17970,SkillController.cpp,CSkillController::CSkillController(CResourceManager*),DIFF,False,False,,False
+0xe17ac0,SkillController.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe1f590,SkillController.cpp,__tcf_17,DIFF,False,False,,False
+0xe1f600,SkillController.cpp,__tcf_16,DIFF,False,False,,False
+0xe1f670,SkillController.cpp,__tcf_15,DIFF,False,False,,False
+0xe1f6e0,SkillController.cpp,__tcf_14,DIFF,False,False,,False
+0xe1f770,SkillController.cpp,__tcf_1,DIFF,False,False,,False
+0xe1f7e0,SkillController.cpp,"CSkillController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xe1fda0,SkillController.cpp,__tcf_13,DIFF,False,False,,False
+0xe1fe30,SkillController.cpp,__tcf_12,DIFF,False,False,,False
+0xe1fec0,SkillController.cpp,__tcf_11,DIFF,False,False,,False
+0xe1ff50,SkillController.cpp,__tcf_10,DIFF,False,False,,False
+0xe1ffe0,SkillController.cpp,__tcf_9,DIFF,False,False,,False
+0xe20050,SkillController.cpp,__tcf_8,DIFF,False,False,,False
+0xe200c0,SkillController.cpp,__tcf_7,DIFF,False,False,,False
+0xe20130,SkillController.cpp,__tcf_5,DIFF,False,False,,False
+0xe201c0,SkillController.cpp,__tcf_4,DIFF,False,False,,False
+0xe20250,SkillController.cpp,__tcf_3,DIFF,False,False,,False
+0xe202e0,SkillController.cpp,__tcf_2,DIFF,False,False,,False
+0xe20350,SkillController.cpp,__tcf_0,DIFF,False,False,,False
+0xe203c0,SkillController.cpp,__tcf_6,DIFF,False,False,,False
+0xe20450,SkillController.cpp,CSkillController::configureUnit(),MISSING,False,False,,False
+0xe20620,SkillController.cpp,CSkillController::stopSkill(),MISSING,False,False,,False
+0xe20650,SkillController.cpp,CSkillController::startSkill(),MISSING,False,False,,False
+0xe20680,SkillController.cpp,CSkillController::initSkillController(),MATCH,True,False,,False
+0xe20690,SkillController.cpp,CSkillController::unlearnSkill(),MISSING,False,False,,False
+0xe206f0,SkillController.cpp,CSkillController::learnSkill(),MISSING,False,False,,False
+0xe207b0,SkillController.cpp,CSkillController::update(float),MISSING,False,False,,False
+0xe20cc0,SkillController.cpp,CSkillController::~CSkillController(),MISSING,False,False,,False
+0xe20f40,SkillController.cpp,CSkillController::~CSkillController(),MISSING,False,False,,False
+0xe20f60,editorbutton.cpp,CEditorButton::handle_Click(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe20f90,editorbutton.cpp,"CEditorButton::setRolloverImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe281a0,editorbutton.cpp,"CEditorButton::setNormalImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe28220,editorbutton.cpp,"CEditorButton::setDisabledImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe282a0,editorbutton.cpp,"CEditorButton::setClickedImage(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
+0xe28570,editorbutton.cpp,CEditorButton::CEditorButton(CResourceManager*),MISSING,False,False,,False
+0xe29180,editorbutton.cpp,CEditorButton::~CEditorButton(),MATCH,True,False,,False
+0xe292b0,editorbutton.cpp,CEditorButton::~CEditorButton(),MATCH,True,False,,False
+0xe29320,editorimage.cpp,CEditorImage::setVisible(bool),DIFF,False,False,,False
+0xe29380,editorimage.cpp,"CEditorImage::calculatePosOffsetHie(CEGUI::UDim&, CEGUI::UDim&)",MATCH,True,False,,False
+0xe29410,editorimage.cpp,"CEditorImage::calculatePosHie(CEGUI::UDim&, CEGUI::UDim&)",MISSING,False,False,,False
+0xe294a0,editorimage.cpp,CEditorImage::getVisibleHie(),MATCH,True,False,,False
+0xe294e0,editorimage.cpp,CEditorImage::activate(),MISSING,False,False,,False
+0xe29560,editorimage.cpp,CEditorImage::setEnabled(bool),MATCH,True,False,,False
+0xe295c0,editorimage.cpp,CEditorImage::updatePositionAndSize(),MATCH,True,False,,False
+0xe29670,editorimage.cpp,CEditorImage::update(float),MISSING,False,False,,False
+0xe296e0,editorimage.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe30dd0,editorimage.cpp,__tcf_0,DIFF,False,False,,False
+0xe31320,editorimage.cpp,__tcf_12,DIFF,False,False,,False
+0xe313b0,editorimage.cpp,__tcf_11,DIFF,False,False,,False
+0xe31440,editorimage.cpp,__tcf_10,DIFF,False,False,,False
+0xe314d0,editorimage.cpp,__tcf_9,DIFF,False,False,,False
+0xe31560,editorimage.cpp,__tcf_8,DIFF,False,False,,False
+0xe315d0,editorimage.cpp,__tcf_7,DIFF,False,False,,False
+0xe31640,editorimage.cpp,__tcf_6,DIFF,False,False,,False
+0xe316b0,editorimage.cpp,__tcf_4,DIFF,False,False,,False
+0xe31740,editorimage.cpp,__tcf_3,DIFF,False,False,,False
+0xe317d0,editorimage.cpp,__tcf_2,DIFF,False,False,,False
+0xe31860,editorimage.cpp,__tcf_1,DIFF,False,False,,False
+0xe318d0,editorimage.cpp,__tcf_5,DIFF,False,False,,False
+0xe31960,editorimage.cpp,CEditorImage::~CEditorImage(),MISSING,False,False,,False
+0xe31a60,editorimage.cpp,CEditorImage::~CEditorImage(),MISSING,False,False,,False
+0xe31a80,editorimage.cpp,"CEditorImage::CEditorImage(CResourceManager*, CEGUI::String)",MISSING,False,False,,False
+0xe32490,editorimage.cpp,"CEditorImage::getImageByFileOrName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned char*)",MISSING,False,False,,False
+0xe33220,editorimage.cpp,"CEditorImage::setImageFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xe332a0,journalmenu.cpp,CJournalMenu::setOwner(CCharacter*),MATCH,True,False,,False
+0xe332b0,journalmenu.cpp,CJournalMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe332d0,journalmenu.cpp,CJournalMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe332e0,journalmenu.cpp,"CJournalMenu::processInput(void*, float, bool)",MATCH,True,False,,False
+0xe33310,journalmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe39e60,journalmenu.cpp,CJournalMenu::~CJournalMenu(),DIFF,True,False,,False
+0xe39f10,journalmenu.cpp,CJournalMenu::~CJournalMenu(),MATCH,True,False,,False
+0xe39f30,journalmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xe39fc0,journalmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xe3a030,journalmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xe3a0a0,journalmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xe3a110,journalmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xe3a180,journalmenu.cpp,CJournalMenu::update(float),DIFF,True,False,,False
+0xe3a680,journalmenu.cpp,CJournalMenu::setOpen(bool),MATCH,True,False,,False
+0xe3adf0,journalmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xe3ae80,journalmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xe3aef0,journalmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xe3af80,journalmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xe3b010,journalmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xe3b0a0,journalmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xe3b130,journalmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xe3b1a0,journalmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xe3b210,journalmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xe3b2a0,journalmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xe3b330,journalmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xe3b3c0,journalmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xe3b550,journalmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xe3b5e0,journalmenu.cpp,CJournalMenu::createMenus(),DIFF,True,False,,False
+0xe3c070,journalmenu.cpp,"CJournalMenu::CJournalMenu(CGameUI&, CSettings&, Ogre::RenderWindow*, Ogre::SceneManager*, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xe3c460,journalmenu.cpp,CJournalMenu::updateLayout(),DIFF,True,False,,False
+0xe447e0,journalmenu.cpp,CEGUI::MemberFunctionSlot<CJournalMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xe447f0,journalmenu.cpp,CEGUI::MemberFunctionSlot<CJournalMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
+0xe44820,journalmenu.cpp,CEGUI::MemberFunctionSlot<CJournalMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
+0xe44830,tipmenu.cpp,CTipMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe44840,tipmenu.cpp,"CTipMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xe448c0,tipmenu.cpp,CTipMenu::update(float),MISSING,False,False,,False
+0xe44930,tipmenu.cpp,CTipMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe44950,tipmenu.cpp,CTipMenu::setOpen(bool),MISSING,False,False,,False
+0xe44a70,tipmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe4b5c0,tipmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xe4b630,tipmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xe4b6a0,tipmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xe4b710,tipmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xe4b7a0,tipmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xe4b810,tipmenu.cpp,"CTipMenu::setContents(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",MISSING,False,False,,False
+0xe4c0a0,tipmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xe4c130,tipmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xe4c1c0,tipmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xe4c250,tipmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xe4c2e0,tipmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xe4c370,tipmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xe4c3e0,tipmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xe4c450,tipmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xe4c4c0,tipmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xe4c550,tipmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xe4c5e0,tipmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xe4c670,tipmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xe4c770,tipmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xe4c800,tipmenu.cpp,CTipMenu::createMenus(),MISSING,False,False,,False
+0xe4d090,tipmenu.cpp,"CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xe4d210,FileSystem.cpp,CFileSystem::getNeedsToRecompressEverything(),MATCH,True,False,,False
+0xe4d230,FileSystem.cpp,CFileSystem::clean(),MATCH,True,False,,False
+0xe4d250,FileSystem.cpp,CFileSystem::getSingleton(),MATCH,True,False,,False
+0xe4d260,FileSystem.cpp,CFileSystem::getNumberOfMods(),MATCH,True,False,,False
+0xe4d280,FileSystem.cpp,"CFileSystem::getEnabledModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MATCH,True,False,,False
+0xe4d2a0,FileSystem.cpp,"CFileSystem::getModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MATCH,True,False,,False
+0xe4d2c0,FileSystem.cpp,CFileSystem::getDataStream(CFileInfo&),MATCH,True,False,,False
+0xe4d360,FileSystem.cpp,global constructors keyed to g_pFileSystem,DIFF,False,False,,False
 0xe4d650,FileSystem.cpp,"CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",DIFF,False,False,,False
 0xe4d8c0,FileSystem.cpp,CFileSystem::reload(),DIFF,False,False,,False
 0xe4d9c0,FileSystem.cpp,"CFileSystem::getDataGroup(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
@@ -183,6 +692,41 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe90db0,MoneyTaker.cpp,__tcf_1,DIFF,False,False,,False
 0xe90e40,MoneyTaker.cpp,__tcf_0,DIFF,False,False,,False
 0xe90ed0,MoneyTaker.cpp,__tcf_8,DIFF,False,False,,False
+0xe90f60,cinematicmenu.cpp,"CCinematicMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
+0xe90fa0,cinematicmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
+0xe98e50,cinematicmenu.cpp,CCinematicMenu::setOpen(bool),MISSING,False,False,,False
+0xe99020,cinematicmenu.cpp,__tcf_15,DIFF,False,False,,False
+0xe99090,cinematicmenu.cpp,__tcf_14,DIFF,False,False,,False
+0xe99100,cinematicmenu.cpp,__tcf_16,DIFF,False,False,,False
+0xe99170,cinematicmenu.cpp,__tcf_13,DIFF,False,False,,False
+0xe99200,cinematicmenu.cpp,__tcf_0,DIFF,False,False,,False
+0xe99270,cinematicmenu.cpp,CCinematicMenu::~CCinematicMenu(),MATCH,True,False,,False
+0xe992d0,cinematicmenu.cpp,CCinematicMenu::~CCinematicMenu(),MATCH,True,False,,False
+0xe992f0,cinematicmenu.cpp,CCinematicMenu::updateTextDisplay(float),MISSING,False,False,,False
+0xe99800,cinematicmenu.cpp,CCinematicMenu::update(float),MISSING,False,False,,False
+0xe99ad0,cinematicmenu.cpp,__tcf_4,DIFF,False,False,,False
+0xe99b60,cinematicmenu.cpp,__tcf_3,DIFF,False,False,,False
+0xe99bf0,cinematicmenu.cpp,__tcf_2,DIFF,False,False,,False
+0xe99c80,cinematicmenu.cpp,__tcf_1,DIFF,False,False,,False
+0xe9a0f0,cinematicmenu.cpp,__tcf_17,DIFF,False,False,,False
+0xe9a180,cinematicmenu.cpp,__tcf_12,DIFF,False,False,,False
+0xe9a210,cinematicmenu.cpp,__tcf_11,DIFF,False,False,,False
+0xe9a2a0,cinematicmenu.cpp,__tcf_10,DIFF,False,False,,False
+0xe9a330,cinematicmenu.cpp,__tcf_9,DIFF,False,False,,False
+0xe9a3c0,cinematicmenu.cpp,__tcf_8,DIFF,False,False,,False
+0xe9a430,cinematicmenu.cpp,__tcf_7,DIFF,False,False,,False
+0xe9a4a0,cinematicmenu.cpp,__tcf_6,DIFF,False,False,,False
+0xe9a510,cinematicmenu.cpp,__tcf_5,DIFF,False,False,,False
+0xe9a5a0,cinematicmenu.cpp,"CCinematicMenu::setText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xe9b180,cinematicmenu.cpp,CCinematicMenu::createMenus(),MISSING,False,False,,False
+0xe9b920,cinematicmenu.cpp,"CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xe9bab0,waypointmenu.cpp,CWaypointMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xe9bad0,waypointmenu.cpp,CWaypointMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xea34b0,waypointmenu.cpp,CWaypointMenu::update(float),MISSING,False,False,,False
+0xea45d0,waypointmenu.cpp,"CWaypointMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xea4970,waypointmenu.cpp,CWaypointMenu::setOpen(bool),MISSING,False,False,,False
+0xea58b0,waypointmenu.cpp,CWaypointMenu::createMenus(),MISSING,False,False,,False
+0xea62a0,waypointmenu.cpp,"CWaypointMenu::CWaypointMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
 0xea6660,WaypointActivatorDescriptor.cpp,"CWaypointActivatorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
 0xea66a0,WaypointActivatorDescriptor.cpp,CWaypointActivatorDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
 0xea6700,WaypointActivatorDescriptor.cpp,CWaypointActivatorDescriptor::~CWaypointActivatorDescriptor(),MATCH,True,False,,False
@@ -205,161 +749,3 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xea9c60,OgreReader.cpp,COgreReader::~COgreReader(),MATCH,True,False,,False
 0xea9cd0,OgreReader.cpp,"COgreReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0xea9ff0,SPLASH.cpp,CSplash::CSplash(),MATCH,True,False,,False
-0xeaa020,SPLASH.cpp,"CSplash::findCenterForWindow(int, int, int&, int&)",MATCH,True,False,,False
-0xeaa030,SPLASH.cpp,global constructors keyed to CSplash::CSplash(),MATCH,False,False,,False
-0xeaa0a0,SPLASH.cpp,CSplash::Hide(),MATCH,True,False,,False
-0xeaa0c0,SPLASH.cpp,CSplash::Show(),MATCH,True,False,,False
-0xeaa160,SPLASH.cpp,CSplash::~CSplash(),MATCH,True,False,,False
-0xeaa190,SPLASH.cpp,CSplash::~CSplash(),MATCH,True,False,,False
-0xeaa1b0,SPLASH.cpp,"CSplash::Init(void*, int)",DIFF,False,False,,False
-0xeaa430,WaypointActivator.cpp,CWaypointActivator::createEntity(),MATCH,True,False,,False
-0xeaa440,WaypointActivator.cpp,CWaypointActivator::CWaypointActivator(CResourceManager*),MATCH,True,False,,False
-0xeb2200,WaypointActivator.cpp,CWaypointActivator::activate(),MISSING,False,False,,False
-0xeb25e0,WaypointActivator.cpp,CWaypointActivator::~CWaypointActivator(),MATCH,True,False,,False
-0xeb2640,WaypointActivator.cpp,CWaypointActivator::~CWaypointActivator(),MATCH,True,False,,False
-0xeb2660,DungeonObject.cpp,CDungeonObject::createEntity(),MATCH,True,False,,False
-0xeb2670,DungeonObject.cpp,CDungeonObject::CDungeonObject(CResourceManager*),MATCH,True,False,,False
-0xeb26d0,DungeonObject.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xeb9a00,DungeonObject.cpp,global constructors keyed to CDungeonObject::CDungeonObject(CResourceManager*),MATCH,False,False,,False
-0xeb9a10,DungeonObject.cpp,__tcf_16,DIFF,False,False,,False
-0xeb9a80,DungeonObject.cpp,__tcf_15,DIFF,False,False,,False
-0xeb9b10,DungeonObject.cpp,__tcf_2,MATCH,False,False,,False
-0xeb9bf0,DungeonObject.cpp,__tcf_17,DIFF,False,False,,False
-0xeb9d80,DungeonObject.cpp,__tcf_14,DIFF,False,False,,False
-0xeb9e10,DungeonObject.cpp,__tcf_13,DIFF,False,False,,False
-0xeb9ea0,DungeonObject.cpp,__tcf_12,DIFF,False,False,,False
-0xeb9f30,DungeonObject.cpp,__tcf_11,DIFF,False,False,,False
-0xeb9fc0,DungeonObject.cpp,__tcf_10,DIFF,False,False,,False
-0xeba030,DungeonObject.cpp,__tcf_9,MATCH,False,False,,False
-0xeba0a0,DungeonObject.cpp,__tcf_8,MATCH,False,False,,False
-0xeba110,DungeonObject.cpp,__tcf_6,MATCH,False,False,,False
-0xeba1a0,DungeonObject.cpp,__tcf_5,MATCH,False,False,,False
-0xeba230,DungeonObject.cpp,__tcf_4,MATCH,False,False,,False
-0xeba2c0,DungeonObject.cpp,__tcf_3,MATCH,False,False,,False
-0xeba330,DungeonObject.cpp,__tcf_1,DIFF,False,False,,False
-0xeba3c0,DungeonObject.cpp,__tcf_0,DIFF,False,False,,False
-0xeba430,DungeonObject.cpp,CDungeonObject::clearHistory(),MATCH,True,False,,False
-0xeba530,DungeonObject.cpp,__tcf_7,MATCH,False,False,,False
-0xeba5c0,DungeonObject.cpp,CDungeonObject::~CDungeonObject(),MATCH,True,False,,False
-0xeba620,DungeonObject.cpp,CDungeonObject::~CDungeonObject(),MATCH,True,False,,False
-0xeba640,DungeonObjectDescriptor.cpp,"CDungeonObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",DIFF,False,False,,False
-0xeba680,DungeonObjectDescriptor.cpp,CDungeonObjectDescriptor::CreateObject(CEditorScene*),MATCH,True,False,,False
-0xeba6e0,DungeonObjectDescriptor.cpp,CDungeonObjectDescriptor::~CDungeonObjectDescriptor(),MATCH,True,False,,False
-0xeba6f0,DungeonObjectDescriptor.cpp,CDungeonObjectDescriptor::~CDungeonObjectDescriptor(),MATCH,True,False,,False
-0xeba710,DungeonObjectDescriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xebd5c0,DungeonObjectDescriptor.cpp,"global constructors keyed to CDungeonObjectDescriptor::CDungeonObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",MATCH,False,False,,False
-0xebd5d0,DungeonObjectDescriptor.cpp,__tcf_5,MATCH,False,False,,False
-0xebd640,DungeonObjectDescriptor.cpp,__tcf_4,MATCH,False,False,,False
-0xebd6b0,DungeonObjectDescriptor.cpp,__tcf_3,MATCH,False,False,,False
-0xebd720,DungeonObjectDescriptor.cpp,__tcf_2,MATCH,False,False,,False
-0xebd7b0,DungeonObjectDescriptor.cpp,__tcf_1,MATCH,False,False,,False
-0xebd820,DungeonObjectDescriptor.cpp,__tcf_0,MATCH,False,False,,False
-0xebd920,DungeonObjectDescriptor.cpp,"CDungeonObjectDescriptor::CDungeonObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",DIFF,False,False,,False
-0xebdb20,DungeonObjectDescriptor.cpp,"CDungeonObjectDescriptor::Get_getDungeon(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
-0xebdba0,DungeonObjectDescriptor.cpp,"CDungeonObjectDescriptor::Set_setDungeon(CEditorBaseObject*, UNIONDATA16BIT*, unsigned int)",MATCH,False,False,,False
-0xebdc40,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::GpuCommandBufferFlush(),MATCH,True,False,,False
-0xebdc80,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::frameStarted(Ogre::FrameEvent const&),MATCH,True,False,,False
-0xebdcb0,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::frameEnded(Ogre::FrameEvent const&),MATCH,True,False,,False
-0xebdd30,OgreGpuCommandBufferFlush.cpp,global constructors keyed to Ogre::GpuCommandBufferFlush::GpuCommandBufferFlush(),DIFF,False,False,,False
-0xebdda0,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::stop(),MATCH,True,False,,False
-0xebde50,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::~GpuCommandBufferFlush(),MATCH,True,False,,False
-0xebdeb0,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::~GpuCommandBufferFlush(),MATCH,True,False,,False
-0xebded0,OgreGpuCommandBufferFlush.cpp,Ogre::GpuCommandBufferFlush::start(unsigned long),MATCH,True,False,,False
-0xebe000,OgreGpuCommandBufferFlush.cpp,"std::vector<Ogre::HardwareOcclusionQuery*, std::allocator<Ogre::HardwareOcclusionQuery*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<Ogre::HardwareOcclusionQuery**, std::vector<Ogre::HardwareOcclusionQuery*, std::allocator<Ogre::HardwareOcclusionQuery*> > >, Ogre::HardwareOcclusionQuery* const&)",MATCH,False,False,,False
-0xebe190,Achievement.cpp,CAchievement::getStatType(),MISSING,False,False,,False
-0xebe1b0,Achievement.cpp,CAchievement::checkForAchieved(),MISSING,False,False,,False
-0xebe260,Achievement.cpp,CAchievement::setValue(float),DIFF,False,False,,False
-0xebe2c0,Achievement.cpp,CAchievement::setValue(int),DIFF,False,False,,False
-0xebe330,Achievement.cpp,CAchievement::cheat(),DIFF,False,False,,False
-0xebe400,Achievement.cpp,CAchievement::forceComplete(),DIFF,False,False,,False
-0xebe4c0,Achievement.cpp,CAchievement::addValue(float),DIFF,False,False,,False
-0xebe550,Achievement.cpp,CAchievement::addValue(int),DIFF,False,False,,False
-0xebe5f0,Achievement.cpp,CAchievement::increment(),DIFF,False,False,,False
-0xebe650,Achievement.cpp,"CAchievement::CAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, ESTATS, float, float)",MISSING,False,False,,False
-0xebe730,Achievement.cpp,"CAchievement::CAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, ESTATS, int, int)",MISSING,False,False,,False
-0xebf630,Achievement.cpp,__tcf_0,DIFF,False,False,,False
-0xebf6a0,Achievement.cpp,CAchievement::~CAchievement(),DIFF,False,False,,False
-0xebf710,Achievement.cpp,non-virtual thunk to CAchievement::~CAchievement(),MATCH,True,False,,False
-0xebf720,Achievement.cpp,non-virtual thunk to CAchievement::~CAchievement(),MATCH,True,False,,False
-0xebf730,Achievement.cpp,CAchievement::~CAchievement(),MATCH,True,False,,False
-0xebf750,Achievement.cpp,__tcf_1,DIFF,False,False,,False
-0xebf7c0,Achievement.cpp,CAchievement::getStatCompleteString(),MISSING,False,False,,False
-0xebfa20,Achievements.cpp,CAchievements::getSingleton(),MATCH,True,False,,False
-0xebfa30,Achievements.cpp,CAchievements::getAchievement(EACHIEVEMENTS),MATCH,True,False,,False
-0xebfa80,Achievements.cpp,CAchievements::synchAchievementsComplete(),MATCH,True,False,,False
-0xebfa90,Achievements.cpp,CAchievements::update(float),MATCH,True,False,,False
-0xebfac0,Achievements.cpp,CAchievements::cheat(),MISSING,False,False,,False
-0xec6590,Achievements.cpp,global constructors keyed to m_gAchievementsObject,DIFF,False,False,,False
-0xec65a0,Achievements.cpp,CAchievements::~CAchievements(),MISSING,False,False,,False
-0xec66c0,Achievements.cpp,CAchievements::~CAchievements(),MISSING,False,False,,False
-0xec7090,Achievements.cpp,"CAchievements::getAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",MISSING,False,False,,False
-0xec71d0,Achievements.cpp,CAchievements::getAchievementStatus(),MISSING,False,False,,False
-0xec7770,Achievements.cpp,__tcf_0,DIFF,False,False,,False
-0xec7850,Achievements.cpp,CAchievements::setAchievementComplete(CAchievement*),MISSING,False,False,,False
-0xec7940,Achievements.cpp,CAchievements::CAchievements(),MISSING,False,False,,False
-0xecdf30,Achievements.cpp,TArrayList<CAchievement*>::~TArrayList(),MATCH,False,False,,False
-0xece240,SteamStats.cpp,CSteamStats::reloadPlayerData(CPlayer*),DIFF,False,False,,False
-0xece310,SteamStats.cpp,CSteamStats::update(float),MATCH,True,False,,False
-0xece320,SteamStats.cpp,CSteamStats::forceStatsToSave(),MATCH,True,False,,False
-0xece330,SteamStats.cpp,"CSteamStats::setStatInt(ESTATS, unsigned int)",MATCH,True,False,,False
-0xece340,SteamStats.cpp,"CSteamStats::incrementStat(ESTATS, int)",MATCH,True,False,,False
-0xece350,SteamStats.cpp,"CSteamStats::setStatFloat(ESTATS, float)",MATCH,True,False,,False
-0xece360,SteamStats.cpp,CSteamStats::getStatInt(ESTATS),MISSING,False,False,,False
-0xece3a0,SteamStats.cpp,CSteamStats::getStatFloat(ESTATS),MISSING,False,False,,False
-0xece3e0,SteamStats.cpp,CSteamStats::getPlayerStatInt(ESTATS),MISSING,False,False,,False
-0xece420,SteamStats.cpp,CSteamStats::getPlayerStatFloat(ESTATS),MATCH,True,False,,False
-0xece430,SteamStats.cpp,CSteamStats::getSingleton(),MATCH,True,False,,False
-0xece440,SteamStats.cpp,CSteamStats::StoreStats(),MATCH,True,False,,False
-0xece450,SteamStats.cpp,"CSteamStats::statModified(ESTATS, UNIONDATA32BIT)",DIFF,False,False,,False
-0xece5d0,SteamStats.cpp,CSteamStats::updateStatListeners(),MISSING,False,False,,False
-0xece780,SteamStats.cpp,CSteamStats::checkForLocalUpdates(float),MISSING,False,False,,False
-0xece980,SteamStats.cpp,"CSteamStats::addStatListener(ESTATS, iStatListener*)",DIFF,True,False,,False
-0xecea70,SteamStats.cpp,CSteamStats::~CSteamStats(),MISSING,False,False,,False
-0xecec00,SteamStats.cpp,CSteamStats::~CSteamStats(),MISSING,False,False,,False
-0xecec20,SteamStats.cpp,CSteamStats::CSteamStats(),MISSING,False,False,,False
-0xeceef0,SteamStats.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xed5980,SteamStats.cpp,__tcf_0,DIFF,False,False,,False
-0xed59f0,SteamStats.cpp,__tcf_17,DIFF,False,False,,False
-0xed5a60,SteamStats.cpp,__tcf_16,DIFF,False,False,,False
-0xed5ad0,SteamStats.cpp,__tcf_15,DIFF,False,False,,False
-0xed5b40,SteamStats.cpp,__tcf_14,DIFF,False,False,,False
-0xed5bd0,SteamStats.cpp,__tcf_4,DIFF,False,False,,False
-0xed5c40,SteamStats.cpp,__tcf_1,DIFF,False,False,,False
-0xed5cb0,SteamStats.cpp,__tcf_2,DIFF,False,False,,False
-0xed5e40,SteamStats.cpp,__tcf_18,DIFF,False,False,,False
-0xed5ed0,SteamStats.cpp,__tcf_13,DIFF,False,False,,False
-0xed5f60,SteamStats.cpp,__tcf_12,DIFF,False,False,,False
-0xed5ff0,SteamStats.cpp,__tcf_11,DIFF,False,False,,False
-0xed6060,SteamStats.cpp,__tcf_10,DIFF,False,False,,False
-0xed60d0,SteamStats.cpp,__tcf_8,DIFF,False,False,,False
-0xed6160,SteamStats.cpp,__tcf_7,DIFF,False,False,,False
-0xed61f0,SteamStats.cpp,__tcf_6,DIFF,False,False,,False
-0xed6280,SteamStats.cpp,__tcf_5,DIFF,False,False,,False
-0xed62f0,SteamStats.cpp,__tcf_3,DIFF,False,False,,False
-0xed6380,SteamStats.cpp,__tcf_9,DIFF,False,False,,False
-0xf61bd0,LinuxUtils.cpp,"LinuxUtils::SaveDesktopResolution(int, int)",MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61bd0.cpp,False
-0xf61be0,LinuxUtils.cpp,"LinuxUtils::GetDesktopResolution(int&, int&)",MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61be0.cpp,False
-0xf61c70,LinuxUtils.cpp,"MessageBoxA(void*, char const*, char const*, int)",MISSING,False,False,,False
-0xf61d60,LinuxUtils.cpp,GetTickCount(),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61d60.cpp,False
-0xf61da0,LinuxUtils.cpp,LinuxUtils::GetSDLWindowHandle(SDL_Window*),MISSING,False,False,,False
-0xf61dd0,LinuxUtils.cpp,LinuxUtils::GetHomeDir(),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61dd0.cpp,False
-0xf61df0,LinuxUtils.cpp,LinuxUtils::GetTempDir(),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61df0.cpp,False
-0xf61e10,LinuxUtils.cpp,LinuxUtils::GetAppDir(),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf61e10.cpp,False
-0xf61e30,LinuxUtils.cpp,LinuxUtils::crash_handler(int),MISSING,False,False,,False
-0xf61eb0,LinuxUtils.cpp,"MessageBox(void*, wchar_t const*, wchar_t const*, int)",MISSING,False,False,,False
-0xf620d0,LinuxUtils.cpp,"_wfopen_s(_IO_FILE**, wchar_t const*, wchar_t const*)",MISSING,False,False,,False
-0xf622e0,LinuxUtils.cpp,LinuxUtils::Init(),MISSING,False,False,,False
-0xf62780,LinuxUtils.cpp,"LinuxUtils::GetIntLine(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MISSING,False,False,,False
-0xf62b70,LinuxUtils.cpp,LinuxUtils::GetPhysicalRAMSize(),MISSING,False,False,,False
-0xf62c80,LinuxUtils.cpp,LinuxUtils::GetCPUFrequency(),MISSING,False,False,,False
-0xf63210,LinuxUtils.cpp,"UpdateCursorPos(long, long)",MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63210.cpp,False
-0xf63220,LinuxUtils.cpp,GetCursorPos(POINT*),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63220.cpp,False
-0xf63240,LinuxUtils.cpp,"SetCursorPos(int, int)",MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63240.cpp,False
-0xf63250,LinuxUtils.cpp,"UpdateKeyState(unsigned int, bool)",MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63250.cpp,False
-0xf63260,LinuxUtils.cpp,GetAsyncKeyState(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63260.cpp,False
-0xf63280,LinuxUtils.cpp,GetKeyState(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf63280.cpp,False
-0xf632a0,LinuxUtils.cpp,LinuxMapVirtual2Scancode(unsigned int),MISSING,False,False,,False
-0xf632b0,LinuxUtils.cpp,ClearKeyState(),MATCH,True,True,handoff/recovered-pass10/snippets/LinuxUtils.cpp/0xf632b0.cpp,False
-0xf632d0,ShellUtils.cpp,"ShellUtils::LaunchProgram(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)",MATCH,True,False,,False
-0xf63380,ShellUtils.cpp,"ShellUtils::LaunchBrowser(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
-0xf633c0,ShellUtils.cpp,lodepng_read32bitInt(unsigned char const*),MISSING,False,False,,False

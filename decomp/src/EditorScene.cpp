@@ -1,17 +1,17 @@
-extern unsigned int gObjectsCreated asm("_ZL15gObjectsCreated");
 #include "DataGroup.h"
 #include "Descriptor.h"
 #include "DescriptorController.h"
-#include "DescriptorManager.h"
-#include "EditorScene.h"
 #include "FileUtilities.h"
 #include "LogicGroupDescriptor.h"
 #include "MasterResourceManager.h"
 #include "ParticleScene.h"
 #include "ParticleTechWrapper.h"
 #include "ResourceManager.h"
+#include "SceneNodeObject.h"
 #include "Settings.h"
 #include "Timeline.h"
+extern unsigned int gObjectsCreated __asm__("_ZL15gObjectsCreated");
+
 #include "EditorScene.h"
 
 void CEditorScene::fireEvent(EEDITOR_EVENTS event, long long guid)
@@ -50,8 +50,6 @@ CEditorBaseObject* CEditorScene::GetObjectInScene(long long guid)
     return NULL;
 }
 
-
-// Imported source candidates; historical status is not fresh acceptance.
 void CEditorScene::clearObjectIndex()
 {
     gObjectsCreated = 0;
@@ -145,4 +143,20 @@ unsigned int CEditorScene::saveObjectsHavingParent(long long parent, CDataGroup*
             count += saveObjectAndChildren(it->second, group, configuration);
     }
     return count;
+}
+
+TArrayList<CEditorBaseObject*>* CEditorScene::GetObjectsCreatedByADescriptor(const std::wstring& name)
+{
+    if (!m_pDescriptorManager) return NULL;
+    CDescriptor* descriptor = m_pDescriptorManager->GetDescriptor(name.c_str(),false);
+    if (!descriptor) return NULL;
+    return &descriptor->m_Objects;
+}
+
+void CEditorScene::AddDescriptor(const wchar_t* name)
+{
+    if (!m_pDescriptorManager->GetDescriptor(name,true)) {
+        CDescriptor* descriptor = CDescriptorController::getNewDescriptorByName(name);
+        AddDescriptor(descriptor);
+    }
 }

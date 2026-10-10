@@ -15,18 +15,20 @@
 #include "ResourceManager.h"
 #include "Settings.h"
 class CGameUI;
+class CCharacterSaveState;
 
 class CContinueGameMenu : public CDropdownMenu
 {
 public:
+
     virtual ~CContinueGameMenu();
     virtual void update(float);
     virtual void setOpen(bool);
-    virtual void onClick(ELayoutFunction, std::wstring);
-    virtual void onDoubleClick(ELayoutFunction, std::wstring);
+    virtual bool onClick(ELayoutFunction, std::wstring);
+    virtual bool onDoubleClick(ELayoutFunction, std::wstring);
     bool canContinue();
-    long long handle_ExitButton(const CEGUI::EventArgs&);
-    long long handle_CloseButton(const CEGUI::EventArgs&);
+    bool handle_ExitButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     void updateCharacterList();
     void scrollUp();
     void scrollDown();
@@ -80,9 +82,7 @@ public:
     void* m_pUnknown1D0;
     long long m_iUnknown1D8;
     void* m_pUnknown1E0;
-    void* m_pUnknown1E8;
-    long long m_iUnknown1F0;
-    void* m_pUnknown1F8;
+    std::vector<CCharacterSaveState*> m_savedCharacters;
     void* m_pUnknown200;
     long long m_iUnknown208;
     void* m_pUnknown210;

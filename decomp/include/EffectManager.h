@@ -6,6 +6,7 @@
 #include "TArrayList.h"
 #include <string>
 class CBaseUnit;
+class CCharacter;
 class CAffix;
 class CCharacter;
 class CEffect;
@@ -19,6 +20,12 @@ public:
     void notifyOfDeletion(CCharacter* character);
     void clearAllUnitReferences();
     CAffix* cloneAffix(CAffix* affix, unsigned int level, CBaseUnit* source, float scale);
+    CEffect* getEffect(EEFFECT_TYPE type);
+
+    void transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE);
+
+    void recalculateEffects();
+
     CEffectManager(CBaseUnit* owner);
     virtual ~CEffectManager();
     CAffix* addAffix(CAffix* affix,unsigned int level,CBaseUnit* source,float scale);

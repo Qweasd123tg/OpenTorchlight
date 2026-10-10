@@ -1,10 +1,23 @@
+#include <cmath>
+#include "DataGroup.h"
+#include "DungeonTracker.h"
+#include "GameClient.h"
+#include "GenericModel.h"
 #include "Graph.h"
 #include "GraphManager.h"
+#include "Level.h"
 #include "LevelState.h"
-#include <OgreSceneNode.h>
-#include "Player.h"
+#include "LevelTemplateData.h"
+#include "OgreSceneNode.h"
+#include "Particle.h"
+#include "ResourceManager.h"
+#include "Skill.h"
 #include "SteamStats.h"
-#include <cmath>
+#include "StringUtilities.h"
+#include "Utilities.h"
+#include "cmath"
+void WriteUTF32ToUTF16(FILE*, const std::wstring&, unsigned long);
+
 #include "Character.h"
 #include "Player.h"
 
@@ -13,8 +26,6 @@ void CPlayer::levelLoaded(CLevel* value)
     CCharacter::levelLoaded(value);
 }
 
-
-// Imported source candidates; historical status is not fresh acceptance.
 void CPlayer::clearSkillMap()
 {
     for (int i = 0; i < 10; ++i) { m_skillMap[i] = -1; m_leftSkillMap[i] = -1; }
@@ -125,4 +136,84 @@ void CPlayer::calculateMaxMana()
             if (m_fManaFloat > maxMana()) m_fManaFloat = maxMana();
         }
     }
+}
+
+int CPlayer::getDungeonRank(std::wstring dungeon)
+{
+    for (unsigned int i = 0; i < m_dungeonTrackers.size(); ++i) {
+        if (m_dungeonTrackers[i]->m_name == dungeon) return m_dungeonTrackers[i]->m_rank;
+    }
+    return 0;
+}
+
+void CPlayer::clearDungeonHistory(std::wstring dungeon)
+{
+    dungeon = STRINGS::StringUpper(dungeon);
+    for (int i = 0; i < int(m_savedLevels.size()); ++i) {
+        CLevelState* state = m_savedLevels[i];
+        if (state->m_sLevelName == dungeon) state->m_iStateVersion = -1.0f;
+    }
+}
+
+bool CPlayer::hasDungeonHistory(std::wstring dungeon)
+{
+    dungeon = STRINGS::StringUpper(dungeon);
+    for (int i = 0; i < int(m_savedLevels.size()); ++i)
+        if (m_savedLevels[i]->m_sLevelName == dungeon) return true;
+    return false;
+}
+
+void CPlayer::startFishing()
+{
+    CCharacter::startFishing();
+    m_fishingParticle->setVisible(false);
+    m_fishingFlag = false;
+    m_fishingDelay = UTILITIES::randomBetweenVolatile(1.0f,3.0f);
+    m_fishingTime = 2.0f;
+    m_fishingValue860 = 0.0f;
+    m_fishingValue854 = 0.0f;
+}
+
+void CPlayer::openPortal(CLevel& level)
+{
+    if (level.getLevelTemplateData()->permitsPortal())
+    {
+        level.deleteOpenPortals();
+        m_hasPortal = true;
+        m_portalDepth = level.getLevelDepth();
+        m_portalDungeon = level.getDungeonName();
+        m_portalPosition = level.randomOpenPosition(getPosition(true), 3, false);
+        createPortals(level);
+    }
+}
+
+void CPlayer::attemptToStopPlayerSkill(bool force)
+{
+    if (m_activeSkill)
+    {
+        int animation = m_activeSkill->getAnimationIndexLoopEnd();
+        attemptStopOfActiveSkill();
+        if (!performingSkill())
+        {
+            if (animation != -1)
+            {
+                blendAnimation(animation, true, 0.2f, 1, -1);
+                queueBlendAnimation("IDLE", true, 0.2f, 1);
+            }
+            if (m_activeSkill && m_activeSkill->stopsPathingOnCompletion() && force)
+                stopPathing();
+        }
+    }
+}
+
+void CPlayer::catchFish()
+{
+    if (m_eAIState == 34)
+        return;
+    m_fishingFlag = false;
+    if (m_fishingValue860 > 0)
+        m_fishingFlag = true;
+    setAIState(static_cast<EAIState>(34));
+    blendAnimation("FISHING_CATCH", false, 0.2f, 1, -1);
+    m_pUnitModel->queueBlendAnimation("IDLE", true, 0.2f, 1);
 }

@@ -15,6 +15,8 @@ class CDescriptor;
 class CDescriptorManager;
 class CDynamicPropertyFile;
 class CTimerStatics;
+class CDescriptorLoadConfiguration;
+class CDescriptorSaveConfiguration;
 
 // Partial: layout from CEditorScene::CEditorScene(const wchar_t*); members of
 // EditorScene.cpp are declared as recovered TUs need them. Return types of the
@@ -22,6 +24,19 @@ class CTimerStatics;
 class CEditorScene : public CPositionableObject
 {
 public:
+    unsigned int getNumberOfTimelinesThatDoLoop();
+    unsigned int getNumberOfTimelinesUpdating(bool excludeLooping);
+
+    void DeleteAllObjectsFromScene();
+    int saveScene(std::wstring filename, TArrayList<CEditorBaseObject*>* objects);
+
+    std::map<long long, CEditorBaseObject*>& getObjects() { return m_Objects; }
+
+    TArrayList<CEditorBaseObject*>* GetObjectsCreatedByADescriptor(const std::wstring& name);
+    void configureGroupsToParse(CEditorBaseObject* parent,CDataGroup& data,TArrayList<CDataGroup*>& groups,CDescriptorLoadConfiguration* configuration);
+    int loadObject(CDataGroup* data,CDescriptorLoadConfiguration* configuration);
+    int loadObjects(CEditorBaseObject* parent,CDataGroup* data,CDescriptorLoadConfiguration* configuration);
+
     void clearObjectIndex();
     unsigned int GetNumberOfObjectsInScene(bool includeOwner);
     TArrayList<CEditorBaseObject*>* GetObjectsCreatedByADescriptor(CDescriptor* descriptor);
@@ -35,7 +50,8 @@ public:
     void deleteUnusedDescriptors();
     void setFileLoaded(const std::wstring& path);
     unsigned int saveObjectsHavingParent(long long parent, CDataGroup* group, CDescriptorSaveConfiguration* configuration);
-    unsigned int saveObjectAndChildren(CEditorBaseObject*,CDataGroup*,CDescriptorSaveConfiguration*);
+    unsigned int saveObjectAndChildren(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*);
+
     void RemoveObjectInScene(CEditorBaseObject* object);
     CEditorScene(const wchar_t* name);
     virtual ~CEditorScene();
@@ -79,7 +95,7 @@ private:
     std::wstring m_sFileLoaded;
     void* m_pUnknown170;
     void* m_pUnknown178;
-    void* m_pUnknown180;
+    CDataGroup* m_pUnknown180;
     int m_iUnknown188;
     bool m_bActivated;
     bool m_bUnknown18D;

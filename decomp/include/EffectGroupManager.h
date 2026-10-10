@@ -13,7 +13,7 @@ class CEffectGroupManager : public CRunicCore
 public:
 	virtual ~CEffectGroupManager();
 
-	void getAffixNames(TArrayList<std::wstring> affixNames);
+	void getAffixNames(TArrayList<std::wstring>& affixNames);
 	void clean();
 	CAffix* getAffix(const std::wstring& name);
 	void rollAndCreateRandomAffixes(

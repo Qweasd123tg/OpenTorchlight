@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <OgreVector3.h>
 
 #include "BaseUnit.h"
 #include "DataGroup.h"
@@ -52,11 +53,9 @@ public:
 
     unsigned char m_reserved7C[4];
 
-    union
-    {
-        CSoundBank* m_pSoundBank;
-        unsigned char m_reservedSoundStorage[0x18];
-    };
+    CSoundBank* m_pSoundBank;
+    Ogre::Vector3 m_cameraOffset; // +0x88
+    unsigned char m_reserved94[4];
 
     std::wstring m_sThemeOverride;
     std::wstring m_sSoundName;

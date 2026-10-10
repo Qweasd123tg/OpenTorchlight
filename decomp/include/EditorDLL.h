@@ -29,4 +29,15 @@ void EditorParticleMovementConfig(float& a, float& b, bool set);
 void EditorMakeGuid();
 void EditorSetModPriority(const wchar_t* mod, int priority);
 
+
+class CLogicGroup;
+class CTimeline;
+class CUndo;
+extern wchar_t sEditorString[];
+extern CUndo* g_pGroupedUndos;
+static bool bGroupUndos;
+void* EditorGetObjectProperty(long long objectID, unsigned int propertyID);
+CLogicGroup* GetLogicGroupByID(long long guid);
+CTimeline* GetTimeline(long long guid);
+
 #endif

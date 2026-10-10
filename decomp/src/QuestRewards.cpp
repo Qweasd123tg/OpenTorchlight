@@ -11,13 +11,13 @@ void CQuestRewards::destroyIcons()
     for (unsigned int i = 0; i < m_rewardItems.size(); ++i)
     {
         CEquipment *equipment =
-            dynamic_cast<CEquipment *>(&m_rewardItems[i]);
+            dynamic_cast<CEquipment *>(m_rewardItems[i]);
         if (equipment != NULL)
             equipment->destroyIcon();
     }
 }
 
-TArrayList<CBaseUnit> *CQuestRewards::getRewardItems()
+TArrayList<CBaseUnit*> *CQuestRewards::getRewardItems()
 {
     calculateRewards();
     return &m_rewardItems;

@@ -13,6 +13,8 @@ class CSpawnClassData;
 class CSpawnClassParser : public CRunicCore
 {
 public:
+    void reloadFromDirectory(const wchar_t* path);
+
     virtual ~CSpawnClassParser();
     static CSpawnClassParser* getSingleton();
     void clear();

@@ -25,7 +25,7 @@ extern "C" void* fireEquipmentTable[] __asm__("_ZTV10CEquipment");
 extern "C" void* fireCharacterTable[] __asm__("_ZTV10CCharacter");
 namespace {
 typedef char equipment_size[sizeof(CEquipment)==0x438?1:-1];
-typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
+typedef char character_size[sizeof(CCharacter)==0x778?1:-1];
 typedef char listeners_offset[__builtin_offsetof(CMissile,m_Listeners)==0x1c8?1:-1];
 typedef char refs_offset[__builtin_offsetof(CEquipment,m_ActiveMissileRefs)==0x410?1:-1];
 typedef TSafePointer<CMissile> Reference;

@@ -12,6 +12,8 @@ class CGameUI; class CResourceManager;
 class CConsole : public CRunicCore
 {
 public:
+    void keyEvent(unsigned int event, unsigned int key, long text);
+
     CConsole(CGameUI*, CResourceManager*, CEGUI::Window*);
 
     virtual ~CConsole();

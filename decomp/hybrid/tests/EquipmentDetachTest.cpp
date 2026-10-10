@@ -19,7 +19,7 @@ extern "C" void tracedoriginalDetach(CEquipment*) __asm__("_ZN10CEquipment18deta
 namespace {
 typedef char primary_offset[__builtin_offsetof(CCharacter,m_PaperdollItems)==0x560?1:-1];
 typedef char secondary_offset[__builtin_offsetof(CCharacter,m_PaperdollItemsSecondary)==0x5c0?1:-1];
-typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
+typedef char character_size[sizeof(CCharacter)==0x778?1:-1];
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,flags,mode,slot;};const Case*input;autotest::Capture*capture;
 void number(int n){capture->add(&n,sizeof(n));}

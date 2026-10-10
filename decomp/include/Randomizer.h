@@ -16,6 +16,9 @@ enum ERANDOMIZER_TYPE
 class CRandomizer : public CRunicCore
 {
 public:
+    unsigned int getChoiceCount() const { return m_Odds.size(); }
+    int getChoice(unsigned int index) { return m_Choices[index]; }
+
     CRandomizer(ERANDOMIZER_TYPE type);
     virtual ~CRandomizer() {}
 

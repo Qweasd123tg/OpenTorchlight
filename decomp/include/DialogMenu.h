@@ -8,9 +8,16 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CDialogMenu : public CDropdownMenu {
 public:
+    bool handle_ExitButton(const CEGUI::EventArgs& event);
+    bool handle_CloseButton(const CEGUI::EventArgs& event);
+    virtual bool onClick(ELayoutFunction function, std::wstring text);
+    virtual void update(float elapsed);
+    virtual void setOpen(bool open);
+
     virtual ~CDialogMenu();
     CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
-    char m_Unrecoveredc0[0x38];
+    unsigned char m_PaddingC0[0x30];
+    CBaseUnit* m_dialogOwner; // +0xf0
 };
 typedef char check_CDialogMenu_size[sizeof(CDialogMenu)==0xf8?1:-1];
 #endif

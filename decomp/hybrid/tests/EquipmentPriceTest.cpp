@@ -23,7 +23,7 @@ extern "C" void* priceEquipmentTable[] __asm__("_ZTV10CEquipment");
 namespace {
 struct Case{unsigned seed,mode,warm;};
 struct Snapshot{std::vector<unsigned char> bytes;Snapshot(const void* p,size_t n):bytes(static_cast<const unsigned char*>(p),static_cast<const unsigned char*>(p)+n){}void pointer(size_t at,uintptr_t id){if(at+sizeof(id)>bytes.size())_exit(71);std::memcpy(&bytes[at],&id,sizeof(id));}void emit(autotest::Capture& out){out.add(&bytes[0],bytes.size());}};
-const Case* input;autotest::Capture* capture;CEquipment* equipment;CInventory* inventory;CBaseUnit* owner;int service[8];unsigned calls;
+const Case* input;autotest::Capture* capture;CEquipment* equipment;CInventory* inventory;CCharacter* owner;int service[8];unsigned calls;
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}void text(const std::wstring& s){number(s.size());capture->add(s.data(),s.size()*sizeof(wchar_t));}
 bool isa(CBaseUnit* p,UNITTYPES::EUNITTYPES type){number(10);number(p==equipment?1:p==owner?2:0);number(type);return p==equipment?type==UNITTYPES::UNIQUE&&(input->seed&1):p==owner&&type==UNITTYPES::GAMBLER&&(input->seed/144)%4==3;}
 bool magical(CEquipment* p){number(11);number(p==equipment);return (input->seed&2)!=0;}
@@ -36,7 +36,7 @@ float value(const CGraph* p,float x,unsigned line){unsigned id=0;while(id<8&&p!=
     if(input->mode==3&&calls==2)equipment->m_pInventory=NULL;
     return result;
 }
-void side(const Case& c,bool ours,autotest::Capture& out){input=&c;capture=&out;calls=0;unsigned long long eqStorage[(sizeof(CEquipment)+7)/8],invStorage[(sizeof(CInventory)+7)/8],ownerStorage[(sizeof(CBaseUnit)+7)/8];std::memset(eqStorage,0,sizeof(eqStorage));std::memset(invStorage,0,sizeof(invStorage));std::memset(ownerStorage,0,sizeof(ownerStorage));equipment=reinterpret_cast<CEquipment*>(eqStorage);inventory=reinterpret_cast<CInventory*>(invStorage);owner=reinterpret_cast<CBaseUnit*>(ownerStorage);
+void side(const Case& c,bool ours,autotest::Capture& out){input=&c;capture=&out;calls=0;unsigned long long eqStorage[(sizeof(CEquipment)+7)/8],invStorage[(sizeof(CInventory)+7)/8],ownerStorage[(sizeof(CCharacter)+7)/8];std::memset(eqStorage,0,sizeof(eqStorage));std::memset(invStorage,0,sizeof(invStorage));std::memset(ownerStorage,0,sizeof(ownerStorage));equipment=reinterpret_cast<CEquipment*>(eqStorage);inventory=reinterpret_cast<CInventory*>(invStorage);owner=reinterpret_cast<CCharacter*>(ownerStorage);
     void* table[89];std::memcpy(table,priceEquipmentTable+2,sizeof(table));table[86]=reinterpret_cast<void*>(&magical);void** pointer=table;std::memcpy(equipment,&pointer,sizeof(pointer));
     static const int levels[]={-5,0,1,2,25,100};static const int values[]={0,1,-3,37,100,101};equipment->m_iUnknown274=levels[(c.seed/24)%6];equipment->m_iUnknown264=77;equipment->m_iUnknown268=88;equipment->m_iUnknown26C=99;equipment->m_iUnknown270=111;
     unsigned inv=(c.seed/144)%4;inventory->m_pPositionableObject=inv==1?NULL:reinterpret_cast<CCharacter*>(owner);equipment->m_pInventory=inv==0?NULL:inventory;if(c.mode==2)equipment->m_pInventory=NULL;
@@ -45,7 +45,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){input=&c;capture=&out;
     typedef void (*Fn)(CEquipment*);Fn fn=ours?&recoveredEquipmentPrice:&originalEquipmentPrice;
     for(unsigned repeat=0;repeat<=c.warm;++repeat){if(repeat==c.warm)autotest::invoke(out,fn,equipment);else fn(equipment);number(equipment->m_iUnknown264);number(equipment->m_iUnknown268);number(equipment->m_iUnknown26C);number(equipment->m_iUnknown270);number(equipment->m_iUnknown274);number(equipment->m_pInventory==inventory);}
     Snapshot eq(equipment,sizeof(CEquipment));eq.pointer(0,*reinterpret_cast<void***>(equipment)==table?1:255);eq.pointer(0x1b0,equipment->m_pDataGroup==&data?1:255);eq.pointer(0x240,equipment->m_pInventory==inventory?1:equipment->m_pInventory?255:0);eq.emit(out);
-    Snapshot iv(inventory,sizeof(CInventory));iv.pointer(0x20,inventory->m_pPositionableObject==owner?1:inventory->m_pPositionableObject?255:0);iv.emit(out);out.add(owner,sizeof(CBaseUnit));number(data.GetDataValue(L"VALUE",100));number(calls);
+    Snapshot iv(inventory,sizeof(CInventory));iv.pointer(0x20,inventory->m_pPositionableObject==owner?1:inventory->m_pPositionableObject?255:0);iv.emit(out);out.add(owner,sizeof(CCharacter));number(data.GetDataValue(L"VALUE",100));number(calls);
 
 }
 void original(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),false,c);}void recovered(void* p,autotest::Capture& c){side(*static_cast<Case*>(p),true,c);}

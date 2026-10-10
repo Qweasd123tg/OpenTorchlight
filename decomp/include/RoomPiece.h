@@ -23,7 +23,7 @@ public:
     virtual void setParentGuid(long long);
     virtual void setVisible(bool);
     virtual void scaleUpdated(const Ogre::Vector3&);
-    virtual long getSnapValues(ESNAP_TYPES);
+    virtual TArrayList<float>* getSnapValues(ESNAP_TYPES);
     virtual void setHighlighted(bool);
     virtual void getCollisionMesh();
     char getRoomPieceIsScalable();

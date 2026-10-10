@@ -1,5 +1,8 @@
 address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
-0x716fd0,Editor.cpp,"CEditor::GetEditorScene(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0x7163a0,Editor.cpp,"CEditor::EditorDumpDescriptionOfObjectsToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0x716cb0,Editor.cpp,CEditor::reinitScene(),MISSING,False,False,,False
+0x716e30,Editor.cpp,CEditor::GetEditorSceneIDByName(wchar_t const*),MISSING,False,False,,False
+0x716fd0,Editor.cpp,"CEditor::GetEditorScene(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x717020,Editor.cpp,"CEditor::updateParticleSystems(float, float)",MISSING,False,False,,False
 0x717660,Editor.cpp,CEditor::~CEditor(),MISSING,False,False,,False
 0x717b00,Editor.cpp,CEditor::~CEditor(),MISSING,False,False,,False
@@ -68,6 +71,10 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x7221f0,EditorDLL.cpp,__tcf_13,DIFF,False,False,,False
 0x722220,EditorDLL.cpp,__tcf_14,DIFF,False,False,,False
 0x722250,EditorDLL.cpp,__tcf_15,DIFF,False,False,,False
+0x722280,EditorDLL.cpp,__tcf_20,DIFF,False,False,,False
+0x7222c0,EditorDLL.cpp,__tcf_21,DIFF,False,False,,False
+0x722300,EditorDLL.cpp,__tcf_22,DIFF,False,False,,False
+0x722330,EditorDLL.cpp,__tcf_23,DIFF,False,False,,False
 0x722910,EditorDLL.cpp,"EditorSetObjectName(long long, wchar_t*)",MISSING,False,False,,False
 0x7229a0,EditorDLL.cpp,EditorCreateMod(wchar_t const*),MISSING,False,False,,False
 0x722a10,EditorDLL.cpp,"SetModEnabled(wchar_t const*, bool)",MISSING,False,False,,False
@@ -75,34 +82,34 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x722ae0,EditorDLL.cpp,"EditorResetCamera(float, float, float)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x722ae0.cpp,False
 0x722b20,EditorDLL.cpp,"EditorSetIngameRes(unsigned int, unsigned int)",MISSING,False,False,,False
 0x722c50,EditorDLL.cpp,EditorSetMonsterAutoSpawn(wchar_t*),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x722c50.cpp,False
-0x722cb0,EditorDLL.cpp,EditorGetMuted(),MISSING,False,False,,False
-0x722d20,EditorDLL.cpp,EditorSetMuted(bool),MISSING,False,False,,False
-0x722e00,EditorDLL.cpp,EditorStopMusic(),MISSING,False,False,,False
+0x722cb0,EditorDLL.cpp,EditorGetMuted(),MATCH,True,False,,False
+0x722d20,EditorDLL.cpp,EditorSetMuted(bool),MATCH,True,False,,False
+0x722e00,EditorDLL.cpp,EditorStopMusic(),MATCH,True,False,,False
 0x722e50,EditorDLL.cpp,EditorPlayMusic(wchar_t*),MISSING,False,False,,False
-0x722ef0,EditorDLL.cpp,EditorReloadSoundData(),MISSING,False,False,,False
+0x722ef0,EditorDLL.cpp,EditorReloadSoundData(),MATCH,True,False,,False
 0x722f30,EditorDLL.cpp,"EditorSetActiveAnimationPaused(long long, bool)",MISSING,False,False,,False
 0x722fc0,EditorDLL.cpp,"EditorGetObjectSnap(long long, unsigned int&, bool, bool, bool)",MISSING,False,False,,False
 0x7230c0,EditorDLL.cpp,EditorGetActiveAnimationTimePosition(long long),MISSING,False,False,,False
 0x723140,EditorDLL.cpp,"EditorSetActiveAnimationTimePosition(long long, float)",MISSING,False,False,,False
 0x723220,EditorDLL.cpp,EditorReloadSkill(wchar_t*),MISSING,False,False,,False
 0x723290,EditorDLL.cpp,EditorReloadModelAnimations(long long),MISSING,False,False,,False
-0x723350,EditorDLL.cpp,"EditorGetObjectIDRefedInLogicObject(long long, unsigned int)",MISSING,False,False,,False
+0x723350,EditorDLL.cpp,"EditorGetObjectIDRefedInLogicObject(long long, unsigned int)",MATCH,True,False,,False
 0x7233b0,EditorDLL.cpp,"EditorPollObjectIDByIndex(unsigned int, unsigned int)",MISSING,False,False,,False
 0x723480,EditorDLL.cpp,EditorDeleteAllUndos(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x723480.cpp,False
 0x723490,EditorDLL.cpp,EditorDeleteAllObjectsInScene(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x723490.cpp,False
 0x7234e0,EditorDLL.cpp,"EditorSetFlagState(unsigned int, bool)",MISSING,False,False,,False
 0x723530,EditorDLL.cpp,"EditorTimelineGetPointIDInTimelinePropertyByIndex(long long, long long, int, int, bool)",MISSING,False,False,,False
-0x7235e0,EditorDLL.cpp,"EditorTimelineGetPropertyIDForObjectInTimelineByIndex(long long, long long, int, bool&)",MISSING,False,False,,False
-0x723670,EditorDLL.cpp,"EditorTimelineGetObjectIDInTimelineByIndex(long long, int)",MISSING,False,False,,False
-0x7236b0,EditorDLL.cpp,"EditorTimelineGetValueAtPoint(long long, long long, int, int)",MISSING,False,False,,False
-0x723740,EditorDLL.cpp,"EditorTimelineGetValueAtPointArray(long long, long long, int, int, unsigned int&)",MISSING,False,False,,False
+0x7235e0,EditorDLL.cpp,"EditorTimelineGetPropertyIDForObjectInTimelineByIndex(long long, long long, int, bool&)",MATCH,True,False,,False
+0x723670,EditorDLL.cpp,"EditorTimelineGetObjectIDInTimelineByIndex(long long, int)",MATCH,True,False,,False
+0x7236b0,EditorDLL.cpp,"EditorTimelineGetValueAtPoint(long long, long long, int, int)",MATCH,True,False,,False
+0x723740,EditorDLL.cpp,"EditorTimelineGetValueAtPointArray(long long, long long, int, int, unsigned int&)",MATCH,True,False,,False
 0x7237e0,EditorDLL.cpp,EditorGetObjectName(long long),MISSING,False,False,,False
 0x723840,EditorDLL.cpp,"EditorTimelineAddPointToProperty(long long, long long, int, bool)",MISSING,False,False,,False
-0x7238e0,EditorDLL.cpp,"EditorSetObjectSelected(long long, bool)",MISSING,False,False,,False
-0x723940,EditorDLL.cpp,EditorGetObjectSceneID(long long),MISSING,False,False,,False
+0x7238e0,EditorDLL.cpp,"EditorSetObjectSelected(long long, bool)",MATCH,True,False,,False
+0x723940,EditorDLL.cpp,EditorGetObjectSceneID(long long),MATCH,True,False,,False
 0x723990,EditorDLL.cpp,EditorGetObjectsCreatedThisRender(unsigned int&),MISSING,False,False,,False
-0x723ae0,EditorDLL.cpp,EditorEndUndo(),MISSING,False,False,,False
-0x723b20,EditorDLL.cpp,EditorGetObjectUnderMouse(),MISSING,False,False,,False
+0x723ae0,EditorDLL.cpp,EditorEndUndo(),MATCH,True,False,,False
+0x723b20,EditorDLL.cpp,EditorGetObjectUnderMouse(),MATCH,True,False,,False
 0x723b70,EditorDLL.cpp,EditorResnapSelectedObjects(bool),MISSING,False,False,,False
 0x723bb0,EditorDLL.cpp,EditorResetOrientation(),MISSING,False,False,,False
 0x723bf0,EditorDLL.cpp,EditorResetScale(),MISSING,False,False,,False
@@ -111,7 +118,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x723cb0,EditorDLL.cpp,EditorApplyNormalNoise(float),MISSING,False,False,,False
 0x723cf0,EditorDLL.cpp,"EditorApplyScaleNoise(float, bool)",MISSING,False,False,,False
 0x723d30,EditorDLL.cpp,"cloneObject(unsigned int, CEditorBaseObject*, CEditorBaseObject*)",MISSING,False,False,,False
-0x723e30,EditorDLL.cpp,EditorGetDescriptorHash(),MISSING,False,False,,False
+0x723e30,EditorDLL.cpp,EditorGetDescriptorHash(),MATCH,True,False,,False
 0x723e60,EditorDLL.cpp,"EditorGetUndoRedoCounts(unsigned int&, unsigned int&)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x723e60.cpp,False
 0x723eb0,EditorDLL.cpp,EditorRedo(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x723eb0.cpp,False
 0x723ee0,EditorDLL.cpp,EditorUndo(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x723ee0.cpp,False
@@ -123,11 +130,11 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x7242e0,EditorDLL.cpp,EditorReloadMonster(wchar_t*),MISSING,False,False,,False
 0x724420,EditorDLL.cpp,reloadSpawnClasses(),MISSING,False,False,,False
 0x724460,EditorDLL.cpp,reloadRecipes(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724460.cpp,False
-0x7244a0,EditorDLL.cpp,reloadItemSets(),MISSING,False,False,,False
-0x7244f0,EditorDLL.cpp,reloadEditorParticles(),MISSING,False,False,,False
+0x7244a0,EditorDLL.cpp,reloadItemSets(),MATCH,True,False,,False
+0x7244f0,EditorDLL.cpp,reloadEditorParticles(),MATCH,True,False,,False
 0x724540,EditorDLL.cpp,reloadUnitThemes(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724540.cpp,False
 0x724580,EditorDLL.cpp,reloadQuests(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724580.cpp,False
-0x7245c0,EditorDLL.cpp,reloadTextures(),MISSING,False,False,,False
+0x7245c0,EditorDLL.cpp,reloadTextures(),MATCH,True,False,,False
 0x724620,EditorDLL.cpp,reloadModFileFilter(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724620.cpp,False
 0x724660,EditorDLL.cpp,reloadEditorLayoutLinks(),MISSING,False,False,,False
 0x724770,EditorDLL.cpp,reloadMissiles(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724770.cpp,False
@@ -135,41 +142,41 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x7247f0,EditorDLL.cpp,reloadAffixes(),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x7247f0.cpp,False
 0x724830,EditorDLL.cpp,EditorReloadAllAssets(),MISSING,False,False,,False
 0x724a30,EditorDLL.cpp,EditorSetMouseWheelDelta(int),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724a30.cpp,False
-0x724a60,EditorDLL.cpp,EditorSetOrientSnapSize(float),MISSING,False,False,,False
-0x724a90,EditorDLL.cpp,EditorSetPosVSnapSize(float),MISSING,False,False,,False
-0x724ac0,EditorDLL.cpp,EditorSetPosHSnapSize(float),MISSING,False,False,,False
+0x724a60,EditorDLL.cpp,EditorSetOrientSnapSize(float),MATCH,True,False,,False
+0x724a90,EditorDLL.cpp,EditorSetPosVSnapSize(float),MATCH,True,False,,False
+0x724ac0,EditorDLL.cpp,EditorSetPosHSnapSize(float),MATCH,True,False,,False
 0x724af0,EditorDLL.cpp,"EditorSetChunkTemplateExit(int, float, float, float)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724af0.cpp,False
 0x724b20,EditorDLL.cpp,EditorSetChunkTemplateExits(int),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x724b20.cpp,False
-0x724b50,EditorDLL.cpp,EditorSetChunkTemplateHeight(float),MISSING,False,False,,False
-0x724b80,EditorDLL.cpp,EditorSetChunkTemplateWidth(float),MISSING,False,False,,False
-0x724bb0,EditorDLL.cpp,EditorSetChunkTemplateBasisSize(float),MISSING,False,False,,False
-0x724be0,EditorDLL.cpp,EditorGetWorkingPlaneHeight(),MISSING,False,False,,False
-0x724c10,EditorDLL.cpp,EditorSetWorkingPlaneHeight(float),MISSING,False,False,,False
+0x724b50,EditorDLL.cpp,EditorSetChunkTemplateHeight(float),MATCH,True,False,,False
+0x724b80,EditorDLL.cpp,EditorSetChunkTemplateWidth(float),MATCH,True,False,,False
+0x724bb0,EditorDLL.cpp,EditorSetChunkTemplateBasisSize(float),MATCH,True,False,,False
+0x724be0,EditorDLL.cpp,EditorGetWorkingPlaneHeight(),MATCH,True,False,,False
+0x724c10,EditorDLL.cpp,EditorSetWorkingPlaneHeight(float),MATCH,True,False,,False
 0x724c40,EditorDLL.cpp,"EditorAmbientColor(int&, int&, int&, bool)",MISSING,False,False,,False
 0x724cf0,EditorDLL.cpp,"EditorDiretionalColor(int&, int&, int&, bool)",MISSING,False,False,,False
-0x724da0,EditorDLL.cpp,"EditorDiretionalIntensity(float&, bool)",MISSING,False,False,,False
+0x724da0,EditorDLL.cpp,"EditorDiretionalIntensity(float&, bool)",MATCH,True,False,,False
 0x724df0,EditorDLL.cpp,"EditorMaterialAmbientColor(int&, int&, int&, bool)",MISSING,False,False,,False
-0x724ea0,EditorDLL.cpp,EditorSetSnapToGroundBias(float),MISSING,False,False,,False
-0x724ed0,EditorDLL.cpp,EditorSetWorkingPlaneHeightToSelectedPivot(),MISSING,False,False,,False
-0x724f40,EditorDLL.cpp,"EditorSetBackgroundColor(float, float, float)",MISSING,False,False,,False
+0x724ea0,EditorDLL.cpp,EditorSetSnapToGroundBias(float),MATCH,True,False,,False
+0x724ed0,EditorDLL.cpp,EditorSetWorkingPlaneHeightToSelectedPivot(),MATCH,True,False,,False
+0x724f40,EditorDLL.cpp,"EditorSetBackgroundColor(float, float, float)",MATCH,True,False,,False
 0x724f70,EditorDLL.cpp,EditorToggleDisplayCollision(),MISSING,False,False,,False
 0x7250e0,EditorDLL.cpp,EditorSetEditorPetType(wchar_t*),MISSING,False,False,,False
 0x725170,EditorDLL.cpp,EditorSetEditorCompletedQuests(wchar_t*),MISSING,False,False,,False
 0x7251e0,EditorDLL.cpp,EditorSetEditorActiveQuests(wchar_t*),MISSING,False,False,,False
 0x725250,EditorDLL.cpp,EditorSetEditorCharacterClass(wchar_t*),MISSING,False,False,,False
-0x7252e0,EditorDLL.cpp,EditorFlushKeymanager(),MISSING,False,False,,False
+0x7252e0,EditorDLL.cpp,EditorFlushKeymanager(),MATCH,True,False,,False
 0x725310,EditorDLL.cpp,EditorWindowHasFocus(bool),MATCH,True,True,handoff/recovered-pass10/snippets/EditorDLL.cpp/0x725310.cpp,False
 0x725340,EditorDLL.cpp,EditorUpdate(int),MISSING,False,False,,False
 0x7254d0,EditorDLL.cpp,"IsA(wchar_t*, wchar_t*)",MISSING,False,False,,False
-0x725590,EditorDLL.cpp,EditorGetTime(),MISSING,False,False,,False
+0x725590,EditorDLL.cpp,EditorGetTime(),MATCH,True,False,,False
 0x725600,EditorDLL.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0x730300,EditorDLL.cpp,"convertRoomPieces(CDataGroup*, TArrayList<CRoomPieceDataInformation::CRoomPieceCoreData*>&)",MISSING,False,False,,False
 0x7306a0,EditorDLL.cpp,"EditorConvertLayoutToNewTileset(wchar_t const*, wchar_t const*)",MISSING,False,False,,False
 0x7308e0,EditorDLL.cpp,"EditorTestCameraShake(wchar_t*, float)",MISSING,False,False,,False
-0x730ae0,EditorDLL.cpp,EditorStartUndo(),MISSING,False,False,,False
+0x730ae0,EditorDLL.cpp,EditorStartUndo(),MATCH,True,False,,False
 0x730b50,EditorDLL.cpp,"EditorSaveScene(unsigned int, wchar_t*, bool)",MISSING,False,False,,False
 0x730c60,EditorDLL.cpp,"EditorPollObjects(unsigned int, unsigned int&)",MISSING,False,False,,False
-0x730d10,EditorDLL.cpp,"EditorSetSceneVisible(unsigned int, bool)",MISSING,False,False,,False
+0x730d10,EditorDLL.cpp,"EditorSetSceneVisible(unsigned int, bool)",MATCH,True,False,,False
 0x730d60,EditorDLL.cpp,"EditorGetLogicFuncId(unsigned int, unsigned int, wchar_t*, bool)",MISSING,False,False,,False
 0x730e80,EditorDLL.cpp,"EditorSetObjectProperty(long long, unsigned int, void*)",MISSING,False,False,,False
 0x730fe0,EditorDLL.cpp,EditorDeleteObject(long long),MISSING,False,False,,False
@@ -179,14 +186,14 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x731a50,EditorDLL.cpp,"EditorGetAnimationNameByPath(long long, wchar_t*)",MISSING,False,False,,False
 0x731be0,EditorDLL.cpp,EditorAutomapTiles(),MISSING,False,False,,False
 0x731cc0,EditorDLL.cpp,EditorGetDebugOutput(),MISSING,False,False,,False
-0x731da0,EditorDLL.cpp,EditorSetEditorMonsterSpawnclass(wchar_t*),MISSING,False,False,,False
-0x731e00,EditorDLL.cpp,EditorSetCommandAutoRun(wchar_t*),MISSING,False,False,,False
-0x731e60,EditorDLL.cpp,EditorSetEditorPlayerFile(wchar_t*),MISSING,False,False,,False
+0x731da0,EditorDLL.cpp,EditorSetEditorMonsterSpawnclass(wchar_t*),MATCH,True,False,,False
+0x731e00,EditorDLL.cpp,EditorSetCommandAutoRun(wchar_t*),MATCH,True,False,,False
+0x731e60,EditorDLL.cpp,EditorSetEditorPlayerFile(wchar_t*),MATCH,True,False,,False
 0x731ec0,EditorDLL.cpp,EditorGetCountOfLogicObjectsInLogicGroup(long long),MISSING,False,False,,False
 0x731f20,EditorDLL.cpp,"EditorGetLogicLinkInputFunctionID(long long, unsigned int, unsigned int)",MISSING,False,False,,False
 0x731fd0,EditorDLL.cpp,"EditorGetLogicLinkOutputFunctionID(long long, unsigned int, unsigned int)",MISSING,False,False,,False
-0x732080,EditorDLL.cpp,"EditorCreateLogicObject(long long, long long)",MISSING,False,False,,False
-0x732120,EditorDLL.cpp,"EditorGetCountOfLogicLinksInLogicObject(long long, unsigned int)",MISSING,False,False,,False
+0x732080,EditorDLL.cpp,"EditorCreateLogicObject(long long, long long)",MATCH,True,False,,False
+0x732120,EditorDLL.cpp,"EditorGetCountOfLogicLinksInLogicObject(long long, unsigned int)",MATCH,True,False,,False
 0x732190,EditorDLL.cpp,"EditorGetLogicObjectIDLinkingTo(long long, unsigned int, unsigned int)",MISSING,False,False,,False
 0x732260,EditorDLL.cpp,"EditorGetLogicObjectPosition(long long, unsigned int, int&, int&)",MISSING,False,False,,False
 0x732310,EditorDLL.cpp,"EditorSetLogicObjectPosition(long long, unsigned int, int, int)",MISSING,False,False,,False
@@ -206,11 +213,13 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x733140,EditorDLL.cpp,"EditorTimelineAddProperty(long long, long long, int, bool)",MISSING,False,False,,False
 0x733230,EditorDLL.cpp,"EditorTimelineGetTimePercentAtPoint(long long, long long, int, int, bool)",MISSING,False,False,,False
 0x733330,EditorDLL.cpp,"EditorTimelineSetPropertyPointTimePercent(long long, long long, int, int, float, bool)",MISSING,False,False,,False
+0x733430,EditorDLL.cpp,__tcf_18,DIFF,False,False,,False
 0x7334a0,EditorDLL.cpp,__tcf_17,DIFF,False,False,,False
 0x733510,EditorDLL.cpp,__tcf_16,DIFF,False,False,,False
 0x7335a0,EditorDLL.cpp,__tcf_3,DIFF,False,False,,False
+0x733610,EditorDLL.cpp,__tcf_19,DIFF,False,False,,False
 0x733680,EditorDLL.cpp,EditorFileExists(wchar_t*),MISSING,False,False,,False
-0x7337e0,EditorDLL.cpp,"EditorLogMessage(wchar_t*, Ogre::LogMessageLevel)",MISSING,False,False,,False
+0x7337e0,EditorDLL.cpp,"EditorLogMessage(wchar_t*, Ogre::LogMessageLevel)",MATCH,True,False,,False
 0x733890,EditorDLL.cpp,"EditorPlaySound(wchar_t*, float, float, float)",MISSING,False,False,,False
 0x733aa0,EditorDLL.cpp,EditorGetIconSheets(),MISSING,False,False,,False
 0x733db0,EditorDLL.cpp,"EditorGetModelAnimationLengthSeconds(long long, char*)",MISSING,False,False,,False
@@ -237,9 +246,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x735ee0,EditorDLL.cpp,EditorGetUnitsByUnittype(char*),MISSING,False,False,,False
 0x736130,EditorDLL.cpp,EditorGetCinematics(),MISSING,False,False,,False
 0x736260,EditorDLL.cpp,EditorGetSkillTypes(),MISSING,False,False,,False
-0x736d10,EditorDLL.cpp,"EditorGetObjectProperty(long long, unsigned int)",MISSING,False,False,,False
+0x736d10,EditorDLL.cpp,"EditorGetObjectProperty(long long, unsigned int)",MATCH,True,False,,False
 0x736db0,EditorDLL.cpp,"EditorGetObjectPropertyString(long long, unsigned int)",MISSING,False,False,,False
-0x736e10,EditorDLL.cpp,"EditorGetObjectPropertyArray(long long, unsigned int, unsigned int&)",MISSING,False,False,,False
+0x736e10,EditorDLL.cpp,"EditorGetObjectPropertyArray(long long, unsigned int, unsigned int&)",MATCH,True,False,,False
 0x736eb0,EditorDLL.cpp,"EditorLoadScene(unsigned int, wchar_t*, bool)",MISSING,False,False,,False
 0x739040,EditorDLL.cpp,EditorGetSkeletonBoneList(long long),MISSING,False,False,,False
 0x739e90,EditorDLL.cpp,EditorGetSkillTargetTypes(),MISSING,False,False,,False
@@ -295,7 +304,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x7412b0,EditorScene.cpp,CEditorScene::GetObjectsCreatedByADescriptor(CDescriptor*),MATCH,True,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x7412b0.cpp,False
 0x7412d0,EditorScene.cpp,"saveBinaryGroup(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False
 0x741390,EditorScene.cpp,"CEditorScene::canObjectBeSaved(CResourceManager*, CEditorBaseObject*)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741390.cpp,False
-0x741450,EditorScene.cpp,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0x741450,EditorScene.cpp,"CEditorScene::GetObjectsCreatedByADescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0x741490,EditorScene.cpp,"CEditorScene::CreateObjectByDescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741490.cpp,False
 0x741510,EditorScene.cpp,"CEditorScene::GetDescriptorInSceneByName(wchar_t const*, bool)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x741510.cpp,False
 0x741530,EditorScene.cpp,CEditorScene::getNumberOfParticlesUpdating(),MISSING,False,False,,False
@@ -338,7 +347,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x74ef60,EditorScene.cpp,"CEditorScene::merge(CEditorScene*, TArrayList<CEditorBaseObject*>*, long long, CTimerStatics*)",MISSING,False,False,,False
 0x74f100,EditorScene.cpp,"CEditorScene::saveObjectAndChildren(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",MISSING,False,False,,False
 0x74f2b0,EditorScene.cpp,"CEditorScene::saveObjectsHavingParent(long long, CDataGroup*, CDescriptorSaveConfiguration*)",MATCH,True,True,handoff/recovered-pass10/snippets/EditorScene.cpp/0x74f2b0.cpp,False
-0x74f340,EditorScene.cpp,CEditorScene::AddDescriptor(wchar_t const*),MISSING,False,False,,False
+0x74f340,EditorScene.cpp,CEditorScene::AddDescriptor(wchar_t const*),MATCH,True,False,,False
 0x74f420,EditorScene.cpp,"CEditorScene::loadObject(CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False
 0x74f880,EditorScene.cpp,"CEditorScene::loadObjects(CEditorBaseObject*, CDataGroup*, CDescriptorLoadConfiguration*)",MISSING,False,False,,False
 0x74f960,EditorScene.cpp,"CEditorScene::cloneLayout(CEditorScene*, TArrayList<CEditorBaseObject*>*, CTimerStatics*)",MISSING,False,False,,False
@@ -385,6 +394,46 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x773f60,ParticleScene.cpp,__tcf_2,MATCH,False,False,,False
 0x773ff0,ParticleScene.cpp,__tcf_1,MATCH,False,False,,False
 0x774060,ParticleScene.cpp,__tcf_0,MATCH,False,False,,False
+0x774280,ObjectControl3D.cpp,CObjectControl3D::doCameraMovement(float),MATCH,True,False,,False
+0x774290,ObjectControl3D.cpp,CObjectControl3D::GetSelectionOrientation(),MISSING,False,False,,False
+0x7742d0,ObjectControl3D.cpp,CObjectControl3D::getManipulationType(),MATCH,True,False,,False
+0x774330,ObjectControl3D.cpp,CObjectControl3D::UpdateChunkTemplate(),MISSING,False,False,,False
+0x774510,ObjectControl3D.cpp,CObjectControl3D::getSelectedPivot(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x774690,ObjectControl3D.cpp,CObjectControl3D::configureSceneManager(CPositionableObject*),MATCH,True,False,,False
+0x774770,ObjectControl3D.cpp,CObjectControl3D::cloneObjectsIfNeedBe(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x774b80,ObjectControl3D.cpp,"CObjectControl3D::getMousePlaneInstersect(POINT, Ogre::Plane)",MISSING,False,False,,False
+0x774d60,ObjectControl3D.cpp,CObjectControl3D::showControls(bool),MISSING,False,False,,False
+0x7750e0,ObjectControl3D.cpp,CObjectControl3D::getCameraPlaneIntersect(Ogre::Plane),MISSING,False,False,,False
+0x7752e0,ObjectControl3D.cpp,CObjectControl3D::getWorkingPlanePosition(),MISSING,False,False,,False
+0x775700,ObjectControl3D.cpp,CObjectControl3D::UpdateWorkingPlane(),MISSING,False,False,,False
+0x775840,ObjectControl3D.cpp,"CObjectControl3D::resnapObjects(TArrayList<CEditorBaseObject*>&, bool)",MISSING,False,False,,False
+0x775d60,ObjectControl3D.cpp,CObjectControl3D::configureDragType(),MISSING,False,False,,False
+0x7769a0,ObjectControl3D.cpp,CObjectControl3D::getGroupRotationPoint(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x776df0,ObjectControl3D.cpp,CObjectControl3D::flushKeyManager(),MATCH,True,False,,False
+0x776e00,ObjectControl3D.cpp,"CObjectControl3D::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False
+0x776e10,ObjectControl3D.cpp,"CObjectControl3D::keyEvent(unsigned int, unsigned int)",MATCH,True,False,,False
+0x776e20,ObjectControl3D.cpp,CObjectControl3D::~CObjectControl3D(),MATCH,True,False,,False
+0x776f80,ObjectControl3D.cpp,CObjectControl3D::~CObjectControl3D(),MATCH,True,False,,False
+0x77fd60,ObjectControl3D.cpp,CObjectControl3D::updateBoundingBox(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x780280,ObjectControl3D.cpp,__tcf_2,DIFF,False,False,,False
+0x7802f0,ObjectControl3D.cpp,"CObjectControl3D::snapObjectToGround(CPositionableObject*, bool)",MISSING,False,False,,False
+0x780b60,ObjectControl3D.cpp,"CObjectControl3D::manipulateSelectedItems(float, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
+0x782860,ObjectControl3D.cpp,CObjectControl3D::doObjectPick(),MISSING,False,False,,False
+0x783240,ObjectControl3D.cpp,CObjectControl3D::getObjectUnderMouse(),MISSING,False,False,,False
+0x783900,ObjectControl3D.cpp,CObjectControl3D::updateControls(float),MISSING,False,False,,False
+0x785850,ObjectControl3D.cpp,__tcf_3,DIFF,False,False,,False
+0x7858c0,ObjectControl3D.cpp,__tcf_1,DIFF,False,False,,False
+0x785950,ObjectControl3D.cpp,__tcf_0,DIFF,False,False,,False
+0x7859e0,ObjectControl3D.cpp,CObjectControl3D::createUndo(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x7860f0,ObjectControl3D.cpp,CObjectControl3D::ResetScale(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x7861d0,ObjectControl3D.cpp,CObjectControl3D::ResetOrientation(TArrayList<CEditorBaseObject*>&),MISSING,False,False,,False
+0x786300,ObjectControl3D.cpp,"CObjectControl3D::ApplyScaleNoise(float, bool, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
+0x786560,ObjectControl3D.cpp,"CObjectControl3D::ApplyRotationNoise(float, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
+0x7866f0,ObjectControl3D.cpp,"CObjectControl3D::ApplyNormalNoise(float, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
+0x7868c0,ObjectControl3D.cpp,"CObjectControl3D::snapObjectsToGround(bool, TArrayList<CEditorBaseObject*>&)",MISSING,False,False,,False
+0x7869b0,ObjectControl3D.cpp,"CObjectControl3D::update(float, TArrayList<CEditorBaseObject*>&, bool)",MISSING,False,False,,False
+0x786c80,ObjectControl3D.cpp,CObjectControl3D::InitControls(),MISSING,False,False,,False
+0x788080,ObjectControl3D.cpp,CObjectControl3D::CObjectControl3D(CResourceManager*),MISSING,False,False,,False
 0x7885d0,pov.cpp,CPOV::ExtractOrientationVectors(),DIFF,False,False,,False
 0x788690,pov.cpp,CPOV::DampContactVelocity(float),DIFF,False,False,,False
 0x788730,pov.cpp,CPOV::DampLateralVelocity(float),MISSING,False,False,,False
@@ -700,52 +749,3 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x7e9d10,EffectGroupManager.cpp,CEffectGroupManager::clean(),MATCH,True,False,,False
 0x7e9ea0,EffectGroupManager.cpp,CEffectGroupManager::~CEffectGroupManager(),MATCH,True,False,,False
 0x7e9f70,EffectGroupManager.cpp,CEffectGroupManager::~CEffectGroupManager(),MATCH,True,False,,False
-0x7e9f90,EffectGroupManager.cpp,"CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
-0x7ea100,EffectGroupManager.cpp,"CEffectGroupManager::rollAndCreateRandomAffixes(unsigned int, unsigned int, unsigned int, TArrayList<CAffix*>&)",MISSING,False,False,,False
-0x7ea5f0,EffectGroupManager.cpp,CEffectGroupManager::reload(),MISSING,False,False,,False
-0x7eaaf0,EffectGroupManager.cpp,CEffectGroupManager::CEffectGroupManager(wchar_t const*),MATCH,True,False,,False
-0x7eaca0,EffectGroupManager.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, TArrayList<CAffix*>*>, std::_Select1st<std::pair<unsigned int const, TArrayList<CAffix*>*> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, TArrayList<CAffix*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, TArrayList<CAffix*>*> >*)",MATCH,False,False,,False
-0x7eaed0,BaseUnit.cpp,CRandomizer::~CRandomizer(),MATCH,False,False,,False
-0x7eaf30,EffectGroupManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CAffix*> >*)",MATCH,False,False,,False
-0x7eafd0,BaseUnit.cpp,CRandomizer::~CRandomizer(),MATCH,False,False,,False
-0x7eb4c0,EffectManager.cpp,CEffectManager::notifyOfDeletion(CCharacter*),MATCH,True,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7eb4c0.cpp,False
-0x7eb4d0,EffectManager.cpp,CEffectManager::clearAllUnitReferences(),MATCH,True,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7eb4d0.cpp,False
-0x7eb4e0,EffectManager.cpp,CEffectManager::getEffect(EEFFECT_TYPE),MISSING,False,False,,False
-0x7eb580,EffectManager.cpp,CEffectManager::hasEffect(EEFFECT_TYPE),DIFF,True,False,,False
-0x7eb5f0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,True,False,,False
-0x7eb7c0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_ACTIVATION, EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,True,False,,False
-0x7eb9c0,EffectManager.cpp,CEffectManager::hasEffectFromSkill(CSkill const*),MISSING,False,False,,False
-0x7eba30,EffectManager.cpp,CEffectManager::clearOutDescriptions(),MISSING,False,False,,False
-0x7eba70,EffectManager.cpp,"CEffectManager::removeEffect(CEffect*, bool)",MISSING,False,False,,False
-0x7ebbc0,EffectManager.cpp,CEffectManager::recalculateEffects(),MISSING,False,False,,False
-0x7ebc60,EffectManager.cpp,CEffectManager::clearOutAffixEffects(),MISSING,False,False,,False
-0x7ebcc0,EffectManager.cpp,CEffectManager::addAffixEffectsBackIn(),MISSING,False,False,,False
-0x7ebd40,EffectManager.cpp,CEffectManager::clearEffects(bool),MISSING,False,False,,False
-0x7ebf30,EffectManager.cpp,CEffectManager::calculateEffectValues(),MISSING,False,False,,False
-0x7ec320,EffectManager.cpp,CEffectManager::updateAffixes(float),MISSING,False,False,,False
-0x7ec450,EffectManager.cpp,CEffectManager::deleteAffix(CAffix*),MISSING,False,False,,False
-0x7ec4f0,EffectManager.cpp,"CEffectManager::addAffix(CAffix*, unsigned int, CBaseUnit*, float)",MISSING,False,False,,False
-0x7ec630,EffectManager.cpp,"CEffectManager::cloneAffix(CAffix*, unsigned int, CBaseUnit*, float)",MATCH,True,True,handoff/recovered-pass10/snippets/EffectManager.cpp/0x7ec630.cpp,False
-0x7ec720,EffectManager.cpp,"CEffectManager::addAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int, CBaseUnit*, CResourceManager*, float)",MATCH,True,False,,False
-0x7ec7a0,EffectManager.cpp,"CEffectManager::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MISSING,False,False,,False
-0x7ec990,EffectManager.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0x7f2930,EffectManager.cpp,__tcf_10,DIFF,False,False,,False
-0x7f29c0,EffectManager.cpp,__tcf_0,DIFF,False,False,,False
-0x7f2a30,EffectManager.cpp,CEffectManager::getEffects(TArrayList<CEffect*>*),MISSING,False,False,,False
-0x7f2b70,EffectManager.cpp,"CEffectManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
-0x7f2c30,EffectManager.cpp,"CEffectManager::removeEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",DIFF,True,False,,False
-0x7f2da0,EffectManager.cpp,"CEffectManager::deleteAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
-0x7f2f10,EffectManager.cpp,CEffectManager::addNewEffect(CEffect*),MISSING,False,False,,False
-0x7f31a0,EffectManager.cpp,"CEffectManager::cloneEffect(CBaseUnit*, CEffect*)",MISSING,False,False,,False
-0x7f3270,EffectManager.cpp,"CEffectManager::cloneEffects(CBaseUnit*, TArrayList<CEffect*>*)",MISSING,False,False,,False
-0x7f32f0,EffectManager.cpp,"CEffectManager::getEffectValue(EEFFECT_TYPE, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
-0x7f34f0,EffectManager.cpp,"CEffectManager::hasEffect(EEFFECT_TYPE, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
-0x7f35e0,EffectManager.cpp,"CEffectManager::hasEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
-0x7f36c0,EffectManager.cpp,"CEffectManager::getEffect(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",MISSING,False,False,,False
-0x7f37f0,EffectManager.cpp,CEffectManager::deleteDeadEffects(),MISSING,False,False,,False
-0x7f3b50,EffectManager.cpp,CEffectManager::removeNonSavedEffects(),MISSING,False,False,,False
-0x7f4010,EffectManager.cpp,__tcf_12,DIFF,False,False,,False
-0x7f40a0,EffectManager.cpp,__tcf_11,DIFF,False,False,,False
-0x7f4130,EffectManager.cpp,__tcf_9,DIFF,False,False,,False
-0x7f41c0,EffectManager.cpp,__tcf_8,DIFF,False,False,,False
-0x7f4250,EffectManager.cpp,__tcf_7,DIFF,False,False,,False

@@ -1,6 +1,8 @@
 #ifndef GAMEENUMS_H
 #define GAMEENUMS_H
 
+enum EContextTip { CONTEXT_TIP_NONE = -1 };
+
 // Enums and typedefs named in symbols, promoted from the generated headers as recovered
 // code needs them. Enumerators are unknown until a TU defines them; move each into its
 // proper header when that is known.
@@ -26,5 +28,11 @@ enum ESTATS { ESTATS_GEN_LAST = 0x7fffffff };
 enum ETIMELINE_INTERP_TYPES { ETIMELINE_INTERP_TYPES_GEN_LAST = 0x7fffffff };
 enum EWeaponSpeed { EWeaponSpeed_GEN_LAST = 0x7fffffff };
 enum SOUND_TYPE { SOUND_TYPE_GEN_LAST = 0x7fffffff };
+
+enum ELEVELLAYOUT_CREATION
+{
+    LEVEL_CREATION_FIRST = 0,
+    LEVEL_CREATION_LAST = 10
+};
 
 #endif
