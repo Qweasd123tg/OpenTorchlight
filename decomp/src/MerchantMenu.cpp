@@ -1462,3 +1462,155 @@ void CMerchantMenu::setOwner(CCharacter* owner) {
   m_pCanEquipCharacter->getFollower(0)->m_pInventory->addListener(this);
  }
 }
+
+namespace merchant_input {
+struct UIFields {char prefix[0xb8];CEquipment* dragged;};
+struct HoverFields {char prefix[0x198];bool flag198;};
+inline __attribute__((always_inline)) void removeGlow(CMerchantMenu* menu) {
+ if(menu->m_pUnknown28->isChild(menu->m_pUnknown3448))menu->m_pUnknown28->removeChildWindow(menu->m_pUnknown3448);
+ else if(menu->m_pUnknown40->isChild(menu->m_pUnknown3448))menu->m_pUnknown40->removeChildWindow(menu->m_pUnknown3448);
+}
+}
+bool CMerchantMenu::processInput(void*,float,bool active) {
+ if(!active){m_pHoveredEquipment=0;m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);merchant_input::removeGlow(this);return true;}
+ bool result=true;if(m_bUnknown62){setOpen(false);m_bUnknown62=false;result=false;}
+ CEquipment* dragged=0;
+ if(m_pOwner&&!m_pOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(127)))dragged=reinterpret_cast<merchant_input::UIFields*>(m_pGameUI)->dragged;
+ if(dragged&&dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+  m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();
+ }else if(!m_pHoveredEquipment||reinterpret_cast<merchant_input::HoverFields*>(m_pHoveredEquipment)->flag198) {
+  m_pHoveredEquipment=0;m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);
+ }
+ if(!m_bUnknown3450)merchant_input::removeGlow(this);
+ m_iItemSlotIndexA=-1;m_iItemSlotIndexB=-1;m_iPetSlotIndexA=-1;m_iPetSlotIndexB=-1;return result;
+}
+bool CMerchantMenu::handle_MouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CBaseUnit* owner=m_pOwner;
+ if(window&&owner){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory=static_cast<CCharacter*>(owner)->m_pInventory;
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item==m_pHoveredEquipment){m_pHoveredEquipment=0;CEquipment* dragged=reinterpret_cast<merchant_input::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+ }return true;
+}
+bool CMerchantMenu::handle_PetMouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CCharacter* pet=m_pCanEquipCharacter->getFollower(0);
+ if(pet&&window){int slot=*static_cast<int*>(window->getUserData());CEquipment* item=pet->m_pInventory->getEquipmentInSlot(slot);
+  if(item==m_pHoveredEquipment){m_pHoveredEquipment=0;CEquipment* dragged=reinterpret_cast<merchant_input::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+ }return true;
+}
+
+bool CMerchantMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CBaseUnit* owner=m_pOwner;
+ if(window&&owner&&m_bOpenPartial){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory=static_cast<CCharacter*>(owner)->m_pInventory;
+
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item){m_pHoveredEquipment=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();}
+   else {m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+  // Both original hover paths attach the shared glow to TopFrame.
+  CEGUI::Window* parent=m_pUnknown28;
+  float x=m_pSocketedSizeWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSocketedSizeWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!parent->isChild(m_pUnknown3448))parent->addChildWindow(m_pUnknown3448);
+  m_pUnknown3448->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pUnknown3448->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pUnknown3448->moveToBack();m_bUnknown3450=true;
+
+ }return true;
+}
+bool CMerchantMenu::handle_PetMouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CCharacter* pet=m_pCanEquipCharacter->getFollower(0);
+ if(pet&&window){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory=pet->m_pInventory;
+
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item){m_pHoveredEquipment=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pSocketedIconParent->setVisible(true);m_pSocketedIconParent->moveToFront();m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();}
+   else {m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+  // Both original hover paths attach the shared glow to TopFrame.
+  CEGUI::Window* parent=m_pUnknown28;
+  float x=m_pSlotWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSlotWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSlotWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSlotWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!parent->isChild(m_pUnknown3448))parent->addChildWindow(m_pUnknown3448);
+  m_pUnknown3448->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pUnknown3448->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pUnknown3448->moveToBack();m_bUnknown3450=true;
+
+ }return true;
+}
+
+
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+namespace merchant_animation {
+struct ModelFields {char prefix[0x60];Ogre::Entity* entity;char gap68[0x130-0x68];Ogre::SkeletonInstance* skeleton;};
+inline __attribute__((always_inline)) ModelFields& model(CGenericModel* p){return *reinterpret_cast<ModelFields*>(p);}
+}
+void CMerchantMenu::update(float elapsed) {
+ int width=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);int height=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+ if(!m_bOpenPartial){m_pHoveredEquipment=0;m_pSocketedIconParent->setVisible(false);m_pUnknown38->setVisible(false);}
+ if(m_bOpenPartial||!m_bUnknown61){
+  m_pPositionableObject->updateAnimation(elapsed,false);merchant_animation::model(m_pPositionableObject).entity->_updateAnimation();
+  Ogre::Bone* top=merchant_animation::model(m_pPositionableObject).skeleton->getBone("tag_topmerchant");
+  Ogre::Vector3 position=m_pPositionableObject->getPosition(false);const Ogre::Vector3& offset=top->_getDerivedPosition();
+  float x=position.x+offset.x;float y=position.y+offset.y;
+  x=m_pGameUI->scaledY(x);float halfWidth=float(width)*0.5f;y=m_pGameUI->scaledY(y);y=-(y+float(height)*-0.5f);
+  m_pUnknown28->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,halfWidth+x),CEGUI::UDim(0.0f,y)));
+  Ogre::Bone* bottom=merchant_animation::model(m_pPositionableObject).skeleton->getBone("tag_bottommerchant");
+  position=m_pPositionableObject->getPosition(false);const Ogre::Vector3& bottomOffset=bottom->_getDerivedPosition();
+  x=m_pGameUI->scaledY(position.x+bottomOffset.x);
+  m_pUnknown40->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,halfWidth+x),CEGUI::UDim(0.0f,y)));
+  Ogre::Bone* right=merchant_animation::model(m_pPositionableObject).skeleton->getBone("tag_bottommerchantright");
+  position=m_pPositionableObject->getPosition(false);const Ogre::Vector3& rightOffset=right->_getDerivedPosition();
+  x=m_pGameUI->scaledY(position.x+rightOffset.x);float margin=m_pGameUI->scaledY(50.0f);float edge=(halfWidth+x)-margin;m_fScreenEdge=edge>0.0f?edge:0.0f;
+  if(!m_bOpenPartial&&!m_bUnknown61&&!m_pPositionableObject->animationPlaying("CLOSE")&&!m_pPositionableObject->animationQueued("CLOSE")){
+   m_pPositionableObject->setVisible(false);static_cast<CEGUI::Window*>(m_pUnknown18)->removeChildWindow(m_pUnknown20);m_bUnknown61=true;
+  }
+ }
+}
+
+#include "EquipmentRef.h"
+
+#include "SoundBank.h"
+void CMerchantMenu::setOpen(bool open) {
+ if(m_bOpenPartial){
+  if(!open){m_pSoundBank->playSample(66,0,0.0f,0.0f,false);m_pPositionableObject->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);m_bUnknown61=false;m_bOpenPartial=false;return;}
+ }else {
+  if(!open){m_bOpenPartial=false;return;}
+  m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);m_pPositionableObject->setVisible(true);
+  if(m_pPositionableObject->animationPlaying("CLOSE"))m_pPositionableObject->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pPositionableObject->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pPositionableObject->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  static_cast<CEGUI::Window*>(m_pUnknown18)->addChildWindow(m_pUnknown20);m_pUnknown20->moveToBack();
+  CEGUI::RadioButton* first=static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[3]);m_iUnknown3454=0;m_iUnknown3458=0;first->setSelected(true);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[4])->setSelected(false);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[5])->setSelected(false);
+  m_pUnknown33C8[0]->setVisible(true);m_pUnknown33C8[1]->setVisible(false);m_pUnknown33C8[2]->setVisible(false);
+  int tab=static_cast<CCharacter*>(m_pOwner)->getDefaultMerchantTab();
+  if(tab==1){
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[11])->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[9])->setSelected(true);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[10])->setSelected(false);
+   m_pUnknown33C8[8]->setVisible(false);m_pUnknown33C8[6]->setVisible(true);m_pUnknown33C8[7]->setVisible(false);m_iUnknown3454=1;
+  }else {
+   CEGUI::RadioButton* first=static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[11]);
+   m_iUnknown3454=tab==2?2:0;
+   first->setSelected(tab!=2);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[9])->setSelected(false);
+   static_cast<CEGUI::RadioButton*>(m_pUnknown33C8[10])->setSelected(tab==2);
+   m_pUnknown33C8[8]->setVisible(tab!=2);m_pUnknown33C8[6]->setVisible(false);m_pUnknown33C8[7]->setVisible(tab==2);
+  }
+  m_pGameUI->queueTip(static_cast<EContextTip>(m_pOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(127))?12:5));
+ }
+ m_bOpenPartial=open;updateLayout();
+}
+
