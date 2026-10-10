@@ -10,6 +10,7 @@
 class CChannelInstance : public CRunicCore
 {
 public:
+    CChannelInstance() : CRunicCore(), m_iUnknown10(0) {}
     virtual ~CChannelInstance();
     void clear();
 

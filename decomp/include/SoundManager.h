@@ -8,6 +8,10 @@
 #include <OgreSceneNode.h>
 #include <OgreVector3.h>
 #include <string>
+#include "FmodInterface.h"
+#include <vector>
+#include "TArrayList.h"
+#include "ChannelInstance.h"
 #include "DynamicPropertyFile.h"
 #include "GameEnums.h"
 #include "RunicCore.h"
@@ -18,8 +22,8 @@ class CSoundManager : public CRunicCore
 {
 public:
     virtual ~CSoundManager();
-    unsigned char fmodFileReadCallback(void*, void*, unsigned int, unsigned int*, void*);
-    long long fmodFileSeekCallback(void*, unsigned int, void*);
+    static FMOD_RESULT fmodFileReadCallback(void*, void*, unsigned int, unsigned int*, void*);
+    static FMOD_RESULT fmodFileSeekCallback(void*, unsigned int, void*);
     void releaseSound(CSoundInstance*);
     int getNumberOfChannelsPlaying();
     void incrementSoundBank();
@@ -33,9 +37,9 @@ public:
     long long isChannelPlaying(int);
     void setSoundVolume(int, float);
     void setPauseSound(int, bool);
-    CSoundManager* getMusicFilePlaying();
+    std::wstring getMusicFilePlaying();
     CSoundManager(bool);
-    long long createSoundGroup(std::string);
+    FMOD::SoundGroup* createSoundGroup(std::string);
     int getMemoryInUse();
     void updateAudioLevels(float, float, bool, bool);
     void queueSound(int, CSoundInstance*, float, float);
@@ -52,26 +56,15 @@ public:
     // fields
     int m_iUnknown10;
     int m_iUnknown14;
-    long long m_iUnknown18;
-    void* m_pUnknown20;
-    void* m_pUnknown28;
-    void* m_pUnknown30;
-    long long m_iUnknown38;
-    void* m_pUnknown40;
-    void* m_pUnknown48;
-    long long m_iUnknown50;
-    void* m_pUnknown58;
-    long long m_iUnknown60;
-    long long m_iUnknown68;
-    void* m_pUnknown70;
-    void* m_pUnknown78;
-    long long m_iUnknown80;
-    void* m_pUnknown88;
-    unsigned char m_Unknown90[0x18] __attribute__((aligned(8)));
-    long long m_UnknownA8;
-    unsigned char m_gapB0[0x8] __attribute__((aligned(8)));
-    long long m_iUnknownB8;
-    unsigned char m_gapC0[0x5e8] __attribute__((aligned(8)));
+    FMOD::System* m_iUnknown18;
+    union { void* m_pUnknown20; struct { int m_fileField20; int m_fileField24; }; };
+    union { void* m_pUnknown28; struct { int m_fileField28; int m_fileField2C; }; };
+    std::vector<CSoundInstance*> m_soundList0;
+    std::vector<CSoundInstance*> m_soundList1;
+    std::vector<CSoundInstance*> m_soundList2;
+    std::vector<CSoundInstance*> m_soundList3;
+    TArrayList<CSoundInstance*> m_pendingSounds;
+    CChannelInstance m_channels[64];
     bool m_bUnknown6A8;
     bool m_bUnknown6A9;
     unsigned char m_gap6AA[0x6];
@@ -80,10 +73,10 @@ public:
     long long m_iUnknown6C0;
     bool m_bUnknown6C8;
     unsigned char m_gap6C9[0x7];
-    long long m_iUnknown6D0;
+    CSoundInstance* m_iUnknown6D0;
     int m_iUnknown6D8;
     unsigned char m_gap6DC[0x4] __attribute__((aligned(4)));
-    long long m_iUnknown6E0;
+    FMOD::SoundGroup* m_iUnknown6E0;
     long long m_iUnknown6E8;
     int m_iUnknown6F0;
     int m_iUnknown6F4;

@@ -55,7 +55,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  for(unsigned j=0;j<c.children;++j)win[410]->d_children.push_back(win[420+j]);
  menu->m_bOpen=c.guard!=1;menu->m_pCharacter=c.guard==2?0:character;character->m_pInventory=c.guard==3?0:inventory;
  CEquipmentRef* refs[3];int slots[]={18,19,81};for(int i=0;i<3;++i){refs[i]=(CEquipmentRef*)rmem[i];item[i]=(CEquipment*)emem[i];refs[i]->m_pUnknown10=item[i];refs[i]->m_iSlot=slots[i];}
- TArrayList<CEquipmentRef*>& equipmentRefs=*reinterpret_cast<TArrayList<CEquipmentRef*>*>(inventory->m_Unknown30);equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
+ TArrayList<CEquipmentRef*>& equipmentRefs=inventory->m_equipmentRefs;equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
  detour::Set d;TL_REDIRECT(d,queryFn,&query);
  d.redirect(getSizeFn,getSizeFn,&size);d.redirect(setSizeFn,setSizeFn,&setSize);d.redirect(removeFn,removeFn,&remove);d.redirect(frontFn,frontFn,&front);d.redirect(backFn,backFn,&back);d.redirect(propertyFn,propertyFn,&property);d.redirect(textFn,textFn,&setText);d.redirect(tooltipFn,tooltipFn,&tooltip);
  d.redirect(showFn,showFn,&show);if(d.failed())_exit(42);

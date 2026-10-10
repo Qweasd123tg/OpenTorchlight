@@ -1,3 +1,4 @@
+#include "GameUICallBoundaries.h"
 #ifndef SKILL_TOOLTIP_HELPERS_H
 #define SKILL_TOOLTIP_HELPERS_H
 // Draft helpers for the complete entry; only placement currently has executed evidence.
@@ -51,7 +52,7 @@ inline __attribute__((always_inline)) float layoutStatRows(CGameUI*& ui,CEGUI::W
  return height;
 }
 inline __attribute__((always_inline)) void place(CSkillTooltip* tip,float mouseX,float mouseY){
- float viewportWidth=g_pGameUI->getWindowWidth();float viewportHeight=g_pGameUI->getWindowHeight();
+ float viewportWidth=gameuiBoundaryWidth(g_pGameUI);float viewportHeight=gameuiBoundaryHeight(g_pGameUI);
  float width=tip->m_pWindow->getWidth().asAbsolute(1.0f);float height=tip->m_pWindow->getHeight().asAbsolute(1.0f);
  float x=(mouseX-width)-26.0f;float y=(mouseY-height)-26.0f;
  float vw=float(static_cast<unsigned>(static_cast<long>(viewportWidth)));if((x+width)+26.0f>vw)x=vw-(width+26.0f);

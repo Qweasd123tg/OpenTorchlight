@@ -8,7 +8,7 @@
 #include <string>
 #include "RunicCore.h"
 
-class CollisionModel;
+class CCollisionModel;
 
 class CollisionModelRef : public CRunicCore
 {
@@ -16,8 +16,9 @@ public:
     virtual ~CollisionModelRef();
     CollisionModelRef();
 
-    CollisionModel* m_pCollisionModel;
-    unsigned char m_Padding18[8] __attribute__((aligned(8)));
+    CCollisionModel* m_pCollisionModel;
+    int m_referenceCount;
+    unsigned char m_gap1c[4];
     std::wstring m_sUnknown20;
 };
 

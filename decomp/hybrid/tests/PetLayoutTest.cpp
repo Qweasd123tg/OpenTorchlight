@@ -44,7 +44,7 @@ void front(CEGUI::Window* p){number(7);number(id(p));}
 void back(CEGUI::Window* p){number(8);number(id(p));}
 long query(CInventory* p,unsigned i){number(9);number(p==inventory);number(i);if(input->mutate&&i==11)menu->m_pSocketedSizeWindows[i]=0;return 0;}
 void slot(CPetMenu* p,CEquipment* e,int index,int data){number(10);number(p==menu);int n=-1;for(int i=0;i<3;++i)if(e==item[i])n=i;number(n);number(index);number(data);}
-int pane(CInventory* p,unsigned slotIndex){number(11);number(p==inventory);number(slotIndex);int result=int(slotIndex%3);if(input->mutate){menu->m_iCurrentTab=result;TArrayList<CEquipmentRef*>& refs=*reinterpret_cast<TArrayList<CEquipmentRef*>*>(p->m_Unknown30);refs.m_nCapacity=0;}return result;}
+int pane(CInventory* p,unsigned slotIndex){number(11);number(p==inventory);number(slotIndex);int result=int(slotIndex%3);if(input->mutate){menu->m_iCurrentTab=result;TArrayList<CEquipmentRef*>& refs=p->m_equipmentRefs;refs.m_nCapacity=0;}return result;}
 void side(const Case& c,bool ours,autotest::Capture& out){
  cap=&out;input=&c;
  unsigned long long mem[(sizeof(CPetMenu)+7)/8]={0},cmem[(sizeof(CCharacter)+7)/8]={0},imem[(sizeof(CInventory)+7)/8]={0},rmem[3][(sizeof(CEquipmentRef)+7)/8]={0},emem[3][(sizeof(CEquipment)+7)/8]={0};
@@ -56,7 +56,7 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  for(unsigned j=0;j<c.children;++j)win[410]->d_children.push_back(win[420+j]);
  menu->m_iCurrentTab=int(c.tab)-1;menu->m_bOpenPartial=c.guard!=1;menu->m_pCharacter=c.guard==2?0:character;character->m_pInventory=c.guard==3?0:inventory;
  CEquipmentRef* refs[3];int slots[]={18,19,81};for(int i=0;i<3;++i){refs[i]=(CEquipmentRef*)rmem[i];item[i]=(CEquipment*)emem[i];refs[i]->m_pUnknown10=item[i];refs[i]->m_iSlot=slots[i];}
- TArrayList<CEquipmentRef*>& equipmentRefs=*reinterpret_cast<TArrayList<CEquipmentRef*>*>(inventory->m_Unknown30);equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
+ TArrayList<CEquipmentRef*>& equipmentRefs=inventory->m_equipmentRefs;equipmentRefs.m_pData=refs;equipmentRefs.m_nCount=c.count;equipmentRefs.m_nCapacity=c.capacity;
  detour::Set d;TL_REDIRECT(d,paneFn,&pane);TL_REDIRECT(d,queryFn,&query);TL_REDIRECT(d,slotFn,&slot);
  d.redirect(getSizeFn,getSizeFn,&size);d.redirect(setSizeFn,setSizeFn,&setSize);d.redirect(removeFn,removeFn,&remove);d.redirect(frontFn,frontFn,&front);d.redirect(backFn,backFn,&back);d.redirect(propertyFn,propertyFn,&property);d.redirect(textFn,textFn,&setText);d.redirect(tooltipFn,tooltipFn,&tooltip);
  if(d.failed())_exit(42);

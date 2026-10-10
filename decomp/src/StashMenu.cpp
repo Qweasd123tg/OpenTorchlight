@@ -1258,7 +1258,7 @@ void CStashMenu::update(float elapsed) {
 
 #include "EquipmentRef.h"
 namespace stash_layout {
-inline __attribute__((always_inline)) TArrayList<CEquipmentRef*>& equipment(CInventory* p){return *reinterpret_cast<TArrayList<CEquipmentRef*>*>(p->m_Unknown30);}
+inline __attribute__((always_inline)) TArrayList<CEquipmentRef*>& equipment(CInventory* p){return p->m_equipmentRefs;}
 }
 void CStashMenu::updateLayout(){
  if(!m_bOpenPartial||!m_pOwner)return;

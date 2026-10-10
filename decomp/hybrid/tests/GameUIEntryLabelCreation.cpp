@@ -446,7 +446,7 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     std::memcpy(world->dropdownVT,world->vt,sizeof(world->vt));world->dropdownVT[3]=reinterpret_cast<unsigned long long>(&tick);
     for(unsigned i=0;i<8;++i)world->children[i][0]=reinterpret_cast<unsigned long long>(i<4?world->vt:world->dropdownVT);
     for(unsigned family=0;family<2;++family){unsigned base=family?0x1948:0x1930;for(unsigned i=0;i<4;++i){world->lists[family][i]=world->children[family*4+i];world->alternate[family][i]=world->children[family*4+3-i];}at<void**>(world->ui,base)=world->lists[family];at<void**>(world->ui,base+8)=world->lists[family]+(family?c.dropCount:c.subCount);}
-    detour::Set patches;
+    detour::Set patches; detour::Set extraPatches;
     detour::Set slotPatches;
     TL_REDIRECT(patches,settingsGet,&setting);TL_REDIRECT(patches,mousePressed,&pressed);TL_REDIRECT(patches,mouseHeld,&pressed);
     TL_REDIRECT(slotPatches,updateSlots,&unused);TL_REDIRECT(patches,editorSingleton,&editor);TL_REDIRECT(patches,modalPartial,&modal);
@@ -461,29 +461,29 @@ void side(void* context,autotest::Capture& capture,bool expected) {
     patches.redirect(reinterpret_cast<char*>(0x555c08),reinterpret_cast<char*>(&gameui_detail::service::native_text),&text);
     patches.redirect(reinterpret_cast<char*>(0x5532d8),reinterpret_cast<char*>(&gameui_detail::service::native_property),&property);
     TL_REDIRECT(patches,uiHeight,&heightRead);TL_REDIRECT(patches,rightEdge,&rightRead);TL_REDIRECT(patches,leftEdge,&leftRead);TL_REDIRECT(patches,settingsFloat,&settingFloat);
-    TL_REDIRECT(patches,textEvents,&events);TL_REDIRECT(patches,hideItem,&itemHidden);TL_REDIRECT(patches,hideCharacter,&characterHidden);
-    TL_REDIRECT(patches,consoleVisible,&consoleIsVisible);TL_REDIRECT(patches,consoleUpdate,&consoleTick);TL_REDIRECT(patches,finalMenuUpdate,&finalTick);
+    TL_REDIRECT(extraPatches,textEvents,&events);TL_REDIRECT(extraPatches,hideItem,&itemHidden);TL_REDIRECT(extraPatches,hideCharacter,&characterHidden);
+    TL_REDIRECT(extraPatches,consoleVisible,&consoleIsVisible);TL_REDIRECT(extraPatches,consoleUpdate,&consoleTick);TL_REDIRECT(extraPatches,finalMenuUpdate,&finalTick);
     patches.redirect(reinterpret_cast<char*>(0x554d48),reinterpret_cast<char*>(&gameui_detail::service::native_cameraOrientation),&cameraOrientation);
     patches.redirect(reinterpret_cast<char*>(0x5545c8),reinterpret_cast<char*>(&gameui_detail::service::native_cameraPosition),&cameraPosition);
-    TL_REDIRECT(patches,entryDep_a82ae0,&both);
-    TL_REDIRECT(patches,entryDep_91a680,&key);
-    TL_REDIRECT(patches,entryDep_7f62a0,&isA);
+    TL_REDIRECT(extraPatches,entryDep_a82ae0,&both);
+    TL_REDIRECT(extraPatches,entryDep_91a680,&key);
+    TL_REDIRECT(extraPatches,entryDep_7f62a0,&isA);
     patches.redirect(reinterpret_cast<char*>(0x555758),reinterpret_cast<char*>(&gameui_detail::service::native_castEquipment),&cast);
-    TL_REDIRECT(patches,entryDep_9e7080,&objectPosition);
-    TL_REDIRECT(patches,entryDep_a82f40,&screenPosition);
-    TL_REDIRECT(patches,entryDep_8b60b0,&itemShown);
-    TL_REDIRECT(patches,entryDep_816e20,&characterShown);
-TL_REDIRECT(patches,entryDep_c8ea50,&unique);
-TL_REDIRECT(patches,entryDep_a83e70,&scaled);
-TL_REDIRECT(patches,entryDep_834700,&mimic);
-TL_REDIRECT(patches,entryDep_7f62d0,&quest);
-TL_REDIRECT(patches,entryDep_87d6b0,&getSet);
-TL_REDIRECT(patches,entryDep_a4e160,&globals);
+    TL_REDIRECT(extraPatches,entryDep_9e7080,&objectPosition);
+    TL_REDIRECT(extraPatches,entryDep_a82f40,&screenPosition);
+    TL_REDIRECT(extraPatches,entryDep_8b60b0,&itemShown);
+    TL_REDIRECT(extraPatches,entryDep_816e20,&characterShown);
+TL_REDIRECT(extraPatches,entryDep_c8ea50,&unique);
+TL_REDIRECT(extraPatches,entryDep_a83e70,&scaled);
+TL_REDIRECT(extraPatches,entryDep_834700,&mimic);
+TL_REDIRECT(extraPatches,entryDep_7f62d0,&quest);
+TL_REDIRECT(extraPatches,entryDep_87d6b0,&getSet);
+TL_REDIRECT(extraPatches,entryDep_a4e160,&globals);
 patches.redirect(reinterpret_cast<char*>(0x5530d8),reinterpret_cast<char*>(&gameui_detail::service::native_createWindow),&makeWindow);
 patches.redirect(reinterpret_cast<char*>(0x554028),reinterpret_cast<char*>(&gameui_detail::service::native_font),&font);
 patches.redirect(reinterpret_cast<char*>(0x555ba8),reinterpret_cast<char*>(&gameui_detail::service::native_textExtent),&extent);
 patches.redirect(reinterpret_cast<char*>(0x5532a8),reinterpret_cast<char*>(&gameui_detail::service::native_windowSize),&getSize);
-    if(patches.failed() || slotPatches.failed()) _exit(42);
+    if(patches.failed() || extraPatches.failed() || slotPatches.failed()) _exit(42);
     for(unsigned repeat=0;repeat<2;++repeat){
         reachedBoundary=false;world->managerCalls=world->gateCalls=world->modalCalls=world->orientationCalls=0;world->changed[0]=world->changed[1]=false;
         try { if(expected)if(repeat==0){autotest::invoke(capture,&restoredUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{restoredUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);}else if(repeat==0){autotest::invoke(capture,&originalUpdate,world->ui,c.elapsed,world->client,&world->renderWindow);}else{originalUpdate(world->ui,c.elapsed,world->client,&world->renderWindow);} }

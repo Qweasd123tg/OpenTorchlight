@@ -15,6 +15,7 @@ class CEditorObjectManager;
 class CEditorScene;
 class CResourceManager;
 class CUndo;
+class CPOV;
 class iEditorResourceManager;
 
 // Partial: layout from CEditor::CEditor (504 bytes). Members of Editor.cpp are
@@ -22,6 +23,21 @@ class iEditorResourceManager;
 class CEditor : public CRunicCore
 {
 public:
+    void SetMouseWheelDelta(int delta);
+    void SetPovVelocityMult(float multiplier);
+    void SetRenderWindowHasFocus(bool focused);
+    CEditorScene* GetEditorScene(unsigned int index);
+    unsigned int getUndoSize();
+    void doUndo();
+    unsigned int getRedoSize();
+    void doRedo();
+    void deleteAllUndos();
+    void FlyToPositionLookingAtPos(Ogre::Vector3 position, Ogre::Vector3 target);
+    void keyEvent(unsigned int event, unsigned int code);
+    void mouseEvent(unsigned int event, unsigned int code);
+    void ResetCamera(Ogre::Vector3);
+    friend void EditorSetMonsterAutoSpawn(wchar_t*);
+
     CEditor();
     static CEditor* getSingleton();
     virtual ~CEditor();
@@ -60,7 +76,7 @@ private:
     float m_fUnknown60;
     int m_iFlags;
     int m_iUnknown68;
-    void* m_pCameraController;
+    CPOV* m_pCameraController;
     int m_iUnknown78[3];
     void* m_pUnknown88;
     void* m_pUnknown90;

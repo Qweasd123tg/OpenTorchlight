@@ -34,7 +34,7 @@ public:
     int getQuestRewardFame();
     int getQuestRewardXP();
     int getQuestRewardGold();
-    CQuest* getQuestRewardString();
+    std::wstring getQuestRewardString();
     void setQuestAccepted(bool);
     void setIsComplete(bool);
     long long isComplete(bool);
@@ -52,8 +52,8 @@ public:
     void save(_IO_FILE*);
     void reinitializeQuest(bool, bool);
     void load(_IO_FILE*, CResourceManager*, unsigned int);
-    CQuest* replaceStringTags(const std::wstring&);
-    CQuest* getQuestDetails();
+    std::wstring replaceStringTags(const std::wstring&);
+    std::wstring getQuestDetails();
     void initializeQuestWithNPC(CBaseUnit*);
     unsigned int calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int);
     long long loadQuestData(const std::wstring&);
@@ -61,7 +61,9 @@ public:
     void giveRewardForQuest();
 
     // fields
-    unsigned char m_Unknown10[0x18] __attribute__((aligned(8)));
+    unsigned char m_Unknown10[0x14] __attribute__((aligned(8)));
+    bool m_complete;
+    unsigned char m_gap25[3];
     bool m_bUnknown28;
     bool m_bUnknown29;
     bool m_bUnknown2A;
@@ -75,7 +77,7 @@ public:
     void* m_pUnknown48;
     std::wstring m_sUnknown50;
     std::wstring m_sUnknown58;
-    unsigned char m_Unknown60[0x18] __attribute__((aligned(8)));
+    TArrayList<CQuestDialog*> m_acceptDialogs;
     unsigned char m_Unknown78[0x18] __attribute__((aligned(8)));
     unsigned char m_Unknown90[0x18] __attribute__((aligned(8)));
     unsigned char m_UnknownA8[0x18] __attribute__((aligned(8)));

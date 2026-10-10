@@ -1,3 +1,4 @@
+#include "GameUICallBoundaries.h"
 #ifndef GAMEUI_EQUIPMENT_TOOLTIP_H
 #define GAMEUI_EQUIPMENT_TOOLTIP_H
 #include "EquipmentTooltip.h"
@@ -55,8 +56,8 @@ inline __attribute__((always_inline)) void place(CGameUI* ui,CEquipmentTooltip* 
                                                 CEquipmentTooltip* first,
                                                 CEquipmentTooltip* second)
 {
-    unsigned viewportWidth=static_cast<unsigned>(static_cast<long>(ui->getWindowWidth()));
-    unsigned viewportHeight=static_cast<unsigned>(static_cast<long>(ui->getWindowHeight()));
+    unsigned viewportWidth=static_cast<unsigned>(static_cast<long>(gameuiBoundaryWidth(ui)));
+    unsigned viewportHeight=static_cast<unsigned>(static_cast<long>(gameuiBoundaryHeight(ui)));
     CEGUI::UDim ownWidth=tip->m_pRoot->getWidth();
     CEGUI::UDim ownHeight=tip->m_pRoot->getHeight();
     PointerFields& pointer=*reinterpret_cast<PointerFields*>(ui);
