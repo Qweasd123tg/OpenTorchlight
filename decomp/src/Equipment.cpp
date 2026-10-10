@@ -2308,3 +2308,108 @@ std::wstring CEquipment::getSet()
 {
     return m_pDataGroup->GetDataValue(L"SET", EMPTY_WSTRING);
 }
+
+long long CEquipment::hasEffects() {
+ if(!m_pEffectManager)return 0;
+ if(m_pEffectManager->getAffixes().size())return 1;
+ TArrayList<CEffect*>& effects=*reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18);
+ for(int i=0;i<static_cast<int>(effects.size());++i)if(effects[i]->m_eType!=static_cast<EEFFECT_TYPE>(62))return 1;
+ return 0;
+}
+const std::wstring& CEquipment::getItemName(){
+ if(!m_bUnknown348&&!m_sUnidentifiedName.empty())return m_sUnidentifiedName;
+ return m_sDisplayName;
+}
+int CEquipment::minimumDamage(){return m_iMinimumDamage;}
+int CEquipment::maximumDamage(){return m_iMaximumDamage;}
+void CEquipment::removeDamageBonus(EDAMAGE_TYPES,int){}
+long long CEquipment::canPickup(CCharacter*){return 1;}
+long long CEquipment::canDrop(CCharacter*){return 1;}
+void CEquipment::incrementStackBy(int amount){
+ int value=static_cast<int>(static_cast<unsigned int>(m_iUnknown238)+static_cast<unsigned int>(amount));
+ m_iUnknown238=value<0?0:value;
+}
+void CEquipment::useEquipment(CCharacter*,CCharacter*){incrementStackBy(-1);}
+void CEquipment::missileBeingFired(CMissile*){}
+bool CEquipment::isMagical(){
+ if(ISA(static_cast<UNITTYPES::EUNITTYPES>(55)))return true;
+ if(ISA(static_cast<UNITTYPES::EUNITTYPES>(120)))return false;
+ for(unsigned i=0;i<m_ElementalDamageTypes.size();++i)if(m_ElementalDamageBonuses[i])return true;
+ return hasEffects()!=0;
+}
+bool CEquipment::getCharacterCanBeHarmedByMissile(CMissile* missile,CCharacter* target){
+ if(missile->m_bUnknown294)return true;
+ if(!getEquippedTo())return false;
+ return getEquippedTo()->isEnemy(target);
+}
+void CEquipment::playDropSound(Ogre::SceneNode* node){m_pSoundBank->playSample(17,node?node:m_pSceneNode,0.0f,0.0f,false);}
+void CEquipment::playTakeSound(Ogre::SceneNode* node){m_pSoundBank->playSample(18,node?node:m_pSceneNode,0.0f,0.0f,false);}
+
+void CEquipment::setHighlighted(bool value){
+ if(getHighlighted()!=value){
+  CItem::setHighlighted(value);
+  if(getUnitModelSecondary())static_cast<CGenericModel*>(getUnitModelSecondary())->setHighlighted(getHighlighted());
+ }
+}
+void CEquipment::activateDropParticles(){
+ if(m_pParticle_3D0&&m_pUnitModel){
+  m_pParticle_3D0->sceneNodeSetParent(m_pUnitModel->getSceneNode(),false);
+  m_pParticle_3D0->setPosition(Ogre::Vector3(0.0f,0.0f,0.0f));m_pParticle_3D0->Start();
+ }
+}
+void CEquipment::setElementalParticlesEnabled(bool enabled){
+ if(m_pParticle){
+  if(enabled){if(!m_pParticle->getVisible())m_pParticle->Start();}
+  else if(m_pParticle->getVisible())m_pParticle->Stop(true);
+ }
+}
+void CEquipment::unequipped(CInventory*,CCharacter*,EEQUIP_LOCATIONS){
+ resetVisualLayout();detachFromLocation();if(m_bBaseUnitFlag0)BroadcastEvent(109);
+}
+void CEquipment::useEquipment(){if(m_pInventory)m_pInventory->useEquipment(this,0);}
+void CEquipment::unequip(){if(m_pInventory)m_pInventory->unequipEquipment(this);}
+void CEquipment::equip(){if(m_pInventory)m_pInventory->equipEquipmentIntoFirstFreeLocation(this);}
+void CEquipment::removedFromInventory(CInventory*,CCharacter*){
+ if(m_pResourceManager->getGameClient()->getPlayer())questEventFire(static_cast<EQUEST_EVENTS>(5),m_pResourceManager->getGameClient()->getPlayer(),this);
+ m_pInventory=0;setParentGuid(-1);if(m_bBaseUnitFlag0)BroadcastEvent(107);
+}
+void CEquipment::destroyIcon(){
+ if(m_pIconWindow){
+  CEGUI::Window* parent=m_pIconWindow->getParent();if(parent)parent->removeChildWindow(m_pIconWindow);
+  CEGUI::WindowManager::getSingleton().destroyWindow(m_pIconWindow);m_pIconWindow=0;
+  int count=static_cast<int>(m_SocketedEquipment.size());
+  for(int i=0;i<count;++i)m_SocketedEquipment[i]->destroyIcon();
+ }
+ CItem::destroyItemText();
+}
+void CEquipment::update(Ogre::Camera* camera,const Ogre::Vector3& position,float elapsed){
+ CItem::update(camera,position,elapsed);if(m_bUnknown25C)updateDrop(elapsed);updateVisualLayout(elapsed);
+}
+void CEquipment::clearDamageBonuses(){
+ m_ElementalDamageTypes.clear();m_ElementalDamageBonuses.clear();m_InherentElementalDamage.clear();
+ createElementalDamages();CItem::destroyItemText();
+}
+
+#include "UnitResourceList.h"
+void CEquipment::convertEquipment(std::wstring name){
+ bool initialize=m_pDataGroup!=0;
+ CDataGroup* data=m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(L"ITEMS",name);
+ if(data)unitInit(data,initialize);
+}
+void CEquipment::createNewEquipment(std::wstring name){convertEquipment(name);}
+void CEquipment::addEnchant(int level,int minimum,int maximum){
+ if(m_pResourceManager&&m_pResourceManager->getLevel()&&
+   (ISA(static_cast<UNITTYPES::EUNITTYPES>(8))||ISA(static_cast<UNITTYPES::EUNITTYPES>(13))||ISA(static_cast<UNITTYPES::EUNITTYPES>(17))||ISA(static_cast<UNITTYPES::EUNITTYPES>(24)))){
+  int count=UTILITIES::randomIntegerBetweenVolatile(minimum,maximum);m_pResourceManager->createAffixesForUnit(this,level,count);
+ }
+ if(m_pEffectManager)m_pEffectManager->calculateEffectValues();
+ createElementalDamages();setRequirements();recalculatePrice();
+}
+void CEquipment::equipped(CInventory*,CCharacter* character,EEQUIP_LOCATIONS location){
+ resetVisualLayout();setHighlighted(false);setRenderBehind(true);attachToGivenLocation(character,location);
+ if(m_bBaseUnitFlag0)BroadcastEvent(108);
+}
+
+bool CEquipment::canEnchant(){
+ return ISA(static_cast<UNITTYPES::EUNITTYPES>(8))||ISA(static_cast<UNITTYPES::EUNITTYPES>(13))||ISA(static_cast<UNITTYPES::EUNITTYPES>(17))||ISA(static_cast<UNITTYPES::EUNITTYPES>(160))||ISA(static_cast<UNITTYPES::EUNITTYPES>(24));
+}

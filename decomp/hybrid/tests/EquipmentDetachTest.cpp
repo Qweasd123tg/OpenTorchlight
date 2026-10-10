@@ -15,6 +15,7 @@ TL_FUNCTION(dtStop,"_ZN9CParticle4StopEb")
 TL_FUNCTION(dtPaper,"_ZN10CCharacter16setPaperdollItemE16EEQUIP_LOCATIONSPN4Ogre6EntityE")
 TL_FUNCTION(dtSecond,"_ZN10CCharacter25setPaperdollItemSecondaryE16EEQUIP_LOCATIONSPN4Ogre6EntityE")
 extern "C" char dtBone[] __asm__("_ZN4Ogre6Entity20detachObjectFromBoneEPNS_13MovableObjectE");
+extern "C" void tracedoriginalDetach(CEquipment*) __asm__("_ZN10CEquipment18detachFromLocationEv");
 namespace {
 typedef char primary_offset[__builtin_offsetof(CCharacter,m_PaperdollItems)==0x560?1:-1];
 typedef char secondary_offset[__builtin_offsetof(CCharacter,m_PaperdollItemsSecondary)==0x5c0?1:-1];
@@ -43,9 +44,11 @@ void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;Wo
  w.models[0].get()->m_pSceneNode=w.nodes[1];w.models[1].get()->m_pSceneNode=w.nodes[2];w.particles[0].get()->m_pSceneNode=w.nodes[3];w.particles[1].get()->m_pSceneNode=w.nodes[4];
  if(c.n%2)w.nodes[5]->addChild(w.nodes[1]);w.nodes[6]->addChild(w.nodes[2]);if(c.n%3)w.nodes[5]->addChild(w.nodes[3]);if(c.n%4)w.nodes[6]->addChild(w.nodes[4]);
  detour::Set patches;TL_REDIRECT(patches,dtStop,&stop);TL_REDIRECT(patches,dtPaper,&paper);TL_REDIRECT(patches,dtSecond,&second);patches.redirect(dtBone,dtBone,&bone);if(patches.failed())_exit(42);
- for(unsigned repeat=0;repeat<2;++repeat){if(ours)p->detachFromLocation();else originalDetach(p);number(w.actorID(p->m_pEquippedTo));number(p->m_iUnknown298);number(w.boneCalls);for(unsigned j=0;j<8;++j)number(w.nodeID(w.nodes[j]->getParent()));for(unsigned j=0;j<2;++j)for(unsigned k=0;k<12;++k){number(w.entityID(w.actors[j].get()->m_PaperdollItems[k]));number(w.entityID(w.actors[j].get()->m_PaperdollItemsSecondary[k]));}}
+ for(unsigned repeat=0;repeat<2;++repeat){if(repeat==0){autotest::invoke(out,ours?&tracedoriginalDetach:&originalDetach,p);}else{if(ours)p->detachFromLocation();else originalDetach(p);}number(w.actorID(p->m_pEquippedTo));number(p->m_iUnknown298);number(w.boneCalls);for(unsigned j=0;j<8;++j)number(w.nodeID(w.nodes[j]->getParent()));for(unsigned j=0;j<2;++j)for(unsigned k=0;k<12;++k){number(w.entityID(w.actors[j].get()->m_PaperdollItems[k]));number(w.entityID(w.actors[j].get()->m_PaperdollItemsSecondary[k]));}}
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}void recovered(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_detach_differential){int failures=0;for(unsigned n=0;n<3584;++n){Case c={n,n%256,0,(n/256)%12};if(n>=3072){unsigned q=n-3072;c.flags=16|64|128;c.mode=1+(q/72)%6;c.slot=q%12;}
- autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    detach case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}host->log("    detach: 3584 cases, two calls per side\n");return failures;}
+TL_TEST(equipment_detach_differential){
+autotest::Coverage coverage0("equipment_detach_differential",(uint64_t)(uintptr_t)&originalDetach);
+int failures=0;for(unsigned n=0;n<3584;++n){Case c={n,n%256,0,(n/256)%12};if(n>=3072){unsigned q=n-3072;c.flags=16|64|128;c.mode=1+(q/72)%6;c.slot=q%12;}
+ autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    detach case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}}host->log("    detach: 3584 cases, two calls per side\n");{coverage0.report(host);return failures;}}

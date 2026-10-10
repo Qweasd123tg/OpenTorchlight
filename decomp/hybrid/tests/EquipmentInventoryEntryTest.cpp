@@ -20,6 +20,7 @@ TL_FUNCTION(ieIcon,"_ZN10CEquipment10createIconER7CGameUIb")
 TL_FUNCTION(iePrice,"_ZN10CEquipment16recalculatePriceEv")
 TL_FUNCTION(ieRemove,"_ZN12CEditorScene19RemoveObjectInSceneEP17CEditorBaseObject")
 TL_FUNCTION(ieStop,"_ZN9CParticle4StopEb")
+extern "C" void tracedoriginalInventoryEntry(CEquipment*,CInventory*,CCharacter*) __asm__("_ZN10CEquipment16addedToInventoryEP10CInventoryP10CCharacter");
 namespace {
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,flags,mode;};const Case*input;autotest::Capture*capture;
@@ -47,9 +48,11 @@ void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;Wo
  CEquipment*p=w.item.get();p->m_pResourceManager=w.managers[0].get();p->m_pInventory=(c.flags&1)?w.inventory((c.flags&2)?1:0):NULL;p->m_bGamblerIcon=(c.flags&4)!=0;p->m_bUnknown430=true;p->m_pPositionableObject=(c.n%3)?w.layout.get():NULL;
  if(c.flags&8)w.clients[0].get()->m_pGameUI=NULL;if(c.flags&16)w.clients[0].get()->m_pPlayer=NULL;w.actor.get()->m_pMaster=(c.flags&64)?w.master.get():NULL;w.actor.get()->m_iGuid=0x123456789LL+c.n;p->m_pSceneOwner=(c.flags&256)?w.scene(0):NULL;p->m_pParticle_3D0=(c.flags&512)?w.particles[0].get():NULL;
  detour::Set patches;TL_REDIRECT(patches,ieQuest,&quest);TL_REDIRECT(patches,ieState,&state);TL_REDIRECT(patches,ieIsa,&isa);TL_REDIRECT(patches,ieIcon,&icon);TL_REDIRECT(patches,iePrice,&price);TL_REDIRECT(patches,ieRemove,&remove);TL_REDIRECT(patches,ieStop,&stop);if(patches.failed())_exit(42);
- for(unsigned repeat=0;repeat<2;++repeat){if(ours)p->CEquipment::addedToInventory(w.inventory(1),w.actor.get());else originalInventoryEntry(p,w.inventory(1),w.actor.get());number(w.inventoryID(p->m_pInventory));number(p->m_bItemFlag1F2);number(p->m_bUnknown430);capture->add(&p->m_iParentGuid,sizeof(p->m_iParentGuid));}
+ for(unsigned repeat=0;repeat<2;++repeat){if(repeat==0){autotest::invoke(out,ours?&tracedoriginalInventoryEntry:&originalInventoryEntry,p,w.inventory(1),w.actor.get());}else{if(ours)p->CEquipment::addedToInventory(w.inventory(1),w.actor.get());else originalInventoryEntry(p,w.inventory(1),w.actor.get());}number(w.inventoryID(p->m_pInventory));number(p->m_bItemFlag1F2);number(p->m_bUnknown430);capture->add(&p->m_iParentGuid,sizeof(p->m_iParentGuid));}
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}void recovered(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_inventory_entry_differential){int failures=0;for(unsigned n=0;n<4096;++n){Case c={n,n%1024,0};if(n>=1024)c.mode=1+((n-1024)/384)%8;
- autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    inventory entry case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}host->log("    inventory entry: 4096 cases, two calls per side\n");return failures;}
+TL_TEST(equipment_inventory_entry_differential){
+autotest::Coverage coverage0("equipment_inventory_entry_differential",(uint64_t)(uintptr_t)&originalInventoryEntry);
+int failures=0;for(unsigned n=0;n<4096;++n){Case c={n,n%1024,0};if(n>=1024)c.mode=1+((n-1024)/384)%8;
+ autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);int pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    inventory entry case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}}host->log("    inventory entry: 4096 cases, two calls per side\n");{coverage0.report(host);return failures;}}

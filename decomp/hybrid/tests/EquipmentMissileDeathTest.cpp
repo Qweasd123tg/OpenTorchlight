@@ -16,6 +16,7 @@ TL_FUNCTION(mdRemove,"_ZN10CRunicCore17removeSafePointerEP12TSafePointerIPvEj")
 // Both the original method and the blob link this low-address ELF PLT entry.
 // Observe that shared call boundary; the library implementation stays untouched.
 extern "C" char mdFree[] __asm__("_ZN4Ogre12NedAllocImpl12deallocBytesEPv");
+extern "C" void tracedoriginalMissileDeath(CEquipment*,CMissile*) __asm__("_ZN10CEquipment13missileDieingEP8CMissile");
 namespace {
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,count,pattern,target,mode;};const Case*input;autotest::Capture*capture;
@@ -41,7 +42,7 @@ void remove(CRunicCore*p,TSafePointer<void*>*ref,unsigned index){number(10);numb
  }
 }
 void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;World w;world=&w;realFree=reinterpret_cast<char*>(dlsym(RTLD_DEFAULT,"_ZN4Ogre12NedAllocImpl12deallocBytesEPv"));if(!realFree)_exit(46);detour::Set removals,deallocations;removePatch=&removals;freePatch=&deallocations;TL_REDIRECT(removals,mdRemove,&remove);deallocations.redirect(mdFree,mdFree,&release);if(removals.failed()||deallocations.failed())_exit(42);CEquipment*p=w.item.get();CMissile*target=c.target<2?w.missiles[c.target].get():NULL;
- for(unsigned repeat=0;repeat<2;++repeat){try{if(ours)p->CEquipment::missileDieing(target);else originalMissileDeath(p,target);number(0);}catch(const std::runtime_error&e){number(std::strcmp(e.what(),"remove")==0?1:2);}
+ for(unsigned repeat=0;repeat<2;++repeat){try{if(repeat==0&&!(c.mode==4)){autotest::invoke(out,ours?&tracedoriginalMissileDeath:&originalMissileDeath,p,target);}else{if(ours)p->CEquipment::missileDieing(target);else originalMissileDeath(p,target);}number(0);}catch(const std::runtime_error&e){number(std::strcmp(e.what(),"remove")==0?1:2);}
  number(w.removes);number(w.frees);number(p->m_ActiveMissileRefs.size());for(unsigned i=0;i<p->m_ActiveMissileRefs.size();++i)number(w.id(p->m_ActiveMissileRefs[i]));
  // Grow-by-one initializes every allocated slot. Compare inactive tail slots
  // as pointer identities too; never dereference a freed reference.
@@ -52,5 +53,7 @@ void side(const Case&c,bool ours,autotest::Capture&out){input=&c;capture=&out;Wo
 }
 void original(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),false,c);}void recovered(void*p,autotest::Capture&c){side(*static_cast<Case*>(p),true,c);}
 }
-TL_TEST(equipment_missile_death_differential){int failures=0;for(unsigned n=0;n<5832;++n){Case c={n,n%6,(n/6)%243,(n/1458)%3,0};if(n>=4374){unsigned q=n-4374;c.count=1+q%5;c.pattern=q%243;c.target=q%3;c.mode=1+(q/243)%5;}
- autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);bool ok=WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    missile death case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok)return failures;}host->log("    missile death: 5832 cases, real safe-pointer lists and observed Ogre frees\n");return failures;}
+TL_TEST(equipment_missile_death_differential){
+autotest::Coverage coverage0("equipment_missile_death_differential",(uint64_t)(uintptr_t)&originalMissileDeath);
+int failures=0;for(unsigned n=0;n<5832;++n){Case c={n,n%6,(n/6)%243,(n/1458)%3,0};if(n>=4374){unsigned q=n-4374;c.count=1+q%5;c.pattern=q%243;c.target=q%3;c.mode=1+(q/243)%5;}
+ autotest::Outcome a,b;autotest::runChild(original,&c,a);autotest::runChild(recovered,&c,b);int pair=0;if(!(c.mode==4))pair=coverage0.observe(host,a,b);bool ok=pair==0&&WIFEXITED(a.status)&&WEXITSTATUS(a.status)==0&&WIFEXITED(b.status)&&WEXITSTATUS(b.status)==0&&a.capture.length==b.capture.length&&a.capture.length<autotest::Capture::kSize&&std::memcmp(a.capture.data,b.capture.data,a.capture.length)==0;if(!ok)host->log("    missile death case %u status %d/%d sizes %lu/%lu\n",n,a.status,b.status,(unsigned long)a.capture.length,(unsigned long)b.capture.length);TL_CHECK(failures,ok);if(!ok){coverage0.report(host);return failures;}}host->log("    missile death: 5832 cases, real safe-pointer lists and observed Ogre frees\n");{coverage0.report(host);return failures;}}
