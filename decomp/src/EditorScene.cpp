@@ -160,3 +160,60 @@ void CEditorScene::AddDescriptor(const wchar_t* name)
         AddDescriptor(descriptor);
     }
 }
+
+unsigned int CEditorScene::getNumberOfParticlesUpdating()
+{
+    CDescriptor* descriptor = GetDescriptorInSceneByName(L"Particle", false);
+    unsigned int count = 0;
+    if (descriptor) {
+        for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i)
+            if (static_cast<CParticleWrapper*>(descriptor->getObject(i))->isPlaying()) ++count;
+    }
+    else {
+        descriptor = GetDescriptorInSceneByName(L"Layout Link Particle", false);
+        if (descriptor) {
+            for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i)
+                count += static_cast<CEditorScene*>(descriptor->getObject(i))->getNumberOfParticlesUpdating();
+        }
+    }
+    return count;
+}
+
+unsigned int CEditorScene::getNumberOfTimelinesUpdating(bool excludeLooping)
+{
+    CDescriptor* descriptor = GetDescriptorInSceneByName(L"Timeline", false);
+    unsigned int count = 0;
+    if (descriptor) {
+        for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i) {
+            CTimeline* timeline = static_cast<CTimeline*>(descriptor->getObject(i));
+            if (timeline->m_bEnabled && (!excludeLooping || !timeline->m_bTimelineLoops)) ++count;
+        }
+    }
+    return count;
+}
+
+unsigned int CEditorScene::getNumberOfTimelinesThatDoLoop()
+{
+    CDescriptor* descriptor = GetDescriptorInSceneByName(L"Timeline", false);
+    unsigned int count = 0;
+    if (descriptor) {
+        for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i)
+            if (static_cast<CTimeline*>(descriptor->getObject(i))->m_bTimelineLoops) ++count;
+    }
+    return count;
+}
+
+void CEditorScene::setActivated(bool activated)
+{
+    if (m_bActivated == activated) return;
+    m_bActivated = activated;
+    if (!m_pDescriptorManager) return;
+    if (!activated) {
+        m_pDescriptorManager->deactivateDescriptors(this);
+        return;
+    }
+    m_pDescriptorManager->activateDescriptors(this);
+    CDescriptor* descriptor = GetDescriptorInSceneByName(L"Logic Group", false);
+    CLogicGroupDescriptor* logic = dynamic_cast<CLogicGroupDescriptor*>(descriptor);
+    if (logic) logic->levelActivated(this);
+}

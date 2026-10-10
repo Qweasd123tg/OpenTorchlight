@@ -82,3 +82,8 @@ CObjectControl3D::~CObjectControl3D()
         m_mouseHandler = NULL;
     }
 }
+
+Ogre::Quaternion CObjectControl3D::GetSelectionOrientation()
+{
+    return Ogre::Quaternion::IDENTITY;
+}

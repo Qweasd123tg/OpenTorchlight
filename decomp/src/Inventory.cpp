@@ -204,3 +204,196 @@ bool CInventory::unequipEquipment(CEquipment* equipment)
     equipment->drop();
     return false;
 }
+
+int CInventory::getPaneIndex(EINVENTORY_PANES pane)
+{
+    for (int i = static_cast<int>(m_paneStarts.size()) - 1; i >= 0; --i)
+        if (m_panes[i] == pane) return i;
+    return 0;
+}
+
+bool CInventory::EquipmentsInSlot(unsigned int slot)
+{
+    if (slot < 12) return getEquipmentInSlot(slot) != NULL;
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        int location = m_equipmentRefs[i]->m_iSlot;
+        if (location > 11 && static_cast<unsigned int>(location) == slot) return true;
+    }
+    return false;
+}
+
+int CInventory::findEquipmentSlot(CEquipment* equipment)
+{
+    for (int slot = 0; slot < static_cast<int>(m_iUnknown28); ++slot) {
+        CEquipment* item = getEquipmentInSlot(slot);
+        if (item && item == equipment) return slot;
+    }
+    return -1;
+}
+
+int CInventory::getEquipmentsEquippedLocation(CEquipment* equipment)
+{
+    for (int slot = 0; slot < 12; ++slot)
+        if (getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(slot)) == equipment)
+            return slot;
+    return 12;
+}
+
+int CInventory::getEquipmentCountOfGuid(long long guid)
+{
+    int count = 0;
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        if (m_equipmentRefs[i]->m_pEquipment->getUnitGuid() == guid) {
+            if (m_equipmentRefs[i]->m_pEquipment->m_iUnknown23C > 0)
+                count += m_equipmentRefs[i]->m_pEquipment->m_iUnknown238;
+            else ++count;
+        }
+    }
+    return count;
+}
+
+CEquipmentRef* CInventory::getEquipmentOfGuid(long long guid)
+{
+    CEquipmentRef* result = NULL;
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        if (m_equipmentRefs[i]->m_pEquipment->getUnitGuid() == guid) {
+            if (!result) result = m_equipmentRefs[i];
+            if (m_equipmentRefs[i]->m_pEquipment->m_iUnknown23C <= 0) return result;
+            if (result && m_equipmentRefs[i]->m_pEquipment->m_iUnknown238 < result->m_pEquipment->m_iUnknown238)
+                result = m_equipmentRefs[i];
+        }
+    }
+    return result;
+}
+
+void CInventory::forceRecalculationOfEquipmentStats()
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        if (m_equipmentRefs[i]->m_pEquipment && m_equipmentRefs[i]->m_pEquipment->m_pEffectManager)
+            m_equipmentRefs[i]->m_pEquipment->m_pEffectManager->recalculateEffects();
+    }
+}
+
+bool CInventory::canPickup(CEquipment* equipment, bool ignoreCapacity)
+{
+    if (!equipment) return false;
+    if (equipment->getParentGuid() != -1)
+        return equipment->getParentGuid() == m_pPositionableObject->getGuid();
+    if (!equipment->canPickup(m_pPositionableObject)) return false;
+    if (!equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(2))) return false;
+    if (ignoreCapacity) return true;
+    EINVENTORY_PANES pane = static_cast<EINVENTORY_PANES>(getRequiredPane(equipment));
+    unsigned int items = itemsInPane(pane);
+    return items < static_cast<unsigned int>(getPaneSize(pane));
+}
+
+float CInventory::getEffectValue(EEFFECT_TYPE effect, EDAMAGE_TYPES damage)
+{
+    if (m_effectValues[damage].find(effect) != m_effectValues[damage].end())
+        return m_effectValues[damage][effect];
+    return 0.0f;
+}
+
+float CInventory::getEffectValue(EEFFECT_TYPE effect, float value, const std::wstring& name)
+{
+    float result = 0.0f;
+    for (int slot = 0; slot < 12; ++slot) {
+        CEquipment* equipment = getEquipmentInSlot(slot);
+        if (equipment) {
+            result += ceilf(equipment->getEffectValue(effect, value, name));
+            for (unsigned int i = 0; i < equipment->m_SocketedEquipment.size(); ++i)
+                result += ceilf(equipment->m_SocketedEquipment[i]->getEffectValue(effect, value, name));
+        }
+    }
+    return result + ceilf(m_pEffectManager->getEffectValue(effect, name));
+}
+
+float CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE effect, EEQUIP_LOCATIONS slot, EDAMAGE_TYPES damage)
+{
+    if (static_cast<int>(slot) == 12) return 0.0f;
+    CEquipment* equipment = getEquipmentEquippedAt(slot);
+    if (!equipment) return 0.0f;
+    float result = ceilf(equipment->getEffectValue(EFFECT_ACTIVATION_PASSIVE, effect, 0.0f, damage));
+    for (unsigned int i = 0; i < equipment->m_SocketedEquipment.size(); ++i)
+        result += ceilf(equipment->m_SocketedEquipment[i]->getEffectValue(EFFECT_ACTIVATION_PASSIVE, effect, 0.0f, damage));
+    return ceilf(result);
+}
+
+float CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE effect, EEQUIP_LOCATIONS slot, EDAMAGE_TYPES damage)
+{
+    float result = ceilf(getEffectValue(effect, damage));
+    if (result != 0.0f)
+        return result - getEffectValueFromEquipmentSlot(effect, slot, damage);
+    return 0.0f;
+}
+
+float CInventory::calculateEffectValue(EEFFECT_TYPE effect, EDAMAGE_TYPES damage)
+{
+    float result = 0.0f;
+    for (int slot = 0; slot < 12; ++slot) {
+        CEquipment* equipment = getEquipmentInSlot(slot);
+        if (equipment) {
+            result += ceilf(equipment->getEffectValue(EFFECT_ACTIVATION_PASSIVE, effect, 0.0f, damage));
+            for (unsigned int i = 0; i < equipment->m_SocketedEquipment.size(); ++i)
+                result += ceilf(equipment->m_SocketedEquipment[i]->getEffectValue(EFFECT_ACTIVATION_PASSIVE, effect, 0.0f, damage));
+        }
+    }
+    return result + ceilf(m_pEffectManager->getEffectValue(EFFECT_ACTIVATION_PASSIVE, effect, damage));
+}
+
+void CInventory::identifyAll()
+{
+    for (int slot = 0; slot < static_cast<int>(m_iUnknown28); ++slot) {
+        CEquipment* equipment = getEquipmentInSlot(slot);
+        if (equipment) {
+            equipment->m_bUnknown348 = true;
+            equipment->destroyItemText();
+        }
+    }
+}
+
+void CInventory::destroyIcons()
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i)
+        if (m_equipmentRefs[i] && m_equipmentRefs[i]->m_pEquipment)
+            m_equipmentRefs[i]->m_pEquipment->destroyIcon();
+}
+
+unsigned int CInventory::getEquipmentsOfQuestID(long long guid, TArrayList<CEquipmentRef*>& output)
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i)
+        if (m_equipmentRefs[i]->m_pEquipment->getQuestGuid() == guid)
+            output.add(m_equipmentRefs[i]);
+    return output.size();
+}
+
+unsigned int CInventory::getEquipmentsOfUnitGuid(long long guid, TArrayList<CEquipmentRef*>& output)
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i)
+        if (m_equipmentRefs[i]->m_pEquipment->getUnitGuid() == guid)
+            output.add(m_equipmentRefs[i]);
+    return output.size();
+}
+
+unsigned int CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CEquipmentRef*>& output)
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i)
+        if (m_equipmentRefs[i]->m_pEquipment->ISA(type))
+            output.add(m_equipmentRefs[i]);
+    return output.size();
+}
+
+bool CInventory::useEquipment(CEquipment* equipment, CCharacter* target)
+{
+    if (!equipment) return false;
+    if (!target) target = m_pPositionableObject;
+    if (!canUseEquipment(equipment, target)) return false;
+    equipment->useEquipment(m_pPositionableObject, target);
+    for (unsigned int i = 0; i < m_listeners.size(); ++i)
+        m_listeners[i]->equipmentUsed(equipment);
+    if (equipment->m_iUnknown238 <= 0) {
+        removeEquipment(equipment);
+        delete equipment;
+    }
+    return true;
+}

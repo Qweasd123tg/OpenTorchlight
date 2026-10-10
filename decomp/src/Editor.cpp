@@ -110,3 +110,80 @@ CEditorScene* CEditor::GetEditorScene(std::wstring name)
 {
     return GetEditorScene(GetEditorSceneIDByName(name.c_str()));
 }
+
+Ogre::Camera* CEditor::getCamera()
+{
+    if (!m_pEditorResourceManager) return NULL;
+    if (!m_pUnknown88 || !(m_iFlags & (1 << EDITOR_FLAG_INGAME_MODE))) return m_pUnknown88;
+    return m_pEditorResourceManager->getGameCamera();
+}
+
+void CEditor::setDirectionalColor(int red, int green, int blue)
+{
+    m_pSettings->SetInt(KSETTINGS_DIRECTIONAL_LIGHT_RED, red);
+    m_pSettings->SetInt(KSETTINGS_DIRECTIONAL_LIGHT_GREEN, green);
+    m_pSettings->SetInt(KSETTINGS_DIRECTIONAL_LIGHT_BLUE, blue);
+    TArrayList<CGameClient*>* clients = m_pUnknown128->getGameClients();
+    if (clients && clients->size()) (*clients)[0]->refreshLighting();
+}
+
+void CEditor::setMaterialAmbientColor(int red, int green, int blue)
+{
+    m_pSettings->SetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_RED, red);
+    m_pSettings->SetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_GREEN, green);
+    m_pSettings->SetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_BLUE, blue);
+    TArrayList<CGameClient*>* clients = m_pUnknown128->getGameClients();
+    if (clients && clients->size()) (*clients)[0]->refreshLighting();
+}
+
+void CEditor::setAmbientColor(int red, int green, int blue)
+{
+    m_pSettings->SetInt(KSETTINGS_AMBIENT_LIGHT_RED, red);
+    m_pSettings->SetInt(KSETTINGS_AMBIENT_LIGHT_GREEN, green);
+    m_pSettings->SetInt(KSETTINGS_AMBIENT_LIGHT_BLUE, blue);
+    TArrayList<CGameClient*>* clients = m_pUnknown128->getGameClients();
+    if (clients && clients->size()) (*clients)[0]->refreshLighting();
+}
+
+void CEditor::setDirectionalIntensity(float intensity)
+{
+    m_pSettings->SetFloat(KSETTINGS_F_DIRECTIONAL_INTENSITY, intensity);
+    TArrayList<CGameClient*>* clients = m_pUnknown128->getGameClients();
+    if (clients && clients->size()) (*clients)[0]->refreshLighting();
+}
+
+void CEditor::addUndo(CUndo* undo, bool clearRedo)
+{
+    if (clearRedo) {
+        for (std::list<CUndo*>::iterator i = m_Redos.begin(); i != m_Redos.end(); ++i) {
+            if (*i) { delete *i; *i = NULL; }
+        }
+    }
+    m_Undos.push_back(undo);
+    while (!m_Undos.empty() && m_Undos.size() > m_iMaxUndos) {
+        CUndo*& oldest = m_Undos.front();
+        if (oldest) { delete oldest; oldest = NULL; }
+        m_Undos.pop_front();
+    }
+}
+
+void CEditor::addRedo(CUndo* redo)
+{
+    m_Redos.push_back(redo);
+    while (!m_Redos.empty() && m_Redos.size() > m_iMaxUndos) {
+        CUndo*& oldest = m_Redos.front();
+        if (oldest) { delete oldest; oldest = NULL; }
+        m_Redos.pop_front();
+    }
+}
+
+CEditor* CEditor::getSingleton()
+{
+    if (gEditor) return gEditor;
+    CEditor* editor = new CEditor;
+    if (gEditor != editor) {
+        if (gEditor) delete gEditor;
+        gEditor = editor;
+    }
+    return editor;
+}
