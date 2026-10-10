@@ -21,6 +21,8 @@ extern "C"
 {
     SDL_RWops* SDL_RWFromFile(const char* file,const char* mode);
     SDL_Surface* SDL_LoadBMP_RW(SDL_RWops* source,int freeSource);
+    int SDL_ShowCursor(int toggle);
+    void SDL_SetCursor(SDL_Cursor* cursor);
     SDL_Cursor* SDL_CreateColorCursor(SDL_Surface* surface,int hotX,int hotY);
     void SDL_FreeSurface(SDL_Surface* surface);
     SDL_Window* SDL_GetWindowFromID(Uint32 id);

@@ -26,7 +26,8 @@ public:
     void closeMenus();
     void update(float, CGameClient*, Ogre::RenderWindow*);
     void flushProcessInput();
-    long long processInput(void*, float, bool);
+    // Original 0xc2b840: bool exits, AL tests, and bool dropdown tail-call.
+    bool processInput(void*, float, bool);
     void captureProcessInput();
     void mouseEvent(unsigned int, unsigned int);
     void keyEvent(unsigned int, unsigned int, long);

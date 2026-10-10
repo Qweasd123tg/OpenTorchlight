@@ -37,6 +37,7 @@ public:
     bool addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
     void removeListenerFromUnits(iUnitObserver* observer);
     bool getAutomapVisible();
+    void setAutomapVisible(bool visible);
     void setNPCAutomapBillboardVisible(Ogre::Billboard* billboard, bool visible);
     void clearPassabilityData();
     bool mapPassable(int x, int y);
