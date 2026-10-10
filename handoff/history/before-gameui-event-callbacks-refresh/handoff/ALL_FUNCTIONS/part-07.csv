@@ -6,26 +6,26 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MISSING,False,False,,False
 0xa83670,gameui.cpp,CGameUI::clickLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83670.cpp,False
 0xa83680,gameui.cpp,CGameUI::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83680.cpp,False
-0xa83690,gameui.cpp,CGameUI::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xa83690,gameui.cpp,CGameUI::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
 0xa836c0,gameui.cpp,CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa836c0.cpp,False
 0xa83700,gameui.cpp,CGameUI::handle_SkillSelectMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83700.cpp,False
 0xa83740,gameui.cpp,"CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",MISSING,False,False,,False
 0xa83790,gameui.cpp,"CGameUI::removeMenuListener(EMENU_TYPE, iMenuListener*)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83790.cpp,False
 0xa837e0,gameui.cpp,CGameUI::getQuestDialogNPC(),MISSING,False,False,,False
 0xa83800,gameui.cpp,CGameUI::getQuestDialogCameraOffset(),MISSING,False,False,,False
-0xa83820,gameui.cpp,CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa83820,gameui.cpp,CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
 0xa838e0,gameui.cpp,CGameUI::getWindowHeight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa838e0.cpp,False
 0xa83900,gameui.cpp,CGameUI::getWindowWidth(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83900.cpp,False
 0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",MISSING,False,False,,False
 0xa83ad0,gameui.cpp,CGameUI::getAspectRatio(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ad0.cpp,False
-0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MISSING,False,False,,False
 0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),MISSING,False,False,,False
 0xa83bc0,gameui.cpp,CGameUI::toggleFPS(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83bc0.cpp,False
-0xa83c30,gameui.cpp,CGameUI::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xa83c30,gameui.cpp,CGameUI::handle_MouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
 0xa83cf0,gameui.cpp,"CGameUI::activateItemSlot(int, bool)",MISSING,False,False,,False
 0xa83d60,gameui.cpp,CGameUI::updateHardwareCursor(),MISSING,False,False,,False
 0xa83e00,gameui.cpp,CGameUI::setCursorState(ECursorState),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e00.cpp,False
-0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MISSING,False,False,,False
 0xa83e70,gameui.cpp,CGameUI::scaledY(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e70.cpp,False
 0xa83ea0,gameui.cpp,CGameUI::scaledX(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ea0.cpp,False
 0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MISSING,False,False,,False

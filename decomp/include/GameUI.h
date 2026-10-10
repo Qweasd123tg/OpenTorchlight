@@ -121,6 +121,9 @@ public:
     virtual ~CGameUI();
     bool create();
     bool handle_MouseThrough(const CEGUI::EventArgs&);
+    bool handle_onClick(const CEGUI::EventArgs&);
+    bool handle_ToggleItemNames(const CEGUI::EventArgs&);
+    bool handle_MouseOver(const CEGUI::EventArgs&);
     bool handle_ClickThrough(const CEGUI::EventArgs&);
     bool handle_SkillSelectMouseOver(const CEGUI::EventArgs&);
     bool handle_SkillSelectMouseOut(const CEGUI::EventArgs&);

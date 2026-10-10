@@ -1,0 +1,41 @@
+{
+  "accepted_current": 2343,
+  "matched_game": 2113,
+  "behavioral_game": 230,
+  "pro_definitions": 401,
+  "pro_primary_match": 396,
+  "pro_primary_behavioral": 5,
+  "pro_addresses": 405,
+  "pro_overlap_accepted": 405,
+  "total_indexed_addresses": 7663,
+  "all_current_tests": 406,
+  "base_local_commit": "0c1c7ed06ffef299e7bb4a5b9aacd992a82021af",
+  "pending_large_function": null,
+  "accepted_bytes": 1139832,
+  "game_functions": 5247,
+  "game_bytes": 3702188,
+  "matched_bytes": 168566,
+  "matched_static_init": 824,
+  "matched_static_init_bytes": 89156,
+  "verified_main_commit": "0c1c7ed06ffef299e7bb4a5b9aacd992a82021af",
+  "verified_main_tree": "6d1522674f7e94e7dc302abf4fd02c85e00f1c4b",
+  "refresh": "gameui-click",
+  "pass11_net_accepted": 269,
+  "pass11_integrated_files": 128,
+  "index_status_counts": {
+    "MATCH": 3494,
+    "DIFF": 2151,
+    "MISSING": 2018
+  },
+  "validation_input_sha256": {
+    "pass11-final-receipt.json": "1b55d7546bdd817894128ad4c016c86875eff80df6e86007f7a2acf041040522",
+    "gameui-click-root.exit": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "gameui-click-root.json": "eaca0359de80c23ad1463d38f48acc8a4d946935dd18503a4fd1824bd0bab064",
+    "gameui-click-root.log": "ad9d531c187740a487018bff6d54194fc90785f8ec64e640076f190ec476f113",
+    "gameui-click-stage-validation.json": "bf8dd6d1fa2194d5181619c1f8eb040933fd1e5c7e3536dd596ef6abeea2c70b",
+    "gameui-click-integrated.json": "fb353068cd9f701b606c14ba19d9d6ff63703f865d7bc50df7ceba97e3793182",
+    "pass11-root.json": "fe92c105482bc26e9b1891867e00afc96854c2f901a428858847ba4275f62475"
+  },
+  "gameui_click_net_accepted": 1,
+  "gameui_click_integrated_files": 5
+}
