@@ -23,6 +23,13 @@ public:
  void addExperienceToStat(ESTATSMENU_STATS,int);
  void addExperienceSpent(int);
  float getStatBarTotalAmount(ESTATSMENU_STATS);
+ bool handle_ExitButton(const CEGUI::EventArgs&);
+ bool handle_CloseButton(const CEGUI::EventArgs&);
+ float getExperienceBarTotalAmount();
+ float getAmountOfXPToAdd(ESTATSMENU_STATS,float);
+ float getAmountOfXPToRemove(ESTATSMENU_STATS,float);
+ void fillIntoBar(ESTATSMENU_STATS,float);
+ void removeFromBar(ESTATSMENU_STATS,float);
  bool handle_onMouseUp(const CEGUI::EventArgs&);
  bool handle_AddToStat(const CEGUI::EventArgs&);
  bool handle_RemoveFromStat(const CEGUI::EventArgs&);

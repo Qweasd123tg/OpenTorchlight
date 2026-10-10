@@ -33,7 +33,7 @@ public:
     virtual void onClick(ELayoutFunction, std::wstring);
     virtual void onDoubleClick(ELayoutFunction, std::wstring);
     void broadcastEvent(EMENU_TYPE, EMENU_EVENT);
-    long long handle_CloseButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
     void mapEventHandlers(CEGUI::Window*);
     void setTitle(const std::wstring&);
     unsigned long handle_onDoubleClick(const CEGUI::EventArgs&);
