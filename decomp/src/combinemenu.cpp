@@ -683,3 +683,42 @@ void CCombineMenu::mapEventHandlers(CEGUI::Window* window) {
    window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CCombineMenu::handle_onClick,this));
  }catch(...) {}
 }
+
+#include "Level.h"
+void CCombineMenu::itemUpdatedInMenu(CEquipment* item,bool added) {
+ if(g_bDontTrackItemEquipAndUnEquip)return;
+ std::map<CEquipment*,std::pair<CInventory*,EEQUIP_LOCATIONS> >::iterator found=m_OriginalItemLocations.find(item);
+ if(added) {
+  if(found==m_OriginalItemLocations.end()&&item->m_pInventory)
+   m_OriginalItemLocations[item]=std::make_pair(item->m_pInventory,static_cast<EEQUIP_LOCATIONS>(item->m_iUnknown298));
+ }else if(found!=m_OriginalItemLocations.end())m_OriginalItemLocations.erase(found);
+}
+namespace combine_items {
+inline __attribute__((always_inline)) void drop(CCombineMenu* menu,CEquipment* item) {
+ Ogre::Vector3 position=menu->m_pCharacter->getPosition(true);
+ menu->m_pCharacter->getLevel()->addItem(item,position,true);item->drop();
+}
+}
+void CCombineMenu::returnItemsToCorrectLocation(CEquipment* item) {
+ if(!item)return;
+ CCharacter* player=m_pCharacter;CInventory* inventory=player?player->m_pInventory:0;
+ std::map<CEquipment*,std::pair<CInventory*,EEQUIP_LOCATIONS> >::iterator found=m_OriginalItemLocations.find(item);
+ if(found!=m_OriginalItemLocations.end()) {
+  inventory=found->second.first;EEQUIP_LOCATIONS location=found->second.second;
+  if(!inventory) {combine_items::drop(this,item);m_OriginalItemLocations.erase(found);return;}
+  if(static_cast<int>(location)>=0&&static_cast<int>(location)<=18&&!inventory->getEquipmentEquippedAt(location)&&inventory->equipEquipmentIntoSpecificLocation(item,location)==true) {
+   player=m_pCharacter;
+  }else {
+   if(!inventory->pickupEquipment(item,true))combine_items::drop(this,item);
+   m_OriginalItemLocations.erase(found);return;
+  }
+ }
+ if(player&&inventory&&!inventory->isEquipmentInInventory(item)) {
+  if(!inventory->pickupEquipment(item,true))combine_items::drop(this,item);
+ }
+ if(found!=m_OriginalItemLocations.end())m_OriginalItemLocations.erase(found);
+}
+void CCombineMenu::equipmentUsed(CEquipment* item) {
+ if(!g_bDontTrackItemEquipAndUnEquip)returnItemsToCorrectLocation(item);
+ updateLayout();
+}

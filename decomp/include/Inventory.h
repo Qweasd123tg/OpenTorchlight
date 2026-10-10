@@ -33,12 +33,12 @@ public:
     bool slotIsInPane(unsigned int, int);
     int itemsInPane(EINVENTORY_PANES);
     int getItemPane(unsigned int);
-    long long isEquipmentInInventory(CEquipment*);
+    bool isEquipmentInInventory(CEquipment*);
     long long EquipmentsInSlot(unsigned int);
     CEquipment* getEquipmentInSlot(unsigned int);
     long getEquipmentRefInSlot(unsigned int);
     int findEquipmentSlot(CEquipment*);
-    long long getEquipmentEquippedAt(EEQUIP_LOCATIONS);
+    CEquipment* getEquipmentEquippedAt(EEQUIP_LOCATIONS);
     int getEquipmentsEquippedLocation(CEquipment*);
     long long isEquipmentEquipped(CEquipment*);
     int getEquipmentCountOfGuid(long long);
@@ -78,7 +78,7 @@ public:
     CEquipment* pickupEquipment(CEquipment*, bool);
     long long useEquipment(CEquipment*, CCharacter*);
     long long removeEquipmentByGuid(long long, unsigned int, bool);
-    long long equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS);
+    bool equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS);
     bool equipEquipmentIntoFirstFreeLocation(CEquipment*);
     void swapWeaponSet();
     CInventory(CCharacter*, unsigned int);
