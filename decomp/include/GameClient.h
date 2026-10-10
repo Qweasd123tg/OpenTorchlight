@@ -58,6 +58,7 @@ public:
 
 
     void clearMouseClickUnits();
+    bool clickRight(long long, bool, bool);
     void warpLevels(std::wstring dungeon, int delta, int depth, bool waypoint, std::wstring warpName, bool flag);
     virtual ~CGameClient();
     virtual void preRenderTargetUpdate(const Ogre::RenderTargetEvent&);

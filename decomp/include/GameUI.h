@@ -68,6 +68,7 @@ public:
     void refreshQuestMenu();
     void closeCinematicMenu();
     void clickLeft();
+    void activateItemSlot(int, bool);
     bool handle_MouseOut(const CEGUI::EventArgs& event);
     void removeMenuListener(EMENU_TYPE type, iMenuListener* listener);
     float scaledX(float value);
