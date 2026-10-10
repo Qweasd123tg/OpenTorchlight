@@ -60,7 +60,7 @@ def inspect(tus=(), libraries=(), out=None):
         return path
     with publication.tree_lock():
         snapshot = publication.tree_state(root)
-        objects = toolchain.parallel_map(compile_unit, sources)
+        objects = toolchain.parallel_map(compile_unit, sources, phase="build")
         defined, undefined, initializers, locals_ = set(), set(), set(), []
         for path in objects:
             obj = elfimage.load_object(path)

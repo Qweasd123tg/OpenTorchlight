@@ -132,7 +132,7 @@ def main():
 
     sources = sorted((ROOT / "decomp" / "src").rglob("*.cpp"))
     original = objdiff.Original(db=db)
-    units = toolchain.parallel_map(lambda s: objdiff.compare_source(s, original, scores=args.scores), sources)
+    units = toolchain.parallel_map(lambda s: objdiff.compare_source(s, original, scores=args.scores), sources, phase="compare")
     objdiff.save_norm_cache(original)
     status = Counter()
     matched = {}

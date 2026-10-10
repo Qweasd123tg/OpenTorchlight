@@ -49,7 +49,7 @@ class Definitions(unittest.TestCase):
                 (publication.Stage, "activate", lambda stage: nullcontext(stage)),
                 (objdiff, "Original", lambda: SimpleNamespace(db=self.db)),
                 (objdiff, "compare_source", self.compare),
-                (toolchain, "parallel_map", lambda fn, items: [fn(p) for p in items]),
+                (toolchain, "parallel_map", lambda fn, items, **kwargs: [fn(p) for p in items]),
                 (hybrid, "build", self.build),
                 (hybrid, "selftest", lambda *_: (0, self.report))):
             mocked = patch.object(target, attribute, value)
