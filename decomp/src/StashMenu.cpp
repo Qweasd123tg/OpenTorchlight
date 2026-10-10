@@ -1095,3 +1095,194 @@ void CStashMenu::setOwner(CCharacter* owner) {
   stash_owners::firstFollower(m_pCharacter)->m_pInventory->addListener(this);
  }
 }
+
+namespace stash_input {
+struct UIFields {char prefix[0xb8];CEquipment* dragged;};
+struct HoverFields {char prefix[0x198];bool flag198;};
+inline __attribute__((always_inline)) void removeGlow(CStashMenu* menu) {
+ if(menu->m_pUnknown28->isChild(menu->m_pUnknown3418))menu->m_pUnknown28->removeChildWindow(menu->m_pUnknown3418);
+ else if(menu->m_pUnknown40->isChild(menu->m_pUnknown3418))menu->m_pUnknown40->removeChildWindow(menu->m_pUnknown3418);
+}
+}
+bool CStashMenu::processInput(void*,float,bool active) {
+ if(!active){m_pHoverObject=0;m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);stash_input::removeGlow(this);return true;}
+ bool result=true;if(m_bUnknown62){setOpen(false);m_bUnknown62=false;result=false;}
+ CEquipment* dragged=0;
+ if(m_pOwner&&!m_pOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(127)))dragged=reinterpret_cast<stash_input::UIFields*>(m_pGameUI)->dragged;
+ if(dragged&&dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))) {
+  m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();m_pUnknown30->setVisible(true);m_pUnknown30->moveToFront();
+ }else if(!m_pHoverObject||reinterpret_cast<stash_input::HoverFields*>(m_pHoverObject)->flag198) {
+  m_pHoverObject=0;m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);
+ }
+ if(!m_bUnknown3420)stash_input::removeGlow(this);
+ m_iUnknown3400=-1;m_iUnknown3404=-1;m_iUnknown33F8=-1;m_iUnknown33FC=-1;return result;
+}
+bool CStashMenu::handle_MouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CBaseUnit* owner=m_pOwner;
+ if(window&&owner){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory;
+  if(owner->ISA(static_cast<UNITTYPES::EUNITTYPES>(170)))inventory=CSharedStash::getSingleton()->m_pInventory;
+  else inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item==m_pHoverObject){m_pHoverObject=0;CEquipment* dragged=reinterpret_cast<stash_input::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+ }return true;
+}
+bool CStashMenu::handle_PetMouseOut(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CCharacter* pet=m_pCharacter->getFollower(0);
+ if(pet&&window){int slot=*static_cast<int*>(window->getUserData());CEquipment* item=pet->m_pInventory->getEquipmentInSlot(slot);
+  if(item==m_pHoverObject){m_pHoverObject=0;CEquipment* dragged=reinterpret_cast<stash_input::UIFields*>(m_pGameUI)->dragged;
+   if(!dragged||!dragged->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+ }return true;
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundBank.h"
+#include "SoundData.h"
+CStashMenu::CStashMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pUnknown18(parent),m_pOwner(0),m_pCharacter(0),m_bOpenPartial(false),m_bUnknown61(true),m_bUnknown62(false),
+ m_pDynamicPropertyFile(&settings),m_pGameUI(&ui),m_pUnknown78(scene),m_pUnknown80(render),m_pUnknown90(0),
+ m_pResourceManager(resources),m_fScreenEdge(0.0f),m_pSoundBank(0),m_iUnknown33F8(-1),m_iUnknown33FC(-1),
+ m_iUnknown3400(-1),m_iUnknown3404(-1),m_pHoverObject(0),m_bUnknown3420(false),m_bUnknown3421(false)
+{
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"STATSOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"STATSCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ createMenus();
+}
+CStashMenu::~CStashMenu() {
+ setPlayer(0);setOwner(0);
+ if(m_pUnknown90){delete m_pUnknown90;m_pUnknown90=0;}
+ if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}
+}
+
+bool CStashMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CBaseUnit* owner=m_pOwner;
+ if(window&&owner){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory;
+  if(owner->ISA(static_cast<UNITTYPES::EUNITTYPES>(170)))inventory=CSharedStash::getSingleton()->m_pInventory;
+  else inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;
+
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item){m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();m_pUnknown30->setVisible(true);m_pUnknown30->moveToFront();}
+   else {m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);}
+  }
+  // Both original hover paths attach the shared glow to TopFrame.
+  CEGUI::Window* parent=m_pUnknown28;
+  float x=m_pSocketedSizeWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSocketedSizeWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSocketedSizeWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSocketedSizeWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!parent->isChild(m_pUnknown3418))parent->addChildWindow(m_pUnknown3418);
+  m_pUnknown3418->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pUnknown3418->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pUnknown3418->moveToBack();m_bUnknown3420=true;
+
+ }return true;
+}
+bool CStashMenu::handle_PetMouseOver(const CEGUI::EventArgs& event) {
+ CEGUI::Window* window=static_cast<const CEGUI::WindowEventArgs&>(event).window;CCharacter* pet=m_pCharacter->getFollower(0);
+ if(pet&&window){int slot=*static_cast<int*>(window->getUserData());CInventory* inventory=pet->m_pInventory;
+
+  CEquipment* item=inventory->getEquipmentInSlot(slot);
+  if(item){m_pHoverObject=item;
+   if((item->m_bUnknown348&&item->m_iSocketCount)||item->ISA(static_cast<UNITTYPES::EUNITTYPES>(120))){m_pUnknown38->setVisible(true);m_pUnknown38->moveToFront();m_pUnknown30->setVisible(true);m_pUnknown30->moveToFront();}
+   else {m_pUnknown38->setVisible(false);m_pUnknown30->setVisible(false);}
+  }
+  // Both original hover paths attach the shared glow to TopFrame.
+  CEGUI::Window* parent=m_pUnknown28;
+  float x=m_pSlotWindows[slot]->getPosition().d_x.asAbsolute(0.0f);
+  float y=m_pSlotWindows[slot]->getPosition().d_y.asAbsolute(0.0f);
+  float width=m_pSlotWindows[slot]->getWidth().asAbsolute(0.0f);
+  float height=m_pSlotWindows[slot]->getHeight().asAbsolute(0.0f);
+  if(!parent->isChild(m_pUnknown3418))parent->addChildWindow(m_pUnknown3418);
+  m_pUnknown3418->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,x),CEGUI::UDim(0.0f,y)));
+  m_pUnknown3418->setSize(CEGUI::UVector2(CEGUI::UDim(0.0f,width),CEGUI::UDim(0.0f,height)));
+  m_pUnknown3418->moveToBack();m_bUnknown3420=true;
+
+ }return true;
+}
+
+void CStashMenu::setOpen(bool open) {
+ if(m_bOpenPartial){
+  if(!open){m_pSoundBank->playSample(66,0,0.0f,0.0f,false);m_pUnknown90->blendAnimation("CLOSE",false,0.1f,2.0f,-1.0f);m_bUnknown61=false;m_bOpenPartial=false;return;}
+ }else {
+  if(!open){m_bOpenPartial=false;return;}
+  m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+  m_pSoundBank->playSample(22,0,0.0f,0.0f,false);m_pUnknown90->setVisible(true);
+  if(m_pUnknown90->animationPlaying("CLOSE"))m_pUnknown90->blendAnimation("OPEN",false,0.1f,2.0f,-1.0f);
+  else m_pUnknown90->playAnimation("OPEN",false,2.0f,-1.0f);
+  m_pUnknown90->queueBlendAnimation("IDLE",true,0.1f,1.0f);
+  m_pUnknown18->addChildWindow(m_pUnknown20);m_pUnknown20->moveToBack();
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33e0)->setSelected(true);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33e8)->setSelected(false);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33f0)->setSelected(false);
+  m_pUnknown33c8->setVisible(true);m_pUnknown33d0->setVisible(false);m_pUnknown33d8->setVisible(false);
+  m_pGameUI->queueTip(static_cast<EContextTip>(m_bUnknown3421?21:17));
+ }
+ m_bOpenPartial=open;updateLayout();
+}
+
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+namespace stash_animation {
+struct ModelFields {char prefix[0x60];Ogre::Entity* entity;char gap68[0x130-0x68];Ogre::SkeletonInstance* skeleton;};
+inline __attribute__((always_inline)) ModelFields& model(CGenericModel* p){return *reinterpret_cast<ModelFields*>(p);}
+}
+void CStashMenu::update(float elapsed) {
+ int width=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);int height=m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+ if(!m_bOpenPartial){m_pHoverObject=0;m_pUnknown30->setVisible(false);m_pUnknown38->setVisible(false);}
+ if(m_bOpenPartial||!m_bUnknown61){
+  m_pUnknown90->updateAnimation(elapsed,false);stash_animation::model(m_pUnknown90).entity->_updateAnimation();
+  Ogre::Bone* top=stash_animation::model(m_pUnknown90).skeleton->getBone("tag_topmerchant");
+  Ogre::Vector3 position=m_pUnknown90->getPosition(false);const Ogre::Vector3& offset=top->_getDerivedPosition();
+  float x=position.x+offset.x;float y=position.y+offset.y;
+  x=m_pGameUI->scaledY(x);float halfWidth=float(width)*0.5f;y=m_pGameUI->scaledY(y);y=-(y+float(height)*-0.5f);
+  m_pUnknown28->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,halfWidth+x),CEGUI::UDim(0.0f,y)));
+  Ogre::Bone* bottom=stash_animation::model(m_pUnknown90).skeleton->getBone("tag_bottommerchant");
+  position=m_pUnknown90->getPosition(false);const Ogre::Vector3& bottomOffset=bottom->_getDerivedPosition();
+  x=m_pGameUI->scaledY(position.x+bottomOffset.x);
+  m_pUnknown40->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,halfWidth+x),CEGUI::UDim(0.0f,y)));
+  Ogre::Bone* right=stash_animation::model(m_pUnknown90).skeleton->getBone("tag_bottommerchantright");
+  position=m_pUnknown90->getPosition(false);const Ogre::Vector3& rightOffset=right->_getDerivedPosition();
+  x=m_pGameUI->scaledY(position.x+rightOffset.x);float margin=m_pGameUI->scaledY(50.0f);float edge=(halfWidth+x)-margin;m_fScreenEdge=edge>0.0f?edge:0.0f;
+  if(!m_bOpenPartial&&!m_bUnknown61&&!m_pUnknown90->animationPlaying("CLOSE")&&!m_pUnknown90->animationQueued("CLOSE")){
+   m_pUnknown90->setVisible(false);m_pUnknown18->removeChildWindow(m_pUnknown20);m_bUnknown61=true;
+  }
+ }
+}
+
+#include "EquipmentRef.h"
+namespace stash_layout {
+inline __attribute__((always_inline)) TArrayList<CEquipmentRef*>& equipment(CInventory* p){return *reinterpret_cast<TArrayList<CEquipmentRef*>*>(p->m_Unknown30);}
+}
+void CStashMenu::updateLayout(){
+ if(!m_bOpenPartial||!m_pOwner)return;
+ CInventory* inventory;
+ if(m_pOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(170)))inventory=CSharedStash::getSingleton()->m_pInventory;
+ else inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;
+ if(!inventory)return;
+ while(m_pUnknown30->getChildCount())m_pUnknown30->removeChildWindow(m_pUnknown30->getChildAtIdx(0));
+ for(int slot=19;slot<61;++slot){
+  if(m_pSocketedSizeWindows[slot]->getChildCount())m_pSocketedSizeWindows[slot]->removeChildWindow(m_pSocketedSizeWindows[slot]->getChildAtIdx(0));
+  m_pMainUnidentifiedWindows[slot]->setProperty("Image","");m_pMainGlowWindows[slot]->setProperty("Image","");m_pMainSocketGlowWindows[slot]->setProperty("Image","");
+  if(m_pMainStackWindows[slot])m_pMainStackWindows[slot]->setText("");
+ }
+ TArrayList<CEquipmentRef*>& items=stash_layout::equipment(inventory);
+ for(unsigned i=0;i<items.size();++i){CEquipmentRef* ref=items[i];CEquipment* item=static_cast<CEquipment*>(ref->m_pUnknown10);if(ref->m_iSlot>18){int slot=items[i]->m_iSlot;setSlotIcon(item,slot,slot);}}
+ inventory=m_pCharacter->getFollower(0)->m_pInventory;
+ if(inventory){
+  for(int slot=19;slot<82;++slot){
+   if(m_pSlotWindows[slot]->getChildCount())m_pSlotWindows[slot]->removeChildWindow(m_pSlotWindows[slot]->getChildAtIdx(0));
+   m_pSlotGlowWindows[slot]->setProperty("Image","");m_pSocketGlowWindows[slot]->setProperty("Image","");m_pUnidentifiedWindows[slot]->setProperty("Image","");
+   if(m_pStackWindows[slot])m_pStackWindows[slot]->setText("");
+  }
+  TArrayList<CEquipmentRef*>& petItems=stash_layout::equipment(inventory);
+  for(unsigned i=0;i<petItems.size();++i){CEquipmentRef* ref=petItems[i];CEquipment* item=static_cast<CEquipment*>(ref->m_pUnknown10);if(ref->m_iSlot>18){int slot=petItems[i]->m_iSlot;setPetSlotIcon(item,slot,slot);}}
+ }
+ m_pUnknown20->moveToBack();m_pUnknown40->moveToFront();m_pUnknown28->moveToFront();m_pUnknown38->moveToFront();m_pUnknown30->moveToFront();
+}
