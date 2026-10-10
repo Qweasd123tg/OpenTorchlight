@@ -2090,3 +2090,140 @@ bool CGameUI::handle_MouseThrough(const CEGUI::EventArgs&)
         menu->clearSkillTooltip();
     return true;
 }
+
+namespace gameui_text_event_detail {
+// The accepted producer remains an out-of-line call at its original symbol.
+extern CTextEvent* getTextEventObject(CGameUI*, const Ogre::Vector3&,
+    const std::string&, float, float, CEGUI::colour, CEGUI::colour, bool)
+    __asm__("_ZN7CGameUI18getTextEventObjectERKN4Ogre7Vector3ERKSsffN5CEGUI6colourES7_b");
+}
+
+void CGameUI::hideTextEvents()
+{
+    using namespace gameui_create_detail;
+    FinalState& lists = *reinterpret_cast<FinalState*>(this);
+    TLinkedListNode<CTextEvent*>* node = lists.activeEvents->head;
+    while (node) {
+        CTextEvent* event = node->m_Data;
+        TLinkedListNode<CTextEvent*>* next = node->m_pNext;
+        CEGUI::Window* window = event->m_pWindow;
+        if (window && window->getParent())
+            window->getParent()->removeChildWindow(window);
+
+        TextEventList* active = lists.activeEvents;
+        if (active->head == node) {
+            if (node->m_pNext) node->m_pNext->m_pPrevious = NULL;
+            if (node->m_pNext) {
+                active->head = node->m_pNext;
+                node->m_pNext->m_pPrevious = NULL;
+            } else active->head = NULL;
+        } else {
+            if (node->m_pPrevious)
+                node->m_pPrevious->m_pNext = node->m_pNext;
+            if (node->m_pNext)
+                node->m_pNext->m_pPrevious = node->m_pPrevious;
+        }
+        node->m_pNext = NULL;
+        node->m_pPrevious = NULL;
+        delete node;
+        lists.freeEvents->prepend(event);
+        node = next;
+    }
+}
+
+void CGameUI::returnTextEventObject(CTextEvent* event)
+{
+    using namespace gameui_create_detail;
+    FinalState& lists = *reinterpret_cast<FinalState*>(this);
+    TLinkedListNode<CTextEvent*>* node = lists.freeEvents->head;
+    while (node) {
+        if (node->m_Data == event) return;
+        node = node->m_pNext;
+    }
+
+    CEGUI::Window* window = event->m_pWindow;
+    if (window && window->getParent())
+        window->getParent()->removeChildWindow(window);
+
+    TextEventList* active = lists.activeEvents;
+    node = active->head;
+    while (node) {
+        if (node->m_Data == event) {
+            if (active->head == node) {
+                if (node->m_pNext) node->m_pNext->m_pPrevious = NULL;
+                if (node->m_pNext) {
+                    active->head = node->m_pNext;
+                    node->m_pNext->m_pPrevious = NULL;
+                } else active->head = NULL;
+            } else {
+                if (node->m_pPrevious)
+                    node->m_pPrevious->m_pNext = node->m_pNext;
+                if (node->m_pNext)
+                    node->m_pNext->m_pPrevious = node->m_pPrevious;
+            }
+            node->m_pNext = NULL;
+            node->m_pPrevious = NULL;
+            delete node;
+            break;
+        }
+        node = node->m_pNext;
+    }
+    lists.freeEvents->prepend(event);
+}
+
+void CGameUI::updateTextEvents(float elapsed, Ogre::Vector3& cameraPosition,
+    Ogre::Matrix4& matrix, bool showEvents)
+{
+    using namespace gameui_create_detail;
+    FinalState& lists = *reinterpret_cast<FinalState*>(this);
+    SheetState& sheets = *reinterpret_cast<SheetState*>(this);
+    TLinkedListNode<CTextEvent*>* node = lists.activeEvents->head;
+    while (node) {
+        CTextEvent* event = node->m_Data;
+        TLinkedListNode<CTextEvent*>* next = node->m_pNext;
+        event->update(sheets.ingame, elapsed);
+        if ((!showEvents && !event->m_Flag82) || event->m_Value68 <= 0.f) {
+            CEGUI::Window* window = event->m_pWindow;
+            if (window && window->getParent())
+                window->getParent()->removeChildWindow(window);
+
+            TextEventList* active = lists.activeEvents;
+            if (active->head == node) {
+                if (node->m_pNext) node->m_pNext->m_pPrevious = NULL;
+                if (node->m_pNext) {
+                    active->head = node->m_pNext;
+                    node->m_pNext->m_pPrevious = NULL;
+                } else active->head = NULL;
+            } else {
+                if (node->m_pPrevious)
+                    node->m_pPrevious->m_pNext = node->m_pNext;
+                if (node->m_pNext)
+                    node->m_pNext->m_pPrevious = node->m_pPrevious;
+            }
+            node->m_pNext = NULL;
+            node->m_pPrevious = NULL;
+            delete node;
+            lists.freeEvents->prepend(event);
+        } else {
+            const Ogre::Vector3 position = getScreenPosition(
+                reinterpret_cast<const Ogre::Vector3*>(&event->m_Value10),
+                &cameraPosition, matrix);
+            event->m_pWindow->setPosition(CEGUI::UVector2(
+                CEGUI::UDim(0.f, -0.5f * event->m_Unrecovered6C + position.x),
+                CEGUI::UDim(0.f, position.y)));
+        }
+        node = next;
+    }
+}
+
+void CGameUI::addTextEvent(const Ogre::Vector3& position,
+    const std::string& text, float scale, float duration,
+    CEGUI::colour first, CEGUI::colour second)
+{
+    if (!m_settings->GetInt(KSETTINGS_FLOATY_NUMBERS)) return;
+    gameui_create_detail::SceneState& scenes =
+        *reinterpret_cast<gameui_create_detail::SceneState*>(this);
+    if (!scenes.camera->isVisible(Ogre::Sphere(position, 0.5f), NULL)) return;
+    gameui_text_event_detail::getTextEventObject(this, position, text,
+        scale, duration, first, second, true);
+}

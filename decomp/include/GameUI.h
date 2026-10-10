@@ -35,7 +35,7 @@ class CGameClient;
 class CLevel;
 class CSubMenu;
 class CItem;
-namespace Ogre { class RenderWindow; }
+namespace Ogre { class RenderWindow; class Vector3; class Matrix4; }
 class CTextEvent;
 class CCharacter;
 class CEquipment;
@@ -155,6 +155,10 @@ public:
     void setInteractiveMenuVisible(bool visible);
     int getUIIsInCinematic();
     void returnTextEventObject(CTextEvent* event);
+    Ogre::Vector3 getScreenPosition(const Ogre::Vector3*, const Ogre::Vector3*, Ogre::Matrix4);
+    void hideTextEvents();
+    void updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool);
+    void addTextEvent(const Ogre::Vector3&, const std::string&, float, float, CEGUI::colour, CEGUI::colour);
     // Pointer return verified at original 0xa9bff5; parameters from its mangled name.
     CTextEvent* getTextEventObject(const Ogre::Vector3&, const std::string&, float, float, CEGUI::colour, CEGUI::colour, bool);
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
