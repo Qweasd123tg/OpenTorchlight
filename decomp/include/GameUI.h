@@ -31,7 +31,7 @@ enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
-namespace CEGUI { class Image; class Window; class EventArgs; }
+namespace CEGUI { class Image; class Window; class EventArgs; class colour; }
 class CGameClient;
 class CLevel;
 class CSubMenu;
@@ -152,6 +152,8 @@ public:
     void setInteractiveMenuVisible(bool visible);
     int getUIIsInCinematic();
     void returnTextEventObject(CTextEvent* event);
+    // Pointer return verified at original 0xa9bff5; parameters from its mangled name.
+    CTextEvent* getTextEventObject(const Ogre::Vector3&, const std::string&, float, float, CEGUI::colour, CEGUI::colour, bool);
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
     void setCinematicOpen(std::wstring cinematic);
 private:
