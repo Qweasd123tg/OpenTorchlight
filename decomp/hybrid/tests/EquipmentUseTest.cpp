@@ -26,7 +26,7 @@ extern "C" void* useCharacterTable[] __asm__("_ZTV10CCharacter");
 extern "C" void tracedoriginalEquipmentUse(CEquipment*,CCharacter*,CBaseUnit*) __asm__("_ZN10CEquipment11useOnTargetEP10CCharacterP9CBaseUnit");
 namespace {
 typedef char effect_size[sizeof(CEffect)==0x138?1:-1];
-typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
+typedef char character_size[sizeof(CCharacter)==0x778?1:-1];
 typedef char owner_offset[__builtin_offsetof(CEffect,m_Owner)==0x48?1:-1];
 typedef char master_offset[__builtin_offsetof(CCharacter,m_pMaster)==0x640?1:-1];
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T* get(){return reinterpret_cast<T*>(data);}};

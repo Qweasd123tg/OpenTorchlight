@@ -40,7 +40,7 @@ AT_OFF(CCharacter,m_pRightHandNode,0x2e8);AT_OFF(CCharacter,m_pLeftHandNode,0x2f
 AT_OFF(CCharacter,m_pLeftShoulderNode,0x308);AT_OFF(CCharacter,m_pRightShoulderNode,0x310);AT_OFF(CCharacter,m_pHeadNode,0x318);
 AT_OFF(CCharacter,m_iGold,0x444);AT_OFF(CMasterResourceManager,m_pSceneManager,0xd0);AT_OFF(CMasterResourceManager,m_pSoundBankDataInformation,0x100);
 #undef AT_OFF
-typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
+typedef char character_size[sizeof(CCharacter)==0x778?1:-1];
 struct Case{unsigned seed,mode,warm;};
 struct World;
 World* world;autotest::Capture* capture;const Case* input;

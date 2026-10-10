@@ -36,6 +36,10 @@ class CCameraControl;
 class CResourceManager : public CRunicCore
 {
 public:
+    int ISA(const std::wstring& unit, const std::wstring& parent);
+
+    TArrayList<CGameClient*>* getGameClients() { return &m_GameClients; }
+
     CGraph* getGraph(const std::wstring&);
     CGameUI* getGameUI();
     CEquipment* createEquipment(const wchar_t*,bool,bool);

@@ -1,6 +1,7 @@
 #ifndef GENERICMODEL_H
 #define GENERICMODEL_H
 #include "PositionableObject.h"
+#include "OgreUtilityEnums.h"
 #include "iRandomWeight.h"
 #include "iHighlight.h"
 #include <vector>
@@ -12,12 +13,14 @@ namespace Ogre { class Material; class ColourValue; }
 struct CRenderableStates { char prefix[3]; bool highlighted; bool renderBehind; char gap5[11]; Ogre::Material* material; char tail[40]; };
 #include <string>
 class CKeyframe;
+class CAnimationSet;
 namespace Ogre {class SkeletonInstance;}
 // Partial: size and all vtable groups preserved; expose only Item collaborators.
 class CGenericModel : public CPositionableObject, public iRandomWeight, public iHighlight
 {
 friend class CEquipment;
 friend class CCharacter;
+friend void EditorSetActiveAnimationPaused(long long, bool);
 friend class CStatsMenu;
 friend class CPetMenu;
 friend class CInventoryMenu;
@@ -40,6 +43,26 @@ public:
     bool animationPlaying(unsigned int) const;
     void queueBlendAnimation(unsigned int,bool,float,float);
 
+    bool animationPlaying() const;
+
+    void setAnimationTime(float time);
+
+    CGenericModel(CResourceManager* resources, Ogre::SceneManager* manager, OGRE_UTILITIES::EPRIMITIVES primitive);
+    void setQueryMask(OGRE_UTILITIES::EQUERYMASK mask);
+    void setWireframe(bool wireframe);
+
+    void reloadAnimations();
+
+    void clearAnimations();
+    void playAnimation(unsigned int animation, bool loop, float speed, float length);
+    void blendAnimation(unsigned int animation, bool loop, float blend, float speed, float length);
+    bool animationPlayingSubstring(const std::string& animation) const;
+
+    float getAnimationTime();
+
+
+    bool animationExists(const std::string&) const;
+
     void generateExtremes(unsigned long,bool);
     virtual ~CGenericModel();
     virtual unsigned int GetRandomWeight();
@@ -56,7 +79,6 @@ public:
     void blendAnimation(const std::string&, bool, float, float, float);
     void playAnimation(const std::string&, bool, float, float);
     void queueBlendAnimation(const std::string&, bool, float, float);
-    bool animationExists(const std::string&) const;
     bool animationPlaying(const std::string&) const;
     bool animationQueued(const std::string&) const;
     const std::vector<CKeyframe*>& getAnimationEvents() const { return m_AnimationEvents; }
@@ -71,9 +93,12 @@ private:
     std::vector<CKeyframe*> m_AnimationEvents;
     std::vector<std::vector<TArrayList<int> > > m_valueIndexes;
     CAnimationSet* m_animationSet;
-    unsigned char m_gap1e8[0x208-0x1e8];
+    bool m_animationPaused;
+    unsigned char m_gap1e9[0x208-0x1e9];
     std::vector<CRenderableStates> m_renderableStates;
-    unsigned char m_gap220[0x23c-0x220];
+    unsigned char m_gap220[0x23a-0x220];
+    bool m_renderFlag23A;
+    unsigned char m_gap23B;
     bool m_animationLoop;
     unsigned char m_ModelData23D[3];
     float m_animationSpeed;

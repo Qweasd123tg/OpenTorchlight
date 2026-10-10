@@ -2323,7 +2323,7 @@ const std::wstring& CEquipment::getItemName(){
 int CEquipment::minimumDamage(){return m_iMinimumDamage;}
 int CEquipment::maximumDamage(){return m_iMaximumDamage;}
 void CEquipment::removeDamageBonus(EDAMAGE_TYPES,int){}
-long long CEquipment::canPickup(CCharacter*){return 1;}
+bool CEquipment::canPickup(CCharacter*){return 1;}
 long long CEquipment::canDrop(CCharacter*){return 1;}
 void CEquipment::incrementStackBy(int amount){
  int value=static_cast<int>(static_cast<unsigned int>(m_iUnknown238)+static_cast<unsigned int>(amount));

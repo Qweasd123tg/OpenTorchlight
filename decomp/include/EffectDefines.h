@@ -47,4 +47,10 @@ static const std::string gEFFECT_STAT_MODIFIER_ICON_NAMES[] =
     "iconmagic",
 };
 
+static const EEFFECT_TYPE gDAMAGE_DEFENSE_EFFECT_TYPES[] = {
+    static_cast<EEFFECT_TYPE>(35), static_cast<EEFFECT_TYPE>(36),
+    static_cast<EEFFECT_TYPE>(37), static_cast<EEFFECT_TYPE>(38),
+    static_cast<EEFFECT_TYPE>(39), static_cast<EEFFECT_TYPE>(40)
+};
+
 #endif

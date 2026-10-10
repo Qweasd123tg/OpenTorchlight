@@ -27,7 +27,6 @@ class CWaypointMenu;
 #include "RunicCore.h"
 
 enum ELayoutFunction { LAYOUT_FUNCTION_EXIT_GAME = 0 };
-enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape;
 // onClick's return type is not verified and that method is not used here.
@@ -92,6 +91,7 @@ public:
     bool handle_TogglePet(const CEGUI::EventArgs& event);
     bool handle_ToggleStats(const CEGUI::EventArgs& event);
     bool handle_ToggleMap(const CEGUI::EventArgs& event);
+    CGameClient* getGameClient() { return m_gameClient; }
     void requestSetGameState(EGameState, EMenu);
     bool processIngameInput(void*,float,bool);
     bool bothCoveredPartial();
@@ -157,6 +157,13 @@ public:
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
     void setCinematicOpen(std::wstring cinematic);
 private:
+    friend class CDieMenu;
+    friend class COptionsMenu;
+    friend class CContinueGameMenu;
+    friend class CDifficultyMenu;
+    friend class CMainMenu;
+    friend class CNewGameMenu;
+    friend class CWaypointMenu;
     unsigned char m_gap10[0x28];
     CCharacter* m_pCharacter;
     CLevel* m_level;
@@ -193,7 +200,8 @@ private:
     CMenuManager* m_menuManager;
     unsigned char m_gap590[0xd68];
     bool m_displayStats;
-    unsigned char m_gap12F9[0x2];
+    bool m_bExitButtonPressed;
+    unsigned char m_gap12FA;
     bool m_mouseThrough;
     ECursorState m_cursorState;
     unsigned char m_gap1300[0x341];
@@ -214,7 +222,9 @@ private:
     unsigned char m_gap1698[0x27c];
     EGameState m_requestedGameState;
     EMenu m_requestedMenu;
-    unsigned char m_gap191C[0x14];
+    unsigned char m_gap191C[4];
+    CGameClient* m_gameClient;
+    unsigned char m_gap1928[8];
     std::vector<CSubMenu*> m_submenus;
     std::vector<CDropdownMenu*> m_dropdowns;
     unsigned char m_gap1960[0x39];

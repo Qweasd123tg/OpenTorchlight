@@ -8,6 +8,9 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CDieMenu : public CDropdownMenu {
 public:
+    bool handle_ExitButton(const CEGUI::EventArgs&);
+    bool handle_CloseButton(const CEGUI::EventArgs&);
+
     virtual ~CDieMenu();
     CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
     char m_Unrecoveredc0[0x48];

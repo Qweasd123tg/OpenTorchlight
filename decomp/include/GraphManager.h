@@ -19,6 +19,7 @@ public:
     void reload();
 
 private:
+    friend wchar_t* EditorGetGraphNames();
     std::wstring m_sDirectory;
     std::map<std::wstring, CGraph*> m_GraphsByName;
     std::map<std::wstring, CGraph*> m_GraphsByFilename;

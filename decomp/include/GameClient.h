@@ -13,7 +13,9 @@ class CQuestManager;
 class CMasterResourceManager;
 class CSoundManager;
 namespace Ogre { class Light; class SceneNode; class Root; }
+#include "KeyManager.h"
 #include "QuestEventTypes.h"
+#include "GameEnums.h"
 
 class CBaseUnit;
 class CCharacter;
@@ -44,6 +46,17 @@ public:
     void keyEvent(unsigned int event, unsigned int key, long character);
     void setWindowActive(bool active);
     void notifyOfDeletion(CCharacter* object);
+    TSafePointer<CRunicCore>& getMouseClickUnit(unsigned int index) { return reinterpret_cast<TSafePointer<CRunicCore>*>(&m_selectedCharacter)[index]; }
+
+    void rescaleUI();
+
+    void saveCharacter(bool,bool);
+    EGameState getGameState() const { return m_gameState; }
+
+    void refreshLighting();
+    CKeyManager* getKeyManager() { return &m_keyManager; }
+
+
     void clearMouseClickUnits();
     void warpLevels(std::wstring dungeon, int delta, int depth, bool waypoint, std::wstring warpName, bool flag);
     virtual ~CGameClient();
@@ -86,13 +99,16 @@ private:
     Ogre::SceneNode* m_playerLightNode;
     unsigned char m_gap228[0x8];
     Ogre::Light* m_playerLight;
-    unsigned char m_gap238[0xe08];
+    unsigned char m_gap238[0x2d0-0x238];
+    CKeyManager m_keyManager;
+    unsigned char m_gapAfterKeys[0x1040-0x2d0-sizeof(CKeyManager)];
     CMasterResourceManager* m_masterResources;
     unsigned char m_gap1048[0x10];
     Ogre::Root* m_root;
     unsigned char m_gap1060[0x5c];
     bool m_bStateControl10BC;
-    unsigned char m_gap10BD[0x2817];
+    unsigned char m_gap10BD[0x38d0-0x10bd];
+    EGameState m_gameState;
     bool m_pendingPassClear;
     unsigned char m_gap38D5[0x3b];
 };

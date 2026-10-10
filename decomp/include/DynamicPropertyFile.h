@@ -11,6 +11,8 @@
 class CDynamicPropertyFile : public CRunicCore
 {
 public:
+    void SetFloat(unsigned int,float);
+
     CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section);
     unsigned int GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool flag);
     virtual ~CDynamicPropertyFile();

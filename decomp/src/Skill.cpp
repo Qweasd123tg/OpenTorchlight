@@ -69,7 +69,7 @@ const std::wstring& CSkill::getDisplayName()
     return m_property ? m_property->m_sDisplayName : EMPTY_WSTRING;
 }
 
-unsigned int CSkill::getAnimationIndex()
+int CSkill::getAnimationIndex()
 {
     return m_property ? m_animationIndex : static_cast<unsigned int>(-1);
 }
@@ -84,7 +84,7 @@ unsigned int CSkill::getAnimationIndexLoopInto()
     return m_property ? m_animationIndexLoopInto : static_cast<unsigned int>(-1);
 }
 
-unsigned int CSkill::getAnimationIndexLoopEnd()
+int CSkill::getAnimationIndexLoopEnd()
 {
     return m_property ? m_animationIndexLoopEnd : static_cast<unsigned int>(-1);
 }

@@ -39,7 +39,7 @@ IC_AT(CEGUI::Image,d_scaledWidth,0x20);IC_AT(CEGUI::Image,d_scaledHeight,0x24);
 #undef IC_AT
 typedef char icon_equipment_size[sizeof(CEquipment)==0x438?1:-1];
 struct Case{unsigned seed,mode,warm;};
-const Case* input;autotest::Capture* capture;CEquipment* object;CGameUI* ui;CBaseUnit* owner;
+const Case* input;autotest::Capture* capture;CEquipment* object;CGameUI* ui;CCharacter* owner;
 CEGUI::Window* windows[2];CEGUI::Image* imageObject;CEGUI::WindowManager* manager;
 CMasterResourceManager* masterObject;CSettings* settings;CDataGroup* replacement;
 unsigned created,imageCalls,ratioCalls,uniqueCalls;unsigned long long service;

@@ -3,8 +3,13 @@
 
 #include "CmdLineParser.h"
 #include "DynamicPropertyFile.h"
+#include "TArrayList.h"
 
 // Property indices registered by CSettings.
+extern unsigned int KSETTINGS_SOUNDMUTE;
+extern unsigned int KSETTINGS_MUSICMUTE;
+extern unsigned int KSETTINGS_DESTROY_MONSTERS_AFTER_DEATH;
+extern unsigned int KSETTINGS_SHOW_TIPS;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAP;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAPZOOMIN;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAPZOOMOUT;
@@ -30,15 +35,44 @@ extern unsigned int KSETTINGS_KEYMAP_SHOWITEMS;
 extern unsigned int KSETTINGS_KEYMAP_SWAPSKILLS;
 extern unsigned int KSETTINGS_TOGGLE_ITEM_NAME;
 
-
-// Partial: declarations from Settings.cpp used by recovered TUs; only the
-// leading field is recovered.
+// The empty user destructor retains the array cookie observed in CSettings::~CSettings.
+struct CSettingsResolution
+{
+    int width;
+    int height;
+    bool flag8; // +0x8
+    bool flag9; // +0x9
+    bool flagA; // +0xa
+    CSettingsResolution() : width(0), height(0), flag8(false), flag9(false), flagA(false) {}
+    ~CSettingsResolution() {}
+};
+// Partial: resolution records begin at 0x148 after the parser pointer.
 class CSettings : public CDynamicPropertyFile
 {
 public:
+    void addResolutionCombo(int width, int height, bool flag8, bool flagA, bool flag9);
+
+    void findClosestResolution(int width,int height,int& resultWidth,int& resultHeight);
+
     virtual ~CSettings();
 
     CCmdLineParser* m_pCmdLineParser;
+    TArrayList<CSettingsResolution> m_resolutions;
 };
 
+extern unsigned int KSETTINGS_AMBIENT_LIGHT_RED;
+extern unsigned int KSETTINGS_AMBIENT_LIGHT_GREEN;
+extern unsigned int KSETTINGS_AMBIENT_LIGHT_BLUE;
+extern unsigned int KSETTINGS_MATERIAL_AMBIENT_LIGHT_RED;
+extern unsigned int KSETTINGS_MATERIAL_AMBIENT_LIGHT_GREEN;
+extern unsigned int KSETTINGS_MATERIAL_AMBIENT_LIGHT_BLUE;
+extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_RED;
+extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_GREEN;
+extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_BLUE;
+extern unsigned int KSETTINGS_F_DIRECTIONAL_INTENSITY;
+extern int KSETTINGS_RES_WIDTH;
+extern int KSETTINGS_RES_HEIGHT;
+extern unsigned int KSETTINGS_WIN_WIDTH;
+extern unsigned int KSETTINGS_WIN_HEIGHT;
+extern unsigned int KSETTINGS_XRATIO;
 #endif

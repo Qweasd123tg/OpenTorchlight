@@ -6,12 +6,13 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include "GameEnums.h"
+#include "TArrayList.h"
 
 class iSnap
 {
 public:
     virtual ~iSnap();
-    virtual long getSnapValues(ESNAP_TYPES) = 0;
+    virtual TArrayList<float>* getSnapValues(ESNAP_TYPES) = 0;
 
     // fields
 };

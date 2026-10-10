@@ -45,7 +45,11 @@ class CBaseUnit : public CPositionableObject
     friend class CEnchantMenu;
     friend class CSkillProperty;
     friend struct SmallmatchLayoutProbe;
+friend class CInventory;
 public:
+    long long getQuestGuid() const { return m_iQuestGuid; }
+    long long getUnitGuid() const { return m_iUnitValue1A0; }
+
     CBaseUnit(CResourceManager* resourceManager, EBASEUNIT_TYPE type);
     virtual ~CBaseUnit();
 
@@ -127,6 +131,7 @@ public:
 
 protected:
     friend class CGameUI;
+    friend class CCharacter;
     unsigned int m_iUnitLevel;
     TArrayList<CUnitTheme*> m_ThemesToAdd;
     TArrayList<CUnitTheme*> m_ThemesToRemove;

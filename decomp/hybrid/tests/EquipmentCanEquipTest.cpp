@@ -22,7 +22,7 @@ TL_FUNCTION(ceMagicReq,"_ZN10CEquipment19getMagicRequirementEP10CCharacter")
 TL_FUNCTION(ceDefenseReq,"_ZN10CEquipment21getDefenseRequirementEP10CCharacter")
 extern "C" bool tracedoriginalCanEquip(CEquipment*, CCharacter*, bool) __asm__("_ZN10CEquipment8canEquipEP10CCharacterb");
 namespace {
-typedef char character_size[sizeof(CCharacter)==0x720?1:-1];
+typedef char character_size[sizeof(CCharacter)==0x778?1:-1];
 typedef char flag_offset[__builtin_offsetof(CCharacter,m_bCharacterFlag4A0)==0x4a0?1:-1];
 typedef char level_offset[__builtin_offsetof(CBaseUnit,m_iUnitLevel)==0x100?1:-1];
 template<class T> struct Raw { unsigned long long data[(sizeof(T)+7)/8]; Raw(){std::memset(data,0,sizeof(data));} T* get(){return reinterpret_cast<T*>(data);} };

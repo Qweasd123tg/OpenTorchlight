@@ -23,10 +23,10 @@ public:
     unsigned int getManaCost();
     unsigned int getManaCostOT();
     bool getRequiresPathable();
-    unsigned int getAnimationIndex();
+    int getAnimationIndex();
     unsigned int getAnimationIndexDW();
     unsigned int getAnimationIndexLoopInto();
-    unsigned int getAnimationIndexLoopEnd();
+    int getAnimationIndexLoopEnd();
     unsigned int getAnimationIndexDWLoopInto();
     unsigned int getChanceToCast();
     float getAnimationSpeedMult();
@@ -42,6 +42,7 @@ public:
     bool rollCancelChance();
     bool rollCastChance();
 
+    bool stopsPathingOnCompletion() const { return m_stopsPathingOnCompletion; }
     void fillOutStatBonuses(float (&values)[6], bool, unsigned int);
     const std::wstring& getName();
     const std::wstring& getSkillUsageDescription();
@@ -73,13 +74,19 @@ public:
     void setEnabled(bool enabled) { m_bEnabled = enabled; }
 
 private:
+    friend class CCharacter;
     CResourceManager* m_resources;
     CSkillManager* m_pSkillManager;
     char m_SkillData28[0x30 - 0x28];
     CBaseUnit* m_pOwner;
     char m_SkillData38[0x60 - 0x38];
     ESKILL_ACTIVATION_TYPE m_eActivationType; // 0x60
-    char m_SkillData64[0x6a-0x64];
+    bool m_interruptible; // +0x64
+    unsigned char m_Padding65[0x1];
+    bool m_allowsTurning; // +0x66
+    unsigned char m_Padding67;
+    bool m_stopsPathingOnCompletion; // +0x68
+    unsigned char m_Padding69;
     bool m_requiresPathable;
     // Set on skills that CExecuteSkillProps adds to a skill manager.
     bool m_bExecutedByProperty;
@@ -99,7 +106,7 @@ private:
     unsigned int m_iEffectiveSkillLevel; // 0xe0
     unsigned int m_animationIndex;
     unsigned int m_animationIndexDW;
-    unsigned int m_animationIndexLoopInto;
+    union { unsigned int m_animationIndexLoopInto; int m_animationID; };
     unsigned int m_animationIndexDWLoopInto;
     unsigned int m_animationIndexLoopEnd;
     char m_SkillDataF8[0x108-0xf8];

@@ -3,7 +3,7 @@
 #include "RunicCore.h"
 #include <string>
 class CInventory;
-enum EWardrobeSlot { WARDROBE_CHEST=0, WARDROBE_GLOVES=1, WARDROBE_BOOTS=2, WARDROBE_HELMET=3, WARDROBE_SHOULDERS=4 };
+#include "WardrobeDefines.h"
 // Partial layout: original getters address meshes at 0x88 and textures at 0xb0.
 class CWardrobe : public CRunicCore {
     char m_Unrecovered10[0x88-0x10];
