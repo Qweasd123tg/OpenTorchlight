@@ -230,6 +230,7 @@ private:
     friend class CPetMenu;
     friend class CEnchantMenu;
     friend class CCombineMenu;
+    friend class CStashMenu;
     bool m_bCharacterFlag4A0;
     char m_CharacterData4A1[0x52e - 0x4a1];
     bool m_bInvulnerable;

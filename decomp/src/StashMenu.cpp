@@ -1001,3 +1001,97 @@ void CStashMenu::setSlotIcon(CEquipment* pItem, int iSlotIndex, int iDataIndex)
         }
     }
 }
+
+#include "Character.h"
+#include <CEGUI.h>
+namespace stash_controls {
+struct ClientFields {char prefix[0x1c8];TSafePointer<CRunicCore> first,second,third,fourth;};
+struct ClientUI {char prefix[0x1920];ClientFields* client;};
+inline __attribute__((always_inline,flatten)) void clearMouseClicks(CGameUI* ui) {
+ ClientFields* c=reinterpret_cast<ClientUI*>(ui)->client;
+ c->fourth.setObject(0);c->third.setObject(0);c->first.setObject(0);c->second.setObject(0);
+}
+}
+void CStashMenu::equipmentPickedUp(CEquipment*){updateLayout();}
+void CStashMenu::equipmentDropped(CEquipment*){updateLayout();}
+void CStashMenu::equipmentEquipped(CEquipment*){updateLayout();}
+void CStashMenu::equipmentUnequipped(CEquipment*){updateLayout();}
+void CStashMenu::equipmentUsed(CEquipment*){updateLayout();}
+void CStashMenu::inventoryDestroyed(){}
+bool CStashMenu::handle_ItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_iUnknown3400=slot;
+  else if(mouse.button==CEGUI::RightButton)m_iUnknown3404=slot;
+ }return true;
+}
+bool CStashMenu::handle_PetItemClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.window){int slot=*static_cast<int*>(mouse.window->getUserData());
+  if(mouse.button==CEGUI::LeftButton)m_iUnknown33F8=slot;
+  else if(mouse.button==CEGUI::RightButton)m_iUnknown33FC=slot;
+ }return true;
+}
+bool CStashMenu::handle_MouseThrough(const CEGUI::EventArgs&){m_bUnknown3420=false;return true;}
+void CStashMenu::setPetTab(int tab){onClick(static_cast<ELayoutFunction>(tab+14));}
+bool CStashMenu::handle_onClick(const CEGUI::EventArgs& event) {
+ const CEGUI::MouseEventArgs& mouse=static_cast<const CEGUI::MouseEventArgs&>(event);
+ if(mouse.button==CEGUI::LeftButton&&mouse.window)return onClick(*static_cast<ELayoutFunction*>(mouse.window->getUserData()));
+ return true;
+}
+bool CStashMenu::handle_CloseButton(const CEGUI::EventArgs& event) {
+ if(static_cast<const CEGUI::MouseEventArgs&>(event).button==CEGUI::LeftButton) {
+  m_bUnknown62=true;m_pGameUI->getCharacter()->setTarget(0);
+  stash_controls::clearMouseClicks(m_pGameUI);m_pGameUI->closeRight();
+ }return true;
+}
+bool CStashMenu::onClick(ELayoutFunction action) {
+ if(m_bOpenPartial&&(static_cast<int>(action)==14||static_cast<int>(action)==15||static_cast<int>(action)==16)) {
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33e0)->setSelected(static_cast<int>(action)==14);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33e8)->setSelected(static_cast<int>(action)==15);
+  static_cast<CEGUI::RadioButton*>(m_pUnknown33f0)->setSelected(static_cast<int>(action)==16);
+  m_pUnknown33c8->setVisible(static_cast<int>(action)==14);
+  m_pUnknown33d0->setVisible(static_cast<int>(action)==15);
+  m_pUnknown33d8->setVisible(static_cast<int>(action)==16);
+  updateLayout();
+ }return true;
+}
+void CStashMenu::mapEventHandlers(CEGUI::Window* window) {
+ int count=static_cast<int>(window->getChildCount());
+ for(int i=0;i<count;++i)mapEventHandlers(window->getChildAtIdx(i));
+ try {
+  if(window->isPropertyPresent("onClick")&&!window->getProperty("onClick").empty())
+   window->subscribeEvent(CEGUI::Window::EventMouseButtonDown,CEGUI::Event::Subscriber(&CStashMenu::handle_onClick,this));
+ }catch(...) {}
+}
+
+#include "Inventory.h"
+#include "SharedStash.h"
+namespace stash_owners {
+inline __attribute__((always_inline)) CCharacter* firstFollower(CCharacter* player){return player->getFollower(0);}
+}
+void CStashMenu::setPlayer(CCharacter* player) {
+ if(m_pCharacter&&stash_owners::firstFollower(m_pCharacter))stash_owners::firstFollower(m_pCharacter)->m_pInventory->removeListener(this);
+ m_pCharacter=player;
+ if(player&&stash_owners::firstFollower(player))stash_owners::firstFollower(player)->m_pInventory->addListener(this);
+}
+void CStashMenu::setOwner(CCharacter* owner) {
+ if(owner!=m_pOwner)inventoryDestroyed();
+ if(m_pOwner) {
+  CInventory* inventory;
+  if(m_pOwner->ISA(static_cast<UNITTYPES::EUNITTYPES>(170))&&CSharedStash::getSingleton())inventory=CSharedStash::getSingleton()->m_pInventory;
+  else inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;
+  if(inventory)inventory->removeListener(this);
+ }
+ m_pOwner=owner;
+ if(owner) {
+  CInventory* inventory;
+  if(owner->ISA(static_cast<UNITTYPES::EUNITTYPES>(170))&&CSharedStash::getSingleton()){inventory=CSharedStash::getSingleton()->m_pInventory;m_bUnknown3421=true;}
+  else {inventory=static_cast<CCharacter*>(m_pOwner)->m_pInventory;m_bUnknown3421=false;}
+  if(inventory)inventory->addListener(this);
+ }
+ if(m_pCharacter&&stash_owners::firstFollower(m_pCharacter)) {
+  stash_owners::firstFollower(m_pCharacter)->m_pInventory->removeListener(this);
+  stash_owners::firstFollower(m_pCharacter)->m_pInventory->addListener(this);
+ }
+}
