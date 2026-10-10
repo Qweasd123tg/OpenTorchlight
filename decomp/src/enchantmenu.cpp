@@ -1046,3 +1046,49 @@ bool CEnchantMenu::handle_MouseOver(const CEGUI::EventArgs& event) {
  }
  return true;
 }
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+CEnchantMenu::CEnchantMenu(CGameUI& ui,CSettings& settings,Ogre::RenderWindow* render,
+ Ogre::SceneManager* scene,CEGUI::Window* parent,CResourceManager* resources)
+ :m_pParent(parent),m_pOwner(0),m_pCharacter(0),m_pOwnerItem(0),m_bOpen(false),m_bFullyClosed(true),m_bInteractionComplete(false),m_bRetirementComplete(false),
+ m_pSettings(&settings),m_pGameUI(&ui),m_pSceneManager(scene),m_pRenderWindow(render),m_pMenuModel(0),
+ m_pResourceManager(resources),m_fPanelX(0.0f),m_pSoundBank(0),m_ClickedSlot(-1),m_RightClickedSlot(-1),m_pHoverObject(0),m_bHover(false)
+{
+ CSoundBankDataInformation* sounds=CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+ m_pSoundBank=new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+ CSoundData* open=sounds->getSoundDataObject(L"STATSOPEN");if(open)m_pSoundBank->addSample(22,open->m_iGuid);
+ CSoundData* close=sounds->getSoundDataObject(L"STATSCLOSE");if(close)m_pSoundBank->addSample(66,close->m_iGuid);
+ CSoundData* error=sounds->getSoundDataObject(L"ERROR");if(error)m_pSoundBank->addSample(24,error->m_iGuid);
+ CSoundData* mana=sounds->getSoundDataObject(L"LOWMANA");if(mana)m_pSoundBank->addSample(35,mana->m_iGuid);
+ CSoundData* reveal=sounds->getSoundDataObject(L"REVEAL");if(reveal)m_pSoundBank->addSample(36,reveal->m_iGuid);
+ CSoundData* buy=sounds->getSoundDataObject(L"GOLDBUY");if(buy)m_pSoundBank->addSample(23,buy->m_iGuid);
+ createMenus();
+}
+CEnchantMenu::~CEnchantMenu(){setPlayer(0);if(m_pMenuModel){delete m_pMenuModel;m_pMenuModel=0;}if(m_pSoundBank){delete m_pSoundBank;m_pSoundBank=0;}}
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+namespace enchant_animation {
+struct ModelFields {char prefix[0x60];Ogre::Entity* entity;char gap68[0x130-0x68];Ogre::SkeletonInstance* skeleton;};
+inline __attribute__((always_inline)) ModelFields& model(CGenericModel* p){return *reinterpret_cast<ModelFields*>(p);}
+}
+void CEnchantMenu::update(float elapsed) {
+ int width=m_pSettings->GetInt(KSETTINGS_RES_WIDTH);int height=m_pSettings->GetInt(KSETTINGS_RES_HEIGHT);
+ if(!m_bOpen){m_pHoverObject=0;m_pSocketedIconParent->setVisible(false);m_pForeground->setVisible(false);}
+ if(m_bOpen||!m_bFullyClosed) {
+  if(m_pMenuModel) {
+   m_pMenuModel->updateAnimation(elapsed,false);enchant_animation::model(m_pMenuModel).entity->_updateAnimation();
+   Ogre::Bone* bone=enchant_animation::model(m_pMenuModel).skeleton->getBone("tag_dropdowntop");
+   Ogre::Vector3 position=m_pMenuModel->getPosition(false);
+   const Ogre::Vector3& offset=bone->_getDerivedPosition();
+   float x=position.x+offset.x;float y=position.y+offset.y;
+   x=m_pGameUI->scaledY(x);y=m_pGameUI->scaledY(y);
+   m_pPanel->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f,float(width)*0.5f+x),CEGUI::UDim(0.0f,-(y+float(height)*-0.5f))));
+  }
+  if(!m_bOpen&&!m_bFullyClosed&&!m_pMenuModel->animationPlaying("CLOSE")&&!m_pMenuModel->animationQueued("CLOSE")) {
+   m_pMenuModel->setVisible(false);m_pParent->removeChildWindow(m_pBackground);m_bFullyClosed=true;
+   if(m_bRetirementComplete){m_bRetirementComplete=false;m_pGameUI->requestSetGameState(static_cast<EGameState>(0),static_cast<EMenu>(2));}
+  }
+ }
+}

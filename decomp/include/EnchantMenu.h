@@ -70,7 +70,8 @@ public:
  char gap98[8];
  CGenericModel* m_pMenuModel;
  CResourceManager* m_pResourceManager;
- char gapB0[8];
+ float m_fPanelX;
+ char gapB4[4];
  CSoundBank* m_pSoundBank;
  int m_aiSlotData[1];
  int m_aiLocalSlotData[1];
