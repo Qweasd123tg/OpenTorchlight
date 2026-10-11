@@ -58,6 +58,8 @@ public:
     void keyEvent(unsigned int,unsigned int,long);
     void setWindowActive(bool);
 
+    void cleanupReferences();
+    void setLoadingVisible(bool);
     void clearGameStateRequest();
     bool getDieMenuIsOpen();
     bool questDialogOpen();
