@@ -2979,3 +2979,50 @@ const CEGUI::Image* CGameUI::getImageFromImageSet(const unsigned char* name)
     }
     return 0;
 }
+
+// Preserve the original out-of-line message setters in the flattened UI update.
+__attribute__((noinline))
+void CGameUI::setSmallText(std::wstring text, float duration)
+{
+    using gameui_detail::field;
+    if (text.empty()) {
+        field<float>(this,0x1994) = 0;
+        field<CEGUI::Window*>(this,0x118)->setVisible(false);
+    } else {
+        field<std::wstring>(this,0x1988) = text;
+        field<float>(this,0x1994) = 1;
+        field<float>(this,0x1990) = duration;
+        field<CEGUI::Window*>(this,0x118)->setProperty("TextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(1,1,1,1)));
+        field<CEGUI::Window*>(this,0x118)->setProperty("DropTextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(0,0,0,1)));
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::setBigText(std::wstring text, float duration)
+{
+    using gameui_detail::field;
+    if (text.empty()) {
+        field<float>(this,0x1984) = 0;
+        field<CEGUI::Window*>(this,0x110)->setVisible(false);
+    } else {
+        field<CEGUI::Window*>(this,0x110)->setVisible(true);
+        field<std::wstring>(this,0x1978) = text;
+        field<float>(this,0x1984) = 1;
+        field<float>(this,0x1980) = duration;
+        field<CEGUI::Window*>(this,0x110)->setProperty("TextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(1,1,1,1)));
+        field<CEGUI::Window*>(this,0x110)->setProperty("DropTextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(0,0,0,1)));
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::setCinematicOpen(std::wstring text)
+{
+    if (m_cinematicMenu) {
+        m_cinematicMenu->setText(text);
+        m_cinematicMenu->setOpen(true);
+    }
+}
