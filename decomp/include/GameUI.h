@@ -30,7 +30,7 @@ enum ELayoutFunction { LAYOUT_FUNCTION_EXIT_GAME = 0 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape.
 // onClick returns bool through the original CEGUI callback (consumed as AL).
-namespace CEGUI { class Imageset; class Image; class Window; class EventArgs; class colour; }
+namespace CEGUI { class Combobox; class Imageset; class Image; class Window; class EventArgs; class colour; }
 class CGameClient;
 class CLevel;
 class CSubMenu;
@@ -120,6 +120,8 @@ public:
     float getWindowWidth();
     float getWindowHeight();
     void updateIngameUI(float, CGameClient*, Ogre::RenderWindow*);
+    bool mouseOverPanel(int x, int y);
+    void sizeComboList(CEGUI::Combobox*);
     void convertToScreenScale(CEGUI::Window*, bool);
     void mapToFunctions(CEGUI::Window*);
     void statsChanged();
